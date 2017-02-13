@@ -612,6 +612,113 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(VertexAttributeTest, DrawArraysWithMaxBufferStride)
+{
+    // TODO(jmadill): Diagnose this failure.
+    if (IsD3D11_FL93())
+    {
+        std::cout << "Test disabled on D3D11 FL 9_3" << std::endl;
+        return;
+    }
+
+    const int maxStride      = 2048 / 4;  // MAX_VERTEX_ATTRIB_BINDINGS == 2048 in ES3.1 SPEC.
+    const int inputDataCount = mVertexCount * maxStride;
+
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    GLfloat inputData[inputDataCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[count * maxStride] = static_cast<GLfloat>(count);
+        expectedData[count]          = static_cast<GLfloat>(count);
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    GLsizei dataSize   = inputDataCount * TypeStride(GL_FLOAT);
+    GLsizei dataStride = maxStride * TypeStride(GL_FLOAT);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, inputData);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, dataStride, nullptr);
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(VertexAttributeTest, DrawArraysWithMaxBufferOffset)
+{
+    // TODO(jmadill): Diagnose this failure.
+    if (IsD3D11_FL93())
+    {
+        std::cout << "Test disabled on D3D11 FL 9_3" << std::endl;
+        return;
+    }
+
+    const int maxOffset      = 2047 / 4;  // MAX_VERTEX_ATTRIB_RELATIVE_OFFSET == 2047 in ES3.1 SPEC
+    const int inputDataCount = maxOffset + mVertexCount;
+
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    GLfloat inputData[inputDataCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[maxOffset + count] = static_cast<GLfloat>(count);
+        expectedData[count]          = static_cast<GLfloat>(count);
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    GLsizei dataSize    = inputDataCount * TypeStride(GL_FLOAT);
+    GLintptr dataOffset = maxOffset * TypeStride(GL_FLOAT);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, inputData);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, 0,
+                          reinterpret_cast<const void *>(dataOffset));
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
 class VertexAttributeCachingTest : public VertexAttributeTest
 {
   protected:
