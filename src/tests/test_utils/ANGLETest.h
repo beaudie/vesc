@@ -161,6 +161,13 @@ GLColor32F ReadColor32F(GLint x, GLint y);
 
 class EGLWindow;
 class OSWindow;
+class ANGLETest;
+
+struct TestPlatformContext final : angle::NonCopyable
+{
+    bool ignoreMessages    = false;
+    ANGLETest *currentTest = nullptr;
+};
 
 class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
 {
@@ -255,10 +262,15 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     // Used for indexed quad rendering
     GLuint mQuadVertexBuffer;
 
+    TestPlatformContext mPlatformContext;
+
     static OSWindow *mOSWindow;
 
     // Workaround for NVIDIA not being able to share a window with OpenGL and Vulkan.
     static Optional<EGLint> mLastRendererType;
+
+    // For loading and freeing platform
+    static std::unique_ptr<angle::Library> mGLESLibrary;
 };
 
 class ANGLETestEnvironment : public testing::Environment
@@ -266,10 +278,6 @@ class ANGLETestEnvironment : public testing::Environment
   public:
     void SetUp() override;
     void TearDown() override;
-
-  private:
-    // For loading and freeing platform
-    std::unique_ptr<angle::Library> mGLESLibrary;
 };
 
 // Driver vendors
@@ -301,10 +309,6 @@ bool IsVulkan();
 // Debug/Release
 bool IsDebug();
 bool IsRelease();
-
-// Negative tests may trigger expected errors/warnings in the ANGLE Platform.
-void IgnoreANGLEPlatformMessages();
-void EnableANGLEPlatformMessages();
 
 // Note: git cl format messes up this formatting.
 #define ANGLE_SKIP_TEST_IF(COND)                              \
