@@ -140,6 +140,23 @@ class VertexAttributeTest : public ANGLETest
         EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
     }
 
+    void checkPixelsNoEQ()
+    {
+        GLint viewportSize[4];
+        glGetIntegerv(GL_VIEWPORT, viewportSize);
+
+        GLint midPixelX = (viewportSize[0] + viewportSize[2]) / 2;
+        GLint midPixelY = (viewportSize[1] + viewportSize[3]) / 2;
+
+        // We need to offset our checks from triangle edges to ensure we don't fall on a single tri
+        // Avoid making assumptions of drawQuad with four checks to check the four possible tri
+        // regions
+        EXPECT_PIXEL_EQ((midPixelX + viewportSize[0]) / 2, midPixelY, 255, 255, 255, 255);
+        EXPECT_PIXEL_EQ((midPixelX + viewportSize[2]) / 2, midPixelY, 255, 255, 255, 255);
+        EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[1]) / 2, 255, 255, 255, 255);
+        EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
+    }
+
     void runTest(const TestData &test)
     {
         // TODO(geofflang): Figure out why this is broken on AMD OpenGL
@@ -607,6 +624,105 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
 
     // Draw offset by one vertex.
     glDrawArrays(GL_TRIANGLES, 1, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(VertexAttributeTest, DrawArraysWithLargeBufferStride)
+{
+    const int maxStride      = 1023;
+    const int inputDataCount = mVertexCount * maxStride;
+
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    GLfloat inputData[inputDataCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[count * maxStride] = static_cast<GLfloat>(count);
+        expectedData[count]          = static_cast<GLfloat>(count);
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    GLsizei dataSize   = inputDataCount * TypeStride(GL_FLOAT);
+    GLsizei dataStride = maxStride * TypeStride(GL_FLOAT);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, inputData);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, dataStride, nullptr);
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(VertexAttributeTest, DrawArraysWithLargeBufferOffset)
+{
+    // TODO(jmadill): Diagnose this failure.
+    if (IsD3D11_FL93())
+    {
+        std::cout << "Test disabled on D3D11 FL 9_3" << std::endl;
+        return;
+    }
+
+    const int largeOffset    = 240000;
+    const int inputDataCount = largeOffset + mVertexCount;
+
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    GLfloat inputData[inputDataCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[largeOffset + count] = static_cast<GLfloat>(count);
+        expectedData[count]            = static_cast<GLfloat>(count);
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    GLsizei dataSize   = inputDataCount * TypeStride(GL_FLOAT);
+    GLsizei dataOffset = largeOffset * TypeStride(GL_FLOAT);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, inputData);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, 0, (const void *)dataOffset);
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     checkPixels();
 
     EXPECT_GL_NO_ERROR();
