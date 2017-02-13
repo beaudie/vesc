@@ -110,6 +110,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mComputeShaderLocalSizeDeclared(false),
       mNumViews(-1),
       mMaxNumViews(resources.MaxViewsOVR),
+      mMaxImageUnits(resources.MaxImageUnits),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
@@ -1249,20 +1250,20 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
                 }
                 break;
         }
+
+        checkIsImageBindingValid(identifierLocation, layoutQualifier.binding,
+                                 publicType.array ? publicType.arraySize : 1);
     }
     else
     {
-
-        if (!checkInternalFormatIsNotSpecified(identifierLocation,
-                                               layoutQualifier.imageInternalFormat))
+        if (!IsOpaqueType(publicType.getBasicType()))
         {
-            return;
+            checkBindingIsNotSpecified(identifierLocation, layoutQualifier.binding);
         }
 
-        if (!checkIsMemoryQualifierNotSpecified(publicType.memoryQualifier, identifierLocation))
-        {
-            return;
-        }
+        checkInternalFormatIsNotSpecified(identifierLocation, layoutQualifier.imageInternalFormat);
+
+        checkIsMemoryQualifierNotSpecified(publicType.memoryQualifier, identifierLocation);
     }
 }
 
@@ -1296,16 +1297,37 @@ bool TParseContext::checkWorkGroupSizeIsNotSpecified(const TSourceLoc &location,
     return true;
 }
 
-bool TParseContext::checkInternalFormatIsNotSpecified(const TSourceLoc &location,
+void TParseContext::checkInternalFormatIsNotSpecified(const TSourceLoc &location,
                                                       TLayoutImageInternalFormat internalFormat)
 {
     if (internalFormat != EiifUnspecified)
     {
         error(location, "invalid layout qualifier: only valid when used with images",
               getImageInternalFormatString(internalFormat));
-        return false;
     }
-    return true;
+}
+
+void TParseContext::checkBindingIsNotSpecified(const TSourceLoc &location, int binding)
+{
+    if (binding != -1)
+    {
+        error(location,
+              "invalid layout qualifier: only valid when used with opaque types or blocks",
+              "binding");
+    }
+}
+
+void TParseContext::checkIsImageBindingValid(const TSourceLoc &location, int binding, int arraySize)
+{
+    // Expects arraySize to be 1 when setting binding for only a single variable.
+    if (binding >= 0 && binding + arraySize > mMaxImageUnits)
+    {
+        error(location, "image binding greater than gl_MaxImageUnits", "binding");
+    }
+    else if (arraySize > mMaxImageUnits)
+    {
+        error(location, "image array too large", "image");
+    }
 }
 
 void TParseContext::functionCallLValueErrorCheck(const TFunction *fnCandidate,
@@ -1827,35 +1849,29 @@ void TParseContext::checkLocalVariableConstStorageQualifier(const TQualifierWrap
     }
 }
 
-bool TParseContext::checkIsMemoryQualifierNotSpecified(const TMemoryQualifier &memoryQualifier,
+void TParseContext::checkIsMemoryQualifierNotSpecified(const TMemoryQualifier &memoryQualifier,
                                                        const TSourceLoc &location)
 {
     if (memoryQualifier.readonly)
     {
         error(location, "Only allowed with images.", "readonly");
-        return false;
     }
     if (memoryQualifier.writeonly)
     {
         error(location, "Only allowed with images.", "writeonly");
-        return false;
     }
     if (memoryQualifier.coherent)
     {
         error(location, "Only allowed with images.", "coherent");
-        return false;
     }
     if (memoryQualifier.restrictQualifier)
     {
         error(location, "Only allowed with images.", "restrict");
-        return false;
     }
     if (memoryQualifier.volatileQualifier)
     {
         error(location, "Only allowed with images.", "volatile");
-        return false;
     }
-    return true;
 }
 
 TIntermDeclaration *TParseContext::parseSingleDeclaration(
@@ -2242,9 +2258,11 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
     if (!layoutQualifier.isCombinationValid())
     {
-        error(typeQualifier.line, "invalid combination:", "layout");
+        error(typeQualifier.line, "invalid layout qualifier combination", "layout");
         return;
     }
+
+    checkBindingIsNotSpecified(typeQualifier.line, layoutQualifier.binding);
 
     checkIsMemoryQualifierNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
 
@@ -2724,6 +2742,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     }
 
     checkIsMemoryQualifierNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
+
+    // TODO(oetuaho): Remove this and support binding for blocks.
+    checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
     checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
@@ -3341,6 +3362,19 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             qualifier.locationsSpecified = 1;
         }
     }
+    else if (qualifierType == "binding")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range: binding must be non-negative",
+                  intValueString.c_str());
+        }
+        else
+        {
+            qualifier.binding = intValue;
+        }
+    }
     else if (qualifierType == "local_size_x")
     {
         parseLocalSize(qualifierType, qualifierTypeLine, intValue, intValueLine, intValueString, 0u,
@@ -3511,6 +3545,8 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
         }
 
         checkIsMemoryQualifierNotSpecified(field.type()->getMemoryQualifier(), field.line());
+
+        checkBindingIsNotSpecified(field.line(), field.type()->getLayoutQualifier().binding);
 
         checkLocationIsNotSpecified(field.line(), field.type()->getLayoutQualifier());
     }
