@@ -51,6 +51,7 @@ State::State()
       mGenerateMipmapHint(GL_NONE),
       mFragmentShaderDerivativeHint(GL_NONE),
       mBindGeneratesResource(true),
+      mClientArraysEnabled(true),
       mNearZ(0),
       mFarZ(0),
       mReadFramebuffer(nullptr),
@@ -74,7 +75,8 @@ void State::initialize(const Caps &caps,
                        const Extensions &extensions,
                        const Version &clientVersion,
                        bool debug,
-                       bool bindGeneratesResource)
+                       bool bindGeneratesResource,
+                       bool clientArraysEnabled)
 {
     mMaxDrawBuffers = caps.maxDrawBuffers;
     mMaxCombinedTextureImageUnits = caps.maxCombinedTextureImageUnits;
@@ -141,6 +143,7 @@ void State::initialize(const Caps &caps,
     mFragmentShaderDerivativeHint = GL_DONT_CARE;
 
     mBindGeneratesResource = bindGeneratesResource;
+    mClientArraysEnabled   = clientArraysEnabled;
 
     mLineWidth = 1.0f;
 
@@ -683,6 +686,8 @@ bool State::getEnableFeature(GLenum feature) const
           return mDebug.isOutputEnabled();
       case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
           return isBindGeneratesResourceEnabled();
+      case GL_CLIENT_ARRAYS_ANGLE:
+          return isClientArraysEnabled();
       case GL_FRAMEBUFFER_SRGB_EXT:
           return getFramebufferSRGB();
       default:                               UNREACHABLE(); return false;
@@ -718,6 +723,11 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
 bool State::isBindGeneratesResourceEnabled() const
 {
     return mBindGeneratesResource;
+}
+
+bool State::isClientArraysEnabled() const
+{
+    return mClientArraysEnabled;
 }
 
 void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
@@ -1545,6 +1555,9 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
           break;
       case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
           *params = isBindGeneratesResourceEnabled() ? GL_TRUE : GL_FALSE;
+          break;
+      case GL_CLIENT_ARRAYS_ANGLE:
+          *params = isClientArraysEnabled() ? GL_TRUE : GL_FALSE;
           break;
       case GL_FRAMEBUFFER_SRGB_EXT:
           *params = getFramebufferSRGB() ? GL_TRUE : GL_FALSE;
