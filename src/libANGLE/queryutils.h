@@ -17,6 +17,7 @@
 namespace gl
 {
 class Buffer;
+class Context;
 class Framebuffer;
 class Program;
 class Renderbuffer;
@@ -36,7 +37,10 @@ void QueryBufferParameteriv(const Buffer *buffer, GLenum pname, GLint *params);
 void QueryBufferParameteri64v(const Buffer *buffer, GLenum pname, GLint64 *params);
 void QueryBufferPointerv(const Buffer *buffer, GLenum pname, void **params);
 void QueryProgramiv(const Program *program, GLenum pname, GLint *params);
-void QueryRenderbufferiv(const Renderbuffer *renderbuffer, GLenum pname, GLint *params);
+void QueryRenderbufferiv(const Context *context,
+                         const Renderbuffer *renderbuffer,
+                         GLenum pname,
+                         GLint *params);
 void QueryShaderiv(const Shader *shader, GLenum pname, GLint *params);
 void QueryTexLevelParameterfv(const Texture *texture,
                               GLenum target,
