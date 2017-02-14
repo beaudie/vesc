@@ -118,6 +118,16 @@ struct WorkaroundsGL
     // This only seems to affect AMD OpenGL drivers, and some Android devices.
     // http://anglebug.com/1637
     bool reapplyUBOBindingsAfterLoadingBinaryProgram = false;
+
+    // Some drivers seem to return a wrong value when querying MAX_VERTEX_ATTRIB_STRIDE, which
+    // is too large to use as stride directly in rendering.
+    // This only seems to affect some Android devices.
+    bool clampMaxVertexAttribStride = false;
+
+    // Some drivers seem to return a wrong value when querying MAX_VERTEX_ATTRIB_RELATIVE_OFFSET,
+    // which is too large to use as stride directly in rendering.
+    // This only seems to affect some Android devices.
+    bool clampMaxVertexAttribRelativeOffset = false;
 };
 }  // namespace rx
 

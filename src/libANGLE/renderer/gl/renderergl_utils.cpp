@@ -183,8 +183,12 @@ static void LimitVersion(gl::Version *curVersion, const gl::Version &maxVersion)
     }
 }
 
-void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsMap *textureCapsMap,
-                  gl::Extensions *extensions, gl::Version *maxSupportedESVersion)
+void GenerateCaps(const FunctionsGL *functions,
+                  gl::Caps *caps,
+                  gl::TextureCapsMap *textureCapsMap,
+                  gl::Extensions *extensions,
+                  gl::Version *maxSupportedESVersion,
+                  const WorkaroundsGL *workarounds)
 {
     // Texture format support checks
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
@@ -632,6 +636,15 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
             QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET);
         caps->maxVertexAttribBindings = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_BINDINGS);
         caps->maxVertexAttribStride   = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_STRIDE);
+        if (workarounds->clampMaxVertexAttribStride)
+        {
+            caps->maxVertexAttribStride = std::min(caps->maxVertexAttribStride, 4095);
+        }
+        if (workarounds->clampMaxVertexAttribRelativeOffset)
+        {
+            caps->maxVertexAttribRelativeOffset =
+                std::min(caps->maxVertexAttribRelativeOffset, 0x10000000);
+        }
     }
     else
     {
@@ -933,7 +946,6 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->doesSRGBClearsOnLinearFramebufferAttachments =
         functions->standard == STANDARD_GL_DESKTOP && (IsIntel(vendor) || IsAMD(vendor));
-
 #if defined(ANGLE_PLATFORM_APPLE)
     workarounds->doWhileGLSLCausesGPUHang = true;
     workarounds->useUnusedBlocksWithStandardOrSharedLayout = true;
@@ -968,10 +980,11 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->emulateAtan2Float = IsNvidia(vendor);
 
     workarounds->reapplyUBOBindingsAfterLoadingBinaryProgram = IsAMD(vendor);
-
 #if defined(ANGLE_PLATFORM_ANDROID)
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterLoadingBinaryProgram = true;
+    workarounds->clampMaxVertexAttribStride                  = true;
+    workarounds->clampMaxVertexAttribRelativeOffset          = true;
 #endif
 }
 
