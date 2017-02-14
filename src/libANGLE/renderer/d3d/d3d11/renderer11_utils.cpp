@@ -639,6 +639,29 @@ size_t GetMaximumVertexUniformBlocks(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+size_t GetMaximumVertexAttribStrides(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_REQ_MULTI_ELEMENT_STRUCTURE_SIZE_IN_BYTES;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_REQ_MULTI_ELEMENT_STRUCTURE_SIZE_IN_BYTES;
+
+        case D3D_FEATURE_LEVEL_9_3:
+        case D3D_FEATURE_LEVEL_9_2:
+        case D3D_FEATURE_LEVEL_9_1:
+            return 2048;
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 size_t GetReservedVertexOutputVectors(D3D_FEATURE_LEVEL featureLevel)
 {
     // According to The OpenGL ES Shading Language specifications
@@ -1224,6 +1247,7 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
         static_cast<GLuint>(GetMaximumVertexOutputVectors(featureLevel)) * 4;
     caps->maxVertexTextureImageUnits =
         static_cast<GLuint>(GetMaximumVertexTextureUnits(featureLevel));
+    caps->maxVertexAttribStride = static_cast<GLuint>(GetMaximumVertexAttribStrides(featureLevel));
 
     // Fragment shader limits
     caps->maxFragmentUniformComponents =

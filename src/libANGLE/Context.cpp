@@ -1404,10 +1404,12 @@ void Context::getIntegerv(GLenum pname, GLint *params)
           *params = mCaps.maxIntegerSamples;
           break;
       case GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET:
-          *params = mCaps.maxVertexAttribRelativeOffset;
+          *params = mCaps.maxVertexAttribRelativeOffset ? mCaps.maxVertexAttribRelativeOffset
+                                                        : gl::MAX_VERTEX_ATTRIB_RELATIVE_OFFSET;
           break;
       case GL_MAX_VERTEX_ATTRIB_BINDINGS:
-          *params = mCaps.maxVertexAttribBindings;
+          *params = mCaps.maxVertexAttribBindings ? mCaps.maxVertexAttribBindings
+                                                  : gl::MAX_VERTEX_ATTRIB_BINDINGS;
           break;
       case GL_MAX_VERTEX_ATTRIB_STRIDE:
           *params = mCaps.maxVertexAttribStride;
