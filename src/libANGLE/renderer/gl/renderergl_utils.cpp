@@ -632,6 +632,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
             QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET);
         caps->maxVertexAttribBindings = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_BINDINGS);
         caps->maxVertexAttribStride   = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_STRIDE);
+        caps->maxVertexAttribStride   = std::min(2048, caps->maxVertexAttribStride);
     }
     else
     {
