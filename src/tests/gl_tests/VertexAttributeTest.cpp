@@ -612,6 +612,117 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+class VertexAttributeTestES31 : public VertexAttributeTestES3
+{
+  protected:
+    VertexAttributeTestES31() {}
+
+    void drawArraysWithStrideAndOffset(GLint stride, GLint offset)
+    {
+        int dataStride = stride ? (stride / TypeStride(GL_FLOAT)) : 1;
+        int dataOffset = offset / TypeStride(GL_FLOAT);
+
+        int inputDataCount = dataOffset + mVertexCount * dataStride;
+        GLsizei inputSize  = inputDataCount * TypeStride(GL_FLOAT);
+        ASSERT_GE(inputSize, dataOffset * TypeStride(GL_FLOAT));
+
+        initBasicProgram();
+        glUseProgram(mProgram);
+
+        std::vector<GLfloat> inputData(inputDataCount);
+        GLfloat expectedData[mVertexCount];
+
+        for (size_t count = 0; count < mVertexCount; ++count)
+        {
+            inputData[dataOffset + count * dataStride] = static_cast<GLfloat>(count);
+            expectedData[count]                        = static_cast<GLfloat>(count);
+        }
+
+        auto quadVertices = GetQuadVertices();
+        GLsizei quadVerticesSize =
+            static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+        glGenBuffers(1, &mQuadBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+        GLint positionLocation = glGetAttribLocation(mProgram, "position");
+        ASSERT_NE(-1, positionLocation);
+        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glEnableVertexAttribArray(positionLocation);
+
+        // ensure inputSize, inputStride and inputOffset are multiples of TypeStride(GL_FLOAT).
+        GLsizei inputStride  = stride ? dataStride * TypeStride(GL_FLOAT) : 0;
+        GLintptr inputOffset = dataOffset * TypeStride(GL_FLOAT);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferData(GL_ARRAY_BUFFER, inputSize, nullptr, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, inputSize, &inputData[0]);
+        glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, inputStride,
+                              reinterpret_cast<const GLvoid *>(inputOffset));
+        glEnableVertexAttribArray(mTestAttrib);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+        glEnableVertexAttribArray(mExpectedAttrib);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        checkPixels();
+
+        EXPECT_GL_NO_ERROR();
+    }
+};
+
+// Verify that MAX_VERTEX_ATTRIB_STRIDE is no less than	the minimum required value (2048) in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxAttribStride)
+{
+    GLint maxAttribStride;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxAttribStride);
+
+    EXPECT_GE(maxAttribStride, 2048);
+}
+
+// Verify that MAX_VERTEX_ATTRIB_RELATIVE_OFFSET is no less than the minimum required value (2047)
+// in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxAttribRelativeOffset)
+{
+    GLint maxAttribRelativeOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxAttribRelativeOffset);
+
+    EXPECT_GE(maxAttribRelativeOffset, 2047);
+}
+
+// Verify that using a large stride in ES3.1 doesn't mess up the draw.
+TEST_P(VertexAttributeTestES31, DrawArraysWithLargeBufferStride)
+{
+    GLint largeAttribStride;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &largeAttribStride);
+
+    // 2048 is the minimum MAX_VERTEX_ATTRIB_STRIDE in ES3.1.
+    // On some platforms (e.g. some Android devices) querying MAX_VERTEX_ATTRIB_STRIDE may get very
+    // large values (2147483647).
+    // We cannot test with such value because it can cause buffers to be too large and math
+    // overflows.
+    largeAttribStride = largeAttribStride > 2048 ? 2048 : largeAttribStride;
+
+    drawArraysWithStrideAndOffset(largeAttribStride, 0);
+}
+
+// Verify that using a large offset in ES3.1 doesn't mess up the draw.
+TEST_P(VertexAttributeTestES31, DrawArraysWithLargeBufferOffset)
+{
+    GLint largeOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &largeOffset);
+
+    // 2047 is the minimum MAX_VERTEX_ATTRIB_RELATIVE_OFFSET in ES3.1.
+    // On some platforms (e.g. some Android devices) querying MAX_VERTEX_ATTRIB_RELATIVE_OFFSET may
+    // get very large values (2147483647).
+    // We cannot test with such value because it can cause buffers to be too large and math
+    // overflows.
+    largeOffset = largeOffset > 2047 ? 2047 : largeOffset;
+
+    drawArraysWithStrideAndOffset(0, largeOffset);
+}
+
 class VertexAttributeCachingTest : public VertexAttributeTest
 {
   protected:
@@ -884,6 +995,8 @@ ANGLE_INSTANTIATE_TEST(VertexAttributeTest,
                        ES3_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeCachingTest,
                        ES2_D3D9(),
