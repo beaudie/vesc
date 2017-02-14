@@ -1949,7 +1949,10 @@ bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
         return false;
     }
 
-    const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+    // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
+    GLenum convertedIntenalFormat = context->getConvertedRenderbufferFormat(internalformat);
+
+    const TextureCaps &formatCaps = context->getTextureCaps().get(convertedIntenalFormat);
     if (!formatCaps.renderable)
     {
         context->handleError(Error(GL_INVALID_ENUM));
@@ -1959,7 +1962,7 @@ bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
     // ANGLE_framebuffer_multisample does not explicitly state that the internal format must be
     // sized but it does state that the format must be in the ES2.0 spec table 4.5 which contains
     // only sized internal formats.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(convertedIntenalFormat);
     if (formatInfo.pixelBytes == 0)
     {
         context->handleError(Error(GL_INVALID_ENUM));
