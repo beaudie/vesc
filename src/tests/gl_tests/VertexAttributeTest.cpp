@@ -612,6 +612,120 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+class VertexAttributeTestES31 : public VertexAttributeTestES3
+{
+  protected:
+    VertexAttributeTestES31() {}
+
+    void drawArraysWithStrideAndOffset(GLint stride, GLint offset)
+    {
+        int dataStride = stride ? (stride / TypeStride(GL_FLOAT)) : 1;
+        int dataOffset = offset / TypeStride(GL_FLOAT);
+
+        int inputDataCount = dataOffset + mVertexCount * dataStride;
+        GLsizei inputSize  = inputDataCount * TypeStride(GL_FLOAT);
+        ASSERT_GE(inputSize, dataOffset * TypeStride(GL_FLOAT));
+
+        initBasicProgram();
+        glUseProgram(mProgram);
+
+        std::vector<GLfloat> inputData(inputDataCount);
+        GLfloat expectedData[mVertexCount];
+
+        for (size_t count = 0; count < mVertexCount; ++count)
+        {
+            inputData[dataOffset + count * dataStride] = static_cast<GLfloat>(count);
+            expectedData[count]                        = static_cast<GLfloat>(count);
+        }
+
+        auto quadVertices = GetQuadVertices();
+        GLsizei quadVerticesSize =
+            static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+        glGenBuffers(1, &mQuadBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+
+        GLint positionLocation = glGetAttribLocation(mProgram, "position");
+        ASSERT_NE(-1, positionLocation);
+        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glEnableVertexAttribArray(positionLocation);
+
+        // ensure inputSize, inputStride and inputOffset are multiples of TypeStride(GL_FLOAT).
+        GLsizei inputStride  = stride ? dataStride * TypeStride(GL_FLOAT) : 0;
+        GLintptr inputOffset = dataOffset * TypeStride(GL_FLOAT);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferData(GL_ARRAY_BUFFER, inputSize, nullptr, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, inputSize, &inputData[0]);
+        glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, inputStride,
+                              reinterpret_cast<const GLvoid *>(inputOffset));
+        glEnableVertexAttribArray(mTestAttrib);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+        glEnableVertexAttribArray(mExpectedAttrib);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        checkPixels();
+
+        EXPECT_GL_NO_ERROR();
+    }
+};
+
+// Verify that MAX_VERTEX_ATTRIB_STRIDE is no less than	the minimum required value (2048) in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxVertexAttribStride)
+{
+    GLint maxAttribStride;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxAttribStride);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_GE(maxAttribStride, 2048);
+}
+
+// Verify that MAX_VERTEX_ATTRIB_RELATIVE_OFFSET is no less than the minimum required value (2047)
+// in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxVertexAttribRelativeOffset)
+{
+    GLint maxAttribRelativeOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxAttribRelativeOffset);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_GE(maxAttribRelativeOffset, 2047);
+}
+
+// Verify that using MAX_VERTEX_ATTRIB_STRIDE as stride in ES3.1 doesn't mess up the draw.
+TEST_P(VertexAttributeTestES31, DrawArraysWithMaxVertexAttribStride)
+{
+    GLint maxStride;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxStride);
+    EXPECT_GL_NO_ERROR();
+
+    // skip if maxStride is maximum unsigned or signed values
+    if (maxStride == -1 || maxStride == 0x7FFFFFFF)
+    {
+        std::cout << "Implementation supports all strides." << std::endl;
+        return;
+    }
+
+    drawArraysWithStrideAndOffset(maxStride, 0);
+}
+
+// Verify that using MAX_VERTEX_ATTRIB_RELATIVE_OFFSET as offset in ES3.1 doesn't mess up the draw.
+TEST_P(VertexAttributeTestES31, DrawArraysWithMaxVertexAttribRelativeOffset)
+{
+    GLint maxOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &maxOffset);
+
+    // skip if maxOffset is maximum unsigned or signed values
+    if (maxOffset == -1 || maxOffset == 0x7FFFFFFF)
+    {
+        std::cout << "Implementation supports all VertexAttribRelativeOffsets." << std::endl;
+        return;
+    }
+
+    drawArraysWithStrideAndOffset(0, maxOffset);
+}
+
 class VertexAttributeCachingTest : public VertexAttributeTest
 {
   protected:
@@ -884,6 +998,8 @@ ANGLE_INSTANTIATE_TEST(VertexAttributeTest,
                        ES3_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeCachingTest,
                        ES2_D3D9(),
