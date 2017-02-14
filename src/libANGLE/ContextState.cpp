@@ -95,14 +95,15 @@ ContextState::ContextState(uintptr_t contextIn,
 
 ContextState::~ContextState()
 {
-    mBuffers->release();
-    mShaderPrograms->release();
-    mTextures->release();
-    mRenderbuffers->release();
-    mSamplers->release();
-    mFenceSyncs->release();
-    mPaths->release();
-    mFramebuffers->release();
+    // Handles are released by the Context.
+    ASSERT(!mBuffers);
+    ASSERT(!mShaderPrograms);
+    ASSERT(!mTextures);
+    ASSERT(!mRenderbuffers);
+    ASSERT(!mSamplers);
+    ASSERT(!mFenceSyncs);
+    ASSERT(!mPaths);
+    ASSERT(!mFramebuffers);
 }
 
 const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
