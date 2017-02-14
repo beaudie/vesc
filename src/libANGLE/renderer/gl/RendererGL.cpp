@@ -553,7 +553,8 @@ void RendererGL::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureC
                               gl::Extensions *outExtensions,
                               gl::Limitations * /* outLimitations */) const
 {
-    nativegl_gl::GenerateCaps(mFunctions, outCaps, outTextureCaps, outExtensions, &mMaxSupportedESVersion);
+    nativegl_gl::GenerateCaps(mFunctions, outCaps, outTextureCaps, outExtensions,
+                              &mMaxSupportedESVersion, &mWorkarounds);
 }
 
 GLint RendererGL::getGPUDisjoint()
