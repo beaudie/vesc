@@ -2457,6 +2457,8 @@ void Context::initCaps(bool webGLContext, const egl::DisplayExtensions &displayE
     mCaps.maxVertexAttributes = std::min<GLuint>(mCaps.maxVertexAttributes, MAX_VERTEX_ATTRIBS);
     mCaps.maxVertexUniformBlocks = std::min<GLuint>(mCaps.maxVertexUniformBlocks, IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
     mCaps.maxVertexOutputComponents = std::min<GLuint>(mCaps.maxVertexOutputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
+    mCaps.maxVertexAttribStride         = std::min(2048, mCaps.maxVertexAttribStride);
+    mCaps.maxVertexAttribRelativeOffset = std::min(2047, mCaps.maxVertexAttribRelativeOffset);
 
     mCaps.maxFragmentInputComponents = std::min<GLuint>(mCaps.maxFragmentInputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
 
