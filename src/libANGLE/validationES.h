@@ -76,7 +76,7 @@ Program *GetValidProgram(ValidationContext *context, GLuint id);
 Shader *GetValidShader(ValidationContext *context, GLuint id);
 
 bool ValidateAttachmentTarget(Context *context, GLenum attachment);
-bool ValidateRenderbufferStorageParametersBase(ValidationContext,
+bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
                                                GLenum target,
                                                GLsizei samples,
                                                GLenum internalformat,
