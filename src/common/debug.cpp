@@ -139,13 +139,16 @@ void LogMessage::trace() const
     }
 
     std::ostringstream stream;
-    stream << LogSeverityName(mSeverity) << ": ";
-    // EVENT() don't require additional function(line) info
-    if (mSeverity != LOG_EVENT)
+    // EVENT() does not require additional function(line) info.
+    if (mSeverity == LOG_EVENT)
     {
-        stream << mFunction << "(" << mLine << "): ";
+        stream << mStream.str();
     }
-    stream << mStream.str() << std::endl;
+    else
+    {
+        stream << LogSeverityName(mSeverity) << ": " << mFunction << "(" << mLine
+               << "): " << mStream.str() << std::endl;
+    }
     std::string str(stream.str());
 
     if (DebugAnnotationsActive())
@@ -165,11 +168,17 @@ void LogMessage::trace() const
 
     if (mSeverity == LOG_ERR)
     {
-        std::cerr << str;
-#if !defined(NDEBUG) && defined(_MSC_VER)
-        OutputDebugStringA(str.c_str());
-#endif  // !defined(NDEBUG) && defined(_MSC_VER)
+        std::cerr << str << std::endl;
     }
+
+#if defined(ANGLE_PLATFORM_WINDOWS) && (defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER) || !defined(NDEBUG))
+#if !defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
+    if (mSeverity == LOG_ERR)
+#endif  // !defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
+    {
+        OutputDebugStringA(str.c_str());
+    }
+#endif
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE)
 #if defined(NDEBUG)
@@ -177,19 +186,14 @@ void LogMessage::trace() const
     {
         return;
     }
-#endif  // NDEBUG
+#endif  // defined(NDEBUG)
     static std::ofstream file(TRACE_OUTPUT_FILE, std::ofstream::app);
     if (file)
     {
-        file.write(str.c_str(), str.length());
+        file << str << std::endl;
         file.flush();
     }
-
-#if defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
-    OutputDebugStringA(str.c_str());
-#endif  // ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER
-
-#endif  // ANGLE_ENABLE_DEBUG_TRACE
+#endif  // defined(ANGLE_ENABLE_DEBUG_TRACE)
 }
 
 LogSeverity LogMessage::getSeverity() const
