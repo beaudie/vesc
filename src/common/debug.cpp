@@ -139,13 +139,16 @@ void LogMessage::trace() const
     }
 
     std::ostringstream stream;
-    stream << LogSeverityName(mSeverity) << ": ";
     // EVENT() don't require additional function(line) info
-    if (mSeverity != LOG_EVENT)
+    if (mSeverity == LOG_EVENT)
     {
-        stream << mFunction << "(" << mLine << "): ";
+        stream << mStream.str();
     }
-    stream << mStream.str() << std::endl;
+    else
+    {
+        stream << LogSeverityName(mSeverity) << ": " << mFunction << "(" << mLine
+               << "): " << mStream.str() << std::endl;
+    }
     std::string str(stream.str());
 
     if (DebugAnnotationsActive())
