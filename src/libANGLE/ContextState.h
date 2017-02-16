@@ -124,6 +124,11 @@ class ValidationContext : angle::NonCopyable
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum getConvertedRenderbufferFormat(GLenum internalformat) const;
 
+    bool isWebGL1() const
+    {
+        return mState.mExtensions.webglCompatibility && mState.mClientVersion.major == 2;
+    }
+
   protected:
     ContextState mState;
     bool mSkipValidation;
