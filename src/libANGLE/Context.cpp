@@ -2121,7 +2121,7 @@ void Context::detachTexture(GLuint texture)
     // allocation map management either here or in the resource manager at detach time.
     // Zero textures are held by the Context, and we don't attempt to request them from
     // the State.
-    mGLState.detachTexture(mZeroTextures, texture);
+    mGLState.detachTexture(this, mZeroTextures, texture);
 }
 
 void Context::detachBuffer(GLuint buffer)
@@ -2160,7 +2160,7 @@ void Context::detachFramebuffer(GLuint framebuffer)
 
 void Context::detachRenderbuffer(GLuint renderbuffer)
 {
-    mGLState.detachRenderbuffer(renderbuffer);
+    mGLState.detachRenderbuffer(this, renderbuffer);
 }
 
 void Context::detachVertexArray(GLuint vertexArray)
@@ -2731,11 +2731,11 @@ void Context::framebufferTexture2D(GLenum target,
             index = ImageIndex::MakeCube(textarget, level);
         }
 
-        framebuffer->setAttachment(GL_TEXTURE, attachment, index, textureObj);
+        framebuffer->setAttachment(this->isWebGL1(), GL_TEXTURE, attachment, index, textureObj);
     }
     else
     {
-        framebuffer->resetAttachment(attachment);
+        framebuffer->resetAttachment(this, attachment);
     }
 
     mGLState.setObjectDirty(target);
@@ -2752,12 +2752,13 @@ void Context::framebufferRenderbuffer(GLenum target,
     if (renderbuffer != 0)
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
-        framebuffer->setAttachment(GL_RENDERBUFFER, attachment, gl::ImageIndex::MakeInvalid(),
-                                   renderbufferObject);
+
+        framebuffer->setAttachment(this->isWebGL1(), GL_RENDERBUFFER, attachment,
+                                   gl::ImageIndex::MakeInvalid(), renderbufferObject);
     }
     else
     {
-        framebuffer->resetAttachment(attachment);
+        framebuffer->resetAttachment(this, attachment);
     }
 
     mGLState.setObjectDirty(target);
@@ -2788,11 +2789,11 @@ void Context::framebufferTextureLayer(GLenum target,
             index = ImageIndex::Make2DArray(level, layer);
         }
 
-        framebuffer->setAttachment(GL_TEXTURE, attachment, index, textureObject);
+        framebuffer->setAttachment(this->isWebGL1(), GL_TEXTURE, attachment, index, textureObject);
     }
     else
     {
-        framebuffer->resetAttachment(attachment);
+        framebuffer->resetAttachment(this, attachment);
     }
 
     mGLState.setObjectDirty(target);
