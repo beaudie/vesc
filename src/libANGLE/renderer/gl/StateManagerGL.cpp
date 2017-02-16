@@ -1669,18 +1669,21 @@ void StateManagerGL::setFramebufferSRGBEnabled(bool enabled)
 void StateManagerGL::setFramebufferSRGBEnabledForFramebuffer(bool enabled,
                                                              const FramebufferGL *framebuffer)
 {
-    if (mFunctions->standard == STANDARD_GL_DESKTOP && framebuffer->isDefault())
+    if (mFunctions->standard == STANDARD_GL_DESKTOP
     {
-        // Obey the framebuffer sRGB state for blending on all framebuffers except the default
-        // framebuffer on Desktop OpenGL.
-        // When SRGB blending is enabled, only SRGB capable formats will use it but the default
-        // framebuffer will always use it if it is enabled.
-        // TODO(geofflang): Update this when the framebuffer binding dirty changes, when it exists.
-        setFramebufferSRGBEnabled(false);
-    }
-    else
-    {
-        setFramebufferSRGBEnabled(enabled);
+        if (framebuffer->isDefault())
+        {
+            // Obey the framebuffer sRGB state for blending on all framebuffers except the default
+            // framebuffer on Desktop OpenGL.
+            // When SRGB blending is enabled, only SRGB capable formats will use it but the default
+            // framebuffer will always use it if it is enabled.
+            // TODO(geofflang): Update this when the framebuffer binding dirty changes, when it exists.
+            setFramebufferSRGBEnabled(false);
+        }
+        else
+        {
+            setFramebufferSRGBEnabled(enabled);
+        }
     }
 }
 
