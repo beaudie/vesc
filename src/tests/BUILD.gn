@@ -92,6 +92,7 @@ if (is_win || is_linux || is_mac || is_android) {
       "//base/test:test_support",
       "//testing/gmock",
       "//testing/gtest",
+      "//third_party/angle:angle_gpu_info_util",
       "//third_party/angle:angle_image_util",
       "//third_party/angle:angle_util",
       "//third_party/angle:libEGL",

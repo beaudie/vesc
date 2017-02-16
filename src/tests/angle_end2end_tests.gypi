@@ -92,6 +92,7 @@
             '<(angle_path)/src/tests/egl_tests/EGLSurfacelessContextTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLSurfaceTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLVulkanEXTTest.cpp',
+            '<(angle_path)/src/tests/util_tests/PrintSystemInfoTest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.h',
             '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
@@ -117,6 +118,7 @@
     },
     'dependencies':
     [
+        '<(angle_path)/src/angle.gyp:angle_gpu_info_util',
         '<(angle_path)/src/angle.gyp:angle_image_util',
         # We use the D3D11 config for enabling Debug runtime error logging.
         '<(angle_path)/src/angle.gyp:libANGLE_d3d11_config',
