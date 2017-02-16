@@ -117,6 +117,7 @@
     },
     'dependencies':
     [
+        '<(angle_path)/src/angle.gyp:angle_gpu_info_util',
         '<(angle_path)/src/angle.gyp:angle_image_util',
         # We use the D3D11 config for enabling Debug runtime error logging.
         '<(angle_path)/src/angle.gyp:libANGLE_d3d11_config',
