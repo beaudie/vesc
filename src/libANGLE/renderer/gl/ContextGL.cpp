@@ -330,7 +330,7 @@ void ContextGL::popGroupMarker()
 
 void ContextGL::syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits)
 {
-    mRenderer->getStateManager()->syncState(state, dirtyBits);
+    mRenderer->getStateManager()->syncState(getContextState(), state, dirtyBits);
 }
 
 GLint ContextGL::getGPUDisjoint()
