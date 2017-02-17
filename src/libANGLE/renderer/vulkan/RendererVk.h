@@ -77,6 +77,19 @@ class RendererVk : angle::NonCopyable
             new vk::GarbageObject<T>(serial, std::move(object))));
     }
 
+    template <typename T>
+    void enqueueGarbageOrDeleteNow(const ResourceVk &resouce, T &&object)
+    {
+        if (resouce.getDeleteSchedule(mLastCompletedCommandSerial) == DeleteSchedule::NOW)
+        {
+            object.destroy(mDevice);
+        }
+        else
+        {
+            enqueueGarbage(resouce.getStoredCommandSerial(), std::move(object));
+        }
+    }
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,

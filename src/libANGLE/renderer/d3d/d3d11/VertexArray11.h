@@ -23,7 +23,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver
     VertexArray11(const gl::VertexArrayState &data);
     ~VertexArray11() override;
 
-    void syncState(const gl::VertexArray::DirtyBits &dirtyBits) override;
+    void syncState(ContextImpl *contextImpl, const gl::VertexArray::DirtyBits &dirtyBits) override;
     gl::Error updateDirtyAndDynamicAttribs(VertexDataManager *vertexDataManager,
                                            const gl::State &state,
                                            GLint start,

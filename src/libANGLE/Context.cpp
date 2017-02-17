@@ -1513,7 +1513,7 @@ void Context::getIntegerv(GLenum pname, GLint *params)
           *params = mCaps.shaderStorageBufferOffsetAlignment;
           break;
       default:
-          mGLState.getIntegerv(mState, pname, params);
+          mGLState.getIntegerv(this, pname, params);
           break;
     }
 }
@@ -2535,7 +2535,7 @@ void Context::syncRendererState()
     const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
     mImplementation->syncState(dirtyBits);
     mGLState.clearDirtyBits();
-    mGLState.syncDirtyObjects();
+    mGLState.syncDirtyObjects(this);
 }
 
 void Context::syncRendererState(const State::DirtyBits &bitMask,
@@ -2545,7 +2545,7 @@ void Context::syncRendererState(const State::DirtyBits &bitMask,
     mImplementation->syncState(dirtyBits);
     mGLState.clearDirtyBits(dirtyBits);
 
-    mGLState.syncDirtyObjects(objectMask);
+    mGLState.syncDirtyObjects(this, objectMask);
 }
 
 void Context::blitFramebuffer(GLint srcX0,
@@ -2646,7 +2646,7 @@ void Context::copyTexImage2D(GLenum target,
                              GLint border)
 {
     // Only sync the read FBO
-    mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
+    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
 
     Rectangle sourceArea(x, y, width, height);
 
@@ -2671,7 +2671,7 @@ void Context::copyTexSubImage2D(GLenum target,
     }
 
     // Only sync the read FBO
-    mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
+    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
 
     Offset destOffset(xoffset, yoffset, 0);
     Rectangle sourceArea(x, y, width, height);
@@ -2698,7 +2698,7 @@ void Context::copyTexSubImage3D(GLenum target,
     }
 
     // Only sync the read FBO
-    mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
+    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
 
     Offset destOffset(xoffset, yoffset, zoffset);
     Rectangle sourceArea(x, y, width, height);
@@ -2823,7 +2823,7 @@ void Context::readBuffer(GLenum mode)
 void Context::discardFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(target);
+    mGLState.syncDirtyObject(this, target);
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
@@ -2838,12 +2838,12 @@ void Context::invalidateFramebuffer(GLenum target,
                                     const GLenum *attachments)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(target);
+    mGLState.syncDirtyObject(this, target);
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->checkStatus(mState) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->checkStatus(this) != GL_FRAMEBUFFER_COMPLETE)
     {
         return;
     }
@@ -2860,12 +2860,12 @@ void Context::invalidateSubFramebuffer(GLenum target,
                                        GLsizei height)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(target);
+    mGLState.syncDirtyObject(this, target);
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->checkStatus(mState) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->checkStatus(this) != GL_FRAMEBUFFER_COMPLETE)
     {
         return;
     }
@@ -3768,7 +3768,7 @@ void Context::texStorage2DMultisample(GLenum target,
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
-    mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
+    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
     const Framebuffer *framebuffer = mGLState.getReadFramebuffer();
 
     switch (pname)
