@@ -54,7 +54,7 @@ class ResourceVk
         mStoredCommandSerial = commandSerial;
     }
 
-    DeleteSchedule getDeleteSchedule(uint32_t lastCompletedWorkSerial)
+    DeleteSchedule getDeleteSchedule(uint32_t lastCompletedWorkSerial) const
     {
         if (mStoredCommandSerial == 0 || lastCompletedWorkSerial >= mStoredCommandSerial)
         {
@@ -65,6 +65,8 @@ class ResourceVk
             return DeleteSchedule::LATER;
         }
     }
+
+    uint32_t getStoredCommandSerial() const { return mStoredCommandSerial; }
 
   private:
     uint32_t mStoredCommandSerial = 0;

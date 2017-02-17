@@ -534,7 +534,7 @@ bool Framebuffer::usingExtendedDrawBuffers() const
     return false;
 }
 
-GLenum Framebuffer::checkStatus(const ContextState &state)
+GLenum Framebuffer::checkStatus(const Context *context)
 {
     // The default framebuffer is always complete except when it is surfaceless in which
     // case it is always unsupported. We return early because the default framebuffer may
@@ -549,14 +549,16 @@ GLenum Framebuffer::checkStatus(const ContextState &state)
 
     if (hasAnyDirtyBit() || !mCachedStatus.valid())
     {
-        mCachedStatus = checkStatusImpl(state);
+        mCachedStatus = checkStatusImpl(context);
     }
 
     return mCachedStatus.value();
 }
 
-GLenum Framebuffer::checkStatusImpl(const ContextState &state)
+GLenum Framebuffer::checkStatusImpl(const Context *context)
 {
+    const ContextState &state = context->getContextState();
+
     ASSERT(mId != 0);
 
     unsigned int colorbufferSize = 0;
@@ -764,7 +766,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
         return GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS;
     }
 
-    syncState();
+    syncState(context);
     if (!mImpl->checkStatus())
     {
         return GL_FRAMEBUFFER_UNSUPPORTED;
@@ -911,9 +913,9 @@ Error Framebuffer::blit(rx::ContextImpl *context,
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);
 }
 
-int Framebuffer::getSamples(const ContextState &state)
+int Framebuffer::getSamples(const Context *context)
 {
-    if (complete(state))
+    if (complete(context))
     {
         // For a complete framebuffer, all attachments must have the same sample count.
         // In this case return the first nonzero sample size.
@@ -1008,11 +1010,11 @@ void Framebuffer::resetAttachment(GLenum binding)
     setAttachment(GL_NONE, binding, ImageIndex::MakeInvalid(), nullptr);
 }
 
-void Framebuffer::syncState()
+void Framebuffer::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
-        mImpl->syncState(mDirtyBits);
+        mImpl->syncState(rx::SafeGetImpl(context), mDirtyBits);
         mDirtyBits.reset();
         if (mId != 0)
         {
@@ -1027,9 +1029,14 @@ void Framebuffer::signal(SignalToken token)
     mCachedStatus.reset();
 }
 
-bool Framebuffer::complete(const ContextState &state)
+bool Framebuffer::complete(const Context *context)
 {
-    return (checkStatus(state) == GL_FRAMEBUFFER_COMPLETE);
+    return (checkStatus(context) == GL_FRAMEBUFFER_COMPLETE);
+}
+
+bool Framebuffer::cachedComplete() const
+{
+    return (mCachedStatus.valid() && mCachedStatus == GL_FRAMEBUFFER_COMPLETE);
 }
 
 bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
@@ -1157,6 +1164,17 @@ void Framebuffer::setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLoc
 {
     mState.mDefaultFixedSampleLocations = defaultFixedSampleLocations;
     mDirtyBits.set(DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS);
+}
+
+// TODO(jmadill): Remove this kludge.
+GLenum Framebuffer::checkStatus(const ValidationContext *context)
+{
+    return checkStatus(static_cast<const Context *>(context));
+}
+
+int Framebuffer::getSamples(const ValidationContext *context)
+{
+    return getSamples(static_cast<const Context *>(context));
 }
 
 }  // namespace gl
