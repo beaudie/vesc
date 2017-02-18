@@ -917,6 +917,9 @@ void Renderer11::populateRenderer11DeviceCaps()
         mRenderer11DeviceCaps.B5G5R5A1support = 0;
     }
 
+    // DEBUG(Shahmeer): Repro B5G5R5A1 clear issue by disabling native support for format
+    // mRenderer11DeviceCaps.B5G5R5A1support = 0;
+
     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
     SafeRelease(dxgiAdapter2);
