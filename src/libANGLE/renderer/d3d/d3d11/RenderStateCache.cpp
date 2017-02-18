@@ -36,7 +36,13 @@ static void ClearStateMap(mapType &map)
 // MSDN's documentation of ID3D11Device::CreateBlendState, ID3D11Device::CreateRasterizerState,
 // ID3D11Device::CreateDepthStencilState and ID3D11Device::CreateSamplerState claims the maximum
 // number of unique states of each type an application can create is 4096
-const unsigned int RenderStateCache::kMaxBlendStates = 4096;
+// Since the Clear11 object has it's own seperate blendstate cache containing up to 16 blendstates,
+// the maximum number of blendstates must be reduced to avoid reaching the 4096 limit.
+// TODO(ShahmeerEsmail): Consider creating caches with a smaller initial size to save memory since
+// in most cases only a fraction of these are required.
+// TODO(ShahmeerEsmail): Consider sharing caches with Clear11 to avoid overlap and ensure that
+// the 4096 element limit is not reached inadvertantly
+const unsigned int RenderStateCache::kMaxBlendStates        = 4000;
 const unsigned int RenderStateCache::kMaxRasterizerStates = 4096;
 const unsigned int RenderStateCache::kMaxDepthStencilStates = 4096;
 const unsigned int RenderStateCache::kMaxSamplerStates = 4096;
@@ -71,53 +77,27 @@ void RenderStateCache::clear()
     ClearStateMap(mSamplerStateCache);
 }
 
-std::size_t RenderStateCache::hashBlendState(const BlendStateKey &blendState)
+std::size_t RenderStateCache::hashBlendState(const d3d11::BlendStateKey &blendState)
 {
     static const unsigned int seed = 0xABCDEF98;
 
     std::size_t hash = 0;
-    MurmurHash3_x86_32(&blendState, sizeof(gl::BlendState), seed, &hash);
+    MurmurHash3_x86_32(&blendState, sizeof(d3d11::BlendStateKey), seed, &hash);
     return hash;
 }
 
-bool RenderStateCache::compareBlendStates(const BlendStateKey &a, const BlendStateKey &b)
+bool RenderStateCache::compareBlendStates(const d3d11::BlendStateKey &a,
+                                          const d3d11::BlendStateKey &b)
 {
-    return memcmp(&a, &b, sizeof(BlendStateKey)) == 0;
+    return memcmp(&a, &b, sizeof(d3d11::BlendStateKey)) == 0;
 }
 
-gl::Error RenderStateCache::getBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState,
+gl::Error RenderStateCache::getBlendState(const d3d11::BlendStateKey &key,
                                           ID3D11BlendState **outBlendState)
 {
     if (!mDevice)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
-    }
-
-    bool mrt = false;
-
-    const FramebufferD3D *framebufferD3D = GetImplAs<FramebufferD3D>(framebuffer);
-    const gl::AttachmentList &colorbuffers = framebufferD3D->getColorAttachmentsForRender();
-
-    BlendStateKey key = {};
-    key.blendState = blendState;
-    for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
-    {
-        const gl::FramebufferAttachment *attachment = colorbuffers[colorAttachment];
-
-        auto rtChannels = key.rtChannels[colorAttachment];
-
-        if (attachment)
-        {
-            if (colorAttachment > 0)
-            {
-                mrt = true;
-            }
-
-            rtChannels[0] = attachment->getRedSize()   > 0;
-            rtChannels[1] = attachment->getGreenSize() > 0;
-            rtChannels[2] = attachment->getBlueSize()  > 0;
-            rtChannels[3] = attachment->getAlphaSize() > 0;
-        }
     }
 
     BlendStateMap::iterator keyIter = mBlendStateCache.find(key);
@@ -148,30 +128,32 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer *framebuffer, co
         }
 
         // Create a new blend state and insert it into the cache
-        D3D11_BLEND_DESC blendDesc = { 0 };
-        blendDesc.AlphaToCoverageEnable = blendState.sampleAlphaToCoverage;
-        blendDesc.IndependentBlendEnable = mrt ? TRUE : FALSE;
+        D3D11_BLEND_DESC blendDesc;
+        D3D11_RENDER_TARGET_BLEND_DESC *pBlendDesc0 = &blendDesc.RenderTarget[0];
+        *pBlendDesc0                                = {0};
+        const gl::BlendState blendState             = key.blendState;
 
-        for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
+        blendDesc.AlphaToCoverageEnable  = blendState.sampleAlphaToCoverage;
+        blendDesc.IndependentBlendEnable = key.mrt ? TRUE : FALSE;
+        if (blendState.blend)
         {
-            D3D11_RENDER_TARGET_BLEND_DESC &rtBlend = blendDesc.RenderTarget[i];
+            pBlendDesc0->BlendEnable = true;
+            pBlendDesc0->SrcBlend    = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendRGB, false);
+            pBlendDesc0->DestBlend   = gl_d3d11::ConvertBlendFunc(blendState.destBlendRGB, false);
+            pBlendDesc0->BlendOp     = gl_d3d11::ConvertBlendOp(blendState.blendEquationRGB);
+            pBlendDesc0->SrcBlendAlpha =
+                gl_d3d11::ConvertBlendFunc(blendState.sourceBlendAlpha, true);
+            pBlendDesc0->DestBlendAlpha =
+                gl_d3d11::ConvertBlendFunc(blendState.destBlendAlpha, true);
+            pBlendDesc0->BlendOpAlpha = gl_d3d11::ConvertBlendOp(blendState.blendEquationAlpha);
+        }
 
-            rtBlend.BlendEnable = blendState.blend;
-            if (blendState.blend)
-            {
-                rtBlend.SrcBlend = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendRGB, false);
-                rtBlend.DestBlend = gl_d3d11::ConvertBlendFunc(blendState.destBlendRGB, false);
-                rtBlend.BlendOp = gl_d3d11::ConvertBlendOp(blendState.blendEquationRGB);
+        pBlendDesc0->RenderTargetWriteMask = key.rtvMasks[0];
 
-                rtBlend.SrcBlendAlpha = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendAlpha, true);
-                rtBlend.DestBlendAlpha = gl_d3d11::ConvertBlendFunc(blendState.destBlendAlpha, true);
-                rtBlend.BlendOpAlpha = gl_d3d11::ConvertBlendOp(blendState.blendEquationAlpha);
-            }
-
-            rtBlend.RenderTargetWriteMask = gl_d3d11::ConvertColorMask(key.rtChannels[i][0] && blendState.colorMaskRed,
-                                                                       key.rtChannels[i][1] && blendState.colorMaskGreen,
-                                                                       key.rtChannels[i][2] && blendState.colorMaskBlue,
-                                                                       key.rtChannels[i][3] && blendState.colorMaskAlpha);
+        for (unsigned int i = 1; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
+        {
+            blendDesc.RenderTarget[i]                       = *pBlendDesc0;
+            blendDesc.RenderTarget[i].RenderTargetWriteMask = key.rtvMasks[i];
         }
 
         ID3D11BlendState *dx11BlendState = NULL;
@@ -298,28 +280,12 @@ bool RenderStateCache::compareDepthStencilStates(const gl::DepthStencilState &a,
     return memcmp(&a, &b, sizeof(gl::DepthStencilState)) == 0;
 }
 
-gl::Error RenderStateCache::getDepthStencilState(const gl::DepthStencilState &originalState,
-                                                 bool disableDepth,
-                                                 bool disableStencil,
+gl::Error RenderStateCache::getDepthStencilState(const gl::DepthStencilState &glState,
                                                  ID3D11DepthStencilState **outDSState)
 {
     if (!mDevice)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
-    }
-
-    gl::DepthStencilState glState = originalState;
-    if (disableDepth)
-    {
-        glState.depthTest = false;
-        glState.depthMask = false;
-    }
-
-    if (disableStencil)
-    {
-        glState.stencilWritemask     = 0;
-        glState.stencilBackWritemask = 0;
-        glState.stencilTest          = false;
     }
 
     auto keyIter = mDepthStencilStateCache.find(glState);

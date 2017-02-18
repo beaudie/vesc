@@ -23,6 +23,18 @@ class Renderer11;
 class RenderTarget11;
 struct ClearParameters;
 
+template <typename T>
+struct RtvDsvClearInfo
+{
+    float z;
+    float c0y_pad;
+    float c0z_pad;
+    float c0w_pad;
+    T r, g, b;
+    T alphas[8];
+    T c3w_pad;
+};
+
 class Clear11 : angle::NonCopyable
 {
   public:
@@ -34,63 +46,48 @@ class Clear11 : angle::NonCopyable
                                const gl::FramebufferState &fboData);
 
   private:
-    struct MaskedRenderTarget
+    class ClearShader final : public angle::NonCopyable
     {
-        bool colorMask[4];
-        RenderTarget11 *renderTarget;
-    };
-
-    ID3D11BlendState *getBlendState(const std::vector<MaskedRenderTarget> &rts);
-    ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
-
-    struct ClearShader final : public angle::NonCopyable
-    {
-        ClearShader(DXGI_FORMAT colorType,
-                    const char *inputLayoutName,
-                    const BYTE *vsByteCode,
-                    size_t vsSize,
-                    const char *vsDebugName,
-                    const BYTE *psByteCode,
-                    size_t psSize,
-                    const char *psDebugName);
+      public:
+        ClearShader(Renderer11 *renderer, const D3D_FEATURE_LEVEL fl);
         ~ClearShader();
+        void getIlVsPs(const INT clearType,
+                       const bool isAeShader,
+                       ID3D11InputLayout **il,
+                       ID3D11VertexShader **vs,
+                       ID3D11PixelShader **ps);
 
-        d3d11::LazyInputLayout *inputLayout;
-        d3d11::LazyShader<ID3D11VertexShader> vertexShader;
-        d3d11::LazyShader<ID3D11PixelShader> pixelShader;
+      private:
+        Renderer11 *mRenderer;
+        D3D_FEATURE_LEVEL mFeatureLevel;
+
+        angle::ComPtr<ID3D11InputLayout> mIl9;
+        d3d11::LazyShader<ID3D11VertexShader> mVs9;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloat9;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloatAe9;
+        d3d11::LazyShader<ID3D11VertexShader> mVs;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloat;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloatAe;
+        d3d11::LazyShader<ID3D11PixelShader> mPsUInt;
+        d3d11::LazyShader<ID3D11PixelShader> mPsSInt;
     };
-
-    template <unsigned int vsSize, unsigned int psSize>
-    static ClearShader CreateClearShader(ID3D11Device *device, DXGI_FORMAT colorType, const BYTE(&vsByteCode)[vsSize], const BYTE(&psByteCode)[psSize]);
-
-    struct ClearBlendInfo
-    {
-        bool maskChannels[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT][4];
-    };
-    typedef bool(*ClearBlendInfoComparisonFunction)(const ClearBlendInfo&, const ClearBlendInfo &);
-    typedef std::map<ClearBlendInfo, ID3D11BlendState*, ClearBlendInfoComparisonFunction> ClearBlendStateMap;
-
-    struct ClearDepthStencilInfo
-    {
-        bool clearDepth;
-        bool clearStencil;
-        UINT8 stencilWriteMask;
-    };
-    typedef bool(*ClearDepthStencilInfoComparisonFunction)(const ClearDepthStencilInfo&, const ClearDepthStencilInfo &);
-    typedef std::map<ClearDepthStencilInfo, ID3D11DepthStencilState*, ClearDepthStencilInfoComparisonFunction> ClearDepthStencilStateMap;
 
     Renderer11 *mRenderer;
 
-    ClearBlendStateMap mClearBlendStates;
+    // States
+    angle::ComPtr<ID3D11RasterizerState> mScissorEnabledRasterizerState;
+    angle::ComPtr<ID3D11RasterizerState> mScissorDisabledRasterizerState;
+    std::array<ID3D11BlendState *, 16> mBlendStates;
+    D3D11_BLEND_DESC mCachedBlendStateDesc;
+    gl::DepthStencilState mDepthStencilStateKey;
 
-    ClearShader *mFloatClearShader;
-    ClearShader *mUintClearShader;
-    ClearShader *mIntClearShader;
-
-    ClearDepthStencilStateMap mClearDepthStencilStates;
-
-    ID3D11Buffer *mVertexBuffer;
-    ID3D11RasterizerState *mRasterizerState;
+    // Shaders and Shader Resources
+    ClearShader *mClearShaders;
+    angle::ComPtr<ID3D11Buffer> mConstantBuffer;
+    angle::ComPtr<ID3D11Buffer> mVertexBuffer;
+    RtvDsvClearInfo<float> mCbCache;
+    uint32_t mCbSize;
+    uint32_t mVertexSize;
 };
 
 }
