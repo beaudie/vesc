@@ -55,6 +55,28 @@ UINT ConvertMaxAnisotropy(float maxAnisotropy, D3D_FEATURE_LEVEL featureLevel);
 
 D3D11_QUERY ConvertQueryType(GLenum queryType);
 
+UINT8 inline GetColorMask(const gl::InternalFormat *formatInfo)
+{
+    UINT8 mask = 0;
+    if (formatInfo->redBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_RED;
+    }
+    if (formatInfo->greenBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_GREEN;
+    }
+    if (formatInfo->blueBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_BLUE;
+    }
+    if (formatInfo->alphaBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
+    }
+    return mask;
+}
+
 }  // namespace gl_d3d11
 
 namespace d3d11_gl
@@ -113,15 +135,18 @@ void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex* vertex, flo
                                       unsigned int layer, float u, float v, float s);
 
 template <typename T>
-struct PositionDepthColorVertex
+struct Position3DColorVertex
 {
     float x, y, z;
     T r, g, b, a;
 };
 
 template <typename T>
-void SetPositionDepthColorVertex(PositionDepthColorVertex<T>* vertex, float x, float y, float z,
-                                 const gl::Color<T> &color)
+void inline SetPosition3DColorVertex(Position3DColorVertex<T> *vertex,
+                                     float x,
+                                     float y,
+                                     float z,
+                                     const gl::Color<T> &color)
 {
     vertex->x = x;
     vertex->y = y;
@@ -131,6 +156,13 @@ void SetPositionDepthColorVertex(PositionDepthColorVertex<T>* vertex, float x, f
     vertex->b = color.blue;
     vertex->a = color.alpha;
 }
+
+struct BlendStateKey
+{
+    gl::BlendState blendState;
+    bool mrt;
+    uint8_t rtvMasks[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+};
 
 HRESULT SetDebugName(ID3D11DeviceChild *resource, const char *name);
 
