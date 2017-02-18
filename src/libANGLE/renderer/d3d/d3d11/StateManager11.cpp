@@ -86,6 +86,46 @@ bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOUR
     return false;
 }
 
+d3d11::BlendStateKey inline GetBlendStateKey(const gl::Framebuffer *framebuffer,
+                                             const gl::BlendState &blendState)
+{
+    d3d11::BlendStateKey key;
+    const FramebufferD3D *framebufferD3D   = GetImplAs<FramebufferD3D>(framebuffer);
+    const gl::AttachmentList &colorbuffers = framebufferD3D->getColorAttachmentsForRender();
+    const UINT8 blendStateMask =
+        gl_d3d11::ConvertColorMask(blendState.colorMaskRed, blendState.colorMaskGreen,
+                                   blendState.colorMaskBlue, blendState.colorMaskAlpha);
+
+    key.blendState = blendState;
+    key.mrt        = false;
+
+    for (size_t i = 0; i < colorbuffers.size(); ++i)
+    {
+        const gl::FramebufferAttachment *attachment = colorbuffers[i];
+
+        if (attachment)
+        {
+            if (i > 0)
+            {
+                key.mrt = true;
+            }
+
+            key.rtvMasks[i] = gl_d3d11::GetColorMask(attachment->getFormat().info) & blendStateMask;
+        }
+        else
+        {
+            key.rtvMasks[i] = 0;
+        }
+    }
+
+    for (size_t i = colorbuffers.size(); i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
+    {
+        key.rtvMasks[i] = 0;
+    }
+
+    return key;
+}
+
 // Does *not* increment the resource ref count!!
 ID3D11Resource *GetViewResource(ID3D11View *view)
 {
@@ -496,7 +536,9 @@ gl::Error StateManager11::setBlendState(const gl::Framebuffer *framebuffer,
     }
 
     ID3D11BlendState *dxBlendState = nullptr;
-    ANGLE_TRY(mRenderer->getStateCache().getBlendState(framebuffer, blendState, &dxBlendState));
+    const d3d11::BlendStateKey key = GetBlendStateKey(framebuffer, blendState);
+
+    ANGLE_TRY(mRenderer->getStateCache().getBlendState(key, &dxBlendState));
 
     ASSERT(dxBlendState != nullptr);
 
@@ -807,17 +849,6 @@ void StateManager11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTarget
                                             ID3D11DepthStencilView *depthStencil)
 {
     mRenderer->getDeviceContext()->OMSetRenderTargets(1, &renderTarget, depthStencil);
-    mRenderTargetIsDirty = true;
-}
-
-void StateManager11::setOneTimeRenderTargets(
-    const std::vector<ID3D11RenderTargetView *> &renderTargets,
-    ID3D11DepthStencilView *depthStencil)
-{
-    UINT count               = static_cast<UINT>(renderTargets.size());
-    auto renderTargetPointer = (!renderTargets.empty() ? renderTargets.data() : nullptr);
-
-    mRenderer->getDeviceContext()->OMSetRenderTargets(count, renderTargetPointer, depthStencil);
     mRenderTargetIsDirty = true;
 }
 
