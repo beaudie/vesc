@@ -34,13 +34,7 @@ class Clear11 : angle::NonCopyable
                                const gl::FramebufferState &fboData);
 
   private:
-    struct MaskedRenderTarget
-    {
-        bool colorMask[4];
-        RenderTarget11 *renderTarget;
-    };
-
-    ID3D11BlendState *getBlendState(const std::vector<MaskedRenderTarget> &rts);
+    ID3D11BlendState *getBlendState(const UINT8 &colorMask);
     ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
 
     struct ClearShader final : public angle::NonCopyable
@@ -60,16 +54,6 @@ class Clear11 : angle::NonCopyable
         d3d11::LazyShader<ID3D11PixelShader> pixelShader;
     };
 
-    template <unsigned int vsSize, unsigned int psSize>
-    static ClearShader CreateClearShader(ID3D11Device *device, DXGI_FORMAT colorType, const BYTE(&vsByteCode)[vsSize], const BYTE(&psByteCode)[psSize]);
-
-    struct ClearBlendInfo
-    {
-        bool maskChannels[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT][4];
-    };
-    typedef bool(*ClearBlendInfoComparisonFunction)(const ClearBlendInfo&, const ClearBlendInfo &);
-    typedef std::map<ClearBlendInfo, ID3D11BlendState*, ClearBlendInfoComparisonFunction> ClearBlendStateMap;
-
     struct ClearDepthStencilInfo
     {
         bool clearDepth;
@@ -81,7 +65,8 @@ class Clear11 : angle::NonCopyable
 
     Renderer11 *mRenderer;
 
-    ClearBlendStateMap mClearBlendStates;
+    ID3D11BlendState *mBlendStateCache[16];
+    D3D11_BLEND_DESC mCachedBlendStateDesc;
 
     ClearShader *mFloatClearShader;
     ClearShader *mUintClearShader;
@@ -89,8 +74,18 @@ class Clear11 : angle::NonCopyable
 
     ClearDepthStencilStateMap mClearDepthStencilStates;
 
-    ID3D11Buffer *mVertexBuffer;
-    ID3D11RasterizerState *mRasterizerState;
+    angle::ComPtr<ID3D11Buffer> mVertexBuffer;
+    angle::ComPtr<ID3D11RasterizerState> mScissorEnabledRasterizerState;
+    angle::ComPtr<ID3D11RasterizerState> mScissorDisabledRasterizerState;
+
+    union {
+        d3d11::Position3DColorVertex<FLOAT> f32;
+        d3d11::Position3DColorVertex<UINT> u32;
+        d3d11::Position3DColorVertex<INT> i32;
+    } mCachedVertices[4];
+
+    unsigned int mVertexCacheSize;
+    unsigned int mVertexSize;
 };
 
 }

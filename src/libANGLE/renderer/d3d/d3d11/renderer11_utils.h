@@ -113,15 +113,18 @@ void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex* vertex, flo
                                       unsigned int layer, float u, float v, float s);
 
 template <typename T>
-struct PositionDepthColorVertex
+struct Position3DColorVertex
 {
     float x, y, z;
     T r, g, b, a;
 };
 
 template <typename T>
-void SetPositionDepthColorVertex(PositionDepthColorVertex<T>* vertex, float x, float y, float z,
-                                 const gl::Color<T> &color)
+void inline SetPosition3DColorVertex(Position3DColorVertex<T> *vertex,
+                                     float x,
+                                     float y,
+                                     float z,
+                                     const gl::Color<T> &color)
 {
     vertex->x = x;
     vertex->y = y;

@@ -810,17 +810,6 @@ void StateManager11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTarget
     mRenderTargetIsDirty = true;
 }
 
-void StateManager11::setOneTimeRenderTargets(
-    const std::vector<ID3D11RenderTargetView *> &renderTargets,
-    ID3D11DepthStencilView *depthStencil)
-{
-    UINT count               = static_cast<UINT>(renderTargets.size());
-    auto renderTargetPointer = (!renderTargets.empty() ? renderTargets.data() : nullptr);
-
-    mRenderer->getDeviceContext()->OMSetRenderTargets(count, renderTargetPointer, depthStencil);
-    mRenderTargetIsDirty = true;
-}
-
 void StateManager11::onBeginQuery(Query11 *query)
 {
     mCurrentQueries.insert(query);

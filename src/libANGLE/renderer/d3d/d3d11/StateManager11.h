@@ -85,8 +85,6 @@ class StateManager11 final : angle::NonCopyable
 
     void setOneTimeRenderTarget(ID3D11RenderTargetView *renderTarget,
                                 ID3D11DepthStencilView *depthStencil);
-    void setOneTimeRenderTargets(const std::vector<ID3D11RenderTargetView *> &renderTargets,
-                                 ID3D11DepthStencilView *depthStencil);
 
     void onBeginQuery(Query11 *query);
     void onDeleteQueryObject(Query11 *query);
