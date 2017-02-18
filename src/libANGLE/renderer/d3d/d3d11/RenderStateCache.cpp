@@ -36,7 +36,13 @@ static void ClearStateMap(mapType &map)
 // MSDN's documentation of ID3D11Device::CreateBlendState, ID3D11Device::CreateRasterizerState,
 // ID3D11Device::CreateDepthStencilState and ID3D11Device::CreateSamplerState claims the maximum
 // number of unique states of each type an application can create is 4096
-const unsigned int RenderStateCache::kMaxBlendStates = 4096;
+// Since the Clear11 object has it's own seperate blendstate cache containing up to 16 blendstates,
+// the maximum number of blendstates must be reduced to avoid reaching the 4096 limit.
+// TODO(ShahmeerEsmail): Consider creating caches with a smaller initial size to save memory since
+// in most cases only a fraction of these are required.
+// TODO(ShahmeerEsmail): Consider sharing caches with Clear11 to avoid overlap and ensure that
+// the 4096 element limit is not reached inadvertantly
+const unsigned int RenderStateCache::kMaxBlendStates        = 4000;
 const unsigned int RenderStateCache::kMaxRasterizerStates = 4096;
 const unsigned int RenderStateCache::kMaxDepthStencilStates = 4096;
 const unsigned int RenderStateCache::kMaxSamplerStates = 4096;
