@@ -1690,6 +1690,28 @@ D3D11_QUERY ConvertQueryType(GLenum queryType)
     }
 }
 
+UINT8 GetColorMask(const gl::InternalFormat *formatInfo)
+{
+    UINT8 mask = 0;
+    if (formatInfo->redBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_RED;
+    }
+    if (formatInfo->greenBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_GREEN;
+    }
+    if (formatInfo->blueBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_BLUE;
+    }
+    if (formatInfo->alphaBits > 0)
+    {
+        mask |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
+    }
+    return mask;
+}
+
 }  // namespace gl_d3d11
 
 namespace d3d11
@@ -1888,14 +1910,17 @@ LazyInputLayout::LazyInputLayout(const D3D11_INPUT_ELEMENT_DESC *inputDesc,
       mByteCode(byteCode),
       mDebugName(debugName)
 {
-    memcpy(&mInputDesc[0], inputDesc, sizeof(D3D11_INPUT_ELEMENT_DESC) * inputDescLen);
+    if (inputDesc)
+    {
+        memcpy(&mInputDesc[0], inputDesc, sizeof(D3D11_INPUT_ELEMENT_DESC) * inputDescLen);
+    }
 }
 
 ID3D11InputLayout *LazyInputLayout::resolve(ID3D11Device *device)
 {
     checkAssociatedDevice(device);
 
-    if (mResource == nullptr)
+    if (mResource == nullptr && mByteCode != nullptr)
     {
         HRESULT result =
             device->CreateInputLayout(&mInputDesc[0], static_cast<UINT>(mInputDesc.size()),
