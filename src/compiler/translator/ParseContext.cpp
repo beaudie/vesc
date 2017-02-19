@@ -845,8 +845,13 @@ void TParseContext::checkLocationIsNotSpecified(const TSourceLoc &location,
 {
     if (layoutQualifier.location != -1)
     {
-        error(location, "invalid layout qualifier: only valid on program inputs and outputs",
-              "location");
+        const char *errorMsg = "invalid layout qualifier: only valid on program inputs and outputs";
+        if (mShaderVersion >= 310)
+        {
+            errorMsg =
+                "invalid layout qualifier: only valid on program inputs, outputs, and uniforms";
+        }
+        error(location, errorMsg, "location");
     }
 }
 
@@ -1199,7 +1204,13 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
         return;
     }
 
-    if (publicType.qualifier != EvqVertexIn && publicType.qualifier != EvqFragmentOut)
+    bool canHaveLocation =
+        publicType.qualifier == EvqVertexIn || publicType.qualifier == EvqFragmentOut;
+    if (mShaderVersion >= 310)
+    {
+        canHaveLocation = canHaveLocation || publicType.qualifier == EvqUniform;
+    }
+    if (!canHaveLocation)
     {
         checkLocationIsNotSpecified(identifierLocation, publicType.layoutQualifier);
     }

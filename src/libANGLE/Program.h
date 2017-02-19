@@ -502,7 +502,9 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     VectorAndSamplerCount flattenUniform(const sh::ShaderVariable &uniform,
                                          const std::string &fullName,
-                                         std::vector<LinkedUniform> *samplerUniforms);
+                                         std::vector<LinkedUniform> *samplerUniforms,
+                                         int binding,
+                                         int location);
 
     void gatherInterfaceBlockInfo();
     template <typename VarT>
