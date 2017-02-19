@@ -70,6 +70,10 @@ Issues
     If you need to set individual elements of a uniform array you must query the
     location of the each element you wish to set.
 
+    If a uniform has its location set by using a location layout qualifier, the
+    location set via the API must match this layout qualifier. If the locations
+    do not match, linking must fail.
+
 New Tokens
 
     None
