@@ -125,15 +125,15 @@ void UniformStateQueryCastLoop(DestT *dataOut, const uint8_t *srcPointer, int co
     }
 }
 
-bool UniformInList(const std::vector<LinkedUniform> &list, const std::string &name)
+LinkedUniform *UniformInList(std::vector<LinkedUniform> &list, const std::string &name)
 {
-    for (const LinkedUniform &uniform : list)
+    for (LinkedUniform &uniform : list)
     {
         if (uniform.name == name)
-            return true;
+            return &uniform;
     }
 
-    return false;
+    return nullptr;
 }
 
 // true if varying x has a higher priority in packing than y
@@ -260,19 +260,6 @@ ProgramState::~ProgramState()
 const std::string &ProgramState::getLabel()
 {
     return mLabel;
-}
-
-const LinkedUniform *ProgramState::getUniformByName(const std::string &name) const
-{
-    for (const LinkedUniform &linkedUniform : mUniforms)
-    {
-        if (linkedUniform.name == name)
-        {
-            return &linkedUniform;
-        }
-    }
-
-    return nullptr;
 }
 
 GLint ProgramState::getUniformLocation(const std::string &name) const
@@ -1940,9 +1927,9 @@ bool Program::validateVertexAndFragmentUniforms(InfoLog &infoLog) const
         auto entry = linkedUniforms.find(fragmentUniform.name);
         if (entry != linkedUniforms.end())
         {
-            LinkedUniform *vertexUniform   = &entry->second;
-            const std::string &uniformName = "uniform '" + vertexUniform->name + "'";
-            if (!linkValidateUniforms(infoLog, uniformName, *vertexUniform, fragmentUniform))
+            LinkedUniform *linkedUniform   = &entry->second;
+            const std::string &uniformName = "uniform '" + linkedUniform->name + "'";
+            if (!linkValidateUniforms(infoLog, uniformName, *linkedUniform, fragmentUniform))
             {
                 return false;
             }
@@ -1998,13 +1985,20 @@ bool Program::indexUniforms(InfoLog &infoLog,
         }
 
         int preSetLocation = uniformLocationBindings.getBinding(uniform.name);
+        int shaderLocation = uniform.location;
 
-        // Verify that this location isn't used twice
-        if (preSetLocation != -1 &&
-            preLocatedUniforms.find(preSetLocation) != preLocatedUniforms.end())
+        if (shaderLocation != -1)
         {
-            infoLog << "Multiple uniforms bound to location " << preSetLocation << ".";
-            return false;
+            // Verify that location set in a layout qualifier matches with the pre-set location from
+            // the API.
+            if (preSetLocation != -1 && preSetLocation != shaderLocation)
+            {
+                infoLog << "Bound uniform location " << preSetLocation
+                        << " conflicts with uniform location " << shaderLocation
+                        << " specified in the shader.";
+                return false;
+            }
+            preSetLocation = shaderLocation;
         }
 
         for (unsigned int arrayIndex = 0; arrayIndex < uniform.elementCount(); arrayIndex++)
@@ -2012,14 +2006,29 @@ bool Program::indexUniforms(InfoLog &infoLog,
             VariableLocation location(uniform.name, arrayIndex,
                                       static_cast<unsigned int>(uniformIndex));
 
-            if (arrayIndex == 0 && preSetLocation != -1)
+            if ((arrayIndex == 0 && preSetLocation != -1) || shaderLocation != -1)
             {
-                preLocatedUniforms[preSetLocation] = location;
-                maxUniformLocation                 = std::max(maxUniformLocation, preSetLocation);
+                if (!uniform.staticUse)
+                {
+                    location.used    = false;
+                    location.ignored = true;
+                }
+                // GLSL ES 3.10 section 4.4.3
+                int elementLocation = preSetLocation + arrayIndex;
+                if (preLocatedUniforms.find(elementLocation) != preLocatedUniforms.end())
+                {
+                    infoLog << "Multiple uniforms bound to location " << elementLocation << ".";
+                    return false;
+                }
+                preLocatedUniforms[elementLocation] = location;
+                maxUniformLocation                  = std::max(maxUniformLocation, elementLocation);
             }
             else
             {
-                unlocatedUniforms.push_back(location);
+                if (uniform.staticUse)
+                {
+                    unlocatedUniforms.push_back(location);
+                }
             }
         }
     }
@@ -2392,7 +2401,6 @@ bool Program::linkValidateVariablesBase(InfoLog &infoLog, const std::string &var
 }
 
 // GLSL ES Spec 3.00.3, section 4.3.5.
-// GLSL ES Spec 3.10.4, section 4.4.5.
 bool Program::linkValidateUniforms(InfoLog &infoLog, const std::string &uniformName, const sh::Uniform &vertexUniform, const sh::Uniform &fragmentUniform)
 {
 #if ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION == ANGLE_ENABLED
@@ -2406,10 +2414,20 @@ bool Program::linkValidateUniforms(InfoLog &infoLog, const std::string &uniformN
         return false;
     }
 
+    // GLSL ES Spec 3.10.4, section 4.4.5.
     if (vertexUniform.binding != -1 && fragmentUniform.binding != -1 &&
         vertexUniform.binding != fragmentUniform.binding)
     {
         infoLog << "Binding layout qualifiers for " << uniformName
+                << " differ between vertex and fragment shaders.";
+        return false;
+    }
+
+    // GLSL ES Spec 3.10.4, section 9.2.1.
+    if (vertexUniform.location != -1 && fragmentUniform.location != -1 &&
+        vertexUniform.location != fragmentUniform.location)
+    {
+        infoLog << "Location layout qualifiers for " << uniformName
                 << " differ between vertex and fragment shaders.";
         return false;
     }
@@ -2662,9 +2680,12 @@ bool Program::flattenUniformsAndCheckCapsForShader(const Shader &shader,
     VectorAndSamplerCount vasCount;
     for (const sh::Uniform &uniform : shader.getUniforms())
     {
+        int location                          = uniform.location;
+        VectorAndSamplerCount uniformVasCount = flattenUniform(
+            uniform, uniform.name, &samplerUniforms, uniform.staticUse, uniform.binding, &location);
         if (uniform.staticUse)
         {
-            vasCount += flattenUniform(uniform, uniform.name, &samplerUniforms);
+            vasCount += uniformVasCount;
         }
     }
 
@@ -2745,8 +2766,12 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
 
 Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable &uniform,
                                                        const std::string &fullName,
-                                                       std::vector<LinkedUniform> *samplerUniforms)
+                                                       std::vector<LinkedUniform> *samplerUniforms,
+                                                       bool staticUse,
+                                                       int binding,
+                                                       int *location)
 {
+    ASSERT(location);
     VectorAndSamplerCount vectorAndSamplerCount;
 
     if (uniform.isStruct())
@@ -2760,7 +2785,8 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                vectorAndSamplerCount += flattenUniform(field, fieldFullName, samplerUniforms);
+                vectorAndSamplerCount +=
+                    flattenUniform(field, fieldFullName, samplerUniforms, staticUse, -1, location);
             }
         }
 
@@ -2769,12 +2795,36 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
 
     // Not a struct
     bool isSampler = IsSamplerType(uniform.type);
-    if (!UniformInList(mState.getUniforms(), fullName) &&
-        !UniformInList(*samplerUniforms, fullName))
+    LinkedUniform *uniformInList = nullptr;
+    if (isSampler)
+    {
+        uniformInList = UniformInList(*samplerUniforms, fullName);
+    }
+    else
+    {
+        uniformInList = UniformInList(mState.mUniforms, fullName);
+    }
+    if (uniformInList)
+    {
+        if (binding != -1)
+        {
+            uniformInList->binding = binding;
+        }
+        if (*location != -1)
+        {
+            uniformInList->location = *location;
+        }
+        if (uniform.staticUse)
+        {
+            uniformInList->staticUse = uniform.staticUse;
+        }
+    }
+    else
     {
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
-                                    -1, sh::BlockMemberInfo::getDefaultBlockInfo());
-        linkedUniform.staticUse = true;
+                                    binding, *location, -1,
+                                    sh::BlockMemberInfo::getDefaultBlockInfo());
+        linkedUniform.staticUse = staticUse;
 
         // Store sampler uniforms separately, so we'll append them to the end of the list.
         if (isSampler)
@@ -2794,6 +2844,8 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
     vectorAndSamplerCount.vectorCount =
         (isSampler ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
     vectorAndSamplerCount.samplerCount = (isSampler ? elementCount : 0);
+
+    *location += elementCount;
 
     return vectorAndSamplerCount;
 }
@@ -2896,7 +2948,7 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
                 continue;
             }
 
-            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize,
+            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
                                      blockIndex, memberInfo);
 
             // Since block uniforms have no location, we don't need to store them in the uniform

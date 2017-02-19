@@ -764,9 +764,10 @@ LinkResult ProgramD3D::load(const ContextImpl *contextImpl,
 
     const auto &linkedUniforms = mState.getUniforms();
     ASSERT(mD3DUniforms.empty());
-    for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; uniformIndex++)
+    for (const gl::LinkedUniform &linkedUniform : linkedUniforms)
     {
-        const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
+        if (!linkedUniform.staticUse)
+            continue;
 
         D3DUniform *d3dUniform =
             new D3DUniform(linkedUniform.type, linkedUniform.name, linkedUniform.arraySize,
@@ -1936,6 +1937,9 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
     for (const gl::LinkedUniform &glUniform : mState.getUniforms())
     {
         if (!glUniform.isInDefaultBlock())
+            continue;
+
+        if (!glUniform.staticUse)
             continue;
 
         auto mapEntry = uniformMap.find(glUniform.name);
