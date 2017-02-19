@@ -472,6 +472,109 @@ TEST_P(BindUniformLocationTest, UseSamplerWhenUnusedUniforms)
     EXPECT_GL_NO_ERROR();
 }
 
+class BindUniformLocationES31Test : public BindUniformLocationTest
+{
+  protected:
+    BindUniformLocationES31Test() : BindUniformLocationTest() {}
+
+    void linkProgramWithUniformLocation(GLuint vs,
+                                        GLuint fs,
+                                        const char *uniformName,
+                                        GLint uniformLocation)
+    {
+        mProgram = glCreateProgram();
+        mBindUniformLocation(mProgram, uniformLocation, uniformName);
+
+        glAttachShader(mProgram, vs);
+        glDeleteShader(vs);
+        glAttachShader(mProgram, fs);
+        glDeleteShader(fs);
+
+        glLinkProgram(mProgram);
+    }
+};
+
+// Test for when the shader specifies an explicit uniform location with a layout qualifier and the
+// bindUniformLocation API sets a consistent location.
+TEST_P(BindUniformLocationES31Test, ConsistentWithLocationLayoutQualifier)
+{
+    if (!extensionEnabled("GL_CHROMIUM_bind_uniform_location"))
+    {
+        std::cout << "Test skipped because GL_CHROMIUM_bind_uniform_location is not available."
+                  << std::endl;
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 310 es\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(0);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 310 es\n"
+        "uniform layout(location=2) highp sampler2D tex;\n"
+        "out highp vec4 my_FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = texture(tex, vec2(1));\n"
+        "}\n";
+
+    const GLuint texLocation = 2;
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
+    linkProgramWithUniformLocation(vs, fs, "tex", texLocation);
+
+    GLint linked = GL_FALSE;
+    glGetProgramiv(mProgram, GL_LINK_STATUS, &linked);
+    ASSERT_EQ(GL_TRUE, linked);
+
+    EXPECT_EQ(static_cast<GLint>(texLocation), glGetUniformLocation(mProgram, "tex"));
+    glUseProgram(mProgram);
+    glUniform1i(texLocation, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test for when the shader specifies an explicit uniform location with a layout qualifier and the
+// bindUniformLocation API sets a conflicting location. Linking should fail.
+TEST_P(BindUniformLocationES31Test, ConflictingWithLocationLayoutQualifier)
+{
+    if (!extensionEnabled("GL_CHROMIUM_bind_uniform_location"))
+    {
+        std::cout << "Test skipped because GL_CHROMIUM_bind_uniform_location is not available."
+                  << std::endl;
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 310 es\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(0);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 310 es\n"
+        "uniform layout(location=2) highp sampler2D tex;\n"
+        "out highp vec4 my_FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = texture(tex, vec2(1));\n"
+        "}\n";
+
+    const GLuint texLocation = 3;
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
+    linkProgramWithUniformLocation(vs, fs, "tex", texLocation);
+
+    GLint linked = GL_TRUE;
+    glGetProgramiv(mProgram, GL_LINK_STATUS, &linked);
+    EXPECT_EQ(GL_FALSE, linked);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(BindUniformLocationTest,
@@ -480,5 +583,7 @@ ANGLE_INSTANTIATE_TEST(BindUniformLocationTest,
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
                        ES2_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(BindUniformLocationES31Test, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES())
 
 }  // namespace

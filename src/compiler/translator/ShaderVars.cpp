@@ -189,20 +189,20 @@ Uniform::~Uniform()
 {
 }
 
-Uniform::Uniform(const Uniform &other) : ShaderVariable(other), binding(other.binding)
+Uniform::Uniform(const Uniform &other) : InterfaceVariable(other), binding(other.binding)
 {
 }
 
 Uniform &Uniform::operator=(const Uniform &other)
 {
-    ShaderVariable::operator=(other);
+    InterfaceVariable::operator=(other);
     binding                 = other.binding;
     return *this;
 }
 
 bool Uniform::operator==(const Uniform &other) const
 {
-    return ShaderVariable::operator==(other) && binding == other.binding;
+    return InterfaceVariable::operator==(other) && binding == other.binding;
 }
 
 bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
@@ -211,7 +211,11 @@ bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
     {
         return false;
     }
-    return ShaderVariable::isSameVariableAtLinkTime(other, true);
+    if (location != -1 && other.location != -1 && location != other.location)
+    {
+        return false;
+    }
+    return InterfaceVariable::isSameVariableAtLinkTime(other, true);
 }
 
 InterfaceVariable::InterfaceVariable() : location(-1)

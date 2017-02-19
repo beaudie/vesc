@@ -94,7 +94,22 @@ struct ShaderVariable
     }
 };
 
-struct Uniform : public ShaderVariable
+// An interface variable is a variable which passes data between the GL data structures and the
+// shader execution: either uniforms, vertex shader inputs or fragment shader outputs. These
+// variables can have integer locations to pass back to the GL API.
+struct InterfaceVariable : public ShaderVariable
+{
+    InterfaceVariable();
+    ~InterfaceVariable();
+    InterfaceVariable(const InterfaceVariable &other);
+    InterfaceVariable &operator=(const InterfaceVariable &other);
+    bool operator==(const InterfaceVariable &other) const;
+    bool operator!=(const InterfaceVariable &other) const { return !operator==(other); }
+
+    int location;
+};
+
+struct Uniform : public InterfaceVariable
 {
     Uniform();
     ~Uniform();
@@ -113,21 +128,6 @@ struct Uniform : public ShaderVariable
     // GLSL ES Spec 3.00.3, section 4.3.5.
     // GLSL ES Spec 3.10.4, section 4.4.5
     bool isSameUniformAtLinkTime(const Uniform &other) const;
-};
-
-// An interface variable is a variable which passes data between the GL data structures and the
-// shader execution: either vertex shader inputs or fragment shader outputs. These variables can
-// have integer locations to pass back to the GL API.
-struct InterfaceVariable : public ShaderVariable
-{
-    InterfaceVariable();
-    ~InterfaceVariable();
-    InterfaceVariable(const InterfaceVariable &other);
-    InterfaceVariable &operator=(const InterfaceVariable &other);
-    bool operator==(const InterfaceVariable &other) const;
-    bool operator!=(const InterfaceVariable &other) const { return !operator==(other); }
-
-    int location;
 };
 
 struct Attribute : public InterfaceVariable

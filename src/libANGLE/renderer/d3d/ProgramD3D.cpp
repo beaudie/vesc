@@ -764,9 +764,10 @@ LinkResult ProgramD3D::load(const ContextImpl *contextImpl,
 
     const auto &linkedUniforms = mState.getUniforms();
     ASSERT(mD3DUniforms.empty());
-    for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; uniformIndex++)
+    for (const gl::LinkedUniform &linkedUniform : linkedUniforms)
     {
-        const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
+        if (!linkedUniform.staticUse)
+            continue;
 
         D3DUniform *d3dUniform =
             new D3DUniform(linkedUniform.type, linkedUniform.name, linkedUniform.arraySize,
@@ -1938,6 +1939,9 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
         if (!glUniform.isInDefaultBlock())
             continue;
 
+        if (!glUniform.staticUse)
+            continue;
+
         auto mapEntry = uniformMap.find(glUniform.name);
         ASSERT(mapEntry != uniformMap.end());
         mD3DUniforms.push_back(mapEntry->second);
@@ -2440,7 +2444,7 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
 
 D3DUniform *ProgramD3D::getD3DUniformFromLocation(GLint location)
 {
-    return mD3DUniforms[mState.getUniformLocations()[location].index];
+    return mD3DUniforms[mState.getUniformLocations()[location].staticallyUsedIndex];
 }
 
 bool ProgramD3D::getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const

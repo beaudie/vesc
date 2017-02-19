@@ -128,11 +128,18 @@ class InfoLog : angle::NonCopyable
 struct VariableLocation
 {
     VariableLocation();
-    VariableLocation(const std::string &name, unsigned int element, unsigned int index);
+    VariableLocation(const std::string &name,
+                     unsigned int element,
+                     unsigned int index,
+                     unsigned int staticallyUsedIndex);
 
     std::string name;
     unsigned int element;
     unsigned int index;
+
+    // Index of this variable among statically used variables in the list. For uniforms, this may be
+    // different from index.
+    unsigned int staticallyUsedIndex;
 
     // If this is a valid uniform location
     bool used;
@@ -211,7 +218,6 @@ class ProgramState final : angle::NonCopyable
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
 
-    const LinkedUniform *getUniformByName(const std::string &name) const;
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndexFromName(const std::string &name) const;
     GLuint getUniformIndexFromLocation(GLint location) const;
@@ -500,9 +506,13 @@ class Program final : angle::NonCopyable, public LabeledObject
         unsigned int samplerCount;
     };
 
+    // staticUse is given as a separate parameter because it is tracked here at struct granularity.
     VectorAndSamplerCount flattenUniform(const sh::ShaderVariable &uniform,
                                          const std::string &fullName,
-                                         std::vector<LinkedUniform> *samplerUniforms);
+                                         std::vector<LinkedUniform> *samplerUniforms,
+                                         bool staticUse,
+                                         int binding,
+                                         int *location);
 
     void gatherInterfaceBlockInfo();
     template <typename VarT>
