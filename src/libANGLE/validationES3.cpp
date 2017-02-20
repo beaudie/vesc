@@ -1996,6 +1996,25 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_VERTEX_BINDING_BUFFER:
+        case GL_VERTEX_BINDING_DIVISOR:
+        case GL_VERTEX_BINDING_OFFSET:
+        case GL_VERTEX_BINDING_STRIDE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM,
+                          "Vertex Attrib Bindings are not supported in this version of GL"));
+                return false;
+            }
+            if (index >= caps.maxVertexAttribBindings)
+            {
+                context->handleError(
+                    Error(GL_INVALID_VALUE,
+                          "bindingindex must be smaller than MAX_VERTEX_ATTRIB_BINDINGS."));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;
@@ -2275,43 +2294,41 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(Error(GL_INVALID_OPERATION,
-                                   "glVertexAttribIPointer requires OpenGL ES 3.0 or higher."));
-        return false;
-    }
-
-    if (index >= MAX_VERTEX_ATTRIBS)
-    {
         context->handleError(
-            Error(GL_INVALID_VALUE, "Index must be less than MAX_VERTEX_ATTRIBS."));
+            Error(GL_INVALID_OPERATION, "VertexAttribIPointer requires OpenGL ES 3.0 or higher."));
         return false;
     }
 
-    if (size < 1 || size > 4)
+    if (!ValidateVertexAttribFormatBase(context, index, size, type, 0, true))
     {
-        context->handleError(Error(GL_INVALID_VALUE, "Size must be between 1 and 4."));
         return false;
-    }
-
-    switch (type)
-    {
-        case GL_BYTE:
-        case GL_UNSIGNED_BYTE:
-        case GL_SHORT:
-        case GL_UNSIGNED_SHORT:
-        case GL_INT:
-        case GL_UNSIGNED_INT:
-            break;
-
-        default:
-            context->handleError(Error(GL_INVALID_ENUM, "Unknown vertex attribute type."));
-            return false;
     }
 
     if (stride < 0)
     {
-        context->handleError(Error(GL_INVALID_VALUE, "Stride cannot be negative."));
+        context->handleError(Error(GL_INVALID_VALUE, "stride cannot be negative."));
         return false;
+    }
+
+    const Caps &caps = context->getCaps();
+    if (context->getClientVersion() >= ES_3_1)
+    {
+        if (stride > caps.maxVertexAttribStride)
+        {
+            context->handleError(
+                Error(GL_INVALID_VALUE, "stride cannot be greater than MAX_VERTEX_ATTRIB_STRIDE."));
+            return false;
+        }
+
+        // [OpenGL ES 3.1] Section 10.3.1 page 245:
+        // glVertexAttribBinding is part of the equivalent code of VertexAttribIPointer, so its
+        // validation should be inherited.
+        if (index >= caps.maxVertexAttribBindings)
+        {
+            context->handleError(
+                Error(GL_INVALID_VALUE, "index must be smaller than MAX_VERTEX_ATTRIB_BINDINGS."));
+            return false;
+        }
     }
 
     // [OpenGL ES 3.0.2] Section 2.8 page 24:
