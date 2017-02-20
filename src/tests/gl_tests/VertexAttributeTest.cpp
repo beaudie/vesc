@@ -677,20 +677,22 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
 // Verify that MAX_VERTEX_ATTRIB_STRIDE is no less than the minimum required value (2048) in ES3.1.
 TEST_P(VertexAttributeTestES31, MaxVertexAttribStride)
 {
-    // TODO(ynovikov): AMD Linux GL 4.4.13374 on R5 230 and 4.5.13399 on R7 240
-    // return 0 for GL_MAX_VERTEX_ATTRIB_STRIDE, not conforming to spec.
-    // Reenable if AMD fixes their drivers.
-    if (IsDesktopOpenGL() && IsLinux() && IsAMD())
-    {
-        std::cout << "Test disabled on Linux AMD OpenGL." << std::endl;
-        return;
-    }
-
     GLint maxStride;
     glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxStride);
     ASSERT_GL_NO_ERROR();
 
     EXPECT_GE(maxStride, 2048);
+}
+
+// Verify that GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET is no less than the minimum required value
+// (2047) in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxVertexAttribRelativeOffset)
+{
+    GLint maxRelativeOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &maxRelativeOffset);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_GE(maxRelativeOffset, 2047);
 }
 
 // Verify using MAX_VERTEX_ATTRIB_STRIDE as stride doesn't mess up the draw.
