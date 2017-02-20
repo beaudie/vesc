@@ -42,16 +42,41 @@ VertexArray11::~VertexArray11()
 
 void VertexArray11::syncState(const gl::VertexArray::DirtyBits &dirtyBits)
 {
+    auto &attribs = mData.getVertexAttributes();
+
     for (auto dirtyBit : angle::IterateBitSet(dirtyBits))
     {
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
             continue;
 
         size_t index = gl::VertexArray::GetAttribIndex(dirtyBit);
-        // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-        ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
-        mAttribsToUpdate.set(index);
+
+        // index means attribIndex: directly set the bit of this attribute.
+        if (gl::VertexArray::IsAttribBit(dirtyBit))
+        {
+            mAttribsToUpdate.set(index);
+        }
+        else
+        {
+            break;
+        }
     }
+
+    for (size_t attribIndex = 0; attribIndex < attribs.size(); attribIndex++)
+    {
+        if (mAttribsToUpdate.test(attribIndex))
+        {
+            continue;
+        }
+        size_t bindingIndex = attribs[attribIndex].bindingIndex;
+        // An attribute should be updated as long as its binding is dirty.
+        if (gl::VertexArray::IsDirtyBinding(bindingIndex, dirtyBits))
+        {
+            mAttribsToUpdate.set(attribIndex);
+        }
+    }
+
+    // Ignore the bindings that don't belong to any attribute.
 }
 
 void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
