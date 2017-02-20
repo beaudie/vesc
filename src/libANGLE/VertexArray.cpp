@@ -100,6 +100,12 @@ size_t VertexArray::GetAttribIndex(unsigned long dirtyBit)
     return (dirtyBit - gl::VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED) % gl::MAX_VERTEX_ATTRIBS;
 }
 
+bool VertexArray::IsAttribBit(unsigned long dirtyBit)
+{
+    ASSERT(dirtyBit > gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+    return dirtyBit < gl::VertexArray::DIRTY_BIT_BINDING_0_BUFFER;
+}
+
 void VertexArray::bindVertexBuffer(size_t bindingIndex,
                                    Buffer *boundBuffer,
                                    GLintptr offset,
@@ -119,8 +125,9 @@ void VertexArray::setVertexAttribBinding(size_t attribIndex, size_t bindingIndex
 {
     ASSERT(attribIndex < getMaxAttribs() && bindingIndex < getMaxBindings());
 
-    // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-    ASSERT(attribIndex == bindingIndex);
+    VertexAttribute *attrib = &mState.mVertexAttributes[attribIndex];
+
+    attrib->bindingIndex = static_cast<GLuint>(bindingIndex);
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_BINDING + attribIndex);
 }
 
@@ -162,6 +169,7 @@ void VertexArray::setVertexAttribDivisor(size_t index, GLuint divisor)
 void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 {
     ASSERT(attribIndex < getMaxAttribs());
+
     mState.mVertexAttributes[attribIndex].enabled = enabledState;
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_ENABLED + attribIndex);
 

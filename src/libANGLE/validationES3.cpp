@@ -12,6 +12,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/validationES31.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Framebuffer.h"
@@ -1996,6 +1997,21 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_VERTEX_BINDING_BUFFER:
+        case GL_VERTEX_BINDING_DIVISOR:
+        case GL_VERTEX_BINDING_OFFSET:
+        case GL_VERTEX_BINDING_STRIDE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "pname requires OpenGL ES 3.1."));
+                return false;
+            }
+            if (index >= caps.maxVertexAttribBindings)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "Invalid index value."));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;
@@ -2264,6 +2280,52 @@ bool ValidateRenderbufferStorageMultisample(ValidationContext *context,
     }
 
     return true;
+}
+
+bool ValidateVertexAttribIPointer(ValidationContext *context,
+                                  GLuint index,
+                                  GLint size,
+                                  GLenum type,
+                                  GLsizei stride,
+                                  const GLvoid *pointer)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "VertexAttribIPointer requires OpenGL ES 3.0 or higher."));
+        return false;
+    }
+
+    const Caps &caps = context->getCaps();
+    if (context->getClientVersion() >= ES_3_1)
+    {
+        if (stride < 0 || stride > caps.maxVertexAttribStride)
+        {
+            context->handleError(Error(GL_INVALID_VALUE, "Invalid stride."));
+            return false;
+        }
+
+        if (index >= caps.maxVertexAttribBindings)
+        {
+            context->handleError(Error(GL_INVALID_VALUE, "Invalid binding index value."));
+            return false;
+        }
+    }
+
+    // [OpenGL ES 3.0.2] Section 2.8 page 24:
+    // An INVALID_OPERATION error is generated when a non-zero vertex array object
+    // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
+    // and the pointer argument is not NULL.
+    if (context->getGLState().getVertexArrayId() != 0 &&
+        context->getGLState().getArrayBufferId() == 0 && pointer != nullptr)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "Pointer is null with a non-zero VAO bound and zero bound to GL_ARRAY_BUFFER."));
+        return false;
+    }
+
+    return ValidateVertexAttribFormatBase(context, index, size, type, 0, true);
 }
 
 }  // namespace gl
