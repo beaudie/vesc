@@ -916,30 +916,6 @@ void SetSamplerParameteriv(Sampler *sampler, GLenum pname, const GLint *params)
     SetSamplerParameterBase(sampler, pname, params);
 }
 
-void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param)
-{
-    ASSERT(framebuffer);
-
-    switch (pname)
-    {
-        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
-            framebuffer->setDefaultWidth(param);
-            break;
-        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
-            framebuffer->setDefaultHeight(param);
-            break;
-        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
-            framebuffer->setDefaultSamples(param);
-            break;
-        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
-            framebuffer->setDefaultFixedSampleLocations(static_cast<GLboolean>(param));
-            break;
-        default:
-            UNREACHABLE();
-            break;
-    }
-}
-
 }  // namespace gl
 
 namespace egl

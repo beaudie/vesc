@@ -95,8 +95,7 @@ void GL_APIENTRY FramebufferParameteri(GLenum target, GLenum pname, GLint param)
             return;
         }
 
-        Framebuffer *framebuffer = context->getGLState().getTargetFramebuffer(target);
-        SetFramebufferParameteri(framebuffer, pname, param);
+        context->setFramebufferParameteri(target, pname, param);
     }
 }
 
