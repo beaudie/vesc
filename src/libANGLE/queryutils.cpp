@@ -390,6 +390,21 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
             *params = ConvertFromGLboolean<ParamType>(attrib.pureInteger);
             break;
+        case GL_VERTEX_ATTRIB_BINDING:
+            *params = ConvertFromGLuint<ParamType>(attrib.bindingIndex);
+            break;
+        case GL_VERTEX_ATTRIB_RELATIVE_OFFSET:
+            *params = ConvertFromGLuint<ParamType>(static_cast<GLuint>(attrib.relativeOffset));
+            break;
+        case GL_VERTEX_BINDING_DIVISOR:
+            *params = ConvertFromGLuint<ParamType>(binding.divisor);
+            break;
+        case GL_VERTEX_BINDING_OFFSET:
+            *params = ConvertFromGLuint<ParamType>(static_cast<GLuint>(binding.offset));
+            break;
+        case GL_VERTEX_BINDING_STRIDE:
+            *params = ConvertFromGLuint<ParamType>(static_cast<GLuint>(binding.stride));
+            break;
         default:
             UNREACHABLE();
             break;
