@@ -100,6 +100,18 @@ class VertexArray final : public LabeledObject
                            bool pureInteger,
                            GLsizei stride,
                            const void *pointer);
+    void setVertexAttribFormat(size_t attribIndex,
+                               GLint size,
+                               GLenum type,
+                               bool normalized,
+                               bool pureInteger,
+                               GLintptr relativeOffset);
+    void bindVertexBuffer(size_t bindingIndex,
+                          Buffer *boundBuffer,
+                          GLintptr offset,
+                          GLsizei stride);
+    void setVertexAttribBinding(size_t attribIndex, size_t bindingIndex);
+    void setVertexBindingDivisor(size_t bindingIndex, GLuint divisor);
 
     void setElementArrayBuffer(Buffer *buffer);
 
@@ -135,16 +147,16 @@ class VertexArray final : public LabeledObject
         DIRTY_BIT_ATTRIB_0_POINTER   = DIRTY_BIT_ATTRIB_MAX_ENABLED,
         DIRTY_BIT_ATTRIB_MAX_POINTER = DIRTY_BIT_ATTRIB_0_POINTER + gl::MAX_VERTEX_ATTRIBS,
 
-        // Reserve bits for changes to VertexAttribFormat
-        DIRTY_BIT_ATTRIB_0_FORMAT   = DIRTY_BIT_ATTRIB_MAX_POINTER,
-        DIRTY_BIT_ATTRIB_MAX_FORMAT = DIRTY_BIT_ATTRIB_0_FORMAT + gl::MAX_VERTEX_ATTRIBS,
-
         // Reserve bits for changes to VertexAttribBinding
-        DIRTY_BIT_ATTRIB_0_BINDING   = DIRTY_BIT_ATTRIB_MAX_FORMAT,
+        DIRTY_BIT_ATTRIB_0_BINDING   = DIRTY_BIT_ATTRIB_MAX_POINTER,
         DIRTY_BIT_ATTRIB_MAX_BINDING = DIRTY_BIT_ATTRIB_0_BINDING + gl::MAX_VERTEX_ATTRIBS,
 
+        // Reserve bits for changes to VertexAttribFormat
+        DIRTY_BIT_ATTRIB_0_FORMAT   = DIRTY_BIT_ATTRIB_MAX_BINDING,
+        DIRTY_BIT_ATTRIB_MAX_FORMAT = DIRTY_BIT_ATTRIB_0_FORMAT + gl::MAX_VERTEX_ATTRIBS,
+
         // Reserve bits for changes to BindVertexBuffer
-        DIRTY_BIT_BINDING_0_BUFFER   = DIRTY_BIT_ATTRIB_MAX_BINDING,
+        DIRTY_BIT_BINDING_0_BUFFER   = DIRTY_BIT_ATTRIB_MAX_FORMAT,
         DIRTY_BIT_BINDING_MAX_BUFFER = DIRTY_BIT_BINDING_0_BUFFER + gl::MAX_VERTEX_ATTRIB_BINDINGS,
 
         // Reserve bits for binding divisors
@@ -159,26 +171,13 @@ class VertexArray final : public LabeledObject
     typedef std::bitset<DIRTY_BIT_MAX> DirtyBits;
 
     static size_t GetAttribIndex(unsigned long dirtyBit);
+    static bool IsAttribBit(unsigned long dirtyBit);
+    static bool IsDirtyBinding(size_t bindingIndex, const DirtyBits &dirtyBits);
 
     void syncImplState();
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
   private:
-    // TODO(jiawei.shao@intel.com): make these functions public when Vertex Attrib Binding entries
-    // are ready.
-    void setVertexAttribFormat(size_t attribIndex,
-                               GLint size,
-                               GLenum type,
-                               bool normalized,
-                               bool pureInteger,
-                               GLintptr relativeOffset);
-    void bindVertexBuffer(size_t bindingIndex,
-                          Buffer *boundBuffer,
-                          GLintptr offset,
-                          GLsizei stride);
-    void setVertexAttribBinding(size_t attribIndex, size_t bindingIndex);
-    void setVertexBindingDivisor(size_t bindingIndex, GLuint divisor);
-
     GLuint mId;
 
     VertexArrayState mState;
