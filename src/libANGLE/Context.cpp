@@ -3807,4 +3807,20 @@ void Context::renderbufferStorageMultisample(GLenum target,
         renderbuffer->setStorageMultisample(samples, convertedInternalFormat, width, height));
 }
 
+void Context::getFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
+{
+    Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    QueryFramebufferParameteriv(framebuffer, pname, params);
+}
+
+void Context::setFramebufferParameteri(GLenum target, GLenum pname, GLint param)
+{
+    Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    SetFramebufferParameteri(framebuffer, pname, param);
+}
+
 }  // namespace gl

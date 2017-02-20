@@ -854,8 +854,6 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
 
 void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params)
 {
-    ASSERT(framebuffer);
-
     switch (pname)
     {
         case GL_FRAMEBUFFER_DEFAULT_WIDTH:
@@ -918,8 +916,6 @@ void SetSamplerParameteriv(Sampler *sampler, GLenum pname, const GLint *params)
 
 void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param)
 {
-    ASSERT(framebuffer);
-
     switch (pname)
     {
         case GL_FRAMEBUFFER_DEFAULT_WIDTH:
