@@ -12,6 +12,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/validationES31.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Framebuffer.h"
@@ -1842,6 +1843,21 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_VERTEX_BINDING_BUFFER:
+        case GL_VERTEX_BINDING_DIVISOR:
+        case GL_VERTEX_BINDING_OFFSET:
+        case GL_VERTEX_BINDING_STRIDE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            if (index >= caps.maxVertexAttribBindings)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;
@@ -2106,6 +2122,74 @@ bool ValidateRenderbufferStorageMultisample(ValidationContext *context,
         context->handleError(
             Error(GL_INVALID_OPERATION,
                   "Samples must not be greater than maximum supported value for the format."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateVertexAttribIPointer(ValidationContext *context,
+                                  GLuint index,
+                                  GLint size,
+                                  GLenum type,
+                                  GLsizei stride,
+                                  const GLvoid *pointer)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "VertexAttribIPointer requires OpenGL ES 3.0 or higher."));
+        return false;
+    }
+
+    if (context->getClientVersion() >= ES_3_1)
+    {
+        return ValidateVertexAttribIPointerES31(context, index, size, type, stride, pointer);
+    }
+
+    if (index >= MAX_VERTEX_ATTRIBS)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE,
+                  "Index is greater than or equal to the value of MAX_VERTEX_ATTRIBS."));
+        return false;
+    }
+
+    if (size < 1 || size > 4)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid size."));
+        return false;
+    }
+
+    switch (type)
+    {
+        case GL_BYTE:
+        case GL_UNSIGNED_BYTE:
+        case GL_SHORT:
+        case GL_UNSIGNED_SHORT:
+        case GL_INT:
+        case GL_UNSIGNED_INT:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Type is not integer."));
+            return false;
+    }
+
+    if (stride < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid stride."));
+        return false;
+    }
+
+    // [OpenGL ES 3.0.2] Section 2.8 page 24:
+    // An INVALID_OPERATION error is generated when a non-zero vertex array object
+    // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
+    // and the pointer argument is not NULL.
+    if (context->getGLState().getVertexArrayId() != 0 &&
+        context->getGLState().getArrayBufferId() == 0 && pointer != NULL)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
 
