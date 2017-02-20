@@ -684,6 +684,17 @@ TEST_P(VertexAttributeTestES31, MaxVertexAttribStride)
     EXPECT_GE(maxStride, 2048);
 }
 
+// Verify that GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET is no less than the minimum required value
+// (2047) in ES3.1.
+TEST_P(VertexAttributeTestES31, MaxVertexAttribRelativeOffset)
+{
+    GLint maxRelativeOffset;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &maxRelativeOffset);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_GE(maxRelativeOffset, 2047);
+}
+
 // Verify using MAX_VERTEX_ATTRIB_STRIDE as stride doesn't mess up the draw.
 // Use default value if the value of MAX_VERTEX_ATTRIB_STRIDE is too large for this test.
 TEST_P(VertexAttributeTestES31, DrawArraysWithLargeStride)
