@@ -23,6 +23,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES3.h"
+#include "libANGLE/validationES31.h"
 #include "libANGLE/VertexArray.h"
 
 namespace gl
@@ -3901,56 +3902,19 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
                                  GLsizei stride,
                                  const GLvoid *ptr)
 {
-    if (index >= MAX_VERTEX_ATTRIBS)
+    const Caps &caps = context->getCaps();
+    if (context->getClientVersion() >= ES_3_1)
     {
-        context->handleError(Error(GL_INVALID_VALUE, "Invalid index value."));
-        return false;
-    }
-
-    if (size < 1 || size > 4)
-    {
-        context->handleError(Error(GL_INVALID_VALUE, "Invalide size value."));
-        return false;
-    }
-
-    switch (type)
-    {
-        case GL_BYTE:
-        case GL_UNSIGNED_BYTE:
-        case GL_SHORT:
-        case GL_UNSIGNED_SHORT:
-        case GL_FIXED:
-        case GL_FLOAT:
-            break;
-
-        case GL_HALF_FLOAT:
-        case GL_INT:
-        case GL_UNSIGNED_INT:
-        case GL_INT_2_10_10_10_REV:
-        case GL_UNSIGNED_INT_2_10_10_10_REV:
-            if (context->getClientMajorVersion() < 3)
-            {
-                context->handleError(
-                    Error(GL_INVALID_ENUM, "Vertex type not supported before OpenGL ES 3.0."));
-                return false;
-            }
-            break;
-
-        default:
-            context->handleError(Error(GL_INVALID_ENUM, "Invalid vertex type."));
+        if (stride < 0 || stride > caps.maxVertexAttribStride)
+        {
+            context->handleError(Error(GL_INVALID_VALUE, "Invalid stride."));
             return false;
-    }
+        }
 
-    if (stride < 0)
-    {
-        context->handleError(Error(GL_INVALID_VALUE, "Invalid stride."));
-        return false;
-    }
-
-    if ((type == GL_INT_2_10_10_10_REV || type == GL_UNSIGNED_INT_2_10_10_10_REV) && size != 4)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION, "Invalid size for a sized vertex type."));
-        return false;
+        if (!ValidateVertexAttribBindingBase(context, index, index))
+        {
+            return false;
+        }
     }
 
     // [OpenGL ES 3.0.2] Section 2.8 page 24:
@@ -3959,7 +3923,7 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
     // and the pointer argument is not NULL.
     bool nullBufferAllowed = context->getGLState().areClientArraysEnabled() &&
                              context->getGLState().getVertexArray()->id() == 0;
-    if (!nullBufferAllowed && context->getGLState().getArrayBufferId() == 0 && ptr != NULL)
+    if (!nullBufferAllowed && context->getGLState().getArrayBufferId() == 0 && ptr != nullptr)
     {
         context->handleError(
             Error(GL_INVALID_OPERATION,
@@ -4013,7 +3977,7 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
         }
     }
 
-    return true;
+    return ValidateVertexAttribFormatBase(context, index, size, type, 0, false);
 }
 
 bool ValidateDepthRangef(ValidationContext *context, GLclampf zNear, GLclampf zFar)
