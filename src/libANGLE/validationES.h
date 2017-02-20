@@ -602,6 +602,7 @@ bool ValidateGetInternalFormativ(Context *context,
                                  GLenum pname,
                                  GLsizei bufSize,
                                  GLint *params);
+
 bool ValidateGetInternalFormativRobustANGLE(Context *context,
                                             GLenum target,
                                             GLenum internalformat,
@@ -609,6 +610,13 @@ bool ValidateGetInternalFormativRobustANGLE(Context *context,
                                             GLsizei bufSize,
                                             GLsizei *length,
                                             GLint *params);
+
+bool ValidateVertexAttribFormatBase(ValidationContext *context,
+                                    GLuint attribIndex,
+                                    GLint size,
+                                    GLenum type,
+                                    GLuint relativeOffset,
+                                    GLboolean pureInteger);
 
 // Error messages shared here for use in testing.
 extern const char *g_ExceedsMaxElementErrorMessage;

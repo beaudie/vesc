@@ -826,7 +826,6 @@ void GL_APIENTRY VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLs
         {
             return;
         }
-
         context->vertexAttribIPointer(index, size, type, stride, pointer);
     }
 }
