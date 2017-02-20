@@ -1996,6 +1996,23 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_VERTEX_BINDING_BUFFER:
+        case GL_VERTEX_BINDING_DIVISOR:
+        case GL_VERTEX_BINDING_OFFSET:
+        case GL_VERTEX_BINDING_STRIDE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM,
+                          "Vertex Attrib Bindings are not supported in this version of GL"));
+                return false;
+            }
+            if (index >= caps.maxVertexAttribBindings)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "Invalid index value."));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;
@@ -2260,6 +2277,68 @@ bool ValidateRenderbufferStorageMultisample(ValidationContext *context,
         context->handleError(
             Error(GL_INVALID_OPERATION,
                   "Samples must not be greater than maximum supported value for the format."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateVertexAttribIPointer(ValidationContext *context,
+                                  GLuint index,
+                                  GLint size,
+                                  GLenum type,
+                                  GLsizei stride,
+                                  const GLvoid *pointer)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "VertexAttribIPointer requires OpenGL ES 3.0 or higher."));
+        return false;
+    }
+
+    if (!ValidateVertexAttribFormatBase(context, index, size, type, 0, true))
+    {
+        return false;
+    }
+
+    if (stride < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "stride cannot be negative."));
+        return false;
+    }
+
+    const Caps &caps = context->getCaps();
+    if (context->getClientVersion() >= ES_3_1)
+    {
+        if (stride > caps.maxVertexAttribStride)
+        {
+            context->handleError(
+                Error(GL_INVALID_VALUE, "stride cannot be greater than MAX_VERTEX_ATTRIB_STRIDE."));
+            return false;
+        }
+
+        // [OpenGL ES 3.1] Section 10.3.1 page 245:
+        // glVertexAttribBinding is part of the equivalent code of VertexAttribIPointer, so its
+        // validation should be inherited.
+        if (index >= caps.maxVertexAttribBindings)
+        {
+            context->handleError(
+                Error(GL_INVALID_VALUE, "index must be smaller than MAX_VERTEX_ATTRIB_BINDINGS."));
+            return false;
+        }
+    }
+
+    // [OpenGL ES 3.0.2] Section 2.8 page 24:
+    // An INVALID_OPERATION error is generated when a non-zero vertex array object
+    // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
+    // and the pointer argument is not NULL.
+    if (context->getGLState().getVertexArrayId() != 0 &&
+        context->getGLState().getArrayBufferId() == 0 && pointer != nullptr)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "Pointer is null with a non-zero VAO bound and zero bound to GL_ARRAY_BUFFER."));
         return false;
     }
 
