@@ -1108,11 +1108,25 @@ bool ValidateGetVertexAttribBase(Context *context,
             case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
                 if (context->getClientMajorVersion() < 3)
                 {
-                    context->handleError(Error(GL_INVALID_ENUM, "pname requires OpenGL ES 3.0."));
+                    context->handleError(Error(
+                        GL_INVALID_ENUM, "GL_VERTEX_ATTRIB_ARRAY_INTEGER requires OpenGL ES 3.0."));
                     return false;
                 }
                 break;
 
+            case GL_VERTEX_ATTRIB_BINDING:
+            case GL_VERTEX_ATTRIB_RELATIVE_OFFSET:
+            case GL_VERTEX_BINDING_DIVISOR:
+            case GL_VERTEX_BINDING_OFFSET:
+            case GL_VERTEX_BINDING_STRIDE:
+            case GL_VERTEX_BINDING_BUFFER:
+                if (context->getClientVersion() < ES_3_1)
+                {
+                    context->handleError(
+                        Error(GL_INVALID_ENUM, "Vertex Attrib Bindings require OpenGL ES 3.1."));
+                    return false;
+                }
+                break;
             default:
                 context->handleError(Error(GL_INVALID_ENUM, "Unknown pname."));
                 return false;
