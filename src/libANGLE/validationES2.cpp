@@ -23,6 +23,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES3.h"
+#include "libANGLE/validationES31.h"
 #include "libANGLE/VertexArray.h"
 
 namespace gl
@@ -3901,6 +3902,11 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
                                  GLsizei stride,
                                  const GLvoid *ptr)
 {
+    if (context->getClientVersion() >= ES_3_1)
+    {
+        return ValidateVertexAttribPointerES31(context, index, size, type, normalized, stride, ptr);
+    }
+
     if (index >= MAX_VERTEX_ATTRIBS)
     {
         context->handleError(Error(GL_INVALID_VALUE, "Invalid index value."));

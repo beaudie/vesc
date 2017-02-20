@@ -75,10 +75,36 @@ class VertexArrayGL : public VertexArrayImpl
                                GLsizei instanceCount,
                                const gl::IndexRange &indexRange) const;
 
+    struct AppliedAttributeGL
+    {
+        explicit AppliedAttributeGL(GLuint bindingIndex);
+
+        bool enabled;
+        GLenum type;
+        GLuint size;
+        bool normalized;
+        bool pureInteger;
+        const GLvoid *pointer;
+        GLintptr relativeOffset;
+        GLuint bindingIndex;
+    };
+
+    static bool IsAttributeUnchanged(const AppliedAttributeGL &a, const gl::VertexAttribute &b);
+    static bool IsFormatUnchanged(const AppliedAttributeGL &a, const gl::VertexAttribute &b);
+    static bool IsBindingBufferUnchanged(const gl::VertexBinding &a, const gl::VertexBinding &b);
+
+    bool CanUseVertexAttribPointer(size_t attribIndex);
+    bool CanUseVertexAttribDivisor(size_t attribIndex);
+
     void updateNeedsStreaming(size_t attribIndex);
     void updateAttribEnabled(size_t attribIndex);
     void updateAttribPointer(size_t attribIndex);
     void updateAttribDivisor(size_t attribIndex);
+
+    void updateAttribFormat(size_t attribIndex);
+    void updateAttribBinding(size_t attribIndex);
+    void updateBindingBuffer(size_t bindingIndex);
+    void updateBindingDivisor(size_t bindingIndex);
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
@@ -87,7 +113,7 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
 
-    mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+    mutable std::vector<AppliedAttributeGL> mAppliedAttributes;
     mutable std::vector<gl::VertexBinding> mAppliedBindings;
 
     mutable size_t mStreamingElementArrayBufferSize;
@@ -95,6 +121,8 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable size_t mStreamingArrayBufferSize;
     mutable GLuint mStreamingArrayBuffer;
+
+    bool VertexAttribBindingAvailable;
 
     gl::AttributesMask mAttributesNeedStreaming;
 };
