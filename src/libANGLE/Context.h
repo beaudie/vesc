@@ -128,6 +128,10 @@ class Context final : public ValidationContext
     void bindReadFramebuffer(GLuint framebufferHandle);
     void bindDrawFramebuffer(GLuint framebufferHandle);
     void bindVertexArray(GLuint vertexArrayHandle);
+    void bindVertexBuffer(GLuint bindingIndex,
+                          GLuint bufferHandle,
+                          GLintptr offset,
+                          GLsizei stride);
     void bindSampler(GLuint textureUnit, GLuint samplerHandle);
     void bindGenericUniformBuffer(GLuint bufferHandle);
     void bindIndexedUniformBuffer(GLuint bufferHandle,
@@ -157,6 +161,7 @@ class Context final : public ValidationContext
     void getQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params);
 
     void setVertexAttribDivisor(GLuint index, GLuint divisor);
+    void setVertexBindingDivisor(GLuint bindingIndex, GLuint divisor);
 
     void samplerParameteri(GLuint sampler, GLenum pname, GLint param);
     void samplerParameteriv(GLuint sampler, GLenum pname, const GLint *param);
@@ -243,6 +248,12 @@ class Context final : public ValidationContext
     void vertexAttrib3fv(GLuint index, const GLfloat *values);
     void vertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
     void vertexAttrib4fv(GLuint index, const GLfloat *values);
+    void vertexAttribFormat(GLuint attribIndex,
+                            GLint size,
+                            GLenum type,
+                            GLboolean normalized,
+                            GLuint relativeOffset);
+    void vertexAttribBinding(GLuint attribIndex, GLuint bindingIndex);
     void vertexAttribPointer(GLuint index,
                              GLint size,
                              GLenum type,
@@ -256,6 +267,7 @@ class Context final : public ValidationContext
                               GLenum type,
                               GLsizei stride,
                               const GLvoid *pointer);
+    void vertexAttribIFormat(GLuint attribIndex, GLint size, GLenum type, GLuint relativeOffset);
     void vertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w);
     void vertexAttribI4ui(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
     void vertexAttribI4iv(GLuint index, const GLint *v);
