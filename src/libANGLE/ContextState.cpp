@@ -673,6 +673,10 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
     {
         case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
         case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+        case GL_VERTEX_BINDING_BUFFER:
+        case GL_VERTEX_BINDING_DIVISOR:
+        case GL_VERTEX_BINDING_OFFSET:
+        case GL_VERTEX_BINDING_STRIDE:
         {
             *type      = GL_INT;
             *numParams = 1;

@@ -42,15 +42,47 @@ VertexArray11::~VertexArray11()
 
 void VertexArray11::syncState(const gl::VertexArray::DirtyBits &dirtyBits)
 {
+    auto &attribs = mData.getVertexAttributes();
+    // Record VertexBindings that will be updated together with their VertexAttributes.
+    std::bitset<gl::MAX_VERTEX_ATTRIB_BINDINGS> dirtyBindingBits;
+
     for (auto dirtyBit : angle::IterateBitSet(dirtyBits))
     {
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
             continue;
 
         size_t index = gl::VertexArray::GetAttribIndex(dirtyBit);
-        // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-        ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
-        mAttribsToUpdate.set(index);
+
+        // index means attribIndex: directly set the bit of this attribute.
+        if (gl::VertexArray::IsAttribBit(dirtyBit))
+        {
+            mAttribsToUpdate.set(index);
+
+            // attribs[index] and its binding are used as a whole in D3D11, so the binding should be
+            // marked as dirty.
+            dirtyBindingBits.set(attribs[index].bindingIndex);
+        }
+        else
+        {
+            // index means bindingIndex: we need to get the attribIndex of this binding.
+            // Skip the bindings that have already been marked as dirty.
+            if (!dirtyBindingBits.test(index))
+            {
+                for (int attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+                {
+                    if (mAttribsToUpdate.test(attribIndex))
+                    {
+                        continue;
+                    }
+                    if (attribs[attribIndex].bindingIndex == index)
+                    {
+                        mAttribsToUpdate.set(attribIndex);
+                        dirtyBindingBits.set(index);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 

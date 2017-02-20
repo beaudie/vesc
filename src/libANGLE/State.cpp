@@ -1027,6 +1027,39 @@ bool State::removeVertexArrayBinding(GLuint vertexArray)
     return false;
 }
 
+void State::bindVertexBuffer(GLuint bindingIndex,
+                             Buffer *boundBuffer,
+                             GLintptr offset,
+                             GLsizei stride)
+{
+    getVertexArray()->bindVertexBuffer(bindingIndex, boundBuffer, offset, stride);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
+void State::setVertexAttribBinding(GLuint attribIndex, GLuint bindingIndex)
+{
+    getVertexArray()->setVertexAttribBinding(attribIndex, bindingIndex);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
+void State::setVertexAttribFormat(GLuint attribIndex,
+                                  GLint size,
+                                  GLenum type,
+                                  bool normalized,
+                                  bool pureInteger,
+                                  GLuint relativeOffset)
+{
+    getVertexArray()->setVertexAttribFormat(attribIndex, size, type, normalized, pureInteger,
+                                            relativeOffset);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
+void State::setVertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
+{
+    getVertexArray()->setVertexBindingDivisor(bindingIndex, divisor);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
 void State::setProgram(const Context *context, Program *newProgram)
 {
     if (mProgram != newProgram)
@@ -1896,6 +1929,30 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
             *data = mUniformBuffers[index].id();
         }
         break;
+      case GL_VERTEX_BINDING_BUFFER:
+          if (static_cast<size_t>(index) < mVertexArray->getMaxBindings())
+          {
+              *data = mVertexArray->getVertexBinding(index).buffer.id();
+          }
+          break;
+      case GL_VERTEX_BINDING_DIVISOR:
+          if (static_cast<size_t>(index) < mVertexArray->getMaxBindings())
+          {
+              *data = mVertexArray->getVertexBinding(index).divisor;
+          }
+          break;
+      case GL_VERTEX_BINDING_OFFSET:
+          if (static_cast<size_t>(index) < mVertexArray->getMaxBindings())
+          {
+              *data = static_cast<GLuint>(mVertexArray->getVertexBinding(index).offset);
+          }
+          break;
+      case GL_VERTEX_BINDING_STRIDE:
+          if (static_cast<size_t>(index) < mVertexArray->getMaxBindings())
+          {
+              *data = mVertexArray->getVertexBinding(index).stride;
+          }
+          break;
       default:
           UNREACHABLE();
           break;
