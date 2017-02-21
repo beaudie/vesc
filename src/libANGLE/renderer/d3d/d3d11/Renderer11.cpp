@@ -1589,15 +1589,16 @@ gl::Error Renderer11::setUniformBuffers(const gl::ContextState &data,
     return gl::NoError();
 }
 
-gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
+gl::Error Renderer11::updateState(ContextImpl *contextImpl, GLenum drawMode)
 {
+    const auto &data    = contextImpl->getContextState();
     const auto &glState = data.getState();
 
     // Applies the render target surface, depth stencil surface, viewport rectangle and
     // scissor rectangle to the renderer
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
-    ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->complete(data));
-    ANGLE_TRY(applyRenderTarget(framebuffer));
+    ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->cachedComplete());
+    ANGLE_TRY(mStateManager.syncFramebuffer(contextImpl, framebuffer));
 
     // Set the present path state
     auto firstColorAttachment        = framebuffer->getFirstColorbuffer();
@@ -1698,11 +1699,6 @@ bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSi
     }
 
     return count >= minCount;
-}
-
-gl::Error Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
-{
-    return mStateManager.syncFramebuffer(framebuffer);
 }
 
 gl::Error Renderer11::applyVertexBuffer(const gl::State &state,
@@ -4576,7 +4572,7 @@ gl::Error Renderer11::genericDrawElements(Context11 *context,
         return gl::NoError();
     }
 
-    ANGLE_TRY(updateState(data, mode));
+    ANGLE_TRY(updateState(context, mode));
 
     TranslatedIndexData indexInfo;
     indexInfo.indexRange = indexRange;
@@ -4624,7 +4620,7 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
         return gl::NoError();
     }
 
-    ANGLE_TRY(updateState(data, mode));
+    ANGLE_TRY(updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
     ANGLE_TRY(applyTextures(context, data));
@@ -4659,7 +4655,7 @@ gl::Error Renderer11::genericDrawIndirect(Context11 *context,
 
     ANGLE_TRY(generateSwizzles(data));
     applyPrimitiveType(mode, 0, usesPointSize);
-    ANGLE_TRY(updateState(data, mode));
+    ANGLE_TRY(updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
     ANGLE_TRY(applyTextures(context, data));

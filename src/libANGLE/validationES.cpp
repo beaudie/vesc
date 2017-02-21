@@ -248,13 +248,13 @@ bool ValidateReadPixelsBase(ValidationContext *context,
 
     auto readFramebuffer = context->getGLState().getReadFramebuffer();
 
-    if (readFramebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+    if (readFramebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && readFramebuffer->getSamples(context->getContextState()) != 0)
+    if (readFramebuffer->id() != 0 && readFramebuffer->getSamples(context) != 0)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
@@ -2102,19 +2102,19 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
         return false;
     }
 
-    if (readFramebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+    if (readFramebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (drawFramebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+    if (drawFramebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (drawFramebuffer->getSamples(context->getContextState()) != 0)
+    if (drawFramebuffer->getSamples(context) != 0)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
@@ -2943,8 +2943,8 @@ bool ValidateStateQuery(ValidationContext *context,
         case GL_IMPLEMENTATION_COLOR_READ_TYPE:
         case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
         {
-            if (context->getGLState().getReadFramebuffer()->checkStatus(
-                    context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+            if (context->getGLState().getReadFramebuffer()->checkStatus(context) !=
+                GL_FRAMEBUFFER_COMPLETE)
             {
                 context->handleError(Error(GL_INVALID_OPERATION));
                 return false;
@@ -3047,13 +3047,13 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
 
     const auto &state    = context->getGLState();
     auto readFramebuffer = state.getReadFramebuffer();
-    if (readFramebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+    if (readFramebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && readFramebuffer->getSamples(context->getContextState()) != 0)
+    if (readFramebuffer->id() != 0 && readFramebuffer->getSamples(context) != 0)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
@@ -3251,7 +3251,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         }
     }
 
-    if (framebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
