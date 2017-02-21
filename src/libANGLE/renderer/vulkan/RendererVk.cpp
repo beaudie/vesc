@@ -103,7 +103,7 @@ RendererVk::RendererVk()
 
 RendererVk::~RendererVk()
 {
-    if (!mInFlightCommands.empty())
+    if (!mInFlightCommands.empty() || !mInFlightFences.empty() || !mGarbage.empty())
     {
         vk::Error error = finish();
         if (error.isError())
@@ -627,7 +627,7 @@ vk::Error RendererVk::submitCommandsWithSync(const vk::CommandBuffer &commandBuf
     submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
 
     // TODO(jmadill): Investigate how to properly queue command buffer work.
-    ANGLE_TRY(submit(submitInfo));
+    ANGLE_TRY(submitFrame(submitInfo));
 
     return vk::NoError();
 }
@@ -636,49 +636,85 @@ vk::Error RendererVk::finish()
 {
     ASSERT(mQueue != VK_NULL_HANDLE);
     ANGLE_VK_TRY(vkQueueWaitIdle(mQueue));
-    checkInFlightCommands();
+    freeAllInFlightResources();
     return vk::NoError();
+}
+
+void RendererVk::freeAllInFlightResources()
+{
+    for (auto &fence : mInFlightFences)
+    {
+        fence.destroy(mDevice);
+    }
+    mInFlightFences.clear();
+
+    for (auto &command : mInFlightCommands)
+    {
+        command.destroy(mDevice);
+    }
+    mInFlightCommands.clear();
+
+    for (auto &garbage : mGarbage)
+    {
+        garbage->destroy(mDevice);
+    }
+    mGarbage.clear();
 }
 
 vk::Error RendererVk::checkInFlightCommands()
 {
-    bool anyFinished = false;
+    size_t finishedIndex = 0;
 
     // Check if any in-flight command buffers are finished.
-    for (size_t index = 0; index < mInFlightCommands.size();)
+    for (size_t index = 0; index < mInFlightFences.size(); index++)
     {
-        auto *inFlightCommand = &mInFlightCommands[index];
+        auto *inFlightFence = &mInFlightFences[index];
 
-        bool done = false;
-        ANGLE_TRY_RESULT(inFlightCommand->finished(mDevice), done);
-        if (done)
-        {
-            ASSERT(inFlightCommand->serial() > mLastCompletedCommandSerial);
-            mLastCompletedCommandSerial = inFlightCommand->serial();
-            inFlightCommand->destroy(mDevice);
-            mInFlightCommands.erase(mInFlightCommands.begin() + index);
-            anyFinished = true;
-        }
-        else
-        {
-            ++index;
-        }
+        VkResult result = inFlightFence->getFence().getStatus(mDevice);
+        if (result == VK_NOT_READY)
+            break;
+        ANGLE_VK_TRY(result);
+        finishedIndex = index + 1;
+
+        // Release the fence handle.
+        // TODO(jmadill): Re-use fences.
+        inFlightFence->destroy(mDevice);
     }
 
-    if (anyFinished)
-    {
-        size_t freeIndex = 0;
-        for (; freeIndex < mGarbage.size(); ++freeIndex)
-        {
-            if (!mGarbage[freeIndex]->destroyIfComplete(mDevice, mLastCompletedCommandSerial))
-                break;
-        }
+    if (finishedIndex == 0)
+        return vk::NoError();
 
-        // Remove the entries from the garbage list - they should be ready to go.
-        if (freeIndex > 0)
-        {
-            mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
-        }
+    uint32_t finishedSerial = mInFlightFences[finishedIndex - 1].serial();
+    mInFlightFences.erase(mInFlightFences.begin(), mInFlightFences.begin() + finishedIndex);
+
+    size_t completedCBIndex = 0;
+    for (size_t cbIndex = 0; cbIndex < mInFlightCommands.size(); ++cbIndex)
+    {
+        auto *inFlightCB = &mInFlightCommands[cbIndex];
+        if (inFlightCB->serial() > finishedSerial)
+            break;
+
+        completedCBIndex = cbIndex + 1;
+        inFlightCB->destroy(mDevice);
+    }
+
+    if (completedCBIndex == 0)
+        return vk::NoError();
+
+    mInFlightCommands.erase(mInFlightCommands.begin(),
+                            mInFlightCommands.begin() + completedCBIndex);
+
+    size_t freeIndex = 0;
+    for (; freeIndex < mGarbage.size(); ++freeIndex)
+    {
+        if (!mGarbage[freeIndex]->destroyIfComplete(mDevice, finishedSerial))
+            break;
+    }
+
+    // Remove the entries from the garbage list - they should be ready to go.
+    if (freeIndex > 0)
+    {
+        mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
     }
 
     return vk::NoError();
@@ -686,28 +722,46 @@ vk::Error RendererVk::checkInFlightCommands()
 
 vk::Error RendererVk::submit(const VkSubmitInfo &submitInfo)
 {
-    checkInFlightCommands();
-
-    // Start a Fence to record when this command buffer finishes.
-    VkFenceCreateInfo fenceInfo;
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = nullptr;
-    fenceInfo.flags = 0;
-
-    vk::Fence fence;
-    ANGLE_TRY(fence.init(mDevice, fenceInfo));
-
-    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, VK_NULL_HANDLE));
 
     // Store this command buffer in the in-flight list.
-    mInFlightCommands.emplace_back(vk::FenceAndCommandBuffer(
-        mCurrentCommandSerial, std::move(fence), std::move(mCommandBuffer)));
+    mInFlightCommands.emplace_back(
+        vk::CommandBufferAndSerial(std::move(mCommandBuffer), mCurrentCommandSerial));
 
     // Sanity check.
     ASSERT(mInFlightCommands.size() < 1000u);
 
     // Increment the command buffer serial.
     mCurrentCommandSerial++;
+
+    return vk::NoError();
+}
+
+vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo)
+{
+    VkFenceCreateInfo createInfo;
+    createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    createInfo.pNext = nullptr;
+    createInfo.flags = 0;
+
+    vk::Fence fence;
+    ANGLE_TRY(fence.init(mDevice, createInfo));
+
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+
+    // Store this command buffer in the in-flight list.
+    mInFlightFences.emplace_back(vk::FenceAndSerial(std::move(fence), mCurrentCommandSerial));
+    mInFlightCommands.emplace_back(
+        vk::CommandBufferAndSerial(std::move(mCommandBuffer), mCurrentCommandSerial));
+
+    // Sanity check.
+    ASSERT(mInFlightCommands.size() < 1000u);
+
+    // Increment the command buffer serial.
+    mCurrentCommandSerial++;
+
+    ANGLE_TRY(checkInFlightCommands());
+
     return vk::NoError();
 }
 

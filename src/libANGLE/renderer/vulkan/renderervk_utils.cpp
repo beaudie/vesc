@@ -238,7 +238,7 @@ Error CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &createIn
 }
 
 // CommandBuffer implementation.
-CommandBuffer::CommandBuffer() : mCommandPool(nullptr)
+CommandBuffer::CommandBuffer() : mStarted(false), mCommandPool(nullptr)
 {
 }
 
@@ -250,6 +250,11 @@ void CommandBuffer::setCommandPool(CommandPool *commandPool)
 
 Error CommandBuffer::begin(VkDevice device)
 {
+    if (mStarted)
+    {
+        return NoError();
+    }
+
     if (mHandle == VK_NULL_HANDLE)
     {
         VkCommandBufferAllocateInfo commandBufferInfo;
@@ -266,6 +271,8 @@ Error CommandBuffer::begin(VkDevice device)
         reset();
     }
 
+    mStarted = true;
+
     VkCommandBufferBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.pNext = nullptr;
@@ -280,6 +287,8 @@ Error CommandBuffer::begin(VkDevice device)
 
 Error CommandBuffer::end()
 {
+    mStarted = false;
+
     ASSERT(valid());
     ANGLE_VK_TRY(vkEndCommandBuffer(mHandle));
     return NoError();
@@ -287,6 +296,8 @@ Error CommandBuffer::end()
 
 Error CommandBuffer::reset()
 {
+    mStarted = false;
+
     ASSERT(valid());
     ANGLE_VK_TRY(vkResetCommandBuffer(mHandle, 0));
     return NoError();
@@ -861,45 +872,51 @@ VkResult Fence::getStatus(VkDevice device) const
     return vkGetFenceStatus(device, mHandle);
 }
 
-// FenceAndCommandBuffer implementation.
-FenceAndCommandBuffer::FenceAndCommandBuffer(uint32_t serial,
-                                             Fence &&fence,
-                                             CommandBuffer &&commandBuffer)
-    : mSerial(serial), mFence(std::move(fence)), mCommandBuffer(std::move(commandBuffer))
+// CommandBufferAndSerial implementation.
+CommandBufferAndSerial::CommandBufferAndSerial(CommandBuffer &&commandBuffer, uint32_t serial)
+    : mCommandBuffer(std::move(commandBuffer)), mSerial(serial)
 {
 }
 
-FenceAndCommandBuffer::FenceAndCommandBuffer(FenceAndCommandBuffer &&other)
-    : mSerial(other.mSerial),
-      mFence(std::move(other.mFence)),
-      mCommandBuffer(std::move(other.mCommandBuffer))
+CommandBufferAndSerial::CommandBufferAndSerial(CommandBufferAndSerial &&other)
+    : mCommandBuffer(std::move(other.mCommandBuffer)), mSerial(other.mSerial)
 {
     other.mSerial = 0;
 }
 
-void FenceAndCommandBuffer::destroy(VkDevice device)
+void CommandBufferAndSerial::destroy(VkDevice device)
 {
-    mFence.destroy(device);
     mCommandBuffer.destroy(device);
 }
 
-vk::ErrorOrResult<bool> FenceAndCommandBuffer::finished(VkDevice device) const
+CommandBufferAndSerial &CommandBufferAndSerial::operator=(CommandBufferAndSerial &&other)
 {
-    VkResult result = mFence.getStatus(device);
-    // Should this be a part of ANGLE_VK_TRY?
-    if (result == VK_NOT_READY)
-    {
-        return false;
-    }
-    ANGLE_VK_TRY(result);
-    return true;
+    mCommandBuffer = std::move(other.mCommandBuffer);
+    std::swap(mSerial, other.mSerial);
+    return *this;
 }
 
-FenceAndCommandBuffer &FenceAndCommandBuffer::operator=(FenceAndCommandBuffer &&other)
+// FenceAndSerial implementation.
+FenceAndSerial::FenceAndSerial(Fence &&fence, uint32_t serial)
+    : mFence(std::move(fence)), mSerial(serial)
 {
+}
+
+FenceAndSerial::FenceAndSerial(FenceAndSerial &&other)
+    : mFence(std::move(other.mFence)), mSerial(other.mSerial)
+{
+    other.mSerial = 0;
+}
+
+void FenceAndSerial::destroy(VkDevice device)
+{
+    mFence.destroy(device);
+}
+
+FenceAndSerial &FenceAndSerial::operator=(FenceAndSerial &&other)
+{
+    mFence = std::move(other.mFence);
     std::swap(mSerial, other.mSerial);
-    mFence         = std::move(other.mFence);
-    mCommandBuffer = std::move(other.mCommandBuffer);
     return *this;
 }
 

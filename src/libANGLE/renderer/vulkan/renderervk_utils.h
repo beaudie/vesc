@@ -175,6 +175,8 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
   public:
     CommandBuffer();
 
+    bool started() const { return mStarted; }
+
     void destroy(VkDevice device);
     using WrappedObject::operator=;
 
@@ -212,6 +214,7 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            const std::vector<VkDeviceSize> &offsets);
 
   private:
+    bool mStarted;
     CommandPool *mCommandPool;
 };
 
@@ -394,28 +397,45 @@ class Fence final : public WrappedObject<Fence, VkFence>
     VkResult getStatus(VkDevice device) const;
 };
 
-class FenceAndCommandBuffer final : angle::NonCopyable
+class CommandBufferAndSerial final : angle::NonCopyable
 {
   public:
-    FenceAndCommandBuffer(uint32_t serial, Fence &&fence, CommandBuffer &&commandBuffer);
-    FenceAndCommandBuffer(FenceAndCommandBuffer &&other);
-    FenceAndCommandBuffer &operator=(FenceAndCommandBuffer &&other);
+    CommandBufferAndSerial(CommandBuffer &&commandBuffer, uint32_t serial);
+    CommandBufferAndSerial(CommandBufferAndSerial &&other);
+    CommandBufferAndSerial &operator=(CommandBufferAndSerial &&other);
 
     void destroy(VkDevice device);
-    vk::ErrorOrResult<bool> finished(VkDevice device) const;
 
     uint32_t serial() const { return mSerial; }
 
   private:
-    uint32_t mSerial;
-    Fence mFence;
     CommandBuffer mCommandBuffer;
+    uint32_t mSerial;
+};
+
+class FenceAndSerial final : angle::NonCopyable
+{
+  public:
+    FenceAndSerial(Fence &&commandBuffer, uint32_t serial);
+    FenceAndSerial(FenceAndSerial &&other);
+    FenceAndSerial &operator=(FenceAndSerial &&other);
+
+    void destroy(VkDevice device);
+
+    uint32_t serial() const { return mSerial; }
+
+    const Fence &getFence() const { return mFence; }
+
+  private:
+    Fence mFence;
+    uint32_t mSerial;
 };
 
 class IGarbageObject : angle::NonCopyable
 {
   public:
     virtual bool destroyIfComplete(VkDevice device, uint32_t completedSerial) = 0;
+    virtual void destroy(VkDevice device) = 0;
 };
 
 template <typename T>
@@ -434,6 +454,8 @@ class GarbageObject final : public IGarbageObject
 
         return false;
     }
+
+    void destroy(VkDevice device) override { mObject.destroy(device); }
 
   private:
     uint32_t mSerial;
