@@ -575,7 +575,7 @@ vk::CommandBuffer *RendererVk::getCommandBuffer()
     return &mCommandBuffer;
 }
 
-vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer)
+vk::Error RendererVk::submitCommandBuffer(const vk::CommandBuffer &commandBuffer)
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -598,7 +598,12 @@ vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &comm
     // TODO(jmadill): Investigate how to properly submit command buffers.
     ANGLE_TRY(submit(submitInfo));
 
-    // Wait indefinitely for the queue to finish.
+    return vk::NoError();
+}
+
+vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer)
+{
+    ANGLE_TRY(submitCommandBuffer(commandBuffer));
     ANGLE_TRY(finish());
 
     return vk::NoError();
@@ -634,13 +639,15 @@ vk::Error RendererVk::waitThenFinishCommandBuffer(const vk::CommandBuffer &comma
 vk::Error RendererVk::finish()
 {
     ASSERT(mQueue != VK_NULL_HANDLE);
-    checkInFlightCommands();
     ANGLE_VK_TRY(vkQueueWaitIdle(mQueue));
+    checkInFlightCommands();
     return vk::NoError();
 }
 
 vk::Error RendererVk::checkInFlightCommands()
 {
+    bool anyFinished = false;
+
     // Check if any in-flight command buffers are finished.
     for (size_t index = 0; index < mInFlightCommands.size();)
     {
@@ -654,10 +661,27 @@ vk::Error RendererVk::checkInFlightCommands()
             mLastCompletedCommandSerial = inFlightCommand->serial();
             inFlightCommand->destroy(mDevice);
             mInFlightCommands.erase(mInFlightCommands.begin() + index);
+            anyFinished = true;
         }
         else
         {
             ++index;
+        }
+    }
+
+    if (anyFinished)
+    {
+        size_t freeIndex = 0;
+        for (; freeIndex < mGarbage.size(); ++freeIndex)
+        {
+            if (!mGarbage[freeIndex]->destroyIfComplete(mDevice, mLastCompletedCommandSerial))
+                break;
+        }
+
+        // Remove the entries from the garbage list - they should be ready to go.
+        if (freeIndex > 0)
+        {
+            mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
         }
     }
 
