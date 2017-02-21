@@ -54,13 +54,13 @@ void BufferD3D::updateD3DBufferUsage(GLenum usage)
         case GL_STATIC_DRAW:
         case GL_STATIC_READ:
         case GL_STATIC_COPY:
+        case GL_STREAM_DRAW:
+        case GL_STREAM_READ:
+        case GL_STREAM_COPY:
             mUsage = D3DBufferUsage::STATIC;
             initializeStaticData();
             break;
 
-        case GL_STREAM_DRAW:
-        case GL_STREAM_READ:
-        case GL_STREAM_COPY:
         case GL_DYNAMIC_READ:
         case GL_DYNAMIC_COPY:
         case GL_DYNAMIC_DRAW:
