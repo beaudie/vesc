@@ -47,15 +47,6 @@
             'x11/X11Window.cpp',
             'x11/X11Window.h',
         ],
-        'util_osx_sources':
-        [
-            'osx/OSX_system_utils.cpp',
-            'osx/OSXTimer.cpp',
-            'osx/OSXTimer.h',
-            'osx/OSXWindow.cpp',
-            'osx/OSXWindow.h',
-            'posix/Posix_system_utils.cpp',
-        ],
     },
     'targets':
     [
@@ -124,13 +115,6 @@
                             '<!@(pkg-config --libs-only-l x11 xi) -lrt',
                         ],
                     },
-                }],
-                ['OS=="mac"',
-                {
-                    'sources':
-                    [
-                        '<@(util_osx_sources)',
-                    ],
                 }],
             ],
         },
