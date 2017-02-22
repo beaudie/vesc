@@ -232,6 +232,7 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     void setConfigStencilBits(int bits);
     void setConfigComponentType(EGLenum componentType);
     void setMultisampleEnabled(bool enabled);
+    void setSamples(EGLint samples);
     void setDebugEnabled(bool enabled);
     void setNoErrorEnabled(bool enabled);
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
