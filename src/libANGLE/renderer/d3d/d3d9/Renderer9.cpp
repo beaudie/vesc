@@ -687,7 +687,8 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                           backBufferFormat, depthBufferFormat, orientation);
 }
 
-egl::Error Renderer9::getD3DTextureInfo(IUnknown *d3dTexture,
+egl::Error Renderer9::getD3DTextureInfo(const egl::Config *config,
+                                        IUnknown *d3dTexture,
                                         EGLint *width,
                                         EGLint *height,
                                         GLenum *fboFormat) const

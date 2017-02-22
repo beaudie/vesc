@@ -49,6 +49,7 @@ class SwapChain11 final : public SwapChainD3D
     EGLint getWidth() const { return mWidth; }
     EGLint getHeight() const { return mHeight; }
     void *getKeyedMutex() override { return mKeyedMutex; }
+    EGLint getSamples() const { return mSampleCount; }
 
   private:
     void release();
@@ -102,6 +103,9 @@ class SwapChain11 final : public SwapChainD3D
 
     SurfaceRenderTarget11 mColorRenderTarget;
     SurfaceRenderTarget11 mDepthStencilRenderTarget;
+
+    EGLint mSampleCount;
+    EGLint mSampleQuality;
 };
 
 }  // namespace rx

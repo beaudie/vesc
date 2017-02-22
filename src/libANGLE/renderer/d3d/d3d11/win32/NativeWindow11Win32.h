@@ -33,6 +33,8 @@ class NativeWindow11Win32 : public NativeWindow11
                             DXGI_FORMAT format,
                             UINT width,
                             UINT height,
+                            UINT sampleCount,
+                            UINT sampleQuality,
                             IDXGISwapChain **swapChain) override;
 
     void commitChange() override;
