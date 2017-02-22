@@ -83,6 +83,7 @@ class SurfaceD3D : public SurfaceImpl
     NativeWindowD3D *mNativeWindow;  // Handler for the Window that the surface is created for.
     EGLint mWidth;
     EGLint mHeight;
+    EGLint mEGLSamples;
 
     EGLint mSwapInterval;
 
