@@ -20,6 +20,7 @@
 #include "libANGLE/formatutils.h"
 
 #include <EGL/eglext.h>
+#include <iostream>
 
 namespace
 {
@@ -882,6 +883,8 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
 
 Error ValidateMakeCurrent(Display *display, EGLSurface draw, EGLSurface read, gl::Context *context)
 {
+    std::cout << "----Start ValidateMakeCurrent\n";
+
     if (context == EGL_NO_CONTEXT && (draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE))
     {
         return Error(EGL_BAD_MATCH, "If ctx is EGL_NO_CONTEXT, surfaces must be EGL_NO_SURFACE");

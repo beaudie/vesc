@@ -13,12 +13,57 @@
 #include <vector>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include "../../libANGLE/Config.h"
 
 #include "OSWindow.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
 
 using namespace angle;
+
+struct Config
+{
+    Config();
+
+    GLenum renderTargetFormat;      // TODO(geofflang): remove this
+    GLenum depthStencilFormat;      // TODO(geofflang): remove this
+
+    EGLint bufferSize;              // Depth of the color buffer
+    EGLint redSize;                 // Bits of Red in the color buffer
+    EGLint greenSize;               // Bits of Green in the color buffer
+    EGLint blueSize;                // Bits of Blue in the color buffer
+    EGLint luminanceSize;           // Bits of Luminance in the color buffer
+    EGLint alphaSize;               // Bits of Alpha in the color buffer
+    EGLint alphaMaskSize;           // Bits of Alpha Mask in the mask buffer
+    EGLBoolean bindToTextureRGB;    // True if bindable to RGB textures.
+    EGLBoolean bindToTextureRGBA;   // True if bindable to RGBA textures.
+    EGLenum colorBufferType;        // Color buffer type
+    EGLenum configCaveat;           // Any caveats for the configuration
+    EGLint configID;                // Unique EGLConfig identifier
+    EGLint conformant;              // Whether contexts created with this config are conformant
+    EGLint depthSize;               // Bits of Z in the depth buffer
+    EGLint level;                   // Frame buffer level
+    EGLBoolean matchNativePixmap;   // Match the native pixmap format
+    EGLint maxPBufferWidth;         // Maximum width of pbuffer
+    EGLint maxPBufferHeight;        // Maximum height of pbuffer
+    EGLint maxPBufferPixels;        // Maximum size of pbuffer
+    EGLint maxSwapInterval;         // Maximum swap interval
+    EGLint minSwapInterval;         // Minimum swap interval
+    EGLBoolean nativeRenderable;    // EGL_TRUE if native rendering APIs can render to surface
+    EGLint nativeVisualID;          // Handle of corresponding native visual
+    EGLint nativeVisualType;        // Native visual type of the associated visual
+    EGLint renderableType;          // Which client rendering APIs are supported.
+    EGLint sampleBuffers;           // Number of multisample buffers
+    EGLint samples;                 // Number of samples per pixel
+    EGLint stencilSize;             // Bits of Stencil in the stencil buffer
+    EGLint surfaceType;             // Which types of EGL surfaces are supported.
+    EGLenum transparentType;        // Type of transparency supported
+    EGLint transparentRedValue;     // Transparent red value
+    EGLint transparentGreenValue;   // Transparent green value
+    EGLint transparentBlueValue;    // Transparent blue value
+    EGLint optimalOrientation;      // Optimal window surface orientation
+    EGLenum colorComponentType;     // Color component type
+};
 
 namespace
 {
@@ -148,7 +193,15 @@ class EGLContextCompatibilityTest : public ANGLETest
 
     void testPbufferCompatibility(EGLConfig pbufferConfig, EGLConfig contextConfig, bool compatible) const
     {
+        Config *p = static_cast<Config*>(pbufferConfig);
+        Config *c = static_cast<Config*>(contextConfig);
+        std::cout << "Start testPbufferCompatibility\n";
+        std::cout << "pbuffer-S:" << p->samples << " RTF:" << p->renderTargetFormat << " DSF:" << p->depthStencilFormat << "\n";
+        std::cout << "context-S:" << c->samples << " RTF:" << c->renderTargetFormat << " DSF:" << c->depthStencilFormat << "\n";
+
+        std::cout << "Start eglCreateContext\n";
         EGLContext context = eglCreateContext(mDisplay, contextConfig, EGL_NO_CONTEXT, contextAttribs);
+        std::cout << "success eglCreateContext\n";
         ASSERT_TRUE(context != EGL_NO_CONTEXT);
 
         const EGLint pBufferAttribs[] =
@@ -157,23 +210,33 @@ class EGLContextCompatibilityTest : public ANGLETest
             EGL_HEIGHT, 500,
             EGL_NONE,
         };
+        std::cout << "Start eglCreatePbufferSurface\n";
         EGLSurface pbuffer = eglCreatePbufferSurface(mDisplay, pbufferConfig, pBufferAttribs);
+        std::cout << "Success eglCreatePbufferSurface\n";
         ASSERT_TRUE(pbuffer != EGL_NO_SURFACE);
 
         if (compatible)
         {
+            std::cout << "Start Compatible\n";
             testClearSurface(pbuffer, pbufferConfig, context);
+            std::cout << "Success Compatible\n";
         }
         else
         {
+            std::cout << "Start Safe Fail\n";
             testMakeCurrentFails(pbuffer, context);
+            std::cout << "Success Safe Fail\n";
         }
-
+        std::cout << "Start eglDestroySurface\n";
         eglDestroySurface(mDisplay, pbuffer);
+        std::cout << "Success eglDestroySurface\n";
         ASSERT_EGL_SUCCESS();
 
+        std::cout << "Start eglDestroyContext\n";
         eglDestroyContext(mDisplay, context);
+        std::cout << "Success eglDestroyContext\n";
         ASSERT_EGL_SUCCESS();
+        std::cout << "Success testPbufferCompatibility\n";
     }
 
     std::vector<EGLConfig> mConfigs;
@@ -182,13 +245,17 @@ class EGLContextCompatibilityTest : public ANGLETest
   private:
     void testClearSurface(EGLSurface surface, EGLConfig surfaceConfig, EGLContext context) const
     {
+        std::cout << "Start eglMakeCurrent\n";
         eglMakeCurrent(mDisplay, surface, surface, context);
         ASSERT_EGL_SUCCESS();
+        std::cout << "Success eglMakeCurrent\n";
 
+        std::cout << "Start gl calls\n";
         glViewport(0, 0, 500, 500);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         ASSERT_GL_NO_ERROR();
+        std::cout << "Success gl calls\n";
 
         EGLint surfaceCompontentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
         if (eglDisplayExtensionEnabled(mDisplay, "EGL_EXT_pixel_format_float"))
@@ -206,8 +273,11 @@ class EGLContextCompatibilityTest : public ANGLETest
             EXPECT_PIXEL_32F_EQ(250, 250, 0, 0, 1.0f, 1.0f);
         }
 
+        std::cout << "Start eglMakeCurrent\n";
         eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         ASSERT_EGL_SUCCESS();
+        std::cout << "Success eglMakeCurrent\n";
+
     }
 
     void testMakeCurrentFails(EGLSurface surface, EGLContext context) const
@@ -228,7 +298,7 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
         EGLConfig config = mConfigs[i];
-
+       
         EGLint surfaceType;
         eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE, &surfaceType);
         ASSERT_EGL_SUCCESS();
@@ -244,12 +314,20 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
 // same config can render.
 TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
 {
+    std::cout << "=======================================================\n";
+    std::cout << "PbufferSameConfig Test Start\n";
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
         EGLConfig config = mConfigs[i];
 
+        Config *configuration = static_cast<Config*>(config);
+        std::cout << "\n";
+        std::cout << "Loop Start-S:" << configuration->samples << " RTF:" << configuration->renderTargetFormat << " DSF:" << configuration->depthStencilFormat << "\n";
         EGLint surfaceType;
+     
+        std::cout << "Start GetConfigAttrib\n";
         eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE, &surfaceType);
+        std::cout << "Success GetConfigAttrib\n";
         ASSERT_EGL_SUCCESS();
 
         if ((surfaceType & EGL_PBUFFER_BIT) != 0)

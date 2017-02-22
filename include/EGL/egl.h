@@ -108,6 +108,7 @@ typedef void (*__eglMustCastToProperFunctionPointerType)(void);
 #define EGL_STENCIL_SIZE                  0x3026
 #define EGL_SUCCESS                       0x3000
 #define EGL_SURFACE_TYPE                  0x3033
+#define EGL_SURFACE_TYPE_TEST             0x3034
 #define EGL_TRANSPARENT_BLUE_VALUE        0x3035
 #define EGL_TRANSPARENT_GREEN_VALUE       0x3036
 #define EGL_TRANSPARENT_RED_VALUE         0x3037
