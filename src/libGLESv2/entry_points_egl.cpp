@@ -28,7 +28,7 @@
 #include "platform/Platform.h"
 
 #include <EGL/eglext.h>
-
+#include <iostream>
 namespace egl
 {
 
@@ -226,7 +226,7 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy, EGLConfig config, EGLint 
 
     Display *display = static_cast<Display*>(dpy);
     Config *configuration = static_cast<Config*>(config);
-
+    std::cout << "Config - S:" << configuration->samples << " RTF:" << configuration->renderTargetFormat << " DSF:" << configuration->depthStencilFormat << "\n";
     Error error = ValidateGetConfigAttrib(display, configuration, attribute);
     if (error.isError())
     {

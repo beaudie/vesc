@@ -308,4 +308,4 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(EGLContextCompatibilityTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
+ANGLE_INSTANTIATE_TEST(EGLContextCompatibilityTest,  ES2_D3D11());
