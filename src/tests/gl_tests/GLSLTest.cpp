@@ -868,6 +868,7 @@ TEST_P(GLSLTest, InvariantGLPosition)
 {
     const std::string fragmentShaderSource =
         "precision mediump float;\n"
+        "invariant gl_FragCoord;\n"
         "varying float v_varying;\n"
         "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
 
@@ -2057,6 +2058,7 @@ TEST_P(GLSLTest, PragmaDirective)
 
     const std::string fragmentShaderSource =
         "precision mediump float;\n"
+        "invariant gl_FragCoord;\n"
         "void main()\n"
         "{\n"
         "    gl_FragColor = vec4(1.0);\n"
