@@ -676,6 +676,11 @@ void ANGLETest::setMultisampleEnabled(bool enabled)
     mEGLWindow->setMultisample(enabled);
 }
 
+void ANGLETest::setSamples(EGLint samples)
+{
+    mEGLWindow->setSamples(samples);
+}
+
 void ANGLETest::setDebugEnabled(bool enabled)
 {
     mEGLWindow->setDebugEnabled(enabled);

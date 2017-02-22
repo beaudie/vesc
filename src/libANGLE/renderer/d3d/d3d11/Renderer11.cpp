@@ -958,6 +958,8 @@ egl::ConfigSet Renderer11::generateConfigs()
         GL_NONE, GL_DEPTH24_STENCIL8_OES, GL_DEPTH_COMPONENT16,
     };
 
+    static const unsigned int sampleCounts[] = {1, 2, 4};
+
     const gl::Caps &rendererCaps                  = getNativeCaps();
     const gl::TextureCapsMap &rendererTextureCaps = getNativeTextureCaps();
 
@@ -976,86 +978,91 @@ egl::ConfigSet Renderer11::generateConfigs()
 
         for (GLenum depthStencilBufferInternalFormat : depthStencilBufferFormats)
         {
-            const gl::TextureCaps &depthStencilBufferFormatCaps =
-                rendererTextureCaps.get(depthStencilBufferInternalFormat);
-            if (!depthStencilBufferFormatCaps.renderable &&
-                depthStencilBufferInternalFormat != GL_NONE)
+            for (unsigned int sampleCount : sampleCounts)
             {
-                continue;
-            }
-
-            const gl::InternalFormat &colorBufferFormatInfo =
-                gl::GetInternalFormatInfo(colorBufferInternalFormat);
-            const gl::InternalFormat &depthStencilBufferFormatInfo =
-                gl::GetInternalFormatInfo(depthStencilBufferInternalFormat);
-            const gl::Version &maxVersion = getMaxSupportedESVersion();
-
-            egl::Config config;
-            config.renderTargetFormat = colorBufferInternalFormat;
-            config.depthStencilFormat = depthStencilBufferInternalFormat;
-            config.bufferSize         = colorBufferFormatInfo.pixelBytes * 8;
-            config.redSize            = colorBufferFormatInfo.redBits;
-            config.greenSize          = colorBufferFormatInfo.greenBits;
-            config.blueSize           = colorBufferFormatInfo.blueBits;
-            config.luminanceSize      = colorBufferFormatInfo.luminanceBits;
-            config.alphaSize          = colorBufferFormatInfo.alphaBits;
-            config.alphaMaskSize      = 0;
-            config.bindToTextureRGB   = (colorBufferFormatInfo.format == GL_RGB);
-            config.bindToTextureRGBA  = (colorBufferFormatInfo.format == GL_RGBA ||
-                                        colorBufferFormatInfo.format == GL_BGRA_EXT);
-            config.colorBufferType = EGL_RGB_BUFFER;
-            config.configCaveat    = EGL_NONE;
-            config.configID        = static_cast<EGLint>(configs.size() + 1);
-
-            // PresentPathFast may not be conformant
-            config.conformant = 0;
-            if (!mPresentPathFastEnabled)
-            {
-                // Can only support a conformant ES2 with feature level greater than 10.0.
-                if (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
+                const gl::TextureCaps &depthStencilBufferFormatCaps =
+                    rendererTextureCaps.get(depthStencilBufferInternalFormat);
+                if (!depthStencilBufferFormatCaps.renderable &&
+                    depthStencilBufferInternalFormat != GL_NONE)
                 {
-                    config.conformant |= EGL_OPENGL_ES2_BIT;
+                    continue;
                 }
 
-                // We can only support conformant ES3 on FL 10.1+
+                const gl::InternalFormat &colorBufferFormatInfo =
+                    gl::GetInternalFormatInfo(colorBufferInternalFormat);
+                const gl::InternalFormat &depthStencilBufferFormatInfo =
+                    gl::GetInternalFormatInfo(depthStencilBufferInternalFormat);
+                const gl::Version &maxVersion = getMaxSupportedESVersion();
+
+                egl::Config config;
+                config.renderTargetFormat = colorBufferInternalFormat;
+                config.depthStencilFormat = depthStencilBufferInternalFormat;
+                config.bufferSize         = colorBufferFormatInfo.pixelBytes * 8;
+                config.redSize            = colorBufferFormatInfo.redBits;
+                config.greenSize          = colorBufferFormatInfo.greenBits;
+                config.blueSize           = colorBufferFormatInfo.blueBits;
+                config.luminanceSize      = colorBufferFormatInfo.luminanceBits;
+                config.alphaSize          = colorBufferFormatInfo.alphaBits;
+                config.alphaMaskSize      = 0;
+                config.bindToTextureRGB   = (colorBufferFormatInfo.format == GL_RGB);
+                config.bindToTextureRGBA  = (colorBufferFormatInfo.format == GL_RGBA ||
+                                            colorBufferFormatInfo.format == GL_BGRA_EXT);
+                config.colorBufferType = EGL_RGB_BUFFER;
+                config.configCaveat    = EGL_NONE;
+                config.configID        = static_cast<EGLint>(configs.size() + 1);
+
+                // PresentPathFast may not be conformant
+                config.conformant = 0;
+                if (!mPresentPathFastEnabled)
+                {
+                    // Can only support a conformant ES2 with feature level greater than 10.0.
+                    if (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
+                    {
+                        config.conformant |= EGL_OPENGL_ES2_BIT;
+                    }
+
+                    // We can only support conformant ES3 on FL 10.1+
+                    if (maxVersion.major >= 3)
+                    {
+                        config.conformant |= EGL_OPENGL_ES3_BIT_KHR;
+                    }
+                }
+
+                config.depthSize         = depthStencilBufferFormatInfo.depthBits;
+                config.level             = 0;
+                config.matchNativePixmap = EGL_NONE;
+                config.maxPBufferWidth   = rendererCaps.max2DTextureSize;
+                config.maxPBufferHeight  = rendererCaps.max2DTextureSize;
+                config.maxPBufferPixels =
+                    rendererCaps.max2DTextureSize * rendererCaps.max2DTextureSize;
+                config.maxSwapInterval  = 4;
+                config.minSwapInterval  = 0;
+                config.nativeRenderable = EGL_FALSE;
+                config.nativeVisualID   = 0;
+                config.nativeVisualType = EGL_NONE;
+
+                // Can't support ES3 at all without feature level 10.1
+                config.renderableType = EGL_OPENGL_ES2_BIT;
                 if (maxVersion.major >= 3)
                 {
-                    config.conformant |= EGL_OPENGL_ES3_BIT_KHR;
+                    config.renderableType |= EGL_OPENGL_ES3_BIT_KHR;
                 }
+
+                config.sampleBuffers = 0;  // FIXME: enumerate multi-sampling
+                config.samples       = sampleCount;
+                config.stencilSize   = depthStencilBufferFormatInfo.stencilBits;
+                config.surfaceType =
+                    EGL_PBUFFER_BIT | EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT;
+                config.transparentType       = EGL_NONE;
+                config.transparentRedValue   = 0;
+                config.transparentGreenValue = 0;
+                config.transparentBlueValue  = 0;
+                config.optimalOrientation    = optimalSurfaceOrientation;
+                config.colorComponentType    = gl_egl::GLComponentTypeToEGLColorComponentType(
+                    colorBufferFormatInfo.componentType);
+
+                configs.add(config);
             }
-
-            config.depthSize         = depthStencilBufferFormatInfo.depthBits;
-            config.level             = 0;
-            config.matchNativePixmap = EGL_NONE;
-            config.maxPBufferWidth   = rendererCaps.max2DTextureSize;
-            config.maxPBufferHeight  = rendererCaps.max2DTextureSize;
-            config.maxPBufferPixels = rendererCaps.max2DTextureSize * rendererCaps.max2DTextureSize;
-            config.maxSwapInterval  = 4;
-            config.minSwapInterval  = 0;
-            config.nativeRenderable = EGL_FALSE;
-            config.nativeVisualID   = 0;
-            config.nativeVisualType = EGL_NONE;
-
-            // Can't support ES3 at all without feature level 10.1
-            config.renderableType = EGL_OPENGL_ES2_BIT;
-            if (maxVersion.major >= 3)
-            {
-                config.renderableType |= EGL_OPENGL_ES3_BIT_KHR;
-            }
-
-            config.sampleBuffers = 0;  // FIXME: enumerate multi-sampling
-            config.samples       = 0;
-            config.stencilSize   = depthStencilBufferFormatInfo.stencilBits;
-            config.surfaceType = EGL_PBUFFER_BIT | EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT;
-            config.transparentType       = EGL_NONE;
-            config.transparentRedValue   = 0;
-            config.transparentGreenValue = 0;
-            config.transparentBlueValue  = 0;
-            config.optimalOrientation    = optimalSurfaceOrientation;
-            config.colorComponentType =
-                gl_egl::GLComponentTypeToEGLColorComponentType(colorBufferFormatInfo.componentType);
-
-            configs.add(config);
         }
     }
 
@@ -1188,7 +1195,8 @@ NativeWindowD3D *Renderer11::createNativeWindow(EGLNativeWindowType window,
 #endif
 }
 
-egl::Error Renderer11::getD3DTextureInfo(IUnknown *d3dTexture,
+egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
+                                         IUnknown *d3dTexture,
                                          EGLint *width,
                                          EGLint *height,
                                          GLenum *fboFormat) const
@@ -1219,6 +1227,11 @@ egl::Error Renderer11::getD3DTextureInfo(IUnknown *d3dTexture,
     if (height)
     {
         *height = static_cast<EGLint>(desc.Height);
+    }
+
+    if (static_cast<EGLint>(desc.SampleDesc.Count) != configuration->samples)
+    {
+        return egl::Error(EGL_BAD_PARAMETER, "Texture's sample count does not match.");
     }
 
     // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer.

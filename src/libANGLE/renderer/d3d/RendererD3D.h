@@ -136,7 +136,8 @@ class RendererD3D : public BufferFactoryD3D
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation) = 0;
-    virtual egl::Error getD3DTextureInfo(IUnknown *d3dTexture,
+    virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                         IUnknown *d3dTexture,
                                          EGLint *width,
                                          EGLint *height,
                                          GLenum *fboFormat) const = 0;

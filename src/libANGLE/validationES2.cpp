@@ -1884,7 +1884,7 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                 }
             }
 
-            if (readFramebuffer->getSamples(context->getContextState()) != 0 &&
+            if (readFramebuffer->getSamples(context->getContextState()) > 1 &&
                 IsPartialBlit(context, readColorAttachment, drawColorAttachment, srcX0, srcY0,
                               srcX1, srcY1, dstX0, dstY0, dstX1, dstY1))
             {
@@ -1917,7 +1917,7 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                     return false;
                 }
 
-                if (readBuffer->getSamples() != 0 || drawBuffer->getSamples() != 0)
+                if (readBuffer->getSamples() > 1 || drawBuffer->getSamples() > 1)
                 {
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;

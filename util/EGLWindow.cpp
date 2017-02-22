@@ -109,6 +109,7 @@ EGLWindow::EGLWindow(EGLint glesMajorVersion,
       mStencilBits(-1),
       mComponentType(EGL_COLOR_COMPONENT_TYPE_FIXED_EXT),
       mMultisample(false),
+      mSamples(-1),
       mDebug(false),
       mNoError(false),
       mWebGLCompatibility(false),
@@ -259,6 +260,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
         EGL_DEPTH_SIZE,     (mDepthBits >= 0) ? mDepthBits : EGL_DONT_CARE,
         EGL_STENCIL_SIZE,   (mStencilBits >= 0) ? mStencilBits : EGL_DONT_CARE,
         EGL_SAMPLE_BUFFERS, mMultisample ? 1 : 0,
+        EGL_SAMPLES,        (mSamples >= 0) ? mSamples : EGL_DONT_CARE,
     };
 
     // Add dynamic attributes
@@ -289,6 +291,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
     eglGetConfigAttrib(mDisplay, mConfig, EGL_ALPHA_SIZE, &mAlphaBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_DEPTH_SIZE, &mDepthBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_STENCIL_SIZE, &mStencilBits);
+    eglGetConfigAttrib(mDisplay, mConfig, EGL_SAMPLES, &mSamples);
 
     std::vector<EGLint> surfaceAttributes;
     if (strstr(displayExtensions, "EGL_NV_post_sub_buffer") != nullptr)

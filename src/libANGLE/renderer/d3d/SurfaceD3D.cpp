@@ -60,7 +60,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
             mD3DTexture = static_cast<IUnknown *>(clientBuffer);
             ASSERT(mD3DTexture != nullptr);
             mD3DTexture->AddRef();
-            mRenderer->getD3DTextureInfo(mD3DTexture, &mWidth, &mHeight, &mRenderTargetFormat);
+            mRenderer->getD3DTextureInfo(state.config, mD3DTexture, &mWidth, &mHeight,
+                                         &mRenderTargetFormat);
             mDepthStencilFormat = GL_NONE;
             break;
 

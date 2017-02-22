@@ -2105,7 +2105,7 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
         return false;
     }
 
-    if (drawFramebuffer->getSamples(context->getContextState()) != 0)
+    if (drawFramebuffer->getSamples(context->getContextState()) > 1)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;

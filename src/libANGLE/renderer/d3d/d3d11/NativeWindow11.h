@@ -29,6 +29,8 @@ class NativeWindow11 : public NativeWindowD3D
                                     DXGI_FORMAT format,
                                     UINT width,
                                     UINT height,
+                                    UINT sampleCount,
+                                    UINT sampleQuality,
                                     IDXGISwapChain **swapChain) = 0;
     virtual void commitChange() = 0;
 };
