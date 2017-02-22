@@ -59,6 +59,16 @@ class D3DTextureTest : public ANGLETest
                 gl_FragColor = texture2D(tex, texcoord);
             }
         );
+
+        const std::string textureFSSourceNoSampling = SHADER_SOURCE
+        (
+            precision highp float;
+
+            void main()
+            {
+                gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+            }
+        );
         // clang-format on
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
@@ -66,6 +76,9 @@ class D3DTextureTest : public ANGLETest
 
         mTextureUniformLocation = glGetUniformLocation(mTextureProgram, "tex");
         ASSERT_NE(-1, mTextureUniformLocation);
+
+        mTextureProgramNoSampling = CompileProgram(vsSource, textureFSSourceNoSampling);
+        ASSERT_NE(0u, mTextureProgramNoSampling) << "shader compilation failed.";
 
         mD3D11Module = LoadLibrary(TEXT("d3d11.dll"));
         ASSERT_NE(nullptr, mD3D11Module);
@@ -139,7 +152,9 @@ class D3DTextureTest : public ANGLETest
     EGLSurface createPBuffer(size_t width,
                              size_t height,
                              EGLint eglTextureFormat,
-                             EGLint eglTextureTarget)
+                             EGLint eglTextureTarget,
+                             EGLint sampleCount,
+                             EGLint sampleQuality)
     {
         EGLWindow *window  = getEGLWindow();
         EGLDisplay display = window->getDisplay();
@@ -156,6 +171,8 @@ class D3DTextureTest : public ANGLETest
             CD3D11_TEXTURE2D_DESC desc(DXGI_FORMAT_R8G8B8A8_UNORM, static_cast<UINT>(width),
                                        static_cast<UINT>(height), 1, 1,
                                        D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET);
+            desc.SampleDesc.Count   = sampleCount;
+            desc.SampleDesc.Quality = sampleQuality;
             EXPECT_TRUE(SUCCEEDED(mD3D11Device->CreateTexture2D(&desc, nullptr, &texture)));
 
             EGLSurface pbuffer = eglCreatePbufferFromClientBuffer(display, EGL_D3D_TEXTURE_ANGLE,
@@ -217,6 +234,7 @@ class D3DTextureTest : public ANGLETest
     }
 
     GLuint mTextureProgram;
+    GLuint mTextureProgramNoSampling;
     GLint mTextureUniformLocation;
 
     HMODULE mD3D11Module       = nullptr;
@@ -238,7 +256,8 @@ TEST_P(D3DTextureTest, Clear)
 
     const size_t bufferSize = 32;
 
-    EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE);
+    EGLSurface pbuffer =
+        createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 1, 0);
     ASSERT_EGL_SUCCESS();
     ASSERT_NE(pbuffer, EGL_NO_SURFACE);
 
@@ -271,7 +290,8 @@ TEST_P(D3DTextureTest, BindTexImage)
 
     const size_t bufferSize = 32;
 
-    EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D);
+    EGLSurface pbuffer =
+        createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 1, 0);
     ASSERT_EGL_SUCCESS();
     ASSERT_NE(pbuffer, EGL_NO_SURFACE);
 
@@ -325,8 +345,159 @@ TEST_P(D3DTextureTest, BindTexImage)
     eglDestroySurface(display, pbuffer);
 }
 
+class D3DTextureTestMS : public D3DTextureTest
+{
+  protected:
+    D3DTextureTestMS() : D3DTextureTest()
+    {
+        setSamples(4);
+        setMultisampleEnabled(true);
+    }
+};
+
+// Test creating a pbuffer from a multisampled d3d surface and clearing it
+TEST_P(D3DTextureTestMS, Clear)
+{
+    if (!valid())
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    {
+        return;
+    }
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay display = window->getDisplay();
+
+    const size_t bufferSize = 32;
+
+    EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 4,
+                                       D3D11_STANDARD_MULTISAMPLE_PATTERN);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+
+    // Apply the Pbuffer and clear it to purple and verify
+    eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
+    ASSERT_EGL_SUCCESS();
+
+    glViewport(0, 0, static_cast<GLsizei>(bufferSize), static_cast<GLsizei>(bufferSize));
+    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(static_cast<GLint>(bufferSize) / 2, static_cast<GLint>(bufferSize) / 2, 255, 0,
+                    255, 255);
+
+    eglDestroySurface(display, pbuffer);
+}
+
+TEST_P(D3DTextureTestMS, BindTexImage)
+{
+    if (!valid())
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    {
+        return;
+    }
+
+    EGLWindow *window = getEGLWindow();
+
+    const size_t bufferSize = 32;
+
+    EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 4,
+                                       D3D11_STANDARD_MULTISAMPLE_PATTERN);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+
+    // Apply the Pbuffer and clear it to purple
+    eglMakeCurrent(window->getDisplay(), pbuffer, pbuffer, window->getContext());
+    ASSERT_EGL_SUCCESS();
+
+    glViewport(0, 0, static_cast<GLsizei>(bufferSize), static_cast<GLsizei>(bufferSize));
+    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_EQ(static_cast<GLint>(bufferSize) / 2, static_cast<GLint>(bufferSize) / 2, 255, 0,
+                    255, 255);
+
+    // Apply the window surface
+    eglMakeCurrent(window->getDisplay(), window->getSurface(), window->getSurface(),
+                   window->getContext());
+
+    // Create a texture and bind the Pbuffer to it
+    GLuint texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    EXPECT_GL_NO_ERROR();
+
+    eglBindTexImage(window->getDisplay(), pbuffer, EGL_BACK_BUFFER);
+    glViewport(0, 0, getWindowWidth(), getWindowHeight());
+    ASSERT_EGL_SUCCESS();
+
+    // Draw a quad and verify that it is purple
+    glUseProgram(mTextureProgramNoSampling);
+
+    drawQuad(mTextureProgramNoSampling, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    // Unbind the texture
+    eglReleaseTexImage(window->getDisplay(), pbuffer, EGL_BACK_BUFFER);
+    ASSERT_EGL_SUCCESS();
+
+    // Verify that purple was drawn
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 255, 255);
+
+    glDeleteTextures(1, &texture);
+}
+
+// Verify that creating a pbuffer with a sample count that does not match the EGL config will result
+// in failure.
+TEST_P(D3DTextureTestMS, CheckSampleMismatch)
+{
+    if (!valid())
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        return;
+    }
+
+    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    {
+        return;
+    }
+
+    const size_t bufferSize = 32;
+
+    EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 2,
+                                       D3D11_STANDARD_MULTISAMPLE_PATTERN);
+
+    EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
+    EXPECT_EQ(pbuffer, nullptr);
+}
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(D3DTextureTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
-
+ANGLE_INSTANTIATE_TEST(D3DTextureTestMS, ES2_D3D11());
 }  // namespace
