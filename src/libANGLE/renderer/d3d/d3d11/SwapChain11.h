@@ -72,6 +72,8 @@ class SwapChain11 final : public SwapChainD3D
     bool mAppCreatedShareHandle;
     unsigned int mSwapInterval;
     bool mPassThroughResourcesInit;
+    EGLint mSampleCount;
+    EGLint mSampleQuality;
 
     NativeWindow11 *mNativeWindow;  // Handler for the Window that the surface is created for.
 
