@@ -88,6 +88,8 @@ class SurfaceD3D : public SurfaceImpl
 
     HANDLE mShareHandle;
     IUnknown *mD3DTexture;
+
+    EGLint mEGLSamples;
 };
 
 class WindowSurfaceD3D : public SurfaceD3D
