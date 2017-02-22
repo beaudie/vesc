@@ -295,7 +295,7 @@ uint32_t DisplayOzone::Buffer::getDRMFB()
         uint32_t offsets[4] = {0};
         if (drmModeAddFB2(fd, mWidth, mHeight, mDRMFormatFB, handles, pitches, offsets, &mDRMFB, 0))
         {
-            std::cerr << "drmModeAddFB2 failed" << std::endl;
+            std::cerr << "drmModeAddFB2 failed: " << errno << " " << strerror(errno) << std::endl;
         }
         else
         {
@@ -336,8 +336,8 @@ DisplayOzone::DisplayOzone(const egl::DisplayState &state)
       mMode(nullptr),
       mCRTC(nullptr),
       mSetCRTC(true),
-      mWidth(0),
-      mHeight(0),
+      mWidth(1280),
+      mHeight(1024),
       mScanning(nullptr),
       mPending(nullptr),
       mDrawing(nullptr),
@@ -358,47 +358,21 @@ DisplayOzone::~DisplayOzone()
 {
 }
 
-egl::Error DisplayOzone::initialize(egl::Display *display)
+bool DisplayOzone::hasUsableScreen(int fd)
 {
-    int fd;
-    char deviceName[30];
-    drmModeResPtr resources = nullptr;
-
-    for (int i = 0; i < 9; ++i)
-    {
-        snprintf(deviceName, sizeof(deviceName), "/dev/dri/card%d", i);
-        fd = open(deviceName, O_RDWR | O_CLOEXEC);
-        if (fd >= 0)
-        {
-            resources = drmModeGetResources(fd);
-            if (resources)
-            {
-                if (resources->count_connectors > 0)
-                {
-                    break;
-                }
-                drmModeFreeResources(resources);
-                resources = nullptr;
-            }
-            close(fd);
-        }
-    }
+    drmModeResPtr resources = drmModeGetResources(fd);
     if (!resources)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not open drm device.");
+        return false;
     }
-
-    mGBM = gbm_create_device(fd);
-    if (!mGBM)
+    if (resources->count_connectors < 1)
     {
-        close(fd);
         drmModeFreeResources(resources);
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not create gbm device.");
+        return false;
     }
 
-    mConnector            = nullptr;
-    bool monitorConnected = false;
-    for (int i = 0; !mCRTC && i < resources->count_connectors; ++i)
+    mConnector = nullptr;
+    for (int i = 0; i < resources->count_connectors; ++i)
     {
         drmModeFreeConnector(mConnector);
         mConnector = drmModeGetConnector(fd, resources->connectors[i]);
@@ -406,7 +380,6 @@ egl::Error DisplayOzone::initialize(egl::Display *display)
         {
             continue;
         }
-        monitorConnected = true;
         mMode = ChooseMode(mConnector);
         if (!mMode)
         {
@@ -418,25 +391,68 @@ egl::Error DisplayOzone::initialize(egl::Display *display)
             continue;
         }
         mCRTC = drmModeGetCrtc(fd, resources->crtcs[n]);
+        if (mCRTC)
+        {
+            // found a screen
+            mGBM = gbm_create_device(fd);
+            if (mGBM)
+            {
+                mWidth  = mMode->hdisplay;
+                mHeight = mMode->vdisplay;
+                drmModeFreeResources(resources);
+                return true;
+            }
+            // can't use this screen
+            drmModeFreeCrtc(mCRTC);
+            mCRTC = nullptr;
+        }
     }
-    drmModeFreeResources(resources);
 
-    if (mCRTC)
+    drmModeFreeResources(resources);
+    return false;
+}
+
+egl::Error DisplayOzone::initialize(egl::Display *display)
+{
+    int fd;
+    char deviceName[30];
+
+    for (int i = 0; i < 64; ++i)
     {
-        mWidth  = mMode->hdisplay;
-        mHeight = mMode->vdisplay;
+        snprintf(deviceName, sizeof(deviceName), "/dev/dri/card%d", i);
+        fd = open(deviceName, O_RDWR | O_CLOEXEC);
+        if (fd >= 0)
+        {
+            if (hasUsableScreen(fd))
+            {
+                break;
+            }
+            close(fd);
+        }
     }
-    else if (!monitorConnected)
+
+    if (!mGBM)
     {
-        // Even though there is no monitor to show it, we still do
-        // everything the same as if there were one, so we need an
-        // arbitrary size for our buffers.
-        mWidth  = 1280;
-        mHeight = 1024;
+        // there's no usable screen so try to proceed without one
+        for (int i = 128; i < 192; ++i)
+        {
+            snprintf(deviceName, sizeof(deviceName), "/dev/dri/renderD%d", i);
+            fd = open(deviceName, O_RDWR | O_CLOEXEC);
+            if (fd >= 0)
+            {
+                mGBM = gbm_create_device(fd);
+                if (mGBM)
+                {
+                    break;
+                }
+                close(fd);
+            }
+        }
     }
-    else
+
+    if (!mGBM)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to choose mode/crtc.");
+        return egl::Error(EGL_NOT_INITIALIZED, "Could not open drm device.");
     }
 
     // ANGLE builds its executables with an RPATH so they pull in ANGLE's libGL and libEGL.
@@ -819,7 +835,11 @@ void DisplayOzone::terminate()
         SafeDelete(mEGL);
     }
 
+    drmModeFreeConnector(mConnector);
+    mConnector = nullptr;
+    mMode      = nullptr;
     drmModeFreeCrtc(mCRTC);
+    mCRTC = nullptr;
 
     if (mGBM)
     {
