@@ -102,6 +102,9 @@ class SwapChain11 final : public SwapChainD3D
 
     SurfaceRenderTarget11 mColorRenderTarget;
     SurfaceRenderTarget11 mDepthStencilRenderTarget;
+
+    EGLint mSampleCount;
+    EGLint mSampleQuality;
 };
 
 }  // namespace rx

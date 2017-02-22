@@ -1221,6 +1221,17 @@ egl::Error Renderer11::getD3DTextureInfo(IUnknown *d3dTexture,
         *height = static_cast<EGLint>(desc.Height);
     }
 
+    if (desc.SampleDesc.Count != 1)
+    {
+        UINT qualityLevel = 0;
+        HRESULT hr = mDevice->CheckMultisampleQualityLevels(desc.Format, desc.SampleDesc.Count,
+                                                            &qualityLevel);
+        if (SUCCEEDED(hr) && (qualityLevel == 0 || desc.SampleDesc.Quality == 0))
+        {
+            return egl::Error(EGL_BAD_PARAMETER, "Texture's multisample quality level is invalid.");
+        }
+    }
+
     // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer.
     switch (desc.Format)
     {

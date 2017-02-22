@@ -25,7 +25,9 @@ NativeWindow11Win32::NativeWindow11Win32(EGLNativeWindowType window,
       mHasAlpha(hasAlpha),
       mDevice(nullptr),
       mCompositionTarget(nullptr),
-      mVisual(nullptr)
+      mVisual(nullptr),
+      mSampleCount(1),
+      mSampleQuality(0)
 {
 }
 
@@ -152,8 +154,8 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
         swapChainDesc.Height                = height;
         swapChainDesc.Format                = format;
         swapChainDesc.Stereo                = FALSE;
-        swapChainDesc.SampleDesc.Count      = 1;
-        swapChainDesc.SampleDesc.Quality = 0;
+        swapChainDesc.SampleDesc.Count      = mSampleCount;
+        swapChainDesc.SampleDesc.Quality    = mSampleQuality;
         swapChainDesc.BufferUsage =
             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
         swapChainDesc.BufferCount   = 1;
@@ -186,8 +188,8 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
         DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
     swapChainDesc.Flags              = 0;
     swapChainDesc.OutputWindow       = getNativeWindow();
-    swapChainDesc.SampleDesc.Count   = 1;
-    swapChainDesc.SampleDesc.Quality = 0;
+    swapChainDesc.SampleDesc.Count   = mSampleCount;
+    swapChainDesc.SampleDesc.Quality = mSampleQuality;
     swapChainDesc.Windowed           = TRUE;
     swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
 
@@ -211,5 +213,11 @@ void NativeWindow11Win32::commitChange()
 bool NativeWindow11Win32::IsValidNativeWindow(EGLNativeWindowType window)
 {
     return IsWindow(window) == TRUE;
+}
+
+void NativeWindow11Win32::setSampleDesc(EGLint sampleCount, EGLint sampleQuality)
+{
+    mSampleCount   = sampleCount;
+    mSampleQuality = sampleQuality;
 }
 }  // namespace rx
