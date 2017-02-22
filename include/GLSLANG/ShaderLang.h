@@ -95,12 +95,11 @@ const ShCompileOptions SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT = UINT64_C(1)
 // while ESSL3 disallows invariant qualifier in fragment shader and GLSL >= 4.2 doesn't require
 // invariant qualifier to match between shaders. Remove invariant qualifier from vertex shader to
 // workaround AMD driver bug.
-// Note that the two flags take effect on ESSL3 input shaders translated to GLSL 4.1 or lower and to
-// GLSL 4.2 or newer on Linux AMD.
+// Also GLSL 1.2 doesn't support invariant fragment built-ins.
 // TODO(zmo): This is not a good long-term solution. Simply dropping these qualifiers may break some
 // developers' content. A more complex workaround of dynamically generating, compiling, and
 // re-linking shaders that use these qualifiers should be implemented.
-const ShCompileOptions SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3 = UINT64_C(1) << 7;
+const ShCompileOptions SH_REMOVE_INVARIANT_AND_CENTROID = UINT64_C(1) << 7;
 
 // This flag works around bug in Intel Mac drivers related to abs(i) where
 // i is an integer.
