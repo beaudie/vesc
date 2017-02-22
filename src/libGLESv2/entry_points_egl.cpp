@@ -28,7 +28,7 @@
 #include "platform/Platform.h"
 
 #include <EGL/eglext.h>
-
+#include <iostream>
 namespace egl
 {
 
@@ -223,10 +223,14 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy, EGLConfig config, EGLint 
         "*value = 0x%0.8p)",
         dpy, config, attribute, value);
     Thread *thread = GetCurrentThread();
-
+ 
     Display *display = static_cast<Display*>(dpy);
     Config *configuration = static_cast<Config*>(config);
-
+    if (attribute == EGL_SURFACE_TYPE_TEST)
+    {
+        std::cout << "Active Config: S:" << configuration->samples << " RTF:" << configuration->renderTargetFormat << " DSF:" << configuration->depthStencilFormat << "\n";
+        attribute = EGL_SURFACE_TYPE;
+    }
     Error error = ValidateGetConfigAttrib(display, configuration, attribute);
     if (error.isError())
     {

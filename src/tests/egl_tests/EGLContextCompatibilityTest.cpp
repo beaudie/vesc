@@ -249,7 +249,7 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
         EGLConfig config = mConfigs[i];
 
         EGLint surfaceType;
-        eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE, &surfaceType);
+        eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE_TEST, &surfaceType);
         ASSERT_EGL_SUCCESS();
 
         if ((surfaceType & EGL_PBUFFER_BIT) != 0)
@@ -267,7 +267,7 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
     {
         EGLConfig config1 = mConfigs[i];
         EGLint surfaceType;
-        eglGetConfigAttrib(mDisplay, config1, EGL_SURFACE_TYPE, &surfaceType);
+        eglGetConfigAttrib(mDisplay, config1, EGL_SURFACE_TYPE_TEST, &surfaceType);
         ASSERT_EGL_SUCCESS();
 
         if ((surfaceType & EGL_WINDOW_BIT) == 0)
@@ -292,7 +292,7 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
     {
         EGLConfig config1 = mConfigs[i];
         EGLint surfaceType;
-        eglGetConfigAttrib(mDisplay, config1, EGL_SURFACE_TYPE, &surfaceType);
+        eglGetConfigAttrib(mDisplay, config1, EGL_SURFACE_TYPE_TEST, &surfaceType);
         ASSERT_EGL_SUCCESS();
 
         if ((surfaceType & EGL_PBUFFER_BIT) == 0)
