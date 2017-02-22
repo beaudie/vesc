@@ -526,9 +526,7 @@ std::string RendererGL::getRendererDescription() const
     rendererString << " " << mFunctions->version.major << "." << mFunctions->version.minor;
     if (mFunctions->standard == STANDARD_GL_DESKTOP)
     {
-        // Some drivers (NVIDIA) use a profile mask of 0 when in compatibility profile.
-        if ((mFunctions->profile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT) != 0 ||
-            (mFunctions->isAtLeastGL(gl::Version(3, 2)) && mFunctions->profile == 0))
+        if ((mFunctions->profile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT) != 0)
         {
             rendererString << " compatibility";
         }
