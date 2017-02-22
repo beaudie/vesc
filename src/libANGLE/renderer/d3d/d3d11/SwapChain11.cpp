@@ -17,10 +17,11 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 #include "third_party/trace_event/trace_event.h"
-
+#include <iostream>
 // Precompiled shaders
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2dms11ps.h"
 
 #ifdef ANGLE_ENABLE_KEYEDMUTEX
 #define ANGLE_RESOURCE_SHARE_TYPE D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX
@@ -48,7 +49,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
                          IUnknown *d3dTexture,
                          GLenum backBufferFormat,
                          GLenum depthBufferFormat,
-                         EGLint orientation)
+                         EGLint orientation,
+                         EGLint samples)
     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
       mRenderer(renderer),
       mWidth(-1),
@@ -79,7 +81,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
       mPassThroughPS(nullptr),
       mPassThroughRS(nullptr),
       mColorRenderTarget(this, renderer, false),
-      mDepthStencilRenderTarget(this, renderer, true)
+      mDepthStencilRenderTarget(this, renderer, true),
+      mEGLSamples(samples)
 {
     // Sanity check that if present path fast is active then we're using the default orientation
     ASSERT(!mRenderer->presentPathFastEnabled() || orientation == 0);
@@ -156,8 +159,9 @@ EGLint SwapChain11::resetOffscreenBuffers(int backbufferWidth, int backbufferHei
 
 EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbufferHeight)
 {
+    
     ASSERT(mNeedsOffscreenTexture);
-
+    std::cout << "-->resetOffscreenColorBuffer()\n";
     TRACE_EVENT0("gpu.angle", "SwapChain11::resetOffscreenTexture");
     ID3D11Device *device = mRenderer->getDevice();
 
@@ -217,12 +221,13 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
         offscreenTextureDesc.Format               = backbufferFormatInfo.texFormat;
         offscreenTextureDesc.MipLevels = 1;
         offscreenTextureDesc.ArraySize = 1;
-        offscreenTextureDesc.SampleDesc.Count = 1;
+        offscreenTextureDesc.SampleDesc.Count     = getD3DSamples();
         offscreenTextureDesc.SampleDesc.Quality = 0;
         offscreenTextureDesc.Usage = D3D11_USAGE_DEFAULT;
         offscreenTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
         offscreenTextureDesc.CPUAccessFlags = 0;
         offscreenTextureDesc.MiscFlags = useSharedResource ? ANGLE_RESOURCE_SHARE_TYPE : 0;
+        std::cout << "---->CreateTexture2D()\n";
 
         HRESULT result = device->CreateTexture2D(&offscreenTextureDesc, NULL, &mOffscreenTexture);
 
@@ -273,7 +278,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
 
     D3D11_RENDER_TARGET_VIEW_DESC offscreenRTVDesc;
     offscreenRTVDesc.Format             = backbufferFormatInfo.rtvFormat;
-    offscreenRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    offscreenRTVDesc.ViewDimension =
+        (mEGLSamples <= 1) ? D3D11_RTV_DIMENSION_TEXTURE2D : D3D11_RTV_DIMENSION_TEXTURE2DMS;
     offscreenRTVDesc.Texture2D.MipSlice = 0;
 
     HRESULT result = device->CreateRenderTargetView(mOffscreenTexture, &offscreenRTVDesc, &mOffscreenRTView);
@@ -282,7 +288,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
 
     D3D11_SHADER_RESOURCE_VIEW_DESC offscreenSRVDesc;
     offscreenSRVDesc.Format                    = backbufferFormatInfo.srvFormat;
-    offscreenSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    offscreenSRVDesc.ViewDimension =
+        (mEGLSamples <= 1) ? D3D11_SRV_DIMENSION_TEXTURE2D : D3D11_SRV_DIMENSION_TEXTURE2DMS;
     offscreenSRVDesc.Texture2D.MostDetailedMip = 0;
     offscreenSRVDesc.Texture2D.MipLevels = static_cast<UINT>(-1);
 
@@ -321,7 +328,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
 }
 
 EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbufferHeight)
-{
+{        std::cout << "-->resetOffScreenDepthBuffer()\n";
+
     releaseOffscreenDepthBuffer();
 
     if (mDepthBufferFormat != GL_NONE)
@@ -335,7 +343,7 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
         depthStencilTextureDesc.Format             = depthBufferFormatInfo.texFormat;
         depthStencilTextureDesc.MipLevels = 1;
         depthStencilTextureDesc.ArraySize = 1;
-        depthStencilTextureDesc.SampleDesc.Count = 1;
+        depthStencilTextureDesc.SampleDesc.Count   = getD3DSamples();
         depthStencilTextureDesc.SampleDesc.Quality = 0;
         depthStencilTextureDesc.Usage = D3D11_USAGE_DEFAULT;
         depthStencilTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
@@ -349,6 +357,8 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
         depthStencilTextureDesc.MiscFlags = 0;
 
         ID3D11Device *device = mRenderer->getDevice();
+                std::cout << "---->CreateTexture2D()\n";
+
         HRESULT result =
             device->CreateTexture2D(&depthStencilTextureDesc, NULL, &mDepthStencilTexture);
         if (FAILED(result))
@@ -370,7 +380,8 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
 
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilDesc;
         depthStencilDesc.Format             = depthBufferFormatInfo.dsvFormat;
-        depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        depthStencilDesc.ViewDimension =
+            (mEGLSamples <= 1) ? D3D11_DSV_DIMENSION_TEXTURE2D : D3D11_DSV_DIMENSION_TEXTURE2DMS;
         depthStencilDesc.Flags = 0;
         depthStencilDesc.Texture2D.MipSlice = 0;
 
@@ -382,7 +393,9 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC depthStencilSRVDesc;
             depthStencilSRVDesc.Format                    = depthBufferFormatInfo.srvFormat;
-            depthStencilSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+            depthStencilSRVDesc.ViewDimension             = (mEGLSamples <= 1)
+                                                    ? D3D11_SRV_DIMENSION_TEXTURE2D
+                                                    : D3D11_SRV_DIMENSION_TEXTURE2DMS;
             depthStencilSRVDesc.Texture2D.MostDetailedMip = 0;
             depthStencilSRVDesc.Texture2D.MipLevels = static_cast<UINT>(-1);
 
@@ -506,6 +519,8 @@ DXGI_FORMAT SwapChain11::getSwapChainNativeFormat() const
 
 EGLint SwapChain11::reset(EGLint backbufferWidth, EGLint backbufferHeight, EGLint swapInterval)
 {
+            std::cout << "-->SwapChain11::reset()\n";
+
     mSwapInterval = static_cast<unsigned int>(swapInterval);
     if (mSwapInterval > 4)
     {
@@ -544,9 +559,11 @@ EGLint SwapChain11::reset(EGLint backbufferWidth, EGLint backbufferHeight, EGLin
 
     if (mNativeWindow->getNativeWindow())
     {
-        HRESULT result = mNativeWindow->createSwapChain(device, mRenderer->getDxgiFactory(),
-                                                        getSwapChainNativeFormat(), backbufferWidth,
-                                                        backbufferHeight, &mSwapChain);
+                std::cout << "---->createSwapChain()\n";
+
+        HRESULT result = mNativeWindow->createSwapChain(
+            device, mRenderer->getDxgiFactory(), getSwapChainNativeFormat(), backbufferWidth,
+            backbufferHeight, getD3DSamples(), &mSwapChain);
 
         if (FAILED(result))
         {
@@ -588,7 +605,7 @@ EGLint SwapChain11::reset(EGLint backbufferWidth, EGLint backbufferHeight, EGLin
 }
 
 void SwapChain11::initPassThroughResources()
-{
+{std::cout << "-->initPassThroughResources()\n";
     if (mPassThroughResourcesInit)
     {
         return;
@@ -648,7 +665,18 @@ void SwapChain11::initPassThroughResources()
     ASSERT(SUCCEEDED(result));
     d3d11::SetDebugName(mPassThroughVS, "Swap chain pass through vertex shader");
 
-    result = device->CreatePixelShader(g_PS_PassthroughRGBA2D, sizeof(g_PS_PassthroughRGBA2D), NULL, &mPassThroughPS);
+    std::cout << "----CreatePixelShader()\n";
+    if (mEGLSamples <= 1)
+    {
+        result = device->CreatePixelShader(g_PS_PassthroughRGBA2D, sizeof(g_PS_PassthroughRGBA2D),
+                                           nullptr, &mPassThroughPS);
+    }
+    else
+    {
+        result = device->CreatePixelShader(
+            g_PS_PassthroughRGBA2DMS, sizeof(g_PS_PassthroughRGBA2DMS), nullptr, &mPassThroughPS);
+    }
+
     ASSERT(SUCCEEDED(result));
     d3d11::SetDebugName(mPassThroughPS, "Swap chain pass through pixel shader");
 
@@ -664,6 +692,7 @@ void SwapChain11::initPassThroughResources()
     rasterizerDesc.ScissorEnable         = FALSE;
     rasterizerDesc.MultisampleEnable     = FALSE;
     rasterizerDesc.AntialiasedLineEnable = FALSE;
+    std::cout << "----CreateRasterizerState()\n";
     result = device->CreateRasterizerState(&rasterizerDesc, &mPassThroughRS);
     ASSERT(SUCCEEDED(result));
     d3d11::SetDebugName(mPassThroughRS, "Swap chain pass through rasterizer state");
@@ -785,7 +814,7 @@ EGLint SwapChain11::copyOffscreenToBackbuffer(EGLint x, EGLint y, EGLint width, 
     deviceContext->Draw(4, 0);
 
     // Rendering to the swapchain is now complete. Now we can call Present().
-    // Before that, we perform any cleanup on the D3D device. We do this before Present() to make sure the
+    // Before that, we perform any cleanup on the D3D /. We do this before Present() to make sure the
     // cleanup is caught under the current eglSwapBuffers() PIX/Graphics Diagnostics call rather than the next one.
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, NULL);
 
@@ -809,7 +838,8 @@ EGLint SwapChain11::present(EGLint x, EGLint y, EGLint width, EGLint height)
     HRESULT result = S_OK;
 
     // Use IDXGISwapChain1::Present1 with a dirty rect if DXGI 1.2 is available.
-    if (mSwapChain1 != nullptr)
+    // Dirty rect present is not supported with a multisampled swapchain.
+    if (mSwapChain1 != nullptr && mEGLSamples <= 1)
     {
         if (mFirstSwap)
         {
@@ -890,6 +920,11 @@ ID3D11Texture2D *SwapChain11::getDepthStencilTexture()
 void SwapChain11::recreate()
 {
     // possibly should use this method instead of reset
+}
+
+UINT SwapChain11::getD3DSamples() const
+{
+    return (mEGLSamples == 0) ? 1 : mEGLSamples;
 }
 
 }  // namespace rx

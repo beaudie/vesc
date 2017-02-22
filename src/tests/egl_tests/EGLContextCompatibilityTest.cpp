@@ -13,7 +13,6 @@
 #include <vector>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
-
 #include "OSWindow.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
@@ -121,7 +120,7 @@ class EGLContextCompatibilityTest : public ANGLETest
         ASSERT_TRUE(osWindow != nullptr);
         osWindow->initialize("EGLContextCompatibilityTest", 500, 500);
         osWindow->setVisible(true);
-
+        
         EGLContext context = eglCreateContext(mDisplay, contextConfig, EGL_NO_CONTEXT, contextAttribs);
         ASSERT_TRUE(context != EGL_NO_CONTEXT);
 
@@ -249,6 +248,7 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
         EGLConfig config = mConfigs[i];
 
         EGLint surfaceType;
+
         eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE, &surfaceType);
         ASSERT_EGL_SUCCESS();
 
@@ -256,7 +256,9 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
         {
             testPbufferCompatibility(config, config, true);
         }
+        std::cout << "Config success!\n";
     }
+    
 }
 
 // Check that a context rendering to a window with a different

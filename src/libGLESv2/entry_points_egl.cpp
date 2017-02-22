@@ -28,7 +28,7 @@
 #include "platform/Platform.h"
 
 #include <EGL/eglext.h>
-
+#include <iostream>
 namespace egl
 {
 
@@ -226,14 +226,22 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy, EGLConfig config, EGLint 
 
     Display *display = static_cast<Display*>(dpy);
     Config *configuration = static_cast<Config*>(config);
-
+    if (configuration->samples != 0)
+    {
+        std::cout << "==========================\n";
+        std::cout << "EGL Configuration\n";
+        std::cout << "---ColorBufferFormat: " << configuration->renderTargetFormat << "\n";
+        std::cout << "---DepthStencilFormat: " << configuration->depthStencilFormat << "\n";
+        std::cout << "---Samples: " << configuration->samples << "\n";
+        std::cout << "==========================\n";
+    }
     Error error = ValidateGetConfigAttrib(display, configuration, attribute);
     if (error.isError())
     {
         thread->setError(error);
         return EGL_FALSE;
     }
-
+    
     QueryConfigAttrib(configuration, attribute, value);
 
     thread->setError(Error(EGL_SUCCESS));
@@ -281,7 +289,10 @@ EGLSurface EGLAPIENTRY CreatePbufferSurface(EGLDisplay dpy, EGLConfig config, co
     Display *display = static_cast<Display*>(dpy);
     Config *configuration = static_cast<Config*>(config);
     AttributeMap attributes = AttributeMap::CreateFromIntArray(attrib_list);
-
+     if (configuration->samples != 0)
+    {
+        std::cout << "-->ValidateCreatePbufferSurface()\n";
+    }
     Error error = ValidateCreatePbufferSurface(display, configuration, attributes);
     if (error.isError())
     {
@@ -290,6 +301,10 @@ EGLSurface EGLAPIENTRY CreatePbufferSurface(EGLDisplay dpy, EGLConfig config, co
     }
 
     egl::Surface *surface = nullptr;
+    if (configuration->samples != 0)
+    {
+        std::cout << "-->CreatePBufferSurface()\n";
+    }
     error = display->createPbufferSurface(configuration, attributes, &surface);
     if (error.isError())
     {
@@ -496,6 +511,10 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
     }
 
     gl::Context *context = nullptr;
+    if (configuration->samples != 0)
+    {
+        std::cout << "->CreatePBufferSurface()\n";
+    }
     error = display->createContext(configuration, sharedGLContext, attributes, &context);
     if (error.isError())
     {
@@ -541,6 +560,7 @@ EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
 
 EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx)
 {
+    std::cout << "-->MakeCurrent()\n";
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface draw = 0x%0.8p, EGLSurface read = 0x%0.8p, EGLContext ctx = 0x%0.8p)",
           dpy, draw, read, ctx);
     Thread *thread = GetCurrentThread();

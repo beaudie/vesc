@@ -25,7 +25,7 @@
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/RenderbufferImpl.h"
 #include "libANGLE/renderer/SurfaceImpl.h"
-
+#include <iostream>
 using namespace angle;
 
 namespace gl
@@ -885,8 +885,9 @@ Error Framebuffer::clear(rx::ContextImpl *context, GLbitfield mask)
     {
         return gl::NoError();
     }
-
+    std::cout << "-->mImpl->clear()/n";
     return mImpl->clear(context, mask);
+
 }
 
 Error Framebuffer::clearBufferfv(rx::ContextImpl *context,

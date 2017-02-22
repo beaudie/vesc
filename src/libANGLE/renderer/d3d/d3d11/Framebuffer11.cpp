@@ -21,7 +21,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Texture.h"
-
+#include <iostream>
 using namespace angle;
 
 namespace rx
@@ -108,7 +108,7 @@ gl::Error Framebuffer11::markAttachmentsDirty() const
 gl::Error Framebuffer11::clearImpl(ContextImpl *context, const ClearParameters &clearParams)
 {
     Clear11 *clearer = mRenderer->getClearer();
-
+    std::cout << "-->Framebuffer11::clearImpl()\n";
     const gl::FramebufferAttachment *colorAttachment = mState.getFirstColorAttachment();
     if (clearParams.scissorEnabled == true && colorAttachment != nullptr &&
         UsePresentPathFast(mRenderer, colorAttachment))

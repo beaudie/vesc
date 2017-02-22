@@ -33,7 +33,7 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
 #include "third_party/trace_event/trace_event.h"
-
+#include <iostream>
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #   include "libANGLE/renderer/d3d/DisplayD3D.h"
 #endif
@@ -551,8 +551,15 @@ Error Display::createPbufferSurface(const Config *configuration, const Attribute
     {
         ANGLE_TRY(restoreLostDevice());
     }
-
+     if (configuration->samples != 0)
+    {
+        std::cout << "---->new PbufferSurface\n";
+    }
     std::unique_ptr<Surface> surface(new PbufferSurface(mImplementation, configuration, attribs));
+      if (configuration->samples != 0)
+    {
+        std::cout << "---->surface->initialize\n";
+    }
     ANGLE_TRY(surface->initialize(*this));
 
     ASSERT(outSurface != nullptr);
