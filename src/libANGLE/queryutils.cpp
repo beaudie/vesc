@@ -15,11 +15,11 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramResource.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Texture.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VertexAttribute.h"
 
 namespace gl
@@ -788,7 +788,7 @@ void QueryActiveUniformBlockiv(const Program *program,
                                GLenum pname,
                                GLint *params)
 {
-    const UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
+    const LinkedBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
     switch (pname)
     {
         case GL_UNIFORM_BLOCK_BINDING:
@@ -801,21 +801,21 @@ void QueryActiveUniformBlockiv(const Program *program,
             *params = ConvertToGLint(uniformBlock.nameWithArrayIndex().size() + 1);
             break;
         case GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS:
-            *params = ConvertToGLint(uniformBlock.memberUniformIndexes.size());
+            *params = ConvertToGLint(uniformBlock.memberIndexes.size());
             break;
         case GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES:
-            for (size_t blockMemberIndex = 0;
-                 blockMemberIndex < uniformBlock.memberUniformIndexes.size(); blockMemberIndex++)
+            for (size_t blockMemberIndex = 0; blockMemberIndex < uniformBlock.memberIndexes.size();
+                 blockMemberIndex++)
             {
                 params[blockMemberIndex] =
-                    ConvertToGLint(uniformBlock.memberUniformIndexes[blockMemberIndex]);
+                    ConvertToGLint(uniformBlock.memberIndexes[blockMemberIndex]);
             }
             break;
         case GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER:
-            *params = ConvertToGLint(uniformBlock.vertexStaticUse);
+            *params = ConvertToGLint(uniformBlock.referencedByVertexShader);
             break;
         case GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER:
-            *params = ConvertToGLint(uniformBlock.fragmentStaticUse);
+            *params = ConvertToGLint(uniformBlock.referencedByFragmentShader);
             break;
         default:
             UNREACHABLE();

@@ -36,7 +36,8 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b);
 // Uniform block layout qualifier, see section 4.3.8.3 of the ESSL 3.00.4 spec
 enum BlockLayoutType
 {
-    BLOCKLAYOUT_STANDARD,
+    BLOCKLAYOUT_STANDARD_140,
+    BLOCKLAYOUT_STANDARD_430,
     BLOCKLAYOUT_PACKED,
     BLOCKLAYOUT_SHARED
 };
@@ -106,13 +107,15 @@ struct Uniform : public ShaderVariable
         return !operator==(other);
     }
 
-    int binding;
-
     // Decide whether two uniforms are the same at shader link time,
     // assuming one from vertex shader and the other from fragment shader.
     // GLSL ES Spec 3.00.3, section 4.3.5.
     // GLSL ES Spec 3.10.4, section 4.4.5
     bool isSameUniformAtLinkTime(const Uniform &other) const;
+
+    int location;
+    int binding;
+    int offset;
 };
 
 // An interface variable is a variable which passes data between the GL data structures and the
@@ -217,6 +220,7 @@ struct InterfaceBlock
     unsigned int arraySize;
     BlockLayoutType layout;
     bool isRowMajorLayout;
+    int binding;
     bool staticUse;
     std::vector<InterfaceBlockField> fields;
 };
