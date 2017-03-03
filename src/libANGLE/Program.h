@@ -48,7 +48,7 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
-struct UniformBlock;
+struct LinkedBlock;
 struct LinkedUniform;
 struct PackedVarying;
 
@@ -208,7 +208,7 @@ class ProgramState final : angle::NonCopyable
     const std::map<int, VariableLocation> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
-    const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
+    const std::vector<LinkedBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
 
     const LinkedUniform *getUniformByName(const std::string &name) const;
@@ -247,7 +247,7 @@ class ProgramState final : angle::NonCopyable
     // This makes sampler validation easier, since we don't need a separate list.
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
-    std::vector<UniformBlock> mUniformBlocks;
+    std::vector<LinkedBlock> mUniformBlocks;
     RangeUI mSamplerUniformRange;
 
     // An array of the samplers that are used by the program
@@ -374,7 +374,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     void bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const;
 
-    const UniformBlock &getUniformBlockByIndex(GLuint index) const;
+    const LinkedBlock &getUniformBlockByIndex(GLuint index) const;
 
     void setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode);
     void getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const;
