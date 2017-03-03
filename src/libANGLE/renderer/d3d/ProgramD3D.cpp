@@ -13,7 +13,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/Uniform.h"
+#include "libANGLE/ProgramResource.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/features.h"
@@ -1607,7 +1607,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
         SafeGetImplAs<ShaderD3D>(mState.getAttachedFragmentShader());
     const ShaderD3D *computeShaderD3D = SafeGetImplAs<ShaderD3D>(mState.getAttachedComputeShader());
 
-    for (const gl::UniformBlock &uniformBlock : mState.getUniformBlocks())
+    for (const gl::LinkedBlock &uniformBlock : mState.getUniformBlocks())
     {
         unsigned int uniformBlockElement = uniformBlock.isArray ? uniformBlock.arrayElement : 0;
 

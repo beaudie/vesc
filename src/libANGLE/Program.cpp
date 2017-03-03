@@ -18,13 +18,13 @@
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/ProgramResource.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/features.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/queryconversions.h"
-#include "libANGLE/Uniform.h"
 
 namespace gl
 {
@@ -44,6 +44,14 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     ASSERT(var.fields.empty());
 }
 
+void WriteUniform(BinaryOutputStream *stream, const sh::Uniform &var)
+{
+    WriteShaderVar(stream, var);
+    stream->writeInt(var.location);
+    stream->writeInt(var.binding);
+    stream->writeInt(var.offset);
+}
+
 void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
 {
     var->type       = stream->readInt<GLenum>();
@@ -53,6 +61,14 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->arraySize  = stream->readInt<unsigned int>();
     var->staticUse  = stream->readBool();
     var->structName = stream->readString();
+}
+
+void LoadUniform(BinaryInputStream *stream, sh::Uniform *var)
+{
+    LoadShaderVar(stream, var);
+    var->location = stream->readInt<int>();
+    var->binding  = stream->readInt<int>();
+    var->offset   = stream->readInt<int>();
 }
 
 // This simplified cast function doesn't need to worry about advanced concepts like
@@ -816,13 +832,17 @@ Error Program::loadBinary(const Context *context,
     for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
     {
         LinkedUniform uniform;
-        LoadShaderVar(&stream, &uniform);
+        LoadUniform(&stream, &uniform);
 
         uniform.blockIndex                 = stream.readInt<int>();
         uniform.blockInfo.offset           = stream.readInt<int>();
         uniform.blockInfo.arrayStride      = stream.readInt<int>();
         uniform.blockInfo.matrixStride     = stream.readInt<int>();
         uniform.blockInfo.isRowMajorMatrix = stream.readBool();
+
+        uniform.referencedByVertexShader   = stream.readInt<int>();
+        uniform.referencedByFragmentShader = stream.readInt<int>();
+        uniform.referencedByComputeShader  = stream.readInt<int>();
 
         mState.mUniforms.push_back(uniform);
     }
@@ -847,18 +867,22 @@ Error Program::loadBinary(const Context *context,
     for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < uniformBlockCount;
          ++uniformBlockIndex)
     {
-        UniformBlock uniformBlock;
+        LinkedBlock uniformBlock;
         stream.readString(&uniformBlock.name);
         stream.readBool(&uniformBlock.isArray);
         stream.readInt(&uniformBlock.arrayElement);
         stream.readInt(&uniformBlock.dataSize);
-        stream.readBool(&uniformBlock.vertexStaticUse);
-        stream.readBool(&uniformBlock.fragmentStaticUse);
+
+        stream.readInt(&uniformBlock.referencedByVertexShader);
+        stream.readInt(&uniformBlock.referencedByFragmentShader);
+        stream.readInt(&uniformBlock.referencedByComputeShader);
+
+        stream.readInt(&uniformBlock.bufferBinding);
 
         unsigned int numMembers = stream.readInt<unsigned int>();
         for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
         {
-            uniformBlock.memberUniformIndexes.push_back(stream.readInt<unsigned int>());
+            uniformBlock.memberIndexes.push_back(stream.readInt<unsigned int>());
         }
 
         mState.mUniformBlocks.push_back(uniformBlock);
@@ -959,15 +983,17 @@ Error Program::saveBinary(const Context *context,
     stream.writeInt(mState.mUniforms.size());
     for (const LinkedUniform &uniform : mState.mUniforms)
     {
-        WriteShaderVar(&stream, uniform);
-
-        // FIXME: referenced
+        WriteUniform(&stream, uniform);
 
         stream.writeInt(uniform.blockIndex);
         stream.writeInt(uniform.blockInfo.offset);
         stream.writeInt(uniform.blockInfo.arrayStride);
         stream.writeInt(uniform.blockInfo.matrixStride);
         stream.writeInt(uniform.blockInfo.isRowMajorMatrix);
+
+        stream.writeInt(uniform.referencedByVertexShader);
+        stream.writeInt(uniform.referencedByFragmentShader);
+        stream.writeInt(uniform.referencedByComputeShader);
     }
 
     stream.writeInt(mState.mUniformLocations.size());
@@ -981,18 +1007,21 @@ Error Program::saveBinary(const Context *context,
     }
 
     stream.writeInt(mState.mUniformBlocks.size());
-    for (const UniformBlock &uniformBlock : mState.mUniformBlocks)
+    for (const LinkedBlock &uniformBlock : mState.mUniformBlocks)
     {
         stream.writeString(uniformBlock.name);
         stream.writeInt(uniformBlock.isArray);
         stream.writeInt(uniformBlock.arrayElement);
         stream.writeInt(uniformBlock.dataSize);
 
-        stream.writeInt(uniformBlock.vertexStaticUse);
-        stream.writeInt(uniformBlock.fragmentStaticUse);
+        stream.writeInt(uniformBlock.referencedByVertexShader);
+        stream.writeInt(uniformBlock.referencedByFragmentShader);
+        stream.writeInt(uniformBlock.referencedByComputeShader);
 
-        stream.writeInt(uniformBlock.memberUniformIndexes.size());
-        for (unsigned int memberUniformIndex : uniformBlock.memberUniformIndexes)
+        stream.writeInt(uniformBlock.bufferBinding);
+
+        stream.writeInt(uniformBlock.memberIndexes.size());
+        for (unsigned int memberUniformIndex : uniformBlock.memberIndexes)
         {
             stream.writeInt(memberUniformIndex);
         }
@@ -1678,7 +1707,7 @@ void Program::getActiveUniformBlockName(GLuint uniformBlockIndex, GLsizei bufSiz
         uniformBlockIndex <
         mState.mUniformBlocks.size());  // index must be smaller than getActiveUniformBlockCount()
 
-    const UniformBlock &uniformBlock = mState.mUniformBlocks[uniformBlockIndex];
+    const LinkedBlock &uniformBlock = mState.mUniformBlocks[uniformBlockIndex];
 
     if (bufSize > 0)
     {
@@ -1708,7 +1737,7 @@ GLint Program::getActiveUniformBlockMaxLength() const
         unsigned int numUniformBlocks = static_cast<unsigned int>(mState.mUniformBlocks.size());
         for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < numUniformBlocks; uniformBlockIndex++)
         {
-            const UniformBlock &uniformBlock = mState.mUniformBlocks[uniformBlockIndex];
+            const LinkedBlock &uniformBlock = mState.mUniformBlocks[uniformBlockIndex];
             if (!uniformBlock.name.empty())
             {
                 const int length = static_cast<int>(uniformBlock.name.length()) + 1;
@@ -1732,7 +1761,7 @@ GLuint Program::getUniformBlockIndex(const std::string &name) const
     unsigned int numUniformBlocks = static_cast<unsigned int>(mState.mUniformBlocks.size());
     for (unsigned int blockIndex = 0; blockIndex < numUniformBlocks; blockIndex++)
     {
-        const UniformBlock &uniformBlock = mState.mUniformBlocks[blockIndex];
+        const LinkedBlock &uniformBlock = mState.mUniformBlocks[blockIndex];
         if (uniformBlock.name == baseName)
         {
             const bool arrayElementZero =
@@ -1748,7 +1777,7 @@ GLuint Program::getUniformBlockIndex(const std::string &name) const
     return GL_INVALID_INDEX;
 }
 
-const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
+const LinkedBlock &Program::getUniformBlockByIndex(GLuint index) const
 {
     ASSERT(index < static_cast<GLuint>(mState.mUniformBlocks.size()));
     return mState.mUniformBlocks[index];
@@ -2813,11 +2842,11 @@ void Program::gatherInterfaceBlockInfo()
             if (!computeBlock.staticUse && computeBlock.layout == sh::BLOCKLAYOUT_PACKED)
                 continue;
 
-            for (UniformBlock &block : mState.mUniformBlocks)
+            for (LinkedBlock &block : mState.mUniformBlocks)
             {
                 if (block.name == computeBlock.name)
                 {
-                    block.computeStaticUse = computeBlock.staticUse;
+                    block.referencedByComputeShader = computeBlock.staticUse;
                 }
             }
 
@@ -2853,11 +2882,11 @@ void Program::gatherInterfaceBlockInfo()
 
         if (visitedList.count(fragmentBlock.name) > 0)
         {
-            for (UniformBlock &block : mState.mUniformBlocks)
+            for (LinkedBlock &block : mState.mUniformBlocks)
             {
                 if (block.name == fragmentBlock.name)
                 {
-                    block.fragmentStaticUse = fragmentBlock.staticUse;
+                    block.referencedByFragmentShader = fragmentBlock.staticUse;
                 }
             }
 
@@ -2940,24 +2969,27 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     {
         for (unsigned int arrayElement = 0; arrayElement < interfaceBlock.arraySize; ++arrayElement)
         {
-            UniformBlock block(interfaceBlock.name, true, arrayElement);
-            block.memberUniformIndexes = blockUniformIndexes;
+            LinkedBlock block(interfaceBlock.name, true, arrayElement);
+            block.memberIndexes = blockUniformIndexes;
+            // ESSL 3.10 section 4.4.4.
+            // Each subsequent element takes the next consecutive binding point.
+            block.bufferBinding = interfaceBlock.binding + arrayElement;
 
             switch (shaderType)
             {
                 case GL_VERTEX_SHADER:
                 {
-                    block.vertexStaticUse = interfaceBlock.staticUse;
+                    block.referencedByVertexShader = interfaceBlock.staticUse;
                     break;
                 }
                 case GL_FRAGMENT_SHADER:
                 {
-                    block.fragmentStaticUse = interfaceBlock.staticUse;
+                    block.referencedByFragmentShader = interfaceBlock.staticUse;
                     break;
                 }
                 case GL_COMPUTE_SHADER:
                 {
-                    block.computeStaticUse = interfaceBlock.staticUse;
+                    block.referencedByComputeShader = interfaceBlock.staticUse;
                     break;
                 }
                 default:
@@ -2973,24 +3005,25 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     }
     else
     {
-        UniformBlock block(interfaceBlock.name, false, 0);
-        block.memberUniformIndexes = blockUniformIndexes;
+        LinkedBlock block(interfaceBlock.name, false, 0);
+        block.memberIndexes = blockUniformIndexes;
+        block.bufferBinding = interfaceBlock.binding;
 
         switch (shaderType)
         {
             case GL_VERTEX_SHADER:
             {
-                block.vertexStaticUse = interfaceBlock.staticUse;
+                block.referencedByVertexShader = interfaceBlock.staticUse;
                 break;
             }
             case GL_FRAGMENT_SHADER:
             {
-                block.fragmentStaticUse = interfaceBlock.staticUse;
+                block.referencedByFragmentShader = interfaceBlock.staticUse;
                 break;
             }
             case GL_COMPUTE_SHADER:
             {
-                block.computeStaticUse = interfaceBlock.staticUse;
+                block.referencedByComputeShader = interfaceBlock.staticUse;
                 break;
             }
             default:
