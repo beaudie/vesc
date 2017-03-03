@@ -13,12 +13,12 @@
 #include "common/debug.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
+#include "libANGLE/ProgramResource.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
-#include "libANGLE/Uniform.h"
 #include "platform/Platform.h"
 
 namespace rx
@@ -487,7 +487,7 @@ void ProgramGL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformB
     if (mUniformBlockRealLocationMap.empty())
     {
         mUniformBlockRealLocationMap.reserve(mState.getUniformBlocks().size());
-        for (const gl::UniformBlock &uniformBlock : mState.getUniformBlocks())
+        for (const gl::LinkedBlock &uniformBlock : mState.getUniformBlocks())
         {
             const std::string &nameWithIndex = uniformBlock.nameWithArrayIndex();
             GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, nameWithIndex.c_str());
