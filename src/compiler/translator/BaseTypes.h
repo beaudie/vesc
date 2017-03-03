@@ -596,7 +596,8 @@ enum TLayoutBlockStorage
     EbsUnspecified,
     EbsShared,
     EbsPacked,
-    EbsStd140
+    EbsStd140,
+    EbsStd430
 };
 
 struct TLayoutQualifier

@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-#include "libANGLE/Uniform.h"
+#include "libANGLE/ProgramResource.h"
 
 #include "common/utilities.h"
 
@@ -13,8 +13,65 @@
 namespace gl
 {
 
+ShaderRefs::ShaderRefs()
+    : referencedByVertexShader(0), referencedByFragmentShader(0), referencedByComputeShader(0)
+{
+}
+
+ShaderRefs::~ShaderRefs()
+{
+}
+
+ShaderRefs::ShaderRefs(const ShaderRefs &other)
+    : referencedByVertexShader(other.referencedByVertexShader),
+      referencedByFragmentShader(other.referencedByFragmentShader),
+      referencedByComputeShader(other.referencedByComputeShader)
+{
+}
+
+ShaderRefs &ShaderRefs::operator=(const ShaderRefs &other)
+{
+    referencedByVertexShader   = other.referencedByVertexShader;
+    referencedByFragmentShader = other.referencedByFragmentShader;
+    referencedByComputeShader  = other.referencedByComputeShader;
+
+    return *this;
+}
+
+bool ShaderRefs::operator==(const ShaderRefs &other) const
+{
+    return (referencedByVertexShader == other.referencedByVertexShader &&
+            referencedByFragmentShader == other.referencedByFragmentShader &&
+            referencedByComputeShader == other.referencedByComputeShader);
+}
+
+LinkedField::LinkedField() : blockIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
+{
+}
+
+LinkedField::LinkedField(const int index, const sh::BlockMemberInfo &info)
+{
+    blockIndex = index;
+    blockInfo  = info;
+}
+
+LinkedField::~LinkedField()
+{
+}
+
+LinkedField::LinkedField(const LinkedField &other) : ShaderRefs(other)
+{
+    blockIndex = other.blockIndex;
+    blockInfo  = other.blockInfo;
+}
+
+LinkedField &LinkedField::operator=(const LinkedField &other)
+{
+    ShaderRefs::operator=(other);
+    return *this;
+}
+
 LinkedUniform::LinkedUniform()
-    : blockIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
 }
 
@@ -24,7 +81,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              unsigned int arraySizeIn,
                              const int blockIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
-    : blockIndex(blockIndexIn), blockInfo(blockInfoIn)
+    : LinkedField(blockIndexIn, blockInfoIn)
 {
     type      = typeIn;
     precision = precisionIn;
@@ -32,13 +89,12 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     arraySize = arraySizeIn;
 }
 
-LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
-    : sh::Uniform(uniform), blockIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
+LinkedUniform::LinkedUniform(const sh::Uniform &uniform) : sh::Uniform(uniform)
 {
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
-    : sh::Uniform(uniform), blockIndex(uniform.blockIndex), blockInfo(uniform.blockInfo)
+    : LinkedField(uniform), sh::Uniform(uniform)
 {
     // This function is not intended to be called during runtime.
     ASSERT(uniform.mLazyData.empty());
@@ -50,8 +106,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     ASSERT(uniform.mLazyData.empty());
 
     sh::Uniform::operator=(uniform);
-    blockIndex           = uniform.blockIndex;
-    blockInfo            = uniform.blockInfo;
+    LinkedField::operator=(uniform);
 
     return *this;
 }
@@ -130,28 +185,49 @@ const uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex) const
     return const_cast<LinkedUniform *>(this)->getDataPtrToElement(elementIndex);
 }
 
-UniformBlock::UniformBlock()
-    : isArray(false),
-      arrayElement(0),
-      dataSize(0),
-      vertexStaticUse(false),
-      fragmentStaticUse(false),
-      computeStaticUse(false)
+LinkedBufferVariable::LinkedBufferVariable() : topLevelArraySize(1), topLevelArrayStride(0)
 {
 }
 
-UniformBlock::UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn)
-    : name(nameIn),
-      isArray(isArrayIn),
-      arrayElement(arrayElementIn),
-      dataSize(0),
-      vertexStaticUse(false),
-      fragmentStaticUse(false),
-      computeStaticUse(false)
+LinkedBufferVariable::~LinkedBufferVariable()
 {
 }
 
-std::string UniformBlock::nameWithArrayIndex() const
+BufferBacked::BufferBacked() : bufferBinding(0), dataSize(0)
+{
+}
+
+BufferBacked::~BufferBacked()
+{
+}
+
+BufferBacked::BufferBacked(const BufferBacked &other) : ShaderRefs(other)
+{
+    bufferBinding = other.bufferBinding;
+    dataSize      = other.dataSize;
+    memberIndexes = other.memberIndexes;
+}
+
+BufferBacked &BufferBacked::operator=(const BufferBacked &other)
+{
+    ShaderRefs::operator=(other);
+    bufferBinding       = other.bufferBinding;
+    dataSize            = other.dataSize;
+    memberIndexes       = other.memberIndexes;
+
+    return *this;
+}
+
+LinkedBlock::LinkedBlock() : isArray(false), arrayElement(0)
+{
+}
+
+LinkedBlock::LinkedBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn)
+    : name(nameIn), isArray(isArrayIn), arrayElement(arrayElementIn)
+{
+}
+
+std::string LinkedBlock::nameWithArrayIndex() const
 {
     std::stringstream fullNameStr;
     fullNameStr << name;
