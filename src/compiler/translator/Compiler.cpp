@@ -922,8 +922,9 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermNode *root)
 
     for (auto block : interfaceBlocks)
     {
-        if (!block.staticUse &&
-            (block.layout == sh::BLOCKLAYOUT_STANDARD || block.layout == sh::BLOCKLAYOUT_SHARED))
+        if (!block.staticUse && (block.layout == sh::BLOCKLAYOUT_STANDARD_140 ||
+                                 block.layout == sh::BLOCKLAYOUT_STANDARD_430 ||
+                                 block.layout == sh::BLOCKLAYOUT_SHARED))
         {
             list.push_back(block);
         }
