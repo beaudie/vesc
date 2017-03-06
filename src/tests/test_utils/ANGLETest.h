@@ -239,6 +239,9 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     void setVulkanLayersEnabled(bool enabled);
     void setClientArraysEnabled(bool enabled);
 
+    // Some EGL extension tests would like to defer the Context init until the test body.
+    void setDeferContextInit(bool enabled);
+
     int getClientMajorVersion() const;
     int getClientMinorVersion() const;
 
@@ -254,7 +257,6 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     static OSWindow *GetOSWindow() { return mOSWindow; }
 
   private:
-    bool createEGLContext();
     bool destroyEGLContext();
 
     void checkD3D11SDKLayersMessages();
@@ -269,6 +271,8 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     GLuint mQuadVertexBuffer;
 
     TestPlatformContext mPlatformContext;
+
+    bool mDeferContextInit;
 
     static OSWindow *mOSWindow;
 
