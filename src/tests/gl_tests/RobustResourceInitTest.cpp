@@ -28,17 +28,38 @@ class RobustResourceInitTest : public ANGLETest
         setDeferContextInit(true);
         setRobustResourceInit(true);
     }
+
+    bool hasEGLExtension()
+    {
+        EGLDisplay display = getEGLWindow()->getDisplay();
+        ASSERT(display != EGL_NO_DISPLAY);
+
+        return (eglDisplayExtensionEnabled(
+            display, "EGL_ANGLE_create_context_robust_resource_initialization"));
+    }
+
+    bool setup()
+    {
+        if (!hasEGLExtension())
+        {
+            return false;
+        }
+
+        if (!getEGLWindow()->initializeContext())
+        {
+            EXPECT_TRUE(false);
+            return false;
+        }
+
+        return true;
+    }
 };
 
 // Context creation should fail if EGL_ANGLE_create_context_robust_resource_initialization
 // is not available, and succeed otherwise.
 TEST_P(RobustResourceInitTest, ExtensionInit)
 {
-    EGLDisplay display = getEGLWindow()->getDisplay();
-    ASSERT_TRUE(display != EGL_NO_DISPLAY);
-
-    if (eglDisplayExtensionEnabled(display,
-                                   "EGL_ANGLE_create_context_robust_resource_initialization"))
+    if (hasEGLExtension())
     {
         // Context creation shold succeed with robust resource init enabled.
         EXPECT_TRUE(getEGLWindow()->initializeContext());
@@ -89,8 +110,7 @@ TEST_P(RobustResourceInitTest, QueriesOnNonRobustContext)
     EGLDisplay display = getEGLWindow()->getDisplay();
     ASSERT_TRUE(display != EGL_NO_DISPLAY);
 
-    if (!eglDisplayExtensionEnabled(display,
-                                    "EGL_ANGLE_create_context_robust_resource_initialization"))
+    if (!hasEGLExtension())
     {
         return;
     }
@@ -108,6 +128,39 @@ TEST_P(RobustResourceInitTest, QueriesOnNonRobustContext)
 
     EXPECT_GL_FALSE(glIsEnabled(GL_CONTEXT_ROBUST_RESOURCE_INITIALIZATION_ANGLE));
     EXPECT_GL_NO_ERROR();
+}
+
+// Tests that buffers start zero-filled if the data pointer is null.
+TEST_P(RobustResourceInitTest, BufferData)
+{
+    if (!setup() || !(extensionEnabled("GL_EXT_map_buffer_range") || getClientMajorVersion() < 3))
+    {
+        return;
+    }
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 128, nullptr, GL_STATIC_DRAW);
+
+    void *mappedPointer = nullptr;
+
+    if (getClientMajorVersion() >= 3)
+    {
+        mappedPointer = glMapBufferRange(GL_ARRAY_BUFFER, 0, 128, GL_MAP_READ_BIT);
+    }
+    else
+    {
+        mappedPointer = glMapBufferRangeEXT(GL_ARRAY_BUFFER, 0, 128, GL_MAP_READ_BIT);
+    }
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_NE(nullptr, mappedPointer);
+
+    std::vector<uint8_t> expected(128, 0);
+    std::vector<uint8_t> actual(128);
+    memcpy(actual.data(), mappedPointer, 128);
+
+    EXPECT_EQ(expected, actual);
 }
 
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
