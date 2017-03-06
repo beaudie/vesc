@@ -752,6 +752,46 @@ TEST_P(UniformTestES3, ReturnsOnlyOneArrayElement)
     }
 }
 
+// Test a uniform struct containing a non-square matrix and a boolean.
+// Minimal test case for a bug revealed by dEQP tests.
+TEST_P(UniformTestES3, StructWithNonSquareMatrixAndBool)
+{
+    const std::string &vertShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "in highp vec4 a_position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
+
+    const std::string &fragShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out highp vec4 my_color;\n"
+        "struct S\n"
+        "{\n"
+        "    mat2x4 m;\n"
+        "    bool b;\n"
+        "};\n"
+        "uniform S uni;\n"
+        "void main()\n"
+        "{\n"
+        "    my_color = vec4(1.0);\n"
+        "    if (!uni.b) { my_color.g = 0.0; }"
+        "}\n";
+
+    mProgram = CompileProgram(vertShader, fragShader);
+    ASSERT_NE(0u, mProgram);
+
+    glUseProgram(mProgram);
+    glUniform1i(glGetUniformLocation(mProgram, "uni.b"), 1);
+
+    drawQuad(mProgram, "a_position", 0.0f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, angle::GLColor(255, 255, 255, 255));
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformTest,
                        ES2_D3D9(),
