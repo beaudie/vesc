@@ -2070,8 +2070,74 @@ gl::Error Renderer11::drawElementsIndirectImpl(const gl::ContextState &data,
                                                GLenum type,
                                                const GLvoid *indirect)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError() << "DrawElementsIndirect hasn't been implemented for D3D11 backend.";
+    if (skipDraw(data, mode))
+    {
+        return gl::NoError();
+    }
+
+    const auto &glState            = data.getState();
+    gl::Buffer *drawIndirectBuffer = glState.getDrawIndirectBuffer();
+    ASSERT(drawIndirectBuffer);
+    Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
+    uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
+
+    gl::VertexArray *vao           = glState.getVertexArray();
+    auto *vertexArray11            = GetImplAs<VertexArray11>(vao);
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    ASSERT(elementArrayBuffer);
+    BufferD3D *indexBuffer = GetImplAs<BufferD3D>(elementArrayBuffer);
+    if (type != GL_UNSIGNED_BYTE && indexBuffer->supportsDirectBinding() &&
+        !vertexArray11->hasDynamicAttrib(glState) && mode != GL_LINE_LOOP &&
+        mode != GL_TRIANGLE_FAN)
+    {
+        TranslatedIndexData indexInfo;
+        ANGLE_TRY(applyIndexBuffer(data, nullptr, 0, mode, type, &indexInfo));
+        ANGLE_TRY(applyVertexBuffer(glState, mode, 0, 0, 0, &indexInfo));
+        ID3D11Buffer *buffer = nullptr;
+        ANGLE_TRY_RESULT(storage->getBuffer(BUFFER_USAGE_INDIRECT), buffer);
+        mDeviceContext->DrawIndexedInstancedIndirect(buffer, static_cast<unsigned int>(offset));
+        return gl::NoError();
+    }
+
+    const uint8_t *bufferData = nullptr;
+    ANGLE_TRY(storage->getData(&bufferData));
+    ASSERT(bufferData);
+
+    const gl::DrawElementsIndirectCommand *cmd =
+        reinterpret_cast<const gl::DrawElementsIndirectCommand *>(bufferData + offset);
+    GLuint count      = cmd->count;
+    GLuint instances  = cmd->primCount;
+    GLuint firstIndex = cmd->firstIndex;
+    GLint baseVertex  = cmd->baseVertex;
+
+    const gl::Type &typeInfo = gl::GetTypeInfo(type);
+    uint8_t *indices         = static_cast<uint8_t *>(0) + firstIndex * typeInfo.bytes;
+
+    gl::IndexRange indexRange;
+    ANGLE_TRY(elementArrayBuffer->getIndexRange(type, reinterpret_cast<size_t>(indices), count,
+                                                glState.isPrimitiveRestartEnabled(), &indexRange));
+
+    TranslatedIndexData indexInfo;
+    indexInfo.indexRange = indexRange;
+    ANGLE_TRY(applyIndexBuffer(data, indices, count, mode, type, &indexInfo));
+    size_t vertexCount = indexInfo.indexRange.vertexCount();
+    ANGLE_TRY(applyVertexBuffer(glState, mode,
+                                static_cast<GLsizei>(indexInfo.indexRange.start) + baseVertex,
+                                static_cast<GLsizei>(vertexCount), instances, &indexInfo));
+
+    int baseVertexLocation = -static_cast<int>(indexInfo.indexRange.start);
+    if (mode == GL_LINE_LOOP)
+    {
+        return drawLineLoop(data, count, type, indices, baseVertexLocation, instances);
+    }
+
+    if (mode == GL_TRIANGLE_FAN)
+    {
+        return drawTriangleFan(data, count, type, indices, baseVertexLocation, instances);
+    }
+
+    mDeviceContext->DrawIndexedInstanced(count, instances, 0, baseVertexLocation, 0);
+    return gl::NoError();
 }
 
 gl::Error Renderer11::drawLineLoop(const gl::ContextState &data,
