@@ -29,8 +29,28 @@ bool operator>=(const Version &a, const Version &b);
 bool operator<=(const Version &a, const Version &b);
 bool operator<(const Version &a, const Version &b);
 bool operator>(const Version &a, const Version &b);
+
+struct VersionRange
+{
+    constexpr VersionRange();
+    constexpr VersionRange(const Version &min, const Version &max);
+
+    Version min;
+    Version max;
+};
+
+bool VersionInRange(const VersionRange &range, const Version &version);
 }
 
 #include "Version.inl"
+
+namespace gl
+{
+static constexpr Version MinimumVersion = Version(0, 0);
+static constexpr Version MaximumVersion =
+    Version(std::numeric_limits<GLuint>::max(), std::numeric_limits<GLuint>::max());
+static constexpr VersionRange AllVersions = VersionRange(MinimumVersion, MinimumVersion);
+static constexpr VersionRange NoVersions  = VersionRange(MinimumVersion, MaximumVersion);
+}
 
 #endif // LIBANGLE_VERSION_H_
