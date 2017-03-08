@@ -56,4 +56,20 @@ inline bool operator>(const Version &a, const Version &b)
     return std::tie(a.major, a.minor) > std::tie(b.major, b.minor);
 }
 
+constexpr VersionRange::VersionRange()
+    : VersionRange(Version(), Version())
+{
+}
+
+constexpr VersionRange::VersionRange(const Version &minimum_, const Version &maximum_)
+    : minimum(minimum_),
+      maximum(maximum_)
+{
+}
+
+inline bool VersionInRange(const VersionRange &range, const Version &version)
+{
+    return version >= range.minimum && version <= range.maximum;
+}
+
 }

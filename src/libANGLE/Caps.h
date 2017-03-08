@@ -364,6 +364,9 @@ struct ExtensionInfo
     // If this extension can be enabled with glRequestExtension (GL_ANGLE_request_extension)
     bool Requestable = false;
 
+    VersionRange ESVersionRange    = AllVersions;
+    VersionRange WebGLVersionRange = NoVersions;
+
     // Pointer to a boolean member of the Extensions struct
     typedef bool(Extensions::*ExtensionBool);
     ExtensionBool ExtensionsMember = nullptr;

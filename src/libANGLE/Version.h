@@ -11,6 +11,8 @@
 
 #include <angle_gl.h>
 
+#include <limits>
+
 namespace gl
 {
 
@@ -29,8 +31,28 @@ bool operator>=(const Version &a, const Version &b);
 bool operator<=(const Version &a, const Version &b);
 bool operator<(const Version &a, const Version &b);
 bool operator>(const Version &a, const Version &b);
+
+struct VersionRange
+{
+    constexpr VersionRange();
+    constexpr VersionRange(const Version &minimum, const Version &maximum);
+
+    Version minimum;
+    Version maximum;
+};
+
+bool VersionInRange(const VersionRange &range, const Version &version);
 }
 
 #include "Version.inl"
+
+namespace gl
+{
+static constexpr Version MinimumVersion = Version(0, 0);
+static constexpr Version MaximumVersion =
+    Version(std::numeric_limits<GLuint>::max(), std::numeric_limits<GLuint>::max());
+static constexpr VersionRange AllVersions = VersionRange(MinimumVersion, MinimumVersion);
+static constexpr VersionRange NoVersions  = VersionRange(MinimumVersion, MaximumVersion);
+}
 
 #endif // LIBANGLE_VERSION_H_

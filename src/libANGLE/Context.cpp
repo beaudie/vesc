@@ -2388,6 +2388,7 @@ void Context::initExtensionStrings()
     for (const auto &extensionInfo : GetExtensionInfoMap())
     {
         if (extensionInfo.second.Requestable &&
+            VersionInRange(extensionInfo.second.WebGLVersionRange, getClientVersion()) &&
             !(mExtensions.*(extensionInfo.second.ExtensionsMember)) &&
             nativeExtensions.*(extensionInfo.second.ExtensionsMember))
         {
@@ -2502,20 +2503,6 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions)
 
     mLimitations = mImplementation->getNativeLimitations();
 
-    if (getClientVersion() < Version(3, 0))
-    {
-        // Disable ES3+ extensions
-        mExtensions.colorBufferFloat = false;
-        mExtensions.eglImageExternalEssl3 = false;
-        mExtensions.textureNorm16         = false;
-    }
-
-    if (getClientVersion() > Version(2, 0))
-    {
-        // FIXME(geofflang): Don't support EXT_sRGB in non-ES2 contexts
-        //mExtensions.sRGB = false;
-    }
-
     // Some extensions are always available because they are implemented in the GL layer.
     mExtensions.bindUniformLocation = true;
     mExtensions.vertexArrayObject   = true;
@@ -2557,12 +2544,25 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions)
 
     // WebGL compatibility
     mExtensions.webglCompatibility = mWebGLContext;
-    for (const auto &extensionInfo : GetExtensionInfoMap())
+    for (const auto &extensionInfoPair : GetExtensionInfoMap())
     {
-        // If this context is for WebGL, disable all enableable extensions
-        if (mWebGLContext && extensionInfo.second.Requestable)
+        const ExtensionInfo &extensionInfo = extensionInfoPair.second;
+
+        if (mWebGLContext)
         {
-            mExtensions.*(extensionInfo.second.ExtensionsMember) = false;
+            // If this context is for WebGL, disable all enableable extensions
+            if (extensionInfo.Requestable)
+            {
+                mExtensions.*(extensionInfo.ExtensionsMember) = false;
+            }
+        }
+        else
+        {
+            // Disable all extensions that are not allowed on this version
+            if (!VersionInRange(extensionInfo.ESVersionRange, getClientVersion()))
+            {
+                mExtensions.*(extensionInfo.ExtensionsMember) = false;
+            }
         }
     }
 
