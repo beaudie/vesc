@@ -3569,7 +3569,8 @@ bool ValidateRequestExtensionANGLE(ValidationContext *context, const GLchar *nam
 
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     auto extension                         = extensionInfos.find(name);
-    if (extension == extensionInfos.end() || !extension->second.Requestable)
+    if (extension == extensionInfos.end() || !extension->second.Requestable ||
+        !VersionInRange(extension->second.WebGLVersionRange, context->getClientVersion()))
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Extension %s is not requestable.", name));
         return false;
