@@ -43,7 +43,7 @@ Error FenceNV::set(GLenum condition)
     mStatus = GL_FALSE;
     mIsSet = true;
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error FenceNV::test(GLboolean *outResult)
@@ -56,7 +56,7 @@ Error FenceNV::test(GLboolean *outResult)
     }
 
     *outResult = mStatus;
-    return NoError();
+    return gl::NoError();
 }
 
 Error FenceNV::finish()
@@ -71,7 +71,7 @@ Error FenceNV::finish()
 
     mStatus = GL_TRUE;
 
-    return NoError();
+    return gl::NoError();
 }
 
 FenceSync::FenceSync(rx::FenceSyncImpl *impl, GLuint id)
@@ -104,7 +104,7 @@ Error FenceSync::set(GLenum condition, GLbitfield flags)
 
     mCondition = condition;
     mFlags = flags;
-    return NoError();
+    return gl::NoError();
 }
 
 Error FenceSync::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)

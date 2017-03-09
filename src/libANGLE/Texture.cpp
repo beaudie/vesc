@@ -888,7 +888,7 @@ Error Texture::setImage(const Context *context,
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type)));
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::setSubImage(const Context *context,
@@ -927,7 +927,7 @@ Error Texture::setCompressedImage(const Context *context,
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat)));
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::setCompressedSubImage(const Context *context,
@@ -968,7 +968,7 @@ Error Texture::copyImage(const Context *context,
                                                  Format(internalFormatInfo)));
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::copySubImage(const Context *context,
@@ -1011,7 +1011,7 @@ Error Texture::copyTexture(const Context *context,
     mState.setImageDesc(target, level, ImageDesc(sourceDesc.size, Format(internalFormatInfo)));
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::copySubTexture(const Context *context,
@@ -1045,7 +1045,7 @@ Error Texture::copyCompressedTexture(const Context *context, const Texture *sour
     const auto &sourceDesc = source->mState.getImageDesc(source->getTarget(), 0);
     mState.setImageDesc(getTarget(), 0, sourceDesc);
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::setStorage(const Context *context,
@@ -1076,7 +1076,7 @@ Error Texture::setStorage(const Context *context,
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::setStorageMultisample(const Context *context,
@@ -1103,7 +1103,7 @@ Error Texture::setStorageMultisample(const Context *context,
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Texture::generateMipmap(const Context *context)
@@ -1133,7 +1133,7 @@ Error Texture::generateMipmap(const Context *context)
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 void Texture::bindTexImageFromSurface(egl::Surface *surface)
@@ -1238,7 +1238,7 @@ Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
     mState.setImageDesc(target, 0, ImageDesc(size, imageTarget->getFormat()));
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Extents Texture::getAttachmentSize(const ImageIndex &imageIndex) const

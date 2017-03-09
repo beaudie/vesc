@@ -118,7 +118,7 @@ gl::Error GetQueryObjectParameter(gl::Query *query, GLenum pname, T *params)
         }
         default:
             UNREACHABLE();
-            return gl::Error(GL_INVALID_OPERATION, "Unreachable Error");
+            return gl::InternalError() << "Unreachable Error";
     }
 }
 
@@ -1166,7 +1166,7 @@ Error Context::beginQuery(GLenum target, GLuint query)
     // set query as active for specified target only if begin succeeded
     mGLState.setActiveQuery(target, queryObject);
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Context::endQuery(GLenum target)

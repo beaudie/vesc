@@ -1021,7 +1021,7 @@ Error Framebuffer::readPixels(const gl::Context *context,
         unpackBuffer->onPixelUnpack();
     }
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Framebuffer::blit(const gl::Context *context,
@@ -1051,7 +1051,7 @@ Error Framebuffer::blit(const gl::Context *context,
 
     if (!blitMask)
     {
-        return NoError();
+        return gl::NoError();
     }
 
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);
