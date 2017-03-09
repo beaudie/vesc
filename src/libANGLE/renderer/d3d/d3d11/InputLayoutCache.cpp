@@ -367,7 +367,9 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             result = mDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &mPointSpriteVertexBuffer);
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation vertex buffer, HRESULT: 0x%08x", result);
+                return gl::OutOfMemory()
+                       << "Failed to create instanced pointsprite emulation vertex buffer, "
+                       << gl::FmtHR(result);
             }
         }
 
@@ -403,7 +405,9 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             if (FAILED(result))
             {
                 SafeRelease(mPointSpriteVertexBuffer);
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation index buffer, HRESULT: 0x%08x", result);
+                return gl::OutOfMemory()
+                       << "Failed to create instanced pointsprite emulation index buffer, "
+                       << gl::FmtHR(result);
             }
         }
 
@@ -645,8 +649,7 @@ gl::Error InputLayoutCache::createInputLayout(const AttribIndexArray &sortedSema
                                    shader11->getLength(), inputLayoutOut);
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal input layout, HRESULT: 0x%08x", result);
+        return gl::OutOfMemory() << "Failed to create internal input layout, " << gl::FmtHR(result);
     }
 
     return gl::NoError();

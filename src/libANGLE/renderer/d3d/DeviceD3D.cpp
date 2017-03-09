@@ -39,11 +39,11 @@ egl::Error DeviceD3D::getDevice(void **outValue)
     if (!mIsInitialized)
     {
         *outValue = nullptr;
-        return egl::Error(EGL_BAD_DEVICE_EXT);
+        return egl::EglBadDevice();
     }
 
     *outValue = mDevice;
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error DeviceD3D::initialize(void *device,
@@ -53,7 +53,7 @@ egl::Error DeviceD3D::initialize(void *device,
     ASSERT(!mIsInitialized);
     if (mIsInitialized)
     {
-        return egl::Error(EGL_BAD_DEVICE_EXT);
+        return egl::EglBadDevice();
     }
 
     mDevice                  = device;
@@ -71,7 +71,7 @@ egl::Error DeviceD3D::initialize(void *device,
             iunknown->QueryInterface(__uuidof(ID3D11Device), reinterpret_cast<void **>(&d3dDevice));
         if (FAILED(hr))
         {
-            return egl::Error(EGL_BAD_ATTRIBUTE, "Invalid D3D device passed into EGLDeviceEXT");
+            return egl::EglBadAttribute() << "Invalid D3D device passed into EGLDeviceEXT";
         }
 
         // The QI to ID3D11Device adds a ref to the D3D11 device.
@@ -86,7 +86,7 @@ egl::Error DeviceD3D::initialize(void *device,
 
     mIsInitialized = true;
 
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 EGLint DeviceD3D::getType()

@@ -639,7 +639,7 @@ Error Program::link(const gl::Context *context)
     if (isComputeShaderAttached == true && nonComputeShadersAttached == true)
     {
         mInfoLog << "Both a compute and non-compute shaders are attached to the same program.";
-        return NoError();
+        return gl::NoError();
     }
 
     if (computeShader)
@@ -647,7 +647,7 @@ Error Program::link(const gl::Context *context)
         if (!computeShader->isCompiled())
         {
             mInfoLog << "Attached compute shader is not compiled.";
-            return NoError();
+            return gl::NoError();
         }
         ASSERT(computeShader->getType() == GL_COMPUTE_SHADER);
 
@@ -658,17 +658,17 @@ Error Program::link(const gl::Context *context)
         if (!mState.mComputeShaderLocalSize.isDeclared())
         {
             mInfoLog << "Work group size is not specified.";
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkUniforms(mInfoLog, caps, mUniformLocationBindings))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkUniformBlocks(mInfoLog, caps))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         gl::VaryingPacking noPacking(0, PackMode::ANGLE_RELAXED);
@@ -676,54 +676,54 @@ Error Program::link(const gl::Context *context)
                          mLinked);
         if (!mLinked)
         {
-            return NoError();
+            return gl::NoError();
         }
     }
     else
     {
         if (!fragmentShader || !fragmentShader->isCompiled())
         {
-            return NoError();
+            return gl::NoError();
         }
         ASSERT(fragmentShader->getType() == GL_FRAGMENT_SHADER);
 
         if (!vertexShader || !vertexShader->isCompiled())
         {
-            return NoError();
+            return gl::NoError();
         }
         ASSERT(vertexShader->getType() == GL_VERTEX_SHADER);
 
         if (fragmentShader->getShaderVersion() != vertexShader->getShaderVersion())
         {
             mInfoLog << "Fragment shader version does not match vertex shader version.";
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkAttributes(data, mInfoLog))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkVaryings(mInfoLog))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkUniforms(mInfoLog, caps, mUniformLocationBindings))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         if (!linkUniformBlocks(mInfoLog, caps))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         const auto &mergedVaryings = getMergedVaryings();
 
         if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, caps))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         linkOutputVariables();
@@ -739,14 +739,14 @@ Error Program::link(const gl::Context *context)
         if (!varyingPacking.packUserVaryings(mInfoLog, packedVaryings,
                                              mState.getTransformFeedbackVaryingNames()))
         {
-            return NoError();
+            return gl::NoError();
         }
 
         ANGLE_TRY_RESULT(mProgram->link(context->getImplementation(), varyingPacking, mInfoLog),
                          mLinked);
         if (!mLinked)
         {
-            return NoError();
+            return gl::NoError();
         }
 
         gatherTransformFeedbackVaryings(mergedVaryings);
@@ -756,7 +756,7 @@ Error Program::link(const gl::Context *context)
 
     gatherInterfaceBlockInfo();
 
-    return NoError();
+    return gl::NoError();
 }
 
 // Returns the program object to an unlinked state, before re-linking, or at destruction
@@ -791,13 +791,13 @@ Error Program::loadBinary(const Context *context,
     unlink();
 
 #if ANGLE_PROGRAM_BINARY_LOAD != ANGLE_ENABLED
-    return NoError();
+    return gl::NoError();
 #else
     ASSERT(binaryFormat == GL_PROGRAM_BINARY_ANGLE);
     if (binaryFormat != GL_PROGRAM_BINARY_ANGLE)
     {
         mInfoLog << "Invalid program binary format.";
-        return NoError();
+        return gl::NoError();
     }
 
     BinaryInputStream stream(binary, length);
@@ -808,7 +808,7 @@ Error Program::loadBinary(const Context *context,
         0)
     {
         mInfoLog << "Invalid program binary version.";
-        return NoError();
+        return gl::NoError();
     }
 
     int majorVersion = stream.readInt<int>();
@@ -817,7 +817,7 @@ Error Program::loadBinary(const Context *context,
         minorVersion != context->getClientMinorVersion())
     {
         mInfoLog << "Cannot load program binaries across different ES context versions.";
-        return NoError();
+        return gl::NoError();
     }
 
     mState.mComputeShaderLocalSize[0] = stream.readInt<int>();
@@ -951,7 +951,7 @@ Error Program::loadBinary(const Context *context,
 
     ANGLE_TRY_RESULT(mProgram->load(context->getImplementation(), mInfoLog, &stream), mLinked);
 
-    return NoError();
+    return gl::NoError();
 #endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
 }
 
@@ -1095,7 +1095,7 @@ Error Program::saveBinary(const Context *context,
         // TODO: This should be moved to the validation layer but computing the size of the binary before saving
         // it causes the save to happen twice.  It may be possible to write the binary to a separate buffer, validate
         // sizes and then copy it.
-        return Error(GL_INVALID_OPERATION);
+        return gl::InternalError();
     }
 
     if (binary)
@@ -1113,7 +1113,7 @@ Error Program::saveBinary(const Context *context,
         *length = streamLength;
     }
 
-    return NoError();
+    return gl::NoError();
 }
 
 GLint Program::getBinaryLength() const

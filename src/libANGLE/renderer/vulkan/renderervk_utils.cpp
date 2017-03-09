@@ -177,20 +177,18 @@ gl::Error Error::toGL(GLenum glErrorCode) const
     }
 
     // TODO(jmadill): Set extended error code to 'vulkan internal error'.
-    const std::string &message = toString();
-    return gl::Error(glErrorCode, message.c_str());
+    return gl::Error(glErrorCode, glErrorCode, toString());
 }
 
 egl::Error Error::toEGL(EGLint eglErrorCode) const
 {
     if (!isError())
     {
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
 
     // TODO(jmadill): Set extended error code to 'vulkan internal error'.
-    const std::string &message = toString();
-    return egl::Error(eglErrorCode, message.c_str());
+    return egl::Error(eglErrorCode, eglErrorCode, toString());
 }
 
 std::string Error::toString() const
@@ -234,7 +232,7 @@ Error CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &createIn
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateCommandPool(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // CommandBuffer implementation.
@@ -252,7 +250,7 @@ Error CommandBuffer::begin(VkDevice device)
 {
     if (mStarted)
     {
-        return NoError();
+        return vk::NoError();
     }
 
     if (mHandle == VK_NULL_HANDLE)
@@ -282,7 +280,7 @@ Error CommandBuffer::begin(VkDevice device)
 
     ANGLE_VK_TRY(vkBeginCommandBuffer(mHandle, &beginInfo));
 
-    return NoError();
+    return vk::NoError();
 }
 
 Error CommandBuffer::end()
@@ -291,7 +289,7 @@ Error CommandBuffer::end()
 
     ASSERT(valid());
     ANGLE_VK_TRY(vkEndCommandBuffer(mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 Error CommandBuffer::reset()
@@ -300,7 +298,7 @@ Error CommandBuffer::reset()
 
     ASSERT(valid());
     ANGLE_VK_TRY(vkResetCommandBuffer(mHandle, 0));
-    return NoError();
+    return vk::NoError();
 }
 
 void CommandBuffer::singleImageBarrier(VkPipelineStageFlags srcStageMask,
@@ -460,7 +458,7 @@ Error Image::init(VkDevice device, const VkImageCreateInfo &createInfo)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateImage(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 void Image::changeLayoutTop(VkImageAspectFlags aspectMask,
@@ -538,7 +536,7 @@ Error Image::bindMemory(VkDevice device, const vk::DeviceMemory &deviceMemory)
 {
     ASSERT(valid() && deviceMemory.valid());
     ANGLE_VK_TRY(vkBindImageMemory(device, mHandle, deviceMemory.getHandle(), 0));
-    return NoError();
+    return vk::NoError();
 }
 
 // ImageView implementation.
@@ -558,7 +556,7 @@ void ImageView::destroy(VkDevice device)
 Error ImageView::init(VkDevice device, const VkImageViewCreateInfo &createInfo)
 {
     ANGLE_VK_TRY(vkCreateImageView(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // Semaphore implementation.
@@ -586,7 +584,7 @@ Error Semaphore::init(VkDevice device)
 
     ANGLE_VK_TRY(vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle));
 
-    return NoError();
+    return vk::NoError();
 }
 
 // Framebuffer implementation.
@@ -607,7 +605,7 @@ Error Framebuffer::init(VkDevice device, const VkFramebufferCreateInfo &createIn
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateFramebuffer(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // DeviceMemory implementation.
@@ -628,7 +626,7 @@ Error DeviceMemory::allocate(VkDevice device, const VkMemoryAllocateInfo &allocI
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkAllocateMemory(device, &allocInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 Error DeviceMemory::map(VkDevice device,
@@ -640,7 +638,7 @@ Error DeviceMemory::map(VkDevice device,
     ASSERT(valid());
     ANGLE_VK_TRY(
         vkMapMemory(device, mHandle, offset, size, flags, reinterpret_cast<void **>(mapPointer)));
-    return NoError();
+    return vk::NoError();
 }
 
 void DeviceMemory::unmap(VkDevice device)
@@ -667,7 +665,7 @@ Error RenderPass::init(VkDevice device, const VkRenderPassCreateInfo &createInfo
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateRenderPass(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // StagingImage implementation.
@@ -743,7 +741,7 @@ Error StagingImage::init(VkDevice device,
 
     mSize = memoryRequirements.size;
 
-    return NoError();
+    return vk::NoError();
 }
 
 // Buffer implementation.
@@ -772,14 +770,14 @@ Error Buffer::init(VkDevice device, const VkBufferCreateInfo &createInfo)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateBuffer(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 Error Buffer::bindMemory(VkDevice device)
 {
     ASSERT(valid() && mMemory.valid());
     ANGLE_VK_TRY(vkBindBufferMemory(device, mHandle, mMemory.getHandle(), 0));
-    return NoError();
+    return vk::NoError();
 }
 
 // ShaderModule implementation.
@@ -800,7 +798,7 @@ Error ShaderModule::init(VkDevice device, const VkShaderModuleCreateInfo &create
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateShaderModule(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // Pipeline implementation.
@@ -822,7 +820,7 @@ Error Pipeline::initGraphics(VkDevice device, const VkGraphicsPipelineCreateInfo
     ASSERT(!valid());
     ANGLE_VK_TRY(
         vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // PipelineLayout implementation.
@@ -843,7 +841,7 @@ Error PipelineLayout::init(VkDevice device, const VkPipelineLayoutCreateInfo &cr
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreatePipelineLayout(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 // Fence implementation.
@@ -864,7 +862,7 @@ Error Fence::init(VkDevice device, const VkFenceCreateInfo &createInfo)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateFence(device, &createInfo, nullptr, &mHandle));
-    return NoError();
+    return vk::NoError();
 }
 
 VkResult Fence::getStatus(VkDevice device) const

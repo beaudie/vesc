@@ -66,7 +66,7 @@ OffscreenSurfaceVk::~OffscreenSurfaceVk()
 
 egl::Error OffscreenSurfaceVk::initialize(const DisplayImpl *displayImpl)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::FramebufferState &state)
@@ -77,7 +77,7 @@ FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Framebuf
 
 egl::Error OffscreenSurfaceVk::swap(const DisplayImpl *displayImpl)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error OffscreenSurfaceVk::postSubBuffer(EGLint /*x*/,
@@ -85,23 +85,23 @@ egl::Error OffscreenSurfaceVk::postSubBuffer(EGLint /*x*/,
                                              EGLint /*width*/,
                                              EGLint /*height*/)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error OffscreenSurfaceVk::querySurfacePointerANGLE(EGLint /*attribute*/, void ** /*value*/)
 {
     UNREACHABLE();
-    return egl::Error(EGL_BAD_CURRENT_SURFACE);
+    return egl::EglBadCurrentSurface();
 }
 
 egl::Error OffscreenSurfaceVk::bindTexImage(gl::Texture * /*texture*/, EGLint /*buffer*/)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error OffscreenSurfaceVk::releaseTexImage(EGLint /*buffer*/)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error OffscreenSurfaceVk::getSyncValues(EGLuint64KHR * /*ust*/,
@@ -109,7 +109,7 @@ egl::Error OffscreenSurfaceVk::getSyncValues(EGLuint64KHR * /*ust*/,
                                              EGLuint64KHR * /*sbc*/)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::EglBadAccess();
 }
 
 void OffscreenSurfaceVk::setSwapInterval(EGLint /*interval*/)
@@ -142,7 +142,7 @@ gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(
     FramebufferAttachmentRenderTarget ** /*rtOut*/)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -468,23 +468,23 @@ vk::Error WindowSurfaceVk::nextSwapchainImage(RendererVk *renderer)
 egl::Error WindowSurfaceVk::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
     // TODO(jmadill)
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error WindowSurfaceVk::querySurfacePointerANGLE(EGLint attribute, void **value)
 {
     UNREACHABLE();
-    return egl::Error(EGL_BAD_CURRENT_SURFACE);
+    return egl::EglBadCurrentSurface();
 }
 
 egl::Error WindowSurfaceVk::bindTexImage(gl::Texture *texture, EGLint buffer)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error WindowSurfaceVk::releaseTexImage(EGLint buffer)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error WindowSurfaceVk::getSyncValues(EGLuint64KHR * /*ust*/,
@@ -492,7 +492,7 @@ egl::Error WindowSurfaceVk::getSyncValues(EGLuint64KHR * /*ust*/,
                                           EGLuint64KHR * /*sbc*/)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::EglBadAccess();
 }
 
 void WindowSurfaceVk::setSwapInterval(EGLint interval)

@@ -171,8 +171,7 @@ gl::Error Query11::resume()
         HRESULT result = device->CreateQuery(&queryDesc, &mActiveQuery->query);
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory() << "Internal query creation failed, " << gl::FmtHR(result);
         }
 
         // If we are doing time elapsed we also need a query to actually query the timestamp
@@ -184,14 +183,12 @@ gl::Error Query11::resume()
             result         = device->CreateQuery(&desc, &mActiveQuery->beginTimestamp);
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory() << "Internal query creation failed, " << gl::FmtHR(result);
             }
             result = device->CreateQuery(&desc, &mActiveQuery->endTimestamp);
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory() << "Internal query creation failed, " << gl::FmtHR(result);
             }
         }
 
@@ -250,9 +247,8 @@ gl::Error Query11::testQuery(QueryState *queryState)
                     context->GetData(queryState->query, &numPixels, sizeof(numPixels), 0);
                 if (FAILED(result))
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to get the data of an internal query, result: 0x%X.",
-                                     result);
+                    return gl::OutOfMemory()
+                           << "Failed to get the data of an internal query, " << gl::FmtHR(result);
                 }
 
                 if (result == S_OK)
@@ -270,9 +266,8 @@ gl::Error Query11::testQuery(QueryState *queryState)
                 HRESULT result = context->GetData(queryState->query, &soStats, sizeof(soStats), 0);
                 if (FAILED(result))
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to get the data of an internal query, result: 0x%X.",
-                                     result);
+                    return gl::OutOfMemory()
+                           << "Failed to get the data of an internal query, " << gl::FmtHR(result);
                 }
 
                 if (result == S_OK)
@@ -293,9 +288,8 @@ gl::Error Query11::testQuery(QueryState *queryState)
                     context->GetData(queryState->query, &timeStats, sizeof(timeStats), 0);
                 if (FAILED(result))
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to get the data of an internal query, result: 0x%X.",
-                                     result);
+                    return gl::OutOfMemory()
+                           << "Failed to get the data of an internal query, " << gl::FmtHR(result);
                 }
 
                 if (result == S_OK)
@@ -305,18 +299,16 @@ gl::Error Query11::testQuery(QueryState *queryState)
                         context->GetData(queryState->beginTimestamp, &beginTime, sizeof(UINT64), 0);
                     if (FAILED(beginRes))
                     {
-                        return gl::Error(
-                            GL_OUT_OF_MEMORY,
-                            "Failed to get the data of an internal query, result: 0x%X.", beginRes);
+                        return gl::OutOfMemory() << "Failed to get the data of an internal query, "
+                                                 << gl::FmtHR(beginRes);
                     }
                     UINT64 endTime = 0;
                     HRESULT endRes =
                         context->GetData(queryState->endTimestamp, &endTime, sizeof(UINT64), 0);
                     if (FAILED(endRes))
                     {
-                        return gl::Error(
-                            GL_OUT_OF_MEMORY,
-                            "Failed to get the data of an internal query, result: 0x%X.", endRes);
+                        return gl::OutOfMemory() << "Failed to get the data of an internal query, "
+                                                 << gl::FmtHR(endRes);
                     }
 
                     if (beginRes == S_OK && endRes == S_OK)
@@ -368,9 +360,8 @@ gl::Error Query11::testQuery(QueryState *queryState)
                     context->GetData(queryState->query, &completed, sizeof(completed), 0);
                 if (FAILED(result))
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to get the data of an internal query, result: 0x%X.",
-                                     result);
+                    return gl::OutOfMemory()
+                           << "Failed to get the data of an internal query, " << gl::FmtHR(result);
                 }
 
                 if (result == S_OK)
@@ -390,7 +381,7 @@ gl::Error Query11::testQuery(QueryState *queryState)
         if (!queryState->finished && mRenderer->testDeviceLost())
         {
             mRenderer->notifyDeviceLost();
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
+            return gl::OutOfMemory() << "Failed to test get query result, device is lost.";
         }
     }
 

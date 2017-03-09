@@ -58,20 +58,20 @@ egl::Error Device::CreateDevice(void *devicePointer, EGLint deviceType, Device *
 
         *outDevice = new Device(nullptr, deviceD3D);
         GetDeviceSet()->insert(*outDevice);
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
 #endif
 
     // Note that creating an EGL device from inputted D3D9 parameters isn't currently supported
     *outDevice = nullptr;
-    return egl::Error(EGL_BAD_ATTRIBUTE);
+    return egl::EglBadAttribute();
 }
 
 egl::Error Device::CreateDevice(Display *owningDisplay, rx::DeviceImpl *impl, Device **outDevice)
 {
     *outDevice = new Device(owningDisplay, impl);
     GetDeviceSet()->insert(*outDevice);
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 bool Device::IsValidDevice(Device *device)

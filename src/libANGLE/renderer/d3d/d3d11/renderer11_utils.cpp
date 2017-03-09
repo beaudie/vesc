@@ -2209,8 +2209,7 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
         HRESULT result = device->CreateTexture2D(&stagingDesc, nullptr, &stagingTex);
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "CreateStagingTextureFor failed, HRESULT: 0x%X.",
-                             result);
+            return gl::OutOfMemory() << "CreateStagingTextureFor failed, " << gl::FmtHR(result);
         }
 
         return TextureHelper11::MakeAndPossess2D(stagingTex, formatSet);
@@ -2232,8 +2231,7 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
     HRESULT result = device->CreateTexture3D(&stagingDesc, nullptr, &stagingTex);
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "CreateStagingTextureFor failed, HRESULT: 0x%X.",
-                         result);
+        return gl::OutOfMemory() << "CreateStagingTextureFor failed, " << gl::FmtHR(result);
     }
 
     return TextureHelper11::MakeAndPossess3D(stagingTex, formatSet);

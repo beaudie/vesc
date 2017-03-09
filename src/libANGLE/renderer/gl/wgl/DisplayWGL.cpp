@@ -90,7 +90,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mOpenGLModule = LoadLibraryA("opengl32.dll");
     if (!mOpenGLModule)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to load OpenGL library.");
+        return egl::EglNotInitialized() << "Failed to load OpenGL library.";
     }
 
     mFunctionsWGL = new FunctionsWGL();
@@ -118,7 +118,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mWindowClass = RegisterClassA(&intermediateClassDesc);
     if (!mWindowClass)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to register intermediate OpenGL window class.");
+        return egl::EglNotInitialized() << "Failed to register intermediate OpenGL window class.";
     }
 
     HWND dummyWindow = CreateWindowExA(0,
@@ -135,13 +135,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                                        nullptr);
     if (!dummyWindow)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create dummy OpenGL window.");
+        return egl::EglNotInitialized() << "Failed to create dummy OpenGL window.";
     }
 
     HDC dummyDeviceContext = GetDC(dummyWindow);
     if (!dummyDeviceContext)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get the device context of the dummy OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to get the device context of the dummy OpenGL window.";
     }
 
     const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor();
@@ -149,23 +150,26 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     int dummyPixelFormat = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
     if (dummyPixelFormat == 0)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not find a compatible pixel format for the dummy OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Could not find a compatible pixel format for the dummy OpenGL window.";
     }
 
     if (!SetPixelFormat(dummyDeviceContext, dummyPixelFormat, &pixelFormatDescriptor))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to set the pixel format on the intermediate OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
     HGLRC dummyWGLContext = mFunctionsWGL->createContext(dummyDeviceContext);
     if (!dummyDeviceContext)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create a WGL context for the dummy OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to create a WGL context for the dummy OpenGL window.";
     }
 
     if (!mFunctionsWGL->makeCurrent(dummyDeviceContext, dummyWGLContext))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to make the dummy WGL context current.");
+        return egl::EglNotInitialized() << "Failed to make the dummy WGL context current.";
     }
 
     // Grab the GL version from this context and use it as the maximum version available.
@@ -173,7 +177,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     PFNGLGETSTRINGPROC getString = reinterpret_cast<PFNGLGETSTRINGPROC>(GetProcAddress(mOpenGLModule, "glGetString"));
     if (!getString)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get glGetString pointer.");
+        return egl::EglNotInitialized() << "Failed to get glGetString pointer.";
     }
 
     // Reinitialize the wgl functions to grab the extensions
@@ -195,9 +199,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         !mFunctionsWGL->hasExtension("WGL_EXT_create_context_es2_profile") &&
         !mFunctionsWGL->hasExtension("WGL_EXT_create_context_es_profile"))
     {
-        return egl::Error(EGL_NOT_INITIALIZED,
-                          "Cannot create an OpenGL ES platform on Windows without "
-                          "the WGL_EXT_create_context_es(2)_profile extension.");
+        return egl::EglNotInitialized() << "Cannot create an OpenGL ES platform on Windows without "
+                                           "the WGL_EXT_create_context_es(2)_profile extension.";
     }
 
     // Create the real intermediate context and windows
@@ -215,13 +218,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                               nullptr);
     if (!mWindow)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create intermediate OpenGL window.");
+        return egl::EglNotInitialized() << "Failed to create intermediate OpenGL window.";
     }
 
     mDeviceContext = GetDC(mWindow);
     if (!mDeviceContext)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get the device context of the intermediate OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to get the device context of the intermediate OpenGL window.";
     }
 
     if (mFunctionsWGL->choosePixelFormatARB)
@@ -240,12 +244,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (mPixelFormat == 0)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not find a compatible pixel format for the intermediate OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Could not find a compatible pixel format for the intermediate OpenGL window.";
     }
 
     if (!SetPixelFormat(mDeviceContext, mPixelFormat, &pixelFormatDescriptor))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to set the pixel format on the intermediate OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
     if (mFunctionsWGL->createContextAttribsARB)
@@ -334,12 +340,13 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (!mWGLContext)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create a WGL context for the intermediate OpenGL window.");
+        return egl::EglNotInitialized()
+               << "Failed to create a WGL context for the intermediate OpenGL window.";
     }
 
     if (!mFunctionsWGL->makeCurrent(mDeviceContext, mWGLContext))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to make the intermediate WGL context current.");
+        return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
     }
 
     mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
@@ -356,7 +363,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     VendorID vendor = GetVendorID(mFunctionsGL);
     if (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE && IsIntel(vendor))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Intel OpenGL ES drivers are not supported.");
+        return egl::EglNotInitialized() << "Intel OpenGL ES drivers are not supported.";
     }
 
     // Create DXGI swap chains for windows that come from other processes.  Windows is unable to
@@ -388,7 +395,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         else
         {
             // Want to use DXGI swap chains but WGL_NV_DX_interop2 is not present, fail initialization
-            return egl::Error(EGL_NOT_INITIALIZED, "WGL_NV_DX_interop2 is required but not present.");
+            return egl::EglNotInitialized() << "WGL_NV_DX_interop2 is required but not present.";
         }
     }
 
@@ -500,7 +507,7 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
 egl::Error DisplayWGL::getDevice(DeviceImpl **device)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_DISPLAY);
+    return egl::EglBadDisplay();
 }
 
 egl::ConfigSet DisplayWGL::generateConfigs()
@@ -591,7 +598,7 @@ bool DisplayWGL::testDeviceLost()
 
 egl::Error DisplayWGL::restoreLostDevice()
 {
-    return egl::Error(EGL_BAD_DISPLAY);
+    return egl::EglBadDisplay();
 }
 
 bool DisplayWGL::isValidNativeWindow(EGLNativeWindowType window) const
@@ -632,19 +639,19 @@ egl::Error DisplayWGL::initializeD3DDevice()
 {
     if (mD3D11Device != nullptr)
     {
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
 
     mDxgiModule = LoadLibrary(TEXT("dxgi.dll"));
     if (!mDxgiModule)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to load DXGI library.");
+        return egl::EglNotInitialized() << "Failed to load DXGI library.";
     }
 
     mD3d11Module = LoadLibrary(TEXT("d3d11.dll"));
     if (!mD3d11Module)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to load d3d11 library.");
+        return egl::EglNotInitialized() << "Failed to load d3d11 library.";
     }
 
     PFN_D3D11_CREATE_DEVICE d3d11CreateDevice = nullptr;
@@ -652,15 +659,14 @@ egl::Error DisplayWGL::initializeD3DDevice()
         GetProcAddress(mD3d11Module, "D3D11CreateDevice"));
     if (d3d11CreateDevice == nullptr)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not retrieve D3D11CreateDevice address.");
+        return egl::EglNotInitialized() << "Could not retrieve D3D11CreateDevice address.";
     }
 
     HRESULT result = d3d11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0,
                                        D3D11_SDK_VERSION, &mD3D11Device, nullptr, nullptr);
     if (FAILED(result))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not create D3D11 device, error: 0x%X",
-                          result);
+        return egl::EglNotInitialized() << "Could not create D3D11 device, " << gl::FmtHR(result);
     }
 
     egl::Error error = registerD3DDevice(mD3D11Device, &mD3D11DeviceHandle);
@@ -669,7 +675,7 @@ egl::Error DisplayWGL::initializeD3DDevice()
         return error;
     }
 
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
@@ -699,7 +705,7 @@ void DisplayWGL::generateCaps(egl::Caps *outCaps) const
 egl::Error DisplayWGL::waitClient() const
 {
     // Unimplemented as this is not needed for WGL
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error DisplayWGL::waitNative(EGLint engine,
@@ -707,7 +713,7 @@ egl::Error DisplayWGL::waitNative(EGLint engine,
                                   egl::Surface *readSurface) const
 {
     // Unimplemented as this is not needed for WGL
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error DisplayWGL::registerD3DDevice(IUnknown *device, HANDLE *outHandle)
@@ -720,13 +726,13 @@ egl::Error DisplayWGL::registerD3DDevice(IUnknown *device, HANDLE *outHandle)
     {
         iter->second.refCount++;
         *outHandle = iter->second.handle;
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
 
     HANDLE handle = mFunctionsWGL->dxOpenDeviceNV(device);
     if (!handle)
     {
-        return egl::Error(EGL_BAD_PARAMETER, "Failed to open D3D device.");
+        return egl::EglBadParameter() << "Failed to open D3D device.";
     }
 
     device->AddRef();
@@ -737,7 +743,7 @@ egl::Error DisplayWGL::registerD3DDevice(IUnknown *device, HANDLE *outHandle)
     mRegisteredD3DDevices[device] = newDeviceInfo;
 
     *outHandle = handle;
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)

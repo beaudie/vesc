@@ -410,7 +410,7 @@ gl::Error Buffer11::copySubData(ContextImpl *context,
 
     if (!copySource || !copyDest)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal staging buffer.");
+        return gl::OutOfMemory() << "Failed to allocate internal staging buffer.";
     }
 
     // If copying to/from a pixel pack buffer, we must have a staging or
@@ -486,7 +486,7 @@ gl::Error Buffer11::mapRange(ContextImpl *context,
 
     if (!mMappedStorage)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate mappable internal buffer.");
+        return gl::OutOfMemory() << "Failed to allocate mappable internal buffer.";
     }
 
     if ((access & GL_MAP_WRITE_BIT) > 0)
@@ -1034,8 +1034,7 @@ gl::Error Buffer11::NativeStorage::resize(size_t size, bool preserveData)
 
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal buffer, result: 0x%X.",
-                         result);
+        return gl::OutOfMemory() << "Failed to create internal buffer, " << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(newBuffer, "Buffer11::NativeStorage");
@@ -1160,8 +1159,7 @@ gl::Error Buffer11::NativeStorage::map(size_t offset,
     ASSERT(SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to map native storage in Buffer11::NativeStorage::map");
+        return gl::OutOfMemory() << "Failed to map native storage in Buffer11::NativeStorage::map";
     }
     ASSERT(mappedResource.pData);
     *mapPointerOut = static_cast<uint8_t *>(mappedResource.pData) + offset;
@@ -1200,8 +1198,8 @@ gl::ErrorOrResult<ID3D11ShaderResourceView *> Buffer11::NativeStorage::getSRVFor
     ASSERT(SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Error creating buffer SRV in Buffer11::NativeStorage::getSRVForFormat");
+        return gl::OutOfMemory()
+               << "Error creating buffer SRV in Buffer11::NativeStorage::getSRVForFormat";
     }
 
     mBufferResourceViews[srvFormat] = bufferSRV;
@@ -1263,9 +1261,8 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
 
         if (!mIndicesMemoryBuffer.resize(indicesDataSize))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Error resizing index memory buffer in "
-                             "Buffer11::EmulatedIndexedStorage::getNativeStorage");
+            return gl::OutOfMemory() << "Error resizing index memory buffer in "
+                                        "Buffer11::EmulatedIndexedStorage::getNativeStorage";
         }
 
         memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
@@ -1284,9 +1281,8 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
         angle::MemoryBuffer expandedData;
         if (!expandedData.resize(expandedDataSize))
         {
-            return gl::Error(
-                GL_OUT_OF_MEMORY,
-                "Error resizing buffer in Buffer11::EmulatedIndexedStorage::getNativeStorage");
+            return gl::OutOfMemory()
+                   << "Error resizing buffer in Buffer11::EmulatedIndexedStorage::getNativeStorage";
         }
 
         // Clear the contents of the allocated buffer
@@ -1339,8 +1335,8 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
         HRESULT result = device->CreateBuffer(&bufferDesc, &subResourceData, &mNativeStorage);
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Could not create emulated index data buffer: %08lX",
-                             result);
+            return gl::OutOfMemory()
+                   << "Could not create emulated index data buffer, " << gl::FmtHR(result);
         }
         d3d11::SetDebugName(mNativeStorage, "Buffer11::EmulatedIndexedStorage");
     }
@@ -1369,7 +1365,7 @@ gl::Error Buffer11::EmulatedIndexedStorage::resize(size_t size, bool preserveDat
     {
         if (!mMemoryBuffer.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize EmulatedIndexedStorage");
+            return gl::OutOfMemory() << "Failed to resize EmulatedIndexedStorage";
         }
         mBufferSize = size;
     }
@@ -1426,7 +1422,7 @@ gl::Error Buffer11::PackStorage::resize(size_t size, bool preserveData)
     {
         if (!mMemoryBuffer.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal buffer storage.");
+            return gl::OutOfMemory() << "Failed to resize internal buffer storage.";
         }
         mBufferSize = size;
     }
@@ -1551,7 +1547,7 @@ gl::Error Buffer11::SystemMemoryStorage::resize(size_t size, bool preserveData)
     {
         if (!mSystemCopy.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize SystemMemoryStorage");
+            return gl::OutOfMemory() << "Failed to resize SystemMemoryStorage";
         }
         mBufferSize = size;
     }

@@ -72,40 +72,40 @@ egl::Error PbufferSurfaceCGL::initialize(const DisplayImpl *displayImpl)
     mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
                                         GL_RENDERBUFFER, mDSRenderbuffer);
 
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::makeCurrent()
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::swap(const DisplayImpl *displayImpl)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::querySurfacePointerANGLE(EGLint attribute, void **value)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::bindTexImage(gl::Texture *texture, EGLint buffer)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 egl::Error PbufferSurfaceCGL::releaseTexImage(EGLint buffer)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 void PbufferSurfaceCGL::setSwapInterval(EGLint interval)
