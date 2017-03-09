@@ -644,8 +644,7 @@ gl::Error InputLayoutCache::createInputLayout(Renderer11 *renderer,
                                   shader11->getLength(), inputLayoutOut);
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal input layout, HRESULT: 0x%08x", result);
+        return gl::OutOfMemory() << "Failed to create internal input layout, " << gl::FmtHR(result);
     }
     return gl::NoError();
 }

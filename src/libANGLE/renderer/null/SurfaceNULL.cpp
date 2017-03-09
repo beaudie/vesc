@@ -26,7 +26,7 @@ SurfaceNULL::~SurfaceNULL()
 
 egl::Error SurfaceNULL::initialize(const egl::Display *display)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 FramebufferImpl *SurfaceNULL::createDefaultFramebuffer(const gl::FramebufferState &state)
@@ -36,34 +36,34 @@ FramebufferImpl *SurfaceNULL::createDefaultFramebuffer(const gl::FramebufferStat
 
 egl::Error SurfaceNULL::swap(const egl::Display *display)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error SurfaceNULL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error SurfaceNULL::querySurfacePointerANGLE(EGLint attribute, void **value)
 {
     UNREACHABLE();
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error SurfaceNULL::bindTexImage(gl::Texture *texture, EGLint buffer)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error SurfaceNULL::releaseTexImage(EGLint buffer)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error SurfaceNULL::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
 {
     UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::EglBadAccess();
 }
 
 void SurfaceNULL::setSwapInterval(EGLint interval)

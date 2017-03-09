@@ -903,7 +903,7 @@ Error QuerySynciv(const FenceSync *sync,
         {
             *length = 0;
         }
-        return NoError();
+        return gl::NoError();
     }
 
     switch (pname)
@@ -931,7 +931,7 @@ Error QuerySynciv(const FenceSync *sync,
         *length = 1;
     }
 
-    return NoError();
+    return gl::NoError();
 }
 
 void SetTexParameterf(Texture *texture, GLenum pname, GLfloat param)
