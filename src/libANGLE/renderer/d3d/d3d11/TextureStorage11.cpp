@@ -1030,14 +1030,14 @@ gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
         if (d3d11::isDeviceLostError(result))
         {
             mRenderer->notifyDeviceLost();
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create 2D texture storage, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create 2D texture storage, " << gl::FmtHR(result);
         }
         else if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create 2D texture storage, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create 2D texture storage, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(*outputTexture, "TexStorage2D.Texture");
@@ -1094,10 +1094,9 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
 
             if (result == E_OUTOFMEMORY)
             {
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create internal render target view for texture "
-                                 "storage, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory()
+                       << "Failed to create internal render target view for texture storage, "
+                       << gl::FmtHR(result);
             }
             ASSERT(SUCCEEDED(result));
 
@@ -1126,10 +1125,9 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(
-                GL_OUT_OF_MEMORY,
-                "Failed to create internal render target view for texture storage, result: 0x%X.",
-                result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal render target view for texture storage, "
+                   << gl::FmtHR(result);
         }
 
         mRenderTarget[level] = new TextureRenderTarget11(
@@ -1157,10 +1155,9 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(
-            GL_OUT_OF_MEMORY,
-            "Failed to create internal depth stencil view for texture storage, result: 0x%X.",
-            result);
+        return gl::OutOfMemory()
+               << "Failed to create internal depth stencil view for texture storage, "
+               << gl::FmtHR(result);
     }
 
     mRenderTarget[level] =
@@ -1217,8 +1214,8 @@ gl::Error TextureStorage11_2D::createSRV(int baseLevel,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to create internal texture storage SRV, "
+                                 << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(*outSRV, "TexStorage2D.SRV");
@@ -1252,8 +1249,8 @@ gl::Error TextureStorage11_2D::getSwizzleTexture(ID3D11Resource **outTexture)
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle texture, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle texture, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mSwizzleTexture, "TexStorage2D.SwizzleTexture");
@@ -1287,9 +1284,8 @@ gl::Error TextureStorage11_2D::getSwizzleRenderTarget(int mipLevel, ID3D11Render
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle render target view, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle render target view, " << gl::FmtHR(result);
         }
     }
 
@@ -1421,7 +1417,7 @@ gl::Error TextureStorage11_External::getRenderTarget(const gl::ImageIndex &index
 {
     // Render targets are not supported for external textures
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureStorage11_External::createSRV(int baseLevel,
@@ -1452,8 +1448,8 @@ gl::Error TextureStorage11_External::createSRV(int baseLevel,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to create internal texture storage SRV, "
+                                 << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(*outSRV, "TexStorage2D.SRV");
@@ -1464,14 +1460,14 @@ gl::Error TextureStorage11_External::createSRV(int baseLevel,
 gl::Error TextureStorage11_External::getSwizzleTexture(ID3D11Resource **outTexture)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureStorage11_External::getSwizzleRenderTarget(int mipLevel,
                                                             ID3D11RenderTargetView **outRTV)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 TextureStorage11_EGLImage::TextureStorage11_EGLImage(Renderer11 *renderer,
@@ -1525,7 +1521,7 @@ gl::Error TextureStorage11_EGLImage::getMippedResource(ID3D11Resource **)
     // This shouldn't be called unless the zero max LOD workaround is active.
     // EGL images are unavailable in this configuration.
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureStorage11_EGLImage::getRenderTarget(const gl::ImageIndex &index,
@@ -1577,7 +1573,7 @@ gl::Error TextureStorage11_EGLImage::releaseAssociatedImage(const gl::ImageIndex
 gl::Error TextureStorage11_EGLImage::useLevelZeroWorkaroundTexture(bool)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureStorage11_EGLImage::getSwizzleTexture(ID3D11Resource **outTexture)
@@ -1606,8 +1602,8 @@ gl::Error TextureStorage11_EGLImage::getSwizzleTexture(ID3D11Resource **outTextu
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle texture, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle texture, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mSwizzleTexture, "TexStorageEGLImage.SwizzleTexture");
@@ -1642,9 +1638,8 @@ gl::Error TextureStorage11_EGLImage::getSwizzleRenderTarget(int mipLevel,
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle render target view, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle render target view, " << gl::FmtHR(result);
         }
     }
 
@@ -1692,9 +1687,8 @@ gl::Error TextureStorage11_EGLImage::createSRV(int baseLevel,
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal texture storage SRV, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal texture storage SRV, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(*outSRV, "TexStorageEGLImage.SRV");
@@ -2052,14 +2046,14 @@ gl::Error TextureStorage11_Cube::ensureTextureExists(int mipLevels)
         if (d3d11::isDeviceLostError(result))
         {
             mRenderer->notifyDeviceLost();
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create cube texture storage, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create cube texture storage, " << gl::FmtHR(result);
         }
         else if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create cube texture storage, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create cube texture storage, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(*outputTexture, "TexStorageCube.Texture");
@@ -2096,10 +2090,9 @@ gl::Error TextureStorage11_Cube::createRenderTargetSRV(ID3D11Resource *texture,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(
-            GL_OUT_OF_MEMORY,
-            "Failed to create internal shader resource view for texture storage, result: 0x%X.",
-            result);
+        return gl::OutOfMemory()
+               << "Failed to create internal shader resource view for texture storage, "
+               << gl::FmtHR(result);
     }
     return gl::NoError();
 }
@@ -2137,10 +2130,9 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
 
                 if (result == E_OUTOFMEMORY)
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to create internal render target view for texture "
-                                     "storage, result: 0x%X.",
-                                     result);
+                    return gl::OutOfMemory()
+                           << "Failed to create internal render target view for texture storage, "
+                           << gl::FmtHR(result);
                 }
                 ASSERT(SUCCEEDED(result));
 
@@ -2195,10 +2187,9 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
             {
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create internal render target view for texture "
-                                 "storage, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory()
+                       << "Failed to create internal render target view for texture storage, "
+                       << gl::FmtHR(result);
             }
 
             d3d11::SetDebugName(rtv, "TexStorageCube.RenderTargetRTV");
@@ -2230,10 +2221,9 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
             {
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create internal depth stencil view for texture "
-                                 "storage, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory()
+                       << "Failed to create internal depth stencil view for texture storage, "
+                       << gl::FmtHR(result);
             }
 
             d3d11::SetDebugName(dsv, "TexStorageCube.RenderTargetDSV");
@@ -2316,8 +2306,8 @@ gl::Error TextureStorage11_Cube::createSRV(int baseLevel,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to create internal texture storage SRV, "
+                                 << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(*outSRV, "TexStorageCube.SRV");
@@ -2351,8 +2341,8 @@ gl::Error TextureStorage11_Cube::getSwizzleTexture(ID3D11Resource **outTexture)
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle texture, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle texture, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(*outTexture, "TexStorageCube.SwizzleTexture");
@@ -2389,9 +2379,8 @@ gl::Error TextureStorage11_Cube::getSwizzleRenderTarget(int mipLevel,
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle render target view, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle render target view, " << gl::FmtHR(result);
         }
     }
 
@@ -2611,14 +2600,14 @@ gl::Error TextureStorage11_3D::getResource(ID3D11Resource **outResource)
         if (d3d11::isDeviceLostError(result))
         {
             mRenderer->notifyDeviceLost();
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create 3D texture storage, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create 3D texture storage, " << gl::FmtHR(result);
         }
         else if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create 3D texture storage, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create 3D texture storage, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mTexture, "TexStorage3D.Texture");
@@ -2648,8 +2637,8 @@ gl::Error TextureStorage11_3D::createSRV(int baseLevel,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to create internal texture storage SRV, "
+                                 << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(*outSRV, "TexStorage3D.SRV");
@@ -2694,10 +2683,9 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             {
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create internal render target view for texture "
-                                 "storage, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory()
+                       << "Failed to create internal render target view for texture storage, "
+                       << gl::FmtHR(result);
             }
 
             d3d11::SetDebugName(rtv, "TexStorage3D.RTV");
@@ -2745,10 +2733,9 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
         {
             SafeRelease(srv);
             SafeRelease(blitSRV);
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal render target view for texture "
-                             "storage, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal render target view for texture storage, "
+                   << gl::FmtHR(result);
         }
         ASSERT(SUCCEEDED(result));
 
@@ -2791,8 +2778,8 @@ gl::Error TextureStorage11_3D::getSwizzleTexture(ID3D11Resource **outTexture)
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle texture, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle texture, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mSwizzleTexture, "TexStorage3D.SwizzleTexture");
@@ -2828,9 +2815,8 @@ gl::Error TextureStorage11_3D::getSwizzleRenderTarget(int mipLevel, ID3D11Render
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle render target view, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle render target view, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mSwizzleTexture, "TexStorage3D.SwizzleRTV");
@@ -3002,14 +2988,14 @@ gl::Error TextureStorage11_2DArray::getResource(ID3D11Resource **outResource)
         if (d3d11::isDeviceLostError(result))
         {
             mRenderer->notifyDeviceLost();
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create 2D array texture storage, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create 2D array texture storage, " << gl::FmtHR(result);
         }
         else if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create 2D array texture storage, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create 2D array texture storage, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(mTexture, "TexStorage2DArray.Texture");
@@ -3039,8 +3025,8 @@ gl::Error TextureStorage11_2DArray::createSRV(int baseLevel,
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to create internal texture storage SRV, "
+                                 << gl::FmtHR(result);
     }
 
     d3d11::SetDebugName(*outSRV, "TexStorage2DArray.SRV");
@@ -3067,10 +3053,9 @@ gl::Error TextureStorage11_2DArray::createRenderTargetSRV(ID3D11Resource *textur
     ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(
-            GL_OUT_OF_MEMORY,
-            "Failed to create internal shader resource view for texture storage, result: 0x%X.",
-            result);
+        return gl::OutOfMemory()
+               << "Failed to create internal shader resource view for texture storage, "
+               << gl::FmtHR(result);
     }
 
     return gl::NoError();
@@ -3132,10 +3117,9 @@ gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
             {
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create internal render target view for texture "
-                                 "storage, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory()
+                       << "Failed to create internal render target view for texture storage, "
+                       << gl::FmtHR(result);
             }
 
             d3d11::SetDebugName(rtv, "TexStorage2DArray.RenderTargetRTV");
@@ -3169,8 +3153,8 @@ gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
             {
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create TexStorage2DArray DSV. Result: 0x%X.", result);
+                return gl::OutOfMemory()
+                       << "Failed to create TexStorage2DArray DSV, " << gl::FmtHR(result);
             }
 
             d3d11::SetDebugName(dsv, "TexStorage2DArray.RenderTargetDSV");
@@ -3215,8 +3199,8 @@ gl::Error TextureStorage11_2DArray::getSwizzleTexture(ID3D11Resource **outTextur
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle texture, result: 0x%X.", result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle texture, " << gl::FmtHR(result);
         }
 
         d3d11::SetDebugName(*outTexture, "TexStorage2DArray.SwizzleTexture");
@@ -3253,9 +3237,8 @@ gl::Error TextureStorage11_2DArray::getSwizzleRenderTarget(int mipLevel,
         ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create internal swizzle render target view, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create internal swizzle render target view, " << gl::FmtHR(result);
         }
     }
 

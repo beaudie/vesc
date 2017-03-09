@@ -31,7 +31,7 @@ gl::Error TextureImpl::copyTexture(ContextImpl *contextImpl,
                                    const gl::Texture *source)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION, "CHROMIUM_copy_texture exposed but not implemented.");
+    return gl::InternalError() << "CHROMIUM_copy_texture exposed but not implemented.";
 }
 
 gl::Error TextureImpl::copySubTexture(ContextImpl *contextImpl,
@@ -46,13 +46,12 @@ gl::Error TextureImpl::copySubTexture(ContextImpl *contextImpl,
                                       const gl::Texture *source)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION, "CHROMIUM_copy_texture exposed but not implemented.");
+    return gl::InternalError() << "CHROMIUM_copy_texture exposed but not implemented.";
 }
 
 gl::Error TextureImpl::copyCompressedTexture(ContextImpl *contextImpl, const gl::Texture *source)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION,
-                     "CHROMIUM_copy_compressed_texture exposed but not implemented.");
+    return gl::InternalError() << "CHROMIUM_copy_compressed_texture exposed but not implemented.";
 }
 }  // namespace rx

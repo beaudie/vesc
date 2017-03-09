@@ -17,27 +17,9 @@
 namespace gl
 {
 
-Error::Error(GLenum errorCode, std::string &&message)
-    : mCode(errorCode), mID(errorCode), mMessage(new std::string(std::move(message)))
+Error::Error(GLenum errorCode, GLuint id, std::string &&message)
+    : mCode(errorCode), mID(id), mMessage(new std::string(std::move(message)))
 {
-}
-
-Error::Error(GLenum errorCode, const char *msg, ...) : mCode(errorCode), mID(errorCode)
-{
-    va_list vararg;
-    va_start(vararg, msg);
-    createMessageString();
-    *mMessage = FormatString(msg, vararg);
-    va_end(vararg);
-}
-
-Error::Error(GLenum errorCode, GLuint id, const char *msg, ...) : mCode(errorCode), mID(id)
-{
-    va_list vararg;
-    va_start(vararg, msg);
-    createMessageString();
-    *mMessage = FormatString(msg, vararg);
-    va_end(vararg);
 }
 
 void Error::createMessageString() const
@@ -79,18 +61,28 @@ std::ostream &operator<<(std::ostream &os, const Error &err)
 namespace priv
 {
 template <GLenum EnumT>
-ErrorStream<EnumT>::ErrorStream()
+ErrorStream<EnumT>::ErrorStream() : mID(EnumT)
+{
+}
+
+template <GLenum EnumT>
+ErrorStream<EnumT>::ErrorStream(GLuint id) : mID(id)
 {
 }
 
 template <GLenum EnumT>
 ErrorStream<EnumT>::operator gl::Error()
 {
-    return Error(EnumT, mErrorStream.str().c_str());
+    return Error(EnumT, mID, mErrorStream.str());
 }
 
-template class ErrorStream<GL_OUT_OF_MEMORY>;
+template class ErrorStream<GL_INVALID_ENUM>;
+template class ErrorStream<GL_INVALID_VALUE>;
 template class ErrorStream<GL_INVALID_OPERATION>;
+template class ErrorStream<GL_STACK_OVERFLOW>;
+template class ErrorStream<GL_STACK_UNDERFLOW>;
+template class ErrorStream<GL_OUT_OF_MEMORY>;
+template class ErrorStream<GL_INVALID_FRAMEBUFFER_OPERATION>;
 
 }  // namespace priv
 
@@ -99,26 +91,8 @@ template class ErrorStream<GL_INVALID_OPERATION>;
 namespace egl
 {
 
-Error::Error(EGLint errorCode, const char *msg, ...) : mCode(errorCode), mID(0)
-{
-    va_list vararg;
-    va_start(vararg, msg);
-    createMessageString();
-    *mMessage = FormatString(msg, vararg);
-    va_end(vararg);
-}
-
-Error::Error(EGLint errorCode, EGLint id, const char *msg, ...) : mCode(errorCode), mID(id)
-{
-    va_list vararg;
-    va_start(vararg, msg);
-    createMessageString();
-    *mMessage = FormatString(msg, vararg);
-    va_end(vararg);
-}
-
-Error::Error(EGLint errorCode, EGLint id, const std::string &msg)
-    : mCode(errorCode), mID(id), mMessage(new std::string(msg))
+Error::Error(EGLint errorCode, EGLint id, std::string &&message)
+    : mCode(errorCode), mID(id), mMessage(new std::string(std::move(message)))
 {
 }
 
@@ -140,4 +114,41 @@ std::ostream &operator<<(std::ostream &os, const Error &err)
 {
     return gl::FmtHexShort(os, err.getCode());
 }
+namespace priv
+{
+template <GLenum EnumT>
+ErrorStream<EnumT>::ErrorStream() : mID(EnumT)
+{
 }
+
+template <GLenum EnumT>
+ErrorStream<EnumT>::ErrorStream(GLuint id) : mID(id)
+{
+}
+
+template <GLenum EnumT>
+ErrorStream<EnumT>::operator egl::Error()
+{
+    return Error(EnumT, mID, mErrorStream.str());
+}
+
+template class ErrorStream<EGL_NOT_INITIALIZED>;
+template class ErrorStream<EGL_BAD_ACCESS>;
+template class ErrorStream<EGL_BAD_ALLOC>;
+template class ErrorStream<EGL_BAD_ATTRIBUTE>;
+template class ErrorStream<EGL_BAD_CONFIG>;
+template class ErrorStream<EGL_BAD_CONTEXT>;
+template class ErrorStream<EGL_BAD_CURRENT_SURFACE>;
+template class ErrorStream<EGL_BAD_DISPLAY>;
+template class ErrorStream<EGL_BAD_MATCH>;
+template class ErrorStream<EGL_BAD_NATIVE_WINDOW>;
+template class ErrorStream<EGL_BAD_PARAMETER>;
+template class ErrorStream<EGL_BAD_SURFACE>;
+template class ErrorStream<EGL_CONTEXT_LOST>;
+template class ErrorStream<EGL_BAD_STREAM_KHR>;
+template class ErrorStream<EGL_BAD_STATE_KHR>;
+template class ErrorStream<EGL_BAD_DEVICE_EXT>;
+
+}  // namespace priv
+
+}  // namespace egl

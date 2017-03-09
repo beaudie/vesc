@@ -426,9 +426,8 @@ gl::Error Image11::copyWithoutConversion(const gl::Offset &destOffset,
         HRESULT result            = device->CreateTexture2D(&resolveDesc, nullptr, &srcTex2D);
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create resolve texture for Image11::copy, HRESULT: 0x%X.",
-                             result);
+            return gl::OutOfMemory()
+                   << "Failed to create resolve texture for Image11::copy, " << gl::FmtHR(result);
         }
         srcTex = srcTex2D;
 
@@ -532,8 +531,7 @@ gl::Error Image11::createStagingTexture()
         if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory() << "Failed to create staging texture, " << gl::FmtHR(result);
         }
 
         mStagingTexture     = newTexture;
@@ -576,8 +574,7 @@ gl::Error Image11::createStagingTexture()
         if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture, result: 0x%X.",
-                             result);
+            return gl::OutOfMemory() << "Failed to create staging texture, " << gl::FmtHR(result);
         }
 
         mStagingTexture     = newTexture;
@@ -613,7 +610,7 @@ gl::Error Image11::map(D3D11_MAP mapType, D3D11_MAPPED_SUBRESOURCE *map)
         {
             mRenderer->notifyDeviceLost();
         }
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map staging texture, result: 0x%X.", result);
+        return gl::OutOfMemory() << "Failed to map staging texture, " << gl::FmtHR(result);
     }
 
     mDirty = true;

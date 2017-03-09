@@ -34,7 +34,7 @@ egl::Error DisplayNULL::initialize(egl::Display *display)
     constexpr size_t kMaxTotalAllocationSize = 1 << 28;  // 256MB
     mAllocationTracker.reset(new AllocationTrackerNULL(kMaxTotalAllocationSize));
 
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 void DisplayNULL::terminate()
@@ -47,7 +47,7 @@ egl::Error DisplayNULL::makeCurrent(egl::Surface *drawSurface,
                                     egl::Surface *readSurface,
                                     gl::Context *context)
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::ConfigSet DisplayNULL::generateConfigs()
@@ -100,7 +100,7 @@ bool DisplayNULL::testDeviceLost()
 
 egl::Error DisplayNULL::restoreLostDevice()
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 bool DisplayNULL::isValidNativeWindow(EGLNativeWindowType window) const
@@ -116,19 +116,19 @@ std::string DisplayNULL::getVendorString() const
 egl::Error DisplayNULL::getDevice(DeviceImpl **device)
 {
     *device = mDevice;
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error DisplayNULL::waitClient() const
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 egl::Error DisplayNULL::waitNative(EGLint engine,
                                    egl::Surface *drawSurface,
                                    egl::Surface *readSurface) const
 {
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 
 gl::Version DisplayNULL::getMaxSupportedESVersion() const

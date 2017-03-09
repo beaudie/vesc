@@ -31,7 +31,7 @@ gl::Error Buffer9::setData(ContextImpl * /*context*/,
     {
         if (!mMemory.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal buffer.");
+            return gl::OutOfMemory() << "Failed to resize internal buffer.";
         }
     }
 
@@ -64,7 +64,7 @@ gl::Error Buffer9::setSubData(ContextImpl * /*context*/,
     {
         if (!mMemory.resize(offset + size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal buffer.");
+            return gl::OutOfMemory() << "Failed to resize internal buffer.";
         }
     }
 
@@ -100,7 +100,7 @@ gl::Error Buffer9::copySubData(ContextImpl *context,
 gl::Error Buffer9::map(ContextImpl *context, GLenum access, void **mapPtr)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error Buffer9::mapRange(ContextImpl *context,
@@ -110,19 +110,19 @@ gl::Error Buffer9::mapRange(ContextImpl *context,
                             void **mapPtr)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error Buffer9::unmap(ContextImpl *context, GLboolean *result)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error Buffer9::markTransformFeedbackUsage()
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 }  // namespace rx

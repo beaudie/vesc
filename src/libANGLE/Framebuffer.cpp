@@ -949,7 +949,7 @@ Error Framebuffer::readPixels(rx::ContextImpl *context,
         unpackBuffer->onPixelUnpack();
     }
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Framebuffer::blit(rx::ContextImpl *context,
@@ -979,7 +979,7 @@ Error Framebuffer::blit(rx::ContextImpl *context,
 
     if (!blitMask)
     {
-        return NoError();
+        return gl::NoError();
     }
 
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);

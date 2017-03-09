@@ -33,7 +33,7 @@ gl::Error TextureVk::setImage(ContextImpl *contextImpl,
                               const uint8_t *pixels)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setSubImage(ContextImpl *contextImpl,
@@ -46,7 +46,7 @@ gl::Error TextureVk::setSubImage(ContextImpl *contextImpl,
                                  const uint8_t *pixels)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setCompressedImage(ContextImpl *contextImpl,
@@ -59,7 +59,7 @@ gl::Error TextureVk::setCompressedImage(ContextImpl *contextImpl,
                                         const uint8_t *pixels)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setCompressedSubImage(ContextImpl *contextImpl,
@@ -72,7 +72,7 @@ gl::Error TextureVk::setCompressedSubImage(ContextImpl *contextImpl,
                                            const uint8_t *pixels)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::copyImage(ContextImpl *contextImpl,
@@ -83,7 +83,7 @@ gl::Error TextureVk::copyImage(ContextImpl *contextImpl,
                                const gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::copySubImage(ContextImpl *contextImpl,
@@ -94,7 +94,7 @@ gl::Error TextureVk::copySubImage(ContextImpl *contextImpl,
                                   const gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setStorage(ContextImpl *contextImpl,
@@ -104,13 +104,13 @@ gl::Error TextureVk::setStorage(ContextImpl *contextImpl,
                                 const gl::Extents &size)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setEGLImageTarget(GLenum target, egl::Image *image)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::setImageExternal(GLenum target,
@@ -118,13 +118,13 @@ gl::Error TextureVk::setImageExternal(GLenum target,
                                       const egl::Stream::GLTextureDescription &desc)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureVk::generateMipmap(ContextImpl *contextImpl)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 void TextureVk::setBaseLevel(GLuint baseLevel)
@@ -147,7 +147,7 @@ gl::Error TextureVk::getAttachmentRenderTarget(GLenum binding,
                                                FramebufferAttachmentRenderTarget **rtOut)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 void TextureVk::syncState(const gl::Texture::DirtyBits &dirtyBits)

@@ -34,7 +34,7 @@ egl::Error WindowSurfaceEGL::initialize(const DisplayImpl *displayImpl)
         return egl::Error(mEGL->getError(), "eglCreateWindowSurface failed");
     }
 
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 }  // namespace rx

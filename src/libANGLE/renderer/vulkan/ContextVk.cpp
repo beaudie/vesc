@@ -52,13 +52,13 @@ gl::Error ContextVk::initialize()
 gl::Error ContextVk::flush()
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error ContextVk::finish()
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error ContextVk::initPipeline()
@@ -332,7 +332,7 @@ gl::Error ContextVk::drawArraysInstanced(GLenum mode,
                                          GLsizei instanceCount)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error ContextVk::drawElements(GLenum mode,
@@ -342,7 +342,7 @@ gl::Error ContextVk::drawElements(GLenum mode,
                                   const gl::IndexRange &indexRange)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error ContextVk::drawElementsInstanced(GLenum mode,
@@ -353,7 +353,7 @@ gl::Error ContextVk::drawElementsInstanced(GLenum mode,
                                            const gl::IndexRange &indexRange)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error ContextVk::drawRangeElements(GLenum mode,
@@ -553,7 +553,7 @@ void ContextVk::invalidateCurrentPipeline()
 gl::Error ContextVk::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 }  // namespace rx
