@@ -112,13 +112,13 @@ gl::Error PixelTransfer11::loadResources()
     mBufferToTextureVS = d3d11::CompileVS(device, g_VS_BufferToTexture, "BufferToTexture VS");
     if (!mBufferToTextureVS)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal buffer to texture vertex shader.");
+        return gl::OutOfMemory() << "Failed to create internal buffer to texture vertex shader.";
     }
 
     mBufferToTextureGS = d3d11::CompileGS(device, g_GS_BufferToTexture, "BufferToTexture GS");
     if (!mBufferToTextureGS)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal buffer to texture geometry shader.");
+        return gl::OutOfMemory() << "Failed to create internal buffer to texture geometry shader.";
     }
 
     ANGLE_TRY(buildShaderMap());
@@ -261,7 +261,7 @@ gl::Error PixelTransfer11::buildShaderMap()
     {
         if (shaderMapIt->second == nullptr)
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal buffer to texture pixel shader.");
+            return gl::OutOfMemory() << "Failed to create internal buffer to texture pixel shader.";
         }
     }
 

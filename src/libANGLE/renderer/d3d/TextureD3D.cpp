@@ -312,8 +312,7 @@ gl::Error TextureD3D::fastUnpackPixels(const gl::PixelUnpackState &unpack, const
     {
         // TODO(jmadill): additional unpack parameters
         UNIMPLEMENTED();
-        return gl::Error(GL_INVALID_OPERATION,
-                         "Unimplemented pixel store parameters in fastUnpackPixels");
+        return gl::InternalError() << "Unimplemented pixel store parameters in fastUnpackPixels";
     }
 
     // No-op
@@ -371,7 +370,7 @@ gl::Error TextureD3D::setImageExternal(GLenum target,
 {
     // Only external images can accept external textures
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D::generateMipmap(const gl::Context *context)
@@ -1596,7 +1595,7 @@ bool TextureD3D_Cube::isDepth(GLint level, GLint layer) const
 gl::Error TextureD3D_Cube::setEGLImageTarget(GLenum target, egl::Image *image)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_Cube::setImage(const gl::Context *context,
@@ -2281,7 +2280,7 @@ bool TextureD3D_3D::isDepth(GLint level) const
 gl::Error TextureD3D_3D::setEGLImageTarget(GLenum target, egl::Image *image)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_3D::setImage(const gl::Context *context,
@@ -2403,7 +2402,7 @@ gl::Error TextureD3D_3D::copyImage(const gl::Context *context,
                                    const gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION, "Copying 3D textures is unimplemented.");
+    return gl::InternalError() << "Copying 3D textures is unimplemented.";
 }
 
 gl::Error TextureD3D_3D::copySubImage(const gl::Context *context,
@@ -2802,7 +2801,7 @@ bool TextureD3D_2DArray::isDepth(GLint level) const
 gl::Error TextureD3D_2DArray::setEGLImageTarget(GLenum target, egl::Image *image)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_2DArray::setImage(const gl::Context *context,
@@ -2943,7 +2942,7 @@ gl::Error TextureD3D_2DArray::copyImage(const gl::Context *context,
                                         const gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION, "Copying 2D array textures is unimplemented.");
+    return gl::InternalError() << "Copying 2D array textures is unimplemented.";
 }
 
 gl::Error TextureD3D_2DArray::copySubImage(const gl::Context *context,
@@ -3377,7 +3376,7 @@ gl::Error TextureD3D_External::setImage(const gl::Context *context,
 {
     // Image setting is not supported for external images
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::setSubImage(const gl::Context *context,
@@ -3390,7 +3389,7 @@ gl::Error TextureD3D_External::setSubImage(const gl::Context *context,
                                            const uint8_t *pixels)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::setCompressedImage(const gl::Context *context,
@@ -3403,7 +3402,7 @@ gl::Error TextureD3D_External::setCompressedImage(const gl::Context *context,
                                                   const uint8_t *pixels)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::setCompressedSubImage(const gl::Context *context,
@@ -3416,7 +3415,7 @@ gl::Error TextureD3D_External::setCompressedSubImage(const gl::Context *context,
                                                      const uint8_t *pixels)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::copyImage(const gl::Context *context,
@@ -3427,7 +3426,7 @@ gl::Error TextureD3D_External::copyImage(const gl::Context *context,
                                          const gl::Framebuffer *source)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::copySubImage(const gl::Context *context,
@@ -3438,7 +3437,7 @@ gl::Error TextureD3D_External::copySubImage(const gl::Context *context,
                                             const gl::Framebuffer *source)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::setStorage(const gl::Context *context,
@@ -3448,7 +3447,7 @@ gl::Error TextureD3D_External::setStorage(const gl::Context *context,
                                           const gl::Extents &size)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 gl::Error TextureD3D_External::setImageExternal(GLenum target,
@@ -3500,7 +3499,7 @@ void TextureD3D_External::initMipmapImages()
 gl::Error TextureD3D_External::getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT)
 {
     UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::InternalError();
 }
 
 bool TextureD3D_External::isImageComplete(const gl::ImageIndex &index) const

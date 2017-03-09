@@ -86,7 +86,7 @@ Error Buffer::bufferData(const Context *context,
     mState.mUsage = usage;
     mState.mSize  = size;
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Buffer::bufferSubData(const Context *context,
@@ -99,7 +99,7 @@ Error Buffer::bufferSubData(const Context *context,
 
     mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(size));
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Buffer::copyBufferSubData(const Context *context,
@@ -113,7 +113,7 @@ Error Buffer::copyBufferSubData(const Context *context,
 
     mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Buffer::map(const Context *context, GLenum access)
@@ -132,7 +132,7 @@ Error Buffer::map(const Context *context, GLenum access)
     mState.mAccessFlags = GL_MAP_WRITE_BIT;
     mIndexRangeCache.clear();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Buffer::mapRange(const Context *context,
@@ -162,7 +162,7 @@ Error Buffer::mapRange(const Context *context,
         mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(length));
     }
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Buffer::unmap(const Context *context, GLboolean *result)
@@ -179,7 +179,7 @@ Error Buffer::unmap(const Context *context, GLboolean *result)
     mState.mAccess      = GL_WRITE_ONLY_OES;
     mState.mAccessFlags = 0;
 
-    return NoError();
+    return gl::NoError();
 }
 
 void Buffer::onTransformFeedback()
@@ -200,14 +200,14 @@ Error Buffer::getIndexRange(GLenum type,
 {
     if (mIndexRangeCache.findRange(type, offset, count, primitiveRestartEnabled, outRange))
     {
-        return NoError();
+        return gl::NoError();
     }
 
     ANGLE_TRY(mImpl->getIndexRange(type, offset, count, primitiveRestartEnabled, outRange));
 
     mIndexRangeCache.addRange(type, offset, count, primitiveRestartEnabled, *outRange);
 
-    return NoError();
+    return gl::NoError();
 }
 
 }  // namespace gl

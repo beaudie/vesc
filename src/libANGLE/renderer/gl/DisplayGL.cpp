@@ -38,10 +38,10 @@ egl::Error DisplayGL::initialize(egl::Display *display)
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "OpenGL ES 2.0 is not supportable.");
+        return egl::EglNotInitialized() << "OpenGL ES 2.0 is not supportable.";
     }
 
-    return egl::Error(EGL_SUCCESS);
+    return egl::EglSuccess();
 }
 
 void DisplayGL::terminate()
@@ -83,7 +83,7 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
 
     if (!context)
     {
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
 
     // Pause transform feedback before making a new surface current, to workaround anglebug.com/1426
@@ -95,7 +95,7 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
         SurfaceGL *glDrawSurface = GetImplAs<SurfaceGL>(drawSurface);
         ANGLE_TRY(glDrawSurface->makeCurrent());
         mCurrentDrawSurface = drawSurface;
-        return egl::Error(EGL_SUCCESS);
+        return egl::EglSuccess();
     }
     else
     {
@@ -112,6 +112,6 @@ gl::Version DisplayGL::getMaxSupportedESVersion() const
 egl::Error DisplayGL::makeCurrentSurfaceless(gl::Context *context)
 {
     UNIMPLEMENTED();
-    return egl::NoError();
+    return egl::EglSuccess();
 }
 }

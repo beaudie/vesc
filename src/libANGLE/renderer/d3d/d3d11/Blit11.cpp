@@ -1037,7 +1037,8 @@ gl::Error Blit11::swizzleTexture(const d3d11::SharedSRV &source,
         deviceContext->Map(mVertexBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal vertex buffer for swizzle, " << result;
+        return gl::OutOfMemory() << "Failed to map internal vertex buffer for swizzle, "
+                                 << gl::FmtHR(result);
     }
 
     ShaderSupport support;
@@ -1059,7 +1060,7 @@ gl::Error Blit11::swizzleTexture(const d3d11::SharedSRV &source,
     if (FAILED(result))
     {
         return gl::OutOfMemory() << "Failed to map internal constant buffer for swizzle, "
-                                 << result;
+                                 << gl::FmtHR(result);
     }
 
     unsigned int *swizzleIndices = reinterpret_cast<unsigned int *>(mappedResource.pData);
@@ -1177,7 +1178,7 @@ gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
     if (FAILED(result))
     {
         return gl::OutOfMemory() << "Failed to map internal vertex buffer for texture copy, "
-                                 << result;
+                                 << gl::FmtHR(result);
     }
 
     UINT stride    = 0;
@@ -1317,7 +1318,7 @@ gl::Error Blit11::copyDepth(const d3d11::SharedSRV &source,
     if (FAILED(result))
     {
         return gl::OutOfMemory() << "Failed to map internal vertex buffer for texture copy, "
-                                 << result;
+                                 << gl::FmtHR(result);
     }
 
     UINT stride    = 0;
@@ -1516,7 +1517,7 @@ gl::Error Blit11::copyAndConvertImpl(const TextureHelper11 &source,
     {
         return gl::OutOfMemory()
                << "Failed to map internal source staging texture for depth stencil blit, "
-               << result;
+               << gl::FmtHR(result);
     }
 
     D3D11_MAPPED_SUBRESOURCE destMapping;
@@ -1526,7 +1527,7 @@ gl::Error Blit11::copyAndConvertImpl(const TextureHelper11 &source,
         deviceContext->Unmap(sourceStaging.get(), 0);
         return gl::OutOfMemory()
                << "Failed to map internal destination staging texture for depth stencil blit, "
-               << result;
+               << gl::FmtHR(result);
     }
 
     // Clip dest area to the destination size

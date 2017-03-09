@@ -58,7 +58,7 @@ Error Renderbuffer::setStorage(GLenum internalformat, size_t width, size_t heigh
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Renderbuffer::setStorageMultisample(size_t samples, GLenum internalformat, size_t width, size_t height)
@@ -74,7 +74,7 @@ Error Renderbuffer::setStorageMultisample(size_t samples, GLenum internalformat,
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 Error Renderbuffer::setStorageEGLImageTarget(egl::Image *image)
@@ -92,7 +92,7 @@ Error Renderbuffer::setStorageEGLImageTarget(egl::Image *image)
 
     mDirtyChannel.signal();
 
-    return NoError();
+    return gl::NoError();
 }
 
 rx::RenderbufferImpl *Renderbuffer::getImplementation() const
