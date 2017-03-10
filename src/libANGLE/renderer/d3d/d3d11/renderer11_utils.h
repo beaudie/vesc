@@ -121,19 +121,6 @@ struct PositionDepthColorVertex
     T r, g, b, a;
 };
 
-template <typename T>
-void SetPositionDepthColorVertex(PositionDepthColorVertex<T>* vertex, float x, float y, float z,
-                                 const gl::Color<T> &color)
-{
-    vertex->x = x;
-    vertex->y = y;
-    vertex->z = z;
-    vertex->r = color.red;
-    vertex->g = color.green;
-    vertex->b = color.blue;
-    vertex->a = color.alpha;
-}
-
 struct BlendStateKey
 {
     gl::BlendState blendState;
