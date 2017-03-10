@@ -205,7 +205,7 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveAttribLocationsMask;
     }
-    const std::map<int, VariableLocation> &getOutputVariables() const { return mOutputVariables; }
+    const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
@@ -252,8 +252,9 @@ class ProgramState final : angle::NonCopyable
     // An array of the samplers that are used by the program
     std::vector<gl::SamplerBinding> mSamplerBindings;
 
+    std::vector<sh::OutputVariable> mOutputVariables;
     // TODO(jmadill): use unordered/hash map when available
-    std::map<int, VariableLocation> mOutputVariables;
+    std::map<int, VariableLocation> mOutputLocations;
 
     bool mBinaryRetrieveableHint;
 };
@@ -314,7 +315,12 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getAttributeLocation(const std::string &name) const;
     bool isAttribLocationActive(size_t attribLocation) const;
 
-    void getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
+    void getActiveAttribute(GLuint index,
+                            GLsizei bufsize,
+                            GLsizei *length,
+                            GLint *size,
+                            GLenum *type,
+                            GLchar *name) const;
     GLint getActiveAttributeCount() const;
     GLint getActiveAttributeMaxLength() const;
     const std::vector<sh::Attribute> &getAttributes() const { return mState.mAttributes; }
@@ -411,6 +417,24 @@ class Program final : angle::NonCopyable, public LabeledObject
                                           const sh::ShaderVariable &fragmentVariable,
                                           bool validatePrecision);
 
+    bool isValidResourceIndex(GLenum programInterface, GLuint index) const;
+
+    void getInterfaceiv(GLenum programInterface, GLenum pname, GLint *params) const;
+    void getResourceName(GLenum programInterface,
+                         GLuint index,
+                         GLsizei bufSize,
+                         GLsizei *length,
+                         GLchar *name) const;
+    GLuint getResourceIndex(GLenum programInterface, const GLchar *name) const;
+    void getResourceiv(GLenum programInterface,
+                       GLuint index,
+                       GLsizei propCount,
+                       const GLenum *props,
+                       GLsizei bufSize,
+                       GLsizei *length,
+                       GLint *params) const;
+    GLint getResourceLocation(GLenum programInterface, const GLchar *name) const;
+
     class Bindings final : angle::NonCopyable
     {
       public:
@@ -499,6 +523,24 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
+
+    GLuint getActiveAttributeIndex(const GLchar *name) const;
+    void getActiveAttributeProperties(GLuint index,
+                                      GLsizei propCount,
+                                      const GLenum *props,
+                                      GLsizei bufSize,
+                                      GLsizei *length,
+                                      GLint *params) const;
+
+    GLuint getActiveOutputIndex(const GLchar *name) const;
+    GLint getActiveOutputMaxLength() const;
+    void getActiveOutputName(GLuint index, GLsizei bufsize, GLsizei *length, GLchar *name) const;
+    void getActiveOutputProperties(GLuint index,
+                                   GLsizei propCount,
+                                   const GLenum *props,
+                                   GLsizei bufSize,
+                                   GLsizei *length,
+                                   GLint *params) const;
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;

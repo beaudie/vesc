@@ -55,6 +55,37 @@ bool ValidationGetFramebufferParameteri(Context *context,
                                         GLenum target,
                                         GLenum pname,
                                         GLint *params);
+
+bool ValidateGetProgramInterfaceiv(Context *context,
+                                   GLuint program,
+                                   GLenum programInterface,
+                                   GLenum pname,
+                                   GLint *params);
+bool ValidateGetProgramResourceIndex(Context *context,
+                                     GLuint program,
+                                     GLenum programInterface,
+                                     const GLchar *name);
+bool ValidateGetProgramResourceName(Context *context,
+                                    GLuint program,
+                                    GLenum programInterface,
+                                    GLuint index,
+                                    GLsizei bufSize,
+                                    GLsizei *length,
+                                    GLchar *name);
+bool ValidateGetProgramResourceiv(Context *context,
+                                  GLuint program,
+                                  GLenum programInterface,
+                                  GLuint index,
+                                  GLsizei propCount,
+                                  const GLenum *props,
+                                  GLsizei bufSize,
+                                  GLsizei *length,
+                                  GLint *params);
+bool ValidateGetProgramResourceLocation(Context *context,
+                                        GLuint program,
+                                        GLenum programInterface,
+                                        const GLchar *name);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
