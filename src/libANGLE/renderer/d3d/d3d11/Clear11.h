@@ -26,9 +26,13 @@ struct ClearParameters;
 template <typename T>
 struct RtvDsvClearInfo
 {
-    T r, g, b, a;
     float z;
-    float c1padding[3];
+    float c0y_pad;
+    float c0z_pad;
+    float c0w_pad;
+    T r, g, b;
+    T alphas[8];
+    T c3w_pad;
 };
 
 class Clear11 : angle::NonCopyable
@@ -48,6 +52,7 @@ class Clear11 : angle::NonCopyable
         ClearShader(Renderer11 *renderer, const D3D_FEATURE_LEVEL fl);
         ~ClearShader();
         void getIlVsPs(const INT clearType,
+                       const bool isAeShader,
                        ID3D11InputLayout **il,
                        ID3D11VertexShader **vs,
                        ID3D11PixelShader **ps);
@@ -59,8 +64,10 @@ class Clear11 : angle::NonCopyable
         angle::ComPtr<ID3D11InputLayout> mIl9;
         d3d11::LazyShader<ID3D11VertexShader> mVs9;
         d3d11::LazyShader<ID3D11PixelShader> mPsFloat9;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloatAe9;
         d3d11::LazyShader<ID3D11VertexShader> mVs;
         d3d11::LazyShader<ID3D11PixelShader> mPsFloat;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloatAe;
         d3d11::LazyShader<ID3D11PixelShader> mPsUInt;
         d3d11::LazyShader<ID3D11PixelShader> mPsSInt;
     };
