@@ -36,9 +36,11 @@ call:BuildShader Passthrough2D11.hlsl PS_PassthroughRGBUnmultiply2D   ps_4_0_lev
 
 call:BuildShader Clear11.hlsl           VS_Clear_FL9             vs_4_0_level_9_3  compiled\clear11_fl9vs.h             %debug%
 call:BuildShader Clear11.hlsl           PS_ClearFloat_FL9        ps_4_0_level_9_3  compiled\clearfloat11_fl9ps.h        %debug%
+call:BuildShader Clear11.hlsl           PS_ClearFloatAe_FL9      ps_4_0_level_9_3  compiled\clearfloatae11_fl9ps.h      %debug%
 
 call:BuildShader Clear11.hlsl           VS_Clear                 vs_4_0            compiled\clear11vs.h                 %debug%
 call:BuildShader Clear11.hlsl           PS_ClearFloat            ps_4_0            compiled\clearfloat11ps.h            %debug%
+call:BuildShader Clear11.hlsl           PS_ClearFloatAe          ps_4_0            compiled\clearfloatae11ps.h          %debug%
 
 :: Shaders for OpenGL ES 3.0+ only
 ::              | Input file               | Entry point            | Type   | Output file                        | Debug |
