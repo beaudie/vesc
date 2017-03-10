@@ -50,7 +50,7 @@ GLenum LayerIndexToCubeMapTextureTarget(size_t index);
 
 // Parse the base uniform name and array index.  Returns the base name of the uniform. outSubscript is
 // set to GL_INVALID_INDEX if the provided name is not an array or the array index is invalid.
-std::string ParseUniformName(const std::string &name, size_t *outSubscript);
+std::string ParseResourceName(const std::string &name, size_t *outSubscript);
 
 // Find the range of index values in the provided indices pointer.  Primitive restart indices are
 // only counted in the range if primitive restart is disabled.
