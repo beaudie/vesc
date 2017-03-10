@@ -32,6 +32,61 @@ void CheckBlendFunctions(GLenum src, GLenum dst)
     }
 }
 
+class PixelRect
+{
+  public:
+    PixelRect(GLsizei w, GLsizei h, GLuint start) : mWidth(w), mHeight(h), mData(w * h)
+    {
+        for (GLsizei i = 0; i < w * h; ++i)
+        {
+            mData[i] = angle::GLColor(start++);
+        }
+    }
+
+    bool getPixel(GLint x, GLint y, angle::GLColor &c) const
+    {
+        if (0 <= x && x < mWidth && 0 <= y && y < mHeight)
+        {
+            c = mData[x + y * mWidth];
+            return true;
+        }
+        return false;
+    }
+
+    angle::GLColor *data() { return mData.data(); }
+
+  private:
+    GLsizei mWidth, mHeight;
+    std::vector<angle::GLColor> mData;
+};
+
+// Read w*h pixels at position x,y and check the result.
+// We check that destination pixels outside the framebuffer are not modified
+// as well that those inside get the value in the framebuffer.
+void CheckReadPixels(GLint x, GLint y, GLsizei w, GLsizei h, const PixelRect &frameBuffer)
+{
+    // fill read buffer with unique pixels which are also different than any frame buffer pixel
+    constexpr GLuint startColor = 0xf1f1f1f1;
+    PixelRect before(w, h, startColor);  // buffer contents before glReadPixels()
+    PixelRect after(w, h, startColor);   // buffer contents after glReadPixels()
+    angle::GLColor expect, actual;
+
+    glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, after.data());
+    for (int i = 0; i < w; ++i)
+    {
+        for (int j = 0; j < h; ++j)
+        {
+            if (!frameBuffer.getPixel(i + x, j + y, expect))
+            {
+                // pixel was not in frame buffer, so expect original read buffer value
+                ASSERT(before.getPixel(i, j, expect));
+            }
+            ASSERT(after.getPixel(i, j, actual));
+            EXPECT_EQ(expect, actual);
+        }
+    }
+}
+
 }  // namespace
 
 namespace angle
@@ -500,6 +555,66 @@ TEST_P(WebGLCompatibilityTest, BlendWithConstantColor)
             CheckBlendFunctions(src, dst);
             glBlendFuncSeparate(src, dst, GL_ONE, GL_ONE);
             CheckBlendFunctions(src, dst);
+        }
+    }
+}
+
+// Check that readPixels does not set a destination pixel when
+// the corresponding source pixel is outside the framebuffer.
+TEST_P(WebGLCompatibilityTest, ReadPixelsOutside)
+{
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+    PixelRect frameBuffer(getWindowWidth(), getWindowHeight(), 0x01010101);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, frameBuffer.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    ASSERT_GL_NO_ERROR();
+
+    const std::string vertexShader =
+        "attribute vec3 a_position;\n"
+        "varying vec2 v_texCoord;\n"
+        "void main() {\n"
+        "    v_texCoord = a_position.xy * 0.5 + 0.5;\n"
+        "    gl_Position = vec4(a_position, 1);\n"
+        "}\n";
+
+    const std::string fragmentShader =
+        "precision mediump float;\n"
+        "varying vec2 v_texCoord;\n"
+        "uniform sampler2D u_texture;\n"
+        "void main() {\n"
+        "    gl_FragColor = texture2D(u_texture, v_texCoord);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    glUseProgram(program.get());
+    GLint uniformLoc = glGetUniformLocation(program.get(), "u_texture");
+    ASSERT_NE(-1, uniformLoc);
+    glUniform1i(uniformLoc, 0);
+    glDisable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+
+    // draw the contents of 'frameBuffer' into the frame buffer
+    drawQuad(program.get(), "a_position", 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    // Read a width*height rectangle of pixels from places that include:
+    // - completely outside framebuffer, on all sides of it (i,j < 0 or > 2)
+    // - completely inside framebuffer (i,j == 1)
+    // - straddling framebuffer boundary, at each corner and side
+    constexpr int width  = 4;
+    constexpr int height = 4;
+    for (int i = -1; i < 4; ++i)
+    {
+        for (int j = -1; j < 4; ++j)
+        {
+            const int x = i * getWindowWidth() / 2 - width / 2;
+            const int y = j * getWindowHeight() / 2 - height / 2;
+            CheckReadPixels(x, y, width, height, frameBuffer);
         }
     }
 }
