@@ -23,6 +23,14 @@ class Renderer11;
 class RenderTarget11;
 struct ClearParameters;
 
+template <typename T>
+struct RtvDsvClearInfo
+{
+    T r, g, b, a;
+    float z;
+    float c1padding[3];
+};
+
 class Clear11 : angle::NonCopyable
 {
   public:
@@ -34,32 +42,28 @@ class Clear11 : angle::NonCopyable
                                const gl::FramebufferState &fboData);
 
   private:
-    struct MaskedRenderTarget
+    class ClearShader final : public angle::NonCopyable
     {
-        bool colorMask[4];
-        RenderTarget11 *renderTarget;
-    };
-
-    ID3D11BlendState *getBlendState(const std::vector<MaskedRenderTarget> &rts);
-    ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
-
-    struct ClearShader final : public angle::NonCopyable
-    {
-        ClearShader(DXGI_FORMAT colorType,
-                    const char *inputLayoutName,
-                    const BYTE *vsByteCode,
-                    size_t vsSize,
-                    const char *vsDebugName,
-                    const BYTE *psByteCode,
-                    size_t psSize,
-                    const char *psDebugName);
+      public:
+        ClearShader(Renderer11 *renderer, const D3D_FEATURE_LEVEL fl);
         ~ClearShader();
+        void getIlVsPs(const INT clearType,
+                       ID3D11InputLayout **il,
+                       ID3D11VertexShader **vs,
+                       ID3D11PixelShader **ps);
 
-        d3d11::LazyInputLayout *inputLayout;
-        d3d11::LazyShader<ID3D11VertexShader> vertexShader;
-        d3d11::LazyShader<ID3D11PixelShader> pixelShader;
+      private:
+        Renderer11 *mRenderer;
+        D3D_FEATURE_LEVEL mFeatureLevel;
+
+        angle::ComPtr<ID3D11InputLayout> mIl9;
+        d3d11::LazyShader<ID3D11VertexShader> mVs9;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloat9;
+        d3d11::LazyShader<ID3D11VertexShader> mVs;
+        d3d11::LazyShader<ID3D11PixelShader> mPsFloat;
+        d3d11::LazyShader<ID3D11PixelShader> mPsUInt;
+        d3d11::LazyShader<ID3D11PixelShader> mPsSInt;
     };
-
 
     Renderer11 *mRenderer;
 
@@ -70,10 +74,10 @@ class Clear11 : angle::NonCopyable
     d3d11::BlendStateKey mBlendStateKey;
 
     // Shaders and Shader Resources
-    ClearShader *mFloatClearShader;
-    ClearShader *mUintClearShader;
-    ClearShader *mIntClearShader;
+    std::unique_ptr<ClearShader> mShaders;
+    angle::ComPtr<ID3D11Buffer> mConstantBuffer;
     angle::ComPtr<ID3D11Buffer> mVertexBuffer;
+    RtvDsvClearInfo<float> mCbCache;
 };
 
 }
