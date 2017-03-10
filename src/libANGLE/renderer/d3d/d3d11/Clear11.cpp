@@ -21,10 +21,12 @@
 
 // Precompiled shaders
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clear11_fl9vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11_fl9ps.h"
-
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clear11vs.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11_fl9ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloatae11_fl9ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloatae11ps.h"
+
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11ps.h"
 
@@ -43,9 +45,17 @@ template <typename T>
 bool UpdateCbCache(void *buffer,
                    const gl::Color<T> &color,
                    const float *zValue,
+                   const T *alphaBuffer,
                    const uint32_t numRtvs,
                    const uint8_t writeMask)
 {
+    static_assert(
+        (offsetof(RtvDsvClearInfo<T>, r) == 16),
+        "In RtvDsvClearInfo<float>, RGB values do not start at byte 16 as expected by PS.");
+
+    static_assert((offsetof(RtvDsvClearInfo<T>, alphas) == (offsetof(RtvDsvClearInfo<T>, r) + 12)),
+                  "In RtvDsvClearInfo<float>, unexpected padding between RGB and alphas.");
+
     RtvDsvClearInfo<T> *cbCache = reinterpret_cast<RtvDsvClearInfo<T> *>(buffer);
 
     bool cbDirty = false;
@@ -62,10 +72,23 @@ bool UpdateCbCache(void *buffer,
         }
 
         const bool writeAlpha = (writeMask & D3D11_COLOR_WRITE_ENABLE_ALPHA) != 0;
-        if (writeAlpha && (cbCache->a != color.alpha))
+        if (writeAlpha)
         {
-            cbCache->a = color.alpha;
-            cbDirty    = true;
+            if (alphaBuffer)
+            {
+                const size_t alphaBytes = sizeof(T) * (numRtvs);
+
+                if (memcmp(cbCache->alphas, alphaBuffer, alphaBytes) != 0)
+                {
+                    memcpy(cbCache->alphas, alphaBuffer, alphaBytes);
+                    cbDirty = true;
+                }
+            }
+            else if (cbCache->alphas[0] != color.alpha)
+            {
+                cbCache->alphas[0] = color.alpha;
+                cbDirty            = true;
+            }
         }
     }
 
@@ -90,12 +113,13 @@ Clear11::ClearShader::ClearShader(Renderer11 *renderer, const D3D_FEATURE_LEVEL 
       mIl9(nullptr),
       mVs9(g_VS_Clear_FL9, ArraySize(g_VS_Clear_FL9), "Clear11 VS FL9"),
       mPsFloat9(g_PS_ClearFloat_FL9, ArraySize(g_PS_ClearFloat_FL9), "Clear11 PS FloatFL9"),
+      mPsFloatAe9(g_PS_ClearFloatAe_FL9, ArraySize(g_PS_ClearFloatAe_FL9), "Clear11 PS FloatAeFL9"),
       mVs(g_VS_Clear, ArraySize(g_VS_Clear), "Clear11 VS"),
       mPsFloat(g_PS_ClearFloat, ArraySize(g_PS_ClearFloat), "Clear11 PS Float"),
+      mPsFloatAe(g_PS_ClearFloatAe, ArraySize(g_PS_ClearFloatAe), "Clear11 PS FloatAe"),
       mPsUInt(g_PS_ClearUint, ArraySize(g_PS_ClearUint), "Clear11 PS UINT"),
       mPsSInt(g_PS_ClearSint, ArraySize(g_PS_ClearSint), "Clear11 PS SINT")
 {
-
     if (mFeatureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
         const D3D11_INPUT_ELEMENT_DESC ilDesc = {
@@ -111,13 +135,16 @@ Clear11::ClearShader::~ClearShader()
 {
     mVs9.release();
     mPsFloat9.release();
+    mPsFloatAe9.release();
     mVs.release();
     mPsFloat.release();
+    mPsFloatAe.release();
     mPsUInt.release();
     mPsSInt.release();
 }
 
 void Clear11::ClearShader::getIlVsPs(const INT clearType,
+                                     const bool isAeShader,
                                      ID3D11InputLayout **il,
                                      ID3D11VertexShader **vs,
                                      ID3D11PixelShader **ps)
@@ -129,7 +156,7 @@ void Clear11::ClearShader::getIlVsPs(const INT clearType,
         assert(clearType == GL_FLOAT);
         *vs = mVs9.resolve(device);
         *il = mIl9.Get();
-        *ps = mPsFloat9.resolve(device);
+        *ps = (isAeShader ? mPsFloatAe9.resolve(device) : mPsFloat9.resolve(device));
         return;
     }
 
@@ -139,7 +166,7 @@ void Clear11::ClearShader::getIlVsPs(const INT clearType,
     switch (clearType)
     {
         case GL_FLOAT:
-            *ps = mPsFloat.resolve(device);
+            *ps = (isAeShader ? mPsFloatAe.resolve(device) : mPsFloat.resolve(device));
             break;
         case GL_UNSIGNED_INT:
             *ps = mPsUInt.resolve(device);
@@ -373,8 +400,10 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
 
     std::array<ID3D11RenderTargetView *, D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT> rtvs;
     std::array<uint8_t, D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT> rtvMasks;
+    std::array<float, D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT> alphasF = {};
     ID3D11DepthStencilView *dsv = nullptr;
     uint32_t numRtvs            = 0;
+    bool alphasEmulated         = false;
     const uint8_t colorMask =
         gl_d3d11::ConvertColorMask(clearParams.colorMaskRed, clearParams.colorMaskGreen,
                                    clearParams.colorMaskBlue, clearParams.colorMaskAlpha);
@@ -429,6 +458,37 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
             {
                 rtvs[numRtvs]     = framebufferRTV;
                 rtvMasks[numRtvs] = gl_d3d11::GetColorMask(&formatInfo) & colorMask;
+
+                if (clearParams.colorType == GL_FLOAT && clearParams.colorMaskAlpha)
+                {
+                    const auto &nativeFormat = renderTarget->getFormatSet().format();
+
+                    // Formats emulated using a nativeFormat with extra alpha bits or
+                    // an extra alpha channel need to have their alpha values rounded
+                    // or set to their default values to ensure that they are sampled
+                    // correctly by other shaders.
+                    if (nativeFormat.alphaBits == formatInfo.alphaBits ||
+                        formatInfo.alphaBits > 1 || clearParams.colorF.alpha == 1.0f ||
+                        (formatInfo.alphaBits == 1 && clearParams.colorF.alpha == 0.0f))
+                    {
+                        // Either no alpha emulation or safe alpha emulation requiring no
+                        // adjustments
+                        alphasF[numRtvs] = clearParams.colorF.alpha;
+                    }
+                    else if (formatInfo.alphaBits == 1)
+                    {
+                        // For A1 formats like R5G5B5A1, alphas of either 0 or 1 are expected
+                        alphasF[numRtvs] = (clearParams.colorF.alpha >= 0.5f ? 1.0f : 0.0f);
+                        alphasEmulated   = true;
+                    }
+                    else if (formatInfo.alphaBits == 0)
+                    {
+                        // Default value of 1.0f required
+                        alphasF[numRtvs] = 1.0f;
+                        alphasEmulated   = true;
+                    }
+                }
+
                 numRtvs++;
             }
             else
@@ -607,13 +667,17 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
     switch (clearParams.colorType)
     {
         case GL_FLOAT:
-            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorF, zValue, numRtvs, colorMask);
+            alphasEmulated = (numRtvs > 1 && clearParams.colorMaskAlpha) ? alphasEmulated : false;
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorF, zValue, &alphasF[0], numRtvs,
+                                    colorMask);
             break;
         case GL_UNSIGNED_INT:
-            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorUI, zValue, numRtvs, colorMask);
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorUI, zValue, (uint32_t *)nullptr,
+                                    numRtvs, colorMask);
             break;
         case GL_INT:
-            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorI, zValue, numRtvs, colorMask);
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorI, zValue, (int32_t *)nullptr,
+                                    numRtvs, colorMask);
             break;
         default:
             UNREACHABLE();
@@ -666,7 +730,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
     ID3D11VertexShader *vs;
     ID3D11InputLayout *il;
     ID3D11PixelShader *ps;
-    mShaders->getIlVsPs(clearParams.colorType, &il, &vs, &ps);
+    mShaders->getIlVsPs(clearParams.colorType, alphasEmulated, &il, &vs, &ps);
 
     // Apply Shaders
     deviceContext->VSSetShader(vs, nullptr, 0);
