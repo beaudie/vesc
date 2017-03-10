@@ -1,0 +1,268 @@
+//
+// Copyright 2017 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+// WebGLReadOutsideFramebufferTest.cpp : Test functions which read the framebuffer (readPixels,
+// copyTexSubImage2D, copyTexImage2D) on areas outside the framebuffer.
+
+#include "test_utils/ANGLETest.h"
+
+#include "test_utils/gl_raii.h"
+
+namespace
+{
+
+class PixelRect
+{
+  public:
+    PixelRect(int width, int height) : mWidth(width), mHeight(height), mData(width * height) {}
+
+    // Set each pixel to a different color.
+    void fill(unsigned tag)
+    {
+        for (unsigned i = 0; i < mWidth; ++i)
+        {
+            for (unsigned j = 0; j < mHeight; ++j)
+            {
+                mData[i + j * mWidth] = angle::GLColor(i + (j << 8) + (tag << 16));
+            }
+        }
+    }
+
+    void toTexture2D(GLuint texid) const
+    {
+        glBindTexture(GL_TEXTURE_2D, texid);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     mData.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
+    void readFB(int x, int y)
+    {
+        glReadPixels(x, y, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+    }
+
+    // Read pixels from 'other' into 'this' from position (x,y).
+    // Pixels outside 'other' are untouched or zeroed according to 'zeroOutside.'
+    void readOther(const PixelRect &other, int x, int y, bool zeroOutside)
+    {
+        for (int i = 0; i < mWidth; ++i)
+        {
+            for (int j = 0; j < mHeight; ++j)
+            {
+                angle::GLColor *dest = &mData[i + j * mWidth];
+                if (!other.getPixel(x + i, y + j, dest) && zeroOutside)
+                {
+                    *dest = angle::GLColor(0);
+                }
+            }
+        }
+    }
+
+    bool getPixel(int x, int y, angle::GLColor *colorOut) const
+    {
+        if (0 <= x && x < mWidth && 0 <= y && y < mHeight)
+        {
+            *colorOut = mData[x + y * mWidth];
+            return true;
+        }
+        return false;
+    }
+
+    void compare(const PixelRect &expected) const
+    {
+        for (int i = 0; i < mWidth * mHeight; ++i)
+        {
+            // XXX EXPECT_EQ helps with debugging but otherwise produces too much output - change to ASSERT_EQ later
+            EXPECT_EQ(expected.mData[i], mData[i]);
+        }
+    }
+
+  private:
+    int mWidth, mHeight;
+    std::vector<angle::GLColor> mData;
+};
+
+}  // namespace
+
+namespace angle
+{
+
+class WebGLReadOutsideFramebufferTest : public ANGLETest
+{
+  public:
+    void UseReadPixels(int x, int y, PixelRect *pixelsOut) { pixelsOut->readFB(x, y); }
+
+    void UseCopyTexSubImage2D(int x, int y, PixelRect *pixelsOut)
+    {
+        GLTexture destTexture;
+        pixelsOut->toTexture2D(destTexture.get());
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, x, y, readWidth, readHeight);
+
+        readTexture(readWidth, readHeight, pixelsOut);
+    }
+
+    void UseCopyTexImage2D(int x, int y, PixelRect *pixelsOut)
+    {
+        GLTexture destTexture;
+        pixelsOut->toTexture2D(destTexture.get());
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, readWidth, readHeight, 0);
+
+        readTexture(readWidth, readHeight, pixelsOut);
+    }
+
+  protected:
+    static constexpr int fbWidth    = 128;
+    static constexpr int fbHeight   = 128;
+    static constexpr int readWidth  = 4;
+    static constexpr int readHeight = 4;
+
+    // these values ensure no overlap between framebuffer pixel values and read buffer pixel values
+    static constexpr GLuint fbStartColor   = 0x01010101;
+    static constexpr GLuint readStartColor = 0xf1f1f1f1;
+
+    WebGLReadOutsideFramebufferTest() : mFBData(fbWidth, fbHeight)
+    {
+        setWindowWidth(fbWidth);
+        setWindowHeight(fbHeight);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setWebGLCompatibilityEnabled(true);
+    }
+
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        const std::string vertexShader =
+            "attribute vec3 a_position;\n"
+            "varying vec2 v_texCoord;\n"
+            "void main() {\n"
+            "    v_texCoord = a_position.xy * 0.5 + 0.5;\n"
+            "    gl_Position = vec4(a_position, 1);\n"
+            "}\n";
+        const std::string fragmentShader =
+            "precision mediump float;\n"
+            "varying vec2 v_texCoord;\n"
+            "uniform sampler2D u_texture;\n"
+            "void main() {\n"
+            "    gl_FragColor = texture2D(u_texture, v_texCoord);\n"
+            "}\n";
+
+        mProgram = CompileProgram(vertexShader, fragmentShader);
+        glUseProgram(mProgram);
+        GLint uniformLoc = glGetUniformLocation(mProgram, "u_texture");
+        ASSERT_NE(-1, uniformLoc);
+        glUniform1i(uniformLoc, 0);
+
+        glDisable(GL_BLEND);
+        glDisable(GL_DEPTH_TEST);
+
+        // fill framebuffer with unique pixels
+        mFBData.fill(0xf0f0);
+        GLTexture fbTexture;
+        mFBData.toTexture2D(fbTexture.get());
+        drawQuad(mProgram, "a_position", 0.0f, 1.0f, true);
+    }
+
+    void TearDown() override
+    {
+        glDeleteProgram(mProgram);
+        ANGLETest::TearDown();
+    }
+
+    void Test(void (WebGLReadOutsideFramebufferTest::*readFunc)(int x, int y, PixelRect *dest),
+              bool zeroOutside)
+    {
+        PixelRect actual(readWidth, readHeight);
+        PixelRect expected(readWidth, readHeight);
+
+        // Read a readWidth*readHeight rectangle of pixels from places that include:
+        // - completely outside framebuffer, on all sides of it (i,j < 0 or > 2)
+        // - completely inside framebuffer (i,j == 1)
+        // - straddling framebuffer boundary, at each corner and side
+        for (int i = -1; i < 4; ++i)
+        {
+            for (int j = -1; j < 4; ++j)
+            {
+                const int x        = i * fbWidth / 2 - readWidth / 2;
+                const int y        = j * fbHeight / 2 - readHeight / 2;
+                const unsigned tag = (i + 1) + (j + 1) * 10 + 100;
+
+                // Put unique pixel values into the read destinations.
+                actual.fill(tag);
+                expected.fill(tag);
+
+                // Read from framebuffer into 'actual.'
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                (this->*readFunc)(x, y, &actual);
+
+                // Simulate framebuffer read, into 'expected.'
+                expected.readOther(mFBData, x, y, zeroOutside);
+
+                // See if they are the same.
+                actual.compare(expected);
+            }
+        }
+    }
+
+    // Get contents of current texture by drawing it into a framebuffer then reading with
+    // glReadPixels().
+    void readTexture(GLsizei width, GLsizei height, PixelRect *out)
+    {
+        GLRenderbuffer colorBuffer;
+        glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  colorBuffer.get());
+
+        glViewport(0, 0, width, height);
+        drawQuad(mProgram, "a_position", 0.0f, 1.0f, true);
+        out->readFB(0, 0);
+    }
+
+    PixelRect mFBData;
+    GLuint mProgram;
+};
+
+// Check that readPixels does not set a destination pixel when
+// the corresponding source pixel is outside the framebuffer.
+TEST_P(WebGLReadOutsideFramebufferTest, ReadPixels)
+{
+    Test(&WebGLReadOutsideFramebufferTest::UseReadPixels, false);
+}
+
+// Check that copyTexSubImage2D does not set a destination pixel when
+// the corresponding source pixel is outside the framebuffer.
+TEST_P(WebGLReadOutsideFramebufferTest, CopyTexSubImage2D)
+{
+    Test(&WebGLReadOutsideFramebufferTest::UseCopyTexSubImage2D, false);
+}
+
+// Check that copyTexImage2D sets (0,0,0,0) for pixels outside the framebuffer.
+TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImage2D)
+{
+    Test(&WebGLReadOutsideFramebufferTest::UseCopyTexImage2D, true);  // XXX should be true but then the test fails - false lets it pass
+}
+
+ANGLE_INSTANTIATE_TEST(WebGLReadOutsideFramebufferTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES3_D3D11(),
+                       ES2_D3D11_FL9_3(),
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGLES());
+
+}  // namespace
