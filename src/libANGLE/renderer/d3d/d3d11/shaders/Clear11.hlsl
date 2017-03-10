@@ -10,6 +10,10 @@
 //  - UINT & SINT clears can only be compiled with FL10+
 //  - VS_Clear_FL9 requires a VB to be bound with vertices to create
 //    a primitive covering the entire surface (in clip co-ordinates)
+//  - AlphaEmulation shader outputs a unique alpha value for each RT to
+//    ensure for formats emulated using formats with extra alpha
+//    bits or an extra alpha channel use either a rounded alpha clear
+//    value, the default alpha value or the original clear value
 
 // Constants
 static const float2 g_Corners[3] =
@@ -36,20 +40,27 @@ void VS_Clear_FL9( in float4 inPosition : POSITION,
 // Pixel Shader Constant Buffers
 cbuffer ColorAndDepthDataFloat : register(b0)
 {
-    float4 color_Float   : packoffset(c0);
-    float  zValueF_Float : packoffset(c1);
+    float  zValueF_Float : packoffset(c0);
+    float4 color_Float   : packoffset(c1);
+    float  a1_Float      : packoffset(c2.x);
+    float  a2_Float      : packoffset(c2.y);
+    float  a3_Float      : packoffset(c2.z);
+    float  a4_Float      : packoffset(c2.w);
+    float  a5_Float      : packoffset(c3.x);
+    float  a6_Float      : packoffset(c3.y);
+    float  a7_Float      : packoffset(c3.z);
 }
 
 cbuffer ColorAndDepthDataSint : register(b0)
 {
-    int4  color_Sint   : packoffset(c0);
-    float zValueF_Sint : packoffset(c1);
+    float zValueF_Sint : packoffset(c0);
+    int4 color_Sint    : packoffset(c1);
 }
 
 cbuffer ColorAndDepthDataUint : register(b0)
 {
-    uint4 color_Uint   : packoffset(c0);
-    float zValueF_Uint : packoffset(c1);
+    float zValueF_Uint : packoffset(c0);
+    uint4 color_Uint   : packoffset(c1);
 }
 
 // Pixel Shader Output Structs
@@ -113,6 +124,17 @@ PS_OutputFloat_FL9 PS_ClearFloat_FL9(in float4 inPosition : SV_POSITION)
     return outData;
 }
 
+PS_OutputFloat_FL9 PS_ClearFloatAe_FL9(in float4 inPosition : SV_POSITION)
+{
+    PS_OutputFloat_FL9 outData;
+    outData.color0 = color_Float;
+    outData.color1 = float4(color_Float.xyz, a1_Float);
+    outData.color2 = float4(color_Float.xyz, a2_Float);
+    outData.color3 = float4(color_Float.xyz, a3_Float);
+    outData.depth  = zValueF_Float;
+    return outData;
+}
+
 PS_OutputFloat PS_ClearFloat(in float4 inPosition : SV_POSITION)
 {
     PS_OutputFloat outData;
@@ -124,6 +146,21 @@ PS_OutputFloat PS_ClearFloat(in float4 inPosition : SV_POSITION)
     outData.color5 = color_Float;
     outData.color6 = color_Float;
     outData.color7 = color_Float;
+    outData.depth  = zValueF_Float;
+    return outData;
+}
+
+PS_OutputFloat PS_ClearFloatAe(in float4 inPosition : SV_POSITION)
+{
+    PS_OutputFloat outData;
+    outData.color0 = color_Float;
+    outData.color1 = float4(color_Float.xyz, a1_Float);
+    outData.color2 = float4(color_Float.xyz, a2_Float);
+    outData.color3 = float4(color_Float.xyz, a3_Float);
+    outData.color4 = float4(color_Float.xyz, a4_Float);
+    outData.color5 = float4(color_Float.xyz, a5_Float);
+    outData.color6 = float4(color_Float.xyz, a6_Float);
+    outData.color7 = float4(color_Float.xyz, a7_Float);
     outData.depth  = zValueF_Float;
     return outData;
 }
