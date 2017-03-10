@@ -114,11 +114,9 @@ struct PositionLayerTexCoord3DVertex
 void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex* vertex, float x, float y,
                                       unsigned int layer, float u, float v, float s);
 
-template <typename T>
-struct PositionDepthColorVertex
+struct PositionVertex
 {
-    float x, y, z;
-    T r, g, b, a;
+    float x, y, z, w;
 };
 
 struct BlendStateKey
