@@ -2038,6 +2038,54 @@ void Context::programPathFragmentInputGen(GLuint program,
     programObject->pathFragmentInputGen(location, genMode, components, coeffs);
 }
 
+void Context::getProgramInterfaceiv(GLuint program,
+                                    GLenum programInterface,
+                                    GLenum pname,
+                                    GLint *params)
+{
+    gl::Program *programObject = getProgram(program);
+    programObject->getInterfaceiv(programInterface, pname, params);
+}
+
+void Context::getProgramResourceName(GLuint program,
+                                     GLenum programInterface,
+                                     GLuint index,
+                                     GLsizei bufSize,
+                                     GLsizei *length,
+                                     GLchar *name)
+{
+    gl::Program *programObject = getProgram(program);
+    programObject->getResourceName(programInterface, index, bufSize, length, name);
+}
+
+GLuint Context::getProgramResourceIndex(GLuint program, GLenum programInterface, const GLchar *name)
+{
+    gl::Program *programObject = getProgram(program);
+    return programObject->getResourceIndex(programInterface, name);
+}
+
+void Context::getProgramResourceiv(GLuint program,
+                                   GLenum programInterface,
+                                   GLuint index,
+                                   GLsizei propCount,
+                                   const GLenum *props,
+                                   GLsizei bufSize,
+                                   GLsizei *length,
+                                   GLint *params)
+{
+    gl::Program *programObject = getProgram(program);
+    programObject->getResourceiv(programInterface, index, propCount, props, bufSize, length,
+                                 params);
+}
+
+GLint Context::getProgramResourceLocation(GLuint program,
+                                          GLenum programInterface,
+                                          const GLchar *name)
+{
+    gl::Program *programObject = getProgram(program);
+    return programObject->getResourceLocation(programInterface, name);
+}
+
 void Context::handleError(const Error &error)
 {
     if (error.isError())

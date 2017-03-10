@@ -21,6 +21,195 @@ using namespace angle;
 namespace gl
 {
 
+namespace
+{
+
+bool ValidateNamedProgramInterface(GLenum programInterface)
+{
+    return (programInterface == GL_UNIFORM || programInterface == GL_UNIFORM_BLOCK ||
+            programInterface == GL_PROGRAM_INPUT || programInterface == GL_PROGRAM_OUTPUT ||
+            programInterface == GL_TRANSFORM_FEEDBACK_VARYING ||
+            programInterface == GL_BUFFER_VARIABLE || programInterface == GL_SHADER_STORAGE_BLOCK);
+}
+
+bool ValidateProgramInterface(GLenum programInterface)
+{
+    return (programInterface == GL_ATOMIC_COUNTER_BUFFER ||
+            ValidateNamedProgramInterface(programInterface));
+}
+
+bool ValidateProgramResourceProperty(GLenum prop)
+{
+    switch (prop)
+    {
+        case GL_ACTIVE_VARIABLES:
+        case GL_BUFFER_BINDING:
+        case GL_NUM_ACTIVE_VARIABLES:
+
+        case GL_ARRAY_SIZE:
+
+        case GL_ARRAY_STRIDE:
+        case GL_BLOCK_INDEX:
+        case GL_IS_ROW_MAJOR:
+        case GL_MATRIX_STRIDE:
+
+        case GL_ATOMIC_COUNTER_BUFFER_INDEX:
+
+        case GL_BUFFER_DATA_SIZE:
+
+        case GL_LOCATION:
+
+        case GL_NAME_LENGTH:
+
+        case GL_OFFSET:
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+
+        case GL_TOP_LEVEL_ARRAY_SIZE:
+        case GL_TOP_LEVEL_ARRAY_STRIDE:
+
+        case GL_TYPE:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool ValidateProgramResourcePropertyByInterface(GLenum prop, GLenum programInterface)
+{
+    switch (prop)
+    {
+        case GL_ACTIVE_VARIABLES:
+        case GL_BUFFER_BINDING:
+        case GL_NUM_ACTIVE_VARIABLES:
+        {
+            if (programInterface == GL_ATOMIC_COUNTER_BUFFER ||
+                programInterface == GL_SHADER_STORAGE_BLOCK || programInterface == GL_UNIFORM_BLOCK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_ARRAY_SIZE:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE || programInterface == GL_PROGRAM_INPUT ||
+                programInterface == GL_PROGRAM_OUTPUT ||
+                programInterface == GL_TRANSFORM_FEEDBACK_VARYING || programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_ARRAY_STRIDE:
+        case GL_BLOCK_INDEX:
+        case GL_IS_ROW_MAJOR:
+        case GL_MATRIX_STRIDE:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE || programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_ATOMIC_COUNTER_BUFFER_INDEX:
+        {
+            if (programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_BUFFER_DATA_SIZE:
+        {
+            if (programInterface == GL_ATOMIC_COUNTER_BUFFER ||
+                programInterface == GL_SHADER_STORAGE_BLOCK || programInterface == GL_UNIFORM_BLOCK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_LOCATION:
+        {
+            if (programInterface == GL_PROGRAM_INPUT || programInterface == GL_PROGRAM_OUTPUT ||
+                programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+        case GL_NAME_LENGTH:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE || programInterface == GL_PROGRAM_INPUT ||
+                programInterface == GL_PROGRAM_OUTPUT ||
+                programInterface == GL_TRANSFORM_FEEDBACK_VARYING ||
+                programInterface == GL_UNIFORM || programInterface == GL_SHADER_STORAGE_BLOCK ||
+                programInterface == GL_UNIFORM_BLOCK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_OFFSET:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE || programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+        {
+            if (programInterface == GL_ATOMIC_COUNTER_BUFFER ||
+                programInterface == GL_BUFFER_VARIABLE || programInterface == GL_PROGRAM_INPUT ||
+                programInterface == GL_PROGRAM_OUTPUT ||
+                programInterface == GL_SHADER_STORAGE_BLOCK || programInterface == GL_UNIFORM ||
+                programInterface == GL_UNIFORM_BLOCK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_TOP_LEVEL_ARRAY_SIZE:
+        case GL_TOP_LEVEL_ARRAY_STRIDE:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_TYPE:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE || programInterface == GL_PROGRAM_INPUT ||
+                programInterface == GL_PROGRAM_OUTPUT ||
+                programInterface == GL_TRANSFORM_FEEDBACK_VARYING || programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        default:
+            return false;
+    }
+}
+
+}  // anonymous namespace
+
 bool ValidateGetBooleani_v(Context *context, GLenum target, GLuint index, GLboolean *data)
 {
     if (context->getClientVersion() < ES_3_1)
@@ -500,6 +689,217 @@ bool ValidationGetFramebufferParameteri(Context *context,
     {
         context->handleError(
             Error(GL_INVALID_OPERATION, "Default framebuffer is bound to target."));
+        return false;
+    }
+    return true;
+}
+
+bool ValidateGetProgramInterfaceiv(Context *context,
+                                   GLuint program,
+                                   GLenum programInterface,
+                                   GLenum pname,
+                                   GLint *params)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+        return false;
+
+    if (!ValidateProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+
+    switch (pname)
+    {
+        case GL_ACTIVE_RESOURCES:
+        case GL_MAX_NAME_LENGTH:
+        case GL_MAX_NUM_ACTIVE_VARIABLES:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Unknown property of program interface."));
+            return false;
+    }
+
+    if (pname == GL_MAX_NAME_LENGTH && programInterface == GL_ATOMIC_COUNTER_BUFFER)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "Active atomic counter resources are not assigned name strings."));
+        return false;
+    }
+
+    if (pname == GL_MAX_NUM_ACTIVE_VARIABLES &&
+        (programInterface != GL_ATOMIC_COUNTER_BUFFER &&
+         programInterface != GL_SHADER_STORAGE_BLOCK && programInterface != GL_UNIFORM_BLOCK))
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "MAX_NUM_ACTIVE_VARIABLES requires a buffer or block interface."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetProgramResourceIndex(Context *context,
+                                     GLuint program,
+                                     GLenum programInterface,
+                                     const GLchar *name)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+
+    if (!ValidateNamedProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+    return true;
+}
+
+bool ValidateGetProgramResourceName(Context *context,
+                                    GLuint program,
+                                    GLenum programInterface,
+                                    GLuint index,
+                                    GLsizei bufSize,
+                                    GLsizei *length,
+                                    GLchar *name)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+
+    if (!ValidateNamedProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+
+    if (!programObject->isValidResourceIndex(programInterface, index))
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid index: %d", index));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid bufSize: %d", bufSize));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetProgramResourceiv(Context *context,
+                                  GLuint program,
+                                  GLenum programInterface,
+                                  GLuint index,
+                                  GLsizei propCount,
+                                  const GLenum *props,
+                                  GLsizei bufSize,
+                                  GLsizei *length,
+                                  GLint *params)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+    if (!ValidateProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+    if (propCount <= 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid propCount: %d", propCount));
+        return false;
+    }
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid bufSize: %d", bufSize));
+        return false;
+    }
+    for (GLsizei i = 0; i < propCount; i++)
+    {
+        if (!ValidateProgramResourceProperty(props[i]))
+        {
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid props[%d]:0x%X", i, props[i]));
+            return false;
+        }
+        if (!ValidateProgramResourcePropertyByInterface(props[i], programInterface))
+        {
+            context->handleError(Error(GL_INVALID_OPERATION,
+                                       "props[%d] is not allowed for programInterface:0x%X", i,
+                                       programInterface));
+            return false;
+        }
+    }
+    return true;
+}
+
+bool ValidateGetProgramResourceLocation(Context *context,
+                                        GLuint program,
+                                        GLenum programInterface,
+                                        const GLchar *name)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+
+    if (!programObject->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Program is not successfully linked."));
+        return false;
+    }
+
+    if (!ValidateProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
         return false;
     }
     return true;
