@@ -20,90 +20,211 @@
 #include "third_party/trace_event/trace_event.h"
 
 // Precompiled shaders
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clear11_fl9vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11_fl9ps.h"
 
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11vs.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clear11vs.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11ps.h"
-
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11ps.h"
 
 namespace rx
 {
 
-static constexpr uint32_t g_VertexSize = sizeof(d3d11::PositionDepthColorVertex<float>);
-static constexpr uint32_t g_Zero       = 0;
+namespace
+{
 
+static constexpr uint32_t g_ConstantBufferSize = sizeof(RtvDsvClearInfo<float>);
+static constexpr uint32_t g_VertexSize         = sizeof(d3d11::PositionVertex);
+static constexpr uint32_t g_Zero               = 0;
+
+// Updates color, depth and alpha components of cached CB if necessary.
+// Returns true if any constants are updated, false otherwise.
 template <typename T>
-static void ApplyVertices(const gl::Color<T> &color, const float depth, void *buffer)
+bool UpdateCbCache(void *buffer,
+                   const gl::Color<T> &color,
+                   const float *zValue,
+                   const uint32_t numRtvs,
+                   const uint8_t writeMask)
 {
-    d3d11::PositionDepthColorVertex<T> *vertices =
-        reinterpret_cast<d3d11::PositionDepthColorVertex<T> *>(buffer);
+    RtvDsvClearInfo<T> *cbCache = reinterpret_cast<RtvDsvClearInfo<T> *>(buffer);
 
-    const float z      = gl::clamp01(depth);
-    const float left   = -1.0f;
-    const float right  = 1.0f;
-    const float top    = -1.0f;
-    const float bottom = 1.0f;
+    bool cbDirty = false;
 
-    vertices[0] = {left, bottom, z, color.red, color.green, color.blue, color.alpha};
-    vertices[1] = {left, top, z, color.red, color.green, color.blue, color.alpha};
-    vertices[2] = {right, bottom, z, color.red, color.green, color.blue, color.alpha};
-    vertices[3] = {right, top, z, color.red, color.green, color.blue, color.alpha};
+    if (numRtvs > 0)
+    {
+        const bool writeRGB = (writeMask & ~D3D11_COLOR_WRITE_ENABLE_ALPHA) != 0;
+        if (writeRGB && memcmp(&cbCache->r, &color.red, sizeof(T) * 3) != 0)
+        {
+            cbCache->r = color.red;
+            cbCache->g = color.green;
+            cbCache->b = color.blue;
+            cbDirty    = true;
+        }
+
+        const bool writeAlpha = (writeMask & D3D11_COLOR_WRITE_ENABLE_ALPHA) != 0;
+        if (writeAlpha && (cbCache->a != color.alpha))
+        {
+            cbCache->a = color.alpha;
+            cbDirty    = true;
+        }
+    }
+
+    if (zValue)
+    {
+        const float clampedZValue = gl::clamp01(*zValue);
+
+        if (clampedZValue != cbCache->z)
+        {
+            cbCache->z = clampedZValue;
+            cbDirty    = true;
+        }
+    }
+
+    return cbDirty;
 }
+}  // anonymous namespace
 
-Clear11::ClearShader::ClearShader(DXGI_FORMAT colorType,
-                                  const char *inputLayoutName,
-                                  const BYTE *vsByteCode,
-                                  size_t vsSize,
-                                  const char *vsDebugName,
-                                  const BYTE *psByteCode,
-                                  size_t psSize,
-                                  const char *psDebugName)
-    : inputLayout(nullptr),
-      vertexShader(vsByteCode, vsSize, vsDebugName),
-      pixelShader(psByteCode, psSize, psDebugName)
+Clear11::ClearShader::ClearShader(Renderer11 *renderer, const D3D_FEATURE_LEVEL fl)
+    : mRenderer(renderer),
+      mFeatureLevel(fl),
+      mIl9(nullptr),
+      mVs9(g_VS_Clear_FL9, ArraySize(g_VS_Clear_FL9), "Clear11 VS FL9"),
+      mPsFloat9(g_PS_ClearFloat_FL9, ArraySize(g_PS_ClearFloat_FL9), "Clear11 PS FloatFL9"),
+      mVs(g_VS_Clear, ArraySize(g_VS_Clear), "Clear11 VS"),
+      mPsFloat(g_PS_ClearFloat, ArraySize(g_PS_ClearFloat), "Clear11 PS Float"),
+      mPsUInt(g_PS_ClearUint, ArraySize(g_PS_ClearUint), "Clear11 PS UINT"),
+      mPsSInt(g_PS_ClearSint, ArraySize(g_PS_ClearSint), "Clear11 PS SINT")
 {
-    D3D11_INPUT_ELEMENT_DESC quadLayout[] = {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 0, colorType, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-    };
 
-    inputLayout = new d3d11::LazyInputLayout(quadLayout, 2, vsByteCode, vsSize, inputLayoutName);
+    if (mFeatureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        const D3D11_INPUT_ELEMENT_DESC ilDesc = {
+            "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0};
+        ID3D11Device *device = mRenderer->getDevice();
+
+        device->CreateInputLayout(&ilDesc, 1, g_VS_Clear_FL9, ArraySize(g_PS_ClearFloat_FL9),
+                                  mIl9.GetAddressOf());
+    }
 }
 
 Clear11::ClearShader::~ClearShader()
 {
-    SafeDelete(inputLayout);
-    vertexShader.release();
-    pixelShader.release();
+    mVs9.release();
+    mPsFloat9.release();
+    mVs.release();
+    mPsFloat.release();
+    mPsUInt.release();
+    mPsSInt.release();
+}
+
+void Clear11::ClearShader::getIlVsPs(const INT clearType,
+                                     ID3D11InputLayout **il,
+                                     ID3D11VertexShader **vs,
+                                     ID3D11PixelShader **ps)
+{
+    ID3D11Device *device = mRenderer->getDevice();
+
+    if (mFeatureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        assert(clearType == GL_FLOAT);
+        *vs = mVs9.resolve(device);
+        *il = mIl9.Get();
+        *ps = mPsFloat9.resolve(device);
+        return;
+    }
+
+    *vs = mVs.resolve(device);
+    *il = nullptr;
+
+    switch (clearType)
+    {
+        case GL_FLOAT:
+            *ps = mPsFloat.resolve(device);
+            break;
+        case GL_UNSIGNED_INT:
+            *ps = mPsUInt.resolve(device);
+            break;
+        case GL_INT:
+            *ps = mPsSInt.resolve(device);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 Clear11::Clear11(Renderer11 *renderer)
     : mRenderer(renderer),
-      mFloatClearShader(nullptr),
-      mUintClearShader(nullptr),
-      mIntClearShader(nullptr)
+      mScissorEnabledRasterizerState(nullptr),
+      mScissorDisabledRasterizerState(nullptr),
+      mShaders(nullptr),
+      mConstantBuffer(nullptr),
+      mVertexBuffer(nullptr),
+      mCbCache({})
 {
     TRACE_EVENT0("gpu.angle", "Clear11::Clear11");
 
     HRESULT result;
     ID3D11Device *device = renderer->getDevice();
 
-    D3D11_BUFFER_DESC vbDesc;
-    vbDesc.ByteWidth           = g_VertexSize * 4;
-    vbDesc.Usage               = D3D11_USAGE_DYNAMIC;
-    vbDesc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-    vbDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
-    vbDesc.MiscFlags           = 0;
-    vbDesc.StructureByteStride = 0;
+    static_assert((sizeof(RtvDsvClearInfo<float>) == sizeof(RtvDsvClearInfo<int>)),
+                  "Size of rx::RtvDsvClearInfo<float> is not equal to rx::RtvDsvClearInfo<int>");
 
-    result = device->CreateBuffer(&vbDesc, nullptr, mVertexBuffer.GetAddressOf());
+    static_assert(
+        (sizeof(RtvDsvClearInfo<float>) == sizeof(RtvDsvClearInfo<uint32_t>)),
+        "Size of rx::RtvDsvClearInfo<float> is not equal to rx::RtvDsvClearInfo<uint32_t>");
+
+    static_assert((sizeof(RtvDsvClearInfo<float>) % 16 == 0),
+                  "The size of RtvDsvClearInfo<float> should be a multiple of 16bytes.");
+
+    // Create constant buffer for color & depth data
+
+    D3D11_BUFFER_DESC bufferDesc;
+    bufferDesc.ByteWidth           = g_ConstantBufferSize;
+    bufferDesc.Usage               = D3D11_USAGE_DYNAMIC;
+    bufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+    bufferDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+    bufferDesc.MiscFlags           = 0;
+    bufferDesc.StructureByteStride = 0;
+
+    D3D11_SUBRESOURCE_DATA initialData;
+    initialData.pSysMem          = &mCbCache;
+    initialData.SysMemPitch      = g_ConstantBufferSize;
+    initialData.SysMemSlicePitch = g_ConstantBufferSize;
+
+    result = device->CreateBuffer(&bufferDesc, &initialData, mConstantBuffer.GetAddressOf());
     ASSERT(SUCCEEDED(result));
-    d3d11::SetDebugName(mVertexBuffer, "Clear11 masked clear vertex buffer");
+    d3d11::SetDebugName(mConstantBuffer, "Clear11 Constant Buffer");
 
+    const D3D_FEATURE_LEVEL featureLevel = mRenderer->getRenderer11DeviceCaps().featureLevel;
+
+    if (featureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        // Create vertex buffer with vertices for a triangle covering the entire surface
+        static_assert((sizeof(d3d11::PositionVertex) % 16) == 0,
+                      "d3d11::PositionVertex should be a multiple of 16 bytes");
+        const d3d11::PositionVertex vbData[3] = {
+            {-1.0f, 3.0f, 0.0f, 1.0f}, {-1.0f, -1.0f, 0.0f, 1.0f}, {3.0f, -1.0f, 0.0f, 1.0f}};
+        const UINT vbSize = sizeof(vbData);
+
+        bufferDesc.ByteWidth           = vbSize;
+        bufferDesc.Usage               = D3D11_USAGE_IMMUTABLE;
+        bufferDesc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+        bufferDesc.CPUAccessFlags      = 0;
+        bufferDesc.MiscFlags           = 0;
+        bufferDesc.StructureByteStride = 0;
+
+        initialData.pSysMem          = vbData;
+        initialData.SysMemPitch      = vbSize;
+        initialData.SysMemSlicePitch = initialData.SysMemPitch;
+
+        result = device->CreateBuffer(&bufferDesc, &initialData, mVertexBuffer.GetAddressOf());
+        ASSERT(SUCCEEDED(result));
+        d3d11::SetDebugName(mVertexBuffer, "Clear11 Vertex Buffer");
+    }
+
+    // Create Rasterizer States
     D3D11_RASTERIZER_DESC rsDesc;
     rsDesc.FillMode              = D3D11_FILL_SOLID;
     rsDesc.CullMode              = D3D11_CULL_NONE;
@@ -127,34 +248,7 @@ Clear11::Clear11(Renderer11 *renderer)
     d3d11::SetDebugName(mScissorEnabledRasterizerState,
                         "Clear11 Rasterizer State with scissor enabled");
 
-    if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
-    {
-        mFloatClearShader =
-            new ClearShader(DXGI_FORMAT_R32G32B32A32_FLOAT, "Clear11 Float IL", g_VS_ClearFloat,
-                            ArraySize(g_VS_ClearFloat), "Clear11 Float VS", g_PS_ClearFloat_FL9,
-                            ArraySize(g_PS_ClearFloat_FL9), "Clear11 Float PS");
-    }
-    else
-    {
-        mFloatClearShader =
-            new ClearShader(DXGI_FORMAT_R32G32B32A32_FLOAT, "Clear11 Float IL", g_VS_ClearFloat,
-                            ArraySize(g_VS_ClearFloat), "Clear11 Float VS", g_PS_ClearFloat,
-                            ArraySize(g_PS_ClearFloat), "Clear11 Float PS");
-    }
-
-    if (renderer->isES3Capable())
-    {
-        mUintClearShader =
-            new ClearShader(DXGI_FORMAT_R32G32B32A32_UINT, "Clear11 UINT IL", g_VS_ClearUint,
-                            ArraySize(g_VS_ClearUint), "Clear11 UINT VS", g_PS_ClearUint,
-                            ArraySize(g_PS_ClearUint), "Clear11 UINT PS");
-        mIntClearShader =
-            new ClearShader(DXGI_FORMAT_R32G32B32A32_UINT, "Clear11 SINT IL", g_VS_ClearSint,
-                            ArraySize(g_VS_ClearSint), "Clear11 SINT VS", g_PS_ClearSint,
-                            ArraySize(g_PS_ClearSint), "Clear11 SINT PS");
-    }
-
-    // Initialize DepthstencilStateKey with defaults
+    // Initialize Depthstencil state with defaults
     mDepthStencilStateKey.depthTest                = false;
     mDepthStencilStateKey.depthMask                = false;
     mDepthStencilStateKey.depthFunc                = GL_ALWAYS;
@@ -184,13 +278,13 @@ Clear11::Clear11(Renderer11 *renderer)
     mBlendStateKey.blendState.dither                = true;
     mBlendStateKey.mrt                              = false;
     memset(mBlendStateKey.rtvMasks, 0, sizeof(mBlendStateKey.rtvMasks));
+
+    // Create Shader Manager
+    mShaders = std::unique_ptr<ClearShader>(new ClearShader(mRenderer, featureLevel));
 }
 
 Clear11::~Clear11()
 {
-    SafeDelete(mFloatClearShader);
-    SafeDelete(mUintClearShader);
-    SafeDelete(mIntClearShader);
 }
 
 gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
@@ -221,15 +315,20 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
     // If these conditions are met, and:
     // - No scissored clear is needed, then clear using ID3D11DeviceContext::ClearRenderTargetView.
     // - A scissored clear is needed then clear using ID3D11DeviceContext1::ClearView if available.
-    //   Otherwise draw a quad.
+    // Otherwise perform a shader based clear.
     //
-    // Also determine if the depth stencil can be cleared with
-    // ID3D11DeviceContext::ClearDepthStencilView
-    // by checking if the stencil write mask covers the entire stencil.
+    // Also determine if the DSV can be cleared withID3D11DeviceContext::ClearDepthStencilView by
+    // checking if the stencil write mask covers the entire stencil.
     //
-    // To clear the remaining buffers, quads must be drawn containing an int, uint or float vertex
-    // color
-    // attribute.
+    // To clear the remaining buffers, a shader based clear is performed:
+    // - The appropriate clearShaders (VS & PS) for the clearType is set
+    // - A CB containing the clear color and Z values is bound
+    // - An IL and VB are bound (for FL93 and below)
+    // - ScissorRect/Raststate/Viewport set as required
+    // - Blendstate set containing appropriate colorMasks
+    // - DepthStencilState set with appropriate parameters for a z or stencil clear if required
+    // - Color and/or Z buffers to be cleared are bound
+    // - Primitive covering entire clear area is drawn
 
     gl::Extents framebufferSize;
 
@@ -294,7 +393,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
 
             const gl::InternalFormat &formatInfo = *attachment.getFormat().info;
 
-            if (clearParams.colorClearType == GL_FLOAT &&
+            if (clearParams.colorType == GL_FLOAT &&
                 !(formatInfo.componentType == GL_FLOAT ||
                   formatInfo.componentType == GL_UNSIGNED_NORMALIZED ||
                   formatInfo.componentType == GL_SIGNED_NORMALIZED))
@@ -323,7 +422,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
             }
 
             if ((!(mRenderer->getRenderer11DeviceCaps().supportsClearView) && needScissoredClear) ||
-                clearParams.colorClearType != GL_FLOAT ||
+                clearParams.colorType != GL_FLOAT ||
                 (formatInfo.redBits > 0 && !clearParams.colorMaskRed) ||
                 (formatInfo.greenBits > 0 && !clearParams.colorMaskGreen) ||
                 (formatInfo.blueBits > 0 && !clearParams.colorMaskBlue) ||
@@ -345,16 +444,16 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
                 float clearValues[4] = {
                     ((formatInfo.redBits == 0 && nativeFormat.redBits > 0)
                          ? 0.0f
-                         : clearParams.colorFClearValue.red),
+                         : clearParams.colorF.red),
                     ((formatInfo.greenBits == 0 && nativeFormat.greenBits > 0)
                          ? 0.0f
-                         : clearParams.colorFClearValue.green),
+                         : clearParams.colorF.green),
                     ((formatInfo.blueBits == 0 && nativeFormat.blueBits > 0)
                          ? 0.0f
-                         : clearParams.colorFClearValue.blue),
+                         : clearParams.colorF.blue),
                     ((formatInfo.alphaBits == 0 && nativeFormat.alphaBits > 0)
                          ? 1.0f
-                         : clearParams.colorFClearValue.alpha),
+                         : clearParams.colorF.alpha),
                 };
 
                 if (formatInfo.alphaBits == 1)
@@ -362,7 +461,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
                     // Some drivers do not correctly handle calling Clear() on a format with 1-bit
                     // alpha. They can incorrectly round all non-zero values up to 1.0f. Note that
                     // WARP does not do this. We should handle the rounding for them instead.
-                    clearValues[3] = (clearParams.colorFClearValue.alpha >= 0.5f) ? 1.0f : 0.0f;
+                    clearValues[3] = (clearParams.colorF.alpha >= 0.5f) ? 1.0f : 0.0f;
                 }
 
                 if (needScissoredClear)
@@ -422,8 +521,8 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
         {
             const UINT clearFlags = (clearParams.clearDepth ? D3D11_CLEAR_DEPTH : 0) |
                                     (clearParams.clearStencil ? D3D11_CLEAR_STENCIL : 0);
-            const FLOAT depthClear   = gl::clamp01(clearParams.depthClearValue);
-            const UINT8 stencilClear = clearParams.stencilClearValue & 0xFF;
+            const FLOAT depthClear   = gl::clamp01(clearParams.depthValue);
+            const UINT8 stencilClear = clearParams.stencilValue & 0xFF;
 
             deviceContext->ClearDepthStencilView(dsv, clearFlags, depthClear, stencilClear);
 
@@ -431,21 +530,29 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
         }
     }
 
-    if (numRtvs == 0 && !dsv)
+    if (numRtvs == 0 && dsv == nullptr)
     {
         return gl::NoError();
     }
 
-    // To clear the render targets and depth stencil in one pass:
+    // Clear the remaining render targets and depth stencil in one pass by rendering a quad:
     //
-    // Render a quad clipped to the scissor rectangle which draws the clear color and a blend
-    // state that will perform the required color masking.
+    // IA/VS: Vertices containing position and color members are passed through to the next stage.
+    // The vertex position has XY coordinates equal to clip extents and a Z component equal to the
+    // Z clear value. The vertex color contains the clear color.
     //
-    // The quad's depth is equal to the depth clear value with a depth stencil state that
-    // will enable or disable depth test/writes if the depth buffer should be cleared or not.
+    // Rasterizer: Viewport scales the VS output over the entire surface and depending on whether
+    // or not scissoring is enabled the appropriate scissor rect and rasterizerState with or without
+    // the scissor test enabled is set as well.
     //
-    // The rasterizer state's stencil is set to always pass or fail based on if the stencil
-    // should be cleared or not with a stencil write mask of the stencil clear value.
+    // DepthStencilTest: DepthTesting, DepthWrites, StencilMask and StencilWrites will be enabled or
+    // disabled or set depending on what the input depthStencil clear parameters are. Since the PS
+    // is not writing out depth or rejecting pixels, this should happen prior to the PS stage.
+    //
+    // PS: Will write out the color values passed through from the previous stage to all outputs.
+    //
+    // OM: BlendState will perform the required color masking and output to RTV(s).
+
     //
     // ======================================================================================
     //
@@ -478,7 +585,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
         ANGLE_TRY(mRenderer->getStateCache().getBlendState(mBlendStateKey, &blendState));
     }
 
-    const UINT stencilValue          = clearParams.stencilClearValue & 0xFF;
+    const UINT stencilValue          = clearParams.stencilValue & 0xFF;
     ID3D11DepthStencilState *dsState = nullptr;
     const float *zValue              = nullptr;
 
@@ -492,45 +599,43 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
 
         // Get DepthStencilState
         ANGLE_TRY(mRenderer->getStateCache().getDepthStencilState(mDepthStencilStateKey, &dsState));
-        zValue = clearParams.clearDepth ? &clearParams.depthClearValue : nullptr;
+        zValue = clearParams.clearDepth ? &clearParams.depthValue : nullptr;
     }
 
-    // Set the vertices
-    ClearShader *shader = nullptr;
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    HRESULT result =
-        deviceContext->Map(mVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Clear11: Failed to map internal VB, " << result;
-    }
+    bool dirtyCb = false;
 
-    switch (clearParams.colorClearType)
+    // Compare the input color/z values against the CB cache and update it if necessary
+    switch (clearParams.colorType)
     {
         case GL_FLOAT:
-            ApplyVertices(clearParams.colorFClearValue, clearParams.depthClearValue,
-                          mappedResource.pData);
-            shader       = mFloatClearShader;
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorF, zValue, numRtvs, colorMask);
             break;
-
         case GL_UNSIGNED_INT:
-            ApplyVertices(clearParams.colorUIClearValue, clearParams.depthClearValue,
-                          mappedResource.pData);
-            shader       = mUintClearShader;
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorUI, zValue, numRtvs, colorMask);
             break;
-
         case GL_INT:
-            ApplyVertices(clearParams.colorIClearValue, clearParams.depthClearValue,
-                          mappedResource.pData);
-            shader       = mIntClearShader;
+            dirtyCb = UpdateCbCache(&mCbCache, clearParams.colorI, zValue, numRtvs, colorMask);
             break;
-
         default:
             UNREACHABLE();
             break;
     }
 
-    deviceContext->Unmap(mVertexBuffer.Get(), 0);
+    if (dirtyCb)
+    {
+        // Update the constant buffer with the updated cache contents
+        // TODO(Shahmeer): Consider using UpdateSubresource1 D3D11_COPY_DISCARD where possible.
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        HRESULT result = deviceContext->Map(mConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0,
+                                            &mappedResource);
+        if (FAILED(result))
+        {
+            return gl::OutOfMemory() << "Clear11: Failed to map CB, " << result;
+        }
+
+        memcpy(mappedResource.pData, &mCbCache, g_ConstantBufferSize);
+        deviceContext->Unmap(mConstantBuffer.Get(), 0);
+    }
 
     // Set the viewport to be the same size as the framebuffer
     D3D11_VIEWPORT viewport;
@@ -558,22 +663,39 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams,
         deviceContext->RSSetState(mScissorDisabledRasterizerState.Get());
     }
 
-    // Apply shaders
-    ID3D11Device *device = mRenderer->getDevice();
-    deviceContext->IASetInputLayout(shader->inputLayout->resolve(device));
-    deviceContext->VSSetShader(shader->vertexShader.resolve(device), nullptr, 0);
-    deviceContext->PSSetShader(shader->pixelShader.resolve(device), nullptr, 0);
-    deviceContext->GSSetShader(nullptr, nullptr, 0);
+    // Get Shaders
+    ID3D11VertexShader *vs;
+    ID3D11InputLayout *il;
+    ID3D11PixelShader *ps;
+    mShaders->getIlVsPs(clearParams.colorType, &il, &vs, &ps);
 
-    // Apply vertex buffer
-    deviceContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), &g_VertexSize, &g_Zero);
-    deviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    // Apply Shaders
+    deviceContext->VSSetShader(vs, nullptr, 0);
+    deviceContext->GSSetShader(nullptr, nullptr, 0);
+    deviceContext->PSSetShader(ps, nullptr, 0);
+    deviceContext->PSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
+
+    // Bind IL & VB if needed
+    deviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+    deviceContext->IASetInputLayout(il);
+
+    if (mVertexBuffer.Get())
+    {
+        deviceContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), &g_VertexSize,
+                                          &g_Zero);
+    }
+    else
+    {
+        deviceContext->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+    }
+
+    deviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // Apply render targets
     mRenderer->getStateManager()->setOneTimeRenderTargets(&rtvs[0], numRtvs, dsv);
 
-    // Draw the clear quad
-    deviceContext->Draw(4, 0);
+    // Draw the fullscreen triangle
+    deviceContext->Draw(3, 0);
 
     // Clean up
     mRenderer->markAllStateDirty();
