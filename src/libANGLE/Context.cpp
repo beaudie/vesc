@@ -272,8 +272,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mRobustAccess(GetRobustAccess(attribs)),
       mCurrentSurface(nullptr),
       mSurfacelessFramebuffer(nullptr),
-      mWebGLContext(GetWebGLContext(attribs)),
-      mScratchBuffer(1000u)
+      mWebGLContext(GetWebGLContext(attribs))
 {
     if (mRobustAccess)
     {
@@ -3940,15 +3939,6 @@ void Context::setFramebufferParameteri(GLenum target, GLenum pname, GLint param)
 {
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     SetFramebufferParameteri(framebuffer, pname, param);
-}
-
-Error Context::getScratchBuffer(size_t requestedSize, angle::MemoryBuffer **scratchBufferOut) const
-{
-    if (!mScratchBuffer.get(requestedSize, scratchBufferOut))
-    {
-        return gl::OutOfMemory() << "Failed to allocate internal buffer.";
-    }
-    return gl::NoError();
 }
 
 }  // namespace gl

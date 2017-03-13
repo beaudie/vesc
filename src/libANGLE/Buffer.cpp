@@ -67,19 +67,7 @@ Error Buffer::bufferData(const Context *context,
                          GLsizeiptr size,
                          GLenum usage)
 {
-    const void *dataForImpl = data;
-
-    // If we are using robust resource init, make sure the buffer starts cleared.
-    // TODO(jmadill): Investigate lazier clearing.
-    if (context && context->getGLState().isRobustResourceInitEnabled() && data == nullptr)
-    {
-        angle::MemoryBuffer *scratchBuffer = nullptr;
-        ANGLE_TRY(context->getScratchBuffer(static_cast<size_t>(size), &scratchBuffer));
-        std::fill(scratchBuffer->data(), scratchBuffer->data() + size, static_cast<uint8_t>(0));
-        dataForImpl = scratchBuffer->data();
-    }
-
-    ANGLE_TRY(mImpl->setData(rx::SafeGetImpl(context), target, dataForImpl, size, usage));
+    ANGLE_TRY(mImpl->setData(rx::SafeGetImpl(context), target, data, size, usage));
 
     mIndexRangeCache.clear();
     mState.mUsage = usage;

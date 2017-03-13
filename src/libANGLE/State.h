@@ -321,7 +321,6 @@ class State : angle::NonCopyable
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
 
     bool hasMappedBuffer(GLenum target) const;
-    bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
 
     enum DirtyBitType
     {
