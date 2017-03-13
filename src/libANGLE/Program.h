@@ -205,7 +205,7 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveAttribLocationsMask;
     }
-    const std::map<int, VariableLocation> &getOutputVariables() const { return mOutputVariables; }
+    const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
@@ -252,8 +252,9 @@ class ProgramState final : angle::NonCopyable
     // An array of the samplers that are used by the program
     std::vector<gl::SamplerBinding> mSamplerBindings;
 
+    std::vector<sh::OutputVariable> mOutputVariables;
     // TODO(jmadill): use unordered/hash map when available
-    std::map<int, VariableLocation> mOutputVariables;
+    std::map<int, VariableLocation> mOutputLocations;
 
     bool mBinaryRetrieveableHint;
 };
@@ -411,6 +412,8 @@ class Program final : angle::NonCopyable, public LabeledObject
                                           const sh::ShaderVariable &fragmentVariable,
                                           bool validatePrecision);
 
+    GLuint getResourceIndex(GLenum programInterface, const GLchar *name) const;
+
     class Bindings final : angle::NonCopyable
     {
       public:
@@ -499,6 +502,9 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
+
+    GLuint getActiveAttributeIndex(const GLchar *name) const;
+    GLuint getActiveOutputIndex(const GLchar *name) const;
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;
