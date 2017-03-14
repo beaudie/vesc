@@ -16,7 +16,7 @@ namespace sh
 {
 
 HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy)
-    : mEncoderStrategy(strategy), mTransposeMatrices(false)
+    : mEncoderStrategy(strategy), mTransposeMatrices(true)
 {
 }
 
@@ -154,25 +154,13 @@ void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoder *
     }
 }
 
-unsigned int HLSLVariableRegisterCount(const Varying &variable, bool transposeMatrices)
-{
-    HLSLBlockEncoder encoder(HLSLBlockEncoder::ENCODE_PACKED);
-    encoder.setTransposeMatrices(transposeMatrices);
-    HLSLVariableRegisterCount(variable, &encoder);
-
-    const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
-    return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) /
-                                     registerBytes);
-}
-
 unsigned int HLSLVariableRegisterCount(const Uniform &variable, ShShaderOutput outputType)
 {
     HLSLBlockEncoder encoder(HLSLBlockEncoder::GetStrategyFor(outputType));
-    encoder.setTransposeMatrices(true);
     HLSLVariableRegisterCount(variable, &encoder);
 
     const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
     return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) /
                                      registerBytes);
 }
-}
+}  // namespace sh

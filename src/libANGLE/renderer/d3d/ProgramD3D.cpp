@@ -260,8 +260,8 @@ D3DUniform::D3DUniform(GLenum typeIn,
         data = new uint8_t[bytes];
         memset(data, 0, bytes);
 
-        // TODO(jmadill): is this correct with non-square matrices?
-        registerCount = gl::VariableRowCount(type) * elementCount();
+        // Use the correct register count for non-square matrices.
+        registerCount = gl::VariableRowCount(gl::TransposeMatrixType(type)) * elementCount();
     }
 }
 
