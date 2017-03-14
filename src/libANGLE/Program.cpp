@@ -1093,6 +1093,18 @@ bool Program::getBinaryRetrievableHint() const
     return mState.mBinaryRetrieveableHint;
 }
 
+void Program::setSeparable(bool separable)
+{
+    // TODO(yunchao) : replace with dirty bits
+    mProgram->setSeparable(separable);
+    mState.mSeparable = separable;
+}
+
+bool Program::getSeparable() const
+{
+    return mState.mSeparable;
+}
+
 void Program::release(const Context *context)
 {
     mRefCount--;
