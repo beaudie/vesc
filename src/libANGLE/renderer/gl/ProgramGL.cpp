@@ -111,6 +111,16 @@ void ProgramGL::setBinaryRetrievableHint(bool retrievable)
     }
 }
 
+void ProgramGL::setSeparable(bool separable)
+{
+    // glProgramParameteri isn't always available on ES backends.
+    if (mFunctions->programParameteri)
+    {
+        mFunctions->programParameteri(mProgramID, GL_PROGRAM_SEPARABLE,
+                                      separable ? GL_TRUE : GL_FALSE);
+    }
+}
+
 LinkResult ProgramGL::link(ContextImpl *contextImpl,
                            const gl::VaryingPacking &packing,
                            gl::InfoLog &infoLog)
