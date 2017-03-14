@@ -605,6 +605,9 @@ void QueryProgramiv(const Program *program, GLenum pname, GLint *params)
         case GL_PROGRAM_BINARY_RETRIEVABLE_HINT:
             *params = program->getBinaryRetrievableHint();
             break;
+        case GL_PROGRAM_SEPARABLE:
+            *params = program->getSeparable();
+            break;
         default:
             UNREACHABLE();
             break;
