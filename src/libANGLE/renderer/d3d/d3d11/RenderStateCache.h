@@ -13,6 +13,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
 #include "common/angleutils.h"
+#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 #include <unordered_map>
 
@@ -34,11 +35,11 @@ class RenderStateCache : angle::NonCopyable
     void initialize(ID3D11Device *device);
     void clear();
 
-    gl::Error getBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, ID3D11BlendState **outBlendState);
+    static d3d11::BlendStateKey getBlendStateKey(const gl::Framebuffer *framebuffer,
+                                                 const gl::BlendState &blendState);
+    gl::Error getBlendState(const d3d11::BlendStateKey &key, ID3D11BlendState **outBlendState);
     gl::Error getRasterizerState(const gl::RasterizerState &rasterState, bool scissorEnabled, ID3D11RasterizerState **outRasterizerState);
     gl::Error getDepthStencilState(const gl::DepthStencilState &dsState,
-                                   bool disableDepth,
-                                   bool disableStencil,
                                    ID3D11DepthStencilState **outDSState);
     gl::Error getSamplerState(const gl::SamplerState &samplerState, ID3D11SamplerState **outSamplerState);
 
@@ -47,19 +48,19 @@ class RenderStateCache : angle::NonCopyable
     unsigned long long mCounter;
 
     // Blend state cache
-    struct BlendStateKey
-    {
-        gl::BlendState blendState;
-        bool rtChannels[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT][4];
-    };
-    static std::size_t hashBlendState(const BlendStateKey &blendState);
-    static bool compareBlendStates(const BlendStateKey &a, const BlendStateKey &b);
+    static std::size_t hashBlendState(const d3d11::BlendStateKey &blendState);
+    static bool compareBlendStates(const d3d11::BlendStateKey &a, const d3d11::BlendStateKey &b);
     static const unsigned int kMaxBlendStates;
 
-    typedef std::size_t (*BlendStateHashFunction)(const BlendStateKey &);
-    typedef bool (*BlendStateEqualityFunction)(const BlendStateKey &, const BlendStateKey &);
+    typedef std::size_t (*BlendStateHashFunction)(const d3d11::BlendStateKey &);
+    typedef bool (*BlendStateEqualityFunction)(const d3d11::BlendStateKey &,
+                                               const d3d11::BlendStateKey &);
     typedef std::pair<ID3D11BlendState*, unsigned long long> BlendStateCounterPair;
-    typedef std::unordered_map<BlendStateKey, BlendStateCounterPair, BlendStateHashFunction, BlendStateEqualityFunction> BlendStateMap;
+    typedef std::unordered_map<d3d11::BlendStateKey,
+                               BlendStateCounterPair,
+                               BlendStateHashFunction,
+                               BlendStateEqualityFunction>
+        BlendStateMap;
     BlendStateMap mBlendStateCache;
 
     // Rasterizer state cache
