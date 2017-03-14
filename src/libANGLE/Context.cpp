@@ -2336,8 +2336,14 @@ void Context::programParameteri(GLuint program, GLenum pname, GLint value)
     gl::Program *programObject = getProgram(program);
     ASSERT(programObject != nullptr);
 
-    ASSERT(pname == GL_PROGRAM_BINARY_RETRIEVABLE_HINT);
-    programObject->setBinaryRetrievableHint(value != GL_FALSE);
+    if (pname == GL_PROGRAM_BINARY_RETRIEVABLE_HINT)
+    {
+        programObject->setBinaryRetrievableHint(value != GL_FALSE);
+    }
+    else if (pname == GL_PROGRAM_SEPARABLE)
+    {
+        programObject->setSeparable(value != GL_FALSE);
+    }
 }
 
 void Context::initRendererString()

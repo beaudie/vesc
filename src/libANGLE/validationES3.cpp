@@ -1421,6 +1421,22 @@ bool ValidateProgramParameteri(Context *context, GLuint program, GLenum pname, G
             }
             break;
 
+        case GL_PROGRAM_SEPARABLE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "PROGRAM_SEPARABLE is not supported in GLES3."));
+                return false;
+            }
+
+            if (value != GL_FALSE && value != GL_TRUE)
+            {
+                context->handleError(Error(
+                    GL_INVALID_VALUE, "Invalid value, expected GL_FALSE or GL_TRUE: %i", value));
+                return false;
+            }
+            break;
+
         default:
             context->handleError(Error(GL_INVALID_ENUM, "Invalid pname: 0x%X", pname));
             return false;
