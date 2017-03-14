@@ -394,6 +394,7 @@ class TParseContext : angle::NonCopyable
     void checkBindingIsNotSpecified(const TSourceLoc &location, int binding);
     void checkImageBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
     void checkSamplerBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
+    void checkYuvIsNotSpecified(const TSourceLoc &location, bool yuv);
 
     TIntermTyped *addBinaryMathInternal(TOperator op,
                                         TIntermTyped *left,

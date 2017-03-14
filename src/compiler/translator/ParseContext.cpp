@@ -1182,6 +1182,15 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
         return;
     }
 
+    if ((publicType.qualifier != EvqTemporary && publicType.qualifier != EvqGlobal &&
+         publicType.qualifier != EvqConst) &&
+        publicType.getBasicType() == EbtYuvCscStandardEXT)
+    {
+        error(identifierLocation, "cannot be used with a yuvCscStandardEXT",
+              getQualifierString(publicType.qualifier));
+        return;
+    }
+
     // check for layout qualifier issues
     const TLayoutQualifier layoutQualifier = publicType.layoutQualifier;
 
@@ -1202,6 +1211,19 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
     if (publicType.qualifier != EvqVertexIn && publicType.qualifier != EvqFragmentOut)
     {
         checkLocationIsNotSpecified(identifierLocation, publicType.layoutQualifier);
+    }
+
+    if (publicType.qualifier == EvqFragmentOut)
+    {
+        if (layoutQualifier.location != -1 && layoutQualifier.yuv == true)
+        {
+            error(identifierLocation, "invalid layout qualifier combination", "yuv");
+            return;
+        }
+    }
+    else
+    {
+        checkYuvIsNotSpecified(identifierLocation, layoutQualifier.yuv);
     }
 
     if (IsImage(publicType.getBasicType()))
@@ -1366,6 +1388,14 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arraySize > mMaxCombinedTextureImageUnits)
     {
         error(location, "sampler binding greater than maximum texture units", "binding");
+    }
+}
+
+void TParseContext::checkYuvIsNotSpecified(const TSourceLoc &location, bool yuv)
+{
+    if (yuv != false)
+    {
+        error(location, "invalid layout qualifier: only valid on program outputs", "yuv");
     }
 }
 
@@ -2307,6 +2337,8 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
     checkInternalFormatIsNotSpecified(typeQualifier.line, layoutQualifier.imageInternalFormat);
 
+    checkYuvIsNotSpecified(typeQualifier.line, layoutQualifier.yuv);
+
     if (typeQualifier.qualifier == EvqComputeIn)
     {
         if (mComputeShaderLocalSizeDeclared &&
@@ -2784,6 +2816,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     // TODO(oetuaho): Remove this and support binding for blocks.
     checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
+
+    checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
     checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
@@ -3270,6 +3304,11 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
     {
         error(qualifierTypeLine, "invalid layout qualifier: location requires an argument",
               qualifierType.c_str());
+    }
+    else if (qualifierType == "yuv" && isExtensionEnabled("GL_EXT_YUV_target") &&
+             mShaderType == GL_FRAGMENT_SHADER)
+    {
+        qualifier.yuv = true;
     }
     else if (qualifierType == "rgba32f")
     {
