@@ -28,7 +28,16 @@ void PS_ResolveDepth(in float4 position : SV_Position,
     uint width, height, samples;
     Depth.GetDimensions(width, height, samples);
     uint2 coord = uint2(texCoord.x * float(width), texCoord.y * float(height));
-    depth = Depth.Load(coord, 0).r;
+
+    // Average the samples.
+    depth = 0.0f;
+
+    for (uint sample = 0; sample < samples; ++sample)
+    {
+        depth += Depth.Load(coord, sample).r;
+    }
+
+    depth /= float(samples);
 }
 
 void PS_ResolveDepthStencil(in float4 position : SV_Position,
@@ -39,8 +48,17 @@ void PS_ResolveDepthStencil(in float4 position : SV_Position,
     uint width, height, samples;
     Depth.GetDimensions(width, height, samples);
     uint2 coord = uint2(texCoord.x * float(width), texCoord.y * float(height));
-    depthStencil.r = Depth.Load(coord, 0).r;
-    depthStencil.g = float(Stencil.Load(coord, 0).g);
+
+    // Average the samples.
+    depthStencil = float2(0.0f, 0.0f);
+
+    for (uint sample = 0; sample < samples; ++sample)
+    {
+        depthStencil.r += Depth.Load(coord, sample).r;
+        depthStencil.g += float(Stencil.Load(coord, sample).g);
+    }
+
+    depthStencil /= float(samples);
 }
 
 void PS_ResolveStencil(in float4 position : SV_Position,
@@ -51,6 +69,14 @@ void PS_ResolveStencil(in float4 position : SV_Position,
     uint width, height, samples;
     Stencil.GetDimensions(width, height, samples);
     uint2 coord = uint2(texCoord.x * float(width), texCoord.y * float(height));
-    stencil.r = 0.0f;
-    stencil.g = float(Stencil.Load(coord, 0).g);
+
+    // Average the samples.
+    stencil = float2(0.0f, 0.0f);
+
+    for (uint sample = 0; sample < samples; ++sample)
+    {
+        stencil.g += float(Stencil.Load(coord, sample).g);
+    }
+
+    stencil /= float(samples);
 }
