@@ -16,8 +16,6 @@
             '<(vulkan_layers_path)/loader/debug_report.c',
             '<(vulkan_layers_path)/loader/debug_report.h',
             '<(vulkan_layers_path)/loader/dev_ext_trampoline.c',
-            '<(vulkan_layers_path)/loader/extensions.c',
-            '<(vulkan_layers_path)/loader/extensions.h',
             '<(vulkan_layers_path)/loader/gpa_helper.h',
             '<(vulkan_layers_path)/loader/loader.c',
             '<(vulkan_layers_path)/loader/loader.h',
@@ -252,11 +250,6 @@
             '<(vulkan_layers_path)/layers/descriptor_sets.cpp',
             '<(vulkan_layers_path)/layers/descriptor_sets.h',
         ],
-        'VkLayer_image_sources':
-        [
-            '<(vulkan_layers_path)/layers/image.cpp',
-            '<(vulkan_layers_path)/layers/image.h',
-        ],
         'VkLayer_swapchain_sources':
         [
             '<(vulkan_layers_path)/layers/swapchain.cpp',
@@ -290,7 +283,6 @@
         'vulkan_gen_json_files_sources_win':
         [
             '<(vulkan_layers_path)/layers/windows/VkLayer_core_validation.json',
-            '<(vulkan_layers_path)/layers/windows/VkLayer_image.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_object_tracker.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_parameter_validation.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_swapchain.json',
@@ -300,7 +292,6 @@
         'vulkan_gen_json_files_outputs':
         [
             '<(angle_gen_path)/vulkan/json/VkLayer_core_validation.json',
-            '<(angle_gen_path)/vulkan/json/VkLayer_image.json',
             '<(angle_gen_path)/vulkan/json/VkLayer_object_tracker.json',
             '<(angle_gen_path)/vulkan/json/VkLayer_parameter_validation.json',
             '<(angle_gen_path)/vulkan/json/VkLayer_swapchain.json',
@@ -816,11 +807,33 @@
                         },
 
                         {
-                            'action_name': 'vulkan_generate_dispatch_table_helper',
+                            'action_name': 'vulkan_run_vk_xml_generate_vk_layer_dispatch_table_h',
+                            'message': 'generating vk_layer_dispatch_table.h',
+                            'inputs':
+                            [
+                                '<(vulkan_layers_path)/scripts/loader_extension_generator.py',
+                                '<(vulkan_layers_path)/scripts/generator.py',
+                                '<(vulkan_layers_path)/scripts/lvl_genvk.py',
+                                '<(vulkan_layers_path)/scripts/reg.py',
+                                '<(vulkan_layers_path)/scripts/vk.xml',
+                            ],
+                            'outputs':
+                            [
+                                '<(angle_gen_path)/vulkan/vk_layer_dispatch_table.h',
+                            ],
+                            'action':
+                            [
+                                'python', '<(vulkan_layers_path)/scripts/lvl_genvk.py', '-o', '<(angle_gen_path)/vulkan',
+                                '-registry', '<(vulkan_layers_path)/scripts/vk.xml', 'vk_layer_dispatch_table.h', '-quiet',
+                            ],
+                        },
+
+                        {
+                            'action_name': 'vulkan_run_vk_xml_generate_vk_dispatch_table_helper_h',
                             'message': 'generating vk_dispatch_table_helper.h',
                             'inputs':
                             [
-                                '<(vulkan_layers_path)/scripts/dispatch_table_generator.py',
+                                '<(vulkan_layers_path)/scripts/dispatch_table_helper_generator.py',
                                 '<(vulkan_layers_path)/scripts/generator.py',
                                 '<(vulkan_layers_path)/scripts/lvl_genvk.py',
                                 '<(vulkan_layers_path)/scripts/reg.py',
@@ -834,6 +847,50 @@
                             [
                                 'python', '<(vulkan_layers_path)/scripts/lvl_genvk.py', '-o', '<(angle_gen_path)/vulkan',
                                 '-registry', '<(vulkan_layers_path)/scripts/vk.xml', 'vk_dispatch_table_helper.h', '-quiet',
+                            ],
+                        },
+
+                        {
+                            'action_name': 'vulkan_run_vk_xml_generate_vk_loader_extensions_h',
+                            'message': 'generating vk_loader_extensions.h',
+                            'inputs':
+                            [
+                                '<(vulkan_layers_path)/scripts/loader_extension_generator.py',
+                                '<(vulkan_layers_path)/scripts/generator.py',
+                                '<(vulkan_layers_path)/scripts/lvl_genvk.py',
+                                '<(vulkan_layers_path)/scripts/reg.py',
+                                '<(vulkan_layers_path)/scripts/vk.xml',
+                            ],
+                            'outputs':
+                            [
+                                '<(angle_gen_path)/vulkan/vk_loader_extensions.h',
+                            ],
+                            'action':
+                            [
+                                'python', '<(vulkan_layers_path)/scripts/lvl_genvk.py', '-o', '<(angle_gen_path)/vulkan',
+                                '-registry', '<(vulkan_layers_path)/scripts/vk.xml', 'vk_loader_extensions.h', '-quiet',
+                            ],
+                        },
+
+                        {
+                            'action_name': 'vulkan_run_vk_xml_generate_vk_loader_extensions_c',
+                            'message': 'generating vk_loader_extensions.c',
+                            'inputs':
+                            [
+                                '<(vulkan_layers_path)/scripts/loader_extension_generator.py',
+                                '<(vulkan_layers_path)/scripts/generator.py',
+                                '<(vulkan_layers_path)/scripts/lvl_genvk.py',
+                                '<(vulkan_layers_path)/scripts/reg.py',
+                                '<(vulkan_layers_path)/scripts/vk.xml',
+                            ],
+                            'outputs':
+                            [
+                                '<(angle_gen_path)/vulkan/vk_loader_extensions.c',
+                            ],
+                            'action':
+                            [
+                                'python', '<(vulkan_layers_path)/scripts/lvl_genvk.py', '-o', '<(angle_gen_path)/vulkan',
+                                '-registry', '<(vulkan_layers_path)/scripts/vk.xml', 'vk_loader_extensions.c', '-quiet',
                             ],
                         },
 
@@ -887,30 +944,6 @@
                             'sources':
                             [
                                 '<(vulkan_layers_path)/layers/VkLayer_core_validation.def',
-                            ]
-                        }],
-                    ],
-                },
-
-                {
-                    'target_name': 'VkLayer_image',
-                    'type': 'shared_library',
-                    'dependencies':
-                    [
-                        'vulkan_generate_layer_helpers',
-                        'vulkan_layer_utils_static',
-                    ],
-                    'sources':
-                    [
-                        '<@(VkLayer_image_sources)',
-                    ],
-                    'conditions':
-                    [
-                        ['OS=="win"',
-                        {
-                            'sources':
-                            [
-                                '<(vulkan_layers_path)/layers/VkLayer_image.def',
                             ]
                         }],
                     ],
@@ -1116,7 +1149,6 @@
                         # Need to disable these to prevent multiply defined symbols with ninja.
                         # TODO(jmadill): Figure out how to implement data_deps in gyp.
                         # 'VkLayer_core_validation',
-                        # 'VkLayer_image',
                         # 'VkLayer_object_tracker',
                         # 'VkLayer_parameter_validation',
                         # 'VkLayer_swapchain',
