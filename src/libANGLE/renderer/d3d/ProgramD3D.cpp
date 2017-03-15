@@ -1902,7 +1902,6 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
     if (computeShader)
     {
         for (const sh::Uniform &computeUniform : computeShader->getUniforms())
-
         {
             if (computeUniform.staticUse)
             {
@@ -1914,7 +1913,6 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
     {
         const gl::Shader *vertexShader = mState.getAttachedVertexShader();
         for (const sh::Uniform &vertexUniform : vertexShader->getUniforms())
-
         {
             if (vertexUniform.staticUse)
             {
@@ -1962,7 +1960,7 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
 
     unsigned int startRegister = shaderD3D->getUniformRegister(uniform.name);
     ShShaderOutput outputType = shaderD3D->getCompilerOutputType();
-    sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType));
+    sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType), true);
     encoder.skipRegisters(startRegister);
 
     defineUniform(shader->getType(), uniform, uniform.name, &encoder, uniformMap);
@@ -2192,7 +2190,7 @@ size_t ProgramD3D::getUniformBlockInfo(const sh::InterfaceBlock &interfaceBlock)
 
     // define member uniforms
     sh::Std140BlockEncoder std140Encoder;
-    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED);
+    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *encoder = nullptr;
 
     if (interfaceBlock.layout == sh::BLOCKLAYOUT_STANDARD)

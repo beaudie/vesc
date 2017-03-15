@@ -15,8 +15,8 @@
 namespace sh
 {
 
-HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy)
-    : mEncoderStrategy(strategy), mTransposeMatrices(false)
+HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool transposeMatrices)
+    : mEncoderStrategy(strategy), mTransposeMatrices(transposeMatrices)
 {
 }
 
@@ -156,8 +156,7 @@ void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoder *
 
 unsigned int HLSLVariableRegisterCount(const Varying &variable, bool transposeMatrices)
 {
-    HLSLBlockEncoder encoder(HLSLBlockEncoder::ENCODE_PACKED);
-    encoder.setTransposeMatrices(transposeMatrices);
+    HLSLBlockEncoder encoder(HLSLBlockEncoder::ENCODE_PACKED, transposeMatrices);
     HLSLVariableRegisterCount(variable, &encoder);
 
     const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
@@ -167,8 +166,7 @@ unsigned int HLSLVariableRegisterCount(const Varying &variable, bool transposeMa
 
 unsigned int HLSLVariableRegisterCount(const Uniform &variable, ShShaderOutput outputType)
 {
-    HLSLBlockEncoder encoder(HLSLBlockEncoder::GetStrategyFor(outputType));
-    encoder.setTransposeMatrices(true);
+    HLSLBlockEncoder encoder(HLSLBlockEncoder::GetStrategyFor(outputType), true);
     HLSLVariableRegisterCount(variable, &encoder);
 
     const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
