@@ -255,7 +255,7 @@ const std::string &ProgramState::getLabel()
 GLint ProgramState::getUniformLocation(const std::string &name) const
 {
     size_t subscript     = GL_INVALID_INDEX;
-    std::string baseName = ParseUniformName(name, &subscript);
+    std::string baseName = ParseResourceName(name, &subscript);
 
     for (size_t location = 0; location < mUniformLocations.size(); ++location)
     {
@@ -293,7 +293,7 @@ GLint ProgramState::getUniformLocation(const std::string &name) const
 GLuint ProgramState::getUniformIndexFromName(const std::string &name) const
 {
     size_t subscript     = GL_INVALID_INDEX;
-    std::string baseName = ParseUniformName(name, &subscript);
+    std::string baseName = ParseResourceName(name, &subscript);
 
     // The app is not allowed to specify array indices other than 0 for arrays of basic types
     if (subscript != 0 && subscript != GL_INVALID_INDEX)
@@ -487,7 +487,7 @@ void Program::bindAttributeLocation(GLuint index, const char *name)
 void Program::bindUniformLocation(GLuint index, const char *name)
 {
     // Bind the base uniform name only since array indices other than 0 cannot be bound
-    mUniformLocationBindings.bindLocation(index, ParseUniformName(name, nullptr));
+    mUniformLocationBindings.bindLocation(index, ParseResourceName(name, nullptr));
 }
 
 void Program::bindFragmentInputLocation(GLint index, const char *name)
@@ -720,6 +720,7 @@ void Program::unlink()
     mState.mUniformLocations.clear();
     mState.mUniformBlocks.clear();
     mState.mOutputVariables.clear();
+    mState.mOutputLocations.clear();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
 
@@ -865,6 +866,16 @@ Error Program::loadBinary(const Context *context,
 
     stream.readInt(&mState.mTransformFeedbackBufferMode);
 
+    unsigned int outputCount = stream.readInt<unsigned int>();
+    ASSERT(mState.mOutputVariables.empty());
+    for (unsigned int outputIndex = 0; outputIndex < outputCount; ++outputIndex)
+    {
+        sh::OutputVariable output;
+        LoadShaderVar(&stream, &output);
+        output.location = stream.readInt<int>();
+        mState.mOutputVariables.push_back(output);
+    }
+
     unsigned int outputVarCount = stream.readInt<unsigned int>();
     for (unsigned int outputIndex = 0; outputIndex < outputVarCount; ++outputIndex)
     {
@@ -873,7 +884,7 @@ Error Program::loadBinary(const Context *context,
         stream.readInt(&locationData.element);
         stream.readInt(&locationData.index);
         stream.readString(&locationData.name);
-        mState.mOutputVariables[locationIndex] = locationData;
+        mState.mOutputLocations[locationIndex] = locationData;
     }
 
     stream.readInt(&mState.mSamplerUniformRange.start);
@@ -991,7 +1002,14 @@ Error Program::saveBinary(const Context *context,
     stream.writeInt(mState.mTransformFeedbackBufferMode);
 
     stream.writeInt(mState.mOutputVariables.size());
-    for (const auto &outputPair : mState.mOutputVariables)
+    for (const sh::OutputVariable &output : mState.mOutputVariables)
+    {
+        WriteShaderVar(&stream, output);
+        stream.writeInt(output.location);
+    }
+
+    stream.writeInt(mState.mOutputLocations.size());
+    for (const auto &outputPair : mState.mOutputLocations)
     {
         stream.writeInt(outputPair.first);
         stream.writeIntOrNegOne(outputPair.second.element);
@@ -1222,11 +1240,57 @@ GLint Program::getActiveAttributeMaxLength() const
     return static_cast<GLint>(maxLength);
 }
 
+GLuint Program::getActiveAttributeIndex(const GLchar *name) const
+{
+    if (!mLinked)
+    {
+        return GL_INVALID_INDEX;
+    }
+
+    GLuint attributeIndex = 0;
+    for (const sh::Attribute &attribute : mState.mAttributes)
+    {
+        if (attribute.name.compare(name) == 0)
+        {
+            return attributeIndex;
+        }
+        attributeIndex++;
+    }
+    return GL_INVALID_INDEX;
+}
+
+GLuint Program::getActiveOutputIndex(const GLchar *name) const
+{
+    if (!mLinked)
+    {
+        return GL_INVALID_INDEX;
+    }
+
+    size_t subscript     = GL_INVALID_INDEX;
+    std::string baseName = ParseResourceName(name, &subscript);
+    // Only "basename" and "basename[0]" are allowed.
+    if (subscript != GL_INVALID_INDEX && subscript != 0)
+    {
+        return GL_INVALID_INDEX;
+    }
+
+    for (unsigned int outputVariableIndex = 0; outputVariableIndex < mState.mOutputVariables.size();
+         ++outputVariableIndex)
+    {
+        const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
+        if (outputVariable.name == baseName)
+        {
+            return outputVariableIndex;
+        }
+    }
+    return GL_INVALID_INDEX;
+}
+
 GLint Program::getFragDataLocation(const std::string &name) const
 {
     std::string baseName(name);
     unsigned int arrayIndex = ParseAndStripArrayIndex(&baseName);
-    for (auto outputPair : mState.mOutputVariables)
+    for (auto outputPair : mState.mOutputLocations)
     {
         const VariableLocation &outputVariable = outputPair.second;
         if (outputVariable.name == baseName && (arrayIndex == GL_INVALID_INDEX || arrayIndex == outputVariable.element))
@@ -1679,7 +1743,7 @@ GLint Program::getActiveUniformBlockMaxLength() const
 GLuint Program::getUniformBlockIndex(const std::string &name) const
 {
     size_t subscript     = GL_INVALID_INDEX;
-    std::string baseName = ParseUniformName(name, &subscript);
+    std::string baseName = ParseResourceName(name, &subscript);
 
     unsigned int numUniformBlocks = static_cast<unsigned int>(mState.mUniformBlocks.size());
     for (unsigned int blockIndex = 0; blockIndex < numUniformBlocks; blockIndex++)
@@ -2505,14 +2569,13 @@ void Program::linkOutputVariables()
     if (fragmentShader->getShaderVersion() == 100)
         return;
 
-    const auto &shaderOutputVars = fragmentShader->getActiveOutputVariables();
-
+    mState.mOutputVariables = fragmentShader->getActiveOutputVariables();
     // TODO(jmadill): any caps validation here?
 
-    for (unsigned int outputVariableIndex = 0; outputVariableIndex < shaderOutputVars.size();
+    for (unsigned int outputVariableIndex = 0; outputVariableIndex < mState.mOutputVariables.size();
          outputVariableIndex++)
     {
-        const sh::OutputVariable &outputVariable = shaderOutputVars[outputVariableIndex];
+        const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
@@ -2525,9 +2588,9 @@ void Program::linkOutputVariables()
              elementIndex++)
         {
             const int location = baseLocation + elementIndex;
-            ASSERT(mState.mOutputVariables.count(location) == 0);
+            ASSERT(mState.mOutputLocations.count(location) == 0);
             unsigned int element = outputVariable.isArray() ? elementIndex : GL_INVALID_INDEX;
-            mState.mOutputVariables[location] =
+            mState.mOutputLocations[location] =
                 VariableLocation(outputVariable.name, element, outputVariableIndex);
         }
     }
@@ -2897,6 +2960,24 @@ bool Program::samplesFromTexture(const gl::State &state, GLuint textureID) const
     }
 
     return false;
+}
+
+GLuint Program::getResourceIndex(GLenum programInterface, const GLchar *name) const
+{
+    switch (programInterface)
+    {
+        case GL_PROGRAM_INPUT:
+            return getActiveAttributeIndex(name);
+
+        case GL_PROGRAM_OUTPUT:
+            return getActiveOutputIndex(name);
+
+        // TODO(Jie): more interfaces.
+
+        default:
+            UNREACHABLE();
+    }
+    return GL_INVALID_INDEX;
 }
 
 }  // namespace gl
