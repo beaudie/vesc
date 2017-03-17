@@ -205,10 +205,8 @@ class VertexAttributeTest : public ANGLETest
         shaderStream << "}" << std::endl;
 
         const std::string testFragmentShaderSource =
-            SHADER_SOURCE(varying mediump float color; void main(void)
-                          {
-                              gl_FragColor = vec4(color, 0.0, 0.0, 1.0);
-                          });
+            SHADER_SOURCE(varying mediump float color;
+                          void main(void) { gl_FragColor = vec4(color, 0.0, 0.0, 1.0); });
 
         return CompileProgram(shaderStream.str(), testFragmentShaderSource);
     }
@@ -270,7 +268,8 @@ class VertexAttributeTest : public ANGLETest
 
 TEST_P(VertexAttributeTest, UnsignedByteUnnormalized)
 {
-    GLubyte inputData[mVertexCount] = { 0, 1, 2, 3, 4, 5, 6, 7, 125, 126, 127, 128, 129, 250, 251, 252, 253, 254, 255 };
+    GLubyte inputData[mVertexCount] = {0,   1,   2,   3,   4,   5,   6,   7,   125, 126,
+                                       127, 128, 129, 250, 251, 252, 253, 254, 255};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -283,7 +282,8 @@ TEST_P(VertexAttributeTest, UnsignedByteUnnormalized)
 
 TEST_P(VertexAttributeTest, UnsignedByteNormalized)
 {
-    GLubyte inputData[mVertexCount] = { 0, 1, 2, 3, 4, 5, 6, 7, 125, 126, 127, 128, 129, 250, 251, 252, 253, 254, 255 };
+    GLubyte inputData[mVertexCount] = {0,   1,   2,   3,   4,   5,   6,   7,   125, 126,
+                                       127, 128, 129, 250, 251, 252, 253, 254, 255};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -296,7 +296,8 @@ TEST_P(VertexAttributeTest, UnsignedByteNormalized)
 
 TEST_P(VertexAttributeTest, ByteUnnormalized)
 {
-    GLbyte inputData[mVertexCount] = { 0, 1, 2, 3, 4, -1, -2, -3, -4, 125, 126, 127, -128, -127, -126 };
+    GLbyte inputData[mVertexCount] = {0,  1,   2,   3,   4,    -1,   -2,  -3,
+                                      -4, 125, 126, 127, -128, -127, -126};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -309,7 +310,8 @@ TEST_P(VertexAttributeTest, ByteUnnormalized)
 
 TEST_P(VertexAttributeTest, ByteNormalized)
 {
-    GLbyte inputData[mVertexCount] = { 0, 1, 2, 3, 4, -1, -2, -3, -4, 125, 126, 127, -128, -127, -126 };
+    GLbyte inputData[mVertexCount] = {0,  1,   2,   3,   4,    -1,   -2,  -3,
+                                      -4, 125, 126, 127, -128, -127, -126};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -322,7 +324,8 @@ TEST_P(VertexAttributeTest, ByteNormalized)
 
 TEST_P(VertexAttributeTest, UnsignedShortUnnormalized)
 {
-    GLushort inputData[mVertexCount] = { 0, 1, 2, 3, 254, 255, 256, 32766, 32767, 32768, 65533, 65534, 65535 };
+    GLushort inputData[mVertexCount] = {0,     1,     2,     3,     254,   255,  256,
+                                        32766, 32767, 32768, 65533, 65534, 65535};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -335,7 +338,8 @@ TEST_P(VertexAttributeTest, UnsignedShortUnnormalized)
 
 TEST_P(VertexAttributeTest, UnsignedShortNormalized)
 {
-    GLushort inputData[mVertexCount] = { 0, 1, 2, 3, 254, 255, 256, 32766, 32767, 32768, 65533, 65534, 65535 };
+    GLushort inputData[mVertexCount] = {0,     1,     2,     3,     254,   255,  256,
+                                        32766, 32767, 32768, 65533, 65534, 65535};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -348,7 +352,8 @@ TEST_P(VertexAttributeTest, UnsignedShortNormalized)
 
 TEST_P(VertexAttributeTest, ShortUnnormalized)
 {
-    GLshort inputData[mVertexCount] = {  0, 1, 2, 3, -1, -2, -3, -4, 32766, 32767, -32768, -32767, -32766 };
+    GLshort inputData[mVertexCount] = {0,  1,     2,     3,      -1,     -2,    -3,
+                                       -4, 32766, 32767, -32768, -32767, -32766};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -361,7 +366,8 @@ TEST_P(VertexAttributeTest, ShortUnnormalized)
 
 TEST_P(VertexAttributeTest, ShortNormalized)
 {
-    GLshort inputData[mVertexCount] = {  0, 1, 2, 3, -1, -2, -3, -4, 32766, 32767, -32768, -32767, -32766 };
+    GLshort inputData[mVertexCount] = {0,  1,     2,     3,      -1,     -2,    -3,
+                                       -4, 32766, 32767, -32768, -32767, -32766};
     GLfloat expectedData[mVertexCount];
     for (size_t i = 0; i < mVertexCount; i++)
     {
@@ -612,6 +618,55 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+// Verify that when we pass a client memory pointer to a disabled attribute the draw is still
+// correct.
+TEST_P(VertexAttributeTest, DrawArraysWithDisabledAttribute)
+{
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    GLfloat inputData[mVertexCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[count]    = static_cast<GLfloat>(count);
+        expectedData[count] = inputData[count];
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, quadVertices.data(), GL_STATIC_DRAW);
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(inputData), inputData, GL_STATIC_DRAW);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    // Pass a client memory pointer to disabledAttribute and disable it.
+    GLint disabledAttribute = 15;
+    ASSERT(disabledAttribute != positionLocation && disabledAttribute != mTestAttrib &&
+           disabledAttribute != mExpectedAttrib);
+    glVertexAttribPointer(disabledAttribute, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glDisableVertexAttribArray(disabledAttribute);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
 class VertexAttributeTestES31 : public VertexAttributeTestES3
 {
   protected:
@@ -642,7 +697,7 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
             static_cast<GLsizeiptr>(quadVertices.size() * sizeof(quadVertices[0]));
         glGenBuffers(1, &mQuadBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
-        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_STATIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
 
         GLint positionLocation = glGetAttribLocation(mProgram, "position");
@@ -858,7 +913,7 @@ void VertexAttributeCachingTest::SetUp()
 
     mExpectedData[GL_BYTE]          = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_FALSE);
     mExpectedData[GL_UNSIGNED_BYTE] = GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_FALSE);
-    mExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE);
+    mExpectedData[GL_SHORT]         = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE);
     mExpectedData[GL_UNSIGNED_SHORT] =
         GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_FALSE);
     mExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_FALSE);
@@ -965,8 +1020,10 @@ TEST_P(VertexAttributeCachingTest, BufferMulticachingWithOneUnchangedAttrib)
     }
 }
 
-// Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-// D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels 10_0+, so we should test them separately.
+// Use this to select which configurations (e.g. which renderer, which GLES major version) these
+// tests should be run against.
+// D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels
+// 10_0+, so we should test them separately.
 ANGLE_INSTANTIATE_TEST(VertexAttributeTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
