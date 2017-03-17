@@ -194,10 +194,16 @@ O           [0-7]
 "sampler2DShadow"      { return ES2_reserved_ES3_keyword(context, SAMPLER2DSHADOW); }
 "samplerCubeShadow"    { return ES2_ident_ES3_keyword(context, SAMPLERCUBESHADOW); }
 "sampler2DArrayShadow" { return ES2_ident_ES3_keyword(context, SAMPLER2DARRAYSHADOW); }
+"__samplerExternal2DY2YEXT"   { return ES2_reserved_ES3_keyword(context, SAMPLEREXTERNAL2DY2YEXT); }
 
 "struct"       { return STRUCT; }
 
 "layout"  { return ES2_ident_ES3_keyword(context, LAYOUT); }
+
+"yuvCscStandardEXT"    { return ES2_ident_ES3_keyword(context, YUVCSCSTANDARDEXT); }
+"itu_601"              { return ES2_ident_ES3_keyword(context, ITU601); }
+"itu_601_full_range"   { return ES2_ident_ES3_keyword(context, ITU601FULLRANGE); }
+"itu_709"              { return ES2_ident_ES3_keyword(context, ITU709); }
 
 "image2D" { return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE2D); }
 "iimage2D" { return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE2D); }
