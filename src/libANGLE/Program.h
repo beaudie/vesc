@@ -175,6 +175,34 @@ struct SamplerBinding
     std::vector<GLuint> boundTextureUnits;
 };
 
+// A varying with tranform feedback enabled. If it's an array, either the whole array or one of its
+// elements specified by 'arrayIndex' can set to be enabled.
+struct TransformFeedbackVaryingVar
+{
+    TransformFeedbackVaryingVar(const sh::Varying &varyingIn, GLuint index)
+        : varying(varyingIn), arrayIndex(index)
+    {
+    }
+    std::string name() const
+    {
+        std::stringstream fullNameStr;
+        fullNameStr << varying.name;
+        if (arrayIndex != GL_INVALID_INDEX)
+        {
+            fullNameStr << "[" << arrayIndex << "]";
+        }
+        return fullNameStr.str();
+    }
+    GLsizei elementCount() const
+    {
+        return (arrayIndex == GL_INVALID_INDEX ? varying.elementCount() : 1);
+    }
+    GLenum type() const { return varying.type; }
+
+    sh::Varying varying;
+    GLuint arrayIndex;
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -230,7 +258,7 @@ class ProgramState final : angle::NonCopyable
     Shader *mAttachedComputeShader;
 
     std::vector<std::string> mTransformFeedbackVaryingNames;
-    std::vector<sh::Varying> mTransformFeedbackVaryingVars;
+    std::vector<TransformFeedbackVaryingVar> mTransformFeedbackVaryingVars;
     GLenum mTransformFeedbackBufferMode;
 
     std::array<GLuint, IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS> mUniformBlockBindings;

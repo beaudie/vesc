@@ -2426,10 +2426,17 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
 
                 // There can be more than one register assigned to a particular varying, and each
                 // register needs its own stream out entry.
-                if (tfVaryingName == varying.name)
+                size_t subscript     = GL_INVALID_INDEX;
+                std::string baseName = gl::ParseResourceName(tfVaryingName, &subscript);
+                if (baseName == registerInfo.packedVarying->varying->name)
                 {
-                    mStreamOutVaryings.push_back(D3DVarying(
-                        varyingSemantic, registerInfo.semanticIndex, componentCount, outputSlot));
+                    if (subscript == GL_INVALID_INDEX ||
+                        subscript == registerInfo.varyingArrayIndex)
+                    {
+                        mStreamOutVaryings.push_back(D3DVarying(varyingSemantic,
+                                                                registerInfo.semanticIndex,
+                                                                componentCount, outputSlot));
+                    }
                 }
             }
         }
