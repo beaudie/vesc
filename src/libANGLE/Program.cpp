@@ -129,7 +129,31 @@ void UniformStateQueryCastLoop(DestT *dataOut, const uint8_t *srcPointer, int co
 // true if varying x has a higher priority in packing than y
 bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
 {
-    return gl::CompareShaderVar(*x.varying, *y.varying);
+    sh::ShaderVariable vx, vy;
+    const sh::ShaderVariable *px, *py;
+    if (x.isArrayElement())
+    {
+        vx           = *x.varying;
+        vx.arraySize = 0;
+        px           = &vx;
+    }
+    else
+    {
+        px = x.varying;
+    }
+
+    if (y.isArrayElement())
+    {
+        vy           = *y.varying;
+        vy.arraySize = 0;
+        py           = &vy;
+    }
+    else
+    {
+        py = y.varying;
+    }
+
+    return gl::CompareShaderVar(*px, *py);
 }
 
 template <typename VarT>
@@ -680,7 +704,7 @@ Error Program::link(const gl::Context *context)
 
         const auto &mergedVaryings = getMergedVaryings();
 
-        if (!linkValidateTransformFeedback(mInfoLog, mergedVaryings, caps))
+        if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, caps))
         {
             return NoError();
         }
@@ -723,7 +747,7 @@ void Program::unlink()
 {
     mState.mAttributes.clear();
     mState.mActiveAttribLocationsMask.reset();
-    mState.mTransformFeedbackVaryingVars.clear();
+    mState.mTransformFeedbackVaryings.clear();
     mState.mUniforms.clear();
     mState.mUniformLocations.clear();
     mState.mUniformBlocks.clear();
@@ -859,7 +883,7 @@ Error Program::loadBinary(const Context *context,
     }
 
     unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
-    ASSERT(mState.mTransformFeedbackVaryingVars.empty());
+    ASSERT(mState.mTransformFeedbackVaryings.empty());
     for (unsigned int transformFeedbackVaryingIndex = 0;
         transformFeedbackVaryingIndex < transformFeedbackVaryingCount;
         ++transformFeedbackVaryingIndex)
@@ -869,7 +893,9 @@ Error Program::loadBinary(const Context *context,
         stream.readInt(&varying.type);
         stream.readString(&varying.name);
 
-        mState.mTransformFeedbackVaryingVars.push_back(varying);
+        GLuint arrayIndex = stream.readInt<GLuint>();
+
+        mState.mTransformFeedbackVaryings.emplace_back(varying, arrayIndex);
     }
 
     stream.readInt(&mState.mTransformFeedbackBufferMode);
@@ -999,12 +1025,14 @@ Error Program::saveBinary(const Context *context,
         stream.writeInt(binding);
     }
 
-    stream.writeInt(mState.mTransformFeedbackVaryingVars.size());
-    for (const sh::Varying &varying : mState.mTransformFeedbackVaryingVars)
+    stream.writeInt(mState.mTransformFeedbackVaryings.size());
+    for (const auto &var : mState.mTransformFeedbackVaryings)
     {
-        stream.writeInt(varying.arraySize);
-        stream.writeInt(varying.type);
-        stream.writeString(varying.name);
+        stream.writeInt(var.varying.arraySize);
+        stream.writeInt(var.varying.type);
+        stream.writeString(var.varying.name);
+
+        stream.writeIntOrNegOne(var.arrayIndex);
     }
 
     stream.writeInt(mState.mTransformFeedbackBufferMode);
@@ -1801,24 +1829,24 @@ void Program::getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei
 {
     if (mLinked)
     {
-        ASSERT(index < mState.mTransformFeedbackVaryingVars.size());
-        const sh::Varying &varying = mState.mTransformFeedbackVaryingVars[index];
-        GLsizei lastNameIdx = std::min(bufSize - 1, static_cast<GLsizei>(varying.name.length()));
+        ASSERT(index < mState.mTransformFeedbackVaryings.size());
+        const auto &var     = mState.mTransformFeedbackVaryings[index];
+        GLsizei lastNameIdx = std::min(bufSize - 1, static_cast<GLsizei>(var.name().length()));
         if (length)
         {
             *length = lastNameIdx;
         }
         if (size)
         {
-            *size = varying.elementCount();
+            *size = var.elementCount();
         }
         if (type)
         {
-            *type = varying.type;
+            *type = var.type();
         }
         if (name)
         {
-            memcpy(name, varying.name.c_str(), lastNameIdx);
+            memcpy(name, var.name().c_str(), lastNameIdx);
             name[lastNameIdx] = '\0';
         }
     }
@@ -1828,7 +1856,7 @@ GLsizei Program::getTransformFeedbackVaryingCount() const
 {
     if (mLinked)
     {
-        return static_cast<GLsizei>(mState.mTransformFeedbackVaryingVars.size());
+        return static_cast<GLsizei>(mState.mTransformFeedbackVaryings.size());
     }
     else
     {
@@ -1841,9 +1869,9 @@ GLsizei Program::getTransformFeedbackVaryingMaxLength() const
     if (mLinked)
     {
         GLsizei maxSize = 0;
-        for (const sh::Varying &varying : mState.mTransformFeedbackVaryingVars)
+        for (const auto &var : mState.mTransformFeedbackVaryings)
         {
-            maxSize = std::max(maxSize, static_cast<GLsizei>(varying.name.length() + 1));
+            maxSize = std::max(maxSize, static_cast<GLsizei>(var.name().length() + 1));
         }
 
         return maxSize;
@@ -2388,7 +2416,8 @@ bool Program::linkValidateBuiltInVaryings(InfoLog &infoLog) const
     return true;
 }
 
-bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
+bool Program::linkValidateTransformFeedback(const gl::Context *context,
+                                            InfoLog &infoLog,
                                             const Program::MergedVaryings &varyings,
                                             const Caps &caps) const
 {
@@ -2399,11 +2428,14 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
     for (const std::string &tfVaryingName : mState.mTransformFeedbackVaryingNames)
     {
         bool found = false;
+        size_t subscript     = GL_INVALID_INDEX;
+        std::string baseName = ParseResourceName(tfVaryingName, &subscript);
+
         for (const auto &ref : varyings)
         {
             const sh::Varying *varying = ref.second.get();
 
-            if (tfVaryingName == varying->name)
+            if (baseName == varying->name)
             {
                 if (uniqueNames.count(tfVaryingName) > 0)
                 {
@@ -2411,16 +2443,19 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
                             << tfVaryingName << ").";
                     return false;
                 }
-                uniqueNames.insert(tfVaryingName);
-
-                if (varying->isArray())
+                if (context->getClientVersion() >= Version(3, 1) && uniqueNames.count(baseName) > 0)
                 {
-                    infoLog << "Capture of arrays is undefined and not supported.";
+                    infoLog << "Two transform feedback varyings include the same array element ("
+                            << tfVaryingName << ").";
                     return false;
                 }
+                uniqueNames.insert(tfVaryingName);
 
                 // TODO(jmadill): Investigate implementation limits on D3D11
-                size_t componentCount = VariableComponentCount(varying->type);
+                size_t typeCount =
+                    ((varying->isArray() && subscript == GL_INVALID_INDEX) ? varying->elementCount()
+                                                                           : 1);
+                size_t componentCount = VariableComponentCount(varying->type) * typeCount;
                 if (mState.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
                     componentCount > caps.maxTransformFeedbackSeparateComponents)
                 {
@@ -2434,12 +2469,6 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
                 found = true;
                 break;
             }
-        }
-
-        if (tfVaryingName.find('[') != std::string::npos)
-        {
-            infoLog << "Capture of array elements is undefined and not supported.";
-            return false;
         }
 
         // All transform feedback varyings are expected to exist since packVaryings checks for them.
@@ -2461,15 +2490,18 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
 void Program::gatherTransformFeedbackVaryings(const Program::MergedVaryings &varyings)
 {
     // Gather the linked varyings that are used for transform feedback, they should all exist.
-    mState.mTransformFeedbackVaryingVars.clear();
+    mState.mTransformFeedbackVaryings.clear();
     for (const std::string &tfVaryingName : mState.mTransformFeedbackVaryingNames)
     {
+        size_t subscript     = GL_INVALID_INDEX;
+        std::string baseName = ParseResourceName(tfVaryingName, &subscript);
         for (const auto &ref : varyings)
         {
             const sh::Varying *varying = ref.second.get();
-            if (tfVaryingName == varying->name)
+            if (baseName == varying->name)
             {
-                mState.mTransformFeedbackVaryingVars.push_back(*varying);
+                mState.mTransformFeedbackVaryings.emplace_back(*varying,
+                                                               static_cast<GLuint>(subscript));
                 break;
             }
         }
@@ -2498,6 +2530,7 @@ std::vector<PackedVarying> Program::getPackedVaryings(
 {
     const std::vector<std::string> &tfVaryings = mState.getTransformFeedbackVaryingNames();
     std::vector<PackedVarying> packedVaryings;
+    std::set<std::string> uniqueFullNames;
 
     for (const auto &ref : mergedVaryings)
     {
@@ -2535,7 +2568,13 @@ std::vector<PackedVarying> Program::getPackedVaryings(
 
         for (const std::string &tfVarying : tfVaryings)
         {
-            if (tfVarying == input->name)
+            size_t subscript     = GL_INVALID_INDEX;
+            std::string baseName = ParseResourceName(tfVarying, &subscript);
+            if (uniqueFullNames.count(tfVarying) > 0)
+            {
+                continue;
+            }
+            if (baseName == input->name)
             {
                 // Transform feedback for varying structs is underspecified.
                 // See Khronos bug 9856.
@@ -2544,8 +2583,13 @@ std::vector<PackedVarying> Program::getPackedVaryings(
                 {
                     packedVaryings.push_back(PackedVarying(*input, input->interpolation));
                     packedVaryings.back().vertexOnly = true;
+                    packedVaryings.back().arrayIndex = static_cast<GLuint>(subscript);
+                    uniqueFullNames.insert(tfVarying);
                 }
-                break;
+                if (subscript == GL_INVALID_INDEX)
+                {
+                    break;
+                }
             }
         }
     }
