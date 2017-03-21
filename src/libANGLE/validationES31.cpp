@@ -553,4 +553,46 @@ bool ValidateGetProgramResourceIndex(Context *context,
     return true;
 }
 
+bool ValidateGetProgramResourceName(Context *context,
+                                    GLuint program,
+                                    GLenum programInterface,
+                                    GLuint index,
+                                    GLsizei bufSize,
+                                    GLsizei *length,
+                                    GLchar *name)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+
+    if (!ValidateNamedProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+
+    if (!programObject->isValidResourceIndex(programInterface, index))
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid index: %d", index));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid bufSize: %d", bufSize));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
