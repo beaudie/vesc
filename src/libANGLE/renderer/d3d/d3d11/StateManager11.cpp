@@ -1128,4 +1128,11 @@ const std::vector<TranslatedAttribute> &StateManager11::getCurrentValueAttribs()
     return mCurrentValueAttribs;
 }
 
+void StateManager11::setComputeConstants(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    mComputeConstants.numWorkGroups[0] = numGroupsX;
+    mComputeConstants.numWorkGroups[1] = numGroupsY;
+    mComputeConstants.numWorkGroups[2] = numGroupsZ;
+}
+
 }  // namespace rx
