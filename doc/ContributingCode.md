@@ -4,7 +4,7 @@
 
  * Whether you're writing a new feature or fixing an existing bug, it pays to get a second opinion before you get too far. If it's a new feature idea, post to the discussion group ([angleproject](https://groups.google.com/forum/?fromgroups#!forum/angleproject)) and propose it or talk with the ANGLE team on IRC in the #ANGLEproject channel on FreeNode.
  * Not all bugs in our [bug system](https://code.google.com/p/angleproject/issues/list) are assigned, but if the one you're interested in fixing is, send a note to the person it's assigned to and ask if they would like a patch.
- * Behavior changes and anything nontrivial (i.e. anything other than simple cleanups and style fixes) should generally be tracked in the bug system. Please [file a bug](https://anglebug.com/new) and describe what you're doing if there isn't one already.
+ * Behavior changes and anything nontrivial (i.e. anything other than simple cleanups and style fixes) should generally be tracked in the bug system. Please [file a bug](http://anglebug.com/new) and describe what you're doing if there isn't one already.
 
 ## Get your code ready
 ### Code
@@ -24,6 +24,7 @@
 ### Testing
  * ANGLE uses trybots to test on a variety of platforms. Please run your changes against our bots and check the results before landing changes or requesting reviews.
     * Upload your change (see [Making changes](ContributingCode.md#making-changes)).
+    * To kick of a try job, use the 'CQ Dry Run' button, or set the Commit-Queue +1 label to trigger a dry run of the CQ (will not land the change).
     * If you are not part of the `angle-committers` group, you will need to either ask to be added or ask a member of the group to submit the tryjob for you. Add jmadill or geofflang as a reviewer for assistance.
     * Wait for the bots to report the result on the code review page. The bot results should be visible in Gerrit as yellow (in-progress), green (passed), or red (failed). This can take up to two hours for some of the debug bots. Click on the colored rectangle to open the bot log to triage failed tests.
     * If a failure is unexpected, or seems likely unrelated to your change, ask an ANGLE project member for advice.
