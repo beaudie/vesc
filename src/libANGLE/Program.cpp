@@ -1646,7 +1646,7 @@ void Program::getActiveUniformBlockName(GLuint uniformBlockIndex, GLsizei bufSiz
 
         if (length)
         {
-            *length = static_cast<GLsizei>(strlen(uniformBlockName));
+            *length = static_cast<GLsizei>(strlen(uniformBlockName) + 1);
         }
     }
 }
