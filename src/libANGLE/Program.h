@@ -315,7 +315,12 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getAttributeLocation(const std::string &name) const;
     bool isAttribLocationActive(size_t attribLocation) const;
 
-    void getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
+    void getActiveAttribute(GLuint index,
+                            GLsizei bufsize,
+                            GLsizei *length,
+                            GLint *size,
+                            GLenum *type,
+                            GLchar *name) const;
     GLint getActiveAttributeCount() const;
     GLint getActiveAttributeMaxLength() const;
     const std::vector<sh::Attribute> &getAttributes() const { return mState.mAttributes; }
@@ -414,6 +419,9 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     GLuint getInputResourceIndex(const GLchar *name) const;
     GLuint getOutputResourceIndex(const GLchar *name) const;
+    bool isValidResourceIndex(GLenum interface, GLuint index) const;
+    void getInputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
+    void getOutputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
 
     class Bindings final : angle::NonCopyable
     {
