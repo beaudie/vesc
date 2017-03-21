@@ -1810,4 +1810,21 @@ GLuint StateManagerGL::getBoundBuffer(GLenum type)
     ASSERT(mBuffers.find(type) != mBuffers.end());
     return mBuffers[type];
 }
+
+gl::Error StateManagerGL::setDispatchComputeState(const gl::ContextState &data,
+                                                  GLuint numGroupsX,
+                                                  GLuint numGroupsY,
+                                                  GLuint numGroupsZ)
+{
+    return setGenericDispatchState(data, numGroupsX, numGroupsY, numGroupsZ);
+}
+
+gl::Error StateManagerGL::setGenericDispatchState(const gl::ContextState &data,
+                                                  GLuint numGroupsX,
+                                                  GLuint numGroupsY,
+                                                  GLuint numGroupsZ)
+{
+    setGenericShaderState(data);
+    return gl::NoError();
+}
 }

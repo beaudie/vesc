@@ -267,4 +267,11 @@ const gl::Limitations &Context9::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
+gl::Error Context9::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    // D3D9 doesn't compute shader.
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 }  // namespace rx

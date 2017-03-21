@@ -505,4 +505,54 @@ bool ValidationGetFramebufferParameteri(Context *context,
     return true;
 }
 
+bool ValidateDispatchCompute(Context *context, GLuint numGroupX, GLuint numGroupY, GLuint numGroupZ)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "context does not support OpenGL ES 3.1."));
+        return false;
+    }
+
+    const State &state   = context->getGLState();
+    gl::Program *program = state.getProgram();
+
+    if (program == nullptr)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "no active program object for the compute shader stage."));
+        return false;
+    }
+
+    if (program->isLinked() == false || program->getAttachedComputeShader() == nullptr)
+    {
+        context->handleError(Error(
+            GL_INVALID_OPERATION,
+            "program has not been successfully linked, or program contains no compute shaders."));
+        return false;
+    }
+
+    const Caps &caps = context->getCaps();
+    if (numGroupX > caps.maxComputeWorkGroupCount[0])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupX is greater than %u",
+                                   caps.maxComputeWorkGroupCount[0]));
+        return false;
+    }
+    if (numGroupY > caps.maxComputeWorkGroupCount[1])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupY is greater than %u",
+                                   caps.maxComputeWorkGroupCount[1]));
+        return false;
+    }
+    if (numGroupZ > caps.maxComputeWorkGroupCount[2])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupZ is greater than %u",
+                                   caps.maxComputeWorkGroupCount[2]));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl

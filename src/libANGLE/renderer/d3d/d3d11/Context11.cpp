@@ -280,4 +280,9 @@ const gl::Limitations &Context11::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
+gl::Error Context11::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    return mRenderer->genericDispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ);
+}
+
 }  // namespace rx

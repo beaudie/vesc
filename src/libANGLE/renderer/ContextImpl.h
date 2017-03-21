@@ -147,6 +147,8 @@ class ContextImpl : public GLImplFactory
     const gl::Extensions &getExtensions() const { return mState.getExtensions(); }
     const gl::Limitations &getLimitations() const { return mState.getLimitations(); }
 
+    virtual gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ) = 0;
+
   protected:
     const gl::ContextState &mState;
 };
