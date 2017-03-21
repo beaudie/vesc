@@ -2044,6 +2044,23 @@ GLuint Context::getProgramResourceIndex(GLuint program, GLenum programInterface,
     return QueryProgramResourceIndex(programObject, programInterface, name);
 }
 
+bool Context::isValidResourceIndex(GLuint program, GLenum programInterface, GLuint index)
+{
+    gl::Program *programObject = getProgram(program);
+    return IsValidResourceIndex(programObject, programInterface, index);
+}
+
+void Context::getProgramResourceName(GLuint program,
+                                     GLenum programInterface,
+                                     GLuint index,
+                                     GLsizei bufSize,
+                                     GLsizei *length,
+                                     GLchar *name)
+{
+    gl::Program *programObject = getProgram(program);
+    QueryProgramResourceName(programObject, programInterface, index, bufSize, length, name);
+}
+
 void Context::handleError(const Error &error)
 {
     if (error.isError())

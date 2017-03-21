@@ -74,5 +74,59 @@ TEST_P(ProgramInterfaceTestES31, GetResourceIndex)
     glDeleteProgram(program);
 }
 
+// Tests glGetProgramResourceName.
+TEST_P(ProgramInterfaceTestES31, GetResourceName)
+{
+    const std::string &vertexShaderSource =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "in highp vec4 position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = position;\n"
+        "}";
+
+    const std::string fragmentShaderSource =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "uniform vec4 color;\n"
+        "out vec4 oColor[4];\n"
+        "void main()\n"
+        "{\n"
+        "    oColor[0] = color;\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+
+    GLuint index = glGetProgramResourceIndex(program, GL_PROGRAM_INPUT, "position");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(index, GL_INVALID_INDEX);
+
+    GLchar name[64];
+    GLsizei length;
+    glGetProgramResourceName(program, GL_PROGRAM_INPUT, index, sizeof(name), &length, name);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(length, 8);
+    EXPECT_EQ(std::string(name), "position");
+
+    glGetProgramResourceName(program, GL_PROGRAM_INPUT, index, -1, &length, name);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    glGetProgramResourceName(program, GL_PROGRAM_INPUT, GL_INVALID_INDEX, sizeof(name), &length,
+                             name);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    index = glGetProgramResourceIndex(program, GL_PROGRAM_OUTPUT, "oColor");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(index, GL_INVALID_INDEX);
+
+    glGetProgramResourceName(program, GL_PROGRAM_OUTPUT, index, sizeof(name), &length, name);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(length, 9);
+    EXPECT_EQ(std::string(name), "oColor[0]");
+
+    glDeleteProgram(program);
+}
+
 ANGLE_INSTANTIATE_TEST(ProgramInterfaceTestES31, ES31_OPENGL(), ES31_D3D11(), ES31_OPENGLES());
 }

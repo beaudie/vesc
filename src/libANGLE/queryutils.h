@@ -110,6 +110,14 @@ void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint para
 GLuint QueryProgramResourceIndex(const Program *program,
                                  GLenum programInterface,
                                  const GLchar *name);
+bool IsValidResourceIndex(const Program *program, GLenum programInterface, GLuint index);
+
+void QueryProgramResourceName(const Program *program,
+                              GLenum programInterface,
+                              GLuint index,
+                              GLsizei bufSize,
+                              GLsizei *length,
+                              GLchar *name);
 
 }  // namespace gl
 
