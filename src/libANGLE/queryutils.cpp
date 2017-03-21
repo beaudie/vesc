@@ -966,6 +966,62 @@ GLuint QueryProgramResourceIndex(const Program *program,
     }
 }
 
+bool IsValidResourceIndex(const Program *program, GLenum programInterface, GLuint index)
+{
+    switch (programInterface)
+    {
+        case GL_PROGRAM_INPUT:
+            return program->isValidInputResourceIndex(index);
+
+        case GL_PROGRAM_OUTPUT:
+            return program->isValidOutputResourceIndex(index);
+
+        // TODO(Jie): more interfaces.
+        case GL_UNIFORM:
+        case GL_UNIFORM_BLOCK:
+        case GL_TRANSFORM_FEEDBACK_VARYING:
+        case GL_BUFFER_VARIABLE:
+        case GL_SHADER_STORAGE_BLOCK:
+            UNIMPLEMENTED();
+            return false;
+
+        default:
+            UNREACHABLE();
+            return false;
+    }
+}
+
+void QueryProgramResourceName(const Program *program,
+                              GLenum programInterface,
+                              GLuint index,
+                              GLsizei bufSize,
+                              GLsizei *length,
+                              GLchar *name)
+{
+    switch (programInterface)
+    {
+        case GL_PROGRAM_INPUT:
+            program->getInputResourceName(index, bufSize, length, name);
+            break;
+
+        case GL_PROGRAM_OUTPUT:
+            program->getOutputResourceName(index, bufSize, length, name);
+            break;
+
+        // TODO(Jie): more interfaces.
+        case GL_UNIFORM:
+        case GL_UNIFORM_BLOCK:
+        case GL_TRANSFORM_FEEDBACK_VARYING:
+        case GL_BUFFER_VARIABLE:
+        case GL_SHADER_STORAGE_BLOCK:
+            UNIMPLEMENTED();
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+}
+
 }  // namespace gl
 
 namespace egl
