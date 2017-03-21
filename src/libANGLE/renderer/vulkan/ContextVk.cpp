@@ -499,4 +499,9 @@ std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
     return std::vector<PathImpl *>();
 }
 
+gl::Error ContextVk::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
 }  // namespace rx
