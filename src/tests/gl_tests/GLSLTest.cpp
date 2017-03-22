@@ -2770,6 +2770,49 @@ TEST_P(GLSLTest_ES3, NestedSamplingOperation)
     EXPECT_PIXEL_COLOR_EQ_VEC2(lr, simpleColors[3]);
 }
 
+TEST_P(GLSLTest, BadStuff)
+{
+    const std::string &vertexSource =
+        "attribute vec2 position;\n"
+        "void main() {\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "}";
+
+    const std::string &fragmentSource =
+        "precision mediump float;\n"
+        "precision mediump int;\n"
+        "\n"
+        "uniform vec2 injectionSwitch;\n"
+        "\n"
+        "float sdBox(float p)\n"
+        "{\n"
+        "    return 1.0;\n"
+        "}\n"
+        "float map(vec3 p)\n"
+        "{\n"
+        "    float cube = 0.2;\n"
+        "    float s1 = sdBox(cube);\n"
+        "    float s2 = 1.0;\n"
+        "    return 1.0;\n"
+        "    return s2;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    const int MAX_MARCH = 50;\n"
+        "    for(\n"
+        "        int mi = 0;\n"
+        "        mi < MAX_MARCH;\n"
+        "        ++ mi\n"
+        "    )\n"
+        "        {\n"
+        "            map(vec3(1.0));\n"
+        "            discard;\n"
+        "        }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertexSource, fragmentSource);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
