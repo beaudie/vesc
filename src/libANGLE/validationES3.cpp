@@ -2327,6 +2327,14 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
         return false;
     }
 
+    if (context->getExtensions().webglCompatibility)
+    {
+        if (!ValidateWebGLVertexAttribPointer(context, type, false, stride, pointer, true))
+        {
+            return false;
+        }
+    }
+
     return true;
 }
 
