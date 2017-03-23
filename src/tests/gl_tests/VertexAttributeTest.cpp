@@ -688,6 +688,17 @@ TEST_P(VertexAttributeTestES31, MaxVertexAttribStride)
 // Use default value if the value of MAX_VERTEX_ATTRIB_STRIDE is too large for this test.
 TEST_P(VertexAttributeTestES31, DrawArraysWithLargeStride)
 {
+    // AMD Linux GL 4.4.13374 on R5 230 and 4.5.13399 on R7 240 return 0 for
+    // GL_MAX_VERTEX_ATTRIB_STRIDE, not conforming to spec. We use an emulated value (2048)
+    // for Linux AMD GL drivers.
+    // Skip this test because AMD Linux GL 4.4.13374 on R5 230 cannot support 2048 as a stride
+    // in rendering.
+    if (IsDesktopOpenGL() && IsLinux() && IsAMD())
+    {
+        std::cout << "Test disabled on Linux AMD OpenGL." << std::endl;
+        return;
+    }
+
     GLint maxStride;
     glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &maxStride);
     ASSERT_GL_NO_ERROR();
