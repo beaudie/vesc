@@ -225,6 +225,26 @@
             },
             'conditions':
             [
+                ['OS=="win"',
+                {
+                    'sources':
+                    [
+                        '<@(libangle_gpu_info_util_win_sources)',
+                    ],
+                    'link_settings':
+                    {
+                        'msvs_settings':
+                        {
+                            'VCLinkerTool':
+                            {
+                                'AdditionalDependencies':
+                                [
+                                    'setupapi.lib'
+                                ]
+                            }
+                        }
+                    }
+                }],
                 ['OS=="linux"',
                 {
                     'sources':
