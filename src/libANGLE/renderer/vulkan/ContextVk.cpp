@@ -315,15 +315,14 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     }
 
     vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
+
+    ANGLE_TRY(commandBuffer->begin(device));
     ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, queueSerial, state));
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
     commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
     commandBuffer->draw(count, 1, first, 0);
     commandBuffer->endRenderPass();
-    ANGLE_TRY(commandBuffer->end());
-
-    ANGLE_TRY(submitCommands(*commandBuffer));
 
     return gl::NoError();
 }
