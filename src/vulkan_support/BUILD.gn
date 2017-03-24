@@ -398,8 +398,10 @@ action("vulkan_gen_json_files") {
 
 source_set("vulkan_layer_utils") {
   sources = rebase_path(vulkan_gypi.vulkan_layer_utils_sources, ".", "src")
-  public_configs = [ ":vulkan_loader_config" ]
-  configs += [ ":vulkan_loader_internal_config" ]
+  public_configs = [
+    ":vulkan_loader_config",
+    ":vulkan_loader_internal_config",
+  ]
   configs -= vulkan_undefine_configs
 }
 
