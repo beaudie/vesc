@@ -433,11 +433,12 @@ vk::Error WindowSurfaceVk::swapImpl(RendererVk *renderer)
 
     auto *image = &mSwapchainImages[mCurrentSwapchainImageIndex];
 
-    currentCB->begin(renderer->getDevice());
+    ANGLE_TRY(currentCB->begin(renderer->getDevice()));
+
     image->changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                                   VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                   VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, currentCB);
-    currentCB->end();
+    ANGLE_TRY(currentCB->end());
 
     ANGLE_TRY(renderer->submitCommandsWithSync(*currentCB, mImageAvailableSemaphore,
                                                mRenderingCompleteSemaphore));
