@@ -3203,6 +3203,7 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
                                   GLenum destFormat,
                                   const gl::Offset &destOffset,
                                   TextureStorage *storage,
+                                  GLenum destTarget,
                                   GLint destLevel,
                                   bool unpackFlipY,
                                   bool unpackPremultiplyAlpha,
@@ -3213,6 +3214,7 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
     TextureStorage *sourceStorage = nullptr;
     ANGLE_TRY(const_cast<TextureD3D *>(sourceD3D)->getNativeTexture(&sourceStorage));
 
+    ASSERT(destTarget == GL_TEXTURE_2D);
     TextureStorage11_2D *sourceStorage11 = GetAs<TextureStorage11_2D>(sourceStorage);
     ASSERT(sourceStorage11);
 
