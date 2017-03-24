@@ -1030,22 +1030,25 @@ gl::Error TextureD3D_2D::copySubImage(ContextImpl *contextImpl,
 }
 
 gl::Error TextureD3D_2D::copyTexture(ContextImpl *contextImpl,
+                                     GLenum target,
+                                     size_t level,
                                      GLenum internalFormat,
                                      GLenum type,
+                                     size_t sourceLevel,
                                      bool unpackFlipY,
                                      bool unpackPremultiplyAlpha,
                                      bool unpackUnmultiplyAlpha,
                                      const gl::Texture *source)
 {
+    ASSERT(target == GL_TEXTURE_2D);
     GLenum sourceTarget = source->getTarget();
-    GLint sourceLevel   = 0;
 
-    GLint destLevel = 0;
+    GLint destLevel = static_cast<GLint>(level);
 
     GLenum sizedInternalFormat = gl::GetSizedInternalFormat(internalFormat, type);
     gl::Extents size(static_cast<int>(source->getWidth(sourceTarget, sourceLevel)),
                      static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
-    redefineImage(destLevel, sizedInternalFormat, size, false);
+    redefineImage(level, sizedInternalFormat, size, false);
 
     ASSERT(canCreateRenderTargetForImage(gl::ImageIndex::Make2D(destLevel)));
 
@@ -1055,34 +1058,37 @@ gl::Error TextureD3D_2D::copyTexture(ContextImpl *contextImpl,
 
     gl::Rectangle sourceRect(0, 0, size.width, size.height);
     gl::Offset destOffset(0, 0, 0);
-    ANGLE_TRY(mRenderer->copyTexture(source, sourceLevel, sourceRect,
+    ANGLE_TRY(mRenderer->copyTexture(source, static_cast<GLint>(sourceLevel), sourceRect,
                                      gl::GetInternalFormatInfo(sizedInternalFormat).format,
-                                     destOffset, mTexStorage, destLevel, unpackFlipY,
+                                     destOffset, mTexStorage, target, destLevel, unpackFlipY,
                                      unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
 
     return gl::NoError();
 }
 
 gl::Error TextureD3D_2D::copySubTexture(ContextImpl *contextImpl,
+                                        GLenum target,
+                                        size_t level,
                                         const gl::Offset &destOffset,
+                                        size_t sourceLevel,
                                         const gl::Rectangle &sourceArea,
                                         bool unpackFlipY,
                                         bool unpackPremultiplyAlpha,
                                         bool unpackUnmultiplyAlpha,
                                         const gl::Texture *source)
 {
-    GLint sourceLevel = 0;
-    GLint destLevel   = 0;
+    GLint destLevel = static_cast<GLint>(level);
 
+    ASSERT(target == GL_TEXTURE_2D);
     ASSERT(canCreateRenderTargetForImage(gl::ImageIndex::Make2D(destLevel)));
 
     ANGLE_TRY(ensureRenderTarget());
     ASSERT(isValidLevel(destLevel));
     ANGLE_TRY(updateStorageLevel(destLevel));
 
-    ANGLE_TRY(mRenderer->copyTexture(source, sourceLevel, sourceArea,
+    ANGLE_TRY(mRenderer->copyTexture(source, static_cast<GLint>(sourceLevel), sourceArea,
                                      gl::GetInternalFormatInfo(getBaseLevelInternalFormat()).format,
-                                     destOffset, mTexStorage, destLevel, unpackFlipY,
+                                     destOffset, mTexStorage, target, destLevel, unpackFlipY,
                                      unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
 
     return gl::NoError();
