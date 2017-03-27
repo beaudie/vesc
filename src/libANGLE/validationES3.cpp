@@ -1481,6 +1481,22 @@ bool ValidateClearBufferiv(ValidationContext *context,
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            if (context->getExtensions().webglCompatibility)
+            {
+                const FramebufferAttachment *attachment =
+                    context->getGLState().getDrawFramebuffer()->getDrawBuffer(drawbuffer);
+                if (attachment)
+                {
+                    GLenum componentType = attachment->getFormat().info->componentType;
+                    if (componentType != GL_INT)
+                    {
+                        context->handleError(Error(
+                            GL_INVALID_OPERATION,
+                            "No defined conversion between clear value and attachment format."));
+                        return false;
+                    }
+                }
+            }
             break;
 
         case GL_STENCIL:
@@ -1488,6 +1504,22 @@ bool ValidateClearBufferiv(ValidationContext *context,
             {
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
+            }
+            if (context->getExtensions().webglCompatibility)
+            {
+                const FramebufferAttachment *attachment =
+                    context->getGLState().getDrawFramebuffer()->getDrawBuffer(drawbuffer);
+                if (attachment)
+                {
+                    GLenum componentType = attachment->getFormat().info->componentType;
+                    if (componentType != GL_UNSIGNED_INT)
+                    {
+                        context->handleError(Error(
+                            GL_INVALID_OPERATION,
+                            "No defined conversion between clear value and attachment format."));
+                        return false;
+                    }
+                }
             }
             break;
 
@@ -1536,6 +1568,23 @@ bool ValidateClearBufferfv(ValidationContext *context,
             {
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
+            }
+            if (context->getExtensions().webglCompatibility)
+            {
+                const FramebufferAttachment *attachment =
+                    context->getGLState().getDrawFramebuffer()->getDrawBuffer(drawbuffer);
+                if (attachment)
+                {
+                    GLenum componentType = attachment->getFormat().info->componentType;
+                    if (componentType != GL_FLOAT && componentType != GL_UNSIGNED_NORMALIZED &&
+                        componentType != GL_SIGNED_NORMALIZED)
+                    {
+                        context->handleError(Error(
+                            GL_INVALID_OPERATION,
+                            "No defined conversion between clear value and attachment format."));
+                        return false;
+                    }
+                }
             }
             break;
 

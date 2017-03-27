@@ -1965,6 +1965,27 @@ bool ValidateClear(ValidationContext *context, GLbitfield mask)
         return false;
     }
 
+    if (context->getExtensions().webglCompatibility)
+    {
+        for (size_t drawBufferIdx = 0; drawBufferIdx < context->getCaps().maxDrawBuffers;
+             drawBufferIdx++)
+        {
+            const FramebufferAttachment *attachment = fbo->getDrawBuffer(drawBufferIdx);
+            if (attachment)
+            {
+                GLenum componentType = attachment->getFormat().info->componentType;
+                if (componentType != GL_FLOAT && componentType != GL_UNSIGNED_NORMALIZED &&
+                    componentType != GL_SIGNED_NORMALIZED)
+                {
+                    context->handleError(
+                        Error(GL_INVALID_OPERATION,
+                              "No defined conversion between clear value and attachment format."));
+                    return false;
+                }
+            }
+        }
+    }
+
     return true;
 }
 
