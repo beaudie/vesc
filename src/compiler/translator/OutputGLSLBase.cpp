@@ -946,7 +946,17 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpCallBuiltInFunction:
             // Function call.
             if (visit == PreVisit)
-                out << hashFunctionNameIfNeeded(node->getFunctionSymbolInfo()->getNameObj()) << "(";
+            {
+                if (node->getOp() == EOpCallBuiltInFunction)
+                {
+                    out << translateTextureFunction(node->getFunctionSymbolInfo()->getName());
+                }
+                else
+                {
+                    out << hashFunctionNameIfNeeded(node->getFunctionSymbolInfo()->getNameObj());
+                }
+                out << "(";
+            }
             else if (visit == InVisit)
                 out << ", ";
             else
@@ -1196,22 +1206,18 @@ TString TOutputGLSLBase::hashVariableName(const TName &name)
     return hashName(name);
 }
 
-TString TOutputGLSLBase::hashFunctionNameIfNeeded(const TName &mangledName)
+TString TOutputGLSLBase::hashFunctionNameIfNeeded(const TName &name)
 {
-    TString mangledStr = mangledName.getString();
-    TString name       = TFunction::unmangleName(mangledStr);
-    if (mSymbolTable.findBuiltIn(mangledStr, mShaderVersion) != nullptr || name == "main")
-        return translateTextureFunction(name);
-    if (mangledName.isInternal())
+    const TString &nameStr = name.getString();
+    if (nameStr == "main" || name.isInternal())
     {
         // Internal function names are outputted as-is - they may refer to functions manually added
         // to the output shader source that are not included in the AST at all.
-        return name;
+        return nameStr;
     }
     else
     {
-        TName nameObj(name);
-        return hashName(nameObj);
+        return hashName(name);
     }
 }
 
