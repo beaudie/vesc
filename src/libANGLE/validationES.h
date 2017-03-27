@@ -617,6 +617,33 @@ bool ValidateVertexFormatBase(ValidationContext *context,
                               GLenum type,
                               GLboolean pureInteger);
 
+// Perform validation from WebGL 2 section 5.10 "Invalid Clears":
+// In the WebGL 2 API, trying to perform a clear when there is a mismatch between the type of the
+// specified clear value and the type of a buffer that is being cleared generates an
+// INVALID_OPERATION error instead of producing undefined results
+template <size_t N>
+bool ValidateWebGLFramebufferAttachmentClearType(ValidationContext *context,
+                                                 GLint drawbuffer,
+                                                 const GLenum (&validComponentTypes)[N])
+{
+    const FramebufferAttachment *attachment =
+        context->getGLState().getDrawFramebuffer()->getDrawBuffer(drawbuffer);
+    if (attachment)
+    {
+        GLenum componentType = attachment->getFormat().info->componentType;
+        if (std::find(std::begin(validComponentTypes), std::end(validComponentTypes),
+                      componentType) == std::end(validComponentTypes))
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION,
+                      "No defined conversion between clear value and attachment format."));
+            return false;
+        }
+    }
+
+    return true;
+}
+
 // Error messages shared here for use in testing.
 extern const char *g_ExceedsMaxElementErrorMessage;
 }  // namespace gl
