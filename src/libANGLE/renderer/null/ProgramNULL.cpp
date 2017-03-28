@@ -190,4 +190,8 @@ void ProgramNULL::setPathFragmentInputGen(const std::string &inputName,
 {
 }
 
+void ProgramNULL::getUniformiv(GLint location, GLint *v)
+{
+}
+
 }  // namespace rx

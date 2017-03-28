@@ -92,6 +92,8 @@ class ProgramImpl : angle::NonCopyable
                                          GLint components,
                                          const GLfloat *coeffs) = 0;
 
+    virtual void getUniformiv(GLint location, GLint *v) = 0;
+
   protected:
     const gl::ProgramState &mState;
 };

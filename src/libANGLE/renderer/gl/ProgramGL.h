@@ -78,6 +78,8 @@ class ProgramGL : public ProgramImpl
 
     GLuint getProgramID() const;
 
+    void getUniformiv(GLint location, GLint *v) override;
+
   private:
     void preLink();
     bool checkLinkStatus(gl::InfoLog &infoLog);
@@ -91,6 +93,7 @@ class ProgramGL : public ProgramImpl
     StateManagerGL *mStateManager;
 
     std::vector<GLint> mUniformRealLocationMap;
+    std::map<GLuint, GLint> mImageUniformBindingMap;
     std::vector<GLuint> mUniformBlockRealLocationMap;
 
     struct PathRenderingFragmentInput

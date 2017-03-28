@@ -583,6 +583,7 @@ void ProgramGL::preLink()
 {
     // Reset the program state
     mUniformRealLocationMap.clear();
+    mImageUniformBindingMap.clear();
     mUniformBlockRealLocationMap.clear();
     mPathRenderingFragmentInputs.clear();
 }
@@ -627,6 +628,7 @@ void ProgramGL::postLink()
 {
     // Query the uniform information
     ASSERT(mUniformRealLocationMap.empty());
+    ASSERT(mImageUniformBindingMap.empty());
     const auto &uniformLocations = mState.getUniformLocations();
     const auto &uniforms = mState.getUniforms();
     mUniformRealLocationMap.resize(uniformLocations.size(), GL_INVALID_INDEX);
@@ -651,6 +653,13 @@ void ProgramGL::postLink()
 
         GLint realLocation = mFunctions->getUniformLocation(mProgramID, fullName.c_str());
         mUniformRealLocationMap[uniformLocation] = realLocation;
+
+        if (gl::IsImageType(uniform.type) && realLocation > 0)
+        {
+            GLint binding;
+            mFunctions->getUniformiv(mProgramID, realLocation, &binding);
+            mImageUniformBindingMap.insert(std::pair<GLuint, GLint>(realLocation, binding));
+        }
     }
 
     // Discover CHROMIUM_path_rendering fragment inputs if enabled.
@@ -717,6 +726,12 @@ void ProgramGL::postLink()
             }
         }
     }
+}
+
+void ProgramGL::getUniformiv(GLint location, GLint *v)
+{
+    std::map<GLuint, GLint>::iterator iter = mImageUniformBindingMap.find(uniLoc(location));
+    *v = iter != mImageUniformBindingMap.end() ? iter->second : -1;
 }
 
 }  // namespace rx

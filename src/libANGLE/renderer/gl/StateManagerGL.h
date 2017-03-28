@@ -56,6 +56,7 @@ class StateManagerGL final : angle::NonCopyable
     void activeTexture(size_t unit);
     void bindTexture(GLenum type, GLuint texture);
     void bindSampler(size_t unit, GLuint sampler);
+    void bindImageTexture(size_t unit, const gl::ImageUnit &imageUnit);
     void bindFramebuffer(GLenum type, GLuint framebuffer);
     void bindRenderbuffer(GLenum type, GLuint renderbuffer);
     void bindTransformFeedback(GLenum type, GLuint transformFeedback);
@@ -195,6 +196,7 @@ class StateManagerGL final : angle::NonCopyable
     size_t mTextureUnitIndex;
     std::map<GLenum, std::vector<GLuint>> mTextures;
     std::vector<GLuint> mSamplers;
+    std::vector<gl::ImageUnit> mImages;
 
     GLuint mTransformFeedback;
 

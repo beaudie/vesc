@@ -180,6 +180,7 @@ void State::initialize(const Caps &caps,
 
         mAtomicCounterBuffers.resize(caps.maxAtomicCounterBufferBindings);
         mShaderStorageBuffers.resize(caps.maxShaderStorageBufferBindings);
+        mImageUnits.resize(caps.maxImageUnits, ImageUnit());
     }
     if (extensions.eglImageExternal || extensions.eglStreamConsumerExternal)
     {
@@ -825,6 +826,20 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
                 // Zero textures are the "default" textures instead of NULL
                 binding.set(it->second.get());
             }
+        }
+    }
+
+    for (auto &bindingImageUnit : mImageUnits)
+    {
+        if (bindingImageUnit.texture != nullptr && bindingImageUnit.texture->id() == texture)
+        {
+            bindingImageUnit.texture = nullptr;
+            bindingImageUnit.level   = 0;
+            bindingImageUnit.layered = false;
+            bindingImageUnit.layer   = 0;
+            bindingImageUnit.access  = GL_READ_ONLY;
+            bindingImageUnit.format  = GL_R32UI;
+            break;
         }
     }
 
@@ -2192,6 +2207,26 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
+}
+
+void State::setImageUnit(GLuint unit,
+                         Texture *texture,
+                         GLint level,
+                         GLboolean layered,
+                         GLint layer,
+                         GLenum access,
+                         GLenum format)
+{
+    ImageUnit imageUnit(texture, level, layered, layer, access, format);
+    if (mImageUnits[unit] != imageUnit)
+    {
+        mImageUnits[unit] = imageUnit;
+    }
+}
+
+const ImageUnit &State::getImageUnit(GLuint unit) const
+{
+    return mImageUnits[unit];
 }
 
 }  // namespace gl
