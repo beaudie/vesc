@@ -182,39 +182,54 @@ class EGLContextCompatibilityTest : public ANGLETest
   private:
     void testClearSurface(EGLSurface surface, EGLConfig surfaceConfig, EGLContext context) const
     {
+        std::cout << "Start testClearSurface\n";
+        std::cout << "--Start eglMakeCurrent\n";
         eglMakeCurrent(mDisplay, surface, surface, context);
         ASSERT_EGL_SUCCESS();
+        std::cout << "--Success eglMakeCurrent\n";
 
         glViewport(0, 0, 500, 500);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+        std::cout << "--Start glClear\n";
         glClear(GL_COLOR_BUFFER_BIT);
+        std::cout << "--Success glClear\n";
         ASSERT_GL_NO_ERROR();
 
         EGLint surfaceCompontentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
         if (eglDisplayExtensionEnabled(mDisplay, "EGL_EXT_pixel_format_float"))
         {
+            std::cout << "--Start eglGetConfigAttrib\n";
             eglGetConfigAttrib(mDisplay, surfaceConfig, EGL_COLOR_COMPONENT_TYPE_EXT,
                                &surfaceCompontentType);
+                        std::cout << "--Success eglGetConfigAttrib\n";
+
         }
+
+        std::cout << surfaceCompontentType << std::endl;
 
         if (surfaceCompontentType == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT)
         {
+            std::cout << "--EGL_COLOR_COMPONENT_TYPE_FIXED_EXT\n";
             EXPECT_PIXEL_EQ(250, 250, 0, 0, 255, 255);
         }
         else
         {
             EXPECT_PIXEL_32F_EQ(250, 250, 0, 0, 1.0f, 1.0f);
         }
-
+        std::cout << "--Start eglMakeCurrent\n";
         eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        std::cout << "--Success eglMakeCurrent\n";
         ASSERT_EGL_SUCCESS();
+        std::cout << "Success testClearSurface\n";
     }
 
     void testMakeCurrentFails(EGLSurface surface, EGLContext context) const
-    {
+    {   
         eglMakeCurrent(mDisplay, surface, surface, context);
+        
         EXPECT_EGL_ERROR(EGL_BAD_MATCH);
     }
+
 };
 
 // The test is split in several subtest so that simple cases
