@@ -960,6 +960,17 @@ Error Program::loadBinary(const Context *context,
         mState.mSamplerBindings.emplace_back(SamplerBinding(textureType, bindingCount));
     }
 
+    stream.readInt(&mState.mImageUniformRange.start);
+    stream.readInt(&mState.mImageUniformRange.end);
+
+    unsigned int imageCount = stream.readInt<unsigned int>();
+    for (unsigned int imageIndex = 0; imageIndex < imageCount; ++imageIndex)
+    {
+        GLuint boundImageUnit = stream.readInt<unsigned int>();
+        size_t elementCount   = stream.readInt<size_t>();
+        mState.mImageBindings.emplace_back(ImageBinding(boundImageUnit, elementCount));
+    }
+
     ANGLE_TRY_RESULT(mProgram->load(context, mInfoLog, &stream), mLinked);
 
     return NoError();
@@ -1099,6 +1110,16 @@ Error Program::saveBinary(const Context *context,
     {
         stream.writeInt(samplerBinding.textureType);
         stream.writeInt(samplerBinding.boundTextureUnits.size());
+    }
+
+    stream.writeInt(mState.mImageUniformRange.start);
+    stream.writeInt(mState.mImageUniformRange.end);
+
+    stream.writeInt(mState.mImageBindings.size());
+    for (const auto &imageBinding : mState.mImageBindings)
+    {
+        stream.writeInt(imageBinding.boundImageUnit);
+        stream.writeInt(imageBinding.elementCount);
     }
 
     ANGLE_TRY(mProgram->save(&stream));
@@ -2041,29 +2062,54 @@ bool Program::linkUniforms(const Context *context,
 
     linker.getResults(&mState.mUniforms, &mState.mUniformLocations);
 
-    linkSamplerBindings();
+    linkSamplerAndImageBindings();
 
     return true;
 }
 
-void Program::linkSamplerBindings()
+void Program::linkSamplerAndImageBindings()
 {
-    mState.mSamplerUniformRange.end   = static_cast<unsigned int>(mState.mUniforms.size());
+    mState.mImageUniformRange.end   = static_cast<unsigned int>(mState.mUniforms.size());
+    mState.mImageUniformRange.start = mState.mImageUniformRange.end;
+    auto uniformIter                = mState.mUniforms.rbegin();
+    while (uniformIter != mState.mUniforms.rend() && uniformIter->isImage())
+    {
+        --mState.mImageUniformRange.start;
+        ++uniformIter;
+    }
+
+    mState.mSamplerUniformRange.end   = mState.mImageUniformRange.start;
     mState.mSamplerUniformRange.start = mState.mSamplerUniformRange.end;
-    auto samplerIter                  = mState.mUniforms.rbegin();
-    while (samplerIter != mState.mUniforms.rend() && samplerIter->isSampler())
+    while (uniformIter != mState.mUniforms.rend() && uniformIter->isSampler())
     {
         --mState.mSamplerUniformRange.start;
-        ++samplerIter;
+        ++uniformIter;
     }
     // If uniform is a sampler type, insert it into the mSamplerBindings array.
     for (unsigned int samplerIndex = mState.mSamplerUniformRange.start;
-         samplerIndex < mState.mUniforms.size(); ++samplerIndex)
+         samplerIndex < mState.mSamplerUniformRange.end; ++samplerIndex)
     {
         const auto &samplerUniform = mState.mUniforms[samplerIndex];
         GLenum textureType         = SamplerTypeToTextureType(samplerUniform.type);
         mState.mSamplerBindings.emplace_back(
             SamplerBinding(textureType, samplerUniform.elementCount()));
+    }
+
+    // If uniform is a image type, insert it into the mImageBindings array.
+    for (unsigned int imageIndex = mState.mImageUniformRange.start;
+         imageIndex < mState.mImageUniformRange.end; ++imageIndex)
+    {
+        // ES3.1 (section 7.6.1) and GLSL ES3.1 (section 4.4.5), Uniform*i{v}
+        // commands cannot load values into a uniform defined as an image,so
+        // if declare without a binding qualifier, the image variable is
+        // initially bound to unit zero.
+        auto &imageUniform = mState.mUniforms[imageIndex];
+        if (imageUniform.binding == -1)
+        {
+            imageUniform.binding = 0;
+        }
+        mState.mImageBindings.emplace_back(
+            ImageBinding(imageUniform.binding, imageUniform.elementCount()));
     }
 }
 
