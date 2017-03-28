@@ -322,26 +322,35 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     const Shader &shader,
     GLuint maxUniformComponents,
     GLuint maxTextureImageUnits,
+    GLuint maxImageUnits,
     const std::string &componentsErrorMessage,
     const std::string &samplerErrorMessage,
+    const std::string &imageErrorMessage,
     std::vector<LinkedUniform> &samplerUniforms,
+    std::vector<LinkedUniform> &imageUniforms,
     InfoLog &infoLog)
 {
-    VectorAndSamplerCount vasCount;
+    ShaderUniformCount shaderUniformCount;
     for (const sh::Uniform &uniform : shader.getUniforms())
     {
-        vasCount += flattenUniform(uniform, &samplerUniforms);
+        shaderUniformCount += flattenUniform(uniform, &samplerUniforms, &imageUniforms);
     }
 
-    if (vasCount.vectorCount > maxUniformComponents)
+    if (shaderUniformCount.vectorCount > maxUniformComponents)
     {
         infoLog << componentsErrorMessage << maxUniformComponents << ").";
         return false;
     }
 
-    if (vasCount.samplerCount > maxTextureImageUnits)
+    if (shaderUniformCount.samplerCount > maxTextureImageUnits)
     {
         infoLog << samplerErrorMessage << maxTextureImageUnits << ").";
+        return false;
+    }
+
+    if (shaderUniformCount.imageCount > maxImageUnits)
+    {
+        infoLog << imageErrorMessage << maxImageUnits << ").";
         return false;
     }
 
@@ -351,6 +360,7 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
 bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
 {
     std::vector<LinkedUniform> samplerUniforms;
+    std::vector<LinkedUniform> imageUniforms;
 
     if (mState.getAttachedComputeShader())
     {
@@ -359,10 +369,11 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
         // TODO (mradev): check whether we need finer-grained component counting
         if (!flattenUniformsAndCheckCapsForShader(
                 *computeShader, caps.maxComputeUniformComponents / 4,
-                caps.maxComputeTextureImageUnits,
+                caps.maxComputeTextureImageUnits, caps.maxComputeImageUniforms,
                 "Compute shader active uniforms exceed MAX_COMPUTE_UNIFORM_COMPONENTS (",
                 "Compute shader sampler count exceeds MAX_COMPUTE_TEXTURE_IMAGE_UNITS (",
-                samplerUniforms, infoLog))
+                "Compute shader image count exceeds MAX_COMPUTE_IMAGE_UNIFORMS (", samplerUniforms,
+                imageUniforms, infoLog))
         {
             return false;
         }
@@ -373,9 +384,11 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
 
         if (!flattenUniformsAndCheckCapsForShader(
                 *vertexShader, caps.maxVertexUniformVectors, caps.maxVertexTextureImageUnits,
+                caps.maxVertexImageUniforms,
                 "Vertex shader active uniforms exceed MAX_VERTEX_UNIFORM_VECTORS (",
                 "Vertex shader sampler count exceeds MAX_VERTEX_TEXTURE_IMAGE_UNITS (",
-                samplerUniforms, infoLog))
+                "Vertex shader image count exceeds MAX_VERTEX_IMAGE_UNIFORMS (", samplerUniforms,
+                imageUniforms, infoLog))
         {
             return false;
         }
@@ -383,42 +396,48 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
 
         if (!flattenUniformsAndCheckCapsForShader(
                 *fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits,
+                caps.maxFragmentImageUniforms,
                 "Fragment shader active uniforms exceed MAX_FRAGMENT_UNIFORM_VECTORS (",
-                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (", samplerUniforms,
-                infoLog))
+                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
+                "Fragment shader image count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
+                samplerUniforms, imageUniforms, infoLog))
         {
             return false;
         }
     }
 
     mUniforms.insert(mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
+    mUniforms.insert(mUniforms.end(), imageUniforms.begin(), imageUniforms.end());
     return true;
 }
 
-UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniform(
+UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
     const sh::Uniform &uniform,
-    std::vector<LinkedUniform> *samplerUniforms)
+    std::vector<LinkedUniform> *samplerUniforms,
+    std::vector<LinkedUniform> *imageUniforms)
 {
     int location                          = uniform.location;
-    VectorAndSamplerCount uniformVasCount = flattenUniformImpl(
-        uniform, uniform.name, samplerUniforms, uniform.staticUse, uniform.binding, &location);
+    ShaderUniformCount shaderUniformCount =
+        flattenUniformImpl(uniform, uniform.name, samplerUniforms, imageUniforms, uniform.staticUse,
+                           uniform.binding, &location);
     if (uniform.staticUse)
     {
-        return uniformVasCount;
+        return shaderUniformCount;
     }
-    return VectorAndSamplerCount();
+    return ShaderUniformCount();
 }
 
-UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
+UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     const sh::ShaderVariable &uniform,
     const std::string &fullName,
     std::vector<LinkedUniform> *samplerUniforms,
+    std::vector<LinkedUniform> *imageUniforms,
     bool markStaticUse,
     int binding,
     int *location)
 {
     ASSERT(location);
-    VectorAndSamplerCount vectorAndSamplerCount;
+    ShaderUniformCount shaderUniformCount;
 
     if (uniform.isStruct())
     {
@@ -431,21 +450,27 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                vectorAndSamplerCount += flattenUniformImpl(field, fieldFullName, samplerUniforms,
-                                                            markStaticUse, -1, location);
+                shaderUniformCount +=
+                    flattenUniformImpl(field, fieldFullName, samplerUniforms, imageUniforms,
+                                       markStaticUse, -1, location);
             }
         }
 
-        return vectorAndSamplerCount;
+        return shaderUniformCount;
     }
 
     // Not a struct
     bool isSampler                              = IsSamplerType(uniform.type);
+    bool isImage                                = IsImageType(uniform.type);
     std::vector<gl::LinkedUniform> *uniformList = &mUniforms;
     if (isSampler)
     {
         // Store sampler uniforms separately, so we'll append them to the end of the list.
         uniformList = samplerUniforms;
+    }
+    else if (isImage)
+    {
+        uniformList = imageUniforms;
     }
     LinkedUniform *existingUniform = FindUniform(*uniformList, fullName);
     if (existingUniform)
@@ -474,18 +499,19 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
 
     unsigned int elementCount = uniform.elementCount();
 
-    // Samplers aren't "real" uniforms, so they don't count towards register usage.
-    // Likewise, don't count "real" uniforms towards sampler count.
-    vectorAndSamplerCount.vectorCount =
-        (isSampler ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
-    vectorAndSamplerCount.samplerCount = (isSampler ? elementCount : 0);
+    // Samplers and images aren't "real" uniforms, so they don't count towards register usage.
+    // Likewise, don't count "real" uniforms towards sampler and image count.
+    shaderUniformCount.vectorCount =
+        ((isSampler || isImage) ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
+    shaderUniformCount.samplerCount = (isSampler ? elementCount : 0);
+    shaderUniformCount.imageCount   = (isImage ? elementCount : 0);
 
     if (*location != -1)
     {
         *location += elementCount;
     }
 
-    return vectorAndSamplerCount;
+    return shaderUniformCount;
 }
 
 }  // namespace gl
