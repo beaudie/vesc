@@ -375,7 +375,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         mUseDXGISwapChains = false;
     }
 
-    if (mUseDXGISwapChains)
+    if (mFunctionsWGL->hasExtension("WGL_NV_DX_interop2"))
     {
         egl::Error error = initializeD3DDevice();
         if (error.isError())
@@ -465,9 +465,8 @@ SurfaceImpl *DisplayWGL::createPbufferFromClientBuffer(const egl::SurfaceState &
                                                        EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs)
 {
-    ASSERT(buftype == EGL_D3D_TEXTURE_ANGLE);
-    return new D3DTextureSurfaceWGL(state, getRenderer(), clientBuffer, this, mWGLContext,
-                                    mDeviceContext, mFunctionsGL, mFunctionsWGL);
+    return new D3DTextureSurfaceWGL(state, getRenderer(), buftype, clientBuffer, this, mWGLContext,
+                                    mDeviceContext, mD3D11Device, mFunctionsGL, mFunctionsWGL);
 }
 
 SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
@@ -588,7 +587,9 @@ egl::Error DisplayWGL::validateClientBuffer(const egl::Config *configuration,
     switch (buftype)
     {
         case EGL_D3D_TEXTURE_ANGLE:
-            return D3DTextureSurfaceWGL::ValidateD3DTextureClientBuffer(clientBuffer);
+        case EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE:
+            return D3DTextureSurfaceWGL::ValidateD3DTextureClientBuffer(buftype, clientBuffer,
+                                                                        mD3D11Device);
 
         default:
             return DisplayGL::validateClientBuffer(configuration, buftype, clientBuffer, attribs);
@@ -659,7 +660,11 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->createContextRobustness = mHasRobustness;
 
-    outExtensions->d3dTextureClientBuffer = mFunctionsWGL->hasExtension("WGL_NV_DX_interop2");
+    outExtensions->d3dTextureClientBuffer         = mD3D11Device != nullptr;
+    outExtensions->d3dShareHandleClientBuffer     = mD3D11Device != nullptr;
+    outExtensions->surfaceD3DTexture2DShareHandle = true;
+    outExtensions->querySurfacePointer            = true;
+    outExtensions->keyedMutex                     = true;
 
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;
