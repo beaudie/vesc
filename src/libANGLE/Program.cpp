@@ -1196,7 +1196,12 @@ bool Program::isAttribLocationActive(size_t attribLocation) const
     return mState.mActiveAttribLocationsMask[attribLocation];
 }
 
-void Program::getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
+void Program::getActiveAttribute(GLuint index,
+                                 GLsizei bufsize,
+                                 GLsizei *length,
+                                 GLint *size,
+                                 GLenum *type,
+                                 GLchar *name) const
 {
     if (!mLinked)
     {
@@ -1279,6 +1284,77 @@ GLuint Program::getInputResourceIndex(const GLchar *name) const
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
 {
     return GetResourceIndexFromName(mState.mOutputVariables, std::string(name));
+}
+
+bool Program::isValidResourceIndex(GLenum interface, GLuint index) const
+{
+    switch (interface)
+    {
+        case GL_PROGRAM_INPUT:
+            return (index < mState.mAttributes.size());
+
+        case GL_PROGRAM_OUTPUT:
+            return (index < mState.mOutputVariables.size());
+
+        // TODO(Jie): more interfaces.
+        case GL_UNIFORM:
+        case GL_UNIFORM_BLOCK:
+        case GL_TRANSFORM_FEEDBACK_VARYING:
+        case GL_BUFFER_VARIABLE:
+        case GL_SHADER_STORAGE_BLOCK:
+            UNIMPLEMENTED();
+            return false;
+
+        default:
+            UNREACHABLE();
+            return false;
+    }
+}
+
+void Program::getInputResourceName(GLuint index,
+                                   GLsizei bufSize,
+                                   GLsizei *length,
+                                   GLchar *name) const
+{
+    GLint size;
+    GLenum type;
+    getActiveAttribute(index, bufSize, length, &size, &type, name);
+}
+
+void Program::getOutputResourceName(GLuint index,
+                                    GLsizei bufSize,
+                                    GLsizei *length,
+                                    GLchar *name) const
+{
+    if (length)
+    {
+        *length = 0;
+    }
+
+    if (!mLinked)
+    {
+        if (bufSize > 0)
+        {
+            name[0] = '\0';
+        }
+        return;
+    }
+    ASSERT(index < mState.mOutputVariables.size());
+    const auto &output = mState.mOutputVariables[index];
+
+    if (bufSize > 0)
+    {
+        std::string nameWithArray = (output.isArray() ? output.name + "[0]" : output.name);
+        const char *string        = nameWithArray.c_str();
+
+        strncpy(name, string, bufSize);
+        name[bufSize - 1] = '\0';
+
+        if (length)
+        {
+            *length = static_cast<GLsizei>(strlen(name));
+        }
+    }
 }
 
 GLint Program::getFragDataLocation(const std::string &name) const
