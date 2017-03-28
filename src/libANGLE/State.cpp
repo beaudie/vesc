@@ -821,6 +821,20 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
         }
     }
 
+    for (auto &bindingImageUnit : mImageUnits)
+    {
+        if (bindingImageUnit.texture != nullptr && bindingImageUnit.texture->id() == texture)
+        {
+            bindingImageUnit.texture = nullptr;
+            bindingImageUnit.level   = 0;
+            bindingImageUnit.layered = false;
+            bindingImageUnit.layer   = 0;
+            bindingImageUnit.access  = GL_READ_ONLY;
+            bindingImageUnit.format  = GL_R32UI;
+            break;
+        }
+    }
+
     // [OpenGL ES 2.0.24] section 4.4 page 112:
     // If a texture object is deleted while its image is attached to the currently bound framebuffer, then it is
     // as if Texture2DAttachment had been called, with a texture of 0, for each attachment point to which this
@@ -2094,6 +2108,28 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
+}
+
+void State::setImageUnit(GLuint unit,
+                         Texture *texture,
+                         GLint level,
+                         GLboolean layered,
+                         GLint layer,
+                         GLenum access,
+                         GLenum format)
+{
+    ImageUnit *imageUnit = &mImageUnits[unit];
+    imageUnit->texture   = texture;
+    imageUnit->level     = level;
+    imageUnit->layered   = layered;
+    imageUnit->layer     = layer;
+    imageUnit->access    = access;
+    imageUnit->format    = format;
+}
+
+const ImageUnit &State::getImageUnit(GLuint unit) const
+{
+    return mImageUnits[unit];
 }
 
 }  // namespace gl

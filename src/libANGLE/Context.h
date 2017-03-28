@@ -666,6 +666,14 @@ class Context final : public ValidationContext
 
     Error getScratchBuffer(size_t requestedSize, angle::MemoryBuffer **scratchBufferOut) const;
 
+    void bindImageTexture(GLuint unit,
+                          GLuint texture,
+                          GLint level,
+                          GLboolean layered,
+                          GLint layer,
+                          GLenum access,
+                          GLenum format);
+
   private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);

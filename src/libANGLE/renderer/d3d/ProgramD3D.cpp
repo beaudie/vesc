@@ -2479,4 +2479,10 @@ void ProgramD3D::setPathFragmentInputGen(const std::string &inputName,
     UNREACHABLE();
 }
 
+void ProgramD3D::getUniformiv(GLint location, GLint *v)
+{
+    UNIMPLEMENTED();
+    return;
+}
+
 }  // namespace rx

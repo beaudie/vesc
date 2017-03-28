@@ -302,4 +302,10 @@ gl::ErrorOrResult<vk::PipelineLayout *> ProgramVk::getPipelineLayout(VkDevice de
     return &mPipelineLayout;
 }
 
+void ProgramVk::getUniformiv(GLint location, GLint *v)
+{
+    UNIMPLEMENTED();
+    return;
+}
+
 }  // namespace rx

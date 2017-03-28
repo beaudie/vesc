@@ -274,6 +274,8 @@ class ProgramD3D : public ProgramImpl
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
 
+    void getUniformiv(GLint location, GLint *v) override;
+
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
     class GetExecutableTask;

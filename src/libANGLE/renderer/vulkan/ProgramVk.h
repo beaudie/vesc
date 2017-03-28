@@ -104,6 +104,8 @@ class ProgramVk : public ProgramImpl
     const vk::ShaderModule &getLinkedFragmentModule() const;
     gl::ErrorOrResult<vk::PipelineLayout *> getPipelineLayout(VkDevice device);
 
+    void getUniformiv(GLint location, GLint *v) override;
+
   private:
     vk::ShaderModule mLinkedVertexModule;
     vk::ShaderModule mLinkedFragmentModule;

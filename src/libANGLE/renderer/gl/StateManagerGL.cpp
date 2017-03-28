@@ -836,6 +836,28 @@ void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
             }
         }
     }
+
+    for (const gl::ImageBinding &imageUniform : program->getImageBindings())
+    {
+        for (size_t imageUnitIndex = 0; imageUnitIndex < imageUniform.elementCount;
+             imageUnitIndex++)
+        {
+            const gl::ImageUnit imageUnit = state.getImageUnit(imageUniform.boundImageUnit +
+                                                               static_cast<GLuint>(imageUnitIndex));
+            const TextureGL *textureGL = SafeGetImplAs<TextureGL>(imageUnit.texture);
+            if (textureGL != nullptr)
+            {
+                bindImageTexture(imageUniform.boundImageUnit, textureGL->getTextureID(),
+                                 imageUnit.level, imageUnit.layered, imageUnit.layer,
+                                 imageUnit.access, imageUnit.format);
+            }
+            else
+            {
+                bindImageTexture(imageUniform.boundImageUnit, 0, imageUnit.level, imageUnit.layered,
+                                 imageUnit.layer, imageUnit.access, imageUnit.format);
+            }
+        }
+    }
 }
 
 gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
@@ -1809,5 +1831,16 @@ GLuint StateManagerGL::getBoundBuffer(GLenum type)
 {
     ASSERT(mBuffers.find(type) != mBuffers.end());
     return mBuffers[type];
+}
+
+void StateManagerGL::bindImageTexture(GLuint unit,
+                                      GLuint texture,
+                                      GLint level,
+                                      GLboolean layered,
+                                      GLint layer,
+                                      GLenum access,
+                                      GLenum format)
+{
+    mFunctions->bindImageTexture(unit, texture, level, layered, layer, access, format);
 }
 }

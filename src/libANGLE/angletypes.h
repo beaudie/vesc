@@ -20,6 +20,7 @@
 namespace gl
 {
 class Buffer;
+class Texture;
 
 enum PrimitiveType
 {
@@ -216,6 +217,26 @@ struct SamplerState
 
 bool operator==(const SamplerState &a, const SamplerState &b);
 bool operator!=(const SamplerState &a, const SamplerState &b);
+
+struct ImageUnit
+{
+    ImageUnit()
+        : texture(nullptr),
+          level(0),
+          layered(false),
+          layer(0),
+          access(GL_READ_ONLY),
+          format(GL_R32UI)
+    {
+    }
+
+    Texture *texture;
+    GLint level;
+    GLboolean layered;
+    GLint layer;
+    GLenum access;
+    GLenum format;
+};
 
 struct PixelStoreStateBase
 {

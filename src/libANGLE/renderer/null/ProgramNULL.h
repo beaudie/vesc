@@ -98,6 +98,8 @@ class ProgramNULL : public ProgramImpl
                                  GLenum genMode,
                                  GLint components,
                                  const GLfloat *coeffs) override;
+
+    void getUniformiv(GLint location, GLint *v) override;
 };
 
 }  // namespace rx
