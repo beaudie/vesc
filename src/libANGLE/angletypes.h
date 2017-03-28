@@ -21,6 +21,7 @@
 namespace gl
 {
 class Buffer;
+class Texture;
 
 enum PrimitiveType
 {
@@ -236,6 +237,44 @@ struct DrawElementsIndirectCommand
 };
 static_assert(sizeof(DrawElementsIndirectCommand) == 20,
               "Unexpected size of DrawElementsIndirectCommand");
+
+struct ImageUnit
+{
+    ImageUnit()
+        : texture(nullptr),
+          level(0),
+          layered(false),
+          layer(0),
+          access(GL_READ_ONLY),
+          format(GL_R32UI)
+    {
+    }
+    ImageUnit(Texture *textureIn,
+              GLint levelIn,
+              GLboolean layeredIn,
+              GLint layerIn,
+              GLenum accessIn,
+              GLenum formatIn)
+        : texture(textureIn),
+          level(levelIn),
+          layered(layeredIn),
+          layer(layerIn),
+          access(accessIn),
+          format(formatIn)
+    {
+    }
+
+    ImageUnit &operator=(const ImageUnit &other);
+    bool operator==(const ImageUnit &other) const;
+    bool operator!=(const ImageUnit &other) const;
+
+    Texture *texture;
+    GLint level;
+    GLboolean layered;
+    GLint layer;
+    GLenum access;
+    GLenum format;
+};
 
 struct PixelStoreStateBase
 {
