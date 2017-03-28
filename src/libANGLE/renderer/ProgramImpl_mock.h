@@ -54,6 +54,8 @@ class MockProgramImpl : public rx::ProgramImpl
     MOCK_METHOD4(setUniformMatrix3x4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
     MOCK_METHOD4(setUniformMatrix4x3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
 
+    MOCK_METHOD2(getUniformiv, void(GLint, GLint *));
+
     MOCK_METHOD2(setUniformBlockBinding, void(GLuint, GLuint));
     MOCK_CONST_METHOD2(getUniformBlockSize, bool(const std::string &, size_t *));
     MOCK_CONST_METHOD2(getUniformBlockMemberInfo, bool(const std::string &, sh::BlockMemberInfo *));
