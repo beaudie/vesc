@@ -1058,6 +1058,18 @@ void Context::bindSampler(GLuint textureUnit, GLuint samplerHandle)
     mGLState.setSamplerBinding(textureUnit, sampler);
 }
 
+void Context::bindImageTexture(GLuint unit,
+                               GLuint texture,
+                               GLint level,
+                               GLboolean layered,
+                               GLint layer,
+                               GLenum access,
+                               GLenum format)
+{
+    Texture *tex = mState.mTextures->getTexture(texture);
+    mGLState.setImageUnit(unit, tex, level, layered, layer, access, format);
+}
+
 void Context::bindGenericUniformBuffer(GLuint bufferHandle)
 {
     Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
