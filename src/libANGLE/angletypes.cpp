@@ -141,4 +141,26 @@ bool operator!=(const Extents &lhs, const Extents &rhs)
 {
     return !(lhs == rhs);
 }
+
+ImageUnit &ImageUnit::operator=(const ImageUnit &other)
+{
+    texture = other.texture;
+    level   = other.level;
+    layered = other.layered;
+    layer   = other.layer;
+    access  = other.access;
+    format  = other.format;
+    return *this;
+}
+
+bool ImageUnit::operator==(const ImageUnit &other) const
+{
+    return texture == other.texture && level == other.level && layered == other.layered &&
+           layer == other.layer && access == other.access && format == other.format;
+}
+
+bool ImageUnit::operator!=(const ImageUnit &other) const
+{
+    return !(*this == other);
+}
 }

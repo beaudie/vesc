@@ -50,6 +50,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mTextureUnitIndex(0),
       mTextures(),
       mSamplers(rendererCaps.maxCombinedTextureImageUnits, 0),
+      mImages(rendererCaps.maxImageUnits, gl::ImageUnit()),
       mTransformFeedback(0),
       mQueries(),
       mPrevDrawTransformFeedback(nullptr),
@@ -404,6 +405,26 @@ void StateManagerGL::bindSampler(size_t unit, GLuint sampler)
     {
         mSamplers[unit] = sampler;
         mFunctions->bindSampler(static_cast<GLuint>(unit), sampler);
+    }
+}
+
+void StateManagerGL::bindImageTexture(GLuint unit, const gl::ImageUnit &imageUnit)
+{
+    if (mImages[unit] != imageUnit)
+    {
+        mImages[unit]              = imageUnit;
+        const TextureGL *textureGL = SafeGetImplAs<TextureGL>(imageUnit.texture);
+        if (textureGL)
+        {
+            mFunctions->bindImageTexture(unit, textureGL->getTextureID(), imageUnit.level,
+                                         imageUnit.layered, imageUnit.layer, imageUnit.access,
+                                         imageUnit.format);
+        }
+        else
+        {
+            mFunctions->bindImageTexture(unit, 0, imageUnit.level, imageUnit.layered,
+                                         imageUnit.layer, imageUnit.access, imageUnit.format);
+        }
     }
 }
 
@@ -846,6 +867,18 @@ void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
             {
                 bindSampler(textureUnitIndex, 0);
             }
+        }
+    }
+
+    for (const gl::ImageBinding &imageUniform : program->getImageBindings())
+    {
+        for (size_t imageUnitIndex = 0; imageUnitIndex < imageUniform.elementCount;
+             imageUnitIndex++)
+        {
+            const gl::ImageUnit imageUnit = state.getImageUnit(imageUniform.boundImageUnit +
+                                                               static_cast<GLuint>(imageUnitIndex));
+            bindImageTexture(imageUniform.boundImageUnit + static_cast<GLuint>(imageUnitIndex),
+                             imageUnit);
         }
     }
 }
