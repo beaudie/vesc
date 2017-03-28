@@ -453,6 +453,16 @@ class State : angle::NonCopyable
     void syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
 
+    void setImageUnit(GLuint unit,
+                      Texture *texture,
+                      GLint level,
+                      GLboolean layered,
+                      GLint layer,
+                      GLenum access,
+                      GLenum format);
+
+    const ImageUnit &getImageUnit(GLuint unit) const;
+
   private:
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;
@@ -508,6 +518,9 @@ class State : angle::NonCopyable
 
     typedef std::vector<BindingPointer<Sampler>> SamplerBindingVector;
     SamplerBindingVector mSamplers;
+
+    typedef std::vector<ImageUnit> ImageUnitVector;
+    ImageUnitVector mImageUnits;
 
     typedef std::map<GLenum, BindingPointer<Query>> ActiveQueryMap;
     ActiveQueryMap mActiveQueries;
