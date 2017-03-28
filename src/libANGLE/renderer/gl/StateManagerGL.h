@@ -164,6 +164,14 @@ class StateManagerGL final : angle::NonCopyable
 
     GLuint getBoundBuffer(GLenum type);
 
+    void bindImageTexture(GLuint unit,
+                          GLuint texture,
+                          GLint level,
+                          GLboolean layered,
+                          GLint layer,
+                          GLenum access,
+                          GLenum format);
+
   private:
     // Set state that's common among draw commands and compute invocations.
     void setGenericShaderState(const gl::ContextState &data);

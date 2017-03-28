@@ -3957,4 +3957,16 @@ Error Context::getScratchBuffer(size_t requestedSize, angle::MemoryBuffer **scra
     return gl::NoError();
 }
 
+void Context::bindImageTexture(GLuint unit,
+                               GLuint texture,
+                               GLint level,
+                               GLboolean layered,
+                               GLint layer,
+                               GLenum access,
+                               GLenum format)
+{
+    Texture *tex = mState.mTextures->getTexture(texture);
+    mGLState.setImageUnit(unit, tex, level, layered, layer, access, format);
+}
+
 }  // namespace gl

@@ -175,6 +175,14 @@ struct SamplerBinding
     std::vector<GLuint> boundTextureUnits;
 };
 
+struct ImageBinding
+{
+    ImageBinding(GLuint imageUnit, size_t count) : boundImageUnit(imageUnit), elementCount(count) {}
+
+    GLuint boundImageUnit;
+    size_t elementCount;
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -210,6 +218,7 @@ class ProgramState final : angle::NonCopyable
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
+    const std::vector<ImageBinding> &getImageBindings() const { return mImageBindings; }
 
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndexFromName(const std::string &name) const;
@@ -248,9 +257,13 @@ class ProgramState final : angle::NonCopyable
     std::vector<VariableLocation> mUniformLocations;
     std::vector<UniformBlock> mUniformBlocks;
     RangeUI mSamplerUniformRange;
+    RangeUI mImageUniformRange;
 
     // An array of the samplers that are used by the program
     std::vector<gl::SamplerBinding> mSamplerBindings;
+
+    // An array of the images that are used by the program
+    std::vector<gl::ImageBinding> mImageBindings;
 
     std::vector<sh::OutputVariable> mOutputVariables;
     // TODO(jmadill): use unordered/hash map when available
@@ -404,6 +417,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     {
         return mState.mSamplerBindings;
     }
+
+    const std::vector<ImageBinding> &getImageBindings() const { return mState.mImageBindings; }
+
     const ProgramState &getState() const { return mState; }
 
     static bool linkValidateVariablesBase(InfoLog &infoLog,
@@ -456,7 +472,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool linkVaryings(InfoLog &infoLog) const;
 
     bool linkUniforms(InfoLog &infoLog, const Caps &caps, const Bindings &uniformLocationBindings);
-    void updateSamplerBindings();
+    void updateSamplerAndImageBindings();
 
     bool areMatchingInterfaceBlocks(InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,
