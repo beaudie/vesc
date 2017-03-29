@@ -86,6 +86,40 @@ const char *GetImageArgumentToken(TIntermTyped *imageNode)
 
 }  // namespace
 
+struct OffsetSpan
+{
+    int begin;
+    int end;
+};
+
+// This tracks each binding point's current default offset for inheritance of subsequent
+// variales using the same binding, and keeps offsets unique and non overlapping.
+// See GLSL ES 3.1, section 4.4.6.
+struct TParseContext::BindingOffset
+{
+    BindingOffset() : defaultOffset(0){};
+    // Inserts a new span and returns true if no overlapping with existing spans.
+    bool addSpan(int start, size_t length)
+    {
+        OffsetSpan newSpan;
+        newSpan.begin = start;
+        newSpan.end   = start + static_cast<int>(length);
+
+        for (auto &span : spans)
+        {
+            if (newSpan.begin < span.end && newSpan.end > span.begin)
+            {
+                return false;
+            }
+        }
+        spans.push_back(newSpan);
+        defaultOffset = newSpan.end;
+        return true;
+    }
+    int defaultOffset;
+    std::vector<OffsetSpan> spans;
+};
+
 TParseContext::TParseContext(TSymbolTable &symt,
                              TExtensionBehavior &ext,
                              sh::GLenum type,
@@ -131,9 +165,14 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxImageUnits(resources.MaxImageUnits),
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
+      mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
+}
+
+TParseContext::~TParseContext()
+{
 }
 
 //
@@ -1336,6 +1375,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     {
         checkSamplerBindingIsValid(identifierLocation, layoutQualifier.binding, arraySize);
     }
+    else if (IsAtomicCounter(type.getBasicType()))
+    {
+        checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
     else
     {
         ASSERT(!IsOpaqueType(type.getBasicType()));
@@ -1410,6 +1453,15 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arraySize > mMaxCombinedTextureImageUnits)
     {
         error(location, "sampler binding greater than maximum texture units", "binding");
+    }
+}
+
+void TParseContext::checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding)
+{
+    if (binding >= mMaxAtomicCounterBindings)
+    {
+        error(location, "atomic counter binding greater than gl_MaxAtomicCounterBindings",
+              "binding");
     }
 }
 
@@ -1845,6 +1897,32 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
         {
             checkIsAtGlobalLevel(typeSpecifier.getLine(), "layout");
         }
+        if (typeSpecifier.getBasicType() == EbtAtomicCounter)
+        {
+            if (returnType.precision == EbpLow || returnType.precision == EbpMedium)
+            {
+                error(typeSpecifier.getLine(), "Can only be highp", "atomic counter");
+            }
+            if (mShaderVersion < 310)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint supported in GLSL ES 3.10 only",
+                      "layout");
+            }
+            if (returnType.qualifier != EvqUniform)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint must be uniform", "layout");
+            }
+            // deqp enforces compile error if location is specified. See uniform_location.test.
+            if (returnType.layoutQualifier.location != -1)
+            {
+                error(typeSpecifier.getLine(), "location must not be set for atomic_uint",
+                      "layout");
+            }
+            if (returnType.layoutQualifier.binding == -1)
+            {
+                error(typeSpecifier.getLine(), "no binding specified", "atomic counter");
+            }
+        }
         if (sh::IsVarying(returnType.qualifier) || returnType.qualifier == EvqVertexIn ||
             returnType.qualifier == EvqFragmentOut)
         {
@@ -1974,6 +2052,21 @@ void TParseContext::checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &m
     }
 }
 
+void TParseContext::checkAtomicCounterOffsetIsNotOverlapped(TPublicType &publicType,
+                                                            size_t size,
+                                                            const TSourceLoc &loc)
+{
+    auto &bindingOffset = mAtomicCounterBindingOffsets[publicType.layoutQualifier.binding];
+    if (publicType.layoutQualifier.offset == -1)
+    {
+        publicType.layoutQualifier.offset = bindingOffset.defaultOffset;
+    }
+    if (!bindingOffset.addSpan(publicType.layoutQualifier.offset, size))
+    {
+        error(loc, "Offset overlapping", "atomic counter");
+    }
+}
+
 TIntermDeclaration *TParseContext::parseSingleDeclaration(
     TPublicType &publicType,
     const TSourceLoc &identifierOrTypeLocation,
@@ -2019,12 +2112,21 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
     if (emptyDeclaration)
     {
         emptyDeclarationErrorCheck(publicType, identifierOrTypeLocation);
+        if (publicType.getBasicType() == EbtAtomicCounter)
+        {
+            setAtomicCounterBindingDefaultOffset(publicType, identifierOrTypeLocation);
+        }
     }
     else
     {
         singleDeclarationErrorCheck(publicType, identifierOrTypeLocation);
 
         checkCanBeDeclaredWithoutInitializer(identifierOrTypeLocation, identifier, &publicType);
+
+        if (publicType.getBasicType() == EbtAtomicCounter)
+        {
+            checkAtomicCounterOffsetIsNotOverlapped(publicType, 4, identifierOrTypeLocation);
+        }
 
         TVariable *variable = nullptr;
         declareVariable(identifierOrTypeLocation, identifier, type, &variable);
@@ -2062,6 +2164,11 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
     // Make the type an array even if size check failed.
     // This ensures useless error messages regarding the variable's non-arrayness won't follow.
     arrayType.setArraySize(size);
+
+    if (publicType.getBasicType() == EbtAtomicCounter)
+    {
+        checkAtomicCounterOffsetIsNotOverlapped(publicType, size * 4, identifierLocation);
+    }
 
     TVariable *variable = nullptr;
     declareVariable(identifierLocation, identifier, arrayType, &variable);
@@ -2338,6 +2445,23 @@ void TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
         {
             declarationOut->appendDeclarator(initNode);
         }
+    }
+}
+
+void TParseContext::setAtomicCounterBindingDefaultOffset(const TPublicType &publicType,
+                                                         const TSourceLoc &location)
+{
+    const TLayoutQualifier &layoutQualifier = publicType.layoutQualifier;
+    checkAtomicCounterBindingIsValid(location, layoutQualifier.binding);
+    if (layoutQualifier.binding == -1 || layoutQualifier.offset == -1)
+    {
+        error(location, "Requires both binding and offset", "layout");
+        return;
+    }
+    else
+    {
+        mAtomicCounterBindingOffsets[layoutQualifier.binding].defaultOffset =
+            layoutQualifier.offset;
     }
 }
 
@@ -2878,17 +3002,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
             error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
+                  "unsupported type - opaque types are not allowed in interface blocks",
                   fieldType->getBasicString());
         }
 
@@ -3484,6 +3601,19 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             qualifier.binding = intValue;
         }
     }
+    else if (qualifierType == "offset")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range: offset must be non-negative",
+                  intValueString.c_str());
+        }
+        else
+        {
+            qualifier.offset = intValue;
+        }
+    }
     else if (qualifierType == "local_size_x")
     {
         parseLocalSize(qualifierType, qualifierTypeLine, intValue, intValueLine, intValueString, 0u,
@@ -3573,6 +3703,11 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
     checkIsNonVoid(typeSpecifier.getLine(), (*fieldList)[0]->name(), typeSpecifier.getBasicType());
 
     checkWorkGroupSizeIsNotSpecified(typeSpecifier.getLine(), typeSpecifier.layoutQualifier);
+
+    if (typeSpecifier.getBasicType() == EbtAtomicCounter)
+    {
+        error(typeSpecifier.getLine(), "atomic_uint in struct", "struct");
+    }
 
     for (unsigned int i = 0; i < fieldList->size(); ++i)
     {
