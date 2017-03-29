@@ -3060,4 +3060,11 @@ gl::Version Renderer9::getMaxSupportedESVersion() const
     return gl::Version(2, 0);
 }
 
+gl::Error Renderer9::applyComputeUniforms(const ProgramD3D &programD3D,
+                                          const std::vector<D3DUniform *> &uniformArray)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "D3D9 doesn't support compute shader";
+}
+
 }  // namespace rx
