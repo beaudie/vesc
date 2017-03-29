@@ -121,6 +121,9 @@ class Context11 : public ContextImpl
 
     Renderer11 *getRenderer() const { return mRenderer; }
 
+    // TODO(Xinghua): Need to add "override" when finishing GL side.
+    gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
+
   private:
     Renderer11 *mRenderer;
 };

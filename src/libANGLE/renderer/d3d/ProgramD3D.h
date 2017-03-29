@@ -176,10 +176,6 @@ class ProgramD3D : public ProgramImpl
                                                     GLenum drawMode,
                                                     ShaderExecutableD3D **outExecutable,
                                                     gl::InfoLog *infoLog);
-    gl::Error getComputeExecutable(const gl::ContextState &data,
-                                   ShaderExecutableD3D **outExecutable,
-                                   gl::InfoLog *infoLog);
-
     LinkResult link(ContextImpl *contextImpl,
                     const gl::VaryingPacking &packing,
                     gl::InfoLog &infoLog) override;
@@ -273,6 +269,9 @@ class ProgramD3D : public ProgramImpl
     const gl::InputLayout &getCachedInputLayout() const { return mCachedInputLayout; }
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
+
+    gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
+    gl::Error applyComputeUniforms();
 
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
