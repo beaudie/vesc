@@ -45,6 +45,8 @@ class ImageD3D : angle::NonCopyable
     GLenum getInternalFormat() const { return mInternalFormat; }
     GLenum getTarget() const { return mTarget; }
     bool isRenderableFormat() const { return mRenderable; }
+    // GLsizei getSamples() const { return mSamples; }
+    // GLboolean getFixedSampleLocations() const { return mFixedSampleLocations; }
 
     void markDirty() { mDirty = true; }
     void markClean() { mDirty = false; }
@@ -108,6 +110,9 @@ class ImageD3D : angle::NonCopyable
     GLenum mInternalFormat;
     bool mRenderable;
     GLenum mTarget;
+
+    // GLsizei mSamples;
+    // GLboolean mFixedSampleLocations;
 
     bool mDirty;
 };
