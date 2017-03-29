@@ -316,6 +316,14 @@ class Renderer9 : public RendererD3D
                                                 GLsizei depth,
                                                 int levels) override;
 
+    TextureStorage *createTextureStorage2DMultisample(GLenum internalformat,
+                                                      bool renderTarget,
+                                                      GLsizei width,
+                                                      GLsizei height,
+                                                      int levels,
+                                                      int samples,
+                                                      GLboolean fixedSampleLocations) override;
+
     // Buffer creation
     VertexBuffer *createVertexBuffer() override;
     IndexBuffer *createIndexBuffer() override;

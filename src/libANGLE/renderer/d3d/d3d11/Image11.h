@@ -55,6 +55,12 @@ class Image11 : public ImageD3D
                             const gl::Box &region) override;
 
     bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) override;
+    bool redefine(GLenum target,
+                  GLenum internalformat,
+                  const gl::Extents &size,
+                  GLsizei samples,
+                  GLboolean fixedSampleLocations,
+                  bool forceRelease) override;
 
     DXGI_FORMAT getDXGIFormat() const;
 

@@ -319,19 +319,31 @@ bool Image11::redefine(GLenum target,
                        const gl::Extents &size,
                        bool forceRelease)
 {
+    return redefine(target, internalformat, size, 1, true, forceRelease);
+}
+
+bool Image11::redefine(GLenum target,
+                       GLenum internalformat,
+                       const gl::Extents &size,
+                       GLsizei samples,
+                       GLboolean fixedSampleLocations,
+                       bool forceRelease)
+{
     if (mWidth != size.width || mHeight != size.height || mInternalFormat != internalformat ||
-        forceRelease)
+        forceRelease || mSamples != samples || mFixedSampleLocations != fixedSampleLocations)
     {
         // End the association with the TextureStorage, since that data will be out of date.
         // Also reset mRecoveredFromStorageCount since this Image is getting completely redefined.
         disassociateStorage();
         mRecoveredFromStorageCount = 0;
 
-        mWidth          = size.width;
-        mHeight         = size.height;
-        mDepth          = size.depth;
-        mInternalFormat = internalformat;
-        mTarget         = target;
+        mWidth                = size.width;
+        mHeight               = size.height;
+        mDepth                = size.depth;
+        mInternalFormat       = internalformat;
+        mTarget               = target;
+        mSamples              = samples;
+        mFixedSampleLocations = fixedSampleLocations;
 
         // compute the d3d format that will be used
         const d3d11::Format &formatInfo =
@@ -340,7 +352,7 @@ bool Image11::redefine(GLenum target,
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
         releaseStagingTexture();
-        mDirty = (formatInfo.dataInitializerFunction != nullptr) ||
+        mDirty = (formatInfo.dataInitializerFunction != NULL) ||
                  mRenderer->isRobustResourceInitEnabled();
 
         return true;
@@ -619,6 +631,7 @@ gl::Error Image11::createStagingTexture()
     int lodOffset  = 1;
     GLsizei width  = mWidth;
     GLsizei height = mHeight;
+    GLsizei samples = mSamples;
 
     // adjust size if needed for compressed textures
     d3d11::MakeValidSize(false, dxgiFormat, &width, &height, &lodOffset);
@@ -663,7 +676,7 @@ gl::Error Image11::createStagingTexture()
         desc.MipLevels          = lodOffset + 1;
         desc.ArraySize          = 1;
         desc.Format             = dxgiFormat;
-        desc.SampleDesc.Count   = 1;
+        desc.SampleDesc.Count   = samples;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_STAGING;
         desc.BindFlags          = 0;
@@ -687,6 +700,34 @@ gl::Error Image11::createStagingTexture()
         }
 
         mStagingSubresource = D3D11CalcSubresource(lodOffset, 0, lodOffset + 1);
+    }
+    else if (mTarget == GL_TEXTURE_2D_MULTISAMPLE)
+    {
+        D3D11_TEXTURE2D_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.Width          = width;
+        desc.Height         = height;
+        desc.MipLevels      = 1;
+        desc.ArraySize      = 1;
+        desc.Format         = dxgiFormat;
+        desc.Usage          = D3D11_USAGE_DEFAULT;
+        desc.BindFlags      = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags      = 0;
+
+        UINT qualityLevels = 0;
+        if (mSamples > 2 && mSamples % 4 != 0)
+        {
+            mSamples = (mSamples / 4 + 1) * 4;
+        }
+        mRenderer->CheckMultisampleQualityLevels(desc.Format, mSamples, &qualityLevels);
+        ASSERT(qualityLevels > 0);
+        desc.SampleDesc.Count   = mSamples;
+        desc.SampleDesc.Quality = qualityLevels - 1;
+
+        ANGLE_TRY(mRenderer->allocateTexture(desc, formatInfo, &mStagingTexture));
+
+        mStagingSubresource = D3D11CalcSubresource(0, 0, 1);
     }
     else
     {
