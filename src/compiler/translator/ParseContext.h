@@ -233,6 +233,9 @@ class TParseContext : angle::NonCopyable
                                   TIntermDeclaration *declarationOut);
 
     void parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder);
+    void parseGlobalAtomicCounterBindingDefaultOffset(const TPublicType &declaration,
+                                                      const TSourceLoc &location);
+
     TIntermFunctionPrototype *addFunctionPrototypeDeclaration(const TFunction &parsedFunction,
                                                               const TSourceLoc &location);
     TIntermFunctionDefinition *addFunctionDefinition(TIntermFunctionPrototype *functionPrototype,
@@ -354,6 +357,48 @@ class TParseContext : angle::NonCopyable
     TSymbolTable &symbolTable;   // symbol table that goes with the language currently being parsed
 
   private:
+    struct OffsetSpan
+    {
+        int begin;
+        int end;
+    };
+    // This tracks each binding point's current default offset for inheritance of subsequent
+    // variales using the same binding, and keeps offsets unique and non overlapping.
+    // See GLSL ES 3.1, section 4.4.6.
+    struct BindingOffset
+    {
+        BindingOffset() : current(0) {}
+        bool addSpan(int start, size_t length)
+        {
+            OffsetSpan newSpan;
+            newSpan.begin = start;
+            newSpan.end   = start + static_cast<int>(length);
+
+            bool isOverlapped = false;
+            for (auto &span : spans)
+            {
+                if (newSpan.begin < span.end && newSpan.end > span.begin)
+                {
+                    isOverlapped = true;
+                    break;
+                }
+            }
+            if (!isOverlapped)
+            {
+                spans.push_back(newSpan);
+                current = newSpan.end;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        int current;
+        std::vector<OffsetSpan> spans;
+    };
+
     // Returns a clamped index. If it prints out an error message, the token is "[]".
     int checkIndexOutOfRange(bool outOfRangeIndexIsError,
                              const TSourceLoc &location,
@@ -390,10 +435,15 @@ class TParseContext : angle::NonCopyable
                                            TLayoutImageInternalFormat internalFormat);
     void checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &memoryQualifier,
                                             const TSourceLoc &location);
+    void checkAtomicCounterOffsetIsNotOverlapped(TPublicType &publicType,
+                                                 size_t size,
+                                                 const TSourceLoc &loc);
+
     void checkBindingIsValid(const TSourceLoc &identifierLocation, const TType &type);
     void checkBindingIsNotSpecified(const TSourceLoc &location, int binding);
     void checkImageBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
     void checkSamplerBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
+    void checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding);
 
     void checkUniformLocationInRange(const TSourceLoc &location,
                                      int objectLocationCount,
@@ -476,8 +526,14 @@ class TParseContext : angle::NonCopyable
     int mMaxImageUnits;
     int mMaxCombinedTextureImageUnits;
     int mMaxUniformLocations;
+
+    int mMaxAtomicCounterBindings;
+
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
+
+    // Track the default current offsets of each atomic counter binding.
+    TMap<int, BindingOffset> mAtomicCounterBindingOffsets;
 };
 
 int PaParseStrings(size_t count,
