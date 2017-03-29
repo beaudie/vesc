@@ -55,6 +55,12 @@ class TextureD3D : public TextureImpl
     GLint getBaseLevelHeight() const;
     GLenum getBaseLevelInternalFormat() const;
 
+    gl::Error setStorage(const gl::Context *context,
+                         GLenum target,
+                         size_t levels,
+                         GLenum internalFormat,
+                         const gl::Extents &size);
+
     gl::Error setStorageMultisample(const gl::Context *context,
                                     GLenum target,
                                     GLsizei samples,
@@ -92,6 +98,10 @@ class TextureD3D : public TextureImpl
     gl::Error setBaseLevel(const gl::Context *context, GLuint baseLevel) override;
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+
+    gl::Error clearTexture(const gl::Context *context,
+                           const gl::ImageIndex &index,
+                           float *clearValues);
 
   protected:
     gl::Error setImageImpl(const gl::Context *context,
@@ -285,13 +295,6 @@ class TextureD3D_2D : public TextureD3D
     gl::ImageIndexIterator imageIterator() const override;
     gl::ImageIndex getImageIndex(GLint mip, GLint layer) const override;
     bool isValidIndex(const gl::ImageIndex &index) const override;
-
-    gl::Error setStorageMultisample(const gl::Context *context,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalFormat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
 
   protected:
     void markAllImagesDirty() override;
@@ -844,16 +847,12 @@ class TextureD3D_2DMultisample : public TextureD3D
                            const gl::Rectangle &sourceArea,
                            const gl::Framebuffer *source) override;
 
-    gl::Error setStorage(const gl::Context *context,
-                         GLenum target,
-                         size_t levels,
-                         GLenum internalFormat,
-                         const gl::Extents &size) override;
-
-    gl::Error setImageExternal(const gl::Context *context,
-                               GLenum target,
-                               egl::Stream *stream,
-                               const egl::Stream::GLTextureDescription &desc) override;
+    gl::Error setStorageMultisample(const gl::Context *context,
+                                    GLenum target,
+                                    GLsizei samples,
+                                    GLint internalFormat,
+                                    const gl::Extents &size,
+                                    GLboolean fixedSampleLocations) override;
 
     gl::Error bindTexImage(const gl::Context *context, egl::Surface *surface) override;
     gl::Error releaseTexImage(const gl::Context *context) override;

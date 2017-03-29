@@ -268,6 +268,12 @@ class RendererD3D : public BufferFactoryD3D
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;
+    virtual TextureStorage *createTextureStorage2DMultisample(GLenum internalformat,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              int levels,
+                                                              int samples,
+                                                              GLboolean fixedSampleLocations) = 0;
 
     // Buffer-to-texture and Texture-to-buffer copies
     virtual bool supportsFastCopyBufferToTexture(GLenum internalFormat) const = 0;
@@ -299,6 +305,11 @@ class RendererD3D : public BufferFactoryD3D
                                     gl::SamplerType samplerType,
                                     size_t rangeStart,
                                     size_t rangeEnd) = 0;
+
+    virtual gl::Error clearTextureStorage(const gl::Context *context,
+                                          TextureStorage *texStorage,
+                                          const gl::ImageIndex &index,
+                                          float *clearValues) = 0;
 
     virtual egl::Error getEGLDevice(DeviceImpl **device) = 0;
 
