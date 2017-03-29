@@ -105,6 +105,8 @@ const char *getBasicString(TBasicType t)
             return "iimageCube";
         case EbtUImageCube:
             return "uimageCube";
+        case EbtAtomicCounter:
+            return "atomic_uint";
         default:
             UNREACHABLE();
             return "unknown type";
@@ -521,17 +523,6 @@ bool TStructure::containsSamplers() const
     {
         const TType *fieldType = (*mFields)[i]->type();
         if (IsSampler(fieldType->getBasicType()) || fieldType->isStructureContainingSamplers())
-            return true;
-    }
-    return false;
-}
-
-bool TStructure::containsImages() const
-{
-    for (size_t i = 0; i < mFields->size(); ++i)
-    {
-        const TType *fieldType = (*mFields)[i]->type();
-        if (IsImage(fieldType->getBasicType()) || fieldType->isStructureContainingImages())
             return true;
     }
     return false;
