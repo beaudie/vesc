@@ -292,6 +292,11 @@ class ResourceManager11 final : angle::NonCopyable
         return gl::NoError();
     }
 
+    gl::Error CheckMultisampleQualityLevels(Renderer11 *renderer,
+                                            DXGI_FORMAT format,
+                                            GLsizei samples,
+                                            UINT *qualityLevels);
+
     template <typename T>
     void onRelease(T *resource)
     {

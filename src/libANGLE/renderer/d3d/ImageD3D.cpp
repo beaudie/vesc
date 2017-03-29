@@ -25,6 +25,8 @@ ImageD3D::ImageD3D()
       mInternalFormat(GL_NONE),
       mRenderable(false),
       mTarget(GL_NONE),
+      mSamples(1),
+      mFixedSampleLocations(true),
       mDirty(false)
 {
 }

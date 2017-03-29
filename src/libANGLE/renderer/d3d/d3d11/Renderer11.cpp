@@ -3979,6 +3979,18 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat,
                                         levels);
 }
 
+TextureStorage *Renderer11::createTextureStorage2DMultisample(GLenum internalformat,
+                                                              bool renderTarget,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              int levels,
+                                                              int samples,
+                                                              GLboolean fixedSampleLocations)
+{
+    return new TextureStorage11_2DMultisample(this, internalformat, renderTarget, width, height,
+                                              levels, samples, fixedSampleLocations);
+}
+
 gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAttachment,
                                          const gl::Rectangle &sourceArea,
                                          GLenum format,
@@ -4940,6 +4952,15 @@ gl::Error Renderer11::allocateTexture(const D3D11_TEXTURE3D_DESC &desc,
     d3d11::Texture3D texture;
     ANGLE_TRY(mResourceManager11.allocate(this, &desc, initData, &texture));
     textureOut->init(std::move(texture), desc, format);
+    return gl::NoError();
+}
+
+gl::Error Renderer11::CheckMultisampleQualityLevels(DXGI_FORMAT format,
+                                                    GLsizei samples,
+                                                    UINT *qualityLevels)
+{
+    ANGLE_TRY(
+        mResourceManager11.CheckMultisampleQualityLevels(this, format, samples, qualityLevels));
     return gl::NoError();
 }
 
