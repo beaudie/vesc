@@ -196,7 +196,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     }
     TString suffix = TextureGroupSuffix(textureGroup);
     // Since HLSL_TEXTURE_2D is the first group, it has a fixed offset of zero.
-    if (textureGroup != HLSL_TEXTURE_2D)
+    if (textureGroup != HLSL_TEXTURE_2D && textureGroup != HLSL_TEXTURE_2D_MS)
     {
         out << "static const uint textureIndexOffset" << suffix << " = "
             << (*groupTextureRegisterIndex) << ";\n";
