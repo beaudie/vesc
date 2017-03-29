@@ -1114,6 +1114,46 @@ unsigned int GetReservedFragmentUniformVectors(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+GLuint GetMaximumAtomicCounterBufferSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return static_cast<GLuint>(std::numeric_limits<unsigned int>::max());
+
+        default:
+            return 0;
+    }
+}
+
+GLuint64 GetMaximumShaderStorageBlockSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return static_cast<GLuint64>(D3D11_REQ_MULTI_ELEMENT_STRUCTURE_SIZE_IN_BYTES);
+
+        default:
+            return 0;
+    }
+}
+
+GLuint GetMaximumUnorderedAccessViews(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+            return static_cast<GLuint>(D3D11_1_UAV_SLOT_COUNT);
+        case D3D_FEATURE_LEVEL_11_0:
+            return static_cast<GLuint>(D3D11_PS_CS_UAV_REGISTER_COUNT);
+
+        default:
+            return 0;
+    }
+}
+
 gl::Version GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -1257,6 +1297,25 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
         static_cast<GLuint>(GetMaximumComputeUniformBlocks(featureLevel));
     caps->maxComputeTextureImageUnits =
         static_cast<GLuint>(GetMaximumComputeTextureUnits(featureLevel));
+
+    // Unorederd access view limits
+    GLuint maxUnorderedAccessViews        = GetMaximumUnorderedAccessViews(featureLevel);
+    caps->maxComputeAtomicCounterBuffers  = maxUnorderedAccessViews;
+    caps->maxComputeAtomicCounters        = maxUnorderedAccessViews;
+    caps->maxComputeShaderStorageBlocks   = maxUnorderedAccessViews;
+    caps->maxFragmentShaderStorageBlocks  = maxUnorderedAccessViews;
+    caps->maxFragmentAtomicCounterBuffers = maxUnorderedAccessViews;
+    caps->maxFragmentAtomicCounters       = maxUnorderedAccessViews;
+    caps->maxAtomicCounterBufferBindings  = maxUnorderedAccessViews;
+    caps->maxAtomicCounterBufferSize      = GetMaximumAtomicCounterBufferSize(featureLevel);
+    caps->maxCombinedAtomicCounterBuffers =
+        caps->maxComputeAtomicCounterBuffers + caps->maxFragmentAtomicCounterBuffers;
+    caps->maxCombinedAtomicCounters =
+        caps->maxComputeAtomicCounters + caps->maxFragmentAtomicCounterBuffers;
+    caps->maxShaderStorageBufferBindings = maxUnorderedAccessViews;
+    caps->maxShaderStorageBlockSize      = GetMaximumShaderStorageBlockSize(featureLevel);
+    caps->maxCombinedShaderStorageBlocks =
+        caps->maxComputeShaderStorageBlocks + caps->maxFragmentShaderStorageBlocks;
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
