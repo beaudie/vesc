@@ -2475,6 +2475,20 @@ bool ProgramD3D::getUniformBlockMemberInfo(const std::string &memberUniformName,
     return true;
 }
 
+bool ProgramD3D::getAtomicCounterBufferSize(int binding, size_t *sizeOut) const
+{
+    // TODO(Jie): Figure out the actual size.
+    *sizeOut = 0;
+    return true;
+}
+
+bool ProgramD3D::getAtomicCounterBlockMemberInfo(const std::string &name,
+                                                 sh::BlockMemberInfo *memberInfoOut) const
+{
+    // TODO(Jie): Implement this.
+    return true;
+}
+
 void ProgramD3D::setPathFragmentInputGen(const std::string &inputName,
                                          GLenum genMode,
                                          GLint components,

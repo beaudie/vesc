@@ -39,6 +39,7 @@ struct TranslatedAttribute;
 
 namespace gl
 {
+struct BufferBacked;
 struct Caps;
 class Context;
 class ContextState;
@@ -210,6 +211,10 @@ class ProgramState final : angle::NonCopyable
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
+    const std::vector<BufferBacked> &getAtomicCounterBuffers() const
+    {
+        return mAtomicCounterBuffers;
+    }
 
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndexFromName(const std::string &name) const;
@@ -247,6 +252,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
     std::vector<UniformBlock> mUniformBlocks;
+    std::vector<BufferBacked> mAtomicCounterBuffers;
     RangeUI mSamplerUniformRange;
 
     // An array of the samplers that are used by the program
@@ -493,6 +499,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void setUniformValuesFromBindingQualifiers();
 
+    void gatherAtomicCounterBuffer();
     void gatherInterfaceBlockInfo();
     template <typename VarT>
     void defineUniformBlockMembers(const std::vector<VarT> &fields,

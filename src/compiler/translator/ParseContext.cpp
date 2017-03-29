@@ -131,6 +131,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxImageUnits(resources.MaxImageUnits),
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
+      mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
@@ -1336,6 +1337,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     {
         checkSamplerBindingIsValid(identifierLocation, layoutQualifier.binding, arraySize);
     }
+    else if (IsAtomicCounter(type.getBasicType()))
+    {
+        checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
     else
     {
         ASSERT(!IsOpaqueType(type.getBasicType()));
@@ -1410,6 +1415,15 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arraySize > mMaxCombinedTextureImageUnits)
     {
         error(location, "sampler binding greater than maximum texture units", "binding");
+    }
+}
+
+void TParseContext::checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding)
+{
+    if (binding >= mMaxAtomicCounterBindings)
+    {
+        error(location, "atomic counter binding greater than gl_MaxAtomicCounterBindings",
+              "binding");
     }
 }
 
@@ -1845,6 +1859,31 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
         {
             checkIsAtGlobalLevel(typeSpecifier.getLine(), "layout");
         }
+        if (typeSpecifier.getBasicType() == EbtAtomicCounter)
+        {
+            if (returnType.precision == EbpLow || returnType.precision == EbpMedium)
+            {
+                error(typeSpecifier.getLine(), "Can only be highp", "atomic counter");
+            }
+            if (mShaderVersion < 310)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint supported in GLSL ES 3.10 only",
+                      "layout");
+            }
+            if (returnType.qualifier != EvqUniform)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint must be uniform", "layout");
+            }
+            if (returnType.layoutQualifier.binding != -1)
+            {
+                checkAtomicCounterBindingIsValid(typeSpecifier.getLine(),
+                                                 returnType.layoutQualifier.binding);
+            }
+            else
+            {
+                error(typeSpecifier.getLine(), "No binding specified", "atomic counter");
+            }
+        }
         if (sh::IsVarying(returnType.qualifier) || returnType.qualifier == EvqVertexIn ||
             returnType.qualifier == EvqFragmentOut)
         {
@@ -1974,6 +2013,29 @@ void TParseContext::checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &m
     }
 }
 
+void TParseContext::checkAtomicCounterOffsetIsNotOverlapped(TPublicType &publicType,
+                                                            size_t size,
+                                                            const TSourceLoc &loc)
+{
+    if (publicType.getBasicType() == EbtAtomicCounter)
+    {
+        auto it = mAtomicCounterBindingOffsets.find(publicType.layoutQualifier.binding);
+        if (it == mAtomicCounterBindingOffsets.end())
+        {
+            mAtomicCounterBindingOffsets[publicType.layoutQualifier.binding] = BindingOffset();
+        }
+        auto &bindingOffset = mAtomicCounterBindingOffsets[publicType.layoutQualifier.binding];
+        if (publicType.layoutQualifier.offset == -1)
+        {
+            publicType.layoutQualifier.offset = bindingOffset.current;
+        }
+        if (!bindingOffset.addSpan(publicType.layoutQualifier.offset, size))
+        {
+            error(loc, "Offset overlapping", "atomic counter");
+        }
+    }
+}
+
 TIntermDeclaration *TParseContext::parseSingleDeclaration(
     TPublicType &publicType,
     const TSourceLoc &identifierOrTypeLocation,
@@ -2010,6 +2072,11 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
     TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, type, identifierOrTypeLocation);
 
     bool emptyDeclaration = (identifier == "");
+
+    if (!emptyDeclaration)
+    {
+        checkAtomicCounterOffsetIsNotOverlapped(publicType, 4, identifierOrTypeLocation);
+    }
 
     mDeferredSingleDeclarationErrorCheck = emptyDeclaration;
 
@@ -2062,6 +2129,8 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
     // Make the type an array even if size check failed.
     // This ensures useless error messages regarding the variable's non-arrayness won't follow.
     arrayType.setArraySize(size);
+
+    checkAtomicCounterOffsetIsNotOverlapped(publicType, size * 4, identifierLocation);
 
     TVariable *variable = nullptr;
     declareVariable(identifierLocation, identifier, arrayType, &variable);
@@ -2338,6 +2407,39 @@ void TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
         {
             declarationOut->appendDeclarator(initNode);
         }
+    }
+}
+
+void TParseContext::parseGlobalAtomicCounterBindingDefaultOffset(TIntermDeclaration &declaration,
+                                                                 const TSourceLoc &location)
+{
+    TIntermSequence *sequence = declaration.getSequence();
+    if (sequence->size() != 1)
+    {
+        return;
+    }
+    TIntermTyped *type = (*sequence)[0]->getAsTyped();
+    if (type->getBasicType() != EbtAtomicCounter)
+    {
+        return;
+    }
+
+    TIntermSymbol *symbol = static_cast<TIntermSymbol *>(type);
+    // Identifier should be empty for global scope setting. See parseSingleDeclaration(...).
+    if (symbol->getName().getString() != "")
+    {
+        return;
+    }
+    const TLayoutQualifier layoutQualifier = type->getTypePointer()->getLayoutQualifier();
+    checkAtomicCounterBindingIsValid(location, layoutQualifier.binding);
+    if (layoutQualifier.binding == -1 || layoutQualifier.offset == -1)
+    {
+        error(location, "Requires both binding and offset", "layout");
+        return;
+    }
+    else
+    {
+        mAtomicCounterBindingOffsets[layoutQualifier.binding].current = layoutQualifier.offset;
     }
 }
 
@@ -2878,17 +2980,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
             error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
+                  "unsupported type - opaque types are not allowed in interface blocks",
                   fieldType->getBasicString());
         }
 
@@ -3482,6 +3577,19 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         else
         {
             qualifier.binding = intValue;
+        }
+    }
+    else if (qualifierType == "offset")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range: offset must be non-negative",
+                  intValueString.c_str());
+        }
+        else
+        {
+            qualifier.offset = intValue;
         }
     }
     else if (qualifierType == "local_size_x")

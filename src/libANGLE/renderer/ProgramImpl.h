@@ -85,6 +85,13 @@ class ProgramImpl : angle::NonCopyable
     // Returns false for inactive members.
     virtual bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                            sh::BlockMemberInfo *memberInfoOut) const = 0;
+
+    // May only be called after a successful link operation.
+    // Returns false for inactive blocks.
+    virtual bool getAtomicCounterBufferSize(int binding, size_t *sizeOut) const = 0;
+    virtual bool getAtomicCounterBlockMemberInfo(const std::string &name,
+                                                 sh::BlockMemberInfo *memberInfoOut) const = 0;
+
     // CHROMIUM_path_rendering
     // Set parameters to control fragment shader input variable interpolation
     virtual void setPathFragmentInputGen(const std::string &inputName,

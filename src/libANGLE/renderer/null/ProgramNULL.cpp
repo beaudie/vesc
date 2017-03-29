@@ -176,6 +176,18 @@ bool ProgramNULL::getUniformBlockSize(const std::string &blockName, size_t *size
     return true;
 }
 
+bool ProgramNULL::getAtomicCounterBufferSize(int binding, size_t *sizeOut) const
+{
+    *sizeOut = 0;
+    return true;
+}
+
+bool ProgramNULL::getAtomicCounterBlockMemberInfo(const std::string &name,
+                                                  sh::BlockMemberInfo *memberInfoOut) const
+{
+    return true;
+}
+
 bool ProgramNULL::getUniformBlockMemberInfo(const std::string &memberUniformName,
                                             sh::BlockMemberInfo *memberInfoOut) const
 {

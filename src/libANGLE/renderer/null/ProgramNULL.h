@@ -93,6 +93,13 @@ class ProgramNULL : public ProgramImpl
     // Returns false for inactive members.
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
+
+    // May only be called after a successful link operation.
+    // Returns false for inactive blocks.
+    bool getAtomicCounterBufferSize(int binding, size_t *sizeOut) const override;
+    bool getAtomicCounterBlockMemberInfo(const std::string &name,
+                                         sh::BlockMemberInfo *memberInfoOut) const override;
+
     // CHROMIUM_path_rendering
     // Set parameters to control fragment shader input variable interpolation
     void setPathFragmentInputGen(const std::string &inputName,
