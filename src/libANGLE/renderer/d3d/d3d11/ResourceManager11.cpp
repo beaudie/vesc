@@ -381,6 +381,16 @@ gl::Error ResourceManager11::allocate(Renderer11 *renderer,
     return gl::NoError();
 }
 
+gl::Error ResourceManager11::CheckMultisampleQualityLevels(Renderer11 *renderer,
+                                                           DXGI_FORMAT format,
+                                                           GLsizei samples,
+                                                           UINT *qualityLevels)
+{
+    ID3D11Device *device = renderer->getDevice();
+    device->CheckMultisampleQualityLevels(format, samples, qualityLevels);
+    return gl::NoError();
+}
+
 void ResourceManager11::incrResource(ResourceType resourceType, size_t memorySize)
 {
     mAllocatedResourceCounts[ResourceTypeIndex(resourceType)]++;

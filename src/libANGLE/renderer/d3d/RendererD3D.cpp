@@ -259,7 +259,14 @@ gl::Texture *RendererD3D::getIncompleteTexture(GLImplFactory *implFactory, GLenu
         // Skip the API layer to avoid needing to pass the Context and mess with dirty bits.
         gl::Texture *t =
             new gl::Texture(implFactory, std::numeric_limits<GLuint>::max(), createType);
-        t->setStorage(nullptr, createType, 1, GL_RGBA8, colorSize);
+        if (createType == GL_TEXTURE_2D_MULTISAMPLE)
+        {
+            t->setStorageMultisample(nullptr, createType, 1, GL_RGBA8, colorSize, true);
+        }
+        else
+        {
+            t->setStorage(nullptr, createType, 1, GL_RGBA8, colorSize);
+        }
         if (type == GL_TEXTURE_CUBE_MAP)
         {
             for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
