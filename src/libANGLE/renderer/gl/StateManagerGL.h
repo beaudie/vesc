@@ -164,6 +164,8 @@ class StateManagerGL final : angle::NonCopyable
 
     GLuint getBoundBuffer(GLenum type);
 
+    gl::Error setDispatchComputeState(const gl::ContextState &data);
+
   private:
     // Set state that's common among draw commands and compute invocations.
     void setGenericShaderState(const gl::ContextState &data);
