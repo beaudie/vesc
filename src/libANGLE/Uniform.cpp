@@ -23,6 +23,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              const std::string &nameIn,
                              unsigned int arraySizeIn,
                              const int bindingIn,
+                             const int offsetIn,
                              const int locationIn,
                              const int blockIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
@@ -33,6 +34,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     name      = nameIn;
     arraySize = arraySizeIn;
     binding   = bindingIn;
+    offset    = offsetIn;
     location  = locationIn;
 }
 
@@ -108,6 +110,11 @@ bool LinkedUniform::isImage() const
     return IsImageType(type);
 }
 
+bool LinkedUniform::isAtomicCounter() const
+{
+    return IsAtomicCounterType(type);
+}
+
 bool LinkedUniform::isField() const
 {
     return name.find('.') != std::string::npos;
@@ -134,10 +141,33 @@ const uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex) const
     return const_cast<LinkedUniform *>(this)->getDataPtrToElement(elementIndex);
 }
 
+BufferBacked::BufferBacked() : bufferBinding(0), dataSize(0)
+{
+}
+
+BufferBacked::~BufferBacked()
+{
+}
+
+BufferBacked::BufferBacked(const BufferBacked &other)
+{
+    bufferBinding = other.bufferBinding;
+    dataSize      = other.dataSize;
+    memberIndexes = other.memberIndexes;
+}
+
+BufferBacked &BufferBacked::operator=(const BufferBacked &other)
+{
+    bufferBinding = other.bufferBinding;
+    dataSize      = other.dataSize;
+    memberIndexes = other.memberIndexes;
+
+    return *this;
+}
+
 UniformBlock::UniformBlock()
     : isArray(false),
       arrayElement(0),
-      dataSize(0),
       vertexStaticUse(false),
       fragmentStaticUse(false),
       computeStaticUse(false)
@@ -148,7 +178,6 @@ UniformBlock::UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned i
     : name(nameIn),
       isArray(isArrayIn),
       arrayElement(arrayElementIn),
-      dataSize(0),
       vertexStaticUse(false),
       fragmentStaticUse(false),
       computeStaticUse(false)
