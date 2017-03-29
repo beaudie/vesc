@@ -96,6 +96,12 @@ class ProgramVk : public ProgramImpl
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
 
+    // May only be called after a successful link operation.
+    // Returns false for inactive blocks.
+    bool getAtomicCounterBufferSize(int binding, size_t *sizeOut) const override;
+    bool getAtomicCounterBlockMemberInfo(const std::string &name,
+                                         sh::BlockMemberInfo *memberInfoOut) const override;
+
     void setPathFragmentInputGen(const std::string &inputName,
                                  GLenum genMode,
                                  GLint components,

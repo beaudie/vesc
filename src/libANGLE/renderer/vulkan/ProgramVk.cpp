@@ -260,6 +260,19 @@ bool ProgramVk::getUniformBlockSize(const std::string &blockName, size_t *sizeOu
     return bool();
 }
 
+bool ProgramVk::getAtomicCounterBufferSize(int binding, size_t *sizeOut) const
+{
+    UNIMPLEMENTED();
+    return bool();
+}
+
+bool ProgramVk::getAtomicCounterBlockMemberInfo(const std::string &name,
+                                                sh::BlockMemberInfo *memberInfoOut) const
+{
+    UNIMPLEMENTED();
+    return bool();
+}
+
 bool ProgramVk::getUniformBlockMemberInfo(const std::string &memberUniformName,
                                           sh::BlockMemberInfo *memberInfoOut) const
 {
