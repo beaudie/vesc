@@ -400,8 +400,9 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniform(
     std::vector<LinkedUniform> *samplerUniforms)
 {
     int location                          = uniform.location;
-    VectorAndSamplerCount uniformVasCount = flattenUniformImpl(
-        uniform, uniform.name, samplerUniforms, uniform.staticUse, uniform.binding, &location);
+    VectorAndSamplerCount uniformVasCount =
+        flattenUniformImpl(uniform, uniform.name, samplerUniforms, uniform.staticUse,
+                           uniform.binding, uniform.offset, &location);
     if (uniform.staticUse)
     {
         return uniformVasCount;
@@ -415,6 +416,7 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
     std::vector<LinkedUniform> *samplerUniforms,
     bool markStaticUse,
     int binding,
+    int offset,
     int *location)
 {
     ASSERT(location);
@@ -432,7 +434,7 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
                 vectorAndSamplerCount += flattenUniformImpl(field, fieldFullName, samplerUniforms,
-                                                            markStaticUse, -1, location);
+                                                            markStaticUse, -1, -1, location);
             }
         }
 
@@ -454,6 +456,10 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
         {
             existingUniform->binding = binding;
         }
+        if (offset != -1)
+        {
+            existingUniform->offset = offset;
+        }
         if (*location != -1)
         {
             existingUniform->location = *location;
@@ -466,7 +472,7 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
     else
     {
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
-                                    binding, *location, -1,
+                                    binding, offset, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
         linkedUniform.staticUse = markStaticUse;
         uniformList->push_back(linkedUniform);
