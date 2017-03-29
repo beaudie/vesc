@@ -3990,6 +3990,18 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat,
                                         levels);
 }
 
+TextureStorage *Renderer11::createTextureStorage2DMultisample(GLenum internalformat,
+                                                              bool renderTarget,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              int levels,
+                                                              int samples,
+                                                              GLboolean fixedSampleLocations)
+{
+    return new TextureStorage11_2DMultisample(this, internalformat, renderTarget, width, height,
+                                              levels, samples, fixedSampleLocations);
+}
+
 gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAttachment,
                                          const gl::Rectangle &sourceArea,
                                          GLenum format,

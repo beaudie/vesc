@@ -168,7 +168,14 @@ const char *GetSamplerCoordinateTypeString(
         switch (hlslCoords)
         {
             case 2:
-                return "int3";
+                if (textureFunction.sampler == EbtSampler2DMS)
+                {
+                    return "int2";
+                }
+                else
+                {
+                    return "int3";
+                }
             case 3:
                 return "int4";
             default:
@@ -202,6 +209,7 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
         {
             case EbtSampler2D:
             case EbtSamplerExternalOES:
+            case EbtSampler2DMS:
                 hlslCoords = 2;
                 break;
             case EbtSamplerCube:
@@ -230,6 +238,8 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
         {
             case EbtSampler2D:
                 return 2;
+            case EbtSampler2DMS:
+                return 2;
             case EbtSampler3D:
                 return 3;
             case EbtSamplerCube:
@@ -240,6 +250,8 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
                 return 2;
             case EbtISampler2D:
                 return 2;
+            case EbtISampler2DMS:
+                return 2;
             case EbtISampler3D:
                 return 3;
             case EbtISamplerCube:
@@ -247,6 +259,8 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
             case EbtISampler2DArray:
                 return 3;
             case EbtUSampler2D:
+                return 2;
+            case EbtUSampler2DMS:
                 return 2;
             case EbtUSampler3D:
                 return 3;
@@ -386,7 +400,14 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
         case TextureFunctionHLSL::TextureFunction::SIZE:
             break;
         case TextureFunctionHLSL::TextureFunction::FETCH:
-            out << ", int mip";
+            if (textureFunction.sampler == EbtSampler2DMS)
+            {
+                out << ", int index";
+            }
+            else
+            {
+                out << ", int mip";
+            }
             break;
         case TextureFunctionHLSL::TextureFunction::GRAD:
             break;
@@ -435,7 +456,8 @@ void GetTextureReference(TInfoSinkBase &out,
     if (outputType == SH_HLSL_4_1_OUTPUT)
     {
         TString suffix = TextureGroupSuffix(textureFunction.sampler);
-        if (TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D)
+        if (TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D ||
+            TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D_MS)
         {
             *textureReference = TString("textures") + suffix + "[samplerIndex]";
             *samplerReference = TString("samplers") + suffix + "[samplerIndex]";
@@ -932,7 +954,14 @@ void OutputTextureSampleFunctionReturnStatement(
         else if (IsIntegerSampler(textureFunction.sampler) ||
                  textureFunction.method == TextureFunctionHLSL::TextureFunction::FETCH)
         {
-            out << ", mip)";
+            if (textureFunction.sampler == EbtSampler2DMS)
+            {
+                out << "), index";
+            }
+            else
+            {
+                out << ", mip)";
+            }
         }
         else if (IsShadowSampler(textureFunction.sampler))
         {
@@ -1082,17 +1111,20 @@ const char *TextureFunctionHLSL::TextureFunction::getReturnType() const
         switch (sampler)
         {
             case EbtSampler2D:
+            case EbtSampler2DMS:
             case EbtSampler3D:
             case EbtSamplerCube:
             case EbtSampler2DArray:
             case EbtSamplerExternalOES:
                 return "float4";
             case EbtISampler2D:
+            case EbtISampler2DMS:
             case EbtISampler3D:
             case EbtISamplerCube:
             case EbtISampler2DArray:
                 return "int4";
             case EbtUSampler2D:
+            case EbtUSampler2DMS:
             case EbtUSampler3D:
             case EbtUSamplerCube:
             case EbtUSampler2DArray:
@@ -1128,7 +1160,7 @@ TString TextureFunctionHLSL::useTextureFunction(const TString &name,
     textureFunction.proj    = false;
     textureFunction.offset  = false;
 
-    if (name == "texture2D" || name == "textureCube" || name == "texture")
+    if (name == "texture2D" || name == "textureCube" || name == "texture" || name == "texture2DMS")
     {
         textureFunction.method = TextureFunction::IMPLICIT;
     }
