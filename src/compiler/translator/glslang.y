@@ -181,6 +181,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %token <lex> SAMPLEREXTERNAL2DY2YEXT
 %token <lex> IMAGE2D IIMAGE2D UIMAGE2D IMAGE3D IIMAGE3D UIMAGE3D IMAGE2DARRAY IIMAGE2DARRAY UIMAGE2DARRAY
 %token <lex> IMAGECUBE IIMAGECUBE UIMAGECUBE
+%token <lex> ATOMICUINT
 %token <lex> LAYOUT
 %token <lex> YUVCSCSTANDARDEXT YUVCSCSTANDARDEXTCONSTANT
 
@@ -973,6 +974,7 @@ storage_qualifier
 
 type_specifier
     : type_specifier_no_prec {
+        context->checkIsNotGlobalAtomicCounter(@1, $1);
         $$ = $1;
         $$.precision = context->symbolTable.getDefaultPrecision($1.getBasicType());
     }
@@ -1257,6 +1259,9 @@ type_specifier_nonarray
     }
     | UIMAGECUBE {
         $$.initialize(EbtUImageCube, @1);
+    }
+    | ATOMICUINT {
+        $$.initialize(EbtAtomicCounter, @1);
     }
     | TYPE_NAME {
         //

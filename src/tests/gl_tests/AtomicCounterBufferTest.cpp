@@ -45,10 +45,127 @@ TEST_P(AtomicCounterBufferTest, AtomicCounterBufferBindings)
     }
 }
 
+class AtomicCounterBufferTest31 : public AtomicCounterBufferTest
+{
+};
+
+TEST_P(AtomicCounterBufferTest31, BasicAtomicCounterDeclaration)
+{
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a;\n"
+        "layout(binding = 2) uniform atomic_uint b;\n"
+        "layout(binding = 2, offset = 12) uniform atomic_uint c;\n"
+        "layout(binding = 1, offset = 4) uniform atomic_uint d;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_NE(0u, shader);
+    glDeleteShader(shader);
+}
+
+TEST_P(AtomicCounterBufferTest31, InvalidShaderVersion)
+{
+    const std::string &source =
+        "#version 300 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest31, InvalidQualifier)
+{
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) in atomic_uint a;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest31, BindingOffsetOverlapping)
+{
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a[3];\n"
+        "layout(binding = 2, offset = 8) uniform atomic_uint b;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest31, GlobalBindingOffsetOverlapping)
+{
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint;\n"
+        "layout(binding = 2) uniform atomic_uint b;\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint c;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+// The spec only demands offset unique and non-overlapping. So this should be allowed.
+TEST_P(AtomicCounterBufferTest31, DeclarationSequenceWithDecrementalOffsetsSpecified)
+{
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a;\n"
+        "layout(binding = 2, offset = 0) uniform atomic_uint b;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_NE(0u, shader);
+    glDeleteShader(shader);
+}
+
+// Linking should fail if counters in vertex shader exceed gl_MaxVertexAtomicCounters.
+TEST_P(AtomicCounterBufferTest31, ExceedMaxVertexAtomicCounters)
+{
+    const std::string &vertexShaderSource =
+        "#version 310 es\n"
+        "layout(binding = 2) uniform atomic_uint foo[gl_MaxVertexAtomicCounters + 1];\n"
+        "void main()\n"
+        "{\n"
+        "    atomicCounterIncrement(foo[0]);\n"
+        "}\n";
+    const std::string &fragmentShaderSource =
+        "#version 310 es\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    EXPECT_EQ(0u, program);
+}
+
+TEST_P(AtomicCounterBufferTest31, OffsetAutoIncremented)
+{
+    // TODO(jie.a.chen@intel.com): Add this case once the ProgramInterface implementation is ready.
+}
+
 ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
                        ES31_OPENGLES());
-
+ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
 }  // namespace
