@@ -207,6 +207,10 @@ TEST_P(ComputeShaderTest, AccessAllSpecialVariables)
         "}\n";
 
     ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Access part compute shader special variables.
@@ -223,6 +227,10 @@ TEST_P(ComputeShaderTest, AccessPartSpecialVariables)
         "}\n";
 
     ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Check that it is not possible to create a compute shader when the context does not support ES

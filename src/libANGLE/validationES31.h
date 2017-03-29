@@ -61,6 +61,11 @@ bool ValidateGetProgramResourceIndex(Context *context,
                                      GLenum programInterface,
                                      const GLchar *name);
 
+bool ValidateDispatchCompute(Context *context,
+                             GLuint numGroupX,
+                             GLuint numGroupY,
+                             GLuint numGroupZ);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
