@@ -45,6 +45,102 @@ TEST_P(AtomicCounterBufferTest, AtomicCounterBufferBindings)
     }
 }
 
+TEST_P(AtomicCounterBufferTest, BasicAtomicCounterDeclaration)
+{
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        return;
+    }
+
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a;\n"
+        "layout(binding = 2) uniform atomic_uint b;\n"
+        "layout(binding = 2, offset = 12) uniform atomic_uint c;\n"
+        "layout(binding = 1, offset = 4) uniform atomic_uint d;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_NE(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest, InvalidShaderVersion)
+{
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        return;
+    }
+
+    const std::string &source =
+        "#version 300 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest, InvalidQualifier)
+{
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        return;
+    }
+
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) in atomic_uint a;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest, BindingOffsetOverlapping)
+{
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        return;
+    }
+
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint a[3];\n"
+        "layout(binding = 2, offset = 8) uniform atomic_uint b;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
+TEST_P(AtomicCounterBufferTest, GlobalBindingOffsetOverlapping)
+{
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        return;
+    }
+
+    const std::string &source =
+        "#version 310 es\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint;\n"
+        "layout(binding = 2) uniform atomic_uint b;\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint c;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
+    EXPECT_EQ(0u, shader);
+}
+
 ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),

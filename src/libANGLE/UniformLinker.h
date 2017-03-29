@@ -71,6 +71,7 @@ class UniformLinker
                                              std::vector<LinkedUniform> *samplerUniforms,
                                              bool markStaticUse,
                                              int binding,
+                                             int offset,
                                              int *location);
 
     bool indexUniforms(InfoLog &infoLog, const Program::Bindings &uniformLocationBindings);

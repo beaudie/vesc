@@ -558,6 +558,22 @@ bool ProgramGL::getUniformBlockMemberInfo(const std::string &memberUniformName,
     return true;
 }
 
+bool ProgramGL::getAtomicCounterBlockMemberInfo(const std::string &name,
+                                                sh::BlockMemberInfo *memberInfoOut) const
+{
+    // TODO(Jie): Implement this.
+    return true;
+}
+
+bool ProgramGL::getAtomicCounterBufferSize(int binding, size_t *sizeOut) const
+{
+    ASSERT(mProgramID != 0u);
+
+    // TODO(Jie): Figure out the actual size.
+    *sizeOut = 0;
+    return true;
+}
+
 void ProgramGL::setPathFragmentInputGen(const std::string &inputName,
                                         GLenum genMode,
                                         GLint components,
