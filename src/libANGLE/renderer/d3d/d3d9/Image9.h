@@ -33,6 +33,12 @@ class Image9 : public ImageD3D
     static gl::Error copyLockableSurfaces(IDirect3DSurface9 *dest, IDirect3DSurface9 *source);
 
     bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) override;
+    bool redefine(GLenum target,
+                  GLenum internalformat,
+                  const gl::Extents &size,
+                  GLsizei samples,
+                  GLboolean fixedSampleLocations,
+                  bool forceRelease) override;
 
     D3DFORMAT getD3DFormat() const;
 
