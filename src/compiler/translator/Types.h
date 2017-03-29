@@ -468,11 +468,6 @@ class TType
         return structure ? structure->containsSamplers() : false;
     }
 
-    bool isStructureContainingImages() const
-    {
-        return structure ? structure->containsImages() : false;
-    }
-
     void createSamplerSymbols(const TString &structName,
                               const TString &structAPIName,
                               const unsigned int arrayOfStructsSize,

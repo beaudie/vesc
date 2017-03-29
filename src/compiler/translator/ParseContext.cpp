@@ -30,9 +30,9 @@ namespace
 
 const int kWebGLMaxStructNesting = 4;
 
-bool ContainsSampler(const TType &type)
+bool ContainsOpaqueType(const TType &type)
 {
-    if (IsSampler(type.getBasicType()))
+    if (IsOpaqueType(type.getBasicType()))
         return true;
 
     if (type.getBasicType() == EbtStruct || type.isInterfaceBlock())
@@ -40,25 +40,7 @@ bool ContainsSampler(const TType &type)
         const TFieldList &fields = type.getStruct()->fields();
         for (unsigned int i = 0; i < fields.size(); ++i)
         {
-            if (ContainsSampler(*fields[i]->type()))
-                return true;
-        }
-    }
-
-    return false;
-}
-
-bool ContainsImage(const TType &type)
-{
-    if (IsImage(type.getBasicType()))
-        return true;
-
-    if (type.getBasicType() == EbtStruct || type.isInterfaceBlock())
-    {
-        const TFieldList &fields = type.getStruct()->fields();
-        for (unsigned int i = 0; i < fields.size(); ++i)
-        {
-            if (ContainsImage(*fields[i]->type()))
+            if (ContainsOpaqueType(*fields[i]->type()))
                 return true;
         }
     }
@@ -85,6 +67,40 @@ const char *GetImageArgumentToken(TIntermTyped *imageNode)
 }
 
 }  // namespace
+
+struct OffsetSpan
+{
+    int begin;
+    int end;
+};
+
+// This tracks each binding point's current default offset for inheritance of subsequent
+// variables using the same binding, and keeps offsets unique and non overlapping.
+// See GLSL ES 3.1, section 4.4.6.
+struct TParseContext::AtomicCounterBindingState
+{
+    AtomicCounterBindingState() : defaultOffset(0){};
+    // Inserts a new span and returns true if no overlapping with existing spans.
+    bool addSpan(int start, size_t length)
+    {
+        OffsetSpan newSpan;
+        newSpan.begin = start;
+        newSpan.end   = start + static_cast<int>(length);
+
+        for (auto &span : spans)
+        {
+            if (newSpan.begin < span.end && newSpan.end > span.begin)
+            {
+                return false;
+            }
+        }
+        spans.push_back(newSpan);
+        defaultOffset = newSpan.end;
+        return true;
+    }
+    int defaultOffset;
+    std::vector<OffsetSpan> spans;
+};
 
 TParseContext::TParseContext(TSymbolTable &symt,
                              TExtensionBehavior &ext,
@@ -131,9 +147,14 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxImageUnits(resources.MaxImageUnits),
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
+      mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
+}
+
+TParseContext::~TParseContext()
+{
 }
 
 //
@@ -340,14 +361,9 @@ void TParseContext::checkPrecisionSpecified(const TSourceLoc &line,
                 error(line, "No precision specified (int)", "");
                 return;
             default:
-                if (IsSampler(type))
+                if (IsOpaqueType(type))
                 {
-                    error(line, "No precision specified (sampler)", "");
-                    return;
-                }
-                if (IsImage(type))
-                {
-                    error(line, "No precision specified (image)", "");
+                    error(line, "No precision specified (opaque)", "");
                     return;
                 }
         }
@@ -451,13 +467,9 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
             {
                 message = "can't modify void";
             }
-            if (IsSampler(node->getBasicType()))
+            if (IsOpaqueType(node->getBasicType()))
             {
-                message = "can't modify a sampler";
-            }
-            if (IsImage(node->getBasicType()))
-            {
-                message = "can't modify an image";
+                message = "can't modify an opaque type";
             }
     }
 
@@ -683,14 +695,9 @@ bool TParseContext::checkConstructorArguments(const TSourceLoc &line,
     {
         TIntermTyped *argTyped = argNode->getAsTyped();
         ASSERT(argTyped != nullptr);
-        if (op != EOpConstructStruct && IsSampler(argTyped->getBasicType()))
+        if (op != EOpConstructStruct && IsOpaqueType(argTyped->getBasicType()))
         {
-            error(line, "cannot convert a sampler", "constructor");
-            return false;
-        }
-        if (op != EOpConstructStruct && IsImage(argTyped->getBasicType()))
-        {
-            error(line, "cannot convert an image", "constructor");
+            error(line, "cannot convert an opaque type", "constructor");
             return false;
         }
         if (argTyped->getBasicType() == EbtVoid)
@@ -777,16 +784,16 @@ void TParseContext::checkIsScalarBool(const TSourceLoc &line, const TPublicType 
     }
 }
 
-bool TParseContext::checkIsNotSampler(const TSourceLoc &line,
-                                      const TTypeSpecifierNonArray &pType,
-                                      const char *reason)
+bool TParseContext::checkIsNotOpaqueType(const TSourceLoc &line,
+                                         const TTypeSpecifierNonArray &pType,
+                                         const char *reason)
 {
     if (pType.type == EbtStruct)
     {
-        if (ContainsSampler(*pType.userDef))
+        if (ContainsOpaqueType(*pType.userDef))
         {
             std::stringstream reasonStream;
-            reasonStream << reason << " (structure contains a sampler)";
+            reasonStream << reason << " (structure contains an opaque type)";
             std::string reasonStr = reasonStream.str();
             error(line, reasonStr.c_str(), getBasicString(pType.type));
             return false;
@@ -794,37 +801,9 @@ bool TParseContext::checkIsNotSampler(const TSourceLoc &line,
 
         return true;
     }
-    else if (IsSampler(pType.type))
+    else if (IsOpaqueType(pType.type))
     {
         error(line, reason, getBasicString(pType.type));
-        return false;
-    }
-
-    return true;
-}
-
-bool TParseContext::checkIsNotImage(const TSourceLoc &line,
-                                    const TTypeSpecifierNonArray &pType,
-                                    const char *reason)
-{
-    if (pType.type == EbtStruct)
-    {
-        if (ContainsImage(*pType.userDef))
-        {
-            std::stringstream reasonStream;
-            reasonStream << reason << " (structure contains an image)";
-            std::string reasonStr = reasonStream.str();
-            error(line, reasonStr.c_str(), getBasicString(pType.type));
-
-            return false;
-        }
-
-        return true;
-    }
-    else if (IsImage(pType.type))
-    {
-        error(line, reason, getBasicString(pType.type));
-
         return false;
     }
 
@@ -860,29 +839,10 @@ void TParseContext::checkOutParameterIsNotOpaqueType(const TSourceLoc &line,
                                                      TQualifier qualifier,
                                                      const TType &type)
 {
-    checkOutParameterIsNotSampler(line, qualifier, type);
-    checkOutParameterIsNotImage(line, qualifier, type);
-}
-
-void TParseContext::checkOutParameterIsNotSampler(const TSourceLoc &line,
-                                                  TQualifier qualifier,
-                                                  const TType &type)
-{
     ASSERT(qualifier == EvqOut || qualifier == EvqInOut);
-    if (IsSampler(type.getBasicType()))
+    if (IsOpaqueType(type.getBasicType()))
     {
-        error(line, "samplers cannot be output parameters", type.getBasicString());
-    }
-}
-
-void TParseContext::checkOutParameterIsNotImage(const TSourceLoc &line,
-                                                TQualifier qualifier,
-                                                const TType &type)
-{
-    ASSERT(qualifier == EvqOut || qualifier == EvqInOut);
-    if (IsImage(type.getBasicType()))
-    {
-        error(line, "images cannot be output parameters", type.getBasicString());
+        error(line, "opaque types cannot be output parameters", type.getBasicString());
     }
 }
 
@@ -1176,14 +1136,8 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
     }
 
     if (publicType.qualifier != EvqUniform &&
-        !checkIsNotSampler(identifierLocation, publicType.typeSpecifierNonArray,
-                           "samplers must be uniform"))
-    {
-        return;
-    }
-    if (publicType.qualifier != EvqUniform &&
-        !checkIsNotImage(identifierLocation, publicType.typeSpecifierNonArray,
-                         "images must be uniform"))
+        !checkIsNotOpaqueType(identifierLocation, publicType.typeSpecifierNonArray,
+                              "Opaque types must be uniform"))
     {
         return;
     }
@@ -1336,6 +1290,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     {
         checkSamplerBindingIsValid(identifierLocation, layoutQualifier.binding, arraySize);
     }
+    else if (IsAtomicCounter(type.getBasicType()))
+    {
+        checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
     else
     {
         ASSERT(!IsOpaqueType(type.getBasicType()));
@@ -1410,6 +1368,15 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arraySize > mMaxCombinedTextureImageUnits)
     {
         error(location, "sampler binding greater than maximum texture units", "binding");
+    }
+}
+
+void TParseContext::checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding)
+{
+    if (binding >= mMaxAtomicCounterBindings)
+    {
+        error(location, "atomic counter binding greater than gl_MaxAtomicCounterBindings",
+              "binding");
     }
 }
 
@@ -1845,6 +1812,32 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
         {
             checkIsAtGlobalLevel(typeSpecifier.getLine(), "layout");
         }
+        if (typeSpecifier.getBasicType() == EbtAtomicCounter)
+        {
+            if (returnType.precision == EbpLow || returnType.precision == EbpMedium)
+            {
+                error(typeSpecifier.getLine(), "Can only be highp", "atomic counter");
+            }
+            if (mShaderVersion < 310)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint supported in GLSL ES 3.10 only",
+                      "layout");
+            }
+            if (returnType.qualifier != EvqUniform)
+            {
+                error(typeSpecifier.getLine(), "atomic_uint must be uniform", "layout");
+            }
+            // dEQP enforces compile error if location is specified. See uniform_location.test.
+            if (returnType.layoutQualifier.location != -1)
+            {
+                error(typeSpecifier.getLine(), "location must not be set for atomic_uint",
+                      "layout");
+            }
+            if (returnType.layoutQualifier.binding == -1)
+            {
+                error(typeSpecifier.getLine(), "no binding specified", "atomic counter");
+            }
+        }
         if (sh::IsVarying(returnType.qualifier) || returnType.qualifier == EvqVertexIn ||
             returnType.qualifier == EvqFragmentOut)
         {
@@ -1974,6 +1967,21 @@ void TParseContext::checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &m
     }
 }
 
+void TParseContext::checkAtomicCounterOffsetIsNotOverlapped(TPublicType &publicType,
+                                                            size_t size,
+                                                            const TSourceLoc &loc)
+{
+    auto &bindingState = mAtomicCounterBindingStates[publicType.layoutQualifier.binding];
+    if (publicType.layoutQualifier.offset == -1)
+    {
+        publicType.layoutQualifier.offset = bindingState.defaultOffset;
+    }
+    if (!bindingState.addSpan(publicType.layoutQualifier.offset, size))
+    {
+        error(loc, "Offset overlapping", "atomic counter");
+    }
+}
+
 TIntermDeclaration *TParseContext::parseSingleDeclaration(
     TPublicType &publicType,
     const TSourceLoc &identifierOrTypeLocation,
@@ -2019,12 +2027,21 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
     if (emptyDeclaration)
     {
         emptyDeclarationErrorCheck(publicType, identifierOrTypeLocation);
+        if (publicType.getBasicType() == EbtAtomicCounter)
+        {
+            setAtomicCounterBindingDefaultOffset(publicType, identifierOrTypeLocation);
+        }
     }
     else
     {
         singleDeclarationErrorCheck(publicType, identifierOrTypeLocation);
 
         checkCanBeDeclaredWithoutInitializer(identifierOrTypeLocation, identifier, &publicType);
+
+        if (publicType.getBasicType() == EbtAtomicCounter)
+        {
+            checkAtomicCounterOffsetIsNotOverlapped(publicType, 4, identifierOrTypeLocation);
+        }
 
         TVariable *variable = nullptr;
         declareVariable(identifierOrTypeLocation, identifier, type, &variable);
@@ -2062,6 +2079,11 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
     // Make the type an array even if size check failed.
     // This ensures useless error messages regarding the variable's non-arrayness won't follow.
     arrayType.setArraySize(size);
+
+    if (publicType.getBasicType() == EbtAtomicCounter)
+    {
+        checkAtomicCounterOffsetIsNotOverlapped(publicType, size * 4, identifierLocation);
+    }
 
     TVariable *variable = nullptr;
     declareVariable(identifierLocation, identifier, arrayType, &variable);
@@ -2338,6 +2360,22 @@ void TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
         {
             declarationOut->appendDeclarator(initNode);
         }
+    }
+}
+
+void TParseContext::setAtomicCounterBindingDefaultOffset(const TPublicType &publicType,
+                                                         const TSourceLoc &location)
+{
+    const TLayoutQualifier &layoutQualifier = publicType.layoutQualifier;
+    checkAtomicCounterBindingIsValid(location, layoutQualifier.binding);
+    if (layoutQualifier.binding == -1 || layoutQualifier.offset == -1)
+    {
+        error(location, "Requires both binding and offset", "layout");
+        return;
+    }
+    else
+    {
+        mAtomicCounterBindingStates[layoutQualifier.binding].defaultOffset = layoutQualifier.offset;
     }
 }
 
@@ -2724,10 +2762,9 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     {
         error(location, "no qualifiers allowed for function return", "layout");
     }
-    // make sure a sampler or an image is not involved as well...
-    checkIsNotSampler(location, type.typeSpecifierNonArray,
-                      "samplers can't be function return values");
-    checkIsNotImage(location, type.typeSpecifierNonArray, "images can't be function return values");
+    // make sure an opaque type is not involved as well...
+    checkIsNotOpaqueType(location, type.typeSpecifierNonArray,
+                         "opaque types can't be function return values");
     if (mShaderVersion < 300)
     {
         // Array return values are forbidden, but there's also no valid syntax for declaring array
@@ -2878,17 +2915,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
             error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
+                  "unsupported type - opaque types are not allowed in interface blocks",
                   fieldType->getBasicString());
         }
 
@@ -3484,6 +3514,19 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             qualifier.binding = intValue;
         }
     }
+    else if (qualifierType == "offset")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range: offset must be non-negative",
+                  intValueString.c_str());
+        }
+        else
+        {
+            qualifier.offset = intValue;
+        }
+    }
     else if (qualifierType == "local_size_x")
     {
         parseLocalSize(qualifierType, qualifierTypeLine, intValue, intValueLine, intValueString, 0u,
@@ -3648,7 +3691,8 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
         {
             error(field.line(), "invalid qualifier on struct member", "invariant");
         }
-        if (IsImage(field.type()->getBasicType()))
+        // ESSL 3.1 section 4.1.8 -- atomic_uint or images are not allowed as structure member.
+        if (IsImage(field.type()->getBasicType()) || IsAtomicCounter(field.type()->getBasicType()))
         {
             error(field.line(), "disallowed type in struct", field.type()->getBasicString());
         }
@@ -3946,13 +3990,6 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 return false;
             }
 
-            if ((op == EOpAssign || op == EOpInitialize) &&
-                left->getType().isStructureContainingImages())
-            {
-                error(loc, "undefined operation for structs containing images",
-                      GetOperatorString(op));
-                return false;
-            }
             if ((left->getNominalSize() != right->getNominalSize()) ||
                 (left->getSecondarySize() != right->getSecondarySize()))
             {
