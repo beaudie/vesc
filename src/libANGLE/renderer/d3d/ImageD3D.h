@@ -44,12 +44,20 @@ class ImageD3D : angle::NonCopyable
     GLenum getInternalFormat() const { return mInternalFormat; }
     GLenum getTarget() const { return mTarget; }
     bool isRenderableFormat() const { return mRenderable; }
+    GLsizei getSamples() const { return mSamples; }
+    GLboolean getFixedSampleLocations() const { return mFixedSampleLocations; }
 
     void markDirty() { mDirty = true; }
     void markClean() { mDirty = false; }
     virtual bool isDirty() const = 0;
 
     virtual bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) = 0;
+    virtual bool redefine(GLenum target,
+                          GLenum internalformat,
+                          const gl::Extents &size,
+                          GLsizei samples,
+                          GLboolean fixedSampleLocations,
+                          bool forceRelease) = 0;
 
     virtual gl::Error loadData(const gl::Box &area,
                                const gl::PixelUnpackState &unpack,
@@ -89,6 +97,9 @@ class ImageD3D : angle::NonCopyable
     GLenum mInternalFormat;
     bool mRenderable;
     GLenum mTarget;
+
+    GLsizei mSamples;
+    GLboolean mFixedSampleLocations;
 
     bool mDirty;
 };

@@ -50,6 +50,12 @@ class Image11 : public ImageD3D
     virtual gl::Error copyToStorage(TextureStorage *storage, const gl::ImageIndex &index, const gl::Box &region);
 
     bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) override;
+    bool redefine(GLenum target,
+                  GLenum internalformat,
+                  const gl::Extents &size,
+                  GLsizei samples,
+                  GLboolean fixedSampleLocations,
+                  bool forceRelease) override;
 
     DXGI_FORMAT getDXGIFormat() const;
 

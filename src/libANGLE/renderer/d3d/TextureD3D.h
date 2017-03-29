@@ -47,6 +47,12 @@ class TextureD3D : public TextureImpl
     GLint getBaseLevelHeight() const;
     GLenum getBaseLevelInternalFormat() const;
 
+    gl::Error setStorage(const gl::Context *context,
+                         GLenum target,
+                         size_t levels,
+                         GLenum internalFormat,
+                         const gl::Extents &size);
+
     gl::Error setStorageMultisample(const gl::Context *context,
                                     GLenum target,
                                     GLsizei samples,
@@ -243,13 +249,6 @@ class TextureD3D_2D : public TextureD3D
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
     virtual bool isValidIndex(const gl::ImageIndex &index) const;
-
-    gl::Error setStorageMultisample(const gl::Context *context,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalFormat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
 
   protected:
     void markAllImagesDirty() override;
@@ -719,6 +718,10 @@ class TextureD3D_2DMultisample : public TextureD3D
   public:
     TextureD3D_2DMultisample(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D_2DMultisample() override;
+    GLsizei getWidth() const;
+    GLsizei getHeight() const;
+    GLsizei getSamples() const;
+    GLboolean getFixedSampleLocations() const;
 
     ImageD3D *getImage(const gl::ImageIndex &index) const override;
     gl::Error setImage(const gl::Context *context,
@@ -769,11 +772,12 @@ class TextureD3D_2DMultisample : public TextureD3D
                            const gl::Rectangle &sourceArea,
                            const gl::Framebuffer *source) override;
 
-    gl::Error setStorage(const gl::Context *context,
-                         GLenum target,
-                         size_t levels,
-                         GLenum internalFormat,
-                         const gl::Extents &size) override;
+    gl::Error setStorageMultisample(const gl::Context *context,
+                                    GLenum target,
+                                    GLsizei samples,
+                                    GLint internalFormat,
+                                    const gl::Extents &size,
+                                    GLboolean fixedSampleLocations) override;
 
     gl::Error setImageExternal(GLenum target,
                                egl::Stream *stream,
@@ -805,6 +809,19 @@ class TextureD3D_2DMultisample : public TextureD3D
     void initMipmapImages() override;
 
     bool isImageComplete(const gl::ImageIndex &index) const override;
+
+    void redefineImage(size_t level,
+                       GLenum internalformat,
+                       const gl::Extents &size,
+                       GLsizei samples,
+                       bool fixedSampleLocations,
+                       bool forceRelease);
+
+    bool isLevelComplete(int level) const;
+
+    gl::Error updateStorageLevel(int level);
+
+    ImageD3D *mImage;
 };
 }
 
