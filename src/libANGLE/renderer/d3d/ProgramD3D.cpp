@@ -2483,4 +2483,28 @@ void ProgramD3D::setPathFragmentInputGen(const std::string &inputName,
     UNREACHABLE();
 }
 
+gl::Error ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutable)
+{
+    if (outExecutable)
+    {
+        *outExecutable = nullptr;
+        *outExecutable = mComputeExecutable.get();
+    }
+
+    return gl::NoError();
+}
+
+gl::Error ProgramD3D::applyComputeUniforms()
+{
+    ASSERT(!mDirtySamplerMapping);
+    ANGLE_TRY(mRenderer->applyComputeUniforms(*this, mD3DUniforms));
+
+    for (D3DUniform *d3dUniform : mD3DUniforms)
+    {
+        d3dUniform->dirty = false;
+    }
+
+    return gl::NoError();
+}
+
 }  // namespace rx
