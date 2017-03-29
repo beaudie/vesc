@@ -3398,4 +3398,332 @@ TextureStorage11_2DArray::ensureDropStencilTexture()
     return DropStencil::CREATED;
 }
 
+void TextureStorage11_2DMultisample::disassociateImage(const gl::ImageIndex &index,
+                                                       Image11 *expectedImage)
+{
+    ASSERT(mAssociatedImage == expectedImage);
+
+    if (mAssociatedImage == expectedImage)
+    {
+        mAssociatedImage = nullptr;
+    }
+}
+
+TextureStorage11_2DMultisample::TextureStorage11_2DMultisample(Renderer11 *renderer,
+                                                               GLenum internalformat,
+                                                               bool renderTarget,
+                                                               GLsizei width,
+                                                               GLsizei height,
+                                                               int levels,
+                                                               int samples,
+                                                               GLboolean fixedSampleLocations)
+    : TextureStorage11(
+          renderer,
+          GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
+          GetTextureMiscFlags(internalformat,
+                              renderer->getRenderer11DeviceCaps(),
+                              renderTarget,
+                              levels),
+          internalformat),
+      mHasKeyedMutex(false),
+      mLevelZeroTexture(nullptr),
+      mLevelZeroRenderTarget(nullptr),
+      mAssociatedImage(nullptr)
+{
+    // adjust size if needed for compressed textures
+    d3d11::MakeValidSize(false, mFormatInfo.texFormat, &width, &height, &mTopLevel);
+
+    mMipLevels            = 1;
+    mTextureWidth         = width;
+    mTextureHeight        = height;
+    mSamples              = samples;
+    mFixedSampleLocations = fixedSampleLocations;
+}
+
+TextureStorage11_2DMultisample::~TextureStorage11_2DMultisample()
+{
+    if (mAssociatedImage != nullptr)
+    {
+        bool imageAssociationCorrect = mAssociatedImage->isAssociatedStorageValid(this);
+        ASSERT(imageAssociationCorrect);
+
+        if (imageAssociationCorrect)
+        {
+            // We must let the Images recover their data before we delete it from the
+            // TextureStorage.
+            mAssociatedImage->recoverFromAssociatedStorage();
+        }
+    }
+
+    SafeRelease(mLevelZeroTexture);
+    SafeDelete(mLevelZeroRenderTarget);
+}
+
+gl::Error TextureStorage11_2DMultisample::getResource(ID3D11Resource **outResource)
+{
+    ANGLE_TRY(ensureTextureExists(0));
+
+    *outResource = mLevelZeroTexture;
+    return gl::NoError();
+}
+
+gl::Error TextureStorage11_2DMultisample::ensureTextureExists(int mipLevels)
+{
+    // For Multisampled textures, mMipLevels always equals 0.
+    ID3D11Texture2D **outputTexture = &mLevelZeroTexture;
+
+    // if the width or height is not positive this should be treated as an incomplete texture
+    // we handle that here by skipping the d3d texture creation
+    if (*outputTexture == nullptr && mTextureWidth > 0 && mTextureHeight > 0)
+    {
+        ASSERT(mipLevels == 0);
+
+        ID3D11Device *device = mRenderer->getDevice();
+
+        D3D11_TEXTURE2D_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.Width          = mTextureWidth;  // Compressed texture size constraints?
+        desc.Height         = mTextureHeight;
+        desc.MipLevels      = 1;
+        desc.ArraySize      = 1;
+        desc.Format         = mFormatInfo.texFormat;
+        desc.Usage          = D3D11_USAGE_DEFAULT;
+        desc.BindFlags      = getBindFlags();
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags      = getMiscFlags();
+
+        // FEATURE_LEVEL_11_0 devices are required to support 4x MSAA for all render target
+        // formats, and 8x MSAA for all render target formats except R32G32B32A32 formats.
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476499(v=vs.85).aspx
+        UINT qualityLevels = 0;
+        if (mSamples > 2 && mSamples % 4 != 0)
+        {
+            mSamples = (mSamples / 4 + 1) * 4;
+        }
+        device->CheckMultisampleQualityLevels(desc.Format, mSamples, &qualityLevels);
+        ASSERT(qualityLevels > 0);
+        desc.SampleDesc.Count   = mSamples;
+        desc.SampleDesc.Quality = qualityLevels - 1;
+
+        HRESULT result = device->CreateTexture2D(&desc, nullptr, outputTexture);
+
+        // this can happen from windows TDR
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+            return gl::Error(GL_OUT_OF_MEMORY,
+                             "Failed to create 2DMS texture storage, result: 0x%X.", result);
+        }
+        else if (FAILED(result))
+        {
+            ASSERT(result == E_OUTOFMEMORY);
+            return gl::Error(GL_OUT_OF_MEMORY,
+                             "Failed to create 2DMS texture storage, result: 0x%X.", result);
+        }
+
+        d3d11::SetDebugName(*outputTexture, "TexStorage2D.Texture");
+    }
+
+    return gl::NoError();
+}
+
+gl::Error TextureStorage11_2DMultisample::releaseAssociatedImage(const gl::ImageIndex &index,
+                                                                 Image11 *incomingImage)
+{
+    const GLint level = index.mipIndex;
+
+    ASSERT(level == 0);
+
+    // No need to let the old Image recover its data, if it is also the incoming Image.
+    if (mAssociatedImage != nullptr && mAssociatedImage != incomingImage)
+    {
+        // Ensure that the Image is still associated with this TextureStorage. This should be
+        // true.
+        bool imageAssociationCorrect = mAssociatedImage->isAssociatedStorageValid(this);
+        ASSERT(imageAssociationCorrect);
+
+        if (imageAssociationCorrect)
+        {
+            // Force the image to recover from storage before its data is overwritten.
+            // This will reset mAssociatedImages[level] to nullptr too.
+            ANGLE_TRY(mAssociatedImage->recoverFromAssociatedStorage());
+        }
+    }
+
+    return gl::NoError();
+}
+
+bool TextureStorage11_2DMultisample::isAssociatedImageValid(const gl::ImageIndex &index,
+                                                            Image11 *expectedImage)
+{
+    const GLint level = index.mipIndex;
+
+    if (level == 0)
+    {
+        // This validation check should never return false. It means the Image/TextureStorage
+        // association is broken.
+        bool retValue = (mAssociatedImage == expectedImage);
+        ASSERT(retValue);
+        return retValue;
+    }
+
+    return false;
+}
+
+void TextureStorage11_2DMultisample::associateImage(Image11 *image, const gl::ImageIndex &index)
+{
+    const GLint level = index.mipIndex;
+    ASSERT(level == 0);
+
+    mAssociatedImage = image;
+}
+
+gl::Error TextureStorage11_2DMultisample::copyToStorage(TextureStorage *destStorage)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "copyToStorage is unimplemented";
+}
+
+gl::Error TextureStorage11_2DMultisample::getRenderTarget(const gl::ImageIndex &index,
+                                                          RenderTargetD3D **outRT)
+{
+    ASSERT(!index.hasLayer());
+
+    const int level = index.mipIndex;
+    ASSERT(level == 0);
+
+    ASSERT(outRT);
+    if (mLevelZeroRenderTarget)
+    {
+        *outRT = mLevelZeroRenderTarget;
+        return gl::NoError();
+    }
+
+    ID3D11Resource *texture = nullptr;
+    ANGLE_TRY(getResource(&texture));
+
+    ID3D11ShaderResourceView *srv = nullptr;
+    ANGLE_TRY(getSRVLevel(level, false, &srv));
+
+    ID3D11ShaderResourceView *blitSRV = nullptr;
+    ANGLE_TRY(getSRVLevel(level, true, &blitSRV));
+
+    ID3D11Device *device = mRenderer->getDevice();
+
+    if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        if (!mLevelZeroRenderTarget)
+        {
+            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+            rtvDesc.Format        = mFormatInfo.rtvFormat;
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+
+            ID3D11RenderTargetView *rtv;
+            HRESULT result = device->CreateRenderTargetView(mLevelZeroTexture, &rtvDesc, &rtv);
+
+            if (result == E_OUTOFMEMORY)
+            {
+                return gl::Error(GL_OUT_OF_MEMORY,
+                                 "Failed to create internal render target view for texture "
+                                 "storage, result: 0x%X.",
+                                 result);
+            }
+            ASSERT(SUCCEEDED(result));
+
+            mLevelZeroRenderTarget = new TextureRenderTarget11(
+                rtv, mLevelZeroTexture, srv, nullptr, mFormatInfo.internalFormat, getFormatSet(),
+                getLevelWidth(level), getLevelHeight(level), 1, mSamples);
+
+            // RenderTarget will take ownership of these resources
+            SafeRelease(rtv);
+        }
+
+        *outRT = mLevelZeroRenderTarget;
+        return gl::NoError();
+    }
+    ASSERT(mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+    dsvDesc.Format        = mFormatInfo.dsvFormat;
+    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+    dsvDesc.Flags         = 0;
+
+    ID3D11DepthStencilView *dsv;
+    HRESULT result = device->CreateDepthStencilView(texture, &dsvDesc, &dsv);
+
+    ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        return gl::Error(
+            GL_OUT_OF_MEMORY,
+            "Failed to create internal depth stencil view for texture storage, result: 0x%X.",
+            result);
+    }
+
+    mLevelZeroRenderTarget =
+        new TextureRenderTarget11(dsv, texture, srv, mFormatInfo.internalFormat, getFormatSet(),
+                                  getLevelWidth(level), getLevelHeight(level), 1, 0);
+
+    // RenderTarget will take ownership of these resources
+    SafeRelease(dsv);
+    SafeRelease(srv);
+
+    *outRT = mLevelZeroRenderTarget;
+    return gl::NoError();
+}
+
+gl::Error TextureStorage11_2DMultisample::createSRV(int baseLevel,
+                                                    int mipLevels,
+                                                    DXGI_FORMAT format,
+                                                    ID3D11Resource *texture,
+                                                    ID3D11ShaderResourceView **outSRV) const
+{
+    ASSERT(outSRV);
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Format                    = format;
+    srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    srvDesc.Texture2D.MipLevels       = 0;
+
+    ID3D11Resource *srvTexture = texture;
+
+    ID3D11Device *device = mRenderer->getDevice();
+    HRESULT result       = device->CreateShaderResourceView(srvTexture, &srvDesc, outSRV);
+
+    ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        return gl::Error(GL_OUT_OF_MEMORY,
+                         "Failed to create internal texture storage SRV, result: 0x%X.", result);
+    }
+
+    d3d11::SetDebugName(*outSRV, "TexStorage2D.SRV");
+
+    return gl::NoError();
+}
+
+gl::Error TextureStorage11_2DMultisample::useLevelZeroWorkaroundTexture(bool useLevelZeroTexture)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+gl::Error TextureStorage11_2DMultisample::getSwizzleTexture(ID3D11Resource **outTexture)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getSwizzleTexture is unimplemented.";
+}
+gl::Error TextureStorage11_2DMultisample::getSwizzleRenderTarget(int mipLevel,
+                                                                 ID3D11RenderTargetView **outRTV)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getSwizzleRenderTarget is unimplemented.";
+}
+gl::ErrorOrResult<TextureStorage11::DropStencil>
+TextureStorage11_2DMultisample::ensureDropStencilTexture()
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "Drop stencil texture not implemented.";
+}
 }  // namespace rx
