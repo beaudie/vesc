@@ -120,6 +120,8 @@ class TextureStorage11 : public TextureStorage
     unsigned int mTextureWidth;
     unsigned int mTextureHeight;
     unsigned int mTextureDepth;
+    unsigned int mSamples;
+    GLboolean mFixedSampleLocations;
 
     gl::SwizzleState mSwizzleCache[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
     ID3D11Texture2D *mDropStencilTexture;
@@ -425,6 +427,60 @@ class TextureStorage11_2DArray : public TextureStorage11
     ImageMap mAssociatedImages;
 };
 
+class TextureStorage11_2DMultisample : public TextureStorage11
+{
+  public:
+    TextureStorage11_2DMultisample(Renderer11 *renderer,
+                                   GLenum internalformat,
+                                   bool renderTarget,
+                                   GLsizei width,
+                                   GLsizei height,
+                                   int levels,
+                                   int samples,
+                                   GLboolean fixedSampleLocations);
+    ~TextureStorage11_2DMultisample() override;
+
+    gl::Error getResource(ID3D11Resource **outResource) override;
+    gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT) override;
+
+    gl::Error copyToStorage(TextureStorage *destStorage) override;
+
+    void associateImage(Image11 *image, const gl::ImageIndex &index) override;
+    void disassociateImage(const gl::ImageIndex &index, Image11 *expectedImage) override;
+    bool isAssociatedImageValid(const gl::ImageIndex &index, Image11 *expectedImage) override;
+    gl::Error releaseAssociatedImage(const gl::ImageIndex &index, Image11 *incomingImage) override;
+
+    gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) override;
+
+  protected:
+    gl::Error getSwizzleTexture(ID3D11Resource **outTexture) override;
+    gl::Error getSwizzleRenderTarget(int mipLevel, ID3D11RenderTargetView **outRTV) override;
+
+    gl::ErrorOrResult<DropStencil> ensureDropStencilTexture() override;
+
+    gl::Error ensureTextureExists(int mipLevels);
+
+  private:
+    gl::Error createSRV(int baseLevel,
+                        int mipLevels,
+                        DXGI_FORMAT format,
+                        ID3D11Resource *texture,
+                        ID3D11ShaderResourceView **outSRV) const override;
+
+    // ID3D11Texture2D *mTexture;
+    // RenderTarget11 *mRenderTarget;
+    bool mHasKeyedMutex;
+
+    ID3D11Texture2D *mLevelZeroTexture;
+    RenderTarget11 *mLevelZeroRenderTarget;
+    // bool mUseLevelZeroTexture;
+
+    // Swizzle-related variables
+    // ID3D11Texture2D *mSwizzleTexture;
+    // ID3D11RenderTargetView *mSwizzleRenderTarget;
+
+    Image11 *mAssociatedImage;
+};
 }
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_TEXTURESTORAGE11_H_
