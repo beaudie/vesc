@@ -78,6 +78,11 @@ bool ValidateVertexAttribBinding(ValidationContext *context,
                                  GLuint bindingIndex);
 bool ValidateVertexBindingDivisor(ValidationContext *context, GLuint bindingIndex, GLuint divisor);
 
+bool ValidateDispatchCompute(Context *context,
+                             GLuint numGroupX,
+                             GLuint numGroupY,
+                             GLuint numGroupZ);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
