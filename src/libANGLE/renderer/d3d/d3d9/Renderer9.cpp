@@ -2996,6 +2996,20 @@ TextureStorage *Renderer9::createTextureStorage2DArray(GLenum internalformat,
     return nullptr;
 }
 
+TextureStorage *Renderer9::createTextureStorage2DMultisample(GLenum internalformat,
+                                                             bool renderTarget,
+                                                             GLsizei width,
+                                                             GLsizei height,
+                                                             int levels,
+                                                             int samples,
+                                                             GLboolean fixedSampleLocations)
+{
+    // 2D multisampled textures are not supported by the D3D9 backend.
+    UNREACHABLE();
+
+    return NULL;
+}
+
 bool Renderer9::getLUID(LUID *adapterLuid) const
 {
     adapterLuid->HighPart = 0;

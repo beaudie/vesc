@@ -204,6 +204,18 @@ bool Image9::redefine(GLenum target, GLenum internalformat, const gl::Extents &s
     return false;
 }
 
+bool Image9::redefine(GLenum target,
+                      GLenum internalformat,
+                      const gl::Extents &size,
+                      GLsizei samples,
+                      GLboolean fixedSampleLocations,
+                      bool forceRelease)
+{
+    // 2D multisampled textures are not supported by the D3D9 backend.
+    UNREACHABLE();
+    return false;
+}
+
 gl::Error Image9::createSurface()
 {
     if (mSurface)
