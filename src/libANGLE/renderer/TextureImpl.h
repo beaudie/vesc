@@ -150,6 +150,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual void syncState(const gl::Texture::DirtyBits &dirtyBits) = 0;
 
+    virtual gl::Error clearTexture(const gl::Context *context, GLenum target, float *clearValues);
+
   protected:
     const gl::TextureState &mState;
 };

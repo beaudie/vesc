@@ -163,6 +163,16 @@ GLenum TextureD3D::getBaseLevelInternalFormat() const
     return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
 }
 
+gl::Error TextureD3D::setStorage(const gl::Context *context,
+                                 GLenum target,
+                                 size_t levels,
+                                 GLenum internalFormat,
+                                 const gl::Extents &size)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
 gl::Error TextureD3D::setStorageMultisample(const gl::Context *context,
                                             GLenum target,
                                             GLsizei samples,
@@ -170,8 +180,8 @@ gl::Error TextureD3D::setStorageMultisample(const gl::Context *context,
                                             const gl::Extents &size,
                                             GLboolean fixedSampleLocations)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError() << "setStorageMultisample is unimplemented.";
+    UNREACHABLE();
+    return gl::InternalError();
 }
 
 bool TextureD3D::shouldUseSetData(const ImageD3D *image) const
@@ -646,211 +656,6 @@ TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *rendere
     {
         image.reset(renderer->createImage());
     }
-}
-
-TextureD3D_2DMultisample::TextureD3D_2DMultisample(const gl::TextureState &state,
-                                                   RendererD3D *renderer)
-    : TextureD3D(state, renderer)
-{
-}
-
-TextureD3D_2DMultisample::~TextureD3D_2DMultisample()
-{
-}
-
-ImageD3D *TextureD3D_2DMultisample::getImage(const gl::ImageIndex &index) const
-{
-    UNIMPLEMENTED();
-    return nullptr;
-}
-
-gl::Error TextureD3D_2DMultisample::setImage(const gl::Context *context,
-                                             GLenum target,
-                                             size_t level,
-                                             GLenum internalFormat,
-                                             const gl::Extents &size,
-                                             GLenum format,
-                                             GLenum type,
-                                             const gl::PixelUnpackState &unpack,
-                                             const uint8_t *pixels)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setSubImage(const gl::Context *context,
-                                                GLenum target,
-                                                size_t level,
-                                                const gl::Box &area,
-                                                GLenum format,
-                                                GLenum type,
-                                                const gl::PixelUnpackState &unpack,
-                                                const uint8_t *pixels)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setCompressedImage(const gl::Context *context,
-                                                       GLenum target,
-                                                       size_t level,
-                                                       GLenum internalFormat,
-                                                       const gl::Extents &size,
-                                                       const gl::PixelUnpackState &unpack,
-                                                       size_t imageSize,
-                                                       const uint8_t *pixels)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setCompressedSubImage(const gl::Context *context,
-                                                          GLenum target,
-                                                          size_t level,
-                                                          const gl::Box &area,
-                                                          GLenum format,
-                                                          const gl::PixelUnpackState &unpack,
-                                                          size_t imageSize,
-                                                          const uint8_t *pixels)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::copyImage(const gl::Context *context,
-                                              GLenum target,
-                                              size_t level,
-                                              const gl::Rectangle &sourceArea,
-                                              GLenum internalFormat,
-                                              const gl::Framebuffer *source)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::copySubImage(const gl::Context *context,
-                                                 GLenum target,
-                                                 size_t level,
-                                                 const gl::Offset &destOffset,
-                                                 const gl::Rectangle &sourceArea,
-                                                 const gl::Framebuffer *source)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setStorage(const gl::Context *context,
-                                               GLenum target,
-                                               size_t levels,
-                                               GLenum internalFormat,
-                                               const gl::Extents &size)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setImageExternal(const gl::Context *context,
-                                                     GLenum target,
-                                                     egl::Stream *stream,
-                                                     const egl::Stream::GLTextureDescription &desc)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::bindTexImage(const gl::Context *context, egl::Surface *surface)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::releaseTexImage(const gl::Context *context)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setEGLImageTarget(const gl::Context *context,
-                                                      GLenum target,
-                                                      egl::Image *image)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::getRenderTarget(const gl::Context *context,
-                                                    const gl::ImageIndex &index,
-                                                    RenderTargetD3D **outRT)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::ImageIndexIterator TextureD3D_2DMultisample::imageIterator() const
-{
-    UNIMPLEMENTED();
-    return gl::ImageIndexIterator::Make2DMultisample();
-}
-
-gl::ImageIndex TextureD3D_2DMultisample::getImageIndex(GLint mip, GLint layer) const
-{
-    UNIMPLEMENTED();
-    return gl::ImageIndex::Make2DMultisample();
-}
-
-bool TextureD3D_2DMultisample::isValidIndex(const gl::ImageIndex &index) const
-{
-    UNIMPLEMENTED();
-    return false;
-}
-
-GLsizei TextureD3D_2DMultisample::getLayerCount(int level) const
-{
-    UNIMPLEMENTED();
-    return GLsizei();
-}
-
-void TextureD3D_2DMultisample::markAllImagesDirty()
-{
-    UNIMPLEMENTED();
-}
-
-gl::Error TextureD3D_2DMultisample::initializeStorage(const gl::Context *context, bool renderTarget)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::createCompleteStorage(bool renderTarget,
-                                                          TexStoragePointer *outStorage) const
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::setCompleteTexStorage(const gl::Context *context,
-                                                          TextureStorage *newCompleteTexStorage)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::updateStorage(const gl::Context *context)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-gl::Error TextureD3D_2DMultisample::initMipmapImages(const gl::Context *context)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError();
-}
-
-bool TextureD3D_2DMultisample::isImageComplete(const gl::ImageIndex &index) const
-{
-    UNIMPLEMENTED();
-    return false;
 }
 
 gl::Error TextureD3D_2D::onDestroy(const gl::Context *context)
@@ -1594,17 +1399,6 @@ void TextureD3D_2D::markAllImagesDirty()
         mImageArray[i]->markDirty();
     }
     mDirtyImages = true;
-}
-
-gl::Error TextureD3D_2D::setStorageMultisample(const gl::Context *context,
-                                               GLenum target,
-                                               GLsizei samples,
-                                               GLint internalFormat,
-                                               const gl::Extents &size,
-                                               GLboolean fixedSampleLocations)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError() << "setStorageMultisample is unimplemented.";
 }
 
 TextureD3D_Cube::TextureD3D_Cube(const gl::TextureState &state, RendererD3D *renderer)
@@ -3695,4 +3489,247 @@ void TextureD3D_External::markAllImagesDirty()
 {
     UNREACHABLE();
 }
+
+TextureD3D_2DMultisample::TextureD3D_2DMultisample(const gl::TextureState &state,
+                                                   RendererD3D *renderer)
+    : TextureD3D(state, renderer)
+{
+}
+
+gl::Error TextureD3D_2DMultisample::onDestroy(const gl::Context *context)
+{
+    return TextureD3D::onDestroy(context);
+}
+
+TextureD3D_2DMultisample::~TextureD3D_2DMultisample()
+{
+}
+
+ImageD3D *TextureD3D_2DMultisample::getImage(const gl::ImageIndex &index) const
+{
+    return nullptr;
+}
+
+gl::Error TextureD3D_2DMultisample::setImage(const gl::Context *context,
+                                             GLenum target,
+                                             size_t level,
+                                             GLenum internalFormat,
+                                             const gl::Extents &size,
+                                             GLenum format,
+                                             GLenum type,
+                                             const gl::PixelUnpackState &unpack,
+                                             const uint8_t *pixels)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::setSubImage(const gl::Context *context,
+                                                GLenum target,
+                                                size_t level,
+                                                const gl::Box &area,
+                                                GLenum format,
+                                                GLenum type,
+                                                const gl::PixelUnpackState &unpack,
+                                                const uint8_t *pixels)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::clearTexture(const gl::Context *context,
+                                                 GLenum target,
+                                                 float *clearValues)
+{
+    mRenderer->clearRenderTargetView(context, mTexStorage, target, clearValues);
+
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::setCompressedImage(const gl::Context *context,
+                                                       GLenum target,
+                                                       size_t level,
+                                                       GLenum internalFormat,
+                                                       const gl::Extents &size,
+                                                       const gl::PixelUnpackState &unpack,
+                                                       size_t imageSize,
+                                                       const uint8_t *pixels)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::setCompressedSubImage(const gl::Context *context,
+                                                          GLenum target,
+                                                          size_t level,
+                                                          const gl::Box &area,
+                                                          GLenum format,
+                                                          const gl::PixelUnpackState &unpack,
+                                                          size_t imageSize,
+                                                          const uint8_t *pixels)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::copyImage(const gl::Context *context,
+                                              GLenum target,
+                                              size_t level,
+                                              const gl::Rectangle &sourceArea,
+                                              GLenum internalFormat,
+                                              const gl::Framebuffer *source)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::copySubImage(const gl::Context *context,
+                                                 GLenum target,
+                                                 size_t level,
+                                                 const gl::Offset &destOffset,
+                                                 const gl::Rectangle &sourceArea,
+                                                 const gl::Framebuffer *source)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::setStorageMultisample(const gl::Context *context,
+                                                          GLenum target,
+                                                          GLsizei samples,
+                                                          GLint internalFormat,
+                                                          const gl::Extents &size,
+                                                          GLboolean fixedSampleLocations)
+{
+    ASSERT(target == GL_TEXTURE_2D_MULTISAMPLE && size.depth == 1);
+
+    TexStoragePointer storage(context);
+    storage.reset(mRenderer->createTextureStorage2DMultisample(internalFormat, size.width,
+                                                               size.height, static_cast<int>(0),
+                                                               samples, fixedSampleLocations));
+
+    ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
+    storage.release();
+
+    ANGLE_TRY(updateStorage(context));
+
+    mImmutable = false;
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::bindTexImage(const gl::Context *context, egl::Surface *surface)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::releaseTexImage(const gl::Context *context)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::setEGLImageTarget(const gl::Context *context,
+                                                      GLenum target,
+                                                      egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
+gl::Error TextureD3D_2DMultisample::getRenderTarget(const gl::Context *context,
+                                                    const gl::ImageIndex &index,
+                                                    RenderTargetD3D **outRT)
+{
+    ASSERT(!index.hasLayer());
+
+    // ensure the underlying texture is created
+    ANGLE_TRY(ensureRenderTarget(context));
+
+    return mTexStorage->getRenderTarget(context, index, outRT);
+}
+
+gl::ImageIndexIterator TextureD3D_2DMultisample::imageIterator() const
+{
+    return gl::ImageIndexIterator::Make2DMultisample();
+}
+
+gl::ImageIndex TextureD3D_2DMultisample::getImageIndex(GLint mip, GLint layer) const
+{
+    return gl::ImageIndex::Make2DMultisample();
+}
+
+bool TextureD3D_2DMultisample::isValidIndex(const gl::ImageIndex &index) const
+{
+    return (mTexStorage && index.type == GL_TEXTURE_2D_MULTISAMPLE && index.mipIndex == 0);
+}
+
+GLsizei TextureD3D_2DMultisample::getLayerCount(int level) const
+{
+    UNIMPLEMENTED();
+    return GLsizei();
+}
+
+void TextureD3D_2DMultisample::markAllImagesDirty()
+{
+}
+
+gl::Error TextureD3D_2DMultisample::initializeStorage(const gl::Context *context, bool renderTarget)
+{
+    // Only initialize the first time this texture is used as a render target or shader resource
+    if (mTexStorage)
+    {
+        return gl::NoError();
+    }
+
+    bool createRenderTarget = (renderTarget || IsRenderTargetUsage(mState.getUsage()));
+
+    TexStoragePointer storage(context);
+    ANGLE_TRY(createCompleteStorage(createRenderTarget, &storage));
+
+    ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
+    storage.release();
+
+    ASSERT(mTexStorage);
+
+    // flush image data to the storage
+    ANGLE_TRY(updateStorage(context));
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::createCompleteStorage(bool renderTarget,
+                                                          TexStoragePointer *outStorage) const
+{
+    outStorage->reset(mTexStorage);
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::setCompleteTexStorage(const gl::Context *context,
+                                                          TextureStorage *newCompleteTexStorage)
+{
+    ANGLE_TRY(releaseTexStorage(context));
+    mTexStorage = newCompleteTexStorage;
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::updateStorage(const gl::Context *context)
+{
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2DMultisample::initMipmapImages(const gl::Context *context)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
+}
+
+bool TextureD3D_2DMultisample::isImageComplete(const gl::ImageIndex &index) const
+{
+    return true;
+}
+
 }  // namespace rx

@@ -3953,6 +3953,17 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat,
                                         levels);
 }
 
+TextureStorage *Renderer11::createTextureStorage2DMultisample(GLenum internalformat,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              int levels,
+                                                              int samples,
+                                                              GLboolean fixedSampleLocations)
+{
+    return new TextureStorage11_2DMultisample(this, internalformat, width, height, levels, samples,
+                                              fixedSampleLocations);
+}
+
 gl::Error Renderer11::readFromAttachment(const gl::Context *context,
                                          const gl::FramebufferAttachment &srcAttachment,
                                          const gl::Rectangle &sourceArea,
@@ -4927,6 +4938,15 @@ gl::Error Renderer11::allocateTexture(const D3D11_TEXTURE3D_DESC &desc,
     return gl::NoError();
 }
 
+gl::Error Renderer11::CheckMultisampleQualityLevels(DXGI_FORMAT format,
+                                                    GLsizei samples,
+                                                    UINT *qualityLevels)
+{
+    ANGLE_TRY(
+        mResourceManager11.CheckMultisampleQualityLevels(this, format, samples, qualityLevels));
+    return gl::NoError();
+}
+
 gl::Error Renderer11::getBlendState(const d3d11::BlendStateKey &key,
                                     ID3D11BlendState **outBlendState)
 {
@@ -4950,6 +4970,40 @@ gl::Error Renderer11::getSamplerState(const gl::SamplerState &samplerState,
                                       ID3D11SamplerState **outSamplerState)
 {
     return mStateCache.getSamplerState(this, samplerState, outSamplerState);
+}
+
+gl::Error Renderer11::clearRenderTargetView(const gl::Context *context,
+                                            TextureStorage *texStorage,
+                                            GLenum target,
+                                            float *clearValues)
+{
+    const TextureHelper11 *texture = nullptr;
+    TextureStorage11 *texStorage11 = GetAs<TextureStorage11>(texStorage);
+    ANGLE_TRY(texStorage11->getResource(context, &texture));
+    d3d11::RenderTargetView rtv;
+    const d3d11::Format &formatInfo = texture->getFormatSet();
+
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+    rtvDesc.Format             = formatInfo.rtvFormat;
+    rtvDesc.Texture2D.MipSlice = 0;
+    switch (target)
+    {
+        case GL_TEXTURE_2D:
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+            break;
+        case GL_TEXTURE_2D_MULTISAMPLE:
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+            break;
+        case GL_TEXTURE_CUBE_MAP:
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+        default:
+            UNREACHABLE();
+    }
+
+    ANGLE_TRY(allocateResource(rtvDesc, texture->get(), &rtv));
+    mDeviceContext->ClearRenderTargetView(rtv.get(), clearValues);
+
+    return gl::NoError();
 }
 
 }  // namespace rx

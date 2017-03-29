@@ -308,6 +308,12 @@ class Renderer11 : public RendererD3D
                                                 GLsizei height,
                                                 GLsizei depth,
                                                 int levels) override;
+    TextureStorage *createTextureStorage2DMultisample(GLenum internalformat,
+                                                      GLsizei width,
+                                                      GLsizei height,
+                                                      int levels,
+                                                      int samples,
+                                                      GLboolean fixedSampleLocations) override;
 
     VertexBuffer *createVertexBuffer() override;
     IndexBuffer *createIndexBuffer() override;
@@ -471,6 +477,15 @@ class Renderer11 : public RendererD3D
                               const d3d11::Format &format,
                               const D3D11_SUBRESOURCE_DATA *initData,
                               TextureHelper11 *textureOut);
+
+    gl::Error CheckMultisampleQualityLevels(DXGI_FORMAT format,
+                                            GLsizei samples,
+                                            UINT *qualityLevels);
+
+    gl::Error clearRenderTargetView(const gl::Context *context,
+                                    TextureStorage *texStorage,
+                                    GLenum target,
+                                    float *clearValues) override;
 
   protected:
     gl::Error clearTextures(const gl::Context *context,
