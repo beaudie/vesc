@@ -28,21 +28,23 @@ class UniformLinker
                     std::vector<VariableLocation> *uniformLocations);
 
   private:
-    struct VectorAndSamplerCount
+    struct LimitCounts
     {
-        VectorAndSamplerCount() : vectorCount(0), samplerCount(0) {}
-        VectorAndSamplerCount(const VectorAndSamplerCount &other) = default;
-        VectorAndSamplerCount &operator=(const VectorAndSamplerCount &other) = default;
+        LimitCounts() : vector(0), sampler(0), atomicCounter(0) {}
+        LimitCounts(const LimitCounts &other) = default;
+        LimitCounts &operator=(const LimitCounts &other) = default;
 
-        VectorAndSamplerCount &operator+=(const VectorAndSamplerCount &other)
+        LimitCounts &operator+=(const LimitCounts &other)
         {
-            vectorCount += other.vectorCount;
-            samplerCount += other.samplerCount;
+            vector += other.vector;
+            sampler += other.sampler;
+            atomicCounter += other.atomicCounter;
             return *this;
         }
 
-        unsigned int vectorCount;
-        unsigned int samplerCount;
+        unsigned int vector;
+        unsigned int sampler;
+        unsigned int atomicCounter;
     };
 
     bool validateVertexAndFragmentUniforms(InfoLog &infoLog) const;
@@ -55,23 +57,27 @@ class UniformLinker
     bool flattenUniformsAndCheckCapsForShader(const Shader &shader,
                                               GLuint maxUniformComponents,
                                               GLuint maxTextureImageUnits,
+                                              GLuint maxAtomicCounters,
                                               const std::string &componentsErrorMessage,
                                               const std::string &samplerErrorMessage,
+                                              const std::string &atomicCounterErrorMessage,
                                               std::vector<LinkedUniform> &samplerUniforms,
                                               InfoLog &infoLog);
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
+    bool checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &infoLog);
 
-    VectorAndSamplerCount flattenUniform(const sh::Uniform &uniform,
-                                         std::vector<LinkedUniform> *samplerUniforms);
+    LimitCounts flattenUniform(const sh::Uniform &uniform,
+                               std::vector<LinkedUniform> *samplerUniforms);
 
     // markStaticUse is given as a separate parameter because it is tracked here at struct
     // granularity.
-    VectorAndSamplerCount flattenUniformImpl(const sh::ShaderVariable &uniform,
-                                             const std::string &fullName,
-                                             std::vector<LinkedUniform> *samplerUniforms,
-                                             bool markStaticUse,
-                                             int binding,
-                                             int *location);
+    LimitCounts flattenUniformImpl(const sh::ShaderVariable &uniform,
+                                   const std::string &fullName,
+                                   std::vector<LinkedUniform> *samplerUniforms,
+                                   bool markStaticUse,
+                                   int binding,
+                                   int offset,
+                                   int *location);
 
     bool indexUniforms(InfoLog &infoLog, const Program::Bindings &uniformLocationBindings);
     bool gatherUniformLocationsAndCheckConflicts(InfoLog &infoLog,
