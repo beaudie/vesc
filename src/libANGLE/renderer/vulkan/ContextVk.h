@@ -128,6 +128,8 @@ class ContextVk : public ContextImpl
 
     RendererVk *getRenderer() { return mRenderer; }
 
+    gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ) override;
+
   private:
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
