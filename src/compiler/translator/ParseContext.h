@@ -40,6 +40,7 @@ class TParseContext : angle::NonCopyable
                   bool checksPrecErrors,
                   TDiagnostics *diagnostics,
                   const ShBuiltInResources &resources);
+    ~TParseContext();
 
     const pp::Preprocessor &getPreprocessor() const { return mPreprocessor; }
     pp::Preprocessor &getPreprocessor() { return mPreprocessor; }
@@ -129,6 +130,9 @@ class TParseContext : angle::NonCopyable
     bool checkIsNotImage(const TSourceLoc &line,
                          const TTypeSpecifierNonArray &pType,
                          const char *reason);
+    bool checkIsNotAtomicCounter(const TSourceLoc &line,
+                                 const TTypeSpecifierNonArray &pType,
+                                 const char *reason);
     void checkDeclaratorLocationIsNotSpecified(const TSourceLoc &line, const TPublicType &pType);
     void checkLocationIsNotSpecified(const TSourceLoc &location,
                                      const TLayoutQualifier &layoutQualifier);
@@ -354,6 +358,8 @@ class TParseContext : angle::NonCopyable
     TSymbolTable &symbolTable;   // symbol table that goes with the language currently being parsed
 
   private:
+    struct AtomicCounterBindingState;
+
     // Returns a clamped index. If it prints out an error message, the token is "[]".
     int checkIndexOutOfRange(bool outOfRangeIndexIsError,
                              const TSourceLoc &location,
@@ -390,10 +396,15 @@ class TParseContext : angle::NonCopyable
                                            TLayoutImageInternalFormat internalFormat);
     void checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &memoryQualifier,
                                             const TSourceLoc &location);
+    void checkAtomicCounterOffsetIsNotOverlapped(TPublicType &publicType,
+                                                 size_t size,
+                                                 const TSourceLoc &loc);
+
     void checkBindingIsValid(const TSourceLoc &identifierLocation, const TType &type);
     void checkBindingIsNotSpecified(const TSourceLoc &location, int binding);
     void checkImageBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
     void checkSamplerBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
+    void checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding);
 
     void checkUniformLocationInRange(const TSourceLoc &location,
                                      int objectLocationCount,
@@ -432,6 +443,9 @@ class TParseContext : angle::NonCopyable
     TIntermFunctionPrototype *createPrototypeNodeFromFunction(const TFunction &function,
                                                               const TSourceLoc &location,
                                                               bool insertParametersToSymbolTable);
+
+    void setAtomicCounterBindingDefaultOffset(const TPublicType &declaration,
+                                              const TSourceLoc &location);
 
     // Set to true when the last/current declarator list was started with an empty declaration.
     bool mDeferredSingleDeclarationErrorCheck;
@@ -476,8 +490,14 @@ class TParseContext : angle::NonCopyable
     int mMaxImageUnits;
     int mMaxCombinedTextureImageUnits;
     int mMaxUniformLocations;
+
+    int mMaxAtomicCounterBindings;
+
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
+
+    // Track the state of each atomic counter binding.
+    TMap<int, AtomicCounterBindingState> mAtomicCounterBindingStates;
 };
 
 int PaParseStrings(size_t count,
