@@ -612,6 +612,88 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+// Verify that when we pass a client memory pointer to a disabled attribute the draw is still
+// correct.
+TEST_P(VertexAttributeTest, DrawArraysWithDisabledAttribute)
+{
+    initBasicProgram();
+
+    GLfloat inputData[mVertexCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[count]    = static_cast<GLfloat>(count);
+        expectedData[count] = inputData[count];
+    }
+
+    auto quadVertices        = GetQuadVertices();
+    GLsizei quadVerticesSize = static_cast<GLsizei>(quadVertices.size() * sizeof(quadVertices[0]));
+
+    glGenBuffers(1, &mQuadBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, quadVertices.data(), GL_STATIC_DRAW);
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(inputData), inputData, GL_STATIC_DRAW);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    // Compared with mProgram, mProgram2 adds an attribute 'disabled'
+    const std::string testVertexShaderSource2 =
+        "attribute mediump vec4 position;\n"
+        "attribute mediump vec4 test;\n"
+        "attribute mediump vec4 expected;\n"
+        "attribute mediump vec4 disabled;\n"
+        "varying mediump vec4 color;\n"
+        "void main(void)\n"
+        "{\n"
+        "    gl_Position = position;\n"
+        "    vec4 threshold = max(abs(expected + disabled) * 0.005, 1.0 / 64.0);\n"
+        "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
+        "}\n";
+
+    const std::string testFragmentShaderSource =
+        "varying mediump vec4 color;\n"
+        "void main(void)\n"
+        "{\n"
+        "    gl_FragColor = color;\n"
+        "}\n";
+    GLuint mProgram2 = CompileProgram(testVertexShaderSource2, testFragmentShaderSource);
+    ASSERT_NE(0u, mProgram2);
+
+    GLint mpos2            = glGetAttribLocation(mProgram2, "position");
+    GLint mtest2           = glGetAttribLocation(mProgram2, "test");
+    GLint mExpectedAttrib2 = glGetAttribLocation(mProgram2, "expected");
+    ASSERT(positionLocation == mpos2 && mTestAttrib == mtest2 &&
+           mExpectedAttrib == mExpectedAttrib2);
+
+    // Pass a client memory pointer to disabledAttribute and disable it.
+    GLint disabledAttribute = glGetAttribLocation(mProgram2, "disabled");
+    glVertexAttribPointer(disabledAttribute, 1, GL_FLOAT, GL_FALSE, 0, expectedData);
+    glDisableVertexAttribArray(disabledAttribute);
+
+    glUseProgram(mProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    // Now enable disabledAttribute which should be used in mProgram2.
+    glEnableVertexAttribArray(disabledAttribute);
+    glUseProgram(mProgram2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
 class VertexAttributeTestES31 : public VertexAttributeTestES3
 {
   protected:
