@@ -53,10 +53,10 @@ struct VertexAttribute final : angle::NonCopyable
     GLuint bindingIndex;
 };
 
-bool operator==(const VertexAttribute &a, const VertexAttribute &b);
-bool operator!=(const VertexAttribute &a, const VertexAttribute &b);
-bool operator==(const VertexBinding &a, const VertexBinding &b);
-bool operator!=(const VertexBinding &a, const VertexBinding &b);
+bool SameVertexAttribFormat(const VertexAttribute &a, const VertexAttribute &b);
+bool SameBindingStrideAndOffset(const VertexBinding &a, const VertexBinding &b);
+bool UseClientMemoryPointer(const VertexBinding &binding);
+bool IsVertexAttribPointerValid(size_t attribIndex, const VertexAttribute &a);
 
 size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib);
 
