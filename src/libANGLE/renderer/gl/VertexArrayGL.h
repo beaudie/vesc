@@ -75,10 +75,25 @@ class VertexArrayGL : public VertexArrayImpl
                                GLsizei instanceCount,
                                const gl::IndexRange &indexRange) const;
 
+    bool canUseVertexAttribPointer(size_t attribIndex) const;
+    bool attributeNeedsStreaming(size_t attribIndex) const;
+    bool attribEnabledChanged(size_t attribIndex) const;
+    bool attribPointerChanged(size_t attribIndex) const;
+    bool bindingDivisorChanged(size_t bindingIndex) const;
+
     void updateNeedsStreaming(size_t attribIndex);
-    void updateAttribEnabled(size_t attribIndex);
-    void updateAttribPointer(size_t attribIndex);
-    void updateAttribDivisor(size_t attribIndex);
+
+    void syncAttribPointer(size_t attribIndex) const;
+    void syncAttribEnabled(size_t attribIndex) const;
+    void syncAttribDivisor(size_t attribIndex) const;
+
+    void callVertexAttribPointer(GLuint attribIndex,
+                                 GLuint size,
+                                 GLenum type,
+                                 GLboolean normalized,
+                                 GLsizei stride,
+                                 GLintptr offset,
+                                 GLboolean pureInteger) const;
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
