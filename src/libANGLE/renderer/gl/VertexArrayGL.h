@@ -76,6 +76,7 @@ class VertexArrayGL : public VertexArrayImpl
                                const gl::IndexRange &indexRange) const;
 
     void updateNeedsStreaming(size_t attribIndex);
+
     void updateAttribEnabled(size_t attribIndex);
     void updateAttribPointer(size_t attribIndex);
     void updateAttribDivisor(size_t attribIndex);

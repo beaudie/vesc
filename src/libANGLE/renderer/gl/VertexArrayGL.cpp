@@ -29,7 +29,7 @@ namespace
 // Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 bool AttributeNeedsStreaming(const VertexAttribute &attrib, const VertexBinding &binding)
 {
-    return (attrib.enabled && binding.buffer.get() == nullptr);
+    return (attrib.pointer != nullptr && binding.buffer.get() == nullptr);
 }
 }  // anonymous namespace
 
@@ -443,7 +443,7 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 void VertexArrayGL::updateAttribPointer(size_t attribIndex)
 {
     const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
-    ASSERT(attribIndex == attrib.bindingIndex);
+    ASSERT(attribIndex == attrib.bindingIndex && attrib.relativeOffset == 0);
 
     GLuint bindingIndex          = attrib.bindingIndex;
     const VertexBinding &binding = mData.getVertexBinding(bindingIndex);
@@ -462,30 +462,20 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
     }
 
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
-    const Buffer *arrayBuffer = binding.buffer.get();
-    if (arrayBuffer != nullptr)
+
+    const Buffer *arrayBuffer  = binding.buffer.get();
+    const GLvoid *inputPointer = nullptr;
+    if (arrayBuffer == nullptr)
+    {
+        ASSERT(attrib.pointer == nullptr);
+        mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    else
     {
         const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
         mStateManager->bindBuffer(GL_ARRAY_BUFFER, arrayBufferGL->getBufferID());
-    }
-    else
-    {
-        mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
-    mAppliedBindings[bindingIndex].buffer = binding.buffer;
-
-    const GLvoid *inputPointer = nullptr;
-    if (arrayBuffer != nullptr)
-    {
-        inputPointer = static_cast<const GLvoid *>(
-            reinterpret_cast<const uint8_t *>(binding.offset + attrib.relativeOffset));
-    }
-    else
-    {
-        // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
-        // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding
-        inputPointer = attrib.pointer;
+        inputPointer =
+            static_cast<const GLvoid *>(reinterpret_cast<const uint8_t *>(binding.offset));
     }
 
     if (attrib.pureInteger)
@@ -508,6 +498,7 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
 
     mAppliedBindings[bindingIndex].stride = binding.stride;
     mAppliedBindings[bindingIndex].offset = binding.offset;
+    mAppliedBindings[bindingIndex].buffer = binding.buffer;
 }
 
 void VertexArrayGL::updateAttribDivisor(size_t attribIndex)
