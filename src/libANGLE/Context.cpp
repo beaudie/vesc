@@ -2511,6 +2511,16 @@ void Context::requestExtension(const char *name)
     // Re-create the compiler with the requested extensions enabled.
     SafeDelete(mCompiler);
     mCompiler = new Compiler(mImplementation.get(), mState);
+
+    // Invalidate all cached completenesses for textures and framebuffer. Some extensions make new
+    // formats renderable or sampleable.
+    mState.mTextures->invalidateTextureComplenessCache();
+    for (auto &zeroTexture : mZeroTextures)
+    {
+        zeroTexture.second->invalidateCompletenessCache();
+    }
+
+    mState.mFramebuffers->invalidateFramebufferComplenessCache();
 }
 
 size_t Context::getRequestableExtensionStringCount() const
@@ -2622,10 +2632,10 @@ void Context::updateCaps()
 
     for (auto capsIt : mImplementation->getNativeTextureCaps())
     {
-        GLenum format          = capsIt.first;
+        GLenum sizedInternalFormat = capsIt.first;
         TextureCaps formatCaps = capsIt.second;
 
-        const InternalFormat &formatInfo = GetInternalFormatInfo(format);
+        const InternalFormat &formatInfo = GetSizedInternalFormatInfo(sizedInternalFormat);
 
         // Update the format caps based on the client version and extensions.
         // Caps are AND'd with the renderer caps because some core formats are still unsupported in
@@ -2648,10 +2658,10 @@ void Context::updateCaps()
 
         if (formatCaps.texturable && formatInfo.compressed)
         {
-            mCaps.compressedTextureFormats.push_back(format);
+            mCaps.compressedTextureFormats.push_back(sizedInternalFormat);
         }
 
-        mTextureCaps.insert(format, formatCaps);
+        mTextureCaps.insert(sizedInternalFormat, formatCaps);
     }
 }
 

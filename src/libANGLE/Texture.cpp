@@ -156,8 +156,8 @@ bool TextureState::setBaseLevel(GLuint baseLevel)
 {
     if (mBaseLevel != baseLevel)
     {
-        mBaseLevel                    = baseLevel;
-        mCompletenessCache.cacheValid = false;
+        mBaseLevel = baseLevel;
+        invalidateCompletenessCache();
         return true;
     }
     return false;
@@ -167,8 +167,8 @@ void TextureState::setMaxLevel(GLuint maxLevel)
 {
     if (mMaxLevel != maxLevel)
     {
-        mMaxLevel                     = maxLevel;
-        mCompletenessCache.cacheValid = false;
+        mMaxLevel = maxLevel;
+        invalidateCompletenessCache();
     }
 }
 
@@ -200,21 +200,28 @@ bool TextureState::isCubeComplete() const
 bool TextureState::isSamplerComplete(const SamplerState &samplerState,
                                      const ContextState &data) const
 {
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
-    const TextureCaps &textureCaps = data.getTextureCap(baseImageDesc.format.asSized());
-    if (!mCompletenessCache.cacheValid || mCompletenessCache.samplerState != samplerState ||
-        mCompletenessCache.filterable != textureCaps.filterable ||
-        mCompletenessCache.clientVersion != data.getClientMajorVersion() ||
-        mCompletenessCache.supportsNPOT != data.getExtensions().textureNPOT)
+    auto cacheIter = mCompletenessCache.find(data.getContext());
+    if (cacheIter == mCompletenessCache.end())
     {
-        mCompletenessCache.cacheValid      = true;
-        mCompletenessCache.samplerState    = samplerState;
-        mCompletenessCache.filterable      = textureCaps.filterable;
-        mCompletenessCache.clientVersion   = data.getClientMajorVersion();
-        mCompletenessCache.supportsNPOT    = data.getExtensions().textureNPOT;
-        mCompletenessCache.samplerComplete = computeSamplerCompleteness(samplerState, data);
+        // Add a new cache entry
+        cacheIter =
+            mCompletenessCache.insert(std::make_pair(data.getContext(), SamplerCompletenessCache()))
+                .first;
     }
-    return mCompletenessCache.samplerComplete;
+
+    auto cacheEntry = cacheIter->second;
+    if (!cacheEntry.cacheValid || cacheEntry.samplerState != samplerState)
+    {
+        cacheEntry.cacheValid      = true;
+        cacheEntry.samplerComplete = computeSamplerCompleteness(samplerState, data);
+    }
+
+    return cacheEntry.samplerComplete;
+}
+
+void TextureState::invalidateCompletenessCache()
+{
+    mCompletenessCache.clear();
 }
 
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
@@ -239,8 +246,8 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         return false;
     }
 
-    const TextureCaps &textureCaps = data.getTextureCap(baseImageDesc.format.asSized());
-    if (!textureCaps.filterable && !IsPointSampled(samplerState))
+    if (!baseImageDesc.format.info->filterSupport(data.getClientVersion(), data.getExtensions()) &&
+        !IsPointSampled(samplerState))
     {
         return false;
     }
@@ -309,7 +316,7 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         // extension, due to some underspecification problems, we must allow linear filtering
         // for legacy compatibility with WebGL 1.
         // See http://crbug.com/649200
-        if (samplerState.compareMode == GL_NONE && baseImageDesc.format.sized)
+        if (samplerState.compareMode == GL_NONE && baseImageDesc.format.info->sized)
         {
             if ((samplerState.minFilter != GL_NEAREST &&
                  samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
@@ -442,8 +449,8 @@ void TextureState::setImageDesc(GLenum target, size_t level, const ImageDesc &de
 {
     size_t descIndex = GetImageDescIndex(target, level);
     ASSERT(descIndex < mImageDescs.size());
-    mImageDescs[descIndex]        = desc;
-    mCompletenessCache.cacheValid = false;
+    mImageDescs[descIndex] = desc;
+    invalidateCompletenessCache();
 }
 
 void TextureState::setImageDescChain(GLuint baseLevel,
@@ -496,15 +503,12 @@ void TextureState::clearImageDescs()
     {
         mImageDescs[descIndex] = ImageDesc();
     }
-    mCompletenessCache.cacheValid = false;
+    invalidateCompletenessCache();
 }
 
 TextureState::SamplerCompletenessCache::SamplerCompletenessCache()
     : cacheValid(false),
       samplerState(),
-      filterable(false),
-      clientVersion(0),
-      supportsNPOT(false),
       samplerComplete(false)
 {
 }
@@ -845,6 +849,12 @@ egl::Stream *Texture::getBoundStream() const
     return mBoundStream;
 }
 
+void Texture::invalidateCompletenessCache()
+{
+    mState.invalidateCompletenessCache();
+    mDirtyChannel.signal();
+}
+
 Error Texture::setImage(const Context *context,
                         const PixelUnpackState &unpackState,
                         GLenum target,
@@ -865,7 +875,7 @@ Error Texture::setImage(const Context *context,
     ANGLE_TRY(mTexture->setImage(rx::SafeGetImpl(context), target, level, internalFormat, size,
                                  format, type, unpackState, pixels));
 
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, format, type)));
+    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type)));
     mDirtyChannel.signal();
 
     return NoError();
@@ -944,9 +954,10 @@ Error Texture::copyImage(const Context *context,
     ANGLE_TRY(mTexture->copyImage(rx::SafeGetImpl(context), target, level, sourceArea,
                                   internalFormat, source));
 
-    const GLenum sizedFormat = GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE);
+    const InternalFormat &internalFormatInfo =
+        GetInternalFormatInfo(internalFormat, source->getReadColorbuffer()->getFormat().info->type);
     mState.setImageDesc(target, level, ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
-                                                 Format(sizedFormat)));
+                                                 Format(internalFormatInfo)));
     mDirtyChannel.signal();
 
     return NoError();
@@ -989,8 +1000,8 @@ Error Texture::copyTexture(const Context *context,
                                     unpackUnmultiplyAlpha, source));
 
     const auto &sourceDesc   = source->mState.getImageDesc(source->getTarget(), 0);
-    const GLenum sizedFormat = GetSizedInternalFormat(internalFormat, type);
-    mState.setImageDesc(target, level, ImageDesc(sourceDesc.size, Format(sizedFormat)));
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
+    mState.setImageDesc(target, level, ImageDesc(sourceDesc.size, Format(internalFormatInfo)));
     mDirtyChannel.signal();
 
     return NoError();

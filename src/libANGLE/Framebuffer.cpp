@@ -568,6 +568,14 @@ bool Framebuffer::usingExtendedDrawBuffers() const
     return false;
 }
 
+void Framebuffer::invalidateCompletenessCache()
+{
+    if (mId != 0)
+    {
+        mCachedStatus.reset();
+    }
+}
+
 GLenum Framebuffer::checkStatus(const ContextState &state)
 {
     // The default framebuffer is always complete except when it is surfaceless in which
@@ -610,7 +618,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
             }
 
             const Format &format          = colorAttachment.getFormat();
-            const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+            const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
             if (colorAttachment.type() == GL_TEXTURE)
             {
                 if (!formatCaps.renderable)
@@ -701,7 +709,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
         }
 
         const Format &format          = depthAttachment.getFormat();
-        const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+        const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
         if (depthAttachment.type() == GL_TEXTURE)
         {
             if (!formatCaps.renderable)
@@ -753,7 +761,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
         }
 
         const Format &format          = stencilAttachment.getFormat();
-        const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+        const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
         if (stencilAttachment.type() == GL_TEXTURE)
         {
             if (!formatCaps.renderable)
