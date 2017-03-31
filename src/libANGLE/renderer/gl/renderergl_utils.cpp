@@ -197,7 +197,7 @@ void GenerateCaps(const FunctionsGL *functions,
         gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, internalFormat);
         textureCapsMap->insert(internalFormat, textureCaps);
 
-        if (gl::GetInternalFormatInfo(internalFormat).compressed)
+        if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
         {
             caps->compressedTextureFormats.push_back(internalFormat);
         }

@@ -568,6 +568,14 @@ bool Framebuffer::usingExtendedDrawBuffers() const
     return false;
 }
 
+void Framebuffer::invalidateCompletenessCache()
+{
+    if (mId != 0)
+    {
+        mCachedStatus.reset();
+    }
+}
+
 GLenum Framebuffer::checkStatus(const ContextState &state)
 {
     // The default framebuffer is always complete except when it is surfaceless in which

@@ -282,11 +282,10 @@ bool ValidateReadPixelsBase(ValidationContext *context,
 
     GLenum currentFormat         = framebuffer->getImplementationColorReadFormat();
     GLenum currentType           = framebuffer->getImplementationColorReadType();
-    GLenum currentInternalFormat = readBuffer->getFormat().asSized();
+    GLenum currentComponentType  = readBuffer->getFormat().info->componentType;
 
-    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(currentInternalFormat);
     bool validFormatTypeCombination =
-        ValidReadPixelsFormatType(context, internalFormatInfo.componentType, format, type);
+        ValidReadPixelsFormatType(context, currentComponentType, format, type);
 
     if (!(currentFormat == format && currentType == type) && !validFormatTypeCombination)
     {

@@ -33,7 +33,7 @@ static bool ValidateTexImageFormatCombination(gl::Context *context,
     // GLint instead of a GLenum. Therefor an invalid internal format gives a GL_INVALID_VALUE
     // error instead of a GL_INVALID_ENUM error. As this validation function is only called in
     // the validation codepaths for glTexImage2D/3D, we record a GL_INVALID_VALUE error.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
     if (!formatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
     {
         context->handleError(Error(GL_INVALID_VALUE));
@@ -170,15 +170,15 @@ bool ValidateES3TexImageParametersBase(Context *context,
     }
 
     // Validate texture formats
-    GLenum actualInternalFormat =
-        isSubImage ? texture->getFormat(target, level).asSized() : internalformat;
-    if (isSubImage && actualInternalFormat == GL_NONE)
+    const InternalFormat &actualFormatInfo = isSubImage
+                                                 ? *texture->getFormat(target, level).info
+                                                 : GetInternalFormatInfo(internalformat, type);
+    if (isSubImage && actualFormatInfo.internalFormat == GL_NONE)
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Texture level does not exist."));
         return false;
     }
 
-    const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(actualInternalFormat);
     if (isCompressed)
     {
         if (!actualFormatInfo.compressed)
@@ -188,8 +188,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (!ValidCompressedImageSize(context, actualInternalFormat, xoffset, yoffset, width,
-                                      height))
+        if (!ValidCompressedImageSize(context, actualFormatInfo.internalFormat, xoffset, yoffset,
+                                      width, height))
         {
             context->handleError(Error(GL_INVALID_OPERATION));
             return false;
@@ -209,7 +209,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
     }
     else
     {
-        if (!ValidateTexImageFormatCombination(context, actualInternalFormat, format, type))
+        if (!ValidateTexImageFormatCombination(context, actualFormatInfo.internalFormat, format,
+                                               type))
         {
             return false;
         }
@@ -258,8 +259,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
         }
     }
 
-    if (!ValidImageDataSize(context, target, width, height, 1, actualInternalFormat, type, pixels,
-                            imageSize))
+    if (!ValidImageDataSize(context, target, width, height, 1, actualFormatInfo.internalFormat,
+                            type, pixels, imageSize))
     {
         return false;
     }
@@ -467,13 +468,10 @@ static bool EqualOrFirstZero(GLuint first, GLuint second)
     return first == 0 || first == second;
 }
 
-static bool IsValidES3CopyTexImageCombination(const Format &textureFormat,
-                                              const Format &framebufferFormat,
+static bool IsValidES3CopyTexImageCombination(const InternalFormat &textureFormatInfo,
+                                              const InternalFormat &framebufferFormatInfo,
                                               GLuint readBufferHandle)
 {
-    const auto &textureFormatInfo     = *textureFormat.info;
-    const auto &framebufferFormatInfo = *framebufferFormat.info;
-
     if (!ValidES3CopyConversion(textureFormatInfo.format, framebufferFormatInfo.format))
     {
         return false;
@@ -613,7 +611,7 @@ bool ValidateES3CopyTexImageParametersBase(ValidationContext *context,
                                            GLsizei height,
                                            GLint border)
 {
-    Format textureFormat = Format::Invalid();
+    InternalFormat textureFormat;
     if (!ValidateCopyTexImageParametersBase(context, target, level, internalformat, isSubImage,
                                             xoffset, yoffset, zoffset, x, y, width, height, border,
                                             &textureFormat))

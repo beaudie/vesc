@@ -766,7 +766,7 @@ bool ValidateES2CopyTexImageParameters(ValidationContext *context,
         return false;
     }
 
-    Format textureFormat = Format::Invalid();
+    InternalFormat textureFormat;
     if (!ValidateCopyTexImageParametersBase(context, target, level, internalformat, isSubImage,
                                             xoffset, yoffset, 0, x, y, width, height, border,
                                             &textureFormat))

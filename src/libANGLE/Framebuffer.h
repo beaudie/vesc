@@ -187,6 +187,8 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     void setDefaultSamples(GLint defaultSamples);
     void setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations);
 
+    void invalidateCompletenessCache();
+
     GLenum checkStatus(const ContextState &state);
 
     // Helper for checkStatus == GL_FRAMEBUFFER_COMPLETE.

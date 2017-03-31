@@ -187,7 +187,7 @@ void PackPixels(const PackPixelsParams &params,
         inputPitch = -inputPitch;
     }
 
-    const auto &sourceGLInfo = gl::GetInternalFormatInfo(sourceFormat.glInternalFormat);
+    const auto &sourceGLInfo = gl::GetSizedInternalFormatInfo(sourceFormat.glInternalFormat);
 
     if (sourceGLInfo.format == params.format && sourceGLInfo.type == params.type)
     {
@@ -205,8 +205,7 @@ void PackPixels(const PackPixelsParams &params,
     gl::FormatType formatType(params.format, params.type);
     ColorCopyFunction fastCopyFunc =
         GetFastCopyFunction(sourceFormat.fastCopyFunctions, formatType);
-    GLenum sizedDestInternalFormat = gl::GetSizedInternalFormat(formatType.format, formatType.type);
-    const auto &destFormatInfo     = gl::GetInternalFormatInfo(sizedDestInternalFormat);
+    const auto &destFormatInfo = gl::GetInternalFormatInfo(formatType.format, formatType.type);
 
     if (fastCopyFunc)
     {
