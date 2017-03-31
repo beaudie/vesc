@@ -799,7 +799,13 @@ void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
         for (GLuint textureUnitIndex : samplerUniform.boundTextureUnits)
         {
             gl::Texture *texture = state.getSamplerTexture(textureUnitIndex, textureType);
-            if (texture != nullptr)
+            const gl::Sampler *sampler = state.getSampler(textureUnitIndex);
+
+            const gl::SamplerState &samplerState =
+                sampler ? sampler->getSamplerState() : texture->getSamplerState();
+
+            if (texture != nullptr &&
+                texture->getTextureState().isSamplerComplete(samplerState, data))
             {
                 const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
 
@@ -823,7 +829,6 @@ void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
                 }
             }
 
-            const gl::Sampler *sampler = state.getSampler(textureUnitIndex);
             if (sampler != nullptr)
             {
                 const SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
