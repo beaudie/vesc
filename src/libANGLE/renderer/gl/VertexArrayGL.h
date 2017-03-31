@@ -75,6 +75,8 @@ class VertexArrayGL : public VertexArrayImpl
                                GLsizei instanceCount,
                                const gl::IndexRange &indexRange) const;
 
+    bool canUseVertexAttribPointer(size_t attribIndex) const;
+
     void updateNeedsStreaming(size_t attribIndex);
     void updateAttribEnabled(size_t attribIndex);
     void updateAttribPointer(size_t attribIndex);

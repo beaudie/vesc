@@ -37,6 +37,10 @@ TEST(VertexArrayTest, VerifyGetAttribIndex)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_POINTER, index);
         }
+        else if (dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
+        {
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BINDING_0_DIVISOR, index);
+        }
         else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_FORMAT)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_FORMAT, index);
@@ -48,10 +52,6 @@ TEST(VertexArrayTest, VerifyGetAttribIndex)
         else if (dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_BUFFER)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BINDING_0_BUFFER, index);
-        }
-        else if (dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
-        {
-            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BINDING_0_DIVISOR, index);
         }
         else
             ASSERT_TRUE(false);
