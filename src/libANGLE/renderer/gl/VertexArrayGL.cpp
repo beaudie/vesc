@@ -440,15 +440,22 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
     mAppliedAttributes[attribIndex].enabled = attrib.enabled;
 }
 
-void VertexArrayGL::updateAttribPointer(size_t attribIndex)
+bool VertexArrayGL::canUseVertexAttribPointer(size_t attribIndex) const
 {
     const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
-    ASSERT(attribIndex == attrib.bindingIndex);
+    return attribIndex == attrib.bindingIndex && attrib.relativeOffset == 0;
+}
 
+void VertexArrayGL::updateAttribPointer(size_t attribIndex)
+{
+    ASSERT(canUseVertexAttribPointer(attribIndex));
+
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
     GLuint bindingIndex          = attrib.bindingIndex;
     const VertexBinding &binding = mData.getVertexBinding(bindingIndex);
 
-    if (mAppliedAttributes[attribIndex] == attrib && mAppliedBindings[bindingIndex] == binding)
+    if (sameVertexFormat(attrib, mAppliedAttributes[attribIndex]) &&
+        sameBindingBuffer(binding, mAppliedBindings[bindingIndex]))
     {
         return;
     }
@@ -473,19 +480,16 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
         mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    mAppliedBindings[bindingIndex].buffer = binding.buffer;
-
     const GLvoid *inputPointer = nullptr;
     if (arrayBuffer != nullptr)
     {
-        inputPointer = static_cast<const GLvoid *>(
-            reinterpret_cast<const uint8_t *>(binding.offset + attrib.relativeOffset));
+        inputPointer =
+            static_cast<const GLvoid *>(reinterpret_cast<const uint8_t *>(binding.offset));
     }
     else
     {
-        // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
-        // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding
-        inputPointer = attrib.pointer;
+        ASSERT(attrib.pointer == nullptr);
+        inputPointer = nullptr;
     }
 
     if (attrib.pureInteger)
@@ -498,16 +502,14 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
         mFunctions->vertexAttribPointer(static_cast<GLuint>(attribIndex), attrib.size, attrib.type,
                                         attrib.normalized, binding.stride, inputPointer);
     }
-    mAppliedAttributes[attribIndex].size                    = attrib.size;
-    mAppliedAttributes[attribIndex].type                    = attrib.type;
-    mAppliedAttributes[attribIndex].normalized              = attrib.normalized;
-    mAppliedAttributes[attribIndex].pureInteger             = attrib.pureInteger;
-    mAppliedAttributes[attribIndex].pointer                 = attrib.pointer;
-    mAppliedAttributes[attribIndex].relativeOffset          = attrib.relativeOffset;
-    mAppliedAttributes[attribIndex].vertexAttribArrayStride = attrib.vertexAttribArrayStride;
+    mAppliedAttributes[attribIndex].size        = attrib.size;
+    mAppliedAttributes[attribIndex].type        = attrib.type;
+    mAppliedAttributes[attribIndex].normalized  = attrib.normalized;
+    mAppliedAttributes[attribIndex].pureInteger = attrib.pureInteger;
 
     mAppliedBindings[bindingIndex].stride = binding.stride;
     mAppliedBindings[bindingIndex].offset = binding.offset;
+    mAppliedBindings[bindingIndex].buffer = binding.buffer;
 }
 
 void VertexArrayGL::updateAttribDivisor(size_t attribIndex)
@@ -526,15 +528,24 @@ void VertexArrayGL::updateAttribDivisor(size_t attribIndex)
 
 void VertexArrayGL::syncState(const VertexArray::DirtyBits &dirtyBits)
 {
-    for (unsigned long dirtyBit : angle::IterateBitSet(dirtyBits))
+    if (dirtyBits[VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER])
     {
-        if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        // TODO(jmadill): Element array buffer bindings
+    }
+
+    for (unsigned long dirtyBit = VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED;
+         dirtyBit < VertexArray::DIRTY_BIT_MIN_ES31; dirtyBit++)
+    {
+        if (!dirtyBits[dirtyBit])
         {
-            // TODO(jmadill): Element array buffer bindings
             continue;
         }
 
         size_t index = VertexArray::GetAttribIndex(dirtyBit);
+        // Currently we won't enable Vertex Attrib Binding APIs on drivers that don't support this
+        // feature.
+        ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
+
         if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED &&
             dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
         {
@@ -544,12 +555,6 @@ void VertexArrayGL::syncState(const VertexArray::DirtyBits &dirtyBits)
                  dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
         {
             updateAttribPointer(index);
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_FORMAT &&
-                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_BUFFER)
-        {
-            // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-            ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
         }
         else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
                  dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
