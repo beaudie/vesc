@@ -280,6 +280,13 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver<>
                            GLenum binding,
                            const ImageIndex &textureIndex,
                            FramebufferAttachmentObject *resource);
+    void updateAttachment(FramebufferAttachment *attachment,
+                          size_t dirtyBit,
+                          angle::ChannelBinding<> *onDirtyBinding,
+                          GLenum type,
+                          GLenum binding,
+                          const ImageIndex &textureIndex,
+                          FramebufferAttachmentObject *resource);
 
     FramebufferState mState;
     rx::FramebufferImpl *mImpl;
