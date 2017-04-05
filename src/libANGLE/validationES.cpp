@@ -292,11 +292,10 @@ bool ValidateReadPixelsBase(ValidationContext *context,
 
     GLenum currentFormat         = framebuffer->getImplementationColorReadFormat();
     GLenum currentType           = framebuffer->getImplementationColorReadType();
-    GLenum currentInternalFormat = readBuffer->getFormat().asSized();
+    GLenum currentComponentType  = readBuffer->getFormat().info->componentType;
 
-    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(currentInternalFormat);
     bool validFormatTypeCombination =
-        ValidReadPixelsFormatType(context, internalFormatInfo.componentType, format, type);
+        ValidReadPixelsFormatType(context, currentComponentType, format, type);
 
     if (!(currentFormat == format && currentType == type) && !validFormatTypeCombination)
     {
@@ -315,8 +314,7 @@ bool ValidateReadPixelsBase(ValidationContext *context,
 
     // ..  the data would be packed to the buffer object such that the memory writes required
     // would exceed the data store size.
-    GLenum sizedInternalFormat       = GetSizedInternalFormat(format, type);
-    const InternalFormat &formatInfo = GetInternalFormatInfo(sizedInternalFormat);
+    const InternalFormat &formatInfo = GetInternalFormatInfo(format, type);
     const gl::Extents size(width, height, 1);
     const auto &pack = context->getGLState().getPackState();
 
@@ -1790,7 +1788,7 @@ bool ValidCompressedImageSize(const ValidationContext *context,
                               GLsizei width,
                               GLsizei height)
 {
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
+    const gl::InternalFormat &formatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
     if (!formatInfo.compressed)
     {
         return false;
@@ -1836,8 +1834,7 @@ bool ValidImageDataSize(ValidationContext *context,
 
     // ...the data would be unpacked from the buffer object such that the memory reads required
     // would exceed the data store size.
-    GLenum sizedFormat                   = GetSizedInternalFormat(internalFormat, type);
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
     const gl::Extents size(width, height, depth);
     const auto &unpack = context->getGLState().getUnpackState();
 
@@ -2076,8 +2073,8 @@ bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
     // ANGLE_framebuffer_multisample does not explicitly state that the internal format must be
     // sized but it does state that the format must be in the ES2.0 spec table 4.5 which contains
     // only sized internal formats.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(convertedInternalFormat);
-    if (formatInfo.pixelBytes == 0)
+    const gl::InternalFormat &formatInfo = gl::GetSizedInternalFormatInfo(convertedInternalFormat);
+    if (formatInfo.internalFormat == GL_NONE)
     {
         context->handleError(Error(GL_INVALID_ENUM));
         return false;
@@ -3175,7 +3172,8 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     // In OpenGL ES it is undefined what happens when an operation tries to read from a missing
     // attachment and WebGL defines it to be an error. We do the check unconditionally as the
     // situation is an application error that would lead to a crash in ANGLE.
-    if (readFramebuffer->getReadColorbuffer() == nullptr)
+    auto readBuffer = readFramebuffer->getReadColorbuffer();
+    if (readBuffer == nullptr)
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Missing read attachment"));
         return false;
@@ -3226,7 +3224,8 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
         return false;
     }
 
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
+    const gl::InternalFormat &formatInfo =
+        gl::GetInternalFormatInfo(internalformat, readBuffer->getFormat().info->type);
 
     if (formatInfo.depthBits > 0)
     {
@@ -4221,7 +4220,8 @@ bool ValidateEGLImageTargetTexture2DOES(Context *context,
         return false;
     }
 
-    const TextureCaps &textureCaps = context->getTextureCaps().get(image->getFormat().asSized());
+    const TextureCaps &textureCaps =
+        context->getTextureCaps().get(image->getFormat().info->sizedInternalFormat);
     if (!textureCaps.texturable)
     {
         context->handleError(Error(GL_INVALID_OPERATION,
@@ -4259,7 +4259,8 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context,
         return false;
     }
 
-    const TextureCaps &textureCaps = context->getTextureCaps().get(image->getFormat().asSized());
+    const TextureCaps &textureCaps =
+        context->getTextureCaps().get(image->getFormat().info->sizedInternalFormat);
     if (!textureCaps.renderable)
     {
         context->handleError(Error(
@@ -4762,7 +4763,7 @@ bool ValidateGenerateMipmap(Context *context, GLenum target)
 
     GLenum baseTarget  = (target == GL_TEXTURE_CUBE_MAP) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X : target;
     const auto &format = texture->getFormat(baseTarget, effectiveBaseLevel);
-    const TextureCaps &formatCaps = context->getTextureCaps().get(format.asSized());
+    const TextureCaps &formatCaps = context->getTextureCaps().get(format.info->sizedInternalFormat);
 
     // GenerateMipmap should not generate an INVALID_OPERATION for textures created with
     // unsized formats or that are color renderable and filterable.  Since we do not track if
