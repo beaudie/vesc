@@ -172,6 +172,11 @@ config("vulkan_loader_config") {
       "VK_USE_PLATFORM_WIN32_KHX",
     ]
     cflags = [ "/wd4201" ]
+    if (is_clang) {
+      # vk_layer.h puts __stdcall on a variadic function. Disable until it's
+      # fixed properly. See https://crbug.com/708591.
+      cflags += [ "-Wno-ignored-attributes" ]
+    }
   }
 }
 
