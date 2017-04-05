@@ -101,6 +101,7 @@ struct TextureState final : public angle::NonCopyable
     bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
 
     const ImageDesc &getImageDesc(GLenum target, size_t level) const;
+    const ImageDesc &getImageDesc(const ImageIndex &imageIndex) const;
 
     GLenum getTarget() const { return mTarget; }
     const SwizzleState &getSwizzleState() const { return mSwizzleState; }

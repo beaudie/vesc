@@ -446,6 +446,11 @@ void TextureState::setImageDesc(GLenum target, size_t level, const ImageDesc &de
     mCompletenessCache.cacheValid = false;
 }
 
+const ImageDesc &TextureState::getImageDesc(const ImageIndex &imageIndex) const
+{
+    return getImageDesc(imageIndex.type, imageIndex.mipIndex);
+}
+
 void TextureState::setImageDescChain(GLuint baseLevel,
                                      GLuint maxLevel,
                                      Extents baseSize,
@@ -1225,12 +1230,12 @@ Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
 
 Extents Texture::getAttachmentSize(const FramebufferAttachment::Target &target) const
 {
-    return mState.getImageDesc(target.textureIndex().type, target.textureIndex().mipIndex).size;
+    return mState.getImageDesc(target.textureIndex()).size;
 }
 
 const Format &Texture::getAttachmentFormat(const FramebufferAttachment::Target &target) const
 {
-    return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
+    return mState.getImageDesc(target.textureIndex()).format;
 }
 
 GLsizei Texture::getAttachmentSamples(const FramebufferAttachment::Target &target) const
