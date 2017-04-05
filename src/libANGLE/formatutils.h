@@ -88,6 +88,9 @@ struct InternalFormat
 
     GLenum internalFormat;
 
+    bool sized;
+    GLenum sizedInternalFormat;
+
     GLuint redBits;
     GLuint greenBits;
     GLuint blueBits;
@@ -125,15 +128,14 @@ struct Format
 {
     // Sized types only.
     explicit Format(GLenum internalFormat);
-    explicit Format(const InternalFormat &internalFormat);
 
     // Sized or unsized types.
-    Format(GLenum internalFormat, GLenum format, GLenum type);
+    explicit Format(const InternalFormat &internalFormat);
+    Format(GLenum internalFormat, GLenum type);
 
     Format(const Format &other);
     Format &operator=(const Format &other);
 
-    GLenum asSized() const;
     bool valid() const;
 
     static Format Invalid();
@@ -143,14 +145,14 @@ struct Format
 
     // This is the sized info.
     const InternalFormat *info;
-    GLenum format;
-    GLenum type;
-    bool sized;
 };
 
-const InternalFormat &GetInternalFormatInfo(GLenum internalFormat);
+const InternalFormat &GetSizedInternalFormatInfo(GLenum internalFormat);
+const InternalFormat &GetInternalFormatInfo(GLenum internalFormat, GLenum type);
 
-GLenum GetSizedInternalFormat(GLenum internalFormat, GLenum type);
+// Strip sizing information from an internal format.  Doesn't necessarily validate that the internal
+// format is valid.
+GLenum GetUnsizedFormat(GLenum internalFormat);
 
 typedef std::set<GLenum> FormatSet;
 const FormatSet &GetAllSizedInternalFormats();
