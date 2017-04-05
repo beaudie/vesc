@@ -1157,12 +1157,8 @@ void Framebuffer::setAttachmentImpl(GLenum type,
             }
         }
 
-        mState.mDepthAttachment.attach(type, binding, textureIndex, attachmentObj);
-        mState.mStencilAttachment.attach(type, binding, textureIndex, attachmentObj);
-        mDirtyBits.set(DIRTY_BIT_DEPTH_ATTACHMENT);
-        mDirtyBits.set(DIRTY_BIT_STENCIL_ATTACHMENT);
-        BindResourceChannel(&mDirtyDepthAttachmentBinding, resource);
-        BindResourceChannel(&mDirtyStencilAttachmentBinding, resource);
+        setAttachmentImpl(type, GL_DEPTH_ATTACHMENT, textureIndex, attachmentObj);
+        setAttachmentImpl(type, GL_STENCIL_ATTACHMENT, textureIndex, attachmentObj);
         return;
     }
 
@@ -1170,34 +1166,49 @@ void Framebuffer::setAttachmentImpl(GLenum type,
     {
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
-            mState.mDepthAttachment.attach(type, binding, textureIndex, resource);
-            mDirtyBits.set(DIRTY_BIT_DEPTH_ATTACHMENT);
-            BindResourceChannel(&mDirtyDepthAttachmentBinding, resource);
+            updateAttachment(&mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
+                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex, resource);
             break;
+
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
-            mState.mStencilAttachment.attach(type, binding, textureIndex, resource);
-            mDirtyBits.set(DIRTY_BIT_STENCIL_ATTACHMENT);
-            BindResourceChannel(&mDirtyStencilAttachmentBinding, resource);
+            updateAttachment(&mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
+                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex,
+                             resource);
             break;
+
         case GL_BACK:
             mState.mColorAttachments[0].attach(type, binding, textureIndex, resource);
-            mDirtyBits.set(DIRTY_BIT_COLOR_ATTACHMENT_0);
             // No need for a resource binding for the default FBO, it's always complete.
-            break;
+            return;
+
         default:
         {
             size_t colorIndex = binding - GL_COLOR_ATTACHMENT0;
             ASSERT(colorIndex < mState.mColorAttachments.size());
-            mState.mColorAttachments[colorIndex].attach(type, binding, textureIndex, resource);
-            mDirtyBits.set(DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex);
-            BindResourceChannel(&mDirtyColorAttachmentBindings[colorIndex], resource);
+            size_t dirtyBit = DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex;
+            updateAttachment(&mState.mColorAttachments[colorIndex], dirtyBit,
+                             &mDirtyColorAttachmentBindings[colorIndex], type, binding,
+                             textureIndex, resource);
 
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
             mState.mEnabledDrawBuffers.set(colorIndex, enabled);
         }
         break;
     }
+}
+
+void Framebuffer::updateAttachment(FramebufferAttachment *attachment,
+                                   size_t dirtyBit,
+                                   OnAttachmentDirtyBinding *onDirtyBinding,
+                                   GLenum type,
+                                   GLenum binding,
+                                   const ImageIndex &textureIndex,
+                                   FramebufferAttachmentObject *resource)
+{
+    attachment->attach(type, binding, textureIndex, resource);
+    mDirtyBits.set(dirtyBit);
+    BindResourceChannel(onDirtyBinding, resource);
 }
 
 void Framebuffer::resetAttachment(const Context *context, GLenum binding)
