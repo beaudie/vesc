@@ -37,8 +37,8 @@
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.size.distinct = FAIL
 
 // Fail because we support these formats through the ANGLE_depth_texture extension instead of OES_depth_texture
-605754 MAC WIN LINUX : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = FAIL
-605754 MAC WIN LINUX : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
+605754 MAC WIN LINUX ANDROID : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = FAIL
+605754 MAC WIN LINUX ANDROID : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
 
 // Tests that we fail because they're not in line with the WebGL spec
 1335 MAC WIN LINUX : dEQP-GLES3.functional.shaders.preprocessor.conditional_inclusion.basic_2* = FAIL
