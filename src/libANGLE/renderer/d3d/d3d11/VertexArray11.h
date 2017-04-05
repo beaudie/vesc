@@ -17,7 +17,7 @@ namespace rx
 {
 class Renderer11;
 
-class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver
+class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver<>
 {
   public:
     VertexArray11(const gl::VertexArrayState &data);
@@ -36,7 +36,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver
     const std::vector<TranslatedAttribute> &getTranslatedAttribs() const;
 
     // SignalReceiver implementation
-    void signal(angle::SignalToken token) override;
+    void signal(uint32_t channelID) override;
 
   private:
     void updateVertexAttribStorage(size_t attribIndex);
@@ -57,7 +57,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver
     // We need to keep a safe pointer to the Buffer so we can attach the correct dirty callbacks.
     std::vector<BindingPointer<gl::Buffer>> mCurrentBuffers;
 
-    std::vector<angle::ChannelBinding> mOnBufferDataDirty;
+    std::vector<angle::ChannelBinding<>> mOnBufferDataDirty;
 };
 
 }  // namespace rx

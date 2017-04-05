@@ -115,7 +115,7 @@ class FramebufferState final : angle::NonCopyable
     bool mWebGLDepthStencilConsistent;
 };
 
-class Framebuffer final : public LabeledObject, public angle::SignalReceiver
+class Framebuffer final : public LabeledObject, public angle::SignalReceiver<>
 {
   public:
     // Constructor to build application-defined framebuffers
@@ -237,7 +237,7 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
                GLbitfield mask,
                GLenum filter);
 
-    enum DirtyBitType
+    enum DirtyBitType : uint32_t
     {
         DIRTY_BIT_COLOR_ATTACHMENT_0,
         DIRTY_BIT_COLOR_ATTACHMENT_MAX =
@@ -260,7 +260,7 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     void syncState(const Context *context);
 
     // angle::SignalReceiver implementation
-    void signal(angle::SignalToken token) override;
+    void signal(uint32_t token) override;
 
     bool formsRenderingFeedbackLoopWith(const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,
@@ -286,9 +286,9 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     GLuint mId;
 
     Optional<GLenum> mCachedStatus;
-    std::vector<angle::ChannelBinding> mDirtyColorAttachmentBindings;
-    angle::ChannelBinding mDirtyDepthAttachmentBinding;
-    angle::ChannelBinding mDirtyStencilAttachmentBinding;
+    std::vector<angle::ChannelBinding<>> mDirtyColorAttachmentBindings;
+    angle::ChannelBinding<> mDirtyDepthAttachmentBinding;
+    angle::ChannelBinding<> mDirtyStencilAttachmentBinding;
 
     DirtyBits mDirtyBits;
 };
