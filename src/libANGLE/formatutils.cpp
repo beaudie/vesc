@@ -151,20 +151,45 @@ static bool HalfFloatSupport(const Version &clientVersion, const Extensions &ext
     return clientVersion >= Version(3, 0) || extensions.textureHalfFloat;
 }
 
-static bool HalfFloatRenderableSupport(const Version &clientVersion, const Extensions &extensions)
+static bool UnsizedHalfFloatSupport(const Version &, const Extensions &extensions)
+{
+    return extensions.textureHalfFloat;
+}
+
+static bool HalfFloatRGBRenderableSupport(const Version &clientVersion,
+                                          const Extensions &extensions)
 {
     return HalfFloatSupport(clientVersion, extensions) && extensions.colorBufferHalfFloat;
 }
 
+static bool HalfFloatRGBARenderableSupport(const Version &clientVersion,
+                                           const Extensions &extensions)
+{
+    return HalfFloatSupport(clientVersion, extensions) &&
+           (extensions.colorBufferHalfFloat || extensions.colorBufferFloat);
+}
+
 // Special function for half float formats with one or two channels.
-static bool HalfFloatSupportRG(const Version &clientVersion, const Extensions &extensions)
+static bool HalfFloatRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
     return clientVersion >= Version(3, 0) || (extensions.textureHalfFloat && extensions.textureRG);
 }
 
-static bool HalfFloatRenderableSupportRG(const Version &clientVersion, const Extensions &extensions)
+static bool UnsizedHalfFloatRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return HalfFloatSupportRG(clientVersion, extensions) && extensions.colorBufferHalfFloat;
+    return extensions.textureHalfFloat && extensions.textureRG;
+}
+
+static bool HalfFloatRGRenderableSupport(const Version &clientVersion, const Extensions &extensions)
+{
+    return HalfFloatRGSupport(clientVersion, extensions) &&
+           (extensions.colorBufferHalfFloat || extensions.colorBufferFloat);
+}
+
+static bool UnsizedHalfFloatRGRenderableSupport(const Version &clientVersion,
+                                                const Extensions &extensions)
+{
+    return UnsizedHalfFloatRGSupport(clientVersion, extensions) && extensions.colorBufferHalfFloat;
 }
 
 // Special function for float formats with three or four channels.
@@ -173,24 +198,54 @@ static bool FloatSupport(const Version &clientVersion, const Extensions &extensi
     return clientVersion >= Version(3, 0) || extensions.textureFloat;
 }
 
-static bool FloatRenderableSupport(const Version &clientVersion, const Extensions &extensions)
+static bool UnsizedFloatSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    // We don't expose colorBufferFloat in ES2, but we silently support rendering to float.
+    return extensions.textureFloat;
+}
+
+static bool FloatRGBRenderableSupport(const Version &clientVersion, const Extensions &extensions)
+{
+    return FloatSupport(clientVersion, extensions) && extensions.colorBufferFloatRGB;
+}
+
+static bool UnsizedFloatRGBRenderableSupport(const Version &clientVersion,
+                                             const Extensions &extensions)
+{
+    return UnsizedFloatSupport(clientVersion, extensions) && extensions.colorBufferFloatRGBA;
+}
+
+static bool FloatRGBARenderableSupport(const Version &clientVersion, const Extensions &extensions)
+{
     return FloatSupport(clientVersion, extensions) &&
-           (extensions.colorBufferFloat || clientVersion == Version(2, 0));
+           (extensions.colorBufferFloat || extensions.colorBufferFloatRGBA);
+}
+
+static bool UnsizedFloatRGBARenderableSupport(const Version &clientVersion,
+                                              const Extensions &extensions)
+{
+    return UnsizedFloatSupport(clientVersion, extensions) && extensions.colorBufferFloatRGBA;
 }
 
 // Special function for float formats with one or two channels.
-static bool FloatSupportRG(const Version &clientVersion, const Extensions &extensions)
+static bool FloatRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
     return clientVersion >= Version(3, 0) || (extensions.textureFloat && extensions.textureRG);
 }
 
-static bool FloatRenderableSupportRG(const Version &clientVersion, const Extensions &extensions)
+static bool UnsizedFloatRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    // We don't expose colorBufferFloat in ES2, but we silently support rendering to float.
-    return FloatSupportRG(clientVersion, extensions) &&
-           (extensions.colorBufferFloat || clientVersion == Version(2, 0));
+    return extensions.textureFloat && extensions.textureRG;
+}
+
+static bool FloatRGRenderableSupport(const Version &clientVersion, const Extensions &extensions)
+{
+    return FloatRGSupport(clientVersion, extensions) && extensions.colorBufferFloat;
+}
+
+static bool UnsizedFloatRGRenderableSupport(const Version &clientVersion,
+                                            const Extensions &extensions)
+{
+    return FloatRGSupport(clientVersion, extensions) && extensions.colorBufferFloat;
 }
 
 InternalFormat::InternalFormat()
@@ -585,23 +640,23 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_RGBA32UI,          32, 32, 32, 32, 0, GL_RGBA_INTEGER, GL_UNSIGNED_INT,                 GL_UNSIGNED_INT,        false, RequireES<3, 0>,                              RequireES<3, 0>,                              NeverSupported);
 
     AddRGBAFormat(&map, GL_BGRA8_EXT,          8,  8,  8,  8, 0, GL_BGRA_EXT,     GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported);
-    AddRGBAFormat(&map, GL_BGRA4_ANGLEX,       4,  4,  4,  4, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported);
-    AddRGBAFormat(&map, GL_BGR5_A1_ANGLEX,     5,  5,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported);
 
     // Special format which is not really supported, so always false for all supports.
+    AddRGBAFormat(&map, GL_BGRA4_ANGLEX,       4,  4,  4,  4, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, GL_UNSIGNED_NORMALIZED, false, NeverSupported, NeverSupported, NeverSupported);
+    AddRGBAFormat(&map, GL_BGR5_A1_ANGLEX,     5,  5,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, GL_UNSIGNED_NORMALIZED, false, NeverSupported, NeverSupported, NeverSupported);
     AddRGBAFormat(&map, GL_BGR565_ANGLEX,      5,  6,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_5_6_5,           GL_UNSIGNED_NORMALIZED, false, NeverSupported, NeverSupported, NeverSupported);
 
     // Floating point renderability and filtering is provided by OES_texture_float and OES_texture_half_float
-    //                 | Internal format     | D |S | Format             | Type                                   | Comp   | SRGB |  Texture supported | Renderable                  | Filterable                                    |
-    //                 |                     |   |  |                    |                                        | type   |      |                    |                             |                                               |
-    AddRGBAFormat(&map, GL_R16F,              16,  0,  0,  0, 0, GL_RED,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupportRG, HalfFloatRenderableSupportRG, RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RG16F,             16, 16,  0,  0, 0, GL_RG,           GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupportRG, HalfFloatRenderableSupportRG, RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RGB16F,            16, 16, 16,  0, 0, GL_RGB,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRenderableSupport,   RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RGBA16F,           16, 16, 16, 16, 0, GL_RGBA,         GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRenderableSupport,   RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_R32F,              32,  0,  0,  0, 0, GL_RED,          GL_FLOAT,                        GL_FLOAT, false, FloatSupportRG,     FloatRenderableSupportRG,     RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RG32F,             32, 32,  0,  0, 0, GL_RG,           GL_FLOAT,                        GL_FLOAT, false, FloatSupportRG,     FloatRenderableSupportRG,     RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RGB32F,            32, 32, 32,  0, 0, GL_RGB,          GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RGBA32F,           32, 32, 32, 32, 0, GL_RGBA,         GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>    );
+    //                 | Internal format     | D |S | Format             | Type                                   | Comp   | SRGB |  Texture supported | Renderable                     | Filterable                                              |
+    //                 |                     |   |  |                    |                                        | type   |      |                    |                                |                                                         |
+    AddRGBAFormat(&map, GL_R16F,              16,  0,  0,  0, 0, GL_RED,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatRGSupport, HalfFloatRGRenderableSupport,   RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RG16F,             16, 16,  0,  0, 0, GL_RG,           GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatRGSupport, HalfFloatRGRenderableSupport,   RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RGB16F,            16, 16, 16,  0, 0, GL_RGB,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRGBRenderableSupport,  RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RGBA16F,           16, 16, 16, 16, 0, GL_RGBA,         GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRGBARenderableSupport, RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_R32F,              32,  0,  0,  0, 0, GL_RED,          GL_FLOAT,                        GL_FLOAT, false, FloatRGSupport,     FloatRGRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RG32F,             32, 32,  0,  0, 0, GL_RG,           GL_FLOAT,                        GL_FLOAT, false, FloatRGSupport,     FloatRGRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RGB32F,            32, 32, 32,  0, 0, GL_RGB,          GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRGBRenderableSupport,      RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RGBA32F,           32, 32, 32, 32, 0, GL_RGBA,         GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRGBARenderableSupport,     RequireExt<&Extensions::textureFloatLinear>              );
 
     // Depth stencil formats
     //                         | Internal format         | D |S | X | Format            | Type                             | Component type        | Supported                                       | Renderable                                                                            | Filterable                                  |
@@ -747,15 +802,15 @@ static UnsizedInternalFormatInfoMap BuildUnsizedInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_BGRA_EXT,           8,  8,  8,  8, 0, GL_BGRA_EXT,     GL_UNSIGNED_BYTE,                GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported);
 
     // Floating point renderability and filtering is provided by OES_texture_float and OES_texture_half_float
-    //                 | Internal format | R | G | B | A |S | Format         | Type                           | Comp    | SRGB | Texture supported | Renderable                  | Filterable                                    |
-    AddRGBAFormat(&map, GL_RED,           16,  0,  0,  0, 0, GL_RED,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupportRG, HalfFloatRenderableSupportRG, RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RG,            16, 16,  0,  0, 0, GL_RG,           GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupportRG, HalfFloatRenderableSupportRG, RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RGB,           16, 16, 16,  0, 0, GL_RGB,          GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRenderableSupport,   RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RGBA,          16, 16, 16, 16, 0, GL_RGBA,         GL_HALF_FLOAT,                   GL_FLOAT, false, HalfFloatSupport,   HalfFloatRenderableSupport,   RequireExt<&Extensions::textureHalfFloatLinear>);
-    AddRGBAFormat(&map, GL_RED,           32,  0,  0,  0, 0, GL_RED,          GL_FLOAT,                        GL_FLOAT, false, FloatSupportRG,     FloatRenderableSupportRG,     RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RG,            32, 32,  0,  0, 0, GL_RG,           GL_FLOAT,                        GL_FLOAT, false, FloatSupportRG,     FloatRenderableSupportRG,     RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RGB,           32, 32, 32,  0, 0, GL_RGB,          GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>    );
-    AddRGBAFormat(&map, GL_RGBA,          32, 32, 32, 32, 0, GL_RGBA,         GL_FLOAT,                        GL_FLOAT, false, FloatSupport,       FloatRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>    );
+    //                 | Internal format | R | G | B | A |S | Format         | Type                           | Comp    | SRGB | Texture supported        | Renderable                           | Filterable                                              |
+    AddRGBAFormat(&map, GL_RED,           16,  0,  0,  0, 0, GL_RED,          GL_HALF_FLOAT_OES,               GL_FLOAT, false, UnsizedHalfFloatRGSupport, UnsizedHalfFloatRGRenderableSupport,   RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RG,            16, 16,  0,  0, 0, GL_RG,           GL_HALF_FLOAT_OES,               GL_FLOAT, false, UnsizedHalfFloatRGSupport, UnsizedHalfFloatRGRenderableSupport,   RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RGB,           16, 16, 16,  0, 0, GL_RGB,          GL_HALF_FLOAT_OES,               GL_FLOAT, false, UnsizedHalfFloatSupport,   NeverSupported,                        RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RGBA,          16, 16, 16, 16, 0, GL_RGBA,         GL_HALF_FLOAT_OES,               GL_FLOAT, false, UnsizedHalfFloatSupport,   NeverSupported,                        RequireESOrExt<3, 0, &Extensions::textureHalfFloatLinear>);
+    AddRGBAFormat(&map, GL_RED,           32,  0,  0,  0, 0, GL_RED,          GL_FLOAT,                        GL_FLOAT, false, UnsizedFloatRGSupport,     UnsizedFloatRGRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RG,            32, 32,  0,  0, 0, GL_RG,           GL_FLOAT,                        GL_FLOAT, false, UnsizedFloatRGSupport,     UnsizedFloatRGRenderableSupport,       RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RGB,           32, 32, 32,  0, 0, GL_RGB,          GL_FLOAT,                        GL_FLOAT, false, UnsizedFloatSupport,       UnsizedFloatRGBRenderableSupport,      RequireExt<&Extensions::textureFloatLinear>              );
+    AddRGBAFormat(&map, GL_RGBA,          32, 32, 32, 32, 0, GL_RGBA,         GL_FLOAT,                        GL_FLOAT, false, UnsizedFloatSupport,       UnsizedFloatRGBARenderableSupport,     RequireExt<&Extensions::textureFloatLinear>              );
 
     // Luminance alpha formats
     //                | Internal format    | L | A | Format            | Type             | Component type        | Supported                                | Renderable    | Filterable                                    |
