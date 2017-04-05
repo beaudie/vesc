@@ -620,7 +620,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
             }
 
             const Format &format          = colorAttachment.getFormat();
-            const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+            const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
             if (colorAttachment.type() == GL_TEXTURE)
             {
                 if (!formatCaps.renderable)
@@ -711,7 +711,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
         }
 
         const Format &format          = depthAttachment.getFormat();
-        const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+        const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
         if (depthAttachment.type() == GL_TEXTURE)
         {
             if (!formatCaps.renderable)
@@ -763,7 +763,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
         }
 
         const Format &format          = stencilAttachment.getFormat();
-        const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
+        const TextureCaps &formatCaps = state.getTextureCap(format.info->sizedInternalFormat);
         if (stencilAttachment.type() == GL_TEXTURE)
         {
             if (!formatCaps.renderable)
