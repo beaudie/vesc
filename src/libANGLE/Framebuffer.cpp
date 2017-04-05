@@ -1148,8 +1148,7 @@ void Framebuffer::setAttachmentImpl(GLenum type,
         FramebufferAttachmentObject *attachmentObj = resource;
         if (resource)
         {
-            FramebufferAttachment::Target target(binding, textureIndex);
-            const Format &format = resource->getAttachmentFormat(target);
+            const Format &format = resource->getAttachmentFormat(binding, textureIndex);
             if (format.info->depthBits == 0 || format.info->stencilBits == 0)
             {
                 // Attaching nullptr detaches the current attachment.
