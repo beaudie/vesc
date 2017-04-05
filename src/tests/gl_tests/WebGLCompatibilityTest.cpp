@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "common/mathutil.h"
 #include "test_utils/gl_raii.h"
 
 namespace
@@ -31,6 +32,18 @@ void CheckBlendFunctions(GLenum src, GLenum dst)
         ASSERT_GL_NO_ERROR();
     }
 }
+
+// Extensions that affect the ability to use floating point textures
+constexpr char *FloatingPointTextureExtensions[] = {
+    "",
+    "GL_EXT_texture_storage",
+    "GL_OES_texture_float",
+    "GL_OES_texture_float_linear",
+    "GL_EXT_color_buffer_half_float",
+    "GL_EXT_color_buffer_float",
+    "GL_CHROMIUM_color_buffer_float_rgba",
+    "GL_CHROMIUM_color_buffer_float_rgb",
+};
 
 }  // namespace
 
@@ -56,6 +69,127 @@ class WebGLCompatibilityTest : public ANGLETest
         ANGLETest::SetUp();
         glRequestExtensionANGLE = reinterpret_cast<PFNGLREQUESTEXTENSIONANGLEPROC>(
             eglGetProcAddress("glRequestExtensionANGLE"));
+    }
+
+    template <typename T>
+    void TestFloatTextureFormat(GLenum internalFormat,
+                                GLenum format,
+                                GLenum type,
+                                bool texturingEnabled,
+                                bool linearSamplingEnabled,
+                                bool renderingEnabled,
+                                const T textureData[4],
+                                const float floatData[4])
+    {
+        ASSERT_GL_NO_ERROR();
+
+        const std::string samplingVs =
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n";
+
+        const std::string samplingFs =
+            "precision mediump float;\n"
+            "uniform sampler2D tex;\n"
+            "uniform vec4 subtractor;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    vec4 color = texture2D(tex, texcoord);\n"
+            "    if (abs(color.r - subtractor.r) +\n"
+            "        abs(color.g - subtractor.g) +\n"
+            "        abs(color.b - subtractor.b) +\n"
+            "        abs(color.a - subtractor.a) < 8.0)\n"
+            "    {\n"
+            "        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+            "    }\n"
+            "    else\n"
+            "    {\n"
+            "        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "    }\n"
+            "}\n";
+
+        ANGLE_GL_PROGRAM(samplingProgram, samplingVs, samplingFs);
+        glUseProgram(samplingProgram.get());
+
+        GLRenderbuffer rbo;
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo.get());
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1, 1);
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo.get());
+
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture.get());
+
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, format, type, textureData);
+        if (!texturingEnabled)
+        {
+            EXPECT_GL_ERROR(GL_INVALID_ENUM);
+            return;
+        }
+        ASSERT_GL_NO_ERROR();
+
+        glUniform1i(glGetUniformLocation(samplingProgram.get(), "tex"), 0);
+        glUniform4fv(glGetUniformLocation(samplingProgram.get(), "subtractor"), 1, floatData);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        drawQuad(samplingProgram.get(), "position", 0.5f, 1.0f, true);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        drawQuad(samplingProgram.get(), "position", 0.5f, 1.0f, true);
+
+        if (linearSamplingEnabled)
+        {
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+        }
+        else
+        {
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+        }
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(),
+                               0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        if (!renderingEnabled)
+        {
+            EXPECT_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+                      glCheckFramebufferStatus(GL_FRAMEBUFFER));
+            return;
+        }
+        ASSERT_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        const std::string renderingVs =
+            "attribute vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+            "}\n";
+
+        const std::string renderingFs =
+            "precision mediump float;\n"
+            "uniform vec4 writeValue;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_FragColor = writeValue;\n"
+            "}\n";
+
+        ANGLE_GL_PROGRAM(renderingProgram, renderingVs, renderingFs);
+        glUseProgram(renderingProgram.get());
+
+        glUniform4fv(glGetUniformLocation(renderingProgram.get(), "writeValue"), 1, floatData);
+
+        drawQuad(renderingProgram.get(), "position", 0.5f, 1.0f, true);
+
+        EXPECT_PIXEL_COLOR32F_EQ(
+            0, 0, GLColor32F(floatData[0], floatData[1], floatData[2], floatData[3]));
     }
 
     // Called from RenderingFeedbackLoopWithDrawBuffersEXT.
@@ -1341,6 +1475,254 @@ TEST_P(WebGLCompatibilityTest, CompressedTextureS3TC)
     ASSERT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+TEST_P(WebGLCompatibilityTest, L32FTextures)
+{
+    constexpr float textureData[]   = {-15.1f, 0.0f, 0.0f, 0.0f};
+    constexpr float readPixelData[] = {textureData[0], textureData[0], textureData[0], 1.0f};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_float");
+        bool filter  = extensionEnabled("GL_OES_texture_float_linear");
+        bool render  = false;
+        TestFloatTextureFormat(GL_LUMINANCE, GL_LUMINANCE, GL_FLOAT, texture, filter, render,
+                               textureData, readPixelData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, A32FTextures)
+{
+    constexpr float textureData[]   = {-33.33f, 0.0f, 0.0f, 0.0f};
+    constexpr float readPixelData[] = {0.0f, 0.0f, 0.0f, textureData[0]};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_float");
+        bool filter  = extensionEnabled("GL_OES_texture_float_linear");
+        bool render  = false;
+        TestFloatTextureFormat(GL_ALPHA, GL_ALPHA, GL_FLOAT, texture, filter, render, textureData,
+                               readPixelData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, LA32FTextures)
+{
+    constexpr float textureData[]   = {-0.21f, 15.1f, 0.0f, 0.0f};
+    constexpr float readPixelData[] = {textureData[0], textureData[0], textureData[0],
+                                       textureData[1]};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_float");
+        bool filter  = extensionEnabled("GL_OES_texture_float_linear");
+        bool render  = false;
+        TestFloatTextureFormat(GL_LUMINANCE_ALPHA, GL_LUMINANCE_ALPHA, GL_FLOAT, texture, filter,
+                               render, textureData, readPixelData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, R32FTextures)
+{
+    constexpr float data[] = {9999.0f, 0.0f, 0.0f, 1.0f};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture =
+            (extensionEnabled("GL_OES_texture_float") && extensionEnabled("GL_EXT_texture_rg"));
+        bool filter = extensionEnabled("GL_OES_texture_float_linear") &&
+                      extensionEnabled("GL_EXT_texture_rg");
+        bool render = extensionEnabled("GL_EXT_color_buffer_float");
+        TestFloatTextureFormat(GL_RED, GL_RED, GL_FLOAT, texture, filter, render, data, data);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RG32FTextures)
+{
+    constexpr float data[] = {9999.0f, -0.001f, 0.0f, 1.0f};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture =
+            (extensionEnabled("GL_OES_texture_float") && extensionEnabled("GL_EXT_texture_rg"));
+        bool filter = extensionEnabled("GL_OES_texture_float_linear") &&
+                      extensionEnabled("GL_EXT_texture_rg");
+        bool render = extensionEnabled("GL_EXT_color_buffer_float");
+        TestFloatTextureFormat(GL_RG, GL_RG, GL_FLOAT, texture, filter, render, data, data);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RGB32FTextures)
+{
+    constexpr float data[] = {1000.0f, -500.0f, 10.0f, 1.0f};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_float");
+        bool filter  = extensionEnabled("GL_OES_texture_float_linear");
+        bool render  = extensionEnabled("GL_CHROMIUM_color_buffer_float_rgb");
+        TestFloatTextureFormat(GL_RGB, GL_RGB, GL_FLOAT, texture, filter, render, data, data);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RGBA32FTextures)
+{
+    constexpr float data[] = {7000.0f, 100.0f, 33.0f, -1.0f};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_float");
+        bool filter  = extensionEnabled("GL_OES_texture_float_linear");
+        bool render  = extensionEnabled("GL_EXT_color_buffer_float") ||
+                      extensionEnabled("GL_CHROMIUM_color_buffer_float_rgba");
+        TestFloatTextureFormat(GL_RGBA, GL_RGBA, GL_FLOAT, texture, filter, render, data, data);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, R16FTextures)
+{
+    constexpr float readPixelsData[] = {-5000.0f, 0.0f, 0.0f, 1.0f};
+    const GLushort textureData[]     = {
+        gl::float32ToFloat16(readPixelsData[0]), gl::float32ToFloat16(readPixelsData[1]),
+        gl::float32ToFloat16(readPixelsData[2]), gl::float32ToFloat16(readPixelsData[3])};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture =
+            extensionEnabled("GL_OES_texture_half_float") && extensionEnabled("GL_EXT_texture_rg");
+        bool filter =
+            getClientMajorVersion() >= 3 || (extensionEnabled("GL_OES_texture_half_float_linear") &&
+                                             extensionEnabled("GL_EXT_texture_rg"));
+        bool render = extensionEnabled("GL_EXT_color_buffer_half_float") &&
+                      extensionEnabled("GL_EXT_texture_rg");
+        TestFloatTextureFormat(GL_RED, GL_RED, GL_HALF_FLOAT_OES, texture, filter, render,
+                               textureData, readPixelsData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RG16FTextures)
+{
+    constexpr float readPixelsData[] = {7108.0f, -10.0f, 0.0f, 1.0f};
+    const GLushort textureData[]     = {
+        gl::float32ToFloat16(readPixelsData[0]), gl::float32ToFloat16(readPixelsData[1]),
+        gl::float32ToFloat16(readPixelsData[2]), gl::float32ToFloat16(readPixelsData[3])};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture =
+            extensionEnabled("GL_OES_texture_half_float") && extensionEnabled("GL_EXT_texture_rg");
+        bool filter =
+            getClientMajorVersion() >= 3 || (extensionEnabled("GL_OES_texture_half_float_linear") &&
+                                             extensionEnabled("GL_EXT_texture_rg"));
+        bool render = extensionEnabled("GL_EXT_color_buffer_half_float") &&
+                      extensionEnabled("GL_EXT_texture_rg");
+        TestFloatTextureFormat(GL_RG, GL_RG, GL_HALF_FLOAT_OES, texture, filter, render,
+                               textureData, readPixelsData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RGB16FTextures)
+{
+    constexpr float readPixelsData[] = {7000.0f, 100.0f, 33.0f, 1.0f};
+    const GLushort textureData[]     = {
+        gl::float32ToFloat16(readPixelsData[0]), gl::float32ToFloat16(readPixelsData[1]),
+        gl::float32ToFloat16(readPixelsData[2]), gl::float32ToFloat16(readPixelsData[3])};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_half_float");
+        bool filter =
+            getClientMajorVersion() >= 3 || extensionEnabled("GL_OES_texture_half_float_linear");
+        bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+        TestFloatTextureFormat(GL_RGB, GL_RGB, GL_HALF_FLOAT_OES, texture, filter, render,
+                               textureData, readPixelsData);
+    }
+}
+
+TEST_P(WebGLCompatibilityTest, RGBA16FTextures)
+{
+    constexpr float readPixelsData[] = {7000.0f, 100.0f, 33.0f, -1.0f};
+    const GLushort textureData[]     = {
+        gl::float32ToFloat16(readPixelsData[0]), gl::float32ToFloat16(readPixelsData[1]),
+        gl::float32ToFloat16(readPixelsData[2]), gl::float32ToFloat16(readPixelsData[3])};
+
+    for (auto extension : FloatingPointTextureExtensions)
+    {
+        if (strlen(extension) > 0 && extensionRequestable(extension))
+        {
+            glRequestExtensionANGLE(extension);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        bool texture = extensionEnabled("GL_OES_texture_half_float");
+        bool filter =
+            getClientMajorVersion() >= 3 || extensionEnabled("GL_OES_texture_half_float_linear");
+        bool render = extensionEnabled("GL_EXT_color_buffer_half_float") ||
+                      extensionEnabled("GL_EXT_color_buffer_float");
+        TestFloatTextureFormat(GL_RGBA, GL_RGBA, GL_HALF_FLOAT_OES, texture, filter, render,
+                               textureData, readPixelsData);
+    }
+}
+
 // This tests that rendering feedback loops works as expected with WebGL 2.
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
@@ -1713,7 +2095,6 @@ ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
                        ES3_D3D11(),
-                       ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
