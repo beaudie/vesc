@@ -25,15 +25,21 @@ namespace angle
 // Verify ref counts are maintained between images and their siblings when objects are deleted
 TEST(ImageTest, RefCounting)
 {
-    NiceMock<rx::MockGLFactory> mockFactory;
+    NiceMock<rx::MockGLFactory> mockGLFactory;
+    NiceMock<rx::MockEGLFactory> mockEGLFactory;
+
     // Create a texture and an EGL image that uses the texture as its source
     rx::MockTextureImpl *textureImpl = new rx::MockTextureImpl();
-    EXPECT_CALL(mockFactory, createTexture(_)).WillOnce(Return(textureImpl));
-    gl::Texture *texture = new gl::Texture(&mockFactory, 1, GL_TEXTURE_2D);
+    EXPECT_CALL(mockGLFactory, createTexture(_)).WillOnce(Return(textureImpl));
+    gl::Texture *texture = new gl::Texture(&mockGLFactory, 1, GL_TEXTURE_2D);
     texture->addRef();
 
-    rx::MockImageImpl *imageImpl = new rx::MockImageImpl();
-    egl::Image *image = new egl::Image(imageImpl, EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
+    rx::MockImageImpl *imageImpl =
+        new rx::MockImageImpl(EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
+    EXPECT_CALL(mockEGLFactory, createImage(_, _, _)).WillOnce(Return(imageImpl));
+
+    egl::Image *image =
+        new egl::Image(&mockEGLFactory, EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
     image->addRef();
 
     // Verify that the image added a ref to the texture and the texture has not added a ref to the
@@ -84,11 +90,13 @@ TEST(ImageTest, RefCounting)
 // Verify that respecifiying textures releases references to the Image.
 TEST(ImageTest, RespecificationReleasesReferences)
 {
-    NiceMock<rx::MockGLFactory> mockFactory;
+    NiceMock<rx::MockGLFactory> mockGLFactory;
+    NiceMock<rx::MockEGLFactory> mockEGLFactory;
+
     // Create a texture and an EGL image that uses the texture as its source
     rx::MockTextureImpl *textureImpl = new rx::MockTextureImpl();
-    EXPECT_CALL(mockFactory, createTexture(_)).WillOnce(Return(textureImpl));
-    gl::Texture *texture = new gl::Texture(&mockFactory, 1, GL_TEXTURE_2D);
+    EXPECT_CALL(mockGLFactory, createTexture(_)).WillOnce(Return(textureImpl));
+    gl::Texture *texture = new gl::Texture(&mockGLFactory, 1, GL_TEXTURE_2D);
     texture->addRef();
 
     gl::PixelUnpackState defaultUnpackState;
@@ -99,8 +107,12 @@ TEST(ImageTest, RespecificationReleasesReferences)
     texture->setImage(nullptr, defaultUnpackState, GL_TEXTURE_2D, 0, GL_RGBA8, gl::Extents(1, 1, 1),
                       GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    rx::MockImageImpl *imageImpl = new rx::MockImageImpl();
-    egl::Image *image = new egl::Image(imageImpl, EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
+    rx::MockImageImpl *imageImpl =
+        new rx::MockImageImpl(EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
+    EXPECT_CALL(mockEGLFactory, createImage(_, _, _)).WillOnce(Return(imageImpl));
+
+    egl::Image *image =
+        new egl::Image(&mockEGLFactory, EGL_GL_TEXTURE_2D, texture, egl::AttributeMap());
     image->addRef();
 
     // Verify that the image added a ref to the texture and the texture has not added a ref to the
@@ -130,4 +142,4 @@ TEST(ImageTest, RespecificationReleasesReferences)
     EXPECT_CALL(*imageImpl, destructor()).Times(1).RetiresOnSaturation();
     image->release();
 }
-}
+}  // namespace angle
