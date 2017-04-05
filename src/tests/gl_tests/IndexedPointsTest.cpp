@@ -297,6 +297,12 @@ TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset3)
 
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffsetChangingIndices)
 {
+    if (IsOzone() && isIntel() && GetParam() == ES2_OPENGLES())
+    {
+        std::cout << "Test skipped on Ozone Intel." << std::endl;
+        return;
+    }
+
     runTest(3, true);
     runTest(1, true);
     runTest(0, true);
