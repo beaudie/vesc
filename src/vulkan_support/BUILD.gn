@@ -155,6 +155,17 @@ group("vulkan_generate_helper_files") {
   }
 }
 
+config("vulkan_internal_config") {
+  defines = [ "VULKAN_NON_CMAKE_BUILD" ]
+  if (is_clang || !is_win) {
+    cflags = [ "-Wno-unused-function" ]
+
+    # See https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers/issues/1649
+    # TODO(jmadill): Lift this once github issue is fixed.
+    cflags += [ "-Wno-ignored-attributes" ]
+  }
+}
+
 # Vulkan loader
 # -------------
 
@@ -166,22 +177,15 @@ config("vulkan_loader_config") {
     "DEFAULT_VK_LAYERS_PATH=\".\"",
     "API_NAME=\"Vulkan\"",
   ]
+
+  cflags = []
+
   if (is_win) {
     defines += [
       "VK_USE_PLATFORM_WIN32_KHR",
       "VK_USE_PLATFORM_WIN32_KHX",
     ]
-    cflags = [ "/wd4201" ]
-  }
-}
-
-config("vulkan_loader_internal_config") {
-  defines = [ "VULKAN_NON_CMAKE_BUILD" ]
-  if (is_clang || !is_win) {
-    cflags = [
-      "-Wno-unused-function",
-      "-Wno-ignored-attributes",
-    ]
+    cflags += [ "/wd4201" ]
   }
 }
 
@@ -196,7 +200,7 @@ static_library("vulkan_loader") {
   deps = [
     ":vulkan_generate_helper_files",
   ]
-  configs += [ ":vulkan_loader_internal_config" ]
+  configs += [ ":vulkan_internal_config" ]
   public_configs = [ ":vulkan_loader_config" ]
   configs -= vulkan_undefine_configs
 }
@@ -343,7 +347,10 @@ source_set("vulkan_layer_table") {
   public_deps = [
     ":vulkan_generate_helper_files",
   ]
-  public_configs = [ ":vulkan_layer_config" ]
+  public_configs = [
+    ":vulkan_layer_config",
+    ":vulkan_internal_config",
+  ]
   sources = [
     "$target_gen_dir/angle/vulkan/vk_dispatch_table_helper.h",
     "$target_gen_dir/angle/vulkan/vk_enum_string_helper.h",
@@ -403,7 +410,7 @@ source_set("vulkan_layer_utils") {
   sources = rebase_path(vulkan_gypi.vulkan_layer_utils_sources, ".", "src")
   public_configs = [
     ":vulkan_loader_config",
-    ":vulkan_loader_internal_config",
+    ":vulkan_internal_config",
   ]
   public_deps = [
     ":vulkan_generate_helper_files",
@@ -449,8 +456,9 @@ group("angle_vulkan") {
   data_deps = [
     ":vulkan_gen_json_files",
   ]
-  foreach(layer, layer_names) {
-    data_deps += [ ":VkLayer_$layer" ]
+  foreach(layer_info, layers) {
+    name = layer_info[0]
+    data_deps += [ ":VkLayer_$name" ]
   }
   public_configs = [
     ":vulkan_loader_config",
