@@ -336,6 +336,11 @@ static_library("glslang") {
 
 config("vulkan_layer_config") {
   include_dirs = [ "$vulkan_layers_dir/layers" ]
+  if (is_clang && is_win) {
+    cflags = [
+      "-Wno-ignored-attributes",
+    ]
+  }
 }
 
 source_set("vulkan_layer_table") {
