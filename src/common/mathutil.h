@@ -817,7 +817,11 @@ inline int BitCount(unsigned int bits)
 }
 
 // Return the index of the least significant bit set. Indexing is such that bit 0 is the least
-// significant bit.
+// significant bit. Implemented for different bit widths on different platforms.
+template <typename T>
+unsigned long ScanForward(T bits);
+
+template <>
 inline unsigned long ScanForward(unsigned long bits)
 {
     ASSERT(bits != 0u);
@@ -831,6 +835,33 @@ inline unsigned long ScanForward(unsigned long bits)
 #else
 #error Please implement bit-scan-forward for your platform!
 #endif
+}
+
+#if defined(ANGLE_X64_CPU)
+// Return the index of the least significant bit set. Indexing is such that bit 0 is the least
+// significant bit.
+template <>
+inline unsigned long ScanForward(uint64_t bits)
+{
+    ASSERT(bits != 0u);
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    unsigned long firstBitIndex = 0ul;
+    unsigned char ret           = _BitScanForward64(&firstBitIndex, bits);
+    ASSERT(ret != 0u);
+    return firstBitIndex;
+#elif defined(ANGLE_PLATFORM_POSIX)
+    return static_cast<unsigned long>(__builtin_ctzll(bits));
+#else
+#error Please implement bit-scan-forward for your platform!
+#endif
+}
+#endif
+
+template <typename T>
+unsigned long ScanForward(T bits)
+{
+    UNREACHABLE();
+    return 0;
 }
 
 // Return the index of the most significant bit set. Indexing is such that bit 0 is the least
