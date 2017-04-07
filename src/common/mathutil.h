@@ -805,7 +805,7 @@ inline uint32_t BitfieldReverse(uint32_t value)
 }
 
 // Count the 1 bits.
-inline int BitCount(unsigned int bits)
+inline int BitCount(uint32_t bits)
 {
 #if defined(_MSC_VER)
     return static_cast<int>(__popcnt(bits));
@@ -816,9 +816,22 @@ inline int BitCount(unsigned int bits)
 #endif
 }
 
+#if defined(ANGLE_X64_CPU)
+inline int BitCount(uint64_t bits)
+{
+#if defined(_MSC_VER)
+    return static_cast<int>(__popcnt64(bits));
+#elif defined(__GNUC__)
+    return __builtin_popcountll(bits);
+#else
+#error Please implement bit count for your platform!
+#endif
+}
+#endif
+
 // Return the index of the least significant bit set. Indexing is such that bit 0 is the least
-// significant bit.
-inline unsigned long ScanForward(unsigned long bits)
+// significant bit. Implemented for different bit widths on different platforms.
+inline unsigned long ScanForward(uint32_t bits)
 {
     ASSERT(bits != 0u);
 #if defined(ANGLE_PLATFORM_WINDOWS)
@@ -832,6 +845,25 @@ inline unsigned long ScanForward(unsigned long bits)
 #error Please implement bit-scan-forward for your platform!
 #endif
 }
+
+#if defined(ANGLE_X64_CPU)
+// Return the index of the least significant bit set. Indexing is such that bit 0 is the least
+// significant bit.
+inline unsigned long ScanForward(uint64_t bits)
+{
+    ASSERT(bits != 0u);
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    unsigned long firstBitIndex = 0ul;
+    unsigned char ret           = _BitScanForward64(&firstBitIndex, bits);
+    ASSERT(ret != 0u);
+    return firstBitIndex;
+#elif defined(ANGLE_PLATFORM_POSIX)
+    return static_cast<unsigned long>(__builtin_ctzll(bits));
+#else
+#error Please implement bit-scan-forward for your platform!
+#endif
+}
+#endif
 
 // Return the index of the most significant bit set. Indexing is such that bit 0 is the least
 // significant bit.
