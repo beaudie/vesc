@@ -48,7 +48,7 @@ TEST_P(ReadPixelsTest, OutOfBounds)
 
     GLsizei pixelsWidth = 32;
     GLsizei pixelsHeight = 32;
-    GLint offset = 16;
+    GLint offset = 15;
     std::vector<GLColor> pixels((pixelsWidth + offset) * (pixelsHeight + offset));
 
     glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
