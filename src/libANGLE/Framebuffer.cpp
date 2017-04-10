@@ -1247,7 +1247,7 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
     }
 
     // The bitset will skip inactive draw buffers.
-    for (GLuint drawIndex : angle::IterateBitSet(mState.mEnabledDrawBuffers))
+    for (size_t drawIndex : mState.mEnabledDrawBuffers)
     {
         const FramebufferAttachment *attachment = getDrawBuffer(drawIndex);
         if (attachment && attachment->type() == GL_TEXTURE)
