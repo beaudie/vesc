@@ -152,7 +152,7 @@ GLuint GL_APIENTRY GetProgramResourceIndex(GLuint program,
         }
         return context->getProgramResourceIndex(program, programInterface, name);
     }
-    return 0u;
+    return GL_INVALID_INDEX;
 }
 
 void GL_APIENTRY GetProgramResourceName(GLuint program,
@@ -213,13 +213,14 @@ GLint GL_APIENTRY GetProgramResourceLocation(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation() &&
+            !ValidateGetProgramResourceLocation(context, program, programInterface, name))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return -1;
         }
-        UNIMPLEMENTED();
+        return context->getProgramResourceLocation(program, programInterface, name);
     }
-    return 0;
+    return -1;
 }
 
 void GL_APIENTRY UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)

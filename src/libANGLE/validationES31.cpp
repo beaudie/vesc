@@ -41,6 +41,12 @@ bool ValidateNamedProgramInterface(GLenum programInterface)
     }
 }
 
+bool ValidateLocationProgramInterface(GLenum programInterface)
+{
+    return (programInterface == GL_UNIFORM || programInterface == GL_PROGRAM_INPUT ||
+            programInterface == GL_PROGRAM_OUTPUT);
+}
+
 bool ValidateProgramResourceIndex(const Program *programObject,
                                   GLenum programInterface,
                                   GLuint index)
@@ -766,6 +772,38 @@ bool ValidateGetProgramResourceName(Context *context,
         return false;
     }
 
+    return true;
+}
+
+bool ValidateGetProgramResourceLocation(Context *context,
+                                        GLuint program,
+                                        GLenum programInterface,
+                                        const GLchar *name)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+
+    if (!programObject->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Program is not successfully linked."));
+        return false;
+    }
+
+    if (!ValidateLocationProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
     return true;
 }
 
