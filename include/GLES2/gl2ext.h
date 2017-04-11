@@ -3690,6 +3690,47 @@ GL_APICALL void GL_APIENTRY glTexParameterivRobustANGLE (GLenum target, GLenum p
 GL_APICALL void GL_APIENTRY glTexSubImage2DRobustANGLE (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, const void *pixels);
 GL_APICALL void GL_APIENTRY glTexImage3DRobustANGLE (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLsizei bufSize, const void *pixels);
 GL_APICALL void GL_APIENTRY glTexSubImage3DRobustANGLE (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLsizei bufSize, const void *pixels);
+GL_APICALL void GL_APIENTRY glCompressedTexImage2DRobustANGLE(GLenum target,
+                                                              GLint level,
+                                                              GLenum internalformat,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              GLint border,
+                                                              GLsizei imageSize,
+                                                              GLsizei bufSize,
+                                                              const void *data);
+GL_APICALL void GL_APIENTRY glCompressedTexSubImage2DRobustANGLE(GLenum target,
+                                                                 GLint level,
+                                                                 GLint xoffset,
+                                                                 GLint yoffset,
+                                                                 GLsizei width,
+                                                                 GLsizei height,
+                                                                 GLenum format,
+                                                                 GLsizei imageSize,
+                                                                 GLsizei bufSize,
+                                                                 const void *data);
+GL_APICALL void GL_APIENTRY glCompressedTexImage3DRobustANGLE(GLenum target,
+                                                              GLint level,
+                                                              GLenum internalformat,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              GLsizei depth,
+                                                              GLint border,
+                                                              GLsizei imageSize,
+                                                              GLsizei bufSize,
+                                                              const void *data);
+GL_APICALL void GL_APIENTRY glCompressedTexSubImage3DRobustANGLE(GLenum target,
+                                                                 GLint level,
+                                                                 GLint xoffset,
+                                                                 GLint yoffset,
+                                                                 GLint zoffset,
+                                                                 GLsizei width,
+                                                                 GLsizei height,
+                                                                 GLsizei depth,
+                                                                 GLenum format,
+                                                                 GLsizei imageSize,
+                                                                 GLsizei bufSize,
+                                                                 const void *data);
 GL_APICALL void GL_APIENTRY glGetQueryivRobustANGLE (GLenum target, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *params);
 GL_APICALL void GL_APIENTRY glGetQueryObjectuivRobustANGLE (GLuint id, GLenum pname, GLsizei bufSize, GLsizei *length, GLuint *params);
 GL_APICALL void GL_APIENTRY glGetBufferPointervRobustANGLE (GLenum target, GLenum pname, GLsizei bufSize, GLsizei *length, void **params);
