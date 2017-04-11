@@ -167,8 +167,7 @@ bool ValidateDrawRangeElements(Context *context,
                                GLuint end,
                                GLsizei count,
                                GLenum type,
-                               const GLvoid *indices,
-                               IndexRange *indexRange);
+                               const GLvoid *indices);
 
 bool ValidateGetUniformuiv(Context *context, GLuint program, GLint location, GLuint* params);
 
@@ -383,6 +382,13 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
                                   GLenum type,
                                   GLsizei stride,
                                   const GLvoid *pointer);
+
+bool ValidateDrawElementsInstanced(ValidationContext *context,
+                                   GLenum mode,
+                                   GLsizei count,
+                                   GLenum type,
+                                   const GLvoid *indices,
+                                   GLsizei instanceCount);
 
 }  // namespace gl
 
