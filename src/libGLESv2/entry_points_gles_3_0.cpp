@@ -53,15 +53,15 @@ void GL_APIENTRY DrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsize
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        IndexRange indexRange;
+        context->saveParams<EntryPoint::DrawRangeElements>(mode, start, end, count, type, indices);
+
         if (!context->skipValidation() &&
-            !ValidateDrawRangeElements(context, mode, start, end, count, type, indices,
-                                       &indexRange))
+            !ValidateDrawRangeElements(context, mode, start, end, count, type, indices))
         {
             return;
         }
 
-        context->drawRangeElements(mode, start, end, count, type, indices, indexRange);
+        context->drawRangeElements(mode, start, end, count, type, indices);
     }
 }
 
@@ -1476,19 +1476,16 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientMajorVersion() < 3)
-        {
-            context->handleError(Error(GL_INVALID_OPERATION));
-            return;
-        }
+        context->saveParams<EntryPoint::DrawElementsInstanced>(mode, count, type, indices,
+                                                               instanceCount);
 
-        IndexRange indexRange;
-        if (!ValidateDrawElementsInstanced(context, mode, count, type, indices, instanceCount, &indexRange))
+        if (!context->skipValidation() &&
+            !ValidateDrawElementsInstanced(context, mode, count, type, indices, instanceCount))
         {
             return;
         }
 
-        context->drawElementsInstanced(mode, count, type, indices, instanceCount, indexRange);
+        context->drawElementsInstanced(mode, count, type, indices, instanceCount);
     }
 }
 

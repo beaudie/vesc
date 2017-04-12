@@ -208,6 +208,8 @@
             'libANGLE/formatutils.cpp',
             'libANGLE/formatutils.h',
             'libANGLE/histogram_macros.h',
+            'libANGLE/params_gles_2_0.cpp',
+            'libANGLE/params_gles_2_0.h',
             'libANGLE/queryconversions.cpp',
             'libANGLE/queryconversions.h',
             'libANGLE/queryutils.cpp',

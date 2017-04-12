@@ -9,9 +9,11 @@
 #ifndef LIBANGLE_CONTEXTSTATE_H_
 #define LIBANGLE_CONTEXTSTATE_H_
 
+#include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
 #include "libANGLE/State.h"
 #include "libANGLE/Version.h"
+#include "libANGLE/params_gles_2_0.h"
 
 namespace gl
 {
@@ -130,11 +132,29 @@ class ValidationContext : angle::NonCopyable
 
     bool isWebGL1() const { return mState.isWebGL1(); }
 
+    template <EntryPoint EP>
+    const typename EntryPointParamType<EP> &getParams() const;
+
   protected:
     ContextState mState;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
+
+    // Caches entry point parameters and values re-used between layers.
+    mutable EntryPoint mSavedArgsType;
+    mutable angle::MemoryBuffer mParamsBuffer;
 };
+
+template <EntryPoint EP>
+const typename EntryPointParamType<EP> &ValidationContext::getParams() const
+{
+    // ASSERT(mSavedArgsType == EP);
+    const typename EntryPointParamType<EP> *params =
+        reinterpret_cast<EntryPointParamType<EP> *>(mParamsBuffer.data());
+    ASSERT(params->hasDynamicType<EP>());
+    return *params;
+}
+
 }  // namespace gl
 
 #endif  // LIBANGLE_CONTEXTSTATE_H_
