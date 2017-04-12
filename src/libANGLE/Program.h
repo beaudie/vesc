@@ -426,6 +426,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getOutputResourceIndex(const GLchar *name) const;
     void getInputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
     void getOutputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
+    GLint getInputResourceProperty(GLuint index, GLenum prop) const;
+    GLint getOutputResourceProperty(GLuint index, GLenum prop) const;
 
     class Bindings final : angle::NonCopyable
     {

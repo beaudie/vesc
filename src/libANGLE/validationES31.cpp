@@ -41,6 +41,205 @@ bool ValidateNamedProgramInterface(GLenum programInterface)
     }
 }
 
+bool ValidateProgramInterface(GLenum programInterface)
+{
+    return (programInterface == GL_ATOMIC_COUNTER_BUFFER ||
+            ValidateNamedProgramInterface(programInterface));
+}
+
+bool ValidateProgramResourceProperty(GLenum prop)
+{
+    switch (prop)
+    {
+        case GL_ACTIVE_VARIABLES:
+        case GL_BUFFER_BINDING:
+        case GL_NUM_ACTIVE_VARIABLES:
+
+        case GL_ARRAY_SIZE:
+
+        case GL_ARRAY_STRIDE:
+        case GL_BLOCK_INDEX:
+        case GL_IS_ROW_MAJOR:
+        case GL_MATRIX_STRIDE:
+
+        case GL_ATOMIC_COUNTER_BUFFER_INDEX:
+
+        case GL_BUFFER_DATA_SIZE:
+
+        case GL_LOCATION:
+
+        case GL_NAME_LENGTH:
+
+        case GL_OFFSET:
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+
+        case GL_TOP_LEVEL_ARRAY_SIZE:
+        case GL_TOP_LEVEL_ARRAY_STRIDE:
+
+        case GL_TYPE:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+// GLES 3.1 spec: Page 82 -- Table 7.2
+bool ValidateProgramResourcePropertyByInterface(GLenum prop, GLenum programInterface)
+{
+    switch (prop)
+    {
+        case GL_ACTIVE_VARIABLES:
+        case GL_BUFFER_BINDING:
+        case GL_NUM_ACTIVE_VARIABLES:
+        {
+            switch (programInterface)
+            {
+                case GL_ATOMIC_COUNTER_BUFFER:
+                case GL_SHADER_STORAGE_BLOCK:
+                case GL_UNIFORM_BLOCK:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_ARRAY_SIZE:
+        {
+            switch (programInterface)
+            {
+                case GL_BUFFER_VARIABLE:
+                case GL_PROGRAM_INPUT:
+                case GL_PROGRAM_OUTPUT:
+                case GL_TRANSFORM_FEEDBACK_VARYING:
+                case GL_UNIFORM:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_ARRAY_STRIDE:
+        case GL_BLOCK_INDEX:
+        case GL_IS_ROW_MAJOR:
+        case GL_MATRIX_STRIDE:
+        {
+            switch (programInterface)
+            {
+                case GL_BUFFER_VARIABLE:
+                case GL_UNIFORM:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_ATOMIC_COUNTER_BUFFER_INDEX:
+        {
+            if (programInterface == GL_UNIFORM)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_BUFFER_DATA_SIZE:
+        {
+            switch (programInterface)
+            {
+                case GL_ATOMIC_COUNTER_BUFFER:
+                case GL_SHADER_STORAGE_BLOCK:
+                case GL_UNIFORM_BLOCK:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_LOCATION:
+        {
+            // Fixme: ValidateLocationProgramInterface
+            switch (programInterface)
+            {
+                case GL_PROGRAM_INPUT:
+                case GL_PROGRAM_OUTPUT:
+                case GL_UNIFORM:
+                    return true;
+                default:
+                    return false;
+            }
+            return false;
+        }
+
+        case GL_NAME_LENGTH:
+        {
+            return ValidateNamedProgramInterface(programInterface);
+        }
+
+        case GL_OFFSET:
+        {
+            switch (programInterface)
+            {
+                case GL_BUFFER_VARIABLE:
+                case GL_UNIFORM:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+        {
+            switch (programInterface)
+            {
+                case GL_ATOMIC_COUNTER_BUFFER:
+                case GL_BUFFER_VARIABLE:
+                case GL_PROGRAM_INPUT:
+                case GL_PROGRAM_OUTPUT:
+                case GL_SHADER_STORAGE_BLOCK:
+                case GL_UNIFORM:
+                case GL_UNIFORM_BLOCK:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        case GL_TOP_LEVEL_ARRAY_SIZE:
+        case GL_TOP_LEVEL_ARRAY_STRIDE:
+        {
+            if (programInterface == GL_BUFFER_VARIABLE)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        case GL_TYPE:
+        {
+            switch (programInterface)
+            {
+                case GL_BUFFER_VARIABLE:
+                case GL_PROGRAM_INPUT:
+                case GL_PROGRAM_OUTPUT:
+                case GL_TRANSFORM_FEEDBACK_VARYING:
+                case GL_UNIFORM:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        default:
+            return false;
+    }
+}
+
 bool ValidateProgramResourceIndex(const Program *programObject,
                                   GLenum programInterface,
                                   GLuint index)
@@ -766,6 +965,61 @@ bool ValidateGetProgramResourceName(Context *context,
         return false;
     }
 
+    return true;
+}
+
+bool ValidateGetProgramResourceiv(Context *context,
+                                  GLuint program,
+                                  GLenum programInterface,
+                                  GLuint index,
+                                  GLsizei propCount,
+                                  const GLenum *props,
+                                  GLsizei bufSize,
+                                  GLsizei *length,
+                                  GLint *params)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+    if (programObject == nullptr)
+    {
+        return false;
+    }
+    if (!ValidateProgramInterface(programInterface))
+    {
+        context->handleError(
+            Error(GL_INVALID_ENUM, "Invalid program interface: 0x%X", programInterface));
+        return false;
+    }
+    if (propCount <= 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid propCount: %d", propCount));
+        return false;
+    }
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid bufSize: %d", bufSize));
+        return false;
+    }
+    for (GLsizei i = 0; i < propCount; i++)
+    {
+        if (!ValidateProgramResourceProperty(props[i]))
+        {
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid props[%d]:0x%X", i, props[i]));
+            return false;
+        }
+        if (!ValidateProgramResourcePropertyByInterface(props[i], programInterface))
+        {
+            context->handleError(Error(GL_INVALID_OPERATION,
+                                       "props[%d] is not allowed for programInterface:0x%X", i,
+                                       programInterface));
+            return false;
+        }
+    }
     return true;
 }
 

@@ -196,11 +196,14 @@ void GL_APIENTRY GetProgramResourceiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation() &&
+            !ValidateGetProgramResourceiv(context, program, programInterface, index, propCount,
+                                          props, bufSize, length, params))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+        context->getProgramResourceiv(program, programInterface, index, propCount, props, bufSize,
+                                      length, params);
     }
 }
 
