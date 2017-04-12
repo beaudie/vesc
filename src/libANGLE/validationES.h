@@ -60,7 +60,7 @@ bool ValidImageDataSize(ValidationContext *context,
                         GLsizei depth,
                         GLenum internalFormat,
                         GLenum type,
-                        const GLvoid *pixels,
+                        const void *pixels,
                         GLsizei imageSize);
 
 bool ValidQueryType(const Context *context, GLenum queryType);
@@ -69,7 +69,7 @@ bool ValidateWebGLVertexAttribPointer(ValidationContext *context,
                                       GLenum type,
                                       GLboolean normalized,
                                       GLsizei stride,
-                                      const GLvoid *ptr,
+                                      const void *ptr,
                                       bool pureInteger);
 
 // Returns valid program if id is a valid program name
@@ -114,7 +114,7 @@ bool ValidateReadPixels(ValidationContext *context,
                         GLsizei height,
                         GLenum format,
                         GLenum type,
-                        GLvoid *pixels);
+                        void *pixels);
 bool ValidateReadPixelsRobustANGLE(ValidationContext *context,
                                    GLint x,
                                    GLint y,
@@ -126,7 +126,7 @@ bool ValidateReadPixelsRobustANGLE(ValidationContext *context,
                                    GLsizei *length,
                                    GLsizei *columns,
                                    GLsizei *rows,
-                                   GLvoid *pixels);
+                                   void *pixels);
 bool ValidateReadnPixelsEXT(Context *context,
                             GLint x,
                             GLint y,
@@ -135,7 +135,7 @@ bool ValidateReadnPixelsEXT(Context *context,
                             GLenum format,
                             GLenum type,
                             GLsizei bufSize,
-                            GLvoid *pixels);
+                            void *pixels);
 bool ValidateReadnPixelsRobustANGLE(ValidationContext *context,
                                     GLint x,
                                     GLint y,
@@ -147,7 +147,7 @@ bool ValidateReadnPixelsRobustANGLE(ValidationContext *context,
                                     GLsizei *length,
                                     GLsizei *columns,
                                     GLsizei *rows,
-                                    GLvoid *data);
+                                    void *data);
 
 bool ValidateGenQueriesEXT(gl::Context *context, GLsizei n);
 bool ValidateDeleteQueriesEXT(gl::Context *context, GLsizei n);
@@ -270,20 +270,20 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
                                 GLenum mode,
                                 GLsizei count,
                                 GLenum type,
-                                const GLvoid *indices,
+                                const void *indices,
                                 GLsizei primcount);
 
 bool ValidateDrawElementsInstancedCommon(ValidationContext *context,
                                          GLenum mode,
                                          GLsizei count,
                                          GLenum type,
-                                         const GLvoid *indices,
+                                         const void *indices,
                                          GLsizei primcount);
 bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         GLenum mode,
                                         GLsizei count,
                                         GLenum type,
-                                        const GLvoid *indices,
+                                        const void *indices,
                                         GLsizei primcount);
 
 bool ValidateFramebufferTextureBase(Context *context,

@@ -352,7 +352,7 @@ bool ValidateES2TexImageParameters(Context *context,
                                    GLenum format,
                                    GLenum type,
                                    GLsizei imageSize,
-                                   const GLvoid *pixels)
+                                   const void *pixels)
 {
     if (!ValidTexture2DDestinationTarget(context, target))
     {
@@ -1770,7 +1770,7 @@ bool ValidateTexImage2D(Context *context,
                         GLint border,
                         GLenum format,
                         GLenum type,
-                        const GLvoid *pixels)
+                        const void *pixels)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1794,7 +1794,7 @@ bool ValidateTexImage2DRobust(Context *context,
                               GLenum format,
                               GLenum type,
                               GLsizei bufSize,
-                              const GLvoid *pixels)
+                              const void *pixels)
 {
     if (!ValidateRobustEntryPoint(context, bufSize))
     {
@@ -1823,7 +1823,7 @@ bool ValidateTexSubImage2D(Context *context,
                            GLsizei height,
                            GLenum format,
                            GLenum type,
-                           const GLvoid *pixels)
+                           const void *pixels)
 {
 
     if (context->getClientMajorVersion() < 3)
@@ -1848,7 +1848,7 @@ bool ValidateTexSubImage2DRobustANGLE(Context *context,
                                       GLenum format,
                                       GLenum type,
                                       GLsizei bufSize,
-                                      const GLvoid *pixels)
+                                      const void *pixels)
 {
     if (!ValidateRobustEntryPoint(context, bufSize))
     {
@@ -1876,7 +1876,7 @@ bool ValidateCompressedTexImage2D(Context *context,
                                   GLsizei height,
                                   GLint border,
                                   GLsizei imageSize,
-                                  const GLvoid *data)
+                                  const void *data)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1924,7 +1924,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
                                      GLsizei height,
                                      GLenum format,
                                      GLsizei imageSize,
-                                     const GLvoid *data)
+                                     const void *data)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -3244,7 +3244,7 @@ bool ValidateCreateShader(Context *context, GLenum type)
 bool ValidateBufferData(ValidationContext *context,
                         GLenum target,
                         GLsizeiptr size,
-                        const GLvoid *data,
+                        const void *data,
                         GLenum usage)
 {
     if (size < 0)
@@ -3299,7 +3299,7 @@ bool ValidateBufferSubData(ValidationContext *context,
                            GLenum target,
                            GLintptr offset,
                            GLsizeiptr size,
-                           const GLvoid *data)
+                           const void *data)
 {
     if (size < 0 || offset < 0)
     {
@@ -3519,10 +3519,10 @@ static bool ValidBlendEquationMode(GLenum mode)
 }
 
 bool ValidateBlendColor(ValidationContext *context,
-                        GLclampf red,
-                        GLclampf green,
-                        GLclampf blue,
-                        GLclampf alpha)
+                        GLfloat red,
+                        GLfloat green,
+                        GLfloat blue,
+                        GLfloat alpha)
 {
     return true;
 }
@@ -3724,7 +3724,7 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
                                  GLenum type,
                                  GLboolean normalized,
                                  GLsizei stride,
-                                 const GLvoid *ptr)
+                                 const void *ptr)
 {
     if (!ValidateVertexFormatBase(context, index, size, type, false))
     {
@@ -3788,7 +3788,7 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
     return true;
 }
 
-bool ValidateDepthRangef(ValidationContext *context, GLclampf zNear, GLclampf zFar)
+bool ValidateDepthRangef(ValidationContext *context, GLfloat zNear, GLfloat zFar)
 {
     if (context->getExtensions().webglCompatibility && zNear > zFar)
     {
@@ -3862,15 +3862,15 @@ bool ValidateCheckFramebufferStatus(ValidationContext *context, GLenum target)
 }
 
 bool ValidateClearColor(ValidationContext *context,
-                        GLclampf red,
-                        GLclampf green,
-                        GLclampf blue,
-                        GLclampf alpha)
+                        GLfloat red,
+                        GLfloat green,
+                        GLfloat blue,
+                        GLfloat alpha)
 {
     return true;
 }
 
-bool ValidateClearDepthf(ValidationContext *context, GLclampf depth)
+bool ValidateClearDepthf(ValidationContext *context, GLfloat depth)
 {
     return true;
 }
@@ -4493,7 +4493,7 @@ bool ValidateReleaseShaderCompiler(ValidationContext *context)
     return true;
 }
 
-bool ValidateSampleCoverage(ValidationContext *context, GLclampf value, GLboolean invert)
+bool ValidateSampleCoverage(ValidationContext *context, GLfloat value, GLboolean invert)
 {
     return true;
 }
@@ -4514,7 +4514,7 @@ bool ValidateShaderBinary(ValidationContext *context,
                           GLsizei n,
                           const GLuint *shaders,
                           GLenum binaryformat,
-                          const GLvoid *binary,
+                          const void *binary,
                           GLsizei length)
 {
     const std::vector<GLenum> &shaderBinaryFormats = context->getCaps().shaderBinaryFormats;
@@ -4835,7 +4835,7 @@ bool ValidateDrawElements(ValidationContext *context,
                           GLenum mode,
                           GLsizei count,
                           GLenum type,
-                          const GLvoid *indices)
+                          const void *indices)
 {
     return ValidateDrawElementsCommon(context, mode, count, type, indices, 1);
 }

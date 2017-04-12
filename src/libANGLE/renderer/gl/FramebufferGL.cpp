@@ -261,7 +261,7 @@ Error FramebufferGL::readPixels(ContextImpl *context,
                                 const gl::Rectangle &area,
                                 GLenum format,
                                 GLenum type,
-                                GLvoid *pixels) const
+                                void *pixels) const
 {
     // TODO: don't sync the pixel pack state here once the dirty bits contain the pixel pack buffer
     // binding
@@ -582,7 +582,7 @@ gl::Error FramebufferGL::readPixelsRowByRowWorkaround(const gl::Rectangle &area,
                                                       GLenum format,
                                                       GLenum type,
                                                       const gl::PixelPackState &pack,
-                                                      GLvoid *pixels) const
+                                                      void *pixels) const
 {
     intptr_t offset = reinterpret_cast<intptr_t>(pixels);
 
@@ -604,7 +604,7 @@ gl::Error FramebufferGL::readPixelsRowByRowWorkaround(const gl::Rectangle &area,
     for (GLint row = 0; row < area.height; ++row)
     {
         mFunctions->readPixels(area.x, row + area.y, area.width, 1, format, type,
-                               reinterpret_cast<GLvoid *>(offset));
+                               reinterpret_cast<void *>(offset));
         offset += row * rowBytes;
     }
 
@@ -615,7 +615,7 @@ gl::Error FramebufferGL::readPixelsPaddingWorkaround(const gl::Rectangle &area,
                                                      GLenum format,
                                                      GLenum type,
                                                      const gl::PixelPackState &pack,
-                                                     GLvoid *pixels) const
+                                                     void *pixels) const
 {
     const gl::InternalFormat &glFormat =
         gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type));
@@ -641,7 +641,7 @@ gl::Error FramebufferGL::readPixelsPaddingWorkaround(const gl::Rectangle &area,
     intptr_t lastRowOffset =
         reinterpret_cast<intptr_t>(pixels) + skipBytes + (area.height - 1) * rowBytes;
     mFunctions->readPixels(area.x, area.y + area.height - 1, area.width, 1, format, type,
-                           reinterpret_cast<GLvoid *>(lastRowOffset));
+                           reinterpret_cast<void *>(lastRowOffset));
 
     return gl::NoError();
 }

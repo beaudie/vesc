@@ -1298,7 +1298,7 @@ gl::Error Renderer9::applyVertexBuffer(const gl::State &state,
 
 // Applies the indices and element array bindings to the Direct3D 9 device
 gl::Error Renderer9::applyIndexBuffer(const gl::ContextState &data,
-                                      const GLvoid *indices,
+                                      const void *indices,
                                       GLsizei count,
                                       GLenum mode,
                                       GLenum type,
@@ -1383,7 +1383,7 @@ gl::Error Renderer9::drawElementsImpl(const gl::ContextState &data,
                                       GLenum mode,
                                       GLsizei count,
                                       GLenum type,
-                                      const GLvoid *indices,
+                                      const void *indices,
                                       GLsizei /*instances*/)
 {
     startScene();
@@ -1414,7 +1414,11 @@ gl::Error Renderer9::drawElementsImpl(const gl::ContextState &data,
     }
 }
 
-gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
+gl::Error Renderer9::drawLineLoop(GLsizei count,
+                                  GLenum type,
+                                  const void *indices,
+                                  int minIndex,
+                                  gl::Buffer *elementArrayBuffer)
 {
     // Get the raw indices for an indexed draw
     if (type != GL_NONE && elementArrayBuffer)
@@ -1603,7 +1607,10 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
 }
 
 template <typename T>
-static gl::Error drawPoints(IDirect3DDevice9* device, GLsizei count, const GLvoid *indices, int minIndex)
+static gl::Error drawPoints(IDirect3DDevice9 *device,
+                            GLsizei count,
+                            const void *indices,
+                            int minIndex)
 {
     for (int i = 0; i < count; i++)
     {
@@ -1614,7 +1621,11 @@ static gl::Error drawPoints(IDirect3DDevice9* device, GLsizei count, const GLvoi
     return gl::NoError();
 }
 
-gl::Error Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
+gl::Error Renderer9::drawIndexedPoints(GLsizei count,
+                                       GLenum type,
+                                       const void *indices,
+                                       int minIndex,
+                                       gl::Buffer *elementArrayBuffer)
 {
     // Drawing index point lists is unsupported in d3d9, fall back to a regular DrawPrimitive call
     // for each individual point. This call is not expected to happen often.
@@ -2968,7 +2979,7 @@ gl::Error Renderer9::genericDrawElements(Context9 *context,
                                          GLenum mode,
                                          GLsizei count,
                                          GLenum type,
-                                         const GLvoid *indices,
+                                         const void *indices,
                                          GLsizei instances,
                                          const gl::IndexRange &indexRange)
 {
