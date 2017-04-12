@@ -1055,6 +1055,62 @@ void QueryProgramResourceName(const Program *program,
     }
 }
 
+void QueryProgramResourceiv(const Program *program,
+                            GLenum programInterface,
+                            GLuint index,
+                            GLsizei propCount,
+                            const GLenum *props,
+                            GLsizei bufSize,
+                            GLsizei *length,
+                            GLint *params)
+{
+    if (!program->isLinked())
+    {
+        if (length)
+        {
+            *length = 0;
+        }
+    }
+
+    GLsizei i;
+    for (i = 0; i < propCount; i++)
+    {
+        GLint value = GL_INVALID_VALUE;
+        switch (programInterface)
+        {
+            case GL_PROGRAM_INPUT:
+                value = program->getInputResourceProperty(index, props[i]);
+                break;
+
+            case GL_PROGRAM_OUTPUT:
+                value = program->getOutputResourceProperty(index, props[i]);
+                break;
+
+            // TODO(Jie): more interfaces.
+            case GL_UNIFORM:
+            case GL_UNIFORM_BLOCK:
+            case GL_TRANSFORM_FEEDBACK_VARYING:
+            case GL_BUFFER_VARIABLE:
+            case GL_SHADER_STORAGE_BLOCK:
+                UNIMPLEMENTED();
+                break;
+
+            default:
+                UNREACHABLE();
+        }
+
+        *params++ = value;
+        if (i == bufSize)
+        {
+            break;
+        }
+    }
+    if (length != nullptr)
+    {
+        *length = i;
+    }
+}
+
 }  // namespace gl
 
 namespace egl

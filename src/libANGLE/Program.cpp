@@ -171,6 +171,45 @@ void CopyStringToBuffer(GLchar *buffer, const std::string &string, GLsizei bufSi
     }
 }
 
+GLint GetLocationVariableProperty(const sh::VariableWithLocation &var, GLenum prop)
+{
+    GLint value = GL_INVALID_VALUE;
+    switch (prop)
+    {
+        case GL_TYPE:
+            value = var.type;
+            break;
+
+        case GL_ARRAY_SIZE:
+            value = 1;
+            // TODO(Jie): check arary of array.
+            if (var.isArray() && !var.isStruct())
+            {
+                value = static_cast<GLint>(var.elementCount());
+            }
+            break;
+
+        case GL_NAME_LENGTH:
+            value = static_cast<GLint>(var.name.size());
+            if (var.isArray())
+            {
+                // Counts "[0]".
+                value += 3;
+            }
+            // ES31 spec p84: This counts the terminating null char.
+            ++value;
+            break;
+
+        case GL_LOCATION:
+            value = var.location;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+    return value;
+}
+
 }  // anonymous namespace
 
 const char *const g_fakepath = "C:\\fakepath";
@@ -1332,6 +1371,69 @@ void Program::getOutputResourceName(GLuint index,
 
         CopyStringToBuffer(name, nameWithArray, bufSize, length);
     }
+}
+
+GLint Program::getInputResourceProperty(GLuint index, GLenum prop) const
+{
+    ASSERT(index < mState.mAttributes.size());
+    const auto &attribute = mState.mAttributes[index];
+
+    GLint value = GL_INVALID_VALUE;
+    switch (prop)
+    {
+        case GL_TYPE:
+        case GL_ARRAY_SIZE:
+        case GL_LOCATION:
+        case GL_NAME_LENGTH:
+            value = GetLocationVariableProperty(attribute, prop);
+            break;
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+            value = 1;
+            break;
+
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+            value = 0;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+    return value;
+}
+
+GLint Program::getOutputResourceProperty(GLuint index, const GLenum prop) const
+{
+    ASSERT(index < mState.mOutputVariables.size());
+    const auto &outputVariable = mState.mOutputVariables[index];
+
+    GLint value = GL_INVALID_VALUE;
+    switch (prop)
+    {
+        case GL_TYPE:
+        case GL_ARRAY_SIZE:
+        case GL_LOCATION:
+        case GL_NAME_LENGTH:
+            value = GetLocationVariableProperty(outputVariable, prop);
+            break;
+
+        case GL_REFERENCED_BY_VERTEX_SHADER:
+            value = 0;
+            break;
+
+        case GL_REFERENCED_BY_FRAGMENT_SHADER:
+            value = 1;
+            break;
+
+        case GL_REFERENCED_BY_COMPUTE_SHADER:
+            value = 0;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+    return value;
 }
 
 GLint Program::getFragDataLocation(const std::string &name) const
