@@ -2580,6 +2580,15 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                         context->handleError(Error(GL_INVALID_OPERATION));
                         return false;
                     }
+
+                    if (context->getExtensions().webglCompatibility &&
+                        *readColorBuffer == *attachment)
+                    {
+                        context->handleError(
+                            Error(GL_INVALID_OPERATION,
+                                  "Read and write color attachments cannot be the same image."));
+                        return false;
+                    }
                 }
             }
 
@@ -2626,6 +2635,14 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                 if (readBuffer->getSamples() > 0 && !sameBounds)
                 {
                     context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+
+                if (context->getExtensions().webglCompatibility && *readBuffer == *drawBuffer)
+                {
+                    context->handleError(Error(
+                        GL_INVALID_OPERATION,
+                        "Read and write depth stencil attachments cannot be the same image."));
                     return false;
                 }
             }
