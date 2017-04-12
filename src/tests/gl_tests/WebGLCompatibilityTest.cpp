@@ -558,9 +558,10 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
 {
     const std::string &vert =
         "attribute float a_pos;\n"
+        "attribute float a_w;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
+        "    gl_Position = vec4(a_pos, a_pos, a_pos, a_w);\n"
         "}\n";
 
     const std::string &frag =
@@ -574,6 +575,10 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
 
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
+
+    GLint wLocation = glGetAttribLocation(program.get(), "a_w");
+    ASSERT_NE(-1, wLocation);
+
     glUseProgram(program.get());
 
     GLBuffer buffer;
@@ -582,6 +587,10 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
 
     glEnableVertexAttribArray(posLocation);
     glVertexAttribDivisor(posLocation, 1);
+
+    glEnableVertexAttribArray(wLocation);
+    glVertexAttribPointer(wLocation, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+    glVertexAttribDivisor(wLocation, 0);
 
     const uint8_t* zeroOffset = nullptr;
 
