@@ -42,26 +42,47 @@ TEST_P(ReadPixelsTest, OutOfBounds)
         return;
     }
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    EXPECT_GL_NO_ERROR();
-
-    GLsizei pixelsWidth = 32;
-    GLsizei pixelsHeight = 32;
-    GLint offset = 16;
-    std::vector<GLColor> pixels((pixelsWidth + offset) * (pixelsHeight + offset));
-
-    glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
-    EXPECT_GL_NO_ERROR();
-
-    // Expect that all pixels which fell within the framebuffer are red
-    for (int y = pixelsHeight / 2; y < pixelsHeight; y++)
+    // Put color x,y,0,255 at pixel x,y.
+    glEnable(GL_SCISSOR_TEST);
+    for (GLint y = 0; y < getWindowHeight(); ++y)
     {
-        for (int x = pixelsWidth / 2; x < pixelsWidth; x++)
+        for (GLint x = 0; x < getWindowWidth(); ++x)
         {
-            EXPECT_EQ(GLColor::red, pixels[y * (pixelsWidth + offset) + x]);
+            glScissor(x, y, 1, 1);
+            glClearColor(x / GLfloat(255), y / GLfloat(255), 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
         }
     }
+    glDisable(GL_SCISSOR_TEST);
+    EXPECT_GL_NO_ERROR();
+
+    GLsizei pixelsWidth = 4;
+    GLsizei pixelsHeight = 4;
+
+    for (GLubyte i=0; i<3; ++i) {
+    for (GLubyte j=0; j<3; ++j) {
+
+    GLint xoffset         = i*16-2;
+    GLint yoffset         = j*16-2;
+    //std::vector<GLColor> pixels((pixelsWidth + xoffset) * (pixelsHeight + yoffset));
+    std::vector<GLColor> pixels(pixelsWidth * pixelsHeight);
+
+    glReadPixels(xoffset, yoffset, pixelsWidth, pixelsHeight, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
+    EXPECT_GL_NO_ERROR();
+
+    // Expect that all pixels which fell within the framebuffer are correct
+    for (GLubyte y = 0; y < pixelsHeight; y++)
+    {
+        for (GLubyte x = 0; x < pixelsWidth; x++)
+        {
+            GLint xo = x + xoffset, yo = y + yoffset;
+	    if (0 <= xo && xo < getWindowWidth() && 0 <= yo && yo < getWindowHeight()) {
+            EXPECT_EQ(GLColor(GLubyte(xo), GLubyte(yo), 0, 255), pixels[y * pixelsWidth + x]);
+	    }
+        }
+    }
+
+    }}
 }
 
 class ReadPixelsPBOTest : public ReadPixelsTest
@@ -714,7 +735,7 @@ TEST_P(ReadPixelsErrorTest, ReadBufferIsNone)
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(ReadPixelsTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
+ANGLE_INSTANTIATE_TEST(ReadPixelsTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ReadPixelsPBOTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ReadPixelsPBODrawTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ReadPixelsMultisampleTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
