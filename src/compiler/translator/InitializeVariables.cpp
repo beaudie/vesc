@@ -82,7 +82,7 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
             TType arrayType   = elementType;
             arrayType.setArraySize(var.elementCount());
 
-            for (unsigned int i = 0; i < var.arraySize; ++i)
+            for (int i = var.arraySize - 1; i >= 0; --i)
             {
                 TIntermSymbol *arraySymbol = new TIntermSymbol(0, name, arrayType);
                 TIntermBinary *element     = new TIntermBinary(EOpIndexDirect, arraySymbol,
