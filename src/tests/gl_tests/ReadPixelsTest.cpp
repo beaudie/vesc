@@ -32,6 +32,18 @@ class ReadPixelsTest : public ANGLETest
     }
 };
 
+static void fillfb()
+{
+    glEnable(GL_SCISSOR_TEST);
+    for (int i=0;i<32;++i){
+    for (int j=0;j<32;++j){
+        glScissor(i,j,1,1);
+        glClearColor(i/255., j/255., 0., 1.);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }}
+    glDisable(GL_SCISSOR_TEST);
+}
+
 // Test out of bounds framebuffer reads.
 TEST_P(ReadPixelsTest, OutOfBounds)
 {
@@ -44,22 +56,23 @@ TEST_P(ReadPixelsTest, OutOfBounds)
 
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    fillfb();
     EXPECT_GL_NO_ERROR();
 
     GLsizei pixelsWidth = 32;
     GLsizei pixelsHeight = 32;
-    GLint offset = 16;
+    GLint offset = 2;
     std::vector<GLColor> pixels((pixelsWidth + offset) * (pixelsHeight + offset));
 
     glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
     EXPECT_GL_NO_ERROR();
 
     // Expect that all pixels which fell within the framebuffer are red
-    for (int y = pixelsHeight / 2; y < pixelsHeight; y++)
+    for (int y = offset; y < pixelsHeight + offset; y++)
     {
-        for (int x = pixelsWidth / 2; x < pixelsWidth; x++)
+        for (int x = offset; x < pixelsWidth + offset; x++)
         {
-            EXPECT_EQ(GLColor::red, pixels[y * (pixelsWidth + offset) + x]);
+            EXPECT_EQ( GLColor (x-offset, y-offset, 0, 255), pixels[y * (pixelsWidth + offset) + x]);
         }
     }
 }
