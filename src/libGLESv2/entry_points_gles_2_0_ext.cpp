@@ -1984,7 +1984,7 @@ ANGLE_EXPORT void GL_APIENTRY GetBooleanvRobustANGLE(GLenum pname,
 
         if (nativeType == GL_BOOL)
         {
-            context->getBooleanv(pname, params);
+            context->getBooleanvImpl(pname, params);
         }
         else
         {
@@ -2042,7 +2042,7 @@ ANGLE_EXPORT void GL_APIENTRY GetFloatvRobustANGLE(GLenum pname,
 
         if (nativeType == GL_FLOAT)
         {
-            context->getFloatv(pname, params);
+            context->getFloatvImpl(pname, params);
         }
         else
         {
@@ -2103,7 +2103,7 @@ ANGLE_EXPORT void GL_APIENTRY GetIntegervRobustANGLE(GLenum pname,
 
         if (nativeType == GL_INT)
         {
-            context->getIntegerv(pname, data);
+            context->getIntegervImpl(pname, data);
         }
         else
         {
