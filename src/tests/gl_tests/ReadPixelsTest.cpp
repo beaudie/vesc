@@ -42,24 +42,35 @@ TEST_P(ReadPixelsTest, OutOfBounds)
         return;
     }
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    // Put color x,y,0,255 at pixel x,y.
+    glEnable(GL_SCISSOR_TEST);
+    for (int y = 0; y < 32; ++y)
+    {
+        for (int x = 0; x < 32; ++x)
+        {
+            glScissor(x, y, 1, 1);
+            glClearColor(x / 255., y / 255., 0., 1.);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+    }
+    glDisable(GL_SCISSOR_TEST);
     EXPECT_GL_NO_ERROR();
 
     GLsizei pixelsWidth = 32;
     GLsizei pixelsHeight = 32;
-    GLint offset = 16;
+    GLint offset         = 2;
     std::vector<GLColor> pixels((pixelsWidth + offset) * (pixelsHeight + offset));
 
     glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
     EXPECT_GL_NO_ERROR();
 
-    // Expect that all pixels which fell within the framebuffer are red
-    for (int y = pixelsHeight / 2; y < pixelsHeight; y++)
+    // Expect that all pixels which fell within the framebuffer are correct
+    for (int y = offset; y < pixelsHeight + offset; y++)
     {
-        for (int x = pixelsWidth / 2; x < pixelsWidth; x++)
+        for (int x = offset; x < pixelsWidth + offset; x++)
         {
-            EXPECT_EQ(GLColor::red, pixels[y * (pixelsWidth + offset) + x]);
+            EXPECT_EQ(GLColor(x - offset, y - offset, 0, 255),
+                      pixels[y * (pixelsWidth + offset) + x]);
         }
     }
 }
