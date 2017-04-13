@@ -4939,7 +4939,10 @@ bool ValidateGetFramebufferAttachmentParameteriv(ValidationContext *context,
                                                  GLsizei *numParams)
 {
     // Only one parameter is returned from glGetFramebufferAttachmentParameteriv
-    *numParams = 1;
+    if (numParams)
+    {
+        *numParams = 1;
+    }
 
     if (!ValidFramebufferTarget(target))
     {
@@ -5253,7 +5256,10 @@ bool ValidateGetBufferParameteri64vRobustANGLE(ValidationContext *context,
 bool ValidateGetProgramiv(Context *context, GLuint program, GLenum pname, GLsizei *numParams)
 {
     // Currently, all GetProgramiv queries return 1 parameter
-    *numParams = 1;
+    if (numParams)
+    {
+        *numParams = 1;
+    }
 
     Program *programObject = GetValidProgram(context, program);
     if (!programObject)
