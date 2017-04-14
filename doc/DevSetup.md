@@ -77,7 +77,7 @@ Once the build completes, the `out/Debug` or `out/Release` directories will cont
 Presently, it is not possible to build standalone ANGLE for Android.
 But, ANGLE for Android can be built within a Chromium checkout.
 The reason for that is a dependency on Chromium for Android toolchain and that it only supports GN.
-Also, it can only be built on Linux, as this is the only platfrom that Chromium for Android supports.
+Also, it can only be built on Linux, as this is the only platform that Chromium for Android supports.
 In theory, once ANGLE supports standalone GN build, it may be possible to put Chromium for Android toolchain in `third_party` or `buildtools` to build standalone ANGLE for Android.
 
 But, for now, the steps in [Checking out and building Chromium for Android](https://chromium.googlesource.com/chromium/src/+/master/docs/android_build_instructions.md) should be followed to check out Chromium for Android and set up build environment.
