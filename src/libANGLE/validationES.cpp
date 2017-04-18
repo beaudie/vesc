@@ -1785,10 +1785,69 @@ bool CompressedTextureFormatRequiresExactSize(GLenum internalFormat)
 
 bool ValidCompressedImageSize(const ValidationContext *context,
                               GLenum internalFormat,
-                              GLint xoffset,
-                              GLint yoffset,
+                              GLint level,
                               GLsizei width,
                               GLsizei height)
+{
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
+    if (!formatInfo.compressed)
+    {
+        return false;
+    }
+
+    if (width < 0 || height < 0)
+    {
+        return false;
+    }
+
+    if (CompressedTextureFormatRequiresExactSize(internalFormat))
+    {
+        bool sizeSmallerThanBlockSize =
+            (width > 0 && static_cast<GLuint>(width) < formatInfo.compressedBlockWidth) ||
+            (height > 0 && static_cast<GLuint>(height) < formatInfo.compressedBlockHeight);
+
+        if (sizeSmallerThanBlockSize)
+        {
+            // Check if the size is smaller than block size but still divides evenly (eg 1 or 2 but
+            // not 3 when block size is 4).
+            bool blockSizeMultipleOfSize =
+                (width == 0 || (formatInfo.compressedBlockWidth % width) == 0) &&
+                (height == 0 || (formatInfo.compressedBlockHeight % height) == 0);
+
+            // The ANGLE extensions allow specifying compressed textures with sizes smaller than the
+            // block size for level 0 but WebGL disallows this.
+            bool smallerThanBlockSizeAllowed =
+                level > 0 || !context->getExtensions().webglCompatibility;
+
+            if (!smallerThanBlockSizeAllowed || !blockSizeMultipleOfSize)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Check if the size is at least as large as block size and a multiple of block size
+            bool sizeMultipleOfBlockSize = (width % formatInfo.compressedBlockWidth) == 0 &&
+                                           (height % formatInfo.compressedBlockHeight) == 0;
+
+            if (!sizeMultipleOfBlockSize)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool ValidCompressedSubImageSize(const ValidationContext *context,
+                                 GLenum internalFormat,
+                                 GLint xoffset,
+                                 GLint yoffset,
+                                 GLsizei width,
+                                 GLsizei height,
+                                 size_t textureWidth,
+                                 size_t textureHeight)
 {
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
     if (!formatInfo.compressed)
@@ -1804,11 +1863,19 @@ bool ValidCompressedImageSize(const ValidationContext *context,
     if (CompressedTextureFormatRequiresExactSize(internalFormat))
     {
         if (xoffset % formatInfo.compressedBlockWidth != 0 ||
-            yoffset % formatInfo.compressedBlockHeight != 0 ||
-            (static_cast<GLuint>(width) > formatInfo.compressedBlockWidth &&
-             width % formatInfo.compressedBlockWidth != 0) ||
-            (static_cast<GLuint>(height) > formatInfo.compressedBlockHeight &&
-             height % formatInfo.compressedBlockHeight != 0))
+            yoffset % formatInfo.compressedBlockHeight != 0)
+        {
+            return false;
+        }
+
+        // Allowed to either have data that is a multiple of block size or is smaller than the block
+        // size but fills the entire mip
+        bool fillsEntireMip = xoffset == 0 && yoffset == 0 &&
+                              static_cast<size_t>(width) == textureWidth &&
+                              static_cast<size_t>(height) == textureHeight;
+        bool sizeMultipleOfBlockSize = (width % formatInfo.compressedBlockWidth) == 0 &&
+                                       (height % formatInfo.compressedBlockHeight) == 0;
+        if (!sizeMultipleOfBlockSize && !fillsEntireMip)
         {
             return false;
         }
@@ -3228,14 +3295,7 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
 
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
 
-    if (formatInfo.depthBits > 0)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    if (formatInfo.compressed &&
-        !ValidCompressedImageSize(context, internalformat, xoffset, yoffset, width, height))
+    if (formatInfo.depthBits > 0 || formatInfo.compressed)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
