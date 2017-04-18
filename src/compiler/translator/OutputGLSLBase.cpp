@@ -1042,6 +1042,11 @@ bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
 {
     TInfoSinkBase &out = objSink();
 
+    if (node->getSequence()->empty())
+    {
+        return true;
+    }
+
     // Variable declaration.
     if (visit == PreVisit)
     {

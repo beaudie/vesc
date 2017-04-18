@@ -577,7 +577,11 @@ Uniform CollectVariables::recordUniform(const TIntermSymbol &variable) const
 bool CollectVariables::visitDeclaration(Visit, TIntermDeclaration *node)
 {
     const TIntermSequence &sequence = *(node->getSequence());
-    ASSERT(!sequence.empty());
+
+    // We can find empty sequences in edge cases, such as when a constant declaration is the only
+    // statement in a for loop.
+    if (sequence.empty())
+        return false;
 
     const TIntermTyped &typedNode = *(sequence.front()->getAsTyped());
     TQualifier qualifier          = typedNode.getQualifier();

@@ -85,6 +85,12 @@ void TVersionGLSL::visitSymbol(TIntermSymbol *node)
 bool TVersionGLSL::visitDeclaration(Visit, TIntermDeclaration *node)
 {
     const TIntermSequence &sequence = *(node->getSequence());
+
+    if (sequence.empty())
+    {
+        return false;
+    }
+
     if (sequence.front()->getAsTyped()->getType().isInvariant())
     {
         ensureVersionIsAtLeast(GLSL_VERSION_120);

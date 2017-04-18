@@ -1640,6 +1640,12 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
     if (visit == PreVisit)
     {
         TIntermSequence *sequence = node->getSequence();
+
+        if (sequence->empty())
+        {
+            return false;
+        }
+
         TIntermTyped *variable    = (*sequence)[0]->getAsTyped();
         ASSERT(sequence->size() == 1);
 
