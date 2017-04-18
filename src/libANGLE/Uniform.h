@@ -55,17 +55,42 @@ struct LinkedUniform : public sh::Uniform
     mutable angle::MemoryBuffer mLazyData;
 };
 
-// Helper struct representing a single shader uniform block
-struct UniformBlock
+// Helper struct representing a single buffer varable
+struct BufferVariable
 {
-    UniformBlock();
-    UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn);
-    UniformBlock(const UniformBlock &other) = default;
-    UniformBlock &operator=(const UniformBlock &other) = default;
+    BufferVariable(const std::string &name,
+                   const int blockIndex,
+                   const unsigned int arraySize,
+                   const unsigned int topLevelArraySize,
+                   const unsigned int topLevelArrayStride,
+                   const sh::BlockMemberInfo &blockInfo);
+    BufferVariable(const BufferVariable &bufferVariable);
+    BufferVariable &operator=(const BufferVariable &bufferVariable);
+    ~BufferVariable();
+
+    std::string name;
+    int blockIndex;
+    unsigned int arraySize;
+    unsigned int topLevelArraySize;
+    unsigned int topLevelArrayStride;
+    sh::BlockMemberInfo blockInfo;
+};
+
+// Helper struct representing a single shader interface block
+struct InterfaceBlock
+{
+    InterfaceBlock();
+    InterfaceBlock(const std::string &nameIn,
+                   int bindingIn,
+                   bool isArrayIn,
+                   unsigned int arrayElementIn);
+    InterfaceBlock(const InterfaceBlock &other) = default;
+    InterfaceBlock &operator=(const InterfaceBlock &other) = default;
 
     std::string nameWithArrayIndex() const;
 
     std::string name;
+    int binding;
     bool isArray;
     unsigned int arrayElement;
     unsigned int dataSize;
@@ -74,7 +99,7 @@ struct UniformBlock
     bool fragmentStaticUse;
     bool computeStaticUse;
 
-    std::vector<unsigned int> memberUniformIndexes;
+    std::vector<unsigned int> memberIndexes;
 };
 
 }

@@ -181,6 +181,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %token <lex> SAMPLEREXTERNAL2DY2YEXT
 %token <lex> IMAGE2D IIMAGE2D UIMAGE2D IMAGE3D IIMAGE3D UIMAGE3D IMAGE2DARRAY IIMAGE2DARRAY UIMAGE2DARRAY
 %token <lex> IMAGECUBE IIMAGECUBE UIMAGECUBE
+%token <lex> BUFFER
 %token <lex> LAYOUT
 %token <lex> YUVCSCSTANDARDEXT YUVCSCSTANDARDEXTCONSTANT
 
@@ -948,6 +949,10 @@ storage_qualifier
     | UNIFORM {
         context->checkIsAtGlobalLevel(@1, "uniform");
         $$ = new TStorageQualifierWrapper(EvqUniform, @1);
+    }
+    | BUFFER {
+        context->checkIsAtGlobalLevel(@1, "buffer");
+        $$ = new TStorageQualifierWrapper(EvqBuffer, @1);
     }
     | READONLY {
         $$ = new TMemoryQualifierWrapper(EvqReadOnly, @1);

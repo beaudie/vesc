@@ -540,7 +540,6 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
 {
     const TInterfaceBlock *blockType = variable.getType().getInterfaceBlock();
     ASSERT(blockType);
-
     InterfaceBlock interfaceBlock;
     interfaceBlock.name = blockType->name().c_str();
     interfaceBlock.mappedName =
@@ -548,7 +547,11 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
     interfaceBlock.instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize        = variable.getArraySize();
+    interfaceBlock.binding              = variable.getType().getLayoutQualifier().binding;
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
+    TQualifier qualifier                = variable.getType().getQualifier();
+    interfaceBlock.isUniformBlock       = (qualifier == EvqUniform);
+    interfaceBlock.isShaderStorageBlock = (qualifier == EvqBuffer);
     interfaceBlock.layout           = GetBlockLayoutType(blockType->blockStorage());
 
     // Gather field information

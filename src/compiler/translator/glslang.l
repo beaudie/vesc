@@ -198,6 +198,7 @@ O           [0-7]
 "sampler2DArrayShadow" { return ES2_ident_ES3_keyword(context, SAMPLER2DARRAYSHADOW); }
 "__samplerExternal2DY2YEXT"   { return ES3_extension_keyword_else_ident(context, "GL_EXT_YUV_target", SAMPLEREXTERNAL2DY2YEXT); }
 
+"buffer" { return BUFFER; }
 "struct"       { return STRUCT; }
 
 "layout"  { return ES2_ident_ES3_keyword(context, LAYOUT); }

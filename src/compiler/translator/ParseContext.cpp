@@ -2832,9 +2832,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
-    if (typeQualifier.qualifier != EvqUniform)
+    if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
     {
-        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform",
+        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform or buffer",
               getQualifierString(typeQualifier.qualifier));
     }
 
@@ -2844,9 +2844,6 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     }
 
     checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
-
-    // TODO(oetuaho): Remove this and support binding for blocks.
-    checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
 
     checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
 
@@ -2878,17 +2875,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
             error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
+                  "unsupported type - Opaque types are not allowed in interface blocks",
                   fieldType->getBasicString());
         }
 
@@ -2897,6 +2887,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         {
             case EvqGlobal:
             case EvqUniform:
+            case EvqBuffer:
                 break;
             default:
                 error(field->line(), "invalid qualifier on interface block member",

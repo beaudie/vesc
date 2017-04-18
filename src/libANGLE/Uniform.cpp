@@ -134,8 +134,50 @@ const uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex) const
     return const_cast<LinkedUniform *>(this)->getDataPtrToElement(elementIndex);
 }
 
-UniformBlock::UniformBlock()
+BufferVariable::BufferVariable(const std::string &nameIn,
+                               const int blockIndexIn,
+                               const unsigned int arraySizeIn,
+                               const unsigned int topLevelArraySizeIn,
+                               const unsigned int topLevelArrayStrideIn,
+                               const sh::BlockMemberInfo &blockInfoIn)
+    : name(nameIn),
+      blockIndex(blockIndexIn),
+      arraySize(arraySizeIn),
+      topLevelArraySize(topLevelArraySizeIn),
+      topLevelArrayStride(topLevelArrayStrideIn),
+      blockInfo(blockInfoIn)
+{
+}
+
+BufferVariable::BufferVariable(const BufferVariable &buffer)
+    : name(buffer.name),
+      blockIndex(buffer.blockIndex),
+      arraySize(buffer.arraySize),
+      topLevelArraySize(buffer.topLevelArraySize),
+      topLevelArrayStride(buffer.topLevelArrayStride),
+      blockInfo(buffer.blockInfo)
+{
+}
+
+BufferVariable &BufferVariable::operator=(const BufferVariable &buffer)
+{
+    name                = buffer.name;
+    blockIndex          = buffer.blockIndex;
+    arraySize           = buffer.arraySize;
+    topLevelArraySize   = buffer.topLevelArraySize;
+    topLevelArrayStride = buffer.topLevelArrayStride;
+    blockInfo           = buffer.blockInfo;
+
+    return *this;
+}
+
+BufferVariable::~BufferVariable()
+{
+}
+
+InterfaceBlock::InterfaceBlock()
     : isArray(false),
+      binding(-1),
       arrayElement(0),
       dataSize(0),
       vertexStaticUse(false),
@@ -144,8 +186,12 @@ UniformBlock::UniformBlock()
 {
 }
 
-UniformBlock::UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn)
+InterfaceBlock::InterfaceBlock(const std::string &nameIn,
+                               int bindingIn,
+                               bool isArrayIn,
+                               unsigned int arrayElementIn)
     : name(nameIn),
+      binding(bindingIn),
       isArray(isArrayIn),
       arrayElement(arrayElementIn),
       dataSize(0),
@@ -155,7 +201,7 @@ UniformBlock::UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned i
 {
 }
 
-std::string UniformBlock::nameWithArrayIndex() const
+std::string InterfaceBlock::nameWithArrayIndex() const
 {
     std::stringstream fullNameStr;
     fullNameStr << name;
