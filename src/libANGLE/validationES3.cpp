@@ -204,11 +204,30 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (!ValidCompressedImageSize(context, actualFormatInfo.internalFormat, xoffset, yoffset,
-                                      width, height))
+        if (isSubImage)
         {
-            context->handleError(Error(GL_INVALID_OPERATION));
-            return false;
+            if (!ValidCompressedSubImageSize(context, actualFormatInfo.internalFormat, xoffset, yoffset, width,
+                                             height, texture->getWidth(target, level),
+                                             texture->getHeight(target, level)))
+            {
+                context->handleError(Error(GL_INVALID_OPERATION));
+                return false;
+            }
+
+            if (format != actualInternalFormat)
+            {
+                context->handleError(Error(
+                    GL_INVALID_OPERATION, "Format must match the internal format of the texture."));
+                return false;
+            }
+        }
+        else
+        {
+            if (!ValidCompressedImageSize(context, actualInternalFormat, level, width, height))
+            {
+                context->handleError(Error(GL_INVALID_OPERATION));
+                return false;
+            }
         }
 
         if (!actualFormatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
@@ -237,11 +256,6 @@ bool ValidateES3TexImageParametersBase(Context *context,
         if (isCompressed != actualFormatInfo.compressed)
         {
             context->handleError(Error(GL_INVALID_OPERATION));
-            return false;
-        }
-
-        if (width == 0 || height == 0 || depth == 0)
-        {
             return false;
         }
 
