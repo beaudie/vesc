@@ -51,6 +51,12 @@ SeparateArrayInitTraverser::SeparateArrayInitTraverser() : TIntermTraverser(true
 bool SeparateArrayInitTraverser::visitDeclaration(Visit, TIntermDeclaration *node)
 {
     TIntermSequence *sequence = node->getSequence();
+
+    if (sequence->empty())
+    {
+        return false;
+    }
+
     TIntermBinary *initNode   = sequence->back()->getAsBinaryNode();
     if (initNode != nullptr && initNode->getOp() == EOpInitialize)
     {
