@@ -12,6 +12,7 @@
 
 #include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/Version.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
@@ -66,6 +67,21 @@ gl::ErrorOrResult<bool> ShouldApplyLastRowPaddingWorkaround(const gl::Extents &s
                                                             GLenum type,
                                                             bool is3D,
                                                             const void *pixels);
+
+struct ContextCreationTry
+{
+    ContextCreationTry(EGLint displayType, bool core, gl::Version version)
+        : displayType(displayType), core(core), version(version)
+    {
+    }
+
+    EGLint displayType;
+    bool core;
+    gl::Version version;
+};
+
+std::vector<ContextCreationTry> GenerateContextCreationToTry(bool isMesa);
+
 }
 
 #endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
