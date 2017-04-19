@@ -1729,65 +1729,64 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 				}
 			else
 				/* Can't grow it, we don't own it. */
-				b->yy_ch_buf = NULL;
+                                b->yy_ch_buf = nullptr;
 
-			if ( ! b->yy_ch_buf )
-				YY_FATAL_ERROR(
-				"fatal error - scanner input buffer overflow" );
+                        if (!b->yy_ch_buf)
+                            YY_FATAL_ERROR("fatal error - scanner input buffer overflow");
 
-			yyg->yy_c_buf_p = &b->yy_ch_buf[yy_c_buf_p_offset];
+                        yyg->yy_c_buf_p = &b->yy_ch_buf[yy_c_buf_p_offset];
 
-			num_to_read = static_cast<int>(YY_CURRENT_BUFFER_LVALUE->yy_buf_size -
-						number_to_move - 1);
+                        num_to_read = static_cast<int>(YY_CURRENT_BUFFER_LVALUE->yy_buf_size -
+                                                       number_to_move - 1);
+                        }
 
-			}
+                        if (num_to_read > YY_READ_BUF_SIZE)
+                            num_to_read = YY_READ_BUF_SIZE;
 
-		if ( num_to_read > YY_READ_BUF_SIZE )
-			num_to_read = YY_READ_BUF_SIZE;
+                        /* Read in more data. */
+                        yy_size_t ret = 0;
+                        YY_INPUT((&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]), ret,
+                                 num_to_read);
+                        yyg->yy_n_chars = static_cast<int>(ret);
 
-		/* Read in more data. */
-		yy_size_t ret = 0;
-		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			ret, num_to_read );
-		yyg->yy_n_chars = static_cast<int>(ret);
+                        YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
+                }
 
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
-		}
+                if (yyg->yy_n_chars == 0)
+                {
+                    if (number_to_move == YY_MORE_ADJ)
+                    {
+                        ret_val = EOB_ACT_END_OF_FILE;
+                        pprestart(yyin, yyscanner);
+                    }
 
-	if ( yyg->yy_n_chars == 0 )
-		{
-		if ( number_to_move == YY_MORE_ADJ )
-			{
-			ret_val = EOB_ACT_END_OF_FILE;
-			pprestart(yyin  ,yyscanner);
-			}
+                    else
+                    {
+                        ret_val                                    = EOB_ACT_LAST_MATCH;
+                        YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_EOF_PENDING;
+                    }
+                }
 
-		else
-			{
-			ret_val = EOB_ACT_LAST_MATCH;
-			YY_CURRENT_BUFFER_LVALUE->yy_buffer_status =
-				YY_BUFFER_EOF_PENDING;
-			}
-		}
+                else
+                    ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	else
-		ret_val = EOB_ACT_CONTINUE_SCAN;
+                if ((int)(yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size)
+                {
+                    /* Extend the array by 50%, plus the number we really need. */
+                    yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
+                    YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *)pprealloc(
+                        (void *)YY_CURRENT_BUFFER_LVALUE->yy_ch_buf, new_size, yyscanner);
+                    if (!YY_CURRENT_BUFFER_LVALUE->yy_ch_buf)
+                        YY_FATAL_ERROR("out of dynamic memory in yy_get_next_buffer()");
+                }
 
-	if ((int) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
-		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
-		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) pprealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size ,yyscanner );
-		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
-	}
+                yyg->yy_n_chars += static_cast<int>(number_to_move);
+                YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars]     = YY_END_OF_BUFFER_CHAR;
+                YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars + 1] = YY_END_OF_BUFFER_CHAR;
 
-	yyg->yy_n_chars += static_cast<int>(number_to_move);
-	YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars] = YY_END_OF_BUFFER_CHAR;
-	YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars + 1] = YY_END_OF_BUFFER_CHAR;
+                yyg->yytext_ptr = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[0];
 
-	yyg->yytext_ptr = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[0];
-
-	return ret_val;
+                return ret_val;
 }
 
 
@@ -2157,14 +2156,15 @@ void pppop_buffer_state (yyscan_t yyscanner)
 		return;
 
 	pp_delete_buffer(YY_CURRENT_BUFFER ,yyscanner);
-	YY_CURRENT_BUFFER_LVALUE = NULL;
-	if (yyg->yy_buffer_stack_top > 0)
-		--yyg->yy_buffer_stack_top;
+        YY_CURRENT_BUFFER_LVALUE = nullptr;
+        if (yyg->yy_buffer_stack_top > 0)
+            --yyg->yy_buffer_stack_top;
 
-	if (YY_CURRENT_BUFFER) {
-		pp_load_buffer_state(yyscanner );
-		yyg->yy_did_buffer_switch_on_eof = 1;
-	}
+        if (YY_CURRENT_BUFFER)
+        {
+            pp_load_buffer_state(yyscanner);
+            yyg->yy_did_buffer_switch_on_eof = 1;
+        }
 }
 
 
@@ -2243,16 +2243,16 @@ YY_BUFFER_STATE pp_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscann
 	b->yy_buf_size = static_cast<int>(size - 2);	/* "- 2" to take care of EOB's */
 	b->yy_buf_pos = b->yy_ch_buf = base;
 	b->yy_is_our_buffer = 0;
-	b->yy_input_file = NULL;
-	b->yy_n_chars = b->yy_buf_size;
-	b->yy_is_interactive = 0;
-	b->yy_at_bol = 1;
-	b->yy_fill_buffer = 0;
-	b->yy_buffer_status = YY_BUFFER_NEW;
+        b->yy_input_file             = nullptr;
+        b->yy_n_chars                = b->yy_buf_size;
+        b->yy_is_interactive         = 0;
+        b->yy_at_bol                 = 1;
+        b->yy_fill_buffer            = 0;
+        b->yy_buffer_status          = YY_BUFFER_NEW;
 
-	pp_switch_to_buffer(b ,yyscanner );
+        pp_switch_to_buffer(b, yyscanner);
 
-	return b;
+        return b;
 }
 
 
@@ -2645,11 +2645,10 @@ static int yy_init_globals (yyscan_t yyscanner)
      * This function is called from pplex_destroy(), so don't allocate here.
      */
 
-
-    yyg->yy_buffer_stack = NULL;
+    yyg->yy_buffer_stack     = nullptr;
     yyg->yy_buffer_stack_top = 0;
     yyg->yy_buffer_stack_max = 0;
-    yyg->yy_c_buf_p = NULL;
+    yyg->yy_c_buf_p          = nullptr;
     yyg->yy_init = 0;
     yyg->yy_start = 0;
 
@@ -2668,8 +2667,8 @@ static int yy_init_globals (yyscan_t yyscanner)
     yyin = stdin;
     yyout = stdout;
 #else
-    yyin = NULL;
-    yyout = NULL;
+    yyin  = nullptr;
+    yyout = nullptr;
 #endif
 
     /* For future reference: Set errno on error, since we are called by
@@ -2687,30 +2686,26 @@ int pplex_destroy  (yyscan_t yyscanner)
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
 		pp_delete_buffer(YY_CURRENT_BUFFER ,yyscanner );
-		YY_CURRENT_BUFFER_LVALUE = NULL;
-		pppop_buffer_state(yyscanner);
-	}
+                YY_CURRENT_BUFFER_LVALUE = nullptr;
+                pppop_buffer_state(yyscanner);
+        }
 
-	/* Destroy the stack itself. */
-	ppfree(yyg->yy_buffer_stack ,yyscanner);
-	yyg->yy_buffer_stack = NULL;
+        /* Destroy the stack itself. */
+        ppfree(yyg->yy_buffer_stack, yyscanner);
+        yyg->yy_buffer_stack = nullptr;
 
-
-    /* Destroy the start condition stack. */
+        /* Destroy the start condition stack. */
         ppfree(yyg->yy_start_stack ,yyscanner );
-        yyg->yy_start_stack = NULL;
+        yyg->yy_start_stack = nullptr;
 
+        /* Reset the globals. This is important in a non-reentrant scanner so the next time
+         * pplex() is called, initialization will occur. */
+        yy_init_globals(yyscanner);
 
-
-
-    /* Reset the globals. This is important in a non-reentrant scanner so the next time
-     * pplex() is called, initialization will occur. */
-    yy_init_globals( yyscanner);
-
-    /* Destroy the main struct (reentrant only). */
-    ppfree ( yyscanner , yyscanner );
-    yyscanner = NULL;
-    return 0;
+        /* Destroy the main struct (reentrant only). */
+        ppfree(yyscanner, yyscanner);
+        yyscanner = nullptr;
+        return 0;
 }
 
 

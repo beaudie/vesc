@@ -1567,7 +1567,7 @@ private:
 
     //! Initialize this value as copy string with initial data, without calling destructor.
     void SetStringRaw(StringRefType s, Allocator& allocator) {
-        Ch* str = NULL;
+        Ch *str = nullptr;
         if(ShortString::Usable(s.length)) {
             flags_ = kShortStringFlag;
             data_.ss.SetLength(s.length);
