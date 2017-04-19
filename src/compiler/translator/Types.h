@@ -158,7 +158,8 @@ class TInterfaceBlock : public TFieldListCollection
           mInstanceName(instanceName),
           mArraySize(arraySize),
           mBlockStorage(layoutQualifier.blockStorage),
-          mMatrixPacking(layoutQualifier.matrixPacking)
+          mMatrixPacking(layoutQualifier.matrixPacking),
+          mBinding(layoutQualifier.binding)
     {
     }
 
@@ -168,6 +169,7 @@ class TInterfaceBlock : public TFieldListCollection
     int arraySize() const { return mArraySize; }
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
     TLayoutMatrixPacking matrixPacking() const { return mMatrixPacking; }
+    int blockBinding() const { return mBinding; }
     const TString &mangledName() const
     {
         if (mMangledName.empty())
@@ -180,6 +182,7 @@ class TInterfaceBlock : public TFieldListCollection
     int mArraySize;                // 0 if not an array
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
+    int mBinding;
 };
 
 //

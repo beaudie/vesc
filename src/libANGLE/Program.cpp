@@ -878,6 +878,7 @@ Error Program::loadBinary(const Context *context,
         stream.readString(&uniformBlock.name);
         stream.readBool(&uniformBlock.isArray);
         stream.readInt(&uniformBlock.arrayElement);
+        stream.readInt(&uniformBlock.binding);
         stream.readInt(&uniformBlock.dataSize);
         stream.readBool(&uniformBlock.vertexStaticUse);
         stream.readBool(&uniformBlock.fragmentStaticUse);
@@ -1025,6 +1026,7 @@ Error Program::saveBinary(const Context *context,
         stream.writeString(uniformBlock.name);
         stream.writeInt(uniformBlock.isArray);
         stream.writeInt(uniformBlock.arrayElement);
+        stream.writeInt(uniformBlock.binding);
         stream.writeInt(uniformBlock.dataSize);
 
         stream.writeInt(uniformBlock.vertexStaticUse);
@@ -1794,12 +1796,10 @@ GLint Program::getActiveUniformBlockMaxLength() const
             const UniformBlock &uniformBlock = mState.mUniformBlocks[uniformBlockIndex];
             if (!uniformBlock.name.empty())
             {
-                const int length = static_cast<int>(uniformBlock.name.length()) + 1;
-
-                // Counting in "[0]".
-                const int arrayLength = (uniformBlock.isArray ? 3 : 0);
-
-                maxLength = std::max(length + arrayLength, maxLength);
+                int length = static_cast<int>(uniformBlock.isArray
+                                                  ? uniformBlock.nameWithArrayIndex().length()
+                                                  : uniformBlock.name.length());
+                maxLength = std::max(length + 1, maxLength);
             }
         }
     }
@@ -2283,7 +2283,9 @@ bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
                 << "' between vertex and fragment shaders";
         return false;
     }
-    if (vertexInterfaceBlock.layout != fragmentInterfaceBlock.layout || vertexInterfaceBlock.isRowMajorLayout != fragmentInterfaceBlock.isRowMajorLayout)
+    if (vertexInterfaceBlock.layout != fragmentInterfaceBlock.layout ||
+        vertexInterfaceBlock.isRowMajorLayout != fragmentInterfaceBlock.isRowMajorLayout ||
+        vertexInterfaceBlock.binding != fragmentInterfaceBlock.binding)
     {
         infoLog << "Layout qualifiers differ for interface block '" << blockName
                 << "' between vertex and fragment shaders";
@@ -2787,6 +2789,12 @@ void Program::gatherInterfaceBlockInfo()
         defineUniformBlock(fragmentBlock, GL_FRAGMENT_SHADER);
         visitedList.insert(fragmentBlock.name);
     }
+    // Set initial bindings from shader.
+    for (unsigned int blockIndex = 0; blockIndex < mState.mUniformBlocks.size(); blockIndex++)
+    {
+        UniformBlock &uniformBlock = mState.mUniformBlocks[blockIndex];
+        bindUniformBlock(blockIndex, uniformBlock.binding);
+    }
 }
 
 template <typename VarT>
@@ -2831,18 +2839,6 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     int blockIndex   = static_cast<int>(mState.mUniformBlocks.size());
     size_t blockSize = 0;
 
-    // Don't define this block at all if it's not active in the implementation.
-    std::stringstream blockNameStr;
-    blockNameStr << interfaceBlock.name;
-    if (interfaceBlock.arraySize > 0)
-    {
-        blockNameStr << "[0]";
-    }
-    if (!mProgram->getUniformBlockSize(blockNameStr.str(), &blockSize))
-    {
-        return;
-    }
-
     // Track the first and last uniform index to determine the range of active uniforms in the
     // block.
     size_t firstBlockUniformIndex = mState.mUniforms.size();
@@ -2860,7 +2856,14 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     {
         for (unsigned int arrayElement = 0; arrayElement < interfaceBlock.arraySize; ++arrayElement)
         {
-            UniformBlock block(interfaceBlock.name, true, arrayElement);
+            // Don't define this block at all if it's not active in the implementation.
+            if (!mProgram->getUniformBlockSize(interfaceBlock.name + ArrayString(arrayElement),
+                                               &blockSize))
+            {
+                continue;
+            }
+            UniformBlock block(interfaceBlock.name, true, arrayElement,
+                               interfaceBlock.binding + arrayElement);
             block.memberUniformIndexes = blockUniformIndexes;
 
             switch (shaderType)
@@ -2893,7 +2896,11 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     }
     else
     {
-        UniformBlock block(interfaceBlock.name, false, 0);
+        if (!mProgram->getUniformBlockSize(interfaceBlock.name, &blockSize))
+        {
+            return;
+        }
+        UniformBlock block(interfaceBlock.name, false, 0, interfaceBlock.binding);
         block.memberUniformIndexes = blockUniformIndexes;
 
         switch (shaderType)
