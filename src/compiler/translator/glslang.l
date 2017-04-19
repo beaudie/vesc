@@ -634,7 +634,7 @@ int yuvcscstandardext_constant(TParseContext *context)
 }
 
 int glslang_initialize(TParseContext* context) {
-    yyscan_t scanner = NULL;
+    yyscan_t scanner = nullptr;
     if (yylex_init_extra(context, &scanner))
         return 1;
 
