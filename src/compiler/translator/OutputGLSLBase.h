@@ -75,6 +75,8 @@ class TOutputGLSLBase : public TIntermTraverser
     // Used to translate function names for differences between ESSL and GLSL
     virtual TString translateTextureFunction(const TString &name) { return name; }
 
+    int getShaderVersion() const { return mShaderVersion; }
+
   private:
     bool structDeclared(const TStructure *structure) const;
     void declareStruct(const TStructure *structure);

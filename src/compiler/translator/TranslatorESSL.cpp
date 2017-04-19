@@ -45,7 +45,7 @@ void TranslatorESSL::translate(TIntermNode *root, ShCompileOptions compileOption
     }
 
     // Write built-in extension behaviors.
-    writeExtensionBehavior(compileOptions);
+    writeExtensionBehavior(compileOptions, shaderVer);
 
     // Write pragmas after extensions because some drivers consider pragmas
     // like non-preprocessor tokens.
@@ -116,7 +116,7 @@ bool TranslatorESSL::shouldFlattenPragmaStdglInvariantAll()
     return false;
 }
 
-void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
+void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions, int shaderVer)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
     const TExtensionBehavior &extBehavior = getExtensionBehavior();
@@ -140,6 +140,13 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                      (iter->first == "GL_OVR_multiview" || iter->first == "GL_OVR_multiview2"))
             {
                 // No output
+                continue;
+            }
+            else if ((iter->first == "GL_EXT_shader_texture_lod" && shaderVer >= 300) ||
+                     (iter->first == "GL_OES_standard_derivatives" && shaderVer >= 300) ||
+                     (iter->first == "GL_EXT_frag_depth" && shaderVer >= 300))
+            {
+                // No output, feature is core
                 continue;
             }
             else
