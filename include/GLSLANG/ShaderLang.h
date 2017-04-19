@@ -25,7 +25,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 174
+#define ANGLE_SH_VERSION 175
 
 enum ShShaderSpec
 {
@@ -376,6 +376,9 @@ struct ShBuiltInResources
 
     // maximum number of buffer object storage in machine units
     int MaxAtomicCounterBufferSize;
+
+    // maximum number of uniform block bindings
+    int MaxUniformBufferBindings;
 };
 
 //
