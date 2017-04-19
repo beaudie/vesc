@@ -44,4 +44,43 @@ bool TOutputESSL::writeVariablePrecision(TPrecision precision)
     return true;
 }
 
+void TOutputESSL::visitSymbol(TIntermSymbol *node)
+{
+    TInfoSinkBase &out = objSink();
+
+    const TString &symbol = node->getSymbol();
+    if (symbol == "gl_FragDepthEXT" && getShaderVersion() >= 300)
+    {
+        out << "gl_FragDepth";
+    }
+    else
+    {
+        TOutputGLSLBase::visitSymbol(node);
+    }
+}
+
+TString TOutputESSL::translateTextureFunction(const TString &name)
+{
+    if (getShaderVersion() >= 300)
+    {
+        const std::pair<const char *, const char *> essl300Renames[] = {
+            // EXT_shader_texture_lod
+            {"texture2DLodEXT", "textureLod"},         {"texture2DProjLodEXT", "textureProjLod"},
+            {"texture2DProjLodEXT", "textureProjLod"}, {"textureCubeLodEXT", "textureLod"},
+            {"texture2DGradEXT", "textureGrad"},       {"texture2DProjGradEXT", "textureProjGrad"},
+            {"textureCubeGradEXT", "textureGrad"},
+        };
+
+        for (const auto &rename : essl300Renames)
+        {
+            if (name == rename.first)
+            {
+                return rename.second;
+            }
+        }
+    }
+
+    return name;
+}
+
 }  // namespace sh
