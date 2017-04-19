@@ -80,14 +80,14 @@ enum
 
 Renderer9::Renderer9(egl::Display *display) : RendererD3D(display), mStateManager(this)
 {
-    mD3d9Module = NULL;
+    mD3d9Module = nullptr;
 
-    mD3d9 = NULL;
-    mD3d9Ex = NULL;
-    mDevice = NULL;
-    mDeviceEx = NULL;
-    mDeviceWindow = NULL;
-    mBlit = NULL;
+    mD3d9         = nullptr;
+    mD3d9Ex       = nullptr;
+    mDevice       = nullptr;
+    mDeviceEx     = nullptr;
+    mDeviceWindow = nullptr;
+    mBlit         = nullptr;
 
     mAdapter = D3DADAPTER_DEFAULT;
 
@@ -112,12 +112,12 @@ Renderer9::Renderer9(egl::Display *display) : RendererD3D(display), mStateManage
         UNREACHABLE();
     }
 
-    mMaskedClearSavedState = NULL;
+    mMaskedClearSavedState = nullptr;
 
-    mVertexDataManager = NULL;
-    mIndexDataManager = NULL;
-    mLineLoopIB = NULL;
-    mCountingIB = NULL;
+    mVertexDataManager = nullptr;
+    mIndexDataManager  = nullptr;
+    mLineLoopIB        = nullptr;
+    mCountingIB        = nullptr;
 
     mMaxNullColorbufferLRU = 0;
     for (int i = 0; i < NUM_NULL_COLORBUFFER_CACHE_ENTRIES; i++)
@@ -125,11 +125,11 @@ Renderer9::Renderer9(egl::Display *display) : RendererD3D(display), mStateManage
         mNullColorbufferCache[i].lruCount = 0;
         mNullColorbufferCache[i].width = 0;
         mNullColorbufferCache[i].height = 0;
-        mNullColorbufferCache[i].buffer = NULL;
+        mNullColorbufferCache[i].buffer   = nullptr;
     }
 
-    mAppliedVertexShader = NULL;
-    mAppliedPixelShader = NULL;
+    mAppliedVertexShader  = nullptr;
+    mAppliedPixelShader   = nullptr;
     mAppliedProgramSerial = 0;
 
     gl::InitializeDebugAnnotations(&mAnnotator);
@@ -172,10 +172,10 @@ void Renderer9::release()
     if (mDeviceWindow)
     {
         DestroyWindow(mDeviceWindow);
-        mDeviceWindow = NULL;
+        mDeviceWindow = nullptr;
     }
 
-    mD3d9Module = NULL;
+    mD3d9Module = nullptr;
 }
 
 egl::Error Renderer9::initialize()
@@ -571,7 +571,7 @@ void Renderer9::endScene()
 
 gl::Error Renderer9::flush()
 {
-    IDirect3DQuery9* query = NULL;
+    IDirect3DQuery9 *query = nullptr;
     gl::Error error = allocateEventQuery(&query);
     if (error.isError())
     {
@@ -603,7 +603,7 @@ gl::Error Renderer9::flush()
 
 gl::Error Renderer9::finish()
 {
-    IDirect3DQuery9* query = NULL;
+    IDirect3DQuery9 *query = nullptr;
     gl::Error error = allocateEventQuery(&query);
     if (error.isError())
     {
@@ -940,7 +940,7 @@ gl::Error Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *te
 {
     int d3dSamplerOffset = (type == gl::SAMPLER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
     int d3dSampler = index + d3dSamplerOffset;
-    IDirect3DBaseTexture9 *d3dTexture = NULL;
+    IDirect3DBaseTexture9 *d3dTexture = nullptr;
     bool forceSetTexture = false;
 
     std::vector<uintptr_t> &appliedTextures = (type == gl::SAMPLER_PIXEL) ? mCurPixelTextures : mCurVertexTextures;
@@ -1349,7 +1349,7 @@ gl::Error Renderer9::drawArraysImpl(const gl::ContextState &data,
     }
     else if (instances > 0)
     {
-        StaticIndexBufferInterface *countingIB = NULL;
+        StaticIndexBufferInterface *countingIB = nullptr;
         gl::Error error = getCountingIB(count, &countingIB);
         if (error.isError())
         {
@@ -1421,7 +1421,7 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
     {
         BufferD3D *storage = GetImplAs<BufferD3D>(elementArrayBuffer);
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
-        const uint8_t *bufferData = NULL;
+        const uint8_t *bufferData = nullptr;
         gl::Error error = storage->getData(&bufferData);
         if (error.isError())
         {
@@ -1460,7 +1460,7 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
             return error;
         }
 
-        void* mappedMemory = NULL;
+        void *mappedMemory  = nullptr;
         unsigned int offset = 0;
         error = mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
         if (error.isError())
@@ -1538,7 +1538,7 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
             return error;
         }
 
-        void* mappedMemory = NULL;
+        void *mappedMemory = nullptr;
         unsigned int offset;
         error = mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
         if (error.isError())
@@ -1624,7 +1624,7 @@ gl::Error Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid 
         BufferD3D *storage = GetImplAs<BufferD3D>(elementArrayBuffer);
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
 
-        const uint8_t *bufferData = NULL;
+        const uint8_t *bufferData = nullptr;
         gl::Error error = storage->getData(&bufferData);
         if (error.isError())
         {
@@ -1656,7 +1656,7 @@ gl::Error Renderer9::getCountingIB(size_t count, StaticIndexBufferInterface **ou
             mCountingIB = new StaticIndexBufferInterface(this);
             mCountingIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_SHORT);
 
-            void *mappedMemory = NULL;
+            void *mappedMemory = nullptr;
             gl::Error error = mCountingIB->mapBuffer(spaceNeeded, &mappedMemory, NULL);
             if (error.isError())
             {
@@ -1686,7 +1686,7 @@ gl::Error Renderer9::getCountingIB(size_t count, StaticIndexBufferInterface **ou
             mCountingIB = new StaticIndexBufferInterface(this);
             mCountingIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT);
 
-            void *mappedMemory = NULL;
+            void *mappedMemory = nullptr;
             gl::Error error = mCountingIB->mapBuffer(spaceNeeded, &mappedMemory, NULL);
             if (error.isError())
             {
@@ -1725,11 +1725,11 @@ gl::Error Renderer9::applyShaders(const gl::ContextState &data, GLenum drawMode)
 
     const auto &inputLayout = programD3D->getCachedInputLayout();
 
-    ShaderExecutableD3D *vertexExe = NULL;
+    ShaderExecutableD3D *vertexExe = nullptr;
     ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
 
     const gl::Framebuffer *drawFramebuffer = data.getState().getDrawFramebuffer();
-    ShaderExecutableD3D *pixelExe = NULL;
+    ShaderExecutableD3D *pixelExe          = nullptr;
     ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
 
     IDirect3DVertexShader9 *vertexShader = (vertexExe ? GetAs<ShaderExecutable9>(vertexExe)->getVertexShader() : nullptr);
@@ -1911,7 +1911,7 @@ gl::Error Renderer9::clear(const ClearParameters &clearParams,
     {
         ASSERT(colorBuffer != nullptr);
 
-        RenderTargetD3D *colorRenderTarget = NULL;
+        RenderTargetD3D *colorRenderTarget = nullptr;
         gl::Error error = colorBuffer->getRenderTarget(&colorRenderTarget);
         if (error.isError())
         {
@@ -2140,8 +2140,8 @@ void Renderer9::markAllStateDirty()
     }
 
     mAppliedIBSerial = 0;
-    mAppliedVertexShader = NULL;
-    mAppliedPixelShader = NULL;
+    mAppliedVertexShader  = nullptr;
+    mAppliedPixelShader   = nullptr;
     mAppliedProgramSerial = 0;
     mStateManager.forceSetDXUniformsState();
 
@@ -2288,7 +2288,7 @@ bool Renderer9::isRemovedDeviceResettable() const
     bool success = false;
 
 #if ANGLE_D3D9EX == ANGLE_ENABLED
-    IDirect3D9Ex *d3d9Ex = NULL;
+    IDirect3D9Ex *d3d9Ex = nullptr;
     typedef HRESULT (WINAPI *Direct3DCreate9ExFunc)(UINT, IDirect3D9Ex**);
     Direct3DCreate9ExFunc Direct3DCreate9ExPtr = reinterpret_cast<Direct3DCreate9ExFunc>(GetProcAddress(mD3d9Module, "Direct3DCreate9Ex"));
 
@@ -2499,7 +2499,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
 
     IDirect3DTexture9 *texture      = nullptr;
-    IDirect3DSurface9 *renderTarget = NULL;
+    IDirect3DSurface9 *renderTarget = nullptr;
     if (width > 0 && height > 0)
     {
         bool requiresInitialization = false;
@@ -2544,7 +2544,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
             // This format requires that the data be initialized before the render target can be used
             // Unfortunately this requires a Get call on the d3d device but it is far better than having
             // to mark the render target as lockable and copy data to the gpu.
-            IDirect3DSurface9 *prevRenderTarget = NULL;
+            IDirect3DSurface9 *prevRenderTarget = nullptr;
             mDevice->GetRenderTarget(0, &prevRenderTarget);
             mDevice->SetRenderTarget(0, renderTarget);
             mDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_RGBA(0, 0, 0, 255), 0.0f, 0);
@@ -2598,7 +2598,7 @@ gl::Error Renderer9::loadExecutable(const void *function,
     {
       case SHADER_VERTEX:
         {
-            IDirect3DVertexShader9 *vshader = NULL;
+            IDirect3DVertexShader9 *vshader = nullptr;
             gl::Error error = createVertexShader((DWORD*)function, length, &vshader);
             if (error.isError())
             {
@@ -2609,7 +2609,7 @@ gl::Error Renderer9::loadExecutable(const void *function,
         break;
       case SHADER_PIXEL:
         {
-            IDirect3DPixelShader9 *pshader = NULL;
+            IDirect3DPixelShader9 *pshader = nullptr;
             gl::Error error = createPixelShader((DWORD*)function, length, &pshader);
             if (error.isError())
             {
@@ -2685,7 +2685,7 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
     configs.push_back(CompileConfig(flags | D3DCOMPILE_AVOID_FLOW_CONTROL,  "avoid flow control" ));
     configs.push_back(CompileConfig(flags | D3DCOMPILE_PREFER_FLOW_CONTROL, "prefer flow control"));
 
-    ID3DBlob *binary = NULL;
+    ID3DBlob *binary = nullptr;
     std::string debugInfo;
     gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, NULL, &binary, &debugInfo);
     if (error.isError())
@@ -2697,7 +2697,7 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
     // and return GL_NO_ERROR to signify that there was a link error but the internal state is still OK.
     if (!binary)
     {
-        *outExectuable = NULL;
+        *outExectuable = nullptr;
         return gl::NoError();
     }
 
