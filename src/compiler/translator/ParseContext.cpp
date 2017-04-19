@@ -131,6 +131,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxImageUnits(resources.MaxImageUnits),
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
+      mMaxUniformBufferBindings(resources.MaxUniformBufferBindings),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
@@ -1410,6 +1411,16 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arraySize > mMaxCombinedTextureImageUnits)
     {
         error(location, "sampler binding greater than maximum texture units", "binding");
+    }
+}
+
+void TParseContext::checkBlockBindingIsValid(const TSourceLoc &location, int binding, int arraySize)
+{
+    int size = (arraySize == 0 ? 1 : arraySize);
+    if (binding + size - 1 >= mMaxUniformBufferBindings)
+    {
+        error(location, "interface block binding greater than MAX_UNIFORM_BUFFER_BINDINGS",
+              "binding");
     }
 }
 
@@ -2845,8 +2856,22 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
 
-    // TODO(oetuaho): Remove this and support binding for blocks.
-    checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
+    // add array index
+    unsigned int arraySize = 0;
+    if (arrayIndex != nullptr)
+    {
+        arraySize = checkIsValidArraySize(arrayIndexLine, arrayIndex);
+    }
+
+    if (mShaderVersion < 310)
+    {
+        checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
+    }
+    else
+    {
+        checkBlockBindingIsValid(typeQualifier.line, typeQualifier.layoutQualifier.binding,
+                                 arraySize);
+    }
 
     checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
 
@@ -2912,6 +2937,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         // check layout qualifiers
         TLayoutQualifier fieldLayoutQualifier = fieldType->getLayoutQualifier();
         checkLocationIsNotSpecified(field->line(), fieldLayoutQualifier);
+        checkBindingIsNotSpecified(field->line(), fieldLayoutQualifier.binding);
 
         if (fieldLayoutQualifier.blockStorage != EbsUnspecified)
         {
@@ -2931,13 +2957,6 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         }
 
         fieldType->setLayoutQualifier(fieldLayoutQualifier);
-    }
-
-    // add array index
-    unsigned int arraySize = 0;
-    if (arrayIndex != nullptr)
-    {
-        arraySize = checkIsValidArraySize(arrayIndexLine, arrayIndex);
     }
 
     TInterfaceBlock *interfaceBlock =
