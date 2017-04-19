@@ -110,7 +110,7 @@ index 1ba63df..2a206ab 100644
 +	b->yy_buf_size = static_cast<int>(size) - 2;	/* "- 2" to take care of EOB's */
  	b->yy_buf_pos = b->yy_ch_buf = base;
  	b->yy_is_our_buffer = 0;
- 	b->yy_input_file = NULL;
+ 	b->yy_input_file = nullptr;
 @@ -3251,7 +3258,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yysc
  	if ( ! buf )
  		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );

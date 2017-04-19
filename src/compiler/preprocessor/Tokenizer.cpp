@@ -1729,7 +1729,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 				}
 			else
 				/* Can't grow it, we don't own it. */
-				b->yy_ch_buf = NULL;
+				b->yy_ch_buf = nullptr;
 
 			if ( ! b->yy_ch_buf )
 				YY_FATAL_ERROR(
@@ -2157,7 +2157,7 @@ void pppop_buffer_state (yyscan_t yyscanner)
 		return;
 
 	pp_delete_buffer(YY_CURRENT_BUFFER ,yyscanner);
-	YY_CURRENT_BUFFER_LVALUE = NULL;
+	YY_CURRENT_BUFFER_LVALUE = nullptr;
 	if (yyg->yy_buffer_stack_top > 0)
 		--yyg->yy_buffer_stack_top;
 
@@ -2243,7 +2243,7 @@ YY_BUFFER_STATE pp_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscann
 	b->yy_buf_size = static_cast<int>(size - 2);	/* "- 2" to take care of EOB's */
 	b->yy_buf_pos = b->yy_ch_buf = base;
 	b->yy_is_our_buffer = 0;
-	b->yy_input_file = NULL;
+	b->yy_input_file = nullptr;
 	b->yy_n_chars = b->yy_buf_size;
 	b->yy_is_interactive = 0;
 	b->yy_at_bol = 1;
@@ -2646,10 +2646,10 @@ static int yy_init_globals (yyscan_t yyscanner)
      */
 
 
-    yyg->yy_buffer_stack = NULL;
+    yyg->yy_buffer_stack = nullptr;
     yyg->yy_buffer_stack_top = 0;
     yyg->yy_buffer_stack_max = 0;
-    yyg->yy_c_buf_p = NULL;
+    yyg->yy_c_buf_p = nullptr;
     yyg->yy_init = 0;
     yyg->yy_start = 0;
 
@@ -2668,8 +2668,8 @@ static int yy_init_globals (yyscan_t yyscanner)
     yyin = stdin;
     yyout = stdout;
 #else
-    yyin = NULL;
-    yyout = NULL;
+    yyin = nullptr;
+    yyout = nullptr;
 #endif
 
     /* For future reference: Set errno on error, since we are called by
@@ -2687,18 +2687,18 @@ int pplex_destroy  (yyscan_t yyscanner)
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
 		pp_delete_buffer(YY_CURRENT_BUFFER ,yyscanner );
-		YY_CURRENT_BUFFER_LVALUE = NULL;
+		YY_CURRENT_BUFFER_LVALUE = nullptr;
 		pppop_buffer_state(yyscanner);
 	}
 
 	/* Destroy the stack itself. */
 	ppfree(yyg->yy_buffer_stack ,yyscanner);
-	yyg->yy_buffer_stack = NULL;
+	yyg->yy_buffer_stack = nullptr;
 
 
     /* Destroy the start condition stack. */
         ppfree(yyg->yy_start_stack ,yyscanner );
-        yyg->yy_start_stack = NULL;
+        yyg->yy_start_stack = nullptr;
 
 
 
@@ -2709,7 +2709,7 @@ int pplex_destroy  (yyscan_t yyscanner)
 
     /* Destroy the main struct (reentrant only). */
     ppfree ( yyscanner , yyscanner );
-    yyscanner = NULL;
+    yyscanner = nullptr;
     return 0;
 }
 

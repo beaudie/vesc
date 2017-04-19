@@ -2861,7 +2861,7 @@ void yypop_buffer_state (yyscan_t yyscanner)
 		return;
 
 	yy_delete_buffer(YY_CURRENT_BUFFER ,yyscanner);
-	YY_CURRENT_BUFFER_LVALUE = NULL;
+	YY_CURRENT_BUFFER_LVALUE = nullptr;
 	if (yyg->yy_buffer_stack_top > 0)
 		--yyg->yy_buffer_stack_top;
 
@@ -3306,17 +3306,17 @@ int yylex_destroy  (yyscan_t yyscanner)
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
 		yy_delete_buffer(YY_CURRENT_BUFFER ,yyscanner );
-		YY_CURRENT_BUFFER_LVALUE = NULL;
+		YY_CURRENT_BUFFER_LVALUE = nullptr;
 		yypop_buffer_state(yyscanner);
 	}
 
 	/* Destroy the stack itself. */
 	yyfree(yyg->yy_buffer_stack ,yyscanner);
-	yyg->yy_buffer_stack = NULL;
+	yyg->yy_buffer_stack = nullptr;
 
     /* Destroy the start condition stack. */
         yyfree(yyg->yy_start_stack ,yyscanner );
-        yyg->yy_start_stack = NULL;
+        yyg->yy_start_stack = nullptr;
 
     /* Reset the globals. This is important in a non-reentrant scanner so the next time
      * yylex() is called, initialization will occur. */
@@ -3324,7 +3324,7 @@ int yylex_destroy  (yyscan_t yyscanner)
 
     /* Destroy the main struct (reentrant only). */
     yyfree ( yyscanner , yyscanner );
-    yyscanner = NULL;
+    yyscanner = nullptr;
     return 0;
 }
 
@@ -3591,7 +3591,7 @@ int yuvcscstandardext_constant(TParseContext *context)
 }
 
 int glslang_initialize(TParseContext* context) {
-    yyscan_t scanner = NULL;
+    yyscan_t scanner = nullptr;
     if (yylex_init_extra(context,&scanner))
         return 1;
 
