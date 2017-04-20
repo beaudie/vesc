@@ -4030,6 +4030,13 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     mDeviceContext->CopySubresourceRegion(stagingHelper.get(), 0, 0, 0, 0, srcTexture->get(),
                                           sourceSubResource, &srcBox);
 
+    // If the origin of the read was outside the framebuffer and got clamped we need to adjust
+    // 'pixelsOut' accordingly.
+    const int xadj       = safeArea.x - actualArea.x;
+    const int yadj       = safeArea.y - actualArea.y;
+    const int pixelBytes = gl::GetInternalFormatInfo(format, type).pixelBytes;
+    pixelsOut += xadj * pixelBytes + yadj * outputPitch;
+
     if (!invertTexture)
     {
         PackPixelsParams packParams(safeArea, format, type, outputPitch, pack, 0);
