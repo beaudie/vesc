@@ -114,12 +114,21 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Rectangle &area,
     IDirect3DDevice9 *device = mRenderer->getDevice();
     ASSERT(device);
 
+    // The origin of the read may be outside the framebuffer.  Adjust 'pixels' so it is inside.
+    int xclamp     = gl::clamp(area.x, 0L, static_cast<LONG>(desc.Width));
+    int yclamp     = gl::clamp(area.y, 0L, static_cast<LONG>(desc.Height));
+    int xadj       = xclamp - area.x;
+    int yadj       = yclamp - area.y;
+    int pixelBytes = gl::GetInternalFormatInfo(format, type).pixelBytes;
+    pixels += xadj * pixelBytes + yadj * outputPitch;
+
     HRESULT result;
     IDirect3DSurface9 *systemSurface = nullptr;
     bool directToPixels = !pack.reverseRowOrder && pack.alignment <= 4 && mRenderer->getShareHandleSupport() &&
                           area.x == 0 && area.y == 0 &&
                           static_cast<UINT>(area.width) == desc.Width && static_cast<UINT>(area.height) == desc.Height &&
-                          desc.Format == D3DFMT_A8R8G8B8 && format == GL_BGRA_EXT && type == GL_UNSIGNED_BYTE;
+                          desc.Format == D3DFMT_A8R8G8B8 && format == GL_BGRA_EXT && type == GL_UNSIGNED_BYTE &&
+                          xadj == 0 && yadj == 0;
     if (directToPixels)
     {
         // Use the pixels ptr as a shared handle to write directly into client's memory
@@ -172,8 +181,8 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Rectangle &area,
     }
 
     RECT rect;
-    rect.left = gl::clamp(area.x, 0L, static_cast<LONG>(desc.Width));
-    rect.top = gl::clamp(area.y, 0L, static_cast<LONG>(desc.Height));
+    rect.left   = xclamp;
+    rect.top    = yclamp;
     rect.right = gl::clamp(area.x + area.width, 0L, static_cast<LONG>(desc.Width));
     rect.bottom = gl::clamp(area.y + area.height, 0L, static_cast<LONG>(desc.Height));
 
