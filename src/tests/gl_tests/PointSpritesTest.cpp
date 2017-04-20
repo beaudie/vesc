@@ -381,7 +381,7 @@ TEST_P(PointSpritesTest, PointSizeEnabledCompliance)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLvoid*)sizeof(vertices));
+    glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void *)sizeof(vertices));
     glEnableVertexAttribArray(1);
 
     GLint pointSizeLoc = glGetUniformLocation(program, "pointSize");
