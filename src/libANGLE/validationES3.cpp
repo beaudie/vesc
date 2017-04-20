@@ -88,7 +88,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
                                        GLenum format,
                                        GLenum type,
                                        GLsizei imageSize,
-                                       const GLvoid *pixels)
+                                       const void *pixels)
 {
     // Validate image size
     if (!ValidImageSizeParameters(context, target, level, width, height, depth, isSubImage))
@@ -321,7 +321,7 @@ bool ValidateES3TexImage2DParameters(Context *context,
                                      GLenum format,
                                      GLenum type,
                                      GLsizei imageSize,
-                                     const GLvoid *pixels)
+                                     const void *pixels)
 {
     if (!ValidTexture2DDestinationTarget(context, target))
     {
@@ -350,7 +350,7 @@ bool ValidateES3TexImage3DParameters(Context *context,
                                      GLenum format,
                                      GLenum type,
                                      GLsizei bufSize,
-                                     const GLvoid *pixels)
+                                     const void *pixels)
 {
     if (!ValidTexture3DDestinationTarget(context, target))
     {
@@ -1051,7 +1051,7 @@ bool ValidateDrawRangeElements(Context *context,
                                GLuint end,
                                GLsizei count,
                                GLenum type,
-                               const GLvoid *indices)
+                               const void *indices)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1161,7 +1161,7 @@ bool ValidateCompressedTexImage3D(Context *context,
                                   GLsizei depth,
                                   GLint border,
                                   GLsizei imageSize,
-                                  const GLvoid *data)
+                                  const void *data)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1231,7 +1231,7 @@ bool ValidateCompressedTexImage3DRobustANGLE(Context *context,
                                              GLint border,
                                              GLsizei imageSize,
                                              GLsizei dataSize,
-                                             const GLvoid *data)
+                                             const void *data)
 {
     if (!ValidateRobustCompressedTexImageBase(context, imageSize, dataSize))
     {
@@ -1697,7 +1697,7 @@ bool ValidateTexImage3D(Context *context,
                         GLint border,
                         GLenum format,
                         GLenum type,
-                        const GLvoid *pixels)
+                        const void *pixels)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1721,7 +1721,7 @@ bool ValidateTexImage3DRobustANGLE(Context *context,
                                    GLenum format,
                                    GLenum type,
                                    GLsizei bufSize,
-                                   const GLvoid *pixels)
+                                   const void *pixels)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1750,7 +1750,7 @@ bool ValidateTexSubImage3D(Context *context,
                            GLsizei depth,
                            GLenum format,
                            GLenum type,
-                           const GLvoid *pixels)
+                           const void *pixels)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1775,7 +1775,7 @@ bool ValidateTexSubImage3DRobustANGLE(Context *context,
                                       GLenum format,
                                       GLenum type,
                                       GLsizei bufSize,
-                                      const GLvoid *pixels)
+                                      const void *pixels)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1804,7 +1804,7 @@ bool ValidateCompressedTexSubImage3D(Context *context,
                                      GLsizei depth,
                                      GLenum format,
                                      GLsizei imageSize,
-                                     const GLvoid *data)
+                                     const void *data)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1853,7 +1853,7 @@ bool ValidateCompressedTexSubImage3DRobustANGLE(Context *context,
                                                 GLenum format,
                                                 GLsizei imageSize,
                                                 GLsizei dataSize,
-                                                const GLvoid *data)
+                                                const void *data)
 {
     if (!ValidateRobustCompressedTexImageBase(context, imageSize, dataSize))
     {
@@ -1974,7 +1974,7 @@ bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode)
     return true;
 }
 
-bool ValidateGetBufferPointerv(Context *context, GLenum target, GLenum pname, GLvoid **params)
+bool ValidateGetBufferPointerv(Context *context, GLenum target, GLenum pname, void **params)
 {
     return ValidateGetBufferPointervBase(context, target, pname, nullptr, params);
 }
@@ -1984,7 +1984,7 @@ bool ValidateGetBufferPointervRobustANGLE(Context *context,
                                           GLenum pname,
                                           GLsizei bufSize,
                                           GLsizei *length,
-                                          GLvoid **params)
+                                          void **params)
 {
     if (!ValidateRobustEntryPoint(context, bufSize))
     {
@@ -2426,7 +2426,7 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
                                   GLint size,
                                   GLenum type,
                                   GLsizei stride,
-                                  const GLvoid *pointer)
+                                  const void *pointer)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -2538,7 +2538,7 @@ bool ValidateDrawElementsInstanced(ValidationContext *context,
                                    GLenum mode,
                                    GLsizei count,
                                    GLenum type,
-                                   const GLvoid *indices,
+                                   const void *indices,
                                    GLsizei instanceCount)
 {
     if (context->getClientMajorVersion() < 3)
