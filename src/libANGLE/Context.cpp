@@ -1772,7 +1772,7 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
     }
 }
 
-void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
+void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
     syncRendererState();
     const IndexRange &indexRange = getParams<EntryPoint::DrawElements>().getIndexRange().value();
@@ -1782,7 +1782,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
 void Context::drawElementsInstanced(GLenum mode,
                                     GLsizei count,
                                     GLenum type,
-                                    const GLvoid *indices,
+                                    const void *indices,
                                     GLsizei instances)
 {
     syncRendererState();
@@ -1797,7 +1797,7 @@ void Context::drawRangeElements(GLenum mode,
                                 GLuint end,
                                 GLsizei count,
                                 GLenum type,
-                                const GLvoid *indices)
+                                const void *indices)
 {
     syncRendererState();
     const IndexRange &indexRange =
@@ -1806,13 +1806,13 @@ void Context::drawRangeElements(GLenum mode,
         mImplementation->drawRangeElements(mode, start, end, count, type, indices, indexRange));
 }
 
-void Context::drawArraysIndirect(GLenum mode, const GLvoid *indirect)
+void Context::drawArraysIndirect(GLenum mode, const void *indirect)
 {
     syncRendererState();
     handleError(mImplementation->drawArraysIndirect(mode, indirect));
 }
 
-void Context::drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+void Context::drawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
 {
     syncRendererState();
     handleError(mImplementation->drawElementsIndirect(mode, type, indirect));
@@ -2765,7 +2765,7 @@ void Context::readPixels(GLint x,
                          GLsizei height,
                          GLenum format,
                          GLenum type,
-                         GLvoid *pixels)
+                         void *pixels)
 {
     if (width == 0 || height == 0)
     {
@@ -3028,7 +3028,7 @@ void Context::texImage2D(GLenum target,
                          GLint border,
                          GLenum format,
                          GLenum type,
-                         const GLvoid *pixels)
+                         const void *pixels)
 {
     syncStateForTexImage();
 
@@ -3048,7 +3048,7 @@ void Context::texImage3D(GLenum target,
                          GLint border,
                          GLenum format,
                          GLenum type,
-                         const GLvoid *pixels)
+                         const void *pixels)
 {
     syncStateForTexImage();
 
@@ -3066,7 +3066,7 @@ void Context::texSubImage2D(GLenum target,
                             GLsizei height,
                             GLenum format,
                             GLenum type,
-                            const GLvoid *pixels)
+                            const void *pixels)
 {
     // Zero sized uploads are valid but no-ops
     if (width == 0 || height == 0)
@@ -3093,7 +3093,7 @@ void Context::texSubImage3D(GLenum target,
                             GLsizei depth,
                             GLenum format,
                             GLenum type,
-                            const GLvoid *pixels)
+                            const void *pixels)
 {
     // Zero sized uploads are valid but no-ops
     if (width == 0 || height == 0 || depth == 0)
@@ -3116,7 +3116,7 @@ void Context::compressedTexImage2D(GLenum target,
                                    GLsizei height,
                                    GLint border,
                                    GLsizei imageSize,
-                                   const GLvoid *data)
+                                   const void *data)
 {
     syncStateForTexImage();
 
@@ -3136,7 +3136,7 @@ void Context::compressedTexImage3D(GLenum target,
                                    GLsizei depth,
                                    GLint border,
                                    GLsizei imageSize,
-                                   const GLvoid *data)
+                                   const void *data)
 {
     syncStateForTexImage();
 
@@ -3155,7 +3155,7 @@ void Context::compressedTexSubImage2D(GLenum target,
                                       GLsizei height,
                                       GLenum format,
                                       GLsizei imageSize,
-                                      const GLvoid *data)
+                                      const void *data)
 {
     syncStateForTexImage();
 
@@ -3177,7 +3177,7 @@ void Context::compressedTexSubImage3D(GLenum target,
                                       GLsizei depth,
                                       GLenum format,
                                       GLsizei imageSize,
-                                      const GLvoid *data)
+                                      const void *data)
 {
     // Zero sized uploads are valid but no-ops
     if (width == 0 || height == 0)
@@ -3269,7 +3269,7 @@ void Context::getBufferPointerv(GLenum target, GLenum pname, void **params)
     QueryBufferPointerv(buffer, pname, params);
 }
 
-GLvoid *Context::mapBuffer(GLenum target, GLenum access)
+void *Context::mapBuffer(GLenum target, GLenum access)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3300,10 +3300,7 @@ GLboolean Context::unmapBuffer(GLenum target)
     return result;
 }
 
-GLvoid *Context::mapBufferRange(GLenum target,
-                                GLintptr offset,
-                                GLsizeiptr length,
-                                GLbitfield access)
+void *Context::mapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3348,7 +3345,7 @@ void Context::activeTexture(GLenum texture)
     mGLState.setActiveSampler(texture - GL_TEXTURE0);
 }
 
-void Context::blendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
+void Context::blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
     mGLState.setBlendColor(clamp01(red), clamp01(green), clamp01(blue), clamp01(alpha));
 }
@@ -3373,12 +3370,12 @@ void Context::blendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, G
     mGLState.setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha);
 }
 
-void Context::clearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
+void Context::clearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
     mGLState.setColorClearValue(red, green, blue, alpha);
 }
 
-void Context::clearDepthf(GLclampf depth)
+void Context::clearDepthf(GLfloat depth)
 {
     mGLState.setDepthClearValue(depth);
 }
@@ -3408,7 +3405,7 @@ void Context::depthMask(GLboolean flag)
     mGLState.setDepthMask(flag != GL_FALSE);
 }
 
-void Context::depthRangef(GLclampf zNear, GLclampf zFar)
+void Context::depthRangef(GLfloat zNear, GLfloat zFar)
 {
     mGLState.setDepthRange(zNear, zFar);
 }
@@ -3528,7 +3525,7 @@ void Context::polygonOffset(GLfloat factor, GLfloat units)
     mGLState.setPolygonOffsetParams(factor, units);
 }
 
-void Context::sampleCoverage(GLclampf value, GLboolean invert)
+void Context::sampleCoverage(GLfloat value, GLboolean invert)
 {
     mGLState.setSampleCoverageParams(clamp01(value), invert == GL_TRUE);
 }
@@ -3629,7 +3626,7 @@ void Context::vertexAttribPointer(GLuint index,
                                   GLenum type,
                                   GLboolean normalized,
                                   GLsizei stride,
-                                  const GLvoid *ptr)
+                                  const void *ptr)
 {
     mGLState.setVertexAttribState(index, mGLState.getTargetBuffer(GL_ARRAY_BUFFER), size, type,
                                   normalized == GL_TRUE, false, stride, ptr);
@@ -3672,7 +3669,7 @@ void Context::vertexAttribIPointer(GLuint index,
                                    GLint size,
                                    GLenum type,
                                    GLsizei stride,
-                                   const GLvoid *pointer)
+                                   const void *pointer)
 {
     mGLState.setVertexAttribState(index, mGLState.getTargetBuffer(GL_ARRAY_BUFFER), size, type,
                                   false, true, stride, pointer);
@@ -3736,7 +3733,7 @@ void Context::getVertexAttribIuiv(GLuint index, GLenum pname, GLuint *params)
                           currentValues, pname, params);
 }
 
-void Context::getVertexAttribPointerv(GLuint index, GLenum pname, GLvoid **pointer)
+void Context::getVertexAttribPointerv(GLuint index, GLenum pname, void **pointer)
 {
     const VertexAttribute &attrib = getGLState().getVertexArray()->getVertexAttribute(index);
     QueryVertexAttribPointerv(attrib, pname, pointer);
@@ -3794,14 +3791,14 @@ void Context::popDebugGroup()
     mGLState.getDebug().popGroup();
 }
 
-void Context::bufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
+void Context::bufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
     handleError(buffer->bufferData(this, target, data, size, usage));
 }
 
-void Context::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data)
+void Context::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
 {
     if (data == nullptr)
     {
@@ -4447,7 +4444,7 @@ void Context::releaseShaderCompiler()
 void Context::shaderBinary(GLsizei n,
                            const GLuint *shaders,
                            GLenum binaryformat,
-                           const GLvoid *binary,
+                           const void *binary,
                            GLsizei length)
 {
     // No binary shader formats are supported.

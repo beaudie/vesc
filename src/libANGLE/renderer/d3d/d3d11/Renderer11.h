@@ -158,7 +158,7 @@ class Renderer11 : public RendererD3D
                                 GLsizei instances,
                                 TranslatedIndexData *indexInfo);
     gl::Error applyIndexBuffer(const gl::ContextState &data,
-                               const GLvoid *indices,
+                               const void *indices,
                                GLsizei count,
                                GLenum mode,
                                GLenum type,
@@ -370,14 +370,14 @@ class Renderer11 : public RendererD3D
                                   GLenum mode,
                                   GLsizei count,
                                   GLenum type,
-                                  const GLvoid *indices,
+                                  const void *indices,
                                   GLsizei instances,
                                   const gl::IndexRange &indexRange);
 
     gl::Error genericDrawIndirect(Context11 *context,
                                   GLenum mode,
                                   GLenum type,
-                                  const GLvoid *indirect);
+                                  const void *indirect);
 
     // Necessary hack for default framebuffers in D3D.
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
@@ -400,15 +400,15 @@ class Renderer11 : public RendererD3D
                                GLenum mode,
                                GLsizei count,
                                GLenum type,
-                               const GLvoid *indices,
+                               const void *indices,
                                GLsizei instances);
     gl::Error drawArraysIndirectImpl(const gl::ContextState &data,
                                      GLenum mode,
-                                     const GLvoid *indirect);
+                                     const void *indirect);
     gl::Error drawElementsIndirectImpl(const gl::ContextState &data,
                                        GLenum mode,
                                        GLenum type,
-                                       const GLvoid *indirect);
+                                       const void *indirect);
 
     // Support directly using indirect draw buffer.
     bool supportsFastIndirectDraw(const gl::State &state, GLenum mode, GLenum type);
@@ -423,13 +423,13 @@ class Renderer11 : public RendererD3D
     gl::Error drawLineLoop(const gl::ContextState &data,
                            GLsizei count,
                            GLenum type,
-                           const GLvoid *indices,
+                           const void *indices,
                            int baseVertex,
                            int instances);
     gl::Error drawTriangleFan(const gl::ContextState &data,
                               GLsizei count,
                               GLenum type,
-                              const GLvoid *indices,
+                              const void *indices,
                               int baseVertex,
                               int instances);
 
