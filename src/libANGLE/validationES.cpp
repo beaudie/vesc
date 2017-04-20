@@ -3857,13 +3857,12 @@ bool ValidateDrawElementsBase(ValidationContext *context, GLenum type)
     return true;
 }
 
-bool ValidateDrawElements(ValidationContext *context,
-                          GLenum mode,
-                          GLsizei count,
-                          GLenum type,
-                          const GLvoid *indices,
-                          GLsizei primcount,
-                          IndexRange *indexRangeOut)
+bool ValidateDrawElementsCommon(ValidationContext *context,
+                                GLenum mode,
+                                GLsizei count,
+                                GLenum type,
+                                const GLvoid *indices,
+                                GLsizei primcount)
 {
     if (!ValidateDrawElementsBase(context, type))
         return false;
@@ -3969,52 +3968,42 @@ bool ValidateDrawElements(ValidationContext *context,
         return false;
     }
 
-    // Use max index to validate if our vertex buffers are large enough for the pull.
+    // Use the parameter buffer to retrieve and cache the index range.
     // TODO: offer fast path, with disabled index validation.
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
-    if (elementArrayBuffer)
+    const auto &params        = context->getParams<EntryPoint::DrawElements>();
+    const auto &indexRangeOpt = params.getIndexRange();
+    if (!indexRangeOpt.valid())
     {
-        uintptr_t offset = reinterpret_cast<uintptr_t>(indices);
-        Error error =
-            elementArrayBuffer->getIndexRange(type, static_cast<size_t>(offset), count,
-                                              state.isPrimitiveRestartEnabled(), indexRangeOut);
-        if (error.isError())
-        {
-            context->handleError(error);
-            return false;
-        }
-    }
-    else
-    {
-        *indexRangeOut = ComputeIndexRange(type, indices, count, state.isPrimitiveRestartEnabled());
+        // Unexpected error.
+        return false;
     }
 
     // If we use an index greater than our maximum supported index range, return an error.
     // The ES3 spec does not specify behaviour here, it is undefined, but ANGLE should always
     // return an error if possible here.
-    if (static_cast<GLuint64>(indexRangeOut->end) >= context->getCaps().maxElementIndex)
+    if (static_cast<GLuint64>(indexRangeOpt.value().end) >= context->getCaps().maxElementIndex)
     {
         context->handleError(Error(GL_INVALID_OPERATION, g_ExceedsMaxElementErrorMessage));
         return false;
     }
 
-    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOut->end),
-                             static_cast<GLint>(indexRangeOut->vertexCount())))
+    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOpt.value().end),
+                             static_cast<GLint>(indexRangeOpt.value().vertexCount())))
     {
         return false;
     }
 
     // No op if there are no real indices in the index data (all are primitive restart).
-    return (indexRangeOut->vertexIndexCount > 0);
+    return (indexRangeOpt.value().vertexIndexCount > 0);
 }
 
-bool ValidateDrawElementsInstanced(Context *context,
-                                   GLenum mode,
-                                   GLsizei count,
-                                   GLenum type,
-                                   const GLvoid *indices,
-                                   GLsizei primcount,
-                                   IndexRange *indexRangeOut)
+bool ValidateDrawElementsInstancedCommon(ValidationContext *context,
+                                         GLenum mode,
+                                         GLsizei count,
+                                         GLenum type,
+                                         const GLvoid *indices,
+                                         GLsizei primcount)
 {
     if (primcount < 0)
     {
@@ -4022,7 +4011,7 @@ bool ValidateDrawElementsInstanced(Context *context,
         return false;
     }
 
-    if (!ValidateDrawElements(context, mode, count, type, indices, primcount, indexRangeOut))
+    if (!ValidateDrawElementsCommon(context, mode, count, type, indices, primcount))
     {
         return false;
     }
@@ -4036,16 +4025,15 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         GLsizei count,
                                         GLenum type,
                                         const GLvoid *indices,
-                                        GLsizei primcount,
-                                        IndexRange *indexRangeOut)
+                                        GLsizei primcount)
 {
     if (!ValidateDrawInstancedANGLE(context))
     {
         return false;
     }
 
-    return ValidateDrawElementsInstanced(context, mode, count, type, indices, primcount,
-                                         indexRangeOut);
+    IndexRange indexRange;
+    return ValidateDrawElementsInstancedCommon(context, mode, count, type, indices, primcount);
 }
 
 bool ValidateFramebufferTextureBase(Context *context,
