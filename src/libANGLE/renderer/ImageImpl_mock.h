@@ -18,11 +18,17 @@ namespace rx
 class MockImageImpl : public ImageImpl
 {
   public:
+    MockImageImpl(EGLenum target, egl::ImageSibling *buffer, const egl::AttributeMap &attribs)
+        : ImageImpl(mockState), mockState(target, buffer, attribs)
+    {
+    }
     virtual ~MockImageImpl() { destructor(); }
     MOCK_METHOD0(initialize, egl::Error(void));
     MOCK_METHOD1(orphan, gl::Error(egl::ImageSibling *));
     MOCK_METHOD0(destructor, void());
+
+    egl::ImageState mockState;
 };
-}
+}  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_IMAGEIMPLMOCK_H_
