@@ -4106,6 +4106,12 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     mDeviceContext->CopySubresourceRegion(stagingHelper.getResource(), 0, 0, 0, 0,
                                           srcTexture->getResource(), sourceSubResource, &srcBox);
 
+    // The origin of the read may be outside the framebuffer.  Adjust 'pixelsOut' so it is inside.
+    int xadj       = safeArea.x - actualArea.x;
+    int yadj       = safeArea.y - actualArea.y;
+    int pixelBytes = gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type)).pixelBytes;
+    pixelsOut += xadj * pixelBytes + yadj * outputPitch;
+
     if (!invertTexture)
     {
         PackPixelsParams packParams(safeArea, format, type, outputPitch, pack, 0);
