@@ -180,6 +180,8 @@ class TIntermTyped : public TIntermNode
 
     bool isConstructorWithOnlyConstantUnionParameters();
 
+    bool isUnsizedArray() const { return mType.isUnsizedArray(); }
+
     static TIntermTyped *CreateIndexNode(int index);
     static TIntermTyped *CreateZero(const TType &type);
     static TIntermTyped *CreateBool(bool value);
