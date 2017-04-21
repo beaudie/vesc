@@ -102,6 +102,16 @@ bool ShaderGL::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog
 {
     // Translate the ESSL into GLSL
     const char *translatedSourceCString = mData.getTranslatedSource().c_str();
+    /*const char *translatedSourceCString =
+            "#version 440\n"
+            "in vec3 normal[];\n"
+            "layout(triangles) in;\n"
+            "layout(triangle_strip) out;\n"
+            "out vec3 o_normal;\n"
+            "void main ()\n"
+            "{\n"
+            "o_normal = normal[10];\n"
+            "}\n"; */
 
     // Generate a shader object and set the source
     mShaderID = mFunctions->createShader(mData.getShaderType());

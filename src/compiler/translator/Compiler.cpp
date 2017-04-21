@@ -218,7 +218,12 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
-      mTemporaryIndex(0)
+      mTemporaryIndex(0),
+      mGeometryInputArraySize(0),
+      mGeometryMaxVertices(-1),
+      mGeometryInvocations(0),
+      mGeometryPrimitiveIn(EgsUndefined),
+      mGeometryPrimitiveOut(EgsUndefined)
 {
     mComputeShaderLocalSize.fill(1);
 }
@@ -239,8 +244,12 @@ bool TCompiler::shouldRunLoopAndIndexingValidation(ShCompileOptions compileOptio
 bool TCompiler::Init(const ShBuiltInResources &resources)
 {
     shaderVersion     = 100;
-    maxUniformVectors = (shaderType == GL_VERTEX_SHADER) ? resources.MaxVertexUniformVectors
-                                                         : resources.MaxFragmentUniformVectors;
+    maxUniformVectors = (shaderType == GL_VERTEX_SHADER)
+                            ? resources.MaxVertexUniformVectors
+                            : (shaderType == GL_FRAGMENT_SHADER)
+                                  ? resources.MaxFragmentUniformVectors
+                                  : (resources.MaxGeometryUniformComponents / 4);
+
     maxExpressionComplexity = resources.MaxExpressionComplexity;
     maxCallStackDepth       = resources.MaxCallStackDepth;
     maxFunctionParameters   = resources.MaxFunctionParameters;
@@ -333,6 +342,36 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             // Can't enable both extensions at the same time.
             mDiagnostics.globalError("Can't enable both OVR_multiview and OVR_multiview2");
             success = false;
+        }
+
+        if (success && shaderType == GL_GEOMETRY_SHADER_EXT)
+        {
+            if (parseContext.getGeometryInputPrimitive() == EgsUndefined)
+            {
+                mDiagnostics.globalError(
+                    "Lack of input primitive declaration in a geometry shader");
+                success = false;
+            }
+            if (success && parseContext.getGeometryOutputPrimitive() == EgsUndefined)
+            {
+                mDiagnostics.globalError(
+                    "Lack of output primitive declaration in a geometry shader");
+                success = false;
+            }
+            if (success && parseContext.getGeometryMaxVertices() == -1)
+            {
+                mDiagnostics.globalError("Lack of max_vertices in a geometry shader");
+                success = false;
+            }
+
+            if (success)
+            {
+                mGeometryPrimitiveIn    = parseContext.getGeometryInputPrimitive();
+                mGeometryPrimitiveOut   = parseContext.getGeometryOutputPrimitive();
+                mGeometryMaxVertices    = parseContext.getGeometryMaxVertices();
+                mGeometryInvocations    = parseContext.getGeometryInvocations();
+                mGeometryInputArraySize = parseContext.getGeometryInputArraySize();
+            }
         }
 
         // Disallow expressions deemed too complex.
@@ -559,6 +598,10 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
             symbolTable.setDefaultPrecision(integer, EbpHigh);
             symbolTable.setDefaultPrecision(floatingPoint, EbpHigh);
             break;
+        case GL_GEOMETRY_SHADER_EXT:
+            symbolTable.setDefaultPrecision(integer, EbpHigh);
+            symbolTable.setDefaultPrecision(floatingPoint, EbpHigh);
+            break;
         default:
             assert(false && "Language not supported");
     }
@@ -594,62 +637,72 @@ void TCompiler::setResourceString()
     std::ostringstream strstream;
 
     // clang-format off
-    strstream << ":MaxVertexAttribs:" << compileResources.MaxVertexAttribs
-        << ":MaxVertexUniformVectors:" << compileResources.MaxVertexUniformVectors
-        << ":MaxVaryingVectors:" << compileResources.MaxVaryingVectors
-        << ":MaxVertexTextureImageUnits:" << compileResources.MaxVertexTextureImageUnits
-        << ":MaxCombinedTextureImageUnits:" << compileResources.MaxCombinedTextureImageUnits
-        << ":MaxTextureImageUnits:" << compileResources.MaxTextureImageUnits
-        << ":MaxFragmentUniformVectors:" << compileResources.MaxFragmentUniformVectors
-        << ":MaxDrawBuffers:" << compileResources.MaxDrawBuffers
-        << ":OES_standard_derivatives:" << compileResources.OES_standard_derivatives
-        << ":OES_EGL_image_external:" << compileResources.OES_EGL_image_external
-        << ":OES_EGL_image_external_essl3:" << compileResources.OES_EGL_image_external_essl3
-        << ":NV_EGL_stream_consumer_external:" << compileResources.NV_EGL_stream_consumer_external
-        << ":ARB_texture_rectangle:" << compileResources.ARB_texture_rectangle
-        << ":EXT_draw_buffers:" << compileResources.EXT_draw_buffers
-        << ":FragmentPrecisionHigh:" << compileResources.FragmentPrecisionHigh
-        << ":MaxExpressionComplexity:" << compileResources.MaxExpressionComplexity
-        << ":MaxCallStackDepth:" << compileResources.MaxCallStackDepth
-        << ":MaxFunctionParameters:" << compileResources.MaxFunctionParameters
-        << ":EXT_blend_func_extended:" << compileResources.EXT_blend_func_extended
-        << ":EXT_frag_depth:" << compileResources.EXT_frag_depth
-        << ":EXT_shader_texture_lod:" << compileResources.EXT_shader_texture_lod
-        << ":EXT_shader_framebuffer_fetch:" << compileResources.EXT_shader_framebuffer_fetch
-        << ":NV_shader_framebuffer_fetch:" << compileResources.NV_shader_framebuffer_fetch
-        << ":ARM_shader_framebuffer_fetch:" << compileResources.ARM_shader_framebuffer_fetch
-        << ":EXT_YUV_target:" << compileResources.EXT_YUV_target
-        << ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
-        << ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
-        << ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset
-        << ":MaxProgramTexelOffset:" << compileResources.MaxProgramTexelOffset
-        << ":MaxDualSourceDrawBuffers:" << compileResources.MaxDualSourceDrawBuffers
-        << ":NV_draw_buffers:" << compileResources.NV_draw_buffers
-        << ":WEBGL_debug_shader_precision:" << compileResources.WEBGL_debug_shader_precision
-        << ":MaxImageUnits:" << compileResources.MaxImageUnits
-        << ":MaxVertexImageUniforms:" << compileResources.MaxVertexImageUniforms
-        << ":MaxFragmentImageUniforms:" << compileResources.MaxFragmentImageUniforms
-        << ":MaxComputeImageUniforms:" << compileResources.MaxComputeImageUniforms
-        << ":MaxCombinedImageUniforms:" << compileResources.MaxCombinedImageUniforms
-        << ":MaxCombinedShaderOutputResources:" << compileResources.MaxCombinedShaderOutputResources
-        << ":MaxComputeWorkGroupCountX:" << compileResources.MaxComputeWorkGroupCount[0]
-        << ":MaxComputeWorkGroupCountY:" << compileResources.MaxComputeWorkGroupCount[1]
-        << ":MaxComputeWorkGroupCountZ:" << compileResources.MaxComputeWorkGroupCount[2]
-        << ":MaxComputeWorkGroupSizeX:" << compileResources.MaxComputeWorkGroupSize[0]
-        << ":MaxComputeWorkGroupSizeY:" << compileResources.MaxComputeWorkGroupSize[1]
-        << ":MaxComputeWorkGroupSizeZ:" << compileResources.MaxComputeWorkGroupSize[2]
-        << ":MaxComputeUniformComponents:" << compileResources.MaxComputeUniformComponents
-        << ":MaxComputeTextureImageUnits:" << compileResources.MaxComputeTextureImageUnits
-        << ":MaxComputeAtomicCounters:" << compileResources.MaxComputeAtomicCounters
-        << ":MaxComputeAtomicCounterBuffers:" << compileResources.MaxComputeAtomicCounterBuffers
-        << ":MaxVertexAtomicCounters:" << compileResources.MaxVertexAtomicCounters
-        << ":MaxFragmentAtomicCounters:" << compileResources.MaxFragmentAtomicCounters
-        << ":MaxCombinedAtomicCounters:" << compileResources.MaxCombinedAtomicCounters
-        << ":MaxAtomicCounterBindings:" << compileResources.MaxAtomicCounterBindings
-        << ":MaxVertexAtomicCounterBuffers:" << compileResources.MaxVertexAtomicCounterBuffers
-        << ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
-        << ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
-        << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize;
+	strstream << ":MaxVertexAttribs:" << compileResources.MaxVertexAttribs
+		<< ":MaxVertexUniformVectors:" << compileResources.MaxVertexUniformVectors
+		<< ":MaxVaryingVectors:" << compileResources.MaxVaryingVectors
+		<< ":MaxVertexTextureImageUnits:" << compileResources.MaxVertexTextureImageUnits
+		<< ":MaxCombinedTextureImageUnits:" << compileResources.MaxCombinedTextureImageUnits
+		<< ":MaxTextureImageUnits:" << compileResources.MaxTextureImageUnits
+		<< ":MaxFragmentUniformVectors:" << compileResources.MaxFragmentUniformVectors
+		<< ":MaxDrawBuffers:" << compileResources.MaxDrawBuffers
+		<< ":OES_standard_derivatives:" << compileResources.OES_standard_derivatives
+		<< ":OES_EGL_image_external:" << compileResources.OES_EGL_image_external
+		<< ":OES_EGL_image_external_essl3:" << compileResources.OES_EGL_image_external_essl3
+		<< ":NV_EGL_stream_consumer_external:" << compileResources.NV_EGL_stream_consumer_external
+		<< ":ARB_texture_rectangle:" << compileResources.ARB_texture_rectangle
+		<< ":EXT_draw_buffers:" << compileResources.EXT_draw_buffers
+		<< ":FragmentPrecisionHigh:" << compileResources.FragmentPrecisionHigh
+		<< ":MaxExpressionComplexity:" << compileResources.MaxExpressionComplexity
+		<< ":MaxCallStackDepth:" << compileResources.MaxCallStackDepth
+		<< ":MaxFunctionParameters:" << compileResources.MaxFunctionParameters
+		<< ":EXT_blend_func_extended:" << compileResources.EXT_blend_func_extended
+		<< ":EXT_frag_depth:" << compileResources.EXT_frag_depth
+		<< ":EXT_shader_texture_lod:" << compileResources.EXT_shader_texture_lod
+		<< ":EXT_shader_framebuffer_fetch:" << compileResources.EXT_shader_framebuffer_fetch
+		<< ":NV_shader_framebuffer_fetch:" << compileResources.NV_shader_framebuffer_fetch
+		<< ":ARM_shader_framebuffer_fetch:" << compileResources.ARM_shader_framebuffer_fetch
+		<< ":EXT_YUV_target:" << compileResources.EXT_YUV_target
+		<< ":EXT_geometry_shader:" << compileResources.EXT_geometry_shader
+		<< ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
+		<< ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
+		<< ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset
+		<< ":MaxProgramTexelOffset:" << compileResources.MaxProgramTexelOffset
+		<< ":MaxDualSourceDrawBuffers:" << compileResources.MaxDualSourceDrawBuffers
+		<< ":NV_draw_buffers:" << compileResources.NV_draw_buffers
+		<< ":WEBGL_debug_shader_precision:" << compileResources.WEBGL_debug_shader_precision
+		<< ":MaxImageUnits:" << compileResources.MaxImageUnits
+		<< ":MaxVertexImageUniforms:" << compileResources.MaxVertexImageUniforms
+		<< ":MaxFragmentImageUniforms:" << compileResources.MaxFragmentImageUniforms
+		<< ":MaxComputeImageUniforms:" << compileResources.MaxComputeImageUniforms
+		<< ":MaxCombinedImageUniforms:" << compileResources.MaxCombinedImageUniforms
+		<< ":MaxCombinedShaderOutputResources:" << compileResources.MaxCombinedShaderOutputResources
+		<< ":MaxComputeWorkGroupCountX:" << compileResources.MaxComputeWorkGroupCount[0]
+		<< ":MaxComputeWorkGroupCountY:" << compileResources.MaxComputeWorkGroupCount[1]
+		<< ":MaxComputeWorkGroupCountZ:" << compileResources.MaxComputeWorkGroupCount[2]
+		<< ":MaxComputeWorkGroupSizeX:" << compileResources.MaxComputeWorkGroupSize[0]
+		<< ":MaxComputeWorkGroupSizeY:" << compileResources.MaxComputeWorkGroupSize[1]
+		<< ":MaxComputeWorkGroupSizeZ:" << compileResources.MaxComputeWorkGroupSize[2]
+		<< ":MaxComputeUniformComponents:" << compileResources.MaxComputeUniformComponents
+		<< ":MaxComputeTextureImageUnits:" << compileResources.MaxComputeTextureImageUnits
+		<< ":MaxComputeAtomicCounters:" << compileResources.MaxComputeAtomicCounters
+		<< ":MaxComputeAtomicCounterBuffers:" << compileResources.MaxComputeAtomicCounterBuffers
+		<< ":MaxVertexAtomicCounters:" << compileResources.MaxVertexAtomicCounters
+		<< ":MaxFragmentAtomicCounters:" << compileResources.MaxFragmentAtomicCounters
+		<< ":MaxCombinedAtomicCounters:" << compileResources.MaxCombinedAtomicCounters
+		<< ":MaxAtomicCounterBindings:" << compileResources.MaxAtomicCounterBindings
+		<< ":MaxVertexAtomicCounterBuffers:" << compileResources.MaxVertexAtomicCounterBuffers
+		<< ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
+		<< ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
+		<< ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize
+		<< ":MaxGeometryInputComponents:" << compileResources.MaxGeometryInputComponents
+		<< ":MaxGeometryOutputComponents:" << compileResources.MaxGeometryOutputComponents
+		<< ":MaxGeometryImageUniforms:" << compileResources.MaxGeometryImageUniforms
+		<< ":MaxGeometryTextureImageUnits:" << compileResources.MaxGeometryTextureImageUnits
+		<< ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
+		<< ":MaxGeometryTotalOutputComponents:" << compileResources.MaxGeometryTotalOutputComponents
+		<< ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+		<< ":MaxGeometryAtomicCounters:" << compileResources.MaxGeometryAtomicCounters
+		<< ":MaxGeometryAtomicCounterBuffers:" << compileResources.MaxGeometryAtomicCounterBuffers;
     // clang-format on
 
     builtInResourcesString = strstream.str();
@@ -877,8 +930,8 @@ void TCompiler::collectVariables(TIntermNode *root)
     if (!variablesCollected)
     {
         sh::CollectVariables collect(&attributes, &outputVariables, &uniforms, &varyings,
-                                     &interfaceBlocks, hashFunction, symbolTable,
-                                     extensionBehavior);
+                                     &inVaryings, &outVaryings, &interfaceBlocks, hashFunction,
+                                     shaderType, symbolTable, extensionBehavior);
         root->traverse(&collect);
 
         // This is for enforcePackingRestriction().

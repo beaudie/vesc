@@ -200,6 +200,59 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
              << ", local_size_z=" << localSize[2] << ") in;\n";
     }
 
+    if (getShaderType() == GL_GEOMETRY_SHADER_EXT)
+    {
+        sink << "layout (";
+        switch (getGeometryShaderInputPrimitives())
+        {
+            case EgsPoints:
+                sink << "points, ";
+                break;
+            case EgsLines:
+                sink << "lines, ";
+                break;
+            case EgsLinesAdjacency:
+                sink << "lines_adjacency, ";
+                break;
+            case EgsTriangles:
+                sink << "triangles, ";
+                break;
+            case EgsTrianglesAdjacency:
+                sink << "triangles_adjacency, ";
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+
+        int invocations = getGeometryShaderInvocations();
+        if (invocations)
+        {
+            sink << "invocations = " << invocations;
+        }
+        sink << ") in;\n";
+
+        sink << "layout(";
+        switch (getGeometryShaderOutputPrimitives())
+        {
+            case EgsPoints:
+                sink << "points, ";
+                break;
+            case EgsLineStrip:
+                sink << "line_strip, ";
+                break;
+            case EgsTriangleStrip:
+                sink << "triangle_strip, ";
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+
+        int maxVertices = getGeometryShaderMaxVertices();
+        sink << "max_vertices = " << maxVertices << ") out;\n";
+    }
+
     // Write translated shader.
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
@@ -266,6 +319,12 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
             if (iter.first == "GL_EXT_draw_buffers")
             {
                 sink << "#extension GL_ARB_draw_buffers : " << getBehaviorString(iter.second)
+                     << "\n";
+            }
+
+            if (iter.first == "GL_EXT_geometry_shader")
+            {
+                sink << "#extension GL_ARB_geometry_shader4 : " << getBehaviorString(iter.second)
                      << "\n";
             }
         }
