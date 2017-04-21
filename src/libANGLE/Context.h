@@ -880,7 +880,10 @@ class Context final : public ValidationContext
 template <EntryPoint EP, typename... ParamsT>
 void Context::gatherParams(ParamsT... args)
 {
-    mSavedArgsType = EP;
+    static_assert(sizeof(EntryPointParamType<EP>) <= kParamsBufferSize,
+                  "Params struct too large, please increase kParamsBufferSize.");
+
+    mSavedArgsType = &EntryPointParamType<EP>::TypeInfo;
 
     // Skip doing any work for ParamsBase/Invalid type.
     if (!EntryPointParamType<EP>::TypeInfo)
@@ -888,11 +891,9 @@ void Context::gatherParams(ParamsT... args)
         return;
     }
 
-    if (mParamsBuffer.size() < sizeof(EntryPointParamType<EP>))
-    {
-        mParamsBuffer.resize(sizeof(EntryPointParamType<EP>));
-    }
-    new (mParamsBuffer.data()) EntryPointParamType<EP>(this, args...);
+    EntryPointParamType<EP> *objBuffer =
+        reinterpret_cast<EntryPointParamType<EP> *>(mParamsBuffer.data());
+    EntryPointParamType<EP>::Factory<EP>(objBuffer, this, args...);
 }
 
 }  // namespace gl

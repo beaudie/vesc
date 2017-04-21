@@ -132,8 +132,8 @@ class ValidationContext : angle::NonCopyable
 
     bool isWebGL1() const { return mState.isWebGL1(); }
 
-    template <EntryPoint EP>
-    const EntryPointParamType<EP> &getParams() const;
+    template <typename T>
+    const T &getParams() const;
 
   protected:
     ContextState mState;
@@ -141,17 +141,16 @@ class ValidationContext : angle::NonCopyable
     bool mDisplayTextureShareGroup;
 
     // Caches entry point parameters and values re-used between layers.
-    mutable EntryPoint mSavedArgsType;
-    mutable angle::MemoryBuffer mParamsBuffer;
+    mutable const ParamTypeInfo *mSavedArgsType;
+    static constexpr size_t kParamsBufferSize = 64u;
+    mutable std::array<uint8_t, kParamsBufferSize> mParamsBuffer;
 };
 
-template <EntryPoint EP>
-const EntryPointParamType<EP> &ValidationContext::getParams() const
+template <typename T>
+const T &ValidationContext::getParams() const
 {
-    const EntryPointParamType<EP> *params =
-        reinterpret_cast<EntryPointParamType<EP> *>(mParamsBuffer.data());
-    ASSERT(params->hasDynamicType(EP));
-    ASSERT(mParamsBuffer.size() >= sizeof(EntryPointParamType<EP>));
+    const T *params = reinterpret_cast<T *>(mParamsBuffer.data());
+    ASSERT(mSavedArgsType->hasDynamicType(T::TypeInfo));
     return *params;
 }
 

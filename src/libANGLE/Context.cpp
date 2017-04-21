@@ -1775,7 +1775,7 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
 {
     syncRendererState();
-    const IndexRange &indexRange = getParams<EntryPoint::DrawElements>().getIndexRange().value();
+    const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(mImplementation->drawElements(mode, count, type, indices, indexRange));
 }
 
@@ -1786,8 +1786,7 @@ void Context::drawElementsInstanced(GLenum mode,
                                     GLsizei instances)
 {
     syncRendererState();
-    const IndexRange &indexRange =
-        getParams<EntryPoint::DrawElementsInstanced>().getIndexRange().value();
+    const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(
         mImplementation->drawElementsInstanced(mode, count, type, indices, instances, indexRange));
 }
@@ -1800,8 +1799,7 @@ void Context::drawRangeElements(GLenum mode,
                                 const GLvoid *indices)
 {
     syncRendererState();
-    const IndexRange &indexRange =
-        getParams<EntryPoint::DrawRangeElements>().getIndexRange().value();
+    const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(
         mImplementation->drawRangeElements(mode, start, end, count, type, indices, indexRange));
 }

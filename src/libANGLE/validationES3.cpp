@@ -1071,7 +1071,7 @@ bool ValidateDrawRangeElements(Context *context,
     }
 
     // Use the parameter buffer to retrieve and cache the index range.
-    const auto &params        = context->getParams<EntryPoint::DrawRangeElements>();
+    const auto &params        = context->getParams<HasIndexRange>();
     const auto &indexRangeOpt = params.getIndexRange();
     if (!indexRangeOpt.valid())
     {

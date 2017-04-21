@@ -16,27 +16,16 @@
 namespace gl
 {
 
-// static
-constexpr ParamTypeInfo ParamsBase::TypeInfo;
-constexpr ParamTypeInfo DrawElementsParams::TypeInfo;
-constexpr ParamTypeInfo DrawElementsInstancedParams::TypeInfo;
-constexpr ParamTypeInfo DrawRangeElementsParams::TypeInfo;
-
-ParamsBase::ParamsBase(Context *context, ...) : mTypeInfo(&TypeInfo), mContext(context)
+ParamsBase::ParamsBase(...)
 {
 }
 
-DrawElementsParams::DrawElementsParams(Context *context,
-                                       GLenum mode,
-                                       GLsizei count,
-                                       GLenum type,
-                                       const GLvoid *indices)
-    : ParamsBase(context), mMode(mode), mCount(count), mType(type), mIndices(indices)
+HasIndexRange::HasIndexRange(Context *context, GLsizei count, GLenum type, const void *indices)
+    : mContext(context), mCount(count), mType(type), mIndices(indices)
 {
-    mTypeInfo = &DrawElementsParams::TypeInfo;
 }
 
-const Optional<IndexRange> &DrawElementsParams::getIndexRange() const
+const Optional<IndexRange> &HasIndexRange::getIndexRange() const
 {
     if (mIndexRange.valid())
     {
@@ -69,29 +58,6 @@ const Optional<IndexRange> &DrawElementsParams::getIndexRange() const
     }
 
     return mIndexRange;
-}
-
-DrawElementsInstancedParams::DrawElementsInstancedParams(Context *context,
-                                                         GLenum mode,
-                                                         GLsizei count,
-                                                         GLenum type,
-                                                         const GLvoid *indices,
-                                                         GLsizei instanceCount)
-    : DrawElementsParams(context, mode, count, type, indices), mInstanceCount(instanceCount)
-{
-    mTypeInfo = &DrawElementsInstancedParams::TypeInfo;
-}
-
-DrawRangeElementsParams::DrawRangeElementsParams(Context *context,
-                                                 GLenum mode,
-                                                 GLuint start,
-                                                 GLuint end,
-                                                 GLsizei count,
-                                                 GLenum type,
-                                                 const GLvoid *indices)
-    : DrawElementsParams(context, mode, count, type, indices), mStart(start), mEnd(end)
-{
-    mTypeInfo = &DrawRangeElementsParams::TypeInfo;
 }
 
 }  // namespace gl

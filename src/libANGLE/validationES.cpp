@@ -4023,7 +4023,7 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
     // Use the parameter buffer to retrieve and cache the index range.
     // TODO: offer fast path, with disabled index validation.
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
-    const auto &params        = context->getParams<EntryPoint::DrawElements>();
+    const auto &params        = context->getParams<HasIndexRange>();
     const auto &indexRangeOpt = params.getIndexRange();
     if (!indexRangeOpt.valid())
     {

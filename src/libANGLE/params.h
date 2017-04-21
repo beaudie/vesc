@@ -38,123 +38,141 @@ using EntryPointParamType = typename EntryPointParam<EP>::Type;
 class ParamTypeInfo
 {
   public:
-    constexpr ParamTypeInfo(EntryPoint selfType, const ParamTypeInfo *parentType)
-        : mSelfType(selfType), mParentTypeInfo(parentType)
+    constexpr ParamTypeInfo(const char *selfClass, const ParamTypeInfo *parentType)
+        : mSelfClass(selfClass), mParentTypeInfo(parentType)
     {
     }
 
-    constexpr bool hasDynamicType(EntryPoint dynamicType) const
+    constexpr bool hasDynamicType(const ParamTypeInfo &typeInfo) const
     {
-        return mSelfType == dynamicType ||
-               (mParentTypeInfo && mParentTypeInfo->hasDynamicType(dynamicType));
+        return mSelfClass == typeInfo.mSelfClass ||
+               (mParentTypeInfo && mParentTypeInfo->hasDynamicType(typeInfo));
     }
 
-    constexpr operator bool() const { return mSelfType != EntryPoint::Invalid; }
+    constexpr operator bool() const { return mSelfClass != nullptr; }
 
   private:
-    EntryPoint mSelfType;
+    const char *mSelfClass;
     const ParamTypeInfo *mParentTypeInfo;
 };
 
 class ParamsBase : angle::NonCopyable
 {
   public:
-    ParamsBase(Context *context, ...);
+    ParamsBase(...);
 
-    static constexpr ParamTypeInfo TypeInfo = {EntryPoint::Invalid, nullptr};
+    template <EntryPoint EP, typename... ArgsT>
+    static void Factory(EntryPointParamType<EP> *objBuffer, ArgsT... args);
 
-    bool hasDynamicType(EntryPoint dynamicType) const
-    {
-        return mTypeInfo->hasDynamicType(dynamicType);
-    }
-
-  protected:
-    const ParamTypeInfo *mTypeInfo;
-    Context *mContext;
+#if defined(ANGLE_ENABLE_ASSERTS)
+    static constexpr ParamTypeInfo TypeInfo = {nullptr, nullptr};
+#endif  // defined(ANGLE_ENABLE_ASSERTS)
 };
 
-class DrawElementsParams : public ParamsBase
+// static
+template <EntryPoint EP, typename... ArgsT>
+void ParamsBase::Factory(EntryPointParamType<EP> *objBuffer, ArgsT... args)
+{
+    new (objBuffer) EntryPointParamType<EP>(args...);
+}
+
+class HasIndexRange : public ParamsBase
 {
   public:
-    DrawElementsParams(Context *context,
-                       GLenum mode,
-                       GLsizei count,
-                       GLenum type,
-                       const GLvoid *indices);
+    HasIndexRange(Context *context, GLsizei count, GLenum type, const void *indices);
+
+    template <EntryPoint EP, typename... ArgsT>
+    static void Factory(HasIndexRange *objBuffer, ArgsT... args);
 
     const Optional<IndexRange> &getIndexRange() const;
 
-    static constexpr ParamTypeInfo TypeInfo = {EntryPoint::DrawElements, nullptr};
+#if defined(ANGLE_ENABLE_ASSERTS)
+    static constexpr ParamTypeInfo TypeInfo = {"HasIndexRange", &ParamsBase::TypeInfo};
+#endif  // defined(ANGLE_ENABLE_ASSERTS)
 
-  protected:
-    GLenum mMode;
+  private:
+    Context *mContext;
     GLsizei mCount;
     GLenum mType;
     const GLvoid *mIndices;
-
-    // Cached stuff.
     mutable Optional<IndexRange> mIndexRange;
 };
 
-class DrawElementsInstancedParams : public DrawElementsParams
+// Entry point funcs essentially re-map different entry point parameter arrays into
+// the format the parameter type class expects. For example, for HasIndexRange, for the
+// various indexed draw calls, they drop parameters that aren't useful and re-arrange
+// the rest.
+#define ANGLE_ENTRY_POINT_FUNC(NAME, CLASS, ...)    \
+    \
+template<> struct EntryPointParam<EntryPoint::NAME> \
+    {                                               \
+        using Type = CLASS;                         \
+    };                                              \
+    \
+template<> inline void CLASS::Factory<EntryPoint::NAME>(__VA_ARGS__)
+
+ANGLE_ENTRY_POINT_FUNC(DrawElements,
+                       HasIndexRange,
+                       HasIndexRange *objBuffer,
+                       Context *context,
+                       GLenum /*mode*/,
+                       GLsizei count,
+                       GLenum type,
+                       const void *indices)
 {
-  public:
-    DrawElementsInstancedParams(Context *context,
-                                GLenum mode,
-                                GLsizei count,
-                                GLenum type,
-                                const GLvoid *indices,
-                                GLsizei instanceCount);
+    return ParamsBase::Factory<EntryPoint::DrawElements>(objBuffer, context, count, type, indices);
+}
 
-    static constexpr ParamTypeInfo TypeInfo = {EntryPoint::DrawElementsInstanced,
-                                               &DrawElementsParams::TypeInfo};
-
-  protected:
-    GLsizei mInstanceCount;
-};
-
-class DrawRangeElementsParams : public DrawElementsParams
+ANGLE_ENTRY_POINT_FUNC(DrawElementsInstanced,
+                       HasIndexRange,
+                       HasIndexRange *objBuffer,
+                       Context *context,
+                       GLenum /*mode*/,
+                       GLsizei count,
+                       GLenum type,
+                       const void *indices,
+                       GLsizei /*instanceCount*/)
 {
-  public:
-    DrawRangeElementsParams(Context *context,
-                            GLenum mode,
-                            GLuint start,
-                            GLuint end,
-                            GLsizei count,
-                            GLenum type,
-                            const GLvoid *indices);
+    return ParamsBase::Factory<EntryPoint::DrawElementsInstanced>(objBuffer, context, count, type,
+                                                                  indices);
+}
 
-    static constexpr ParamTypeInfo TypeInfo = {EntryPoint::DrawRangeElements,
-                                               &DrawElementsParams::TypeInfo};
-
-  protected:
-    GLuint mStart;
-    GLuint mEnd;
-};
-
-template <>
-struct EntryPointParam<EntryPoint::DrawElements>
+ANGLE_ENTRY_POINT_FUNC(DrawElementsInstancedANGLE,
+                       HasIndexRange,
+                       HasIndexRange *objBuffer,
+                       Context *context,
+                       GLenum /*mode*/,
+                       GLsizei count,
+                       GLenum type,
+                       const void *indices,
+                       GLsizei /*instanceCount*/)
 {
-    using Type = DrawElementsParams;
-};
+    return ParamsBase::Factory<EntryPoint::DrawElementsInstancedANGLE>(objBuffer, context, count,
+                                                                       type, indices);
+}
 
-template <>
-struct EntryPointParam<EntryPoint::DrawElementsInstanced>
+ANGLE_ENTRY_POINT_FUNC(DrawRangeElements,
+                       HasIndexRange,
+                       HasIndexRange *objBuffer,
+                       Context *context,
+                       GLenum /*mode*/,
+                       GLuint /*start*/,
+                       GLuint /*end*/,
+                       GLsizei count,
+                       GLenum type,
+                       const void *indices)
 {
-    using Type = DrawElementsInstancedParams;
-};
+    return ParamsBase::Factory<EntryPoint::DrawRangeElements>(objBuffer, context, count, type,
+                                                              indices);
+}
 
-template <>
-struct EntryPointParam<EntryPoint::DrawElementsInstancedANGLE>
+template <EntryPoint EP, typename... ArgsT>
+void HasIndexRange::Factory(HasIndexRange *objBuffer, ArgsT... args)
 {
-    using Type = DrawElementsInstancedParams;
-};
+    static_assert(false, "Invalid overload.");
+}
 
-template <>
-struct EntryPointParam<EntryPoint::DrawRangeElements>
-{
-    using Type = DrawRangeElementsParams;
-};
+#undef ANGLE_ENTRY_POINT_FUNC
 
 template <EntryPoint EP>
 struct EntryPointParam
