@@ -110,8 +110,9 @@ class TCompiler : public TShHandleBase
     const std::vector<sh::Attribute> &getAttributes() const { return attributes; }
     const std::vector<sh::OutputVariable> &getOutputVariables() const { return outputVariables; }
     const std::vector<sh::Uniform> &getUniforms() const { return uniforms; }
-    const std::vector<sh::Varying> &getVaryings() const { return varyings; }
     const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const { return interfaceBlocks; }
+    const std::vector<sh::Varying> &getInputVaryings() const { return inVaryings; }
+    const std::vector<sh::Varying> &getOutputVaryings() const { return outVaryings; }
 
     ShHashFunction64 getHashFunction() const { return hashFunction; }
     NameMap &getNameMap() { return nameMap; }
@@ -125,8 +126,20 @@ class TCompiler : public TShHandleBase
     // Get the resources set by InitBuiltInSymbolTable
     const ShBuiltInResources &getResources() const;
 
-  protected:
+    int getGeometryShaderMaxVertices() const { return mGeometryMaxVertices; }
+    int getGeometryShaderInvocations() const { return mGeometryInvocations; }
+    TLayoutPrimitiveType getGeometryShaderInputPrimitiveType() const
+    {
+        return mGeometryInputPrimitiveType;
+    }
+    TLayoutPrimitiveType getGeometryShaderOutputPrimitiveType() const
+    {
+        return mGeometryOutputPrimitiveType;
+    }
+
     sh::GLenum getShaderType() const { return shaderType; }
+
+  protected:
     // Initialize symbol-table with built-in symbols.
     bool InitBuiltInSymbolTable(const ShBuiltInResources &resources);
     // Compute the string representation of the built-in resources
@@ -173,8 +186,9 @@ class TCompiler : public TShHandleBase
     std::vector<sh::Attribute> attributes;
     std::vector<sh::OutputVariable> outputVariables;
     std::vector<sh::Uniform> uniforms;
-    std::vector<sh::Varying> varyings;
     std::vector<sh::InterfaceBlock> interfaceBlocks;
+    std::vector<sh::Varying> inVaryings;
+    std::vector<sh::Varying> outVaryings;
 
   private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion
@@ -239,6 +253,12 @@ class TCompiler : public TShHandleBase
 
     // GL_OVR_multiview num_views.
     int mNumViews;
+
+    // geometry shader parameters
+    int mGeometryMaxVertices;
+    int mGeometryInvocations;
+    TLayoutPrimitiveType mGeometryInputPrimitiveType;
+    TLayoutPrimitiveType mGeometryOutputPrimitiveType;
 
     // name hashing.
     ShHashFunction64 hashFunction;
