@@ -140,7 +140,8 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 }
 
 #define NON_COMPUTE_ONLY(S, L) {  \
-    if (context->getShaderType() != GL_VERTEX_SHADER && context->getShaderType() != GL_FRAGMENT_SHADER) {  \
+    if (context->getShaderType() != GL_VERTEX_SHADER && context->getShaderType() != GL_FRAGMENT_SHADER && \
+        context->getShaderType() != GL_GEOMETRY_SHADER_EXT) {  \
         context->error(L, " supported in vertex and fragment shaders only ", S);  \
     }  \
 }
@@ -798,6 +799,11 @@ single_declaration
         $$.type = $1;
         $$.intermDeclaration = context->parseSingleDeclaration($$.type, @2, *$2.string);
     }
+    | fully_specified_type identifier LEFT_BRACKET RIGHT_BRACKET {
+        ES3_1_ONLY("[]", @3, "implicitly sized array declaration");
+        $$.type = $1;
+        $$.intermDeclaration = context->parseSingleArrayDeclaration($$.type, @2, *$2.string, @3, nullptr);
+    }
     | fully_specified_type identifier LEFT_BRACKET constant_expression RIGHT_BRACKET {
         $$.type = $1;
         $$.intermDeclaration = context->parseSingleArrayDeclaration($$.type, @2, *$2.string, @3, $4);
@@ -910,9 +916,13 @@ storage_qualifier
             ES3_OR_NEWER("in", @1, "storage qualifier");
             $$ = new TStorageQualifierWrapper(EvqVertexIn, @1);
         }
-        else
+        else if (context->getShaderType() == GL_COMPUTE_SHADER)
         {
             $$ = new TStorageQualifierWrapper(EvqComputeIn, @1);
+        }
+        else
+        {
+            $$ = new TStorageQualifierWrapper(EvqGeometryIn, @1);
         }
     }
     | OUT_QUAL {
@@ -928,9 +938,13 @@ storage_qualifier
             {
                 $$ = new TStorageQualifierWrapper(EvqFragmentOut, @1);
             }
-            else
+            else if (context->getShaderType() == GL_VERTEX_SHADER)
             {
                 $$ = new TStorageQualifierWrapper(EvqVertexOut, @1);
+            }
+            else
+            {
+                $$ = new TStorageQualifierWrapper(EvqGeometryOut, @1);
             }
         }
     }

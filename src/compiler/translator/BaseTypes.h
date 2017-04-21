@@ -565,6 +565,15 @@ enum TQualifier
     EvqRestrict,
     EvqVolatile,
 
+    // GLSL ES 3.1 extension EXT_geometry_shader qualifiers
+    EvqGeometryIn,
+    EvqGeometryOut,
+    EvqGLPerVertex,
+    EvqPrimitiveIDIn,
+    EvqPrimitiveID,
+    EvqInvocationID,
+    EvqLayer,
+
     // end of list
     EvqLast
 };
@@ -615,6 +624,18 @@ enum TYuvCscStandardEXT
     EycsItu709
 };
 
+enum TLayoutGeometryShaderEXT
+{
+    EgsUndefined,
+    EgsPoints,
+    EgsLines,
+    EgsLinesAdjacency,
+    EgsTriangles,
+    EgsTrianglesAdjacency,
+    EgsLineStrip,
+    EgsTriangleStrip
+};
+
 struct TLayoutQualifier
 {
     int location;
@@ -636,6 +657,11 @@ struct TLayoutQualifier
     // EXT_YUV_target yuv layout qualifier.
     bool yuv;
 
+    // EXT_geometry_shader layout qualifiers.
+    TLayoutGeometryShaderEXT primitiveType;
+    int invocations;
+    int maxVertices;
+
     static TLayoutQualifier create()
     {
         TLayoutQualifier layoutQualifier;
@@ -651,6 +677,11 @@ struct TLayoutQualifier
         layoutQualifier.yuv      = false;
 
         layoutQualifier.imageInternalFormat = EiifUnspecified;
+
+        layoutQualifier.primitiveType = EgsUndefined;
+        layoutQualifier.invocations   = 0;
+        layoutQualifier.maxVertices   = -1;
+
         return layoutQualifier;
     }
 
@@ -658,7 +689,8 @@ struct TLayoutQualifier
     {
         return location == -1 && binding == -1 && numViews == -1 && yuv == false &&
                matrixPacking == EmpUnspecified && blockStorage == EbsUnspecified &&
-               !localSize.isAnyValueSet() && imageInternalFormat == EiifUnspecified;
+               !localSize.isAnyValueSet() && imageInternalFormat == EiifUnspecified &&
+               primitiveType == EgsUndefined && invocations == 0 && maxVertices == -1;
     }
 
     bool isCombinationValid() const
@@ -787,6 +819,13 @@ inline const char *getQualifierString(TQualifier q)
     case EvqLocalInvocationIndex:   return "LocalInvocationIndex";
     case EvqReadOnly:               return "readonly";
     case EvqWriteOnly:              return "writeonly";
+    case EvqGeometryIn:             return "in";
+    case EvqGeometryOut:            return "out";
+    case EvqInvocationID:           return "InvocationID";
+    case EvqPrimitiveIDIn:          return "PrimitiveIDIn";
+    case EvqPrimitiveID:            return "PrimitiveID";
+    case EvqLayer:                  return "Layer";
+    case EvqGLPerVertex:            return "gl_in";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on
@@ -886,6 +925,30 @@ inline const char *getYuvCscStandardEXTString(TYuvCscStandardEXT ycsq)
         default:
             UNREACHABLE();
             return "unknown color space conversion standard";
+    }
+}
+
+inline const char *getGeometryShaderPrimitiveTypeString(TLayoutGeometryShaderEXT primitiveType)
+{
+    switch (primitiveType)
+    {
+        case EgsPoints:
+            return "points";
+        case EgsLines:
+            return "lines";
+        case EgsTriangles:
+            return "triangles";
+        case EgsLinesAdjacency:
+            return "lines_adjacency";
+        case EgsTrianglesAdjacency:
+            return "triangles_adjacency";
+        case EgsLineStrip:
+            return "line_strip";
+        case EgsTriangleStrip:
+            return "triangle_strip";
+        default:
+            UNREACHABLE();
+            return "unknown geometry shader primitive type";
     }
 }
 
