@@ -173,6 +173,7 @@ class TInterfaceBlock : public TFieldListCollection
             mMangledName = buildMangledName("iblock-");
         return mMangledName;
     }
+    void setArraySize(int arraySize) { mArraySize = arraySize; }
 
   private:
     const TString *mInstanceName;  // for interface block instance names
@@ -352,6 +353,11 @@ class TType
             arraySize = s;
             invalidateMangledName();
         }
+    }
+    void setArrayUnsized()
+    {
+        array     = true;
+        arraySize = 0;
     }
     void clearArrayness()
     {
