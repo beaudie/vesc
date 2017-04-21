@@ -24,9 +24,11 @@ class CollectVariables : public TIntermTraverser
     CollectVariables(std::vector<Attribute> *attribs,
                      std::vector<OutputVariable> *outputVariables,
                      std::vector<Uniform> *uniforms,
-                     std::vector<Varying> *varyings,
+                     std::vector<Varying> *inVaryings,
+                     std::vector<Varying> *outVaryings,
                      std::vector<InterfaceBlock> *interfaceBlocks,
                      ShHashFunction64 hashFunction,
+                     GLenum shaderType,
                      const TSymbolTable &symbolTable,
                      const TExtensionBehavior &extensionBehavior);
 
@@ -48,7 +50,9 @@ class CollectVariables : public TIntermTraverser
     std::vector<Attribute> *mAttribs;
     std::vector<OutputVariable> *mOutputVariables;
     std::vector<Uniform> *mUniforms;
-    std::vector<Varying> *mVaryings;
+
+    std::vector<Varying> *mInVaryings;
+    std::vector<Varying> *mOutVaryings;
     std::vector<InterfaceBlock> *mInterfaceBlocks;
 
     std::map<std::string, InterfaceBlockField *> mInterfaceBlockFields;
@@ -70,8 +74,15 @@ class CollectVariables : public TIntermTraverser
     bool mSecondaryFragColorEXTAdded;
     bool mSecondaryFragDataEXTAdded;
 
+    bool mPerVertexAdded;
+    bool mInvocationIDAdded;
+    bool mPrimitiveIDAdded;
+    bool mPrimitiveIDInAdded;
+    bool mLayerAdded;
+
     ShHashFunction64 mHashFunction;
 
+    const GLenum mShaderType;
     const TSymbolTable &mSymbolTable;
     const TExtensionBehavior &mExtensionBehavior;
 };

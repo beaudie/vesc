@@ -67,6 +67,20 @@ class ComputeShaderValidationTest : public ShaderCompileTreeTest
     ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
 };
 
+class GeometryShaderValidationTest : public ShaderCompileTreeTest
+{
+  public:
+    GeometryShaderValidationTest() {}
+
+  protected:
+    void initResources(ShBuiltInResources *resources) override
+    {
+        resources->EXT_geometry_shader = 1;
+    }
+    ::GLenum getShaderType() const override { return GL_GEOMETRY_SHADER_EXT; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
+};
+
 // This is a test for a bug that used to exist in ANGLE:
 // Calling a function with all parameters missing should not succeed.
 TEST_F(FragmentShaderValidationTest, FunctionParameterMismatch)
@@ -2163,6 +2177,57 @@ TEST_F(FragmentShaderValidationTest, InvalidUseOfLocalSizeX)
     }
 }
 
+// The local_size layout qualifier is only available in compute shaders.
+TEST_F(GeometryShaderValidationTest, InvalidUseOfLocalSizeX)
+{
+    const std::string &shaderString1 =
+        "#version 310 es\n"
+        "#extension GL_EXT_geometry_shader : require\n"
+        "layout (points, local_size_x = 15) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    const std::string &shaderString2 =
+        "#version 310 es\n"
+        "#extension GL_EXT_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (invocations = 2, local_size_x = 15) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    const std::string &shaderString3 =
+        "#version 310 es\n"
+        "#extension GL_EXT_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, local_size_x = 15, max_vertices = 2) out;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    const std::string &shaderString4 =
+        "#version 310 es\n"
+        "#extension GL_EXT_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points) out;\n"
+        "layout (max_vertices = 2, local_size_x = 15) out;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    if (compile(shaderString1) || compile(shaderString2) || compile(shaderString3) ||
+        compile(shaderString4))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
 // It is a compile time error to use the gl_WorkGroupSize constant if
 // the local size has not been declared yet.
 // GLSL ES 3.10 Revision 4, 7.1.3 Compute Shader Special Variables
@@ -3872,6 +3937,216 @@ TEST_F(FragmentShaderValidationTest, StructAsBoolConstructorArgument)
         "void main(void)\n"
         "{\n"
         "    bool test = bool(a);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The input primitive layout qualifier is only available in geometry shaders.
+TEST_F(VertexShaderValidationTest, InvalidUseOfInputPrimitives)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(points) in vec4 myInput;\n"
+        "out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The input primitive layout qualifier is only available in geometry shaders.
+TEST_F(FragmentShaderValidationTest, InvalidUseOfInputPrimitives)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(points) in vec4 myInput;\n"
+        "out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The input primitive layout qualifier is only available in geometry shaders.
+TEST_F(ComputeShaderValidationTest, InvalidUseOfInputPrimitives)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "layout(points, local_size_x = 12) in;\n"
+        "void main()\n"
+        "{\n"
+        "   uvec3 WorkGroupSize = gl_WorkGroupSize;\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The output primitive layout qualifier is only available in geometry shaders.
+TEST_F(VertexShaderValidationTest, InvalidUseOfOutputPrimitives)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput;\n"
+        "layout(points) out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The output primitive layout qualifier is only available in geometry shaders.
+TEST_F(FragmentShaderValidationTest, InvalidUseOfOutputPrimitives)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput;\n"
+        "layout(points) out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The invocations layout qualifier is only available in geometry shaders.
+TEST_F(VertexShaderValidationTest, InvalidUseOfInvocations)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout (invocations = 3) in vec4 myInput;\n"
+        "out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The invocations layout qualifier is only available in geometry shaders.
+TEST_F(FragmentShaderValidationTest, InvalidUseOfInvocations)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout (invocations = 3) in vec4 myInput;\n"
+        "out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The invocations layout qualifier is only available in geometry shaders.
+TEST_F(ComputeShaderValidationTest, InvalidUseOfInvocations)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "layout(invocations = 3, local_size_x = 12) in;\n"
+        "void main()\n"
+        "{\n"
+        "   uvec3 WorkGroupSize = gl_WorkGroupSize;\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The max_vertices layout qualifier is only available in geometry shaders.
+TEST_F(VertexShaderValidationTest, InvalidUseOfMaxVertices)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput;\n"
+        "layout(max_vertices = 3) out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// The max_vertices layout qualifier is only available in geometry shaders.
+TEST_F(FragmentShaderValidationTest, InvalidUseOfMaxVertices)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput;\n"
+        "layout(max_vertices = 3) out vec4 myOutput;\n"
+        "void main() {\n"
+        "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// It isn't allowed to declare unsized array outputs in vertex shaders.
+TEST_F(VertexShaderValidationTest, UnsizedArrayOutputs)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput;\n"
+        "out vec4 myOutput[];\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation failure, expecting succeeded:\n" << mInfoLog;
+    }
+}
+
+// It isn't allowed to declare unsized array Inputs in fragment shaders.
+TEST_F(FragmentShaderValidationTest, UnsizedArrayInputs)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 myInput[];\n"
+        "out vec4 myOutput;\n"
+        "void main() {\n"
         "}\n";
 
     if (compile(shaderString))

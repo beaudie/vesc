@@ -308,10 +308,14 @@ bool JoinVariableStorageQualifier(TQualifier *joinedQualifier, TQualifier storag
                     *joinedQualifier = EvqCentroid;
                     break;
                 case EvqVertexOut:
+                case EvqGeometryOut:
                     *joinedQualifier = EvqSmoothOut;
                     break;
                 case EvqFragmentIn:
                     *joinedQualifier = EvqSmoothIn;
+                    break;
+                case EvqGeometryIn:
+                    *joinedQualifier = EvqGeometryIn;
                     break;
                 default:
                     return false;
@@ -326,10 +330,14 @@ bool JoinVariableStorageQualifier(TQualifier *joinedQualifier, TQualifier storag
                     *joinedQualifier = EvqFlat;
                     break;
                 case EvqVertexOut:
+                case EvqGeometryOut:
                     *joinedQualifier = EvqFlatOut;
                     break;
                 case EvqFragmentIn:
                     *joinedQualifier = EvqFlatIn;
+                    break;
+                case EvqGeometryIn:
+                    *joinedQualifier = EvqGeometryIn;
                     break;
                 default:
                     return false;
@@ -341,10 +349,14 @@ bool JoinVariableStorageQualifier(TQualifier *joinedQualifier, TQualifier storag
             switch (storageQualifier)
             {
                 case EvqVertexOut:
+                case EvqGeometryOut:
                     *joinedQualifier = EvqCentroidOut;
                     break;
                 case EvqFragmentIn:
                     *joinedQualifier = EvqCentroidIn;
+                    break;
+                case EvqGeometryIn:
+                    *joinedQualifier = EvqGeometryIn;
                     break;
                 default:
                     return false;
@@ -604,6 +616,40 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
     if (rightQualifier.imageInternalFormat != EiifUnspecified)
     {
         joinedQualifier.imageInternalFormat = rightQualifier.imageInternalFormat;
+    }
+
+    if (rightQualifier.primitiveType != EgsUndefined)
+    {
+        if (joinedQualifier.primitiveType != EgsUndefined &&
+            joinedQualifier.primitiveType != rightQualifier.primitiveType)
+        {
+            diagnostics->error(rightQualifierLocation,
+                               "Cannot have multiple different primitive specifiers",
+                               getGeometryShaderPrimitiveTypeString(rightQualifier.primitiveType));
+        }
+        joinedQualifier.primitiveType = rightQualifier.primitiveType;
+    }
+
+    if (rightQualifier.invocations != 0)
+    {
+        if (joinedQualifier.invocations != 0 &&
+            joinedQualifier.invocations != rightQualifier.invocations)
+        {
+            diagnostics->error(rightQualifierLocation, "Cannot have multiple different invocations",
+                               "invocations");
+        }
+        joinedQualifier.invocations = rightQualifier.invocations;
+    }
+
+    if (rightQualifier.maxVertices != -1)
+    {
+        if (joinedQualifier.maxVertices != -1 &&
+            joinedQualifier.maxVertices != rightQualifier.maxVertices)
+        {
+            diagnostics->error(rightQualifierLocation,
+                               "Cannot have multiple different max_vertices", "max_vertices");
+        }
+        joinedQualifier.maxVertices = rightQualifier.maxVertices;
     }
 
     return joinedQualifier;

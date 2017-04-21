@@ -62,7 +62,9 @@ class ShaderState final : angle::NonCopyable
     GLenum getShaderType() const { return mShaderType; }
     int getShaderVersion() const { return mShaderVersion; }
 
-    const std::vector<sh::Varying> &getVaryings() const { return mVaryings; }
+    const std::vector<sh::Varying> &getVaryings() const;
+    const std::vector<sh::Varying> &getInputVaryings() const { return mInVaryings; }
+    const std::vector<sh::Varying> &getOutputVaryings() const { return mOutVaryings; }
     const std::vector<sh::Uniform> &getUniforms() const { return mUniforms; }
     const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const { return mInterfaceBlocks; }
     const std::vector<sh::Attribute> &getActiveAttributes() const { return mActiveAttributes; }
@@ -85,7 +87,6 @@ class ShaderState final : angle::NonCopyable
 
     sh::WorkGroupSize mLocalSize;
 
-    std::vector<sh::Varying> mVaryings;
     std::vector<sh::Uniform> mUniforms;
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::vector<sh::Attribute> mActiveAttributes;
@@ -93,6 +94,13 @@ class ShaderState final : angle::NonCopyable
 
     // Indicates if this shader has been successfully compiled
     CompileStatus mCompileStatus;
+
+    std::vector<sh::Varying> mInVaryings;
+    std::vector<sh::Varying> mOutVaryings;
+    GLenum mGeometryInputPrimitives;
+    GLenum mGeometryOutputPrimitives;
+    int mGeometryInvocations;
+    int mGeometryMaxVertices;
 };
 
 class Shader final : angle::NonCopyable, public LabeledObject
