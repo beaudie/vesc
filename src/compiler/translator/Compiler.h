@@ -112,6 +112,8 @@ class TCompiler : public TShHandleBase
     const std::vector<sh::Uniform> &getUniforms() const { return uniforms; }
     const std::vector<sh::Varying> &getVaryings() const { return varyings; }
     const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const { return interfaceBlocks; }
+    const std::vector<sh::Varying> &getInputVaryings() const { return inVaryings; }
+    const std::vector<sh::Varying> &getOutputVaryings() const { return outVaryings; }
 
     ShHashFunction64 getHashFunction() const { return hashFunction; }
     NameMap &getNameMap() { return nameMap; }
@@ -124,6 +126,17 @@ class TCompiler : public TShHandleBase
 
     // Get the resources set by InitBuiltInSymbolTable
     const ShBuiltInResources &getResources() const;
+
+    int getGeometryShaderMaxVertices() const { return mGeometryMaxVertices; }
+    int getGeometryShaderInvocations() const { return mGeometryInvocations; }
+    TLayoutGeometryShaderEXT getGeometryShaderInputPrimitives() const
+    {
+        return mGeometryPrimitiveIn;
+    }
+    TLayoutGeometryShaderEXT getGeometryShaderOutputPrimitives() const
+    {
+        return mGeometryPrimitiveOut;
+    }
 
   protected:
     sh::GLenum getShaderType() const { return shaderType; }
@@ -181,6 +194,8 @@ class TCompiler : public TShHandleBase
     std::vector<sh::ShaderVariable> expandedUniforms;
     std::vector<sh::Varying> varyings;
     std::vector<sh::InterfaceBlock> interfaceBlocks;
+    std::vector<sh::Varying> inVaryings;
+    std::vector<sh::Varying> outVaryings;
 
   private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion
@@ -248,6 +263,13 @@ class TCompiler : public TShHandleBase
 
     // GL_OVR_multiview num_views.
     int mNumViews;
+
+    // geometry shader parameters
+    int mGeometryInputArraySize;
+    int mGeometryMaxVertices;
+    int mGeometryInvocations;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveIn;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveOut;
 
     // name hashing.
     ShHashFunction64 hashFunction;
