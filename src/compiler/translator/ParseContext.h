@@ -334,6 +334,15 @@ class TParseContext : angle::NonCopyable
                        const TSourceLoc &intValueLine,
                        const std::string &intValueString,
                        int *numViews);
+    void parseNumInvocations(int intValue,
+                             const TSourceLoc &intValueLine,
+                             const std::string &intValueString,
+                             int *numInvocations);
+    void parseMaxVertices(int intValue,
+                          const TSourceLoc &intValueLine,
+                          const std::string &intValueString,
+                          int *maxVertices);
+    bool isGeometryShaderTypeQualifier(sh::TQualifier qualifier) const;
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
                                           const TSourceLoc &qualifierTypeLine);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
@@ -400,6 +409,22 @@ class TParseContext : angle::NonCopyable
                                       TIntermTyped *trueExpression,
                                       TIntermTyped *falseExpression,
                                       const TSourceLoc &line);
+
+    int getGeometryMaxVertices() const { return mGeometryMaxVertices; }
+    int getGeometryInvocations() const { return mGeometryInvocations; }
+    TLayoutPrimitiveType getGeometryInputPrimitiveType() const
+    {
+        return mGeometryInputPrimitiveType;
+    }
+    TLayoutPrimitiveType getGeometryOutputPrimitiveType() const
+    {
+        return mGeometryOutputPrimitiveType;
+    }
+    const std::vector<TString> &getGeometryUnsizedInputDeclarations() const
+    {
+        return mGeometryUnsizedInputDeclarations;
+    }
+    unsigned int getGeometryInputArraySize() const { return mGeometryInputArraySize; }
 
     // TODO(jmadill): make these private
     TIntermediate intermediate;  // to build a parse tree
@@ -507,6 +532,12 @@ class TParseContext : angle::NonCopyable
     // followed by a declarator.
     bool mDeferredNonEmptyDeclarationErrorCheck;
 
+    bool checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderLayouts(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderInputLayouts(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderOutputLayouts(const TTypeQualifier &typeQualifier);
+    void assignArraySizeForGeometryShaderInputs();
+
     sh::GLenum mShaderType;    // vertex or fragment language (future: pack or unpack)
     ShShaderSpec mShaderSpec;  // The language specification compiler conforms to - GLES2 or WebGL.
     ShCompileOptions mCompileOptions;  // Options passed to TCompiler
@@ -555,6 +586,18 @@ class TParseContext : angle::NonCopyable
 
     // Track the state of each atomic counter binding.
     std::map<int, AtomicCounterBindingState> mAtomicCounterBindingStates;
+
+    // Track the geometry shader global parameters declared in layout.
+    int mMaxGeometryInvocations;
+    int mMaxGeometryMaxVertices;
+    TLayoutPrimitiveType mGeometryInputPrimitiveType;
+    TLayoutPrimitiveType mGeometryOutputPrimitiveType;
+    int mGeometryInvocations;
+    int mGeometryMaxVertices;
+    // Track the geometry shader input array size declaration.
+    unsigned int mGeometryInputArraySize;
+    // Track the unsized geometry shader inputs.
+    std::vector<TString> mGeometryUnsizedInputDeclarations;
 };
 
 int PaParseStrings(size_t count,

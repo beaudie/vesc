@@ -459,6 +459,7 @@ bool IsVaryingOut(TQualifier qualifier)
         case EvqFlatOut:
         case EvqCentroidOut:
         case EvqVertexOut:
+        case EvqGeometryOut:
             return true;
 
         default:
@@ -477,6 +478,7 @@ bool IsVaryingIn(TQualifier qualifier)
         case EvqFlatIn:
         case EvqCentroidIn:
         case EvqFragmentIn:
+        case EvqGeometryIn:
             return true;
 
         default:
@@ -505,6 +507,8 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
         case EvqFragmentIn:
         case EvqVaryingIn:
         case EvqVaryingOut:
+        case EvqGeometryIn:
+        case EvqGeometryOut:
             return INTERPOLATION_SMOOTH;
 
         case EvqCentroidIn:

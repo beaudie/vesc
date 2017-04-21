@@ -175,6 +175,8 @@ class TInterfaceBlock : public TFieldListCollection
             mMangledName = buildMangledName("iblock-");
         return mMangledName;
     }
+    // For setting the array size to gl_in when input primitive is declared in geometry shader.
+    void setArraySize(int arraySize) { mArraySize = arraySize; }
 
   private:
     const TString *mInstanceName;  // for interface block instance names
@@ -346,6 +348,7 @@ class TType
     bool isNonSquareMatrix() const { return isMatrix() && primarySize != secondarySize; }
     bool isArray() const { return array; }
     bool isUnsizedArray() const { return array && arraySize == 0u; }
+
     unsigned int getArraySize() const { return arraySize; }
     void setArraySize(unsigned int s)
     {
@@ -356,6 +359,9 @@ class TType
             invalidateMangledName();
         }
     }
+
+    void setArrayUnsized() { setArraySize(0u); }
+
     void clearArrayness()
     {
         if (array)
