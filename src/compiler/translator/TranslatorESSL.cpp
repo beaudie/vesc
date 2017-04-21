@@ -95,6 +95,82 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
              << ", local_size_z=" << localSize[2] << ") in;\n";
     }
 
+    if (getShaderType() == GL_GEOMETRY_SHADER_EXT)
+    {
+        sh::TLayoutGeometryShaderEXT inputPrimitive = getGeometryShaderInputPrimitives();
+        int invocations                             = getGeometryShaderInvocations();
+
+        if (inputPrimitive != EgsUndefined || invocations > 1)
+        {
+            sink << "layout (";
+
+            switch (inputPrimitive)
+            {
+                case EgsPoints:
+                    sink << "points";
+                    break;
+                case EgsLines:
+                    sink << "lines";
+                    break;
+                case EgsLinesAdjacency:
+                    sink << "lines_adjacency";
+                    break;
+                case EgsTriangles:
+                    sink << "triangles";
+                    break;
+                case EgsTrianglesAdjacency:
+                    sink << "triangles_adjacency";
+                    break;
+                default:
+                    break;
+            }
+
+            if (invocations > 1)
+            {
+                if (inputPrimitive != EgsUndefined)
+                {
+                    sink << ", ";
+                }
+
+                sink << "invocations = " << invocations;
+            }
+            sink << ") in;\n";
+        }
+
+        sh::TLayoutGeometryShaderEXT outputPrimitive = getGeometryShaderOutputPrimitives();
+        int maxVertices                              = getGeometryShaderMaxVertices();
+
+        if (outputPrimitive != EgsUndefined || maxVertices != -1)
+        {
+            sink << "layout (";
+
+            switch (outputPrimitive)
+            {
+                case EgsPoints:
+                    sink << "points";
+                    break;
+                case EgsLineStrip:
+                    sink << "line_strip";
+                    break;
+                case EgsTriangleStrip:
+                    sink << "triangle_strip";
+                    break;
+                default:
+                    break;
+            }
+
+            if (maxVertices != -1)
+            {
+                if (outputPrimitive != EgsUndefined)
+                {
+                    sink << ", ";
+                }
+                sink << "max_vertices = " << maxVertices;
+            }
+            sink << ") out;\n";
+        }
+    }
+
     // Write translated shader.
     TOutputESSL outputESSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            getSymbolTable(), getShaderType(), shaderVer, precisionEmulation,

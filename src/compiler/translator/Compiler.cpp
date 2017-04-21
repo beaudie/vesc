@@ -221,6 +221,10 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
+      mGeometryMaxVertices(-1),
+      mGeometryInvocations(1),
+      mGeometryPrimitiveIn(EgsUndefined),
+      mGeometryPrimitiveOut(EgsUndefined),
       mTemporaryIndex(0)
 {
     mComputeShaderLocalSize.fill(1);
@@ -242,8 +246,12 @@ bool TCompiler::shouldRunLoopAndIndexingValidation(ShCompileOptions compileOptio
 bool TCompiler::Init(const ShBuiltInResources &resources)
 {
     shaderVersion     = 100;
-    maxUniformVectors = (shaderType == GL_VERTEX_SHADER) ? resources.MaxVertexUniformVectors
-                                                         : resources.MaxFragmentUniformVectors;
+    maxUniformVectors = (shaderType == GL_VERTEX_SHADER)
+                            ? resources.MaxVertexUniformVectors
+                            : (shaderType == GL_FRAGMENT_SHADER)
+                                  ? resources.MaxFragmentUniformVectors
+                                  : (resources.MaxGeometryUniformComponents / 4);
+
     maxExpressionComplexity = resources.MaxExpressionComplexity;
     maxCallStackDepth       = resources.MaxCallStackDepth;
     maxFunctionParameters   = resources.MaxFunctionParameters;
@@ -336,6 +344,14 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             // Can't enable both extensions at the same time.
             mDiagnostics.globalError("Can't enable both OVR_multiview and OVR_multiview2");
             success = false;
+        }
+
+        if (success && shaderType == GL_GEOMETRY_SHADER_EXT)
+        {
+            mGeometryPrimitiveIn  = parseContext.getGeometryInputPrimitive();
+            mGeometryPrimitiveOut = parseContext.getGeometryOutputPrimitive();
+            mGeometryMaxVertices  = parseContext.getGeometryMaxVertices();
+            mGeometryInvocations  = parseContext.getGeometryInvocations();
         }
 
         // Disallow expressions deemed too complex.
@@ -585,6 +601,10 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
             symbolTable.setDefaultPrecision(integer, EbpHigh);
             symbolTable.setDefaultPrecision(floatingPoint, EbpHigh);
             break;
+        case GL_GEOMETRY_SHADER_EXT:
+            symbolTable.setDefaultPrecision(integer, EbpHigh);
+            symbolTable.setDefaultPrecision(floatingPoint, EbpHigh);
+            break;
         default:
             assert(false && "Language not supported");
     }
@@ -649,6 +669,7 @@ void TCompiler::setResourceString()
         << ":NV_shader_framebuffer_fetch:" << compileResources.NV_shader_framebuffer_fetch
         << ":ARM_shader_framebuffer_fetch:" << compileResources.ARM_shader_framebuffer_fetch
         << ":EXT_YUV_target:" << compileResources.EXT_YUV_target
+        << ":EXT_geometry_shader:" << compileResources.EXT_geometry_shader
         << ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
         << ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
         << ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset
@@ -679,7 +700,16 @@ void TCompiler::setResourceString()
         << ":MaxVertexAtomicCounterBuffers:" << compileResources.MaxVertexAtomicCounterBuffers
         << ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
         << ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
-        << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize;
+        << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize
+        << ":MaxGeometryInputComponents:" << compileResources.MaxGeometryInputComponents
+        << ":MaxGeometryOutputComponents:" << compileResources.MaxGeometryOutputComponents
+        << ":MaxGeometryImageUniforms:" << compileResources.MaxGeometryImageUniforms
+        << ":MaxGeometryTextureImageUnits:" << compileResources.MaxGeometryTextureImageUnits
+        << ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
+        << ":MaxGeometryTotalOutputComponents:" << compileResources.MaxGeometryTotalOutputComponents
+        << ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+        << ":MaxGeometryAtomicCounters:" << compileResources.MaxGeometryAtomicCounters
+        << ":MaxGeometryAtomicCounterBuffers:" << compileResources.MaxGeometryAtomicCounterBuffers;
     // clang-format on
 
     builtInResourcesString = strstream.str();
@@ -697,7 +727,8 @@ void TCompiler::clearResults()
     outputVariables.clear();
     uniforms.clear();
     expandedUniforms.clear();
-    varyings.clear();
+    inVaryings.clear();
+    outVaryings.clear();
     interfaceBlocks.clear();
     variablesCollected = false;
 
@@ -906,9 +937,9 @@ void TCompiler::collectVariables(TIntermNode *root)
 {
     if (!variablesCollected)
     {
-        sh::CollectVariables collect(&attributes, &outputVariables, &uniforms, &varyings,
-                                     &interfaceBlocks, hashFunction, symbolTable,
-                                     extensionBehavior);
+        sh::CollectVariables collect(&attributes, &outputVariables, &uniforms, &inVaryings,
+                                     &outVaryings, &interfaceBlocks, hashFunction, shaderType,
+                                     symbolTable, extensionBehavior);
         root->traverse(&collect);
 
         // This is for enforcePackingRestriction().
@@ -961,9 +992,9 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 void TCompiler::initializeOutputVariables(TIntermBlock *root)
 {
     InitVariableList list;
-    if (shaderType == GL_VERTEX_SHADER)
+    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_EXT)
     {
-        for (auto var : varyings)
+        for (auto var : outVaryings)
         {
             list.push_back(var);
         }
@@ -1022,11 +1053,25 @@ void TCompiler::writePragma(ShCompileOptions compileOptions)
 bool TCompiler::isVaryingDefined(const char *varyingName)
 {
     ASSERT(variablesCollected);
-    for (size_t ii = 0; ii < varyings.size(); ++ii)
+
+    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_EXT)
     {
-        if (varyings[ii].name == varyingName)
+        for (size_t ii = 0; ii < outVaryings.size(); ++ii)
         {
-            return true;
+            if (outVaryings[ii].name == varyingName)
+            {
+                return true;
+            }
+        }
+    }
+    if (shaderType == GL_FRAGMENT_SHADER || shaderType == GL_GEOMETRY_SHADER_EXT)
+    {
+        for (size_t ii = 0; ii < inVaryings.size(); ++ii)
+        {
+            if (inVaryings[ii].name == varyingName)
+            {
+                return true;
+            }
         }
     }
 

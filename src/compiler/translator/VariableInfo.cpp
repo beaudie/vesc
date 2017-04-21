@@ -67,16 +67,19 @@ VarT *FindVariable(const TString &name, std::vector<VarT> *infoList)
 CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
                                    std::vector<sh::OutputVariable> *outputVariables,
                                    std::vector<sh::Uniform> *uniforms,
-                                   std::vector<sh::Varying> *varyings,
+                                   std::vector<sh::Varying> *inVaryings,
+                                   std::vector<sh::Varying> *outVaryings,
                                    std::vector<sh::InterfaceBlock> *interfaceBlocks,
                                    ShHashFunction64 hashFunction,
+                                   GLenum shaderType,
                                    const TSymbolTable &symbolTable,
                                    const TExtensionBehavior &extensionBehavior)
     : TIntermTraverser(true, false, false),
       mAttribs(attribs),
       mOutputVariables(outputVariables),
       mUniforms(uniforms),
-      mVaryings(varyings),
+      mInVaryings(inVaryings),
+      mOutVaryings(outVaryings),
       mInterfaceBlocks(interfaceBlocks),
       mDepthRangeAdded(false),
       mPointCoordAdded(false),
@@ -93,7 +96,9 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mFragDepthAdded(false),
       mSecondaryFragColorEXTAdded(false),
       mSecondaryFragDataEXTAdded(false),
+      mPerVertexAdded(false),
       mHashFunction(hashFunction),
+      mShaderType(shaderType),
       mSymbolTable(symbolTable),
       mExtensionBehavior(extensionBehavior)
 {
@@ -112,11 +117,42 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
 
     if (IsVarying(symbol->getQualifier()))
     {
-        var = FindVariable(symbolName, mVaryings);
+        var = FindVariable(symbolName, mInVaryings);
+        if (var == nullptr)
+        {
+            var = FindVariable(symbolName, mOutVaryings);
+        }
     }
     else if (symbol->getType().getBasicType() == EbtInterfaceBlock)
     {
-        UNREACHABLE();
+        ASSERT(symbol->getQualifier() == EvqGLPerVertex);
+
+        if (!mPerVertexAdded)
+        {
+            Varying info;
+            constexpr char kName[] = "gl_in";
+            info.name              = kName;
+            info.mappedName        = kName;
+            info.type              = GL_STRUCT_ANGLEX;
+            info.arraySize         = symbol->getArraySize();
+            info.precision         = GL_HIGH_FLOAT;
+            info.staticUse         = true;
+            info.isInvariant       = mSymbolTable.isVaryingInvariant(kName);
+
+            ShaderVariable positionInfo;
+            constexpr char kPositionName[] = "gl_Position";
+            positionInfo.name              = kPositionName;
+            positionInfo.mappedName        = kPositionName;
+            positionInfo.type              = GL_FLOAT;
+            positionInfo.arraySize         = 0;
+            positionInfo.precision         = GL_HIGH_FLOAT;
+            positionInfo.staticUse         = true;
+
+            info.fields.push_back(positionInfo);
+
+            mInVaryings->push_back(info);
+            mPerVertexAdded = true;
+        }
     }
     else if (symbolName == "gl_DepthRange")
     {
@@ -179,6 +215,12 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
             case EvqFragmentOut:
                 var = FindVariable(symbolName, mOutputVariables);
                 break;
+            case EvqGeometryIn:
+                var = FindVariable(symbolName, mInVaryings);
+                break;
+            case EvqGeometryOut:
+                var = FindVariable(symbolName, mOutVaryings);
+                break;
             case EvqUniform:
             {
                 const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
@@ -213,7 +255,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_MEDIUM_FLOAT;  // Defined by spec.
                     info.staticUse     = true;
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mInVaryings->push_back(info);
                     mFragCoordAdded = true;
                 }
                 return;
@@ -229,7 +271,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_NONE;
                     info.staticUse     = true;
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mInVaryings->push_back(info);
                     mFrontFacingAdded = true;
                 }
                 return;
@@ -245,7 +287,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_MEDIUM_FLOAT;  // Defined by spec.
                     info.staticUse     = true;
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mInVaryings->push_back(info);
                     mPointCoordAdded = true;
                 }
                 return;
@@ -293,7 +335,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_HIGH_FLOAT;  // Defined by spec.
                     info.staticUse     = true;
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mOutVaryings->push_back(info);
                     mPositionAdded = true;
                 }
                 return;
@@ -309,7 +351,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_MEDIUM_FLOAT;  // Defined by spec.
                     info.staticUse     = true;
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mOutVaryings->push_back(info);
                     mPointSizeAdded = true;
                 }
                 return;
@@ -328,7 +370,7 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.precision   = GL_MEDIUM_FLOAT;  // Defined by spec.
                     info.staticUse   = true;
                     info.isInvariant = mSymbolTable.isVaryingInvariant(kName);
-                    mVaryings->push_back(info);
+                    mInVaryings->push_back(info);
                     mLastFragDataAdded = true;
                 }
                 return;
@@ -438,6 +480,70 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     mSecondaryFragDataEXTAdded = true;
                 }
                 return;
+            case EvqInvocationID:
+                if (!mInvocationIDAdded)
+                {
+                    Attribute info;
+                    const char kName[] = "gl_InvocationID";
+                    info.name          = kName;
+                    info.mappedName    = kName;
+                    info.type          = GL_INT;
+                    info.arraySize     = 0;
+                    info.precision     = GL_HIGH_INT;  // Defined by spec.
+                    info.staticUse     = true;
+                    info.location      = -1;
+                    mAttribs->push_back(info);
+                    mInvocationIDAdded = true;
+                }
+                return;
+            case EvqPrimitiveIDIn:
+                if (!mPrimitiveIDInAdded)
+                {
+                    Attribute info;
+                    const char kName[] = "gl_PrimitiveIDIn";
+                    info.name          = kName;
+                    info.mappedName    = kName;
+                    info.type          = GL_INT;
+                    info.arraySize     = 0;
+                    info.precision     = GL_HIGH_INT;  // Defined by spec.
+                    info.staticUse     = true;
+                    info.location      = -1;
+                    mAttribs->push_back(info);
+                    mPrimitiveIDInAdded = true;
+                }
+                return;
+            case EvqPrimitiveID:
+                if (!mPrimitiveIDAdded)
+                {
+                    Varying info;
+                    const char kName[] = "gl_PrimitiveID";
+                    info.name          = kName;
+                    info.mappedName    = kName;
+                    info.type          = GL_INT;
+                    info.arraySize     = 0;
+                    info.precision     = GL_HIGH_INT;  // Defined by spec.
+                    info.staticUse     = true;
+                    info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
+                    mOutVaryings->push_back(info);
+                    mPrimitiveIDAdded = true;
+                }
+                return;
+            case EvqLayer:
+                if (!mLayerAdded)
+                {
+                    Varying info;
+                    const char kName[] = "gl_Layer";
+                    info.name          = kName;
+                    info.mappedName    = kName;
+                    info.type          = GL_INT;
+                    info.arraySize     = 0;
+                    info.precision     = GL_HIGH_INT;  // Defined by spec.
+                    info.staticUse     = true;
+                    info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
+                    mOutVaryings->push_back(info);
+                    mLayerAdded = true;
+                }
+                return;
             default:
                 break;
         }
@@ -536,6 +642,7 @@ Varying CollectVariables::recordVarying(const TIntermSymbol &variable) const
     return varying;
 }
 
+// TODO(jiawei.shao@intel.com): implement EXT_shader_io_blocks
 InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &variable) const
 {
     const TInterfaceBlock *blockType = variable.getType().getInterfaceBlock();
@@ -585,7 +692,8 @@ bool CollectVariables::visitDeclaration(Visit, TIntermDeclaration *node)
     TQualifier qualifier          = typedNode.getQualifier();
 
     bool isShaderVariable = qualifier == EvqAttribute || qualifier == EvqVertexIn ||
-                            qualifier == EvqFragmentOut || qualifier == EvqUniform ||
+                            qualifier == EvqFragmentOut || qualifier == EvqGeometryIn ||
+                            qualifier == EvqGeometryOut || qualifier == EvqUniform ||
                             IsVarying(qualifier);
 
     if (typedNode.getBasicType() != EbtInterfaceBlock && !isShaderVariable)
@@ -599,7 +707,7 @@ bool CollectVariables::visitDeclaration(Visit, TIntermDeclaration *node)
         // initialization. It will contain a TInterBinary node in that case. Since attributes,
         // uniforms, varyings, outputs and interface blocks cannot be initialized in a shader, we
         // must have only TIntermSymbol nodes in the sequence in the cases we are interested in.
-        const TIntermSymbol &variable = *variableNode->getAsSymbolNode();
+        TIntermSymbol &variable = *variableNode->getAsSymbolNode();
         if (typedNode.getBasicType() == EbtInterfaceBlock)
         {
             mInterfaceBlocks->push_back(recordInterfaceBlock(variable));
@@ -618,9 +726,26 @@ bool CollectVariables::visitDeclaration(Visit, TIntermDeclaration *node)
                 case EvqUniform:
                     mUniforms->push_back(recordUniform(variable));
                     break;
-                default:
-                    mVaryings->push_back(recordVarying(variable));
+                case EvqVaryingIn:
+                case EvqFragmentIn:
+                case EvqGeometryIn:
+                case EvqFlatIn:
+                case EvqCentroidIn:
+                case EvqSmoothIn:
+                {
+                    mInVaryings->push_back(recordVarying(variable));
                     break;
+                }
+                case EvqVaryingOut:
+                case EvqVertexOut:
+                case EvqGeometryOut:
+                case EvqFlatOut:
+                case EvqCentroidOut:
+                case EvqSmoothOut:
+                    mOutVaryings->push_back(recordVarying(variable));
+                    break;
+                default:
+                    UNREACHABLE();
             }
         }
     }
@@ -643,12 +768,19 @@ bool CollectVariables::visitBinary(Visit, TIntermBinary *binaryNode)
 
         const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
         InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
-        ASSERT(namedBlock);
-        namedBlock->staticUse = true;
+        if (!namedBlock)
+        {
+            ASSERT(mShaderType == GL_GEOMETRY_SHADER_EXT);
+            return true;
+        }
+        else
+        {
+            namedBlock->staticUse = true;
 
-        unsigned int fieldIndex = constantUnion->getUConst(0);
-        ASSERT(fieldIndex < namedBlock->fields.size());
-        namedBlock->fields[fieldIndex].staticUse = true;
+            unsigned int fieldIndex = constantUnion->getUConst(0);
+            ASSERT(fieldIndex < namedBlock->fields.size());
+            namedBlock->fields[fieldIndex].staticUse = true;
+        }
         return false;
     }
 

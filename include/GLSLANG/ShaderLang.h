@@ -19,13 +19,12 @@
 // This is the platform independent interface between an OGL driver
 // and the shading language compiler.
 //
-
 // Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
 #include "ShaderVars.h"
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 176
+#define ANGLE_SH_VERSION 177
 
 enum ShShaderSpec
 {
@@ -269,6 +268,7 @@ struct ShBuiltInResources
     int ARM_shader_framebuffer_fetch;
     int OVR_multiview;
     int EXT_YUV_target;
+    int EXT_geometry_shader;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
@@ -383,6 +383,38 @@ struct ShBuiltInResources
 
     // maximum number of uniform block bindings
     int MaxUniformBufferBindings;
+
+    // EXT_geometry_shader constants;
+
+    // maximum number of input components in a geometry shader
+    int MaxGeometryInputComponents;
+
+    // maximum number of output components in a geometry shader
+    int MaxGeometryOutputComponents;
+
+    // maximum number of image uniforms in a geometry shader
+    int MaxGeometryImageUniforms;
+
+    // maximum number of texture image units in a geometry shader
+    int MaxGeometryTextureImageUnits;
+
+    // maximum number of max_vertices in a geometry shader
+    int MaxGeometryOutputVertices;
+
+    // maximum number of total output components in a geometry shader
+    int MaxGeometryTotalOutputComponents;
+
+    // maximum number of uniform components in a geometry shader
+    int MaxGeometryUniformComponents;
+
+    // maximum number of atomic counters in a geometry shader
+    int MaxGeometryAtomicCounters;
+
+    // maximum number of atomic counter buffers in a geometry shader
+    int MaxGeometryAtomicCounterBuffers;
+
+    // maximum number of invocations in a geometry shader
+    int MaxGeometryInvocations;
 };
 
 //
@@ -506,6 +538,13 @@ const std::vector<sh::OutputVariable> *GetOutputVariables(const ShHandle handle)
 const std::vector<sh::InterfaceBlock> *GetInterfaceBlocks(const ShHandle handle);
 sh::WorkGroupSize GetComputeShaderLocalGroupSize(const ShHandle handle);
 int GetVertexShaderNumViews(const ShHandle handle);
+
+const std::vector<sh::Varying> *GetInputVaryings(const ShHandle handle);
+const std::vector<sh::Varying> *GetOutputVaryings(const ShHandle handle);
+GLenum GetGeometryShaderInputPrimitives(const ShHandle handle);
+GLenum GetGeometryShaderOutputPrimitives(const ShHandle handle);
+int GetGeometryShaderMaxVertices(const ShHandle handle);
+int GetGeometryShaderInvocations(const ShHandle handle);
 
 // Returns true if the passed in variables pack in maxVectors followingthe packing rules from the
 // GLSL 1.017 spec, Appendix A, section 7.
