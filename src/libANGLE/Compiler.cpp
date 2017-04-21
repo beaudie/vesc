@@ -50,7 +50,8 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
       mResources(),
       mFragmentCompiler(nullptr),
       mVertexCompiler(nullptr),
-      mComputeCompiler(nullptr)
+      mComputeCompiler(nullptr),
+      mGeometryCompiler(nullptr)
 {
     ASSERT(state.getClientMajorVersion() == 2 || state.getClientMajorVersion() == 3);
 
@@ -72,6 +73,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.OES_EGL_image_external          = extensions.eglImageExternal;
     mResources.OES_EGL_image_external_essl3    = extensions.eglImageExternalEssl3;
     mResources.NV_EGL_stream_consumer_external = extensions.eglStreamConsumerExternal;
+    mResources.EXT_geometry_shader             = extensions.geometryShader;
     // TODO: use shader precision caps to determine if high precision is supported?
     mResources.FragmentPrecisionHigh = 1;
     mResources.EXT_frag_depth        = extensions.fragDepth;
@@ -111,8 +113,18 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxFragmentAtomicCounterBuffers = caps.maxFragmentAtomicCounterBuffers;
     mResources.MaxCombinedAtomicCounterBuffers = caps.maxCombinedAtomicCounterBuffers;
     mResources.MaxAtomicCounterBufferSize      = caps.maxAtomicCounterBufferSize;
-
     mResources.MaxUniformBufferBindings = caps.maxUniformBufferBindings;
+
+    // EXT_geometry_shader constants
+    mResources.MaxGeometryInputComponents       = caps.maxGeometryInputComponents;
+    mResources.MaxGeometryOutputComponents      = caps.maxGeometryOutputComponents;
+    mResources.MaxGeometryImageUniforms         = caps.maxGeometryImageUniforms;
+    mResources.MaxGeometryTextureImageUnits     = caps.maxGeometryTextureImageUnits;
+    mResources.MaxGeometryOutputVertices        = caps.maxGeometryOutputVertices;
+    mResources.MaxGeometryTotalOutputComponents = caps.maxGeometryTotalOutputComponents;
+    mResources.MaxGeometryUniformComponents     = caps.maxGeometryUniformComponents;
+    mResources.MaxGeometryAtomicCounters        = caps.maxGeometryAtomicCounters;
+    mResources.MaxGeometryAtomicCounterBuffers  = caps.maxGeometryAtomicCounterBuffers;
 
     if (state.getClientMajorVersion() == 2 && !extensions.drawBuffers)
     {
@@ -149,6 +161,15 @@ Compiler::~Compiler()
         activeCompilerHandles--;
     }
 
+    if (mGeometryCompiler)
+    {
+        sh::Destruct(mGeometryCompiler);
+        mGeometryCompiler = nullptr;
+
+        ASSERT(activeCompilerHandles > 0);
+        activeCompilerHandles--;
+    }
+
     if (activeCompilerHandles == 0)
     {
         sh::Finalize();
@@ -171,6 +192,9 @@ ShHandle Compiler::getCompilerHandle(GLenum type)
             break;
         case GL_COMPUTE_SHADER:
             compiler = &mComputeCompiler;
+            break;
+        case GL_GEOMETRY_SHADER_EXT:
+            compiler = &mGeometryCompiler;
             break;
         default:
             UNREACHABLE();
