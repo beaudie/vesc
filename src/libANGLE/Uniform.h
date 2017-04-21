@@ -19,8 +19,21 @@
 namespace gl
 {
 
+// Helper struct representing the common part in LinkedUniform, BufferVariable
+struct Variable : public sh::ShaderVariable
+{
+    Variable();
+    ~Variable();
+    Variable(const Variable &other);
+    Variable &operator=(const Variable &other);
+
+    int binding;
+    int blockIndex;
+    sh::BlockMemberInfo blockInfo;
+};
+
 // Helper struct representing a single shader uniform
-struct LinkedUniform : public sh::Uniform
+struct LinkedUniform : public Variable
 {
     LinkedUniform();
     LinkedUniform(GLenum type,
@@ -31,7 +44,6 @@ struct LinkedUniform : public sh::Uniform
                   const int location,
                   const int blockIndex,
                   const sh::BlockMemberInfo &blockInfo);
-    LinkedUniform(const sh::Uniform &uniform);
     LinkedUniform(const LinkedUniform &uniform);
     LinkedUniform &operator=(const LinkedUniform &uniform);
     ~LinkedUniform();
@@ -48,24 +60,45 @@ struct LinkedUniform : public sh::Uniform
     uint8_t *getDataPtrToElement(size_t elementIndex);
     const uint8_t *getDataPtrToElement(size_t elementIndex) const;
 
-    int blockIndex;
-    sh::BlockMemberInfo blockInfo;
+    int location;
 
   private:
     mutable angle::MemoryBuffer mLazyData;
 };
 
-// Helper struct representing a single shader uniform block
-struct UniformBlock
+// Helper struct representing a single buffer varable
+struct BufferVariable : public Variable
 {
-    UniformBlock();
-    UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn);
-    UniformBlock(const UniformBlock &other) = default;
-    UniformBlock &operator=(const UniformBlock &other) = default;
+    BufferVariable();
+    BufferVariable(const std::string &name,
+                   const int blockIndex,
+                   const unsigned int arraySize,
+                   const unsigned int topLevelArraySize,
+                   const unsigned int topLevelArrayStride,
+                   const sh::BlockMemberInfo &blockInfo);
+    BufferVariable(const BufferVariable &bufferVariable);
+    BufferVariable &operator=(const BufferVariable &bufferVariable);
+    ~BufferVariable();
+
+    unsigned int topLevelArraySize;
+    unsigned int topLevelArrayStride;
+};
+
+// Helper struct representing a single shader interface block
+struct InterfaceBlock
+{
+    InterfaceBlock();
+    InterfaceBlock(const std::string &nameIn,
+                   int bindingIn,
+                   bool isArrayIn,
+                   unsigned int arrayElementIn);
+    InterfaceBlock(const InterfaceBlock &other) = default;
+    InterfaceBlock &operator=(const InterfaceBlock &other) = default;
 
     std::string nameWithArrayIndex() const;
 
     std::string name;
+    int binding;
     bool isArray;
     unsigned int arrayElement;
     unsigned int dataSize;
@@ -74,7 +107,7 @@ struct UniformBlock
     bool fragmentStaticUse;
     bool computeStaticUse;
 
-    std::vector<unsigned int> memberUniformIndexes;
+    std::vector<unsigned int> memberIndexes;
 };
 
 }

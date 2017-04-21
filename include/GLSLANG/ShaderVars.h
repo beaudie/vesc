@@ -213,9 +213,12 @@ struct InterfaceBlock
     std::string name;
     std::string mappedName;
     std::string instanceName;
+    int binding;
     unsigned int arraySize;
     BlockLayoutType layout;
     bool isRowMajorLayout;
+    bool isUniformBlock;
+    bool isShaderStorageBlock;
     bool staticUse;
     std::vector<InterfaceBlockField> fields;
 };

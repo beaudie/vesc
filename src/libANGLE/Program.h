@@ -48,8 +48,9 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
-struct UniformBlock;
+struct InterfaceBlock;
 struct LinkedUniform;
+struct BufferVariable;
 struct PackedVarying;
 
 extern const char * const g_fakepath;
@@ -231,7 +232,7 @@ class ProgramState final : angle::NonCopyable
     const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
-    const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
+    const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
 
     GLint getUniformLocation(const std::string &name) const;
@@ -269,7 +270,12 @@ class ProgramState final : angle::NonCopyable
     // This makes sampler validation easier, since we don't need a separate list.
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
-    std::vector<UniformBlock> mUniformBlocks;
+
+    std::vector<InterfaceBlock> mUniformBlocks;
+
+    std::vector<BufferVariable> mBufferVariables;
+    std::vector<InterfaceBlock> mShaderStorageBlocks;
+
     RangeUI mSamplerUniformRange;
 
     // An array of the samplers that are used by the program
@@ -407,7 +413,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     void bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const;
 
-    const UniformBlock &getUniformBlockByIndex(GLuint index) const;
+    const InterfaceBlock &getUniformBlockByIndex(GLuint index) const;
 
     void setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode);
     void getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const;
@@ -479,15 +485,16 @@ class Program final : angle::NonCopyable, public LabeledObject
     void resetUniformBlockBindings();
 
     bool linkAttributes(const ContextState &data, InfoLog &infoLog);
-    bool validateUniformBlocksCount(GLuint maxUniformBlocks,
-                                    const std::vector<sh::InterfaceBlock> &block,
-                                    const std::string &errorMessage,
-                                    InfoLog &infoLog) const;
+    bool validateInterfaceBlocksCount(GLuint maxUniformBlocks,
+                                      GLuint maxShaderStorageBlocks,
+                                      const std::vector<sh::InterfaceBlock> &block,
+                                      const std::string &errorMessage,
+                                      InfoLog &infoLog) const;
     bool validateVertexAndFragmentInterfaceBlocks(
         const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
         InfoLog &infoLog) const;
-    bool linkUniformBlocks(InfoLog &infoLog, const Caps &caps);
+    bool linkInterfaceBlocks(InfoLog &infoLog, const Caps &caps);
     bool linkVaryings(InfoLog &infoLog) const;
 
     bool linkUniforms(InfoLog &infoLog, const Caps &caps, const Bindings &uniformLocationBindings);
@@ -520,9 +527,16 @@ class Program final : angle::NonCopyable, public LabeledObject
     template <typename VarT>
     void defineUniformBlockMembers(const std::vector<VarT> &fields,
                                    const std::string &prefix,
+                                   int binding,
                                    int blockIndex);
 
     void defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType);
+
+    template <typename VarT>
+    void defineShaderStorageBlockMemebers(const std::vector<VarT> &fields,
+                                          const std::string &prefix,
+                                          int blockIndex);
+    void defineShaderStorageBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType);
 
     // Both these function update the cached uniform values and return a modified "count"
     // so that the uniform update doesn't overflow the uniform.
