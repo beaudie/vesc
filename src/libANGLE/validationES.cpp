@@ -1241,9 +1241,9 @@ bool ValidateGetActiveUniformBlockivBase(Context *context,
     {
         if (pname == GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES)
         {
-            const UniformBlock &uniformBlock =
+            const InterfaceBlock &uniformBlock =
                 programObject->getUniformBlockByIndex(uniformBlockIndex);
-            *length = static_cast<GLsizei>(uniformBlock.memberUniformIndexes.size());
+            *length = static_cast<GLsizei>(uniformBlock.memberIndexes.size());
         }
         else
         {
@@ -3666,7 +3666,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
     for (unsigned int uniformBlockIndex = 0;
          uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
-        const gl::UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
+        const gl::InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
         GLuint blockBinding                  = program->getUniformBlockBinding(uniformBlockIndex);
         const OffsetBindingPointer<Buffer> &uniformBuffer =
             state.getIndexedUniformBuffer(blockBinding);

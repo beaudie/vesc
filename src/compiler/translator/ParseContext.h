@@ -451,8 +451,10 @@ class TParseContext : angle::NonCopyable
                                   // without precision, explicit or implicit.
     bool mFragmentPrecisionHighOnESSL1;  // true if highp precision is supported when compiling
                                          // ESSL1.
-    TLayoutMatrixPacking mDefaultMatrixPacking;
-    TLayoutBlockStorage mDefaultBlockStorage;
+    TLayoutMatrixPacking mDefaultUniformMatrixPacking;
+    TLayoutBlockStorage mDefaultUniformBlockStorage;
+    TLayoutMatrixPacking mDefaultBufferMatrixPacking;
+    TLayoutBlockStorage mDefaultBufferBlockStorage;
     TString mHashErrMsg;
     TDiagnostics *mDiagnostics;
     TDirectiveHandler mDirectiveHandler;

@@ -109,8 +109,10 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mFunctionReturnsValue(false),
       mChecksPrecisionErrors(checksPrecErrors),
       mFragmentPrecisionHighOnESSL1(false),
-      mDefaultMatrixPacking(EmpColumnMajor),
-      mDefaultBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
+      mDefaultUniformMatrixPacking(EmpColumnMajor),
+      mDefaultUniformBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
+      mDefaultBufferMatrixPacking(EmpColumnMajor),
+      mDefaultBufferBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
       mDiagnostics(diagnostics),
       mDirectiveHandler(ext,
                         *mDiagnostics,
@@ -2473,12 +2475,26 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
         if (layoutQualifier.matrixPacking != EmpUnspecified)
         {
-            mDefaultMatrixPacking = layoutQualifier.matrixPacking;
+            if (typeQualifier.qualifier == EvqUniform)
+            {
+                mDefaultUniformMatrixPacking = layoutQualifier.matrixPacking;
+            }
+            if (typeQualifier.qualifier == EvqBuffer)
+            {
+                mDefaultBufferMatrixPacking = layoutQualifier.matrixPacking;
+            }
         }
 
         if (layoutQualifier.blockStorage != EbsUnspecified)
         {
-            mDefaultBlockStorage = layoutQualifier.blockStorage;
+            if (typeQualifier.qualifier == EvqUniform)
+            {
+                mDefaultUniformBlockStorage = layoutQualifier.blockStorage;
+            }
+            if (typeQualifier.qualifier == EvqBuffer)
+            {
+                mDefaultBufferBlockStorage = layoutQualifier.blockStorage;
+            }
         }
     }
 }
@@ -2832,9 +2848,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
-    if (typeQualifier.qualifier != EvqUniform)
+    if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
     {
-        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform",
+        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform or buffer",
               getQualifierString(typeQualifier.qualifier));
     }
 
@@ -2845,22 +2861,33 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
 
-    // TODO(oetuaho): Remove this and support binding for blocks.
-    checkBindingIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.binding);
-
     checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
     checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
 
-    if (blockLayoutQualifier.matrixPacking == EmpUnspecified)
+    if ((typeQualifier.qualifier == EvqUniform) &&
+        (blockLayoutQualifier.matrixPacking == EmpUnspecified))
     {
-        blockLayoutQualifier.matrixPacking = mDefaultMatrixPacking;
+        blockLayoutQualifier.matrixPacking = mDefaultUniformMatrixPacking;
     }
 
-    if (blockLayoutQualifier.blockStorage == EbsUnspecified)
+    if ((typeQualifier.qualifier == EvqBuffer) &&
+        (blockLayoutQualifier.matrixPacking == EmpUnspecified))
     {
-        blockLayoutQualifier.blockStorage = mDefaultBlockStorage;
+        blockLayoutQualifier.matrixPacking = mDefaultBufferMatrixPacking;
+    }
+
+    if ((typeQualifier.qualifier == EvqUniform) &&
+        (blockLayoutQualifier.blockStorage == EbsUnspecified))
+    {
+        blockLayoutQualifier.blockStorage = mDefaultUniformBlockStorage;
+    }
+
+    if ((typeQualifier.qualifier == EvqBuffer) &&
+        (blockLayoutQualifier.blockStorage == EbsUnspecified))
+    {
+        blockLayoutQualifier.blockStorage = mDefaultBufferBlockStorage;
     }
 
     checkWorkGroupSizeIsNotSpecified(nameLine, blockLayoutQualifier);
@@ -2878,17 +2905,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
             error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
+                  "unsupported type - Opaque types are not allowed in interface blocks",
                   fieldType->getBasicString());
         }
 
@@ -2897,6 +2917,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         {
             case EvqGlobal:
             case EvqUniform:
+            case EvqBuffer:
                 break;
             default:
                 error(field->line(), "invalid qualifier on interface block member",
