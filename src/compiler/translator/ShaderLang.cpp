@@ -11,6 +11,7 @@
 
 #include "GLSLANG/ShaderLang.h"
 
+#include "compiler/translator/BaseTypes.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/length_limits.h"
@@ -40,12 +41,6 @@ template <>
 const std::vector<Uniform> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getUniforms();
-}
-
-template <>
-const std::vector<Varying> *GetVariableList(const TCompiler *compiler)
-{
-    return &compiler->getVaryings();
 }
 
 template <>
@@ -164,6 +159,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->ARM_shader_framebuffer_fetch    = 0;
     resources->OVR_multiview                   = 0;
     resources->EXT_YUV_target                  = 0;
+    resources->EXT_geometry_shader             = 0;
 
     resources->NV_draw_buffers = 0;
 
@@ -224,6 +220,17 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->MaxAtomicCounterBufferSize      = 32;
 
     resources->MaxUniformBufferBindings = 32;
+
+    resources->MaxGeometryInputComponents       = 64;
+    resources->MaxGeometryOutputComponents      = 64;
+    resources->MaxGeometryImageUniforms         = 0;
+    resources->MaxGeometryTextureImageUnits     = 16;
+    resources->MaxGeometryOutputVertices        = 256;
+    resources->MaxGeometryTotalOutputComponents = 1024;
+    resources->MaxGeometryUniformComponents     = 1024;
+    resources->MaxGeometryAtomicCounters        = 0;
+    resources->MaxGeometryAtomicCounterBuffers  = 0;
+    resources->MaxGeometryInvocations           = 32;
 }
 
 //
@@ -349,9 +356,23 @@ const std::vector<Uniform> *GetUniforms(const ShHandle handle)
     return GetShaderVariables<Uniform>(handle);
 }
 
-const std::vector<Varying> *GetVaryings(const ShHandle handle)
+const std::vector<sh::Varying> *GetVaryings(const ShHandle handle)
 {
-    return GetShaderVariables<Varying>(handle);
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    switch (compiler->getShaderType())
+    {
+        case GL_VERTEX_SHADER:
+            return &compiler->getOutputVaryings();
+        case GL_FRAGMENT_SHADER:
+            return &compiler->getInputVaryings();
+        default:
+            UNREACHABLE();
+            return &compiler->getInputVaryings();
+    }
 }
 
 const std::vector<Attribute> *GetAttributes(const ShHandle handle)
