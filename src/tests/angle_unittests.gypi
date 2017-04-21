@@ -62,6 +62,7 @@
             '<(angle_path)/src/tests/compiler_tests/EXT_blend_func_extended_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/FloatLex_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/FragDepth_test.cpp',
+            '<(angle_path)/src/tests/compiler_tests/GeometryShader_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/GLSLCompatibilityOutput_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/InitOutputVariables_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/IntermNode_test.cpp',

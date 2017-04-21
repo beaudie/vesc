@@ -24,6 +24,8 @@
             '../include/angle_gl.h',
             'compiler/translator/AddAndTrueToLoopCondition.cpp',
             'compiler/translator/AddAndTrueToLoopCondition.h',
+            'compiler/translator/AssignSizeToUnsizedInputs.cpp',
+            'compiler/translator/AssignSizeToUnsizedInputs.h',
             'compiler/translator/BaseTypes.h',
             'compiler/translator/BuiltInFunctionEmulator.cpp',
             'compiler/translator/BuiltInFunctionEmulator.h',
