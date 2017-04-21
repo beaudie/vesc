@@ -43,6 +43,7 @@ class Compiler final : angle::NonCopyable
     ShHandle mFragmentCompiler;
     ShHandle mVertexCompiler;
     ShHandle mComputeCompiler;
+    ShHandle mGeometryCompiler;
 };
 
 }  // namespace gl

@@ -78,6 +78,13 @@ class ShaderState final : angle::NonCopyable
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::vector<sh::Attribute> mActiveAttributes;
     std::vector<sh::OutputVariable> mActiveOutputVariables;
+
+    std::vector<sh::Varying> mInVaryings;
+    std::vector<sh::Varying> mOutVaryings;
+    GLenum mGeometryInputPrimitives;
+    GLenum mGeometryOutputPrimitives;
+    int mGeometryInvocations;
+    int mGeometryMaxVertices;
 };
 
 class Shader final : angle::NonCopyable, public LabeledObject
