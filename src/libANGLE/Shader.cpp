@@ -357,7 +357,6 @@ void Shader::resolveCompile(const Context *context)
     // Gather the shader information
     mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
-    mState.mVaryings        = GetShaderVariables(sh::GetVaryings(compilerHandle));
     mState.mUniforms        = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mInterfaceBlocks = GetShaderVariables(sh::GetInterfaceBlocks(compilerHandle));
 
@@ -370,11 +369,14 @@ void Shader::resolveCompile(const Context *context)
         }
         case GL_VERTEX_SHADER:
         {
+            mState.mVaryings         = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
             mState.mActiveAttributes = GetActiveShaderVariables(sh::GetAttributes(compilerHandle));
             break;
         }
         case GL_FRAGMENT_SHADER:
         {
+            mState.mVaryings = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+
             // TODO(jmadill): Figure out why we only sort in the FS, and if we need to.
             std::sort(mState.mVaryings.begin(), mState.mVaryings.end(), CompareShaderVar);
             mState.mActiveOutputVariables =
