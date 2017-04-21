@@ -201,6 +201,18 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                 ASSERT(symbolName.compare(0, 3, "gl_") != 0 || var);
             }
             break;
+            case EvqBuffer:
+            {
+                const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
+
+                InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
+                ASSERT(namedBlock);
+                var = FindVariable(symbolName, &namedBlock->fields);
+
+                // Set static use on the parent interface block here
+                namedBlock->staticUse = true;
+            }
+            break;
             case EvqFragCoord:
                 if (!mFragCoordAdded)
                 {
@@ -540,7 +552,6 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
 {
     const TInterfaceBlock *blockType = variable.getType().getInterfaceBlock();
     ASSERT(blockType);
-
     InterfaceBlock interfaceBlock;
     interfaceBlock.name = blockType->name().c_str();
     interfaceBlock.mappedName =
@@ -548,7 +559,11 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
     interfaceBlock.instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize        = variable.getArraySize();
+    interfaceBlock.binding              = variable.getType().getLayoutQualifier().binding;
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
+    TQualifier qualifier                = variable.getType().getQualifier();
+    interfaceBlock.isUniformBlock       = (qualifier == EvqUniform);
+    interfaceBlock.isShaderStorageBlock = (qualifier == EvqBuffer);
     interfaceBlock.layout           = GetBlockLayoutType(blockType->blockStorage());
 
     // Gather field information

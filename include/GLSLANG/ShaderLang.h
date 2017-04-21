@@ -376,6 +376,12 @@ struct ShBuiltInResources
 
     // maximum number of buffer object storage in machine units
     int MaxAtomicCounterBufferSize;
+
+    // maximum number of uniform buffer bindings
+    int MaxUniformBufferBindings;
+
+    // maximum number of shader storage buffer bindings
+    int MaxShaderStorageBufferBindings;
 };
 
 //
