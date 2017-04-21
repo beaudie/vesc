@@ -42,6 +42,7 @@ class Compiler final : public RefCountObjectNoID
     ShHandle mFragmentCompiler;
     ShHandle mVertexCompiler;
     ShHandle mComputeCompiler;
+    ShHandle mGeometryCompiler;
 };
 
 }  // namespace gl
