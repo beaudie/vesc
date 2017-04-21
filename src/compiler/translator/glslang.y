@@ -157,9 +157,9 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
     }  \
 }
 
-#define ES3_1_ONLY(TOKEN, LINE, REASON) {  \
-    if (context->getShaderVersion() != 310) {  \
-        context->error(LINE, REASON " supported in GLSL ES 3.10 only ", TOKEN);  \
+#define ES31_OR_NEWER(TOKEN, LINE, REASON) {  \
+    if (context->getShaderVersion() < 310) {  \
+        context->error(LINE, REASON " supported in GLSL ES 3.10 and above only ", TOKEN);  \
     }  \
 }
 %}
@@ -181,6 +181,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %token <lex> SAMPLEREXTERNAL2DY2YEXT
 %token <lex> IMAGE2D IIMAGE2D UIMAGE2D IMAGE3D IIMAGE3D UIMAGE3D IMAGE2DARRAY IIMAGE2DARRAY UIMAGE2DARRAY
 %token <lex> IMAGECUBE IIMAGECUBE UIMAGECUBE
+%token <lex> BUFFER
 %token <lex> LAYOUT
 %token <lex> YUVCSCSTANDARDEXT YUVCSCSTANDARDEXTCONSTANT
 
@@ -948,6 +949,11 @@ storage_qualifier
     | UNIFORM {
         context->checkIsAtGlobalLevel(@1, "uniform");
         $$ = new TStorageQualifierWrapper(EvqUniform, @1);
+    }
+    | BUFFER {
+        ES31_OR_NEWER("buffer", @1, "storage qualifier");
+        context->checkIsAtGlobalLevel(@1, "buffer");
+        $$ = new TStorageQualifierWrapper(EvqBuffer, @1);
     }
     | READONLY {
         $$ = new TMemoryQualifierWrapper(EvqReadOnly, @1);

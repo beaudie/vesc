@@ -361,7 +361,13 @@ bool Varying::isSameVaryingAtLinkTime(const Varying &other, int shaderVersion) c
 }
 
 InterfaceBlock::InterfaceBlock()
-    : arraySize(0), layout(BLOCKLAYOUT_PACKED), isRowMajorLayout(false), staticUse(false)
+    : binding(-1),
+      arraySize(0),
+      layout(BLOCKLAYOUT_PACKED),
+      isRowMajorLayout(false),
+      isUniformBlock(false),
+      isShaderStorageBlock(false),
+      staticUse(false)
 {
 }
 
@@ -373,9 +379,12 @@ InterfaceBlock::InterfaceBlock(const InterfaceBlock &other)
     : name(other.name),
       mappedName(other.mappedName),
       instanceName(other.instanceName),
+      binding(other.binding),
       arraySize(other.arraySize),
       layout(other.layout),
       isRowMajorLayout(other.isRowMajorLayout),
+      isUniformBlock(other.isUniformBlock),
+      isShaderStorageBlock(other.isShaderStorageBlock),
       staticUse(other.staticUse),
       fields(other.fields)
 {
@@ -386,9 +395,12 @@ InterfaceBlock &InterfaceBlock::operator=(const InterfaceBlock &other)
     name             = other.name;
     mappedName       = other.mappedName;
     instanceName     = other.instanceName;
+    binding              = other.binding;
     arraySize        = other.arraySize;
     layout           = other.layout;
     isRowMajorLayout = other.isRowMajorLayout;
+    isUniformBlock       = other.isUniformBlock;
+    isShaderStorageBlock = other.isShaderStorageBlock;
     staticUse        = other.staticUse;
     fields           = other.fields;
     return *this;
@@ -403,7 +415,8 @@ bool InterfaceBlock::isSameInterfaceBlockAtLinkTime(const InterfaceBlock &other)
 {
     if (name != other.name || mappedName != other.mappedName || arraySize != other.arraySize ||
         layout != other.layout || isRowMajorLayout != other.isRowMajorLayout ||
-        fields.size() != other.fields.size())
+        isUniformBlock != other.isUniformBlock ||
+        isShaderStorageBlock != other.isShaderStorageBlock || fields.size() != other.fields.size())
     {
         return false;
     }

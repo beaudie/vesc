@@ -392,6 +392,10 @@ class TParseContext : angle::NonCopyable
                                             const TSourceLoc &location);
     void checkBindingIsValid(const TSourceLoc &identifierLocation, const TType &type);
     void checkBindingIsNotSpecified(const TSourceLoc &location, int binding);
+    void checkBlockBindingIsValid(const TSourceLoc &location,
+                                  const TQualifier &qualifier,
+                                  int binding,
+                                  int arraySize);
     void checkImageBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
     void checkSamplerBindingIsValid(const TSourceLoc &location, int binding, int arraySize);
 
@@ -451,8 +455,10 @@ class TParseContext : angle::NonCopyable
                                   // without precision, explicit or implicit.
     bool mFragmentPrecisionHighOnESSL1;  // true if highp precision is supported when compiling
                                          // ESSL1.
-    TLayoutMatrixPacking mDefaultMatrixPacking;
-    TLayoutBlockStorage mDefaultBlockStorage;
+    TLayoutMatrixPacking mDefaultUniformMatrixPacking;
+    TLayoutBlockStorage mDefaultUniformBlockStorage;
+    TLayoutMatrixPacking mDefaultBufferMatrixPacking;
+    TLayoutBlockStorage mDefaultBufferBlockStorage;
     TString mHashErrMsg;
     TDiagnostics *mDiagnostics;
     TDirectiveHandler mDirectiveHandler;
@@ -476,6 +482,8 @@ class TParseContext : angle::NonCopyable
     int mMaxImageUnits;
     int mMaxCombinedTextureImageUnits;
     int mMaxUniformLocations;
+    int mMaxUniformBufferBindings;
+    int mMaxShaderStorageBufferBindings;
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
 };
