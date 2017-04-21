@@ -140,7 +140,8 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 }
 
 #define NON_COMPUTE_ONLY(S, L) {  \
-    if (context->getShaderType() != GL_VERTEX_SHADER && context->getShaderType() != GL_FRAGMENT_SHADER) {  \
+    if (context->getShaderType() != GL_VERTEX_SHADER && context->getShaderType() != GL_FRAGMENT_SHADER && \
+	    context->getShaderType() != GL_GEOMETRY_SHADER_EXT) {  \
         context->error(L, " supported in vertex and fragment shaders only ", S);  \
     }  \
 }
@@ -910,10 +911,14 @@ storage_qualifier
             ES3_OR_NEWER("in", @1, "storage qualifier");
             $$ = new TStorageQualifierWrapper(EvqVertexIn, @1);
         }
-        else
+        else if (context->getShaderType() == GL_COMPUTE_SHADER)
         {
             $$ = new TStorageQualifierWrapper(EvqComputeIn, @1);
         }
+		else
+		{
+		    $$ = new TStorageQualifierWrapper(EvqGeometryIn, @1);
+		}
     }
     | OUT_QUAL {
         if (context->declaringFunction())
@@ -928,10 +933,14 @@ storage_qualifier
             {
                 $$ = new TStorageQualifierWrapper(EvqFragmentOut, @1);
             }
-            else
+            else if (context->getShaderType() == GL_VERTEX_SHADER)
             {
                 $$ = new TStorageQualifierWrapper(EvqVertexOut, @1);
             }
+			else
+			{
+                $$ = new TStorageQualifierWrapper(EvqGeometryOut, @1);
+			}
         }
     }
     | INOUT_QUAL {

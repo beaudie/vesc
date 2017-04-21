@@ -180,6 +180,8 @@ class TCompiler : public TShHandleBase
     std::vector<sh::ShaderVariable> expandedUniforms;
     std::vector<sh::Varying> varyings;
     std::vector<sh::InterfaceBlock> interfaceBlocks;
+    std::vector<sh::Varying> inVaryings;
+    std::vector<sh::Varying> outVaryings;
 
   private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion
@@ -247,6 +249,13 @@ class TCompiler : public TShHandleBase
 
     // GL_OVR_multiview num_views.
     int mNumViews;
+
+    // geometry shader parameters
+    int mGeometryInputArraySize;
+    int mGeometryMaxVertices;
+    int mGeometryInvocations;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveIn;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveOut;
 
     // name hashing.
     ShHashFunction64 hashFunction;

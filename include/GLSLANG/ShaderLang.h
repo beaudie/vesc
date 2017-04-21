@@ -265,6 +265,7 @@ struct ShBuiltInResources
     int ARM_shader_framebuffer_fetch;
     int OVR_multiview;
     int EXT_YUV_target;
+    int EXT_geometry_shader;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
@@ -376,6 +377,24 @@ struct ShBuiltInResources
 
     // maximum number of buffer object storage in machine units
     int MaxAtomicCounterBufferSize;
+
+    // EXT_geometry_shader constants;
+
+    // maximum number of image uniform in a geometry shader
+    int MaxGeometryTextureImageUnits;
+
+    // maximum number of output vertices in a geometry shader
+    int MaxGeometryOutputVertices;
+
+    // maximum number of total output components in a geometry shader
+    int MaxGeometryTotalOutputComponents;
+
+    // maximum number of uniform vectors in a geometry shader
+    int MaxGeometryUniformVectors;
+
+    // maximum number of varying components in a geometry shader
+    int MaxGeometryVaryingComponents;
+    int MaxGeometryInvocations;
 };
 
 //

@@ -288,6 +288,14 @@ class TParseContext : angle::NonCopyable
                        const TSourceLoc &intValueLine,
                        const std::string &intValueString,
                        int *numViews);
+    void parseNumInvocations(int intValue,
+                             const TSourceLoc &intValueLine,
+                             const std::string &intValueString,
+                             int *numInvocations);
+    void parseMaxVertices(int intValue,
+                          const TSourceLoc &intValueLine,
+                          const std::string &intValueString,
+                          int *maxVertices);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
                                           const TSourceLoc &qualifierTypeLine);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
@@ -348,6 +356,12 @@ class TParseContext : angle::NonCopyable
                                       TIntermTyped *trueExpression,
                                       TIntermTyped *falseExpression,
                                       const TSourceLoc &line);
+
+    int getGeometryInputArraySize() const { return mGeometryInputArraySize; }
+    int getGeometryMaxVertices() const { return mGeometryMaxVertices; }
+    int getGeometryInvocations() const { return mGeometryInvocations; }
+    TLayoutGeometryShaderEXT getGeometryInputPrimitive() const { return mGeometryPrimitiveIn; }
+    TLayoutGeometryShaderEXT getGeometryOutputPrimitive() const { return mGeometryPrimitiveOut; }
 
     // TODO(jmadill): make these private
     TIntermediate intermediate;  // to build a parse tree
@@ -433,6 +447,9 @@ class TParseContext : angle::NonCopyable
                                                               const TSourceLoc &location,
                                                               bool insertParametersToSymbolTable);
 
+    bool parseGeometryShaderLayoutPrimitives(const TTypeQualifier &typeQualifier,
+                                             const TLayoutQualifier &layoutQualifier);
+
     // Set to true when the last/current declarator list was started with an empty declaration.
     bool mDeferredSingleDeclarationErrorCheck;
 
@@ -478,6 +495,14 @@ class TParseContext : angle::NonCopyable
     int mMaxUniformLocations;
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
+
+    // keep track of geometry shader invocations declared in layout.
+    int mMaxGeometryInvocations;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveIn;
+    TLayoutGeometryShaderEXT mGeometryPrimitiveOut;
+    int mGeometryInputArraySize;
+    int mGeometryInvocations;
+    int mGeometryMaxVertices;
 };
 
 int PaParseStrings(size_t count,
