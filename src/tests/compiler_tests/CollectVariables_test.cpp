@@ -419,7 +419,7 @@ TEST_F(CollectVertexVariablesTest, VaryingInterpolation)
 
     compile(shaderString);
 
-    const std::vector<Varying> &varyings = mTranslator->getVaryings();
+    const std::vector<Varying> &varyings = mTranslator->getOutputVaryings();
     ASSERT_EQ(2u, varyings.size());
 
     const Varying *varying = &varyings[0];
