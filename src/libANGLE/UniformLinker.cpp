@@ -76,7 +76,7 @@ bool UniformLinker::link(InfoLog &infoLog,
 bool UniformLinker::validateVertexAndFragmentUniforms(InfoLog &infoLog) const
 {
     // Check that uniforms defined in the vertex and fragment shaders are identical
-    std::map<std::string, LinkedUniform> linkedUniforms;
+    std::map<std::string, sh::Uniform> linkedUniforms;
     const std::vector<sh::Uniform> &vertexUniforms =
         mState.getAttachedVertexShader()->getUniforms();
     const std::vector<sh::Uniform> &fragmentUniforms =
@@ -84,7 +84,7 @@ bool UniformLinker::validateVertexAndFragmentUniforms(InfoLog &infoLog) const
 
     for (const sh::Uniform &vertexUniform : vertexUniforms)
     {
-        linkedUniforms[vertexUniform.name] = LinkedUniform(vertexUniform);
+        linkedUniforms[vertexUniform.name] = vertexUniform;
     }
 
     for (const sh::Uniform &fragmentUniform : fragmentUniforms)
@@ -92,9 +92,9 @@ bool UniformLinker::validateVertexAndFragmentUniforms(InfoLog &infoLog) const
         auto entry = linkedUniforms.find(fragmentUniform.name);
         if (entry != linkedUniforms.end())
         {
-            LinkedUniform *linkedUniform   = &entry->second;
-            const std::string &uniformName = "uniform '" + linkedUniform->name + "'";
-            if (!linkValidateUniforms(infoLog, uniformName, *linkedUniform, fragmentUniform))
+            sh::Uniform *vertexUniform     = &entry->second;
+            const std::string &uniformName = "uniform '" + vertexUniform->name + "'";
+            if (!linkValidateUniforms(infoLog, uniformName, *vertexUniform, fragmentUniform))
             {
                 return false;
             }

@@ -1586,7 +1586,8 @@ void ProgramD3D::initUniformBlockInfo(const gl::Shader *shader)
 {
     for (const sh::InterfaceBlock &interfaceBlock : shader->getInterfaceBlocks())
     {
-        if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
+        if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED &&
+            !interfaceBlock.isUniformBlock)
             continue;
 
         if (mBlockDataSizes.count(interfaceBlock.name) > 0)
@@ -1611,7 +1612,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
         SafeGetImplAs<ShaderD3D>(mState.getAttachedFragmentShader());
     const ShaderD3D *computeShaderD3D = SafeGetImplAs<ShaderD3D>(mState.getAttachedComputeShader());
 
-    for (const gl::UniformBlock &uniformBlock : mState.getUniformBlocks())
+    for (const gl::InterfaceBlock &uniformBlock : mState.getUniformBlocks())
     {
         unsigned int uniformBlockElement = uniformBlock.isArray ? uniformBlock.arrayElement : 0;
 
