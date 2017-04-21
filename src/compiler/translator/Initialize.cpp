@@ -676,6 +676,14 @@ void InsertBuiltInFunctions(sh::GLenum type,
                                                       voidType, "groupMemoryBarrier");
     }
 
+    if (type == GL_GEOMETRY_SHADER_EXT)
+    {
+        symbolTable.insertBuiltInFunctionNoParameters(ESSL3_1_BUILTINS, EOpEmitVertex, voidType,
+                                                      "EmitVertex");
+        symbolTable.insertBuiltInFunctionNoParameters(ESSL3_1_BUILTINS, EOpEndPrimitive, voidType,
+                                                      "EndPrimitive");
+    }
+
     //
     // Depth range in window coordinates
     //
@@ -884,6 +892,13 @@ void IdentifyBuiltIns(sh::GLenum type,
                                    new TVariable(NewPoolTString("gl_LastFragColorARM"),
                                                  TType(EbtFloat, EbpMedium, EvqLastFragColor, 4)));
             }
+
+            if (resources.EXT_geometry_shader)
+            {
+                symbolTable.insert(ESSL3_1_BUILTINS, "GL_EXT_geometry_shader",
+                                   new TVariable(NewPoolTString("gl_PrimitiveID"),
+                                                 TType(EbtInt, EbpHigh, EvqPrimitiveID, 1)));
+            }
         }
 
         break;
@@ -927,7 +942,65 @@ void IdentifyBuiltIns(sh::GLenum type,
                               TType(EbtUInt, EbpUndefined, EvqLocalInvocationIndex, 1)));
         }
         break;
+        case GL_GEOMETRY_SHADER_EXT:
+        {
+            const char *extension    = "GL_EXT_geometry_shader";
+            TFieldList *fields       = NewPoolTFieldList();
+            TSourceLoc zeroSourceLoc = {0, 0, 0, 0};
+            TField *glPositionField  = new TField(new TType(EbtFloat, EbpHigh, EvqPosition, 4),
+                                                 NewPoolTString("gl_Position"), zeroSourceLoc);
+            fields->push_back(glPositionField);
+            const auto *interfaceName = NewPoolTString("gl_in");
+            TInterfaceBlock *block = new TInterfaceBlock(interfaceName, fields, interfaceName, -1,
+                                                         TLayoutQualifier::create());
+            TType glInType(block, EvqPerVertex, TLayoutQualifier::create(), 0);
+            symbolTable.insert(ESSL3_1_BUILTINS, extension, new TVariable(interfaceName, glInType));
 
+            symbolTable.insert(COMMON_BUILTINS, extension,
+                               new TVariable(NewPoolTString("gl_Position"),
+                                             TType(EbtFloat, EbpHigh, EvqPosition, 4)));
+            symbolTable.insert(ESSL3_1_BUILTINS, extension,
+                               new TVariable(NewPoolTString("gl_PrimitiveIDIn"),
+                                             TType(EbtInt, EbpHigh, EvqPrimitiveIDIn, 1)));
+            symbolTable.insert(ESSL3_1_BUILTINS, extension,
+                               new TVariable(NewPoolTString("gl_PrimitiveID"),
+                                             TType(EbtInt, EbpHigh, EvqPrimitiveID, 1)));
+            symbolTable.insert(ESSL3_1_BUILTINS, extension,
+                               new TVariable(NewPoolTString("gl_InvocationID"),
+                                             TType(EbtInt, EbpHigh, EvqInvocationID, 1)));
+            symbolTable.insert(
+                ESSL3_1_BUILTINS, extension,
+                new TVariable(NewPoolTString("gl_Layer"), TType(EbtInt, EbpHigh, EvqLayer, 1)));
+
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryInputComponents",
+                                          resources.MaxGeometryInputComponents);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryOutputComponents",
+                                          resources.MaxGeometryOutputComponents);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryImageUniforms",
+                                          resources.MaxGeometryImageUniforms);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryTextureImageUnits",
+                                          resources.MaxGeometryTextureImageUnits);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryOutputVertices",
+                                          resources.MaxGeometryOutputVertices);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryTotalOutputComponents",
+                                          resources.MaxGeometryTotalOutputComponents);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryUniformComponents",
+                                          resources.MaxGeometryUniformComponents);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryAtomicCounters",
+                                          resources.MaxGeometryAtomicCounters);
+            symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, extension,
+                                          "gl_MaxGeometryAtomicCounterBuffers",
+                                          resources.MaxGeometryAtomicCounterBuffers);
+            break;
+        }
         default:
             assert(false && "Language not supported");
     }
@@ -967,6 +1040,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     if (resources.EXT_YUV_target)
     {
         extBehavior["GL_EXT_YUV_target"] = EBhUndefined;
+    }
+    if (resources.EXT_geometry_shader)
+    {
+        extBehavior["GL_EXT_geometry_shader"] = EBhUndefined;
     }
 }
 
