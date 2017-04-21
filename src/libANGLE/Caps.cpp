@@ -226,7 +226,8 @@ Extensions::Extensions()
       pathRendering(false),
       surfacelessContext(false),
       clientArrays(false),
-      robustResourceInitialization(false)
+      robustResourceInitialization(false),
+      geometryShader(false)
 {
 }
 
@@ -694,6 +695,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_surfaceless_context"] = esOnlyExtension(&Extensions::surfacelessContext);
         map["GL_ANGLE_client_arrays"] = esOnlyExtension(&Extensions::clientArrays);
         map["GL_ANGLE_robust_resource_initialization"] = esOnlyExtension(&Extensions::robustResourceInitialization);
+        map["GL_EXT_geometry_shader"] = esOnlyExtension(&Extensions::geometryShader);
         // clang-format on
 
         return map;
@@ -841,7 +843,19 @@ Caps::Caps()
       maxTransformFeedbackSeparateComponents(0),
 
       // Table 20.49
-      maxSamples(0)
+      maxSamples(0),
+
+      // EXT_geometry_shader
+      maxGeometryInputComponents(0),
+      maxGeometryOutputComponents(0),
+      maxGeometryImageUniforms(0),
+      maxGeometryTextureImageUnits(0),
+      maxGeometryOutputVertices(0),
+      maxGeometryTotalOutputComponents(0),
+      maxGeometryUniformComponents(0),
+      maxGeometryAtomicCounters(0),
+      maxGeometryAtomicCounterBuffers(0),
+      maxGeometryShaderInvocations(0)
 
 {
     for (size_t i = 0; i < 3; ++i)

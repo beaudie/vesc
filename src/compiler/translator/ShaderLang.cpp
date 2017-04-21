@@ -11,6 +11,7 @@
 
 #include "GLSLANG/ShaderLang.h"
 
+#include "compiler/translator/BaseTypes.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/length_limits.h"
@@ -40,12 +41,6 @@ template <>
 const std::vector<Uniform> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getUniforms();
-}
-
-template <>
-const std::vector<Varying> *GetVariableList(const TCompiler *compiler)
-{
-    return &compiler->getVaryings();
 }
 
 template <>
@@ -164,6 +159,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->ARM_shader_framebuffer_fetch    = 0;
     resources->OVR_multiview                   = 0;
     resources->EXT_YUV_target                  = 0;
+    resources->EXT_geometry_shader             = 0;
 
     resources->NV_draw_buffers = 0;
 
@@ -224,6 +220,17 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->MaxAtomicCounterBufferSize      = 32;
 
     resources->MaxUniformBufferBindings = 32;
+
+    resources->MaxGeometryInputComponents       = 64;
+    resources->MaxGeometryOutputComponents      = 64;
+    resources->MaxGeometryImageUniforms         = 0;
+    resources->MaxGeometryTextureImageUnits     = 16;
+    resources->MaxGeometryOutputVertices        = 256;
+    resources->MaxGeometryTotalOutputComponents = 1024;
+    resources->MaxGeometryUniformComponents     = 1024;
+    resources->MaxGeometryAtomicCounters        = 0;
+    resources->MaxGeometryAtomicCounterBuffers  = 0;
+    resources->MaxGeometryInvocations           = 32;
 }
 
 //
@@ -349,11 +356,6 @@ const std::vector<Uniform> *GetUniforms(const ShHandle handle)
     return GetShaderVariables<Uniform>(handle);
 }
 
-const std::vector<Varying> *GetVaryings(const ShHandle handle)
-{
-    return GetShaderVariables<Varying>(handle);
-}
-
 const std::vector<Attribute> *GetAttributes(const ShHandle handle)
 {
     return GetShaderVariables<Attribute>(handle);
@@ -388,6 +390,111 @@ int GetVertexShaderNumViews(const ShHandle handle)
     ASSERT(compiler);
 
     return compiler->getNumViews();
+}
+
+// TODO(jiawei.shao@intel.com): replace this function by GetInVaryings() and GetOutVaryings()
+// everywhere in ANGLE.
+const std::vector<sh::Varying> *GetVaryings(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    switch (compiler->getShaderType())
+    {
+        case GL_VERTEX_SHADER:
+            return &compiler->getOutputVaryings();
+        case GL_FRAGMENT_SHADER:
+            return &compiler->getInputVaryings();
+        default:
+            UNREACHABLE();
+            return &compiler->getOutputVaryings();
+    }
+}
+
+const std::vector<sh::Varying> *GetInputVaryings(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return &compiler->getInputVaryings();
+}
+
+const std::vector<sh::Varying> *GetOutputVaryings(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return &compiler->getOutputVaryings();
+}
+
+GLenum GetGeometryShaderInputPrimitiveType(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    switch (compiler->getGeometryShaderInputPrimitives())
+    {
+        case TLayoutPrimitiveType::EgsPoints:
+            return GL_POINTS;
+        case TLayoutPrimitiveType::EgsLines:
+            return GL_LINES;
+        case TLayoutPrimitiveType::EgsLinesAdjacency:
+            return GL_LINES_ADJACENCY_EXT;
+        case TLayoutPrimitiveType::EgsTriangles:
+            return GL_TRIANGLES;
+        case TLayoutPrimitiveType::EgsTrianglesAdjacency:
+            return GL_TRIANGLES_ADJACENCY_EXT;
+        default:
+            return GL_INVALID_VALUE;
+    }
+}
+
+GLenum GetGeometryShaderOutputPrimitiveType(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    switch (compiler->getGeometryShaderOutputPrimitives())
+    {
+        case TLayoutPrimitiveType::EgsPoints:
+            return GL_POINTS;
+        case TLayoutPrimitiveType::EgsLineStrip:
+            return GL_LINE_STRIP;
+        case TLayoutPrimitiveType::EgsTriangleStrip:
+            return GL_TRIANGLE_STRIP;
+        default:
+            return GL_INVALID_VALUE;
+    }
+}
+
+int GetGeometryShaderInvocations(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return compiler->getGeometryShaderInvocations();
+}
+
+int GetGeometryShaderMaxVertices(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return compiler->getGeometryShaderMaxVertices();
 }
 
 bool CheckVariablesWithinPackingLimits(int maxVectors, const std::vector<ShaderVariable> &variables)

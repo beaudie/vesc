@@ -87,6 +87,20 @@ ShaderState::~ShaderState()
 {
 }
 
+const std::vector<sh::Varying> &ShaderState::getVaryings() const
+{
+    switch (mShaderType)
+    {
+        case GL_VERTEX_SHADER:
+            return mOutVaryings;
+        case GL_FRAGMENT_SHADER:
+            return mInVaryings;
+        default:
+            UNREACHABLE();
+            return mOutVaryings;
+    }
+}
+
 Shader::Shader(ShaderProgramManager *manager,
                rx::GLImplFactory *implFactory,
                const gl::Limitations &rendererLimitations,
@@ -267,7 +281,8 @@ void Shader::compile(const Context *context)
     mState.mTranslatedSource.clear();
     mInfoLog.clear();
     mState.mShaderVersion = 100;
-    mState.mVaryings.clear();
+    mState.mInVaryings.clear();
+    mState.mOutVaryings.clear();
     mState.mUniforms.clear();
     mState.mInterfaceBlocks.clear();
     mState.mActiveAttributes.clear();
@@ -357,7 +372,6 @@ void Shader::resolveCompile(const Context *context)
     // Gather the shader information
     mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
-    mState.mVaryings        = GetShaderVariables(sh::GetVaryings(compilerHandle));
     mState.mUniforms        = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mInterfaceBlocks = GetShaderVariables(sh::GetInterfaceBlocks(compilerHandle));
 
@@ -371,14 +385,28 @@ void Shader::resolveCompile(const Context *context)
         case GL_VERTEX_SHADER:
         {
             mState.mActiveAttributes = GetActiveShaderVariables(sh::GetAttributes(compilerHandle));
+            mState.mOutVaryings      = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
             break;
         }
         case GL_FRAGMENT_SHADER:
         {
             // TODO(jmadill): Figure out why we only sort in the FS, and if we need to.
-            std::sort(mState.mVaryings.begin(), mState.mVaryings.end(), CompareShaderVar);
+            std::sort(mState.mInVaryings.begin(), mState.mInVaryings.end(), CompareShaderVar);
             mState.mActiveOutputVariables =
                 GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
+            mState.mInVaryings = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+            break;
+        }
+        case GL_GEOMETRY_SHADER_EXT:
+        {
+            mState.mInVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+            mState.mOutVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+            mState.mGeometryInputPrimitives =
+                sh::GetGeometryShaderInputPrimitiveType(compilerHandle);
+            mState.mGeometryOutputPrimitives =
+                sh::GetGeometryShaderOutputPrimitiveType(compilerHandle);
+            mState.mGeometryInvocations = sh::GetGeometryShaderInvocations(compilerHandle);
+            mState.mGeometryMaxVertices = sh::GetGeometryShaderMaxVertices(compilerHandle);
             break;
         }
         default:
