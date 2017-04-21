@@ -411,7 +411,7 @@ void DisplayWGL::terminate()
     mWindow = nullptr;
 
     UnregisterClassA(reinterpret_cast<const char*>(mWindowClass), NULL);
-    mWindowClass = NULL;
+    mWindowClass = nullptr;
 
     SafeDelete(mFunctionsWGL);
     SafeDelete(mFunctionsGL);
