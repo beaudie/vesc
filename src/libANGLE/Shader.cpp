@@ -337,6 +337,17 @@ void Shader::compile(const Context *context)
                 GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
             break;
         }
+        case GL_GEOMETRY_SHADER_EXT:
+        {
+            mState.mInVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+            mState.mOutVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+            mState.mGeometryInputPrimitives = sh::GetGeometryShaderInputPrimitives(compilerHandle);
+            mState.mGeometryOutputPrimitives =
+                sh::GetGeometryShaderOutputPrimitives(compilerHandle);
+            mState.mGeometryInvocations = sh::GetGeometryShaderInvocations(compilerHandle);
+            mState.mGeometryMaxVertices = sh::GetGeometryShaderMaxVertices(compilerHandle);
+            break;
+        }
         default:
             UNREACHABLE();
     }

@@ -927,6 +927,33 @@ void GenerateCaps(const FunctionsGL *functions,
                                      functions->hasGLESExtension("GL_ARB_invalidate_subdata");
 
     extensions->translatedShaderSource = true;
+
+    if (functions->isAtLeastGL(gl::Version(4, 0)) || functions->isAtLeastGLES(gl::Version(3, 2)) ||
+        functions->hasGLExtension("GL_ARB_geometry_shader4") ||
+        functions->hasGLESExtension("GL_EXT_geometry_shader"))
+    {
+        extensions->geometryShader = true;
+        caps->maxGeometryInputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_INPUT_COMPONENTS_EXT);
+        caps->maxGeometryOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_EXT);
+        caps->maxGeometryImageUniforms =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_IMAGE_UNIFORMS_EXT);
+        caps->maxGeometryTextureImageUnits =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT);
+        caps->maxGeometryOutputVertices =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT);
+        caps->maxGeometryTotalOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_EXT);
+        caps->maxGeometryUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_EXT);
+        caps->maxGeometryAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTERS_EXT);
+        caps->maxGeometryAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_EXT);
+        caps->maxGeometryShaderInvocations =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_INVOCATIONS_EXT);
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
