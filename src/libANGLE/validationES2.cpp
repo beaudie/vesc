@@ -3858,6 +3858,15 @@ bool ValidateCreateShader(Context *context, GLenum type)
             }
             break;
 
+        case GL_GEOMETRY_SHADER_EXT:
+            if (!context->getExtensions().geometryShader)
+            {
+                context->handleError(Error(
+                    GL_INVALID_ENUM, "GL_GEOMETRY_SHADER_EXT requires GL_EXT_geometry_shader."));
+                return false;
+            }
+            break;
+
         default:
             context->handleError(InvalidEnum() << "Unknown shader type.");
             return false;
