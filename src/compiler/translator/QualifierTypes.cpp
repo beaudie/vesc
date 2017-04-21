@@ -602,6 +602,21 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
         joinedQualifier.imageInternalFormat = rightQualifier.imageInternalFormat;
     }
 
+    if (rightQualifier.primitiveType != EgsUndefined)
+    {
+        joinedQualifier.primitiveType = rightQualifier.primitiveType;
+    }
+
+    if (rightQualifier.invocations != 0)
+    {
+        joinedQualifier.invocations = rightQualifier.invocations;
+    }
+
+    if (rightQualifier.maxVertices != -1)
+    {
+        joinedQualifier.maxVertices = rightQualifier.maxVertices;
+    }
+
     return joinedQualifier;
 }
 

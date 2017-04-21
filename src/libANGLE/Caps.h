@@ -357,6 +357,9 @@ struct Extensions
 
     // GL_ANGLE_robust_resource_initialization
     bool robustResourceInitialization;
+
+    // GL_EXT_geometry_shader
+    bool geometryShader;
 };
 
 struct ExtensionInfo
@@ -537,6 +540,18 @@ struct Caps
 
     // ES 3.1 (April 29, 2015) Table 20.49: Framebuffer Dependent Values
     GLuint maxSamples;
+
+    // EXT_geometry_shader
+    GLuint maxGeometryInputComponents;
+    GLuint maxGeometryOutputComponents;
+    GLuint maxGeometryImageUniforms;
+    GLuint maxGeometryTextureImageUnits;
+    GLuint maxGeometryOutputVertices;
+    GLuint maxGeometryTotalOutputComponents;
+    GLuint maxGeometryUniformVectors;
+    GLuint maxGeometryAtomicCounters;
+    GLuint maxGeometryAtomicCounterBuffers;
+    GLuint maxGeometryShaderInvocations;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion);

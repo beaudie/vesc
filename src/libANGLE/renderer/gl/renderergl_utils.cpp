@@ -926,6 +926,10 @@ void GenerateCaps(const FunctionsGL *functions,
                                      functions->hasGLESExtension("GL_ARB_invalidate_subdata");
 
     extensions->translatedShaderSource = true;
+
+    extensions->geometryShader = functions->isAtLeastGL(gl::Version(4, 0)) ||
+                                 functions->isAtLeastGLES(gl::Version(3, 2)) ||
+                                 functions->hasGLESExtension("GL_EXT_geometry_shader");
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)

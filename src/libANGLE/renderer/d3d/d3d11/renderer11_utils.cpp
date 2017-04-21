@@ -986,6 +986,36 @@ size_t GetMaximumConstantBufferSize(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+size_t GetMaximumGeometryUniformVectors(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryShaderInvocations(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return 32;
+        default:
+            return 0;
+    }
+}
+
 size_t GetMaximumStreamOutputBuffers(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -1295,6 +1325,12 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     // Multisample limits
     caps->maxSamples = maxSamples;
 
+    // Geometry Shader limits
+    caps->maxGeometryUniformVectors =
+        static_cast<GLuint>(GetMaximumGeometryUniformVectors(featureLevel));
+    caps->maxGeometryShaderInvocations =
+        static_cast<GLuint>(GetMaximumGeometryShaderInvocations(featureLevel));
+
     // GL extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->elementIndexUint = true;
@@ -1340,6 +1376,7 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     extensions->syncQuery                 = GetEventQuerySupport(featureLevel);
     extensions->copyTexture               = true;
     extensions->copyCompressedTexture     = true;
+    extensions->geometryShader            = true;
 
     // D3D11 Feature Level 10_0+ uses SV_IsFrontFace in HLSL to emulate gl_FrontFacing.
     // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace, and has no equivalent, so can't support gl_FrontFacing.

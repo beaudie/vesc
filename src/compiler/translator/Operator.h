@@ -262,7 +262,11 @@ enum TOperator
     EOpMemoryBarrierBuffer,
     EOpMemoryBarrierImage,
     EOpMemoryBarrierShared,
-    EOpGroupMemoryBarrier
+    EOpGroupMemoryBarrier,
+
+    // Geometry only
+    EOpEmitVertex,
+    EOpEndPrimitive
 };
 
 // Returns the string corresponding to the operator in GLSL
