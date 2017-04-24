@@ -51,6 +51,13 @@ static bool ValidateTexImageFormatCombination(gl::Context *context,
         return false;
     }
 
+    // Check if this is a valid format combination to load texture data
+    if (!ValidES3FormatCombination(format, type, internalFormat))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
     // For historical reasons, glTexImage2D and glTexImage3D pass in their internal format as a
     // GLint instead of a GLenum. Therefor an invalid internal format gives a GL_INVALID_VALUE
     // error instead of a GL_INVALID_ENUM error. As this validation function is only called in
@@ -59,13 +66,6 @@ static bool ValidateTexImageFormatCombination(gl::Context *context,
     if (!formatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
     {
         context->handleError(Error(GL_INVALID_VALUE));
-        return false;
-    }
-
-    // Check if this is a valid format combination to load texture data
-    if (!ValidES3FormatCombination(format, type, internalFormat))
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
 
