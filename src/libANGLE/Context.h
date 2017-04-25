@@ -783,6 +783,14 @@ class Context final : public ValidationContext
 
     void dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
 
+    void texStorage2D(const Context *context,
+                    GLenum target,
+                    GLsizei levels,
+                    GLenum internalFormat,
+                    const Extents &size,
+                    GLsizei samples,
+                    GLboolean fixedSampleLocations);
+
   private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);

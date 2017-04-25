@@ -45,13 +45,6 @@ class TextureD3D : public TextureImpl
     GLint getBaseLevelHeight() const;
     GLenum getBaseLevelInternalFormat() const;
 
-    gl::Error setStorageMultisample(ContextImpl *contextImpl,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalFormat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
-
     bool isImmutable() const { return mImmutable; }
 
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT) = 0;
@@ -227,7 +220,9 @@ class TextureD3D_2D : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
@@ -239,13 +234,6 @@ class TextureD3D_2D : public TextureD3D
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
     virtual bool isValidIndex(const gl::ImageIndex &index) const;
-
-    gl::Error setStorageMultisample(ContextImpl *contextImpl,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalFormat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
 
   protected:
     void markAllImagesDirty() override;
@@ -341,7 +329,9 @@ class TextureD3D_Cube : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
@@ -444,7 +434,9 @@ class TextureD3D_3D : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
@@ -546,7 +538,9 @@ class TextureD3D_2DArray : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
@@ -647,7 +641,9 @@ class TextureD3D_External : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     gl::Error setImageExternal(GLenum target,
                                egl::Stream *stream,
@@ -738,7 +734,9 @@ class TextureD3D_2DMultisample : public TextureD3D
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     gl::Error setImageExternal(GLenum target,
                                egl::Stream *stream,

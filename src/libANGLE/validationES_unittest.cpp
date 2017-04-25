@@ -83,12 +83,12 @@ TEST(ValidationESTest, DISABLED_DrawElementsWithMaxIndexGivesError)
 
     NiceMock<MockTextureImpl> *textureImpl = new NiceMock<MockTextureImpl>();
     EXPECT_CALL(mockFactory, createTexture(_)).WillOnce(Return(textureImpl));
-    EXPECT_CALL(*textureImpl, setStorage(_, _, _, _, _)).WillOnce(Return(NoError()));
+    EXPECT_CALL(*textureImpl, setStorage(_, _, _, _, _, _, _)).WillOnce(Return(NoError()));
     EXPECT_CALL(*textureImpl, destructor()).Times(1).RetiresOnSaturation();
 
     Texture *texture = new Texture(&mockFactory, 0, GL_TEXTURE_2D);
     texture->addRef();
-    texture->setStorage(nullptr, GL_TEXTURE_2D, 1, GL_RGBA8, Extents(1, 1, 0));
+    texture->setStorage(nullptr, GL_TEXTURE_2D, 1, GL_RGBA8, Extents(1, 1, 0), 0, true);
 
     VertexArray *vertexArray = new VertexArray(&mockFactory, 0, 1, 1);
     Framebuffer *framebuffer = new Framebuffer(caps, &mockFactory, 1);

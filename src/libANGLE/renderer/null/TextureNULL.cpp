@@ -97,7 +97,9 @@ gl::Error TextureNULL::setStorage(ContextImpl *contextImpl,
                                   GLenum target,
                                   size_t levels,
                                   GLenum internalFormat,
-                                  const gl::Extents &size)
+                                  const gl::Extents &size,
+                                  GLsizei samples,
+                                  GLboolean fixedSampleLocations)
 {
     return gl::NoError();
 }
@@ -133,16 +135,6 @@ void TextureNULL::releaseTexImage()
 
 void TextureNULL::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
-}
-
-gl::Error TextureNULL::setStorageMultisample(ContextImpl *contextImpl,
-                                             GLenum target,
-                                             GLsizei samples,
-                                             GLint internalformat,
-                                             const gl::Extents &size,
-                                             GLboolean fixedSampleLocations)
-{
-    return gl::NoError();
 }
 
 }  // namespace rx

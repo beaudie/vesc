@@ -41,6 +41,11 @@ bool UseTexImage3D(GLenum textureType)
     return textureType == GL_TEXTURE_2D_ARRAY || textureType == GL_TEXTURE_3D;
 }
 
+bool UseTexImage2DMS(GLenum textureType)
+{
+    return textureType == GL_TEXTURE_2D_MULTISAMPLE;
+}
+
 bool CompatibleTextureTarget(GLenum textureType, GLenum textureTarget)
 {
     if (textureType != GL_TEXTURE_CUBE_MAP)
@@ -701,7 +706,9 @@ gl::Error TextureGL::setStorage(ContextImpl *contextImpl,
                                 GLenum target,
                                 size_t levels,
                                 GLenum internalFormat,
-                                const gl::Extents &size)
+                                const gl::Extents &size,
+                                GLsizei samples,
+                                GLboolean fixedSampleLocations)
 {
     nativegl::TexStorageFormat texStorageFormat =
         nativegl::GetTexStorageFormat(mFunctions, mWorkarounds, internalFormat);
@@ -830,34 +837,19 @@ gl::Error TextureGL::setStorage(ContextImpl *contextImpl,
             }
         }
     }
+    else if (UseTexImage2DMS(getTarget()))
+    {
+        ASSERT(size.depth == 1);
+
+        mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                            size.width, size.height, fixedSampleLocations);
+    }
     else
     {
         UNREACHABLE();
     }
 
     setLevelInfo(0, levels, GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
-
-    return gl::NoError();
-}
-
-gl::Error TextureGL::setStorageMultisample(ContextImpl *contextImpl,
-                                           GLenum target,
-                                           GLsizei samples,
-                                           GLint internalFormat,
-                                           const gl::Extents &size,
-                                           GLboolean fixedSampleLocations)
-{
-    nativegl::TexStorageFormat texStorageFormat =
-        nativegl::GetTexStorageFormat(mFunctions, mWorkarounds, internalFormat);
-
-    mStateManager->bindTexture(mState.mTarget, mTextureID);
-
-    ASSERT(size.depth == 1);
-
-    mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
-                                        size.width, size.height, fixedSampleLocations);
-
-    setLevelInfo(0, 1, GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
 
     return gl::NoError();
 }
