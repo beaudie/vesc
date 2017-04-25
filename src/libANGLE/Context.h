@@ -781,6 +781,14 @@ class Context final : public ValidationContext
     template <EntryPoint EP, typename... ParamsT>
     void gatherParams(ParamsT &&... params);
 
+    void texStorage2D(const Context *context,
+                      GLenum target,
+                      GLsizei levels,
+                      GLenum internalFormat,
+                      const Extents &size,
+                      GLsizei samples,
+                      GLboolean fixedSampleLocations);
+
   private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);

@@ -4032,8 +4032,8 @@ void Context::texStorage2DMultisample(GLenum target,
 {
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setStorageMultisample(this, target, samples, internalformat, size,
-                                               fixedsamplelocations));
+    handleError(
+        texture->setStorage(this, target, 1, internalformat, size, samples, fixedsamplelocations));
 }
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
@@ -4112,6 +4112,18 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
     }
 
     mImplementation->dispatchCompute(numGroupsX, numGroupsY, numGroupsZ);
+}
+
+void Context::texStorage2D(const Context *context,
+                           GLenum target,
+                           GLsizei levels,
+                           GLenum internalFormat,
+                           const Extents &size,
+                           GLsizei samples,
+                           GLboolean fixedSampleLocations)
+{
+    Texture *texture = getTargetTexture(target);
+    handleError(texture->setStorage(context, target, levels, internalFormat, size, 0, true));
 }
 
 GLenum Context::checkFramebufferStatus(GLenum target)
