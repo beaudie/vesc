@@ -95,8 +95,15 @@ class MockTextureImpl : public TextureImpl
                             bool,
                             const gl::Texture *));
     MOCK_METHOD2(copyCompressedTexture, gl::Error(const gl::Context *, const gl::Texture *source));
-    MOCK_METHOD5(setStorage,
-                 gl::Error(const gl::Context *, GLenum, size_t, GLenum, const gl::Extents &));
+    MOCK_METHOD7(setStorage,
+                 gl::Error(const gl::Context *,
+                           GLenum,
+                           size_t,
+                           GLenum,
+                           const gl::Extents &,
+                           GLsizei,
+                           GLboolean));
+
     MOCK_METHOD3(setImageExternal,
                  gl::Error(GLenum, egl::Stream *, const egl::Stream::GLTextureDescription &));
     MOCK_METHOD2(setEGLImageTarget, gl::Error(GLenum, egl::Image *));
@@ -106,10 +113,6 @@ class MockTextureImpl : public TextureImpl
 
     MOCK_METHOD3(getAttachmentRenderTarget,
                  gl::Error(GLenum, const gl::ImageIndex &, FramebufferAttachmentRenderTarget **));
-
-    MOCK_METHOD6(
-        setStorageMultisample,
-        gl::Error(const gl::Context *, GLenum, GLsizei, GLint, const gl::Extents &, GLboolean));
 
     MOCK_METHOD1(setBaseLevel, void(GLuint));
 
