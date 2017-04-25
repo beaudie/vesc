@@ -73,7 +73,9 @@ class TextureNULL : public TextureImpl
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations);
 
     gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
 
@@ -90,12 +92,6 @@ class TextureNULL : public TextureImpl
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
 
-    gl::Error setStorageMultisample(const gl::Context *context,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalformat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
 };
 
 }  // namespace rx
