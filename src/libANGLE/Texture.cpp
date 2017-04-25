@@ -463,7 +463,9 @@ const ImageDesc &TextureState::getImageDesc(const ImageIndex &imageIndex) const
 void TextureState::setImageDescChain(GLuint baseLevel,
                                      GLuint maxLevel,
                                      Extents baseSize,
-                                     const Format &format)
+                                     const Format &format,
+                                     GLsizei samples,
+                                     GLboolean fixedSampleLocations)
 {
     for (GLuint level = baseLevel; level <= maxLevel; level++)
     {
@@ -473,7 +475,7 @@ void TextureState::setImageDescChain(GLuint baseLevel,
                           (mTarget == GL_TEXTURE_2D_ARRAY)
                               ? baseSize.depth
                               : std::max<int>(baseSize.depth >> relativeLevel, 1));
-        ImageDesc levelInfo(levelSize, format);
+        ImageDesc levelInfo(levelSize, format, samples, fixedSampleLocations);
 
         if (mTarget == GL_TEXTURE_CUBE_MAP)
         {
@@ -487,16 +489,6 @@ void TextureState::setImageDescChain(GLuint baseLevel,
             setImageDesc(mTarget, level, levelInfo);
         }
     }
-}
-
-void TextureState::setImageDescChainMultisample(Extents baseSize,
-                                                const Format &format,
-                                                GLsizei samples,
-                                                GLboolean fixedSampleLocations)
-{
-    ASSERT(mTarget == GL_TEXTURE_2D_MULTISAMPLE);
-    ImageDesc levelInfo(baseSize, format, samples, fixedSampleLocations);
-    setImageDesc(mTarget, 0, levelInfo);
 }
 
 void TextureState::clearImageDesc(GLenum target, size_t level)
@@ -1050,7 +1042,9 @@ Error Texture::setStorage(const Context *context,
                           GLenum target,
                           GLsizei levels,
                           GLenum internalFormat,
-                          const Extents &size)
+                          const Extents &size,
+                          GLsizei samples,
+                          GLboolean fixedSampleLocations)
 {
     ASSERT(target == mState.mTarget);
 
@@ -1058,12 +1052,14 @@ Error Texture::setStorage(const Context *context,
     releaseTexImageInternal();
     orphanImages();
 
-    ANGLE_TRY(mTexture->setStorage(rx::SafeGetImpl(context), target, levels, internalFormat, size));
+    ANGLE_TRY(mTexture->setStorage(rx::SafeGetImpl(context), target, levels, internalFormat, size,
+                                   samples, fixedSampleLocations));
 
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
     mState.clearImageDescs();
-    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat));
+    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
+                             samples, fixedSampleLocations);
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
     // GLES 3.0.4 section 3.8.10 pg 158:
@@ -1071,33 +1067,6 @@ Error Texture::setStorage(const Context *context,
     // clamped to the range[levelbase;levels].
     mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
-
-    mDirtyChannel.signal();
-
-    return NoError();
-}
-
-Error Texture::setStorageMultisample(const Context *context,
-                                     GLenum target,
-                                     GLsizei samples,
-                                     GLint internalFormat,
-                                     const Extents &size,
-                                     GLboolean fixedSampleLocations)
-{
-    ASSERT(target == mState.mTarget);
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    ANGLE_TRY(mTexture->setStorageMultisample(rx::SafeGetImpl(context), target, samples,
-                                              internalFormat, size, fixedSampleLocations));
-
-    mState.mImmutableFormat = true;
-    mState.mImmutableLevels = static_cast<GLuint>(1);
-    mState.clearImageDescs();
-    mState.setImageDescChainMultisample(size, Format(internalFormat), samples,
-                                        fixedSampleLocations);
 
     mDirtyChannel.signal();
 
@@ -1126,7 +1095,8 @@ Error Texture::generateMipmap(const Context *context)
 
         const ImageDesc &baseImageInfo =
             mState.getImageDesc(mState.getBaseImageTarget(), baseLevel);
-        mState.setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format);
+        mState.setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format, 0,
+                                 true);
     }
 
     mDirtyChannel.signal();

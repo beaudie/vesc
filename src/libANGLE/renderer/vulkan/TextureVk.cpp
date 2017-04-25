@@ -101,7 +101,9 @@ gl::Error TextureVk::setStorage(ContextImpl *contextImpl,
                                 GLenum target,
                                 size_t levels,
                                 GLenum internalFormat,
-                                const gl::Extents &size)
+                                const gl::Extents &size,
+                                GLsizei samples,
+                                GLboolean fixedSampleLocations)
 {
     UNIMPLEMENTED();
     return gl::Error(GL_INVALID_OPERATION);
@@ -153,17 +155,6 @@ gl::Error TextureVk::getAttachmentRenderTarget(GLenum binding,
 void TextureVk::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
     UNIMPLEMENTED();
-}
-
-gl::Error TextureVk::setStorageMultisample(ContextImpl *contextImpl,
-                                           GLenum target,
-                                           GLsizei samples,
-                                           GLint internalformat,
-                                           const gl::Extents &size,
-                                           GLboolean fixedSampleLocations)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError() << "setStorageMultisample is unimplemented.";
 }
 
 }  // namespace rx

@@ -2251,7 +2251,7 @@ void GL_APIENTRY TexStorage2D(GLenum target, GLsizei levels, GLenum internalform
 
         Extents size(width, height, 1);
         Texture *texture = context->getTargetTexture(target);
-        Error error      = texture->setStorage(context, target, levels, internalformat, size);
+        Error error = texture->setStorage(context, target, levels, internalformat, size, 0, true);
         if (error.isError())
         {
             context->handleError(error);
@@ -2283,7 +2283,7 @@ void GL_APIENTRY TexStorage3D(GLenum target, GLsizei levels, GLenum internalform
 
         Extents size(width, height, depth);
         Texture *texture = context->getTargetTexture(target);
-        Error error      = texture->setStorage(context, target, levels, internalformat, size);
+        Error error = texture->setStorage(context, target, levels, internalformat, size, 0, true);
         if (error.isError())
         {
             context->handleError(error);

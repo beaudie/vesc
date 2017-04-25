@@ -128,11 +128,9 @@ struct TextureState final : public angle::NonCopyable
     void setImageDescChain(GLuint baselevel,
                            GLuint maxLevel,
                            Extents baseSize,
-                           const Format &format);
-    void setImageDescChainMultisample(Extents baseSize,
-                                      const Format &format,
-                                      GLsizei samples,
-                                      GLboolean fixedSampleLocations);
+                           const Format &format,
+                           GLsizei samples,
+                           GLboolean fixedSampleLocations);
 
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
@@ -336,14 +334,9 @@ class Texture final : public egl::ImageSibling,
                      GLenum target,
                      GLsizei levels,
                      GLenum internalFormat,
-                     const Extents &size);
-
-    Error setStorageMultisample(const Context *context,
-                                GLenum target,
-                                GLsizei samples,
-                                GLint internalformat,
-                                const Extents &size,
-                                GLboolean fixedSampleLocations);
+                     const Extents &size,
+                     GLsizei samples,
+                     GLboolean fixedSampleLocations);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
