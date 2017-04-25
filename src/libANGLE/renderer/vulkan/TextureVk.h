@@ -73,7 +73,9 @@ class TextureVk : public TextureImpl
                          GLenum target,
                          size_t levels,
                          GLenum internalFormat,
-                         const gl::Extents &size) override;
+                         const gl::Extents &size,
+                         GLsizei samples,
+                         GLboolean fixedSampleLocations) override;
 
     gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
 
@@ -93,14 +95,6 @@ class TextureVk : public TextureImpl
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
-
-    gl::Error setStorageMultisample(ContextImpl *contextImpl,
-                                    GLenum target,
-                                    GLsizei samples,
-                                    GLint internalformat,
-                                    const gl::Extents &size,
-                                    GLboolean fixedSampleLocations) override;
-};
 
 }  // namespace rx
 

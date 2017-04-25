@@ -121,14 +121,9 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
                                  GLenum target,
                                  size_t levels,
                                  GLenum internalFormat,
-                                 const gl::Extents &size) = 0;
-
-    virtual gl::Error setStorageMultisample(ContextImpl *contextImpl,
-                                            GLenum target,
-                                            GLsizei samples,
-                                            GLint internalformat,
-                                            const gl::Extents &size,
-                                            GLboolean fixedSampleLocations) = 0;
+                                 const gl::Extents &size,
+                                 GLsizei samples,
+                                 GLboolean fixedSampleLocations) = 0;
 
     virtual gl::Error setEGLImageTarget(GLenum target, egl::Image *image) = 0;
 
