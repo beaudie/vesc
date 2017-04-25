@@ -3970,8 +3970,8 @@ void Context::texStorage2DMultisample(GLenum target,
 {
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setStorageMultisample(this, target, samples, internalformat, size,
-                                               fixedsamplelocations));
+    handleError(
+        texture->setStorage(this, target, 1, internalformat, size, samples, fixedsamplelocations));
 }
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)

@@ -144,17 +144,6 @@ GLenum TextureD3D::getBaseLevelInternalFormat() const
     return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
 }
 
-gl::Error TextureD3D::setStorageMultisample(ContextImpl *contextImpl,
-                                            GLenum target,
-                                            GLsizei samples,
-                                            GLint internalFormat,
-                                            const gl::Extents &size,
-                                            GLboolean fixedSampleLocations)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError() << "setStorageMultisample is unimplemented.";
-}
-
 bool TextureD3D::shouldUseSetData(const ImageD3D *image) const
 {
     if (!mRenderer->getWorkarounds().setDataFasterThanImageUpload)
@@ -679,7 +668,9 @@ gl::Error TextureD3D_2DMultisample::setStorage(ContextImpl *contextImpl,
                                                GLenum target,
                                                size_t levels,
                                                GLenum internalFormat,
-                                               const gl::Extents &size)
+                                               const gl::Extents &size,
+                                               GLsizei samples,
+                                               GLboolean fixedSampleLocations)
 {
     UNIMPLEMENTED();
     return gl::InternalError();
@@ -1123,7 +1114,9 @@ gl::Error TextureD3D_2D::setStorage(ContextImpl *contextImpl,
                                     GLenum target,
                                     size_t levels,
                                     GLenum internalFormat,
-                                    const gl::Extents &size)
+                                    const gl::Extents &size,
+                                    GLsizei samples,
+                                    GLboolean fixedSampleLocations)
 {
     ASSERT(GL_TEXTURE_2D && size.depth == 1);
 
@@ -1477,17 +1470,6 @@ void TextureD3D_2D::markAllImagesDirty()
     mDirtyImages = true;
 }
 
-gl::Error TextureD3D_2D::setStorageMultisample(ContextImpl *contextImpl,
-                                               GLenum target,
-                                               GLsizei samples,
-                                               GLint internalFormat,
-                                               const gl::Extents &size,
-                                               GLboolean fixedSampleLocations)
-{
-    UNIMPLEMENTED();
-    return gl::InternalError() << "setStorageMultisample is unimplemented.";
-}
-
 TextureD3D_Cube::TextureD3D_Cube(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {
@@ -1716,7 +1698,9 @@ gl::Error TextureD3D_Cube::setStorage(ContextImpl *contextImpl,
                                       GLenum target,
                                       size_t levels,
                                       GLenum internalFormat,
-                                      const gl::Extents &size)
+                                      const gl::Extents &size,
+                                      GLsizei samples,
+                                      GLboolean fixedSampleLocations)
 {
     ASSERT(size.width == size.height);
     ASSERT(size.depth == 1);
@@ -2301,7 +2285,9 @@ gl::Error TextureD3D_3D::setStorage(ContextImpl *contextImpl,
                                     GLenum target,
                                     size_t levels,
                                     GLenum internalFormat,
-                                    const gl::Extents &size)
+                                    const gl::Extents &size,
+                                    GLsizei samples,
+                                    GLboolean fixedSampleLocations)
 {
     ASSERT(target == GL_TEXTURE_3D);
 
@@ -2838,7 +2824,9 @@ gl::Error TextureD3D_2DArray::setStorage(ContextImpl *contextImpl,
                                          GLenum target,
                                          size_t levels,
                                          GLenum internalFormat,
-                                         const gl::Extents &size)
+                                         const gl::Extents &size,
+                                         GLsizei samples,
+                                         GLboolean fixedSampleLocations)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
 
@@ -3299,7 +3287,9 @@ gl::Error TextureD3D_External::setStorage(ContextImpl *contextImpl,
                                           GLenum target,
                                           size_t levels,
                                           GLenum internalFormat,
-                                          const gl::Extents &size)
+                                          const gl::Extents &size,
+                                          GLsizei samples,
+                                          GLboolean fixedSampleLocations)
 {
     UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);
