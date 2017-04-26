@@ -168,8 +168,10 @@ static_library("angle_common") {
     ":commit_id",
   ]
   public_configs = [
-    ":angle_release_asserts_config",
     ":angle_common_config",
+  ]
+  all_dependent_configs = [
+    ":angle_release_asserts_config",
   ]
 }
 
