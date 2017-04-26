@@ -307,4 +307,4 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
 }  // namespace gl
 
-#endif   // LIBANGLE_FRAMEBUFFER_H_
+#endif  // LIBANGLE_FRAMEBUFFER_H_
