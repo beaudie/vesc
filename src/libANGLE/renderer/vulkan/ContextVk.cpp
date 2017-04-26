@@ -101,7 +101,7 @@ gl::Error ContextVk::initPipeline()
 
     for (auto attribIndex : programGL->getActiveAttribLocationsMask())
     {
-        const auto &attrib = attribs[attribIndex];
+        const auto &attrib  = attribs[attribIndex];
         const auto &binding = bindings[attrib.bindingIndex];
         if (attrib.enabled)
         {
@@ -192,10 +192,10 @@ gl::Error ContextVk::initPipeline()
     multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampleState.pNext = nullptr;
     multisampleState.flags = 0;
-    multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-    multisampleState.sampleShadingEnable  = VK_FALSE;
-    multisampleState.minSampleShading     = 0.0f;
-    multisampleState.pSampleMask          = nullptr;
+    multisampleState.rasterizationSamples  = VK_SAMPLE_COUNT_1_BIT;
+    multisampleState.sampleShadingEnable   = VK_FALSE;
+    multisampleState.minSampleShading      = 0.0f;
+    multisampleState.pSampleMask           = nullptr;
     multisampleState.alphaToCoverageEnable = VK_FALSE;
     multisampleState.alphaToOneEnable      = VK_FALSE;
 
