@@ -27,24 +27,28 @@ namespace
 // Include inline shaders in the anonymous namespace to make sure no symbols are exported
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughdepth2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbapremultiply2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbaunmultiply2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbpremultiply2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbunmultiply2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2di11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlum2d11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlumalpha2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbapremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbaunmultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbpremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbunmultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgpremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgunmultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrpremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrunmultiply2d11ps.h"
 
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11gs.h"
@@ -852,6 +856,12 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
                 case GL_RGB:
                     return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_PREMULTIPLY
                                                   : BLITSHADER_2D_RGBF_UNMULTIPLY;
+                case GL_RG:
+                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RGF_PREMULTIPLY
+                                                  : BLITSHADER_2D_RGF_UNMULTIPLY;
+                case GL_RED:
+                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RF_PREMULTIPLY
+                                                  : BLITSHADER_2D_RF_UNMULTIPLY;
                 default:
                     UNREACHABLE();
                     return BLITSHADER_INVALID;
@@ -1719,10 +1729,30 @@ gl::Error Blit11::getBlitShader(GLenum destFormat,
                 blitShaderType, SHADER_2D,
                 d3d11::CompilePS(device, g_PS_PassthroughRG2D, "Blit11 2D RG pixel shader"));
             break;
+        case BLITSHADER_2D_RGF_PREMULTIPLY:
+            addBlitShaderToMap(blitShaderType, SHADER_2D,
+                               d3d11::CompilePS(device, g_PS_PassthroughRGPremultiply2D,
+                                                "Blit11 2D RG premultiply pixel shader"));
+            break;
+        case BLITSHADER_2D_RGF_UNMULTIPLY:
+            addBlitShaderToMap(blitShaderType, SHADER_2D,
+                               d3d11::CompilePS(device, g_PS_PassthroughRGUnmultiply2D,
+                                                "Blit11 2D RG unmultiply pixel shader"));
+            break;
         case BLITSHADER_2D_RF:
             addBlitShaderToMap(
                 blitShaderType, SHADER_2D,
                 d3d11::CompilePS(device, g_PS_PassthroughR2D, "Blit11 2D R pixel shader"));
+            break;
+        case BLITSHADER_2D_RF_PREMULTIPLY:
+            addBlitShaderToMap(blitShaderType, SHADER_2D,
+                               d3d11::CompilePS(device, g_PS_PassthroughRPremultiply2D,
+                                                "Blit11 2D R premultiply pixel shader"));
+            break;
+        case BLITSHADER_2D_RF_UNMULTIPLY:
+            addBlitShaderToMap(blitShaderType, SHADER_2D,
+                               d3d11::CompilePS(device, g_PS_PassthroughRUnmultiply2D,
+                                                "Blit11 2D R unmultiply pixel shader"));
             break;
         case BLITSHADER_2D_ALPHA:
             addBlitShaderToMap(

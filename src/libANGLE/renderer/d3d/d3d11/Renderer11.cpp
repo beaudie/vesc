@@ -3354,11 +3354,10 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
     TextureStorage *sourceStorage = nullptr;
     ANGLE_TRY(const_cast<TextureD3D *>(sourceD3D)->getNativeTexture(&sourceStorage));
 
-    ASSERT(destTarget == GL_TEXTURE_2D);
     TextureStorage11_2D *sourceStorage11 = GetAs<TextureStorage11_2D>(sourceStorage);
     ASSERT(sourceStorage11);
 
-    TextureStorage11_2D *destStorage11 = GetAs<TextureStorage11_2D>(storage);
+    TextureStorage11 *destStorage11 = GetAs<TextureStorage11>(storage);
     ASSERT(destStorage11);
 
     // Check for fast path where a CopySubresourceRegion can be used.
@@ -3374,7 +3373,7 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
         ID3D11Resource *destResource = nullptr;
         ANGLE_TRY(destStorage11->getResource(&destResource));
 
-        gl::ImageIndex destIndex = gl::ImageIndex::Make2D(destLevel);
+        gl::ImageIndex destIndex = gl::ImageIndex::MakeGeneric(destTarget, destLevel);
         UINT destSubresource     = destStorage11->getSubresourceIndex(destIndex);
 
         D3D11_BOX sourceBox{
@@ -3395,7 +3394,7 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
         ID3D11ShaderResourceView *sourceSRV = nullptr;
         ANGLE_TRY(sourceStorage11->getSRVLevels(sourceLevel, sourceLevel, &sourceSRV));
 
-        gl::ImageIndex destIndex             = gl::ImageIndex::Make2D(destLevel);
+        gl::ImageIndex destIndex             = gl::ImageIndex::MakeGeneric(destTarget, destLevel);
         RenderTargetD3D *destRenderTargetD3D = nullptr;
         ANGLE_TRY(destStorage11->getRenderTarget(destIndex, &destRenderTargetD3D));
 
