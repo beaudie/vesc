@@ -1712,6 +1712,75 @@ gl::Error TextureD3D_Cube::copySubImage(ContextImpl *contextImpl,
     return gl::NoError();
 }
 
+gl::Error TextureD3D_Cube::copyTexture(ContextImpl *contextImpl,
+                                       GLenum target,
+                                       size_t level,
+                                       GLenum internalFormat,
+                                       GLenum type,
+                                       size_t sourceLevel,
+                                       bool unpackFlipY,
+                                       bool unpackPremultiplyAlpha,
+                                       bool unpackUnmultiplyAlpha,
+                                       const gl::Texture *source)
+{
+    ASSERT(gl::IsCubeMapTextureTarget(target));
+
+    GLenum sourceTarget = source->getTarget();
+
+    GLint destLevel = static_cast<GLint>(level);
+    int faceIndex   = static_cast<int>(gl::CubeMapTextureTargetToLayerIndex(target));
+
+    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    gl::Extents size(static_cast<int>(source->getWidth(sourceTarget, sourceLevel)),
+                     static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
+    redefineImage(faceIndex, destLevel, internalFormatInfo.sizedInternalFormat, size);
+
+    ASSERT(canCreateRenderTargetForImage(gl::ImageIndex::MakeCube(target, destLevel)));
+
+    ANGLE_TRY(ensureRenderTarget());
+    ASSERT(isValidFaceLevel(faceIndex, destLevel));
+    ANGLE_TRY(updateStorageFaceLevel(faceIndex, destLevel));
+
+    gl::Rectangle sourceRect(0, 0, size.width, size.height);
+    gl::Offset destOffset(0, 0, 0);
+    ANGLE_TRY(mRenderer->copyTexture(source, static_cast<GLint>(sourceLevel), sourceRect,
+                                     internalFormatInfo.format, destOffset, mTexStorage, target,
+                                     destLevel, unpackFlipY, unpackPremultiplyAlpha,
+                                     unpackUnmultiplyAlpha));
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_Cube::copySubTexture(ContextImpl *contextImpl,
+                                          GLenum target,
+                                          size_t level,
+                                          const gl::Offset &destOffset,
+                                          size_t sourceLevel,
+                                          const gl::Rectangle &sourceArea,
+                                          bool unpackFlipY,
+                                          bool unpackPremultiplyAlpha,
+                                          bool unpackUnmultiplyAlpha,
+                                          const gl::Texture *source)
+{
+    ASSERT(gl::IsCubeMapTextureTarget(target));
+
+    GLint destLevel = static_cast<GLint>(level);
+    int faceIndex   = static_cast<int>(gl::CubeMapTextureTargetToLayerIndex(target));
+
+    ASSERT(canCreateRenderTargetForImage(gl::ImageIndex::MakeCube(target, destLevel)));
+
+    ANGLE_TRY(ensureRenderTarget());
+    ASSERT(isValidFaceLevel(faceIndex, destLevel));
+    ANGLE_TRY(updateStorageFaceLevel(faceIndex, destLevel));
+
+    ANGLE_TRY(mRenderer->copyTexture(source, static_cast<GLint>(sourceLevel), sourceArea,
+                                     gl::GetUnsizedFormat(getBaseLevelInternalFormat()), destOffset,
+                                     mTexStorage, target, destLevel, unpackFlipY,
+                                     unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
+
+    return gl::NoError();
+}
+
 gl::Error TextureD3D_Cube::setStorage(ContextImpl *contextImpl,
                                       GLenum target,
                                       size_t levels,
