@@ -198,16 +198,15 @@ bool ValidateES3TexImageParametersBase(Context *context,
     }
 
     // Validate texture formats
-    GLenum actualInternalFormat =
-        isSubImage ? texture->getFormat(target, level).info->sizedInternalFormat : internalformat;
-    if (isSubImage && actualInternalFormat == GL_NONE)
+    const InternalFormat &actualFormatInfo = isSubImage
+                                                 ? *texture->getFormat(target, level).info
+                                                 : gl::GetInternalFormatInfo(internalformat, type);
+    if (isSubImage && actualFormatInfo.internalFormat == GL_NONE)
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Texture level does not exist."));
         return false;
     }
 
-    const gl::InternalFormat &actualFormatInfo =
-        gl::GetSizedInternalFormatInfo(actualInternalFormat);
     if (isCompressed)
     {
         if (!actualFormatInfo.compressed)
@@ -216,6 +215,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
                 GL_INVALID_ENUM, "internalformat is not a supported compressed internal format."));
             return false;
         }
+
+        ASSERT(actualFormatInfo.sized);
 
         if (isSubImage)
         {
@@ -228,7 +229,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
                 return false;
             }
 
-            if (format != actualInternalFormat)
+            if (format != actualFormatInfo.internalFormat)
             {
                 context->handleError(Error(
                     GL_INVALID_OPERATION, "Format must match the internal format of the texture."));
@@ -237,7 +238,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
         }
         else
         {
-            if (!ValidCompressedImageSize(context, actualInternalFormat, level, width, height))
+            if (!ValidCompressedImageSize(context, actualFormatInfo.internalFormat, level, width,
+                                          height))
             {
                 context->handleError(
                     Error(GL_INVALID_OPERATION, "Invalid compressed format dimension."));
@@ -259,7 +261,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
     }
     else
     {
-        if (!ValidateTexImageFormatCombination(context, target, actualInternalFormat, format, type))
+        if (!ValidateTexImageFormatCombination(context, target, actualFormatInfo.internalFormat,
+                                               format, type))
         {
             return false;
         }
@@ -297,8 +300,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
         }
     }
 
-    if (!ValidImageDataSize(context, target, width, height, 1, actualInternalFormat, type, pixels,
-                            imageSize))
+    if (!ValidImageDataSize(context, target, width, height, 1, actualFormatInfo.sizedInternalFormat,
+                            type, pixels, imageSize))
     {
         return false;
     }
