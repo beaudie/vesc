@@ -638,7 +638,7 @@ gl::Error TextureGL::copyTexture(ContextImpl *contextImpl,
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat, type);
     reserveTexImageToBeFilled(getTarget(), 0, internalFormatInfo.sizedInternalFormat,
-                              sourceImageDesc.size, internalFormat, type);
+                              sourceImageDesc.size, internalFormatInfo.format, type);
 
     return copySubTextureHelper(target, level, gl::Offset(0, 0, 0), sourceLevel, sourceArea,
                                 internalFormat, unpackFlipY, unpackPremultiplyAlpha,

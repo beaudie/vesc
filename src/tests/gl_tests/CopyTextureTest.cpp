@@ -8,6 +8,8 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "test_utils/gl_raii.h"
+
 namespace angle
 {
 
@@ -79,6 +81,10 @@ class CopyTextureTest : public ANGLETest
 
     PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM       = nullptr;
     PFNGLCOPYSUBTEXTURECHROMIUMPROC glCopySubTextureCHROMIUM = nullptr;
+};
+
+class CopyTextureTestES3 : public CopyTextureTest
+{
 };
 
 // Test to ensure that the basic functionality of the extension works.
@@ -645,8 +651,166 @@ TEST_P(CopyTextureTest, Alpha)
     EXPECT_PIXEL_COLOR_EQ(0, 0, expectedPixels);
 }
 
+// Test the newly added ES3 formats
+TEST_P(CopyTextureTestES3, ES3Formats)
+{
+    if (!checkExtensions())
+    {
+        return;
+    }
+
+    struct CopyTextureType
+    {
+        bool flipY;
+        bool premultiplyAlpha;
+        bool unmultiplyAlpha;
+    };
+    constexpr CopyTextureType copyTypes[] =
+    {
+        { false, false, false, },
+        //{ false, false, true, },
+       // { false, true, false, },
+        //{ false, true, true, },
+        //{ true, false, false, },
+        //{ true, false, true, },
+       // { true, true, false, },
+        //{ true, true, true, },
+    };
+
+    struct CopyTextureFormat
+    {
+        GLenum internalFormat;
+        GLenum format;
+        GLenum type;
+    };
+
+    const GLColor inputColor(128u, 64u, 192u, 128u);
+
+    std::vector<CopyTextureFormat> sourceFormats =
+    {
+        { GL_LUMINANCE, GL_LUMINANCE, GL_UNSIGNED_BYTE },
+        { GL_LUMINANCE_ALPHA, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE },
+        { GL_RGB, GL_RGB, GL_UNSIGNED_BYTE },
+        { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE },
+        { GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE },
+        { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
+    };
+    if (extensionEnabled("GL_EXT_texture_format_BGRA8888"))
+    {
+        sourceFormats.push_back({ GL_BGRA_EXT, GL_BGRA_EXT, GL_UNSIGNED_BYTE });
+        sourceFormats.push_back({ GL_BGRA8_EXT, GL_BGRA_EXT, GL_UNSIGNED_BYTE });
+    }
+
+    struct CopyTextureNormalizedDestinationFormat
+    {
+        GLenum internalFormat;
+        GLenum format;
+        GLenum type;
+
+        GLColor outputColor;
+    };
+
+    std::vector<CopyTextureNormalizedDestinationFormat> normalizedDestinationFormats =
+    {
+        { GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, GLColor(inputColor.R, inputColor.G, inputColor.B, 255u) },
+        { GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, inputColor },
+        { GL_SRGB_ALPHA_EXT, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE, inputColor },
+        { GL_R8, GL_RED, GL_UNSIGNED_BYTE, GLColor(inputColor.R, 0u, 0u, 255u) },
+        { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, GLColor(inputColor.R, inputColor.G, 0u, 255u) },
+        { GL_RGB565, GL_RGB, GL_UNSIGNED_BYTE, GLColor(inputColor.R, inputColor.G, 0u, 255u) },
+        { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, inputColor },
+        { GL_SRGB8_ALPHA8, GL_RGBA, GL_UNSIGNED_BYTE, inputColor },
+        { GL_RGB5_A1, GL_RGBA, GL_UNSIGNED_BYTE, inputColor },
+        { GL_RGBA4, GL_RGBA, GL_UNSIGNED_BYTE, inputColor },
+
+        // Non-renderable formats
+        // { GL_SRGB_EXT, GL_SRGB_EXT, GL_UNSIGNED_BYTE, GLColor(inputColor.R, inputColor.G, inputColor.B, 255u) },
+        // { GL_SRGB8, GL_RGB, GL_UNSIGNED_BYTE, inputColor },
+    };
+    if (extensionEnabled("GL_EXT_texture_format_BGRA8888"))
+    {
+        normalizedDestinationFormats.push_back({ GL_BGRA_EXT, GL_BGRA_EXT, GL_UNSIGNED_BYTE, inputColor });
+        normalizedDestinationFormats.push_back({ GL_BGRA8_EXT, GL_BGRA_EXT, GL_UNSIGNED_BYTE, inputColor });
+    }
+
+    auto testCopyCombination = [this, inputColor](const CopyTextureFormat& sourceFormat, const CopyTextureNormalizedDestinationFormat& destFormat,
+        const CopyTextureType& copyType)
+    {
+        GLTexture sourceTexture;
+        glBindTexture(GL_TEXTURE_2D, sourceTexture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, sourceFormat.internalFormat, 1, 1, 0, sourceFormat.format, sourceFormat.type, &inputColor);
+
+        GLTexture destTexture;
+        glBindTexture(GL_TEXTURE_2D, destTexture);
+
+        glCopyTextureCHROMIUM(sourceTexture, 0, GL_TEXTURE_2D, destTexture, 0, destFormat.internalFormat,
+            destFormat.type, copyType.flipY, copyType.premultiplyAlpha, copyType.unmultiplyAlpha);
+        ASSERT_GL_NO_ERROR();
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, destTexture,
+            0);
+
+        GLColor expectedColor = destFormat.outputColor;
+        if (sourceFormat.format == GL_LUMINANCE || sourceFormat.format == GL_LUMINANCE_ALPHA)
+        {
+            expectedColor.G = expectedColor.R;
+            expectedColor.B = expectedColor.R;
+        }
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, expectedColor);
+    };
+
+    for (const auto& sourceFormat : sourceFormats)
+    {
+        GLTexture sourceTexture;
+        glBindTexture(GL_TEXTURE_2D, sourceTexture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, sourceFormat.internalFormat, 1, 1, 0, sourceFormat.format, sourceFormat.type, &inputColor);
+
+        for (const auto& destFormat : normalizedDestinationFormats)
+        {
+            for (const auto& copyType : copyTypes)
+            {
+                testCopyCombination(sourceFormat, destFormat, copyType);
+            }
+        }
+    }
+
+    constexpr CopyTextureFormat floatDestinationFormats[] =
+    {
+        { GL_R16F, GL_RED, GL_HALF_FLOAT },
+        { GL_R16F, GL_RED, GL_FLOAT },
+        { GL_R32F, GL_RED, GL_FLOAT },
+        { GL_RG16F, GL_RG, GL_HALF_FLOAT },
+        { GL_RG16F, GL_RG, GL_FLOAT },
+        { GL_RG32F, GL_RG, GL_FLOAT },
+        { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE },
+        { GL_R11F_G11F_B10F, GL_RGB, GL_FLOAT },
+        { GL_RGB9_E5, GL_RGB, GL_HALF_FLOAT },
+        { GL_RGB9_E5, GL_RGB, GL_FLOAT },
+        { GL_RGB16F, GL_RGB, GL_HALF_FLOAT },
+        { GL_RGB16F, GL_RGB, GL_FLOAT },
+        { GL_RGB32F, GL_RGB, GL_FLOAT },
+        { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
+        { GL_RGBA16F, GL_RGBA, GL_FLOAT },
+        { GL_RGBA32F, GL_RGBA, GL_FLOAT },
+    };
+
+    constexpr CopyTextureFormat integerDestinationFormats[] =
+    {
+        { GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE },
+        { GL_RG8UI, GL_RG_INTEGER, GL_UNSIGNED_BYTE },
+        { GL_RGB8UI, GL_RGB_INTEGER, GL_UNSIGNED_BYTE },
+        { GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE },
+    };
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(CopyTextureTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
+ANGLE_INSTANTIATE_TEST(CopyTextureTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 }  // namespace angle
