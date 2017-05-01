@@ -34,6 +34,7 @@ class Blit11 : angle::NonCopyable
     gl::Error copyTexture(ID3D11ShaderResourceView *source,
                           const gl::Box &sourceArea,
                           const gl::Extents &sourceSize,
+                          GLenum sourceFormat,
                           ID3D11RenderTargetView *dest,
                           const gl::Box &destArea,
                           const gl::Extents &destSize,
@@ -94,15 +95,11 @@ class Blit11 : angle::NonCopyable
     enum BlitShaderType
     {
         BLITSHADER_INVALID,
+
+        // Passthrough shaders
         BLITSHADER_2D_RGBAF,
-        BLITSHADER_2D_RGBAF_PREMULTIPLY,
-        BLITSHADER_2D_RGBAF_UNMULTIPLY,
         BLITSHADER_2D_BGRAF,
-        BLITSHADER_2D_BGRAF_PREMULTIPLY,
-        BLITSHADER_2D_BGRAF_UNMULTIPLY,
         BLITSHADER_2D_RGBF,
-        BLITSHADER_2D_RGBF_PREMULTIPLY,
-        BLITSHADER_2D_RGBF_UNMULTIPLY,
         BLITSHADER_2D_RGF,
         BLITSHADER_2D_RF,
         BLITSHADER_2D_ALPHA,
@@ -132,6 +129,21 @@ class Blit11 : angle::NonCopyable
         BLITSHADER_3D_ALPHA,
         BLITSHADER_3D_LUMA,
         BLITSHADER_3D_LUMAALPHA,
+
+        // Multiply alpha shaders
+        BLITSHADER_2D_RGBAF_PREMULTIPLY,
+        BLITSHADER_2D_RGBAF_UNMULTIPLY,
+
+        BLITSHADER_2D_RGBF_PREMULTIPLY,
+        BLITSHADER_2D_RGBF_UNMULTIPLY,
+
+        BLITSHADER_2D_RGBAF_TOUI,
+        BLITSHADER_2D_RGBAF_TOUI_PREMULTIPLY,
+        BLITSHADER_2D_RGBAF_TOUI_UNMULTIPLY,
+
+        BLITSHADER_2D_RGBF_TOUI,
+        BLITSHADER_2D_RGBF_TOUI_PREMULTIPLY,
+        BLITSHADER_2D_RGBF_TOUI_UNMULTIPLY,
     };
 
     enum SwizzleShaderType
@@ -185,6 +197,7 @@ class Blit11 : angle::NonCopyable
     ShaderSupport getShaderSupport(const Shader &shader);
 
     static BlitShaderType GetBlitShaderType(GLenum destinationFormat,
+                                            GLenum sourceFormat,
                                             bool isSigned,
                                             bool unpackPremultiplyAlpha,
                                             bool unpackUnmultiplyAlpha,
@@ -238,6 +251,7 @@ class Blit11 : angle::NonCopyable
                             ID3D11PixelShader *ps);
 
     gl::Error getBlitShader(GLenum destFormat,
+                            GLenum sourceFormat,
                             bool isSigned,
                             bool unpackPremultiplyAlpha,
                             bool unpackUnmultiplyAlpha,
