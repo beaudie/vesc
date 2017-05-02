@@ -64,10 +64,10 @@ const Format &Format::Get(GLenum internalFormat)
 """
 
 format_entry_template = """{space}{{
-{space}    static constexpr Format info({internalFormat},
-{space}                                 angle::Format::ID::{formatName},
-{space}                                 {vkFormat},
-{space}                                 {initializer});
+{space}    static const Format info({internalFormat},
+{space}                             angle::Format::ID::{formatName},
+{space}                             {vkFormat},
+{space}                             {initializer});
 {space}    return info;
 {space}}}
 """

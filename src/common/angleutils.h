@@ -31,7 +31,8 @@ class NonCopyable
 {
   public:
     NonCopyable() = default;
-    ~NonCopyable() = default;
+    virtual ~NonCopyable() = default;
+
   protected:
     NonCopyable(const NonCopyable&) = delete;
     void operator=(const NonCopyable&) = delete;
