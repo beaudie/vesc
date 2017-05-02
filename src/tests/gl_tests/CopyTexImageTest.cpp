@@ -298,6 +298,30 @@ TEST_P(CopyTexImageTest, SubImageRGBToL)
     verifyResults(tex, expected1, 7, 7);
 }
 
+TEST_P(CopyTexImageTest, DefaultFramebuffer)
+{
+    const GLint w = getWindowWidth(), h = getWindowHeight();
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, w, h, 0);
+    EXPECT_GL_NO_ERROR();
+    glDeleteTextures(1, &tex);
+}
+
+TEST_P(CopyTexImageTest, SubDefaultFramebuffer)
+{
+    const GLint w = getWindowWidth(), h = getWindowHeight();
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, w, h);
+    EXPECT_GL_NO_ERROR();
+    glDeleteTextures(1, &tex);
+}
+
 // specialization of CopyTexImageTest is added so that some tests can be explicitly run with an ES3
 // context
 class CopyTexImageTestES3 : public CopyTexImageTest
