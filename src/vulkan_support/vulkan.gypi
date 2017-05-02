@@ -53,6 +53,19 @@
             '/wd4706', # Assignment within conditional expression
             '/wd4996', # Unsafe stdlib function
         ],
+        'vulkan_layer_generated_files':
+        [
+            '<(angle_gen_path)/vulkan/vk_enum_string_helper.h',
+            '<(angle_gen_path)/vulkan/vk_struct_size_helper.h',
+            '<(angle_gen_path)/vulkan/vk_struct_size_helper.c',
+            '<(angle_gen_path)/vulkan/vk_safe_struct.h',
+            '<(angle_gen_path)/vulkan/vk_safe_struct.cpp',
+            '<(angle_gen_path)/vulkan/vk_layer_dispatch_table.h',
+            '<(angle_gen_path)/vulkan/vk_dispatch_table_helper.h',
+            '<(angle_gen_path)/vulkan/vk_loader_extensions.h',
+            '<(angle_gen_path)/vulkan/vk_loader_extensions.c',
+            '<@(vulkan_gen_json_files_outputs)',
+        ],
         'glslang_sources':
         [
             '<(glslang_path)/glslang/GenericCodeGen/CodeGen.cpp',
@@ -372,6 +385,14 @@
                             'sources':
                             [
                                 '<@(glslang_unix_sources)',
+                            ],
+                            'cflags_c':
+                            [
+                                '-Wno-typedef-redefinition',
+                            ],
+                            'cflags_cc':
+                            [
+                                '-Wno-inconsistent-missing-override'
                             ],
                         }],
                     ],
@@ -967,6 +988,11 @@
                                 'VK_USE_PLATFORM_XCB_KHR',
                                 'VK_USE_PLATFORM_XCB_KHX',
                             ],
+                            'cflags_c':
+                            [
+                                '-Wno-typedef-redefinition',
+                                '-Wno-missing-field-initializers',
+                            ],
                         }],
                     ],
                     'actions':
@@ -993,6 +1019,17 @@
                                 '<(angle_gen_path)/vulkan/angle_loader.h', '<(PRODUCT_DIR)',
                             ],
                         },
+                        {
+                            'action_name': 'vulkan_loader_order_deps',
+                            'message': 'stamping for vulkan_loader_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/vulkan_loader_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/vulkan_loader_order_deps.stamp',
+                            ]
+                        },
                     ],
                 },
 
@@ -1007,6 +1044,20 @@
                     'sources':
                     [
                         '<@(VkLayer_core_validation_sources)',
+                    ],
+                    'actions':
+                    [
+                        {
+                            'action_name': 'layer_core_validation_order_deps',
+                            'message': 'stamping for layer_core_validation_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_core_validation_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_core_validation_order_deps.stamp',
+                            ]
+                        },
                     ],
                     'conditions':
                     [
@@ -1031,6 +1082,20 @@
                     [
                         '<@(VkLayer_swapchain_sources)',
                     ],
+                    'actions':
+                    [
+                        {
+                            'action_name': 'layer_swapchain_order_deps',
+                            'message': 'stamping for layer_swapchain_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_swapchain_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_swapchain_order_deps.stamp',
+                            ]
+                        },
+                    ],
                     'conditions':
                     [
                         ['OS=="win"',
@@ -1053,6 +1118,20 @@
                     'sources':
                     [
                         '<@(VkLayer_object_tracker_sources)',
+                    ],
+                    'actions':
+                    [
+                        {
+                            'action_name': 'layer_object_tracker_order_deps',
+                            'message': 'stamping for layer_object_tracker_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_object_tracker_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_object_tracker_order_deps.stamp',
+                            ]
+                        },
                     ],
                     'conditions':
                     [
@@ -1089,6 +1168,17 @@
                     ],
                     'actions':
                     [
+                        {
+                            'action_name': 'layer_unique_objects_order_deps',
+                            'message': 'stamping for layer_unique_objects_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_unique_objects_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_unique_objects_order_deps.stamp',
+                            ]
+                        },
                         {
                             'action_name': 'vulkan_layer_unique_objects_generate',
                             'message': 'generating Vulkan unique_objects helpers',
@@ -1137,6 +1227,17 @@
                     'actions':
                     [
                         {
+                            'action_name': 'layer_threading_order_deps',
+                            'message': 'stamping for layer_threading_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_threading_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_threading_order_deps.stamp',
+                            ]
+                        },
+                        {
                             'action_name': 'vulkan_layer_threading_generate',
                             'message': 'generating Vulkan threading header',
                             'inputs':
@@ -1183,6 +1284,17 @@
                     ],
                     'actions':
                     [
+                        {
+                            'action_name': 'layer_parameter_validation_order_deps',
+                            'message': 'stamping for layer_parameter_validation_order_deps',
+                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
+                            'outputs': [ '<(angle_gen_path)/vulkan/layer_parameter_validation_order_deps.stamp' ],
+                            'action':
+                            [
+                                'python', '<(angle_path)/gyp/touch_stamp.py',
+                                '<(angle_gen_path)/vulkan/layer_parameter_validation_order_deps.stamp',
+                            ]
+                        },
                         {
                             'action_name': 'vulkan_layer_parameter_validation_generate',
                             'message': 'generating Vulkan parameter_validation header',
