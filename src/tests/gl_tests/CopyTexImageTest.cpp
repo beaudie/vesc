@@ -240,6 +240,31 @@ TEST_P(CopyTexImageTest, SubImageRGBAToL)
     verifyResults(tex, expected1, 7, 7);
 }
 
+TEST_P(CopyTexImageTest, SubImageRGBAToRGBA)
+{
+    GLfloat color0[] = {
+        0.25f, 1.0f, 0.75f, 0.5f,
+    };
+    GLuint fbo0 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color0);
+    GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_RGBA);
+
+    GLfloat color1[] = {
+        0.5f, 0.25f, 1.0f, 0.75f,
+    };
+    GLuint fbo1 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color1);
+    copyTextureWithCopyTexSubImage(fbo1, tex, 2, 4, 5, 6, 8, 8);
+
+    GLubyte expected0[] = {
+        64, 255, 192, 127,
+    };
+    verifyResults(tex, expected0, 0, 0);
+
+    GLubyte expected1[] = {
+        127, 64, 255, 192,
+    };
+    verifyResults(tex, expected1, 7, 7);
+}
+
 TEST_P(CopyTexImageTest, SubImageRGBAToLA)
 {
     GLfloat color0[] = {
