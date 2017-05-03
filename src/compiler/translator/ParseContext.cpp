@@ -35,30 +35,12 @@ bool ContainsSampler(const TType &type)
     if (IsSampler(type.getBasicType()))
         return true;
 
-    if (type.getBasicType() == EbtStruct || type.isInterfaceBlock())
+    if (type.getBasicType() == EbtStruct)
     {
         const TFieldList &fields = type.getStruct()->fields();
         for (unsigned int i = 0; i < fields.size(); ++i)
         {
             if (ContainsSampler(*fields[i]->type()))
-                return true;
-        }
-    }
-
-    return false;
-}
-
-bool ContainsImage(const TType &type)
-{
-    if (IsImage(type.getBasicType()))
-        return true;
-
-    if (type.getBasicType() == EbtStruct || type.isInterfaceBlock())
-    {
-        const TFieldList &fields = type.getStruct()->fields();
-        for (unsigned int i = 0; i < fields.size(); ++i)
-        {
-            if (ContainsImage(*fields[i]->type()))
                 return true;
         }
     }
@@ -340,14 +322,9 @@ void TParseContext::checkPrecisionSpecified(const TSourceLoc &line,
                 error(line, "No precision specified (int)", "");
                 return;
             default:
-                if (IsSampler(type))
+                if (IsOpaqueType(type))
                 {
-                    error(line, "No precision specified (sampler)", "");
-                    return;
-                }
-                if (IsImage(type))
-                {
-                    error(line, "No precision specified (image)", "");
+                    error(line, "No precision specified", getBasicString(type));
                     return;
                 }
         }
@@ -450,14 +427,6 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
             if (node->getBasicType() == EbtVoid)
             {
                 message = "can't modify void";
-            }
-            if (IsSampler(node->getBasicType()))
-            {
-                message = "can't modify a sampler";
-            }
-            if (IsImage(node->getBasicType()))
-            {
-                message = "can't modify an image";
             }
     }
 
@@ -683,14 +652,11 @@ bool TParseContext::checkConstructorArguments(const TSourceLoc &line,
     {
         TIntermTyped *argTyped = argNode->getAsTyped();
         ASSERT(argTyped != nullptr);
-        if (op != EOpConstructStruct && IsSampler(argTyped->getBasicType()))
+        if (op != EOpConstructStruct && IsOpaqueType(argTyped->getBasicType()))
         {
-            error(line, "cannot convert a sampler", "constructor");
-            return false;
-        }
-        if (op != EOpConstructStruct && IsImage(argTyped->getBasicType()))
-        {
-            error(line, "cannot convert an image", "constructor");
+            std::string reason("cannot convert a(an) ");
+            reason += getBasicString(argTyped->getBasicType());
+            error(line, reason.c_str(), "constructor");
             return false;
         }
         if (argTyped->getBasicType() == EbtVoid)
@@ -777,9 +743,9 @@ void TParseContext::checkIsScalarBool(const TSourceLoc &line, const TPublicType 
     }
 }
 
-bool TParseContext::checkIsNotSampler(const TSourceLoc &line,
-                                      const TTypeSpecifierNonArray &pType,
-                                      const char *reason)
+bool TParseContext::checkIsNotOpaqueType(const TSourceLoc &line,
+                                         const TTypeSpecifierNonArray &pType,
+                                         const char *reason)
 {
     if (pType.type == EbtStruct)
     {
@@ -794,37 +760,9 @@ bool TParseContext::checkIsNotSampler(const TSourceLoc &line,
 
         return true;
     }
-    else if (IsSampler(pType.type))
+    else if (IsOpaqueType(pType.type))
     {
         error(line, reason, getBasicString(pType.type));
-        return false;
-    }
-
-    return true;
-}
-
-bool TParseContext::checkIsNotImage(const TSourceLoc &line,
-                                    const TTypeSpecifierNonArray &pType,
-                                    const char *reason)
-{
-    if (pType.type == EbtStruct)
-    {
-        if (ContainsImage(*pType.userDef))
-        {
-            std::stringstream reasonStream;
-            reasonStream << reason << " (structure contains an image)";
-            std::string reasonStr = reasonStream.str();
-            error(line, reasonStr.c_str(), getBasicString(pType.type));
-
-            return false;
-        }
-
-        return true;
-    }
-    else if (IsImage(pType.type))
-    {
-        error(line, reason, getBasicString(pType.type));
-
         return false;
     }
 
@@ -860,29 +798,10 @@ void TParseContext::checkOutParameterIsNotOpaqueType(const TSourceLoc &line,
                                                      TQualifier qualifier,
                                                      const TType &type)
 {
-    checkOutParameterIsNotSampler(line, qualifier, type);
-    checkOutParameterIsNotImage(line, qualifier, type);
-}
-
-void TParseContext::checkOutParameterIsNotSampler(const TSourceLoc &line,
-                                                  TQualifier qualifier,
-                                                  const TType &type)
-{
     ASSERT(qualifier == EvqOut || qualifier == EvqInOut);
-    if (IsSampler(type.getBasicType()))
+    if (IsOpaqueType(type.getBasicType()))
     {
-        error(line, "samplers cannot be output parameters", type.getBasicString());
-    }
-}
-
-void TParseContext::checkOutParameterIsNotImage(const TSourceLoc &line,
-                                                TQualifier qualifier,
-                                                const TType &type)
-{
-    ASSERT(qualifier == EvqOut || qualifier == EvqInOut);
-    if (IsImage(type.getBasicType()))
-    {
-        error(line, "images cannot be output parameters", type.getBasicString());
+        error(line, "opaque types cannot be output parameters", type.getBasicString());
     }
 }
 
@@ -1174,16 +1093,10 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
         default:
             break;
     }
-
+    std::string reason(getBasicString(publicType.getBasicType()));
+    reason += "s must be uniform";
     if (publicType.qualifier != EvqUniform &&
-        !checkIsNotSampler(identifierLocation, publicType.typeSpecifierNonArray,
-                           "samplers must be uniform"))
-    {
-        return;
-    }
-    if (publicType.qualifier != EvqUniform &&
-        !checkIsNotImage(identifierLocation, publicType.typeSpecifierNonArray,
-                         "images must be uniform"))
+        !checkIsNotOpaqueType(identifierLocation, publicType.typeSpecifierNonArray, reason.c_str()))
     {
         return;
     }
@@ -2724,10 +2637,10 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     {
         error(location, "no qualifiers allowed for function return", "layout");
     }
-    // make sure a sampler or an image is not involved as well...
-    checkIsNotSampler(location, type.typeSpecifierNonArray,
-                      "samplers can't be function return values");
-    checkIsNotImage(location, type.typeSpecifierNonArray, "images can't be function return values");
+    // make sure an opaque type is not involved as well...
+    std::string reason(getBasicString(type.getBasicType()));
+    reason += "s can't be function return values";
+    checkIsNotOpaqueType(location, type.typeSpecifierNonArray, reason.c_str());
     if (mShaderVersion < 300)
     {
         // Array return values are forbidden, but there's also no valid syntax for declaring array
@@ -2878,18 +2791,12 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()))
+        if (IsOpaqueType(fieldType->getBasicType()))
         {
-            error(field->line(),
-                  "unsupported type - sampler types are not allowed in interface blocks",
-                  fieldType->getBasicString());
-        }
-
-        if (IsImage(fieldType->getBasicType()))
-        {
-            error(field->line(),
-                  "unsupported type - image types are not allowed in interface blocks",
-                  fieldType->getBasicString());
+            std::string reason("unsupported type - ");
+            reason += fieldType->getBasicString();
+            reason += " types are not allowed in interface blocks";
+            error(field->line(), reason.c_str(), fieldType->getBasicString());
         }
 
         const TQualifier qualifier = fieldType->getQualifier();
@@ -3946,13 +3853,6 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 return false;
             }
 
-            if ((op == EOpAssign || op == EOpInitialize) &&
-                left->getType().isStructureContainingImages())
-            {
-                error(loc, "undefined operation for structs containing images",
-                      GetOperatorString(op));
-                return false;
-            }
             if ((left->getNominalSize() != right->getNominalSize()) ||
                 (left->getSecondarySize() != right->getSecondarySize()))
             {
