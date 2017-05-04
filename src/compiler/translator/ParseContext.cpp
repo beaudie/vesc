@@ -1079,6 +1079,13 @@ void TParseContext::declarationQualifierErrorCheck(const sh::TQualifier qualifie
         checkYuvIsNotSpecified(location, layoutQualifier.yuv);
     }
 
+    // If multiview extension is enabled, "in" qualifier is allowed in the vertex shader in previous
+    // parsing steps. So it needs to be checked here.
+    if (isMultiviewExtensionEnabled() && mShaderVersion < 300 && qualifier == EvqVertexIn)
+    {
+        error(location, "storage qualifier supported in GLSL ES 3.00 and above only", "in");
+    }
+
     bool canHaveLocation = qualifier == EvqVertexIn || qualifier == EvqFragmentOut;
     if (mShaderVersion >= 310 && qualifier == EvqUniform)
     {
@@ -2347,9 +2354,7 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
         mComputeShaderLocalSizeDeclared = true;
     }
-    else if (mMultiviewAvailable &&
-             (isExtensionEnabled("GL_OVR_multiview") || isExtensionEnabled("GL_OVR_multiview2")) &&
-             typeQualifier.qualifier == EvqVertexIn)
+    else if (isMultiviewExtensionEnabled() && typeQualifier.qualifier == EvqVertexIn)
     {
         // This error is only specified in WebGL, but tightens unspecified behavior in the native
         // specification.
@@ -3408,8 +3413,7 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         parseLocalSize(qualifierType, qualifierTypeLine, intValue, intValueLine, intValueString, 2u,
                        &qualifier.localSize);
     }
-    else if (qualifierType == "num_views" && mMultiviewAvailable &&
-             (isExtensionEnabled("GL_OVR_multiview") || isExtensionEnabled("GL_OVR_multiview2")) &&
+    else if (qualifierType == "num_views" && isMultiviewExtensionEnabled() &&
              mShaderType == GL_VERTEX_SHADER)
     {
         parseNumViews(intValue, intValueLine, intValueString, &qualifier.numViews);
