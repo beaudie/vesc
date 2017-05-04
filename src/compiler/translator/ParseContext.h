@@ -167,6 +167,10 @@ class TParseContext : angle::NonCopyable
     }
     bool supportsExtension(const char *extension);
     bool isExtensionEnabled(const char *extension) const;
+    bool isMultiviewExtensionEnabled() const
+    {
+        return isExtensionEnabled("GL_OVR_multiview") || isExtensionEnabled("GL_OVR_multiview2");
+    }
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc,
                                const char *name,
