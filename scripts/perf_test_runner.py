@@ -14,6 +14,7 @@ import subprocess
 import sys
 import os
 import re
+import platform
 
 base_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
@@ -28,8 +29,10 @@ perftests_paths = [
 ]
 metric = 'score'
 
-# TODO(jmadill): Linux binaries
-binary_name = 'angle_perftests.exe'
+if platform.system() == 'Windows':
+    binary_name = 'angle_perftests.exe'
+else:
+    binary_name = 'angle_perftests'
 
 scores = []
 
