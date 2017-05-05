@@ -14,6 +14,7 @@ import subprocess
 import sys
 import os
 import re
+import platform
 
 base_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
@@ -28,8 +29,13 @@ perftests_paths = [
 ]
 metric = 'score'
 
-# TODO(jmadill): Linux binaries
-binary_name = 'angle_perftests.exe'
+default_test_name = ""
+if platform.system() == 'Windows':
+    binary_name = 'angle_perftests.exe'
+    default_test_name = 'DrawCallPerfBenchmark.Run/d3d11_null'
+else:
+    binary_name = 'angle_perftests'
+    default_test_name = 'DrawCallPerfBenchmark.Run/gl'
 
 scores = []
 
@@ -86,16 +92,36 @@ if perftests_path == None or not os.path.exists(perftests_path):
     print("Cannot find Release angle_perftests.exe!")
     sys.exit(1)
 
-test_name = "DrawCallPerfBenchmark.Run/d3d11_null"
+print('Using test executable: ' + perftests_path)
 
-if len(sys.argv) >= 2:
+run_case_infinitely = True;
+repeat_times = -1
+
+if len(sys.argv) == 1:
+    test_name = default_test_name
+elif len(sys.argv) == 2:
+    test_name = sys.argv[1]
+else:
+    if not sys.argv[2].isdigit():
+        print("Usage: python perf_test_runner.py [test_name] [repeat_times]")
+        print("repeat_times should be a non-negative integer")
+        sys.exit(1);
+    else:
+        run_case_infinitely = False
+        repeat_times = int(sys.argv[2])
     test_name = sys.argv[1]
 
-print('Using test executable: ' + perftests_path)
+
 print('Test name: ' + test_name)
+if run_case_infinitely:
+    print("Repeat times: infinite")
+else:
+    print("Repeat times: %d"%repeat_times)
+
+print("")
 
 # Infinite loop of running the tests.
-while True:
+while run_case_infinitely or repeat_times > 0:
     output = subprocess.check_output([perftests_path, '--gtest_filter=' + test_name])
 
     start_index = output.find(metric + "=")
@@ -134,4 +160,6 @@ while True:
         sys.stdout.write(", truncated mean: " + str(truncated_mean(scores, trucation_n)))
         sys.stdout.write(", stddev: " + str(truncated_stddev(scores, trucation_n)))
 
+    if not run_case_infinitely:
+        repeat_times -= 1
     print("")
