@@ -3853,6 +3853,19 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                                         TIntermTyped *right,
                                         const TSourceLoc &loc)
 {
+    // Check opauqe types are not allowed to be operands in expressions other than array indexing
+    // and structure member selection.
+    switch (op)
+    {
+        case EOpIndexDirect:
+        case EOpIndexDirectStruct:
+            break;
+
+        default:
+            if (IsOpaqueType(left->getBasicType()) || IsOpaqueType(right->getBasicType()))
+                error(loc, "Invalid opaque operand(s)", GetOperatorString(op));
+    }
+
     if (left->getType().getStruct() || right->getType().getStruct())
     {
         switch (op)
