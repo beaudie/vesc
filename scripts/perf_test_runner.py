@@ -14,6 +14,7 @@ import subprocess
 import sys
 import os
 import re
+import platform
 
 base_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
@@ -28,8 +29,15 @@ perftests_paths = [
 ]
 metric = 'score'
 
-# TODO(jmadill): Linux binaries
-binary_name = 'angle_perftests.exe'
+host_os = platform.system()
+if host_os == 'Windows':
+    binary_name = 'angle_perftests.exe'
+elif host_os == 'Linux' or host_os == 'Darwin':
+    binary_name = 'angle_perftests'
+else:
+    # TODO(jiawei.shao@intel.com): Android binaries
+    print("Unsupported platform %s!"%host_os)
+    sys.exit(1)
 
 scores = []
 
@@ -83,12 +91,15 @@ for path in perftests_paths:
 perftests_path = newest_binary
 
 if perftests_path == None or not os.path.exists(perftests_path):
-    print("Cannot find Release angle_perftests.exe!")
+    print("Cannot find Release %s!"%binary_name)
     sys.exit(1)
 
-test_name = "DrawCallPerfBenchmark.Run/d3d11_null"
-
-if len(sys.argv) >= 2:
+if len(sys.argv) == 1:
+    if host_os == 'Windows':
+        test_name = 'DrawCallPerfBenchmark.Run/d3d11_null'
+    else:
+        test_name = 'DrawCallPerfBenchmark.Run/gl'
+else:
     test_name = sys.argv[1]
 
 print('Using test executable: ' + perftests_path)
