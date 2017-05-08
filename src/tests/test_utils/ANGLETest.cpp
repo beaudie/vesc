@@ -89,6 +89,12 @@ std::array<angle::Vector3, 4> GetIndexedQuadVertices()
     return vertices;
 }
 
+const std::array<GLushort, 6> &GetIndexedQuadIndices()
+{
+    static std::array<GLushort, 6> indices = {0, 1, 2, 0, 2, 3};
+    return indices;
+}
+
 }  // anonymous namespace
 
 GLColorRGB::GLColorRGB() : R(0), G(0), B(0)
@@ -199,6 +205,7 @@ ANGLETest::ANGLETest()
       mHeight(16),
       mIgnoreD3D11SDKLayersWarnings(false),
       mQuadVertexBuffer(0),
+      mQuadIndexBuffer(0),
       mDeferContextInit(false)
 {
     mEGLWindow =
@@ -232,6 +239,10 @@ ANGLETest::~ANGLETest()
     if (mQuadVertexBuffer)
     {
         glDeleteBuffers(1, &mQuadVertexBuffer);
+    }
+    if (mQuadIndexBuffer)
+    {
+        glDeleteBuffers(1, &mQuadIndexBuffer);
     }
     SafeDelete(mEGLWindow);
 }
@@ -368,6 +379,19 @@ void ANGLETest::setupIndexedQuadVertexBuffer(GLfloat positionAttribZ, GLfloat po
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 4, quadVertices.data(), GL_STATIC_DRAW);
 }
 
+void ANGLETest::setupIndexedQuadIndexBuffer()
+{
+    if (mQuadIndexBuffer == 0)
+    {
+        glGenBuffers(1, &mQuadIndexBuffer);
+    }
+
+    const auto &quadIndices = angle::GetIndexedQuadIndices();
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mQuadIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndices), quadIndices.data(), GL_STATIC_DRAW);
+}
+
 // static
 void ANGLETest::drawQuad(GLuint program,
                          const std::string &positionAttribName,
@@ -443,6 +467,15 @@ void ANGLETest::drawIndexedQuad(GLuint program,
                                 GLfloat positionAttribZ,
                                 GLfloat positionAttribXYScale)
 {
+    drawIndexedQuad(program, positionAttribName, positionAttribZ, positionAttribXYScale, false);
+}
+
+void ANGLETest::drawIndexedQuad(GLuint program,
+                                const std::string &positionAttribName,
+                                GLfloat positionAttribZ,
+                                GLfloat positionAttribXYScale,
+                                bool useBufferObject)
+{
     GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
     GLint activeProgram = 0;
@@ -461,10 +494,16 @@ void ANGLETest::drawIndexedQuad(GLuint program,
     glEnableVertexAttribArray(positionLocation);
     glBindBuffer(GL_ARRAY_BUFFER, prevBinding);
 
-    const GLushort indices[] = {
-        0, 1, 2, 0, 2, 3,
-    };
-
+    const GLvoid *indices;
+    if (useBufferObject)
+    {
+        setupIndexedQuadIndexBuffer();
+        indices = 0;
+    }
+    else
+    {
+        indices = angle::GetIndexedQuadIndices().data();
+    }
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
     glDisableVertexAttribArray(positionLocation);
