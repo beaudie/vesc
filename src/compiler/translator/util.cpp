@@ -575,6 +575,21 @@ TType GetShaderVariableBasicType(const sh::ShaderVariable &var)
     }
 }
 
+bool CanBeConstructed(TBasicType type)
+{
+    switch (type)
+    {
+        case EbtFloat:
+        case EbtInt:
+        case EbtUInt:
+        case EbtBool:
+        case EbtStruct:
+            return true;
+        default:
+            return false;
+    }
+}
+
 TOperator TypeToConstructorOperator(const TType &type)
 {
     switch (type.getBasicType())
