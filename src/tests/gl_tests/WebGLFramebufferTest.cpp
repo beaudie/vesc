@@ -715,44 +715,48 @@ void testFramebufferIncompleteDimensions(GLenum depthFormat, GLenum depthAttachm
     EXPECT_GL_NO_ERROR();
 }
 
-// Test drawing or reading from a missing framebuffer attachment.
-void testReadingFromMissingAttachment()
+class NoColorFB
 {
-    GLFramebuffer fbo;
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    constexpr int size = 16;
-
-    // The only scenario we can verify is an attempt to read or copy
-    // from a missing color attachment while the framebuffer is still
-    // complete.
-    GLRenderbuffer depthBuffer;
-    glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, size, size);
-
-    // After depth renderbuffer setup
-    EXPECT_GL_NO_ERROR();
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+  public:
+    NoColorFB(int size)
     {
-        // Unable to allocate a framebuffer with just a depth attachment; this is legal.
-        // Try just a depth/stencil renderbuffer
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-        GLRenderbuffer depthStencilBuffer;
-        glBindRenderbuffer(GL_RENDERBUFFER, depthStencilBuffer);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                                  depthStencilBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, size, size);
-        // After depth+stencil renderbuffer setup
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+        // The only scenario we can verify is an attempt to read or copy
+        // from a missing color attachment while the framebuffer is still
+        // complete.
+        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, size, size);
+
+        // After depth renderbuffer setup
         EXPECT_GL_NO_ERROR();
-        // Unable to allocate a framebuffer with just a depth+stencil attachment; this is legal.
+
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         {
-            return;
+            // Unable to allocate a framebuffer with just a depth attachment; this is legal.
+            // Try just a depth/stencil renderbuffer.
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+
+            GLRenderbuffer depthStencilBuffer;
+            glBindRenderbuffer(GL_RENDERBUFFER, depthStencilBuffer);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                      depthStencilBuffer);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, size, size);
+            // After depth+stencil renderbuffer setup
+            EXPECT_GL_NO_ERROR();
         }
     }
 
+  private:
+    GLRenderbuffer depthBuffer;
+    GLRenderbuffer depthStencilBuffer;
+    GLFramebuffer fbo;
+};
+
+// Test reading from a missing framebuffer attachment.
+void testReadingMissingAttachment(int size)
+{
     // The FBO has no color attachment. ReadPixels, CopyTexImage2D,
     // and CopyTexSubImage2D should all generate INVALID_OPERATION.
 
@@ -777,6 +781,21 @@ void testReadingFromMissingAttachment()
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, size, size);
     // After CopyTexSubImage2D from missing attachment
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    printf("read pass\n");
+}
+
+// Test drawing to a missing framebuffer attachment.
+void testDrawingMissingAttachment()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    //glDrawArrays();
+    EXPECT_GL_NO_ERROR();
+
+    //glDrawElements();
+    EXPECT_GL_NO_ERROR();
+    printf("draw pass\n");
 }
 
 // Determine if we can attach both color and depth or color and depth_stencil
@@ -791,7 +810,19 @@ TEST_P(WebGLFramebufferTest, CheckValidColorDepthCombination)
         testFramebufferIncompleteAttachment(depthFormat);
         testFramebufferIncompleteMissingAttachment();
         testUsingIncompleteFramebuffer(depthFormat, depthAttachment);
-        testReadingFromMissingAttachment();
+
+        constexpr int size = 16;
+        NoColorFB fb(size);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+        {
+            // The FBO has no color attachment. ReadPixels, CopyTexImage2D,
+            // and CopyTexSubImage2D should all generate INVALID_OPERATION.
+            testReadingMissingAttachment(size);
+
+            // The FBO has no color attachment. Clear, DrawArrays,
+            // and DrawElements should not generate an error.
+            testDrawingMissingAttachment();
+        }
     }
 }
 
