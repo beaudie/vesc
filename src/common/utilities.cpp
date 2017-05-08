@@ -422,11 +422,15 @@ bool IsImageType(GLenum type)
     return false;
 }
 
+bool IsAtomicCounterType(GLenum type)
+{
+    return type == GL_UNSIGNED_INT_ATOMIC_COUNTER;
+}
+
 bool IsOpaqueType(GLenum type)
 {
     // ESSL 3.10 section 4.1.7 defines opaque types as: samplers, images and atomic counters.
-    // TODO(oetuaho): add atomic types
-    return IsImageType(type) || IsSamplerType(type);
+    return IsImageType(type) || IsSamplerType(type) || IsAtomicCounterType(type);
 }
 
 GLenum SamplerTypeToTextureType(GLenum samplerType)
