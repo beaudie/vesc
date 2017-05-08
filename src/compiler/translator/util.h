@@ -44,7 +44,6 @@ TString ArrayString(const TType &type);
 TType GetShaderVariableBasicType(const sh::ShaderVariable &var);
 
 bool CanBeConstructed(TBasicType type);
-TOperator TypeToConstructorOperator(const TType &type);
 
 bool IsBuiltinOutputVariable(TQualifier qualifier);
 bool IsBuiltinFragmentInputVariable(TQualifier qualifier);
