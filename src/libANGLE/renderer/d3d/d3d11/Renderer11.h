@@ -389,10 +389,16 @@ class Renderer11 : public RendererD3D
 
     gl::Version getMaxSupportedESVersion() const override;
 
-    gl::ErrorOrResult<TextureHelper11> createStagingTexture(GLenum textureType,
+    gl::ErrorOrResult<TextureHelper11> createStagingTexture(ResourceType textureType,
                                                             const d3d11::Format &formatSet,
                                                             const gl::Extents &size,
                                                             StagingAccess readAndWriteAccess);
+
+    template <typename DescT, typename ResourceT>
+    gl::Error allocateResource(const DescT &desc, ResourceT *resourceOut)
+    {
+        return mResourceManager11.allocate(this, &desc, nullptr, resourceOut);
+    }
 
     template <typename DescT, typename InitDataT, typename ResourceT>
     gl::Error allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
@@ -404,6 +410,29 @@ class Renderer11 : public RendererD3D
     gl::Error allocateResourceNoDesc(InitDataT *initData, ResourceT *resourceOut)
     {
         return mResourceManager11.allocate(this, nullptr, initData, resourceOut);
+    }
+
+    template <typename DescT>
+    gl::Error allocateTexture(const DescT &desc,
+                              const d3d11::Format &format,
+                              TextureHelper11 *textureOut)
+    {
+        Resource11<GetD3D11FromDesc<DescT>> texture;
+        ANGLE_TRY(mResourceManager11.allocate(this, &desc, nullptr, &texture));
+        textureOut->init(std::move(texture), desc, format);
+        return gl::NoError();
+    }
+
+    template <typename DescT, typename InitDataT>
+    gl::Error allocateTexture(const DescT &desc,
+                              const d3d11::Format &format,
+                              InitDataT *initData,
+                              TextureHelper11 *textureOut)
+    {
+        Resource11<GetD3D11FromDesc<DescT>> texture;
+        ANGLE_TRY(mResourceManager11.allocate(this, &desc, initData, &texture));
+        textureOut->init(std::move(texture), desc, format);
+        return gl::NoError();
     }
 
   protected:
