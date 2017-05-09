@@ -286,6 +286,8 @@ bool TOutputTraverser::visitBinary(Visit visit, TIntermBinary *node)
 
         out << constantUnion->getIConst() << " (field '" << field->name() << "')";
 
+		out << "\n";
+
         return false;
     }
 
