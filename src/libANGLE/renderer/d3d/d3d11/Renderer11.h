@@ -389,6 +389,11 @@ class Renderer11 : public RendererD3D
 
     gl::Version getMaxSupportedESVersion() const override;
 
+    gl::ErrorOrResult<TextureHelper11> createStagingTexture(GLenum textureType,
+                                                            const d3d11::Format &formatSet,
+                                                            const gl::Extents &size,
+                                                            StagingAccess readAndWriteAccess);
+
     template <typename DescT, typename InitDataT, typename ResourceT>
     gl::Error allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
     {
