@@ -25,6 +25,8 @@ class ResourceManager11;
 #define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                              \
     OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC, \
        ID3D11Resource)
+    OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC, \
+       ID3D11Resource)
 
 #define ANGLE_RESOURCE_TYPE_LIST(NAME, RESTYPE, D3D11TYPE, DESCTYPE, INITDATATYPE) RESTYPE,
 
