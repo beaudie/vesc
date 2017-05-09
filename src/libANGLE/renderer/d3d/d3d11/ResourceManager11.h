@@ -23,6 +23,7 @@ class ResourceManager11;
 
 enum class ResourceType
 {
+    DepthStencilView,
     RenderTargetView,
     Last
 };
@@ -36,6 +37,8 @@ constexpr size_t NumResourceTypes = ResourceTypeIndex(ResourceType::Last);
 
 // Format: ResourceType, D3D11 type, DESC type, init data type.
 #define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                              \
+    OP(NAME, DepthStencilView, ID3D11DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC, \
+       ID3D11Resource)                                                                \
     OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC, \
        ID3D11Resource)
 
@@ -242,6 +245,7 @@ TypedData<ResourceT>::~TypedData()
 
 namespace d3d11
 {
+using DepthStencilView = Resource11<ID3D11DepthStencilView>;
 using RenderTargetView = Resource11<ID3D11RenderTargetView>;
 }  // namespace d3d11
 
