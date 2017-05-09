@@ -26,9 +26,9 @@ size_t ComputeMemoryUsage(const T *desc)
 HRESULT CreateResource(ID3D11Device *device,
                        const D3D11_DEPTH_STENCIL_VIEW_DESC *desc,
                        ID3D11Resource *resource,
-                       ID3D11DepthStencilView **depthStencilView)
+                       ID3D11DepthStencilView **resourceOut)
 {
-    return device->CreateDepthStencilView(resource, desc, depthStencilView);
+    return device->CreateDepthStencilView(resource, desc, resourceOut);
 }
 
 HRESULT CreateResource(ID3D11Device *device,
@@ -39,8 +39,17 @@ HRESULT CreateResource(ID3D11Device *device,
     return device->CreateRenderTargetView(resource, desc, renderTargetView);
 }
 
-constexpr std::array<const char *, NumResourceTypes> kResourceTypeNames = {
-    {"DepthStencilView", "RenderTargetView"}};
+HRESULT CreateResource(ID3D11Device *device,
+                       const D3D11_SHADER_RESOURCE_VIEW_DESC *desc,
+                       ID3D11Resource *resource,
+                       ID3D11ShaderResourceView **resourceOut)
+{
+    return device->CreateShaderResourceView(resource, desc, resourceOut);
+}
+
+constexpr std::array<const char *, NumResourceTypes> kResourceTypeNames = {{
+    "DepthStencilView", "RenderTargetView", "ShaderResourceView",
+}};
 }  // anonymous namespace
 
 // ResourceManager11 Implementation.
@@ -120,14 +129,19 @@ template gl::Error ResourceManager11::allocate<ID3D11DepthStencilView>(
     const D3D11_DEPTH_STENCIL_VIEW_DESC *,
     ID3D11Resource *,
     d3d11::DepthStencilView *);
-
 template gl::Error ResourceManager11::allocate<ID3D11RenderTargetView>(
     Renderer11 *,
     const D3D11_RENDER_TARGET_VIEW_DESC *,
     ID3D11Resource *,
     d3d11::RenderTargetView *);
+template gl::Error ResourceManager11::allocate<ID3D11ShaderResourceView>(
+    Renderer11 *,
+    const D3D11_SHADER_RESOURCE_VIEW_DESC *,
+    ID3D11Resource *,
+    d3d11::ShaderResourceView *);
 
 template void ResourceManager11::onRelease<ID3D11DepthStencilView>(ID3D11DepthStencilView *);
 template void ResourceManager11::onRelease<ID3D11RenderTargetView>(ID3D11RenderTargetView *);
+template void ResourceManager11::onRelease<ID3D11ShaderResourceView>(ID3D11ShaderResourceView *);
 
 }  // namespace rx
