@@ -389,10 +389,16 @@ class Renderer11 : public RendererD3D
 
     gl::Version getMaxSupportedESVersion() const override;
 
-    gl::ErrorOrResult<TextureHelper11> createStagingTexture(GLenum textureType,
+    gl::ErrorOrResult<TextureHelper11> createStagingTexture(ResourceType textureType,
                                                             const d3d11::Format &formatSet,
                                                             const gl::Extents &size,
                                                             StagingAccess readAndWriteAccess);
+
+    template <typename DescT, typename ResourceT>
+    gl::Error allocateResource(const DescT &desc, ResourceT *resourceOut)
+    {
+        return mResourceManager11.allocate(this, &desc, nullptr, resourceOut);
+    }
 
     template <typename DescT, typename InitDataT, typename ResourceT>
     gl::Error allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
@@ -405,6 +411,24 @@ class Renderer11 : public RendererD3D
     {
         return mResourceManager11.allocate(this, nullptr, initData, resourceOut);
     }
+
+    template <typename DescT>
+    gl::Error allocateTexture(const DescT &desc,
+                              const d3d11::Format &format,
+                              TextureHelper11 *textureOut)
+    {
+        return allocateTexture(desc, format, nullptr, textureOut);
+    }
+
+    gl::Error allocateTexture(const D3D11_TEXTURE2D_DESC &desc,
+                              const d3d11::Format &format,
+                              const D3D11_SUBRESOURCE_DATA *initData,
+                              TextureHelper11 *textureOut);
+
+    gl::Error allocateTexture(const D3D11_TEXTURE3D_DESC &desc,
+                              const d3d11::Format &format,
+                              const D3D11_SUBRESOURCE_DATA *initData,
+                              TextureHelper11 *textureOut);
 
   protected:
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
