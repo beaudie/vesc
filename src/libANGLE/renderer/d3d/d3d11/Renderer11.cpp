@@ -1487,7 +1487,7 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
 
 gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
 {
-    ID3D11ShaderResourceView *textureSRV = nullptr;
+    d3d11::SharedSRV textureSRV;
 
     if (texture)
     {
@@ -1505,7 +1505,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
 
         // If we get NULL back from getSRV here, something went wrong in the texture class and we're
         // unexpectedly missing the shader resource view
-        ASSERT(textureSRV != nullptr);
+        ASSERT(textureSRV.valid());
 
         textureImpl->resetDirty();
     }
@@ -1515,7 +1515,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
            (type == gl::SAMPLER_VERTEX &&
             static_cast<unsigned int>(index) < getNativeCaps().maxVertexTextureImageUnits));
 
-    mStateManager.setShaderResource(type, index, textureSRV);
+    mStateManager.setShaderResource(type, index, textureSRV.get());
 
     return gl::NoError();
 }
@@ -3218,8 +3218,8 @@ gl::Error Renderer11::copyImageInternal(const gl::Framebuffer *framebuffer,
     ANGLE_TRY(colorAttachment->getRenderTarget(&sourceRenderTarget));
     ASSERT(sourceRenderTarget);
 
-    ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
-    ASSERT(source);
+    const d3d11::SharedSRV &source = sourceRenderTarget->getBlitShaderResourceView();
+    ASSERT(source.valid());
 
     const d3d11::RenderTargetView &dest =
         GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
@@ -3390,7 +3390,7 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
     }
     else
     {
-        ID3D11ShaderResourceView *sourceSRV = nullptr;
+        d3d11::SharedSRV sourceSRV;
         ANGLE_TRY(sourceStorage11->getSRVLevels(sourceLevel, sourceLevel, &sourceSRV));
 
         gl::ImageIndex destIndex             = gl::ImageIndex::Make2D(destLevel);
@@ -3522,8 +3522,8 @@ gl::Error Renderer11::createRenderTarget(int width,
                              "Failed to create render target texture, result: 0x%X.", result);
         }
 
-        ID3D11ShaderResourceView *srv     = nullptr;
-        ID3D11ShaderResourceView *blitSRV = nullptr;
+        d3d11::SharedSRV srv;
+        d3d11::SharedSRV blitSRV;
         if (bindSRV)
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -3533,14 +3533,11 @@ gl::Error Renderer11::createRenderTarget(int width,
             srvDesc.Texture2D.MostDetailedMip = 0;
             srvDesc.Texture2D.MipLevels       = 1;
 
-            result = mDevice->CreateShaderResourceView(texture, &srvDesc, &srv);
-            if (FAILED(result))
+            gl::Error err = allocateResource(srvDesc, texture, &srv);
+            if (err.isError())
             {
-                ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
-                return gl::Error(
-                    GL_OUT_OF_MEMORY,
-                    "Failed to create render target shader resource view, result: 0x%X.", result);
+                return err;
             }
 
             if (formatInfo.blitSRVFormat != formatInfo.srvFormat)
@@ -3553,22 +3550,16 @@ gl::Error Renderer11::createRenderTarget(int width,
                 blitSRVDesc.Texture2D.MostDetailedMip = 0;
                 blitSRVDesc.Texture2D.MipLevels       = 1;
 
-                result = mDevice->CreateShaderResourceView(texture, &blitSRVDesc, &blitSRV);
-                if (FAILED(result))
+                err = allocateResource(blitSRVDesc, texture, &blitSRV);
+                if (err.isError())
                 {
-                    ASSERT(result == E_OUTOFMEMORY);
                     SafeRelease(texture);
-                    SafeRelease(srv);
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to create render target shader resource view for "
-                                     "blits, result: 0x%X.",
-                                     result);
+                    return err;
                 }
             }
             else
             {
                 blitSRV = srv;
-                srv->AddRef();
             }
         }
 
@@ -3586,8 +3577,6 @@ gl::Error Renderer11::createRenderTarget(int width,
             if (err.isError())
             {
                 SafeRelease(texture);
-                SafeRelease(srv);
-                SafeRelease(blitSRV);
                 return err;
             }
 
@@ -3607,8 +3596,6 @@ gl::Error Renderer11::createRenderTarget(int width,
             if (err.isError())
             {
                 SafeRelease(texture);
-                SafeRelease(srv);
-                SafeRelease(blitSRV);
                 return err;
             }
 
@@ -3627,13 +3614,11 @@ gl::Error Renderer11::createRenderTarget(int width,
         }
 
         SafeRelease(texture);
-        SafeRelease(srv);
-        SafeRelease(blitSRV);
     }
     else
     {
         *outRT = new TextureRenderTarget11(
-            d3d11::RenderTargetView(), nullptr, nullptr, nullptr, format,
+            d3d11::RenderTargetView(), nullptr, d3d11::SharedSRV(), d3d11::SharedSRV(), format,
             d3d11::Format::Get(GL_NONE, mRenderer11DeviceCaps), width, height, 1, supportedSamples);
     }
 
@@ -3967,11 +3952,11 @@ gl::Error Renderer11::generateMipmapUsingD3D(TextureStorage *storage,
     ASSERT(storage11->isRenderTarget());
     ASSERT(storage11->supportsNativeMipmapFunction());
 
-    ID3D11ShaderResourceView *srv;
+    d3d11::SharedSRV srv;
     ANGLE_TRY(storage11->getSRVLevels(textureState.getEffectiveBaseLevel(),
                                       textureState.getEffectiveMaxLevel(), &srv));
 
-    mDeviceContext->GenerateMips(srv);
+    mDeviceContext->GenerateMips(srv.get());
 
     return gl::NoError();
 }
@@ -4239,7 +4224,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     TextureHelper11 readTexture;
     unsigned int readSubresource      = 0;
-    ID3D11ShaderResourceView *readSRV = nullptr;
+    d3d11::SharedSRV readSRV;
 
     if (readRenderTarget->getSamples() > 1)
     {
@@ -4256,14 +4241,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
             viewDesc.Texture2D.MipLevels       = 1;
             viewDesc.Texture2D.MostDetailedMip = 0;
 
-            HRESULT hresult =
-                mDevice->CreateShaderResourceView(readTexture.getResource(), &viewDesc, &readSRV);
-            if (FAILED(hresult))
-            {
-                return gl::OutOfMemory()
-                       << "Renderer11::blitRenderbufferRect: Failed to create temporary SRV, "
-                       << hresult;
-            }
+            ANGLE_TRY(allocateResource(viewDesc, readTexture.getResource(), &readSRV));
         }
     }
     else
@@ -4273,17 +4251,16 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
                                                         readRenderTarget11->getFormatSet());
         readSubresource = readRenderTarget11->getSubresourceIndex();
         readSRV         = readRenderTarget11->getBlitShaderResourceView();
-        if (readSRV == nullptr)
+        if (!readSRV.valid())
         {
             ASSERT(depthBlit || stencilBlit);
             readSRV = readRenderTarget11->getShaderResourceView();
         }
-        ASSERT(readSRV);
-        readSRV->AddRef();
+        ASSERT(readSRV.valid());
     }
 
     // Stencil blits don't use shaders.
-    ASSERT(readSRV || stencilBlit);
+    ASSERT(readSRV.valid() || stencilBlit);
 
     const gl::Extents readSize(readRenderTarget->getWidth(), readRenderTarget->getHeight(), 1);
     const gl::Extents drawSize(drawRenderTarget->getWidth(), drawRenderTarget->getHeight(), 1);
@@ -4455,8 +4432,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         else if (depthBlit)
         {
             const d3d11::DepthStencilView &drawDSV = drawRenderTarget11->getDepthStencilView();
-
-            ASSERT(readSRV);
+            ASSERT(readSRV.valid());
             ANGLE_TRY(mBlit->copyDepth(readSRV, readArea, readSize, drawDSV, drawArea, drawSize,
                                        scissor));
         }
@@ -4472,14 +4448,12 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
-            ASSERT(readSRV);
+            ASSERT(readSRV.valid());
             ANGLE_TRY(mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
                                          scissor, destFormatInfo.format, filter, maskOffAlpha,
                                          false, false));
         }
     }
-
-    SafeRelease(readSRV);
 
     return gl::NoError();
 }

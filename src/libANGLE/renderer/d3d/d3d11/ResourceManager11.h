@@ -20,11 +20,14 @@ namespace rx
 {
 class Renderer11;
 class ResourceManager11;
+template <typename T>
+class SharedResource11;
 
 enum class ResourceType
 {
     DepthStencilView,
     RenderTargetView,
+    ShaderResourceView,
     Last
 };
 
@@ -36,10 +39,12 @@ constexpr size_t ResourceTypeIndex(ResourceType resourceType)
 constexpr size_t NumResourceTypes = ResourceTypeIndex(ResourceType::Last);
 
 // Format: ResourceType, D3D11 type, DESC type, init data type.
-#define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                              \
-    OP(NAME, DepthStencilView, ID3D11DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC, \
-       ID3D11Resource)                                                                \
-    OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC, \
+#define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                                    \
+    OP(NAME, DepthStencilView, ID3D11DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC,       \
+       ID3D11Resource)                                                                      \
+    OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC,       \
+       ID3D11Resource)                                                                      \
+    OP(NAME, ShaderResourceView, ID3D11ShaderResourceView, D3D11_SHADER_RESOURCE_VIEW_DESC, \
        ID3D11Resource)
 
 #define ANGLE_RESOURCE_TYPE_TO_D3D11(NAME, RESTYPE, D3D11TYPE, DESCTYPE, INITDATATYPE) \
@@ -161,8 +166,6 @@ class Resource11Base : angle::NonCopyable
     void reset() { mData.reset(new DataT()); }
 
   protected:
-    friend class TextureHelper11;
-
     Resource11Base() : mData(new DataT()) {}
 
     Resource11Base(Resource11Base &&movedObj) : mData(new DataT())
@@ -197,12 +200,48 @@ class Resource11 : public Resource11Base<ResourceT, UniquePtr, TypedData<Resourc
     }
 
   private:
+    template <typename T>
+    friend class SharedResource11;
     friend class ResourceManager11;
 
     Resource11(ResourceT *object, ResourceManager11 *manager)
     {
         mData->object  = object;
         mData->manager = manager;
+    }
+};
+
+template <typename T>
+class SharedResource11 : public Resource11Base<T, std::shared_ptr, TypedData<T>>
+{
+  public:
+    SharedResource11() {}
+    SharedResource11(SharedResource11 &&movedObj) : Resource11Base(std::move(movedObj)) {}
+
+    SharedResource11 &operator=(SharedResource11 &&other)
+    {
+        std::swap(mData, other.mData);
+        return *this;
+    }
+
+    SharedResource11(const SharedResource11 &sharedObj) { mData = sharedObj.mData; }
+
+    SharedResource11 &operator=(const SharedResource11 &sharedObj)
+    {
+        mData = sharedObj.mData;
+        return *this;
+    }
+
+  private:
+    friend class ResourceManager11;
+    SharedResource11(Resource11<T> &&obj) : Resource11Base()
+    {
+        std::swap(mData->manager, obj.mData->manager);
+
+        // Can't use std::swap because of ID3D11Resource.
+        auto temp         = mData->object;
+        mData->object     = obj.mData->object;
+        obj.mData->object = static_cast<T *>(temp);
     }
 };
 
@@ -217,6 +256,18 @@ class ResourceManager11 final : angle::NonCopyable
                        const GetDescFromD3D11<T> *desc,
                        GetInitDataFromD3D11<T> *initData,
                        Resource11<T> *resourceOut);
+
+    template <typename T>
+    gl::Error allocate(Renderer11 *renderer,
+                       const GetDescFromD3D11<T> *desc,
+                       GetInitDataFromD3D11<T> *initData,
+                       SharedResource11<T> *sharedRes)
+    {
+        Resource11<T> res;
+        ANGLE_TRY(allocate(renderer, desc, initData, &res));
+        *sharedRes = std::move(res);
+        return gl::NoError();
+    }
 
     template <typename T>
     void onRelease(T *resource);
@@ -245,8 +296,11 @@ TypedData<ResourceT>::~TypedData()
 
 namespace d3d11
 {
-using DepthStencilView = Resource11<ID3D11DepthStencilView>;
-using RenderTargetView = Resource11<ID3D11RenderTargetView>;
+using DepthStencilView   = Resource11<ID3D11DepthStencilView>;
+using RenderTargetView   = Resource11<ID3D11RenderTargetView>;
+using ShaderResourceView = Resource11<ID3D11ShaderResourceView>;
+
+using SharedSRV = SharedResource11<ID3D11ShaderResourceView>;
 }  // namespace d3d11
 
 }  // namespace rx
