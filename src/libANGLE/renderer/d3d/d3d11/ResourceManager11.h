@@ -22,12 +22,15 @@ class Renderer11;
 class ResourceManager11;
 template <typename T>
 class SharedResource11;
+class TextureHelper11;
 
 enum class ResourceType
 {
     DepthStencilView,
     RenderTargetView,
     ShaderResourceView,
+    Texture2D,
+    Texture3D,
     Last
 };
 
@@ -81,18 +84,24 @@ ANGLE_TYPE_HELPER_BEGIN(D3D11Type, ResourceType)
 ANGLE_TYPE_HELPER(D3D11Type, ResourceType, DepthStencilView, ID3D11DepthStencilView)
 ANGLE_TYPE_HELPER(D3D11Type, ResourceType, RenderTargetView, ID3D11RenderTargetView)
 ANGLE_TYPE_HELPER(D3D11Type, ResourceType, ShaderResourceView, ID3D11ShaderResourceView)
+ANGLE_TYPE_HELPER(D3D11Type, ResourceType, Texture2D, ID3D11Texture2D)
+ANGLE_TYPE_HELPER(D3D11Type, ResourceType, Texture3D, ID3D11Texture3D)
 ANGLE_TYPE_HELPER_END(D3D11Type, ResourceType)
 
 ANGLE_TYPE_HELPER_BEGIN(DescType, ResourceType)
 ANGLE_TYPE_HELPER(DescType, ResourceType, DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC)
 ANGLE_TYPE_HELPER(DescType, ResourceType, RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC)
 ANGLE_TYPE_HELPER(DescType, ResourceType, ShaderResourceView, D3D11_SHADER_RESOURCE_VIEW_DESC)
+ANGLE_TYPE_HELPER(DescType, ResourceType, Texture2D, D3D11_TEXTURE2D_DESC)
+ANGLE_TYPE_HELPER(DescType, ResourceType, Texture3D, D3D11_TEXTURE3D_DESC)
 ANGLE_TYPE_HELPER_END(DescType, ResourceType)
 
 ANGLE_TYPE_HELPER_BEGIN(InitDataType, ResourceType)
 ANGLE_TYPE_HELPER(InitDataType, ResourceType, DepthStencilView, ID3D11Resource)
 ANGLE_TYPE_HELPER(InitDataType, ResourceType, RenderTargetView, ID3D11Resource)
 ANGLE_TYPE_HELPER(InitDataType, ResourceType, ShaderResourceView, ID3D11Resource)
+ANGLE_TYPE_HELPER(InitDataType, ResourceType, Texture2D, const D3D11_SUBRESOURCE_DATA)
+ANGLE_TYPE_HELPER(InitDataType, ResourceType, Texture3D, const D3D11_SUBRESOURCE_DATA)
 ANGLE_TYPE_HELPER_END(InitDataType, ResourceType)
 
 ANGLE_INV_TYPE_HELPER_BEGIN(ResourceTypeFromD3D11)
@@ -102,6 +111,8 @@ ANGLE_INV_TYPE_HELPER(ResourceTypeFromD3D11,
                       ResourceType,
                       ID3D11ShaderResourceView,
                       ShaderResourceView)
+ANGLE_INV_TYPE_HELPER(ResourceTypeFromD3D11, ResourceType, ID3D11Texture2D, Texture2D)
+ANGLE_INV_TYPE_HELPER(ResourceTypeFromD3D11, ResourceType, ID3D11Texture3D, Texture3D)
 ANGLE_INV_TYPE_HELPER_END(ResourceTypeFromD3D11, ResourceType)
 
 ANGLE_INV_TYPE_HELPER_BEGIN(ResourceTypeFromDesc)
@@ -117,6 +128,8 @@ ANGLE_INV_TYPE_HELPER(ResourceTypeFromDesc,
                       ResourceType,
                       D3D11_SHADER_RESOURCE_VIEW_DESC,
                       ShaderResourceView)
+ANGLE_INV_TYPE_HELPER(ResourceTypeFromDesc, ResourceType, D3D11_TEXTURE2D_DESC, Texture2D)
+ANGLE_INV_TYPE_HELPER(ResourceTypeFromDesc, ResourceType, D3D11_TEXTURE3D_DESC, Texture3D)
 ANGLE_INV_TYPE_HELPER_END(ResourceTypeFromDesc, ResourceType)
 
 template <typename T>
@@ -171,6 +184,8 @@ class Resource11Base : angle::NonCopyable
     void reset() { mData.reset(new DataT()); }
 
   protected:
+    friend class TextureHelper11;
+
     Resource11Base() : mData(new DataT()) {}
 
     Resource11Base(Resource11Base &&movedObj) : mData(new DataT())
@@ -276,6 +291,7 @@ class ResourceManager11 final : angle::NonCopyable
 
     template <typename T>
     void onRelease(T *resource);
+    void onReleaseResource(ResourceType resourceType, ID3D11Resource *resource);
 
   private:
     void incrResource(ResourceType resourceType, size_t memorySize);
@@ -304,6 +320,8 @@ namespace d3d11
 using DepthStencilView   = Resource11<ID3D11DepthStencilView>;
 using RenderTargetView   = Resource11<ID3D11RenderTargetView>;
 using ShaderResourceView = Resource11<ID3D11ShaderResourceView>;
+using Texture2D          = Resource11<ID3D11Texture2D>;
+using Texture3D          = Resource11<ID3D11Texture3D>;
 
 using SharedSRV = SharedResource11<ID3D11ShaderResourceView>;
 }  // namespace d3d11
