@@ -425,9 +425,6 @@ Renderer11::Renderer11(egl::Display *display)
     mDxgiAdapter    = nullptr;
     mDxgiFactory    = nullptr;
 
-    mDriverConstantBufferVS = nullptr;
-    mDriverConstantBufferPS = nullptr;
-
     mAppliedVertexShader   = NULL;
     mAppliedGeometryShader = NULL;
     mAppliedPixelShader    = NULL;
@@ -1786,8 +1783,9 @@ gl::Error Renderer11::applyVertexBuffer(const gl::State &state,
     }
     const auto &vertexArrayAttribs  = vertexArray11->getTranslatedAttribs();
     const auto &currentValueAttribs = mStateManager.getCurrentValueAttribs();
-    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(state, vertexArrayAttribs, currentValueAttribs,
-                                                   mode, first, indexInfo, numIndicesPerInstance));
+    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(this, state, vertexArrayAttribs,
+                                                   currentValueAttribs, mode, first, indexInfo,
+                                                   numIndicesPerInstance));
 
     // InputLayoutCache::applyVertexBuffers calls through to the Bufer11 to get the native vertex
     // buffer (ID3D11Buffer *). Because we allocate these buffers lazily, this will trigger
@@ -1826,7 +1824,7 @@ gl::Error Renderer11::applyIndexBuffer(const gl::ContextState &data,
     else
     {
         IndexBuffer11 *indexBuffer = GetAs<IndexBuffer11>(indexInfo->indexBuffer);
-        buffer                     = indexBuffer->getBuffer();
+        buffer                     = indexBuffer->getBuffer().get();
     }
 
     mAppliedIBChanged = false;
@@ -2276,14 +2274,14 @@ gl::Error Renderer11::drawLineLoop(const gl::ContextState &data,
     ANGLE_TRY(mLineLoopIB->unmapBuffer());
 
     IndexBuffer11 *indexBuffer   = GetAs<IndexBuffer11>(mLineLoopIB->getIndexBuffer());
-    ID3D11Buffer *d3dIndexBuffer = indexBuffer->getBuffer();
+    const d3d11::Buffer &d3dIndexBuffer = indexBuffer->getBuffer();
     DXGI_FORMAT indexFormat      = indexBuffer->getIndexFormat();
 
-    if (mAppliedIB != d3dIndexBuffer || mAppliedIBFormat != indexFormat ||
+    if (mAppliedIB != d3dIndexBuffer.get() || mAppliedIBFormat != indexFormat ||
         mAppliedIBOffset != offset)
     {
-        mDeviceContext->IASetIndexBuffer(d3dIndexBuffer, indexFormat, offset);
-        mAppliedIB       = d3dIndexBuffer;
+        mDeviceContext->IASetIndexBuffer(d3dIndexBuffer.get(), indexFormat, offset);
+        mAppliedIB       = d3dIndexBuffer.get();
         mAppliedIBFormat = indexFormat;
         mAppliedIBOffset = offset;
     }
@@ -2366,14 +2364,14 @@ gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
     ANGLE_TRY(mTriangleFanIB->unmapBuffer());
 
     IndexBuffer11 *indexBuffer   = GetAs<IndexBuffer11>(mTriangleFanIB->getIndexBuffer());
-    ID3D11Buffer *d3dIndexBuffer = indexBuffer->getBuffer();
+    const d3d11::Buffer &d3dIndexBuffer = indexBuffer->getBuffer();
     DXGI_FORMAT indexFormat      = indexBuffer->getIndexFormat();
 
-    if (mAppliedIB != d3dIndexBuffer || mAppliedIBFormat != indexFormat ||
+    if (mAppliedIB != d3dIndexBuffer.get() || mAppliedIBFormat != indexFormat ||
         mAppliedIBOffset != offset)
     {
-        mDeviceContext->IASetIndexBuffer(d3dIndexBuffer, indexFormat, offset);
-        mAppliedIB       = d3dIndexBuffer;
+        mDeviceContext->IASetIndexBuffer(d3dIndexBuffer.get(), indexFormat, offset);
+        mAppliedIB       = d3dIndexBuffer.get();
         mAppliedIBFormat = indexFormat;
         mAppliedIBOffset = offset;
     }
@@ -2494,15 +2492,17 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         }
     }
 
-    const UniformStorage11 *vertexUniformStorage =
+    UniformStorage11 *vertexUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getVertexUniformStorage());
-    const UniformStorage11 *fragmentUniformStorage =
+    UniformStorage11 *fragmentUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getFragmentUniformStorage());
     ASSERT(vertexUniformStorage);
     ASSERT(fragmentUniformStorage);
 
-    ID3D11Buffer *vertexConstantBuffer = vertexUniformStorage->getConstantBuffer();
-    ID3D11Buffer *pixelConstantBuffer  = fragmentUniformStorage->getConstantBuffer();
+    const d3d11::Buffer *vertexConstantBuffer = nullptr;
+    ANGLE_TRY(vertexUniformStorage->getConstantBuffer(this, &vertexConstantBuffer));
+    const d3d11::Buffer *pixelConstantBuffer = nullptr;
+    ANGLE_TRY(fragmentUniformStorage->getConstantBuffer(this, &pixelConstantBuffer));
 
     float(*mapVS)[4] = nullptr;
     float(*mapPS)[4] = nullptr;
@@ -2511,7 +2511,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     {
         D3D11_MAPPED_SUBRESOURCE map = {0};
         HRESULT result =
-            mDeviceContext->Map(vertexConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
+            mDeviceContext->Map(vertexConstantBuffer->get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
         ASSERT(SUCCEEDED(result));
         mapVS = (float(*)[4])map.pData;
     }
@@ -2520,7 +2520,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     {
         D3D11_MAPPED_SUBRESOURCE map = {0};
         HRESULT result =
-            mDeviceContext->Map(pixelConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
+            mDeviceContext->Map(pixelConstantBuffer->get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
         ASSERT(SUCCEEDED(result));
         mapPS = (float(*)[4])map.pData;
     }
@@ -2550,62 +2550,53 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
 
     if (mapVS)
     {
-        mDeviceContext->Unmap(vertexConstantBuffer, 0);
+        mDeviceContext->Unmap(vertexConstantBuffer->get(), 0);
     }
 
     if (mapPS)
     {
-        mDeviceContext->Unmap(pixelConstantBuffer, 0);
+        mDeviceContext->Unmap(pixelConstantBuffer->get(), 0);
     }
 
-    if (mCurrentVertexConstantBuffer != vertexConstantBuffer)
+    ID3D11Buffer *appliedVertexConstants = vertexConstantBuffer->get();
+    if (mCurrentVertexConstantBuffer != appliedVertexConstants)
     {
         mDeviceContext->VSSetConstantBuffers(
-            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &vertexConstantBuffer);
-        mCurrentVertexConstantBuffer = vertexConstantBuffer;
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &appliedVertexConstants);
+        mCurrentVertexConstantBuffer = appliedVertexConstants;
     }
 
-    if (mCurrentPixelConstantBuffer != pixelConstantBuffer)
+    ID3D11Buffer *appliedPixelConstants = pixelConstantBuffer->get();
+    if (mCurrentPixelConstantBuffer != appliedPixelConstants)
     {
         mDeviceContext->PSSetConstantBuffers(
-            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &pixelConstantBuffer);
-        mCurrentPixelConstantBuffer = pixelConstantBuffer;
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &appliedPixelConstants);
+        mCurrentPixelConstantBuffer = appliedPixelConstants;
     }
 
-    if (!mDriverConstantBufferVS)
+    if (!mDriverConstantBufferVS.valid())
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
         d3d11::InitConstantBufferDesc(
             &constantBufferDescription,
             sizeof(dx_VertexConstants11) + mSamplerMetadataVS.sizeBytes());
-        HRESULT result =
-            mDevice->CreateBuffer(&constantBufferDescription, nullptr, &mDriverConstantBufferVS);
-        ASSERT(SUCCEEDED(result));
-        if (FAILED(result))
-        {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create vertex shader constant buffer, result: 0x%X.",
-                             result);
-        }
+        ANGLE_TRY(allocateResource(constantBufferDescription, &mDriverConstantBufferVS));
+
+        ID3D11Buffer *driverVSConstants = mDriverConstantBufferVS.get();
         mDeviceContext->VSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
-                                             &mDriverConstantBufferVS);
+                                             &driverVSConstants);
     }
-    if (!mDriverConstantBufferPS)
+
+    if (!mDriverConstantBufferPS.valid())
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
         d3d11::InitConstantBufferDesc(&constantBufferDescription,
                                       sizeof(dx_PixelConstants11) + mSamplerMetadataPS.sizeBytes());
-        HRESULT result =
-            mDevice->CreateBuffer(&constantBufferDescription, nullptr, &mDriverConstantBufferPS);
-        ASSERT(SUCCEEDED(result));
-        if (FAILED(result))
-        {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Failed to create pixel shader constant buffer, result: 0x%X.",
-                             result);
-        }
+        ANGLE_TRY(allocateResource(constantBufferDescription, &mDriverConstantBufferPS));
+
+        ID3D11Buffer *driverVSConstants = mDriverConstantBufferPS.get();
         mDeviceContext->PSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
-                                             &mDriverConstantBufferPS);
+                                             &driverVSConstants);
     }
 
     // Sampler metadata and driver constants need to coexist in the same constant buffer to conserve
@@ -2626,11 +2617,12 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (programD3D.usesGeometryShader(drawMode))
     {
         // needed for the point sprite geometry shader
-        if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+        ID3D11Buffer *appliedGeometryConstants = mDriverConstantBufferPS.get();
+        if (mCurrentGeometryConstantBuffer != appliedGeometryConstants)
         {
-            ASSERT(mDriverConstantBufferPS != nullptr);
-            mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
-            mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+            ASSERT(mDriverConstantBufferPS.valid());
+            mDeviceContext->GSSetConstantBuffers(0, 1, &appliedGeometryConstants);
+            mCurrentGeometryConstantBuffer = appliedGeometryConstants;
         }
     }
 
@@ -2747,24 +2739,24 @@ void Renderer11::applyDriverConstantsIfNeeded(TShaderConstants *appliedConstants
                                               const TShaderConstants &constants,
                                               SamplerMetadataD3D11 *samplerMetadata,
                                               size_t samplerMetadataReferencedBytes,
-                                              ID3D11Buffer *driverConstantBuffer)
+                                              const d3d11::Buffer &driverConstantBuffer)
 {
-    ASSERT(driverConstantBuffer != nullptr);
+    ASSERT(driverConstantBuffer.valid());
     if (memcmp(appliedConstants, &constants, sizeof(TShaderConstants)) != 0 ||
         samplerMetadata->isDirty())
     {
         memcpy(appliedConstants, &constants, sizeof(TShaderConstants));
 
         D3D11_MAPPED_SUBRESOURCE mapping = {0};
-        HRESULT result =
-            mDeviceContext->Map(driverConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapping);
+        HRESULT result = mDeviceContext->Map(driverConstantBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD,
+                                             0, &mapping);
         ASSERT(SUCCEEDED(result));
         memcpy(mapping.pData, appliedConstants, sizeof(TShaderConstants));
         // Previous buffer contents were discarded, so we need to refresh also the area of the
         // buffer that isn't used by this program.
         memcpy(&reinterpret_cast<uint8_t *>(mapping.pData)[sizeof(TShaderConstants)],
                samplerMetadata->getData(), samplerMetadata->sizeBytes());
-        mDeviceContext->Unmap(driverConstantBuffer, 0);
+        mDeviceContext->Unmap(driverConstantBuffer.get(), 0);
 
         samplerMetadata->markClean();
     }
@@ -2775,13 +2767,13 @@ template void Renderer11::applyDriverConstantsIfNeeded<dx_VertexConstants11>(
     const dx_VertexConstants11 &constants,
     SamplerMetadataD3D11 *samplerMetadata,
     size_t samplerMetadataReferencedBytes,
-    ID3D11Buffer *driverConstantBuffer);
+    const d3d11::Buffer &driverConstantBuffer);
 template void Renderer11::applyDriverConstantsIfNeeded<dx_PixelConstants11>(
     dx_PixelConstants11 *appliedConstants,
     const dx_PixelConstants11 &constants,
     SamplerMetadataD3D11 *samplerMetadata,
     size_t samplerMetadataReferencedBytes,
-    ID3D11Buffer *driverConstantBuffer);
+    const d3d11::Buffer &driverConstantBuffer);
 
 void Renderer11::markAllStateDirty()
 {
@@ -2846,8 +2838,8 @@ void Renderer11::releaseDeviceResources()
     SafeDelete(mTrim);
     SafeDelete(mPixelTransfer);
 
-    SafeRelease(mDriverConstantBufferVS);
-    SafeRelease(mDriverConstantBufferPS);
+    mDriverConstantBufferVS.reset();
+    mDriverConstantBufferPS.reset();
     SafeRelease(mSyncQuery);
 }
 
@@ -3826,7 +3818,7 @@ gl::Error Renderer11::ensureHLSLCompilerInitialized()
 
 UniformStorageD3D *Renderer11::createUniformStorage(size_t storageSize)
 {
-    return new UniformStorage11(this, storageSize);
+    return new UniformStorage11(storageSize);
 }
 
 VertexBuffer *Renderer11::createVertexBuffer()
