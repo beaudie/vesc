@@ -44,6 +44,12 @@ size_t ComputeMemoryUsage(const D3D11_TEXTURE3D_DESC *desc)
     return ComputeMippedMemoryUsage(levelSize, static_cast<size_t>(desc->MipLevels));
 }
 
+size_t ComputeMemoryUsage(const D3D11_BUFFER_DESC *desc)
+{
+    ASSERT(desc);
+    return static_cast<size_t>(desc->ByteWidth);
+}
+
 template <typename T>
 size_t ComputeMemoryUsage(const T *desc)
 {
@@ -67,10 +73,20 @@ size_t ComputeGenericMemoryUsage(ResourceType resourceType, ID3D11DeviceChild *r
             return ComputeGenericMemoryUsage<ResourceType::Texture2D>(resource);
         case ResourceType::Texture3D:
             return ComputeGenericMemoryUsage<ResourceType::Texture3D>(resource);
+        case ResourceType::Buffer:
+            return ComputeGenericMemoryUsage<ResourceType::Buffer>(resource);
 
         default:
             return 0;
     }
+}
+
+HRESULT CreateResource(ID3D11Device *device,
+                       const D3D11_BUFFER_DESC *desc,
+                       const D3D11_SUBRESOURCE_DATA *initData,
+                       ID3D11Buffer **buffer)
+{
+    return device->CreateBuffer(desc, initData, buffer);
 }
 
 HRESULT CreateResource(ID3D11Device *device,
@@ -114,7 +130,8 @@ HRESULT CreateResource(ID3D11Device *device,
 }
 
 constexpr std::array<const char *, NumResourceTypes> kResourceTypeNames = {{
-    "DepthStencilView", "RenderTargetView", "ShaderResourceView", "Texture2D", "Texture3D",
+    "Buffer", "DepthStencilView", "RenderTargetView", "ShaderResourceView", "Texture2D",
+    "Texture3D",
 }};
 }  // anonymous namespace
 
@@ -203,6 +220,10 @@ void ResourceManager11::onRelease(T *resource)
     decrResource(GetResourceTypeFromD3D11<T>(), ComputeMemoryUsage(&desc));
 }
 
+template gl::Error ResourceManager11::allocate<ID3D11Buffer>(Renderer11 *,
+                                                             const D3D11_BUFFER_DESC *,
+                                                             const D3D11_SUBRESOURCE_DATA *,
+                                                             d3d11::Buffer *);
 template gl::Error ResourceManager11::allocate<ID3D11DepthStencilView>(
     Renderer11 *,
     const D3D11_DEPTH_STENCIL_VIEW_DESC *,
@@ -227,6 +248,7 @@ template gl::Error ResourceManager11::allocate<ID3D11Texture3D>(Renderer11 *,
                                                                 const D3D11_SUBRESOURCE_DATA *,
                                                                 d3d11::Texture3D *);
 
+template void ResourceManager11::onRelease<ID3D11Buffer>(ID3D11Buffer *);
 template void ResourceManager11::onRelease<ID3D11DepthStencilView>(ID3D11DepthStencilView *);
 template void ResourceManager11::onRelease<ID3D11RenderTargetView>(ID3D11RenderTargetView *);
 template void ResourceManager11::onRelease<ID3D11ShaderResourceView>(ID3D11ShaderResourceView *);

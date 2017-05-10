@@ -22,6 +22,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/ResourceManager11.h"
 
 namespace gl
 {
@@ -45,7 +46,8 @@ class InputLayoutCache : angle::NonCopyable
     void clear();
     void markDirty();
 
-    gl::Error applyVertexBuffers(const gl::State &state,
+    gl::Error applyVertexBuffers(Renderer11 *renderer,
+                                 const gl::State &state,
                                  const std::vector<TranslatedAttribute> &vertexArrayAttribs,
                                  const std::vector<TranslatedAttribute> &currentValueAttribs,
                                  GLenum mode,
@@ -105,8 +107,8 @@ class InputLayoutCache : angle::NonCopyable
     std::array<UINT, gl::MAX_VERTEX_ATTRIBS> mCurrentVertexOffsets;
     std::vector<const TranslatedAttribute *> mCurrentAttributes;
 
-    ID3D11Buffer *mPointSpriteVertexBuffer;
-    ID3D11Buffer *mPointSpriteIndexBuffer;
+    d3d11::Buffer mPointSpriteVertexBuffer;
+    d3d11::Buffer mPointSpriteIndexBuffer;
 
     unsigned int mCacheSize;
 
