@@ -12,12 +12,13 @@
 #include "common/bitset_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/VertexAttribute.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/VertexAttribute.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 #include "libANGLE/renderer/d3d/d3d11/VertexBuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
@@ -172,8 +173,8 @@ bool InputLayoutCache::PackedAttributeLayout::operator<(const PackedAttributeLay
 
 InputLayoutCache::InputLayoutCache()
     : mCurrentIL(nullptr),
-      mPointSpriteVertexBuffer(nullptr),
-      mPointSpriteIndexBuffer(nullptr),
+      mPointSpriteVertexBuffer(),
+      mPointSpriteIndexBuffer(),
       mCacheSize(kDefaultCacheSize),
       mDevice(nullptr),
       mDeviceContext(nullptr)
@@ -204,8 +205,8 @@ void InputLayoutCache::clear()
         SafeRelease(layout.second);
     }
     mLayoutMap.clear();
-    SafeRelease(mPointSpriteVertexBuffer);
-    SafeRelease(mPointSpriteIndexBuffer);
+    mPointSpriteVertexBuffer.reset();
+    mPointSpriteIndexBuffer.reset();
     markDirty();
 }
 
@@ -221,6 +222,7 @@ void InputLayoutCache::markDirty()
 }
 
 gl::Error InputLayoutCache::applyVertexBuffers(
+    Renderer11 *renderer,
     const gl::State &state,
     const std::vector<TranslatedAttribute> &vertexArrayAttribs,
     const std::vector<TranslatedAttribute> &currentValueAttribs,
@@ -284,7 +286,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             if (bufferStorage == nullptr)
             {
                 ASSERT(attrib.vertexBuffer.get());
-                buffer = GetAs<VertexBuffer11>(attrib.vertexBuffer.get())->getBuffer();
+                buffer = GetAs<VertexBuffer11>(attrib.vertexBuffer.get())->getBuffer().get();
             }
             else if (instancedPointSpritesActive && (indexInfo != nullptr))
             {
@@ -339,10 +341,9 @@ gl::Error InputLayoutCache::applyVertexBuffers(
     // handle missing vertex data and will TDR the system.
     if (programUsesInstancedPointSprites)
     {
-        HRESULT result = S_OK;
         const UINT pointSpriteVertexStride = sizeof(float) * 5;
 
-        if (!mPointSpriteVertexBuffer)
+        if (!mPointSpriteVertexBuffer.valid())
         {
             static const float pointSpriteVertices[] =
             {
@@ -364,14 +365,11 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             vertexBufferDesc.MiscFlags = 0;
             vertexBufferDesc.StructureByteStride = 0;
 
-            result = mDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &mPointSpriteVertexBuffer);
-            if (FAILED(result))
-            {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation vertex buffer, HRESULT: 0x%08x", result);
-            }
+            ANGLE_TRY(renderer->allocateResource(vertexBufferDesc, &vertexBufferData,
+                                                 &mPointSpriteVertexBuffer));
         }
 
-        mCurrentBuffers[0] = mPointSpriteVertexBuffer;
+        mCurrentBuffers[0] = mPointSpriteVertexBuffer.get();
         // Set the stride to 0 if GL_POINTS mode is not being used to instruct the driver to avoid
         // indexing into the vertex buffer.
         mCurrentVertexStrides[0] = instancedPointSpritesActive ? pointSpriteVertexStride : 0;
@@ -382,7 +380,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(
         minDiff = 0;
         maxDiff = std::max(maxDiff, static_cast<size_t>(0));
 
-        if (!mPointSpriteIndexBuffer)
+        if (!mPointSpriteIndexBuffer.valid())
         {
             // Create an index buffer and set it for pointsprite rendering
             static const unsigned short pointSpriteIndices[] =
@@ -399,12 +397,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             indexBufferDesc.MiscFlags = 0;
             indexBufferDesc.StructureByteStride = 0;
 
-            result = mDevice->CreateBuffer(&indexBufferDesc, &indexBufferData, &mPointSpriteIndexBuffer);
-            if (FAILED(result))
-            {
-                SafeRelease(mPointSpriteVertexBuffer);
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation index buffer, HRESULT: 0x%08x", result);
-            }
+            ANGLE_TRY(renderer->allocateResource(indexBufferDesc, &indexBufferData,
+                                                 &mPointSpriteIndexBuffer));
         }
 
         if (instancedPointSpritesActive)
@@ -413,7 +407,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             // non-indexed rendering path in ANGLE (DrawArrays). This means that applyIndexBuffer()
             // on the renderer will not be called and setting this buffer here ensures that the
             // rendering path will contain the correct index buffers.
-            mDeviceContext->IASetIndexBuffer(mPointSpriteIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+            mDeviceContext->IASetIndexBuffer(mPointSpriteIndexBuffer.get(), DXGI_FORMAT_R16_UINT,
+                                             0);
         }
     }
 
