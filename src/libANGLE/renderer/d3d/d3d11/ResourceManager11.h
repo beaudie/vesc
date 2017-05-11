@@ -28,9 +28,13 @@ class TextureHelper11;
 
 enum class ResourceType
 {
+    BlendState,
     Buffer,
+    DepthStencilState,
     DepthStencilView,
+    RasterizerState,
     RenderTargetView,
+    SamplerState,
     ShaderResourceView,
     Texture2D,
     Texture3D,
@@ -46,11 +50,15 @@ constexpr size_t NumResourceTypes = ResourceTypeIndex(ResourceType::Last);
 
 // Format: ResourceType, D3D11 type, DESC type, init data type.
 #define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                                     \
+    OP(NAME, BlendState, ID3D11BlendState, D3D11_BLEND_DESC, void)                           \
     OP(NAME, Buffer, ID3D11Buffer, D3D11_BUFFER_DESC, const D3D11_SUBRESOURCE_DATA)          \
+    OP(NAME, DepthStencilState, ID3D11DepthStencilState, D3D11_DEPTH_STENCIL_DESC, void)     \
     OP(NAME, DepthStencilView, ID3D11DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC,        \
        ID3D11Resource)                                                                       \
+    OP(NAME, RasterizerState, ID3D11RasterizerState, D3D11_RASTERIZER_DESC, void)            \
     OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC,        \
        ID3D11Resource)                                                                       \
+    OP(NAME, SamplerState, ID3D11SamplerState, D3D11_SAMPLER_DESC, void)                     \
     OP(NAME, ShaderResourceView, ID3D11ShaderResourceView, D3D11_SHADER_RESOURCE_VIEW_DESC,  \
        ID3D11Resource)                                                                       \
     OP(NAME, Texture2D, ID3D11Texture2D, D3D11_TEXTURE2D_DESC, const D3D11_SUBRESOURCE_DATA) \
@@ -317,9 +325,13 @@ TypedData<ResourceT>::~TypedData()
 
 namespace d3d11
 {
+using BlendState         = Resource11<ID3D11BlendState>;
 using Buffer             = Resource11<ID3D11Buffer>;
+using DepthStencilState  = Resource11<ID3D11DepthStencilState>;
 using DepthStencilView   = Resource11<ID3D11DepthStencilView>;
+using RasterizerState    = Resource11<ID3D11RasterizerState>;
 using RenderTargetView   = Resource11<ID3D11RenderTargetView>;
+using SamplerState       = Resource11<ID3D11SamplerState>;
 using ShaderResourceView = Resource11<ID3D11ShaderResourceView>;
 using Texture2D          = Resource11<ID3D11Texture2D>;
 using Texture3D          = Resource11<ID3D11Texture3D>;
