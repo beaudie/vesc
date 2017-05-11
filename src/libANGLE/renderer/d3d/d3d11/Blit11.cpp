@@ -549,11 +549,11 @@ Blit11::Blit11(Renderer11 *renderer)
     : mRenderer(renderer),
       mResourcesInitialized(false),
       mVertexBuffer(),
-      mPointSampler(nullptr),
-      mLinearSampler(nullptr),
-      mScissorEnabledRasterizerState(nullptr),
-      mScissorDisabledRasterizerState(nullptr),
-      mDepthStencilState(nullptr),
+      mPointSampler(),
+      mLinearSampler(),
+      mScissorEnabledRasterizerState(),
+      mScissorDisabledRasterizerState(),
+      mDepthStencilState(),
       mQuad2DIL(quad2DLayout,
                 ArraySize(quad2DLayout),
                 g_VS_Passthrough2D,
@@ -610,9 +610,6 @@ gl::Error Blit11::initResources()
 
     TRACE_EVENT0("gpu.angle", "Blit11::initResources");
 
-    HRESULT result;
-    ID3D11Device *device = mRenderer->getDevice();
-
     D3D11_BUFFER_DESC vbDesc;
     vbDesc.ByteWidth =
         static_cast<unsigned int>(std::max(sizeof(d3d11::PositionLayerTexCoord3DVertex),
@@ -642,13 +639,8 @@ gl::Error Blit11::initResources()
     pointSamplerDesc.MinLOD         = 0.0f;
     pointSamplerDesc.MaxLOD         = FLT_MAX;
 
-    result = device->CreateSamplerState(&pointSamplerDesc, mPointSampler.GetAddressOf());
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Failed to create blit point sampler state, " << result;
-    }
-    d3d11::SetDebugName(mPointSampler, "Blit11 point sampler");
+    ANGLE_TRY(mRenderer->allocateResource(pointSamplerDesc, &mPointSampler));
+    mPointSampler.setDebugName("Blit11 point sampler");
 
     D3D11_SAMPLER_DESC linearSamplerDesc;
     linearSamplerDesc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -665,13 +657,8 @@ gl::Error Blit11::initResources()
     linearSamplerDesc.MinLOD         = 0.0f;
     linearSamplerDesc.MaxLOD         = FLT_MAX;
 
-    result = device->CreateSamplerState(&linearSamplerDesc, mLinearSampler.GetAddressOf());
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Failed to create blit linear sampler state, " << result;
-    }
-    d3d11::SetDebugName(mLinearSampler, "Blit11 linear sampler");
+    ANGLE_TRY(mRenderer->allocateResource(linearSamplerDesc, &mLinearSampler));
+    mLinearSampler.setDebugName("Blit11 linear sampler");
 
     // Use a rasterizer state that will not cull so that inverted quads will not be culled
     D3D11_RASTERIZER_DESC rasterDesc;
@@ -686,25 +673,12 @@ gl::Error Blit11::initResources()
     rasterDesc.AntialiasedLineEnable = FALSE;
 
     rasterDesc.ScissorEnable = TRUE;
-    result =
-        device->CreateRasterizerState(&rasterDesc, mScissorEnabledRasterizerState.GetAddressOf());
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Failed to create blit scissoring rasterizer state, " << result;
-    }
-    d3d11::SetDebugName(mScissorEnabledRasterizerState, "Blit11 scissoring rasterizer state");
+    ANGLE_TRY(mRenderer->allocateResource(rasterDesc, &mScissorEnabledRasterizerState));
+    mScissorEnabledRasterizerState.setDebugName("Blit11 scissoring rasterizer state");
 
     rasterDesc.ScissorEnable = FALSE;
-    result =
-        device->CreateRasterizerState(&rasterDesc, mScissorDisabledRasterizerState.GetAddressOf());
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Failed to create blit no scissoring rasterizer state, "
-                                 << result;
-    }
-    d3d11::SetDebugName(mScissorDisabledRasterizerState, "Blit11 no scissoring rasterizer state");
+    ANGLE_TRY(mRenderer->allocateResource(rasterDesc, &mScissorDisabledRasterizerState));
+    mScissorDisabledRasterizerState.setDebugName("Blit11 no scissoring rasterizer state");
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable                  = TRUE;
@@ -722,13 +696,8 @@ gl::Error Blit11::initResources()
     depthStencilDesc.BackFace.StencilPassOp       = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc         = D3D11_COMPARISON_ALWAYS;
 
-    result = device->CreateDepthStencilState(&depthStencilDesc, mDepthStencilState.GetAddressOf());
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
-    {
-        return gl::OutOfMemory() << "Failed to create blit depth stencil state, " << result;
-    }
-    d3d11::SetDebugName(mDepthStencilState, "Blit11 depth stencil state");
+    ANGLE_TRY(mRenderer->allocateResource(depthStencilDesc, &mDepthStencilState));
+    mDepthStencilState.setDebugName("Blit11 depth stencil state");
 
     D3D11_BUFFER_DESC swizzleBufferDesc;
     swizzleBufferDesc.ByteWidth           = sizeof(unsigned int) * 4;
@@ -1073,7 +1042,7 @@ gl::Error Blit11::swizzleTexture(const d3d11::SharedSRV &source,
     // Apply state
     deviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFF);
     deviceContext->OMSetDepthStencilState(nullptr, 0xFFFFFFFF);
-    deviceContext->RSSetState(mScissorDisabledRasterizerState.Get());
+    deviceContext->RSSetState(mScissorDisabledRasterizerState.get());
 
     // Apply shaders
     deviceContext->IASetInputLayout(support.inputLayout);
@@ -1104,7 +1073,8 @@ gl::Error Blit11::swizzleTexture(const d3d11::SharedSRV &source,
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, source.get());
 
     // Apply samplers
-    deviceContext->PSSetSamplers(0, 1, mPointSampler.GetAddressOf());
+    ID3D11SamplerState *samplerState = mPointSampler.get();
+    deviceContext->PSSetSamplers(0, 1, &samplerState);
 
     // Draw the quad
     deviceContext->Draw(drawCount, 0);
@@ -1186,8 +1156,8 @@ gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
     // Apply state
     if (maskOffAlpha)
     {
-        ID3D11BlendState *blendState = mAlphaMaskBlendState.resolve(mRenderer->getDevice());
-        ASSERT(blendState);
+        ANGLE_TRY(mAlphaMaskBlendState.resolve(mRenderer));
+        ID3D11BlendState *blendState = mAlphaMaskBlendState.get();
         deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFF);
     }
     else
@@ -1205,11 +1175,11 @@ gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
         scissorRect.bottom = scissor->y + scissor->height;
 
         deviceContext->RSSetScissorRects(1, &scissorRect);
-        deviceContext->RSSetState(mScissorEnabledRasterizerState.Get());
+        deviceContext->RSSetState(mScissorEnabledRasterizerState.get());
     }
     else
     {
-        deviceContext->RSSetState(mScissorDisabledRasterizerState.Get());
+        deviceContext->RSSetState(mScissorDisabledRasterizerState.get());
     }
 
     // Apply shaders
@@ -1245,10 +1215,10 @@ gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
     switch (filter)
     {
         case GL_NEAREST:
-            sampler = mPointSampler.Get();
+            sampler = mPointSampler.get();
             break;
         case GL_LINEAR:
-            sampler = mLinearSampler.Get();
+            sampler = mLinearSampler.get();
             break;
 
         default:
@@ -1325,7 +1295,7 @@ gl::Error Blit11::copyDepth(const d3d11::SharedSRV &source,
 
     // Apply state
     deviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFF);
-    deviceContext->OMSetDepthStencilState(mDepthStencilState.Get(), 0xFFFFFFFF);
+    deviceContext->OMSetDepthStencilState(mDepthStencilState.get(), 0xFFFFFFFF);
 
     if (scissor)
     {
@@ -1336,11 +1306,11 @@ gl::Error Blit11::copyDepth(const d3d11::SharedSRV &source,
         scissorRect.bottom = scissor->y + scissor->height;
 
         deviceContext->RSSetScissorRects(1, &scissorRect);
-        deviceContext->RSSetState(mScissorEnabledRasterizerState.Get());
+        deviceContext->RSSetState(mScissorEnabledRasterizerState.get());
     }
     else
     {
-        deviceContext->RSSetState(mScissorDisabledRasterizerState.Get());
+        deviceContext->RSSetState(mScissorDisabledRasterizerState.get());
     }
 
     ID3D11Device *device         = mRenderer->getDevice();
@@ -1379,7 +1349,8 @@ gl::Error Blit11::copyDepth(const d3d11::SharedSRV &source,
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, source.get());
 
     // Apply samplers
-    deviceContext->PSSetSamplers(0, 1, mPointSampler.GetAddressOf());
+    ID3D11SamplerState *samplerState = mPointSampler.get();
+    deviceContext->PSSetSamplers(0, 1, &samplerState);
 
     // Draw the quad
     deviceContext->Draw(drawCount, 0);
@@ -1977,7 +1948,7 @@ gl::ErrorOrResult<TextureHelper11> Blit11::resolveDepth(RenderTarget11 *depth)
     context->VSSetShader(mResolveDepthStencilVS.resolve(device), nullptr, 0);
     context->GSSetShader(nullptr, nullptr, 0);
     context->RSSetState(nullptr);
-    context->OMSetDepthStencilState(mDepthStencilState.Get(), 0xFFFFFFFF);
+    context->OMSetDepthStencilState(mDepthStencilState.get(), 0xFFFFFFFF);
     context->OMSetRenderTargets(0, nullptr, mResolvedDepthDSView.get());
     context->OMSetBlendState(nullptr, nullptr, 0xFFFFFFF);
 
