@@ -10,9 +10,13 @@
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
 #include "compiler/translator/ExtensionGLSL.h"
+#include "compiler/translator/InitializeVariables.h"
+#include "compiler/translator/IntermNodePatternMatcher.h"
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/RewriteTexelFetchOffset.h"
 #include "compiler/translator/RewriteUnaryMinusOperatorFloat.h"
+#include "compiler/translator/SeparateDeclarations.h"
+#include "compiler/translator/SimplifyLoopConditions.h"
 #include "compiler/translator/VersionGLSL.h"
 
 namespace sh
@@ -45,7 +49,7 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
     InitBuiltInFunctionEmulatorForGLSLMissingFunctions(emu, getShaderType(), targetGLSLVersion);
 }
 
-void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOptions)
+void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink = getInfoSink().obj;
 
@@ -121,6 +125,27 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
         getBuiltInFunctionEmulator().outputEmulatedFunctions(sink);
         sink << "// END: Generated code for built-in function emulation\n\n";
     }
+
+    // Initialize uninitialized local variables.
+    // In case the ESSL version is 1.00, array initializing can generate extra statements in the
+    // parent block. In that case we need to first simplify loop conditions and separate
+    // declarations.
+    if (getShaderVersion() == 100)
+    {
+        // If we don't follow the Appendix A limitations, loop init statements can declare arrays
+        // and have multiple declarations.
+        if (!shouldRunLoopAndIndexingValidation(compileOptions))
+        {
+            SimplifyLoopConditions(root,
+                                   IntermNodePatternMatcher::kMultiDeclaration |
+                                       IntermNodePatternMatcher::kArrayDeclaration,
+                                   getTemporaryIndex(), getSymbolTable(), getShaderVersion());
+        }
+        // We only really need to separate array declarations, but it's simpler to just use the
+        // regular SeparateDeclarations.
+        SeparateDeclarations(root);
+    }
+    InitializeUninitializedLocals(root, getShaderVersion());
 
     // Write array bounds clamping emulation if needed.
     getArrayBoundsClamper().OutputClampingFunctionDefinition(sink);
