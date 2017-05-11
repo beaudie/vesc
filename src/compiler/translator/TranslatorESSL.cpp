@@ -6,12 +6,16 @@
 
 #include "compiler/translator/TranslatorESSL.h"
 
+#include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
+#include "compiler/translator/InitializeVariables.h"
+#include "compiler/translator/IntermNodePatternMatcher.h"
+#include "compiler/translator/OutputESSL.h"
 #include "compiler/translator/PrunePureLiteralStatements.h"
 #include "compiler/translator/RecordConstantPrecision.h"
-#include "compiler/translator/OutputESSL.h"
-#include "angle_gl.h"
+#include "compiler/translator/SeparateDeclarations.h"
+#include "compiler/translator/SimplifyLoopConditions.h"
 
 namespace sh
 {
@@ -30,7 +34,7 @@ void TranslatorESSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
     }
 }
 
-void TranslatorESSL::translate(TIntermNode *root, ShCompileOptions compileOptions)
+void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptions)
 {
     // The ESSL output doesn't define a default precision for float, so float literal statements
     // end up with no precision which is invalid ESSL.
@@ -63,6 +67,25 @@ void TranslatorESSL::translate(TIntermNode *root, ShCompileOptions compileOption
     }
 
     RecordConstantPrecision(root, getTemporaryIndex());
+
+    // Initialize uninitialized local variables.
+    // In some cases initializing can generate extra statements in the parent block, such as when
+    // initializing nameless structs or initializing arrays in ESSL 1.00. In that case we need to
+    // first simplify loop conditions and separate declarations. If we don't follow the Appendix A
+    // limitations, loop init statements can declare arrays or nameless structs and have multiple
+    // declarations.
+    if (!shouldRunLoopAndIndexingValidation(compileOptions))
+    {
+        SimplifyLoopConditions(root,
+                               IntermNodePatternMatcher::kMultiDeclaration |
+                                   IntermNodePatternMatcher::kArrayDeclaration |
+                                   IntermNodePatternMatcher::kNamelessStructDeclaration,
+                               getTemporaryIndex(), getSymbolTable(), getShaderVersion());
+    }
+    // We only really need to separate array declarations and nameless struct declarations, but it's
+    // simpler to just use the regular SeparateDeclarations.
+    SeparateDeclarations(root);
+    InitializeUninitializedLocals(root, getShaderVersion());
 
     // Write emulated built-in functions if needed.
     if (!getBuiltInFunctionEmulator().isOutputEmpty())
