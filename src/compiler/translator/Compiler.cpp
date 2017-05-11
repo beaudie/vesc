@@ -472,7 +472,8 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         if (success)
         {
-            DeferGlobalInitializers(root);
+            // TODO: Most likely we only want to enable initializing uninitialized globals for GLSL.
+            DeferGlobalInitializers(root, true);
         }
     }
 

@@ -10,9 +10,11 @@
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
 #include "compiler/translator/ExtensionGLSL.h"
+#include "compiler/translator/InitializeVariables.h"
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/RewriteTexelFetchOffset.h"
 #include "compiler/translator/RewriteUnaryMinusOperatorFloat.h"
+#include "compiler/translator/SeparateDeclarations.h"
 #include "compiler/translator/VersionGLSL.h"
 
 namespace sh
@@ -45,7 +47,7 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
     InitBuiltInFunctionEmulatorForGLSLMissingFunctions(emu, getShaderType(), targetGLSLVersion);
 }
 
-void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOptions)
+void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink = getInfoSink().obj;
 
@@ -121,6 +123,12 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
         getBuiltInFunctionEmulator().outputEmulatedFunctions(sink);
         sink << "// END: Generated code for built-in function emulation\n\n";
     }
+
+    // Initialize uninitialized variables. First declarations need to be separated.
+    // TODO: SimplifyLoopConditions may need to be run first. Otherwise multi-declarations in a loop
+    // init statement may cause breakage.
+    SeparateDeclarations(root);
+    InitializeUninitializedLocals(root, getShaderVersion());
 
     // Write array bounds clamping emulation if needed.
     getArrayBoundsClamper().OutputClampingFunctionDefinition(sink);
