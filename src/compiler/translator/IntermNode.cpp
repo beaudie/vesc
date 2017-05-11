@@ -3318,6 +3318,7 @@ void TIntermTraverser::updateTree()
                 insertion.parent->insertChildNodes(insertion.position, insertion.insertionsBefore);
             ASSERT(inserted);
         }
+        // TODO: Need to handle multiple insertions to the same block.
     }
     for (size_t ii = 0; ii < mReplacements.size(); ++ii)
     {
