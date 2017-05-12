@@ -233,12 +233,34 @@ gl::Error Blit9::boxFilter(IDirect3DSurface9 *source, IDirect3DSurface9 *dest)
     return gl::NoError();
 }
 
-gl::Error Blit9::copy2D(const gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, const gl::Offset &destOffset, TextureStorage *storage, GLint level)
+gl::Error Blit9::copy2D(const gl::Framebuffer *framebuffer,
+                        const RECT &origSourceRect,
+                        GLenum destFormat,
+                        const gl::Offset &origDestOffset,
+                        TextureStorage *storage,
+                        GLint level)
 {
     ANGLE_TRY(initialize());
 
     const gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
     ASSERT(colorbuffer);
+
+    // clamp source rectangle to framebuffer
+    gl::Extents sourceSize = colorbuffer->getSize();
+    RECT sourceRect;
+    sourceRect.left   = gl::clamp(origSourceRect.left, 0, sourceSize.width);
+    sourceRect.right  = gl::clamp(origSourceRect.right, 0, sourceSize.width);
+    sourceRect.top    = gl::clamp(origSourceRect.top, 0, sourceSize.height);
+    sourceRect.bottom = gl::clamp(origSourceRect.bottom, 0, sourceSize.height);
+
+    if (!(sourceRect.left < sourceRect.right && sourceRect.top < sourceRect.bottom))
+    {
+        return gl::NoError();
+    }
+
+    // adjust destination in accordance with source clamping
+    gl::Offset destOffset(origDestOffset.x + sourceRect.left - origSourceRect.left,
+                          origDestOffset.y + sourceRect.top - origSourceRect.top, 0);
 
     RenderTarget9 *renderTarget9 = nullptr;
     ANGLE_TRY(colorbuffer->getRenderTarget(&renderTarget9));
