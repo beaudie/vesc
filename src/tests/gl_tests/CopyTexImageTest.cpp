@@ -306,7 +306,13 @@ TEST_P(CopyTexImageTest, DefaultFramebuffer)
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, w, h, 0);
+    for (int i = -12; i <= 20; i += 8)
+    {
+        for (int j = -12; j <= 20; j += 8)
+        {
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, i, j, 8, 8, 0);
+        }
+    }
     EXPECT_GL_NO_ERROR();
 }
 

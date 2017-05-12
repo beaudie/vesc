@@ -233,11 +233,40 @@ gl::Error Blit9::boxFilter(IDirect3DSurface9 *source, IDirect3DSurface9 *dest)
     return gl::NoError();
 }
 
-gl::Error Blit9::copy2D(const gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, const gl::Offset &destOffset, TextureStorage *storage, GLint level)
+gl::Error Blit9::copy2D(const gl::Framebuffer *framebuffer,
+                        const RECT &origSourceRect,
+                        GLenum destFormat,
+                        const gl::Offset &origDestOffset,
+                        TextureStorage *storage,
+                        GLint level)
 {
     ANGLE_TRY(initialize());
 
     const gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
+    gl::Extents sourceSize                       = colorbuffer->getSize();
+    printf("Blit9::copy2D source size %d %d\n", sourceSize.width, sourceSize.height);
+    printf("Blit9::copy2D orig source L %d R %d T %d B %d\n", origSourceRect.left,
+           origSourceRect.right, origSourceRect.top, origSourceRect.bottom);
+    printf("Blit9::copy2D orig offset %d %d\n", origDestOffset.x, origDestOffset.y);
+
+    RECT sourceRect;
+    sourceRect.left   = gl::clamp(origSourceRect.left, 0, sourceSize.width);
+    sourceRect.right  = gl::clamp(origSourceRect.right, 0, sourceSize.width);
+    sourceRect.top    = gl::clamp(origSourceRect.top, 0, sourceSize.height);
+    sourceRect.bottom = gl::clamp(origSourceRect.bottom, 0, sourceSize.height);
+
+    if (!(sourceRect.left < sourceRect.right && sourceRect.top < sourceRect.bottom))
+    {
+        printf("Blit9::copy2D empty\n");
+        return gl::NoError();
+    }
+
+    gl::Offset destOffset(origDestOffset.x + sourceRect.left - origSourceRect.left,
+                          origDestOffset.y + sourceRect.top - origSourceRect.top, 0);
+    printf("Blit9::copy2D adj source L %d R %d T %d B %d\n", sourceRect.left, sourceRect.right,
+           sourceRect.top, sourceRect.bottom);
+    printf("Blit9::copy2D adj offset %d %d\n", destOffset.x, destOffset.y);
+
     ASSERT(colorbuffer);
 
     RenderTarget9 *renderTarget9 = nullptr;
@@ -651,7 +680,9 @@ gl::Error Blit9::copySurfaceToTexture(IDirect3DSurface9 *surface,
 
     if (FAILED(result))
     {
+        printf("Blit9::copySurfaceToTexture before assert\n");
         ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
+        printf("Blit9::copySurfaceToTexture after assert\n");
         SafeRelease(texture);
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to copy between internal blit textures, result: 0x%X.", result);
     }
