@@ -607,46 +607,74 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
     Optional<GLboolean> fixedSampleLocations;
     bool hasRenderbuffer = false;
 
+    auto checkAttachment = [](const Context *context, const FramebufferAttachment &attachment,
+                              bool requireColorBits, bool requireDepthBits,
+                              bool requireStencilBits) {
+        ASSERT(attachment.isAttached());
+
+        const Extents &size = attachment.getSize();
+        if (size.width == 0 || size.height == 0)
+        {
+            return false;
+        }
+
+        const InternalFormat &format = *attachment.getFormat().info;
+        if (!format.renderSupport(context->getClientVersion(), context->getExtensions()))
+        {
+            return false;
+        }
+
+        if (requireColorBits && format.redBits + format.greenBits + format.blueBits +
+                                        format.luminanceBits + format.alphaBits ==
+                                    0)
+        {
+            return false;
+        }
+
+        if (requireDepthBits && format.depthBits == 0)
+        {
+            return false;
+        }
+
+        if (requireStencilBits && format.stencilBits == 0)
+        {
+            return false;
+        }
+
+        if (attachment.type() == GL_TEXTURE)
+        {
+            if (attachment.layer() >= size.depth)
+            {
+                return false;
+            }
+
+            // ES3 specifies that cube map texture attachments must be cube complete.
+            // This language is missing from the ES2 spec, but we enforce it here because some
+            // desktop OpenGL drivers also enforce this validation.
+            // TODO(jmadill): Check if OpenGL ES2 drivers enforce cube completeness.
+            const Texture *texture = attachment.getTexture();
+            ASSERT(texture);
+            if (texture->getTarget() == GL_TEXTURE_CUBE_MAP &&
+                !texture->getTextureState().isCubeComplete())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     for (const FramebufferAttachment &colorAttachment : mState.mColorAttachments)
     {
         if (colorAttachment.isAttached())
         {
-            const Extents &size = colorAttachment.getSize();
-            if (size.width == 0 || size.height == 0)
-            {
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-            }
-
-            const InternalFormat &format = *colorAttachment.getFormat().info;
-            if (!format.renderSupport(context->getClientVersion(), context->getExtensions()))
-            {
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-            }
-
-            if (format.depthBits > 0 || format.stencilBits > 0)
+            if (!checkAttachment(context, colorAttachment, true, false, false))
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
             if (colorAttachment.type() == GL_TEXTURE)
             {
-                if (colorAttachment.layer() >= size.depth)
-                {
-                    return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-                }
-
-                // ES3 specifies that cube map texture attachments must be cube complete.
-                // This language is missing from the ES2 spec, but we enforce it here because some
-                // desktop OpenGL drivers also enforce this validation.
-                // TODO(jmadill): Check if OpenGL ES2 drivers enforce cube completeness.
-                const Texture *texture = colorAttachment.getTexture();
-                ASSERT(texture);
-                if (texture->getTarget() == GL_TEXTURE_CUBE_MAP &&
-                    !texture->getTextureState().isCubeComplete())
-                {
-                    return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-                }
-
                 // ES3.1 (section 9.4) requires that the value of TEXTURE_FIXED_SAMPLE_LOCATIONS
                 // should be the same for all attached textures.
                 GLboolean fixedSampleloc = colorAttachment.getTexture()->getFixedSampleLocations(
@@ -665,6 +693,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
                 hasRenderbuffer = true;
             }
 
+            GLuint bufferSize = colorAttachment.getFormat().info->pixelBytes;
             if (!missingAttachment)
             {
                 // APPLE_framebuffer_multisample, which EXT_draw_buffers refers to, requires that
@@ -678,7 +707,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
                 // in GLES 3.0, there is no such restriction
                 if (state.getClientMajorVersion() < 3)
                 {
-                    if (format.pixelBytes != colorbufferSize)
+                    if (bufferSize != colorbufferSize)
                     {
                         return GL_FRAMEBUFFER_UNSUPPORTED;
                     }
@@ -687,7 +716,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
             else
             {
                 samples           = colorAttachment.getSamples();
-                colorbufferSize   = format.pixelBytes;
+                colorbufferSize   = bufferSize;
                 missingAttachment = false;
             }
         }
@@ -696,20 +725,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
     const FramebufferAttachment &depthAttachment = mState.mDepthAttachment;
     if (depthAttachment.isAttached())
     {
-        const Extents &size = depthAttachment.getSize();
-        if (size.width == 0 || size.height == 0)
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-        }
-
-        const InternalFormat &format = *depthAttachment.getFormat().info;
-
-        if (!format.renderSupport(context->getClientVersion(), context->getExtensions()))
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-        }
-
-        if (format.depthBits == 0)
+        if (!checkAttachment(context, depthAttachment, false, true, false))
         {
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
@@ -738,20 +754,7 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
     const FramebufferAttachment &stencilAttachment = mState.mStencilAttachment;
     if (stencilAttachment.isAttached())
     {
-        const Extents &size = stencilAttachment.getSize();
-        if (size.width == 0 || size.height == 0)
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-        }
-
-        const InternalFormat &format = *stencilAttachment.getFormat().info;
-
-        if (!format.renderSupport(context->getClientVersion(), context->getExtensions()))
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-        }
-
-        if (format.stencilBits == 0)
+        if (!checkAttachment(context, stencilAttachment, false, false, true))
         {
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
