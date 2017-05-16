@@ -114,6 +114,15 @@ HRESULT CreateResource(ID3D11Device *device,
 }
 
 HRESULT CreateResource(ID3D11Device *device,
+                       const InputElementArray *desc,
+                       const ShaderData *initData,
+                       ID3D11InputLayout **resourceOut)
+{
+    return device->CreateInputLayout(desc->get(), static_cast<UINT>(desc->size()), initData->get(),
+                                     initData->size(), resourceOut);
+}
+
+HRESULT CreateResource(ID3D11Device *device,
                        const D3D11_RASTERIZER_DESC *desc,
                        void * /*initData*/,
                        ID3D11RasterizerState **rasterizerState)
@@ -326,6 +335,13 @@ void ResourceManager11::onRelease(ID3D11Resource *resource)
 {
     // For untyped ID3D11Resource, they must call onReleaseResource.
     UNREACHABLE();
+}
+
+template <>
+void ResourceManager11::onRelease(ID3D11InputLayout *resource)
+{
+    ASSERT(resource);
+    decrResource(ResourceType::InputLayout, 0);
 }
 
 template <typename T>

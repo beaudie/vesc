@@ -26,6 +26,9 @@ template <typename T>
 class SharedResource11;
 class TextureHelper11;
 
+using InputElementArray = WrappedArray<D3D11_INPUT_ELEMENT_DESC>;
+using ShaderData        = WrappedArray<uint8_t>;
+
 // Format: ResourceType, D3D11 type, DESC type, init data type.
 #define ANGLE_RESOURCE_TYPE_OP(NAME, OP)                                                     \
     OP(NAME, BlendState, ID3D11BlendState, D3D11_BLEND_DESC, void)                           \
@@ -33,6 +36,7 @@ class TextureHelper11;
     OP(NAME, DepthStencilState, ID3D11DepthStencilState, D3D11_DEPTH_STENCIL_DESC, void)     \
     OP(NAME, DepthStencilView, ID3D11DepthStencilView, D3D11_DEPTH_STENCIL_VIEW_DESC,        \
        ID3D11Resource)                                                                       \
+    OP(NAME, InputLayout, ID3D11InputLayout, InputElementArray, const ShaderData)            \
     OP(NAME, RasterizerState, ID3D11RasterizerState, D3D11_RASTERIZER_DESC, void)            \
     OP(NAME, RenderTargetView, ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC,        \
        ID3D11Resource)                                                                       \

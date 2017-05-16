@@ -792,7 +792,7 @@ void Renderer11::initializeDevice()
     populateRenderer11DeviceCaps();
 
     mStateCache.clear();
-    mInputLayoutCache.initialize(mDevice, mDeviceContext);
+    mInputLayoutCache.initialize();
 
     ASSERT(!mVertexDataManager && !mIndexDataManager);
     mVertexDataManager = new VertexDataManager(this);
@@ -1967,8 +1967,8 @@ gl::Error Renderer11::drawArraysImpl(const gl::ContextState &data,
             // offsets.
             for (GLsizei i = 0; i < instances; i++)
             {
-                ANGLE_TRY(
-                    mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(startVertex, i));
+                ANGLE_TRY(mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
+                    this, startVertex, i));
                 mDeviceContext->DrawIndexedInstanced(6, count, 0, 0, 0);
             }
         }
@@ -2030,8 +2030,8 @@ gl::Error Renderer11::drawElementsImpl(const gl::ContextState &data,
             // offsets.
             for (GLsizei i = 0; i < instances; i++)
             {
-                ANGLE_TRY(
-                    mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(startVertex, i));
+                ANGLE_TRY(mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
+                    this, startVertex, i));
                 mDeviceContext->DrawIndexedInstanced(6, elementsToRender, 0, 0, 0);
             }
         }
