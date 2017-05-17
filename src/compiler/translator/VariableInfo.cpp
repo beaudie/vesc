@@ -99,6 +99,19 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
 {
 }
 
+std::string CollectVariables::getMappedName(const TString &name) const
+{
+    if (name.empty())
+    {
+        return name.c_str();
+    }
+    if (mHashFunction != nullptr)
+    {
+        return TIntermTraverser::hash(name, mHashFunction).c_str();
+    }
+    return ("_u" + name).c_str();
+}
+
 // We want to check whether a uniform/varying is statically used
 // because we only count the used ones in packing computing.
 // Also, gl_FragCoord, gl_PointCoord, and gl_FrontFacing count
@@ -479,7 +492,8 @@ void CollectVariables::setCommonVariableProperties(const TType &type,
         }
     }
     variableOut->name       = name.c_str();
-    variableOut->mappedName = TIntermTraverser::hash(name, mHashFunction).c_str();
+    variableOut->mappedName = getMappedName(name);
+
     variableOut->arraySize  = type.getArraySize();
 }
 
@@ -543,8 +557,7 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
 
     InterfaceBlock interfaceBlock;
     interfaceBlock.name = blockType->name().c_str();
-    interfaceBlock.mappedName =
-        TIntermTraverser::hash(blockType->name().c_str(), mHashFunction).c_str();
+    interfaceBlock.mappedName = getMappedName(blockType->name());
     interfaceBlock.instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize        = variable.getArraySize();

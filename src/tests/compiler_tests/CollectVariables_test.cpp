@@ -19,6 +19,16 @@ using namespace sh;
 #define EXPECT_GLENUM_EQ(expected, actual) \
     EXPECT_EQ(static_cast<::GLenum>(expected), static_cast<::GLenum>(actual))
 
+namespace
+{
+
+std::string DecorateName(const char *name)
+{
+    return std::string("_u") + name;
+}
+
+}  // anonymous namespace
+
 class CollectVariablesTest : public testing::Test
 {
   public:
@@ -299,6 +309,7 @@ TEST_F(CollectVertexVariablesTest, StructInterfaceBlock)
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
+    EXPECT_EQ(DecorateName("b"), interfaceBlock.mappedName);
     EXPECT_TRUE(interfaceBlock.staticUse);
 
     ASSERT_EQ(1u, interfaceBlock.fields.size());
@@ -308,6 +319,7 @@ TEST_F(CollectVertexVariablesTest, StructInterfaceBlock)
     EXPECT_TRUE(field.isStruct());
     EXPECT_TRUE(field.staticUse);
     EXPECT_EQ("s", field.name);
+    EXPECT_EQ(DecorateName("s"), field.mappedName);
     EXPECT_FALSE(field.isRowMajorLayout);
 
     const ShaderVariable &member = field.fields[0];
@@ -315,6 +327,7 @@ TEST_F(CollectVertexVariablesTest, StructInterfaceBlock)
     // NOTE: we don't currently mark struct members as statically used or not
     EXPECT_FALSE(member.isStruct());
     EXPECT_EQ("f", member.name);
+    EXPECT_EQ(DecorateName("f"), member.mappedName);
     EXPECT_GLENUM_EQ(GL_FLOAT, member.type);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, member.precision);
 }
@@ -342,6 +355,7 @@ TEST_F(CollectVertexVariablesTest, StructInstancedInterfaceBlock)
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
+    EXPECT_EQ(DecorateName("b"), interfaceBlock.mappedName);
     EXPECT_EQ("instanceName", interfaceBlock.instanceName);
     EXPECT_TRUE(interfaceBlock.staticUse);
 
@@ -352,6 +366,7 @@ TEST_F(CollectVertexVariablesTest, StructInstancedInterfaceBlock)
     EXPECT_TRUE(field.isStruct());
     EXPECT_TRUE(field.staticUse);
     EXPECT_EQ("s", field.name);
+    EXPECT_EQ(DecorateName("s"), field.mappedName);
     EXPECT_FALSE(field.isRowMajorLayout);
 
     const ShaderVariable &member = field.fields[0];
@@ -359,6 +374,7 @@ TEST_F(CollectVertexVariablesTest, StructInstancedInterfaceBlock)
     // NOTE: we don't currently mark struct members as statically used or not
     EXPECT_FALSE(member.isStruct());
     EXPECT_EQ("f", member.name);
+    EXPECT_EQ(DecorateName("f"), member.mappedName);
     EXPECT_GLENUM_EQ(GL_FLOAT, member.type);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, member.precision);
 }
@@ -386,6 +402,7 @@ TEST_F(CollectVertexVariablesTest, NestedStructRowMajorInterfaceBlock)
     EXPECT_TRUE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
+    EXPECT_EQ(DecorateName("b"), interfaceBlock.mappedName);
     EXPECT_TRUE(interfaceBlock.staticUse);
 
     ASSERT_EQ(1u, interfaceBlock.fields.size());
@@ -395,6 +412,7 @@ TEST_F(CollectVertexVariablesTest, NestedStructRowMajorInterfaceBlock)
     EXPECT_TRUE(field.isStruct());
     EXPECT_TRUE(field.staticUse);
     EXPECT_EQ("s", field.name);
+    EXPECT_EQ(DecorateName("s"), field.mappedName);
     EXPECT_TRUE(field.isRowMajorLayout);
 
     const ShaderVariable &member = field.fields[0];
@@ -402,6 +420,7 @@ TEST_F(CollectVertexVariablesTest, NestedStructRowMajorInterfaceBlock)
     // NOTE: we don't currently mark struct members as statically used or not
     EXPECT_FALSE(member.isStruct());
     EXPECT_EQ("m", member.name);
+    EXPECT_EQ(DecorateName("m"), member.mappedName);
     EXPECT_GLENUM_EQ(GL_FLOAT_MAT2, member.type);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, member.precision);
 }
@@ -434,6 +453,7 @@ TEST_F(CollectVertexVariablesTest, VaryingInterpolation)
     EXPECT_TRUE(varying->staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT, varying->type);
     EXPECT_EQ("vary", varying->name);
+    EXPECT_EQ(DecorateName("vary"), varying->mappedName);
     EXPECT_EQ(INTERPOLATION_CENTROID, varying->interpolation);
 }
 
