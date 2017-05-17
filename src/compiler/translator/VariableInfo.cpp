@@ -479,7 +479,19 @@ void CollectVariables::setCommonVariableProperties(const TType &type,
         }
     }
     variableOut->name       = name.c_str();
-    variableOut->mappedName = TIntermTraverser::hash(name, mHashFunction).c_str();
+    if (name.empty())
+    {
+        variableOut->mappedName = name.c_str();
+    }
+    else if (mHashFunction != nullptr)
+    {
+        variableOut->mappedName = TIntermTraverser::hash(name, mHashFunction).c_str();
+    }
+    else
+    {
+        variableOut->mappedName = ("_u" + name).c_str();
+    }
+
     variableOut->arraySize  = type.getArraySize();
 }
 
