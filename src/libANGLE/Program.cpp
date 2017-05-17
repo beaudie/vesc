@@ -2811,7 +2811,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             {
                 continue;
             }
-            UniformBlock block(interfaceBlock.name, true, arrayElement,
+            UniformBlock block(interfaceBlock.name, interfaceBlock.mappedName, true, arrayElement,
                                blockBinding + arrayElement);
             block.memberIndexes = blockUniformIndexes;
 
@@ -2849,7 +2849,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
         {
             return;
         }
-        UniformBlock block(interfaceBlock.name, false, 0, blockBinding);
+        UniformBlock block(interfaceBlock.name, interfaceBlock.mappedName, false, 0, blockBinding);
         block.memberIndexes = blockUniformIndexes;
 
         switch (shaderType)

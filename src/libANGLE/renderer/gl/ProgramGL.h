@@ -94,12 +94,14 @@ class ProgramGL : public ProgramImpl
     const WorkaroundsGL &mWorkarounds;
     StateManagerGL *mStateManager;
 
+    std::unordered_map<std::string, std::string> mNameManglingMap;
+
     std::vector<GLint> mUniformRealLocationMap;
     std::vector<GLuint> mUniformBlockRealLocationMap;
 
     struct PathRenderingFragmentInput
     {
-        std::string name;
+        std::string mappedName;
         GLint location;
     };
     std::vector<PathRenderingFragmentInput> mPathRenderingFragmentInputs;
