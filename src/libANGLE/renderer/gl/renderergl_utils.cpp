@@ -873,6 +873,22 @@ void GenerateCaps(const FunctionsGL *functions,
                                    functions->hasGLESExtension("GL_EXT_shader_texture_lod");
     extensions->fragDepth = functions->standard == STANDARD_GL_DESKTOP ||
                             functions->hasGLESExtension("GL_EXT_frag_depth");
+
+    if (functions->hasGLExtension("GL_NV_viewport_array2"))
+    {
+        extensions->multiview = true;
+        // GL_MAX_ARRAY_TEXTURE_LAYERS is guaranteed to be at least 256.
+        const int maxLayers = QuerySingleGLInt(functions, GL_MAX_ARRAY_TEXTURE_LAYERS);
+        // GL_MAX_VIEWPORTS is guaranteed to be at least 16.
+        const int maxViewports = QuerySingleGLInt(functions, GL_MAX_VIEWPORTS);
+        extensions->maxViews   = static_cast<GLuint>(std::min(maxLayers, maxViewports));
+    }
+    // Assert that supportMultiviewThroughNVViewportArray2 and the multiview extension have to be
+    // both either enabled, or disabled. This is to prevent higher-level code from setting up an
+    // invalid configuration.
+    ASSERT((workarounds.supportMultiviewThroughNVViewportArray2 && extensions->multiview) ||
+           (!workarounds.supportMultiviewThroughNVViewportArray2 && !extensions->multiview));
+
     extensions->fboRenderMipmap = functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_EXT_framebuffer_object") ||
                                   functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_fbo_render_mipmap");
     extensions->instancedArrays = functions->isAtLeastGL(gl::Version(3, 1)) ||
@@ -1044,6 +1060,9 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;
 #endif
+
+    workarounds->supportMultiviewThroughNVViewportArray2 =
+        functions->hasGLExtension("GL_NV_viewport_array2");
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)

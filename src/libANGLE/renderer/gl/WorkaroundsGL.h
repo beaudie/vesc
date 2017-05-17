@@ -129,6 +129,9 @@ struct WorkaroundsGL
     // Initializing uninitialized locals caused odd behavior on Mac in a few WebGL 2 tests.
     // Tracking bug: http://anglebug/2041
     bool dontInitializeUninitializedLocals = false;
+
+    // Add support for multiview rendering through the NV_viewport_array2 extension.
+    bool supportMultiviewThroughNVViewportArray2 = false;
 };
 }  // namespace rx
 
