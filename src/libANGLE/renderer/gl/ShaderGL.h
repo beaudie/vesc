@@ -42,6 +42,7 @@ class ShaderGL : public ShaderImpl
     GLuint mShaderID;
     bool mIsWebGL;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
+    std::unordered_map<std::string, std::string> mNameManglingMap;
 };
 
 }
