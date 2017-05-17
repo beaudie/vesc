@@ -873,6 +873,17 @@ void GenerateCaps(const FunctionsGL *functions,
                                    functions->hasGLESExtension("GL_EXT_shader_texture_lod");
     extensions->fragDepth = functions->standard == STANDARD_GL_DESKTOP ||
                             functions->hasGLESExtension("GL_EXT_frag_depth");
+
+    extensions->multiview = functions->standard == STANDARD_GL_DESKTOP &&
+                            functions->hasGLExtension("GL_NV_viewport_array2") &&
+                            workarounds.supportMultiviewThroughNVViewportArray2;
+    if (extensions->multiview)
+    {
+        const int maxLayers    = QuerySingleGLInt(functions, GL_MAX_ARRAY_TEXTURE_LAYERS);
+        const int maxViewports = QuerySingleGLInt(functions, GL_MAX_VIEWPORTS);
+        extensions->maxViews   = std::min(maxLayers, maxViewports);
+    }
+
     extensions->fboRenderMipmap = functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_EXT_framebuffer_object") ||
                                   functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_fbo_render_mipmap");
     extensions->instancedArrays = functions->isAtLeastGL(gl::Version(3, 1)) ||
@@ -1044,6 +1055,9 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;
 #endif
+
+    workarounds->supportMultiviewThroughNVViewportArray2 =
+        functions->hasGLExtension("GL_NV_viewport_array2");
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
