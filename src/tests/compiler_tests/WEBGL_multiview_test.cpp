@@ -685,8 +685,8 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, ViewIDAndInstanceIDHaveCorrectV
         "}\n";
     compile(shaderString, SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW);
 
-    EXPECT_TRUE(foundInAllGLSLCode("webgl_angle_ViewID_OVR = (uint(gl_InstanceID) % 3u)"));
-    EXPECT_TRUE(foundInAllGLSLCode("webgl_angle_InstanceID = (gl_InstanceID / 3)"));
+    EXPECT_TRUE(foundInAllGLSLCode("ViewID_OVR = (uint(gl_InstanceID) % 3u)"));
+    EXPECT_TRUE(foundInAllGLSLCode("InstanceID = (gl_InstanceID / 3)"));
 
     EXPECT_TRUE(foundInHLSLCode("ViewID_OVR = (uvec1(gl_InstanceID) % 3)"));
     EXPECT_TRUE(foundInHLSLCode("InstanceID = (gl_InstanceID / 3)"));

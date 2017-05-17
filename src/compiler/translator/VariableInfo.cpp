@@ -85,6 +85,8 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
 
   private:
+    std::string getMappedName(const TString &name) const;
+
     void setCommonVariableProperties(const TType &type,
                                      const TString &name,
                                      ShaderVariable *variableOut) const;
@@ -169,6 +171,19 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mShaderVersion(shaderVersion),
       mExtensionBehavior(extensionBehavior)
 {
+}
+
+std::string CollectVariablesTraverser::getMappedName(const TString &name) const
+{
+    if (name.empty())
+    {
+        return name.c_str();
+    }
+    if (mHashFunction != nullptr)
+    {
+        return TIntermTraverser::hash(name, mHashFunction).c_str();
+    }
+    return ("_u" + name).c_str();
 }
 
 void CollectVariablesTraverser::setBuiltInInfoFromSymbolTable(const char *name,
@@ -422,7 +437,7 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
         }
     }
     variableOut->name       = name.c_str();
-    variableOut->mappedName = TIntermTraverser::hash(name, mHashFunction).c_str();
+    variableOut->mappedName = getMappedName(name);
     variableOut->arraySize  = type.getArraySize();
 }
 
@@ -486,8 +501,7 @@ InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymb
 
     InterfaceBlock interfaceBlock;
     interfaceBlock.name = blockType->name().c_str();
-    interfaceBlock.mappedName =
-        TIntermTraverser::hash(blockType->name().c_str(), mHashFunction).c_str();
+    interfaceBlock.mappedName = getMappedName(blockType->name());
     interfaceBlock.instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize        = variable.getArraySize();
