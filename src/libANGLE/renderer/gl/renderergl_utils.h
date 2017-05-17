@@ -44,7 +44,8 @@ void GenerateCaps(const FunctionsGL *functions,
                   gl::Caps *caps,
                   gl::TextureCapsMap *textureCapsMap,
                   gl::Extensions *extensions,
-                  gl::Version *maxSupportedESVersion);
+                  gl::Version *maxSupportedESVersion,
+                  gl::MultiviewImplementationType *multiviewImplementationType);
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds);

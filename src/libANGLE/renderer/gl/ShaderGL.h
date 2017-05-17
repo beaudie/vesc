@@ -22,7 +22,8 @@ class ShaderGL : public ShaderImpl
     ShaderGL(const gl::ShaderState &data,
              const FunctionsGL *functions,
              const WorkaroundsGL &workarounds,
-             bool isWebGL);
+             bool isWebGL,
+             gl::MultiviewImplementationType multiviewImplementationType);
     ~ShaderGL() override;
 
     // ShaderImpl implementation
@@ -39,6 +40,7 @@ class ShaderGL : public ShaderImpl
 
     GLuint mShaderID;
     bool mIsWebGL;
+    gl::MultiviewImplementationType mMultiviewImplementationType;
 };
 
 }

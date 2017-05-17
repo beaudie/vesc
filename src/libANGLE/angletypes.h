@@ -424,6 +424,12 @@ inline GLenum FramebufferBindingToEnum(FramebufferBinding binding)
 namespace gl
 {
 class ContextState;
+
+enum class MultiviewImplementationType
+{
+    NV_VIEWPORT_ARRAY2,
+    UNSPECIFIED
+};
 }  // namespace gl
 
 #endif // LIBANGLE_ANGLETYPES_H_
