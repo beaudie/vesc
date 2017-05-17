@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_RENDERER_GL_SHADERGL_H_
 #define LIBANGLE_RENDERER_GL_SHADERGL_H_
 
+#include "libANGLE/Caps.h"
 #include "libANGLE/renderer/ShaderImpl.h"
 
 namespace rx
@@ -22,7 +23,7 @@ class ShaderGL : public ShaderImpl
     ShaderGL(const gl::ShaderState &data,
              const FunctionsGL *functions,
              const WorkaroundsGL &workarounds,
-             bool isWebGL);
+             const gl::Extensions &extensions);
     ~ShaderGL() override;
 
     // ShaderImpl implementation
@@ -39,6 +40,7 @@ class ShaderGL : public ShaderImpl
 
     GLuint mShaderID;
     bool mIsWebGL;
+    gl::MultiviewImplementationType mMultiviewImplementationType;
 };
 
 }

@@ -76,6 +76,12 @@ class TextureCapsMap
 TextureCapsMap GenerateMinimumTextureCapsMap(const Version &clientVersion,
                                              const Extensions &extensions);
 
+enum MultiviewImplementationType
+{
+    MitNVViewportArray2,
+    MitUnspecified
+};
+
 struct Extensions
 {
     Extensions();
@@ -250,6 +256,11 @@ struct Extensions
 
     // GL_EXT_frag_depth
     bool fragDepth;
+
+    // ANGLE_multiview
+    bool multiview;
+    GLuint maxViews;
+    MultiviewImplementationType multiviewImplementationType;
 
     // GL_ANGLE_texture_usage
     bool textureUsage;
