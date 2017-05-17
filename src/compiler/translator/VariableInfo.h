@@ -35,6 +35,7 @@ class CollectVariables : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
 
   private:
+    std::string getMappedName(const TString &name) const;
     void setCommonVariableProperties(const TType &type,
                                      const TString &name,
                                      ShaderVariable *variableOut) const;
