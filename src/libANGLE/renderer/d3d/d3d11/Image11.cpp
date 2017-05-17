@@ -77,6 +77,114 @@ gl::Error Image11::generateMipmap(Image11 *dest,
     return gl::NoError();
 }
 
+gl::Error Image11::copyImage(Image11 *dest,
+                             Image11 *source,
+                             const gl::Rectangle &sourceRect,
+                             const gl::Offset &destOffset,
+                             bool unpackFlipY,
+                             bool unpackPremultiplyAlpha,
+                             bool unpackUnmultiplyAlpha,
+                             const Renderer11DeviceCaps &rendererCaps)
+{
+    D3D11_MAPPED_SUBRESOURCE destMapped;
+    ANGLE_TRY(dest->map(D3D11_MAP_WRITE, &destMapped));
+
+    D3D11_MAPPED_SUBRESOURCE srcMapped;
+    gl::Error error = source->map(D3D11_MAP_READ, &srcMapped);
+    if (error.isError())
+    {
+        dest->unmap();
+        return error;
+    }
+
+    const auto &sourceFormat =
+        d3d11::Format::Get(source->getInternalFormat(), rendererCaps).format();
+    GLuint sourcePixelBytes =
+        gl::GetSizedInternalFormatInfo(sourceFormat.fboImplementationInternalFormat).pixelBytes;
+
+    const auto &destFormat = d3d11::Format::Get(dest->getInternalFormat(), rendererCaps).format();
+    const auto &destFormatInfo =
+        gl::GetSizedInternalFormatInfo(destFormat.fboImplementationInternalFormat);
+    GLuint destPixelBytes = destFormatInfo.pixelBytes;
+
+    const uint8_t *sourceData = reinterpret_cast<const uint8_t *>(srcMapped.pData);
+    uint8_t *destData         = reinterpret_cast<uint8_t *>(destMapped.pData);
+
+    for (int y = 0; y < sourceRect.height; y++)
+    {
+        for (int x = 0; x < sourceRect.width; x++)
+        {
+            int sourceX = sourceRect.x + x;
+            int sourceY = sourceRect.y + y;
+            const uint8_t *sourcePixelData =
+                sourceData + sourceY * srcMapped.RowPitch + sourceX * sourcePixelBytes;
+
+            gl::ColorF sourceColor;
+            sourceFormat.colorReadFunction(sourcePixelData,
+                                           reinterpret_cast<uint8_t *>(&sourceColor));
+
+            if (unpackPremultiplyAlpha != unpackUnmultiplyAlpha)
+            {
+                if (unpackPremultiplyAlpha)
+                {
+                    sourceColor.red *= sourceColor.alpha;
+                    sourceColor.green *= sourceColor.alpha;
+                    sourceColor.blue *= sourceColor.alpha;
+                }
+                else
+                {
+                    if (sourceColor.alpha != 0.0f)
+                    {
+                        float invAlpha = 1.0f / sourceColor.alpha;
+                        sourceColor.red *= invAlpha;
+                        sourceColor.green *= invAlpha;
+                        sourceColor.blue *= invAlpha;
+                    }
+                }
+            }
+
+            int destX = destOffset.x + x;
+            int destY = destOffset.y;
+            if (unpackFlipY)
+            {
+                destY += sourceRect.height;
+                destY -= y;
+            }
+            else
+            {
+                destY += y;
+            }
+
+            uint8_t *destPixelData =
+                destData + destY * destMapped.RowPitch + destX * destPixelBytes;
+            if (destFormatInfo.componentType == GL_UNSIGNED_INT)
+            {
+                // Convert to uint data type
+                gl::ColorUI destColor(static_cast<unsigned int>(sourceColor.red * 255),
+                                      static_cast<unsigned int>(sourceColor.green * 255),
+                                      static_cast<unsigned int>(sourceColor.red * 255),
+                                      static_cast<unsigned int>(sourceColor.alpha * 255));
+                destFormat.colorWriteFunction(reinterpret_cast<const uint8_t *>(&destColor),
+                                              destPixelData);
+            }
+            else
+            {
+                // No type conversion needed
+                const gl::ColorF &destColor = sourceColor;
+                destFormat.colorWriteFunction(reinterpret_cast<const uint8_t *>(&destColor),
+                                              destPixelData);
+            }
+        }
+    }
+
+    dest->unmap();
+    source->unmap();
+
+    dest->markDirty();
+
+    return gl::NoError();
+}
+
 bool Image11::isDirty() const
 {
     // If mDirty is true AND mStagingTexture doesn't exist AND mStagingTexture doesn't need to be
