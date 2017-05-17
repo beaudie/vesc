@@ -110,6 +110,12 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
         options |= SH_INITIALIZE_UNINITIALIZED_LOCALS;
     }
 
+    if (mWorkarounds.supportMultiviewThroughNVViewportArray2)
+    {
+        options |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
+        options |= SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER;
+    }
+
     return options;
 }
 
