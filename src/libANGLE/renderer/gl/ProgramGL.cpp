@@ -24,6 +24,45 @@
 namespace rx
 {
 
+namespace
+{
+
+std::string DecorateName(std::string name)
+{
+    std::stringstream decorated;
+
+    size_t offset = 0;
+    size_t dot    = name.find(".", offset);
+    while (dot != std::string::npos)
+    {
+        decorated << "_u" << name.substr(offset, dot - offset) << ".";
+        offset = dot + 1;
+        dot    = name.find(".", offset);
+    }
+    decorated << "_u" << name.substr(offset);
+    return decorated.str();
+}
+
+std::string UndecorateName(std::string name)
+{
+    std::stringstream undecorated;
+
+    size_t offset = 0;
+    size_t dot    = name.find(".", offset);
+    while (dot != std::string::npos)
+    {
+        ASSERT(name.substr(offset, 2) == "_u");
+        undecorated << name.substr(offset + 2, dot - offset) << ".";
+        offset = dot + 1;
+        dot    = name.find(".", offset);
+    }
+    ASSERT(name.substr(offset, 2) == "_u");
+    undecorated << name.substr(offset + 2);
+    return undecorated.str();
+}
+
+}  // anonymous namespace
+
 ProgramGL::ProgramGL(const gl::ProgramState &data,
                      const FunctionsGL *functions,
                      const WorkaroundsGL &workarounds,
@@ -138,10 +177,20 @@ LinkResult ProgramGL::link(ContextImpl *contextImpl,
     else
     {
         // Set the transform feedback state
+        std::vector<std::string> transformFeedbackVaryingRealNames;
+        transformFeedbackVaryingRealNames.reserve(mState.getTransformFeedbackVaryingNames().size());
         std::vector<const GLchar *> transformFeedbackVaryings;
         for (const auto &tfVarying : mState.getTransformFeedbackVaryingNames())
         {
-            transformFeedbackVaryings.push_back(tfVarying.c_str());
+            if (tfVarying.find("gl_") == 0)
+            {
+                transformFeedbackVaryingRealNames.push_back(tfVarying);
+            }
+            else
+            {
+                transformFeedbackVaryingRealNames.push_back(DecorateName(tfVarying));
+            }
+            transformFeedbackVaryings.push_back(transformFeedbackVaryingRealNames.back().c_str());
         }
 
         if (transformFeedbackVaryings.empty())
@@ -175,7 +224,9 @@ LinkResult ProgramGL::link(ContextImpl *contextImpl,
                 continue;
             }
 
-            mFunctions->bindAttribLocation(mProgramID, attribute.location, attribute.name.c_str());
+            std::string attributeRealName = DecorateName(attribute.name);
+            mFunctions->bindAttribLocation(mProgramID, attribute.location,
+                                           attributeRealName.c_str());
         }
 
         // Link and verify
@@ -495,8 +546,9 @@ void ProgramGL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformB
         mUniformBlockRealLocationMap.reserve(mState.getUniformBlocks().size());
         for (const gl::UniformBlock &uniformBlock : mState.getUniformBlocks())
         {
-            const std::string &nameWithIndex = uniformBlock.nameWithArrayIndex();
-            GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, nameWithIndex.c_str());
+            std::string realNameWithIndex = DecorateName(uniformBlock.nameWithArrayIndex());
+            GLuint blockIndex =
+                mFunctions->getUniformBlockIndex(mProgramID, realNameWithIndex.c_str());
             mUniformBlockRealLocationMap.push_back(blockIndex);
         }
     }
@@ -517,7 +569,8 @@ bool ProgramGL::getUniformBlockSize(const std::string &blockName, size_t *sizeOu
 {
     ASSERT(mProgramID != 0u);
 
-    GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, blockName.c_str());
+    std::string blockRealName = DecorateName(blockName);
+    GLuint blockIndex         = mFunctions->getUniformBlockIndex(mProgramID, blockRealName.c_str());
     if (blockIndex == GL_INVALID_INDEX)
     {
         *sizeOut = 0;
@@ -535,7 +588,8 @@ bool ProgramGL::getUniformBlockMemberInfo(const std::string &memberUniformName,
                                           sh::BlockMemberInfo *memberInfoOut) const
 {
     GLuint uniformIndex;
-    const GLchar *memberNameGLStr = memberUniformName.c_str();
+    std::string memberRealName    = DecorateName(memberUniformName);
+    const GLchar *memberNameGLStr = memberRealName.c_str();
     mFunctions->getUniformIndices(mProgramID, 1, &memberNameGLStr, &uniformIndex);
 
     if (uniformIndex == GL_INVALID_INDEX)
@@ -642,7 +696,7 @@ void ProgramGL::postLink()
         // "Locations for sequential array indices are not required to be sequential."
         const gl::LinkedUniform &uniform = uniforms[entry.index];
         std::stringstream fullNameStr;
-        fullNameStr << uniform.name;
+        fullNameStr << DecorateName(uniform.name);
         if (uniform.isArray())
         {
             fullNameStr << "[" << entry.element << "]";
@@ -681,6 +735,8 @@ void ProgramGL::postLink()
         // Ignore built-ins
         if (angle::BeginsWith(name, "gl_"))
             continue;
+
+        name = UndecorateName(name);
 
         const GLenum kQueryProperties[] = {GL_LOCATION, GL_ARRAY_SIZE};
         GLint queryResults[ArraySize(kQueryProperties)];
