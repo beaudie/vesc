@@ -25,7 +25,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
     TType *float4 = new TType(EbtFloat, 4);
 
     emu->addEmulatedFunction(EOpIsNan, float1,
-                             "bool webgl_isnan_emu(float x)\n"
+                             "bool isnan_emu(float x)\n"
                              "{\n"
                              "    return (x > 0.0 || x < 0.0) ? false : x != 0.0;\n"
                              "}\n"
@@ -33,7 +33,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
 
     emu->addEmulatedFunction(
         EOpIsNan, float2,
-        "bool2 webgl_isnan_emu(float2 x)\n"
+        "bool2 isnan_emu(float2 x)\n"
         "{\n"
         "    bool2 isnan;\n"
         "    for (int i = 0; i < 2; i++)\n"
@@ -45,7 +45,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
 
     emu->addEmulatedFunction(
         EOpIsNan, float3,
-        "bool3 webgl_isnan_emu(float3 x)\n"
+        "bool3 isnan_emu(float3 x)\n"
         "{\n"
         "    bool3 isnan;\n"
         "    for (int i = 0; i < 3; i++)\n"
@@ -57,7 +57,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
 
     emu->addEmulatedFunction(
         EOpIsNan, float4,
-        "bool4 webgl_isnan_emu(float4 x)\n"
+        "bool4 isnan_emu(float4 x)\n"
         "{\n"
         "    bool4 isnan;\n"
         "    for (int i = 0; i < 4; i++)\n"
@@ -84,50 +84,50 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     TType *uint4  = new TType(EbtUInt, 4);
 
     emu->addEmulatedFunction(EOpMod, float1, float1,
-                             "float webgl_mod_emu(float x, float y)\n"
+                             "float mod_emu(float x, float y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float2, float2,
-                             "float2 webgl_mod_emu(float2 x, float2 y)\n"
+                             "float2 mod_emu(float2 x, float2 y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float2, float1,
-                             "float2 webgl_mod_emu(float2 x, float y)\n"
+                             "float2 mod_emu(float2 x, float y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float3, float3,
-                             "float3 webgl_mod_emu(float3 x, float3 y)\n"
+                             "float3 mod_emu(float3 x, float3 y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float3, float1,
-                             "float3 webgl_mod_emu(float3 x, float y)\n"
+                             "float3 mod_emu(float3 x, float y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float4, float4,
-                             "float4 webgl_mod_emu(float4 x, float4 y)\n"
+                             "float4 mod_emu(float4 x, float4 y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpMod, float4, float1,
-                             "float4 webgl_mod_emu(float4 x, float y)\n"
+                             "float4 mod_emu(float4 x, float y)\n"
                              "{\n"
                              "    return x - y * floor(x / y);\n"
                              "}\n"
                              "\n");
 
     emu->addEmulatedFunction(EOpFrexp, float1, int1,
-                             "float webgl_frexp_emu(float x, out int exp)\n"
+                             "float frexp_emu(float x, out int exp)\n"
                              "{\n"
                              "    float fexp;\n"
                              "    float mantissa = frexp(abs(x), fexp) * sign(x);\n"
@@ -136,7 +136,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFrexp, float2, int2,
-                             "float2 webgl_frexp_emu(float2 x, out int2 exp)\n"
+                             "float2 frexp_emu(float2 x, out int2 exp)\n"
                              "{\n"
                              "    float2 fexp;\n"
                              "    float2 mantissa = frexp(abs(x), fexp) * sign(x);\n"
@@ -145,7 +145,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFrexp, float3, int3,
-                             "float3 webgl_frexp_emu(float3 x, out int3 exp)\n"
+                             "float3 frexp_emu(float3 x, out int3 exp)\n"
                              "{\n"
                              "    float3 fexp;\n"
                              "    float3 mantissa = frexp(abs(x), fexp) * sign(x);\n"
@@ -154,7 +154,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFrexp, float4, int4,
-                             "float4 webgl_frexp_emu(float4 x, out int4 exp)\n"
+                             "float4 frexp_emu(float4 x, out int4 exp)\n"
                              "{\n"
                              "    float4 fexp;\n"
                              "    float4 mantissa = frexp(abs(x), fexp) * sign(x);\n"
@@ -164,32 +164,32 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "\n");
 
     emu->addEmulatedFunction(EOpLdexp, float1, int1,
-                             "float webgl_ldexp_emu(float x, int exp)\n"
+                             "float ldexp_emu(float x, int exp)\n"
                              "{\n"
                              "    return ldexp(x, float(exp));\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpLdexp, float2, int2,
-                             "float2 webgl_ldexp_emu(float2 x, int2 exp)\n"
+                             "float2 ldexp_emu(float2 x, int2 exp)\n"
                              "{\n"
                              "    return ldexp(x, float2(exp));\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpLdexp, float3, int3,
-                             "float3 webgl_ldexp_emu(float3 x, int3 exp)\n"
+                             "float3 ldexp_emu(float3 x, int3 exp)\n"
                              "{\n"
                              "    return ldexp(x, float3(exp));\n"
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpLdexp, float4, int4,
-                             "float4 webgl_ldexp_emu(float4 x, int4 exp)\n"
+                             "float4 ldexp_emu(float4 x, int4 exp)\n"
                              "{\n"
                              "    return ldexp(x, float4(exp));\n"
                              "}\n"
                              "\n");
 
     emu->addEmulatedFunction(EOpFaceForward, float1, float1, float1,
-                             "float webgl_faceforward_emu(float N, float I, float Nref)\n"
+                             "float faceforward_emu(float N, float I, float Nref)\n"
                              "{\n"
                              "    if(dot(Nref, I) >= 0)\n"
                              "    {\n"
@@ -202,7 +202,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFaceForward, float2, float2, float2,
-                             "float2 webgl_faceforward_emu(float2 N, float2 I, float2 Nref)\n"
+                             "float2 faceforward_emu(float2 N, float2 I, float2 Nref)\n"
                              "{\n"
                              "    if(dot(Nref, I) >= 0)\n"
                              "    {\n"
@@ -215,7 +215,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFaceForward, float3, float3, float3,
-                             "float3 webgl_faceforward_emu(float3 N, float3 I, float3 Nref)\n"
+                             "float3 faceforward_emu(float3 N, float3 I, float3 Nref)\n"
                              "{\n"
                              "    if(dot(Nref, I) >= 0)\n"
                              "    {\n"
@@ -228,7 +228,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n"
                              "\n");
     emu->addEmulatedFunction(EOpFaceForward, float4, float4, float4,
-                             "float4 webgl_faceforward_emu(float4 N, float4 I, float4 Nref)\n"
+                             "float4 faceforward_emu(float4 N, float4 I, float4 Nref)\n"
                              "{\n"
                              "    if(dot(Nref, I) >= 0)\n"
                              "    {\n"
@@ -242,13 +242,13 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "\n");
 
     emu->addEmulatedFunction(EOpAtan, float1, float1,
-                             "float webgl_atan_emu(float y, float x)\n"
+                             "float atan_emu(float y, float x)\n"
                              "{\n"
                              "    if(x == 0 && y == 0) x = 1;\n"  // Avoid producing a NaN
                              "    return atan2(y, x);\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAtan, float2, float2,
-                             "float2 webgl_atan_emu(float2 y, float2 x)\n"
+                             "float2 atan_emu(float2 y, float2 x)\n"
                              "{\n"
                              "    if(x[0] == 0 && y[0] == 0) x[0] = 1;\n"
                              "    if(x[1] == 0 && y[1] == 0) x[1] = 1;\n"
@@ -256,7 +256,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n");
     emu->addEmulatedFunction(
         EOpAtan, float3, float3,
-        "float3 webgl_atan_emu(float3 y, float3 x)\n"
+        "float3 atan_emu(float3 y, float3 x)\n"
         "{\n"
         "    if(x[0] == 0 && y[0] == 0) x[0] = 1;\n"
         "    if(x[1] == 0 && y[1] == 0) x[1] = 1;\n"
@@ -264,7 +264,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "    return float3(atan2(y[0], x[0]), atan2(y[1], x[1]), atan2(y[2], x[2]));\n"
         "}\n");
     emu->addEmulatedFunction(EOpAtan, float4, float4,
-                             "float4 webgl_atan_emu(float4 y, float4 x)\n"
+                             "float4 atan_emu(float4 y, float4 x)\n"
                              "{\n"
                              "    if(x[0] == 0 && y[0] == 0) x[0] = 1;\n"
                              "    if(x[1] == 0 && y[1] == 0) x[1] = 1;\n"
@@ -275,64 +275,64 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "}\n");
 
     emu->addEmulatedFunction(EOpAsinh, float1,
-                             "float webgl_asinh_emu(in float x) {\n"
+                             "float asinh_emu(in float x) {\n"
                              "    return log(x + sqrt(pow(x, 2.0) + 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAsinh, float2,
-                             "float2 webgl_asinh_emu(in float2 x) {\n"
+                             "float2 asinh_emu(in float2 x) {\n"
                              "    return log(x + sqrt(pow(x, 2.0) + 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAsinh, float3,
-                             "float3 webgl_asinh_emu(in float3 x) {\n"
+                             "float3 asinh_emu(in float3 x) {\n"
                              "    return log(x + sqrt(pow(x, 2.0) + 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAsinh, float4,
-                             "float4 webgl_asinh_emu(in float4 x) {\n"
+                             "float4 asinh_emu(in float4 x) {\n"
                              "    return log(x + sqrt(pow(x, 2.0) + 1.0));\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpAcosh, float1,
-                             "float webgl_acosh_emu(in float x) {\n"
+                             "float acosh_emu(in float x) {\n"
                              "    return log(x + sqrt(x + 1.0) * sqrt(x - 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAcosh, float2,
-                             "float2 webgl_acosh_emu(in float2 x) {\n"
+                             "float2 acosh_emu(in float2 x) {\n"
                              "    return log(x + sqrt(x + 1.0) * sqrt(x - 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAcosh, float3,
-                             "float3 webgl_acosh_emu(in float3 x) {\n"
+                             "float3 acosh_emu(in float3 x) {\n"
                              "    return log(x + sqrt(x + 1.0) * sqrt(x - 1.0));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAcosh, float4,
-                             "float4 webgl_acosh_emu(in float4 x) {\n"
+                             "float4 acosh_emu(in float4 x) {\n"
                              "    return log(x + sqrt(x + 1.0) * sqrt(x - 1.0));\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpAtanh, float1,
-                             "float webgl_atanh_emu(in float x) {\n"
+                             "float atanh_emu(in float x) {\n"
                              "    return 0.5 * log((1.0 + x) / (1.0 - x));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAtanh, float2,
-                             "float2 webgl_atanh_emu(in float2 x) {\n"
+                             "float2 atanh_emu(in float2 x) {\n"
                              "    return 0.5 * log((1.0 + x) / (1.0 - x));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAtanh, float3,
-                             "float3 webgl_atanh_emu(in float3 x) {\n"
+                             "float3 atanh_emu(in float3 x) {\n"
                              "    return 0.5 * log((1.0 + x) / (1.0 - x));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpAtanh, float4,
-                             "float4 webgl_atanh_emu(in float4 x) {\n"
+                             "float4 atanh_emu(in float4 x) {\n"
                              "    return 0.5 * log((1.0 + x) / (1.0 - x));\n"
                              "}\n");
 
     emu->addEmulatedFunction(
         EOpRoundEven, float1,
-        "float webgl_roundEven_emu(in float x) {\n"
+        "float roundEven_emu(in float x) {\n"
         "    return (frac(x) == 0.5 && trunc(x) % 2.0 == 0.0) ? trunc(x) : round(x);\n"
         "}\n");
     emu->addEmulatedFunction(
         EOpRoundEven, float2,
-        "float2 webgl_roundEven_emu(in float2 x) {\n"
+        "float2 roundEven_emu(in float2 x) {\n"
         "    float2 v;\n"
         "    v[0] = (frac(x[0]) == 0.5 && trunc(x[0]) % 2.0 == 0.0) ? trunc(x[0]) : round(x[0]);\n"
         "    v[1] = (frac(x[1]) == 0.5 && trunc(x[1]) % 2.0 == 0.0) ? trunc(x[1]) : round(x[1]);\n"
@@ -340,7 +340,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpRoundEven, float3,
-        "float3 webgl_roundEven_emu(in float3 x) {\n"
+        "float3 roundEven_emu(in float3 x) {\n"
         "    float3 v;\n"
         "    v[0] = (frac(x[0]) == 0.5 && trunc(x[0]) % 2.0 == 0.0) ? trunc(x[0]) : round(x[0]);\n"
         "    v[1] = (frac(x[1]) == 0.5 && trunc(x[1]) % 2.0 == 0.0) ? trunc(x[1]) : round(x[1]);\n"
@@ -349,7 +349,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpRoundEven, float4,
-        "float4 webgl_roundEven_emu(in float4 x) {\n"
+        "float4 roundEven_emu(in float4 x) {\n"
         "    float4 v;\n"
         "    v[0] = (frac(x[0]) == 0.5 && trunc(x[0]) % 2.0 == 0.0) ? trunc(x[0]) : round(x[0]);\n"
         "    v[1] = (frac(x[1]) == 0.5 && trunc(x[1]) % 2.0 == 0.0) ? trunc(x[1]) : round(x[1]);\n"
@@ -359,113 +359,113 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
 
     emu->addEmulatedFunction(EOpPackSnorm2x16, float2,
-                             "int webgl_toSnorm16(in float x) {\n"
+                             "int toSnorm16(in float x) {\n"
                              "    return int(round(clamp(x, -1.0, 1.0) * 32767.0));\n"
                              "}\n"
                              "\n"
-                             "uint webgl_packSnorm2x16_emu(in float2 v) {\n"
-                             "    int x = webgl_toSnorm16(v.x);\n"
-                             "    int y = webgl_toSnorm16(v.y);\n"
+                             "uint packSnorm2x16_emu(in float2 v) {\n"
+                             "    int x = toSnorm16(v.x);\n"
+                             "    int y = toSnorm16(v.y);\n"
                              "    return (asuint(y) << 16) | (asuint(x) & 0xffffu);\n"
                              "}\n");
     emu->addEmulatedFunction(EOpPackUnorm2x16, float2,
-                             "uint webgl_toUnorm16(in float x) {\n"
+                             "uint toUnorm16(in float x) {\n"
                              "    return uint(round(clamp(x, 0.0, 1.0) * 65535.0));\n"
                              "}\n"
                              "\n"
-                             "uint webgl_packUnorm2x16_emu(in float2 v) {\n"
-                             "    uint x = webgl_toUnorm16(v.x);\n"
-                             "    uint y = webgl_toUnorm16(v.y);\n"
+                             "uint packUnorm2x16_emu(in float2 v) {\n"
+                             "    uint x = toUnorm16(v.x);\n"
+                             "    uint y = toUnorm16(v.y);\n"
                              "    return (y << 16) | x;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpPackHalf2x16, float2,
-                             "uint webgl_packHalf2x16_emu(in float2 v) {\n"
+                             "uint packHalf2x16_emu(in float2 v) {\n"
                              "    uint x = f32tof16(v.x);\n"
                              "    uint y = f32tof16(v.y);\n"
                              "    return (y << 16) | x;\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpUnpackSnorm2x16, uint1,
-                             "float webgl_fromSnorm16(in uint x) {\n"
+                             "float fromSnorm16(in uint x) {\n"
                              "    int xi = asint(x & 0x7fffu) - asint(x & 0x8000u);\n"
                              "    return clamp(float(xi) / 32767.0, -1.0, 1.0);\n"
                              "}\n"
                              "\n"
-                             "float2 webgl_unpackSnorm2x16_emu(in uint u) {\n"
+                             "float2 unpackSnorm2x16_emu(in uint u) {\n"
                              "    uint y = (u >> 16);\n"
                              "    uint x = u;\n"
-                             "    return float2(webgl_fromSnorm16(x), webgl_fromSnorm16(y));\n"
+                             "    return float2(fromSnorm16(x), fromSnorm16(y));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUnpackUnorm2x16, uint1,
-                             "float webgl_fromUnorm16(in uint x) {\n"
+                             "float fromUnorm16(in uint x) {\n"
                              "    return float(x) / 65535.0;\n"
                              "}\n"
                              "\n"
-                             "float2 webgl_unpackUnorm2x16_emu(in uint u) {\n"
+                             "float2 unpackUnorm2x16_emu(in uint u) {\n"
                              "    uint y = (u >> 16);\n"
                              "    uint x = u & 0xffffu;\n"
-                             "    return float2(webgl_fromUnorm16(x), webgl_fromUnorm16(y));\n"
+                             "    return float2(fromUnorm16(x), fromUnorm16(y));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUnpackHalf2x16, uint1,
-                             "float2 webgl_unpackHalf2x16_emu(in uint u) {\n"
+                             "float2 unpackHalf2x16_emu(in uint u) {\n"
                              "    uint y = (u >> 16);\n"
                              "    uint x = u & 0xffffu;\n"
                              "    return float2(f16tof32(x), f16tof32(y));\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpPackSnorm4x8, float4,
-                             "int webgl_toSnorm8(in float x) {\n"
+                             "int toSnorm8(in float x) {\n"
                              "    return int(round(clamp(x, -1.0, 1.0) * 127.0));\n"
                              "}\n"
                              "\n"
-                             "uint webgl_packSnorm4x8_emu(in float4 v) {\n"
-                             "    int x = webgl_toSnorm8(v.x);\n"
-                             "    int y = webgl_toSnorm8(v.y);\n"
-                             "    int z = webgl_toSnorm8(v.z);\n"
-                             "    int w = webgl_toSnorm8(v.w);\n"
+                             "uint packSnorm4x8_emu(in float4 v) {\n"
+                             "    int x = toSnorm8(v.x);\n"
+                             "    int y = toSnorm8(v.y);\n"
+                             "    int z = toSnorm8(v.z);\n"
+                             "    int w = toSnorm8(v.w);\n"
                              "    return ((asuint(w) & 0xffu) << 24) | ((asuint(z) & 0xffu) << 16) "
                              "| ((asuint(y) & 0xffu) << 8) | (asuint(x) & 0xffu);\n"
                              "}\n");
     emu->addEmulatedFunction(EOpPackUnorm4x8, float4,
-                             "uint webgl_toUnorm8(in float x) {\n"
+                             "uint toUnorm8(in float x) {\n"
                              "    return uint(round(clamp(x, 0.0, 1.0) * 255.0));\n"
                              "}\n"
                              "\n"
-                             "uint webgl_packUnorm4x8_emu(in float4 v) {\n"
-                             "    uint x = webgl_toUnorm8(v.x);\n"
-                             "    uint y = webgl_toUnorm8(v.y);\n"
-                             "    uint z = webgl_toUnorm8(v.z);\n"
-                             "    uint w = webgl_toUnorm8(v.w);\n"
+                             "uint packUnorm4x8_emu(in float4 v) {\n"
+                             "    uint x = toUnorm8(v.x);\n"
+                             "    uint y = toUnorm8(v.y);\n"
+                             "    uint z = toUnorm8(v.z);\n"
+                             "    uint w = toUnorm8(v.w);\n"
                              "    return (w << 24) | (z << 16) | (y << 8) | x;\n"
                              "}\n");
 
-    emu->addEmulatedFunction(EOpUnpackSnorm4x8, uint1,
-                             "float webgl_fromSnorm8(in uint x) {\n"
-                             "    int xi = asint(x & 0x7fu) - asint(x & 0x80u);\n"
-                             "    return clamp(float(xi) / 127.0, -1.0, 1.0);\n"
-                             "}\n"
-                             "\n"
-                             "float4 webgl_unpackSnorm4x8_emu(in uint u) {\n"
-                             "    uint w = (u >> 24);\n"
-                             "    uint z = (u >> 16);\n"
-                             "    uint y = (u >> 8);\n"
-                             "    uint x = u;\n"
-                             "    return float4(webgl_fromSnorm8(x), webgl_fromSnorm8(y), "
-                             "webgl_fromSnorm8(z), webgl_fromSnorm8(w));\n"
-                             "}\n");
-    emu->addEmulatedFunction(EOpUnpackUnorm4x8, uint1,
-                             "float webgl_fromUnorm8(in uint x) {\n"
-                             "    return float(x) / 255.0;\n"
-                             "}\n"
-                             "\n"
-                             "float4 webgl_unpackUnorm4x8_emu(in uint u) {\n"
-                             "    uint w = (u >> 24) & 0xffu;\n"
-                             "    uint z = (u >> 16) & 0xffu;\n"
-                             "    uint y = (u >> 8) & 0xffu;\n"
-                             "    uint x = u & 0xffu;\n"
-                             "    return float4(webgl_fromUnorm8(x), webgl_fromUnorm8(y), "
-                             "webgl_fromUnorm8(z), webgl_fromUnorm8(w));\n"
-                             "}\n");
+    emu->addEmulatedFunction(
+        EOpUnpackSnorm4x8, uint1,
+        "float fromSnorm8(in uint x) {\n"
+        "    int xi = asint(x & 0x7fu) - asint(x & 0x80u);\n"
+        "    return clamp(float(xi) / 127.0, -1.0, 1.0);\n"
+        "}\n"
+        "\n"
+        "float4 unpackSnorm4x8_emu(in uint u) {\n"
+        "    uint w = (u >> 24);\n"
+        "    uint z = (u >> 16);\n"
+        "    uint y = (u >> 8);\n"
+        "    uint x = u;\n"
+        "    return float4(fromSnorm8(x), fromSnorm8(y), fromSnorm8(z), fromSnorm8(w));\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpUnpackUnorm4x8, uint1,
+        "float fromUnorm8(in uint x) {\n"
+        "    return float(x) / 255.0;\n"
+        "}\n"
+        "\n"
+        "float4 unpackUnorm4x8_emu(in uint u) {\n"
+        "    uint w = (u >> 24) & 0xffu;\n"
+        "    uint z = (u >> 16) & 0xffu;\n"
+        "    uint y = (u >> 8) & 0xffu;\n"
+        "    uint x = u & 0xffu;\n"
+        "    return float4(fromUnorm8(x), fromUnorm8(y), fromUnorm8(z), fromUnorm8(w));\n"
+        "}\n");
 
     // The matrix resulting from outer product needs to be transposed
     // (matrices are stored as transposed to simplify element access in HLSL).
@@ -477,40 +477,40 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // transpose of r, we simply can build a column matrix out of the original
     // vector instead of a row matrix.
     emu->addEmulatedFunction(EOpOuterProduct, float2, float2,
-                             "float2x2 webgl_outerProduct_emu(in float2 c, in float2 r) {\n"
+                             "float2x2 outerProduct_emu(in float2 c, in float2 r) {\n"
                              "    return mul(float2x1(r), float1x2(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float3, float3,
-                             "float3x3 webgl_outerProduct_emu(in float3 c, in float3 r) {\n"
+                             "float3x3 outerProduct_emu(in float3 c, in float3 r) {\n"
                              "    return mul(float3x1(r), float1x3(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float4, float4,
-                             "float4x4 webgl_outerProduct_emu(in float4 c, in float4 r) {\n"
+                             "float4x4 outerProduct_emu(in float4 c, in float4 r) {\n"
                              "    return mul(float4x1(r), float1x4(c));\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpOuterProduct, float3, float2,
-                             "float2x3 webgl_outerProduct_emu(in float3 c, in float2 r) {\n"
+                             "float2x3 outerProduct_emu(in float3 c, in float2 r) {\n"
                              "    return mul(float2x1(r), float1x3(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float2, float3,
-                             "float3x2 webgl_outerProduct_emu(in float2 c, in float3 r) {\n"
+                             "float3x2 outerProduct_emu(in float2 c, in float3 r) {\n"
                              "    return mul(float3x1(r), float1x2(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float4, float2,
-                             "float2x4 webgl_outerProduct_emu(in float4 c, in float2 r) {\n"
+                             "float2x4 outerProduct_emu(in float4 c, in float2 r) {\n"
                              "    return mul(float2x1(r), float1x4(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float2, float4,
-                             "float4x2 webgl_outerProduct_emu(in float2 c, in float4 r) {\n"
+                             "float4x2 outerProduct_emu(in float2 c, in float4 r) {\n"
                              "    return mul(float4x1(r), float1x2(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float4, float3,
-                             "float3x4 webgl_outerProduct_emu(in float4 c, in float3 r) {\n"
+                             "float3x4 outerProduct_emu(in float4 c, in float3 r) {\n"
                              "    return mul(float3x1(r), float1x4(c));\n"
                              "}\n");
     emu->addEmulatedFunction(EOpOuterProduct, float3, float4,
-                             "float4x3 webgl_outerProduct_emu(in float3 c, in float4 r) {\n"
+                             "float4x3 outerProduct_emu(in float3 c, in float4 r) {\n"
                              "    return mul(float4x1(r), float1x3(c));\n"
                              "}\n");
 
@@ -534,7 +534,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // for singular or poorly-conditioned matrices.
 
     emu->addEmulatedFunction(EOpInverse, mat2,
-                             "float2x2 webgl_inverse_emu(in float2x2 m) {\n"
+                             "float2x2 inverse_emu(in float2x2 m) {\n"
                              "    float2x2 cof = { m[1][1], -m[0][1], -m[1][0], m[0][0] };\n"
                              "    return cof / determinant(transpose(m));\n"
                              "}\n");
@@ -543,7 +543,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 
     emu->addEmulatedFunction(
         EOpInverse, mat3,
-        "float3x3 webgl_inverse_emu(in float3x3 m) {\n"
+        "float3x3 inverse_emu(in float3x3 m) {\n"
         "    float cof00 = m[1][1] * m[2][2] - m[2][1] * m[1][2];\n"
         "    float cof01 = -(m[1][0] * m[2][2] - m[2][0] * m[1][2]);\n"
         "    float cof02 = m[1][0] * m[2][1] - m[2][0] * m[1][1];\n"
@@ -559,7 +559,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 
     emu->addEmulatedFunction(
         EOpInverse, mat4,
-        "float4x4 webgl_inverse_emu(in float4x4 m) {\n"
+        "float4x4 inverse_emu(in float4x4 m) {\n"
         "    float cof00 = m[1][1] * m[2][2] * m[3][3] + m[2][1] * m[3][2] * m[1][3] + m[3][1] * "
         "m[1][2] * m[2][3]"
         " - m[1][1] * m[3][2] * m[2][3] - m[2][1] * m[1][2] * m[3][3] - m[3][1] * m[2][2] * "
@@ -641,29 +641,29 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // component of 'a' that is true,
     // the corresponding component of 'y' is returned.
     emu->addEmulatedFunction(EOpMix, float1, float1, bool1,
-                             "float webgl_mix_emu(float x, float y, bool a)\n"
+                             "float mix_emu(float x, float y, bool a)\n"
                              "{\n"
                              "    return a ? y : x;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpMix, float2, float2, bool2,
-                             "float2 webgl_mix_emu(float2 x, float2 y, bool2 a)\n"
+                             "float2 mix_emu(float2 x, float2 y, bool2 a)\n"
                              "{\n"
                              "    return a ? y : x;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpMix, float3, float3, bool3,
-                             "float3 webgl_mix_emu(float3 x, float3 y, bool3 a)\n"
+                             "float3 mix_emu(float3 x, float3 y, bool3 a)\n"
                              "{\n"
                              "    return a ? y : x;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpMix, float4, float4, bool4,
-                             "float4 webgl_mix_emu(float4 x, float4 y, bool4 a)\n"
+                             "float4 mix_emu(float4 x, float4 y, bool4 a)\n"
                              "{\n"
                              "    return a ? y : x;\n"
                              "}\n");
 
     emu->addEmulatedFunction(
         EOpBitfieldExtract, uint1, int1, int1,
-        "uint webgl_bitfieldExtract_emu(uint value, int offset, int bits)\n"
+        "uint bitfieldExtract_emu(uint value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -675,7 +675,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, uint2, int1, int1,
-        "uint2 webgl_bitfieldExtract_emu(uint2 value, int offset, int bits)\n"
+        "uint2 bitfieldExtract_emu(uint2 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -687,7 +687,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, uint3, int1, int1,
-        "uint3 webgl_bitfieldExtract_emu(uint3 value, int offset, int bits)\n"
+        "uint3 bitfieldExtract_emu(uint3 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -699,7 +699,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, uint4, int1, int1,
-        "uint4 webgl_bitfieldExtract_emu(uint4 value, int offset, int bits)\n"
+        "uint4 bitfieldExtract_emu(uint4 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -712,7 +712,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 
     emu->addEmulatedFunction(
         EOpBitfieldExtract, int1, int1, int1,
-        "int webgl_bitfieldExtract_emu(int value, int offset, int bits)\n"
+        "int bitfieldExtract_emu(int value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -730,7 +730,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, int2, int1, int1,
-        "int2 webgl_bitfieldExtract_emu(int2 value, int offset, int bits)\n"
+        "int2 bitfieldExtract_emu(int2 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -748,7 +748,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, int3, int1, int1,
-        "int3 webgl_bitfieldExtract_emu(int3 value, int offset, int bits)\n"
+        "int3 bitfieldExtract_emu(int3 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -766,7 +766,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldExtract, int4, int1, int1,
-        "int4 webgl_bitfieldExtract_emu(int4 value, int offset, int bits)\n"
+        "int4 bitfieldExtract_emu(int4 value, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -785,7 +785,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 
     emu->addEmulatedFunction(
         EOpBitfieldInsert, uint1, uint1, int1, int1,
-        "uint webgl_bitfieldInsert_emu(uint base, uint insert, int offset, int bits)\n"
+        "uint bitfieldInsert_emu(uint base, uint insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -798,7 +798,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, uint2, uint2, int1, int1,
-        "uint2 webgl_bitfieldInsert_emu(uint2 base, uint2 insert, int offset, int bits)\n"
+        "uint2 bitfieldInsert_emu(uint2 base, uint2 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -811,7 +811,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, uint3, uint3, int1, int1,
-        "uint3 webgl_bitfieldInsert_emu(uint3 base, uint3 insert, int offset, int bits)\n"
+        "uint3 bitfieldInsert_emu(uint3 base, uint3 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -824,7 +824,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, uint4, uint4, int1, int1,
-        "uint4 webgl_bitfieldInsert_emu(uint4 base, uint4 insert, int offset, int bits)\n"
+        "uint4 bitfieldInsert_emu(uint4 base, uint4 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -838,7 +838,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 
     emu->addEmulatedFunction(
         EOpBitfieldInsert, int1, int1, int1, int1,
-        "int webgl_bitfieldInsert_emu(int base, int insert, int offset, int bits)\n"
+        "int bitfieldInsert_emu(int base, int insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -853,7 +853,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, int2, int2, int1, int1,
-        "int2 webgl_bitfieldInsert_emu(int2 base, int2 insert, int offset, int bits)\n"
+        "int2 bitfieldInsert_emu(int2 base, int2 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -868,7 +868,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, int3, int3, int1, int1,
-        "int3 webgl_bitfieldInsert_emu(int3 base, int3 insert, int offset, int bits)\n"
+        "int3 bitfieldInsert_emu(int3 base, int3 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -883,7 +883,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunction(
         EOpBitfieldInsert, int4, int4, int1, int1,
-        "int4 webgl_bitfieldInsert_emu(int4 base, int4 insert, int offset, int bits)\n"
+        "int4 bitfieldInsert_emu(int4 base, int4 insert, int offset, int bits)\n"
         "{\n"
         "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
         "    {\n"
@@ -898,50 +898,50 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
 
     emu->addEmulatedFunction(EOpUaddCarry, uint1, uint1, uint1,
-                             "uint webgl_uaddCarry_emu(uint x, uint y, out uint carry)\n"
+                             "uint uaddCarry_emu(uint x, uint y, out uint carry)\n"
                              "{\n"
                              "    carry = uint(x > (0xffffffffu - y));\n"
                              "    return x + y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUaddCarry, uint2, uint2, uint2,
-                             "uint2 webgl_uaddCarry_emu(uint2 x, uint2 y, out uint2 carry)\n"
+                             "uint2 uaddCarry_emu(uint2 x, uint2 y, out uint2 carry)\n"
                              "{\n"
                              "    carry = uint2(x > (0xffffffffu - y));\n"
                              "    return x + y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUaddCarry, uint3, uint3, uint3,
-                             "uint3 webgl_uaddCarry_emu(uint3 x, uint3 y, out uint3 carry)\n"
+                             "uint3 uaddCarry_emu(uint3 x, uint3 y, out uint3 carry)\n"
                              "{\n"
                              "    carry = uint3(x > (0xffffffffu - y));\n"
                              "    return x + y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUaddCarry, uint4, uint4, uint4,
-                             "uint4 webgl_uaddCarry_emu(uint4 x, uint4 y, out uint4 carry)\n"
+                             "uint4 uaddCarry_emu(uint4 x, uint4 y, out uint4 carry)\n"
                              "{\n"
                              "    carry = uint4(x > (0xffffffffu - y));\n"
                              "    return x + y;\n"
                              "}\n");
 
     emu->addEmulatedFunction(EOpUsubBorrow, uint1, uint1, uint1,
-                             "uint webgl_usubBorrow_emu(uint x, uint y, out uint borrow)\n"
+                             "uint usubBorrow_emu(uint x, uint y, out uint borrow)\n"
                              "{\n"
                              "    borrow = uint(x < y);\n"
                              "    return x - y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUsubBorrow, uint2, uint2, uint2,
-                             "uint2 webgl_usubBorrow_emu(uint2 x, uint2 y, out uint2 borrow)\n"
+                             "uint2 usubBorrow_emu(uint2 x, uint2 y, out uint2 borrow)\n"
                              "{\n"
                              "    borrow = uint2(x < y);\n"
                              "    return x - y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUsubBorrow, uint3, uint3, uint3,
-                             "uint3 webgl_usubBorrow_emu(uint3 x, uint3 y, out uint3 borrow)\n"
+                             "uint3 usubBorrow_emu(uint3 x, uint3 y, out uint3 borrow)\n"
                              "{\n"
                              "    borrow = uint3(x < y);\n"
                              "    return x - y;\n"
                              "}\n");
     emu->addEmulatedFunction(EOpUsubBorrow, uint4, uint4, uint4,
-                             "uint4 webgl_usubBorrow_emu(uint4 x, uint4 y, out uint4 borrow)\n"
+                             "uint4 usubBorrow_emu(uint4 x, uint4 y, out uint4 borrow)\n"
                              "{\n"
                              "    borrow = uint4(x < y);\n"
                              "    return x - y;\n"
@@ -952,7 +952,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // a <= 0xffff, d <= 0xffff, ((a * c) >> 16) <= 0xffff and 0xffff * 0xffff + 0xffff = 0xffff0000
     BuiltInFunctionEmulator::FunctionId umulExtendedUint1 = emu->addEmulatedFunction(
         EOpUmulExtended, uint1, uint1, uint1, uint1,
-        "void webgl_umulExtended_emu(uint x, uint y, out uint msb, out uint lsb)\n"
+        "void umulExtended_emu(uint x, uint y, out uint msb, out uint lsb)\n"
         "{\n"
         "    lsb = x * y;\n"
         "    uint a = (x & 0xffffu);\n"
@@ -966,27 +966,27 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         umulExtendedUint1, EOpUmulExtended, uint2, uint2, uint2, uint2,
-        "void webgl_umulExtended_emu(uint2 x, uint2 y, out uint2 msb, out uint2 lsb)\n"
+        "void umulExtended_emu(uint2 x, uint2 y, out uint2 msb, out uint2 lsb)\n"
         "{\n"
-        "    webgl_umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         umulExtendedUint1, EOpUmulExtended, uint3, uint3, uint3, uint3,
-        "void webgl_umulExtended_emu(uint3 x, uint3 y, out uint3 msb, out uint3 lsb)\n"
+        "void umulExtended_emu(uint3 x, uint3 y, out uint3 msb, out uint3 lsb)\n"
         "{\n"
-        "    webgl_umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
-        "    webgl_umulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
+        "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    umulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         umulExtendedUint1, EOpUmulExtended, uint4, uint4, uint4, uint4,
-        "void webgl_umulExtended_emu(uint4 x, uint4 y, out uint4 msb, out uint4 lsb)\n"
+        "void umulExtended_emu(uint4 x, uint4 y, out uint4 msb, out uint4 lsb)\n"
         "{\n"
-        "    webgl_umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
-        "    webgl_umulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
-        "    webgl_umulExtended_emu(x.w, y.w, msb.w, lsb.w);\n"
+        "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    umulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
+        "    umulExtended_emu(x.w, y.w, msb.w, lsb.w);\n"
         "}\n");
 
     // The imul emulation does two's complement negation on the lsb and msb manually in case the
@@ -995,12 +995,12 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // -2^31. abs(-2^31) is undefined.
     BuiltInFunctionEmulator::FunctionId imulExtendedInt1 = emu->addEmulatedFunctionWithDependency(
         umulExtendedUint1, EOpImulExtended, int1, int1, int1, int1,
-        "void webgl_imulExtended_emu(int x, int y, out int msb, out int lsb)\n"
+        "void imulExtended_emu(int x, int y, out int msb, out int lsb)\n"
         "{\n"
         "    uint unsignedMsb;\n"
         "    uint unsignedLsb;\n"
         "    bool negative = (x < 0) != (y < 0);\n"
-        "    webgl_umulExtended_emu(uint(abs(x)), uint(abs(y)), unsignedMsb, unsignedLsb);\n"
+        "    umulExtended_emu(uint(abs(x)), uint(abs(y)), unsignedMsb, unsignedLsb);\n"
         "    lsb = asint(unsignedLsb);\n"
         "    msb = asint(unsignedMsb);\n"
         "    if (negative)\n"
@@ -1020,27 +1020,27 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         imulExtendedInt1, EOpImulExtended, int2, int2, int2, int2,
-        "void webgl_imulExtended_emu(int2 x, int2 y, out int2 msb, out int2 lsb)\n"
+        "void imulExtended_emu(int2 x, int2 y, out int2 msb, out int2 lsb)\n"
         "{\n"
-        "    webgl_imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         imulExtendedInt1, EOpImulExtended, int3, int3, int3, int3,
-        "void webgl_imulExtended_emu(int3 x, int3 y, out int3 msb, out int3 lsb)\n"
+        "void imulExtended_emu(int3 x, int3 y, out int3 msb, out int3 lsb)\n"
         "{\n"
-        "    webgl_imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
-        "    webgl_imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
+        "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
         imulExtendedInt1, EOpImulExtended, int4, int4, int4, int4,
-        "void webgl_imulExtended_emu(int4 x, int4 y, out int4 msb, out int4 lsb)\n"
+        "void imulExtended_emu(int4 x, int4 y, out int4 msb, out int4 lsb)\n"
         "{\n"
-        "    webgl_imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
-        "    webgl_imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
-        "    webgl_imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
-        "    webgl_imulExtended_emu(x.w, y.w, msb.w, lsb.w);\n"
+        "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
+        "    imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
+        "    imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
+        "    imulExtended_emu(x.w, y.w, msb.w, lsb.w);\n"
         "}\n");
 }
 
