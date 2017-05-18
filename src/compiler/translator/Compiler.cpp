@@ -13,6 +13,7 @@
 #include "compiler/translator/AddAndTrueToLoopCondition.h"
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/CallDAG.h"
+#include "compiler/translator/DeclareAndInitBuiltinsForInstancedMultiview.h"
 #include "compiler/translator/DeferGlobalInitializers.h"
 #include "compiler/translator/EmulateGLFragColorBroadcast.h"
 #include "compiler/translator/EmulatePrecision.h"
@@ -221,7 +222,9 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
-      mTemporaryIndex(0)
+      mTemporaryIndex(0),
+      mNumViews(-1),
+      mUsesMultiview(false)
 {
     mComputeShaderLocalSize.fill(1);
 }
@@ -323,6 +326,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         mComputeShaderLocalSize         = parseContext.getComputeShaderLocalSize();
 
         mNumViews = parseContext.getNumViews();
+        mUsesMultiview = parseContext.isMultiviewExtensionEnabled();
 
         root = parseContext.getTreeRoot();
 
@@ -405,6 +409,13 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         // Clamping uniform array bounds needs to happen after validateLimitations pass.
         if (success && (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS))
             arrayBoundsClamper.MarkIndirectArrayBoundsForClamping(root);
+        ;
+
+        if (success && (compileOptions & SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW) &&
+            hasMultiview() && getShaderType() == GL_VERTEX_SHADER)
+        {
+            DeclareAndInitBuiltinsForInstancedMultiview(root, getNumViews());
+        }
 
         // gl_Position is always written in compatibility output mode
         if (success && shaderType == GL_VERTEX_SHADER &&
@@ -695,6 +706,7 @@ void TCompiler::clearResults()
     variablesCollected = false;
 
     mNumViews = -1;
+    mUsesMultiview = false;
 
     builtInFunctionEmulator.cleanup();
 
