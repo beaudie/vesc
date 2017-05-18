@@ -15,13 +15,14 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/HLSLCompiler.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/DebugAnnotator11.h"
 #include "libANGLE/renderer/d3d/d3d11/InputLayoutCache.h"
-#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderStateCache.h"
+#include "libANGLE/renderer/d3d/d3d11/ResourceManager11.h"
 #include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
+#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 namespace gl
 {
@@ -396,6 +397,18 @@ class Renderer11 : public RendererD3D
                                    const std::vector<D3DUniform *> &uniformArray) override;
     gl::Error applyComputeShader(const gl::ContextState &data);
 
+    template <typename DescT, typename InitDataT, typename ResourceT>
+    gl::Error allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
+    {
+        return mResourceManager11.allocate(this, &desc, initData, resourceOut);
+    }
+
+    template <typename InitDataT, typename ResourceT>
+    gl::Error allocateResourceNoDesc(InitDataT *initData, ResourceT *resourceOut)
+    {
+        return mResourceManager11.allocate(this, nullptr, initData, resourceOut);
+    }
+
   protected:
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
 
@@ -617,6 +630,7 @@ class Renderer11 : public RendererD3D
     gl::DebugAnnotator *mAnnotator;
 
     mutable Optional<bool> mSupportsShareHandles;
+    ResourceManager11 mResourceManager11;
 };
 
 }  // namespace rx

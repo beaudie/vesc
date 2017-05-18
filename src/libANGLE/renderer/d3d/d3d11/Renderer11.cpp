@@ -3261,8 +3261,9 @@ gl::Error Renderer11::copyImageInternal(const gl::Framebuffer *framebuffer,
     ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
     ASSERT(source);
 
-    ID3D11RenderTargetView *dest = GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
-    ASSERT(dest);
+    const d3d11::RenderTargetView &dest =
+        GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
+    ASSERT(dest.valid());
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents sourceSize(sourceRenderTarget->getWidth(), sourceRenderTarget->getHeight(), 1);
@@ -3438,8 +3439,8 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
 
         RenderTarget11 *destRenderTarget11 = GetAs<RenderTarget11>(destRenderTargetD3D);
 
-        ID3D11RenderTargetView *destRTV = destRenderTarget11->getRenderTargetView();
-        ASSERT(destRTV);
+        const d3d11::RenderTargetView &destRTV = destRenderTarget11->getRenderTargetView();
+        ASSERT(destRTV.valid());
 
         gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
         gl::Extents sourceSize(
@@ -3646,29 +3647,24 @@ gl::Error Renderer11::createRenderTarget(int width,
                                                             : D3D11_RTV_DIMENSION_TEXTURE2DMS;
             rtvDesc.Texture2D.MipSlice = 0;
 
-            ID3D11RenderTargetView *rtv = nullptr;
-            result                      = mDevice->CreateRenderTargetView(texture, &rtvDesc, &rtv);
-            if (FAILED(result))
+            d3d11::RenderTargetView rtv;
+            gl::Error err = allocateResource(rtvDesc, texture, &rtv);
+            if (err.isError())
             {
-                ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create render target render target view, result: 0x%X.",
-                                 result);
+                return err;
             }
 
             if (formatInfo.dataInitializerFunction != nullptr)
             {
                 const float clearValues[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-                mDeviceContext->ClearRenderTargetView(rtv, clearValues);
+                mDeviceContext->ClearRenderTargetView(rtv.get(), clearValues);
             }
 
-            *outRT = new TextureRenderTarget11(rtv, texture, srv, blitSRV, format, formatInfo,
-                                               width, height, 1, supportedSamples);
-
-            SafeRelease(rtv);
+            *outRT = new TextureRenderTarget11(std::move(rtv), texture, srv, blitSRV, format,
+                                               formatInfo, width, height, 1, supportedSamples);
         }
         else
         {
@@ -3682,7 +3678,7 @@ gl::Error Renderer11::createRenderTarget(int width,
     else
     {
         *outRT = new TextureRenderTarget11(
-            static_cast<ID3D11RenderTargetView *>(nullptr), nullptr, nullptr, nullptr, format,
+            d3d11::RenderTargetView(), nullptr, nullptr, nullptr, format,
             d3d11::Format::Get(GL_NONE, mRenderer11DeviceCaps), width, height, 1, supportedSamples);
     }
 
@@ -4278,7 +4274,6 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
     TextureHelper11 drawTexture = TextureHelper11::MakeAndReference(
         drawRenderTarget11->getTexture(), drawRenderTarget11->getFormatSet());
     unsigned int drawSubresource    = drawRenderTarget11->getSubresourceIndex();
-    ID3D11RenderTargetView *drawRTV = drawRenderTarget11->getRenderTargetView();
     ID3D11DepthStencilView *drawDSV = drawRenderTarget11->getDepthStencilView();
 
     RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
@@ -4517,6 +4512,8 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         }
         else
         {
+            const d3d11::RenderTargetView &drawRTV = drawRenderTarget11->getRenderTargetView();
+
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
             ASSERT(readSRV);
