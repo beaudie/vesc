@@ -19,7 +19,9 @@ class TIntermBlock;
 
 namespace sh
 {
-void DeferGlobalInitializers(TIntermBlock *root, bool initializeUninitializedGlobals);
+void DeferGlobalInitializers(TIntermBlock *root,
+                             bool initializeUninitializedGlobals,
+                             unsigned mainSequenceOffset);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_DEFERGLOBALINITIALIZERS_H_

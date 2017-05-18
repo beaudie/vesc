@@ -205,7 +205,8 @@ void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
                            getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
 
-    if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
+    if (getShaderType() == GL_VERTEX_SHADER && hasMultiview() &&
+        compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {
         TName uniformName(TString("ViewID_OVR"));
         uniformName.setInternal(true);

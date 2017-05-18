@@ -84,7 +84,8 @@ void AddArrayZeroInitSequence(const TIntermTyped *initializedNode, TIntermSequen
 
 void InsertInitCode(TIntermSequence *mainBody,
                     const InitVariableList &variables,
-                    const TSymbolTable &symbolTable)
+                    const TSymbolTable &symbolTable,
+                    unsigned mainSequenceOffset)
 {
     for (const auto &var : variables)
     {
@@ -115,7 +116,8 @@ void InsertInitCode(TIntermSequence *mainBody,
             initializedSymbol = new TIntermSymbol(0, name, type);
         }
         TIntermSequence *initCode = CreateInitCode(initializedSymbol);
-        mainBody->insert(mainBody->begin(), initCode->begin(), initCode->end());
+        mainBody->insert(mainBody->begin() + mainSequenceOffset, initCode->begin(),
+                         initCode->end());
     }
 }
 
@@ -204,12 +206,13 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion)
 
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable)
+                         const TSymbolTable &symbolTable,
+                         unsigned mainSequenceOffset)
 {
     TIntermFunctionDefinition *main = FindMain(root);
     ASSERT(main != nullptr);
     TIntermBlock *body = main->getBody();
-    InsertInitCode(body->getSequence(), vars, symbolTable);
+    InsertInitCode(body->getSequence(), vars, symbolTable, mainSequenceOffset);
 }
 
 }  // namespace sh

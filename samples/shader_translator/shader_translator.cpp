@@ -214,6 +214,10 @@ int main(int argc, char *argv[])
                           resources.OVR_multiview = 1;
                           compileOptions |= SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM;
                           break;
+					  case 'e':
+						  resources.OVR_multiview = 1;
+						  compileOptions |= SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE;
+						  break;
                       case 'y': resources.EXT_YUV_target = 1; break;
                       default: failCode = EFailUsage;
                     }
@@ -325,7 +329,7 @@ void usage()
 {
     // clang-format off
     printf(
-        "Usage: translate [-i -o -u -l -p -b=e -b=g -b=h9 -x=i -x=d] file1 file2 ...\n"
+        "Usage: translate [-i -o -u -l -p -b=e -b=g -b=h9 -x=i -x=d -x=e] file1 file2 ...\n"
         "Where: filename : filename ending in .frag or .vert\n"
         "       -i       : print intermediate tree\n"
         "       -o       : print translated code\n"
@@ -353,7 +357,8 @@ void usage()
         "       -x=n     : enable NV_shader_framebuffer_fetch\n"
         "       -x=a     : enable ARM_shader_framebuffer_fetch\n"
         "       -x=m     : enable OVR_multiview\n"
-        "       -x=y     : enable YUV_target\n");
+        "       -x=y     : enable YUV_target\n"
+		"       -x=e     : create global multiview variables and initializes them\n");
     // clang-format on
 }
 

@@ -100,7 +100,11 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
                            getSymbolTable(), getShaderType(), shaderVer, precisionEmulation,
                            compileOptions);
 
-    if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
+    // TODO(mradev): check that ovr has to be emulated. But maybe it is not needed because it is
+    // valid to have either the uniform or gl_InstanceID in the shader without causing any issues.
+    // The compiler will likely optimize them out.
+    if (getShaderType() == GL_VERTEX_SHADER && hasMultiview() &&
+        compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {
         TName uniformName(TString("ViewID_OVR"));
         uniformName.setInternal(true);
@@ -139,6 +143,12 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
             else if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM &&
                      (iter->first == "GL_OVR_multiview" || iter->first == "GL_OVR_multiview2"))
             {
+                // No output
+                continue;
+            }
+            else if ((iter->first == "GL_OVR_multiview" || iter->first == "GL_OVR_multiview2"))
+            {
+                // TODO (mradev): add an emulate multiview option
                 // No output
                 continue;
             }

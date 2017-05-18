@@ -13,6 +13,7 @@
 #include "compiler/translator/AddAndTrueToLoopCondition.h"
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/CallDAG.h"
+#include "compiler/translator/DeclareAndInitMultiviewVars.h"
 #include "compiler/translator/DeferGlobalInitializers.h"
 #include "compiler/translator/EmulateGLFragColorBroadcast.h"
 #include "compiler/translator/EmulatePrecision.h"
@@ -221,7 +222,9 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
-      mTemporaryIndex(0)
+      mTemporaryIndex(0),
+      mNumViews(-1),
+      mUsesMultiview(false)
 {
     mComputeShaderLocalSize.fill(1);
 }
@@ -323,6 +326,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         mComputeShaderLocalSize         = parseContext.getComputeShaderLocalSize();
 
         mNumViews = parseContext.getNumViews();
+        mUsesMultiview = parseContext.isMultiviewExtensionEnabled();
 
         root = parseContext.getTreeRoot();
 
@@ -406,11 +410,24 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS))
             arrayBoundsClamper.MarkIndirectArrayBoundsForClamping(root);
 
+        // Use this variable as an offset within the main sequence whenever new nodes are added.
+        // This is to preserve relative order whenever necessary.
+        unsigned mainSequenceOffset = 0u;
+
+        if (success && (compileOptions & SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE) &&
+            hasMultiview() && getShaderType() == GL_VERTEX_SHADER)
+        {
+            ASSERT(mainSequenceOffset == 0u);
+            DeclareAndInitMultiviewVars(root, getNumViews());
+            // Everything else must be added after the multiview variable initialization.
+            mainSequenceOffset = 1u;
+        }
+
         // gl_Position is always written in compatibility output mode
         if (success && shaderType == GL_VERTEX_SHADER &&
             ((compileOptions & SH_INIT_GL_POSITION) ||
              (outputType == SH_GLSL_COMPATIBILITY_OUTPUT)))
-            initializeGLPosition(root);
+            initializeGLPosition(root, mainSequenceOffset);
 
         // This pass might emit short circuits so keep it before the short circuit unfolding
         if (success && (compileOptions & SH_REWRITE_DO_WHILE_LOOPS))
@@ -448,7 +465,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             }
             if (success && (compileOptions & SH_INIT_OUTPUT_VARIABLES))
             {
-                initializeOutputVariables(root);
+                initializeOutputVariables(root, mainSequenceOffset);
             }
         }
 
@@ -478,7 +495,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         if (success)
         {
-            DeferGlobalInitializers(root, needToInitializeGlobalsInAST());
+            DeferGlobalInitializers(root, needToInitializeGlobalsInAST(), mainSequenceOffset);
         }
 
         if (success && (compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && getOutputType())
@@ -695,6 +712,7 @@ void TCompiler::clearResults()
     variablesCollected = false;
 
     mNumViews = -1;
+    mUsesMultiview = false;
 
     builtInFunctionEmulator.cleanup();
 
@@ -918,13 +936,13 @@ bool TCompiler::enforcePackingRestrictions()
     return packer.CheckVariablesWithinPackingLimits(maxUniformVectors, expandedUniforms);
 }
 
-void TCompiler::initializeGLPosition(TIntermBlock *root)
+void TCompiler::initializeGLPosition(TIntermBlock *root, unsigned mainSequenceOffset)
 {
     InitVariableList list;
     sh::ShaderVariable var(GL_FLOAT_VEC4, 0);
     var.name = "gl_Position";
     list.push_back(var);
-    InitializeVariables(root, list, symbolTable);
+    InitializeVariables(root, list, symbolTable, mainSequenceOffset);
 }
 
 void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
@@ -943,7 +961,7 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
     sh::UseInterfaceBlockFields(root, list, symbolTable);
 }
 
-void TCompiler::initializeOutputVariables(TIntermBlock *root)
+void TCompiler::initializeOutputVariables(TIntermBlock *root, unsigned mainSequenceOffset)
 {
     InitVariableList list;
     if (shaderType == GL_VERTEX_SHADER)
@@ -961,7 +979,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
-    InitializeVariables(root, list, symbolTable);
+    InitializeVariables(root, list, symbolTable, mainSequenceOffset);
 }
 
 const TExtensionBehavior &TCompiler::getExtensionBehavior() const

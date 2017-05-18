@@ -7,12 +7,64 @@
 //   Test that shaders with gl_ViewID_OVR are validated correctly.
 //
 
-#include "angle_gl.h"
-#include "gtest/gtest.h"
 #include "GLSLANG/ShaderLang.h"
+#include "angle_gl.h"
+#include "compiler/translator/FindMain.h"
+#include "compiler/translator/IntermNode.h"
+#include "gtest/gtest.h"
 #include "tests/test_utils/ShaderCompileTreeTest.h"
 
 using namespace sh;
+
+class OccurrencesCounter : public TIntermTraverser
+{
+  public:
+    OccurrencesCounter() : TIntermTraverser(true, false, false), mNumberOfOccurrences(0u) {}
+
+    void visitSymbol(TIntermSymbol *node) override
+    {
+        if (shouldSymbolBeCounted(node))
+        {
+            ++mNumberOfOccurrences;
+        }
+    }
+
+    virtual bool shouldSymbolBeCounted(const TIntermSymbol *node) const = 0;
+
+    bool isAnythingFound() const { return mNumberOfOccurrences != 0; }
+    unsigned getNumberOfOccurrences() const { return mNumberOfOccurrences; }
+
+  private:
+    unsigned mNumberOfOccurrences;
+};
+
+class OccurrencesCounterByQualifier : public OccurrencesCounter
+{
+  public:
+    OccurrencesCounterByQualifier(TQualifier symbolQualifier) : mSymbolQualifier(symbolQualifier) {}
+
+    bool shouldSymbolBeCounted(const TIntermSymbol *node) const override
+    {
+        return node->getQualifier() == mSymbolQualifier;
+    }
+
+  private:
+    TQualifier mSymbolQualifier;
+};
+
+class OccurrencesCounterByName : public OccurrencesCounter
+{
+  public:
+    OccurrencesCounterByName(const TString &symbolName) : mSymbolName(symbolName) {}
+
+    bool shouldSymbolBeCounted(const TIntermSymbol *node) const override
+    {
+        return node->getName().getString() == mSymbolName;
+    }
+
+  private:
+    TString mSymbolName;
+};
 
 class WEBGLMultiviewVertexShaderTest : public ShaderCompileTreeTest
 {
@@ -516,5 +568,196 @@ TEST_F(WEBGLMultiviewFragmentShaderTest, ESSL1ShaderUnsupportedInStorageQualifie
     if (compile(shaderString))
     {
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_InstanceID gets correctly replaced by gl_InstanceIDImpostor. gl_InstanceID should be
+// only used only twice: once to initialize gl_ViewID_OVR and once for gl_InstanceIDImpostor. The
+// number of occurrences of gl_InstanceIDImpostor in the AST should be the sum of one and the number
+// of occurrences of gl_InstanceID before any renaming.
+TEST_F(WEBGLMultiviewVertexShaderTest, InstanceIDIsRenamed)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "flat out int myInstance;\n"
+        "out float myInstanceF;\n"
+        "out float myInstanceF2;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position.x = gl_ViewID_OVR == 0u ? 0. : 1.;\n"
+        "	 gl_Position.yzw = vec3(0., 0., 1.);\n"
+        "	 myInstance = gl_InstanceID;\n"
+        "	 myInstanceF = float(gl_InstanceID) + .5;\n"
+        "	 myInstanceF2 = float(gl_InstanceID) + .1;\n"
+        "}\n";
+    mExtraCompileOptions |= SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE;
+    compileAssumeSuccess(shaderString);
+
+    OccurrencesCounterByName instanceIDByName("gl_InstanceID");
+    mASTRoot->traverse(&instanceIDByName);
+    EXPECT_EQ(2, instanceIDByName.getNumberOfOccurrences());
+
+    OccurrencesCounterByQualifier instanceIDByQualifier(EvqInstanceID);
+    mASTRoot->traverse(&instanceIDByQualifier);
+    EXPECT_EQ(2, instanceIDByQualifier.getNumberOfOccurrences());
+
+    OccurrencesCounterByName instanceIDImpostorFinder("gl_InstanceIDImpostor");
+    mASTRoot->traverse(&instanceIDImpostorFinder);
+    EXPECT_EQ(5, instanceIDImpostorFinder.getNumberOfOccurrences());
+}
+
+// The test check that gl_ViewID_OVR and gl_InstanceIDImpostor are the first to be initialized
+// inside the body of the main function.
+TEST_F(WEBGLMultiviewVertexShaderTest, ViewIDAndInstanceIDDeferredFirst)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "flat out int myInstance;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position.x = gl_ViewID_OVR == 0u ? 0. : 1.;\n"
+        "	 gl_Position.yzw = vec3(0., 0., 1.);\n"
+        "	 myInstance = gl_InstanceID;\n"
+        "}\n";
+    mExtraCompileOptions |= SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE;
+    compileAssumeSuccess(shaderString);
+
+    TIntermFunctionDefinition *main = FindMain(mASTRoot);
+    ASSERT_TRUE(main != nullptr);
+    TIntermBlock *mainBody = main->getBody();
+    ASSERT_TRUE(mainBody != nullptr);
+
+    const TIntermBlock *initializationBlock = (*mainBody->getSequence())[0]->getAsBlock();
+    ASSERT_TRUE(initializationBlock != nullptr);
+
+    const TIntermSequence &initializationSequence = *initializationBlock->getSequence();
+    ASSERT_TRUE(initializationSequence.size() >= 2u);
+
+    const TIntermBinary *viewIDInitialization = initializationSequence[0]->getAsBinaryNode();
+    ASSERT_TRUE(viewIDInitialization != nullptr);
+
+    const TIntermSymbol *viewIDInitializationLeft =
+        viewIDInitialization->getLeft()->getAsSymbolNode();
+    ASSERT_TRUE(viewIDInitializationLeft != nullptr);
+
+    EXPECT_EQ(viewIDInitializationLeft->getName().getString(), "gl_ViewID_OVR");
+
+    TIntermBinary *instanceIDImpostorInitialization = initializationSequence[1]->getAsBinaryNode();
+    ASSERT_TRUE(instanceIDImpostorInitialization != nullptr);
+
+    const TIntermSymbol *instanceIDImpostorInitializationLeft =
+        instanceIDImpostorInitialization->getLeft()->getAsSymbolNode();
+    ASSERT_TRUE(instanceIDImpostorInitializationLeft != nullptr);
+
+    EXPECT_EQ(instanceIDImpostorInitializationLeft->getName().getString(), "gl_InstanceIDImpostor");
+}
+
+// The test check that gl_ViewID_OVR and gl_InstanceIDImpostor have the correct values based on the
+// number of views.
+TEST_F(WEBGLMultiviewVertexShaderTest, ViewIDAndInstanceIDHaveCorrectValues)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 3) in;\n"
+        "flat out int myInstance;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position.x = gl_ViewID_OVR == 0u ? 0. : 1.;\n"
+        "	 gl_Position.yzw = vec3(0., 0., 1.);\n"
+        "	 myInstance = gl_InstanceID;\n"
+        "}\n";
+    mExtraCompileOptions |= SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE;
+    compileAssumeSuccess(shaderString);
+
+    TIntermFunctionDefinition *main = FindMain(mASTRoot);
+    ASSERT_TRUE(main != nullptr);
+    TIntermBlock *mainBody = main->getBody();
+    ASSERT_TRUE(mainBody != nullptr);
+
+    const TIntermBlock *initializationBlock = (*mainBody->getSequence())[0]->getAsBlock();
+    ASSERT_TRUE(initializationBlock != nullptr);
+
+    // Should contain two expressions.
+    const TIntermSequence &initializationSequence = *initializationBlock->getSequence();
+    EXPECT_EQ(2u, initializationSequence.size());
+
+    {
+        // Check for the expression gl_ViewID_OVR = uint(gl_InstanceID) % 3u.
+        const TIntermBinary *viewIDInitialization = initializationSequence[0]->getAsBinaryNode();
+        ASSERT_TRUE(viewIDInitialization != nullptr);
+
+        // Check that the binary operator is assignment.
+        EXPECT_EQ(EOpAssign, viewIDInitialization->getOp());
+
+        // Check name of lvalue on the left side.
+        const TIntermSymbol *viewIDInitializationLeft =
+            viewIDInitialization->getLeft()->getAsSymbolNode();
+        ASSERT_TRUE(viewIDInitializationLeft != nullptr);
+        EXPECT_EQ("gl_ViewID_OVR", viewIDInitializationLeft->getName().getString());
+
+        // Check right side of the expression.
+        const TIntermBinary *viewIDInitializationExpression =
+            viewIDInitialization->getRight()->getAsBinaryNode();
+        ASSERT_TRUE(viewIDInitializationExpression != nullptr);
+
+        // Check that modulus is the applied operator.
+        EXPECT_EQ(EOpIMod, viewIDInitializationExpression->getOp());
+
+        // Check that the expression is uint(gl_InstanceID).
+        const TIntermAggregate *leftArgumentInExpression =
+            viewIDInitializationExpression->getLeft()->getAsAggregate();
+        ASSERT_TRUE(leftArgumentInExpression != nullptr);
+        EXPECT_EQ(EbtUInt, leftArgumentInExpression->getBasicType());
+        EXPECT_EQ(1u, leftArgumentInExpression->getSequence()->size());
+        const TIntermSymbol *uintArgument =
+            (*leftArgumentInExpression->getSequence())[0]->getAsSymbolNode();
+        EXPECT_EQ(EvqInstanceID, uintArgument->getQualifier());
+
+        // Check that the expression is an unsigned integer with value 3u.
+        const TIntermConstantUnion *rightArgumentInExpression =
+            viewIDInitializationExpression->getRight()->getAsConstantUnion();
+        ASSERT_TRUE(rightArgumentInExpression != nullptr);
+        EXPECT_EQ(EbtUInt, rightArgumentInExpression->getBasicType());
+        EXPECT_EQ(3u, rightArgumentInExpression->getUConst(0));
+    }
+
+    {
+        // Check that the expression is gl_InstanceIDImpostor = gl_InstanceID / 3.
+        TIntermBinary *instanceIDImpostorInitialization =
+            initializationSequence[1]->getAsBinaryNode();
+        ASSERT_TRUE(instanceIDImpostorInitialization != nullptr);
+
+        // Check that the binary operator is assignment.
+        EXPECT_EQ(EOpAssign, instanceIDImpostorInitialization->getOp());
+
+        // Check name of lvalue on left side.
+        const TIntermSymbol *instanceIDImpostorInitializationLeft =
+            instanceIDImpostorInitialization->getLeft()->getAsSymbolNode();
+        ASSERT_TRUE(instanceIDImpostorInitializationLeft != nullptr);
+        EXPECT_EQ("gl_InstanceIDImpostor",
+                  instanceIDImpostorInitializationLeft->getName().getString());
+
+        const TIntermBinary *instanceIDImpostorInitializationRight =
+            instanceIDImpostorInitialization->getRight()->getAsBinaryNode();
+        ASSERT_TRUE(instanceIDImpostorInitializationRight != nullptr);
+
+        // Check that the applied operator is /.
+        EXPECT_EQ(EOpDiv, instanceIDImpostorInitializationRight->getOp());
+
+        const TIntermSymbol *leftArgumentInExpression =
+            instanceIDImpostorInitializationRight->getLeft()->getAsSymbolNode();
+        ASSERT_TRUE(leftArgumentInExpression != nullptr);
+        EXPECT_EQ(EvqInstanceID, leftArgumentInExpression->getQualifier());
+
+        const TIntermConstantUnion *rightArgumentInExpression =
+            instanceIDImpostorInitializationRight->getRight()->getAsConstantUnion();
+        ASSERT_TRUE(rightArgumentInExpression != nullptr);
+        EXPECT_EQ(3, rightArgumentInExpression->getIConst(0));
+        EXPECT_EQ(EbtInt, rightArgumentInExpression->getBasicType());
     }
 }

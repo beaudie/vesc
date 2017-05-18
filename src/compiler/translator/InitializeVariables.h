@@ -32,7 +32,8 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion);
 //   2. initializing ESSL 3.00 shaders' output variables.
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable);
+                         const TSymbolTable &symbolTable,
+                         unsigned mainSequenceOffset);
 
 }  // namespace sh
 
