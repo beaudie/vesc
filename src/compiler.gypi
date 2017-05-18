@@ -39,6 +39,8 @@
             'compiler/translator/Compiler.h',
             'compiler/translator/ConstantUnion.cpp',
             'compiler/translator/ConstantUnion.h',
+            'compiler/translator/DeclareAndInitBuiltInsForInstancedMultiview.h',
+            'compiler/translator/DeclareAndInitBuiltInsForInstancedMultiview.cpp',
             'compiler/translator/DeferGlobalInitializers.cpp',
             'compiler/translator/DeferGlobalInitializers.h',
             'compiler/translator/Diagnostics.cpp',
