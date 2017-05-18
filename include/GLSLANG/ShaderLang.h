@@ -222,6 +222,13 @@ const ShCompileOptions SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM = UINT64_C(1) << 31;
 // output variables are initialized regardless of if this flag is set.
 const ShCompileOptions SH_INITIALIZE_UNINITIALIZED_LOCALS = UINT64_C(1) << 32;
 
+// The flag supports the multiview workaround implementation by modifying the AST in the following
+// way:
+// Every occurrence of gl_InstanceID is replaced by gl_InstanceIDImpostor. Declarations for
+// gl_InstanceIDImpostor and gl_ViewID_OVR are added at the beginning of the AST in global scope.
+// Initializers for gl_InstanceIDImpostor and gl_ViewID_OVR are added at the beginning of main().
+const ShCompileOptions SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE = UINT64_C(1) << 33;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {

@@ -85,6 +85,13 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
         {
             TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
             ASSERT(symbolNode);
+
+            // A previous AST pass could include global variable with the "gl_" prefix to emulate a
+            // built-in and initialize it. We do not want to defer its initialization in this pass,
+            // because the responsibility to initialize it is of the pass which added it.
+            if (symbolNode->getSymbol().compare(0, 3, "gl_") == 0)
+                continue;
+
             if (symbolNode->getQualifier() == EvqGlobal && symbolNode->getSymbol() != "")
             {
                 TIntermSequence *initCode = CreateInitCode(symbolNode);
@@ -95,7 +102,9 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
     }
 }
 
-void InsertInitCodeToMain(TIntermBlock *root, TIntermSequence *deferredInitializers)
+void InsertInitCodeToMain(TIntermBlock *root,
+                          TIntermSequence *deferredInitializers,
+                          unsigned mainSequenceOffset)
 {
     // Insert init code as a block to the beginning of the main() function.
     TIntermBlock *initGlobalsBlock = new TIntermBlock();
@@ -105,12 +114,16 @@ void InsertInitCodeToMain(TIntermBlock *root, TIntermSequence *deferredInitializ
     ASSERT(main != nullptr);
     TIntermBlock *mainBody = main->getBody();
     ASSERT(mainBody != nullptr);
-    mainBody->getSequence()->insert(mainBody->getSequence()->begin(), initGlobalsBlock);
+
+    TIntermSequence *mainSequence = mainBody->getSequence();
+    mainSequence->insert(mainSequence->begin() + mainSequenceOffset, initGlobalsBlock);
 }
 
 }  // namespace
 
-void DeferGlobalInitializers(TIntermBlock *root, bool initializeUninitializedGlobals)
+void DeferGlobalInitializers(TIntermBlock *root,
+                             bool initializeUninitializedGlobals,
+                             unsigned mainSequenceOffset)
 {
     TIntermSequence *deferredInitializers = new TIntermSequence();
 
@@ -129,7 +142,7 @@ void DeferGlobalInitializers(TIntermBlock *root, bool initializeUninitializedGlo
     // Add the function with initialization and the call to that.
     if (!deferredInitializers->empty())
     {
-        InsertInitCodeToMain(root, deferredInitializers);
+        InsertInitCodeToMain(root, deferredInitializers, mainSequenceOffset);
     }
 }
 

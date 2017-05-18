@@ -93,6 +93,7 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mFragDepthAdded(false),
       mSecondaryFragColorEXTAdded(false),
       mSecondaryFragDataEXTAdded(false),
+      mViewIDAdded(false),
       mHashFunction(hashFunction),
       mSymbolTable(symbolTable),
       mExtensionBehavior(extensionBehavior)
@@ -295,6 +296,22 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                     info.isInvariant   = mSymbolTable.isVaryingInvariant(kName);
                     mVaryings->push_back(info);
                     mPositionAdded = true;
+                }
+                return;
+            case EvqViewIDOVR:
+                if (!mViewIDAdded)
+                {
+                    Attribute info;
+                    const char kName[] = "gl_ViewID_OVR";
+                    info.name          = kName;
+                    info.mappedName    = kName;
+                    info.type          = GL_INT;
+                    info.arraySize     = 0;
+                    info.precision     = GL_HIGH_INT;
+                    info.staticUse     = true;
+                    info.location      = -1;
+                    mAttribs->push_back(info);
+                    mViewIDAdded = true;
                 }
                 return;
             case EvqPointSize:
