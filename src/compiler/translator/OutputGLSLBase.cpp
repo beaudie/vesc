@@ -1169,14 +1169,23 @@ TString TOutputGLSLBase::hashVariableName(const TName &name)
 {
     if (mSymbolTable.findBuiltIn(name.getString(), mShaderVersion) != nullptr)
     {
-        if (mCompileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM &&
-            name.getString() == "gl_ViewID_OVR")
+        const bool isViewIDEmulated =
+            (mCompileOptions & (SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM |
+                                SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE)) != 0;
+        if (name.getString() == "gl_ViewID_OVR" && isViewIDEmulated)
         {
-            TName uniformName(TString("ViewID_OVR"));
-            uniformName.setInternal(true);
-            return hashName(uniformName);
+            TName viewIdEmulatedVar(TString("ViewID_OVR"));
+            viewIdEmulatedVar.setInternal(true);
+            return hashName(viewIdEmulatedVar);
         }
         return name.getString();
+    }
+    else if ((mCompileOptions & SH_MAKE_MULTIVIEW_VARS_GLOBAL_VARS_AND_INITIALIZE) != 0 &&
+             name.getString() == "gl_InstanceIDImpostor")
+    {
+        TName instanceIDEmulatedVar(TString("InstanceIDImpostor"));
+        instanceIDEmulatedVar.setInternal(true);
+        return hashName(instanceIDEmulatedVar);
     }
     return hashName(name);
 }

@@ -156,6 +156,7 @@ class TIntermTyped : public TIntermNode
     void setType(const TType &t) { mType = t; }
     void setTypePreservePrecision(const TType &t);
     const TType &getType() const { return mType; }
+    TType &getType() { return mType; }
     TType *getTypePointer() { return &mType; }
 
     TBasicType getBasicType() const { return mType.getBasicType(); }
@@ -272,6 +273,7 @@ class TIntermSymbol : public TIntermTyped
     int getId() const { return mId; }
     const TString &getSymbol() const { return mSymbol.getString(); }
     const TName &getName() const { return mSymbol; }
+    TName &getName() { return mSymbol; }
 
     void setId(int newId) { mId = newId; }
 

@@ -103,6 +103,7 @@ class TCompiler : public TShHandleBase
     bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
     int getNumViews() const { return mNumViews; }
+    bool hasMultiview() const { return mUsesMultiview; }
 
     // Clears the results from the previous compilation.
     void clearResults();
@@ -145,14 +146,14 @@ class TCompiler : public TShHandleBase
     // layout. This is to work around a Mac driver that treats unused standard/shared
     // uniform blocks as inactive.
     void useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root);
-    // Insert statements to initialize output variables in the beginning of main().
-    // This is to avoid undefined behaviors.
-    void initializeOutputVariables(TIntermBlock *root);
-    // Insert gl_Position = vec4(0,0,0,0) to the beginning of main().
-    // It is to work around a Linux driver bug where missing this causes compile failure
-    // while spec says it is allowed.
-    // This function should only be applied to vertex shaders.
-    void initializeGLPosition(TIntermBlock *root);
+    // Insert statements to initialize output variables at a given offset within the node sequence
+    // of main(). This is to avoid undefined behaviors.
+    void initializeOutputVariables(TIntermBlock *root, unsigned mainSequenceOffset);
+    // Insert gl_Position = vec4(0,0,0,0) at the offset provided by mainSequenceOFfset within the
+    // node sequence of main(). It is to work around a Linux driver bug where missing this causes
+    // compile failure while spec says it is allowed. This function should only be applied to vertex
+    // shaders.
+    void initializeGLPosition(TIntermBlock *root, unsigned mainSequenceOFfset);
     // Return true if the maximum expression complexity is below the limit.
     bool limitExpressionComplexity(TIntermBlock *root);
     // Get built-in extensions with default behavior.
@@ -246,6 +247,7 @@ class TCompiler : public TShHandleBase
 
     // GL_OVR_multiview num_views.
     int mNumViews;
+    bool mUsesMultiview;
 
     // name hashing.
     ShHashFunction64 hashFunction;
