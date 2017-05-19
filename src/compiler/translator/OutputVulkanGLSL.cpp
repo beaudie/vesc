@@ -30,6 +30,7 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
                       symbolTable,
                       shaderType,
                       shaderVersion,
+                      false,
                       output,
                       compileOptions)
 {

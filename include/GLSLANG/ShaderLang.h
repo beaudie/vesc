@@ -222,6 +222,11 @@ const ShCompileOptions SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM = UINT64_C(1) << 31;
 // output variables are initialized regardless of if this flag is set.
 const ShCompileOptions SH_INITIALIZE_UNINITIALIZED_LOCALS = UINT64_C(1) << 32;
 
+// Set to prepend distinct prefixes to the vertex outputs and the fragment inputs whwnever multiview
+// is in use. The operation is necessary to avoid name collisions in a stage added between vertex
+// and fragment shader stages.
+const ShCompileOptions SH_PREFIX_VARYINGS_IF_MULTIVIEW_IS_ON = UINT64_C(1) << 33;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {

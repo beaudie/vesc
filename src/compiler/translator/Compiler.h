@@ -103,6 +103,7 @@ class TCompiler : public TShHandleBase
     bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
     int getNumViews() const { return mNumViews; }
+    bool hasMultiview() const { return mUsesMultiview; }
 
     // Clears the results from the previous compilation.
     void clearResults();
@@ -246,6 +247,7 @@ class TCompiler : public TShHandleBase
 
     // GL_OVR_multiview num_views.
     int mNumViews;
+    bool mUsesMultiview;
 
     // name hashing.
     ShHashFunction64 hashFunction;
