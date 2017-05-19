@@ -2908,6 +2908,52 @@ TEST_P(GLSLTest_ES3, UninitializedNamelessStructInForInitStatement)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that uninitialized global variables are initialized to 0.
+TEST_P(GLSLTest, InitUninitializedGlobals)
+{
+    const std::string &fragmentShader =
+        "precision mediump float;\n"
+        "int result;\n"
+        "int i[2], j = i[0] + 1;\n"
+        "void main()\n"
+        "{\n"
+        "    result += j;\n"
+        "    if (result == 1)\n"
+        "    {\n"
+        "        gl_FragColor = vec4(0, 1, 0, 1);\n"
+        "    }\n"
+        "    else\n"
+        "    {\n"
+        "        gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that an uninitialized nameless struct in the global scope works.
+TEST_P(GLSLTest_ES3, UninitializedNamelessStructInGlobalScope)
+{
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "struct { float q; } b;\n"
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(1, 0, 0, 1);\n"
+        "    if (b.q == 0.0) {\n"
+        "        my_FragColor = vec4(0, 1, 0, 1);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
