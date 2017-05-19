@@ -221,7 +221,9 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
-      mTemporaryIndex(0)
+      mTemporaryIndex(0),
+      mNumViews(-1),
+      mUsesMultiview(false)
 {
     mComputeShaderLocalSize.fill(1);
 }
@@ -323,6 +325,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         mComputeShaderLocalSize         = parseContext.getComputeShaderLocalSize();
 
         mNumViews = parseContext.getNumViews();
+        mUsesMultiview = parseContext.isMultiviewExtensionEnabled();
 
         root = parseContext.getTreeRoot();
 
@@ -705,6 +708,7 @@ void TCompiler::clearResults()
     variablesCollected = false;
 
     mNumViews = -1;
+    mUsesMultiview = false;
 
     builtInFunctionEmulator.cleanup();
 

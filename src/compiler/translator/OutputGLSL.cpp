@@ -5,6 +5,7 @@
 //
 
 #include "compiler/translator/OutputGLSL.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -16,6 +17,7 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                          TSymbolTable &symbolTable,
                          sh::GLenum shaderType,
                          int shaderVersion,
+                         bool usesMultiview,
                          ShShaderOutput output,
                          ShCompileOptions compileOptions)
     : TOutputGLSLBase(objSink,
@@ -25,6 +27,7 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                       symbolTable,
                       shaderType,
                       shaderVersion,
+                      usesMultiview,
                       output,
                       compileOptions)
 {
@@ -38,7 +41,6 @@ bool TOutputGLSL::writeVariablePrecision(TPrecision)
 void TOutputGLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-
     const TString &symbol = node->getSymbol();
     if (symbol == "gl_FragDepthEXT")
     {
@@ -59,6 +61,16 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
     else if (symbol == "gl_SecondaryFragDataEXT")
     {
         out << "angle_SecondaryFragData";
+    }
+    else if (mUsesMultiview && symbol.compare(0, 3, "gl_") != 0 &&
+             getShaderType() == GL_VERTEX_SHADER && IsVaryingOut(node->getType().getQualifier()))
+    {
+        out << "angle_vert_output_" << symbol;
+    }
+    else if (mUsesMultiview && symbol.compare(0, 3, "gl_") != 0 &&
+             getShaderType() == GL_FRAGMENT_SHADER && IsVaryingIn(node->getType().getQualifier()))
+    {
+        out << "angle_frag_input_" << symbol;
     }
     else
     {

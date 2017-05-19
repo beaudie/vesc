@@ -25,6 +25,7 @@ class TOutputGLSLBase : public TIntermTraverser
                     TSymbolTable &symbolTable,
                     sh::GLenum shaderType,
                     int shaderVersion,
+                    bool usesMultiview,
                     ShShaderOutput output,
                     ShCompileOptions compileOptions);
 
@@ -47,6 +48,7 @@ class TOutputGLSLBase : public TIntermTraverser
     const TConstantUnion *writeConstantUnion(const TType &type, const TConstantUnion *pConstUnion);
     void writeConstructorTriplet(Visit visit, const TType &type);
     TString getTypeName(const TType &type);
+    sh::GLenum getShaderType() const { return mShaderType; }
 
     void visitSymbol(TIntermSymbol *node) override;
     void visitConstantUnion(TIntermConstantUnion *node) override;
@@ -74,6 +76,9 @@ class TOutputGLSLBase : public TIntermTraverser
     TString hashFunctionNameIfNeeded(const TFunctionSymbolInfo &info);
     // Used to translate function names for differences between ESSL and GLSL
     virtual TString translateTextureFunction(const TString &name) { return name; }
+
+  protected:
+    bool mUsesMultiview;
 
   private:
     bool structDeclared(const TStructure *structure) const;

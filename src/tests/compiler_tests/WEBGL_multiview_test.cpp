@@ -7,10 +7,11 @@
 //   Test that shaders with gl_ViewID_OVR are validated correctly.
 //
 
+#include "GLSLANG/ShaderLang.h"
 #include "angle_gl.h"
 #include "gtest/gtest.h"
-#include "GLSLANG/ShaderLang.h"
 #include "tests/test_utils/ShaderCompileTreeTest.h"
+#include "tests/test_utils/compiler_test.h"
 
 using namespace sh;
 
@@ -39,6 +40,31 @@ class WEBGLMultiviewFragmentShaderTest : public ShaderCompileTreeTest
     {
         resources->OVR_multiview = 1;
         resources->MaxViewsOVR   = 4;
+    }
+};
+
+class MultiviewTranslatorVertexShaderTest : public MatchOutputCodeTest
+{
+  public:
+    MultiviewTranslatorVertexShaderTest() : MatchOutputCodeTest(GL_VERTEX_SHADER, 0, SH_ESSL_OUTPUT)
+    {
+        getResources()->OVR_multiview = 1;
+        getResources()->MaxViewsOVR   = 4;
+
+        addOutputType(SH_GLSL_410_CORE_OUTPUT);
+    }
+};
+
+class MultiviewTranslatorFragmentShaderTest : public MatchOutputCodeTest
+{
+  public:
+    MultiviewTranslatorFragmentShaderTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_OUTPUT)
+    {
+        getResources()->OVR_multiview = 1;
+        getResources()->MaxViewsOVR   = 4;
+
+        addOutputType(SH_GLSL_410_CORE_OUTPUT);
     }
 };
 
@@ -517,4 +543,55 @@ TEST_F(WEBGLMultiviewFragmentShaderTest, ESSL1ShaderUnsupportedInStorageQualifie
     {
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
+}
+
+// Test that the output variable names from a vertex shader are renamed if OVR_multiview is enabled.
+TEST_F(MultiviewTranslatorVertexShaderTest, VertexShaderOutputVariableNames)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "struct MyStruct {\n"
+        "	vec4 a;\n"
+        "	vec3 b;\n"
+        "};\n"
+        "out MyStruct myStructData;\n"
+        "out float out_f;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(gl_ViewID_OVR == 0u ? 0. : 1., 0., 0., 1.);\n"
+        "    out_f = 2.;\n"
+        "	 myStructData.a = vec4(.0);\n"
+        "	 myStructData.b = vec3(1.);\n"
+        "}\n";
+    compile(shaderString);
+
+    EXPECT_TRUE(foundInCode("angle_vert_output_myStructData"));
+    EXPECT_TRUE(foundInCode("angle_vert_output_out_f"));
+    EXPECT_FALSE(foundInCode("angle_vert_output_gl_Position"));
+}
+
+// Test that the input variable names to a fragment shader are renamed if OVR_multiview is enabled.
+TEST_F(MultiviewTranslatorFragmentShaderTest, FragmentShaderInputVariableNames)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "struct MyStruct {\n"
+        "	vec4 a;\n"
+        "	vec3 b;\n"
+        "};\n"
+        "in MyStruct myStructData;\n"
+        "in float out_f;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    color = myStructData.a + myStructData.b.rgbb + vec4(out_f);\n"
+        "}\n";
+    compile(shaderString);
+
+    EXPECT_TRUE(foundInCode("angle_frag_input_myStructData"));
+    EXPECT_TRUE(foundInCode("angle_frag_input_out_f"));
 }

@@ -22,6 +22,7 @@ class TOutputGLSL : public TOutputGLSLBase
                 TSymbolTable &symbolTable,
                 sh::GLenum shaderType,
                 int shaderVersion,
+                bool usesMultiview,
                 ShShaderOutput output,
                 ShCompileOptions compileOptions);
 

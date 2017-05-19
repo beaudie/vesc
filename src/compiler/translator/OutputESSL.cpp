@@ -5,6 +5,7 @@
 //
 
 #include "compiler/translator/OutputESSL.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -16,6 +17,7 @@ TOutputESSL::TOutputESSL(TInfoSinkBase &objSink,
                          TSymbolTable &symbolTable,
                          sh::GLenum shaderType,
                          int shaderVersion,
+                         bool usesMultiview,
                          bool forceHighp,
                          ShCompileOptions compileOptions)
     : TOutputGLSLBase(objSink,
@@ -25,6 +27,7 @@ TOutputESSL::TOutputESSL(TInfoSinkBase &objSink,
                       symbolTable,
                       shaderType,
                       shaderVersion,
+                      usesMultiview,
                       SH_ESSL_OUTPUT,
                       compileOptions),
       mForceHighp(forceHighp)
@@ -42,6 +45,28 @@ bool TOutputESSL::writeVariablePrecision(TPrecision precision)
     else
         out << getPrecisionString(precision);
     return true;
+}
+
+void TOutputESSL::visitSymbol(TIntermSymbol *node)
+{
+    TInfoSinkBase &out    = objSink();
+    const TString &symbol = node->getSymbol();
+
+    const bool isGLBuiltin = symbol.compare(0, 3, "gl_") != 0;
+    if (mUsesMultiview && isGLBuiltin && getShaderType() == GL_VERTEX_SHADER &&
+        IsVaryingOut(node->getType().getQualifier()))
+    {
+        out << "angle_vert_output_" << symbol;
+    }
+    else if (mUsesMultiview && isGLBuiltin && getShaderType() == GL_FRAGMENT_SHADER &&
+             IsVaryingIn(node->getType().getQualifier()))
+    {
+        out << "angle_frag_input_" << symbol;
+    }
+    else
+    {
+        TOutputGLSLBase::visitSymbol(node);
+    }
 }
 
 }  // namespace sh

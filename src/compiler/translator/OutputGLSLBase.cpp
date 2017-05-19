@@ -123,6 +123,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
                                  TSymbolTable &symbolTable,
                                  sh::GLenum shaderType,
                                  int shaderVersion,
+                                 bool usesMultiview,
                                  ShShaderOutput output,
                                  ShCompileOptions compileOptions)
     : TIntermTraverser(true, true, true),
@@ -134,6 +135,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
       mSymbolTable(symbolTable),
       mShaderType(shaderType),
       mShaderVersion(shaderVersion),
+      mUsesMultiview(usesMultiview),
       mOutput(output),
       mCompileOptions(compileOptions)
 {

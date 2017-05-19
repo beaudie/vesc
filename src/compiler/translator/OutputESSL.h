@@ -22,11 +22,13 @@ class TOutputESSL : public TOutputGLSLBase
                 TSymbolTable &symbolTable,
                 sh::GLenum shaderType,
                 int shaderVersion,
+                bool usesMultiview,
                 bool forceHighp,
                 ShCompileOptions compileOptions);
 
   protected:
     bool writeVariablePrecision(TPrecision precision) override;
+    void visitSymbol(TIntermSymbol *node) override;
 
   private:
     bool mForceHighp;
