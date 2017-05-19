@@ -202,8 +202,8 @@ void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
 
     // Write translated shader.
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
-                           getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
-                           compileOptions);
+                           getSymbolTable(), getShaderType(), getShaderVersion(), hasMultiview(),
+                           getOutputType(), compileOptions);
 
     if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {

@@ -97,8 +97,8 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
 
     // Write translated shader.
     TOutputESSL outputESSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
-                           getSymbolTable(), getShaderType(), shaderVer, precisionEmulation,
-                           compileOptions);
+                           getSymbolTable(), getShaderType(), shaderVer, hasMultiview(),
+                           precisionEmulation, compileOptions);
 
     if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {

@@ -5,6 +5,7 @@
 //
 
 #include "compiler/translator/OutputGLSLBase.h"
+#include "compiler/translator/util.h"
 
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -123,6 +124,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
                                  TSymbolTable &symbolTable,
                                  sh::GLenum shaderType,
                                  int shaderVersion,
+                                 bool usesMultiview,
                                  ShShaderOutput output,
                                  ShCompileOptions compileOptions)
     : TIntermTraverser(true, true, true),
@@ -134,6 +136,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
       mSymbolTable(symbolTable),
       mShaderType(shaderType),
       mShaderVersion(shaderVersion),
+      mUsesMultiview(usesMultiview),
       mOutput(output),
       mCompileOptions(compileOptions)
 {
@@ -467,10 +470,26 @@ void TOutputGLSLBase::writeConstructorTriplet(Visit visit, const TType &type)
 void TOutputGLSLBase::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-    out << hashVariableName(node->getName());
+    const TString &symbol = node->getSymbol();
 
-    if (mDeclaringVariables && node->getType().isArray())
-        out << arrayBrackets(node->getType());
+    const bool isNotGLBuiltin = symbol.compare(0, 3, "gl_") != 0;
+    if (mUsesMultiview && isNotGLBuiltin && mShaderType == GL_VERTEX_SHADER &&
+        IsVaryingOut(node->getType().getQualifier()))
+    {
+        out << "angle_vert_output_" << symbol;
+    }
+    else if (mUsesMultiview && symbol.compare(0, 3, "gl_") != 0 &&
+             mShaderType == GL_FRAGMENT_SHADER && IsVaryingIn(node->getType().getQualifier()))
+    {
+        out << "angle_frag_input_" << symbol;
+    }
+    else
+    {
+        out << hashVariableName(node->getName());
+
+        if (mDeclaringVariables && node->getType().isArray())
+            out << arrayBrackets(node->getType());
+    }
 }
 
 void TOutputGLSLBase::visitConstantUnion(TIntermConstantUnion *node)

@@ -25,6 +25,7 @@ class TOutputGLSLBase : public TIntermTraverser
                     TSymbolTable &symbolTable,
                     sh::GLenum shaderType,
                     int shaderVersion,
+                    bool usesMultiview,
                     ShShaderOutput output,
                     ShCompileOptions compileOptions);
 
@@ -74,6 +75,9 @@ class TOutputGLSLBase : public TIntermTraverser
     TString hashFunctionNameIfNeeded(const TFunctionSymbolInfo &info);
     // Used to translate function names for differences between ESSL and GLSL
     virtual TString translateTextureFunction(const TString &name) { return name; }
+
+  protected:
+    bool mUsesMultiview;
 
   private:
     bool structDeclared(const TStructure *structure) const;
