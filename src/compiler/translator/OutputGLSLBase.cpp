@@ -5,6 +5,7 @@
 //
 
 #include "compiler/translator/OutputGLSLBase.h"
+#include "compiler/translator/util.h"
 
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -123,6 +124,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
                                  TSymbolTable &symbolTable,
                                  sh::GLenum shaderType,
                                  int shaderVersion,
+                                 bool usesMultiview,
                                  ShShaderOutput output,
                                  ShCompileOptions compileOptions)
     : TIntermTraverser(true, true, true),
@@ -134,6 +136,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
       mSymbolTable(symbolTable),
       mShaderType(shaderType),
       mShaderVersion(shaderVersion),
+      mUsesMultiview(usesMultiview),
       mOutput(output),
       mCompileOptions(compileOptions)
 {
@@ -467,10 +470,25 @@ void TOutputGLSLBase::writeConstructorTriplet(Visit visit, const TType &type)
 void TOutputGLSLBase::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-    out << hashVariableName(node->getName());
 
+    if (mCompileOptions & SH_PREFIX_VARYINGS_IF_MULTIVIEW_IS_ON)
+    {
+        const bool isGLBuiltin = node->getSymbol().compare(0, 3, "gl_") == 0;
+        if (mUsesMultiview && !isGLBuiltin && IsVaryingOut(node->getType().getQualifier()))
+        {
+            out << "webgl_angle_vert_output_";
+        }
+        else if (mUsesMultiview && !isGLBuiltin && IsVaryingIn(node->getType().getQualifier()))
+        {
+            out << "webgl_angle_frag_input_";
+        }
+    }
+
+    out << hashVariableName(node->getName());
     if (mDeclaringVariables && node->getType().isArray())
+    {
         out << arrayBrackets(node->getType());
+    }
 }
 
 void TOutputGLSLBase::visitConstantUnion(TIntermConstantUnion *node)

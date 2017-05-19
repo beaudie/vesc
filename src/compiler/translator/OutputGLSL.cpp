@@ -16,6 +16,7 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                          TSymbolTable &symbolTable,
                          sh::GLenum shaderType,
                          int shaderVersion,
+                         bool usesMultiview,
                          ShShaderOutput output,
                          ShCompileOptions compileOptions)
     : TOutputGLSLBase(objSink,
@@ -25,6 +26,7 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                       symbolTable,
                       shaderType,
                       shaderVersion,
+                      usesMultiview,
                       output,
                       compileOptions)
 {
@@ -38,7 +40,6 @@ bool TOutputGLSL::writeVariablePrecision(TPrecision)
 void TOutputGLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-
     const TString &symbol = node->getSymbol();
     if (symbol == "gl_FragDepthEXT")
     {
