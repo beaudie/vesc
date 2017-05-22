@@ -709,42 +709,79 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
   protected:
     VertexAttributeTestES31() {}
 
-    void drawArraysWithStrideAndOffset(GLint stride, GLsizeiptr offset)
+    void initTest()
     {
-        GLint floatStride      = stride ? (stride / TypeStride(GL_FLOAT)) : 1;
-        GLsizeiptr floatOffset = offset / TypeStride(GL_FLOAT);
-
-        size_t floatCount    = static_cast<size_t>(floatOffset) + kVertexCount * floatStride;
-        GLsizeiptr inputSize = static_cast<GLsizeiptr>(floatCount) * TypeStride(GL_FLOAT);
-
         initBasicProgram();
         glUseProgram(mProgram);
 
-        std::vector<GLfloat> inputData(floatCount);
-        std::array<GLfloat, kVertexCount> expectedData;
-
-        for (size_t count = 0; count < kVertexCount; ++count)
-        {
-            inputData[floatOffset + count * floatStride] = static_cast<GLfloat>(count);
-            expectedData[count]                          = static_cast<GLfloat>(count);
-        }
+        glGenVertexArrays(1, &mVAO);
+        glBindVertexArray(mVAO);
 
         auto quadVertices = GetQuadVertices();
         GLsizeiptr quadVerticesSize =
             static_cast<GLsizeiptr>(quadVertices.size() * sizeof(quadVertices[0]));
         glGenBuffers(1, &mQuadBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mQuadBuffer);
-        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, nullptr, GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, quadVerticesSize, quadVertices.data());
+        glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, quadVertices.data(), GL_STATIC_DRAW);
+        mPositionLocation = glGetAttribLocation(mProgram, "position");
+        ASSERT_NE(-1, mPositionLocation);
+        glVertexAttribPointer(mPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glEnableVertexAttribArray(mPositionLocation);
 
-        GLint positionLocation = glGetAttribLocation(mProgram, "position");
-        ASSERT_NE(-1, positionLocation);
-        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-        glEnableVertexAttribArray(positionLocation);
+        std::array<GLfloat, kVertexCount> expectedData;
+        for (size_t count = 0; count < kVertexCount; ++count)
+        {
+            expectedData[count] = static_cast<GLfloat>(count);
+        }
+
+        const GLsizei kExpectedDataSize = kVertexCount * kFloatStride;
+        glGenBuffers(1, &mExpectedBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mExpectedBuffer);
+        glBufferData(GL_ARRAY_BUFFER, kExpectedDataSize, expectedData.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glEnableVertexAttribArray(mExpectedAttrib);
+    }
+
+    void initTestWithMultipleBuffers()
+    {
+        initTest();
+
+        std::array<GLfloat, kVertexCount + kFloatOffset1> inputData1;
+        std::array<GLfloat, kVertexCount + kFloatOffset2> inputData2;
+        for (size_t count = 0; count < kVertexCount; ++count)
+        {
+            inputData1[count + kFloatOffset1] = static_cast<GLfloat>(count);
+            inputData2[count + kFloatOffset2] = static_cast<GLfloat>(count);
+        }
+
+        const GLsizei kInputDataSize1 = (kVertexCount + kFloatOffset1) * kFloatStride;
+        const GLsizei kInputDataSize2 = (kVertexCount + kFloatOffset2) * kFloatStride;
+        glGenBuffers(1, &mBuffer);
+        glGenBuffers(1, &mBuffer2);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferData(GL_ARRAY_BUFFER, kInputDataSize1, inputData1.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer2);
+        glBufferData(GL_ARRAY_BUFFER, kInputDataSize2, inputData2.data(), GL_STATIC_DRAW);
+    }
+
+    void drawArraysWithStrideAndOffset(GLint stride, GLsizeiptr offset)
+    {
+        initTest();
+
+        GLint floatStride      = stride ? (stride / kFloatStride) : 1;
+        GLsizeiptr floatOffset = offset / kFloatStride;
+        size_t floatCount      = static_cast<size_t>(floatOffset) + kVertexCount * floatStride;
+        GLsizeiptr inputSize   = static_cast<GLsizeiptr>(floatCount) * kFloatStride;
+
+        std::vector<GLfloat> inputData(floatCount);
+        for (size_t count = 0; count < kVertexCount; ++count)
+        {
+            inputData[floatOffset + count * floatStride] = static_cast<GLfloat>(count);
+        }
 
         // Ensure inputSize, inputStride and inputOffset are multiples of TypeStride(GL_FLOAT).
-        GLsizei inputStride    = stride ? floatStride * TypeStride(GL_FLOAT) : 0;
-        GLsizeiptr inputOffset = floatOffset * TypeStride(GL_FLOAT);
+        GLsizei inputStride    = stride ? floatStride * kFloatStride : 0;
+        GLsizeiptr inputOffset = floatOffset * kFloatStride;
         glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
         glBufferData(GL_ARRAY_BUFFER, inputSize, nullptr, GL_STATIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, inputSize, inputData.data());
@@ -752,18 +789,25 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
                               reinterpret_cast<const void *>(inputOffset));
         glEnableVertexAttribArray(mTestAttrib);
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glVertexAttribPointer(mExpectedAttrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData.data());
-        glEnableVertexAttribArray(mExpectedAttrib);
-
         glDrawArrays(GL_TRIANGLES, 0, 6);
         checkPixels();
 
         EXPECT_GL_NO_ERROR();
     }
 
+    GLuint mVAO;
+    GLuint mExpectedBuffer;
+    GLuint mBuffer2;
+    GLint mTestBinding;
+
+    GLint mPositionLocation;
+
+    const GLsizei kFloatStride = TypeStride(GL_FLOAT);
     // Set the maximum value for stride if the stride is too large.
     static constexpr GLint MAX_STRIDE_FOR_TEST = 4095;
+
+    static constexpr GLuint kFloatOffset1 = 10u;
+    static constexpr GLuint kFloatOffset2 = 5u;
 };
 
 // Verify that MAX_VERTEX_ATTRIB_STRIDE is no less than the minimum required value (2048) in ES3.1.
@@ -797,6 +841,62 @@ TEST_P(VertexAttributeTestES31, DrawArraysWithLargeStride)
 
     GLint largeStride = (maxStride < MAX_STRIDE_FOR_TEST) ? maxStride : MAX_STRIDE_FOR_TEST;
     drawArraysWithStrideAndOffset(largeStride, 0);
+}
+
+// TODO(jiawei.shao@intel.com): Merge it into VertexAttributeTestES31 when Vertex Attrib
+// Binding is supported on D3D11 back-ends.
+class VertexAttributeTestES31_OpenGL : public VertexAttributeTestES31
+{
+  protected:
+    VertexAttributeTestES31_OpenGL() {}
+};
+
+// Verify that mixed using VertexAttribPointer and Vertex Attrib Binding won't mess up the draw.
+TEST_P(VertexAttributeTestES31_OpenGL, AttribPointerWithDirtyAttribBinding)
+{
+    initTest();
+
+    constexpr GLint kInputStride2 = 2;
+    std::array<GLfloat, kVertexCount + kFloatOffset1> inputData1;
+    std::array<GLfloat, kVertexCount * kInputStride2> inputData2;
+    for (size_t count = 0; count < kVertexCount; ++count)
+    {
+        inputData1[kFloatOffset1 + count] = static_cast<GLfloat>(count);
+        inputData2[count * kInputStride2] = static_cast<GLfloat>(count);
+    }
+
+    glGenBuffers(1, &mBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, inputData1.size() * kFloatStride, inputData1.data(),
+                 GL_STATIC_DRAW);
+    // Update the format indexed mTestAttrib and the binding indexed mTestAttrib by
+    // VertexAttribPointer.
+    const GLintptr kOffset = static_cast<GLintptr>(kFloatStride * kFloatOffset1);
+    glVertexAttribPointer(mTestAttrib, 1, GL_FLOAT, GL_FALSE, 0,
+                          reinterpret_cast<const GLvoid *>(kOffset));
+    glEnableVertexAttribArray(mTestAttrib);
+
+    constexpr GLint kTestBinding = 10;
+    ASSERT_NE(mTestAttrib, kTestBinding);
+    glGenBuffers(1, &mBuffer2);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer2);
+    glBufferData(GL_ARRAY_BUFFER, inputData2.size() * kFloatStride, inputData2.data(),
+                 GL_STATIC_DRAW);
+    glBindVertexBuffer(kTestBinding, mBuffer2, 0, kFloatStride * kInputStride2);
+
+    // The attribute indexed mTestAttrib is using the binding indexed kTestBinding in the first
+    // draw.
+    glVertexAttribBinding(mTestAttrib, kTestBinding);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+    EXPECT_GL_NO_ERROR();
+
+    // The attribute indexed mTestAttrib is using the binding indexed mTestAttrib which was set
+    // before the first draw.
+    glVertexAttribBinding(mTestAttrib, mTestAttrib);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+    EXPECT_GL_NO_ERROR();
 }
 
 class VertexAttributeCachingTest : public VertexAttributeTest
@@ -1075,6 +1175,8 @@ ANGLE_INSTANTIATE_TEST(VertexAttributeTest,
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31_OpenGL, ES31_OPENGL(), ES31_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeCachingTest,
                        ES2_D3D9(),
