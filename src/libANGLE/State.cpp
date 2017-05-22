@@ -1327,18 +1327,18 @@ void State::setVertexAttribi(GLuint index, const GLint values[4])
     mDirtyBits.set(DIRTY_BIT_CURRENT_VALUE_0 + index);
 }
 
-void State::setVertexAttribState(const Context *context,
-                                 unsigned int attribNum,
-                                 Buffer *boundBuffer,
-                                 GLint size,
-                                 GLenum type,
-                                 bool normalized,
-                                 bool pureInteger,
-                                 GLsizei stride,
-                                 const void *pointer)
+void State::setVertexAttribPointer(const Context *context,
+                                   unsigned int attribNum,
+                                   Buffer *boundBuffer,
+                                   GLint size,
+                                   GLenum type,
+                                   bool normalized,
+                                   bool pureInteger,
+                                   GLsizei stride,
+                                   const void *pointer)
 {
-    getVertexArray()->setAttributeState(context, attribNum, boundBuffer, size, type, normalized,
-                                        pureInteger, stride, pointer);
+    getVertexArray()->setVertexAttribPointer(context, attribNum, boundBuffer, size, type,
+                                             normalized, pureInteger, stride, pointer);
     mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
