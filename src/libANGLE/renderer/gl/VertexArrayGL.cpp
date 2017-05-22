@@ -342,6 +342,8 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
         for (auto idx : attribsToStream)
         {
             const auto &attrib  = attribs[idx];
+            ASSERT(IsVertexAttribPointerSupported(idx, attrib));
+
             const auto &binding = bindings[attrib.bindingIndex];
             ASSERT(AttributeNeedsStreaming(attrib, binding));
 
@@ -446,34 +448,50 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 void VertexArrayGL::updateAttribPointer(const gl::Context *context, size_t attribIndex)
 {
     const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
-
-    // TODO(jiawei.shao@intel.com): Vertex Attrib Binding
-    ASSERT(IsVertexAttribPointerSupported(attribIndex, attrib));
-
     const GLuint bindingIndex    = attrib.bindingIndex;
     const VertexBinding &binding = mData.getVertexBinding(bindingIndex);
 
-    // We do not need to compare attrib.pointer because when we use a different client memory
-    // pointer, we don't need to update mAttributesNeedStreaming by binding.buffer and we won't
-    // update attribPointer in this function.
-    if (SameVertexAttribFormat(mAppliedAttributes[attribIndex], attrib) &&
-        mAppliedAttributes[attribIndex].bindingIndex == bindingIndex &&
-        SameVertexBuffer(mAppliedBindings[attribIndex], binding))
+    // Update needsStreaming when the buffer has been changed because only the changes in attrib
+    // enabled/disabled and buffer can affect if an attribute needs to be streamed. The changes in
+    // format and another non-nullptr attribPointer won't affect the value of
+    // mAttributesNeedStreaming[attribIndex] (it keeps the same value as it was in the last draw).
+    const auto &bindingBuffer = binding.getBuffer();
+    if (bindingBuffer != mAppliedBindings[bindingIndex].getBuffer())
     {
-        return;
+        updateNeedsStreaming(attribIndex);
     }
 
-    updateNeedsStreaming(attribIndex);
-
-    // If we need to stream, defer the attribPointer to the draw call.
-    // Skip the attribute that is disabled and uses a client memory pointer.
-    const Buffer *arrayBuffer = binding.getBuffer().get();
+    // Early return when the vertex attribute is using a client memory pointer:
+    // - If we need to stream, defer the attribPointer to the draw call.
+    // - Skip the attribute that is disabled and uses a client memory pointer.
+    const Buffer *arrayBuffer = bindingBuffer.get();
     if (arrayBuffer == nullptr)
     {
         // Mark the applied binding is using a client memory pointer by setting its buffer to
         // nullptr so that if it doesn't use a client memory pointer later, there is no chance that
         // the caching will skip it.
         mAppliedBindings[bindingIndex].setBuffer(context, nullptr);
+        return;
+    }
+
+    // We update vertex attributes that doesn't contain client memory pointers by Vertex Attrib
+    // Binding APIs instead of VertexAttribPointer on platforms that support this feature.
+    // The dirty bits for format, binding and attribBinding have already been set together with that
+    // for attribPointer when VertexAttribPointer is called.
+    if (supportVertexAttribBinding())
+    {
+        return;
+    }
+
+    ASSERT(IsVertexAttribPointerSupported(attribIndex, attrib));
+
+    // We do not need to compare attrib.pointer because when we use a different client memory
+    // pointer, we don't need to update mAttributesNeedStreaming by binding.buffer and we won't
+    // update attribPointer in this function.
+    if (SameVertexAttribFormat(mAppliedAttributes[attribIndex], attrib) &&
+        mAppliedAttributes[attribIndex].bindingIndex == bindingIndex &&
+        SameVertexBuffer(mAppliedBindings[bindingIndex], binding))
+    {
         return;
     }
 
@@ -489,11 +507,11 @@ void VertexArrayGL::updateAttribPointer(const gl::Context *context, size_t attri
     callVertexAttribPointer(static_cast<GLuint>(attribIndex), attrib, binding.getStride(),
                             binding.getOffset());
 
-    mAppliedAttributes[attribIndex].size                    = attrib.size;
-    mAppliedAttributes[attribIndex].type                    = attrib.type;
-    mAppliedAttributes[attribIndex].normalized              = attrib.normalized;
-    mAppliedAttributes[attribIndex].pureInteger             = attrib.pureInteger;
-    mAppliedAttributes[attribIndex].relativeOffset          = attrib.relativeOffset;
+    mAppliedAttributes[attribIndex].size           = attrib.size;
+    mAppliedAttributes[attribIndex].type           = attrib.type;
+    mAppliedAttributes[attribIndex].normalized     = attrib.normalized;
+    mAppliedAttributes[attribIndex].pureInteger    = attrib.pureInteger;
+    mAppliedAttributes[attribIndex].relativeOffset = attrib.relativeOffset;
 
     mAppliedAttributes[attribIndex].bindingIndex = bindingIndex;
 
@@ -520,22 +538,116 @@ void VertexArrayGL::callVertexAttribPointer(GLuint attribIndex,
     }
 }
 
-void VertexArrayGL::updateAttribDivisor(size_t attribIndex)
+bool VertexArrayGL::supportVertexAttribBinding() const
 {
-    const GLuint bindingIndex = mData.getVertexAttribute(attribIndex).bindingIndex;
-    ASSERT(attribIndex == bindingIndex);
+    ASSERT(mFunctions);
+    return (mFunctions->vertexAttribBinding != nullptr);
+}
 
-    const GLuint divisor = mData.getVertexBinding(bindingIndex).getDivisor();
-    if (mAppliedAttributes[attribIndex].bindingIndex == bindingIndex &&
-        mAppliedBindings[bindingIndex].getDivisor() == divisor)
+void VertexArrayGL::updateAttribFormat(size_t attribIndex)
+{
+    ASSERT(supportVertexAttribBinding());
+
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+
+    // If an attribute is using a client memory pointer, mAttributesNeedStreaming[attribIndex]
+    // should be updated if necessary in updateAttribPointer() and its format and binding should
+    // be updated in streamAttributes().
+    const VertexBinding &binding = mData.getVertexBinding(attrib.bindingIndex);
+    if (binding.getBuffer().get() == nullptr)
     {
         return;
     }
 
-    mFunctions->vertexAttribDivisor(static_cast<GLuint>(attribIndex), divisor);
+    if (SameVertexAttribFormat(mAppliedAttributes[attribIndex], attrib))
+    {
+        return;
+    }
+
+    if (attrib.pureInteger)
+    {
+        ASSERT(!attrib.normalized);
+        mFunctions->vertexAttribIFormat(static_cast<GLuint>(attribIndex), attrib.size, attrib.type,
+                                        attrib.relativeOffset);
+    }
+    else
+    {
+        mFunctions->vertexAttribFormat(static_cast<GLuint>(attribIndex), attrib.size, attrib.type,
+                                       attrib.normalized, attrib.relativeOffset);
+    }
+
+    mAppliedAttributes[attribIndex].size           = attrib.size;
+    mAppliedAttributes[attribIndex].type           = attrib.type;
+    mAppliedAttributes[attribIndex].normalized     = attrib.normalized;
+    mAppliedAttributes[attribIndex].pureInteger    = attrib.pureInteger;
+    mAppliedAttributes[attribIndex].relativeOffset = attrib.relativeOffset;
+}
+
+void VertexArrayGL::updateAttribBinding(size_t attribIndex)
+{
+    ASSERT(supportVertexAttribBinding());
+
+    GLuint bindingIndex = mData.getVertexAttribute(attribIndex).bindingIndex;
+    if (mAppliedAttributes[attribIndex].bindingIndex == bindingIndex)
+    {
+        return;
+    }
+
+    mFunctions->vertexAttribBinding(static_cast<GLuint>(attribIndex), bindingIndex);
 
     mAppliedAttributes[attribIndex].bindingIndex = bindingIndex;
-    mAppliedBindings[bindingIndex].setDivisor(divisor);
+}
+
+void VertexArrayGL::updateBindingBuffer(const gl::Context *context, size_t bindingIndex)
+{
+    ASSERT(supportVertexAttribBinding());
+
+    const VertexBinding &binding = mData.getVertexBinding(bindingIndex);
+
+    // If an attribute is using a client memory pointer, mAttributesNeedStreaming[attribIndex]
+    // should be updated if necessary in updateAttribPointer() and its format and binding should
+    // be updated in streamAttributes().
+    const Buffer *arrayBuffer = binding.getBuffer().get();
+    if (arrayBuffer == nullptr)
+    {
+        return;
+    }
+
+    if (SameVertexBuffer(mAppliedBindings[bindingIndex], binding))
+    {
+        return;
+    }
+
+    const GLuint bufferId = GetImplAs<BufferGL>(arrayBuffer)->getBufferID();
+
+    mFunctions->bindVertexBuffer(static_cast<GLuint>(bindingIndex), bufferId, binding.getOffset(),
+                                 binding.getStride());
+
+    mAppliedBindings[bindingIndex].setStride(binding.getStride());
+    mAppliedBindings[bindingIndex].setOffset(binding.getOffset());
+    mAppliedBindings[bindingIndex].setBuffer(context, binding.getBuffer().get());
+}
+
+void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
+{
+    GLuint newDivisor = mData.getVertexBinding(bindingIndex).getDivisor();
+    if (mAppliedBindings[bindingIndex].getDivisor() == newDivisor)
+    {
+        return;
+    }
+
+    if (supportVertexAttribBinding())
+    {
+        mFunctions->vertexBindingDivisor(static_cast<GLuint>(bindingIndex), newDivisor);
+    }
+    else
+    {
+        // We can only use VertexAttribDivisor on platforms that don't support Vertex Attrib
+        // Binding.
+        mFunctions->vertexAttribDivisor(static_cast<GLuint>(bindingIndex), newDivisor);
+    }
+
+    mAppliedBindings[bindingIndex].setDivisor(newDivisor);
 }
 
 void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::DirtyBits &dirtyBits)
@@ -550,7 +662,7 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
             continue;
         }
 
-        size_t index = VertexArray::GetAttribIndex(dirtyBit);
+        size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
         if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED &&
             dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
         {
@@ -561,16 +673,44 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
         {
             updateAttribPointer(context, index);
         }
+
+        // According to ES3.1 SPEC, VertexAttribPointer should change 4 parts of a vertex attribute:
+        // format, binding, attribBinding, and attribPointer. So these 4 dirty bits are set dirty
+        // when VertexAttribPointer is called.
+        // Skip updating format, binding, and attribBinding separately on platforms that don't
+        // support Vertex Attrib Binding because they should be updated together in
+        // updateAttribPointer.
         else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_FORMAT &&
+                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_FORMAT)
+        {
+            if (supportVertexAttribBinding())
+            {
+                updateAttribFormat(index);
+            }
+        }
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_BINDING &&
+                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_BINDING)
+        {
+            if (supportVertexAttribBinding())
+            {
+                updateAttribBinding(index);
+            }
+        }
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_BUFFER &&
                  dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_BUFFER)
         {
-            // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-            ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
+            if (supportVertexAttribBinding())
+            {
+                updateBindingBuffer(context, index);
+            }
         }
+
+        // On platforms that don't support Vertex Attrib Binding, we can only update the
+        // binding divisor by VertexAttribDivisor.
         else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
                  dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
         {
-            updateAttribDivisor(index);
+            updateBindingDivisor(index);
         }
         else
             UNREACHABLE();
