@@ -81,6 +81,11 @@ class VertexArrayGL : public VertexArrayImpl
     void updateAttribPointer(size_t attribIndex);
     void updateAttribDivisor(size_t attribIndex);
 
+    void updateAttribFormat(size_t attribIndex);
+    void updateAttribBinding(size_t attribIndex);
+    void updateBindingBuffer(size_t bindingIndex);
+    void updateBindingDivisor(size_t bindingIndex);
+
     void callVertexAttribPointer(GLuint attribIndex,
                                  const gl::VertexAttribute &attrib,
                                  GLsizei stride,
@@ -89,6 +94,7 @@ class VertexArrayGL : public VertexArrayImpl
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
 
+    bool mSupportVertexAttribBinding;
     GLuint mVertexArrayID;
 
     mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;

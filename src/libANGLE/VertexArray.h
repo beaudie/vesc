@@ -90,22 +90,22 @@ class VertexArray final : public LabeledObject
     }
 
     void detachBuffer(GLuint bufferName);
-    void setVertexAttribDivisor(size_t index, GLuint divisor);
+    void setVertexAttribDivisor(size_t attribIndex, GLuint divisor);
     void enableAttribute(size_t attribIndex, bool enabledState);
-    void setAttributeState(size_t attribIndex,
-                           Buffer *boundBuffer,
-                           GLint size,
-                           GLenum type,
-                           bool normalized,
-                           bool pureInteger,
-                           GLsizei stride,
-                           const void *pointer);
+    void setVertexAttribPointer(size_t attribIndex,
+                                Buffer *boundBuffer,
+                                GLint size,
+                                GLenum type,
+                                bool normalized,
+                                bool pureInteger,
+                                GLsizei stride,
+                                const void *pointer);
     void setVertexAttribFormat(size_t attribIndex,
                                GLint size,
                                GLenum type,
                                bool normalized,
                                bool pureInteger,
-                               GLintptr relativeOffset);
+                               GLuint relativeOffset);
     void bindVertexBuffer(size_t bindingIndex,
                           Buffer *boundBuffer,
                           GLintptr offset,
@@ -170,7 +170,7 @@ class VertexArray final : public LabeledObject
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
-    static size_t GetAttribIndex(size_t dirtyBit);
+    static size_t GetIndexFromDirtyBit(size_t dirtyBit);
 
     void syncImplState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
