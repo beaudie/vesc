@@ -1362,7 +1362,8 @@ void State::setVertexAttribState(unsigned int attribNum,
                                  GLsizei stride,
                                  const void *pointer)
 {
-    getVertexArray()->setAttributeState(attribNum, boundBuffer, size, type, normalized, pureInteger, stride, pointer);
+    getVertexArray()->setVertexAttribPointer(attribNum, boundBuffer, size, type, normalized,
+                                             pureInteger, stride, pointer);
     mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
