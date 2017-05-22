@@ -817,6 +817,8 @@ class Context final : public ValidationContext
     egl::Surface *getCurrentDrawSurface() const { return mCurrentSurface; }
     egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }
 
+    bool supportVertexAttribBinding() const { return mCaps.maxVertexAttribRelativeOffset > 0; }
+
   private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
