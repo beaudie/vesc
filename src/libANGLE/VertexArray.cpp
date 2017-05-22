@@ -100,7 +100,7 @@ const VertexBinding &VertexArray::getVertexBinding(size_t bindingIndex) const
     return mState.mVertexBindings[bindingIndex];
 }
 
-size_t VertexArray::GetAttribIndex(size_t dirtyBit)
+size_t VertexArray::GetIndexFromDirtyBit(size_t dirtyBit)
 {
     static_assert(gl::MAX_VERTEX_ATTRIBS == gl::MAX_VERTEX_ATTRIB_BINDINGS,
                   "The stride of vertex attributes should equal to that of vertex bindings.");
@@ -145,7 +145,7 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
                                         GLenum type,
                                         bool normalized,
                                         bool pureInteger,
-                                        GLintptr relativeOffset)
+                                        GLuint relativeOffset)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
@@ -159,12 +159,12 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_FORMAT + attribIndex);
 }
 
-void VertexArray::setVertexAttribDivisor(size_t index, GLuint divisor)
+void VertexArray::setVertexAttribDivisor(size_t attribIndex, GLuint divisor)
 {
-    ASSERT(index < getMaxAttribs());
+    ASSERT(attribIndex < getMaxAttribs());
 
-    setVertexAttribBinding(index, index);
-    setVertexBindingDivisor(index, divisor);
+    setVertexAttribBinding(attribIndex, attribIndex);
+    setVertexBindingDivisor(attribIndex, divisor);
 }
 
 void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
@@ -189,15 +189,15 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     }
 }
 
-void VertexArray::setAttributeState(const Context *context,
-                                    size_t attribIndex,
-                                    gl::Buffer *boundBuffer,
-                                    GLint size,
-                                    GLenum type,
-                                    bool normalized,
-                                    bool pureInteger,
-                                    GLsizei stride,
-                                    const void *pointer)
+void VertexArray::setVertexAttribPointer(const Context *context,
+                                         size_t attribIndex,
+                                         gl::Buffer *boundBuffer,
+                                         GLint size,
+                                         GLenum type,
+                                         bool normalized,
+                                         bool pureInteger,
+                                         GLsizei stride,
+                                         const void *pointer)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
