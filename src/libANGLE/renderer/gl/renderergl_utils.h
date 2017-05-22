@@ -26,6 +26,7 @@ class TextureCapsMap;
 struct Extensions;
 struct Version;
 struct Workarounds;
+struct Limitations;
 }
 
 namespace rx
