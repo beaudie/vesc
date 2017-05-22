@@ -251,7 +251,8 @@ Limitations::Limitations()
       attributeZeroRequiresZeroDivisorInEXT(false),
       noSeparateStencilRefsAndMasks(false),
       shadersRequireIndexedLoopValidation(false),
-      noSimultaneousConstantColorAndAlphaBlendFunc(false)
+      noSimultaneousConstantColorAndAlphaBlendFunc(false),
+      noVertexAttribBinding(true)
 {
 }
 

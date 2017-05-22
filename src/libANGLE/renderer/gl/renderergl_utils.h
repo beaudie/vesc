@@ -26,6 +26,7 @@ class TextureCapsMap;
 struct Extensions;
 struct Version;
 struct Workarounds;
+struct Limitations;
 }
 
 namespace rx
@@ -44,6 +45,7 @@ void GenerateCaps(const FunctionsGL *functions,
                   gl::Caps *caps,
                   gl::TextureCapsMap *textureCapsMap,
                   gl::Extensions *extensions,
+                  gl::Limitations *limitations,
                   gl::Version *maxSupportedESVersion);
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
