@@ -105,7 +105,7 @@ class VertexArray final : public LabeledObject
                                GLenum type,
                                bool normalized,
                                bool pureInteger,
-                               GLintptr relativeOffset);
+                               GLuint relativeOffset);
     void bindVertexBuffer(size_t bindingIndex,
                           Buffer *boundBuffer,
                           GLintptr offset,
