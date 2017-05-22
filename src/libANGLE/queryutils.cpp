@@ -395,10 +395,9 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLuint<ParamType>(attrib.bindingIndex);
             break;
         case GL_VERTEX_ATTRIB_RELATIVE_OFFSET:
-            // attrib.relativeOffset should not be negative or greater than max GLint
-            ASSERT(attrib.relativeOffset >= 0 &&
-                   attrib.relativeOffset <= std::numeric_limits<GLint>::max());
-            *params = ConvertFromGLint<ParamType>(static_cast<GLint>(attrib.relativeOffset));
+            // attrib.relativeOffset should not greater than max GLint
+            ASSERT(attrib.relativeOffset <= static_cast<GLuint>(std::numeric_limits<GLint>::max()));
+            *params = ConvertFromGLuint<ParamType>(attrib.relativeOffset);
             break;
         default:
             UNREACHABLE();
