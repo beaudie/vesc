@@ -15,11 +15,11 @@
 
 using namespace gl;
 
-// Tests that function GetAttribIndex computes the index properly.
-TEST(VertexArrayTest, VerifyGetAttribIndex)
+// Tests that function GetIndexFromDirtyBit computes the index properly.
+TEST(VertexArrayTest, VerifyGetIndexFromDirtyBit)
 {
     VertexArray::DirtyBits dirtyBits;
-    size_t bits[] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 90};
+    constexpr size_t bits[] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 92, 103, 110};
     int count     = sizeof(bits) / sizeof(size_t);
     for (int i = 0; i < count; i++)
     {
@@ -28,7 +28,7 @@ TEST(VertexArrayTest, VerifyGetAttribIndex)
 
     for (size_t dirtyBit : dirtyBits)
     {
-        size_t index = VertexArray::GetAttribIndex(dirtyBit);
+        size_t index = VertexArray::GetIndexFromDirtyBit(dirtyBit);
         if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED, index);
@@ -36,6 +36,10 @@ TEST(VertexArrayTest, VerifyGetAttribIndex)
         else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_POINTER, index);
+        }
+        else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_DIVISOR)
+        {
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR, index);
         }
         else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_FORMAT)
         {
