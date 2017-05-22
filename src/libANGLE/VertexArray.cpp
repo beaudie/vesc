@@ -137,7 +137,7 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
                                         GLenum type,
                                         bool normalized,
                                         bool pureInteger,
-                                        GLintptr relativeOffset)
+                                        GLuint relativeOffset)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
