@@ -80,14 +80,34 @@ class VertexArrayGL : public VertexArrayImpl
     void updateAttribPointer(size_t attribIndex);
     void updateAttribDivisor(size_t attribIndex);
 
+    // Update vertex attributes by Vertex Attrib Binding on drivers that support this feature.
+    void syncStateES31(const gl::VertexArray::DirtyBits &dirtyBits);
+    void updateAttribPointerES31(size_t attribIndex, gl::VertexArray::DirtyBits &dirtyBits);
+    void updateAttribDivisorES31(size_t attribIndex, gl::VertexArray::DirtyBits &dirtyBits);
+
+    void updateAttribFormat(size_t attribIndex, gl::VertexArray::DirtyBits &dirtyBits);
+    void updateAttribBinding(size_t attribIndex, gl::VertexArray::DirtyBits &dirtyBits);
+    void updateBindingBuffer(size_t bindingIndex);
+    void updateBindingDivisor(size_t bindingIndex);
+
     void callVertexAttribPointer(GLuint attribIndex,
                                  const gl::VertexAttribute &attrib,
                                  GLsizei stride,
                                  GLintptr offset) const;
 
+    void syncWithVertexAttribPointer(GLuint attribIndex,
+                                     const gl::VertexAttribute &attrib,
+                                     const gl::VertexBinding &binding);
+    void syncWithVertexAttribFormat(GLuint attribIndex, const gl::VertexAttribute &attrib);
+    void syncWithBindVertexBuffer(GLuint bindingIndex, const gl::VertexBinding &binding);
+    void syncWithVertexAttribBinding(GLuint attribIndex, GLuint bindingIndex);
+    void syncWithVertexAttribDivisor(GLuint attribIndex, GLuint divisor);
+    void syncWithVertexBindingDivisor(GLuint bindingIndex, GLuint divisor);
+
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
 
+    bool mSupportVertexAttribBinding;
     GLuint mVertexArrayID;
 
     mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;

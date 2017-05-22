@@ -19,7 +19,7 @@ using namespace gl;
 TEST(VertexArrayTest, VerifyGetAttribIndex)
 {
     VertexArray::DirtyBits dirtyBits;
-    size_t bits[] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 90};
+    size_t bits[] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 92, 103, 110};
     int count     = sizeof(bits) / sizeof(size_t);
     for (int i = 0; i < count; i++)
     {
@@ -36,6 +36,10 @@ TEST(VertexArrayTest, VerifyGetAttribIndex)
         else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_POINTER, index);
+        }
+        else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_DIVISOR)
+        {
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR, index);
         }
         else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_FORMAT)
         {
