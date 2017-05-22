@@ -106,30 +106,49 @@ void VertexArray::bindVertexBuffer(size_t bindingIndex,
                                    GLintptr offset,
                                    GLsizei stride)
 {
+    bindVertexBufferImpl(bindingIndex, boundBuffer, offset, stride);
+
+    mDirtyBits.set(DIRTY_BIT_BINDING_0_BUFFER + bindingIndex);
+}
+void VertexArray::bindVertexBufferImpl(size_t bindingIndex,
+                                       Buffer *boundBuffer,
+                                       GLintptr offset,
+                                       GLsizei stride)
+{
     ASSERT(bindingIndex < getMaxBindings());
 
     VertexBinding *binding = &mState.mVertexBindings[bindingIndex];
-
     binding->buffer.set(boundBuffer);
     binding->offset = offset;
     binding->stride = stride;
-    mDirtyBits.set(DIRTY_BIT_BINDING_0_BUFFER + bindingIndex);
 }
 
 void VertexArray::setVertexAttribBinding(size_t attribIndex, size_t bindingIndex)
 {
+    setVertexAttribBindingImpl(attribIndex, bindingIndex);
+
+    mDirtyBits.set(DIRTY_BIT_ATTRIB_0_BINDING + attribIndex);
+}
+
+void VertexArray::setVertexAttribBindingImpl(size_t attribIndex, size_t bindingIndex)
+{
     ASSERT(attribIndex < getMaxAttribs() && bindingIndex < getMaxBindings());
 
     mState.mVertexAttributes[attribIndex].bindingIndex = static_cast<GLuint>(bindingIndex);
-    mDirtyBits.set(DIRTY_BIT_ATTRIB_0_BINDING + attribIndex);
 }
 
 void VertexArray::setVertexBindingDivisor(size_t bindingIndex, GLuint divisor)
 {
+    setVertexBindingDivisorImpl(bindingIndex, divisor);
+
+    mDirtyBits.set(DIRTY_BIT_BINDING_0_DIVISOR + bindingIndex);
+}
+
+void VertexArray::setVertexBindingDivisorImpl(size_t bindingIndex, GLuint divisor)
+{
     ASSERT(bindingIndex < getMaxBindings());
 
     mState.mVertexBindings[bindingIndex].divisor = divisor;
-    mDirtyBits.set(DIRTY_BIT_BINDING_0_DIVISOR + bindingIndex);
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -137,26 +156,38 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
                                         GLenum type,
                                         bool normalized,
                                         bool pureInteger,
-                                        GLintptr relativeOffset)
+                                        GLuint relativeOffset)
+{
+    setVertexAttribFormatImpl(attribIndex, size, type, normalized, pureInteger, relativeOffset);
+
+    mDirtyBits.set(DIRTY_BIT_ATTRIB_0_FORMAT + attribIndex);
+}
+
+void VertexArray::setVertexAttribFormatImpl(size_t attribIndex,
+                                            GLint size,
+                                            GLenum type,
+                                            bool normalized,
+                                            bool pureInteger,
+                                            GLuint relativeOffset)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
     VertexAttribute *attrib = &mState.mVertexAttributes[attribIndex];
-
     attrib->size           = size;
     attrib->type           = type;
     attrib->normalized     = normalized;
     attrib->pureInteger    = pureInteger;
     attrib->relativeOffset = relativeOffset;
-    mDirtyBits.set(DIRTY_BIT_ATTRIB_0_FORMAT + attribIndex);
 }
 
 void VertexArray::setVertexAttribDivisor(size_t index, GLuint divisor)
 {
     ASSERT(index < getMaxAttribs());
 
-    setVertexAttribBinding(index, index);
-    setVertexBindingDivisor(index, divisor);
+    setVertexAttribBindingImpl(index, index);
+    setVertexBindingDivisorImpl(index, divisor);
+
+    mDirtyBits.set(DIRTY_BIT_ATTRIB_0_DIVISOR + index);
 }
 
 void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
@@ -181,21 +212,21 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     }
 }
 
-void VertexArray::setAttributeState(size_t attribIndex,
-                                    gl::Buffer *boundBuffer,
-                                    GLint size,
-                                    GLenum type,
-                                    bool normalized,
-                                    bool pureInteger,
-                                    GLsizei stride,
-                                    const void *pointer)
+void VertexArray::setVertexAttribPointer(size_t attribIndex,
+                                         gl::Buffer *boundBuffer,
+                                         GLint size,
+                                         GLenum type,
+                                         bool normalized,
+                                         bool pureInteger,
+                                         GLsizei stride,
+                                         const void *pointer)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
     GLintptr offset = boundBuffer ? reinterpret_cast<GLintptr>(pointer) : 0;
 
-    setVertexAttribFormat(attribIndex, size, type, normalized, pureInteger, 0);
-    setVertexAttribBinding(attribIndex, attribIndex);
+    setVertexAttribFormatImpl(attribIndex, size, type, normalized, pureInteger, 0);
+    setVertexAttribBindingImpl(attribIndex, attribIndex);
 
     VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
     GLsizei effectiveStride =
@@ -203,7 +234,7 @@ void VertexArray::setAttributeState(size_t attribIndex,
     attrib.pointer                 = pointer;
     attrib.vertexAttribArrayStride = stride;
 
-    bindVertexBuffer(attribIndex, boundBuffer, offset, effectiveStride);
+    bindVertexBufferImpl(attribIndex, boundBuffer, offset, effectiveStride);
 
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_POINTER + attribIndex);
 }
