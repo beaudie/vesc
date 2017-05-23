@@ -2823,6 +2823,33 @@ TEST_P(GLSLTest_ES3, ConstantStatementAsLoopInit)
     glDeleteShader(shader);
 }
 
+// Tests vec3 array issue on OSX.
+TEST_P(GLSLTest_ES3, Vec3ArrayOSXIssue)
+{
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 foo = vec4(0.0, 0.5, 0.0, 0.0);\n"
+        "    vec3 a[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0));\n"
+        "    for (int i = 0; i < 2; ++i)\n"
+        "    {\n"
+        "        a[i] = vec3(foo);\n"
+        "        foo = foo.zyxw;\n"
+        "    }\n"
+        "    vec3 res = vec3(0.0, 0.0, 0.0);\n"
+        "    res += a[0];\n"
+        "    res += a[1];\n"
+        "    my_FragColor = vec4(res, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
