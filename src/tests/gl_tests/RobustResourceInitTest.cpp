@@ -115,7 +115,7 @@ TEST_P(RobustResourceInitTest, ExtensionInit)
 TEST_P(RobustResourceInitTest, QueriesOnNonRobustContext)
 {
     EGLDisplay display = getEGLWindow()->getDisplay();
-    ASSERT_TRUE(display != EGL_NO_DISPLAY);
+    ASSERT_NE(EGL_NO_DISPLAY, display);
 
     if (!hasEGLExtension())
     {

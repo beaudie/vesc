@@ -29,7 +29,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
+        const std::string &vsSource =
             "#version 300 es\n"
             "precision highp float;\n"
             "in vec4 position;\n"
@@ -42,7 +42,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
             "    color = vec4(gl_VertexID != expectedID, gl_VertexID == expectedID, 0.0, 1.0);"
             "}\n";
 
-        const std::string fsSource =
+        const std::string &fsSource =
             "#version 300 es\n"
             "precision highp float;\n"
             "in vec4 color;\n"

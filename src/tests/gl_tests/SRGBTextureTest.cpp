@@ -27,7 +27,7 @@ class SRGBTextureTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vs =
+        const std::string &vs =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
@@ -38,7 +38,7 @@ class SRGBTextureTest : public ANGLETest
             "   texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "precision highp float;\n"
             "uniform sampler2D tex;\n"
             "varying vec2 texcoord;\n"
@@ -74,7 +74,7 @@ TEST_P(SRGBTextureTest, SRGBValidation)
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    GLubyte pixel[3] = { 0 };
+    constexpr GLubyte pixel[3] = {0};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, 1, 1, 0, GL_SRGB, GL_UNSIGNED_BYTE, pixel);
     if (supported)
     {
@@ -102,7 +102,7 @@ TEST_P(SRGBTextureTest, SRGBAValidation)
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    GLubyte pixel[4] = { 0 };
+    constexpr GLubyte pixel[4] = {0};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE, pixel);
     if (supported)
     {

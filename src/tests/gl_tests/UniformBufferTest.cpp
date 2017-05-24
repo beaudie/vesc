@@ -29,34 +29,31 @@ class UniformBufferTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (   #version 300 es\n
-            in vec4 position;
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (   #version 300 es\n
-            precision highp float;
-            uniform uni {
-                vec4 color;
-            };
+        const std::string &vertexShaderSource =
+            "#version 300 es\n"
+            "in vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            out vec4 fragColor;
-
-            void main()
-            {
-                fragColor = color;
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "#version 300 es\n"
+            "precision highp float\n;"
+            "uniform uni {\n"
+            "    vec4 color;\n"
+            "};\n"
+            "out vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    fragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
-        ASSERT_NE(mProgram, 0u);
+        ASSERT_NE(0u, mProgram);
 
         mUniformBufferIndex = glGetUniformBlockIndex(mProgram, "uni");
-        ASSERT_NE(mUniformBufferIndex, -1);
+        ASSERT_NE(-1, mUniformBufferIndex);
 
         glGenBuffers(1, &mUniformBuffer);
 
@@ -79,7 +76,7 @@ class UniformBufferTest : public ANGLETest
 TEST_P(UniformBufferTest, Simple)
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    float floatData[4] = {0.5f, 0.75f, 0.25f, 1.0f};
+    constexpr float floatData[4] = {0.5f, 0.75f, 0.25f, 1.0f};
 
     glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * 4, floatData, GL_STATIC_DRAW);

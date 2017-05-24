@@ -74,9 +74,7 @@ class CopyTextureTest : public ANGLETest
         return true;
     }
 
-    GLuint mTextures[2] = {
-        0, 0,
-    };
+    GLuint mTextures[2] = {0, 0};
     GLuint mFramebuffer = 0;
 
     PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM       = nullptr;
@@ -257,7 +255,7 @@ TEST_P(CopyTextureTest, RedefineDestinationTexture)
         return;
     }
 
-    GLColor pixels[4] = {GLColor::red, GLColor::red, GLColor::red, GLColor::red};
+    const GLColor pixels[4] = {GLColor::red, GLColor::red, GLColor::red, GLColor::red};
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -401,7 +399,7 @@ TEST_P(CopyTextureTest, CopySubTextureOffset)
         return;
     }
 
-    GLColor rgbaPixels[4 * 4] = {GLColor::red, GLColor::green, GLColor::blue, GLColor::black};
+    const GLColor rgbaPixels[4 * 4] = {GLColor::red, GLColor::green, GLColor::blue, GLColor::black};
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
 
@@ -438,8 +436,8 @@ TEST_P(CopyTextureTest, FlipY)
         return;
     }
 
-    GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
-                             GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
+    const GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
+                                   GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
@@ -466,8 +464,8 @@ TEST_P(CopyTextureTest, PremultiplyAlpha)
         return;
     }
 
-    GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(255u, 255u, 255u, 127u),
-                             GLColor(127u, 127u, 127u, 127u), GLColor(255u, 255u, 255u, 0u)};
+    const GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(255u, 255u, 255u, 127u),
+                                   GLColor(127u, 127u, 127u, 127u), GLColor(255u, 255u, 255u, 0u)};
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
@@ -494,8 +492,8 @@ TEST_P(CopyTextureTest, UnmultiplyAlpha)
         return;
     }
 
-    GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
-                             GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
+    const GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
+                                   GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
@@ -522,8 +520,8 @@ TEST_P(CopyTextureTest, UnmultiplyAndPremultiplyAlpha)
         return;
     }
 
-    GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
-                             GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
+    const GLColor rgbaPixels[4] = {GLColor(255u, 255u, 255u, 255u), GLColor(127u, 127u, 127u, 127u),
+                                   GLColor(63u, 63u, 63u, 127u), GLColor(255u, 255u, 255u, 0u)};
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
@@ -550,8 +548,8 @@ TEST_P(CopyTextureTest, LuminanceAlpha)
         return;
     }
 
-    uint8_t originalPixels[] = {163u, 67u};
-    GLColor expectedPixels(163u, 163u, 163u, 67u);
+    constexpr uint8_t originalPixels[] = {163u, 67u};
+    const GLColor expectedPixels(163u, 163u, 163u, 67u);
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, 1, 1, 0, GL_LUMINANCE_ALPHA,
@@ -573,8 +571,8 @@ TEST_P(CopyTextureTest, Luminance)
         return;
     }
 
-    uint8_t originalPixels[] = {57u};
-    GLColor expectedPixels(57u, 57u, 57u, 255u);
+    constexpr uint8_t originalPixels[] = {57u};
+    const GLColor expectedPixels(57u, 57u, 57u, 255u);
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,
@@ -596,8 +594,8 @@ TEST_P(CopyTextureTest, Alpha)
         return;
     }
 
-    uint8_t originalPixels[] = {77u};
-    GLColor expectedPixels(0u, 0u, 0u, 77u);
+    constexpr uint8_t originalPixels[] = {77u};
+    const GLColor expectedPixels(0u, 0u, 0u, 77u);
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 1, 1, 0, GL_ALPHA, GL_UNSIGNED_BYTE, &originalPixels);
@@ -618,7 +616,7 @@ TEST_P(CopyTextureTest, CubeMapTarget)
         return;
     }
 
-    GLColor pixels = GLColor::red;
+    const GLColor pixels = GLColor::red;
 
     GLTexture textures[2];
 
@@ -664,12 +662,12 @@ TEST_P(CopyTextureTestES3, CopyToMipmap)
         return;
     }
 
-    GLColor pixels = GLColor::red;
+    const GLColor pixels = GLColor::red;
 
     GLTexture textures[2];
 
-    const GLint sourceLevel = 1;
-    const GLint destLevel   = 2;
+    constexpr GLint sourceLevel = 1;
+    constexpr GLint destLevel   = 2;
 
     glBindTexture(GL_TEXTURE_2D, textures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
@@ -707,7 +705,7 @@ TEST_P(CopyTextureTestES3, ES3UnormFormats)
     }
 
     auto testOutput = [this](GLuint texture, const GLColor &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -717,7 +715,7 @@ TEST_P(CopyTextureTestES3, ES3UnormFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
@@ -824,7 +822,7 @@ TEST_P(CopyTextureTestES3, ES3FloatFormats)
     }
 
     auto testOutput = [this](GLuint texture, const GLColor32F &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -834,7 +832,7 @@ TEST_P(CopyTextureTestES3, ES3FloatFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
@@ -963,7 +961,7 @@ TEST_P(CopyTextureTestES3, ES3UintFormats)
     using GLColor32U = std::tuple<GLuint, GLuint, GLuint, GLuint>;
 
     auto testOutput = [this](GLuint texture, const GLColor32U &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -973,7 +971,7 @@ TEST_P(CopyTextureTestES3, ES3UintFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "precision mediump usampler2D;\n"

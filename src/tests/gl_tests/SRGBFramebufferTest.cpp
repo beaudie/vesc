@@ -29,7 +29,7 @@ class SRGBFramebufferTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vs =
+        const std::string &vs =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "void main()\n"
@@ -37,7 +37,7 @@ class SRGBFramebufferTest : public ANGLETest
             "   gl_Position = vec4(position.xy, 0.0, 1.0);\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "precision highp float;\n"
             "uniform vec4 color;\n"
             "void main()\n"

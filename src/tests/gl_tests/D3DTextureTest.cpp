@@ -37,41 +37,32 @@ class D3DTextureTest : public ANGLETest
         ANGLETest::SetUp();
 
         // clang-format off
-        const std::string vsSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vsSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = position;\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "    texcoord.y = 1.0 - texcoord.y;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                texcoord = (position.xy * 0.5) + 0.5;
-                texcoord.y = 1.0 - texcoord.y;
-            }
-        );
+        const std::string &textureFSSource =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
-        const std::string textureFSSource = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
-
-        const std::string textureFSSourceNoSampling = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &textureFSSourceNoSampling =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
         // clang-format on
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
@@ -163,10 +154,8 @@ class D3DTextureTest : public ANGLETest
         EGLDisplay display = window->getDisplay();
         EGLConfig config   = window->getConfig();
 
-        EGLint attribs[] = {
-            EGL_TEXTURE_FORMAT, eglTextureFormat, EGL_TEXTURE_TARGET,
-            eglTextureTarget,   EGL_NONE,         EGL_NONE,
-        };
+        EGLint attribs[] = {EGL_TEXTURE_FORMAT, eglTextureFormat, EGL_TEXTURE_TARGET,
+                            eglTextureTarget,   EGL_NONE,         EGL_NONE};
 
         if (mD3D11Device)
         {
@@ -261,12 +250,12 @@ TEST_P(D3DTextureTest, Clear)
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 1, 0);
     ASSERT_EGL_SUCCESS();
-    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+    ASSERT_NE(EGL_NO_SURFACE, pbuffer);
 
     // Apply the Pbuffer and clear it to purple and verify
     eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
@@ -296,12 +285,12 @@ TEST_P(D3DTextureTest, DepthStencil)
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 1, 0);
     ASSERT_EGL_SUCCESS();
-    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+    ASSERT_NE(EGL_NO_SURFACE, pbuffer);
 
     // Apply the Pbuffer and clear it to purple and verify
     eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
@@ -347,12 +336,12 @@ TEST_P(D3DTextureTest, BindTexImage)
     EGLWindow *window = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 1, 0);
     ASSERT_EGL_SUCCESS();
-    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+    ASSERT_NE(EGL_NO_SURFACE, pbuffer);
 
     // Apply the Pbuffer and clear it to purple
     eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
@@ -424,7 +413,7 @@ TEST_P(D3DTextureTest, CheckSampleMismatch)
     EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 2,
                                        static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN));
     EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
-    EXPECT_EQ(pbuffer, nullptr);
+    EXPECT_EQ(nullptr, pbuffer);
 }
 
 class D3DTextureTestMS : public D3DTextureTest
@@ -449,7 +438,7 @@ TEST_P(D3DTextureTestMS, Clear)
     EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 4,
                                        static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN));
     ASSERT_EGL_SUCCESS();
-    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+    ASSERT_NE(EGL_NO_SURFACE, pbuffer);
 
     // Apply the Pbuffer and clear it to magenta and verify
     eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
@@ -477,7 +466,7 @@ TEST_P(D3DTextureTestMS, DrawProgram)
     EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 4,
                                        static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN));
     ASSERT_EGL_SUCCESS();
-    ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+    ASSERT_NE(EGL_NO_SURFACE, pbuffer);
 
     // Apply the Pbuffer and clear it to magenta
     eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
@@ -521,7 +510,7 @@ TEST_P(D3DTextureTestMS, BindTexture)
     EGLSurface pbuffer = createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 4,
                                        static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN));
     EXPECT_EGL_ERROR(EGL_BAD_ATTRIBUTE);
-    EXPECT_EQ(pbuffer, nullptr);
+    EXPECT_EQ(nullptr, pbuffer);
 }
 
 // Verify that creating a pbuffer from a multisampled texture with a multisampled window will fail
@@ -534,7 +523,7 @@ TEST_P(D3DTextureTestMS, CheckSampleMismatch)
                                        static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN));
 
     EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
-    EXPECT_EQ(pbuffer, nullptr);
+    EXPECT_EQ(nullptr, pbuffer);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these

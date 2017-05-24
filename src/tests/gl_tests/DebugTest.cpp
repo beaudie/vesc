@@ -104,10 +104,10 @@ TEST_P(DebugTest, InsertMessage)
         return;
     }
 
-    const GLenum source       = GL_DEBUG_SOURCE_APPLICATION;
-    const GLenum type         = GL_DEBUG_TYPE_OTHER;
-    const GLuint id           = 1;
-    const GLenum severity     = GL_DEBUG_SEVERITY_NOTIFICATION;
+    constexpr GLenum source   = GL_DEBUG_SOURCE_APPLICATION;
+    constexpr GLenum type     = GL_DEBUG_TYPE_OTHER;
+    constexpr GLuint id       = 1;
+    constexpr GLenum severity = GL_DEBUG_SEVERITY_NOTIFICATION;
     const std::string message = "Message";
 
     glDebugMessageInsertKHR(source, type, id, severity, -1, message.c_str());
@@ -152,12 +152,12 @@ TEST_P(DebugTest, InsertMessageMultiple)
         return;
     }
 
-    const GLenum source          = GL_DEBUG_SOURCE_APPLICATION;
-    const GLenum type            = GL_DEBUG_TYPE_OTHER;
-    const GLuint startID         = 1;
-    const GLenum severity        = GL_DEBUG_SEVERITY_NOTIFICATION;
-    const char messageRepeatChar = 'm';
-    const size_t messageCount    = 32;
+    constexpr GLenum source          = GL_DEBUG_SOURCE_APPLICATION;
+    constexpr GLenum type            = GL_DEBUG_TYPE_OTHER;
+    constexpr GLuint startID         = 1;
+    constexpr GLenum severity        = GL_DEBUG_SEVERITY_NOTIFICATION;
+    constexpr char messageRepeatChar = 'm';
+    constexpr size_t messageCount    = 32;
 
     for (size_t i = 0; i < messageCount; i++)
     {
@@ -219,10 +219,10 @@ TEST_P(DebugTest, DebugCallback)
     glDebugMessageCallbackKHR(Callback, &messages);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
-    const GLenum source       = GL_DEBUG_SOURCE_APPLICATION;
-    const GLenum type         = GL_DEBUG_TYPE_OTHER;
-    const GLuint id           = 1;
-    const GLenum severity     = GL_DEBUG_SEVERITY_NOTIFICATION;
+    constexpr GLenum source   = GL_DEBUG_SOURCE_APPLICATION;
+    constexpr GLenum type     = GL_DEBUG_TYPE_OTHER;
+    constexpr GLuint id       = 1;
+    constexpr GLenum severity = GL_DEBUG_SEVERITY_NOTIFICATION;
     const std::string message = "Message";
 
     glDebugMessageInsertKHR(source, type, id, severity, -1, message.c_str());
@@ -309,10 +309,10 @@ TEST_P(DebugTest, MessageControl1)
     // Message 2
     // Message 5
     EXPECT_EQ(4u, messages.size());
-    EXPECT_STREQ(messages[0].message.c_str(), "Message 1");
-    EXPECT_STREQ(messages[1].message.c_str(), "Message 2");
-    EXPECT_STREQ(messages[2].message.c_str(), "Message 2");
-    EXPECT_STREQ(messages[3].message.c_str(), "Message 5");
+    EXPECT_STREQ("Message 1", messages[0].message.c_str());
+    EXPECT_STREQ("Message 2", messages[1].message.c_str());
+    EXPECT_STREQ("Message 2", messages[2].message.c_str());
+    EXPECT_STREQ("Message 5", messages[3].message.c_str());
 
     ASSERT_GL_NO_ERROR();
 }
@@ -335,7 +335,7 @@ TEST_P(DebugTest, MessageControl2)
     glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_FALSE);
     glDebugMessageControlKHR(GL_DEBUG_SOURCE_THIRD_PARTY, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr,
                              GL_FALSE);
-    std::vector<GLuint> ids0 = {1234, 2345, 3456, 4567};
+    const std::vector<GLuint> ids0 = {1234, 2345, 3456, 4567};
     glDebugMessageControlKHR(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE,
                              static_cast<GLuint>(ids0.size()), ids0.data(), GL_FALSE);
     glDebugMessageControlKHR(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_PORTABILITY, GL_DONT_CARE,
@@ -364,7 +364,7 @@ TEST_P(DebugTest, MessageControl2)
     // Expected debug output from the GL implementation
     // Message 2
     EXPECT_EQ(1u, messages.size());
-    EXPECT_STREQ(messages[0].message.c_str(), "Message 2");
+    EXPECT_STREQ("Message 2", messages[0].message.c_str());
 
     ASSERT_GL_NO_ERROR();
 }

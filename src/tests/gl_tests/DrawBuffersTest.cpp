@@ -43,12 +43,7 @@ class DrawBuffersTest : public ANGLETest
                          GL_UNSIGNED_BYTE, nullptr);
         }
 
-        GLfloat data[] =
-        {
-            -1.0f, 1.0f,
-            -1.0f, -2.0f,
-            2.0f, 1.0f
-        };
+        constexpr GLfloat data[] = {-1.0f, 1.0f, -1.0f, -2.0f, 2.0f, 1.0f};
 
         glGenBuffers(1, &mBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
@@ -92,9 +87,9 @@ class DrawBuffersTest : public ANGLETest
         return (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_draw_buffers"));
     }
 
-    void setupMRTProgramESSL3(bool bufferEnabled[8], GLuint *programOut)
+    void setupMRTProgramESSL3(const bool bufferEnabled[8], GLuint *programOut)
     {
-        const std::string vertexShaderSource =
+        const std::string &vertexShaderSource =
             "#version 300 es\n"
             "in vec4 position;\n"
             "void main() {\n"
@@ -143,15 +138,15 @@ class DrawBuffersTest : public ANGLETest
         glUseProgram(*programOut);
 
         GLint location = glGetAttribLocation(*programOut, "position");
-        ASSERT_NE(location, -1);
+        ASSERT_NE(-1, location);
         glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
         glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 8, nullptr);
         glEnableVertexAttribArray(location);
     }
 
-    void setupMRTProgramESSL1(bool bufferEnabled[8], GLuint *programOut)
+    void setupMRTProgramESSL1(const bool bufferEnabled[8], GLuint *programOut)
     {
-        const std::string vertexShaderSource =
+        const std::string &vertexShaderSource =
             "attribute vec4 position;\n"
             "void main() {\n"
             "    gl_Position = position;\n"
@@ -189,13 +184,13 @@ class DrawBuffersTest : public ANGLETest
         glUseProgram(*programOut);
 
         GLint location = glGetAttribLocation(*programOut, "position");
-        ASSERT_NE(location, -1);
+        ASSERT_NE(-1, location);
         glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
         glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 8, nullptr);
         glEnableVertexAttribArray(location);
     }
 
-    void setupMRTProgram(bool bufferEnabled[8], GLuint *programOut)
+    void setupMRTProgram(const bool bufferEnabled[8], GLuint *programOut)
     {
         if (getClientMajorVersion() == 3)
         {
@@ -203,7 +198,7 @@ class DrawBuffersTest : public ANGLETest
         }
         else
         {
-            ASSERT_EQ(getClientMajorVersion(), 2);
+            ASSERT_EQ(2, getClientMajorVersion());
             setupMRTProgramESSL1(bufferEnabled, programOut);
         }
     }
@@ -256,12 +251,12 @@ TEST_P(DrawBuffersTest, VerifyD3DLimits)
         if (platform.majorVersion == 9 && platform.minorVersion == 3)
         {
             // D3D11 Feature Level 9_3 supports 4 draw buffers
-            ASSERT_EQ(mMaxDrawBuffers, 4);
+            ASSERT_EQ(4, mMaxDrawBuffers);
         }
         else
         {
             // D3D11 Feature Level 10_0+ supports 8 draw buffers
-            ASSERT_EQ(mMaxDrawBuffers, 8);
+            ASSERT_EQ(8, mMaxDrawBuffers);
         }
     }
     else
@@ -295,11 +290,7 @@ TEST_P(DrawBuffersTest, Gaps)
     GLuint program;
     setupMRTProgram(flags, &program);
 
-    const GLenum bufs[] =
-    {
-        GL_NONE,
-        GL_COLOR_ATTACHMENT1
-    };
+    constexpr GLenum bufs[] = {GL_NONE, GL_COLOR_ATTACHMENT1};
     glUseProgram(program);
     setDrawBuffers(2, bufs);
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -331,18 +322,12 @@ TEST_P(DrawBuffersTest, FirstAndLast)
     glBindTexture(GL_TEXTURE_2D, mTextures[1]);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, mTextures[1], 0);
 
-    bool flags[8] = { true, false, false, true };
+    constexpr bool flags[8] = {true, false, false, true};
 
     GLuint program;
     setupMRTProgram(flags, &program);
 
-    const GLenum bufs[] =
-    {
-        GL_COLOR_ATTACHMENT0,
-        GL_NONE,
-        GL_NONE,
-        GL_COLOR_ATTACHMENT3
-    };
+    constexpr GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_NONE, GL_NONE, GL_COLOR_ATTACHMENT3};
 
     glUseProgram(program);
     setDrawBuffers(4, bufs);
@@ -418,18 +403,12 @@ TEST_P(DrawBuffersTest, UnwrittenOutputVariablesShouldNotCrash)
     glBindTexture(GL_TEXTURE_2D, mTextures[1]);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, mTextures[1], 0);
 
-    bool flags[8] = { true, false };
+    constexpr bool flags[8] = {true, false};
 
     GLuint program;
     setupMRTProgram(flags, &program);
 
-    const GLenum bufs[] =
-    {
-        GL_COLOR_ATTACHMENT0,
-        GL_COLOR_ATTACHMENT1,
-        GL_NONE,
-        GL_NONE,
-    };
+    constexpr GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_NONE, GL_NONE};
 
     glUseProgram(program);
     setDrawBuffers(4, bufs);
@@ -461,14 +440,13 @@ TEST_P(DrawBuffersTestES3, 3DTextures)
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, texture.get(), 0, 2);
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, texture.get(), 0, 3);
 
-    bool flags[8] = {true, true, true, true, false};
+    constexpr bool flags[8] = {true, true, true, true, false};
 
     GLuint program;
     setupMRTProgram(flags, &program);
 
-    const GLenum bufs[] = {
-        GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
-    };
+    constexpr GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
+                               GL_COLOR_ATTACHMENT3};
 
     glUseProgram(program);
     glDrawBuffers(4, bufs);
@@ -498,14 +476,13 @@ TEST_P(DrawBuffersTestES3, 2DArrayTextures)
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, texture.get(), 0, 2);
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, texture.get(), 0, 3);
 
-    bool flags[8] = {true, true, true, true, false};
+    constexpr bool flags[8] = {true, true, true, true, false};
 
     GLuint program;
     setupMRTProgram(flags, &program);
 
-    const GLenum bufs[] = {
-        GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
-    };
+    constexpr GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
+                               GL_COLOR_ATTACHMENT3};
 
     glUseProgram(program);
     glDrawBuffers(4, bufs);

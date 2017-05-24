@@ -23,7 +23,7 @@ class CopyTexImageTest : public ANGLETest
         setConfigAlphaBits(8);
     }
 
-    GLuint createFramebuffer(GLenum format, GLenum type, GLfloat color[4]) const
+    GLuint createFramebuffer(GLenum format, GLenum type, const GLfloat color[4]) const
     {
         GLuint fbo;
         glGenFramebuffers(1, &fbo);
@@ -87,7 +87,7 @@ class CopyTexImageTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
+        const std::string &vsSource =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
@@ -99,7 +99,7 @@ class CopyTexImageTest : public ANGLETest
             "    texcoord.y = 1.0 - texcoord.y;\n"
             "}\n";
 
-        const std::string textureFSSource =
+        const std::string &textureFSSource =
             "precision highp float;\n"
             "uniform sampler2D tex;\n"
             "varying vec2 texcoord;\n"
@@ -127,7 +127,7 @@ class CopyTexImageTest : public ANGLETest
         ANGLETest::TearDown();
     }
 
-    void verifyResults(GLuint texture, GLubyte data[4], GLint x, GLint y)
+    void verifyResults(GLuint texture, const GLubyte data[4], GLint x, GLint y)
     {
         glViewport(0, 0, 16, 16);
 
@@ -150,16 +150,12 @@ class CopyTexImageTest : public ANGLETest
 
 TEST_P(CopyTexImageTest, RGBAToL)
 {
-    GLfloat color[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color[] = {0.25f, 1.0f, 0.75f, 0.5f};
 
     GLuint fbo = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color);
     GLuint tex = createTextureFromCopyTexImage(fbo, GL_LUMINANCE);
 
-    GLubyte expected[] = {
-        64, 64, 64, 255,
-    };
+    constexpr GLubyte expected[] = {64, 64, 64, 255};
     verifyResults(tex, expected, 0, 0);
 }
 
@@ -173,96 +169,68 @@ TEST_P(CopyTexImageTest, RGBToL)
         return;
     }
 
-    GLfloat color[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color[] = {0.25f, 1.0f, 0.75f, 0.5f};
 
     GLuint fbo = createFramebuffer(GL_RGB, GL_UNSIGNED_BYTE, color);
     GLuint tex = createTextureFromCopyTexImage(fbo, GL_LUMINANCE);
 
-    GLubyte expected[] = {
-        64, 64, 64, 255,
-    };
+    constexpr GLubyte expected[] = {64, 64, 64, 255};
     verifyResults(tex, expected, 0, 0);
 }
 
 TEST_P(CopyTexImageTest, RGBAToLA)
 {
-    GLfloat color[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color[] = {0.25f, 1.0f, 0.75f, 0.5f};
 
     GLuint fbo = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color);
     GLuint tex = createTextureFromCopyTexImage(fbo, GL_LUMINANCE_ALPHA);
 
-    GLubyte expected[] = {
-        64, 64, 64, 127,
-    };
+    constexpr GLubyte expected[] = {64, 64, 64, 127};
     verifyResults(tex, expected, 0, 0);
 }
 
 TEST_P(CopyTexImageTest, RGBAToA)
 {
-    GLfloat color[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color[] = {0.25f, 1.0f, 0.75f, 0.5f};
 
     GLuint fbo = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color);
     GLuint tex = createTextureFromCopyTexImage(fbo, GL_ALPHA);
 
-    GLubyte expected[] = {
-        0, 0, 0, 127,
-    };
+    constexpr GLubyte expected[] = {0, 0, 0, 127};
     verifyResults(tex, expected, 0, 0);
 }
 
 TEST_P(CopyTexImageTest, SubImageRGBAToL)
 {
-    GLfloat color0[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color0[] = {0.25f, 1.0f, 0.75f, 0.5f};
     GLuint fbo0 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color0);
     GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_LUMINANCE);
 
-    GLfloat color1[] = {
-        0.5f, 0.25f, 1.0f, 0.75f,
-    };
+    constexpr GLfloat color1[] = {0.5f, 0.25f, 1.0f, 0.75f};
     GLuint fbo1 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color1);
     copyTextureWithCopyTexSubImage(fbo1, tex, 2, 4, 5, 6, 8, 8);
 
-    GLubyte expected0[] = {
-        64, 64, 64, 255,
-    };
+    constexpr GLubyte expected0[] = {64, 64, 64, 255};
     verifyResults(tex, expected0, 0, 0);
 
-    GLubyte expected1[] = {
-        127, 127, 127, 255,
-    };
+    constexpr GLubyte expected1[] = {127, 127, 127, 255};
     verifyResults(tex, expected1, 7, 7);
 }
 
 TEST_P(CopyTexImageTest, SubImageRGBAToLA)
 {
-    GLfloat color0[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color0[] = {0.25f, 1.0f, 0.75f, 0.5f};
     GLuint fbo0 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color0);
     GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_LUMINANCE_ALPHA);
 
-    GLfloat color1[] = {
-        0.5f, 0.25f, 1.0f, 0.75f,
-    };
+    constexpr GLfloat color1[] = {0.5f, 0.25f, 1.0f, 0.75f};
     GLuint fbo1 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color1);
     copyTextureWithCopyTexSubImage(fbo1, tex, 2, 4, 5, 6, 8, 8);
 
-    GLubyte expected0[] = {
-        64, 64, 64, 127,
-    };
+    constexpr GLubyte expected0[] = {64, 64, 64, 127};
     verifyResults(tex, expected0, 0, 0);
 
-    GLubyte expected1[] = {
-        127, 127, 127, 192,
-    };
+    constexpr GLubyte expected1[] = {127, 127, 127, 192};
     verifyResults(tex, expected1, 7, 7);
 }
 
@@ -276,26 +244,18 @@ TEST_P(CopyTexImageTest, SubImageRGBToL)
         return;
     }
 
-    GLfloat color0[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color0[] = {0.25f, 1.0f, 0.75f, 0.5f};
     GLuint fbo0 = createFramebuffer(GL_RGB, GL_UNSIGNED_BYTE, color0);
     GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_LUMINANCE);
 
-    GLfloat color1[] = {
-        0.5f, 0.25f, 1.0f, 0.75f,
-    };
+    constexpr GLfloat color1[] = {0.5f, 0.25f, 1.0f, 0.75f};
     GLuint fbo1 = createFramebuffer(GL_RGB, GL_UNSIGNED_BYTE, color1);
     copyTextureWithCopyTexSubImage(fbo1, tex, 2, 4, 5, 6, 8, 8);
 
-    GLubyte expected0[] = {
-        64, 64, 64, 255,
-    };
+    constexpr GLubyte expected0[] = {64, 64, 64, 255};
     verifyResults(tex, expected0, 0, 0);
 
-    GLubyte expected1[] = {
-        127, 127, 127, 255,
-    };
+    constexpr GLubyte expected1[] = {127, 127, 127, 255};
     verifyResults(tex, expected1, 7, 7);
 }
 
@@ -340,9 +300,7 @@ class CopyTexImageTestES3 : public CopyTexImageTest
 //  Reference: GLES 3.0.4, Section 3.8.5 Alternate Texture Image Specification Commands
 TEST_P(CopyTexImageTestES3, ReadBufferIsNone)
 {
-    GLfloat color[] = {
-        0.25f, 1.0f, 0.75f, 0.5f,
-    };
+    constexpr GLfloat color[] = {0.25f, 1.0f, 0.75f, 0.5f};
 
     GLuint fbo = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color);
     GLuint tex = createTextureFromCopyTexImage(fbo, GL_RGBA);
