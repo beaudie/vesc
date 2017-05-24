@@ -419,6 +419,165 @@ TEST_P(FramebufferTest_ES3, DepthOnlyAsDepthStencil)
     EXPECT_GLENUM_NE(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
 
+// Test that if a fbo's color attachment is a texture and we clear it to black, then sampling that
+// texture to draw to another fbo, the final render color should be still black.
+TEST_P(FramebufferTest_ES3, ClearColorWithBlack)
+{
+    // This fails on Intel 6000/6100 Mac OSX. See crbug.com/710443.
+    if (IsOSX() && IsIntel())
+    {
+        std::cout << "Test skipped due to driver bug on Intel Mac OSX." << std::endl;
+        return;
+    }
+
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1.get());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1200, 1100, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GLFramebuffer fbo1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1.get());
+    glViewport(0, 0, 1200, 1100);
+    glDisable(GL_SCISSOR_TEST);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    // Changing the r,g,b channels to anything but 0 or the alpha to anything but 0 seems to resolve
+    // this in MacOS. 
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2.get());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2048, 2048, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GLFramebuffer fbo2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2.get(), 0);
+    GLBuffer buf1;
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf1.get());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 49152, NULL, GL_STATIC_DRAW);
+    uint16_t *data = static_cast<uint16_t *>(glMapBufferRange(
+        GL_ELEMENT_ARRAY_BUFFER, 0, 49152, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+    static const int kMaxQuads       = 1 << 12;
+    static const uint16_t kPattern[] = {0, 1, 2, 0, 2, 3};
+    for (int i = 0; i < kMaxQuads; ++i)
+    {
+        int baseIdx       = i * 6;
+        uint16_t baseVert = (uint16_t)(i * 4);
+        for (int j = 0; j < 6; ++j)
+        {
+            data[baseIdx + j] = baseVert + kPattern[j];
+        }
+    }
+    glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+    GLBuffer buf2;
+    glBindBuffer(GL_ARRAY_BUFFER, buf2.get());
+    glBufferData(GL_ARRAY_BUFFER, 32768, NULL, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 32768, NULL, GL_STREAM_DRAW);
+    std::array<GLubyte, 80> subdata = {
+        {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00,
+         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x89, 0x44,
+         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x89, 0x44, 0x00, 0x00,
+         0x96, 0x44, 0x00, 0x80, 0x89, 0x44, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x96, 0x44,
+         0x00, 0x80, 0x89, 0x44, 0x00, 0x00, 0x96, 0x44, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff,
+         0xff, 0xff, 0x00, 0x00, 0x96, 0x44, 0x00, 0x00, 0x00, 0x00}};
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 80, subdata.data());
+
+    const std::string &vertexShaderSource =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "uniform vec4 urtAdjustment_Stage0;\n"
+        "uniform mat3 uCoordTransformMatrix_0_Stage0;\n"
+        "in vec2 inPosition;\n"
+        "in vec4 inColor;\n"
+        "in vec2 inLocalCoord;\n"
+        "out vec4 vcolor_Stage0;\n"
+        "out vec2 vTransformedCoords_0_Stage0;\n"
+        "void main() {\n"
+        "    vcolor_Stage0 = inColor;\n"
+        "    vec2 pos2 = inPosition;\n"
+        "    vTransformedCoords_0_Stage0 = (uCoordTransformMatrix_0_Stage0 * vec3(inLocalCoord, "
+        "1.0)).xy;\n"
+        "    gl_Position = vec4(pos2.x * urtAdjustment_Stage0.x + urtAdjustment_Stage0.y, pos2.y * "
+        "urtAdjustment_Stage0.z + urtAdjustment_Stage0.w, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string &fragmentShaderSource =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 sk_FragColor;\n"
+        "uniform sampler2D uTextureSampler_0_Stage1;\n"
+        "in vec4 vcolor_Stage0;\n"
+        "in vec2 vTransformedCoords_0_Stage0;\n"
+        "void main() {\n"
+        "    vec4 outputColor_Stage0 = vcolor_Stage0;\n"
+        "    vec4 output_Stage1 = outputColor_Stage0 * texture(uTextureSampler_0_Stage1, "
+        "vTransformedCoords_0_Stage0);\n"
+        "    sk_FragColor = output_Stage1;\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(prog, vertexShaderSource, fragmentShaderSource);
+
+    glBindAttribLocation(prog.get(), 0, "inPosition");
+    glBindAttribLocation(prog.get(), 1, "inColor");
+    glBindAttribLocation(prog.get(), 2, "inLocalCoord");
+
+    GLint urtAdjustment_Stage0_Loc = glGetUniformLocation(prog.get(), "urtAdjustment_Stage0");
+    GLint uCoordTransformMatrix_0_Stage0_Loc =
+        glGetUniformLocation(prog.get(), "uCoordTransformMatrix_0_Stage0");
+    GLint uTextureSampler_0_Stage1_Loc =
+        glGetUniformLocation(prog.get(), "uTextureSampler_0_Stage1");
+
+    glUseProgram(prog.get());
+    glDisable(GL_BLEND);
+    GLfloat u1[] = {0.0009765625f, -1, 0.0009765625f, -1};
+    glUniform4fv(urtAdjustment_Stage0_Loc, 1, u1);
+    GLfloat u2[] = {0.0008333334f, 0, 0, 0, -0.0009090909f, 0, 0, 1, 1};
+    glUniformMatrix3fv(uCoordTransformMatrix_0_Stage0_Loc, 1, GL_FALSE, u2);
+
+    glUniform1i(uTextureSampler_0_Stage1_Loc, 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex1.get());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_GREEN);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_BLUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ALPHA);
+    glDisable(GL_STENCIL_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2.get());
+    glViewport(0, 0, 2048, 2048);
+    GLuint va1;
+    glGenVertexArrays(1, &va1);
+    glBindVertexArray(va1);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf1.get());
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 20, reinterpret_cast<void *>(0));
+    glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 20, reinterpret_cast<void *>(0x8));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 20, reinterpret_cast<void *>(0xc));
+    glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_SHORT, reinterpret_cast<void *>(0));
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+
+    std::vector<GLColor> actual(1, GLColor::white);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, actual.data());
+
+    std::vector<GLColor> expected(1, GLColor::black);
+    EXPECT_EQ(expected, actual);
+
+    glDeleteVertexArrays(1, &va1);
+}
+
 ANGLE_INSTANTIATE_TEST(FramebufferTest_ES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 class FramebufferTest_ES31 : public ANGLETest
