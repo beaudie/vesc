@@ -30,21 +30,25 @@ class CopyCompressedTextureTest : public ANGLETest
 
         glGenTextures(2, mTextures);
 
-        mProgram = CompileProgram(
+        const std::string &vsSource =
             "attribute vec2 a_position;\n"
             "varying vec2 v_texcoord;\n"
             "void main()\n"
             "{\n"
             "   gl_Position = vec4(a_position, 0.0, 1.0);\n"
             "   v_texcoord = (a_position + 1.0) * 0.5;\n"
-            "}\n",
+            "}\n";
+
+        const std::string &fsSource =
             "precision mediump float;\n"
             "uniform sampler2D u_texture;\n"
             "varying vec2 v_texcoord;\n"
             "void main()\n"
             "{\n"
             "    gl_FragColor = texture2D(u_texture, v_texcoord);\n"
-            "}\n");
+            "}\n";
+
+        mProgram = CompileProgram(vsSource, fsSource);
         ASSERT_NE(0u, mProgram);
 
         if (extensionEnabled("GL_CHROMIUM_copy_compressed_texture"))
@@ -95,25 +99,25 @@ const GLColor &CompressedImageColor = GLColor::red;
 
 // Single compressed ATC block of source pixels all set to:
 // CompressedImageColor.
-const uint8_t CompressedImageATC[8] = {0x0, 0x7c, 0x0, 0xf8, 0x55, 0x55, 0x55, 0x55};
+constexpr uint8_t CompressedImageATC[8] = {0x0, 0x7c, 0x0, 0xf8, 0x55, 0x55, 0x55, 0x55};
 
 // Single compressed ATCIA block of source pixels all set to:
 // CompressedImageColor.
-const uint8_t CompressedImageATCIA[16] = {0xff, 0xff, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,
-                                          0x0,  0x7c, 0x0, 0xf8, 0x55, 0x55, 0x55, 0x55};
+constexpr uint8_t CompressedImageATCIA[16] = {0xff, 0xff, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,
+                                              0x0,  0x7c, 0x0, 0xf8, 0x55, 0x55, 0x55, 0x55};
 
 // Single compressed DXT1 block of source pixels all set to:
 // CompressedImageColor.
-const uint8_t CompressedImageDXT1[8] = {0x00, 0xf8, 0x00, 0xf8, 0xaa, 0xaa, 0xaa, 0xaa};
+constexpr uint8_t CompressedImageDXT1[8] = {0x00, 0xf8, 0x00, 0xf8, 0xaa, 0xaa, 0xaa, 0xaa};
 
 // Single compressed DXT5 block of source pixels all set to:
 // CompressedImageColor.
-const uint8_t CompressedImageDXT5[16] = {0xff, 0xff, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,
-                                         0x0,  0xf8, 0x0, 0xf8, 0xaa, 0xaa, 0xaa, 0xaa};
+constexpr uint8_t CompressedImageDXT5[16] = {0xff, 0xff, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,
+                                             0x0,  0xf8, 0x0, 0xf8, 0xaa, 0xaa, 0xaa, 0xaa};
 
 // Single compressed DXT1 block of source pixels all set to:
 // CompressedImageColor.
-const uint8_t CompressedImageETC1[8] = {0x0, 0x0, 0xf8, 0x2, 0xff, 0xff, 0x0, 0x0};
+constexpr uint8_t CompressedImageETC1[8] = {0x0, 0x0, 0xf8, 0x2, 0xff, 0xff, 0x0, 0x0};
 
 }  // anonymous namespace
 

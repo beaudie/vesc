@@ -16,8 +16,8 @@ using namespace angle;
 namespace
 {
 
-const GLuint kWidth  = 100;
-const GLuint kHeight = 100;
+constexpr GLuint kWidth  = 100;
+constexpr GLuint kHeight = 100;
 
 class CHROMIUMFramebufferMixedSamplesTest : public ANGLETest
 {
@@ -39,13 +39,13 @@ class CHROMIUMFramebufferMixedSamplesTest : public ANGLETest
         ANGLETest::SetUp();
 
         // clang-format off
-        static const char* kVertexShaderSource =
+        const std::string &kVertexShaderSource =
             "attribute mediump vec4 position;\n"
             "void main() {\n"
             "  gl_Position = position;\n"
             "}\n";
 
-        static const char* kFragmentShaderSource =
+        const std::string &kFragmentShaderSource =
             "uniform mediump vec4 color;\n"
             "void main() {\n"
             "  gl_FragColor = color;\n"
@@ -60,7 +60,7 @@ class CHROMIUMFramebufferMixedSamplesTest : public ANGLETest
         glGenBuffers(1, &mVBO);
         glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-        static float vertices[] = {
+        static constexpr float vertices[] = {
             1.0f,  1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
             -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f, 1.0f,
         };
@@ -170,7 +170,7 @@ TEST_P(CHROMIUMFramebufferMixedSamplesTest, StateSettingTest)
     GLint value = -1;
     glGetIntegerv(GL_COVERAGE_MODULATION_CHROMIUM, &value);
     EXPECT_EQ(GL_NONE, value);
-    GLenum kValues[] = {GL_NONE, GL_RGB, GL_RGBA, GL_ALPHA};
+    constexpr GLenum kValues[] = {GL_NONE, GL_RGB, GL_RGBA, GL_ALPHA};
     for (auto expect : kValues)
     {
         glCoverageModulationCHROMIUM(expect);
@@ -206,10 +206,10 @@ TEST_P(CHROMIUMFramebufferMixedSamplesTest, CoverageModulation)
     {
         return;
     }
-    static const float kBlue[]  = {0.0f, 0.0f, 1.0f, 1.0f};
-    static const float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
+    static constexpr float kBlue[]  = {0.0f, 0.0f, 1.0f, 1.0f};
+    static constexpr float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
     std::unique_ptr<uint8_t[]> results[3];
-    const GLint kResultSize = kWidth * kHeight * 4;
+    constexpr GLint kResultSize = kWidth * kHeight * 4;
 
     for (int pass = 0; pass < 3; ++pass)
     {
@@ -250,11 +250,11 @@ TEST_P(CHROMIUMFramebufferMixedSamplesTest, MultisampleStencilEffective)
         return;
     }
 
-    static const float kBlue[]  = {0.0f, 0.0f, 1.0f, 1.0f};
-    static const float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
+    static constexpr float kBlue[]  = {0.0f, 0.0f, 1.0f, 1.0f};
+    static constexpr float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
 
     std::unique_ptr<uint8_t[]> results[3];
-    const GLint kResultSize = kWidth * kHeight * 4;
+    constexpr GLint kResultSize = kWidth * kHeight * 4;
 
     for (int pass = 0; pass < 3; ++pass)
     {

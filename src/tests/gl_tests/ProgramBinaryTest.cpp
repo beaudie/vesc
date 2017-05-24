@@ -33,22 +33,18 @@ class ProgramBinaryTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            attribute vec4 inputAttribute;
-            void main()
-            {
-                gl_Position = inputAttribute;
-            }
-        );
+        const std::string &vertexShaderSource =
+            "attribute vec4 inputAttribute;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = inputAttribute;\n"
+            "}\n";
 
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            void main()
-            {
-                gl_FragColor = vec4(1,0,0,1);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1,0,0,1);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         if (mProgram == 0)

@@ -28,23 +28,19 @@ class OcclusionQueriesTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string passthroughVS = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
+        const std::string &passthroughVS =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-        const std::string passthroughPS = SHADER_SOURCE
-        (
-            precision highp float;
-            void main(void)
-            {
-               gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-            }
-        );
+        const std::string &passthroughPS =
+            "precision highp float;\n"
+            "void main(void)\n"
+            "{\n"
+            "   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(passthroughVS, passthroughPS);
         ASSERT_NE(0u, mProgram);
@@ -160,8 +156,8 @@ TEST_P(OcclusionQueriesTest, Errors)
     GLuint query2 = 0;
     glGenQueriesEXT(1, &query);
 
-    EXPECT_EQ(glIsQueryEXT(query), GL_FALSE);
-    EXPECT_EQ(glIsQueryEXT(query2), GL_FALSE);
+    EXPECT_EQ(GL_FALSE, glIsQueryEXT(query));
+    EXPECT_EQ(GL_FALSE, glIsQueryEXT(query2));
 
     glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_EXT, 0); // can't pass 0 as query id
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -170,8 +166,8 @@ TEST_P(OcclusionQueriesTest, Errors)
     glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT, query2); // can't initiate a query while one's already active
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
-    EXPECT_EQ(glIsQueryEXT(query), GL_TRUE);
-    EXPECT_EQ(glIsQueryEXT(query2), GL_FALSE); // have not called begin
+    EXPECT_EQ(GL_TRUE, glIsQueryEXT(query));
+    EXPECT_EQ(GL_FALSE, glIsQueryEXT(query2));  // have not called begin
 
     drawQuad(mProgram, "position", 0.8f); // this quad should not be occluded
     glEndQueryEXT(GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT); // no active query for this target
@@ -186,7 +182,7 @@ TEST_P(OcclusionQueriesTest, Errors)
 
     glGenQueriesEXT(1, &query2);
     glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT, query2); // should be ok now
-    EXPECT_EQ(glIsQueryEXT(query2), GL_TRUE);
+    EXPECT_EQ(GL_TRUE, glIsQueryEXT(query2));
 
     drawQuad(mProgram, "position", 0.3f); // this should draw in front of other quad
     glDeleteQueriesEXT(1, &query2); // should delete when query becomes inactive
@@ -244,7 +240,7 @@ TEST_P(OcclusionQueriesTest, MultiContext)
         EGL_NONE,
     };
 
-    const size_t passCount = 5;
+    constexpr size_t passCount = 5;
     struct ContextInfo
     {
         EGLContext context;
@@ -284,30 +280,26 @@ TEST_P(OcclusionQueriesTest, MultiContext)
     for (auto &context : contexts)
     {
         context.context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
-        ASSERT_NE(context.context, EGL_NO_CONTEXT);
+        ASSERT_NE(EGL_NO_CONTEXT, context.context);
 
         eglMakeCurrent(display, surface, surface, context.context);
 
-        const std::string passthroughVS = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
+        const std::string &passthroughVS =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-        const std::string passthroughPS = SHADER_SOURCE
-        (
-            precision highp float;
-            void main(void)
-            {
-               gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-            }
-        );
+        const std::string &passthroughPS =
+            "precision highp float;\n"
+            "void main(void)\n"
+            "{\n"
+            "   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+            "}\n";
 
         context.program = CompileProgram(passthroughVS, passthroughPS);
-        ASSERT_NE(context.program, 0u);
+        ASSERT_NE(0u, context.program);
 
         glDepthMask(GL_FALSE);
         glEnable(GL_DEPTH_TEST);

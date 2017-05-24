@@ -37,41 +37,32 @@ class D3DTextureTest : public ANGLETest
         ANGLETest::SetUp();
 
         // clang-format off
-        const std::string vsSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vsSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = position;\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "    texcoord.y = 1.0 - texcoord.y;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                texcoord = (position.xy * 0.5) + 0.5;
-                texcoord.y = 1.0 - texcoord.y;
-            }
-        );
+        const std::string &textureFSSource =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
-        const std::string textureFSSource = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
-
-        const std::string textureFSSourceNoSampling = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &textureFSSourceNoSampling =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
         // clang-format on
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
@@ -261,7 +252,7 @@ TEST_P(D3DTextureTest, Clear)
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 1, 0);
@@ -296,7 +287,7 @@ TEST_P(D3DTextureTest, DepthStencil)
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_NO_TEXTURE, EGL_NO_TEXTURE, 1, 0);
@@ -347,7 +338,7 @@ TEST_P(D3DTextureTest, BindTexImage)
     EGLWindow *window = getEGLWindow();
     EGLDisplay display = window->getDisplay();
 
-    const size_t bufferSize = 32;
+    constexpr size_t bufferSize = 32;
 
     EGLSurface pbuffer =
         createPBuffer(bufferSize, bufferSize, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 1, 0);

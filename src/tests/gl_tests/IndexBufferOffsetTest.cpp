@@ -28,15 +28,21 @@ class IndexBufferOffsetTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource =
-            SHADER_SOURCE(precision highp float; attribute vec2 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec2 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position, 0.0, 1.0);\n"
+            "}\n";
 
-                          void main() { gl_Position = vec4(position, 0.0, 1.0); });
-
-        const std::string fragmentShaderSource =
-            SHADER_SOURCE(precision highp float; uniform vec4 color;
-
-                          void main() { gl_FragColor = color; });
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "uniform vec4 color;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -44,7 +50,7 @@ class IndexBufferOffsetTest : public ANGLETest
         mColorUniformLocation      = glGetUniformLocation(mProgram, "color");
         mPositionAttributeLocation = glGetAttribLocation(mProgram, "position");
 
-        const GLfloat vertices[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+        constexpr GLfloat vertices[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
         glGenBuffers(1, &mVertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
