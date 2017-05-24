@@ -25,40 +25,31 @@ class MaxTextureSizeTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vsSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                texcoord = (position.xy * 0.5) + 0.5;
-            }
-        );
+        const std::string &textureFSSource =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
-        const std::string textureFSSource = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
-
-        const std::string blueFSSource = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &blueFSSource =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
         mBlueProgram = CompileProgram(vsSource, blueFSSource);
@@ -106,7 +97,7 @@ TEST_P(MaxTextureSizeTest, SpecificationTexImage)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     GLsizei textureWidth = mMaxTexture2DSize;
-    GLsizei textureHeight = 64;
+    constexpr GLsizei textureHeight = 64;
 
     std::vector<GLubyte> data(textureWidth * textureHeight * 4);
     for (int y = 0; y < textureHeight; y++)
@@ -166,7 +157,7 @@ TEST_P(MaxTextureSizeTest, SpecificationTexStorage)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    GLsizei textureWidth = 64;
+    constexpr GLsizei textureWidth = 64;
     GLsizei textureHeight = mMaxTexture2DSize;
 
     std::vector<GLubyte> data(textureWidth * textureHeight * 4);
@@ -234,7 +225,7 @@ TEST_P(MaxTextureSizeTest, RenderToTexture)
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
 
-    GLsizei textureWidth = 64;
+    constexpr GLsizei textureWidth = 64;
     GLsizei textureHeight = mMaxTexture2DSize;
 
     // texture setup code

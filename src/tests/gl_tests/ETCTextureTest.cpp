@@ -52,7 +52,7 @@ TEST_P(ETCTextureTest, ETC1Validation)
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    GLubyte pixel[8] = { 0x0, 0x0, 0xf8, 0x2, 0x43, 0xff, 0x4, 0x12 };
+    constexpr GLubyte pixel[8] = {0x0, 0x0, 0xf8, 0x2, 0x43, 0xff, 0x4, 0x12};
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_LOSSY_DECODE_ANGLE, 4, 4, 0,
                            sizeof(pixel), pixel);
     if (supported)
@@ -84,7 +84,7 @@ TEST_P(ETCTextureTest, ETC2RGB8Validation)
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    GLubyte pixel[] = {
+    constexpr GLubyte pixel[] = {
         0x00, 0x00, 0xf8, 0x02, 0x43, 0xff, 0x04, 0x12,  // Individual/differential block
         0x1c, 0x65, 0xc6, 0x62, 0xff, 0xf0, 0xff, 0x00,  // T block
         0x62, 0xf2, 0xe3, 0x32, 0xff, 0x0f, 0xff, 0x00,  // H block
@@ -100,7 +100,7 @@ TEST_P(ETCTextureTest, ETC2RGB8Validation)
                                   GL_COMPRESSED_RGB8_LOSSY_DECODE_ETC2_ANGLE, sizeof(pixel), pixel);
         EXPECT_GL_NO_ERROR();
 
-        const GLsizei imageSize = 8;
+        constexpr GLsizei imageSize = 8;
 
         glCompressedTexImage2D(GL_TEXTURE_2D, 1, GL_COMPRESSED_RGB8_LOSSY_DECODE_ETC2_ANGLE, 4, 4,
                                0, imageSize, pixel);
@@ -127,7 +127,7 @@ TEST_P(ETCTextureTest, ETC2SRGB8Validation)
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    GLubyte pixel[] = {
+    constexpr GLubyte pixel[] = {
         0x00, 0x00, 0xf8, 0x02, 0x43, 0xff, 0x04, 0x12,  // Individual/differential block
         0x1c, 0x65, 0xc6, 0x62, 0xff, 0xf0, 0xff, 0x00,  // T block
         0x62, 0xf2, 0xe3, 0x32, 0xff, 0x0f, 0xff, 0x00,  // H block
@@ -144,7 +144,7 @@ TEST_P(ETCTextureTest, ETC2SRGB8Validation)
                                   pixel);
         EXPECT_GL_NO_ERROR();
 
-        const GLsizei imageSize = 8;
+        constexpr GLsizei imageSize = 8;
 
         glCompressedTexImage2D(GL_TEXTURE_2D, 1, GL_COMPRESSED_SRGB8_LOSSY_DECODE_ETC2_ANGLE, 4, 4,
                                0, imageSize, pixel);
@@ -171,7 +171,7 @@ TEST_P(ETCTextureTest, ETC2RGB8A1Validation)
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    GLubyte pixel[] = {
+    constexpr GLubyte pixel[] = {
         0x80, 0x98, 0x59, 0x02, 0x6e, 0xe7, 0x44, 0x47,  // Individual/differential block
         0xeb, 0x85, 0x68, 0x30, 0x77, 0x73, 0x44, 0x44,  // T block
         0xb4, 0x05, 0xab, 0x92, 0xf8, 0x8c, 0x07, 0x73,  // H block
@@ -189,7 +189,7 @@ TEST_P(ETCTextureTest, ETC2RGB8A1Validation)
                                   sizeof(pixel), pixel);
         EXPECT_GL_NO_ERROR();
 
-        const GLsizei imageSize = 8;
+        constexpr GLsizei imageSize = 8;
 
         glCompressedTexImage2D(GL_TEXTURE_2D, 1,
                                GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_LOSSY_DECODE_ETC2_ANGLE, 4, 4,
@@ -219,7 +219,7 @@ TEST_P(ETCTextureTest, ETC2SRGB8A1Validation)
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    GLubyte pixel[] = {
+    constexpr GLubyte pixel[] = {
         0x80, 0x98, 0x59, 0x02, 0x6e, 0xe7, 0x44, 0x47,  // Individual/differential block
         0xeb, 0x85, 0x68, 0x30, 0x77, 0x73, 0x44, 0x44,  // T block
         0xb4, 0x05, 0xab, 0x92, 0xf8, 0x8c, 0x07, 0x73,  // H block
@@ -237,7 +237,7 @@ TEST_P(ETCTextureTest, ETC2SRGB8A1Validation)
                                   sizeof(pixel), pixel);
         EXPECT_GL_NO_ERROR();
 
-        const GLsizei imageSize = 8;
+        constexpr GLsizei imageSize = 8;
 
         glCompressedTexImage2D(GL_TEXTURE_2D, 1,
                                GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_LOSSY_DECODE_ETC2_ANGLE, 4,

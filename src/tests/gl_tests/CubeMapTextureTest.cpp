@@ -25,23 +25,19 @@ class CubeMapTextureTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
+        const std::string &vsSource =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-        const std::string fsSource = SHADER_SOURCE
-        (
-            uniform highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            }
-        );
+        const std::string &fsSource =
+            "uniform highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(vsSource, fsSource);
         if (mProgram == 0)
@@ -77,15 +73,9 @@ class CubeMapTextureTest : public ANGLETest
 // Verify that rendering to the faces of a cube map consecutively will correctly render to each face.
 TEST_P(CubeMapTextureTest, RenderToFacesConsecutively)
 {
-    const GLfloat faceColors[] =
-    {
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 1.0f,
-        0.0f, 1.0f, 1.0f, 1.0f,
-    };
+    constexpr GLfloat faceColors[] = {1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                                      0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+                                      1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
     GLuint tex = 0;
     glGenTextures(1, &tex);

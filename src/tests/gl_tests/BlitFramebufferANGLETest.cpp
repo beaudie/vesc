@@ -61,47 +61,38 @@ class BlitFramebufferANGLETest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string passthroughVS = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec4 pos;
+        const std::string &passthroughVS =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec4 pos;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "    pos = position;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                pos = position;
-            }
-        );
+        const std::string &checkeredFS =
+            "precision highp float;\n"
+            "varying vec4 pos;\n"
+            "void main()\n"
+            "{\n"
+            "    if (pos.x * pos.y > 0.0)\n"
+            "    {\n"
+            "        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "    }\n"
+            "    else\n"
+            "    {\n"
+            "        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+            "    }\n"
+            "}\n";
 
-        const std::string checkeredFS = SHADER_SOURCE
-        (
-            precision highp float;
-            varying vec4 pos;
-
-            void main()
-            {
-                if (pos.x * pos.y > 0.0)
-                {
-                    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                }
-                else
-                {
-                    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-                }
-            }
-        );
-
-        const std::string blueFS = SHADER_SOURCE
-        (
-            precision highp float;
-            varying vec4 pos;
-
-            void main()
-            {
-                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &blueFS =
+            "precision highp float;\n"
+            "varying vec4 pos;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
 
         mCheckerProgram = CompileProgram(passthroughVS, checkeredFS);
         mBlueProgram = CompileProgram(passthroughVS, blueFS);
@@ -119,7 +110,7 @@ class BlitFramebufferANGLETest : public ANGLETest
             mOriginalFBO = (GLuint)originalFBO;
         }
 
-        GLenum format = GL_BGRA_EXT;
+        constexpr GLenum format = GL_BGRA_EXT;
 
         glGenFramebuffers(1, &mUserFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);

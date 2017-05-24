@@ -16,8 +16,8 @@ using namespace angle;
 namespace
 {
 
-const GLint kWidth = 64;
-const GLint kHeight = 64;
+constexpr GLint kWidth  = 64;
+constexpr GLint kHeight = 64;
 
 // test drawing with GL_MULTISAMPLE_EXT enabled/disabled.
 class EXTMultisampleCompatibilityTest : public ANGLETest
@@ -37,30 +37,35 @@ protected:
     {
         ANGLETest::SetUp();
 
-        static const char* v_shader_str =
+        static const std::string &v_shader_str =
             "attribute vec4 a_Position;\n"
             "void main()\n"
-            "{ gl_Position = a_Position; }";
+            "{\n"
+            "    gl_Position = a_Position;\n"
+            "}\n";
 
-        static const char* f_shader_str =
+        static const std::string &f_shader_str =
             "precision mediump float;\n"
             "uniform vec4 color;"
-            "void main() { gl_FragColor = color; }";
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(v_shader_str, f_shader_str);
+        ASSERT_NE(0u, mProgram);
 
         GLuint position_loc = glGetAttribLocation(mProgram, "a_Position");
         mColorLoc = glGetUniformLocation(mProgram, "color");
 
         glGenBuffers(1, &mVBO);
         glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-        static float vertices[] = {
-            1.0f,  1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f, 1.0f,
-        };
+        static constexpr float vertices[] = {1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f,
+                                             -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f,
+                                             -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f};
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         glEnableVertexAttribArray(position_loc);
-        glVertexAttribPointer(position_loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(position_loc, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
 
     void TearDown() override
@@ -192,16 +197,16 @@ TEST_P(EXTMultisampleCompatibilityTest, DrawAndResolve)
     if (!isApplicable())
         return;
 
-    static const float kBlue[] = {0.0f, 0.0f, 1.0f, 1.0f};
-    static const float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
-    static const float kRed[] = {1.0f, 0.0f, 0.0f, 1.0f};
+    static constexpr float kBlue[]  = {0.0f, 0.0f, 1.0f, 1.0f};
+    static constexpr float kGreen[] = {0.0f, 1.0f, 0.0f, 1.0f};
+    static constexpr float kRed[]   = {1.0f, 0.0f, 0.0f, 1.0f};
 
     // Different drivers seem to behave differently with respect to resulting
     // values. These might be due to different MSAA sample counts causing
     // different samples to hit.  Other option is driver bugs. Just test that
     // disabling multisample causes a difference.
     std::unique_ptr<uint8_t[]> results[3];
-    const GLint kResultSize = kWidth * kHeight * 4;
+    constexpr GLint kResultSize = kWidth * kHeight * 4;
     for (int pass = 0; pass < 3; pass++)
     {
         prepareForDraw();
@@ -254,9 +259,9 @@ TEST_P(EXTMultisampleCompatibilityTest, DrawAlphaOneAndResolve)
     // SAMPLE_ALPHA_TO_ONE is specified to transform alpha values of
     // covered samples to 1.0. In order to detect it, we use non-1.0
     // alpha.
-    static const float kBlue[] = {0.0f, 0.0f, 1.0f, 0.5f};
-    static const float kGreen[] = {0.0f, 1.0f, 0.0f, 0.5f};
-    static const float kRed[] = {1.0f, 0.0f, 0.0f, 0.5f};
+    static constexpr float kBlue[]  = {0.0f, 0.0f, 1.0f, 0.5f};
+    static constexpr float kGreen[] = {0.0f, 1.0f, 0.0f, 0.5f};
+    static constexpr float kRed[]   = {1.0f, 0.0f, 0.0f, 0.5f};
 
     // Different drivers seem to behave differently with respect to resulting
     // alpha value. These might be due to different MSAA sample counts causing
@@ -265,7 +270,7 @@ TEST_P(EXTMultisampleCompatibilityTest, DrawAlphaOneAndResolve)
     // representative positions which have fractional pixels, inspecting that
     // normal rendering is different to SAMPLE_ALPHA_TO_ONE rendering.
     std::unique_ptr<uint8_t[]> results[3];
-    const GLint kResultSize = kWidth * kHeight * 4;
+    constexpr GLint kResultSize = kWidth * kHeight * 4;
 
     for (int pass = 0; pass < 3; ++pass)
     {
@@ -406,10 +411,14 @@ TEST_P(MultisampleCompatibilityTest, DrawCoverageAndResolve)
     const std::string &vertex =
         "attribute vec4 position;\n"
         "void main()\n"
-        "{ gl_Position = position; }";
+        "{\n"
+        "    gl_Position = position;\n"
+        "}\n";
     const std::string &fragment =
         "void main()\n"
-        "{ gl_FragColor =  vec4(1.0, 0.0, 0.0, 1.0); }";
+        "{\n"
+        "    gl_FragColor =  vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
 
     ANGLE_GL_PROGRAM(drawRed, vertex, fragment);
 

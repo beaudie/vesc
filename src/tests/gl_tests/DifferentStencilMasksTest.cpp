@@ -32,26 +32,20 @@ class DifferentStencilMasksTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -118,26 +112,20 @@ class DifferentStencilMasksWithoutStencilBufferTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);

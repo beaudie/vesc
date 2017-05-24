@@ -51,7 +51,7 @@ TEST_P(ClientArraysTest, QueryValidation)
     GLboolean boolValue = GL_TRUE;
     glGetBooleanv(GL_CLIENT_ARRAYS_ANGLE, &boolValue);
     EXPECT_GL_NO_ERROR();
-    EXPECT_GL_FALSE(GL_FALSE);
+    EXPECT_GL_FALSE(boolValue);
 
     EXPECT_GL_FALSE(glIsEnabled(GL_CLIENT_ARRAYS_ANGLE));
     EXPECT_GL_NO_ERROR();
@@ -92,9 +92,9 @@ TEST_P(ClientArraysTest, ForbidsClientSideElementBuffer)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     const auto &vertices = GetQuadVertices();
 
@@ -106,7 +106,7 @@ TEST_P(ClientArraysTest, ForbidsClientSideElementBuffer)
     glVertexAttribPointer(posLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posLocation);
 
-    const GLubyte indices[] = {0, 1, 2, 3, 4, 5};
+    constexpr GLubyte indices[] = {0, 1, 2, 3, 4, 5};
 
     ASSERT_GL_NO_ERROR();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);

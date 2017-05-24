@@ -32,32 +32,28 @@ class D3DImageFormatConversionTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = vec4(position.xy, 0.0, 1.0);
-                texcoord = (position.xy * 0.5) + 0.5;
-            }
-        );
-
-        const std::string fragmentShaderSource2D = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
+        const std::string &fragmentShaderSource2D =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
         m2DProgram = CompileProgram(vertexShaderSource, fragmentShaderSource2D);
+        ASSERT_NE(0u, m2DProgram);
+
         mTexture2DUniformLocation = glGetUniformLocation(m2DProgram, "tex");
     }
 

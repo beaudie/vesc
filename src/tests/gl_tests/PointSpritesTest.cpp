@@ -7,6 +7,7 @@
 // conformance test suite.
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 
 #include <cmath>
 
@@ -51,19 +52,23 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
         return;
     }
 
-    const std::string fs = SHADER_SOURCE(precision mediump float; void main() {
-        gl_FragColor = vec4(gl_PointCoord.x, gl_PointCoord.y, 0, 1);
-    });
+    const std::string &fs =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(gl_PointCoord.x, gl_PointCoord.y, 0, 1);\n"
+        "}\n";
 
-    const std::string vs =
-        SHADER_SOURCE(attribute vec4 vPosition; uniform float uPointSize; void main() {
-            gl_PointSize = uPointSize;
-            gl_Position  = vPosition;
-        });
+    const std::string &vs =
+        "attribute vec4 vPosition;\n"
+        "uniform float uPointSize;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = uPointSize;\n"
+        "    gl_Position  = vPosition;\n"
+        "}\n";
 
-    GLuint program = CompileProgram(vs, fs);
-    ASSERT_NE(program, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(program, vs, fs);
 
     glUseProgram(program);
 
@@ -72,9 +77,9 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
 
     GLfloat maxPointSize = pointSizeRange[1];
 
-    ASSERT_TRUE(maxPointSize >= 1);
+    ASSERT_GE(maxPointSize, 1);
     maxPointSize = floorf(maxPointSize);
-    ASSERT_TRUE((int)maxPointSize % 1 == 0);
+    ASSERT_EQ(0, (int)maxPointSize % 1);
 
     maxPointSize       = std::min(maxPointSize, 64.0f);
     GLfloat pointWidth = maxPointSize / windowWidth;
@@ -90,7 +95,7 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
     GLfloat pixelOffset = ((int)maxPointSize % 2) ? (1.0f / (GLfloat)windowWidth) : 0;
     GLuint vertexObject = 0;
     glGenBuffers(1, &vertexObject);
-    ASSERT_NE(vertexObject, 0U);
+    ASSERT_NE(0u, vertexObject);
     ASSERT_GL_NO_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexObject);
@@ -163,28 +168,22 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
     }
 
     // clang-format off
-    const std::string fs = SHADER_SOURCE
-    (
-        precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        }
-    );
+    const std::string &fs =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string vs = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_PointSize = 2.0;
-            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-        }
-    );
+    const std::string &vs =
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = 2.0;\n"
+        "    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
     // clang-format on
 
-    GLuint program = CompileProgram(vs, fs);
-    ASSERT_NE(program, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(program, vs, fs);
 
     glUseProgram(program);
 
@@ -207,31 +206,34 @@ TEST_P(PointSpritesTest, PointCoordRegressionTest)
         return;
     }
 
-    const std::string fs =
-        SHADER_SOURCE(precision mediump float; varying vec4 v_color; void main() {
-            // It seems as long as this mathematical expression references
-            // gl_PointCoord, the fragment's color is incorrect.
-            vec2 diff = gl_PointCoord - vec2(.5, .5);
-            if (length(diff) > 0.5)
-                discard;
+    const std::string &fs =
+        "precision mediump float;\n"
+        "varying vec4 v_color;\n"
+        "void main()\n"
+        "{\n"
+        // It seems as long as this mathematical expression references
+        // gl_PointCoord, the fragment's color is incorrect.
+        "vec2 diff = gl_PointCoord - vec2(.5, .5);\n"
+        "if (length(diff) > 0.5)\n"
+        "    discard;\n"
+        // The point should be a solid color.
+        "gl_FragColor = v_color;\n"
+        "}\n";
 
-            // The point should be a solid color.
-            gl_FragColor = v_color;
-        });
+    const std::string &vs =
+        "varying vec4 v_color;\n"
+        // The X and Y coordinates of the center of the point.
+        "attribute vec2 a_vertex;\n"
+        "uniform float u_pointSize;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = u_pointSize;\n"
+        "    gl_Position  = vec4(a_vertex, 0.0, 1.0);\n"
+        // The color of the point.
+        "    v_color = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string vs =
-        SHADER_SOURCE(varying vec4 v_color;
-                      // The X and Y coordinates of the center of the point.
-                      attribute vec2 a_vertex; uniform float u_pointSize; void main() {
-                          gl_PointSize = u_pointSize;
-                          gl_Position  = vec4(a_vertex, 0.0, 1.0);
-                          // The color of the point.
-                          v_color = vec4(0.0, 1.0, 0.0, 1.0);
-                      });
-
-    GLuint program = CompileProgram(vs, fs);
-    ASSERT_NE(program, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(program, vs, fs);
 
     glUseProgram(program);
 
@@ -240,7 +242,7 @@ TEST_P(PointSpritesTest, PointCoordRegressionTest)
 
     GLfloat maxPointSize = pointSizeRange[1];
 
-    ASSERT_TRUE(maxPointSize > 2);
+    ASSERT_GT(maxPointSize, 2);
 
     glClearColor(0, 0, 0, 1);
     glDisable(GL_DEPTH_TEST);
@@ -290,25 +292,30 @@ TEST_P(PointSpritesTest, PointSizeEnabledCompliance)
         return;
     }
 
-    const std::string fs = SHADER_SOURCE(precision mediump float; varying vec4 color;
+    const std::string &fs =
+        "precision mediump float;\n"
+        "varying vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = color;\n"
+        "}\n";
 
-                                         void main() { gl_FragColor = color; });
-
-    const std::string vs = SHADER_SOURCE(attribute vec3 pos; attribute vec4 colorIn;
-                                         uniform float pointSize; varying vec4 color;
-
-                                         void main() {
-                                             gl_PointSize = pointSize;
-                                             color        = colorIn;
-                                             gl_Position  = vec4(pos, 1.0);
-                                         });
+    const std::string &vs =
+        "attribute vec3 pos;\n"
+        "attribute vec4 colorIn;\n"
+        "uniform float pointSize;\n"
+        "varying vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = pointSize;\n"
+        "    color        = colorIn;\n"
+        "    gl_Position  = vec4(pos, 1.0);\n"
+        "}\n";
 
     // The WebGL test is drawn on a 2x2 canvas. Emulate this by setting a 2x2 viewport.
     glViewport(0, 0, 2, 2);
 
-    GLuint program = CompileProgram(vs, fs);
-    ASSERT_NE(program, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(program, vs, fs);
 
     glUseProgram(program);
 
@@ -317,12 +324,12 @@ TEST_P(PointSpritesTest, PointSizeEnabledCompliance)
     // The choice of (0.4, 0.4) ensures that the centers of the surrounding
     // pixels are not contained within the point when it is of size 1, but
     // that they definitely are when it is of size 2.
-    GLfloat vertices[] = {0.4f, 0.4f, 0.0f};
-    GLubyte colors[]   = {255, 0, 0, 255};
+    constexpr GLfloat vertices[] = {0.4f, 0.4f, 0.0f};
+    constexpr GLubyte colors[]   = {255, 0, 0, 255};
 
     GLuint vertexObject = 0;
     glGenBuffers(1, &vertexObject);
-    ASSERT_NE(vertexObject, 0U);
+    ASSERT_NE(0u, vertexObject);
     ASSERT_GL_NO_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexObject);
@@ -404,19 +411,21 @@ TEST_P(PointSpritesTest, PointSizeEnabledCompliance)
 // Verify that rendering works correctly when gl_PointSize is declared in a shader but isn't used
 TEST_P(PointSpritesTest, PointSizeDeclaredButUnused)
 {
-    const std::string vs = SHADER_SOURCE(attribute highp vec4 position;
+    const std::string &vs =
+        "attribute highp vec4 position;\n"
+        "void main(void)\n"
+        "{\n"
+        "    gl_PointSize = 1.0;\n"
+        "    gl_Position  = position;\n"
+        "}\n";
 
-                                         void main(void) {
-                                             gl_PointSize = 1.0;
-                                             gl_Position  = position;
-                                         });
+    const std::string &fs =
+        "void main(void)\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string fs =
-        SHADER_SOURCE(void main(void) { gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); });
-
-    GLuint program = CompileProgram(vs, fs);
-    ASSERT_NE(program, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(program, vs, fs);
 
     glUseProgram(program);
     drawQuad(program, "position", 0.5f, 1.0f);
@@ -434,60 +443,45 @@ TEST_P(PointSpritesTest, PointSizeDeclaredButUnused)
 TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
 {
     // clang-format off
-    const std::string pointFS = SHADER_SOURCE
-    (
-        precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        }
-    );
+    const std::string &pointFS =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string pointVS = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_PointSize = 16.0;
-            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-        }
-    );
+    const std::string &pointVS =
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = 16.0;\n"
+        "    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string quadFS = SHADER_SOURCE
-    (
-        precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        }
-    );
+    const std::string &quadFS =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
 
-    const std::string quadVS = SHADER_SOURCE
-    (
-        precision mediump float;
-        attribute vec4 pos;
-        void main()
-        {
-            gl_Position = pos;
-        }
-    );
+    const std::string &quadVS =
+        "precision mediump float;\n"
+        "attribute vec4 pos;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = pos;\n"
+        "}\n";
     // clang-format on
 
-    GLuint pointProgram = CompileProgram(pointVS, pointFS);
-    ASSERT_NE(pointProgram, 0u);
-    ASSERT_GL_NO_ERROR();
-
-    GLuint quadProgram = CompileProgram(quadVS, quadFS);
-    ASSERT_NE(pointProgram, 0u);
-    ASSERT_GL_NO_ERROR();
+    ANGLE_GL_PROGRAM(pointProgram, pointVS, pointFS);
+    ANGLE_GL_PROGRAM(quadProgram, quadVS, quadFS);
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
 
-    const GLfloat quadVertices[] = {
-        -1.0f, 1.0f, 0.5f, 1.0f, -1.0f, 0.5f, -1.0f, -1.0f, 0.5f,
+    constexpr GLfloat quadVertices[] = {-1.0f, 1.0f, 0.5f, 1.0f, -1.0f, 0.5f, -1.0f, -1.0f, 0.5f,
 
-        -1.0f, 1.0f, 0.5f, 1.0f, 1.0f,  0.5f, 1.0f,  -1.0f, 0.5f,
-    };
+                                        -1.0f, 1.0f, 0.5f, 1.0f, 1.0f,  0.5f, 1.0f,  -1.0f, 0.5f};
 
     glUseProgram(quadProgram);
     GLint positionLocation = glGetAttribLocation(quadProgram, "pos");
