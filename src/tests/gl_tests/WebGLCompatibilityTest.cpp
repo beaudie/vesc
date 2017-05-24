@@ -85,7 +85,7 @@ class WebGLCompatibilityTest : public ANGLETest
     {
         ASSERT_GL_NO_ERROR();
 
-        const std::string samplingVs =
+        const std::string &samplingVs =
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
             "void main()\n"
@@ -94,7 +94,7 @@ class WebGLCompatibilityTest : public ANGLETest
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string samplingFs =
+        const std::string &samplingFs =
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
             "uniform vec4 subtractor;\n"
@@ -191,14 +191,14 @@ class WebGLCompatibilityTest : public ANGLETest
         }
         ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
-        const std::string renderingVs =
+        const std::string &renderingVs =
             "attribute vec4 position;\n"
             "void main()\n"
             "{\n"
             "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
             "}\n";
 
-        const std::string renderingFs =
+        const std::string &renderingFs =
             "precision mediump float;\n"
             "uniform vec4 writeValue;\n"
             "void main()\n"
@@ -313,7 +313,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionStandardDerivitives)
 {
     EXPECT_FALSE(extensionEnabled("GL_OES_standard_derivatives"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_OES_standard_derivatives : require\n"
         "void main() { gl_FragColor = vec4(dFdx(vec2(1.0, 1.0)).x, 1, 0, 1); }\n";
     ASSERT_EQ(0u, CompileShader(GL_FRAGMENT_SHADER, source));
@@ -335,7 +335,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionTextureLOD)
 {
     EXPECT_FALSE(extensionEnabled("GL_EXT_shader_texture_lod"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_EXT_shader_texture_lod : require\n"
         "uniform sampler2D u_texture;\n"
         "void main() {\n"
@@ -361,7 +361,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionFragDepth)
 {
     EXPECT_FALSE(extensionEnabled("GL_EXT_frag_depth"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_EXT_frag_depth : require\n"
         "void main() {\n"
         "    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
@@ -748,7 +748,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsBufferOutOfBoundsInIndexBuffer)
     glEnableVertexAttribArray(posLocation);
 
     const uint8_t *zeroOffset   = nullptr;
-    const uint8_t zeroIndices[] = {0, 0, 0, 0, 0, 0, 0, 0};
+    constexpr uint8_t zeroIndices[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     glVertexAttribPointer(0, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, zeroOffset);
 
@@ -1076,7 +1076,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
     // Draw a quad where each vertex is red if gl_Position is (0,0,0,0) before it is set,
     // and green otherwise.  The center of each quadrant will be red if and only if all
     // four corners are red.
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec3 pos;\n"
         "varying vec4 color;\n"
         "void main() {\n"
@@ -1088,7 +1088,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
         "    gl_Position = vec4(pos,1);\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "precision mediump float;\n"
         "varying vec4 color;\n"
         "void main() {\n"
@@ -1107,7 +1107,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
 // Based on WebGL test conformance/renderbuffers/feedback-loop.html.
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec4 a_position;\n"
         "varying vec2 v_texCoord;\n"
         "void main() {\n"
@@ -1115,7 +1115,7 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
         "    v_texCoord = (a_position.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "precision mediump float;\n"
         "varying vec2 v_texCoord;\n"
         "uniform sampler2D u_texture;\n"
@@ -1241,7 +1241,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
     glEnableVertexAttribArray(posLocation);
 
     GLBuffer indexBuffer;
-    const GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0};
+    constexpr GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0};
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -1306,7 +1306,7 @@ void WebGLCompatibilityTest::drawBuffersEXTFeedbackLoop(GLuint program,
 // Based on WebGL test conformance/extensions/webgl-draw-buffers-feedback-loop.html
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec4 aPosition;\n"
         "varying vec2 texCoord;\n"
         "void main() {\n"
@@ -1314,7 +1314,7 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#extension GL_EXT_draw_buffers : require\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -1324,8 +1324,8 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
         "    gl_FragData[1] = texture2D(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     // This shader cannot be run in ES3, because WebGL 2 does not expose the draw buffers
     // extension and gl_FragData semantics are changed to enforce indexing by zero always.
@@ -1455,20 +1455,20 @@ void WebGLCompatibilityTest::drawBuffersFeedbackLoop(GLuint program,
 // Based on WebGL test conformance/glsl/misc/shaders-with-invariance.html.
 TEST_P(WebGLCompatibilityTest, BuiltInInvariant)
 {
-    const std::string vertexShaderVariant =
+    const std::string &vertexShaderVariant =
         "varying vec4 v_varying;\n"
         "void main()\n"
         "{\n"
         "    gl_PointSize = 1.0;\n"
         "    gl_Position = v_varying;\n"
         "}";
-    const std::string fragmentShaderInvariantGlFragCoord =
+    const std::string &fragmentShaderInvariantGlFragCoord =
         "invariant gl_FragCoord;\n"
         "void main()\n"
         "{\n"
         "    gl_FragColor = gl_FragCoord;\n"
         "}";
-    const std::string fragmentShaderInvariantGlPointCoord =
+    const std::string &fragmentShaderInvariantGlPointCoord =
         "invariant gl_PointCoord;\n"
         "void main()\n"
         "{\n"
@@ -2081,7 +2081,7 @@ TEST_P(WebGLCompatibilityTest, SizedRGBA32FFormats)
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "#version 300 es\n"
         "in vec4 aPosition;\n"
         "out vec2 texCoord;\n"
@@ -2090,7 +2090,7 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#version 300 es\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -2100,8 +2100,8 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
         "    oColor = texture(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     GLint maxDrawBuffers = 0;
     glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
@@ -2140,7 +2140,7 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
 // Based on WebGL test conformance2/rendering/depth-stencil-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "#version 300 es\n"
         "in vec4 aPosition;\n"
         "out vec2 texCoord;\n"
@@ -2149,7 +2149,7 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#version 300 es\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -2159,8 +2159,8 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
         "    oColor = texture(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
     glUseProgram(program.get());

@@ -64,30 +64,24 @@ class SwizzleTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                texcoord = (position.xy * 0.5) + 0.5;
-            }
-        );
-
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -210,7 +204,7 @@ class SwizzleIntegerTest : public SwizzleTest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource =
+        const std::string &vertexShaderSource =
             "#version 300 es\n"
             "precision highp float;\n"
             "in vec4 position;\n"
@@ -222,7 +216,7 @@ class SwizzleIntegerTest : public SwizzleTest
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fragmentShaderSource =
+        const std::string &fragmentShaderSource =
             "#version 300 es\n"
             "precision highp float;\n"
             "precision highp usampler2D;\n"
@@ -253,105 +247,105 @@ class SwizzleIntegerTest : public SwizzleTest
 
 TEST_P(SwizzleTest, RGBA8_2D)
 {
-    GLubyte data[] = { 1, 64, 128, 200 };
+    constexpr GLubyte data[] = {1, 64, 128, 200};
     init2DTexture(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RGB8_2D)
 {
-    GLubyte data[] = { 77, 66, 55 };
+    constexpr GLubyte data[] = {77, 66, 55};
     init2DTexture(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RG8_2D)
 {
-    GLubyte data[] = { 11, 99 };
+    constexpr GLubyte data[] = {11, 99};
     init2DTexture(GL_RG8, GL_RG, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, R8_2D)
 {
-    GLubyte data[] = { 2 };
+    constexpr GLubyte data[] = {2};
     init2DTexture(GL_R8, GL_RED, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RGB10_A2_2D)
 {
-    GLuint data[] = {20u | (40u << 10) | (60u << 20) | (2u << 30)};
+    constexpr GLuint data[] = {20u | (40u << 10) | (60u << 20) | (2u << 30)};
     init2DTexture(GL_RGB10_A2, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RGBA32F_2D)
 {
-    GLfloat data[] = { 0.25f, 0.5f, 0.75f, 0.8f };
+    constexpr GLfloat data[] = {0.25f, 0.5f, 0.75f, 0.8f};
     init2DTexture(GL_RGBA32F, GL_RGBA, GL_FLOAT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RGB32F_2D)
 {
-    GLfloat data[] = { 0.1f, 0.2f, 0.3f };
+    constexpr GLfloat data[] = {0.1f, 0.2f, 0.3f};
     init2DTexture(GL_RGB32F, GL_RGB, GL_FLOAT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, RG32F_2D)
 {
-    GLfloat data[] = { 0.9f, 0.1f  };
+    constexpr GLfloat data[] = {0.9f, 0.1f};
     init2DTexture(GL_RG32F, GL_RG, GL_FLOAT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, R32F_2D)
 {
-    GLfloat data[] = { 0.5f };
+    constexpr GLfloat data[] = {0.5f};
     init2DTexture(GL_R32F, GL_RED, GL_FLOAT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, D32F_2D)
 {
-    GLfloat data[] = { 0.5f };
+    constexpr GLfloat data[] = {0.5f};
     init2DTexture(GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, D16_2D)
 {
-    GLushort data[] = { 0xFF };
+    constexpr GLushort data[] = {0xFF};
     init2DTexture(GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, D24_2D)
 {
-    GLuint data[] = { 0xFFFF };
+    constexpr GLuint data[] = {0xFFFF};
     init2DTexture(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, L8_2D)
 {
-    GLubyte data[] = {0x77};
+    constexpr GLubyte data[] = {0x77};
     init2DTexture(GL_LUMINANCE, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, A8_2D)
 {
-    GLubyte data[] = {0x55};
+    constexpr GLubyte data[] = {0x55};
     init2DTexture(GL_ALPHA, GL_ALPHA, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
 
 TEST_P(SwizzleTest, LA8_2D)
 {
-    GLubyte data[] = {0x77, 0x66};
+    constexpr GLubyte data[] = {0x77, 0x66};
     init2DTexture(GL_LUMINANCE_ALPHA, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
@@ -364,7 +358,7 @@ TEST_P(SwizzleTest, L32F_2D)
         return;
     }
 
-    GLfloat data[] = {0.7f};
+    constexpr GLfloat data[] = {0.7f};
     init2DTexture(GL_LUMINANCE, GL_LUMINANCE, GL_FLOAT, data);
     runTest2D();
 }
@@ -377,7 +371,7 @@ TEST_P(SwizzleTest, A32F_2D)
         return;
     }
 
-    GLfloat data[] = {
+    constexpr GLfloat data[] = {
         0.4f,
     };
     init2DTexture(GL_ALPHA, GL_ALPHA, GL_FLOAT, data);
@@ -392,7 +386,7 @@ TEST_P(SwizzleTest, LA32F_2D)
         return;
     }
 
-    GLfloat data[] = {
+    constexpr GLfloat data[] = {
         0.5f, 0.6f,
     };
     init2DTexture(GL_LUMINANCE_ALPHA, GL_LUMINANCE_ALPHA, GL_FLOAT, data);
@@ -415,7 +409,7 @@ TEST_P(SwizzleTest, CompressedDXT_2D)
 
 TEST_P(SwizzleIntegerTest, RGB8UI_2D)
 {
-    GLubyte data[] = {77, 66, 55};
+    constexpr GLubyte data[] = {77, 66, 55};
     init2DTexture(GL_RGB8UI, GL_RGB_INTEGER, GL_UNSIGNED_BYTE, data);
     runTest2D();
 }
@@ -423,7 +417,7 @@ TEST_P(SwizzleIntegerTest, RGB8UI_2D)
 // Test that updating the texture data still generates the correct swizzles
 TEST_P(SwizzleTest, SubUpdate)
 {
-    GLColor data(1, 64, 128, 200);
+    const GLColor data(1, 64, 128, 200);
     init2DTexture(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, &data);
 
     glUseProgram(mProgram);
@@ -438,7 +432,7 @@ TEST_P(SwizzleTest, SubUpdate)
     glClear(GL_COLOR_BUFFER_BIT);
     drawQuad(mProgram, "position", 0.5f);
 
-    GLColor expectedData(data.R, data.R, data.R, data.R);
+    const GLColor expectedData(data.R, data.R, data.R, data.R);
     EXPECT_PIXEL_COLOR_EQ(0, 0, expectedData);
 
     GLColor updateData(32, 234, 28, 232);
@@ -447,7 +441,7 @@ TEST_P(SwizzleTest, SubUpdate)
     glClear(GL_COLOR_BUFFER_BIT);
     drawQuad(mProgram, "position", 0.5f);
 
-    GLColor expectedUpdateData(updateData.R, updateData.R, updateData.R, updateData.R);
+    const GLColor expectedUpdateData(updateData.R, updateData.R, updateData.R, updateData.R);
     EXPECT_PIXEL_COLOR_EQ(0, 0, expectedUpdateData);
 }
 

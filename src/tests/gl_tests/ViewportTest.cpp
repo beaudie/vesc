@@ -122,23 +122,18 @@ class ViewportTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string testVertexShaderSource = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
+        const std::string &testVertexShaderSource =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string testFragmentShaderSource = SHADER_SOURCE
-        (
-            void main(void)
-            {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        );
+        const std::string &testFragmentShaderSource =
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
         if (mProgram == 0)

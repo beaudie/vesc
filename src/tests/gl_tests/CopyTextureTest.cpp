@@ -707,7 +707,7 @@ TEST_P(CopyTextureTestES3, ES3UnormFormats)
     }
 
     auto testOutput = [this](GLuint texture, const GLColor &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -717,7 +717,7 @@ TEST_P(CopyTextureTestES3, ES3UnormFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
@@ -824,7 +824,7 @@ TEST_P(CopyTextureTestES3, ES3FloatFormats)
     }
 
     auto testOutput = [this](GLuint texture, const GLColor32F &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -834,7 +834,7 @@ TEST_P(CopyTextureTestES3, ES3FloatFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
@@ -963,7 +963,7 @@ TEST_P(CopyTextureTestES3, ES3UintFormats)
     using GLColor32U = std::tuple<GLuint, GLuint, GLuint, GLuint>;
 
     auto testOutput = [this](GLuint texture, const GLColor32U &expectedColor) {
-        const std::string vs =
+        const std::string &vs =
             "#version 300 es\n"
             "in vec4 position;\n"
             "out vec2 texcoord;\n"
@@ -973,7 +973,7 @@ TEST_P(CopyTextureTestES3, ES3UintFormats)
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        std::string fs =
+        const std::string &fs =
             "#version 300 es\n"
             "precision mediump float;\n"
             "precision mediump usampler2D;\n"

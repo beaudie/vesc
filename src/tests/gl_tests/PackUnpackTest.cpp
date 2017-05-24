@@ -32,62 +32,54 @@ class PackUnpackTest : public ANGLETest
         ANGLETest::SetUp();
 
         // Vertex Shader source
-        const std::string vs = SHADER_SOURCE
-        (   #version 300 es\n
-            precision mediump float;
-            in vec4 position;
-
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
+        const std::string &vs =
+            "#version 300 es\n"
+            "precision mediump float;\n"
+            "in vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = position;\n"
+            "}\n";
 
         // clang-format off
         // Fragment Shader source
-        const std::string sNormFS = SHADER_SOURCE
-        (   #version 300 es\n
-            precision mediump float;
-            uniform mediump vec2 v;
-            layout(location = 0) out mediump vec4 fragColor;
-
-            void main()
-            {
-                uint u = packSnorm2x16(v);
-                vec2 r = unpackSnorm2x16(u);
-                fragColor = vec4(r, 0.0, 1.0);
-            }
-        );
+        const std::string &sNormFS =
+			"#version 300 es\n"
+            "precision mediump float;\n"
+            "uniform mediump vec2 v;\n"
+            "layout(location = 0) out mediump vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    uint u = packSnorm2x16(v);\n"
+            "    vec2 r = unpackSnorm2x16(u);\n"
+            "    fragColor = vec4(r, 0.0, 1.0);\n"
+            "}\n";
 
         // Fragment Shader source
-        const std::string uNormFS = SHADER_SOURCE
-        (   #version 300 es\n
-            precision mediump float;
-            uniform mediump vec2 v;
-            layout(location = 0) out mediump vec4 fragColor;
-
-            void main()
-            {
-                uint u = packUnorm2x16(v);
-                vec2 r = unpackUnorm2x16(u);
-                fragColor = vec4(r, 0.0, 1.0);
-            }
-        );
+        const std::string &uNormFS =
+			"#version 300 es\n"
+            "precision mediump float;\n"
+            "uniform mediump vec2 v;\n"
+            "layout(location = 0) out mediump vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    uint u = packUnorm2x16(v);\n"
+            "    vec2 r = unpackUnorm2x16(u);\n"
+            "    fragColor = vec4(r, 0.0, 1.0);\n"
+            "}\n";
 
         // Fragment Shader source
-        const std::string halfFS = SHADER_SOURCE
-        (   #version 300 es\n
-            precision mediump float;
-            uniform mediump vec2 v;
-            layout(location = 0) out mediump vec4 fragColor;
-
-             void main()
-             {
-                 uint u = packHalf2x16(v);
-                 vec2 r = unpackHalf2x16(u);
-                 fragColor = vec4(r, 0.0, 1.0);
-             }
-        );
+        const std::string &halfFS =
+			"#version 300 es\n"
+            "precision mediump float;\n"
+            "uniform mediump vec2 v;\n"
+            "layout(location = 0) out mediump vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "     uint u = packHalf2x16(v);\n"
+            "     vec2 r = unpackHalf2x16(u);\n"
+            "     fragColor = vec4(r, 0.0, 1.0);\n"
+            "}\n";
         // clang-format on
 
         mSNormProgram = CompileProgram(vs, sNormFS);
@@ -108,7 +100,7 @@ class PackUnpackTest : public ANGLETest
 
         glViewport(0, 0, 16, 16);
 
-        const GLfloat color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+        constexpr GLfloat color[] = {1.0f, 1.0f, 0.0f, 1.0f};
         glClearBufferfv(GL_COLOR, 0, color);
     }
 
@@ -144,7 +136,7 @@ class PackUnpackTest : public ANGLETest
 
         ASSERT_GL_NO_ERROR();
 
-        static const double epsilon = 0.0005;
+        static constexpr double epsilon = 0.0005;
         EXPECT_NEAR(p[0], expect1, epsilon);
         EXPECT_NEAR(p[1], expect2, epsilon);
     }

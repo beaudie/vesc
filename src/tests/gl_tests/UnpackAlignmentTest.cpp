@@ -31,26 +31,20 @@ class UnpackAlignmentTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            uniform sampler2D tex;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, vec2(0.0, 1.0));
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "uniform sampler2D tex;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, vec2(0.0, 1.0));\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         if (mProgram == 0)
@@ -103,8 +97,8 @@ class UnpackAlignmentTest : public ANGLETest
 
     void testAlignment(int alignment, unsigned int offset, GLenum format, GLenum type)
     {
-        static const unsigned int width = 7;
-        static const unsigned int height = 2;
+        static constexpr unsigned int width  = 7;
+        static constexpr unsigned int height = 2;
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 
@@ -146,7 +140,7 @@ TEST_P(UnpackAlignmentTest, DefaultAlignment)
 {
     GLint defaultAlignment;
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &defaultAlignment);
-    EXPECT_EQ(defaultAlignment, 4);
+    EXPECT_EQ(4, defaultAlignment);
 }
 
 

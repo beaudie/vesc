@@ -46,9 +46,9 @@ TEST_P(ReadPixelsTest, OutOfBounds)
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
 
-    GLsizei pixelsWidth  = 32;
-    GLsizei pixelsHeight = 32;
-    GLint offset         = 16;
+    constexpr GLsizei pixelsWidth  = 32;
+    constexpr GLsizei pixelsHeight = 32;
+    constexpr GLint offset         = 16;
     std::vector<GLColor> pixels((pixelsWidth + offset) * (pixelsHeight + offset));
 
     glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA,
@@ -234,7 +234,7 @@ TEST_P(ReadPixelsPBOTest, SubDataPreservesContents)
     glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
     glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
-    unsigned char data[4] = {1, 2, 3, 4};
+    constexpr unsigned char data[4] = {1, 2, 3, 4};
 
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, mPBO);
@@ -267,7 +267,7 @@ TEST_P(ReadPixelsPBOTest, SubDataOffsetPreservesContents)
     glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
     glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
-    unsigned char data[4] = {1, 2, 3, 4};
+    constexpr unsigned char data[4] = {1, 2, 3, 4};
 
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, mPBO);
@@ -293,7 +293,7 @@ class ReadPixelsPBODrawTest : public ReadPixelsPBOTest
     {
         ReadPixelsPBOTest::SetUp();
 
-        const char *vertexShaderSrc =
+        const std::string &vertexShaderSrc =
             "attribute vec4 aTest; attribute vec2 aPosition; varying vec4 vTest;\n"
             "void main()\n"
             "{\n"
@@ -302,7 +302,7 @@ class ReadPixelsPBODrawTest : public ReadPixelsPBOTest
             "    gl_PointSize = 1.0;\n"
             "}";
 
-        const char *fragmentShaderSrc =
+        const std::string &fragmentShaderSrc =
             "precision mediump float; varying vec4 vTest;\n"
             "void main()\n"
             "{\n"
@@ -345,7 +345,7 @@ TEST_P(ReadPixelsPBODrawTest, DrawWithPBO)
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     EXPECT_GL_NO_ERROR();
 
-    float positionData[] = {0.5f, 0.5f};
+    constexpr float positionData[] = {0.5f, 0.5f};
 
     glUseProgram(mProgram);
     glViewport(0, 0, 1, 1);

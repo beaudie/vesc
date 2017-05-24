@@ -31,27 +31,32 @@ class TimerQueriesTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string passthroughVS =
+        const std::string &passthroughVS =
             "attribute highp vec4 position; void main(void)\n"
             "{\n"
             "    gl_Position = position;\n"
             "}\n";
 
-        const std::string passthroughPS =
-            "precision highp float; void main(void)\n"
+        const std::string &passthroughPS =
+            "precision highp float;\n"
+            "void main(void)\n"
             "{\n"
             "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
             "}\n";
 
-        const std::string costlyVS =
-            "attribute highp vec4 position; varying highp vec4 testPos; void main(void)\n"
+        const std::string &costlyVS =
+            "attribute highp vec4 position;\n"
+            "varying highp vec4 testPos;\n"
+            "void main(void)\n"
             "{\n"
             "    testPos     = position;\n"
             "    gl_Position = position;\n"
             "}\n";
 
         const std::string costlyPS =
-            "precision highp float; varying highp vec4 testPos; void main(void)\n"
+            "precision highp float;\n"
+            "varying highp vec4 testPos;\n"
+            "void main(void)\n"
             "{\n"
             "    vec4 test = testPos;\n"
             "    for (int i = 0; i < 500; i++)\n"
@@ -218,7 +223,7 @@ TEST_P(TimerQueriesTest, TimeElapsedTextureTest)
         return;
     }
 
-    GLubyte pixels[] = {0, 0, 0, 255, 255, 255, 255, 255, 255, 0, 0, 0};
+    constexpr GLubyte pixels[] = {0, 0, 0, 255, 255, 255, 255, 255, 255, 0, 0, 0};
 
     // Query and texture initialization
     GLuint texture;
@@ -387,27 +392,33 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     ContextInfo contexts[2];
 
     // Shaders
-    const std::string cheapVS =
-        "attribute highp vec4 position; void main(void)\n"
+    const std::string &cheapVS =
+        "attribute highp vec4 position;\n"
+        "void main(void)\n"
         "{\n"
         "    gl_Position = position;\n"
         "}\n";
 
-    const std::string cheapPS =
-        "precision highp float; void main(void)\n"
+    const std::string &cheapPS =
+        "precision highp float;\n"
+        "void main(void)\n"
         "{\n"
         "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
         "}\n";
 
-    const std::string costlyVS =
-        "attribute highp vec4 position; varying highp vec4 testPos; void main(void)\n"
+    const std::string &costlyVS =
+        "attribute highp vec4 position;\n"
+        "varying highp vec4 testPos;\n"
+        "void main(void)\n"
         "{\n"
         "    testPos     = position;\n"
         "    gl_Position = position;\n"
         "}\n";
 
-    const std::string costlyPS =
-        "precision highp float; varying highp vec4 testPos; void main(void)\n"
+    const std::string &costlyPS =
+        "precision highp float;\n"
+        "varying highp vec4 testPos;\n"
+        "void main(void)\n"
         "{\n"
         "    vec4 test = testPos;\n"
         "    for (int i = 0; i < 500; i++)\n"
@@ -420,7 +431,7 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     // Setup the first context with a cheap shader
     contexts[0].context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
     contexts[0].display = display;
-    ASSERT_NE(contexts[0].context, EGL_NO_CONTEXT);
+    ASSERT_NE(EGL_NO_CONTEXT, contexts[0].context);
     eglMakeCurrent(display, surface, surface, contexts[0].context);
     contexts[0].program = CompileProgram(cheapVS, cheapPS);
     glGenQueriesEXT(1, &contexts[0].query);
@@ -429,7 +440,7 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     // Setup the second context with an expensive shader
     contexts[1].context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
     contexts[1].display = display;
-    ASSERT_NE(contexts[1].context, EGL_NO_CONTEXT);
+    ASSERT_NE(EGL_NO_CONTEXT, contexts[1].context);
     eglMakeCurrent(display, surface, surface, contexts[1].context);
     contexts[1].program = CompileProgram(costlyVS, costlyPS);
     glGenQueriesEXT(1, &contexts[1].query);
