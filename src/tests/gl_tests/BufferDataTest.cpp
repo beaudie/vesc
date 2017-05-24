@@ -35,36 +35,32 @@ class BufferDataTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const char * vsSource = SHADER_SOURCE
-        (
-            attribute vec4 position;
-            attribute float in_attrib;
-            varying float v_attrib;
-            void main()
-            {
-                v_attrib = in_attrib;
-                gl_Position = position;
-            }
-        );
+        const std::string &vsSource =
+            "attribute vec4 position;\n"
+            "attribute float in_attrib;\n"
+            "varying float v_attrib;\n"
+            "void main()\n"
+            "{\n"
+            "    v_attrib = in_attrib;\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-        const char * fsSource = SHADER_SOURCE
-        (
-            precision mediump float;
-            varying float v_attrib;
-            void main()
-            {
-                gl_FragColor = vec4(v_attrib, 0, 0, 1);
-            }
-        );
+        const std::string &fsSource =
+            "precision mediump float;\n"
+            "varying float v_attrib;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(v_attrib, 0, 0, 1);\n"
+            "}\n";
 
         glGenBuffers(1, &mBuffer);
-        ASSERT_NE(mBuffer, 0U);
+        ASSERT_NE(0u, mBuffer);
 
         mProgram = CompileProgram(vsSource, fsSource);
-        ASSERT_NE(mProgram, 0U);
+        ASSERT_NE(0u, mProgram);
 
         mAttribLocation = glGetAttribLocation(mProgram, "in_attrib");
-        ASSERT_NE(mAttribLocation, -1);
+        ASSERT_NE(-1, mAttribLocation);
 
         glClearColor(0, 0, 0, 0);
         glClearDepthf(0.0);
@@ -93,7 +89,7 @@ TEST_P(BufferDataTest, NULLData)
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
     EXPECT_GL_NO_ERROR();
 
-    const int numIterations = 128;
+    constexpr int numIterations = 128;
     for (int i = 0; i < numIterations; ++i)
     {
         GLsizei bufferSize = sizeof(GLfloat) * (i + 1);
@@ -116,14 +112,12 @@ TEST_P(BufferDataTest, ZeroNonNULLData)
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
     EXPECT_GL_NO_ERROR();
 
-    char *zeroData = new char[0];
-    glBufferData(GL_ARRAY_BUFFER, 0, zeroData, GL_STATIC_DRAW);
+    std::unique_ptr<char> zeroData(new char[0]);
+    glBufferData(GL_ARRAY_BUFFER, 0, zeroData.get(), GL_STATIC_DRAW);
     EXPECT_GL_NO_ERROR();
 
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 0, zeroData);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 0, zeroData.get());
     EXPECT_GL_NO_ERROR();
-
-    delete [] zeroData;
 }
 
 TEST_P(BufferDataTest, NULLResolvedData)
@@ -214,10 +208,11 @@ TEST_P(BufferDataTest, DISABLED_HugeSetDataShouldNotCrash)
 // path.
 TEST_P(BufferDataTest, RepeatedDrawWithDynamic)
 {
-    std::vector<GLfloat> data;
-    for (int i = 0; i < 16; ++i)
+    constexpr int kDataSize = 16;
+    std::array<GLfloat, kDataSize> data;
+    for (int i = 0; i < kDataSize; ++i)
     {
-        data.push_back(static_cast<GLfloat>(i));
+        data[i] = static_cast<GLfloat>(i);
     }
 
     glUseProgram(mProgram);
@@ -253,40 +248,36 @@ class IndexedBufferCopyTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const char * vsSource = SHADER_SOURCE
-        (
-            attribute vec3 in_attrib;
-            varying vec3 v_attrib;
-            void main()
-            {
-                v_attrib = in_attrib;
-                gl_Position = vec4(0.0, 0.0, 0.5, 1.0);
-                gl_PointSize = 100.0;
-            }
-        );
+        const std::string &vsSource =
+            "attribute vec3 in_attrib;\n"
+            "varying vec3 v_attrib;\n"
+            "void main()\n"
+            "{\n"
+            "    v_attrib = in_attrib;\n"
+            "    gl_Position = vec4(0.0, 0.0, 0.5, 1.0);\n"
+            "    gl_PointSize = 100.0;\n"
+            "}\n";
 
-        const char * fsSource = SHADER_SOURCE
-        (
-            precision mediump float;
-            varying vec3 v_attrib;
-            void main()
-            {
-                gl_FragColor = vec4(v_attrib, 1);
-            }
-        );
+        const std::string &fsSource =
+            "precision mediump float;\n"
+            "varying vec3 v_attrib;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(v_attrib, 1);\n"
+            "}\n";
 
         glGenBuffers(2, mBuffers);
-        ASSERT_NE(mBuffers[0], 0U);
-        ASSERT_NE(mBuffers[1], 0U);
+        ASSERT_NE(0u, mBuffers[0]);
+        ASSERT_NE(0u, mBuffers[1]);
 
         glGenBuffers(1, &mElementBuffer);
-        ASSERT_NE(mElementBuffer, 0U);
+        ASSERT_NE(0u, mElementBuffer);
 
         mProgram = CompileProgram(vsSource, fsSource);
-        ASSERT_NE(mProgram, 0U);
+        ASSERT_NE(0u, mProgram);
 
         mAttribLocation = glGetAttribLocation(mProgram, "in_attrib");
-        ASSERT_NE(mAttribLocation, -1);
+        ASSERT_NE(-1, mAttribLocation);
 
         glClearColor(0, 0, 0, 0);
         glDisable(GL_DEPTH_TEST);
@@ -322,8 +313,8 @@ TEST_P(IndexedBufferCopyTest, IndexRangeBug)
         return;
     }
 
-    unsigned char vertexData[] = { 255, 0, 0, 0, 0, 0 };
-    unsigned int indexData[] = { 0, 1 };
+    constexpr unsigned char vertexData[] = {255, 0, 0, 0, 0, 0};
+    constexpr unsigned int indexData[]   = {0, 1};
 
     glBindBuffer(GL_ARRAY_BUFFER, mBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(char) * 6, vertexData, GL_STATIC_DRAW);
@@ -358,7 +349,7 @@ TEST_P(IndexedBufferCopyTest, IndexRangeBug)
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
 
-    unsigned char newData[] = { 0, 255, 0 };
+    constexpr unsigned char newData[] = {0, 255, 0};
     glBufferSubData(GL_ARRAY_BUFFER, 3, 3, newData);
 
     glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
@@ -380,13 +371,13 @@ TEST_P(BufferDataTestES3, BufferResizing)
     ASSERT_GL_NO_ERROR();
 
     // Allocate a buffer with one byte
-    uint8_t singleByte[] = { 0xaa };
+    constexpr uint8_t singleByte[] = {0xaa};
     glBufferData(GL_ARRAY_BUFFER, 1, singleByte, GL_STATIC_DRAW);
 
     // Resize the buffer
     // To trigger the bug, the buffer need to be big enough because some hardware copy buffers
     // by chunks of pages instead of the minimum number of bytes neeeded.
-    const size_t numBytes = 4096*4;
+    constexpr size_t numBytes = 4096 * 4;
     glBufferData(GL_ARRAY_BUFFER, numBytes, nullptr, GL_STATIC_DRAW);
 
     // Copy the original data to the buffer
@@ -506,7 +497,7 @@ class BufferDataOverflowTest : public ANGLETest
 TEST_P(BufferDataOverflowTest, VertexBufferIntegerOverflow)
 {
     // These values are special, to trigger the rounding bug.
-    unsigned int numItems = 0x7FFFFFE;
+    constexpr unsigned int numItems = 0x7FFFFFE;
     constexpr GLsizei bufferCnt = 8;
 
     std::vector<GLBuffer> buffers(bufferCnt);
@@ -538,7 +529,7 @@ TEST_P(BufferDataOverflowTest, VertexBufferIntegerOverflow)
         "}";
 
     ANGLE_GL_PROGRAM(program, vertexShaderStr.str(), fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     std::vector<GLfloat> data(numItems, 1.0f);
 
@@ -550,14 +541,14 @@ TEST_P(BufferDataOverflowTest, VertexBufferIntegerOverflow)
         std::stringstream attribNameStr;
         attribNameStr << "attrib" << bufferIndex;
 
-        GLint attribLocation = glGetAttribLocation(program.get(), attribNameStr.str().c_str());
+        GLint attribLocation = glGetAttribLocation(program, attribNameStr.str().c_str());
         ASSERT_NE(-1, attribLocation);
 
         glVertexAttribPointer(attribLocation, 1, GL_FLOAT, GL_FALSE, 4, nullptr);
         glEnableVertexAttribArray(attribLocation);
     }
 
-    GLint positionLocation = glGetAttribLocation(program.get(), "position");
+    GLint positionLocation = glGetAttribLocation(program, "position");
     ASSERT_NE(-1, positionLocation);
     glDisableVertexAttribArray(positionLocation);
     glVertexAttrib2f(positionLocation, 1.0f, 1.0f);

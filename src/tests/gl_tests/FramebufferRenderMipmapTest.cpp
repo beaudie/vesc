@@ -25,23 +25,19 @@ class FramebufferRenderMipmapTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
+        const std::string &vsSource =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-        const std::string fsSource = SHADER_SOURCE
-        (
-            uniform highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            }
-        );
+        const std::string &fsSource =
+            "uniform highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(vsSource, fsSource);
         if (mProgram == 0)
@@ -85,7 +81,7 @@ TEST_P(FramebufferRenderMipmapTest, Validation)
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    const GLint levels = 5;
+    constexpr GLint levels = 5;
     for (GLint i = 0; i < levels; i++)
     {
         GLsizei size = 1 << ((levels - 1) - i);
@@ -136,16 +132,10 @@ TEST_P(FramebufferRenderMipmapTest, RenderToMipmap)
         return;
     }
 
-    const GLfloat levelColors[] =
-    {
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 1.0f,
-        0.0f, 1.0f, 1.0f, 1.0f,
-    };
-    const GLint testLevels = static_cast<GLint>(ArraySize(levelColors) / 4);
+    constexpr GLfloat levelColors[] = {1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                                       0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+                                       1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+    constexpr GLint testLevels = static_cast<GLint>(ArraySize(levelColors) / 4);
 
     GLuint tex = 0;
     glGenTextures(1, &tex);

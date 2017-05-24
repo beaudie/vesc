@@ -125,7 +125,7 @@ class ProvokingVertexTest : public ANGLETest
 // Test drawing a simple triangle with flat shading, and different valued vertices.
 TEST_P(ProvokingVertexTest, FlatTriangle)
 {
-    GLint vertexData[] = {1, 2, 3, 1, 2, 3};
+    constexpr GLint vertexData[] = {1, 2, 3, 1, 2, 3};
     glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
 
     drawQuad(mProgram, "position", 0.5f);
@@ -158,7 +158,7 @@ TEST_P(ProvokingVertexTest, FlatTriWithTransformFeedback)
 
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mBuffer);
 
-    GLint vertexData[] = {1, 2, 3, 1, 2, 3};
+    constexpr GLint vertexData[] = {1, 2, 3, 1, 2, 3};
     glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
 
     glUseProgram(mProgram);
@@ -189,8 +189,8 @@ TEST_P(ProvokingVertexTest, FlatLine)
 {
     GLfloat halfPixel = 1.0f / static_cast<GLfloat>(getWindowWidth());
 
-    GLint vertexData[]     = {1, 2};
-    GLfloat positionData[] = {-1.0f + halfPixel, -1.0f, -1.0f + halfPixel, 1.0f};
+    constexpr GLint vertexData[] = {1, 2};
+    const GLfloat positionData[] = {-1.0f + halfPixel, -1.0f, -1.0f + halfPixel, 1.0f};
 
     glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
 
@@ -211,9 +211,9 @@ TEST_P(ProvokingVertexTest, FlatLine)
 // Test drawing a simple triangle strip with flat shading, and different valued vertices.
 TEST_P(ProvokingVertexTest, FlatTriStrip)
 {
-    GLint vertexData[]     = {1, 2, 3, 4, 5, 6};
-    GLfloat positionData[] = {-1.0f, -1.0f, -1.0f, 1.0f,  0.0f, -1.0f,
-                              0.0f,  1.0f,  1.0f,  -1.0f, 1.0f, 1.0f};
+    constexpr GLint vertexData[]     = {1, 2, 3, 4, 5, 6};
+    constexpr GLfloat positionData[] = {-1.0f, -1.0f, -1.0f, 1.0f,  0.0f, -1.0f,
+                                        0.0f,  1.0f,  1.0f,  -1.0f, 1.0f, 1.0f};
 
     glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
 
@@ -261,10 +261,10 @@ TEST_P(ProvokingVertexTest, FlatTriStripPrimitiveRestart)
         return;
     }
 
-    GLint indexData[]      = {0, 1, 2, -1, 1, 2, 3, 4, -1, 3, 4, 5};
-    GLint vertexData[]     = {1, 2, 3, 4, 5, 6};
-    GLfloat positionData[] = {-1.0f, -1.0f, -1.0f, 1.0f,  0.0f, -1.0f,
-                              0.0f,  1.0f,  1.0f,  -1.0f, 1.0f, 1.0f};
+    constexpr GLint indexData[]      = {0, 1, 2, -1, 1, 2, 3, 4, -1, 3, 4, 5};
+    constexpr GLint vertexData[]     = {1, 2, 3, 4, 5, 6};
+    constexpr GLfloat positionData[] = {-1.0f, -1.0f, -1.0f, 1.0f,  0.0f, -1.0f,
+                                        0.0f,  1.0f,  1.0f,  -1.0f, 1.0f, 1.0f};
 
     glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
 
@@ -284,7 +284,7 @@ TEST_P(ProvokingVertexTest, FlatTriStripPrimitiveRestart)
     ASSERT_GL_NO_ERROR();
 
     // Account for primitive restart when checking the tris.
-    GLint triOffsets[] = {0, 4, 5, 9};
+    constexpr GLint triOffsets[] = {0, 4, 5, 9};
 
     for (unsigned int triIndex = 0; triIndex < 4; ++triIndex)
     {

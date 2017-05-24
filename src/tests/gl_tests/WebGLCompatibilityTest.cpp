@@ -85,7 +85,7 @@ class WebGLCompatibilityTest : public ANGLETest
     {
         ASSERT_GL_NO_ERROR();
 
-        const std::string samplingVs =
+        const std::string &samplingVs =
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
             "void main()\n"
@@ -94,7 +94,7 @@ class WebGLCompatibilityTest : public ANGLETest
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "}\n";
 
-        const std::string samplingFs =
+        const std::string &samplingFs =
             "precision mediump float;\n"
             "uniform sampler2D tex;\n"
             "uniform vec4 subtractor;\n"
@@ -116,18 +116,18 @@ class WebGLCompatibilityTest : public ANGLETest
             "}\n";
 
         ANGLE_GL_PROGRAM(samplingProgram, samplingVs, samplingFs);
-        glUseProgram(samplingProgram.get());
+        glUseProgram(samplingProgram);
 
         GLRenderbuffer rbo;
-        glBindRenderbuffer(GL_RENDERBUFFER, rbo.get());
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1, 1);
 
         GLFramebuffer fbo;
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo.get());
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
 
         GLTexture texture;
-        glBindTexture(GL_TEXTURE_2D, texture.get());
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         if (internalFormat == format)
         {
@@ -160,16 +160,16 @@ class WebGLCompatibilityTest : public ANGLETest
         }
         ASSERT_GL_NO_ERROR();
 
-        glUniform1i(glGetUniformLocation(samplingProgram.get(), "tex"), 0);
-        glUniform4fv(glGetUniformLocation(samplingProgram.get(), "subtractor"), 1, floatData);
+        glUniform1i(glGetUniformLocation(samplingProgram, "tex"), 0);
+        glUniform4fv(glGetUniformLocation(samplingProgram, "subtractor"), 1, floatData);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        drawQuad(samplingProgram.get(), "position", 0.5f, 1.0f, true);
+        drawQuad(samplingProgram, "position", 0.5f, 1.0f, true);
         EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        drawQuad(samplingProgram.get(), "position", 0.5f, 1.0f, true);
+        drawQuad(samplingProgram, "position", 0.5f, 1.0f, true);
 
         if (linearSamplingEnabled)
         {
@@ -180,8 +180,7 @@ class WebGLCompatibilityTest : public ANGLETest
             EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
         }
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(),
-                               0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
         glBindTexture(GL_TEXTURE_2D, 0);
         if (!renderingEnabled)
         {
@@ -191,14 +190,14 @@ class WebGLCompatibilityTest : public ANGLETest
         }
         ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
-        const std::string renderingVs =
+        const std::string &renderingVs =
             "attribute vec4 position;\n"
             "void main()\n"
             "{\n"
             "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
             "}\n";
 
-        const std::string renderingFs =
+        const std::string &renderingFs =
             "precision mediump float;\n"
             "uniform vec4 writeValue;\n"
             "void main()\n"
@@ -207,11 +206,11 @@ class WebGLCompatibilityTest : public ANGLETest
             "}\n";
 
         ANGLE_GL_PROGRAM(renderingProgram, renderingVs, renderingFs);
-        glUseProgram(renderingProgram.get());
+        glUseProgram(renderingProgram);
 
-        glUniform4fv(glGetUniformLocation(renderingProgram.get(), "writeValue"), 1, floatData);
+        glUniform4fv(glGetUniformLocation(renderingProgram, "writeValue"), 1, floatData);
 
-        drawQuad(renderingProgram.get(), "position", 0.5f, 1.0f, true);
+        drawQuad(renderingProgram, "position", 0.5f, 1.0f, true);
 
         EXPECT_PIXEL_COLOR32F_NEAR(
             0, 0, GLColor32F(floatData[0], floatData[1], floatData[2], floatData[3]), 1.0f);
@@ -255,13 +254,13 @@ TEST_P(WebGLCompatibilityTest, EntryPoints)
 TEST_P(WebGLCompatibilityTest, DepthStencilBindingPoint)
 {
     GLRenderbuffer renderbuffer;
-    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.get());
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 32, 32);
 
     GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                              renderbuffer.get());
+                              renderbuffer);
 
     EXPECT_GL_NO_ERROR();
 }
@@ -285,14 +284,14 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionUintIndices)
     EXPECT_FALSE(extensionEnabled("GL_OES_element_index_uint"));
 
     GLBuffer indexBuffer;
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-    GLuint data[] = {0, 1, 2, 1, 3, 2};
+    constexpr GLuint data[] = {0, 1, 2, 1, 3, 2};
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 
     ANGLE_GL_PROGRAM(program, "void main() { gl_Position = vec4(0, 0, 0, 1); }",
                      "void main() { gl_FragColor = vec4(0, 1, 0, 1); }")
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     glDrawElements(GL_TRIANGLES, 2, GL_UNSIGNED_INT, nullptr);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
@@ -313,9 +312,12 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionStandardDerivitives)
 {
     EXPECT_FALSE(extensionEnabled("GL_OES_standard_derivatives"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_OES_standard_derivatives : require\n"
-        "void main() { gl_FragColor = vec4(dFdx(vec2(1.0, 1.0)).x, 1, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "     gl_FragColor = vec4(dFdx(vec2(1.0, 1.0)).x, 1, 0, 1);\n"
+        "}\n";
     ASSERT_EQ(0u, CompileShader(GL_FRAGMENT_SHADER, source));
 
     if (extensionRequestable("GL_OES_standard_derivatives"))
@@ -335,7 +337,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionTextureLOD)
 {
     EXPECT_FALSE(extensionEnabled("GL_EXT_shader_texture_lod"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_EXT_shader_texture_lod : require\n"
         "uniform sampler2D u_texture;\n"
         "void main() {\n"
@@ -361,7 +363,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionFragDepth)
 {
     EXPECT_FALSE(extensionEnabled("GL_EXT_frag_depth"));
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_EXT_frag_depth : require\n"
         "void main() {\n"
         "    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
@@ -391,7 +393,7 @@ TEST_P(WebGLCompatibilityTest, EnableExtensionTextureFilterAnisotropic)
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
     GLTexture texture;
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     ASSERT_GL_NO_ERROR();
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
@@ -518,9 +520,9 @@ TEST_P(WebGLCompatibilityTest, ForbidsClientSideArrayBuffer)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     const auto &vertices = GetQuadVertices();
     glVertexAttribPointer(posLocation, 3, GL_FLOAT, GL_FALSE, 4, vertices.data());
@@ -550,14 +552,14 @@ TEST_P(WebGLCompatibilityTest, ForbidsClientSideElementBuffer)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     const auto &vertices = GetQuadVertices();
 
     GLBuffer vertexBuffer;
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
                  GL_STATIC_DRAW);
 
@@ -578,17 +580,17 @@ TEST_P(WebGLCompatibilityTest, RequiresSameStencilMaskAndRef)
 {
     // Run the test in an FBO to make sure we have some stencil bits.
     GLRenderbuffer renderbuffer;
-    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.get());
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 32, 32);
 
     GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                              renderbuffer.get());
+                              renderbuffer);
 
     ANGLE_GL_PROGRAM(program, "void main() { gl_Position = vec4(0, 0, 0, 1); }",
                      "void main() { gl_FragColor = vec4(0, 1, 0, 1); }")
-    glUseProgram(program.get());
+    glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
     // Having ref and mask the same for front and back is valid.
@@ -637,7 +639,7 @@ TEST_P(WebGLCompatibilityTest, RequiresSameStencilMaskAndRef)
 TEST_P(WebGLCompatibilityTest, ForbidsGLFixed)
 {
     GLBuffer buffer;
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, 16, nullptr, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -651,7 +653,7 @@ TEST_P(WebGLCompatibilityTest, ForbidsGLFixed)
 TEST_P(WebGLCompatibilityTest, MaxStride)
 {
     GLBuffer buffer;
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, 1024, nullptr, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 1, GL_UNSIGNED_BYTE, GL_FALSE, 255, nullptr);
@@ -680,12 +682,12 @@ TEST_P(WebGLCompatibilityTest, DrawArraysBufferOutOfBoundsNonInstanced)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLBuffer buffer;
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, 16, nullptr, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(posLocation);
@@ -737,23 +739,23 @@ TEST_P(WebGLCompatibilityTest, DrawElementsBufferOutOfBoundsInIndexBuffer)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLBuffer vertexBuffer;
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, 16, nullptr, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(posLocation);
 
     const uint8_t *zeroOffset   = nullptr;
-    const uint8_t zeroIndices[] = {0, 0, 0, 0, 0, 0, 0, 0};
+    constexpr uint8_t zeroIndices[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     glVertexAttribPointer(0, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, zeroOffset);
 
     GLBuffer indexBuffer;
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(zeroIndices), zeroIndices, GL_STATIC_DRAW);
     ASSERT_GL_NO_ERROR();
 
@@ -929,16 +931,16 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
 
-    GLint wLocation = glGetAttribLocation(program.get(), "a_w");
+    GLint wLocation = glGetAttribLocation(program, "a_w");
     ASSERT_NE(-1, wLocation);
 
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLBuffer buffer;
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, 16, nullptr, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(posLocation);
@@ -995,13 +997,13 @@ TEST_P(WebGL2CompatibilityTest, InstancedDrawZeroDivisor)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
 
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLBuffer buffer;
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, 16, nullptr, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(posLocation);
@@ -1023,7 +1025,7 @@ TEST_P(WebGLCompatibilityTest, NPOT)
 
     // Create a texture and set an NPOT mip 0, should always be acceptable.
     GLTexture texture;
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     ASSERT_GL_NO_ERROR();
 
@@ -1076,7 +1078,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
     // Draw a quad where each vertex is red if gl_Position is (0,0,0,0) before it is set,
     // and green otherwise.  The center of each quadrant will be red if and only if all
     // four corners are red.
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec3 pos;\n"
         "varying vec4 color;\n"
         "void main() {\n"
@@ -1088,7 +1090,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
         "    gl_Position = vec4(pos,1);\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "precision mediump float;\n"
         "varying vec4 color;\n"
         "void main() {\n"
@@ -1096,7 +1098,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
         "}\n";
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    drawQuad(program.get(), "pos", 0.0f, 1.0f, true);
+    drawQuad(program, "pos", 0.0f, 1.0f, true);
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() * 1 / 4, getWindowHeight() * 1 / 4, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() * 1 / 4, getWindowHeight() * 3 / 4, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() * 3 / 4, getWindowHeight() * 1 / 4, GLColor::red);
@@ -1107,7 +1109,7 @@ TEST_P(WebGLCompatibilityTest, DefaultPosition)
 // Based on WebGL test conformance/renderbuffers/feedback-loop.html.
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec4 a_position;\n"
         "varying vec2 v_texCoord;\n"
         "void main() {\n"
@@ -1115,7 +1117,7 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
         "    v_texCoord = (a_position.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "precision mediump float;\n"
         "varying vec2 v_texCoord;\n"
         "uniform sampler2D u_texture;\n"
@@ -1125,46 +1127,46 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
         "}\n";
 
     GLTexture texture;
-    FillTexture2D(texture.get(), 1, 1, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(texture, 1, 1, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
 
     ASSERT_GL_NO_ERROR();
 
     GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
 
-    GLint uniformLoc = glGetUniformLocation(program.get(), "u_texture");
+    GLint uniformLoc = glGetUniformLocation(program, "u_texture");
     ASSERT_NE(-1, uniformLoc);
 
-    glUseProgram(program.get());
+    glUseProgram(program);
     glUniform1i(uniformLoc, 0);
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     ASSERT_GL_NO_ERROR();
 
     // Drawing with a texture that is also bound to the current framebuffer should fail
-    glBindTexture(GL_TEXTURE_2D, texture.get());
-    drawQuad(program.get(), "a_position", 0.5f, 1.0f, true);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    drawQuad(program, "a_position", 0.5f, 1.0f, true);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     // Ensure that the texture contents did not change after the previous render
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    drawQuad(program.get(), "a_position", 0.5f, 1.0f, true);
+    drawQuad(program, "a_position", 0.5f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 
     // Drawing when texture is bound to an inactive uniform should succeed
     GLTexture texture2;
-    FillTexture2D(texture2.get(), 1, 1, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(texture2, 1, 1, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture.get());
-    drawQuad(program.get(), "a_position", 0.5f, 1.0f, true);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    drawQuad(program, "a_position", 0.5f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
@@ -1179,13 +1181,13 @@ TEST_P(WebGLCompatibilityTest, MaxDrawBuffersAttachmentPoints)
     }
 
     GLFramebuffer fbo[2];
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo[0].get());
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);
 
     // Test that is valid when we bind with a single attachment point.
     GLTexture texture;
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     ASSERT_GL_NO_ERROR();
 
     // Test that enabling the draw buffers extension will allow us to bind with a non-zero
@@ -1196,13 +1198,12 @@ TEST_P(WebGLCompatibilityTest, MaxDrawBuffersAttachmentPoints)
         EXPECT_GL_NO_ERROR();
         EXPECT_TRUE(extensionEnabled("GL_EXT_draw_buffers"));
 
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo[1].get());
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo[1]);
 
         GLTexture texture2;
-        glBindTexture(GL_TEXTURE_2D, texture2.get());
+        glBindTexture(GL_TEXTURE_2D, texture2);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, texture2.get(),
-                               0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, texture2, 0);
         ASSERT_GL_NO_ERROR();
     }
 }
@@ -1226,14 +1227,14 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
 
     ANGLE_GL_PROGRAM(program, vert, frag);
 
-    GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
+    GLint posLocation = glGetAttribLocation(program, "a_pos");
     ASSERT_NE(-1, posLocation);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     const auto &vertices = GetQuadVertices();
 
     GLBuffer vertexBuffer;
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
                  GL_STATIC_DRAW);
 
@@ -1241,8 +1242,8 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
     glEnableVertexAttribArray(posLocation);
 
     GLBuffer indexBuffer;
-    const GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0};
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    constexpr GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0};
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     ASSERT_GL_NO_ERROR();
@@ -1306,7 +1307,7 @@ void WebGLCompatibilityTest::drawBuffersEXTFeedbackLoop(GLuint program,
 // Based on WebGL test conformance/extensions/webgl-draw-buffers-feedback-loop.html
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "attribute vec4 aPosition;\n"
         "varying vec2 texCoord;\n"
         "void main() {\n"
@@ -1314,7 +1315,7 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#extension GL_EXT_draw_buffers : require\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -1324,8 +1325,8 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
         "    gl_FragData[1] = texture2D(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     // This shader cannot be run in ES3, because WebGL 2 does not expose the draw buffers
     // extension and gl_FragData semantics are changed to enforce indexing by zero always.
@@ -1346,32 +1347,31 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
     }
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
     glViewport(0, 0, width, height);
 
     GLTexture tex0;
     GLTexture tex1;
     GLFramebuffer fbo;
-    FillTexture2D(tex0.get(), width, height, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-    FillTexture2D(tex1.get(), width, height, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex0, width, height, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex1, width, height, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
     ASSERT_GL_NO_ERROR();
 
-    glBindTexture(GL_TEXTURE_2D, tex1.get());
-    GLint texLoc = glGetUniformLocation(program.get(), "tex");
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    GLint texLoc = glGetUniformLocation(program, "tex");
     ASSERT_NE(-1, texLoc);
     glUniform1i(texLoc, 0);
     ASSERT_GL_NO_ERROR();
 
     // The sampling texture is bound to COLOR_ATTACHMENT1 during resource allocation
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0.get(), 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex1.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex1, 0);
 
-    drawBuffersEXTFeedbackLoop(program.get(), {{GL_NONE, GL_COLOR_ATTACHMENT1}},
+    drawBuffersEXTFeedbackLoop(program, {{GL_NONE, GL_COLOR_ATTACHMENT1}}, GL_INVALID_OPERATION);
+    drawBuffersEXTFeedbackLoop(program, {{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1}},
                                GL_INVALID_OPERATION);
-    drawBuffersEXTFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1}},
-                               GL_INVALID_OPERATION);
-    drawBuffersEXTFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_NONE}}, GL_NO_ERROR);
+    drawBuffersEXTFeedbackLoop(program, {{GL_COLOR_ATTACHMENT0, GL_NONE}}, GL_NO_ERROR);
 }
 
 // Test tests that texture copying feedback loops are properly rejected in WebGL.
@@ -1379,7 +1379,7 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffersEXT)
 TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
 {
     GLTexture texture;
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1387,7 +1387,7 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     GLTexture texture2;
-    glBindTexture(GL_TEXTURE_2D, texture2.get());
+    glBindTexture(GL_TEXTURE_2D, texture2);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1395,8 +1395,8 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
     // framebuffer should be FRAMEBUFFER_COMPLETE.
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -1405,7 +1405,7 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     // testing copyTexImage2D
 
     // copyTexImage2D to same texture but different level
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glCopyTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 0, 0, 2, 2, 0);
     EXPECT_GL_NO_ERROR();
 
@@ -1414,14 +1414,14 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     // copyTexImage2D to different texture
-    glBindTexture(GL_TEXTURE_2D, texture2.get());
+    glBindTexture(GL_TEXTURE_2D, texture2);
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 2, 2, 0);
     EXPECT_GL_NO_ERROR();
 
     // testing copyTexSubImage2D
 
     // copyTexSubImage2D to same texture but different level
-    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 0, 0, 1, 1);
     EXPECT_GL_NO_ERROR();
 
@@ -1430,7 +1430,7 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     // copyTexSubImage2D to different texture
-    glBindTexture(GL_TEXTURE_2D, texture2.get());
+    glBindTexture(GL_TEXTURE_2D, texture2);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
     EXPECT_GL_NO_ERROR();
 }
@@ -1455,20 +1455,20 @@ void WebGLCompatibilityTest::drawBuffersFeedbackLoop(GLuint program,
 // Based on WebGL test conformance/glsl/misc/shaders-with-invariance.html.
 TEST_P(WebGLCompatibilityTest, BuiltInInvariant)
 {
-    const std::string vertexShaderVariant =
+    const std::string &vertexShaderVariant =
         "varying vec4 v_varying;\n"
         "void main()\n"
         "{\n"
         "    gl_PointSize = 1.0;\n"
         "    gl_Position = v_varying;\n"
         "}";
-    const std::string fragmentShaderInvariantGlFragCoord =
+    const std::string &fragmentShaderInvariantGlFragCoord =
         "invariant gl_FragCoord;\n"
         "void main()\n"
         "{\n"
         "    gl_FragColor = gl_FragCoord;\n"
         "}";
-    const std::string fragmentShaderInvariantGlPointCoord =
+    const std::string &fragmentShaderInvariantGlPointCoord =
         "invariant gl_PointCoord;\n"
         "void main()\n"
         "{\n"
@@ -2081,7 +2081,7 @@ TEST_P(WebGLCompatibilityTest, SizedRGBA32FFormats)
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "#version 300 es\n"
         "in vec4 aPosition;\n"
         "out vec2 texCoord;\n"
@@ -2090,7 +2090,7 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#version 300 es\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -2100,8 +2100,8 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
         "    oColor = texture(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     GLint maxDrawBuffers = 0;
     glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
@@ -2109,38 +2109,38 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
     ASSERT_GE(maxDrawBuffers, 2);
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
     glViewport(0, 0, width, height);
 
     GLTexture tex0;
     GLTexture tex1;
     GLFramebuffer fbo;
-    FillTexture2D(tex0.get(), width, height, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-    FillTexture2D(tex1.get(), width, height, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex0, width, height, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex1, width, height, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
     ASSERT_GL_NO_ERROR();
 
-    glBindTexture(GL_TEXTURE_2D, tex1.get());
-    GLint texLoc = glGetUniformLocation(program.get(), "tex");
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    GLint texLoc = glGetUniformLocation(program, "tex");
     ASSERT_NE(-1, texLoc);
     glUniform1i(texLoc, 0);
 
     // The sampling texture is bound to COLOR_ATTACHMENT1 during resource allocation
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0.get(), 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex1.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex1, 0);
     ASSERT_GL_NO_ERROR();
 
-    drawBuffersFeedbackLoop(program.get(), {{GL_NONE, GL_COLOR_ATTACHMENT1}}, GL_INVALID_OPERATION);
-    drawBuffersFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1}},
+    drawBuffersFeedbackLoop(program, {{GL_NONE, GL_COLOR_ATTACHMENT1}}, GL_INVALID_OPERATION);
+    drawBuffersFeedbackLoop(program, {{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1}},
                             GL_INVALID_OPERATION);
-    drawBuffersFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_NONE}}, GL_NO_ERROR);
+    drawBuffersFeedbackLoop(program, {{GL_COLOR_ATTACHMENT0, GL_NONE}}, GL_NO_ERROR);
 }
 
 // This test covers detection of rendering feedback loops between the FBO and a depth Texture.
 // Based on WebGL test conformance2/rendering/depth-stencil-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
 {
-    const std::string vertexShader =
+    const std::string &vertexShader =
         "#version 300 es\n"
         "in vec4 aPosition;\n"
         "out vec2 texCoord;\n"
@@ -2149,7 +2149,7 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
         "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
         "}\n";
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "#version 300 es\n"
         "precision mediump float;\n"
         "uniform sampler2D tex;\n"
@@ -2159,75 +2159,75 @@ TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
         "    oColor = texture(tex, texCoord);\n"
         "}\n";
 
-    GLsizei width  = 8;
-    GLsizei height = 8;
+    constexpr GLsizei width  = 8;
+    constexpr GLsizei height = 8;
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     glViewport(0, 0, width, height);
 
-    GLint texLoc = glGetUniformLocation(program.get(), "tex");
+    GLint texLoc = glGetUniformLocation(program, "tex");
     glUniform1i(texLoc, 0);
 
     // Create textures and allocate storage
     GLTexture tex0;
     GLTexture tex1;
     GLRenderbuffer rb;
-    FillTexture2D(tex0.get(), width, height, GLColor::black, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-    FillTexture2D(tex1.get(), width, height, 0x80, 0, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT,
+    FillTexture2D(tex0, width, height, GLColor::black, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex1, width, height, 0x80, 0, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT,
                   GL_UNSIGNED_INT);
-    glBindRenderbuffer(GL_RENDERBUFFER, rb.get());
+    glBindRenderbuffer(GL_RENDERBUFFER, rb);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
     ASSERT_GL_NO_ERROR();
 
     GLFramebuffer fbo;
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0, 0);
 
     // Test rendering and sampling feedback loop for depth buffer
-    glBindTexture(GL_TEXTURE_2D, tex1.get());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex1.get(), 0);
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex1, 0);
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     // The same image is used as depth buffer during rendering.
     glEnable(GL_DEPTH_TEST);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     // The same image is used as depth buffer. But depth mask is false.
     glDepthMask(GL_FALSE);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_NO_ERROR();
 
     // The same image is used as depth buffer. But depth test is not enabled during rendering.
     glDepthMask(GL_TRUE);
     glDisable(GL_DEPTH_TEST);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_NO_ERROR();
 
     // Test rendering and sampling feedback loop for stencil buffer
-    glBindTexture(GL_RENDERBUFFER, rb.get());
+    glBindTexture(GL_RENDERBUFFER, rb);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rb.get());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rb);
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
     constexpr GLint stencilClearValue = 0x40;
     glClearBufferiv(GL_STENCIL, 0, &stencilClearValue);
 
     // The same image is used as stencil buffer during rendering.
     glEnable(GL_STENCIL_TEST);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     // The same image is used as stencil buffer. But stencil mask is zero.
     glStencilMask(0x0);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_NO_ERROR();
 
     // The same image is used as stencil buffer. But stencil test is not enabled during rendering.
     glStencilMask(0xffff);
     glDisable(GL_STENCIL_TEST);
-    drawQuad(program.get(), "aPosition", 0.5f, 1.0f, true);
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
     EXPECT_GL_NO_ERROR();
 }
 
@@ -2238,12 +2238,12 @@ TEST_P(WebGL2CompatibilityTest, NoTextureCopyingFeedbackLoopBetween3DLevels)
     GLTexture texture;
     GLFramebuffer framebuffer;
 
-    glBindTexture(GL_TEXTURE_3D, texture.get());
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 0, 0);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, 0);
     ASSERT_GL_NO_ERROR();
 
     glCopyTexSubImage3D(GL_TEXTURE_3D, 1, 0, 0, 0, 0, 0, 2, 2);
@@ -2257,11 +2257,11 @@ TEST_P(WebGL2CompatibilityTest, NoTextureCopyingFeedbackLoopBetween3DLayers)
     GLTexture texture;
     GLFramebuffer framebuffer;
 
-    glBindTexture(GL_TEXTURE_3D, texture.get());
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 0, 1);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, 1);
     ASSERT_GL_NO_ERROR();
 
     glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, 0, 0, 2, 2);
@@ -2275,13 +2275,13 @@ TEST_P(WebGL2CompatibilityTest, TextureCopyingFeedbackLoop3D)
     GLTexture texture;
     GLFramebuffer framebuffer;
 
-    glBindTexture(GL_TEXTURE_3D, texture.get());
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 4, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexImage3D(GL_TEXTURE_3D, 2, GL_RGBA8, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 1, 0);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 1, 0);
     ASSERT_GL_NO_ERROR();
 
     glCopyTexSubImage3D(GL_TEXTURE_3D, 1, 0, 0, 0, 0, 0, 2, 2);
@@ -2305,10 +2305,10 @@ TEST_P(WebGL2CompatibilityTest, ClearBufferTypeCompatibity)
     GLTexture texture;
     GLFramebuffer framebuffer;
 
-    glBindTexture(GL_TEXTURE_2D, texture.get());
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     ASSERT_GL_NO_ERROR();
 
     // Unsigned integer buffer
@@ -2474,7 +2474,7 @@ TEST_P(WebGL2CompatibilityTest, FragmentShaderColorBufferTypeMissmatch)
         "}\n";
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLuint floatLocation = glGetFragDataLocation(program, "floatOutput");
     GLuint uintLocation  = glGetFragDataLocation(program, "uintOutput");
@@ -2565,7 +2565,7 @@ TEST_P(WebGL2CompatibilityTest, VertexShaderAttributeTypeMissmatch)
         "}\n";
 
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    glUseProgram(program.get());
+    glUseProgram(program);
 
     GLint floatLocation = glGetAttribLocation(program, "floatInput");
     GLint uintLocation  = glGetAttribLocation(program, "uintInput");

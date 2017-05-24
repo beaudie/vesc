@@ -372,13 +372,13 @@ TEST_P(StateChangeTestES3, ReadBufferAndDrawBuffersSync)
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, mTextures[1], 0);
 
     // Clear first attachment to red
-    GLenum bufs1[] = {GL_COLOR_ATTACHMENT0, GL_NONE};
+    constexpr GLenum bufs1[] = {GL_COLOR_ATTACHMENT0, GL_NONE};
     glDrawBuffers(2, bufs1);
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Clear second texture to green
-    GLenum bufs2[] = {GL_NONE, GL_COLOR_ATTACHMENT1};
+    constexpr GLenum bufs2[] = {GL_NONE, GL_COLOR_ATTACHMENT1};
     glDrawBuffers(2, bufs2);
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -408,7 +408,7 @@ TEST_P(StateChangeTestES3, IncompleteRenderbufferAttachmentInvalidateSync)
     // attached renderbuffer
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
                      glCheckFramebufferStatus(GL_FRAMEBUFFER));
-    GLenum attachments1[] = {GL_COLOR_ATTACHMENT0};
+    constexpr GLenum attachments1[] = {GL_COLOR_ATTACHMENT0};
     glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, attachments1);
     ASSERT_GL_NO_ERROR();
 
@@ -428,7 +428,7 @@ TEST_P(StateChangeTestES3, IncompleteRenderbufferAttachmentInvalidateSync)
     // invalidate the framebuffer when the attachment is incomplete: no storage allocated to the
     // attached renderbuffer
     // Note: the bug will only repro *without* a call to checkStatus before the invalidate.
-    GLenum attachments2[] = {GL_DEPTH_ATTACHMENT};
+    constexpr GLenum attachments2[] = {GL_DEPTH_ATTACHMENT};
     glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, attachments2);
 
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, static_cast<GLsizei>(samples),
@@ -447,12 +447,12 @@ class StateChangeRenderTest : public StateChangeTest
     {
         StateChangeTest::SetUp();
 
-        const std::string vertexShaderSource =
+        const std::string &vertexShaderSource =
             "attribute vec2 position;\n"
             "void main() {\n"
             "    gl_Position = vec4(position, 0, 1);\n"
             "}";
-        const std::string fragmentShaderSource =
+        const std::string &fragmentShaderSource =
             "uniform highp vec4 uniformColor;\n"
             "void main() {\n"
             "    gl_FragColor = uniformColor;\n"

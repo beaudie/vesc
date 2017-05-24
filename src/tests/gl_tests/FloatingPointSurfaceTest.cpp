@@ -28,7 +28,7 @@ class FloatingPointSurfaceTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
+        const std::string &vsSource =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "void main()\n"
@@ -36,7 +36,7 @@ class FloatingPointSurfaceTest : public ANGLETest
             "   gl_Position = position;\n"
             "}\n";
 
-        const std::string fsSource =
+        const std::string &fsSource =
             "precision highp float;\n"
             "void main()\n"
             "{\n"

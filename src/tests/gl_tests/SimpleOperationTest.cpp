@@ -54,17 +54,15 @@ void SimpleOperationTest::verifyBuffer(const std::vector<uint8_t> &data, GLenum 
 
 TEST_P(SimpleOperationTest, CompileVertexShader)
 {
-    const std::string source = SHADER_SOURCE
-    (
-        attribute vec4 a_input;
-        void main()
-        {
-            gl_Position = a_input;
-        }
-    );
+    const std::string &source =
+        "attribute vec4 a_input;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = a_input;\n"
+        "}\n";
 
     GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
-    EXPECT_NE(shader, 0u);
+    EXPECT_NE(0u, shader);
     glDeleteShader(shader);
 
     EXPECT_GL_NO_ERROR();
@@ -72,18 +70,16 @@ TEST_P(SimpleOperationTest, CompileVertexShader)
 
 TEST_P(SimpleOperationTest, CompileFragmentShader)
 {
-    const std::string source = SHADER_SOURCE
-    (
-        precision mediump float;
-        varying vec4 v_input;
-        void main()
-        {
-            gl_FragColor = v_input;
-        }
-    );
+    const std::string &source =
+        "precision mediump float;\n"
+        "varying vec4 v_input;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = v_input;\n"
+        "}\n";
 
     GLuint shader = CompileShader(GL_FRAGMENT_SHADER, source);
-    EXPECT_NE(shader, 0u);
+    EXPECT_NE(0u, shader);
     glDeleteShader(shader);
 
     EXPECT_GL_NO_ERROR();
@@ -91,24 +87,20 @@ TEST_P(SimpleOperationTest, CompileFragmentShader)
 
 TEST_P(SimpleOperationTest, LinkProgram)
 {
-    const std::string vsSource = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_Position = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-    );
+    const std::string &vsSource =
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n";
 
-    const std::string fsSource = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-    );
+    const std::string &fsSource =
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
     glDeleteProgram(program);
 
     EXPECT_GL_NO_ERROR();
@@ -123,26 +115,22 @@ TEST_P(SimpleOperationTest, LinkProgramWithUniforms)
         return;
     }
 
-    const std::string vsSource = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_Position = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-    );
+    const std::string &vsSource =
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n";
 
-    const std::string fsSource = SHADER_SOURCE
-    (
-        precision mediump float;
-        uniform vec4 u_input;
-        void main()
-        {
-            gl_FragColor = u_input;
-        }
-    );
+    const std::string &fsSource =
+        "precision mediump float;\n"
+        "uniform vec4 u_input;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = u_input;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
 
     GLint uniformLoc = glGetUniformLocation(program, "u_input");
     EXPECT_NE(-1, uniformLoc);
@@ -161,25 +149,21 @@ TEST_P(SimpleOperationTest, LinkProgramWithAttributes)
         return;
     }
 
-    const std::string vsSource = SHADER_SOURCE
-    (
-        attribute vec4 a_input;
-        void main()
-        {
-            gl_Position = a_input;
-        }
-    );
+    const std::string &vsSource =
+        "attribute vec4 a_input;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = a_input;\n"
+        "}\n";
 
-    const std::string fsSource = SHADER_SOURCE
-    (
-        void main()
-        {
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-    );
+    const std::string &fsSource =
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
 
     GLint attribLoc = glGetAttribLocation(program, "a_input");
     EXPECT_NE(-1, attribLoc);

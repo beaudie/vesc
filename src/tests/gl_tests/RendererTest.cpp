@@ -38,13 +38,13 @@ TEST_P(RendererTest, RequestedRendererCreated)
     // Ensure that the renderer string contains D3D11, if we requested a D3D11 renderer.
     if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
     {
-        ASSERT_NE(rendererString.find(std::string("direct3d11")), std::string::npos);
+        ASSERT_NE(std::string::npos, rendererString.find(std::string("direct3d11")));
     }
 
     // Ensure that the renderer string contains D3D9, if we requested a D3D9 renderer.
     if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
     {
-        ASSERT_NE(rendererString.find(std::string("direct3d9")), std::string::npos);
+        ASSERT_NE(std::string::npos, rendererString.find(std::string("direct3d9")));
     }
 
     // Ensure that the major and minor versions trigger expected behavior in D3D11
@@ -117,15 +117,15 @@ TEST_P(RendererTest, RequestedRendererCreated)
     // Ensure that the renderer string contains the requested version number
     if (glesMajorVersion == 3 && glesMinorVersion == 1)
     {
-        ASSERT_NE(versionString.find(std::string("es 3.1")), std::string::npos);
+        ASSERT_NE(std::string::npos, versionString.find(std::string("es 3.1")));
     }
     else if (glesMajorVersion == 3 && glesMinorVersion == 0)
     {
-        ASSERT_NE(versionString.find(std::string("es 3.0")), std::string::npos);
+        ASSERT_NE(std::string::npos, versionString.find(std::string("es 3.0")));
     }
     else if (glesMajorVersion == 2 && glesMinorVersion == 0)
     {
-        ASSERT_NE(versionString.find(std::string("es 2.0")), std::string::npos);
+        ASSERT_NE(std::string::npos, versionString.find(std::string("es 2.0")));
     }
     else
     {

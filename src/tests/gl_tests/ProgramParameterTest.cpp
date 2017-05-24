@@ -37,7 +37,7 @@ class ProgramParameterTestES31 : public ProgramParameterTest
 TEST_P(ProgramParameterTest, ValidatePname)
 {
     GLuint program = glCreateProgram();
-    ASSERT_NE(program, 0u);
+    ASSERT_NE(0u, program);
 
     glProgramParameteri(program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
     ASSERT_GL_NO_ERROR();
@@ -59,7 +59,7 @@ TEST_P(ProgramParameterTest, ValidatePname)
 TEST_P(ProgramParameterTestES31, ValidateParameters)
 {
     GLuint program = glCreateProgram();
-    ASSERT_NE(program, 0u);
+    ASSERT_NE(0u, program);
 
     glProgramParameteri(0, GL_PROGRAM_SEPARABLE, GL_TRUE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);

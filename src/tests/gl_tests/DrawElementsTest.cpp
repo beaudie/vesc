@@ -125,14 +125,13 @@ TEST_P(DrawElementsTest, DeletingAfterStreamingIndexes)
         "  gl_FragColor = vec4(v_data, 0, 1);\n"
         "}";
 
-    mProgram = CompileProgram(vertexShader, fragmentShader);
-    ASSERT_NE(0u, mProgram);
-    glUseProgram(mProgram);
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    glUseProgram(program);
 
-    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    GLint positionLocation = glGetAttribLocation(program, "position");
     ASSERT_NE(-1, positionLocation);
 
-    GLint testFlagLocation = glGetAttribLocation(mProgram, "testFlag");
+    GLint testFlagLocation = glGetAttribLocation(program, "testFlag");
     ASSERT_NE(-1, testFlagLocation);
 
     mIndexBuffers.resize(3u);

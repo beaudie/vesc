@@ -33,22 +33,18 @@ class ProgramBinaryTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            attribute vec4 inputAttribute;
-            void main()
-            {
-                gl_Position = inputAttribute;
-            }
-        );
+        const std::string &vertexShaderSource =
+            "attribute vec4 inputAttribute;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = inputAttribute;\n"
+            "}\n";
 
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            void main()
-            {
-                gl_FragColor = vec4(1,0,0,1);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1,0,0,1);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         if (mProgram == 0)
@@ -299,8 +295,8 @@ void ProgramBinaryES3Test::testBinaryAndUBOBlockIndexes(bool drawWithProgramFirs
     // Init and draw with the program.
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
 
-    float fData[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLuint bindIndex = 2;
+    constexpr float fData[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+    constexpr GLuint bindIndex = 2;
 
     GLBuffer ubo;
     glBindBuffer(GL_UNIFORM_BUFFER, ubo.get());
@@ -413,13 +409,13 @@ TEST_P(ProgramBinaryES31Test, ProgramBinaryWithComputeShader)
 
     // Read back the binary.
     GLint programLength = 0;
-    glGetProgramiv(program.get(), GL_PROGRAM_BINARY_LENGTH, &programLength);
+    glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH, &programLength);
     ASSERT_GL_NO_ERROR();
 
     GLsizei readLength  = 0;
     GLenum binaryFormat = GL_NONE;
     std::vector<uint8_t> binary(programLength);
-    glGetProgramBinary(program.get(), programLength, &readLength, &binaryFormat, binary.data());
+    glGetProgramBinary(program, programLength, &readLength, &binaryFormat, binary.data());
     ASSERT_GL_NO_ERROR();
 
     EXPECT_EQ(static_cast<GLsizei>(programLength), readLength);
@@ -451,25 +447,23 @@ class ProgramBinaryTransformFeedbackTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (   #version 300 es\n
-            in vec4 inputAttribute;
-            out vec4 outputVarying;
-            void main()
-            {
-                outputVarying = inputAttribute;
-            }
-        );
+        const std::string &vertexShaderSource =
+            "#version 300 es\n"
+            "in vec4 inputAttribute;\n"
+            "out vec4 outputVarying;\n"
+            "void main()\n"
+            "{\n"
+            "    outputVarying = inputAttribute;\n"
+            "}\n";
 
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (   #version 300 es\n
-            precision highp float;
-            out vec4 outputColor;
-            void main()
-            {
-                outputColor = vec4(1,0,0,1);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "#version 300 es\n"
+            "precision highp float;\n"
+            "out vec4 outputColor;\n"
+            "void main()\n"
+            "{\n"
+            "    outputColor = vec4(1,0,0,1);\n"
+            "}\n";
 
         std::vector<std::string> transformFeedbackVaryings;
         transformFeedbackVaryings.push_back("outputVarying");
@@ -540,7 +534,7 @@ TEST_P(ProgramBinaryTransformFeedbackTest, GetTransformFeedbackVarying)
     // Ensure the loaded binary is linked
     GLint linkStatus;
     glGetProgramiv(mProgram, GL_LINK_STATUS, &linkStatus);
-    EXPECT_TRUE(linkStatus != 0);
+    EXPECT_NE(0, linkStatus);
 
     // Query information about the transform feedback varying
     char varyingName[64];
@@ -632,50 +626,41 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
 
     GLuint createES2ProgramFromSource()
     {
-        const std::string testVertexShaderSource = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
+        const std::string &testVertexShaderSource =
+            "attribute highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string testFragmentShaderSource = SHADER_SOURCE
-        (
-            void main(void)
-            {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        );
+        const std::string &testFragmentShaderSource =
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "}\n";
 
         return CompileProgram(testVertexShaderSource, testFragmentShaderSource);
     }
 
     GLuint createES3ProgramFromSource()
     {
-        const std::string testVertexShaderSource = SHADER_SOURCE
-        (   #version 300 es\n
-            precision highp float;
-            in highp vec4 position;
+        const std::string &testVertexShaderSource =
+            "#version 300 es\n"
+            "precision highp float;\n"
+            "in highp vec4 position;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main(void)
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string testFragmentShaderSource = SHADER_SOURCE
-        (   #version 300 es \n
-            precision highp float;
-            out vec4 out_FragColor;
-
-            void main(void)
-            {
-                out_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        );
+        const std::string &testFragmentShaderSource =
+            "#version 300 es\n"
+            "precision highp float;\n"
+            "out vec4 out_FragColor;\n"
+            "void main(void)\n"
+            "{\n"
+            "    out_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "}\n";
 
         return CompileProgram(testVertexShaderSource, testFragmentShaderSource);
     }
@@ -689,15 +674,10 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
 
         glUseProgram(program);
 
-        const GLfloat vertices[] =
-        {
-            -1.0f,  1.0f, 0.5f,
-            -1.0f, -1.0f, 0.5f,
-             1.0f, -1.0f, 0.5f,
+        constexpr GLfloat vertices[] = {
+            -1.0f, 1.0f, 0.5f, -1.0f, -1.0f, 0.5f, 1.0f, -1.0f, 0.5f,
 
-            -1.0f,  1.0f, 0.5f,
-             1.0f, -1.0f, 0.5f,
-             1.0f,  1.0f, 0.5f,
+            -1.0f, 1.0f, 0.5f, 1.0f,  -1.0f, 0.5f, 1.0f, 1.0f,  0.5f,
         };
 
         glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);

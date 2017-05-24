@@ -28,15 +28,21 @@ class IndexBufferOffsetTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vertexShaderSource =
-            SHADER_SOURCE(precision highp float; attribute vec2 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec2 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position, 0.0, 1.0);\n"
+            "}\n";
 
-                          void main() { gl_Position = vec4(position, 0.0, 1.0); });
-
-        const std::string fragmentShaderSource =
-            SHADER_SOURCE(precision highp float; uniform vec4 color;
-
-                          void main() { gl_FragColor = color; });
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "uniform vec4 color;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -44,7 +50,7 @@ class IndexBufferOffsetTest : public ANGLETest
         mColorUniformLocation      = glGetUniformLocation(mProgram, "color");
         mPositionAttributeLocation = glGetAttribLocation(mProgram, "position");
 
-        const GLfloat vertices[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+        constexpr GLfloat vertices[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
         glGenBuffers(1, &mVertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
@@ -61,12 +67,12 @@ class IndexBufferOffsetTest : public ANGLETest
         ANGLETest::TearDown();
     }
 
-    void runTest(GLenum type, int typeWidth, void *indexData)
+    void runTest(GLenum type, int typeWidth, const void *indexData)
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        GLuint nullIndexData[] = {0, 0, 0, 0, 0, 0};
+        constexpr GLuint nullIndexData[] = {0, 0, 0, 0, 0, 0};
 
         size_t indexDataWidth = 6 * typeWidth;
 
@@ -110,14 +116,14 @@ class IndexBufferOffsetTest : public ANGLETest
 // Test using an offset for an UInt8 index buffer
 TEST_P(IndexBufferOffsetTest, UInt8Index)
 {
-    GLubyte indexData[] = {0, 1, 2, 1, 2, 3};
+    constexpr GLubyte indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_BYTE, 1, indexData);
 }
 
 // Test using an offset for an UInt16 index buffer
 TEST_P(IndexBufferOffsetTest, UInt16Index)
 {
-    GLushort indexData[] = {0, 1, 2, 1, 2, 3};
+    constexpr GLushort indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_SHORT, 2, indexData);
 }
 
@@ -131,7 +137,7 @@ TEST_P(IndexBufferOffsetTest, UInt32Index)
         return;
     }
 
-    GLuint indexData[] = {0, 1, 2, 1, 2, 3};
+    constexpr GLuint indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_INT, 4, indexData);
 }
 
