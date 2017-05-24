@@ -314,7 +314,7 @@ TEST_P(RobustClientMemoryTest, TexImage2D)
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex.get());
 
-    GLsizei dataDimension = 1024;
+    constexpr GLsizei dataDimension = 1024;
     std::vector<GLubyte> rgbaData(dataDimension * dataDimension * 4);
 
     // Test the regular case
@@ -355,7 +355,7 @@ TEST_P(RobustClientMemoryTest, ReadPixels)
         return;
     }
 
-    GLsizei dataDimension = 16;
+    constexpr GLsizei dataDimension = 16;
     std::vector<GLubyte> rgbaData(dataDimension * dataDimension * 4);
 
     // Test the regular case

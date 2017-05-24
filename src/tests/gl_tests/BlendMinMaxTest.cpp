@@ -62,7 +62,7 @@ class BlendMinMaxTest : public ANGLETest
             maxValue = 1024;
         }
 
-        const size_t colorCount = 128;
+        constexpr size_t colorCount = 128;
         Color colors[colorCount];
         for (size_t i = 0; i < colorCount; i++)
         {
@@ -123,24 +123,19 @@ class BlendMinMaxTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string testVertexShaderSource = SHADER_SOURCE
-        (
-            attribute highp vec4 aPosition;
+        const std::string &testVertexShaderSource =
+            "attribute highp vec4 aPosition;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = aPosition;\n"
+            "}\n";
 
-            void main(void)
-            {
-                gl_Position = aPosition;
-            }
-        );
-
-        const std::string testFragmentShaderSource = SHADER_SOURCE
-        (
-            uniform highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            }
-        );
+        const std::string testFragmentShaderSource =
+            "uniform highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
 
         mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
         if (mProgram == 0)

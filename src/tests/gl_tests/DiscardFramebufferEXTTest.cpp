@@ -33,32 +33,32 @@ TEST_P(DiscardFramebufferEXTTest, DefaultFramebuffer)
     }
 
     // These should succeed on the default framebuffer
-    const GLenum discards1[] = { GL_COLOR_EXT };
+    constexpr GLenum discards1[] = {GL_COLOR_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards1);
     EXPECT_GL_NO_ERROR();
 
-    const GLenum discards2[] = { GL_DEPTH_EXT };
+    constexpr GLenum discards2[] = {GL_DEPTH_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards2);
     EXPECT_GL_NO_ERROR();
 
-    const GLenum discards3[] = { GL_STENCIL_EXT };
+    constexpr GLenum discards3[] = {GL_STENCIL_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards3);
     EXPECT_GL_NO_ERROR();
 
-    const GLenum discards4[] = { GL_STENCIL_EXT, GL_COLOR_EXT, GL_DEPTH_EXT };
+    constexpr GLenum discards4[] = {GL_STENCIL_EXT, GL_COLOR_EXT, GL_DEPTH_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 3, discards4);
     EXPECT_GL_NO_ERROR();
 
     // These should fail on the default framebuffer
-    const GLenum discards5[] = { GL_COLOR_ATTACHMENT0 };
+    constexpr GLenum discards5[] = {GL_COLOR_ATTACHMENT0};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards5);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    const GLenum discards6[] = { GL_DEPTH_ATTACHMENT };
+    constexpr GLenum discards6[] = {GL_DEPTH_ATTACHMENT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards6);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    const GLenum discards7[] = { GL_STENCIL_ATTACHMENT };
+    constexpr GLenum discards7[] = {GL_STENCIL_ATTACHMENT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards7);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
@@ -88,32 +88,32 @@ TEST_P(DiscardFramebufferEXTTest, NonDefaultFramebuffer)
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     // These should fail on the non-default framebuffer
-    const GLenum discards1[] = { GL_COLOR_EXT };
+    constexpr GLenum discards1[] = {GL_COLOR_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards1);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    const GLenum discards2[] = { GL_DEPTH_EXT };
+    constexpr GLenum discards2[] = {GL_DEPTH_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards2);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    const GLenum discards3[] = { GL_STENCIL_EXT };
+    constexpr GLenum discards3[] = {GL_STENCIL_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards3);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    const GLenum discards4[] = { GL_STENCIL_EXT, GL_COLOR_EXT, GL_DEPTH_EXT };
+    constexpr GLenum discards4[] = {GL_STENCIL_EXT, GL_COLOR_EXT, GL_DEPTH_EXT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 3, discards4);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
     // These should succeed on the non-default framebuffer
-    const GLenum discards5[] = { GL_COLOR_ATTACHMENT0 };
+    constexpr GLenum discards5[] = {GL_COLOR_ATTACHMENT0};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards5);
     EXPECT_GL_NO_ERROR();
 
-    const GLenum discards6[] = { GL_DEPTH_ATTACHMENT };
+    constexpr GLenum discards6[] = {GL_DEPTH_ATTACHMENT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards6);
     EXPECT_GL_NO_ERROR();
 
-    const GLenum discards7[] = { GL_STENCIL_ATTACHMENT };
+    constexpr GLenum discards7[] = {GL_STENCIL_ATTACHMENT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards7);
     EXPECT_GL_NO_ERROR();
 }

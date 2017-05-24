@@ -25,31 +25,25 @@ class PbufferTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
+        const std::string &vsSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "    texcoord.y = 1.0 - texcoord.y;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-                texcoord = (position.xy * 0.5) + 0.5;
-                texcoord.y = 1.0 - texcoord.y;
-            }
-        );
-
-        const std::string textureFSSource = SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        );
+        const std::string &textureFSSource =
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n";
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
         if (mTextureProgram == 0)
@@ -81,12 +75,12 @@ class PbufferTest : public ANGLETest
         mPbuffer = eglCreatePbufferSurface(window->getDisplay(), window->getConfig(), pBufferAttributes);
         if (mSupportsPbuffers)
         {
-            ASSERT_NE(mPbuffer, EGL_NO_SURFACE);
+            ASSERT_NE(EGL_NO_SURFACE, mPbuffer);
             ASSERT_EGL_SUCCESS();
         }
         else
         {
-            ASSERT_EQ(mPbuffer, EGL_NO_SURFACE);
+            ASSERT_EQ(EGL_NO_SURFACE, mPbuffer);
             ASSERT_EGL_ERROR(EGL_BAD_MATCH);
         }
 

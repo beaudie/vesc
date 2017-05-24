@@ -30,14 +30,12 @@ class GLSLTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        mSimpleVSSource = SHADER_SOURCE
-        (
-            attribute vec4 inputAttribute;
-            void main()
-            {
-                gl_Position = inputAttribute;
-            }
-        );
+        mSimpleVSSource =
+            "attribute vec4 inputAttribute;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = inputAttribute;\n"
+            "}\n";
     }
 
     std::string GenerateVaryingType(GLint vectorSize)
@@ -450,11 +448,11 @@ class GLSLTest_ES3 : public GLSLTest
 
         mSimpleVSSource =
             "#version 300 es\n"
-            "in vec4 inputAttribute;"
-            "void main()"
-            "{"
-            "    gl_Position = inputAttribute;"
-            "}";
+            "in vec4 inputAttribute;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = inputAttribute;\n"
+            "}\n";
     }
 };
 
@@ -466,31 +464,27 @@ class GLSLTest_ES31 : public GLSLTest
 
         mSimpleVSSource =
             "#version 310 es\n"
-            "in vec4 inputAttribute;"
-            "void main()"
-            "{"
-            "    gl_Position = inputAttribute;"
-            "}";
+            "in vec4 inputAttribute;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = inputAttribute;\n"
+            "}\n";
     }
 };
 
 TEST_P(GLSLTest, NamelessScopedStructs)
 {
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        void main()
-        {
-            struct
-            {
-                float q;
-            } b;
-
-            gl_FragColor = vec4(1, 0, 0, 1);
-            gl_FragColor.a += b.q;
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    struct\n"
+        "    {\n"
+        "        float q;\n"
+        "    } b;\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    gl_FragColor.a += b.q;\n"
+        "}\n";
 
     GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -508,31 +502,24 @@ TEST_P(GLSLTest, ScopedStructsOrderBug)
         return;
     }
 
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        struct T
-        {
-            float f;
-        };
-
-        void main()
-        {
-            T a;
-
-            struct T
-            {
-                float q;
-            };
-
-            T b;
-
-            gl_FragColor = vec4(1, 0, 0, 1);
-            gl_FragColor.a += a.f;
-            gl_FragColor.a += b.q;
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "struct T \n"
+        "{\n"
+        "    float f;\n"
+        "};\n"
+        "void main()\n"
+        "{\n"
+        "    T a;\n"
+        "    struct T\n"
+        "    {\n"
+        "        float q;\n"
+        "    };\n"
+        "    T b;\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    gl_FragColor.a += a.f;\n"
+        "    gl_FragColor.a += b.q;\n"
+        "}\n";
 
     GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -540,31 +527,24 @@ TEST_P(GLSLTest, ScopedStructsOrderBug)
 
 TEST_P(GLSLTest, ScopedStructsBug)
 {
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        struct T_0
-        {
-            float f;
-        };
-
-        void main()
-        {
-            gl_FragColor = vec4(1, 0, 0, 1);
-
-            struct T
-            {
-                vec2 v;
-            };
-
-            T_0 a;
-            T b;
-
-            gl_FragColor.a += a.f;
-            gl_FragColor.a += b.v.x;
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "struct T_0\n"
+        "{\n"
+        "    float f;\n"
+        "};\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    struct T\n"
+        "    {\n"
+        "        vec2 v;\n"
+        "    };\n"
+        "    T_0 a;\n"
+        "    T b;\n"
+        "    gl_FragColor.a += a.f;\n"
+        "    gl_FragColor.a += b.v.x;\n"
+        "}\n";
 
     GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -572,28 +552,22 @@ TEST_P(GLSLTest, ScopedStructsBug)
 
 TEST_P(GLSLTest, DxPositionBug)
 {
-    const std::string &vertexShaderSource = SHADER_SOURCE
-    (
-        attribute vec4 inputAttribute;
-        varying float dx_Position;
-        void main()
-        {
-            gl_Position = vec4(inputAttribute);
-            dx_Position = 0.0;
-        }
-    );
+    const std::string &vertexShaderSource =
+        "attribute vec4 inputAttribute;\n"
+        "varying float dx_Position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(inputAttribute);\n"
+        "    dx_Position = 0.0;\n"
+        "}\n";
 
-    const std::string &fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        varying float dx_Position;
-
-        void main()
-        {
-            gl_FragColor = vec4(dx_Position, 0, 0, 1);
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "varying float dx_Position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(dx_Position, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -664,36 +638,31 @@ TEST_P(GLSLTest, FrontFacingAndVarying)
 {
     EGLPlatformParameters platform = GetParam().eglParameters;
 
-    const std::string vertexShaderSource = SHADER_SOURCE
-    (
-        attribute vec4 a_position;
-        varying float v_varying;
-        void main()
-        {
-            v_varying = a_position.x;
-            gl_Position = a_position;
-        }
-    );
+    const std::string &vertexShaderSource =
+        "attribute vec4 a_position;\n"
+        "varying float v_varying;\n"
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-        varying float v_varying;
-        void main()
-        {
-            vec4 c;
-
-            if (gl_FrontFacing)
-            {
-                c = vec4(v_varying, 0, 0, 1.0);
-            }
-            else
-            {
-                c = vec4(0, v_varying, 0, 1.0);
-            }
-            gl_FragColor = c;
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "varying float v_varying;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 c;\n"
+        "    if (gl_FrontFacing)\n"
+        "    {\n"
+        "        c = vec4(v_varying, 0, 0, 1.0);\n"
+        "    }\n"
+        "    else\n"
+        "    {\n"
+        "        c = vec4(0, v_varying, 0, 1.0);\n"
+        "    }\n"
+        "    gl_FragColor = c;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
 
@@ -741,28 +710,42 @@ TEST_P(GLSLTest, ReleaseCompilerThenCompile)
 // Verify that linking shaders declaring different shading language versions fails.
 TEST_P(GLSLTest_ES3, VersionMismatch)
 {
-    const std::string fragmentShaderSource100 =
+    const std::string &fragmentShaderSource100 =
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource100 =
+    const std::string &vertexShaderSource100 =
         "attribute vec4 a_position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
-    const std::string fragmentShaderSource300 =
+    const std::string &fragmentShaderSource300 =
         "#version 300 es\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource300 =
+    const std::string &vertexShaderSource300 =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource300, fragmentShaderSource100);
     EXPECT_EQ(0u, program);
@@ -774,15 +757,22 @@ TEST_P(GLSLTest_ES3, VersionMismatch)
 // Verify that declaring varying as invariant only in vertex shader fails in ESSL 1.00.
 TEST_P(GLSLTest, InvariantVaryingOut)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 a_position;\n"
         "invariant varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -799,18 +789,24 @@ TEST_P(GLSLTest_ES3, InvariantVaryingOut)
         return;
     }
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "invariant out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -819,15 +815,21 @@ TEST_P(GLSLTest_ES3, InvariantVaryingOut)
 // Verify that declaring varying as invariant only in fragment shader fails in ESSL 1.00.
 TEST_P(GLSLTest, InvariantVaryingIn)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "invariant varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 a_position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -836,18 +838,24 @@ TEST_P(GLSLTest, InvariantVaryingIn)
 // Verify that declaring varying as invariant only in fragment shader fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantVaryingIn)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "invariant in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -856,15 +864,21 @@ TEST_P(GLSLTest_ES3, InvariantVaryingIn)
 // Verify that declaring varying as invariant in both shaders succeeds in ESSL 1.00.
 TEST_P(GLSLTest, InvariantVaryingBoth)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "invariant varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 a_position;\n"
         "invariant varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -873,18 +887,24 @@ TEST_P(GLSLTest, InvariantVaryingBoth)
 // Verify that declaring varying as invariant in both shaders fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantVaryingBoth)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "invariant in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "invariant out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -893,16 +913,22 @@ TEST_P(GLSLTest_ES3, InvariantVaryingBoth)
 // Verify that declaring gl_Position as invariant succeeds in ESSL 1.00.
 TEST_P(GLSLTest, InvariantGLPosition)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 a_position;\n"
         "invariant gl_Position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -911,19 +937,25 @@ TEST_P(GLSLTest, InvariantGLPosition)
 // Verify that declaring gl_Position as invariant succeeds in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantGLPosition)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "invariant gl_Position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -941,17 +973,23 @@ TEST_P(GLSLTest, InvariantAllBoth)
         return;
     }
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#pragma STDGL invariant(all)\n"
         "attribute vec4 a_position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -960,14 +998,24 @@ TEST_P(GLSLTest, InvariantAllBoth)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnFloat)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "float f() { if (v_varying > 0.0) return 1.0; }\n"
-        "void main() { gl_Position = vec4(f(), 0, 0, 1); }\n";
+        "float f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return 1.0;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f(), 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -976,14 +1024,24 @@ TEST_P(GLSLTest, MissingReturnFloat)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec2)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "vec2 f() { if (v_varying > 0.0) return vec2(1.0, 1.0); }\n"
-        "void main() { gl_Position = vec4(f().x, 0, 0, 1); }\n";
+        "vec2 f()\n"
+        "{\n"
+        "if (v_varying > 0.0)\n"
+        "    return vec2(1.0, 1.0);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().x, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -992,14 +1050,24 @@ TEST_P(GLSLTest, MissingReturnVec2)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec3)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "vec3 f() { if (v_varying > 0.0) return vec3(1.0, 1.0, 1.0); }\n"
-        "void main() { gl_Position = vec4(f().x, 0, 0, 1); }\n";
+        "vec3 f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return vec3(1.0, 1.0, 1.0);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().x, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1008,14 +1076,24 @@ TEST_P(GLSLTest, MissingReturnVec3)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec4)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "vec4 f() { if (v_varying > 0.0) return vec4(1.0, 1.0, 1.0, 1.0); }\n"
-        "void main() { gl_Position = vec4(f().x, 0, 0, 1); }\n";
+        "vec4 f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().x, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1024,14 +1102,24 @@ TEST_P(GLSLTest, MissingReturnVec4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnIVec4)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "ivec4 f() { if (v_varying > 0.0) return ivec4(1, 1, 1, 1); }\n"
-        "void main() { gl_Position = vec4(f().x, 0, 0, 1); }\n";
+        "ivec4 f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return ivec4(1, 1, 1, 1);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().x, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1040,14 +1128,24 @@ TEST_P(GLSLTest, MissingReturnIVec4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnMat4)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "mat4 f() { if (v_varying > 0.0) return mat4(1.0); }\n"
-        "void main() { gl_Position = vec4(f()[0][0], 0, 0, 1); }\n";
+        "mat4 f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return mat4(1.0);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f()[0][0], 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1056,15 +1154,30 @@ TEST_P(GLSLTest, MissingReturnMat4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnStruct)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "varying float v_varying;\n"
-        "struct s { float a; int b; vec2 c; };\n"
-        "s f() { if (v_varying > 0.0) return s(1.0, 1, vec2(1.0, 1.0)); }\n"
-        "void main() { gl_Position = vec4(f().a, 0, 0, 1); }\n";
+        "struct s\n"
+        "{\n"
+        "    float a;\n"
+        "    int b;\n"
+        "    vec2 c;\n"
+        "};\n"
+        "s f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "        return s(1.0, 1, vec2(1.0, 1.0));\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().a, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
-        "void main() { gl_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1073,17 +1186,29 @@ TEST_P(GLSLTest, MissingReturnStruct)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest_ES3, MissingReturnArray)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in float v_varying;\n"
-        "vec2[2] f() { if (v_varying > 0.0) { return vec2[2](vec2(1.0, 1.0), vec2(1.0, 1.0)); } }\n"
-        "void main() { gl_Position = vec4(f()[0].x, 0, 0, 1); }\n";
+        "vec2[2] f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "    {\n"
+        "        return vec2[2](vec2(1.0, 1.0), vec2(1.0, 1.0));\n"
+        "    }\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f()[0].x, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1092,19 +1217,36 @@ TEST_P(GLSLTest_ES3, MissingReturnArray)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest_ES3, MissingReturnArrayOfStructs)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in float v_varying;\n"
-        "struct s { float a; int b; vec2 c; };\n"
-        "s[2] f() { if (v_varying > 0.0) { return s[2](s(1.0, 1, vec2(1.0, 1.0)), s(1.0, 1, "
-        "vec2(1.0, 1.0))); } }\n"
-        "void main() { gl_Position = vec4(f()[0].a, 0, 0, 1); }\n";
+        "struct s\n"
+        "{\n"
+        "    float a;\n"
+        "    int b;\n"
+        "    vec2 c;\n"
+        "};\n"
+        "s[2] f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "    {\n"
+        "        return s[2](s(1.0, 1, vec2(1.0, 1.0)),\n"
+        "                    s(1.0, 1, vec2(1.0, 1.0)));\n"
+        "    }\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f()[0].a, 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1124,19 +1266,36 @@ TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
         return;
     }
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in float v_varying;\n"
-        "struct s { float a[2]; int b[2]; vec2 c[2]; };\n"
-        "s f() { if (v_varying > 0.0) { return s(float[2](1.0, 1.0), int[2](1, 1),"
-        "vec2[2](vec2(1.0, 1.0), vec2(1.0, 1.0))); } }\n"
-        "void main() { gl_Position = vec4(f().a[0], 0, 0, 1); }\n";
+        "struct s\n"
+        "{\n"
+        "    float a[2];\n"
+        "    int b[2];\n"
+        "    vec2 c[2];\n"
+        "};\n"
+        "s f()\n"
+        "{\n"
+        "    if (v_varying > 0.0)\n"
+        "    {\n"
+        "        return s(float[2](1.0, 1.0), int[2](1, 1),\n"
+        "        vec2[2](vec2(1.0, 1.0), vec2(1.0, 1.0)));\n"
+        "    }\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(f().a[0], 0, 0, 1);\n"
+        "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(0, 0, 0, 1); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(0, 0, 0, 1);\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1145,20 +1304,27 @@ TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
 // Verify that using invariant(all) in both shaders fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantAllBoth)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "#pragma STDGL invariant(all)\n"
         "in vec4 a_position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -1167,16 +1333,22 @@ TEST_P(GLSLTest_ES3, InvariantAllBoth)
 // Verify that using invariant(all) only in fragment shader fails in ESSL 1.00.
 TEST_P(GLSLTest, InvariantAllIn)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 a_position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x; gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -1185,19 +1357,26 @@ TEST_P(GLSLTest, InvariantAllIn)
 // Verify that using invariant(all) only in fragment shader fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantAllIn)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "in vec4 a_position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -1206,16 +1385,23 @@ TEST_P(GLSLTest_ES3, InvariantAllIn)
 // Verify that using invariant(all) only in vertex shader fails in ESSL 1.00.
 TEST_P(GLSLTest, InvariantAllOut)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "varying float v_varying;\n"
-        "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#pragma STDGL invariant(all)\n"
         "attribute vec4 a_position;\n"
         "varying float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
@@ -1233,19 +1419,26 @@ TEST_P(GLSLTest_ES3, InvariantAllOut)
         return;
     }
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision mediump float;\n"
         "in float v_varying;\n"
         "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(v_varying, 0, 0, 1.0);\n"
+        "}\n";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "#pragma STDGL invariant(all)\n"
         "in vec4 a_position;\n"
         "out float v_varying;\n"
-        "void main() { v_varying = a_position.x; gl_Position = a_position; }\n";
+        "void main()\n"
+        "{\n"
+        "    v_varying = a_position.x;\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
 
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1414,8 +1607,8 @@ TEST_P(GLSLTest, FixedShaderLength)
 {
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    const std::string appendGarbage = "abcasdfasdfasdfasdfasdf";
-    const std::string source = "void main() { gl_FragColor = vec4(0, 0, 0, 0); }" + appendGarbage;
+    const std::string &appendGarbage = "abcasdfasdfasdfasdfasdf";
+    const std::string &source  = "void main() { gl_FragColor = vec4(0, 0, 0, 0); }" + appendGarbage;
     const char *sourceArray[1] = { source.c_str() };
     GLint lengths[1] = { static_cast<GLint>(source.length() - appendGarbage.length()) };
     glShaderSource(shader, static_cast<GLsizei>(ArraySize(sourceArray)), sourceArray, lengths);
@@ -1431,8 +1624,8 @@ TEST_P(GLSLTest, NegativeShaderLength)
 {
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    const char *sourceArray[1] = { "void main() { gl_FragColor = vec4(0, 0, 0, 0); }" };
-    GLint lengths[1] = { -10 };
+    const char *sourceArray[1] = {"void main() { gl_FragColor = vec4(0, 0, 0, 0); }"};
+    constexpr GLint lengths[1] = {-10};
     glShaderSource(shader, static_cast<GLsizei>(ArraySize(sourceArray)), sourceArray, lengths);
     glCompileShader(shader);
 
@@ -1459,12 +1652,8 @@ TEST_P(GLSLTest, MixedShaderLengths)
 {
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    const char *sourceArray[] =
-    {
-        "void main()",
-        "{",
-        "    gl_FragColor = vec4(0, 0, 0, 0);",
-        "}",
+    const char *sourceArray[] = {
+        "void main()", "{", "    gl_FragColor = vec4(0, 0, 0, 0);", "}",
     };
     GLint lengths[] =
     {
@@ -1488,13 +1677,8 @@ TEST_P(GLSLTest, ZeroShaderLength)
 {
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    const char *sourceArray[] =
-    {
-        "adfasdf",
-        "34534",
-        "void main() { gl_FragColor = vec4(0, 0, 0, 0); }",
-        "",
-        "asdfasdfsdsdf",
+    const char *sourceArray[] = {
+        "adfasdf", "34534", "void main() { gl_FragColor = vec4(0, 0, 0, 0); }", "", "asdfasdfsdsdf",
     };
     GLint lengths[] =
     {
@@ -1570,18 +1754,14 @@ TEST_P(GLSLTest, BadIndexBug)
 // Test that structs defined in uniforms are translated correctly.
 TEST_P(GLSLTest, StructSpecifiersUniforms)
 {
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        uniform struct S { float field;} s;
-
-        void main()
-        {
-            gl_FragColor = vec4(1, 0, 0, 1);
-            gl_FragColor.a += s.field;
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "uniform struct S { float field;} s;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    gl_FragColor.a += s.field;\n"
+        "}\n";
 
     GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
@@ -1593,15 +1773,12 @@ TEST_P(GLSLTest, StructSpecifiersUniforms)
 // (note this test is still Impl-independent)
 TEST_P(GLSLTestNoValidation, DepthRangeUniforms)
 {
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        void main()
-        {
-            gl_FragColor = vec4(gl_DepthRange.near, gl_DepthRange.far, gl_DepthRange.diff, 1);
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(gl_DepthRange.near, gl_DepthRange.far, gl_DepthRange.diff, 1);\n"
+        "}\n";
 
     ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShaderSource);
 
@@ -1683,24 +1860,20 @@ TEST_P(GLSLTest, PowOfSmallConstant)
 // than FL9_3.
 TEST_P(GLSLTest, LoopIndexingValidation)
 {
-    const std::string fragmentShaderSource = SHADER_SOURCE
-    (
-        precision mediump float;
-
-        uniform float loopMax;
-
-        void main()
-        {
-            gl_FragColor = vec4(1, 0, 0, 1);
-            for (float l = 0.0; l < loopMax; l++)
-            {
-                if (loopMax > 3.0)
-                {
-                    gl_FragColor.a += 0.1;
-                }
-            }
-        }
-    );
+    const std::string &fragmentShaderSource =
+        "precision mediump float;\n"
+        "uniform float loopMax;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "    for (float l = 0.0; l < loopMax; l++)\n"
+        "    {\n"
+        "        if (loopMax > 3.0)\n"
+        "        {\n"
+        "            gl_FragColor.a += 0.1;\n"
+        "        }\n"
+        "    }\n"
+        "}\n";
 
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -1860,7 +2033,7 @@ TEST_P(GLSLTest, TextureLOD)
         return;
     }
 
-    const std::string source =
+    const std::string &source =
         "#extension GL_EXT_shader_texture_lod : require\n"
         "uniform sampler2D u_texture;\n"
         "void main() {\n"
@@ -1877,7 +2050,7 @@ TEST_P(GLSLTest, TextureLOD)
 // HLSL).
 TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x2)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "out vec4 my_FragColor;\n"
@@ -1886,7 +2059,7 @@ TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x2)
         "    my_FragColor = vec4(0.0);\n"
         "}";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "in vec4 a_vec;\n"
@@ -1905,7 +2078,7 @@ TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x2)
 // the function signatures in this case.
 TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x3)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "out vec4 my_FragColor;\n"
@@ -1914,7 +2087,7 @@ TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x3)
         "    my_FragColor = vec4(0.0);\n"
         "}";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "in mat3x2 a_matA;\n"
@@ -1931,7 +2104,7 @@ TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x3)
 // Test that two functions which have vec4 and mat2 parameters get disambiguated (issue in HLSL).
 TEST_P(GLSLTest_ES3, AmbiguousFunctionCall2x2)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "out vec4 my_FragColor;\n"
@@ -1940,7 +2113,7 @@ TEST_P(GLSLTest_ES3, AmbiguousFunctionCall2x2)
         "    my_FragColor = vec4(0.0);\n"
         "}";
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "in vec4 a_vec;\n"
@@ -1966,7 +2139,7 @@ TEST_P(GLSLTest_ES3, AmbiguousFunctionCall2x2)
 // the function name being too long.
 TEST_P(GLSLTest_ES3, LargeNumberOfFloat4Parameters)
 {
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "out vec4 my_FragColor;\n"
@@ -1976,7 +2149,7 @@ TEST_P(GLSLTest_ES3, LargeNumberOfFloat4Parameters)
         "}";
 
     std::stringstream vertexShaderStream;
-    const unsigned int paramCount = 1024u;
+    constexpr unsigned int paramCount = 1024u;
 
     vertexShaderStream << "#version 300 es\n"
                           "precision highp float;\n"
@@ -2025,7 +2198,7 @@ TEST_P(GLSLTest_ES3, InitGlobalArrayWithArrayIndexing)
         return;
     }
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "in vec4 a_vec;\n"
@@ -2034,7 +2207,7 @@ TEST_P(GLSLTest_ES3, InitGlobalArrayWithArrayIndexing)
         "    gl_Position = vec4(a_vec);\n"
         "}";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "#version 300 es\n"
         "precision highp float;\n"
         "out vec4 my_FragColor;\n"
@@ -2057,14 +2230,14 @@ TEST_P(GLSLTest, IndexConstantSamplerArrayIndexing)
         return;
     }
 
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "attribute vec4 vPosition;\n"
         "void main()\n"
         "{\n"
         "      gl_Position = vPosition;\n"
         "}";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "uniform sampler2D uni[2];\n"
         "\n"
@@ -2098,14 +2271,14 @@ TEST_P(GLSLTest, IndexConstantSamplerArrayIndexing)
 // want to test its behavior, so don't use any varyings.
 TEST_P(GLSLTest, PragmaDirective)
 {
-    const std::string vertexShaderSource =
+    const std::string &vertexShaderSource =
         "#pragma STDGL invariant(all)\n"
         "void main()\n"
         "{\n"
         "    gl_Position = vec4(1.0, 0.0, 0.0, 1.0);\n"
         "}\n";
 
-    const std::string fragmentShaderSource =
+    const std::string &fragmentShaderSource =
         "precision mediump float;\n"
         "void main()\n"
         "{\n"
@@ -2431,7 +2604,7 @@ TEST_P(GLSLTest, ExternalAnd2DSampler)
         return;
     }
 
-    const std::string fragmentShader =
+    const std::string &fragmentShader =
         "precision mediump float;\n"
         "uniform samplerExternalOES tex0;\n"
         "uniform sampler2D tex1;\n"

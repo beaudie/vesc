@@ -35,7 +35,7 @@ class DXTSRGBCompressedTextureTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource = std::string(
+        const std::string &vsSource =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
@@ -43,15 +43,15 @@ class DXTSRGBCompressedTextureTest : public ANGLETest
             "    gl_Position = position;\n"
             "    texcoord = (position.xy * 0.5) + 0.5;\n"
             "    texcoord.y = 1.0 - texcoord.y;\n"
-            "}");
+            "}";
 
-        const std::string textureFSSource = std::string(
+        const std::string &textureFSSource =
             "precision highp float;\n"
             "uniform sampler2D tex;\n"
             "varying vec2 texcoord;\n"
             "void main() {\n"
             "    gl_FragColor = texture2D(tex, texcoord);\n"
-            "}\n");
+            "}\n";
 
         mTextureProgram = CompileProgram(vsSource, textureFSSource);
         ASSERT_NE(0u, mTextureProgram);

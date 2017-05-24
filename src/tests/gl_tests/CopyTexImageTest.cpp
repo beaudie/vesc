@@ -87,7 +87,7 @@ class CopyTexImageTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
+        const std::string &vsSource =
             "precision highp float;\n"
             "attribute vec4 position;\n"
             "varying vec2 texcoord;\n"
@@ -99,7 +99,7 @@ class CopyTexImageTest : public ANGLETest
             "    texcoord.y = 1.0 - texcoord.y;\n"
             "}\n";
 
-        const std::string textureFSSource =
+        const std::string &textureFSSource =
             "precision highp float;\n"
             "uniform sampler2D tex;\n"
             "varying vec2 texcoord;\n"

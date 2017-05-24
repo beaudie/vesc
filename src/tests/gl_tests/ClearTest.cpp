@@ -5,6 +5,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 
 #include "random_utils.h"
 
@@ -75,26 +76,20 @@ class ClearTestBase : public ANGLETest
 
     void setupDefaultProgram()
     {
-        const std::string vertexShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
+        const std::string &vertexShaderSource =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
 
-            void main()
-            {
-                gl_Position = position;
-            }
-        );
-
-        const std::string fragmentShaderSource = SHADER_SOURCE
-        (
-            precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        );
+        const std::string &fragmentShaderSource =
+            "precision highp float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -186,7 +181,7 @@ TEST_P(ClearTest, ClearIssue)
 // mistakenly clear every channel (including the masked-out ones)
 TEST_P(ClearTestES3, MaskedClearBufferBug)
 {
-    unsigned char pixelData[] = { 255, 255, 255, 255 };
+    constexpr unsigned char pixelData[] = {255, 255, 255, 255};
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
 
@@ -204,8 +199,8 @@ TEST_P(ClearTestES3, MaskedClearBufferBug)
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
 
-    float clearValue[] = { 0, 0.5f, 0.5f, 1.0f };
-    GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT1 };
+    constexpr float clearValue[]   = {0, 0.5f, 0.5f, 1.0f};
+    constexpr GLenum drawBuffers[] = {GL_NONE, GL_COLOR_ATTACHMENT1};
     glDrawBuffers(2, drawBuffers);
     glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);
     glClearBufferfv(GL_COLOR, 1, clearValue);
@@ -233,10 +228,10 @@ TEST_P(ClearTestES3, BadFBOSerialBug)
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
 
-    GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+    constexpr GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, drawBuffers);
 
-    float clearValues1[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    constexpr float clearValues1[] = {0.0f, 1.0f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, clearValues1);
 
     ASSERT_GL_NO_ERROR();
@@ -329,7 +324,7 @@ TEST_P(ClearTestES3, MixedSRGBClear)
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, textures[1], 0);
 
-    GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    constexpr GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
     glDrawBuffers(2, drawBuffers);
 
     // Clear both textures
@@ -384,19 +379,19 @@ TEST_P(ClearTestES3, RepeatedClear)
         "    color = texture(tex, v_coord);\n"
         "}\n";
 
-    mProgram = CompileProgram(vertexSource, fragmentSource);
-    ASSERT_NE(0u, mProgram);
+    ANGLE_GL_PROGRAM(program, vertexSource, fragmentSource);
+    mProgram = program.get();
 
     mTextures.resize(1, 0);
     glGenTextures(1, mTextures.data());
 
-    GLenum format           = GL_RGBA8;
-    const int numRowsCols   = 3;
-    const int cellSize      = 32;
-    const int fboSize       = cellSize;
-    const int backFBOSize   = cellSize * numRowsCols;
-    const float fmtValueMin = 0.0f;
-    const float fmtValueMax = 1.0f;
+    constexpr GLenum format     = GL_RGBA8;
+    constexpr int numRowsCols   = 3;
+    constexpr int cellSize      = 32;
+    constexpr int fboSize       = cellSize;
+    constexpr int backFBOSize   = cellSize * numRowsCols;
+    constexpr float fmtValueMin = 0.0f;
+    constexpr float fmtValueMax = 1.0f;
 
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexStorage2D(GL_TEXTURE_2D, 1, format, fboSize, fboSize);
@@ -445,7 +440,7 @@ TEST_P(ClearTestES3, RepeatedClear)
         }
     }
 
-    std::vector<GLColor> pixelData(backFBOSize * backFBOSize);
+    std::array<GLColor, backFBOSize * backFBOSize> pixelData;
     glReadPixels(0, 0, backFBOSize, backFBOSize, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
 
     for (int cellY = 0; cellY < numRowsCols; cellY++)

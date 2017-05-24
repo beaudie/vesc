@@ -49,27 +49,23 @@ class TexCoordDrawTest : public ANGLETest
 
     virtual std::string getVertexShaderSource()
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_Position = vec4(position.xy, 0.0, 1.0);
-                texcoord = (position.xy * 0.5) + 0.5;
-            }
-        )
-        );
+        return std::string(
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n");
     }
 
     virtual std::string getFragmentShaderSource() = 0;
 
     virtual void setUpProgram()
     {
-        const std::string vertexShaderSource   = getVertexShaderSource();
-        const std::string fragmentShaderSource = getFragmentShaderSource();
+        const std::string &vertexShaderSource   = getVertexShaderSource();
+        const std::string &fragmentShaderSource = getFragmentShaderSource();
 
         mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
         ASSERT_NE(0u, mProgram);
@@ -140,18 +136,14 @@ class Texture2DTest : public TexCoordDrawTest
 
     std::string getFragmentShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex, texcoord);
-            }
-        )
-        );
+        return std::string(
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "}\n");
     }
 
     virtual const char *getTextureUniformName() { return "tex"; }
@@ -497,21 +489,16 @@ class Texture2DTestWithDrawScale : public Texture2DTest
 
     std::string getVertexShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision highp float;
-            attribute vec4 position;
-            varying vec2 texcoord;
-
-            uniform vec2 drawScale;
-
-            void main()
-            {
-                gl_Position = vec4(position.xy * drawScale, 0.0, 1.0);
-                texcoord = (position.xy * 0.5) + 0.5;
-            }
-        )
-        );
+        return std::string(
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "varying vec2 texcoord;\n"
+            "uniform vec2 drawScale;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy * drawScale, 0.0, 1.0);\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n");
     }
 
     void SetUp() override
@@ -539,23 +526,18 @@ class Sampler2DAsFunctionParameterTest : public Texture2DTest
 
     std::string getFragmentShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex;
-            varying vec2 texcoord;
-
-            vec4 computeFragColor(sampler2D aTex)
-            {
-                return texture2D(aTex, texcoord);
-            }
-
-            void main()
-            {
-                gl_FragColor = computeFragColor(tex);
-            }
-        )
-        );
+        return std::string(
+            "precision highp float;\n"
+            "uniform sampler2D tex;\n"
+            "varying vec2 texcoord;\n"
+            "vec4 computeFragColor(sampler2D aTex)\n"
+            "{\n"
+            "    return texture2D(aTex, texcoord);\n"
+            "}\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = computeFragColor(tex);\n"
+            "}\n");
     }
 
     void SetUp() override
@@ -579,20 +561,16 @@ class TextureCubeTest : public TexCoordDrawTest
 
     std::string getFragmentShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision highp float;
-            uniform sampler2D tex2D;
-            uniform samplerCube texCube;
-            varying vec2 texcoord;
-
-            void main()
-            {
-                gl_FragColor = texture2D(tex2D, texcoord);
-                gl_FragColor += textureCube(texCube, vec3(texcoord, 0));
-            }
-        )
-        );
+        return std::string(
+            "precision highp float;\n"
+            "uniform sampler2D tex2D;\n"
+            "uniform samplerCube texCube;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex2D, texcoord);\n"
+            "    gl_FragColor += textureCube(texCube, vec3(texcoord, 0));\n"
+            "}\n");
     }
 
     void SetUp() override
@@ -644,18 +622,15 @@ class SamplerArrayTest : public TexCoordDrawTest
 
     std::string getFragmentShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision mediump float;
-            uniform highp sampler2D tex2DArray[2];
-            varying vec2 texcoord;
-            void main()
-            {
-                gl_FragColor = texture2D(tex2DArray[0], texcoord);
-                gl_FragColor += texture2D(tex2DArray[1], texcoord);
-            }
-        )
-        );
+        return std::string(
+            "precision mediump float;\n"
+            "uniform highp sampler2D tex2DArray[2];\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex2DArray[0], texcoord);\n"
+            "    gl_FragColor += texture2D(tex2DArray[1], texcoord);\n"
+            "}\n");
     }
 
     void SetUp() override
@@ -722,23 +697,19 @@ class SamplerArrayAsFunctionParameterTest : public SamplerArrayTest
 
     std::string getFragmentShaderSource() override
     {
-        return std::string(SHADER_SOURCE
-        (
-            precision mediump float;
-            uniform highp sampler2D tex2DArray[2];
-            varying vec2 texcoord;
-
-            vec4 computeFragColor(highp sampler2D aTex2DArray[2])
-            {
-                return texture2D(aTex2DArray[0], texcoord) + texture2D(aTex2DArray[1], texcoord);
-            }
-
-            void main()
-            {
-                gl_FragColor = computeFragColor(tex2DArray);
-            }
-        )
-        );
+        return std::string(
+            "precision mediump float;\n"
+            "uniform highp sampler2D tex2DArray[2];\n"
+            "varying vec2 texcoord;\n"
+            "vec4 computeFragColor(highp sampler2D aTex2DArray[2])\n"
+            "{\n"
+            "    return texture2D(aTex2DArray[0], texcoord) + texture2D(aTex2DArray[1], "
+            "texcoord);\n"
+            "}\n"
+            "void main()\n"
+            "{\n"
+            "   gl_FragColor = computeFragColor(tex2DArray);\n"
+            "}\n");
     }
 };
 
@@ -1303,7 +1274,7 @@ TEST_P(Texture2DTest, ZeroSizedUploads)
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
 
-    const GLubyte *pixel[4] = { 0 };
+    constexpr GLubyte *pixel[4] = {0};
 
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
     EXPECT_GL_NO_ERROR();
@@ -1662,8 +1633,8 @@ TEST_P(Texture2DTest, CopySubImageFloat_RGBA_RGBA)
 // Run against GL_ALPHA/UNSIGNED_BYTE format, to ensure that D3D11 Feature Level 9_3 correctly handles GL_ALPHA
 TEST_P(Texture2DTest, TextureNPOT_GL_ALPHA_UBYTE)
 {
-    const int npotTexSize = 5;
-    const int potTexSize = 4; // Should be less than npotTexSize
+    constexpr int npotTexSize = 5;
+    constexpr int potTexSize  = 4;  // Should be less than npotTexSize
     GLuint tex2D;
 
     if (extensionEnabled("GL_OES_texture_npot"))

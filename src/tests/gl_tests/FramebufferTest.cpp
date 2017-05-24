@@ -123,7 +123,7 @@ class FramebufferFormatsTest : public ANGLETest
         }
         else
         {
-            assert(clientVersion >= 3);
+            ASSERT_GE(clientVersion, 3);
             int maxSamples;
             glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
             supports2Samples = maxSamples >= 2;
@@ -346,9 +346,18 @@ TEST_P(FramebufferFormatsTest, IncompleteCubeMap)
                      glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     // Verify drawing with the incomplete framebuffer produces a GL error
-    const std::string &vs = "attribute vec4 position; void main() { gl_Position = position; }";
-    const std::string &ps = "void main() { gl_FragColor = vec4(1, 0, 0, 1); }";
-    mProgram = CompileProgram(vs, ps);
+    const std::string &vs =
+        "attribute vec4 position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = position;\n"
+        "}\n";
+    const std::string &fs =
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "}\n";
+    mProgram = CompileProgram(vs, fs);
     ASSERT_NE(0u, mProgram);
     drawQuad(mProgram, "position", 0.5f);
     ASSERT_GL_ERROR(GL_INVALID_FRAMEBUFFER_OPERATION);
