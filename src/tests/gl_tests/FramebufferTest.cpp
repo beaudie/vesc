@@ -419,6 +419,106 @@ TEST_P(FramebufferTest_ES3, DepthOnlyAsDepthStencil)
     EXPECT_GLENUM_NE(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
 
+// Test that if a fbo's color attachment is a texture and we clear it to black, then sampling that
+// texture to draw to another fbo, the final render color should be still black.
+TEST_P(FramebufferTest_ES3, ClearColorWithBlack)
+{
+    // This fails on Intel 6000/6100 Mac OSX. See crbug.com/710443.
+    if (IsOSX() && IsIntel())
+    {
+        std::cout << "Test skipped due to driver bug on Intel Mac OSX." << std::endl;
+        return;
+    }
+
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1.get());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GLFramebuffer fbo1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1.get(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1.get());
+    glViewport(0, 0, 128, 128);
+    glDisable(GL_SCISSOR_TEST);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    // Changing the r,g,b channels to anything but 0 or the alpha to anything but 0 seems to resolve
+    // this in MacOS. 
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2.get());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GLFramebuffer fbo2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2.get(), 0);
+    glClearColor(1, 1, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    const std::string &vertexShaderSource =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "in vec2 inPosition;\n"
+        "in vec2 inLocalCoord;\n"
+        "out vec2 texCoord;\n"
+        "void main() {\n"
+        "    texCoord = inLocalCoord;\n"
+        "    gl_Position = vec4(inPosition, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string &fragmentShaderSource =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 fragColor;\n"
+        "uniform sampler2D uTextureSampler;\n"
+        "in vec2 texCoord;\n"
+        "void main() {\n"
+        "    fragColor = texture(uTextureSampler, texCoord);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(prog, vertexShaderSource, fragmentShaderSource);
+    glUseProgram(prog.get());
+
+    GLint uTextureSamplerLoc = glGetUniformLocation(prog.get(), "uTextureSampler");
+    glUniform1i(uTextureSamplerLoc, 0);
+    int posLoc   = glGetAttribLocation(prog.get(), "inPosition");
+    int coordLoc = glGetAttribLocation(prog.get(), "inLocalCoord");
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    std::array<GLfloat, 24> data = {{1.0, 1.0, 1, 1, -1.0, 1.0,  0, 1, -1.0, -1.0, 0, 0,
+                                     1.0, 1.0, 1, 1, -1.0, -1.0, 0, 0, 1.0,  -1.0, 1, 0}};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data.size(), data.data(), GL_STREAM_DRAW);
+
+    glEnableVertexAttribArray(posLoc);
+    glEnableVertexAttribArray(coordLoc);
+    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, 16, reinterpret_cast<void *>(0));
+    glVertexAttribPointer(coordLoc, 2, GL_FLOAT, GL_FALSE, 16, reinterpret_cast<void *>(0x8));
+
+    glDisable(GL_BLEND);
+    glDisable(GL_STENCIL_TEST);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex1.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2.get());
+    glViewport(0, 0, 128, 128);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    std::vector<GLColor> actual(1, GLColor::white);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, actual.data());
+    std::vector<GLColor> expected(1, GLColor::black);
+    EXPECT_EQ(expected, actual);
+}
+
 ANGLE_INSTANTIATE_TEST(FramebufferTest_ES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 class FramebufferTest_ES31 : public ANGLETest
