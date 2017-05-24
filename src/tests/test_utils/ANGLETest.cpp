@@ -254,6 +254,14 @@ void ANGLETest::SetUp()
         needSwap = true;
     }
 
+    angle::PlatformMethods platformMethods;
+    platformMethods.overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
+    platformMethods.logError               = angle::TestPlatform_logError;
+    platformMethods.logWarning             = angle::TestPlatform_logWarning;
+    platformMethods.logInfo                = angle::TestPlatform_logInfo;
+    platformMethods.context                = &mPlatformContext;
+    mEGLWindow->setPlatformMethods(&platformMethods);
+
     if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow))
     {
         FAIL() << "egl display or surface init failed.";
@@ -262,22 +270,6 @@ void ANGLETest::SetUp()
     if (!mDeferContextInit && !mEGLWindow->initializeContext())
     {
         FAIL() << "GL Context init failed.";
-    }
-
-    if (mGLESLibrary)
-    {
-        auto initFunc = reinterpret_cast<angle::GetDisplayPlatformFunc>(
-            mGLESLibrary->getSymbol("ANGLEGetDisplayPlatform"));
-        if (initFunc)
-        {
-            angle::PlatformMethods *platformMethods = nullptr;
-            initFunc(mEGLWindow->getDisplay(), angle::g_PlatformMethodNames,
-                     angle::g_NumPlatformMethods, &mPlatformContext, &platformMethods);
-            platformMethods->overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
-            platformMethods->logError               = angle::TestPlatform_logError;
-            platformMethods->logWarning             = angle::TestPlatform_logWarning;
-            platformMethods->logInfo                = angle::TestPlatform_logInfo;
-        }
     }
 
     if (needSwap)
