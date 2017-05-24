@@ -35,12 +35,15 @@ class InstancingTest : public ANGLETest
         mDrawArraysInstancedANGLE   = nullptr;
         mDrawElementsInstancedANGLE = nullptr;
 
-        char *extensionString = (char*)glGetString(GL_EXTENSIONS);
+        char *extensionString = (char *)glGetString(GL_EXTENSIONS);
         if (strstr(extensionString, "GL_ANGLE_instanced_arrays"))
         {
-            mVertexAttribDivisorANGLE = (PFNGLVERTEXATTRIBDIVISORANGLEPROC)eglGetProcAddress("glVertexAttribDivisorANGLE");
-            mDrawArraysInstancedANGLE = (PFNGLDRAWARRAYSINSTANCEDANGLEPROC)eglGetProcAddress("glDrawArraysInstancedANGLE");
-            mDrawElementsInstancedANGLE = (PFNGLDRAWELEMENTSINSTANCEDANGLEPROC)eglGetProcAddress("glDrawElementsInstancedANGLE");
+            mVertexAttribDivisorANGLE =
+                (PFNGLVERTEXATTRIBDIVISORANGLEPROC)eglGetProcAddress("glVertexAttribDivisorANGLE");
+            mDrawArraysInstancedANGLE =
+                (PFNGLDRAWARRAYSINSTANCEDANGLEPROC)eglGetProcAddress("glDrawArraysInstancedANGLE");
+            mDrawElementsInstancedANGLE = (PFNGLDRAWELEMENTSINSTANCEDANGLEPROC)eglGetProcAddress(
+                "glDrawElementsInstancedANGLE");
         }
 
         ASSERT_TRUE(mVertexAttribDivisorANGLE != nullptr);
@@ -48,10 +51,10 @@ class InstancingTest : public ANGLETest
         ASSERT_TRUE(mDrawElementsInstancedANGLE != nullptr);
 
         // Initialize the vertex and index vectors
-        GLfloat qvertex1[3] = {-quadRadius,  quadRadius, 0.0f};
+        GLfloat qvertex1[3] = {-quadRadius, quadRadius, 0.0f};
         GLfloat qvertex2[3] = {-quadRadius, -quadRadius, 0.0f};
-        GLfloat qvertex3[3] = { quadRadius, -quadRadius, 0.0f};
-        GLfloat qvertex4[3] = { quadRadius,  quadRadius, 0.0f};
+        GLfloat qvertex3[3] = {quadRadius, -quadRadius, 0.0f};
+        GLfloat qvertex4[3] = {quadRadius, quadRadius, 0.0f};
         mQuadVertices.insert(mQuadVertices.end(), qvertex1, qvertex1 + 3);
         mQuadVertices.insert(mQuadVertices.end(), qvertex2, qvertex2 + 3);
         mQuadVertices.insert(mQuadVertices.end(), qvertex3, qvertex3 + 3);
@@ -106,14 +109,12 @@ class InstancingTest : public ANGLETest
 
     void setupDrawArraysTest(const std::string &vs)
     {
-        const std::string fs = SHADER_SOURCE
-        (
-            precision mediump float;
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0, 0, 1.0);
-            }
-        );
+        const std::string &fs =
+            "precision mediump float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0, 0, 1.0);\n"
+            "}\n";
 
         mProgram = CompileProgram(vs, fs);
         ASSERT_NE(0u, mProgram);
@@ -137,26 +138,22 @@ class InstancingTest : public ANGLETest
         mIndices.push_back(3);
 
         // clang-format off
-        const std::string vs = SHADER_SOURCE
-        (
-            attribute vec3 a_position;
-            attribute vec3 a_instancePos;
-            void main()
-            {
-                gl_Position  = vec4(a_position.xyz, 1.0);
-                gl_Position  = vec4(a_instancePos.xyz, 1.0);
-                gl_PointSize = 6.0;
-            }
-        );
+        const std::string &vs =
+            "attribute vec3 a_position;\n"
+            "attribute vec3 a_instancePos;\n"
+            "void main()\n"
+            "{"
+            "    gl_Position  = vec4(a_position.xyz, 1.0);\n"
+            "    gl_Position  = vec4(a_instancePos.xyz, 1.0);\n"
+            "    gl_PointSize = 6.0;\n"
+            "}\n";
 
-        const std::string fs = SHADER_SOURCE
-        (
-            precision mediump float;
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0, 0, 1.0);
-            }
-        );
+        const std::string &fs =
+            "precision mediump float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0, 0, 1.0);\n"
+            "}\n";
         // clang-format on
 
         mProgram = CompileProgram(vs, fs);
@@ -175,7 +172,8 @@ class InstancingTest : public ANGLETest
     void runDrawArraysTest(GLint first, GLsizei count, GLsizei instanceCount, float *offset)
     {
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, mInstances.size() * sizeof(mInstances[0]), &mInstances[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, mInstances.size() * sizeof(mInstances[0]), &mInstances[0],
+                     GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // Get the attribute locations
@@ -197,7 +195,7 @@ class InstancingTest : public ANGLETest
 
         // Offset
         GLint uniformLoc = glGetUniformLocation(mProgram, "u_offset");
-        ASSERT_NE(uniformLoc, -1);
+        ASSERT_NE(-1, uniformLoc);
         glUniform3fv(uniformLoc, 1, offset);
 
         // Do the instanced draw
@@ -208,20 +206,18 @@ class InstancingTest : public ANGLETest
 
     virtual void runDrawElementsTest(std::string vs, bool shouldAttribZeroBeInstanced)
     {
-        const std::string fs = SHADER_SOURCE
-        (
-            precision mediump float;
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0, 0, 1.0);
-            }
-        );
+        const std::string &fs =
+            "precision mediump float;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = vec4(1.0, 0, 0, 1.0);\n"
+            "}\n";
 
         GLuint program = CompileProgram(vs, fs);
-        ASSERT_NE(program, 0u);
+        ASSERT_NE(0u, program);
 
         // Get the attribute locations
-        GLint positionLoc = glGetAttribLocation(program, "a_position");
+        GLint positionLoc    = glGetAttribLocation(program, "a_position");
         GLint instancePosLoc = glGetAttribLocation(program, "a_instancePos");
 
         // If this ASSERT fails then the vertex shader code should be refactored
@@ -264,8 +260,10 @@ class InstancingTest : public ANGLETest
         {
             unsigned int baseOffset = quadIndex * 3;
 
-            int quadx = static_cast<int>(((mInstances[baseOffset + 0]) * 0.5f + 0.5f) * getWindowWidth());
-            int quady = static_cast<int>(((mInstances[baseOffset + 1]) * 0.5f + 0.5f) * getWindowHeight());
+            int quadx =
+                static_cast<int>(((mInstances[baseOffset + 0]) * 0.5f + 0.5f) * getWindowWidth());
+            int quady =
+                static_cast<int>(((mInstances[baseOffset + 1]) * 0.5f + 0.5f) * getWindowHeight());
 
             EXPECT_PIXEL_EQ(quadx, quady, 255, 0, 0, 255);
         }
@@ -283,7 +281,7 @@ class InstancingTest : public ANGLETest
     std::vector<GLfloat> mInstances;
     std::vector<GLushort> mIndices;
 
-    const GLfloat quadRadius = 0.30f;
+    static constexpr GLfloat quadRadius = 0.30f;
 
     GLuint mProgram;
     GLuint mVertexBuffer;
@@ -308,36 +306,33 @@ class InstancingTestPoints : public InstancingTest
 };
 
 // This test uses a vertex shader with the first attribute (attribute zero) instanced.
-// On D3D9 and D3D11 FL9_3, this triggers a special codepath that rearranges the input layout sent to D3D,
-// to ensure that slot/stream zero of the input layout doesn't contain per-instance data.
+// On D3D9 and D3D11 FL9_3, this triggers a special codepath that rearranges the input layout sent
+// to D3D, to ensure that slot/stream zero of the input layout doesn't contain per-instance data.
 TEST_P(InstancingTestAllConfigs, AttributeZeroInstanced)
 {
-    const std::string vs = SHADER_SOURCE
-    (
-        attribute vec3 a_instancePos;
-        attribute vec3 a_position;
-        void main()
-        {
-            gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);
-        }
-    );
+    const std::string &vs =
+        "attribute vec3 a_instancePos;\n"
+        "attribute vec3 a_position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);\n"
+        "}\n";
 
     runDrawElementsTest(vs, true);
 }
 
 // Same as AttributeZeroInstanced, but attribute zero is not instanced.
-// This ensures the general instancing codepath (i.e. without rearranging the input layout) works as expected.
+// This ensures the general instancing codepath (i.e. without rearranging the input layout) works as
+// expected.
 TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
 {
-    const std::string vs = SHADER_SOURCE
-    (
-        attribute vec3 a_position;
-        attribute vec3 a_instancePos;
-        void main()
-        {
-            gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);
-        }
-    );
+    const std::string &vs =
+        "attribute vec3 a_position;\n"
+        "attribute vec3 a_instancePos;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);\n"
+        "}\n";
 
     runDrawElementsTest(vs, false);
 }
@@ -346,23 +341,21 @@ TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
 // the non-instanced vertex attributes.
 TEST_P(InstancingTestNo9_3, DrawArraysWithOffset)
 {
-    const std::string vs = SHADER_SOURCE
-    (
-        attribute vec3 a_position;
-        attribute vec3 a_instancePos;
-        uniform vec3 u_offset;
-        void main()
-        {
-            gl_Position = vec4(a_position.xyz + a_instancePos.xyz + u_offset, 1.0);
-        }
-    );
+    const std::string &vs =
+        "attribute vec3 a_position;\n"
+        "attribute vec3 a_instancePos;\n"
+        "uniform vec3 u_offset;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(a_position.xyz + a_instancePos.xyz + u_offset, 1.0);\n"
+        "}\n";
 
     setupDrawArraysTest(vs);
 
-    float offset1[3] = { 0, 0, 0 };
+    float offset1[3] = {0, 0, 0};
     runDrawArraysTest(0, 6, 2, offset1);
 
-    float offset2[3] = { 0.0f, 1.0f, 0 };
+    float offset2[3] = {0.0f, 1.0f, 0};
     runDrawArraysTest(6, 6, 2, offset2);
 
     checkQuads();
@@ -453,8 +446,9 @@ TEST_P(InstancingTestPoints, DrawElements)
     checkQuads();
 }
 
-// Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-// We test on D3D9 and D3D11 9_3 because they use special codepaths when attribute zero is instanced, unlike D3D11.
+// Use this to select which configurations (e.g. which renderer, which GLES major version) these
+// tests should be run against. We test on D3D9 and D3D11 9_3 because they use special codepaths
+// when attribute zero is instanced, unlike D3D11.
 ANGLE_INSTANTIATE_TEST(InstancingTestAllConfigs,
                        ES2_D3D9(),
                        ES2_D3D11(),
