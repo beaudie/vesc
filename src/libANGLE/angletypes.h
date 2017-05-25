@@ -111,9 +111,14 @@ struct Box
     bool operator!=(const Box &other) const;
 };
 
-
-struct RasterizerState
+struct RasterizerState final
 {
+    // This will zero-initialize the struct, including padding.
+    RasterizerState();
+
+    // Will initialize with spec default values.
+    void reset();
+
     bool cullFace;
     GLenum cullMode;
     GLenum frontFace;
@@ -128,8 +133,17 @@ struct RasterizerState
     bool rasterizerDiscard;
 };
 
-struct BlendState
+bool operator==(const RasterizerState &a, const RasterizerState &b);
+bool operator!=(const RasterizerState &a, const RasterizerState &b);
+
+struct BlendState final
 {
+    // This will zero-initialize the struct, including padding.
+    BlendState();
+
+    // Will initialize with spec default values.
+    void reset();
+
     bool blend;
     GLenum sourceBlendRGB;
     GLenum destBlendRGB;
@@ -148,8 +162,17 @@ struct BlendState
     bool dither;
 };
 
-struct DepthStencilState
+bool operator==(const BlendState &a, const BlendState &b);
+bool operator!=(const BlendState &a, const BlendState &b);
+
+struct DepthStencilState final
 {
+    // This will zero-initialize the struct, including padding.
+    DepthStencilState();
+
+    // Will initialize with spec default values.
+    void reset();
+
     bool depthTest;
     GLenum depthFunc;
     bool depthMask;
@@ -169,32 +192,19 @@ struct DepthStencilState
     GLuint stencilBackWritemask;
 };
 
-struct DrawArraysIndirectCommand
-{
-    GLuint count;
-    GLuint instanceCount;
-    GLuint first;
-    GLuint baseInstance;
-};
-static_assert(sizeof(DrawArraysIndirectCommand) == 16,
-              "Unexpected size of DrawArraysIndirectCommand");
-
-struct DrawElementsIndirectCommand
-{
-    GLuint count;
-    GLuint primCount;
-    GLuint firstIndex;
-    GLint baseVertex;
-    GLuint baseInstance;
-};
-static_assert(sizeof(DrawElementsIndirectCommand) == 20,
-              "Unexpected size of DrawElementsIndirectCommand");
+bool operator==(const DepthStencilState &a, const DepthStencilState &b);
+bool operator!=(const DepthStencilState &a, const DepthStencilState &b);
 
 // State from Table 6.10 (state per sampler object)
-struct SamplerState
+struct SamplerState final
 {
+    // This will zero-initialize the struct, including padding.
     SamplerState();
+
     static SamplerState CreateDefaultForTarget(GLenum target);
+
+    // Will initialize with spec default values.
+    void reset();
 
     GLenum minFilter;
     GLenum magFilter;
@@ -217,6 +227,27 @@ struct SamplerState
 
 bool operator==(const SamplerState &a, const SamplerState &b);
 bool operator!=(const SamplerState &a, const SamplerState &b);
+
+struct DrawArraysIndirectCommand
+{
+    GLuint count;
+    GLuint instanceCount;
+    GLuint first;
+    GLuint baseInstance;
+};
+static_assert(sizeof(DrawArraysIndirectCommand) == 16,
+              "Unexpected size of DrawArraysIndirectCommand");
+
+struct DrawElementsIndirectCommand
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint firstIndex;
+    GLint baseVertex;
+    GLuint baseInstance;
+};
+static_assert(sizeof(DrawElementsIndirectCommand) == 20,
+              "Unexpected size of DrawElementsIndirectCommand");
 
 struct PixelStoreStateBase
 {

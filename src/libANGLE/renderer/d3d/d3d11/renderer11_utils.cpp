@@ -1872,6 +1872,36 @@ void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex* vertex, flo
     vertex->s = s;
 }
 
+BlendStateKey::BlendStateKey()
+{
+    memset(this, sizeof(BlendStateKey), 0);
+}
+
+bool operator==(const BlendStateKey &a, const BlendStateKey &b)
+{
+    return memcmp(&a, &b, sizeof(BlendStateKey)) == 0;
+}
+
+bool operator!=(const BlendStateKey &a, const BlendStateKey &b)
+{
+    return !(a == b);
+}
+
+RasterizerStateKey::RasterizerStateKey()
+{
+    memset(this, sizeof(RasterizerStateKey), 0);
+}
+
+bool operator==(const RasterizerStateKey &a, const RasterizerStateKey &b)
+{
+    return memcmp(&a, &b, sizeof(RasterizerStateKey)) == 0;
+}
+
+bool operator!=(const RasterizerStateKey &a, const RasterizerStateKey &b)
+{
+    return !(a == b);
+}
+
 HRESULT SetDebugName(ID3D11DeviceChild *resource, const char *name)
 {
 #if defined(_DEBUG)
