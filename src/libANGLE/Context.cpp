@@ -2138,7 +2138,7 @@ void Context::programPathFragmentInputGen(GLuint program,
 {
     auto *programObject = getProgram(program);
 
-    programObject->pathFragmentInputGen(location, genMode, components, coeffs);
+    programObject->pathFragmentInputGen(this, location, genMode, components, coeffs);
 }
 
 GLuint Context::getProgramResourceIndex(GLuint program, GLenum programInterface, const GLchar *name)
@@ -4326,14 +4326,14 @@ void Context::getShaderiv(GLuint shader, GLenum pname, GLint *params)
 {
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
-    QueryShaderiv(shaderObject, pname, params);
+    QueryShaderiv(this, shaderObject, pname, params);
 }
 
 void Context::getShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *infolog)
 {
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
-    shaderObject->getInfoLog(bufsize, length, infolog);
+    shaderObject->getInfoLog(this, bufsize, length, infolog);
 }
 
 void Context::getShaderPrecisionFormat(GLenum shadertype,
