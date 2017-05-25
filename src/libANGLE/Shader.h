@@ -19,9 +19,10 @@
 #include "angle_gl.h"
 #include <GLSLANG/ShaderLang.h>
 
+#include "common/Optional.h"
 #include "common/angleutils.h"
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/angletypes.h"
 
 namespace rx
 {
@@ -100,20 +101,25 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     rx::ShaderImpl *getImplementation() const { return mImplementation; }
 
-    void deleteSource();
     void setSource(GLsizei count, const char *const *string, const GLint *length);
-    int getInfoLogLength() const;
-    void getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const;
+    int getInfoLogLength(const Context *context);
+    void getInfoLog(const Context *context, GLsizei bufSize, GLsizei *length, char *infoLog);
     int getSourceLength() const;
     void getSource(GLsizei bufSize, GLsizei *length, char *buffer) const;
-    int getTranslatedSourceLength() const;
-    int getTranslatedSourceWithDebugInfoLength() const;
-    const std::string &getTranslatedSource() const { return mState.getTranslatedSource(); }
-    void getTranslatedSource(GLsizei bufSize, GLsizei *length, char *buffer) const;
-    void getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, char *buffer) const;
+    int getTranslatedSourceLength(const Context *context);
+    int getTranslatedSourceWithDebugInfoLength(const Context *context);
+    const std::string &getTranslatedSource(const Context *context);
+    void getTranslatedSource(const Context *context,
+                             GLsizei bufSize,
+                             GLsizei *length,
+                             char *buffer);
+    void getTranslatedSourceWithDebugInfo(const Context *context,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          char *buffer);
 
     void compile(const Context *context);
-    bool isCompiled() const { return mCompiled; }
+    bool isCompiled(const Context *context);
 
     void addRef();
     void release(const Context *context);
@@ -121,20 +127,25 @@ class Shader final : angle::NonCopyable, public LabeledObject
     bool isFlaggedForDeletion() const;
     void flagForDeletion();
 
-    int getShaderVersion() const;
+    int getShaderVersion(const Context *context);
 
-    const std::vector<sh::Varying> &getVaryings() const;
-    const std::vector<sh::Uniform> &getUniforms() const;
-    const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const;
-    const std::vector<sh::Attribute> &getActiveAttributes() const;
-    const std::vector<sh::OutputVariable> &getActiveOutputVariables() const;
+    const std::vector<sh::Varying> &getVaryings(const Context *context);
+    const std::vector<sh::Uniform> &getUniforms(const Context *context);
+    const std::vector<sh::InterfaceBlock> &getInterfaceBlocks(const Context *context);
+    const std::vector<sh::Attribute> &getActiveAttributes(const Context *context);
+    const std::vector<sh::OutputVariable> &getActiveOutputVariables(const Context *context);
 
-    int getSemanticIndex(const std::string &attributeName) const;
+    int getSemanticIndex(const Context *context, const std::string &attributeName);
 
-    const sh::WorkGroupSize &getWorkGroupSize() const { return mState.mLocalSize; }
+    const sh::WorkGroupSize &getWorkGroupSize(const Context *context);
 
   private:
-    static void getSourceImpl(const std::string &source, GLsizei bufSize, GLsizei *length, char *buffer);
+    static void GetSourceImpl(const std::string &source,
+                              GLsizei bufSize,
+                              GLsizei *length,
+                              char *buffer);
+
+    void resolveCompile(const Context *context);
 
     ShaderState mState;
     rx::ShaderImpl *mImplementation;
@@ -143,8 +154,11 @@ class Shader final : angle::NonCopyable, public LabeledObject
     const GLenum mType;
     unsigned int mRefCount;     // Number of program objects this shader is attached to
     bool mDeleteStatus;         // Flag to indicate that the shader can be deleted when no longer in use
-    bool mCompiled;             // Indicates if this shader has been successfully compiled
+    Optional<bool> mCompiled;   // Indicates if this shader has been successfully compiled
     std::string mInfoLog;
+
+    // We defer the compile until link time, or until the source or info log is queried.
+    bool mCompileRequested;
 
     ShaderProgramManager *mResourceManager;
 };
