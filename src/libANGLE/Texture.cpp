@@ -516,6 +516,7 @@ void TextureState::clearImageDescs()
 TextureState::SamplerCompletenessCache::SamplerCompletenessCache()
     : samplerState(), samplerComplete(false)
 {
+    samplerState.reset();
 }
 
 Texture::Texture(rx::GLImplFactory *factory, GLuint id, GLenum target)
