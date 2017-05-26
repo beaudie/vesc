@@ -135,7 +135,11 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
     }
     else
     {
-        *samples = attachment.getSamples();
+        GLsizei currentSamples = attachment.getSamples();
+        if (currentSamples > 0)
+        {
+            *samples = currentSamples;
+        }
     }
 
     return true;
