@@ -666,7 +666,7 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        if (!linkUniformBlocks(mInfoLog, caps))
+        if (!linkUniformBlocks(mInfoLog, caps, context->getExtensions().webglCompatibility))
         {
             return NoError();
         }
@@ -713,7 +713,7 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        if (!linkUniformBlocks(mInfoLog, caps))
+        if (!linkUniformBlocks(mInfoLog, caps, context->getExtensions().webglCompatibility))
         {
             return NoError();
         }
@@ -2062,10 +2062,12 @@ void Program::linkSamplerBindings()
 bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog,
                                                const std::string &uniformName,
                                                const sh::InterfaceBlockField &vertexUniform,
-                                               const sh::InterfaceBlockField &fragmentUniform)
+                                               const sh::InterfaceBlockField &fragmentUniform,
+                                               bool webglCompatibility)
 {
-    // We don't validate precision on UBO fields. See resolution of Khronos bug 10287.
-    if (!linkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform, false))
+    // If webgl, validate precision of UBO fields, otherwise don't.  See Khronos bug 10287.
+    if (!linkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
+                                   webglCompatibility))
     {
         return false;
     }
@@ -2202,7 +2204,8 @@ bool Program::validateUniformBlocksCount(GLuint maxUniformBlocks,
 bool Program::validateVertexAndFragmentInterfaceBlocks(
     const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
     const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
-    InfoLog &infoLog) const
+    InfoLog &infoLog,
+    bool webglCompatibility) const
 {
     // Check that interface blocks defined in the vertex and fragment shaders are identical
     typedef std::map<std::string, const sh::InterfaceBlock *> UniformBlockMap;
@@ -2219,7 +2222,8 @@ bool Program::validateVertexAndFragmentInterfaceBlocks(
         if (entry != linkedUniformBlocks.end())
         {
             const sh::InterfaceBlock &vertexInterfaceBlock = *entry->second;
-            if (!areMatchingInterfaceBlocks(infoLog, vertexInterfaceBlock, fragmentInterfaceBlock))
+            if (!areMatchingInterfaceBlocks(infoLog, vertexInterfaceBlock, fragmentInterfaceBlock,
+                                            webglCompatibility))
             {
                 return false;
             }
@@ -2228,7 +2232,7 @@ bool Program::validateVertexAndFragmentInterfaceBlocks(
     return true;
 }
 
-bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps)
+bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps, bool webglCompatibility)
 {
     if (mState.mAttachedComputeShader)
     {
@@ -2266,7 +2270,7 @@ bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps)
         return false;
     }
     if (!validateVertexAndFragmentInterfaceBlocks(vertexInterfaceBlocks, fragmentInterfaceBlocks,
-                                                  infoLog))
+                                                  infoLog, webglCompatibility))
     {
         return false;
     }
@@ -2276,7 +2280,8 @@ bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps)
 
 bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
                                          const sh::InterfaceBlock &vertexInterfaceBlock,
-                                         const sh::InterfaceBlock &fragmentInterfaceBlock) const
+                                         const sh::InterfaceBlock &fragmentInterfaceBlock,
+                                         bool webglCompatibility) const
 {
     const char* blockName = vertexInterfaceBlock.name.c_str();
     // validate blocks for the same member types
@@ -2315,7 +2320,8 @@ bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
             return false;
         }
         std::string memberName = "interface block '" + vertexInterfaceBlock.name + "' member '" + vertexMember.name + "'";
-        if (!linkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember))
+        if (!linkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember,
+                                              webglCompatibility))
         {
             return false;
         }
