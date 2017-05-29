@@ -58,6 +58,7 @@ class RobustResourceInitTest : public ANGLETest
     }
 
     void setupTexture(GLTexture *tex);
+    void setup3DTexture(GLTexture *tex);
     void checkNonZeroPixels(GLTexture *texture,
                             int skipX,
                             int skipY,
@@ -67,6 +68,23 @@ class RobustResourceInitTest : public ANGLETest
                             int skipG,
                             int skipB,
                             int skipA);
+    void checkNonZeroPixels3D(GLTexture *texture,
+                              int skipX,
+                              int skipY,
+                              int skipWidth,
+                              int skipHeight,
+                              int skipR,
+                              int skipG,
+                              int skipB,
+                              int skipA);
+    void checkFramebufferNonZeroPixels(int skipX,
+                                       int skipY,
+                                       int skipWidth,
+                                       int skipHeight,
+                                       int skipR,
+                                       int skipG,
+                                       int skipB,
+                                       int skipA);
 };
 
 // Context creation should fail if EGL_ANGLE_create_context_robust_resource_initialization
@@ -233,6 +251,31 @@ void RobustResourceInitTest::setupTexture(GLTexture *tex)
     glBindTexture(GL_TEXTURE_2D, *tex);
 }
 
+void RobustResourceInitTest::setup3DTexture(GLTexture *tex)
+{
+    GLuint tempTexture;
+    glGenTextures(1, &tempTexture);
+    glBindTexture(GL_TEXTURE_3D, tempTexture);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, kWidth, kHeight, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    // this can be quite undeterministic so to improve odds of seeing uninitialized data write bits
+    // into tex then delete texture then re-create one with same characteristics (driver will likely
+    // reuse mem) with this trick on r59046 WebKit/OSX I get FAIL 100% of the time instead of ~15%
+    // of the time.
+
+    std::array<uint8_t, kWidth * kHeight * 2 * 4> badData;
+    for (int i     = 0; i < badData.size(); ++i)
+        badData[i] = i % 255;
+
+    glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, kWidth, kHeight, 2, GL_RGBA, GL_UNSIGNED_BYTE,
+                    badData.data());
+    glDeleteTextures(1, &tempTexture);
+
+    // This will create the GLTexture.
+    glBindTexture(GL_TEXTURE_3D, *tex);
+}
+
 void RobustResourceInitTest::checkNonZeroPixels(GLTexture *texture,
                                                 int skipX,
                                                 int skipY,
@@ -249,6 +292,37 @@ void RobustResourceInitTest::checkNonZeroPixels(GLTexture *texture,
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->get(), 0);
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
+    checkFramebufferNonZeroPixels(skipX, skipY, skipWidth, skipHeight, skipR, skipG, skipB, skipA);
+}
+
+void RobustResourceInitTest::checkNonZeroPixels3D(GLTexture *texture,
+                                                  int skipX,
+                                                  int skipY,
+                                                  int skipWidth,
+                                                  int skipHeight,
+                                                  int skipR,
+                                                  int skipG,
+                                                  int skipB,
+                                                  int skipA)
+{
+    glBindTexture(GL_TEXTURE_3D, 0);
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->get(), 0, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    checkFramebufferNonZeroPixels(skipX, skipY, skipWidth, skipHeight, skipR, skipG, skipB, skipA);
+}
+
+void RobustResourceInitTest::checkFramebufferNonZeroPixels(int skipX,
+                                                           int skipY,
+                                                           int skipWidth,
+                                                           int skipHeight,
+                                                           int skipR,
+                                                           int skipG,
+                                                           int skipB,
+                                                           int skipA)
+{
     std::array<uint8_t, kWidth * kHeight * 4> data;
     glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
 
@@ -285,7 +359,7 @@ TEST_P(RobustResourceInitTest, ReadingUninitializedTexture)
         return;
     }
 
-    if (IsOpenGL() || IsD3D11() || IsD3D9() || IsD3D11_FL93())
+    if (IsOpenGL() || IsD3D9())
     {
         std::cout << "Robust resource init is not yet fully implemented. (" << GetParam() << ")"
                   << std::endl;
@@ -296,6 +370,29 @@ TEST_P(RobustResourceInitTest, ReadingUninitializedTexture)
     setupTexture(&tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     checkNonZeroPixels(&tex, 0, 0, 0, 0, 0, 0, 0, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Reading an uninitialized texture (texImage2D) should succeed with all bytes set to 0.
+TEST_P(RobustResourceInitTest, ReadingUninitialized3DTexture)
+{
+    if (!setup() || getClientMajorVersion() < 3)
+    {
+        return;
+    }
+
+    if (IsOpenGL())
+    {
+        std::cout << "Robust resource init is not yet fully implemented. (" << GetParam() << ")"
+                  << std::endl;
+        return;
+    }
+
+    GLTexture tex;
+    setup3DTexture(&tex);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, kWidth, kHeight, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 nullptr);
+    checkNonZeroPixels3D(&tex, 0, 0, 0, 0, 0, 0, 0, 0);
     EXPECT_GL_NO_ERROR();
 }
 
