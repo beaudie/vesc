@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
+#include "libANGLE/renderer/renderer_utils.h"
 
 namespace rx
 {
@@ -262,12 +263,32 @@ gl::Error FramebufferD3D::blit(ContextImpl *context,
                                GLbitfield mask,
                                GLenum filter)
 {
+
     const auto &glState                      = context->getGLState();
     const gl::Framebuffer *sourceFramebuffer = glState.getReadFramebuffer();
     const gl::Rectangle *scissor = glState.isScissorTestEnabled() ? &glState.getScissor() : nullptr;
-    ANGLE_TRY(blitImpl(sourceArea, destArea, scissor, (mask & GL_COLOR_BUFFER_BIT) != 0,
-                       (mask & GL_DEPTH_BUFFER_BIT) != 0, (mask & GL_STENCIL_BUFFER_BIT) != 0,
-                       filter, sourceFramebuffer));
+
+    gl::Extents readFramebufferSize;
+    if ((mask & GL_COLOR_BUFFER_BIT) != 0)
+    {
+        readFramebufferSize = sourceFramebuffer->getReadColorbuffer()->getSize();
+    }
+    else
+    {
+        readFramebufferSize = sourceFramebuffer->getDepthOrStencilbuffer()->getSize();
+    }
+
+    gl::Rectangle adjustedSourceArea(sourceArea);
+    gl::Rectangle adjustedDestArea(destArea);
+    if (!ClipBlitRectangles(&adjustedSourceArea, &adjustedDestArea, readFramebufferSize))
+    {
+        // Read would be completely out of bounds, no-op
+        return gl::NoError();
+    }
+
+    ANGLE_TRY(blitImpl(adjustedSourceArea, adjustedDestArea, scissor,
+                       (mask & GL_COLOR_BUFFER_BIT) != 0, (mask & GL_DEPTH_BUFFER_BIT) != 0,
+                       (mask & GL_STENCIL_BUFFER_BIT) != 0, filter, sourceFramebuffer));
 
     return gl::NoError();
 }
