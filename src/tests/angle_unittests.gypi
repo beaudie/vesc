@@ -43,6 +43,7 @@
             '<(angle_path)/src/libANGLE/renderer/ImageImpl_mock.h',
             '<(angle_path)/src/libANGLE/renderer/TextureImpl_mock.h',
             '<(angle_path)/src/libANGLE/renderer/TransformFeedbackImpl_mock.h',
+            '<(angle_path)/src/libANGLE/renderer/renderer_utils_unittest.cpp',
             '<(angle_path)/src/libANGLE/signal_utils_unittest.cpp',
             '<(angle_path)/src/libANGLE/validationES_unittest.cpp',
             '<(angle_path)/src/tests/angle_unittests_utils.h',

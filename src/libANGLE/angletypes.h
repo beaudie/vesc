@@ -16,6 +16,7 @@
 #include <stdint.h>
 
 #include <bitset>
+#include <ostream>
 #include <unordered_map>
 
 namespace gl
@@ -66,6 +67,8 @@ bool operator==(const Rectangle &a, const Rectangle &b);
 bool operator!=(const Rectangle &a, const Rectangle &b);
 
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection);
+
+std::ostream &operator<<(std::ostream &ostream, const Rectangle &rect);
 
 struct Offset
 {

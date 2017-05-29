@@ -24,6 +24,7 @@
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "platform/Platform.h"
 
 using namespace gl;
@@ -366,14 +367,33 @@ Error FramebufferGL::blit(ContextImpl *context,
             needManualColorBlit || (destSRGB && mFunctions->isAtMostGL(gl::Version(4, 1)));
     }
 
+    // Adjust the source and destination to be within the read framebuffer's bounds
+    gl::Extents readFramebufferSize;
+    if ((mask & GL_COLOR_BUFFER_BIT) != 0)
+    {
+        readFramebufferSize = sourceFramebuffer->getReadColorbuffer()->getSize();
+    }
+    else
+    {
+        readFramebufferSize = sourceFramebuffer->getDepthOrStencilbuffer()->getSize();
+    }
+
+    gl::Rectangle adjustedSourceArea(sourceArea);
+    gl::Rectangle adjustedDestArea(destArea);
+    if (!ClipBlitRectangles(&adjustedSourceArea, &adjustedDestArea, readFramebufferSize))
+    {
+        // Read would be completely out of bounds, no-op
+        return gl::NoError();
+    }
+
     // Enable FRAMEBUFFER_SRGB if needed
     mStateManager->setFramebufferSRGBEnabledForFramebuffer(context->getContextState(), true, this);
 
     GLenum blitMask = mask;
     if (needManualColorBlit && (mask & GL_COLOR_BUFFER_BIT) && readAttachmentSamples <= 1)
     {
-        ANGLE_TRY(mBlitter->blitColorBufferWithShader(sourceFramebuffer, destFramebuffer,
-                                                      sourceArea, destArea, filter));
+        ANGLE_TRY(mBlitter->blitColorBufferWithShader(
+            sourceFramebuffer, destFramebuffer, adjustedSourceArea, adjustedDestArea, filter));
         blitMask &= ~GL_COLOR_BUFFER_BIT;
     }
 
@@ -386,9 +406,9 @@ Error FramebufferGL::blit(ContextImpl *context,
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
 
-    mFunctions->blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x1(), sourceArea.y1(),
-                                destArea.x, destArea.y, destArea.x1(), destArea.y1(), blitMask,
-                                filter);
+    mFunctions->blitFramebuffer(adjustedSourceArea.x, adjustedSourceArea.y, adjustedSourceArea.x1(),
+                                adjustedSourceArea.y1(), adjustedDestArea.x, adjustedDestArea.y,
+                                adjustedDestArea.x1(), adjustedDestArea.y1(), blitMask, filter);
 
     return gl::NoError();
 }

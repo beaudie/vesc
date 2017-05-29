@@ -288,4 +288,61 @@ ColorCopyFunction FastCopyFunctionMap::get(const gl::FormatType &formatType) con
     return nullptr;
 }
 
+static bool ClipExtent(int *sourceBase,
+                       int *sourceExtent,
+                       int *destBase,
+                       int *destExtent,
+                       int sourceSize)
+{
+    bool outOfBounds = (*sourceBase < 0 && *sourceBase + *sourceExtent < 0) ||
+                       (*sourceBase > sourceSize && *sourceBase + *sourceExtent > sourceSize);
+
+    if (*sourceBase < 0)
+    {
+        int newExtent  = *sourceExtent + *sourceBase;
+        float fraction = std::abs(static_cast<float>(newExtent) / *sourceExtent);
+        *sourceBase    = 0;
+        *sourceExtent  = newExtent;
+        *destBase      = *destBase + static_cast<int>(std::round(*destExtent * (1.0f - fraction)));
+        *destExtent    = static_cast<int>(std::round(*destExtent * fraction));
+    }
+    else if (*sourceBase > sourceSize)
+    {
+        int newExtent  = *sourceExtent + (*sourceBase - sourceSize);
+        float fraction = std::abs(static_cast<float>(newExtent) / *sourceExtent);
+        *sourceBase    = sourceSize;
+        *sourceExtent  = newExtent;
+        *destBase      = *destBase + static_cast<int>(std::round(*destExtent * (1.0f - fraction)));
+        *destExtent    = static_cast<int>(std::round(*destExtent * fraction));
+    }
+
+    if (*sourceBase + *sourceExtent > sourceSize)
+    {
+        int newExtent  = sourceSize - *sourceBase;
+        float fraction = std::abs(static_cast<float>(newExtent) / *sourceExtent);
+        *sourceExtent  = newExtent;
+        *destExtent    = static_cast<int>(std::round(*destExtent * fraction));
+    }
+    else if (*sourceBase + *sourceExtent < 0)
+    {
+        int newExtent  = -*sourceBase;
+        float fraction = std::abs(static_cast<float>(newExtent) / *sourceExtent);
+        *sourceExtent  = newExtent;
+        *destExtent    = static_cast<int>(std::round(*destExtent * fraction));
+    }
+
+    return !outOfBounds;
+}
+
+bool ClipBlitRectangles(gl::Rectangle *sourceArea,
+                        gl::Rectangle *destArea,
+                        const gl::Extents &framebufferSize)
+{
+    bool widthInBounds = ClipExtent(&sourceArea->x, &sourceArea->width, &destArea->x,
+                                    &destArea->width, framebufferSize.width);
+    bool heightInBounds = ClipExtent(&sourceArea->y, &sourceArea->height, &destArea->y,
+                                     &destArea->height, framebufferSize.height);
+    return widthInBounds || heightInBounds;
+}
+
 }  // namespace rx

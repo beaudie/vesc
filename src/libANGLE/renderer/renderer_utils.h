@@ -126,6 +126,13 @@ struct LoadImageFunctionInfo
 
 using LoadFunctionMap = LoadImageFunctionInfo (*)(GLenum);
 
+// Clip the blit rectangles to not read out of the source framebuffer area.  Returns false if the
+// rectangles do not intersect the framebuffer at all and the call to BlitFramebuffer can be
+// skipped.
+bool ClipBlitRectangles(gl::Rectangle *sourceArea,
+                        gl::Rectangle *destArea,
+                        const gl::Extents &framebufferSize);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_

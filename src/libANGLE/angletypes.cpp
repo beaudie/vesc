@@ -121,6 +121,12 @@ bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *in
     }
 }
 
+std::ostream &operator<<(std::ostream &ostream, const Rectangle &rect)
+{
+    return ostream << "(" << rect.x << ", " << rect.y << ", " << rect.width << ", " << rect.height
+                   << ")";
+}
+
 bool Box::operator==(const Box &other) const
 {
     return (x == other.x && y == other.y && z == other.z &&
