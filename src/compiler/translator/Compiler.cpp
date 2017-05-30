@@ -366,7 +366,8 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             PruneEmptyDeclarations(root);
 
         if (success && shaderVersion >= 300 && shaderType == GL_FRAGMENT_SHADER)
-            success = validateOutputs(root);
+            success = ValidateOutputs(root, getExtensionBehavior(), compileResources.MaxDrawBuffers,
+                                      &mDiagnostics);
 
         if (success && shouldRunLoopAndIndexingValidation(compileOptions))
             success =
@@ -872,14 +873,6 @@ bool TCompiler::pruneUnusedFunctions(TIntermBlock *root)
     }
 
     return true;
-}
-
-bool TCompiler::validateOutputs(TIntermNode *root)
-{
-    ValidateOutputs validateOutputs(getExtensionBehavior(), compileResources.MaxDrawBuffers);
-    root->traverse(&validateOutputs);
-    validateOutputs.validate(&mDiagnostics);
-    return (mDiagnostics.numErrors() == 0);
 }
 
 bool TCompiler::limitExpressionComplexity(TIntermBlock *root)
