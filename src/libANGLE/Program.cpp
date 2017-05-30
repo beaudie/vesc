@@ -2665,6 +2665,30 @@ void Program::linkOutputVariables()
     const Shader *fragmentShader = mState.mAttachedFragmentShader;
     ASSERT(fragmentShader != nullptr);
 
+    ASSERT(mState.mOutputVariableTypes.empty());
+
+    // Gather output variable types
+    for (const auto &outputVariable : mState.mOutputVariables)
+    {
+        if (outputVariable.isBuiltIn() && outputVariable.name != "gl_FragColor" &&
+            outputVariable.name != "gl_FragData")
+        {
+            continue;
+        }
+
+        int baseLocation = (outputVariable.location == -1 ? 0 : outputVariable.location);
+        for (unsigned int elementIndex = 0; elementIndex < outputVariable.elementCount();
+             elementIndex++)
+        {
+            const int location = baseLocation + elementIndex;
+            if (location >= mState.mOutputVariableTypes.size())
+            {
+                mState.mOutputVariableTypes.resize(location + 1, GL_NONE);
+            }
+            mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
+        }
+    }
+
     // Skip this step for GLES2 shaders.
     if (fragmentShader->getShaderVersion() == 100)
         return;
