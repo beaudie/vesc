@@ -1131,11 +1131,11 @@ gl::Error Blit11::swizzleTexture(const d3d11::SharedSRV &source,
 }
 
 gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
-                              const gl::Box &sourceArea,
+                              const gl::Box &origSourceArea,
                               const gl::Extents &sourceSize,
                               GLenum sourceFormat,
                               const d3d11::RenderTargetView &dest,
-                              const gl::Box &destArea,
+                              const gl::Box &origDestArea,
                               const gl::Extents &destSize,
                               const gl::Rectangle *scissor,
                               GLenum destFormat,
@@ -1144,6 +1144,28 @@ gl::Error Blit11::copyTexture(const d3d11::SharedSRV &source,
                               bool unpackPremultiplyAlpha,
                               bool unpackUnmultiplyAlpha)
 {
+    // Clamp source area to source size.
+    const int x1 = gl::clamp(origSourceArea.x, 0, sourceSize.width);
+    const int y1 = gl::clamp(origSourceArea.y, 0, sourceSize.height);
+    const int z1 = gl::clamp(origSourceArea.z, 0, sourceSize.depth);
+    const int x2 = gl::clamp(origSourceArea.x + origSourceArea.width, 0, sourceSize.width);
+    const int y2 = gl::clamp(origSourceArea.y + origSourceArea.height, 0, sourceSize.height);
+    const int z2 = gl::clamp(origSourceArea.z + origSourceArea.depth, 0, sourceSize.depth);
+    const gl::Box sourceArea(x1, y1, z1, x2-x1, y2-y1, z2-z1);
+    if (sourceArea.width <= 0 || sourceArea.height <= 0 || sourceArea.depth <= 0)
+    {
+        return gl::NoError();
+    }
+    // If any part of the source area was clamped, adjust the destination accordingly.
+    const gl::Box destArea(
+        origDestArea.x + sourceArea.x - origSourceArea.x,
+        origDestArea.y + sourceArea.y - origSourceArea.y,
+        origDestArea.z + sourceArea.z - origSourceArea.z,
+        origDestArea.width + sourceArea.width - origSourceArea.width,
+        origDestArea.height + sourceArea.height - origSourceArea.height,
+        origDestArea.depth + sourceArea.depth - origSourceArea.depth
+    );
+
     ANGLE_TRY(initResources());
 
     HRESULT result;
