@@ -260,6 +260,13 @@ class ANGLETestBase
                          GLfloat positionAttribXYScale,
                          bool useBufferObject);
 
+    void drawIndexedQuad(GLuint program,
+                         const std::string &positionAttribName,
+                         GLfloat positionAttribZ,
+                         GLfloat positionAttribXYScale,
+                         bool useBufferObject,
+                         bool restrictedRange);
+
     static GLuint compileShader(GLenum type, const std::string &source);
     static bool extensionEnabled(const std::string &extName);
     static bool extensionRequestable(const std::string &extName);
