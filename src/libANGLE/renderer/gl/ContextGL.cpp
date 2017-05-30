@@ -154,7 +154,12 @@ gl::Error ContextGL::finish()
 
 gl::Error ContextGL::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
-    return mRenderer->drawArrays(context, mode, first, count);
+    const gl::Program *program = getGLState().getProgram();
+    if (!program->usesMultiview())
+    {
+        return mRenderer->drawArrays(context, mode, first, count);
+    }
+    return mRenderer->drawArraysInstanced(context, mode, first, count, program->getNumViews());
 }
 
 gl::Error ContextGL::drawArraysInstanced(const gl::Context *context,
@@ -163,6 +168,11 @@ gl::Error ContextGL::drawArraysInstanced(const gl::Context *context,
                                          GLsizei count,
                                          GLsizei instanceCount)
 {
+    const gl::Program *program = getGLState().getProgram();
+    if (program->usesMultiview())
+    {
+        instanceCount *= program->getNumViews();
+    }
     return mRenderer->drawArraysInstanced(context, mode, first, count, instanceCount);
 }
 
@@ -172,7 +182,13 @@ gl::Error ContextGL::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    return mRenderer->drawElements(context, mode, count, type, indices);
+    const gl::Program *program = getGLState().getProgram();
+    if (!program->usesMultiview())
+    {
+        return mRenderer->drawElements(context, mode, count, type, indices);
+    }
+    return mRenderer->drawElementsInstanced(context, mode, count, type, indices,
+                                            program->getNumViews());
 }
 
 gl::Error ContextGL::drawElementsInstanced(const gl::Context *context,
@@ -182,6 +198,11 @@ gl::Error ContextGL::drawElementsInstanced(const gl::Context *context,
                                            const void *indices,
                                            GLsizei instances)
 {
+    const gl::Program *program = getGLState().getProgram();
+    if (program->usesMultiview())
+    {
+        instances *= program->getNumViews();
+    }
     return mRenderer->drawElementsInstanced(context, mode, count, type, indices, instances);
 }
 
@@ -193,7 +214,13 @@ gl::Error ContextGL::drawRangeElements(const gl::Context *context,
                                        GLenum type,
                                        const void *indices)
 {
-    return mRenderer->drawRangeElements(context, mode, start, end, count, type, indices);
+    const gl::Program *program = getGLState().getProgram();
+    if (!program->usesMultiview())
+    {
+        return mRenderer->drawRangeElements(context, mode, start, end, count, type, indices);
+    }
+    return mRenderer->drawElementsInstanced(context, mode, count, type, indices,
+                                            program->getNumViews());
 }
 
 gl::Error ContextGL::drawArraysIndirect(const gl::Context *context,
