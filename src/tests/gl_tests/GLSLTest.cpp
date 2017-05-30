@@ -1086,16 +1086,6 @@ TEST_P(GLSLTest_ES3, MissingReturnArrayOfStructs)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
 {
-    // TODO(cwallez) remove the suppression once NVIDIA removes the restriction for
-    // GLSL >= 300. It was defined only in GLSL 2.0, section 6.1.
-    if (IsNVIDIA() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on NVIDIA OpenGL ES because it disallows returning "
-                     "structure of arrays"
-                  << std::endl;
-        return;
-    }
-
     const std::string vertexShaderSource =
         "#version 300 es\n"
         "in float v_varying;\n"
