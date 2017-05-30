@@ -770,6 +770,7 @@ void Program::unlink()
     mState.mUniformBlocks.clear();
     mState.mOutputVariables.clear();
     mState.mOutputLocations.clear();
+    mState.mOutputVariableTypes.clear();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
 
@@ -938,6 +939,12 @@ Error Program::loadBinary(const Context *context,
         mState.mOutputLocations[locationIndex] = locationData;
     }
 
+    unsigned int outputTypeCount = stream.readInt<unsigned int>();
+    for (unsigned int outputIndex = 0; outputIndex < outputTypeCount; ++outputIndex)
+    {
+        mState.mOutputVariableTypes.push_back(stream.readInt<GLenum>());
+    }
+
     stream.readInt(&mState.mSamplerUniformRange.start);
     stream.readInt(&mState.mSamplerUniformRange.end);
 
@@ -1068,6 +1075,12 @@ Error Program::saveBinary(const Context *context,
         stream.writeIntOrNegOne(outputPair.second.element);
         stream.writeInt(outputPair.second.index);
         stream.writeString(outputPair.second.name);
+    }
+
+    stream.writeInt(mState.mOutputVariableTypes.size());
+    for (const auto &outputVariableType : mState.mOutputVariableTypes)
+    {
+        stream.writeInt(outputVariableType);
     }
 
     stream.writeInt(mState.mSamplerUniformRange.start);
@@ -2664,6 +2677,30 @@ void Program::linkOutputVariables()
 {
     const Shader *fragmentShader = mState.mAttachedFragmentShader;
     ASSERT(fragmentShader != nullptr);
+
+    ASSERT(mState.mOutputVariableTypes.empty());
+
+    // Gather output variable types
+    for (const auto &outputVariable : fragmentShader->getActiveOutputVariables())
+    {
+        if (outputVariable.isBuiltIn() && outputVariable.name != "gl_FragColor" &&
+            outputVariable.name != "gl_FragData")
+        {
+            continue;
+        }
+
+        int baseLocation = (outputVariable.location == -1 ? 0 : outputVariable.location);
+        for (unsigned int elementIndex = 0; elementIndex < outputVariable.elementCount();
+             elementIndex++)
+        {
+            const int location = baseLocation + elementIndex;
+            if (location >= mState.mOutputVariableTypes.size())
+            {
+                mState.mOutputVariableTypes.resize(location + 1, GL_NONE);
+            }
+            mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
+        }
+    }
 
     // Skip this step for GLES2 shaders.
     if (fragmentShader->getShaderVersion() == 100)
