@@ -527,6 +527,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     const Bindings &getFragmentInputBindings() const { return mFragmentInputBindings; }
 
     int getNumViews() const { return mState.mNumViews; }
+    bool usesMultiview() const { return mState.mNumViews != -1; }
 
   private:
     ~Program();
