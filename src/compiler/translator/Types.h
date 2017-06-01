@@ -16,6 +16,31 @@
 namespace sh
 {
 
+enum class ParamType : uint8_t
+{
+    Void,
+    Bool1,
+    Bool2,
+    Bool3,
+    Bool4,
+    Float1,
+    Float2,
+    Float3,
+    Float4,
+    Int1,
+    Int2,
+    Int3,
+    Int4,
+    Mat2,
+    Mat3,
+    Mat4,
+    Uint1,
+    Uint2,
+    Uint3,
+    Uint4,
+    Last,
+};
+
 struct TPublicType;
 class TType;
 class TSymbol;
@@ -489,6 +514,7 @@ class TType
     void realize() { getMangledName(); }
 
   private:
+    friend constexpr bool operator==(ParamType paramType, const TType *ttype);
     void invalidateMangledName() { mangled = ""; }
     TString buildMangledName() const;
 

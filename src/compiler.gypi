@@ -215,6 +215,7 @@
             'compiler/translator/UniformHLSL.h',
             'compiler/translator/UtilsHLSL.cpp',
             'compiler/translator/UtilsHLSL.h',
+            'compiler/translator/emulated_builtin_functions_hlsl_autogen.cpp',
         ],
         'angle_translator_lib_vulkan_sources':
         [
