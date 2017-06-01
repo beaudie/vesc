@@ -87,6 +87,8 @@ class FramebufferGL : public FramebufferImpl
     GLuint getFramebufferID() const;
     bool isDefault() const;
 
+    void maskOutInactiveOutputDrawBuffers(gl::DrawBufferMask maxSet);
+
   private:
     void syncClearState(ContextImpl *context, GLbitfield mask);
     void syncClearBufferState(ContextImpl *context, GLenum buffer, GLint drawBuffer);
@@ -115,6 +117,8 @@ class FramebufferGL : public FramebufferImpl
 
     GLuint mFramebufferID;
     bool mIsDefault;
+
+    gl::DrawBufferMask mAppliedEnabledDrawBuffers;
 };
 }
 

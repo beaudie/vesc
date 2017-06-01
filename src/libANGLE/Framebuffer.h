@@ -72,6 +72,7 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDepthStencilAttachment() const;
 
     const std::vector<GLenum> &getDrawBufferStates() const { return mDrawBufferStates; }
+    DrawBufferMask getEnabledDrawBuffers() const { return mEnabledDrawBuffers; }
     GLenum getReadBufferState() const { return mReadBufferState; }
     const std::vector<FramebufferAttachment> &getColorAttachments() const
     {
@@ -100,7 +101,7 @@ class FramebufferState final : angle::NonCopyable
 
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
-    angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS> mEnabledDrawBuffers;
+    DrawBufferMask mEnabledDrawBuffers;
 
     GLint mDefaultWidth;
     GLint mDefaultHeight;

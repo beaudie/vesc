@@ -202,6 +202,7 @@ FramebufferState::FramebufferState(const Caps &caps)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
+    mEnabledDrawBuffers.set(0);
 }
 
 FramebufferState::~FramebufferState()
@@ -1242,9 +1243,6 @@ void Framebuffer::setAttachmentImpl(GLenum type,
             updateAttachment(&mState.mColorAttachments[colorIndex], dirtyBit,
                              &mDirtyColorAttachmentBindings[colorIndex], type, binding,
                              textureIndex, resource);
-
-            bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
-            mState.mEnabledDrawBuffers.set(colorIndex, enabled);
         }
         break;
     }
