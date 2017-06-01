@@ -15,6 +15,7 @@
 #include "common/tls.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -1667,16 +1668,16 @@ gl::Error Renderer11::setUniformBuffers(const gl::ContextState &data,
     return gl::NoError();
 }
 
-gl::Error Renderer11::updateState(ContextImpl *contextImpl, GLenum drawMode)
+gl::Error Renderer11::updateState(const gl::Context *context, GLenum drawMode)
 {
-    const auto &data    = contextImpl->getContextState();
+    const auto &data    = context->getContextState();
     const auto &glState = data.getState();
 
     // Applies the render target surface, depth stencil surface, viewport rectangle and
     // scissor rectangle to the renderer
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->cachedComplete());
-    ANGLE_TRY(mStateManager.syncFramebuffer(contextImpl, framebuffer));
+    ANGLE_TRY(mStateManager.syncFramebuffer(context, framebuffer));
 
     // Set the present path state
     auto firstColorAttachment        = framebuffer->getFirstColorbuffer();
@@ -4661,7 +4662,7 @@ ContextImpl *Renderer11::createContext(const gl::ContextState &state)
     return new Context11(state, this);
 }
 
-gl::Error Renderer11::genericDrawElements(Context11 *context,
+gl::Error Renderer11::genericDrawElements(const gl::Context *context,
                                           GLenum mode,
                                           GLsizei count,
                                           GLenum type,
@@ -4700,7 +4701,7 @@ gl::Error Renderer11::genericDrawElements(Context11 *context,
     size_t vertexCount = indexInfo.indexRange.vertexCount();
     ANGLE_TRY(applyVertexBuffer(glState, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
                                 static_cast<GLsizei>(vertexCount), instances, &indexInfo));
-    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyTextures(context->getImplementation(), data));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
@@ -4712,7 +4713,7 @@ gl::Error Renderer11::genericDrawElements(Context11 *context,
     return gl::NoError();
 }
 
-gl::Error Renderer11::genericDrawArrays(Context11 *context,
+gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
                                         GLenum mode,
                                         GLint first,
                                         GLsizei count,
@@ -4736,7 +4737,7 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
     ANGLE_TRY(updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
-    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyTextures(context->getImplementation(), data));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
@@ -4753,7 +4754,7 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
     return gl::NoError();
 }
 
-gl::Error Renderer11::genericDrawIndirect(Context11 *context,
+gl::Error Renderer11::genericDrawIndirect(const gl::Context *context,
                                           GLenum mode,
                                           GLenum type,
                                           const void *indirect)
@@ -4771,7 +4772,7 @@ gl::Error Renderer11::genericDrawIndirect(Context11 *context,
     ANGLE_TRY(updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
-    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyTextures(context->getImplementation(), data));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
