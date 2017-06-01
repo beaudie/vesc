@@ -228,6 +228,10 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveAttribLocationsMask;
     }
+    angle::BitSet<gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> getActiveOutputVariables() const
+    {
+        return mActiveOutputVariables;
+    }
     const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
@@ -278,6 +282,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<sh::OutputVariable> mOutputVariables;
     // TODO(jmadill): use unordered/hash map when available
     std::map<int, VariableLocation> mOutputLocations;
+    angle::BitSet<gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> mActiveOutputVariables;
 
     // Fragment output variable base types: FLOAT, INT, or UINT.  Ordered by location.
     std::vector<GLenum> mOutputVariableTypes;

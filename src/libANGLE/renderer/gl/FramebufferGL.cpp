@@ -44,7 +44,8 @@ FramebufferGL::FramebufferGL(const FramebufferState &state,
       mWorkarounds(workarounds),
       mBlitter(blitter),
       mFramebufferID(0),
-      mIsDefault(isDefault)
+      mIsDefault(isDefault),
+      mAppliedEnabledDrawBuffers(1)
 {
     if (!mIsDefault)
     {
@@ -64,7 +65,8 @@ FramebufferGL::FramebufferGL(GLuint id,
       mWorkarounds(workarounds),
       mBlitter(blitter),
       mFramebufferID(id),
-      mIsDefault(true)
+      mIsDefault(true),
+      mAppliedEnabledDrawBuffers(1)
 {
 }
 
@@ -438,6 +440,7 @@ void FramebufferGL::syncState(ContextImpl *contextImpl, const Framebuffer::Dirty
                 const auto &drawBuffers = mState.getDrawBufferStates();
                 mFunctions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
                                         drawBuffers.data());
+                mAppliedEnabledDrawBuffers = mState.getEnabledDrawBuffers();
                 break;
             }
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
@@ -483,6 +486,37 @@ GLuint FramebufferGL::getFramebufferID() const
 bool FramebufferGL::isDefault() const
 {
     return mIsDefault;
+}
+
+void FramebufferGL::ensureDrawBuffersSubsetOf(
+    angle::BitSet<gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> maxSet)
+{
+    auto targetAppliedDrawBuffers = mState.getEnabledDrawBuffers() & maxSet;
+    if (mAppliedEnabledDrawBuffers != targetAppliedDrawBuffers)
+    {
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+        if (mIsDefault)
+        {
+            GLenum drawBuffer = targetAppliedDrawBuffers[0] ? GL_BACK : GL_NONE;
+            mFunctions->drawBuffers(1, &drawBuffer);
+        }
+        else
+        {
+            GLenum drawBuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
+            size_t drawBufferCount = mState.getDrawBufferCount();
+            ASSERT(drawBufferCount < IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+            for (size_t i = 0; i < drawBufferCount; ++i)
+            {
+                drawBuffers[i] = targetAppliedDrawBuffers[i] ? GL_COLOR_ATTACHMENT0 + i : GL_NONE;
+            }
+
+            mFunctions->drawBuffers(static_cast<GLsizei>(drawBufferCount), drawBuffers);
+        }
+
+        mAppliedEnabledDrawBuffers = targetAppliedDrawBuffers;
+    }
 }
 
 void FramebufferGL::syncClearState(ContextImpl *context, GLbitfield mask)

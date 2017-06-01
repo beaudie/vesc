@@ -771,6 +771,7 @@ void Program::unlink()
     mState.mOutputVariables.clear();
     mState.mOutputLocations.clear();
     mState.mOutputVariableTypes.clear();
+    mState.mActiveOutputVariables.reset();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
 
@@ -945,6 +946,8 @@ Error Program::loadBinary(const Context *context,
     {
         mState.mOutputVariableTypes.push_back(stream.readInt<GLenum>());
     }
+    ASSERT(mState.mActiveOutputVariables.size() < 8 * sizeof(uint32_t));
+    mState.mActiveOutputVariables = stream.readInt<uint32_t>();
 
     stream.readInt(&mState.mSamplerUniformRange.start);
     stream.readInt(&mState.mSamplerUniformRange.end);
@@ -1084,6 +1087,8 @@ Error Program::saveBinary(const Context *context,
     {
         stream.writeInt(outputVariableType);
     }
+    ASSERT(mState.mActiveOutputVariables.size() < 8 * sizeof(uint32_t));
+    stream.writeInt(static_cast<uint32_t>(mState.mActiveOutputVariables.to_ulong()));
 
     stream.writeInt(mState.mSamplerUniformRange.start);
     stream.writeInt(mState.mSamplerUniformRange.end);
@@ -2679,6 +2684,7 @@ void Program::linkOutputVariables()
     ASSERT(fragmentShader != nullptr);
 
     ASSERT(mState.mOutputVariableTypes.empty());
+    ASSERT(mState.mActiveOutputVariables.none());
 
     // Gather output variable types
     for (const auto &outputVariable : fragmentShader->getActiveOutputVariables())
@@ -2701,6 +2707,7 @@ void Program::linkOutputVariables()
                 mState.mOutputVariableTypes.resize(location + 1, GL_NONE);
             }
             mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
+            mState.mActiveOutputVariables.set(location);
         }
     }
 
