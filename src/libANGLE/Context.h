@@ -819,7 +819,7 @@ class Context final : public ValidationContext
     Limitations mLimitations;
 
     // Shader compiler
-    Compiler *mCompiler;
+    BindingPointer<Compiler> mCompiler;
 
     State mGLState;
 
