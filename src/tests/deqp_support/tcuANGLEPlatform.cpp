@@ -18,6 +18,11 @@
  *
  */
 
+// This is a bit of a hack but is necessary for ANGLE to compile.
+#if !defined(NOMINMAX)
+#define NOMINMAX
+#endif
+
 #include "tcuANGLEPlatform.h"
 
 #include <EGL/egl.h>
