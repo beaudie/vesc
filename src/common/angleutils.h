@@ -38,6 +38,22 @@ class NonCopyable
     void operator=(const NonCopyable&) = delete;
 };
 
+class ResourceSerial
+{
+  public:
+    constexpr ResourceSerial() : mValue(kDirty) {}
+    constexpr ResourceSerial(uintptr_t value) : mValue(value) {}
+    constexpr bool operator==(ResourceSerial other) const { return mValue == other.mValue; }
+    constexpr bool operator!=(ResourceSerial other) const { return mValue != other.mValue; }
+
+    void dirty() { mValue = kDirty; }
+
+  private:
+    static constexpr uintptr_t kDirty = std::numeric_limits<uintptr_t>::max();
+
+    uintptr_t mValue;
+};
+
 extern const uintptr_t DirtyPointer;
 }  // namespace angle
 

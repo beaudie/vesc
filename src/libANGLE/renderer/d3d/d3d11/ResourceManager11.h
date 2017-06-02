@@ -175,6 +175,11 @@ class Resource11Base : angle::NonCopyable
 
     void reset() { mData.reset(new DataT()); }
 
+    angle::ResourceSerial getSerial() const
+    {
+        return angle::ResourceSerial(reinterpret_cast<uintrptr_t>(mData->object));
+    }
+
   protected:
     friend class TextureHelper11;
 
