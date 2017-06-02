@@ -862,8 +862,7 @@ bool ValidateDrawElementsInstancedBase(ValidationContext *context,
         return false;
     }
 
-    // No-op zero primitive count
-    return (primcount > 0);
+    return true;
 }
 
 bool ValidateDrawArraysInstancedBase(Context *context,
@@ -883,8 +882,7 @@ bool ValidateDrawArraysInstancedBase(Context *context,
         return false;
     }
 
-    // No-op if zero primitive count
-    return (primcount > 0);
+    return true;
 }
 
 bool ValidateDrawInstancedANGLEAndWebGL(ValidationContext *context)
@@ -2790,8 +2788,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         }
     }
 
-    // No-op if zero count
-    return (count > 0);
+    return true;
 }
 
 bool ValidateDrawArraysCommon(ValidationContext *context,
@@ -3045,8 +3042,7 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
         return false;
     }
 
-    // No op if there are no real indices in the index data (all are primitive restart).
-    return (indexRangeOpt.value().vertexIndexCount > 0);
+    return true;
 }
 
 bool ValidateDrawElementsInstancedCommon(ValidationContext *context,
