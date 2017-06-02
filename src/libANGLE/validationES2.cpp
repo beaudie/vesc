@@ -3465,7 +3465,7 @@ bool ValidateProgramPathFragmentInputGen(Context *context,
     if (location == -1)
         return true;
 
-    const auto &binding = programObject->getFragmentInputBindingInfo(location);
+    const auto &binding = programObject->getFragmentInputBindingInfo(context, location);
 
     if (!binding.valid)
     {
