@@ -2564,12 +2564,6 @@ TEST_P(WebGL2CompatibilityTest, VertexShaderAttributeTypeMissmatch)
 // Tests the WebGL removal of undefined behavior when attachments aren't written to.
 TEST_P(WebGLCompatibilityTest, DrawBuffers)
 {
-    if (IsD3D9() || IsD3D11())
-    {
-        std::cout << "Test skipped on " << GetParam() << std::endl;
-        return;
-    }
-
     // Make sure we can use at least 4 attachments for the tests.
     bool useEXT = false;
     if (getClientMajorVersion() < 3)
