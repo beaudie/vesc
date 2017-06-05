@@ -1821,6 +1821,12 @@ void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
+    // No-op if zero count
+    if (count == 0)
+    {
+        return;
+    }
+
     syncRendererState();
     auto error = mImplementation->drawArrays(this, mode, first, count);
     handleError(error);
@@ -1832,6 +1838,12 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 
 void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount)
 {
+    // No-op if zero count
+    if (count == 0 || instanceCount == 0)
+    {
+        return;
+    }
+
     syncRendererState();
     auto error = mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount);
     handleError(error);
@@ -1843,8 +1855,21 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
 
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
+    // No-op if zero count
+    if (count == 0)
+    {
+        return;
+    }
+
     syncRendererState();
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
+
+    // No op if there are no real indices in the index data (all are primitive restart).
+    if (indexRange.vertexIndexCount == 0)
+    {
+        return;
+    }
+
     handleError(mImplementation->drawElements(this, mode, count, type, indices, indexRange));
 }
 
@@ -1854,8 +1879,21 @@ void Context::drawElementsInstanced(GLenum mode,
                                     const void *indices,
                                     GLsizei instances)
 {
+    // No-op if zero count
+    if (count == 0 || instances == 0)
+    {
+        return;
+    }
+
     syncRendererState();
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
+
+    // No op if there are no real indices in the index data (all are primitive restart).
+    if (indexRange.vertexIndexCount == 0)
+    {
+        return;
+    }
+
     handleError(mImplementation->drawElementsInstanced(this, mode, count, type, indices, instances,
                                                        indexRange));
 }
@@ -1867,8 +1905,21 @@ void Context::drawRangeElements(GLenum mode,
                                 GLenum type,
                                 const void *indices)
 {
+    // No-op if zero count
+    if (count == 0)
+    {
+        return;
+    }
+
     syncRendererState();
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
+
+    // No op if there are no real indices in the index data (all are primitive restart).
+    if (indexRange.vertexIndexCount == 0)
+    {
+        return;
+    }
+
     handleError(mImplementation->drawRangeElements(this, mode, start, end, count, type, indices,
                                                    indexRange));
 }
