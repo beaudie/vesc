@@ -43,10 +43,9 @@ LinkResult ProgramVk::load(const gl::Context *contextImpl,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error ProgramVk::save(gl::BinaryOutputStream *stream)
+void ProgramVk::save(gl::BinaryOutputStream *stream)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
 }
 
 void ProgramVk::setBinaryRetrievableHint(bool retrievable)
