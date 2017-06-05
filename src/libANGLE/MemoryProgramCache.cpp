@@ -16,12 +16,14 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "common/third_party/murmurhash/MurmurHash3.h"
 
 namespace gl
 {
 
 namespace
 {
+constexpr unsigned int kWarningLimit = 3;
 
 void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
 {
@@ -46,7 +48,39 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->structName = stream->readString();
 }
 
+const char *GetShaderHashKey(const Shader *shader)
+{
+    return shader ? shader->getSourceString().c_str() : "";
+}
+
+std::ostream &operator<<(std::ostream &stream, const Program::Bindings &bindings)
+{
+    for (const auto &binding : bindings)
+    {
+        stream << binding.first << ":" << binding.second << ":";
+    }
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::vector<std::string> &strings)
+{
+    for (const auto &str : strings)
+    {
+        stream << str << ":";
+    }
+    return stream;
+}
+
 }  // anonymous namespace
+
+MemoryProgramCache::MemoryProgramCache(size_t maxCacheSizeBytes)
+    : mProgramBinaryCache(maxCacheSizeBytes), mIssuedWarnings(0)
+{
+}
+
+MemoryProgramCache::~MemoryProgramCache()
+{
+}
 
 // static
 LinkResult MemoryProgramCache::Deserialize(const Context *context,
@@ -359,6 +393,113 @@ void MemoryProgramCache::Serialize(const Context *context,
     ASSERT(binaryOut);
     binaryOut->resize(stream.length());
     memcpy(binaryOut->data(), stream.data(), stream.length());
+}
+
+// static
+ProgramHash MemoryProgramCache::ComputeHash(const Context *context, const Program *program)
+{
+    auto vertexShader   = program->getAttachedVertexShader();
+    auto fragmentShader = program->getAttachedFragmentShader();
+    auto computeShader  = program->getAttachedComputeShader();
+
+    // Compute the program hash. Start with the shader hashes.
+    std::ostringstream hashStream;
+    hashStream << GetShaderHashKey(vertexShader) << ":" << GetShaderHashKey(fragmentShader) << ":"
+               << GetShaderHashKey(computeShader) << ":";
+
+    // Add some ANGLE metadata.
+    hashStream << ANGLE_COMMIT_HASH << ":" << context->getClientMajorVersion() << ":"
+               << context->getClientMinorVersion() << ":";
+
+    // Hash pre-link program properties.
+    hashStream << program->getAttributeBindings() << ":" << program->getUniformLocationBindings()
+               << ":" << program->getFragmentInputBindings() << ":"
+               << program->getState().getTransformFeedbackVaryingNames() << ":"
+               << program->getState().getTransformFeedbackBufferMode() << ":";
+
+    // Call the hashing function.
+    constexpr uint32_t seed       = 0xABCDEF98;
+    const std::string &programKey = hashStream.str();
+    ProgramHash programHash;
+    MurmurHash3_x86_128(programKey.c_str(), static_cast<uint32_t>(programKey.length()), seed,
+                        programHash.data());
+
+    return programHash;
+}
+
+LinkResult MemoryProgramCache::getProgram(const Context *context,
+                                          const Program *program,
+                                          ProgramState *state,
+                                          ProgramHash *hashOut)
+{
+    *hashOut                                 = MemoryProgramCache::ComputeHash(context, program);
+    const angle::MemoryBuffer *binaryProgram = nullptr;
+    LinkResult result(false);
+    if (get(*hashOut, &binaryProgram))
+    {
+        InfoLog infoLog;
+        ANGLE_TRY_RESULT(Deserialize(context, program, state, binaryProgram->data(),
+                                     binaryProgram->size(), infoLog),
+                         result);
+        if (!result.getResult())
+        {
+            // Cache load failed, evict.
+            if (mIssuedWarnings++ < kWarningLimit)
+            {
+                WARN() << "Failed to load binary from cache: " << infoLog.str();
+
+                if (mIssuedWarnings == kWarningLimit)
+                {
+                    WARN() << "Reaching warning limit for cache load failures, silencing "
+                              "subsequent warnings.";
+                }
+            }
+            remove(*hashOut);
+        }
+    }
+    return result;
+}
+
+bool MemoryProgramCache::get(const ProgramHash &programHash, const angle::MemoryBuffer **programOut)
+{
+    return mProgramBinaryCache.get(programHash, programOut);
+}
+
+void MemoryProgramCache::remove(const ProgramHash &programHash)
+{
+    bool result = mProgramBinaryCache.eraseByKey(programHash);
+    ASSERT(result);
+}
+
+void MemoryProgramCache::put(const ProgramHash &program, angle::MemoryBuffer &&binaryProgram)
+{
+    mProgramBinaryCache.put(program, std::move(binaryProgram), binaryProgram.size());
+}
+
+void MemoryProgramCache::putProgram(const ProgramHash &programHash,
+                                    const Context *context,
+                                    const Program *program)
+{
+    angle::MemoryBuffer binaryProgram;
+    Serialize(context, program, &binaryProgram);
+    put(programHash, std::move(binaryProgram));
+}
+
+void MemoryProgramCache::putBinary(const Context *context,
+                                   const Program *program,
+                                   const uint8_t *binary,
+                                   size_t length)
+{
+    // Copy the binary.
+    angle::MemoryBuffer binaryProgram;
+    binaryProgram.resize(length);
+    memcpy(binaryProgram.data(), binary, length);
+
+    // Compute the hash.
+    const auto &programHash = ComputeHash(context, program);
+
+    // Store the binary.
+    put(programHash, std::move(binaryProgram));
 }
 
 }  // namespace gl
