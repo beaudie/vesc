@@ -958,7 +958,7 @@ LinkResult ProgramD3D::load(const gl::Context *context,
     return true;
 }
 
-gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
+void ProgramD3D::save(gl::BinaryOutputStream *stream)
 {
     // Output the DeviceIdentifier before we output any shader code
     // When we load the binary again later, we can validate the device identifier before trying to
@@ -1122,8 +1122,6 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
     {
         stream->writeInt(0);
     }
-
-    return gl::NoError();
 }
 
 void ProgramD3D::setBinaryRetrievableHint(bool /* retrievable */)
