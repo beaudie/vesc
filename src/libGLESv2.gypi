@@ -158,6 +158,8 @@
             'libANGLE/IndexRangeCache.h',
             'libANGLE/LoggingAnnotator.cpp',
             'libANGLE/LoggingAnnotator.h',
+            'libANGLE/MemoryProgramCache.cpp',
+            'libANGLE/MemoryProgramCache.h',
             'libANGLE/Path.h',
             'libANGLE/Path.cpp',
             'libANGLE/Platform.cpp',
