@@ -257,7 +257,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mLimitations,
                         GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
-      mCompiler(nullptr),
+      mCompiler(),
       mConfig(config),
       mClientType(EGL_OPENGL_ES_API),
       mHasBeenCurrent(false),
@@ -361,7 +361,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
         bindTransformFeedback(0);
     }
 
-    mCompiler = new Compiler(mImplementation.get(), mState);
+    mCompiler.set(new Compiler(mImplementation.get(), mState));
 
     // Initialize dirty bit masks
     // TODO(jmadill): additional ES3 state
@@ -444,8 +444,7 @@ void Context::destroy(egl::Display *display)
     SafeDelete(mSurfacelessFramebuffer);
 
     releaseSurface(display);
-
-    SafeDelete(mCompiler);
+    releaseShaderCompiler();
 
     mState.mBuffers->release(this);
     mState.mShaderPrograms->release(this);
@@ -1300,7 +1299,7 @@ Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
 
 Compiler *Context::getCompiler() const
 {
-    return mCompiler;
+    return mCompiler.get();
 }
 
 void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
@@ -2580,8 +2579,7 @@ void Context::requestExtension(const char *name)
     initExtensionStrings();
 
     // Re-create the compiler with the requested extensions enabled.
-    SafeDelete(mCompiler);
-    mCompiler = new Compiler(mImplementation.get(), mState);
+    mCompiler.set(new Compiler(mImplementation.get(), mState));
 
     // Invalidate all cached completenesses for textures and framebuffer. Some extensions make new
     // formats renderable or sampleable.
@@ -4504,7 +4502,7 @@ void Context::linkProgram(GLuint program)
 
 void Context::releaseShaderCompiler()
 {
-    handleError(mCompiler->release());
+    mCompiler.set(new Compiler(mImplementation.get(), mState));
 }
 
 void Context::shaderBinary(GLsizei n,
