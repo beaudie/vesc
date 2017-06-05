@@ -877,6 +877,81 @@ TEST_P(TransformFeedbackTest, TwoUnreferencedInFragShader)
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(TransformFeedbackTest, OffsetResetOnBeginTransformFeedback)
+{
+    // TODO(jmadill): With points and rasterizer discard?
+    const std::string &vertexShaderSource =
+        "#version 300 es\n"
+        "in vec4 position;\n"
+        "out vec4 outAttrib;\n"
+        "void main() {"
+        "  outAttrib = position;\n"
+        "  gl_Position = vec4(0);\n"
+        "}";
+
+    const std::string &fragmentShaderSource =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 color;\n"
+        "void main() {\n"
+        "  color = vec4(0);\n"
+        "}";
+
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("outAttrib");
+
+    mProgram = CompileProgramWithTransformFeedback(vertexShaderSource, fragmentShaderSource,
+                                                   tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    ASSERT_NE(0u, mProgram);
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(Vector4) * 2, nullptr, GL_STREAM_DRAW);
+
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedback);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    glUseProgram(mProgram);
+
+    angle::Vector4 drawVertex0(4, 3, 2, 1);
+    angle::Vector4 drawVertex1(8, 7, 6, 5);
+    angle::Vector4 drawVertex2(12, 11, 10, 9);
+
+    glEnableVertexAttribArray(positionLocation);
+
+    glBeginTransformFeedback(GL_POINTS);
+
+    // Write vertex 0 at offset 0
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, &drawVertex0);
+    glDrawArrays(GL_POINTS, 0, 1);
+
+    // Append vertex 1
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, &drawVertex1);
+    glDrawArrays(GL_POINTS, 0, 1);
+
+    glEndTransformFeedback();
+    glBeginTransformFeedback(GL_POINTS);
+
+    // Write vertex 2 at offset 0
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, &drawVertex2);
+    glDrawArrays(GL_POINTS, 0, 1);
+
+    glEndTransformFeedback();
+
+    const void *mapPointer =
+        glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(Vector4) * 2, GL_MAP_READ_BIT);
+    ASSERT_NE(nullptr, mapPointer);
+
+    const Vector4 *vecPointer = static_cast<const Vector4 *>(mapPointer);
+    ASSERT_EQ(vecPointer[0], drawVertex2);
+    ASSERT_EQ(vecPointer[1], drawVertex1);
+
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 class TransformFeedbackLifetimeTest : public TransformFeedbackTest
 {
   protected:
