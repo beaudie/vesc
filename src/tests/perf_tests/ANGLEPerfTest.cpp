@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2017 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -21,7 +21,8 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name, const std::string &suffix)
       mTimer(nullptr),
       mRunTimeSeconds(5.0),
       mNumStepsPerformed(0),
-      mRunning(true)
+      mRunning(true),
+      mSkipTest(false)
 {
     mTimer = CreateTimer();
 }
@@ -33,6 +34,11 @@ ANGLEPerfTest::~ANGLEPerfTest()
 
 void ANGLEPerfTest::run()
 {
+    if (mSkipTest)
+    {
+        return;
+    }
+
     mTimer->start();
     while (mRunning)
     {
@@ -66,6 +72,10 @@ void ANGLEPerfTest::SetUp()
 
 void ANGLEPerfTest::TearDown()
 {
+    if (mSkipTest)
+    {
+        return;
+    }
     double relativeScore = static_cast<double>(mNumStepsPerformed) / mTimer->getElapsedTime();
     printResult("score", static_cast<size_t>(std::round(relativeScore)), "score", true);
 }
@@ -105,6 +115,14 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
 {
 }
 
+ANGLERenderTest::ANGLERenderTest(const std::string &name,
+                                 const RenderTestParams &testParams,
+                                 const std::vector<std::string> &extensionPrerequisites)
+    : ANGLERenderTest(name, testParams)
+{
+    mExtensionPrerequisites = extensionPrerequisites;
+}
+
 ANGLERenderTest::~ANGLERenderTest()
 {
     SafeDelete(mOSWindow);
@@ -127,6 +145,21 @@ void ANGLERenderTest::SetUp()
     if (!mEGLWindow->initializeGL(mOSWindow))
     {
         FAIL() << "Failed initializing EGLWindow";
+        return;
+    }
+
+    for (const auto &extension : mExtensionPrerequisites)
+    {
+        if (!CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
+                                  extension))
+        {
+            std::cout << "Test skipped due to missing " + extension << std::endl;
+            mSkipTest = true;
+        }
+    }
+
+    if (mSkipTest)
+    {
         return;
     }
 
