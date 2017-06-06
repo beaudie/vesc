@@ -2723,11 +2723,67 @@ void Context::updateCaps()
 
         // OpenGL ES does not support multisampling with non-rendererable formats
         // OpenGL ES 3.0 or prior does not support multisampling with integer formats
-        if (!formatInfo.renderSupport ||
+        if (!formatCaps.renderable ||
             (getClientVersion() < ES_3_1 &&
              (formatInfo.componentType == GL_INT || formatInfo.componentType == GL_UNSIGNED_INT)))
         {
             formatCaps.sampleCounts.clear();
+        }
+        else
+        {
+            // We may have limited the max samples for some required renderbuffer formats due to
+            // non-conformant formats. In this case MAX_SAMPLES needs to be lowered accordingly.
+            GLuint formatMaxSamples = formatCaps.getMaxSamples();
+
+            // GLES 3.0.5 section 4.4.2.2: "Implementations must support creation of renderbuffers
+            // in these required formats with up to the value of MAX_SAMPLES multisamples, with the
+            // exception of signed and unsigned integer formats."
+            if (formatInfo.componentType != GL_INT && formatInfo.componentType != GL_UNSIGNED_INT &&
+                formatInfo.isRequiredRenderbufferFormat(getClientVersion()))
+            {
+                if (mCaps.maxSamples > formatMaxSamples)
+                {
+                    ASSERT(getClientVersion() < ES_3_0 || formatMaxSamples >= 4);
+                    mCaps.maxSamples = formatMaxSamples;
+                }
+            }
+
+            // Handle GLES 3.1 MAX_*_SAMPLES values similarly to MAX_SAMPLES.
+            if (getClientVersion() >= ES_3_1)
+            {
+                // GLES 3.1 section 9.2.5: "Implementations must support creation of renderbuffers
+                // in these required formats with up to the value of MAX_SAMPLES multisamples, with
+                // the exception that the signed and unsigned integer formats are required only to
+                // support creation of renderbuffers with up to the value of MAX_INTEGER_SAMPLES
+                // multisamples, which must be at least one."
+                if (formatInfo.componentType == GL_INT ||
+                    formatInfo.componentType == GL_UNSIGNED_INT)
+                {
+                    if (mCaps.maxIntegerSamples > formatMaxSamples)
+                    {
+                        mCaps.maxIntegerSamples = formatMaxSamples;
+                    }
+                }
+
+                // GLES 3.1 section 19.3.1.
+                if (formatCaps.texturable)
+                {
+                    if (formatInfo.depthBits > 0)
+                    {
+                        if (mCaps.maxDepthTextureSamples > formatMaxSamples)
+                        {
+                            mCaps.maxDepthTextureSamples = formatMaxSamples;
+                        }
+                    }
+                    else if (formatInfo.redBits > 0)
+                    {
+                        if (mCaps.maxColorTextureSamples > formatMaxSamples)
+                        {
+                            mCaps.maxColorTextureSamples = formatMaxSamples;
+                        }
+                    }
+                }
+            }
         }
 
         if (formatCaps.texturable && formatInfo.compressed)
