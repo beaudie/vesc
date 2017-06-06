@@ -333,7 +333,7 @@ bool Image11::redefine(GLenum target,
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
         releaseStagingTexture();
-        mDirty = (formatInfo.dataInitializerFunction != nullptr);
+        mDirty = (formatInfo.dataInitializerFunction != nullptr) || mRenderer->isRobustResourceInitEnabled();
 
         return true;
     }
