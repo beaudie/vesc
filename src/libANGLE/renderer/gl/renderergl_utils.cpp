@@ -109,9 +109,34 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
             std::vector<GLint> samples(numSamples);
             functions->getInternalformativ(GL_RENDERBUFFER, internalFormat, GL_SAMPLES,
                                            static_cast<GLsizei>(samples.size()), &samples[0]);
+
+            GLenum queryInternalFormat = internalFormat;
+            if (internalFormat == GL_STENCIL_INDEX8)
+            {
+                // The query below does generates an error with STENCIL_INDEX8 on NVIDIA driver
+                // 382.33. So for now we assume that the same sampling modes are conformant for
+                // STENCIL_INDEX8 as for DEPTH24_STENCIL8. Clean this up once the driver is fixed.
+                // http://anglebug.com/2059
+                queryInternalFormat = GL_DEPTH24_STENCIL8;
+            }
             for (size_t sampleIndex = 0; sampleIndex < samples.size(); sampleIndex++)
             {
-                textureCaps.sampleCounts.insert(samples[sampleIndex]);
+                // Some NVIDIA drivers expose multisampling modes implemented as a combination of
+                // multisampling and supersampling. These are non-conformant and should not be
+                // exposed through ANGLE. Query which formats are conformant from the driver if
+                // supported.
+                GLint conformant = GL_TRUE;
+                if (functions->getInternalformatSampleivNV)
+                {
+                    functions->getInternalformatSampleivNV(GL_RENDERBUFFER, queryInternalFormat,
+                                                           samples[sampleIndex], GL_CONFORMANT_NV,
+                                                           1, &conformant);
+                    ASSERT(functions->getError() == GL_NO_ERROR);
+                }
+                if (conformant == GL_TRUE)
+                {
+                    textureCaps.sampleCounts.insert(samples[sampleIndex]);
+                }
             }
         }
     }
@@ -192,8 +217,8 @@ void GenerateCaps(const FunctionsGL *functions,
                   gl::Version *maxSupportedESVersion)
 {
     // Texture format support checks
-    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
-    for (GLenum internalFormat : allFormats)
+    const gl::FormatSet &allSizedFormats = gl::GetAllSizedInternalFormats();
+    for (GLenum internalFormat : allSizedFormats)
     {
         gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, internalFormat);
         textureCapsMap->insert(internalFormat, textureCaps);
@@ -548,6 +573,26 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_EXT_multisampled_render_to_texture"))
     {
         caps->maxSamples = QuerySingleGLInt(functions, GL_MAX_SAMPLES);
+
+        // We may have limited the max samples for some required renderbuffer formats due to
+        // non-conformant formats. In this case MAX_SAMPLES needs to be lowered accordingly. GLES
+        // 3.0.4 section 4.4: "Implementations must support creation of renderbuffers in these
+        // required formats with up to the value of MAX_SAMPLES multisamples, with the exception of
+        // signed and unsigned integer formats."
+        for (GLenum internalFormat : allSizedFormats)
+        {
+            auto &info = gl::GetSizedInternalFormatInfo(internalFormat);
+            if (info.componentType != GL_INT && info.componentType != GL_UNSIGNED_INT &&
+                info.es3RequiredRenderbufferFormat)
+            {
+                GLuint formatMaxSamples = textureCapsMap->get(internalFormat).getMaxSamples();
+                if (caps->maxSamples > formatMaxSamples)
+                {
+                    caps->maxSamples = formatMaxSamples;
+                    ASSERT(formatMaxSamples >= 4);
+                }
+            }
+        }
     }
     else
     {
@@ -624,6 +669,43 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxColorTextureSamples = QuerySingleGLInt(functions, GL_MAX_COLOR_TEXTURE_SAMPLES);
         caps->maxDepthTextureSamples = QuerySingleGLInt(functions, GL_MAX_DEPTH_TEXTURE_SAMPLES);
         caps->maxIntegerSamples      = QuerySingleGLInt(functions, GL_MAX_INTEGER_SAMPLES);
+
+        // We may have limited the max samples for some of the formats due to non-conformant
+        // formats. In this case MAX_*_SAMPLES needs to be lowered accordingly. See GLES 3.1 section
+        // 19.3.1.
+        const gl::Version gles31(3, 1);
+        for (GLenum internalFormat : allSizedFormats)
+        {
+            auto &info = gl::GetSizedInternalFormatInfo(internalFormat);
+            if (info.renderSupport(gles31, gl::Extensions()))
+            {
+                GLuint formatMaxSamples = textureCapsMap->get(internalFormat).getMaxSamples();
+                if (info.componentType == GL_INT || info.componentType == GL_UNSIGNED_INT)
+                {
+                    if (caps->maxIntegerSamples > formatMaxSamples)
+                    {
+                        caps->maxIntegerSamples = formatMaxSamples;
+                    }
+                }
+                if (info.textureSupport(gles31, gl::Extensions()))
+                {
+                    if (info.depthBits > 0)
+                    {
+                        if (caps->maxDepthTextureSamples > formatMaxSamples)
+                        {
+                            caps->maxDepthTextureSamples = formatMaxSamples;
+                        }
+                    }
+                    else if (info.redBits > 0)
+                    {
+                        if (caps->maxColorTextureSamples > formatMaxSamples)
+                        {
+                            caps->maxColorTextureSamples = formatMaxSamples;
+                        }
+                    }
+                }
+            }
+        }
     }
     else
     {
