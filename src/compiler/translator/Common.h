@@ -13,6 +13,7 @@
 #include <vector>
 #include <limits>
 #include <stdio.h>
+#include <unordered_map>
 
 #include "common/angleutils.h"
 #include "common/debug.h"
@@ -53,6 +54,16 @@ inline TString *NewPoolTString(const char *s)
     void *memory = GetGlobalPoolAllocator()->allocate(sizeof(TString));
     return new (memory) TString(s);
 }
+#ifdef __GLIBCXX__
+template <>
+struct hash<TString> : public __hash_bash<size_t, string>
+{
+    size_t operator()(const TString &__s) const noexcept
+    {
+        return std::_Hash_impl::hash(__s.data(), __s.length())
+    }
+};
+#endif
 
 //
 // Persistent string memory.  Should only be used for strings that survive
@@ -74,6 +85,23 @@ class TVector : public std::vector<T, pool_allocator<T>>
     TVector() : std::vector<T, pool_allocator<T>>() {}
     TVector(const pool_allocator<T> &a) : std::vector<T, pool_allocator<T>>(a) {}
     TVector(size_type i) : std::vector<T, pool_allocator<T>>(i) {}
+};
+
+template <class K, class D, class H = std::hash<K>, class CMP = std::equal_to<K>>
+class TUnorderedMap : public std::unordered_map<K, D, H, CMP, pool_allocator<std::pair<const K, D>>>
+{
+  public:
+    POOL_ALLOCATOR_NEW_DELETE();
+    typedef pool_allocator<std::pair<const K, D>> tAllocator;
+
+    TUnorderedMap() : std::unordered_map<K, D, H, CMP, tAllocator>() {}
+    // use correct two-stage name lookup supported in gcc 3.4 and above
+    TUnorderedMap(const tAllocator &a)
+        : std::unordered_map<K, D, H, CMP, tAllocator>(
+              std::unordered_map<K, D, H, CMP, tAllocator>::key_compare(),
+              a)
+    {
+    }
 };
 
 template <class K, class D, class CMP = std::less<K>>
