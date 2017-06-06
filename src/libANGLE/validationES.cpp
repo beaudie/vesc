@@ -619,8 +619,7 @@ bool ValidateDrawElementsInstancedBase(ValidationContext *context,
         return false;
     }
 
-    // No-op zero primitive count
-    return (primcount > 0);
+    return true;
 }
 
 bool ValidateDrawArraysInstancedBase(Context *context,
@@ -640,8 +639,7 @@ bool ValidateDrawArraysInstancedBase(Context *context,
         return false;
     }
 
-    // No-op if zero primitive count
-    return (primcount > 0);
+    return true;
 }
 
 bool ValidateDrawInstancedANGLE(ValidationContext *context)
@@ -2654,8 +2652,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         }
     }
 
-    // No-op if zero count
-    return (count > 0);
+    return true;
 }
 
 bool ValidateDrawArraysCommon(ValidationContext *context,
@@ -2689,20 +2686,22 @@ bool ValidateDrawArraysCommon(ValidationContext *context,
     }
 
     // Check the computation of maxVertex doesn't overflow.
-    // - first < 0 or count < 0 have been checked as an error condition
-    // - count > 0 has been checked in ValidateDrawBase as it makes the call a noop
+    // - ensure first >= 0 and count > 0, otherwise don't validate no-op/invalid calls.
     // From this we know maxVertex will be positive, and only need to check if it overflows GLint.
-    ASSERT(count > 0 && first >= 0);
-    int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
-    if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
+    ASSERT(first >= 0);
+    if (count > 0)
     {
-        ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
-        return false;
-    }
+        int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
+        if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
+            return false;
+        }
 
-    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex), count))
-    {
-        return false;
+        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex), count))
+        {
+            return false;
+        }
     }
 
     return true;
@@ -2875,13 +2874,23 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
                 return false;
             }
         }
-        else if (!indices)
+
+        uint64_t elementDataSizeWithOffset = elementDataSizeNoOffset + offset;
+        if (elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize()))
         {
             // This is an application error that would normally result in a crash,
             // but we catch it and return an error
             context->handleError(InvalidOperation() << "No element array buffer and no pointer.");
             return false;
         }
+    }
+    else if (!indices)
+    {
+        // This is an application error that would normally result in a crash,
+        // but we catch it and return an error
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "No element array buffer and no pointer."));
+        return false;
     }
 
     if (context->getExtensions().robustBufferAccessBehavior)
