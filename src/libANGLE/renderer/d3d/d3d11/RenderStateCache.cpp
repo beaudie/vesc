@@ -17,42 +17,10 @@
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
-#include "third_party/murmurhash/MurmurHash3.h"
 
 namespace rx
 {
 using namespace gl_d3d11;
-
-namespace
-{
-template <typename T>
-void TrimCache(unsigned int maxStates, unsigned int gcLimit, const char *name, T *cache)
-{
-    unsigned int kGarbageCollectionLimit = maxStates / 2 + gcLimit;
-
-    if (cache->size() >= kGarbageCollectionLimit)
-    {
-        WARN() << "Overflowed the limit of " << (maxStates / 2) << " " << name
-               << " states, removing the least recently used to make room.";
-        cache->ShrinkToSize(maxStates / 2);
-    }
-}
-}  // anonymous namespace
-
-template <typename T>
-std::size_t ComputeGenericHash(const T &key)
-{
-    static const unsigned int seed = 0xABCDEF98;
-
-    std::size_t hash = 0;
-    MurmurHash3_x86_32(&key, sizeof(key), seed, &hash);
-    return hash;
-}
-
-template std::size_t ComputeGenericHash(const rx::d3d11::BlendStateKey &);
-template std::size_t ComputeGenericHash(const rx::d3d11::RasterizerStateKey &);
-template std::size_t ComputeGenericHash(const gl::DepthStencilState &);
-template std::size_t ComputeGenericHash(const gl::SamplerState &);
 
 RenderStateCache::RenderStateCache()
     : mBlendStateCache(kMaxStates),
@@ -127,7 +95,7 @@ gl::Error RenderStateCache::getBlendState(Renderer11 *renderer,
         return gl::NoError();
     }
 
-    TrimCache(kMaxStates, kGCLimit, "blend", &mBlendStateCache);
+    TrimCache(kMaxStates, kGCLimit, "blend state", &mBlendStateCache);
 
     // Create a new blend state and insert it into the cache
     D3D11_BLEND_DESC blendDesc;
@@ -182,7 +150,7 @@ gl::Error RenderStateCache::getRasterizerState(Renderer11 *renderer,
         return gl::NoError();
     }
 
-    TrimCache(kMaxStates, kGCLimit, "rasterizer", &mRasterizerStateCache);
+    TrimCache(kMaxStates, kGCLimit, "rasterizer state", &mRasterizerStateCache);
 
     D3D11_CULL_MODE cullMode =
         gl_d3d11::ConvertCullMode(rasterState.cullFace, rasterState.cullMode);
@@ -234,7 +202,7 @@ gl::Error RenderStateCache::getDepthStencilState(Renderer11 *renderer,
         return gl::NoError();
     }
 
-    TrimCache(kMaxStates, kGCLimit, "depth stencil", &mDepthStencilStateCache);
+    TrimCache(kMaxStates, kGCLimit, "depth stencil state", &mDepthStencilStateCache);
 
     D3D11_DEPTH_STENCIL_DESC dsDesc     = {0};
     dsDesc.DepthEnable                  = glState.depthTest ? TRUE : FALSE;
@@ -271,7 +239,7 @@ gl::Error RenderStateCache::getSamplerState(Renderer11 *renderer,
         return gl::NoError();
     }
 
-    TrimCache(kMaxStates, kGCLimit, "sampler stencil", &mSamplerStateCache);
+    TrimCache(kMaxStates, kGCLimit, "sampler state", &mSamplerStateCache);
 
     const auto &featureLevel = renderer->getRenderer11DeviceCaps().featureLevel;
 

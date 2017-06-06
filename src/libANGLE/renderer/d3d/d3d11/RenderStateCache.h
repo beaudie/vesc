@@ -23,12 +23,6 @@ namespace gl
 class Framebuffer;
 }
 
-namespace rx
-{
-template <typename T>
-std::size_t ComputeGenericHash(const T &key);
-}  // namespace rx
-
 namespace std
 {
 template <>
@@ -36,7 +30,7 @@ struct hash<rx::d3d11::BlendStateKey>
 {
     size_t operator()(const rx::d3d11::BlendStateKey &key) const
     {
-        return rx::ComputeGenericHash(key);
+        return angle::ComputeGenericHash(key);
     }
 };
 
@@ -45,7 +39,7 @@ struct hash<rx::d3d11::RasterizerStateKey>
 {
     size_t operator()(const rx::d3d11::RasterizerStateKey &key) const
     {
-        return rx::ComputeGenericHash(key);
+        return angle::ComputeGenericHash(key);
     }
 };
 
@@ -54,14 +48,14 @@ struct hash<gl::DepthStencilState>
 {
     size_t operator()(const gl::DepthStencilState &key) const
     {
-        return rx::ComputeGenericHash(key);
+        return angle::ComputeGenericHash(key);
     }
 };
 
 template <>
 struct hash<gl::SamplerState>
 {
-    size_t operator()(const gl::SamplerState &key) const { return rx::ComputeGenericHash(key); }
+    size_t operator()(const gl::SamplerState &key) const { return angle::ComputeGenericHash(key); }
 };
 }  // namespace std
 
