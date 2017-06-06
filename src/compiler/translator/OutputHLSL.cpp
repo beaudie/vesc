@@ -113,6 +113,9 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mUsesFrontFacing             = false;
     mUsesPointSize               = false;
     mUsesInstanceID              = false;
+    mHasMultiviewExtensionEnabled = IsExtensionEnabled(mExtensionBehavior, "GL_OVR_multiview") ||
+                                    IsExtensionEnabled(mExtensionBehavior, "GL_OVR_multiview2");
+    mUsesViewID                  = false;
     mUsesVertexID                = false;
     mUsesFragDepth               = false;
     mUsesNumWorkGroups           = false;
@@ -716,6 +719,16 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
         out << "#define GL_USES_POINT_SIZE\n";
     }
 
+    if (mHasMultiviewExtensionEnabled)
+    {
+        out << "#define GL_ANGLE_MULTIVIEW_ENABLED\n";
+    }
+
+    if (mUsesViewID)
+    {
+        out << "#define GL_USES_VIEW_ID\n";
+    }
+
     if (mUsesFragDepth)
     {
         out << "#define GL_USES_FRAG_DEPTH\n";
@@ -812,6 +825,10 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         {
             mReferencedVaryings[name] = node;
             out << Decorate(name);
+            if (name == "ViewID_OVR")
+            {
+                mUsesViewID = true;
+            }
         }
         else if (qualifier == EvqFragmentOut)
         {
