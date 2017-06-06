@@ -1340,8 +1340,7 @@ bool ValidateES2TexImageParameters(Context *context,
         }
     }
 
-    if (!ValidImageDataSize(context, target, width, height, 1, internalformat, type, pixels,
-                            imageSize))
+    if (!ValidImageDataSize(context, target, width, height, 1, format, type, pixels, imageSize))
     {
         return false;
     }
