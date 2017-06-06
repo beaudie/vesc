@@ -123,6 +123,8 @@ struct InternalFormat
     SupportCheckFunction textureSupport;
     SupportCheckFunction renderSupport;
     SupportCheckFunction filterSupport;
+
+    bool es3RequiredRenderbufferFormat;
 };
 
 // A "Format" wraps an InternalFormat struct, querying it from either a sized internal format or
@@ -160,6 +162,7 @@ GLenum GetUnsizedFormat(GLenum internalFormat);
 
 typedef std::set<GLenum> FormatSet;
 const FormatSet &GetAllSizedInternalFormats();
+const FormatSet &GetES3RequiredRenderbufferMultisampleFormats();
 
 // From the ESSL 3.00.4 spec:
 // Vertex shader inputs can only be float, floating-point vectors, matrices, signed and unsigned
