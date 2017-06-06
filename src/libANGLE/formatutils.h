@@ -123,6 +123,8 @@ struct InternalFormat
     SupportCheckFunction textureSupport;
     SupportCheckFunction renderSupport;
     SupportCheckFunction filterSupport;
+
+    bool es3RequiredRenderbufferFormat;
 };
 
 // A "Format" wraps an InternalFormat struct, querying it from either a sized internal format or
