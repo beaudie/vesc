@@ -172,6 +172,8 @@ class OutputHLSL : public TIntermTraverser
     bool mUsesFrontFacing;
     bool mUsesPointSize;
     bool mUsesInstanceID;
+    bool mHasMultiviewExtensionEnabled;
+    bool mUsesViewID;
     bool mUsesVertexID;
     bool mUsesFragDepth;
     bool mUsesNumWorkGroups;
