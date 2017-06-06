@@ -1176,7 +1176,7 @@ bool ValidImageDataSize(ValidationContext *context,
                         GLsizei width,
                         GLsizei height,
                         GLsizei depth,
-                        GLenum internalFormat,
+                        GLenum format,
                         GLenum type,
                         const void *pixels,
                         GLsizei imageSize)
@@ -1190,7 +1190,7 @@ bool ValidImageDataSize(ValidationContext *context,
 
     // ...the data would be unpacked from the buffer object such that the memory reads required
     // would exceed the data store size.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
     const gl::Extents size(width, height, depth);
     const auto &unpack = context->getGLState().getUnpackState();
 
