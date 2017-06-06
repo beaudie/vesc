@@ -111,7 +111,20 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
                                            static_cast<GLsizei>(samples.size()), &samples[0]);
             for (size_t sampleIndex = 0; sampleIndex < samples.size(); sampleIndex++)
             {
-                textureCaps.sampleCounts.insert(samples[sampleIndex]);
+                GLint conformant = GL_TRUE;
+                // Some NVIDIA drivers expose multisampling modes implemented as a combination of
+                // multisampling and supersampling. These are non-conformant and should not be
+                // exposed through ANGLE.
+                if (functions->getInternalformatSampleivNV)
+                {
+                    functions->getInternalformatSampleivNV(GL_RENDERBUFFER, internalFormat,
+                                                           samples[sampleIndex], GL_CONFORMANT_NV,
+                                                           1, &conformant);
+                }
+                if (conformant == GL_TRUE)
+                {
+                    textureCaps.sampleCounts.insert(samples[sampleIndex]);
+                }
             }
         }
     }
@@ -548,6 +561,22 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_EXT_multisampled_render_to_texture"))
     {
         caps->maxSamples = QuerySingleGLInt(functions, GL_MAX_SAMPLES);
+
+        // We may have limited the max samples for some required renderbuffer formats due to
+        // non-conformant formats. GLES 3.0.4 section 4.4: "Implementations must support creation of
+        // renderbuffers in these required formats with up to the value of MAX_SAMPLES multisamples,
+        // with the exception of signed and unsigned integer formats."
+        const gl::FormatSet &requiredRenderBufferFormats =
+            gl::GetES3RequiredRenderbufferMultisampleFormats();
+        for (GLenum internalFormat : requiredRenderBufferFormats)
+        {
+            GLuint formatMaxSamples = textureCapsMap->get(internalFormat).getMaxSamples();
+            if (caps->maxSamples > formatMaxSamples)
+            {
+                caps->maxSamples = formatMaxSamples;
+                ASSERT(formatMaxSamples >= 4);
+            }
+        }
     }
     else
     {
