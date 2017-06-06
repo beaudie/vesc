@@ -634,5 +634,5 @@ TEST_P(MultiviewSideBySideRenderTest, DrawArraysInstanced)
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL(), ES31_D3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());

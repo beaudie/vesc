@@ -122,6 +122,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     bool usesPointSize() const;
     bool usesInsertedPointCoordValue() const;
     bool usesViewScale() const;
+    bool usesViewID() const;
     bool addsPointCoordToVertexShader() const;
     bool usesTransformFeedbackGLPosition() const;
     bool usesSystemValuePointSize() const;
@@ -134,6 +135,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     const std::string mShaderModelSuffix;
     const bool mUsesInstancedPointSpriteEmulation;
     const bool mUsesViewScale;
+    const bool mUsesViewID;
     const ShaderD3D *mVertexShader;
     const ShaderD3D *mFragmentShader;
 };
@@ -156,6 +158,7 @@ class ProgramD3D : public ProgramImpl
     bool usesPointSize() const { return mUsesPointSize; }
     bool usesPointSpriteEmulation() const;
     bool usesGeometryShader(GLenum drawMode) const;
+    bool usesGeometryShaderForPointSpriteEmulation() const;
     bool usesInstancedPointSpriteEmulation() const;
 
     gl::LinkResult load(const gl::Context *context,
@@ -398,6 +401,7 @@ class ProgramD3D : public ProgramImpl
     std::string mPixelHLSL;
     angle::CompilerWorkaroundsD3D mPixelWorkarounds;
     bool mUsesFragDepth;
+    bool mUsesViewID;
     std::vector<PixelShaderOutputVariable> mPixelShaderKey;
 
     // Common code for all dynamic geometry shaders. Consists mainly of the GS input and output

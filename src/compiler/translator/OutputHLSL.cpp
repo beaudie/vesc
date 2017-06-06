@@ -113,6 +113,8 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mUsesFrontFacing             = false;
     mUsesPointSize               = false;
     mUsesInstanceID              = false;
+    mUsesViewID                  = IsExtensionEnabled(mExtensionBehavior, "GL_OVR_multiview") ||
+                  IsExtensionEnabled(mExtensionBehavior, "GL_OVR_multiview2");
     mUsesVertexID                = false;
     mUsesFragDepth               = false;
     mUsesNumWorkGroups           = false;
@@ -696,6 +698,11 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
     if (mUsesPointSize)
     {
         out << "#define GL_USES_POINT_SIZE\n";
+    }
+
+    if (mUsesViewID)
+    {
+        out << "#define GL_USES_VIEW_ID\n";
     }
 
     if (mUsesFragDepth)

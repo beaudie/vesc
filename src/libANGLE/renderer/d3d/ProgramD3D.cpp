@@ -343,6 +343,7 @@ ProgramD3DMetadata::ProgramD3DMetadata(RendererD3D *renderer,
       mUsesInstancedPointSpriteEmulation(
           renderer->getWorkarounds().useInstancedPointSpriteEmulation),
       mUsesViewScale(renderer->presentPathFastEnabled()),
+      mUsesViewID(vertexShader->usesViewID()),
       mVertexShader(vertexShader),
       mFragmentShader(fragmentShader)
 {
@@ -388,6 +389,11 @@ bool ProgramD3DMetadata::usesInsertedPointCoordValue() const
 bool ProgramD3DMetadata::usesViewScale() const
 {
     return mUsesViewScale;
+}
+
+bool ProgramD3DMetadata::usesViewID() const
+{
+    return mUsesViewID;
 }
 
 bool ProgramD3DMetadata::addsPointCoordToVertexShader() const
@@ -549,14 +555,22 @@ bool ProgramD3D::usesPointSpriteEmulation() const
     return mUsesPointSize && mRenderer->getMajorShaderModel() >= 4;
 }
 
+bool ProgramD3D::usesGeometryShaderForPointSpriteEmulation() const
+{
+    return usesPointSpriteEmulation() && !usesInstancedPointSpriteEmulation();
+}
+
 bool ProgramD3D::usesGeometryShader(GLenum drawMode) const
 {
+    if (mUsesViewID)
+    {
+        return true;
+    }
     if (drawMode != GL_POINTS)
     {
         return mUsesFlatInterpolation;
     }
-
-    return usesPointSpriteEmulation() && !usesInstancedPointSpriteEmulation();
+    return usesGeometryShaderForPointSpriteEmulation();
 }
 
 bool ProgramD3D::usesInstancedPointSpriteEmulation() const
@@ -843,6 +857,7 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
     stream->readBytes(reinterpret_cast<unsigned char *>(&mPixelWorkarounds),
                       sizeof(angle::CompilerWorkaroundsD3D));
     stream->readBool(&mUsesFragDepth);
+    stream->readBool(&mUsesViewID);
     stream->readBool(&mUsesPointSize);
     stream->readBool(&mUsesFlatInterpolation);
 
@@ -1066,6 +1081,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     stream->writeBytes(reinterpret_cast<unsigned char *>(&mPixelWorkarounds),
                        sizeof(angle::CompilerWorkaroundsD3D));
     stream->writeInt(mUsesFragDepth);
+    stream->writeInt(mUsesViewID);
     stream->writeInt(mUsesPointSize);
     stream->writeInt(mUsesFlatInterpolation);
 
@@ -1268,8 +1284,8 @@ gl::Error ProgramD3D::getGeometryExecutableForPrimitiveType(const gl::ContextSta
     }
 
     std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(
-        geometryShaderType, data, mState, mRenderer->presentPathFastEnabled(),
-        mGeometryShaderPreamble);
+        geometryShaderType, data, mState, mRenderer->presentPathFastEnabled(), mUsesViewID,
+        usesGeometryShaderForPointSpriteEmulation(), mGeometryShaderPreamble);
 
     gl::InfoLog tempInfoLog;
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
@@ -1558,6 +1574,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         mUsesPointSize = vertexShaderD3D->usesPointSize();
         mDynamicHLSL->getPixelShaderOutputKey(data, mState, metadata, &mPixelShaderKey);
         mUsesFragDepth = metadata.usesFragDepth();
+        mUsesViewID    = metadata.usesViewID();
 
         // Cache if we use flat shading
         mUsesFlatInterpolation =
@@ -1567,7 +1584,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         if (mRenderer->getMajorShaderModel() >= 4)
         {
             mGeometryShaderPreamble =
-                mDynamicHLSL->generateGeometryShaderPreamble(packing, builtins);
+                mDynamicHLSL->generateGeometryShaderPreamble(packing, builtins, mUsesViewID);
         }
 
         initAttribLocationsToD3DSemantic(context);
@@ -2331,6 +2348,7 @@ void ProgramD3D::reset()
     mPixelHLSL.clear();
     mPixelWorkarounds = angle::CompilerWorkaroundsD3D();
     mUsesFragDepth = false;
+    mUsesViewID       = false;
     mPixelShaderKey.clear();
     mUsesPointSize = false;
     mUsesFlatInterpolation = false;
