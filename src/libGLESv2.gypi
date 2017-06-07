@@ -113,6 +113,8 @@
         [
             'common/event_tracer.cpp',
             'common/event_tracer.h',
+            'common/third_party/murmurhash/MurmurHash3.cpp',
+            'common/third_party/murmurhash/MurmurHash3.h',
             'libANGLE/AttributeMap.cpp',
             'libANGLE/AttributeMap.h',
             'libANGLE/BinaryStream.h',
@@ -262,8 +264,6 @@
             'libANGLE/validationES3.h',
             'libANGLE/validationES31.cpp',
             'libANGLE/validationES31.h',
-            'third_party/murmurhash/MurmurHash3.cpp',
-            'third_party/murmurhash/MurmurHash3.h',
             'third_party/trace_event/trace_event.h',
             'third_party/mrucache/base/containers/mru_cache.h',
             'third_party/mrucache/base/logging.h',
