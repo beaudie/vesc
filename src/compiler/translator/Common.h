@@ -16,6 +16,7 @@
 
 #include "common/angleutils.h"
 #include "common/debug.h"
+#include "common/third_party/murmurhash/MurmurHash3.h"
 #include "compiler/translator/PoolAlloc.h"
 
 namespace sh
