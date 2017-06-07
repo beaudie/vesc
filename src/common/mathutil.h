@@ -1090,8 +1090,7 @@ angle::CheckedNumeric<T> CheckedRoundUp(const T value, const T alignment)
 
 inline unsigned int UnsignedCeilDivide(unsigned int value, unsigned int divisor)
 {
-    unsigned int divided = value / divisor;
-    return (divided + ((value % divisor == 0) ? 0 : 1));
+    return (value + divisor - 1u) / divisor;
 }
 
 #if defined(_MSC_VER)

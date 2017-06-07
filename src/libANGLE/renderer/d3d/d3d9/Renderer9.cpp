@@ -3035,14 +3035,15 @@ gl::ErrorOrResult<unsigned int> Renderer9::getVertexSpaceRequired(const gl::Vert
         d3d9::GetVertexFormatInfo(getCapsDeclTypes(), vertexFormatType);
 
     unsigned int elementCount = 0;
-    if (instances == 0 || binding.divisor == 0)
+    if (instances == 0 || binding.getDivisor() == 0)
     {
         elementCount = static_cast<unsigned int>(count);
     }
     else
     {
         // Round up to divisor, if possible
-        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), binding.divisor);
+        elementCount =
+            UnsignedCeilDivide(static_cast<unsigned int>(instances), binding.getDivisor());
     }
 
     if (d3d9VertexInfo.outputElementSize > std::numeric_limits<unsigned int>::max() / elementCount)
