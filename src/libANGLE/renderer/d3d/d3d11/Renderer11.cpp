@@ -4528,14 +4528,15 @@ gl::ErrorOrResult<unsigned int> Renderer11::getVertexSpaceRequired(
     }
 
     unsigned int elementCount = 0;
-    if (instances == 0 || binding.divisor == 0)
+    unsigned int divisor      = binding.getDivisor();
+    if (instances == 0 || divisor == 0)
     {
         elementCount = count;
     }
     else
     {
         // Round up to divisor, if possible
-        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), binding.divisor);
+        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), divisor);
     }
 
     gl::VertexFormatType formatType      = gl::GetVertexFormatType(attrib);
