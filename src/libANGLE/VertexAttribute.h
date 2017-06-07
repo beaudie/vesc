@@ -16,14 +16,30 @@ namespace gl
 class VertexArray;
 
 //
-// Implementation of Generic Vertex Attribute Bindings for ES3.1
+// Implementation of Generic Vertex Attribute Bindings for ES3.1. The members are intentionally made
+// private in order to hide implementation details.
 //
-struct VertexBinding final : private angle::NonCopyable
+class VertexBinding final : private angle::NonCopyable
 {
+  public:
     VertexBinding();
     explicit VertexBinding(VertexBinding &&binding);
     VertexBinding &operator=(VertexBinding &&binding);
 
+    GLuint getStride() const { return stride; }
+    void setStride(GLuint strideIn) { stride = strideIn; }
+
+    GLuint getDivisor() const { return divisor; }
+    void setDivisor(GLuint divisorIn) { divisor = divisorIn; }
+
+    GLintptr getOffset() const { return offset; }
+    void setOffset(GLintptr offsetIn) { offset = offsetIn; }
+
+    const BindingPointer<Buffer> &getBuffer() const { return buffer; }
+    BindingPointer<Buffer> &getBuffer() { return buffer; }
+    void setBuffer(const BindingPointer<Buffer> &bufferIn) { buffer = bufferIn; }
+
+  private:
     GLuint stride;
     GLuint divisor;
     GLintptr offset;

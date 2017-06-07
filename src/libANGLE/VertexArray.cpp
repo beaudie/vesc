@@ -30,7 +30,7 @@ VertexArrayState::~VertexArrayState()
 {
     for (auto &binding : mVertexBindings)
     {
-        binding.buffer.set(nullptr);
+        binding.getBuffer().set(nullptr);
     }
     mElementArrayBuffer.set(nullptr);
 }
@@ -69,9 +69,10 @@ void VertexArray::detachBuffer(GLuint bufferName)
 {
     for (auto &binding : mState.mVertexBindings)
     {
-        if (binding.buffer.id() == bufferName)
+        auto &buffer = binding.getBuffer();
+        if (buffer.id() == bufferName)
         {
-            binding.buffer.set(nullptr);
+            buffer.set(nullptr);
         }
     }
 
@@ -110,9 +111,9 @@ void VertexArray::bindVertexBuffer(size_t bindingIndex,
 
     VertexBinding *binding = &mState.mVertexBindings[bindingIndex];
 
-    binding->buffer.set(boundBuffer);
-    binding->offset = offset;
-    binding->stride = stride;
+    binding->getBuffer().set(boundBuffer);
+    binding->setOffset(offset);
+    binding->setStride(stride);
     mDirtyBits.set(DIRTY_BIT_BINDING_0_BUFFER + bindingIndex);
 }
 
@@ -128,7 +129,7 @@ void VertexArray::setVertexBindingDivisor(size_t bindingIndex, GLuint divisor)
 {
     ASSERT(bindingIndex < getMaxBindings());
 
-    mState.mVertexBindings[bindingIndex].divisor = divisor;
+    mState.mVertexBindings[bindingIndex].setDivisor(divisor);
     mDirtyBits.set(DIRTY_BIT_BINDING_0_DIVISOR + bindingIndex);
 }
 
