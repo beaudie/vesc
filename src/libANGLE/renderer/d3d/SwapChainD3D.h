@@ -22,6 +22,11 @@
 #define ANGLE_FORCE_VSYNC_OFF 0
 #endif
 
+namespace egl
+{
+class Thread;
+}  // namespace egl
+
 namespace rx
 {
 class RenderTargetD3D;
@@ -35,9 +40,18 @@ class SwapChainD3D : angle::NonCopyable
                  GLenum depthBufferFormat);
     virtual ~SwapChainD3D();
 
-    virtual EGLint resize(EGLint backbufferWidth, EGLint backbufferSize) = 0;
-    virtual EGLint reset(EGLint backbufferWidth, EGLint backbufferHeight, EGLint swapInterval) = 0;
-    virtual EGLint swapRect(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
+    virtual EGLint resize(const egl::Thread *thread,
+                          EGLint backbufferWidth,
+                          EGLint backbufferSize) = 0;
+    virtual EGLint reset(const egl::Thread *thread,
+                         EGLint backbufferWidth,
+                         EGLint backbufferHeight,
+                         EGLint swapInterval) = 0;
+    virtual EGLint swapRect(const egl::Thread *thread,
+                            EGLint x,
+                            EGLint y,
+                            EGLint width,
+                            EGLint height) = 0;
     virtual void recreate() = 0;
 
     virtual RenderTargetD3D *getColorRenderTarget() = 0;

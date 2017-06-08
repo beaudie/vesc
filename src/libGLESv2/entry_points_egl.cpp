@@ -275,7 +275,7 @@ EGLSurface EGLAPIENTRY CreateWindowSurface(EGLDisplay dpy,
     }
 
     egl::Surface *surface = nullptr;
-    error                 = display->createWindowSurface(configuration, win, attributes, &surface);
+    error = display->createWindowSurface(thread, configuration, win, attributes, &surface);
     if (error.isError())
     {
         thread->setError(error);
@@ -307,7 +307,7 @@ EGLSurface EGLAPIENTRY CreatePbufferSurface(EGLDisplay dpy,
     }
 
     egl::Surface *surface = nullptr;
-    error                 = display->createPbufferSurface(configuration, attributes, &surface);
+    error = display->createPbufferSurface(thread, configuration, attributes, &surface);
     if (error.isError())
     {
         thread->setError(error);
@@ -530,7 +530,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy,
     }
 
     gl::Context *context = nullptr;
-    error = display->createContext(configuration, sharedGLContext, attributes, &context);
+    error = display->createContext(thread, configuration, sharedGLContext, attributes, &context);
     if (error.isError())
     {
         thread->setError(error);
@@ -704,7 +704,7 @@ EGLBoolean EGLAPIENTRY WaitGL(void)
 
     // eglWaitGL like calling eglWaitClient with the OpenGL ES API bound. Since we only implement
     // OpenGL ES we can do the call directly.
-    error = display->waitClient();
+    error = display->waitClient(thread);
     if (error.isError())
     {
         thread->setError(error);
@@ -734,7 +734,7 @@ EGLBoolean EGLAPIENTRY WaitNative(EGLint engine)
         thread->setError(EglBadParameter() << "the 'engine' parameter has an unrecognized value");
     }
 
-    error = display->waitNative(engine, thread->getDrawSurface(), thread->getReadSurface());
+    error = display->waitNative(thread, engine);
     if (error.isError())
     {
         thread->setError(error);
@@ -772,7 +772,7 @@ EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
         return EGL_FALSE;
     }
 
-    error = eglSurface->swap(*display);
+    error = eglSurface->swap(thread);
     if (error.isError())
     {
         thread->setError(error);
@@ -1048,8 +1048,8 @@ EGLSurface EGLAPIENTRY CreatePbufferFromClientBuffer(EGLDisplay dpy,
     }
 
     egl::Surface *surface = nullptr;
-    error = display->createPbufferFromClientBuffer(configuration, buftype, buffer, attributes,
-                                                   &surface);
+    error = display->createPbufferFromClientBuffer(thread, configuration, buftype, buffer,
+                                                   attributes, &surface);
     if (error.isError())
     {
         thread->setError(error);
@@ -1084,7 +1084,7 @@ EGLBoolean EGLAPIENTRY WaitClient(void)
         return EGL_FALSE;
     }
 
-    error = display->waitClient();
+    error = display->waitClient(thread);
     if (error.isError())
     {
         thread->setError(error);

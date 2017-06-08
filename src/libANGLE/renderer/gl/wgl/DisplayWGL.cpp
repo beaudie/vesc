@@ -518,7 +518,7 @@ bool DisplayWGL::testDeviceLost()
     return false;
 }
 
-egl::Error DisplayWGL::restoreLostDevice()
+egl::Error DisplayWGL::restoreLostDevice(const egl::Thread *thread)
 {
     return egl::EglBadDisplay();
 }
@@ -624,15 +624,13 @@ void DisplayWGL::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
-egl::Error DisplayWGL::waitClient() const
+egl::Error DisplayWGL::waitClient(const egl::Thread *thread) const
 {
     // Unimplemented as this is not needed for WGL
     return egl::NoError();
 }
 
-egl::Error DisplayWGL::waitNative(EGLint engine,
-                                  egl::Surface *drawSurface,
-                                  egl::Surface *readSurface) const
+egl::Error DisplayWGL::waitNative(const egl::Thread *thread, EGLint engine) const
 {
     // Unimplemented as this is not needed for WGL
     return egl::NoError();
