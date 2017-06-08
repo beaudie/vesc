@@ -55,7 +55,7 @@ PbufferSurfaceCGL::~PbufferSurfaceCGL()
     }
 }
 
-egl::Error PbufferSurfaceCGL::initialize(const egl::Display *display)
+egl::Error PbufferSurfaceCGL::initialize(const egl::Thread *thread)
 {
     mFunctions->genRenderbuffers(1, &mColorRenderbuffer);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbuffer);
@@ -80,12 +80,16 @@ egl::Error PbufferSurfaceCGL::makeCurrent()
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceCGL::swap(const egl::Display *display)
+egl::Error PbufferSurfaceCGL::swap(const egl::Thread *thread)
 {
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceCGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error PbufferSurfaceCGL::postSubBuffer(const egl::Thread *thread,
+                                            EGLint x,
+                                            EGLint y,
+                                            EGLint width,
+                                            EGLint height)
 {
     return egl::NoError();
 }

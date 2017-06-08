@@ -42,7 +42,7 @@ PbufferSurfaceGLX::~PbufferSurfaceGLX()
     }
 }
 
-egl::Error PbufferSurfaceGLX::initialize(const egl::Display *display)
+egl::Error PbufferSurfaceGLX::initialize(const egl::Thread *thread)
 {
     // Avoid creating 0-sized PBuffers as it fails on the Intel Mesa driver
     // as commented on https://bugs.freedesktop.org/show_bug.cgi?id=38869 so we
@@ -82,12 +82,16 @@ egl::Error PbufferSurfaceGLX::makeCurrent()
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceGLX::swap(const egl::Display *display)
+egl::Error PbufferSurfaceGLX::swap(const egl::Thread *thread)
 {
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceGLX::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error PbufferSurfaceGLX::postSubBuffer(const egl::Thread *thread,
+                                            EGLint x,
+                                            EGLint y,
+                                            EGLint width,
+                                            EGLint height)
 {
     return egl::NoError();
 }
