@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -66,7 +67,7 @@ OffscreenSurfaceVk::~OffscreenSurfaceVk()
 {
 }
 
-egl::Error OffscreenSurfaceVk::initialize(const egl::Display *display)
+egl::Error OffscreenSurfaceVk::initialize(const egl::Thread *thread)
 {
     return egl::NoError();
 }
@@ -77,12 +78,13 @@ FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Framebuf
     return FramebufferVk::CreateUserFBO(state);
 }
 
-egl::Error OffscreenSurfaceVk::swap(const egl::Display *display)
+egl::Error OffscreenSurfaceVk::swap(const egl::Thread *thread)
 {
     return egl::NoError();
 }
 
-egl::Error OffscreenSurfaceVk::postSubBuffer(EGLint /*x*/,
+egl::Error OffscreenSurfaceVk::postSubBuffer(const egl::Thread * /*thread*/,
+                                             EGLint /*x*/,
                                              EGLint /*y*/,
                                              EGLint /*width*/,
                                              EGLint /*height*/)
@@ -212,9 +214,9 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     }
 }
 
-egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
+egl::Error WindowSurfaceVk::initialize(const egl::Thread *thread)
 {
-    const DisplayVk *displayVk = GetImplAs<DisplayVk>(display);
+    const DisplayVk *displayVk = GetImplAs<DisplayVk>(thread->getDisplay());
     return initializeImpl(displayVk->getRenderer()).toEGL(EGL_BAD_SURFACE);
 }
 
@@ -414,9 +416,9 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Framebuffer
     return FramebufferVk::CreateDefaultFBO(state, this);
 }
 
-egl::Error WindowSurfaceVk::swap(const egl::Display *display)
+egl::Error WindowSurfaceVk::swap(const egl::Thread *thread)
 {
-    const DisplayVk *displayVk = GetImplAs<DisplayVk>(display);
+    const DisplayVk *displayVk = GetImplAs<DisplayVk>(thread->getDisplay());
     return swapImpl(displayVk->getRenderer()).toEGL(EGL_BAD_ALLOC);
 }
 
@@ -467,7 +469,11 @@ vk::Error WindowSurfaceVk::nextSwapchainImage(RendererVk *renderer)
     return vk::NoError();
 }
 
-egl::Error WindowSurfaceVk::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error WindowSurfaceVk::postSubBuffer(const egl::Thread *thread,
+                                          EGLint x,
+                                          EGLint y,
+                                          EGLint width,
+                                          EGLint height)
 {
     // TODO(jmadill)
     return egl::NoError();
