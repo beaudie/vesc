@@ -10,10 +10,11 @@
 
 #include <EGL/eglext.h>
 
+#include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
-#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 #include "third_party/trace_event/trace_event.h"
@@ -806,8 +807,11 @@ EGLint SwapChain11::copyOffscreenToBackbuffer(const egl::Display *display,
     deviceContext->PSSetShader(mPassThroughPS.get(), nullptr, 0);
     deviceContext->GSSetShader(nullptr, nullptr, 0);
 
+    const gl::Context *context = thread->getContext();
+    ASSERT(context);
+
     // Apply render targets
-    stateManager->setOneTimeRenderTarget(mBackBufferRTView.get(), nullptr);
+    stateManager->setOneTimeRenderTarget(context, mBackBufferRTView.get(), nullptr);
 
     // Set the viewport
     D3D11_VIEWPORT viewport;
@@ -833,7 +837,7 @@ EGLint SwapChain11::copyOffscreenToBackbuffer(const egl::Display *display,
     // cleanup is caught under the current eglSwapBuffers() PIX/Graphics Diagnostics call rather than the next one.
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
 
-    mRenderer->markAllStateDirty();
+    mRenderer->markAllStateDirty(context);
 
     return EGL_SUCCESS;
 }
@@ -883,7 +887,9 @@ EGLint SwapChain11::present(const egl::Display *display,
 
     // Some swapping mechanisms such as DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL unbind the current render
     // target.  Mark it dirty.
-    mRenderer->getStateManager()->invalidateRenderTarget();
+    const gl::Context *context = thread->getContext();
+    ASSERT(context);
+    mRenderer->getStateManager()->invalidateRenderTarget(context);
 
     if (result == DXGI_ERROR_DEVICE_REMOVED)
     {
