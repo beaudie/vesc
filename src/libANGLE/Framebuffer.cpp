@@ -418,6 +418,16 @@ bool FramebufferState::colorAttachmentsAreUniqueImages() const
     return true;
 }
 
+bool FramebufferState::hasDepth() const
+{
+    return (mDepthAttachment.isAttached() && mDepthAttachment.getDepthSize() > 0);
+}
+
+bool FramebufferState::hasStencil() const
+{
+    return (mStencilAttachment.isAttached() && mStencilAttachment.getStencilSize() > 0);
+}
+
 Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id)
     : mState(caps),
       mImpl(factory->createFramebuffer(mState)),
@@ -711,13 +721,12 @@ size_t Framebuffer::getNumColorBuffers() const
 
 bool Framebuffer::hasDepth() const
 {
-    return (mState.mDepthAttachment.isAttached() && mState.mDepthAttachment.getDepthSize() > 0);
+    return mState.hasDepth();
 }
 
 bool Framebuffer::hasStencil() const
 {
-    return (mState.mStencilAttachment.isAttached() &&
-            mState.mStencilAttachment.getStencilSize() > 0);
+    return mState.hasStencil();
 }
 
 bool Framebuffer::usingExtendedDrawBuffers() const
