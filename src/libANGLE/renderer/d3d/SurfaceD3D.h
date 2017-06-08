@@ -28,11 +28,15 @@ class SurfaceD3D : public SurfaceImpl
     ~SurfaceD3D() override;
     void releaseSwapChain();
 
-    egl::Error initialize(const egl::Display *display) override;
+    egl::Error initialize(const egl::Thread *thread) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
 
-    egl::Error swap(const egl::Display *display) override;
-    egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
+    egl::Error swap(const egl::Thread *thread) override;
+    egl::Error postSubBuffer(const egl::Thread *thread,
+                             EGLint x,
+                             EGLint y,
+                             EGLint width,
+                             EGLint height) override;
     egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
     egl::Error bindTexImage(gl::Texture *texture, EGLint buffer) override;
     egl::Error releaseTexImage(EGLint buffer) override;
@@ -48,10 +52,10 @@ class SurfaceD3D : public SurfaceImpl
     // D3D implementations
     SwapChainD3D *getSwapChain() const;
 
-    egl::Error resetSwapChain();
+    egl::Error resetSwapChain(const egl::Thread *thread);
 
     // Returns true if swapchain changed due to resize or interval update
-    bool checkForOutOfDateSwapChain();
+    bool checkForOutOfDateSwapChain(const egl::Thread *thread);
 
     gl::Error getAttachmentRenderTarget(GLenum binding,
                                         const gl::ImageIndex &imageIndex,
@@ -66,9 +70,11 @@ class SurfaceD3D : public SurfaceImpl
                EGLClientBuffer clientBuffer,
                const egl::AttributeMap &attribs);
 
-    egl::Error swapRect(EGLint x, EGLint y, EGLint width, EGLint height);
-    egl::Error resetSwapChain(int backbufferWidth, int backbufferHeight);
-    egl::Error resizeSwapChain(int backbufferWidth, int backbufferHeight);
+    egl::Error swapRect(const egl::Thread *thread, EGLint x, EGLint y, EGLint width, EGLint height);
+    egl::Error resetSwapChain(const egl::Thread *thread, int backbufferWidth, int backbufferHeight);
+    egl::Error resizeSwapChain(const egl::Thread *thread,
+                               int backbufferWidth,
+                               int backbufferHeight);
 
     RendererD3D *mRenderer;
     egl::Display *mDisplay;

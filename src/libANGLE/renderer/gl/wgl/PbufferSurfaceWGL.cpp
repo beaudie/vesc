@@ -72,7 +72,7 @@ static int GetWGLTextureTarget(EGLenum eglTextureTarget)
     }
 }
 
-egl::Error PbufferSurfaceWGL::initialize(const egl::Display *display)
+egl::Error PbufferSurfaceWGL::initialize(const egl::Thread *thread)
 {
     const int pbufferCreationAttributes[] =
     {
@@ -125,12 +125,16 @@ egl::Error PbufferSurfaceWGL::makeCurrent()
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceWGL::swap(const egl::Display *display)
+egl::Error PbufferSurfaceWGL::swap(const egl::Thread *thread)
 {
     return egl::NoError();
 }
 
-egl::Error PbufferSurfaceWGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error PbufferSurfaceWGL::postSubBuffer(const egl::Thread *thread,
+                                            EGLint x,
+                                            EGLint y,
+                                            EGLint width,
+                                            EGLint height)
 {
     return egl::NoError();
 }
