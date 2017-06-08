@@ -975,24 +975,37 @@ gl::Error TextureD3D_2D::setCompressedSubImage(const gl::Context *context,
     return commitRegion(index, area);
 }
 
+bool ClipToFramebuffer(const gl::Framebuffer *fb, const gl::Rectangle &in, gl::Rectangle *out)
+{
+    gl::Extents size = fb->getReadColorbuffer()->getSize();
+    const gl::Rectangle fbRect(0, 0, size.width, size.height);
+    return ClipRectangle(in, fbRect, out);
+}
+
 gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
                                    GLenum target,
                                    size_t imageLevel,
-                                   const gl::Rectangle &sourceArea,
+                                   const gl::Rectangle &origSourceArea,
                                    GLenum internalFormat,
                                    const gl::Framebuffer *source)
 {
     ASSERT(target == GL_TEXTURE_2D);
 
+    gl::Rectangle sourceArea;
+    if (!ClipToFramebuffer(source, origSourceArea, &sourceArea))
+    {
+        return gl::NoError();
+    }
+
     GLint level                = static_cast<GLint>(imageLevel);
     const gl::InternalFormat &internalFormatInfo =
         gl::GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
     redefineImage(level, internalFormatInfo.sizedInternalFormat,
-                  gl::Extents(sourceArea.width, sourceArea.height, 1),
+                  gl::Extents(origSourceArea.width, origSourceArea.height, 1),
                   mRenderer->isRobustResourceInitEnabled());
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
-    gl::Offset destOffset(0, 0, 0);
+    gl::Offset destOffset(sourceArea.x - origSourceArea.x, sourceArea.y - origSourceArea.y, 0);
 
     // If the zero max LOD workaround is active, then we can't sample from individual layers of the framebuffer in shaders,
     // so we should use the non-rendering copy path.
@@ -1019,11 +1032,19 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
 gl::Error TextureD3D_2D::copySubImage(const gl::Context *context,
                                       GLenum target,
                                       size_t imageLevel,
-                                      const gl::Offset &destOffset,
-                                      const gl::Rectangle &sourceArea,
+                                      const gl::Offset &origDestOffset,
+                                      const gl::Rectangle &origSourceArea,
                                       const gl::Framebuffer *source)
 {
-    ASSERT(target == GL_TEXTURE_2D && destOffset.z == 0);
+    ASSERT(target == GL_TEXTURE_2D && origDestOffset.z == 0);
+
+    gl::Rectangle sourceArea;
+    if (!ClipToFramebuffer(source, origSourceArea, &sourceArea))
+    {
+        return gl::NoError();
+    }
+    const gl::Offset destOffset(origDestOffset.x + sourceArea.x - origSourceArea.x,
+                                origDestOffset.y + sourceArea.y - origSourceArea.y, 0);
 
     // can only make our texture storage to a render target if level 0 is defined (with a width & height) and
     // the current level we're copying to is defined (with appropriate format, width & height)

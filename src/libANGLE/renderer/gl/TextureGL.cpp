@@ -531,10 +531,23 @@ gl::Error TextureGL::setCompressedSubImage(const gl::Context *context,
 gl::Error TextureGL::copyImage(const gl::Context *context,
                                GLenum target,
                                size_t level,
-                               const gl::Rectangle &sourceArea,
+                               const gl::Rectangle &origSourceArea,
                                GLenum internalFormat,
                                const gl::Framebuffer *source)
 {
+//printf("TextureGL::copyImage\n");
+    // Clip source area to framebuffer.
+    const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
+    const gl::Extents fbSize = sourceFramebufferGL->getState().getReadAttachment()->getSize();
+    const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, fbRect, &sourceArea))
+    {
+        // nothing to do
+        return gl::NoError();
+    }
+    gl::Offset destOffset(sourceArea.x - origSourceArea.x, sourceArea.y - origSourceArea.y, 0);
+
     nativegl::CopyTexImageImageFormat copyTexImageFormat = nativegl::GetCopyTexImageImageFormat(
         mFunctions, mWorkarounds, internalFormat, source->getImplementationColorReadType());
 
@@ -551,8 +564,6 @@ gl::Error TextureGL::copyImage(const gl::Context *context,
     }
     else
     {
-        const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
-
         mStateManager->bindTexture(getTarget(), mTextureID);
         mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER,
                                        sourceFramebufferGL->getFramebufferID());
@@ -577,11 +588,24 @@ gl::Error TextureGL::copyImage(const gl::Context *context,
 gl::Error TextureGL::copySubImage(const gl::Context *context,
                                   GLenum target,
                                   size_t level,
-                                  const gl::Offset &destOffset,
-                                  const gl::Rectangle &sourceArea,
+                                  const gl::Offset &origDestOffset,
+                                  const gl::Rectangle &origSourceArea,
                                   const gl::Framebuffer *source)
 {
+//printf("TextureGL::copySubImage\n");
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
+
+    // Clip source area to framebuffer.
+    const gl::Extents fbSize = sourceFramebufferGL->getState().getReadAttachment()->getSize();
+    const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, fbRect, &sourceArea))
+    {
+        // nothing to do
+        return gl::NoError();
+    }
+    gl::Offset destOffset(origDestOffset.x + sourceArea.x - origSourceArea.x,
+                          origDestOffset.y + sourceArea.y - origSourceArea.y, origDestOffset.z);
 
     mStateManager->bindTexture(getTarget(), mTextureID);
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
