@@ -891,6 +891,16 @@ Error Texture::setImage(const Context *context,
     return NoError();
 }
 
+Error Texture::zero(const Context *context, GLenum target, size_t level)
+{
+    const size_t width = getWidth(target, level), height = getHeight(target, level);
+    const InternalFormat *info = getFormat(target, level).info;
+    std::vector<uint8_t> zeroes(width * height * info->pixelBytes);
+    Error ret = setImage(context, PixelUnpackState(1, 0), target, level, info->internalFormat,
+                         gl::Extents(width, height, 1), info->format, info->type, zeroes.data());
+    return ret;
+}
+
 Error Texture::setSubImage(const Context *context,
                            const PixelUnpackState &unpackState,
                            GLenum target,

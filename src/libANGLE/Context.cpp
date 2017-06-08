@@ -2862,8 +2862,18 @@ void Context::copyTexImage2D(GLenum target,
     Rectangle sourceArea(x, y, width, height);
 
     const Framebuffer *framebuffer = mGLState.getReadFramebuffer();
+    gl::Extents size               = framebuffer->getReadColorbuffer()->getSize();
+
     Texture *texture =
         getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
+    if (getExtensions().webglCompatibility &&
+        (x < 0 || y < 0 || x + width > size.width || y + height > size.height))
+    {
+        // Some of the area is outside the framebuffer.  WebGL requires the corresponding
+        // destination pixels be zeroed.  For simplicity we zero the whole thing before
+        // reading the area inside the framebuffer.
+        texture->zero(this, target, level);
+    }
     handleError(texture->copyImage(this, target, level, sourceArea, internalformat, framebuffer));
 }
 

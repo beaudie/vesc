@@ -265,6 +265,7 @@ class Texture final : public egl::ImageSibling,
 
     bool isMipmapComplete() const;
 
+    Error zero(const Context *context, GLenum target, size_t level);
     Error setImage(const Context *context,
                    const PixelUnpackState &unpackState,
                    GLenum target,
