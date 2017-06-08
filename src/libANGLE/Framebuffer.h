@@ -89,6 +89,9 @@ class FramebufferState final : angle::NonCopyable
     GLint getDefaultSamples() const { return mDefaultSamples; };
     GLboolean getDefaultFixedSampleLocations() const { return mDefaultFixedSampleLocations; };
 
+    bool hasDepth() const;
+    bool hasStencil() const;
+
   private:
     friend class Framebuffer;
 
