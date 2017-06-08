@@ -30,11 +30,15 @@ class PbufferSurfaceGLX : public SurfaceGLX
                       glx::FBConfig fbConfig);
     ~PbufferSurfaceGLX() override;
 
-    egl::Error initialize(const egl::Display *display) override;
+    egl::Error initialize(const egl::Thread *thread) override;
     egl::Error makeCurrent() override;
 
-    egl::Error swap(const egl::Display *display) override;
-    egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
+    egl::Error swap(const egl::Thread *thread) override;
+    egl::Error postSubBuffer(const egl::Thread *thread,
+                             EGLint x,
+                             EGLint y,
+                             EGLint width,
+                             EGLint height) override;
     egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
     egl::Error bindTexImage(gl::Texture *texture, EGLint buffer) override;
     egl::Error releaseTexImage(EGLint buffer) override;
