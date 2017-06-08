@@ -635,7 +635,7 @@ bool DisplayGLX::testDeviceLost()
     return false;
 }
 
-egl::Error DisplayGLX::restoreLostDevice()
+egl::Error DisplayGLX::restoreLostDevice(const egl::Thread *thread)
 {
     return egl::EglBadDisplay();
 }
@@ -668,15 +668,13 @@ std::string DisplayGLX::getVendorString() const
     return "";
 }
 
-egl::Error DisplayGLX::waitClient() const
+egl::Error DisplayGLX::waitClient(const egl::Thread *thread) const
 {
     mGLX.waitGL();
     return egl::NoError();
 }
 
-egl::Error DisplayGLX::waitNative(EGLint engine,
-                                  egl::Surface *drawSurface,
-                                  egl::Surface *readSurface) const
+egl::Error DisplayGLX::waitNative(const egl::Thread *thread, EGLint engine) const
 {
     // eglWaitNative is used to notice the driver of changes in X11 for the current surface, such as
     // changes of the window size. We use this event to update the child window of WindowSurfaceGLX

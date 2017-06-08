@@ -98,7 +98,7 @@ bool DisplayVk::testDeviceLost()
     return false;
 }
 
-egl::Error DisplayVk::restoreLostDevice()
+egl::Error DisplayVk::restoreLostDevice(const egl::Thread *thread)
 {
     UNIMPLEMENTED();
     return egl::EglBadAccess();
@@ -120,15 +120,13 @@ egl::Error DisplayVk::getDevice(DeviceImpl **device)
     return egl::NoError();
 }
 
-egl::Error DisplayVk::waitClient() const
+egl::Error DisplayVk::waitClient(const egl::Thread *thread) const
 {
     UNIMPLEMENTED();
     return egl::EglBadAccess();
 }
 
-egl::Error DisplayVk::waitNative(EGLint engine,
-                                 egl::Surface *drawSurface,
-                                 egl::Surface *readSurface) const
+egl::Error DisplayVk::waitNative(const egl::Thread *thread, EGLint engine) const
 {
     UNIMPLEMENTED();
     return egl::EglBadAccess();
