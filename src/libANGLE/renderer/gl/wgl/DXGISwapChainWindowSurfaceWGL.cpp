@@ -86,7 +86,7 @@ DXGISwapChainWindowSurfaceWGL::~DXGISwapChainWindowSurfaceWGL()
     SafeRelease(mSwapChain1);
 }
 
-egl::Error DXGISwapChainWindowSurfaceWGL::initialize(const egl::Display *display)
+egl::Error DXGISwapChainWindowSurfaceWGL::initialize(const egl::Thread *thread)
 {
     if (mOrientation != EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE)
     {
@@ -127,7 +127,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::makeCurrent()
     return egl::NoError();
 }
 
-egl::Error DXGISwapChainWindowSurfaceWGL::swap(const egl::Display *display)
+egl::Error DXGISwapChainWindowSurfaceWGL::swap(const egl::Thread *thread)
 {
     mFunctionsGL->flush();
 
@@ -146,7 +146,8 @@ egl::Error DXGISwapChainWindowSurfaceWGL::swap(const egl::Display *display)
     return checkForResize();
 }
 
-egl::Error DXGISwapChainWindowSurfaceWGL::postSubBuffer(EGLint x,
+egl::Error DXGISwapChainWindowSurfaceWGL::postSubBuffer(const egl::Thread *thread,
+                                                        EGLint x,
                                                         EGLint y,
                                                         EGLint width,
                                                         EGLint height)

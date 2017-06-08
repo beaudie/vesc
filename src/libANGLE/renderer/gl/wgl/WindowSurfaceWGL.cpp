@@ -41,7 +41,7 @@ WindowSurfaceWGL::~WindowSurfaceWGL()
     mDeviceContext = nullptr;
 }
 
-egl::Error WindowSurfaceWGL::initialize(const egl::Display *display)
+egl::Error WindowSurfaceWGL::initialize(const egl::Thread *thread)
 {
     mDeviceContext = GetDC(mWindow);
     if (!mDeviceContext)
@@ -104,7 +104,7 @@ egl::Error WindowSurfaceWGL::makeCurrent()
     return egl::NoError();
 }
 
-egl::Error WindowSurfaceWGL::swap(const egl::Display *display)
+egl::Error WindowSurfaceWGL::swap(const egl::Thread *thread)
 {
     if (!mFunctionsWGL->swapBuffers(mDeviceContext))
     {
@@ -115,7 +115,11 @@ egl::Error WindowSurfaceWGL::swap(const egl::Display *display)
     return egl::NoError();
 }
 
-egl::Error WindowSurfaceWGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error WindowSurfaceWGL::postSubBuffer(const egl::Thread *thread,
+                                           EGLint x,
+                                           EGLint y,
+                                           EGLint width,
+                                           EGLint height)
 {
     UNIMPLEMENTED();
     return egl::NoError();

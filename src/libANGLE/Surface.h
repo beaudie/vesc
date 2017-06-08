@@ -36,6 +36,7 @@ namespace egl
 class AttributeMap;
 class Display;
 struct Config;
+class Thread;
 
 struct SurfaceState final : private angle::NonCopyable
 {
@@ -54,10 +55,10 @@ class Surface : public gl::FramebufferAttachmentObject
 
     EGLint getType() const;
 
-    Error initialize(const Display &display);
-    Error swap(const Display &display);
+    Error initialize(const Thread *thread);
+    Error swap(const Thread *thread);
     Error swapWithDamage(EGLint *rects, EGLint n_rects);
-    Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height);
+    Error postSubBuffer(const Thread *thread, EGLint x, EGLint y, EGLint width, EGLint height);
     Error querySurfacePointerANGLE(EGLint attribute, void **value);
     Error bindTexImage(gl::Texture *texture, EGLint buffer);
     Error releaseTexImage(EGLint buffer);

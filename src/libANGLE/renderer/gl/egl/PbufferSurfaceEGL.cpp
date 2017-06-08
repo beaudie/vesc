@@ -25,7 +25,7 @@ PbufferSurfaceEGL::~PbufferSurfaceEGL()
 {
 }
 
-egl::Error PbufferSurfaceEGL::initialize(const egl::Display *display)
+egl::Error PbufferSurfaceEGL::initialize(const egl::Thread *thread)
 {
     mSurface = mEGL->createPbufferSurface(mConfig, mAttribList.data());
     if (mSurface == EGL_NO_SURFACE)

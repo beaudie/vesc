@@ -102,9 +102,9 @@ void Surface::destroy(const Display *display)
     delete this;
 }
 
-Error Surface::initialize(const Display &display)
+Error Surface::initialize(const Thread *thread)
 {
-    ANGLE_TRY(mImplementation->initialize(&display));
+    ANGLE_TRY(mImplementation->initialize(thread));
 
     // Initialized here since impl is nullptr in the constructor.
     // Must happen after implementation initialize for Android.
@@ -147,9 +147,9 @@ EGLint Surface::getType() const
     return mType;
 }
 
-Error Surface::swap(const Display &display)
+Error Surface::swap(const Thread *thread)
 {
-    return mImplementation->swap(&display);
+    return mImplementation->swap(thread);
 }
 
 Error Surface::swapWithDamage(EGLint *rects, EGLint n_rects)
@@ -157,9 +157,9 @@ Error Surface::swapWithDamage(EGLint *rects, EGLint n_rects)
     return mImplementation->swapWithDamage(rects, n_rects);
 }
 
-Error Surface::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+Error Surface::postSubBuffer(const Thread *thread, EGLint x, EGLint y, EGLint width, EGLint height)
 {
-    return mImplementation->postSubBuffer(x, y, width, height);
+    return mImplementation->postSubBuffer(thread, x, y, width, height);
 }
 
 Error Surface::querySurfacePointerANGLE(EGLint attribute, void **value)
