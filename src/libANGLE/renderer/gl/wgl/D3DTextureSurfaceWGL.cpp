@@ -284,7 +284,7 @@ egl::Error D3DTextureSurfaceWGL::ValidateD3DTextureClientBuffer(EGLenum buftype,
                              nullptr);
 }
 
-egl::Error D3DTextureSurfaceWGL::initialize(const egl::Display *display)
+egl::Error D3DTextureSurfaceWGL::initialize(const egl::Thread *thread)
 {
     IUnknown *device = nullptr;
     ANGLE_TRY(GetD3DTextureInfo(mBuftype, mClientBuffer, mDisplayD3D11Device, &mWidth, &mHeight,
@@ -367,12 +367,16 @@ egl::Error D3DTextureSurfaceWGL::unMakeCurrent()
     return egl::NoError();
 }
 
-egl::Error D3DTextureSurfaceWGL::swap(const egl::Display *display)
+egl::Error D3DTextureSurfaceWGL::swap(const egl::Thread *thread)
 {
     return egl::NoError();
 }
 
-egl::Error D3DTextureSurfaceWGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+egl::Error D3DTextureSurfaceWGL::postSubBuffer(const egl::Thread *thread,
+                                               EGLint x,
+                                               EGLint y,
+                                               EGLint width,
+                                               EGLint height)
 {
     UNIMPLEMENTED();
     return egl::NoError();

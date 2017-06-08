@@ -926,7 +926,7 @@ bool DisplayOzone::testDeviceLost()
     return false;
 }
 
-egl::Error DisplayOzone::restoreLostDevice()
+egl::Error DisplayOzone::restoreLostDevice(const egl::Thread *thread)
 {
     UNIMPLEMENTED();
     return egl::EglBadDisplay();
@@ -937,15 +937,13 @@ bool DisplayOzone::isValidNativeWindow(EGLNativeWindowType window) const
     return true;
 }
 
-egl::Error DisplayOzone::waitClient() const
+egl::Error DisplayOzone::waitClient(const egl::Thread *thread) const
 {
     // TODO(fjhenigman) Implement this.
     return egl::NoError();
 }
 
-egl::Error DisplayOzone::waitNative(EGLint engine,
-                                    egl::Surface *drawSurface,
-                                    egl::Surface *readSurface) const
+egl::Error DisplayOzone::waitNative(const egl::Thread *thread, EGLint engine) const
 {
     // TODO(fjhenigman) Implement this.
     return egl::NoError();

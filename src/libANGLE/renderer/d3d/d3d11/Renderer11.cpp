@@ -1351,7 +1351,7 @@ void *Renderer11::getD3DDevice()
     return reinterpret_cast<void *>(mDevice);
 }
 
-gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
+gl::Error Renderer11::generateSwizzle(const gl::Context *context, gl::Texture *texture)
 {
     if (texture)
     {
@@ -1365,30 +1365,31 @@ gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
         {
             TextureStorage11 *storage11          = GetAs<TextureStorage11>(texStorage);
             const gl::TextureState &textureState = texture->getTextureState();
-            ANGLE_TRY(storage11->generateSwizzles(textureState.getSwizzleState()));
+            ANGLE_TRY(storage11->generateSwizzles(context, textureState.getSwizzleState()));
         }
     }
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::generateSwizzles(const gl::ContextState &data, gl::SamplerType type)
+gl::Error Renderer11::generateSwizzles(const gl::Context *context, gl::SamplerType type)
 {
-    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(data.getState().getProgram());
+    const auto &glState    = context->getGLState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
 
     unsigned int samplerRange = programD3D->getUsedSamplerRange(type);
 
     for (unsigned int i = 0; i < samplerRange; i++)
     {
         GLenum textureType = programD3D->getSamplerTextureType(type, i);
-        GLint textureUnit  = programD3D->getSamplerMapping(type, i, data.getCaps());
+        GLint textureUnit  = programD3D->getSamplerMapping(type, i, context->getCaps());
         if (textureUnit != -1)
         {
-            gl::Texture *texture = data.getState().getSamplerTexture(textureUnit, textureType);
+            gl::Texture *texture = glState.getSamplerTexture(textureUnit, textureType);
             ASSERT(texture);
             if (texture->getTextureState().swizzleRequired())
             {
-                ANGLE_TRY(generateSwizzle(texture));
+                ANGLE_TRY(generateSwizzle(context, texture));
             }
         }
     }
@@ -1396,10 +1397,10 @@ gl::Error Renderer11::generateSwizzles(const gl::ContextState &data, gl::Sampler
     return gl::NoError();
 }
 
-gl::Error Renderer11::generateSwizzles(const gl::ContextState &data)
+gl::Error Renderer11::generateSwizzles(const gl::Context *context)
 {
-    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_VERTEX));
-    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_PIXEL));
+    ANGLE_TRY(generateSwizzles(context, gl::SAMPLER_VERTEX));
+    ANGLE_TRY(generateSwizzles(context, gl::SAMPLER_PIXEL));
     return gl::NoError();
 }
 gl::Error Renderer11::setSamplerState(gl::SamplerType type,
@@ -3153,7 +3154,8 @@ const angle::WorkaroundsD3D &RendererD3D::getWorkarounds() const
     return mWorkarounds;
 }
 
-gl::Error Renderer11::copyImageInternal(const gl::Framebuffer *framebuffer,
+gl::Error Renderer11::copyImageInternal(const gl::Context *context,
+                                        const gl::Framebuffer *framebuffer,
                                         const gl::Rectangle &sourceRect,
                                         GLenum destFormat,
                                         const gl::Offset &destOffset,
@@ -3189,14 +3191,15 @@ gl::Error Renderer11::copyImageInternal(const gl::Framebuffer *framebuffer,
     // Use nearest filtering because source and destination are the same size for the direct copy.
     // Convert to the unsized format before calling copyTexture.
     GLenum sourceFormat = colorAttachment->getFormat().info->format;
-    ANGLE_TRY(mBlit->copyTexture(source, sourceArea, sourceSize, sourceFormat, dest, destArea,
-                                 destSize, nullptr, gl::GetUnsizedFormat(destFormat), GL_NEAREST,
-                                 false, false, false));
+    ANGLE_TRY(mBlit->copyTexture(context, source, sourceArea, sourceSize, sourceFormat, dest,
+                                 destArea, destSize, nullptr, gl::GetUnsizedFormat(destFormat),
+                                 GL_NEAREST, false, false, false));
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer,
+gl::Error Renderer11::copyImage2D(const gl::Context *context,
+                                  const gl::Framebuffer *framebuffer,
                                   const gl::Rectangle &sourceRect,
                                   GLenum destFormat,
                                   const gl::Offset &destOffset,
@@ -3211,14 +3214,16 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer,
     ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
-    ANGLE_TRY(copyImageInternal(framebuffer, sourceRect, destFormat, destOffset, destRenderTarget));
+    ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
+                                destRenderTarget));
 
     storage11->markLevelDirty(level);
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer,
+gl::Error Renderer11::copyImageCube(const gl::Context *context,
+                                    const gl::Framebuffer *framebuffer,
                                     const gl::Rectangle &sourceRect,
                                     GLenum destFormat,
                                     const gl::Offset &destOffset,
@@ -3234,14 +3239,16 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer,
     ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
-    ANGLE_TRY(copyImageInternal(framebuffer, sourceRect, destFormat, destOffset, destRenderTarget));
+    ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
+                                destRenderTarget));
 
     storage11->markLevelDirty(level);
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer,
+gl::Error Renderer11::copyImage3D(const gl::Context *context,
+                                  const gl::Framebuffer *framebuffer,
                                   const gl::Rectangle &sourceRect,
                                   GLenum destFormat,
                                   const gl::Offset &destOffset,
@@ -3256,14 +3263,16 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer,
     ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
-    ANGLE_TRY(copyImageInternal(framebuffer, sourceRect, destFormat, destOffset, destRenderTarget));
+    ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
+                                destRenderTarget));
 
     storage11->markLevelDirty(level);
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer,
+gl::Error Renderer11::copyImage2DArray(const gl::Context *context,
+                                       const gl::Framebuffer *framebuffer,
                                        const gl::Rectangle &sourceRect,
                                        GLenum destFormat,
                                        const gl::Offset &destOffset,
@@ -3278,13 +3287,15 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer,
     ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
-    ANGLE_TRY(copyImageInternal(framebuffer, sourceRect, destFormat, destOffset, destRenderTarget));
+    ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
+                                destRenderTarget));
     storage11->markLevelDirty(level);
 
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyTexture(const gl::Texture *source,
+gl::Error Renderer11::copyTexture(const gl::Context *context,
+                                  const gl::Texture *source,
                                   GLint sourceLevel,
                                   const gl::Rectangle &sourceRect,
                                   GLenum destFormat,
@@ -3367,9 +3378,9 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
         // Use nearest filtering because source and destination are the same size for the direct
         // copy
         GLenum sourceFormat = source->getFormat(GL_TEXTURE_2D, sourceLevel).info->format;
-        ANGLE_TRY(mBlit->copyTexture(*sourceSRV, sourceArea, sourceSize, sourceFormat, destRTV,
-                                     destArea, destSize, nullptr, destFormat, GL_NEAREST, false,
-                                     unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
+        ANGLE_TRY(mBlit->copyTexture(context, *sourceSRV, sourceArea, sourceSize, sourceFormat,
+                                     destRTV, destArea, destSize, nullptr, destFormat, GL_NEAREST,
+                                     false, unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
     }
 
     destStorage11->markLevelDirty(destLevel);
@@ -3810,7 +3821,8 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     return true;
 }
 
-gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack,
+gl::Error Renderer11::fastCopyBufferToTexture(const gl::Context *context,
+                                              const gl::PixelUnpackState &unpack,
                                               unsigned int offset,
                                               RenderTargetD3D *destRenderTarget,
                                               GLenum destinationFormat,
@@ -3818,8 +3830,8 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
                                               const gl::Box &destArea)
 {
     ASSERT(supportsFastCopyBufferToTexture(destinationFormat));
-    return mPixelTransfer->copyBufferToTexture(unpack, offset, destRenderTarget, destinationFormat,
-                                               sourcePixelsType, destArea);
+    return mPixelTransfer->copyBufferToTexture(context, unpack, offset, destRenderTarget,
+                                               destinationFormat, sourcePixelsType, destArea);
 }
 
 ImageD3D *Renderer11::createImage()
@@ -4080,7 +4092,8 @@ gl::Error Renderer11::packPixels(const TextureHelper11 &textureHelper,
     return gl::NoError();
 }
 
-gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
+gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
+                                           const gl::Rectangle &readRectIn,
                                            const gl::Rectangle &drawRectIn,
                                            RenderTargetD3D *readRenderTarget,
                                            RenderTargetD3D *drawRenderTarget,
@@ -4118,8 +4131,9 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     if (readRenderTarget->getSamples() > 1)
     {
-        ANGLE_TRY_RESULT(resolveMultisampledTexture(readRenderTarget11, depthBlit, stencilBlit),
-                         readTexture);
+        ANGLE_TRY_RESULT(
+            resolveMultisampledTexture(context, readRenderTarget11, depthBlit, stencilBlit),
+            readTexture);
 
         if (!stencilBlit)
         {
@@ -4321,12 +4335,12 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         {
             const d3d11::DepthStencilView &drawDSV = drawRenderTarget11->getDepthStencilView();
             ASSERT(readSRV.valid());
-            ANGLE_TRY(mBlit->copyDepth(readSRV, readArea, readSize, drawDSV, drawArea, drawSize,
-                                       scissor));
+            ANGLE_TRY(mBlit->copyDepth(context, readSRV, readArea, readSize, drawDSV, drawArea,
+                                       drawSize, scissor));
         }
         else if (stencilBlit)
         {
-            ANGLE_TRY(mBlit->copyStencil(readTexture, readSubresource, readArea, readSize,
+            ANGLE_TRY(mBlit->copyStencil(context, readTexture, readSubresource, readArea, readSize,
                                          drawTexture, drawSubresource, drawArea, drawSize,
                                          scissor));
         }
@@ -4337,9 +4351,9 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
             ASSERT(readSRV.valid());
-            ANGLE_TRY(mBlit->copyTexture(readSRV, readArea, readSize, srcFormatInfo.format, drawRTV,
-                                         drawArea, drawSize, scissor, destFormatInfo.format, filter,
-                                         maskOffAlpha, false, false));
+            ANGLE_TRY(mBlit->copyTexture(
+                context, readSRV, readArea, readSize, srcFormatInfo.format, drawRTV, drawArea,
+                drawSize, scissor, destFormatInfo.format, filter, maskOffAlpha, false, false));
         }
     }
 
@@ -4392,17 +4406,20 @@ void Renderer11::onBufferDelete(const Buffer11 *deleted)
     mAliveBuffers.erase(deleted);
 }
 
-gl::ErrorOrResult<TextureHelper11>
-Renderer11::resolveMultisampledTexture(RenderTarget11 *renderTarget, bool depth, bool stencil)
+gl::ErrorOrResult<TextureHelper11> Renderer11::resolveMultisampledTexture(
+    const gl::Context *context,
+    RenderTarget11 *renderTarget,
+    bool depth,
+    bool stencil)
 {
     if (depth && !stencil)
     {
-        return mBlit->resolveDepth(renderTarget);
+        return mBlit->resolveDepth(context, renderTarget);
     }
 
     if (stencil)
     {
-        return mBlit->resolveStencil(renderTarget, depth);
+        return mBlit->resolveStencil(context, renderTarget, depth);
     }
 
     const auto &formatSet = renderTarget->getFormatSet();
@@ -4562,7 +4579,7 @@ gl::Error Renderer11::genericDrawElements(const gl::Context *context,
 
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data));
+    ANGLE_TRY(generateSwizzles(context));
 
     if (!applyPrimitiveType(mode, count, usesPointSize))
     {
@@ -4584,7 +4601,7 @@ gl::Error Renderer11::genericDrawElements(const gl::Context *context,
     size_t vertexCount = indexInfo.indexRange.vertexCount();
     ANGLE_TRY(applyVertexBuffer(glState, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
                                 static_cast<GLsizei>(vertexCount), instances, &indexInfo));
-    ANGLE_TRY(applyTextures(context->getImplementation(), data));
+    ANGLE_TRY(applyTextures(context));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
@@ -4611,7 +4628,7 @@ gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
 
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data));
+    ANGLE_TRY(generateSwizzles(context));
     if (!applyPrimitiveType(mode, count, usesPointSize))
     {
         return gl::NoError();
@@ -4620,7 +4637,7 @@ gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
     ANGLE_TRY(mStateManager.updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
-    ANGLE_TRY(applyTextures(context->getImplementation(), data));
+    ANGLE_TRY(applyTextures(context));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
@@ -4650,12 +4667,12 @@ gl::Error Renderer11::genericDrawIndirect(const gl::Context *context,
     bool usesPointSize     = programD3D->usesPointSize();
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data));
+    ANGLE_TRY(generateSwizzles(context));
     applyPrimitiveType(mode, 0, usesPointSize);
     ANGLE_TRY(mStateManager.updateState(context, mode));
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
-    ANGLE_TRY(applyTextures(context->getImplementation(), data));
+    ANGLE_TRY(applyTextures(context));
     ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
@@ -4717,7 +4734,7 @@ gl::Error Renderer11::applyComputeShader(const gl::ContextState &data)
     return programD3D->applyComputeUniforms();
 }
 
-gl::Error Renderer11::dispatchCompute(Context11 *context,
+gl::Error Renderer11::dispatchCompute(const gl::Context *context,
                                       GLuint numGroupsX,
                                       GLuint numGroupsY,
                                       GLuint numGroupsZ)
@@ -4731,8 +4748,8 @@ gl::Error Renderer11::dispatchCompute(Context11 *context,
 
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_COMPUTE));
-    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(generateSwizzles(context, gl::SAMPLER_COMPUTE));
+    ANGLE_TRY(applyTextures(context));
     ANGLE_TRY(applyComputeShader(data));
     // TODO(Xinghua): applyUniformBuffers for compute shader.
     mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);

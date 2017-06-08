@@ -120,7 +120,7 @@ EGLBoolean EGLAPIENTRY PostSubBufferNV(EGLDisplay dpy, EGLSurface surface, EGLin
         return EGL_TRUE;
     }
 
-    error = eglSurface->postSubBuffer(x, y, width, height);
+    error = eglSurface->postSubBuffer(thread, x, y, width, height);
     if (error.isError())
     {
         thread->setError(error);
@@ -302,7 +302,7 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY CreateImageKHR(EGLDisplay dpy,
     }
 
     Image *image = nullptr;
-    error = display->createImage(context, target, buffer, attributes, &image);
+    error        = display->createImage(thread, context, target, buffer, attributes, &image);
     if (error.isError())
     {
         thread->setError(error);

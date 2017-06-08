@@ -26,7 +26,7 @@ class WindowSurfaceEGL : public SurfaceEGL
                      RendererGL *renderer);
     ~WindowSurfaceEGL() override;
 
-    egl::Error initialize(const egl::Display *display) override;
+    egl::Error initialize(const egl::Thread *thread) override;
 
   private:
     EGLNativeWindowType mWindow;
