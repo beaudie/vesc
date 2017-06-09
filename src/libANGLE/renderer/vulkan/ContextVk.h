@@ -149,7 +149,7 @@ class ContextVk : public ContextImpl, public ResourceVk
                               GLuint numGroupsZ) override;
 
   private:
-    gl::Error initPipeline();
+    gl::Error initPipeline(const gl::Context *context);
 
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
