@@ -112,6 +112,15 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Rectangle &area,
     IDirect3DDevice9 *device = mRenderer->getDevice();
     ASSERT(device);
 
+    // If the origin of the read was outside the framebuffer and got clamped we need to adjust
+    // 'pixels' accordingly.
+    const int xclamp     = gl::clamp(area.x, 0L, static_cast<LONG>(desc.Width));
+    const int yclamp     = gl::clamp(area.y, 0L, static_cast<LONG>(desc.Height));
+    const int xadj       = xclamp - area.x;
+    const int yadj       = yclamp - area.y;
+    const int pixelBytes = gl::GetInternalFormatInfo(format, type).pixelBytes;
+    pixels += xadj * pixelBytes + yadj * outputPitch;
+
     HRESULT result;
     IDirect3DSurface9 *systemSurface = nullptr;
     bool directToPixels = !pack.reverseRowOrder && pack.alignment <= 4 && mRenderer->getShareHandleSupport() &&
@@ -170,8 +179,8 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Rectangle &area,
     }
 
     RECT rect;
-    rect.left = gl::clamp(area.x, 0L, static_cast<LONG>(desc.Width));
-    rect.top = gl::clamp(area.y, 0L, static_cast<LONG>(desc.Height));
+    rect.left   = xclamp;
+    rect.top    = yclamp;
     rect.right = gl::clamp(area.x + area.width, 0L, static_cast<LONG>(desc.Width));
     rect.bottom = gl::clamp(area.y + area.height, 0L, static_cast<LONG>(desc.Height));
 
