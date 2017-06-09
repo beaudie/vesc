@@ -66,6 +66,7 @@ class FramebufferGL : public FramebufferImpl
 
     GLenum getImplementationColorReadFormat() const override;
     GLenum getImplementationColorReadType() const override;
+
     gl::Error readPixels(const gl::Context *context,
                          const gl::Rectangle &area,
                          GLenum format,
@@ -99,17 +100,18 @@ class FramebufferGL : public FramebufferImpl
         const GLenum *attachments,
         std::vector<GLenum> *modifiedAttachments) const;
 
-    gl::Error readPixelsRowByRowWorkaround(const gl::Rectangle &area,
-                                           GLenum format,
-                                           GLenum type,
-                                           const gl::PixelPackState &pack,
-                                           void *pixels) const;
+    gl::Error readPixelsRowByRow(const gl::Rectangle &area,
+                                 GLenum format,
+                                 GLenum type,
+                                 const gl::PixelPackState &pack,
+                                 GLubyte *pixels) const;
 
-    gl::Error readPixelsPaddingWorkaround(const gl::Rectangle &area,
-                                          GLenum format,
-                                          GLenum type,
-                                          const gl::PixelPackState &pack,
-                                          void *pixels) const;
+    gl::Error readPixelsAllAtOnce(const gl::Rectangle &area,
+                                  GLenum format,
+                                  GLenum type,
+                                  const gl::PixelPackState &pack,
+                                  GLubyte *pixels,
+                                  bool readLastRowSeparately) const;
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
