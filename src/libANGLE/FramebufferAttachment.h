@@ -108,19 +108,20 @@ class FramebufferAttachment final
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
-    gl::Error getRenderTarget(T **rtOut) const
+    gl::Error getRenderTarget(const Context *context, T **rtOut) const
     {
         static_assert(std::is_base_of<rx::FramebufferAttachmentRenderTarget, T>(),
                       "Invalid RenderTarget class.");
         return getRenderTargetImpl(
-            reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
+            context, reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
     }
 
     bool operator==(const FramebufferAttachment &other) const;
     bool operator!=(const FramebufferAttachment &other) const;
 
   private:
-    gl::Error getRenderTargetImpl(rx::FramebufferAttachmentRenderTarget **rtOut) const;
+    gl::Error getRenderTargetImpl(const Context *context,
+                                  rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     // A framebuffer attachment points to one of three types of resources: Renderbuffers,
     // Textures and egl::Surface. The "Target" struct indicates which part of the
@@ -165,7 +166,8 @@ class FramebufferAttachmentObject
     virtual void onDetach() = 0;
     virtual GLuint getId() const = 0;
 
-    Error getAttachmentRenderTarget(GLenum binding,
+    Error getAttachmentRenderTarget(const Context *context,
+                                    GLenum binding,
                                     const ImageIndex &imageIndex,
                                     rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
@@ -196,10 +198,12 @@ inline GLsizei FramebufferAttachment::getSamples() const
 }
 
 inline gl::Error FramebufferAttachment::getRenderTargetImpl(
+    const Context *context,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     ASSERT(mResource);
-    return mResource->getAttachmentRenderTarget(mTarget.binding(), mTarget.textureIndex(), rtOut);
+    return mResource->getAttachmentRenderTarget(context, mTarget.binding(), mTarget.textureIndex(),
+                                                rtOut);
 }
 
 } // namespace gl

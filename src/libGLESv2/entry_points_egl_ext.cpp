@@ -585,7 +585,7 @@ EGLBoolean EGLAPIENTRY StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR str
         return EGL_FALSE;
     }
 
-    error = streamObject->consumerAcquire();
+    error = streamObject->consumerAcquire(thread);
     if (error.isError())
     {
         thread->setError(error);
@@ -612,7 +612,7 @@ EGLBoolean EGLAPIENTRY StreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR str
         return EGL_FALSE;
     }
 
-    error = streamObject->consumerRelease();
+    error = streamObject->consumerRelease(thread);
     if (error.isError())
     {
         thread->setError(error);
