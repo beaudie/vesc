@@ -378,7 +378,8 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
 
 Display::~Display()
 {
-    terminate();
+    // TODO(jmadill): When is this called?
+    // terminate();
 
     if (mPlatform == EGL_PLATFORM_ANGLE_ANGLE)
     {
@@ -491,13 +492,13 @@ Error Display::initialize()
     return NoError();
 }
 
-void Display::terminate()
+Error Display::terminate(const Thread *thread)
 {
-    makeCurrent(nullptr, nullptr, nullptr);
+    ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, nullptr));
 
     while (!mContextSet.empty())
     {
-        destroyContext(*mContextSet.begin());
+        ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
 
     // The global texture manager should be deleted with the last context that uses it.
@@ -515,7 +516,7 @@ void Display::terminate()
 
     while (!mState.surfaceSet.empty())
     {
-        destroySurface(*mState.surfaceSet.begin());
+        ANGLE_TRY(destroySurface(thread, *mState.surfaceSet.begin()));
     }
 
     mConfigSet.clear();
@@ -537,6 +538,8 @@ void Display::terminate()
 
     // TODO(jmadill): Store Platform in Display and deinit here.
     ANGLEResetDisplayPlatform(this);
+
+    return NoError();
 }
 
 std::vector<const Config*> Display::getConfigs(const egl::AttributeMap &attribs) const
@@ -742,14 +745,17 @@ Error Display::createContext(const Thread *thread,
     return NoError();
 }
 
-Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context)
+Error Display::makeCurrent(const egl::Thread *thread,
+                           egl::Surface *drawSurface,
+                           egl::Surface *readSurface,
+                           gl::Context *context)
 {
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
     if (context != nullptr)
     {
         ASSERT(readSurface == drawSurface);
-        context->makeCurrent(this, drawSurface);
+        ANGLE_TRY(context->makeCurrent(thread, drawSurface));
     }
 
     return NoError();
@@ -769,7 +775,7 @@ Error Display::restoreLostDevice(const Thread *thread)
     return mImplementation->restoreLostDevice(thread);
 }
 
-void Display::destroySurface(Surface *surface)
+Error Display::destroySurface(const Thread *thread, Surface *surface)
 {
     if (surface->getType() == EGL_WINDOW_BIT)
     {
@@ -791,7 +797,8 @@ void Display::destroySurface(Surface *surface)
     }
 
     mState.surfaceSet.erase(surface);
-    surface->onDestroy(this);
+    ANGLE_TRY(surface->onDestroy(thread));
+    return NoError();
 }
 
 void Display::destroyImage(egl::Image *image)
@@ -808,7 +815,7 @@ void Display::destroyStream(egl::Stream *stream)
     SafeDelete(stream);
 }
 
-void Display::destroyContext(gl::Context *context)
+Error Display::destroyContext(const Thread *thread, gl::Context *context)
 {
     if (context->usingDisplayTextureShareGroup())
     {
@@ -823,9 +830,10 @@ void Display::destroyContext(gl::Context *context)
         mGlobalTextureShareGroupUsers--;
     }
 
-    context->destroy(this);
+    ANGLE_TRY(context->destroy(thread));
     mContextSet.erase(context);
     SafeDelete(context);
+    return NoError();
 }
 
 bool Display::isDeviceLost() const

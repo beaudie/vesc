@@ -60,7 +60,7 @@ TEST(ImageTest, RefCounting)
     EXPECT_CALL(*renderbufferImpl, setStorageEGLImageTarget(_))
         .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
-    renderbuffer->setStorageEGLImageTarget(image);
+    renderbuffer->setStorageEGLImageTarget(nullptr, image);
 
     // Verify that the renderbuffer added a ref to the image and the image did not add a ref to
     // the renderbuffer
@@ -85,7 +85,7 @@ TEST(ImageTest, RefCounting)
     // Simulate deletion of the renderbuffer and verify that the deletion cascades to all objects
     rx::MockImageImpl *imageImpl = static_cast<rx::MockImageImpl *>(image->getImplementation());
     EXPECT_CALL(*imageImpl, destructor()).Times(1).RetiresOnSaturation();
-    EXPECT_CALL(*imageImpl, orphan(_)).WillOnce(Return(gl::NoError())).RetiresOnSaturation();
+    EXPECT_CALL(*imageImpl, orphan(_, _)).WillOnce(Return(gl::NoError())).RetiresOnSaturation();
 
     EXPECT_CALL(*textureImpl, destructor()).Times(1).RetiresOnSaturation();
     EXPECT_CALL(*renderbufferImpl, destructor()).Times(1).RetiresOnSaturation();
@@ -128,7 +128,7 @@ TEST(ImageTest, RespecificationReleasesReferences)
 
     // Respecify the texture and verify that the image releases its reference
     rx::MockImageImpl *imageImpl = static_cast<rx::MockImageImpl *>(image->getImplementation());
-    EXPECT_CALL(*imageImpl, orphan(_)).WillOnce(Return(gl::NoError())).RetiresOnSaturation();
+    EXPECT_CALL(*imageImpl, orphan(_, _)).WillOnce(Return(gl::NoError())).RetiresOnSaturation();
     EXPECT_CALL(*textureImpl, setImage(_, _, _, _, _, _, _, _, _))
         .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
