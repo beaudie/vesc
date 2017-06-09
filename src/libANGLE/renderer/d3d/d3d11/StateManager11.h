@@ -123,7 +123,7 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncDepthStencilState(const gl::State &glState);
 
-    gl::Error syncRasterizerState(const gl::Context *context, GLenum drawMode);
+    gl::Error syncRasterizerState(const gl::Context *context, bool pointDrawMode);
 
     void syncScissorRectangle(const gl::Rectangle &scissor, bool enabled);
 
@@ -133,18 +133,31 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
 
+    enum DirtyBitType
+    {
+        DIRTY_BIT_RENDER_TARGET,
+        DIRTY_BIT_VIEWPORT_STATE,
+        DIRTY_BIT_SCISSOR_STATE,
+        DIRTY_BIT_RASTERIZER_STATE,
+        DIRTY_BIT_BLEND_STATE,
+        DIRTY_BIT_DEPTH_STENCIL_STATE,
+        DIRTY_BIT_INVALID,
+        DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
+    };
+
+    using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
+
     Renderer11 *mRenderer;
 
+    // Internal dirty bits.
+    DirtyBits mInternalDirtyBits;
+
     // Blend State
-    bool mBlendStateIsDirty;
-    // TODO(dianx) temporary representation of a dirty bit. once we move enough states in,
-    // try experimenting with dirty bit instead of a bool
     gl::BlendState mCurBlendState;
     gl::ColorF mCurBlendColor;
     unsigned int mCurSampleMask;
 
     // Currently applied depth stencil state
-    bool mDepthStencilStateIsDirty;
     gl::DepthStencilState mCurDepthStencilState;
     int mCurStencilRef;
     int mCurStencilBackRef;
@@ -153,17 +166,14 @@ class StateManager11 final : angle::NonCopyable
     Optional<bool> mCurDisableStencil;
 
     // Currently applied rasterizer state
-    bool mRasterizerStateIsDirty;
     Optional<int> mCurFramebufferSamples;
     gl::RasterizerState mCurRasterState;
 
     // Currently applied scissor rectangle state
-    bool mScissorStateIsDirty;
     bool mCurScissorEnabled;
     gl::Rectangle mCurScissorRect;
 
     // Currently applied viewport state
-    bool mViewportStateIsDirty;
     gl::Rectangle mCurViewport;
     float mCurNear;
     float mCurFar;
@@ -180,9 +190,6 @@ class StateManager11 final : angle::NonCopyable
     // EGL_ANGLE_experimental_present_path variables
     bool mCurPresentPathFastEnabled;
     int mCurPresentPathFastColorBufferHeight;
-
-    // Current RenderTarget state
-    bool mRenderTargetIsDirty;
 
     // Queries that are currently active in this state
     std::set<Query11 *> mCurrentQueries;
