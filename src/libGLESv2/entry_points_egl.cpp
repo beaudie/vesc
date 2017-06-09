@@ -118,7 +118,12 @@ EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
         thread->setCurrent(nullptr, nullptr, nullptr, nullptr);
     }
 
-    display->terminate();
+    Error error = display->terminate(thread);
+    if (error.isError())
+    {
+        thread->setError(error);
+        return EGL_FALSE;
+    }
 
     thread->setError(NoError());
     return EGL_TRUE;
@@ -366,7 +371,12 @@ EGLBoolean EGLAPIENTRY DestroySurface(EGLDisplay dpy, EGLSurface surface)
         return EGL_FALSE;
     }
 
-    display->destroySurface((Surface *)surface);
+    error = display->destroySurface(thread, reinterpret_cast<Surface *>(surface));
+    if (error.isError())
+    {
+        thread->setError(error);
+        return EGL_FALSE;
+    }
 
     thread->setError(NoError());
     return EGL_TRUE;
@@ -567,7 +577,12 @@ EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
         thread->setCurrent(nullptr, thread->getDrawSurface(), thread->getReadSurface(), nullptr);
     }
 
-    display->destroyContext(context);
+    error = display->destroyContext(thread, context);
+    if (error.isError())
+    {
+        thread->setError(error);
+        return EGL_FALSE;
+    }
 
     thread->setError(NoError());
     return EGL_TRUE;
@@ -593,7 +608,7 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
 
     Surface *readSurface   = static_cast<Surface *>(read);
     Surface *drawSurface   = static_cast<Surface *>(draw);
-    Error makeCurrentError = display->makeCurrent(drawSurface, readSurface, context);
+    Error makeCurrentError = display->makeCurrent(thread, drawSurface, readSurface, context);
     if (makeCurrentError.isError())
     {
         thread->setError(makeCurrentError);
@@ -607,7 +622,12 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     // destroyed surfaces to delete themselves.
     if (previousContext != nullptr && context != previousContext)
     {
-        previousContext->releaseSurface(display);
+        auto err = previousContext->releaseSurface(thread);
+        if (err.isError())
+        {
+            thread->setError(err);
+            return EGL_FALSE;
+        }
     }
 
     thread->setError(NoError());
@@ -866,7 +886,7 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
             return EGL_FALSE;
         }
 
-        error = eglSurface->bindTexImage(textureObject, buffer);
+        error = eglSurface->bindTexImage(thread, textureObject, buffer);
         if (error.isError())
         {
             thread->setError(error);
@@ -943,7 +963,7 @@ EGLBoolean EGLAPIENTRY ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLin
 
     if (texture)
     {
-        error = eglSurface->releaseTexImage(buffer);
+        error = eglSurface->releaseTexImage(thread->getContext(), buffer);
         if (error.isError())
         {
             thread->setError(error);
