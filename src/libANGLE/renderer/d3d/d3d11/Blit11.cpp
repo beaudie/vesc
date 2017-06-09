@@ -1080,7 +1080,7 @@ gl::Error Blit11::swizzleTexture(const gl::Context *context,
 
     // Apply shaders
     stateManager->setInputLayout(support.inputLayout);
-    deviceContext->IASetPrimitiveTopology(topology);
+    stateManager->setPrimitiveTopology(topology);
     deviceContext->VSSetShader(support.vertexShader, nullptr, 0);
 
     deviceContext->PSSetShader(shader->pixelShader.get(), nullptr, 0);
@@ -1215,7 +1215,7 @@ gl::Error Blit11::copyTexture(const gl::Context *context,
 
     // Apply shaders
     stateManager->setInputLayout(support.inputLayout);
-    deviceContext->IASetPrimitiveTopology(topology);
+    stateManager->setPrimitiveTopology(topology);
     deviceContext->VSSetShader(support.vertexShader, nullptr, 0);
 
     deviceContext->PSSetShader(shader->pixelShader.get(), nullptr, 0);
@@ -1347,7 +1347,7 @@ gl::Error Blit11::copyDepth(const gl::Context *context,
 
     // Apply shaders
     stateManager->setInputLayout(&mQuad2DIL.getObj());
-    deviceContext->IASetPrimitiveTopology(topology);
+    stateManager->setPrimitiveTopology(topology);
     deviceContext->VSSetShader(mQuad2DVS.get(), nullptr, 0);
 
     deviceContext->PSSetShader(mDepthPS.get(), nullptr, 0);
@@ -1988,7 +1988,7 @@ gl::ErrorOrResult<TextureHelper11> Blit11::resolveDepth(const gl::Context *conte
 
     // Apply the necessary state changes to the D3D11 immediate device context.
     stateManager->setInputLayout(nullptr);
-    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    stateManager->setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->VSSetShader(mResolveDepthStencilVS.get(), nullptr, 0);
     deviceContext->GSSetShader(nullptr, nullptr, 0);
     deviceContext->RSSetState(nullptr);
@@ -2148,7 +2148,7 @@ gl::ErrorOrResult<TextureHelper11> Blit11::resolveStencil(const gl::Context *con
 
     // Apply the necessary state changes to the D3D11 immediate device context.
     stateManager->setInputLayout(nullptr);
-    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    stateManager->setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->VSSetShader(mResolveDepthStencilVS.get(), nullptr, 0);
     deviceContext->GSSetShader(nullptr, nullptr, 0);
     deviceContext->RSSetState(nullptr);
