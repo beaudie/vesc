@@ -4536,6 +4536,7 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
+    mGLState.onProgramExecutableChange(programObject);
 }
 
 void Context::releaseShaderCompiler()
@@ -4730,8 +4731,8 @@ void Context::programBinary(GLuint program, GLenum binaryFormat, const void *bin
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject != nullptr);
-
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
+    mGLState.onProgramExecutableChange(programObject);
 }
 
 }  // namespace gl
