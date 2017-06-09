@@ -165,18 +165,14 @@ class ProgramD3D : public ProgramImpl
     void setBinaryRetrievableHint(bool retrievable) override;
     void setSeparable(bool separable) override;
 
-    gl::Error getPixelExecutableForFramebuffer(const gl::Framebuffer *fbo,
-                                               ShaderExecutableD3D **outExectuable);
-    gl::Error getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout,
-                                                ShaderExecutableD3D **outExectuable,
-                                                gl::InfoLog *infoLog);
-    gl::Error getVertexExecutableForInputLayout(const gl::InputLayout &inputLayout,
-                                                ShaderExecutableD3D **outExectuable,
-                                                gl::InfoLog *infoLog);
+    gl::Error getVertexExecutableForCachedInputLayout(ShaderExecutableD3D **outExectuable,
+                                                      gl::InfoLog *infoLog);
     gl::Error getGeometryExecutableForPrimitiveType(const gl::ContextState &data,
                                                     GLenum drawMode,
                                                     ShaderExecutableD3D **outExecutable,
                                                     gl::InfoLog *infoLog);
+    gl::Error getPixelExecutableForCachedOutputLayout(ShaderExecutableD3D **outExectuable,
+                                                      gl::InfoLog *infoLog);
     gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
     gl::LinkResult link(const gl::Context *context,
                         const gl::VaryingPacking &packing,
@@ -260,9 +256,14 @@ class ProgramD3D : public ProgramImpl
     }
 
     void updateCachedInputLayout(Serial associatedSerial, const gl::State &state);
-    const gl::InputLayout &getCachedInputLayout() const { return mCachedInputLayout; }
+    void updateCachedOutputLayout(const gl::Framebuffer *framebuffer);
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
+
+    // Checks if we need to recompile certain shaders.
+    bool hasVertexExecutableForCachedInputLayout();
+    bool hasGeometryExecutableForPrimitiveType(GLenum drawMode);
+    bool hasPixelExecutableForCachedOutputLayout();
 
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
@@ -380,6 +381,9 @@ class ProgramD3D : public ProgramImpl
     void initUniformBlockInfo(const gl::Context *context, gl::Shader *shader);
     size_t getUniformBlockInfo(const sh::InterfaceBlock &interfaceBlock);
 
+    void updateCachedInputLayoutFromShader(const gl::Context *context);
+    void updateCachedOutputLayoutFromShader();
+
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;
 
@@ -416,8 +420,8 @@ class ProgramD3D : public ProgramImpl
     GLuint mUsedComputeSamplerRange;
     bool mDirtySamplerMapping;
 
-    // Cache for getPixelExecutableForFramebuffer
-    std::vector<GLenum> mPixelShaderOutputFormatCache;
+    // Cache for pixel shader output layout to save reallocations.
+    std::vector<GLenum> mPixelShaderOutputLayoutCache;
 
     AttribIndexArray mAttribLocationToD3DSemantic;
 
@@ -440,6 +444,6 @@ class ProgramD3D : public ProgramImpl
 
     Serial mCurrentVertexArrayStateSerial;
 };
-}
+}  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_D3D_PROGRAMD3D_H_

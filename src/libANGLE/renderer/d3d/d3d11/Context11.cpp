@@ -10,6 +10,8 @@
 #include "libANGLE/renderer/d3d/d3d11/Context11.h"
 
 #include "common/string_utils.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/renderer/d3d/CompilerD3D.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/RenderbufferD3D.h"
@@ -296,6 +298,58 @@ gl::Error Context11::dispatchCompute(const gl::Context *context,
                                      GLuint numGroupsZ)
 {
     return mRenderer->dispatchCompute(context, numGroupsX, numGroupsY, numGroupsZ);
+}
+
+gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *context,
+                                                         gl::InfoLog *infoLog,
+                                                         gl::MemoryProgramCache *memoryCache,
+                                                         GLenum drawMode)
+{
+    const auto &glState    = context->getGLState();
+    const auto *va11       = GetImplAs<VertexArray11>(glState.getVertexArray());
+    const auto *drawFBO    = glState.getDrawFramebuffer();
+    gl::Program *program   = glState.getProgram();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+
+    programD3D->updateCachedInputLayout(va11->getCurrentStateSerial(), glState);
+    programD3D->updateCachedOutputLayout(drawFBO);
+
+    bool vsNeedsRecompilation = programD3D->hasVertexExecutableForCachedInputLayout();
+    bool gsNeedsRecompilation = programD3D->hasGeometryExecutableForPrimitiveType(drawMode);
+    bool psNeedsRecompilation = programD3D->hasPixelExecutableForCachedOutputLayout();
+
+    if (!vsNeedsRecompilation && !gsNeedsRecompilation && !psNeedsRecompilation)
+    {
+        return gl::NoError();
+    }
+
+    // Load the compiler if necessary and recompile the programs.
+    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
+
+    if (vsNeedsRecompilation)
+    {
+        ShaderExecutableD3D *vertexExe = nullptr;
+        ANGLE_TRY(programD3D->getVertexExecutableForCachedInputLayout(&vertexExe, infoLog));
+    }
+
+    if (gsNeedsRecompilation)
+    {
+        ShaderExecutableD3D *geometryExe = nullptr;
+        ANGLE_TRY(programD3D->getGeometryExecutableForPrimitiveType(
+            context->getContextState(), drawMode, &geometryExe, infoLog));
+    }
+
+    if (psNeedsRecompilation)
+    {
+        ShaderExecutableD3D *pixelExe = nullptr;
+        ANGLE_TRY(programD3D->getPixelExecutableForCachedOutputLayout(&pixelExe, infoLog));
+    }
+
+    // Refresh the program cache entry.
+    gl::ProgramHash programHash = gl::MemoryProgramCache::ComputeHash(context, program);
+    memoryCache->putProgram(programHash, context, program);
+
+    return gl::NoError();
 }
 
 }  // namespace rx

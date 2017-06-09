@@ -758,7 +758,8 @@ class Context final : public ValidationContext
                           void *binary);
     void programBinary(GLuint program, GLenum binaryFormat, const void *binary, GLsizei length);
 
-    void handleError(const Error &error) override;
+    // Returns the error.
+    Error handleError(const Error &error) override;
 
     GLenum getError();
     void markContextLost();
@@ -837,6 +838,9 @@ class Context final : public ValidationContext
 
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+
+    // Called before we call the implementation on any draw call.
+    gl::Error preDrawCall(GLenum drawMode);
 
     std::unique_ptr<rx::ContextImpl> mImplementation;
 
