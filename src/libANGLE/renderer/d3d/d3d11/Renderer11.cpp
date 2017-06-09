@@ -2359,7 +2359,8 @@ gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode
 
     const auto &glState    = data.getState();
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
-    programD3D->updateCachedInputLayout(glState);
+    VertexArray11 *vao     = GetImplAs<VertexArray11>(glState.getVertexArray());
+    programD3D->updateCachedInputLayout(vao->getCurrentStateSerial(), glState);
 
     const auto &inputLayout = programD3D->getCachedInputLayout();
 

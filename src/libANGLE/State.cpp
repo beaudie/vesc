@@ -1066,6 +1066,7 @@ void State::setProgram(const Context *context, Program *newProgram)
         {
             newProgram->addRef();
         }
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
     }
 }
 

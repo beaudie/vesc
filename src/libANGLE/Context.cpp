@@ -4536,6 +4536,16 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
+
+    // OpenGL Spec:
+    // "If the program object that is in use is re-linked successfully, the LinkProgram
+    //  command will install the generated executable code as part of the current rendering
+    //  state if the specified program object was already in use as a result of a previous call
+    //  to UseProgram."
+    if (programObject->isLinked() && mGLState.getProgram() == programObject)
+    {
+        mGLState.setObjectDirty(State::DIRTY_OBJECT_PROGRAM);
+    }
 }
 
 void Context::releaseShaderCompiler()
