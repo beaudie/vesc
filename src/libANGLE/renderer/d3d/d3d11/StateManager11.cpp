@@ -142,23 +142,18 @@ static const GLenum QueryTypes[] = {GL_ANY_SAMPLES_PASSED, GL_ANY_SAMPLES_PASSED
 
 StateManager11::StateManager11(Renderer11 *renderer)
     : mRenderer(renderer),
-      mBlendStateIsDirty(false),
+      mInternalDirtyBits(),
       mCurBlendColor(0, 0, 0, 0),
       mCurSampleMask(0),
-      mDepthStencilStateIsDirty(false),
       mCurStencilRef(0),
       mCurStencilBackRef(0),
       mCurStencilSize(0),
-      mRasterizerStateIsDirty(false),
-      mScissorStateIsDirty(false),
       mCurScissorEnabled(false),
       mCurScissorRect(),
-      mViewportStateIsDirty(false),
       mCurViewport(),
       mCurNear(0.0f),
       mCurFar(0.0f),
       mViewportBounds(),
-      mRenderTargetIsDirty(false),
       mDirtyCurrentValueAttribs(),
       mCurrentValueAttribs(),
       mCurrentInputLayout(),
@@ -221,8 +216,8 @@ void StateManager11::updateStencilSizeIfChanged(bool depthStencilInitialized,
 {
     if (!depthStencilInitialized || stencilSize != mCurStencilSize)
     {
-        mCurStencilSize           = stencilSize;
-        mDepthStencilStateIsDirty = true;
+        mCurStencilSize = stencilSize;
+        mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
     }
 }
 
@@ -231,8 +226,8 @@ void StateManager11::setViewportBounds(const int width, const int height)
     if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3 &&
         (mViewportBounds.width != width || mViewportBounds.height != height))
     {
-        mViewportBounds       = gl::Extents(width, height, 1);
-        mViewportStateIsDirty = true;
+        mViewportBounds = gl::Extents(width, height, 1);
+        mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
     }
 }
 
@@ -252,9 +247,15 @@ void StateManager11::checkPresentPath(const gl::Context *context)
     {
         mCurPresentPathFastEnabled           = presentPathFastActive;
         mCurPresentPathFastColorBufferHeight = colorBufferHeight;
-        mViewportStateIsDirty                = true;  // Viewport may need to be vertically inverted
-        mScissorStateIsDirty                 = true;  // Scissor rect may need to be vertically inverted
-        mRasterizerStateIsDirty              = true;  // Cull Mode may need to be inverted
+
+        // Scissor rect may need to be vertically inverted
+        mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
+
+        // Cull Mode may need to be inverted
+        mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+
+        // Viewport may need to be vertically inverted
+        mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
     }
 }
 
@@ -284,7 +285,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 if (blendState.blendEquationRGB != mCurBlendState.blendEquationRGB ||
                     blendState.blendEquationAlpha != mCurBlendState.blendEquationAlpha)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
@@ -296,27 +297,27 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     blendState.sourceBlendAlpha != mCurBlendState.sourceBlendAlpha ||
                     blendState.destBlendAlpha != mCurBlendState.destBlendAlpha)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
                 if (state.getBlendState().blend != mCurBlendState.blend)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 if (state.getBlendState().sampleAlphaToCoverage !=
                     mCurBlendState.sampleAlphaToCoverage)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DITHER_ENABLED:
                 if (state.getBlendState().dither != mCurBlendState.dither)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
@@ -327,38 +328,38 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     blendState.colorMaskBlue != mCurBlendState.colorMaskBlue ||
                     blendState.colorMaskAlpha != mCurBlendState.colorMaskAlpha)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
             case gl::State::DIRTY_BIT_BLEND_COLOR:
                 if (state.getBlendColor() != mCurBlendColor)
                 {
-                    mBlendStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_MASK:
                 if (state.getDepthStencilState().depthMask != mCurDepthStencilState.depthMask)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
                 if (state.getDepthStencilState().depthTest != mCurDepthStencilState.depthTest)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
                 if (state.getDepthStencilState().depthFunc != mCurDepthStencilState.depthFunc)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
                 if (state.getDepthStencilState().stencilTest != mCurDepthStencilState.stencilTest)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -368,7 +369,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     depthStencil.stencilMask != mCurDepthStencilState.stencilMask ||
                     state.getStencilRef() != mCurStencilRef)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             }
@@ -379,7 +380,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     depthStencil.stencilBackMask != mCurDepthStencilState.stencilBackMask ||
                     state.getStencilBackRef() != mCurStencilBackRef)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             }
@@ -387,14 +388,14 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 if (state.getDepthStencilState().stencilWritemask !=
                     mCurDepthStencilState.stencilWritemask)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
                 if (state.getDepthStencilState().stencilBackWritemask !=
                     mCurDepthStencilState.stencilBackWritemask)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_OPS_FRONT:
@@ -405,7 +406,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                         mCurDepthStencilState.stencilPassDepthFail ||
                     depthStencil.stencilPassDepthPass != mCurDepthStencilState.stencilPassDepthPass)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             }
@@ -418,33 +419,33 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     depthStencil.stencilBackPassDepthPass !=
                         mCurDepthStencilState.stencilBackPassDepthPass)
                 {
-                    mDepthStencilStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
                 }
                 break;
             }
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
                 if (state.getRasterizerState().cullFace != mCurRasterState.cullFace)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE:
                 if (state.getRasterizerState().cullMode != mCurRasterState.cullMode)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_FRONT_FACE:
                 if (state.getRasterizerState().frontFace != mCurRasterState.frontFace)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
                 if (state.getRasterizerState().polygonOffsetFill !=
                     mCurRasterState.polygonOffsetFill)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET:
@@ -453,7 +454,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 if (rasterState.polygonOffsetFactor != mCurRasterState.polygonOffsetFactor ||
                     rasterState.polygonOffsetUnits != mCurRasterState.polygonOffsetUnits)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             }
@@ -461,33 +462,33 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 if (state.getRasterizerState().rasterizerDiscard !=
                     mCurRasterState.rasterizerDiscard)
                 {
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
                 if (state.getScissor() != mCurScissorRect)
                 {
-                    mScissorStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
                 if (state.isScissorTestEnabled() != mCurScissorEnabled)
                 {
-                    mScissorStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
                     // Rasterizer state update needs mCurScissorsEnabled and updates when it changes
-                    mRasterizerStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 if (state.getNearPlane() != mCurNear || state.getFarPlane() != mCurFar)
                 {
-                    mViewportStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
                 if (state.getViewport() != mCurViewport)
                 {
-                    mViewportStateIsDirty = true;
+                    mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
                 }
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
@@ -514,11 +515,6 @@ gl::Error StateManager11::syncBlendState(const gl::Context *context,
                                          const gl::ColorF &blendColor,
                                          unsigned int sampleMask)
 {
-    if (!mBlendStateIsDirty && sampleMask == mCurSampleMask)
-    {
-        return gl::NoError();
-    }
-
     ID3D11BlendState *dxBlendState = nullptr;
     const d3d11::BlendStateKey &key =
         RenderStateCache::GetBlendStateKey(context, framebuffer, blendState);
@@ -552,18 +548,11 @@ gl::Error StateManager11::syncBlendState(const gl::Context *context,
     mCurBlendColor = blendColor;
     mCurSampleMask = sampleMask;
 
-    mBlendStateIsDirty = false;
-
     return gl::NoError();
 }
 
 gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
 {
-    if (!mDepthStencilStateIsDirty)
-    {
-        return gl::NoError();
-    }
-
     mCurDepthStencilState = glState.getDepthStencilState();
     mCurStencilRef        = glState.getStencilRef();
     mCurStencilBackRef    = glState.getStencilBackRef();
@@ -613,25 +602,12 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
 
     mRenderer->getDeviceContext()->OMSetDepthStencilState(d3dState, dxStencilRef);
 
-    mDepthStencilStateIsDirty = false;
-
     return gl::NoError();
 }
 
-gl::Error StateManager11::syncRasterizerState(const gl::Context *context, GLenum drawMode)
+gl::Error StateManager11::syncRasterizerState(const gl::Context *context, bool pointDrawMode)
 {
-    bool pointDrawMode = (drawMode == GL_POINTS);
-    if (pointDrawMode != mCurRasterState.pointDrawMode)
-    {
-        mRasterizerStateIsDirty = true;
-    }
-
     // TODO: Remove pointDrawMode and multiSample from gl::RasterizerState.
-    if (!mRasterizerStateIsDirty)
-    {
-        return gl::NoError();
-    }
-
     gl::RasterizerState rasterState = context->getGLState().getRasterizerState();
     rasterState.pointDrawMode       = pointDrawMode;
 
@@ -665,16 +641,12 @@ gl::Error StateManager11::syncRasterizerState(const gl::Context *context, GLenum
     mRenderer->getDeviceContext()->RSSetState(dxRasterState);
 
     mCurRasterState         = rasterState;
-    mRasterizerStateIsDirty = false;
 
     return gl::NoError();
 }
 
 void StateManager11::syncScissorRectangle(const gl::Rectangle &scissor, bool enabled)
 {
-    if (!mScissorStateIsDirty)
-        return;
-
     int modifiedScissorY = scissor.y;
     if (mCurPresentPathFastEnabled)
     {
@@ -694,7 +666,6 @@ void StateManager11::syncScissorRectangle(const gl::Rectangle &scissor, bool ena
 
     mCurScissorRect      = scissor;
     mCurScissorEnabled   = enabled;
-    mScissorStateIsDirty = false;
 }
 
 void StateManager11::syncViewport(const gl::Caps *caps,
@@ -702,9 +673,6 @@ void StateManager11::syncViewport(const gl::Caps *caps,
                                   float zNear,
                                   float zFar)
 {
-    if (!mViewportStateIsDirty)
-        return;
-
     float actualZNear = gl::clamp01(zNear);
     float actualZFar  = gl::clamp01(zFar);
 
@@ -802,22 +770,19 @@ void StateManager11::syncViewport(const gl::Caps *caps,
     mVertexConstants.viewScale[1] = mPixelConstants.viewScale[1];
     mVertexConstants.viewScale[2] = mPixelConstants.viewScale[2];
     mVertexConstants.viewScale[3] = mPixelConstants.viewScale[3];
-
-    mViewportStateIsDirty = false;
 }
 
 void StateManager11::invalidateRenderTarget(const gl::Context *context)
 {
-    mRenderTargetIsDirty = true;
+    ASSERT(context);
+    mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
 
-    // nullptr only on display initialization.
-    if (!context)
-    {
-        return;
-    }
+    // The D3D11 blend state is heavily dependent on the current render target.
+    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
 
     gl::Framebuffer *fbo = context->getGLState().getDrawFramebuffer();
 
+    // nullptr fbo can occur in some egl events like display initialization.
     if (!fbo)
     {
         return;
@@ -834,9 +799,9 @@ void StateManager11::invalidateRenderTarget(const gl::Context *context)
     if (mCurDisableDepth.valid() && disableDepth == mCurDisableDepth.value() &&
         mCurDisableStencil.valid() && disableStencil == mCurDisableStencil.value())
     {
-        mDepthStencilStateIsDirty = true;
-        mCurDisableDepth          = disableDepth;
-        mCurDisableStencil        = disableStencil;
+        mInternalDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_STATE);
+        mCurDisableDepth   = disableDepth;
+        mCurDisableStencil = disableStencil;
     }
 
     // Since framebuffer->getSamples will return the original samples which may be different with
@@ -853,7 +818,7 @@ void StateManager11::invalidateRenderTarget(const gl::Context *context)
     bool multiSample = (mCurFramebufferSamples.value() != 0);
     if (multiSample != mCurRasterState.multiSample)
     {
-        mRasterizerStateIsDirty     = true;
+        mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
         mCurRasterState.multiSample = multiSample;
     }
 
@@ -870,11 +835,7 @@ void StateManager11::invalidateBoundViews(const gl::Context *context)
 
 void StateManager11::invalidateEverything(const gl::Context *context)
 {
-    mBlendStateIsDirty        = true;
-    mDepthStencilStateIsDirty = true;
-    mRasterizerStateIsDirty   = true;
-    mScissorStateIsDirty      = true;
-    mViewportStateIsDirty     = true;
+    mInternalDirtyBits.set();
 
     // We reset the current SRV data because it might not be in sync with D3D's state
     // anymore. For example when a currently used SRV is used as an RTV, D3D silently
@@ -1063,20 +1024,10 @@ void StateManager11::deinitialize()
 gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer)
 {
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
-    ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
 
-    if (framebuffer11->hasAnyInternalDirtyBit())
-    {
-        ASSERT(framebuffer->id() != 0);
-        framebuffer11->syncInternalState(context);
-    }
-
-    if (!mRenderTargetIsDirty)
-    {
-        return gl::NoError();
-    }
-
-    mRenderTargetIsDirty = false;
+    // Applies the render target surface, depth stencil surface, viewport rectangle and
+    // scissor rectangle to the renderer
+    ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->cachedComplete());
 
     // Check for zero-sized default framebuffer, which is a special case.
     // in this case we do not wish to modify any state and just silently return false.
@@ -1171,9 +1122,6 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
     // Apply the render target and depth stencil
     mRenderer->getDeviceContext()->OMSetRenderTargets(maxExistingRT, framebufferRTVs.data(),
                                                       framebufferDSV);
-
-    // The D3D11 blend state is heavily dependent on the current render target.
-    mBlendStateIsDirty = true;
 
     setViewportBounds(renderTargetWidth, renderTargetHeight);
 
@@ -1296,30 +1244,65 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     const auto &data    = context->getContextState();
     const auto &glState = data.getState();
 
-    // Applies the render target surface, depth stencil surface, viewport rectangle and
-    // scissor rectangle to the renderer
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
-    ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->cachedComplete());
-    ANGLE_TRY(syncFramebuffer(context, framebuffer));
+    Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
+    ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
 
-    // Setting viewport state
-    syncViewport(&data.getCaps(), glState.getViewport(), glState.getNearPlane(),
-                 glState.getFarPlane());
+    if (framebuffer11->hasAnyInternalDirtyBit())
+    {
+        ASSERT(framebuffer->id() != 0);
+        framebuffer11->syncInternalState(context);
+    }
 
-    // Setting scissor state
-    syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
+    bool pointDrawMode = (drawMode == GL_POINTS);
+    if (pointDrawMode != mCurRasterState.pointDrawMode)
+    {
+        mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+    }
 
-    // Applying rasterizer state to D3D11 device
-    ANGLE_TRY(syncRasterizerState(context, drawMode));
-
-    // Setting blend state
+    // TODO(jmadill): This can be recomputed only on framebuffer changes.
     ASSERT(mCurFramebufferSamples.valid());
-    unsigned int mask = GetBlendSampleMask(data, mCurFramebufferSamples.value());
-    ANGLE_TRY(syncBlendState(context, framebuffer, glState.getBlendState(), glState.getBlendColor(),
-                             mask));
+    unsigned int sampleMask = GetBlendSampleMask(data, mCurFramebufferSamples.value());
+    if (sampleMask != mCurSampleMask)
+    {
+        mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
+    }
 
-    // Setting depth stencil state
-    ANGLE_TRY(syncDepthStencilState(glState));
+    auto dirtyBitsCopy = mInternalDirtyBits;
+    mInternalDirtyBits.reset();
+
+    for (auto dirtyBit : dirtyBitsCopy)
+    {
+        switch (dirtyBit)
+        {
+            case DIRTY_BIT_RENDER_TARGET:
+                ANGLE_TRY(syncFramebuffer(context, framebuffer));
+                break;
+            case DIRTY_BIT_VIEWPORT_STATE:
+                syncViewport(&data.getCaps(), glState.getViewport(), glState.getNearPlane(),
+                             glState.getFarPlane());
+                break;
+            case DIRTY_BIT_SCISSOR_STATE:
+                syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
+                break;
+            case DIRTY_BIT_RASTERIZER_STATE:
+                ANGLE_TRY(syncRasterizerState(context, pointDrawMode));
+                break;
+            case DIRTY_BIT_BLEND_STATE:
+                ANGLE_TRY(syncBlendState(context, framebuffer, glState.getBlendState(),
+                                         glState.getBlendColor(), sampleMask));
+                break;
+            case DIRTY_BIT_DEPTH_STENCIL_STATE:
+                ANGLE_TRY(syncDepthStencilState(glState));
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+
+    // Check that we haven't set any dirty bits in the flushing of the dirty bits loop.
+    ASSERT(mInternalDirtyBits.none());
 
     return gl::NoError();
 }
