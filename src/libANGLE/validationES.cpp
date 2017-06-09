@@ -1719,7 +1719,7 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
     return true;
 }
 
-bool ValidateReadPixelsRobustANGLE(ValidationContext *context,
+bool ValidateReadPixelsRobustANGLE(Context *context,
                                    GLint x,
                                    GLint y,
                                    GLsizei width,
@@ -1771,7 +1771,7 @@ bool ValidateReadnPixelsEXT(Context *context,
                                   nullptr, nullptr, pixels);
 }
 
-bool ValidateReadnPixelsRobustANGLE(ValidationContext *context,
+bool ValidateReadnPixelsRobustANGLE(Context *context,
                                     GLint x,
                                     GLint y,
                                     GLsizei width,
@@ -5222,7 +5222,7 @@ bool ValidateGetVertexAttribBase(Context *context,
     return true;
 }
 
-bool ValidateReadPixelsBase(ValidationContext *context,
+bool ValidateReadPixelsBase(Context *context,
                             GLint x,
                             GLint y,
                             GLsizei width,
@@ -5288,8 +5288,8 @@ bool ValidateReadPixelsBase(ValidationContext *context,
         return false;
     }
 
-    GLenum currentFormat        = framebuffer->getImplementationColorReadFormat();
-    GLenum currentType          = framebuffer->getImplementationColorReadType();
+    GLenum currentFormat        = framebuffer->getImplementationColorReadFormat(context);
+    GLenum currentType          = framebuffer->getImplementationColorReadType(context);
     GLenum currentComponentType = readBuffer->getFormat().info->componentType;
 
     bool validFormatTypeCombination =
