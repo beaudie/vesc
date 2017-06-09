@@ -155,6 +155,20 @@ class ContextImpl : public GLImplFactory
                                       GLuint numGroupsY,
                                       GLuint numGroupsZ) = 0;
 
+    // This does not correspond to a GL API, but matches a common GL driver behaviour where
+    // draw call states can trigger dynamic shader recompilation. We pass the Program cache
+    // handle as a mutable pointer to this Impl method to both trigger dynamic recompilations
+    // and to allow the back-end to store the refreshed shaders in the cache.
+    // We currently only need the drawMode parameter, but that might change in the future.
+    // TODO(jmadill): Add one for compute shaders when necessary.
+    virtual gl::Error triggerDrawCallProgramRecompilation(const gl::Context *context,
+                                                          gl::InfoLog *infoLog,
+                                                          gl::MemoryProgramCache *memoryCache,
+                                                          GLenum drawMode)
+    {
+        return gl::NoError();
+    }
+
     const gl::ContextState &getContextState() { return mState; }
     int getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     int getClientMinorVersion() const { return mState.getClientMinorVersion(); }
