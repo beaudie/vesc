@@ -549,6 +549,13 @@ void MemoryProgramCache::putProgram(const ProgramHash &programHash,
     put(programHash, std::move(binaryProgram));
 }
 
+void MemoryProgramCache::updateProgram(const Context *context, const Program *program)
+{
+    gl::ProgramHash programHash;
+    ComputeHash(context, program, &programHash);
+    putProgram(programHash, context, program);
+}
+
 void MemoryProgramCache::computeHashAndPutBinary(const Context *context,
                                                  const Program *program,
                                                  const uint8_t *binary,
