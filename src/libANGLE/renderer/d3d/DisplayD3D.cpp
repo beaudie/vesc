@@ -251,7 +251,7 @@ egl::Error DisplayD3D::restoreLostDevice(const egl::Thread *thread)
     {
         if (surface->getBoundTexture())
         {
-            surface->releaseTexImage(EGL_BACK_BUFFER);
+            ANGLE_TRY(surface->releaseTexImage(thread->getContext(), EGL_BACK_BUFFER));
         }
         SurfaceD3D *surfaceD3D = GetImplAs<SurfaceD3D>(surface);
         surfaceD3D->releaseSwapChain();

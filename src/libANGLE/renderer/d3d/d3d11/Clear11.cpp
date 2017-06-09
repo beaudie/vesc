@@ -327,7 +327,7 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     if (clearParams.clearDepth || clearParams.clearStencil)
     {
         ASSERT(depthStencilAttachment != nullptr);
-        ANGLE_TRY(depthStencilAttachment->getRenderTarget(&depthStencilRenderTarget));
+        ANGLE_TRY(depthStencilAttachment->getRenderTarget(context, &depthStencilRenderTarget));
     }
 
     // Iterate over the color buffers which require clearing and determine if they can be
@@ -416,7 +416,7 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
             drawBufferStates[colorAttachmentIndex] != GL_NONE)
         {
             RenderTarget11 *renderTarget = nullptr;
-            ANGLE_TRY(attachment.getRenderTarget(&renderTarget));
+            ANGLE_TRY(attachment.getRenderTarget(context, &renderTarget));
 
             const gl::InternalFormat &formatInfo = *attachment.getFormat().info;
 
