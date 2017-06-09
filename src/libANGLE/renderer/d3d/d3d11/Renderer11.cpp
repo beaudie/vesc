@@ -2345,55 +2345,6 @@ gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
     return gl::NoError();
 }
 
-gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode)
-{
-    // This method is called single-threaded.
-    ANGLE_TRY(ensureHLSLCompilerInitialized());
-
-    const auto &glState    = data.getState();
-    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
-    programD3D->updateCachedInputLayout(glState);
-
-    const auto &inputLayout = programD3D->getCachedInputLayout();
-
-    ShaderExecutableD3D *vertexExe = nullptr;
-    ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
-
-    const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
-    ShaderExecutableD3D *pixelExe          = nullptr;
-    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
-
-    ShaderExecutableD3D *geometryExe = nullptr;
-    ANGLE_TRY(
-        programD3D->getGeometryExecutableForPrimitiveType(data, drawMode, &geometryExe, nullptr));
-
-    const d3d11::VertexShader *vertexShader =
-        (vertexExe ? &GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : nullptr);
-
-    // Skip pixel shader if we're doing rasterizer discard.
-    const d3d11::PixelShader *pixelShader = nullptr;
-    if (!glState.getRasterizerState().rasterizerDiscard)
-    {
-        pixelShader = (pixelExe ? &GetAs<ShaderExecutable11>(pixelExe)->getPixelShader() : nullptr);
-    }
-
-    const d3d11::GeometryShader *geometryShader = nullptr;
-    if (glState.isTransformFeedbackActiveUnpaused())
-    {
-        geometryShader =
-            (vertexExe ? &GetAs<ShaderExecutable11>(vertexExe)->getStreamOutShader() : nullptr);
-    }
-    else
-    {
-        geometryShader =
-            (geometryExe ? &GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : nullptr);
-    }
-
-    mStateManager.setDrawShaders(vertexShader, geometryShader, pixelShader);
-
-    return programD3D->applyUniforms(drawMode);
-}
-
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
                                     GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray)
@@ -4585,7 +4536,6 @@ gl::Error Renderer11::genericDrawElements(const gl::Context *context,
     ANGLE_TRY(applyVertexBuffer(context, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
                                 static_cast<GLsizei>(vertexCount), instances, &indexInfo));
     ANGLE_TRY(applyTextures(context));
-    ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
     if (!skipDraw(data, mode))
@@ -4621,7 +4571,6 @@ gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
     ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ANGLE_TRY(applyVertexBuffer(context, mode, first, count, instances, nullptr));
     ANGLE_TRY(applyTextures(context));
-    ANGLE_TRY(applyShaders(data, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(data));
 
     if (!skipDraw(data, mode))
@@ -4656,7 +4605,6 @@ gl::Error Renderer11::genericDrawIndirect(const gl::Context *context,
     ANGLE_TRY(applyTransformFeedbackBuffers(contextState));
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
     ANGLE_TRY(applyTextures(context));
-    ANGLE_TRY(applyShaders(contextState, mode));
     ANGLE_TRY(programD3D->applyUniformBuffers(contextState));
 
     if (type == GL_NONE)
