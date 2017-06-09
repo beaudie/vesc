@@ -355,6 +355,11 @@ bool RendererD3D::isRobustResourceInitEnabled() const
     return mDisplay->isRobustResourceInitEnabled();
 }
 
+Serial RendererD3D::generateSerial()
+{
+    return mSerialFactory.generate();
+}
+
 unsigned int GetBlendSampleMask(const gl::ContextState &data, int samples)
 {
     const auto &glState = data.getState();
