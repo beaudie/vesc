@@ -142,6 +142,7 @@ class StateManager11 final : angle::NonCopyable
     void checkPresentPath(const gl::Context *context);
 
     gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
+    gl::Error syncProgram(const gl::Context *context, GLenum drawMode);
 
     enum DirtyBitType
     {
