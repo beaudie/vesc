@@ -53,8 +53,9 @@ ImageSibling::~ImageSibling()
 {
     // EGL images should hold a ref to their targets and siblings, a Texture should not be deletable
     // while it is attached to an EGL image.
+    // Child class should orphan images before destruction.
     ASSERT(mSourcesOf.empty());
-    orphanImages();
+    ASSERT(mTargetOf.get() == nullptr);
 }
 
 void ImageSibling::setTargetImage(egl::Image *imageTarget)
@@ -64,21 +65,21 @@ void ImageSibling::setTargetImage(egl::Image *imageTarget)
     imageTarget->addTargetSibling(this);
 }
 
-gl::Error ImageSibling::orphanImages()
+gl::Error ImageSibling::orphanImages(const gl::Context *context)
 {
     if (mTargetOf.get() != nullptr)
     {
         // Can't be a target and have sources.
         ASSERT(mSourcesOf.empty());
 
-        ANGLE_TRY(mTargetOf->orphanSibling(this));
+        ANGLE_TRY(mTargetOf->orphanSibling(context, this));
         mTargetOf.set(nullptr);
     }
     else
     {
         for (auto &sourceImage : mSourcesOf)
         {
-            ANGLE_TRY(sourceImage->orphanSibling(this));
+            ANGLE_TRY(sourceImage->orphanSibling(context, this));
         }
         mSourcesOf.clear();
     }
@@ -139,10 +140,10 @@ void Image::addTargetSibling(ImageSibling *sibling)
     mState.targets.insert(sibling);
 }
 
-gl::Error Image::orphanSibling(ImageSibling *sibling)
+gl::Error Image::orphanSibling(const gl::Context *context, ImageSibling *sibling)
 {
     // notify impl
-    ANGLE_TRY(mImplementation->orphan(sibling));
+    ANGLE_TRY(mImplementation->orphan(context, sibling));
 
     if (mState.source.get() == sibling)
     {
