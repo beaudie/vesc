@@ -1713,11 +1713,7 @@ bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSi
         primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
 
-    if (primitiveTopology != mCurrentPrimitiveTopology)
-    {
-        mDeviceContext->IASetPrimitiveTopology(primitiveTopology);
-        mCurrentPrimitiveTopology = primitiveTopology;
-    }
+    mStateManager.setPrimitiveTopology(primitiveTopology);
 
     return count >= minCount;
 }
@@ -2787,8 +2783,6 @@ void Renderer11::markAllStateDirty(const gl::Context *context)
     mCurrentPixelConstantBuffer    = angle::DirtyPointer;
     mCurrentGeometryConstantBuffer = angle::DirtyPointer;
     mCurrentComputeConstantBuffer  = angle::DirtyPointer;
-
-    mCurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
 
 void Renderer11::releaseDeviceResources()
