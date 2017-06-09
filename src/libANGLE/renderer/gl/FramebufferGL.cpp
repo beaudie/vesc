@@ -132,13 +132,13 @@ static void BindFramebufferAttachment(const FunctionsGL *functions,
     }
 }
 
-Error FramebufferGL::discard(size_t count, const GLenum *attachments)
+Error FramebufferGL::discard(const gl::Context *context, size_t count, const GLenum *attachments)
 {
     // glInvalidateFramebuffer accepts the same enums as glDiscardFramebufferEXT
-    return invalidate(count, attachments);
+    return invalidate(context, count, attachments);
 }
 
-Error FramebufferGL::invalidate(size_t count, const GLenum *attachments)
+Error FramebufferGL::invalidate(const gl::Context *context, size_t count, const GLenum *attachments)
 {
     const GLenum *finalAttachmentsPtr = attachments;
 
@@ -165,7 +165,8 @@ Error FramebufferGL::invalidate(size_t count, const GLenum *attachments)
     return gl::NoError();
 }
 
-Error FramebufferGL::invalidateSub(size_t count,
+Error FramebufferGL::invalidateSub(const gl::Context *context,
+                                   size_t count,
                                    const GLenum *attachments,
                                    const gl::Rectangle &area)
 {
@@ -249,14 +250,14 @@ Error FramebufferGL::clearBufferfi(const gl::Context *context,
     return gl::NoError();
 }
 
-GLenum FramebufferGL::getImplementationColorReadFormat() const
+GLenum FramebufferGL::getImplementationColorReadFormat(const gl::Context *context) const
 {
     const auto *readAttachment = mState.getReadAttachment();
     const Format &format       = readAttachment->getFormat();
     return format.info->getReadPixelsFormat();
 }
 
-GLenum FramebufferGL::getImplementationColorReadType() const
+GLenum FramebufferGL::getImplementationColorReadType(const gl::Context *context) const
 {
     const auto *readAttachment = mState.getReadAttachment();
     const Format &format       = readAttachment->getFormat();

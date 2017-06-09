@@ -207,9 +207,12 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
     bool hasValidDepthStencil() const;
 
-    Error discard(size_t count, const GLenum *attachments);
-    Error invalidate(size_t count, const GLenum *attachments);
-    Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area);
+    Error discard(const Context *context, size_t count, const GLenum *attachments);
+    Error invalidate(const Context *context, size_t count, const GLenum *attachments);
+    Error invalidateSub(const Context *context,
+                        size_t count,
+                        const GLenum *attachments,
+                        const gl::Rectangle &area);
 
     Error clear(const gl::Context *context, GLbitfield mask);
     Error clearBufferfv(const gl::Context *context,
@@ -230,8 +233,8 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
                         GLfloat depth,
                         GLint stencil);
 
-    GLenum getImplementationColorReadFormat() const;
-    GLenum getImplementationColorReadType() const;
+    GLenum getImplementationColorReadFormat(const Context *context) const;
+    GLenum getImplementationColorReadType(const Context *context) const;
     Error readPixels(const gl::Context *context,
                      const gl::Rectangle &area,
                      GLenum format,

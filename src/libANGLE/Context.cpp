@@ -405,7 +405,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     handleError(mImplementation->initialize());
 }
 
-void Context::destroy(egl::Display *display)
+egl::Error Context::destroy(const egl::Thread *thread)
 {
     mGLState.reset(this);
 
@@ -443,7 +443,7 @@ void Context::destroy(egl::Display *display)
 
     SafeDelete(mSurfacelessFramebuffer);
 
-    releaseSurface(display);
+    ANGLE_TRY(releaseSurface(thread));
     releaseShaderCompiler();
 
     mState.mBuffers->release(this);
@@ -454,13 +454,15 @@ void Context::destroy(egl::Display *display)
     mState.mFenceSyncs->release(this);
     mState.mPaths->release(this);
     mState.mFramebuffers->release(this);
+
+    return egl::NoError();
 }
 
 Context::~Context()
 {
 }
 
-void Context::makeCurrent(egl::Display *display, egl::Surface *surface)
+egl::Error Context::makeCurrent(const egl::Thread *thread, egl::Surface *surface)
 {
     if (!mHasBeenCurrent)
     {
@@ -485,12 +487,12 @@ void Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     // TODO(jmadill): Rework this when we support ContextImpl
     mGLState.setAllDirtyBits();
 
-    releaseSurface(display);
+    ANGLE_TRY(releaseSurface(thread));
 
     Framebuffer *newDefault = nullptr;
     if (surface != nullptr)
     {
-        surface->setIsCurrent(display, true);
+        ANGLE_TRY(surface->setIsCurrent(thread, true));
         mCurrentSurface = surface;
         newDefault      = surface->getDefaultFramebuffer();
     }
@@ -520,9 +522,10 @@ void Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 
     // Notify the renderer of a context switch
     mImplementation->onMakeCurrent(mState);
+    return egl::NoError();
 }
 
-void Context::releaseSurface(egl::Display *display)
+egl::Error Context::releaseSurface(const egl::Thread *thread)
 {
     // Remove the default framebuffer
     Framebuffer *currentDefault = nullptr;
@@ -547,9 +550,11 @@ void Context::releaseSurface(egl::Display *display)
 
     if (mCurrentSurface)
     {
-        mCurrentSurface->setIsCurrent(display, false);
+        ANGLE_TRY(mCurrentSurface->setIsCurrent(thread, false));
         mCurrentSurface = nullptr;
     }
+
+    return egl::NoError();
 }
 
 GLuint Context::createBuffer()
@@ -1800,25 +1805,25 @@ void Context::getTexParameteriv(GLenum target, GLenum pname, GLint *params)
 void Context::texParameterf(GLenum target, GLenum pname, GLfloat param)
 {
     Texture *texture = getTargetTexture(target);
-    SetTexParameterf(texture, pname, param);
+    SetTexParameterf(this, texture, pname, param);
 }
 
 void Context::texParameterfv(GLenum target, GLenum pname, const GLfloat *params)
 {
     Texture *texture = getTargetTexture(target);
-    SetTexParameterfv(texture, pname, params);
+    SetTexParameterfv(this, texture, pname, params);
 }
 
 void Context::texParameteri(GLenum target, GLenum pname, GLint param)
 {
     Texture *texture = getTargetTexture(target);
-    SetTexParameteri(texture, pname, param);
+    SetTexParameteri(this, texture, pname, param);
 }
 
 void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 {
     Texture *texture = getTargetTexture(target);
-    SetTexParameteriv(texture, pname, params);
+    SetTexParameteriv(this, texture, pname, params);
 }
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
@@ -3050,7 +3055,7 @@ void Context::discardFramebuffer(GLenum target, GLsizei numAttachments, const GL
 
     // The specification isn't clear what should be done when the framebuffer isn't complete.
     // We leave it up to the framebuffer implementation to decide what to do.
-    handleError(framebuffer->discard(numAttachments, attachments));
+    handleError(framebuffer->discard(this, numAttachments, attachments));
 }
 
 void Context::invalidateFramebuffer(GLenum target,
@@ -3068,7 +3073,7 @@ void Context::invalidateFramebuffer(GLenum target,
         return;
     }
 
-    handleError(framebuffer->invalidate(numAttachments, attachments));
+    handleError(framebuffer->invalidate(this, numAttachments, attachments));
 }
 
 void Context::invalidateSubFramebuffer(GLenum target,
@@ -3091,7 +3096,7 @@ void Context::invalidateSubFramebuffer(GLenum target,
     }
 
     Rectangle area(x, y, width, height);
-    handleError(framebuffer->invalidateSub(numAttachments, attachments, area));
+    handleError(framebuffer->invalidateSub(this, numAttachments, attachments, area));
 }
 
 void Context::texImage2D(GLenum target,
@@ -4068,7 +4073,7 @@ void Context::renderbufferStorage(GLenum target,
     GLenum convertedInternalFormat = getConvertedRenderbufferFormat(internalformat);
 
     Renderbuffer *renderbuffer = mGLState.getCurrentRenderbuffer();
-    handleError(renderbuffer->setStorage(convertedInternalFormat, width, height));
+    handleError(renderbuffer->setStorage(this, convertedInternalFormat, width, height));
 }
 
 void Context::renderbufferStorageMultisample(GLenum target,
@@ -4082,7 +4087,7 @@ void Context::renderbufferStorageMultisample(GLenum target,
 
     Renderbuffer *renderbuffer = mGLState.getCurrentRenderbuffer();
     handleError(
-        renderbuffer->setStorageMultisample(samples, convertedInternalFormat, width, height));
+        renderbuffer->setStorageMultisample(this, samples, convertedInternalFormat, width, height));
 }
 
 void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
