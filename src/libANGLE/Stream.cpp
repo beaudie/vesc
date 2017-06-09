@@ -18,6 +18,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/StreamProducerImpl.h"
 
@@ -176,7 +177,7 @@ Error Stream::createProducerD3D11TextureNV12(const AttributeMap &attributes)
 }
 
 // Called when the consumer of this stream starts using the stream
-Error Stream::consumerAcquire()
+Error Stream::consumerAcquire(const Thread *thread)
 {
     ASSERT(mState == EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR ||
            mState == EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR);
@@ -193,14 +194,14 @@ Error Stream::consumerAcquire()
         if (mPlanes[i].texture != nullptr)
         {
             mPlanes[i].texture->acquireImageFromStream(
-                mProducerImplementation->getGLFrameDescription(i));
+                thread->getContext(), mProducerImplementation->getGLFrameDescription(i));
         }
     }
 
     return NoError();
 }
 
-Error Stream::consumerRelease()
+Error Stream::consumerRelease(const Thread *thread)
 {
     ASSERT(mState == EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR ||
            mState == EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR);
@@ -213,7 +214,7 @@ Error Stream::consumerRelease()
     {
         if (mPlanes[i].texture != nullptr)
         {
-            mPlanes[i].texture->releaseImageFromStream();
+            mPlanes[i].texture->releaseImageFromStream(thread->getContext());
         }
     }
 
