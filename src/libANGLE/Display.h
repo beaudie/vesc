@@ -19,6 +19,7 @@
 #include "libANGLE/Config.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/LoggingAnnotator.h"
+#include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/Version.h"
 
 namespace gl
@@ -186,6 +187,7 @@ class Display final : angle::NonCopyable
     angle::LoggingAnnotator mAnnotator;
 
     gl::TextureManager *mTextureManager;
+    gl::MemoryProgramCache mMemoryProgramCache;
     size_t mGlobalTextureShareGroupUsers;
 };
 

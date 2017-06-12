@@ -372,6 +372,8 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mDevice(eglDevice),
       mPlatform(platform),
       mTextureManager(nullptr),
+      // TODO(jmadill): Find an appropriate size limit.
+      mMemoryProgramCache(100000),
       mGlobalTextureShareGroupUsers(0)
 {
 }
@@ -727,9 +729,9 @@ Error Display::createContext(const Config *configuration,
         shareTextures = mTextureManager;
     }
 
-    gl::Context *context =
-        new gl::Context(mImplementation, configuration, shareContext, shareTextures, attribs,
-                        mDisplayExtensions, isRobustResourceInitEnabled());
+    gl::Context *context = new gl::Context(mImplementation, configuration, shareContext,
+                                           shareTextures, &mMemoryProgramCache, attribs,
+                                           mDisplayExtensions, isRobustResourceInitEnabled());
 
     ASSERT(context != nullptr);
     mContextSet.insert(context);
