@@ -57,7 +57,8 @@ class StateManager11 final : angle::NonCopyable
     void deinitialize();
     void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits);
 
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
+    gl::Error setBlendState(const gl::ContextState &data,
+                            const gl::Framebuffer *framebuffer,
                             const gl::BlendState &blendState,
                             const gl::ColorF &blendColor,
                             unsigned int sampleMask);

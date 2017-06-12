@@ -301,11 +301,9 @@ bool FramebufferD3D::checkStatus() const
 void FramebufferD3D::syncState(const gl::Context *context,
                                const gl::Framebuffer::DirtyBits &dirtyBits)
 {
-    bool invalidateColorAttachmentCache = false;
-
     if (!mColorAttachmentsForRender.valid())
     {
-        invalidateColorAttachmentCache = true;
+        return;
     }
 
     for (auto dirtyBit : dirtyBits)
@@ -314,45 +312,47 @@ void FramebufferD3D::syncState(const gl::Context *context,
              dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX) ||
             dirtyBit == gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS)
         {
-            invalidateColorAttachmentCache = true;
+            mColorAttachmentsForRender.reset();
         }
     }
-
-    if (!invalidateColorAttachmentCache)
-    {
-        return;
-    }
-
-    // Does not actually free memory
-    gl::AttachmentList colorAttachmentsForRender;
-
-    const auto &colorAttachments = mState.getColorAttachments();
-    const auto &drawBufferStates = mState.getDrawBufferStates();
-    const auto &workarounds      = mRenderer->getWorkarounds();
-
-    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
-    {
-        GLenum drawBufferState                           = drawBufferStates[attachmentIndex];
-        const gl::FramebufferAttachment &colorAttachment = colorAttachments[attachmentIndex];
-
-        if (colorAttachment.isAttached() && drawBufferState != GL_NONE)
-        {
-            ASSERT(drawBufferState == GL_BACK ||
-                   drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
-            colorAttachmentsForRender.push_back(&colorAttachment);
-        }
-        else if (!workarounds.mrtPerfWorkaround)
-        {
-            colorAttachmentsForRender.push_back(nullptr);
-        }
-    }
-
-    mColorAttachmentsForRender = std::move(colorAttachmentsForRender);
 }
 
-const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender() const
+const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl::ContextState &data)
 {
-    ASSERT(mColorAttachmentsForRender.valid());
+    gl::DrawBufferMask activeProgramOutputs =
+        data.getState().getProgram()->getActiveOutputVariables();
+    if (!mColorAttachmentsForRender.valid() || mActiveProgramOutputsUsed != activeProgramOutputs)
+    {
+        // Does not actually free memory
+        gl::AttachmentList colorAttachmentsForRender;
+
+        const auto &colorAttachments = mState.getColorAttachments();
+        const auto &drawBufferStates = mState.getDrawBufferStates();
+        const auto &workarounds      = mRenderer->getWorkarounds();
+
+        for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size();
+             ++attachmentIndex)
+        {
+            GLenum drawBufferState                           = drawBufferStates[attachmentIndex];
+            const gl::FramebufferAttachment &colorAttachment = colorAttachments[attachmentIndex];
+
+            if (colorAttachment.isAttached() && drawBufferState != GL_NONE &&
+                activeProgramOutputs[attachmentIndex])
+            {
+                ASSERT(drawBufferState == GL_BACK ||
+                       drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
+                colorAttachmentsForRender.push_back(&colorAttachment);
+            }
+            else if (!workarounds.mrtPerfWorkaround)
+            {
+                colorAttachmentsForRender.push_back(nullptr);
+            }
+        }
+
+        mColorAttachmentsForRender = std::move(colorAttachmentsForRender);
+        mActiveProgramOutputsUsed  = activeProgramOutputs;
+    }
+
     return mColorAttachmentsForRender.value();
 }
 

@@ -1696,7 +1696,7 @@ gl::Error Renderer11::updateState(const gl::Context *context, GLenum drawMode)
 
     // Setting blend state
     unsigned int mask = GetBlendSampleMask(data, samples);
-    ANGLE_TRY(mStateManager.setBlendState(framebuffer, glState.getBlendState(),
+    ANGLE_TRY(mStateManager.setBlendState(data, framebuffer, glState.getBlendState(),
                                           glState.getBlendColor(), mask));
 
     // Setting depth stencil state
@@ -1915,8 +1915,8 @@ gl::Error Renderer11::drawArraysImpl(const gl::ContextState &data,
         }
 
         rx::ShaderExecutableD3D *pixelExe = nullptr;
-        ANGLE_TRY(
-            programD3D->getPixelExecutableForFramebuffer(glState.getDrawFramebuffer(), &pixelExe));
+        ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(data, glState.getDrawFramebuffer(),
+                                                               &pixelExe));
 
         // Skip the draw call if rasterizer discard is enabled (or no fragment shader).
         if (!pixelExe || glState.getRasterizerState().rasterizerDiscard)
@@ -2412,9 +2412,9 @@ gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode
     ShaderExecutableD3D *vertexExe = nullptr;
     ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
 
-    const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+    gl::Framebuffer *drawFramebuffer       = glState.getDrawFramebuffer();
     ShaderExecutableD3D *pixelExe          = nullptr;
-    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
+    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(data, drawFramebuffer, &pixelExe));
 
     ShaderExecutableD3D *geometryExe = nullptr;
     ANGLE_TRY(
