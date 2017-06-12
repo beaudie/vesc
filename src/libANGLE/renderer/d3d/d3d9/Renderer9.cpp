@@ -1807,7 +1807,7 @@ gl::Error Renderer9::applyShaders(const gl::ContextState &data, GLenum drawMode)
 
     const gl::Framebuffer *drawFramebuffer = data.getState().getDrawFramebuffer();
     ShaderExecutableD3D *pixelExe          = nullptr;
-    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
+    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(data, drawFramebuffer, &pixelExe));
 
     IDirect3DVertexShader9 *vertexShader =
         (vertexExe ? GetAs<ShaderExecutable9>(vertexExe)->getVertexShader() : nullptr);

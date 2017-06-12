@@ -1135,13 +1135,14 @@ void ProgramD3D::setSeparable(bool /* separable */)
 {
 }
 
-gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::Framebuffer *fbo,
+gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::ContextState &data,
+                                                       const gl::Framebuffer *fbo,
                                                        ShaderExecutableD3D **outExecutable)
 {
     mPixelShaderOutputFormatCache.clear();
 
-    const FramebufferD3D *fboD3D = GetImplAs<FramebufferD3D>(fbo);
-    const gl::AttachmentList &colorbuffers = fboD3D->getColorAttachmentsForRender();
+    FramebufferD3D *fboD3D                 = GetImplAs<FramebufferD3D>(fbo);
+    const gl::AttachmentList &colorbuffers = fboD3D->getColorAttachmentsForRender(data);
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {

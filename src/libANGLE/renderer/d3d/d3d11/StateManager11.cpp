@@ -10,11 +10,12 @@
 
 #include "common/bitset_utils.h"
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
-#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 
 namespace rx
 {
@@ -500,7 +501,8 @@ void StateManager11::syncState(const gl::State &state, const gl::State::DirtyBit
     // TODO(jmadill): Input layout and vertex buffer state.
 }
 
-gl::Error StateManager11::setBlendState(const gl::Framebuffer *framebuffer,
+gl::Error StateManager11::setBlendState(const gl::ContextState &data,
+                                        const gl::Framebuffer *framebuffer,
                                         const gl::BlendState &blendState,
                                         const gl::ColorF &blendColor,
                                         unsigned int sampleMask)
@@ -511,7 +513,8 @@ gl::Error StateManager11::setBlendState(const gl::Framebuffer *framebuffer,
     }
 
     ID3D11BlendState *dxBlendState = nullptr;
-    const d3d11::BlendStateKey &key = RenderStateCache::GetBlendStateKey(framebuffer, blendState);
+    const d3d11::BlendStateKey &key =
+        RenderStateCache::GetBlendStateKey(data, framebuffer, blendState);
 
     ANGLE_TRY(mRenderer->getBlendState(key, &dxBlendState));
 
@@ -1050,6 +1053,8 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
     size_t appliedRTIndex  = 0;
     bool skipInactiveRTs   = mRenderer->getWorkarounds().mrtPerfWorkaround;
     const auto &drawStates = framebuffer->getDrawBufferStates();
+    gl::DrawBufferMask activeProgramOutputs =
+        context->getContextState().getState().getProgram()->getActiveOutputVariables();
     UINT maxExistingRT     = 0;
 
     for (size_t rtIndex = 0; rtIndex < colorRTs.size(); ++rtIndex)
@@ -1057,7 +1062,8 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
         const RenderTarget11 *renderTarget = colorRTs[rtIndex];
 
         // Skip inactive rendertargets if the workaround is enabled.
-        if (skipInactiveRTs && (!renderTarget || drawStates[rtIndex] == GL_NONE))
+        if (skipInactiveRTs &&
+            (!renderTarget || drawStates[rtIndex] == GL_NONE || !activeProgramOutputs[rtIndex]))
         {
             continue;
         }
