@@ -358,8 +358,12 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
         {
             GLint byteOffset         = row * rowBytes;
             const GLubyte *rowPixels = pixelsWithSkip + byteOffset;
+            if (mState.mBaseLevel != 0)
+                mFunctions->texParameteri(target, GL_TEXTURE_BASE_LEVEL, 0);
             mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x, row + area.y,
                                       area.width, 1, format, type, rowPixels);
+            if (mState.mBaseLevel != 0)
+                mFunctions->texParameteri(target, GL_TEXTURE_BASE_LEVEL, mState.mBaseLevel);
         }
     }
     return gl::NoError();
