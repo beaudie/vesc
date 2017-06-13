@@ -1901,6 +1901,13 @@ bool Program::validateUniformBlocksCount(GLuint maxUniformBlocks,
     GLuint blockCount = 0;
     for (const sh::InterfaceBlock &block : intefaceBlocks)
     {
+        // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately in
+        // shader.
+        if (block.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
+
         if (block.staticUse || block.layout != sh::BLOCKLAYOUT_PACKED)
         {
             if (++blockCount > maxUniformBlocks)
@@ -1925,11 +1932,26 @@ bool Program::validateVertexAndFragmentInterfaceBlocks(
 
     for (const sh::InterfaceBlock &vertexInterfaceBlock : vertexInterfaceBlocks)
     {
+
+        // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately in
+        // shader.
+        if (vertexInterfaceBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
         linkedUniformBlocks[vertexInterfaceBlock.name] = &vertexInterfaceBlock;
     }
 
     for (const sh::InterfaceBlock &fragmentInterfaceBlock : fragmentInterfaceBlocks)
     {
+
+        // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately in
+        // shader.
+        if (fragmentInterfaceBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
+
         auto entry = linkedUniformBlocks.find(fragmentInterfaceBlock.name);
         if (entry != linkedUniformBlocks.end())
         {
@@ -2496,6 +2518,13 @@ void Program::gatherInterfaceBlockInfo(const Context *context)
         for (const sh::InterfaceBlock &computeBlock : computeShader->getInterfaceBlocks(context))
         {
 
+            // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately
+            // in shader.
+            if (computeBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+            {
+                continue;
+            }
+
             // Only 'packed' blocks are allowed to be considered inactive.
             if (!computeBlock.staticUse && computeBlock.layout == sh::BLOCKLAYOUT_PACKED)
                 continue;
@@ -2519,6 +2548,14 @@ void Program::gatherInterfaceBlockInfo(const Context *context)
 
     for (const sh::InterfaceBlock &vertexBlock : vertexShader->getInterfaceBlocks(context))
     {
+
+        // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately in
+        // shader.
+        if (vertexBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
+
         // Only 'packed' blocks are allowed to be considered inactive.
         if (!vertexBlock.staticUse && vertexBlock.layout == sh::BLOCKLAYOUT_PACKED)
             continue;
@@ -2534,6 +2571,13 @@ void Program::gatherInterfaceBlockInfo(const Context *context)
 
     for (const sh::InterfaceBlock &fragmentBlock : fragmentShader->getInterfaceBlocks(context))
     {
+        // TODO(jiajia.qin@intel.com): Gather uniformBlcoks and shaderStorageBlcoks separately in
+        // shader.
+        if (fragmentBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
+
         // Only 'packed' blocks are allowed to be considered inactive.
         if (!fragmentBlock.staticUse && fragmentBlock.layout == sh::BLOCKLAYOUT_PACKED)
             continue;
