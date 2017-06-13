@@ -32,6 +32,20 @@ BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
     }
 }
 
+BlockType GetBlockType(TQualifier qualifier)
+{
+    switch (qualifier)
+    {
+        case EvqUniform:
+            return BLOCK_UNIFORM;
+        case EvqBuffer:
+            return BLOCK_BUFFER;
+        default:
+            UNREACHABLE();
+            return BLOCK_UNIFORM;
+    }
+}
+
 void ExpandUserDefinedVariable(const ShaderVariable &variable,
                                const std::string &name,
                                const std::string &mappedName,
@@ -199,6 +213,18 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
 
                 // It's an internal error to reference an undefined user uniform
                 ASSERT(symbolName.compare(0, 3, "gl_") != 0 || var);
+            }
+            break;
+            case EvqBuffer:
+            {
+                const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
+
+                InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
+                ASSERT(namedBlock);
+                var = FindVariable(symbolName, &namedBlock->fields);
+
+                // Set static use on the parent interface block here
+                namedBlock->staticUse = true;
             }
             break;
             case EvqFragCoord:
@@ -551,6 +577,7 @@ InterfaceBlock CollectVariables::recordInterfaceBlock(const TIntermSymbol &varia
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
     interfaceBlock.binding          = blockType->blockBinding();
     interfaceBlock.layout           = GetBlockLayoutType(blockType->blockStorage());
+    interfaceBlock.blockType        = GetBlockType(variable.getType().getQualifier());
 
     // Gather field information
     for (const TField *field : blockType->fields())
@@ -600,7 +627,9 @@ bool CollectVariables::visitDeclaration(Visit, TIntermDeclaration *node)
         // uniforms, varyings, outputs and interface blocks cannot be initialized in a shader, we
         // must have only TIntermSymbol nodes in the sequence in the cases we are interested in.
         const TIntermSymbol &variable = *variableNode->getAsSymbolNode();
-        if (typedNode.getBasicType() == EbtInterfaceBlock)
+        // TODO(jiajia.qin@intel.com): In order not to affect the old logic of InterfaceBlock, only
+        // uniform blocks are added into InterfaceBlock. Refactor it once 'buffer' is supported.
+        if (qualifier == EvqUniform && typedNode.getBasicType() == EbtInterfaceBlock)
         {
             mInterfaceBlocks->push_back(recordInterfaceBlock(variable));
         }
