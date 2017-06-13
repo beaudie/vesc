@@ -296,6 +296,8 @@ ProgramState::ProgramState()
       mAttachedComputeShader(nullptr),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mSamplerUniformRange(0, 0),
+      mImageUniformRange(0, 0),
+      mAtomicCounterUniformRange(0, 0),
       mBinaryRetrieveableHint(false)
 {
     mComputeShaderLocalSize.fill(1);
@@ -745,6 +747,7 @@ Error Program::link(const gl::Context *context)
 
     setUniformValuesFromBindingQualifiers();
 
+    gatherAtomicCounterBuffers();
     gatherInterfaceBlockInfo(context);
 
     return NoError();
@@ -1194,7 +1197,8 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
       case GL_UNIFORM_TYPE:         return static_cast<GLint>(uniform.type);
       case GL_UNIFORM_SIZE:         return static_cast<GLint>(uniform.elementCount());
       case GL_UNIFORM_NAME_LENGTH:  return static_cast<GLint>(uniform.name.size() + 1 + (uniform.isArray() ? 3 : 0));
-      case GL_UNIFORM_BLOCK_INDEX:  return uniform.blockIndex;
+      case GL_UNIFORM_BLOCK_INDEX:
+          return uniform.bufferIndex;
       case GL_UNIFORM_OFFSET:       return uniform.blockInfo.offset;
       case GL_UNIFORM_ARRAY_STRIDE: return uniform.blockInfo.arrayStride;
       case GL_UNIFORM_MATRIX_STRIDE: return uniform.blockInfo.matrixStride;
@@ -1738,6 +1742,11 @@ bool Program::linkUniforms(const Context *context,
 
     linkSamplerAndImageBindings();
 
+    if (!linkAtomicCounterBuffers())
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -1745,6 +1754,14 @@ void Program::linkSamplerAndImageBindings()
 {
     unsigned int high = static_cast<unsigned int>(mState.mUniforms.size());
     unsigned int low  = high;
+
+    for (auto counterIter = mState.mUniforms.rbegin();
+         counterIter != mState.mUniforms.rend() && counterIter->isAtomicCounter(); ++counterIter)
+    {
+        --low;
+    }
+
+    mState.mAtomicCounterUniformRange = RangeUI(low, high);
 
     for (auto imageIter = mState.mUniforms.rbegin();
          imageIter != mState.mUniforms.rend() && imageIter->isImage(); ++imageIter)
@@ -1788,6 +1805,39 @@ void Program::linkSamplerAndImageBindings()
         mState.mSamplerBindings.emplace_back(
             SamplerBinding(textureType, samplerUniform.elementCount()));
     }
+}
+
+bool Program::linkAtomicCounterBuffers()
+{
+    for (unsigned int index : mState.mAtomicCounterUniformRange)
+    {
+        auto &uniform = mState.mUniforms[index];
+        bool found    = false;
+        for (unsigned int bufferIndex = 0; bufferIndex < mState.mAtomicCounterBuffers.size();
+             ++bufferIndex)
+        {
+            auto &buffer = mState.mAtomicCounterBuffers[bufferIndex];
+            if (buffer.binding == uniform.binding)
+            {
+                buffer.memberIndexes.push_back(index);
+                uniform.bufferIndex = bufferIndex;
+                found               = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            AtomicCounterBuffer atomicCounterBuffer;
+            atomicCounterBuffer.binding = uniform.binding;
+            atomicCounterBuffer.memberIndexes.push_back(index);
+            mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
+            uniform.bufferIndex = static_cast<int>(mState.mAtomicCounterBuffers.size() - 1);
+        }
+    }
+    // TODO(jie.a.chen@intel.com): Count each atomic counter buffer to validate against
+    // gl_Max[Vertex|Fragment|Compute|Combined]AtomicCounterBuffers.
+
+    return true;
 }
 
 bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog,
@@ -2505,6 +2555,13 @@ void Program::setUniformValuesFromBindingQualifiers()
     }
 }
 
+void Program::gatherAtomicCounterBuffers()
+{
+    // TODO(jie.a.chen@intel.com): Get the actual OFFSET and ARRAY_STRIDE from the backend for each
+    // counter.
+    // TODO(jie.a.chen@intel.com): Get the actual BUFFER_DATA_SIZE from backend for each buffer.
+}
+
 void Program::gatherInterfaceBlockInfo(const Context *context)
 {
     ASSERT(mState.mUniformBlocks.empty());
@@ -2610,7 +2667,7 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
             }
 
             LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
-                                     blockIndex, memberInfo);
+                                     -1, blockIndex, memberInfo);
 
             // Since block uniforms have no location, we don't need to store them in the uniform
             // locations list.
@@ -2652,7 +2709,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             }
             UniformBlock block(interfaceBlock.name, true, arrayElement,
                                blockBinding + arrayElement);
-            block.memberUniformIndexes = blockUniformIndexes;
+            block.memberIndexes = blockUniformIndexes;
 
             switch (shaderType)
             {
@@ -2689,7 +2746,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             return;
         }
         UniformBlock block(interfaceBlock.name, false, 0, blockBinding);
-        block.memberUniformIndexes = blockUniformIndexes;
+        block.memberIndexes = blockUniformIndexes;
 
         switch (shaderType)
         {
