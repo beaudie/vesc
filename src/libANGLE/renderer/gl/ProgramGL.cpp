@@ -76,10 +76,14 @@ gl::LinkResult ProgramGL::load(const gl::Context *context,
     const WorkaroundsGL &workaroundsGL = GetImplAs<ContextGL>(context)->getWorkaroundsGL();
     if (workaroundsGL.reapplyUBOBindingsAfterLoadingBinaryProgram)
     {
-        for (size_t bindingIndex : mState.getActiveUniformBlockBindingsMask())
+        const auto &blocks = mState.getUniformBlocks();
+        for (unsigned int blockIndex = 0; blockIndex < blocks.size(); blockIndex++)
         {
-            GLuint uintIndex = static_cast<GLuint>(bindingIndex);
-            setUniformBlockBinding(uintIndex, mState.getUniformBlockBinding(uintIndex));
+            const auto &uniformBlock = blocks[blockIndex];
+            if (uniformBlock.binding != 0)
+            {
+                setUniformBlockBinding(blockIndex, uniformBlock.binding);
+            }
         }
     }
 

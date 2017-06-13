@@ -275,9 +275,6 @@ struct PixelPackState : PixelStoreStateBase
 // Used in Program and VertexArray.
 using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
 
-// Used in Program
-using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
-
 // Used in Framebuffer
 using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 

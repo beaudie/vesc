@@ -24,11 +24,12 @@
 #include "common/mathutil.h"
 #include "common/Optional.h"
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/Uniform.h"
+#include "libANGLE/angletypes.h"
 
 namespace rx
 {
@@ -48,8 +49,6 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
-struct UniformBlock;
-struct LinkedUniform;
 struct PackedVarying;
 
 extern const char * const g_fakepath;
@@ -217,11 +216,7 @@ class ProgramState final : angle::NonCopyable
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const
     {
         ASSERT(uniformBlockIndex < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS);
-        return mUniformBlockBindings[uniformBlockIndex];
-    }
-    const UniformBlockBindingMask &getActiveUniformBlockBindingsMask() const
-    {
-        return mActiveUniformBlockBindings;
+        return mUniformBlocks[uniformBlockIndex].binding;
     }
     const std::vector<sh::Attribute> &getAttributes() const { return mAttributes; }
     const AttributesMask &getActiveAttribLocationsMask() const
@@ -238,12 +233,6 @@ class ProgramState final : angle::NonCopyable
     const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
     const RangeUI &getSamplerUniformRange() const { return mSamplerUniformRange; }
 
-    using UniformBlockBindingArray =
-        std::array<GLuint, IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
-    const UniformBlockBindingArray &getUniformBlockBindings() const
-    {
-        return mUniformBlockBindings;
-    }
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
@@ -271,9 +260,6 @@ class ProgramState final : angle::NonCopyable
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
-
-    UniformBlockBindingArray mUniformBlockBindings;
-    UniformBlockBindingMask mActiveUniformBlockBindings;
 
     std::vector<sh::Attribute> mAttributes;
     angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
