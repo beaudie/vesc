@@ -24,11 +24,12 @@
 #include "common/mathutil.h"
 #include "common/Optional.h"
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/Uniform.h"
+#include "libANGLE/angletypes.h"
 
 namespace rx
 {
@@ -48,8 +49,6 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
-struct UniformBlock;
-struct LinkedUniform;
 struct PackedVarying;
 
 extern const char * const g_fakepath;
@@ -217,7 +216,7 @@ class ProgramState final : angle::NonCopyable
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const
     {
         ASSERT(uniformBlockIndex < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS);
-        return mUniformBlockBindings[uniformBlockIndex];
+        return mUniformBlocks[uniformBlockIndex].binding;
     }
     const UniformBlockBindingMask &getActiveUniformBlockBindingsMask() const
     {
@@ -234,6 +233,10 @@ class ProgramState final : angle::NonCopyable
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
+    const std::vector<BackedBufferInfo> &getAtomicCounterBuffers() const
+    {
+        return mAtomicCounterBuffers;
+    }
 
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndexFromName(const std::string &name) const;
@@ -257,7 +260,6 @@ class ProgramState final : angle::NonCopyable
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
 
-    std::array<GLuint, IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS> mUniformBlockBindings;
     UniformBlockBindingMask mActiveUniformBlockBindings;
 
     std::vector<sh::Attribute> mAttributes;
@@ -271,6 +273,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
     std::vector<UniformBlock> mUniformBlocks;
+    std::vector<BackedBufferInfo> mAtomicCounterBuffers;
     RangeUI mSamplerUniformRange;
 
     // An array of the samplers that are used by the program
@@ -509,6 +512,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                       InfoLog &infoLog,
                       const Bindings &uniformLocationBindings);
     void linkSamplerBindings();
+    bool linkAtomicCounterBuffers();
 
     bool areMatchingInterfaceBlocks(InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,
@@ -534,6 +538,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void setUniformValuesFromBindingQualifiers();
 
+    void gatherAtomicCounterBuffers();
     void gatherInterfaceBlockInfo(const Context *context);
     template <typename VarT>
     void defineUniformBlockMembers(const std::vector<VarT> &fields,

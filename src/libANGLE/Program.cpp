@@ -56,6 +56,37 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->structName = stream->readString();
 }
 
+void WriteBackedBufferInfo(BinaryOutputStream *stream, const BackedBufferInfo &var)
+{
+    stream->writeInt(var.binding);
+    stream->writeInt(var.dataSize);
+
+    stream->writeInt(var.vertexStaticUse);
+    stream->writeInt(var.fragmentStaticUse);
+    stream->writeInt(var.computeStaticUse);
+
+    stream->writeInt(var.memberIndexes.size());
+    for (unsigned int memberCounterIndex : var.memberIndexes)
+    {
+        stream->writeInt(memberCounterIndex);
+    }
+}
+
+void LoadBackedBufferInfo(BinaryInputStream *stream, BackedBufferInfo *var)
+{
+    var->binding           = stream->readInt<int>();
+    var->dataSize          = stream->readInt<unsigned int>();
+    var->vertexStaticUse   = stream->readBool();
+    var->fragmentStaticUse = stream->readBool();
+    var->computeStaticUse  = stream->readBool();
+
+    unsigned int numMembers = stream->readInt<unsigned int>();
+    for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
+    {
+        var->memberIndexes.push_back(stream->readInt<unsigned int>());
+    }
+}
+
 // This simplified cast function doesn't need to worry about advanced concepts like
 // depth range values, or casting to bool.
 template <typename DestT, typename SrcT>
@@ -753,6 +784,7 @@ Error Program::link(const gl::Context *context)
 
     setUniformValuesFromBindingQualifiers();
 
+    gatherAtomicCounterBuffers();
     gatherInterfaceBlockInfo(context);
 
     return NoError();
@@ -846,7 +878,7 @@ Error Program::loadBinary(const Context *context,
         LinkedUniform uniform;
         LoadShaderVar(&stream, &uniform);
 
-        uniform.blockIndex                 = stream.readInt<int>();
+        uniform.bufferIndex                = stream.readInt<int>();
         uniform.blockInfo.offset           = stream.readInt<int>();
         uniform.blockInfo.arrayStride      = stream.readInt<int>();
         uniform.blockInfo.matrixStride     = stream.readInt<int>();
@@ -879,26 +911,20 @@ Error Program::loadBinary(const Context *context,
         stream.readString(&uniformBlock.name);
         stream.readBool(&uniformBlock.isArray);
         stream.readInt(&uniformBlock.arrayElement);
-        stream.readInt(&uniformBlock.binding);
-        stream.readInt(&uniformBlock.dataSize);
-        stream.readBool(&uniformBlock.vertexStaticUse);
-        stream.readBool(&uniformBlock.fragmentStaticUse);
 
-        unsigned int numMembers = stream.readInt<unsigned int>();
-        for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
-        {
-            uniformBlock.memberUniformIndexes.push_back(stream.readInt<unsigned int>());
-        }
+        LoadBackedBufferInfo(&stream, &uniformBlock);
 
         mState.mUniformBlocks.push_back(uniformBlock);
     }
 
-    for (GLuint bindingIndex = 0; bindingIndex < mState.mUniformBlockBindings.size();
-         ++bindingIndex)
+    unsigned int atomicCounterBufferCount = stream.readInt<unsigned int>();
+    ASSERT(mState.mAtomicCounterBuffers.empty());
+    for (unsigned int bufferIndex = 0; bufferIndex < atomicCounterBufferCount; ++bufferIndex)
     {
-        stream.readInt(&mState.mUniformBlockBindings[bindingIndex]);
-        mState.mActiveUniformBlockBindings.set(bindingIndex,
-                                               mState.mUniformBlockBindings[bindingIndex] != 0);
+        BackedBufferInfo atomicCounterBuffer;
+        LoadBackedBufferInfo(&stream, &atomicCounterBuffer);
+
+        mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
     }
 
     unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
@@ -1016,7 +1042,7 @@ Error Program::saveBinary(const Context *context,
 
         // FIXME: referenced
 
-        stream.writeInt(uniform.blockIndex);
+        stream.writeInt(uniform.bufferIndex);
         stream.writeInt(uniform.blockInfo.offset);
         stream.writeInt(uniform.blockInfo.arrayStride);
         stream.writeInt(uniform.blockInfo.matrixStride);
@@ -1039,22 +1065,14 @@ Error Program::saveBinary(const Context *context,
         stream.writeString(uniformBlock.name);
         stream.writeInt(uniformBlock.isArray);
         stream.writeInt(uniformBlock.arrayElement);
-        stream.writeInt(uniformBlock.binding);
-        stream.writeInt(uniformBlock.dataSize);
 
-        stream.writeInt(uniformBlock.vertexStaticUse);
-        stream.writeInt(uniformBlock.fragmentStaticUse);
-
-        stream.writeInt(uniformBlock.memberUniformIndexes.size());
-        for (unsigned int memberUniformIndex : uniformBlock.memberUniformIndexes)
-        {
-            stream.writeInt(memberUniformIndex);
-        }
+        WriteBackedBufferInfo(&stream, uniformBlock);
     }
 
-    for (GLuint binding : mState.mUniformBlockBindings)
+    stream.writeInt(mState.mAtomicCounterBuffers.size());
+    for (const BackedBufferInfo &atomicCounterBuffer : mState.mAtomicCounterBuffers)
     {
-        stream.writeInt(binding);
+        WriteBackedBufferInfo(&stream, atomicCounterBuffer);
     }
 
     stream.writeInt(mState.mLinkedTransformFeedbackVaryings.size());
@@ -1493,7 +1511,8 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
       case GL_UNIFORM_TYPE:         return static_cast<GLint>(uniform.type);
       case GL_UNIFORM_SIZE:         return static_cast<GLint>(uniform.elementCount());
       case GL_UNIFORM_NAME_LENGTH:  return static_cast<GLint>(uniform.name.size() + 1 + (uniform.isArray() ? 3 : 0));
-      case GL_UNIFORM_BLOCK_INDEX:  return uniform.blockIndex;
+      case GL_UNIFORM_BLOCK_INDEX:
+          return uniform.bufferIndex;
       case GL_UNIFORM_OFFSET:       return uniform.blockInfo.offset;
       case GL_UNIFORM_ARRAY_STRIDE: return uniform.blockInfo.arrayStride;
       case GL_UNIFORM_MATRIX_STRIDE: return uniform.blockInfo.matrixStride;
@@ -1859,7 +1878,7 @@ const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
 
 void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
-    mState.mUniformBlockBindings[uniformBlockIndex] = uniformBlockBinding;
+    mState.mUniformBlocks[uniformBlockIndex].binding = uniformBlockBinding;
     mState.mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlockBinding != 0);
     mProgram->setUniformBlockBinding(uniformBlockIndex, uniformBlockBinding);
 }
@@ -1871,10 +1890,6 @@ GLuint Program::getUniformBlockBinding(GLuint uniformBlockIndex) const
 
 void Program::resetUniformBlockBindings()
 {
-    for (unsigned int blockId = 0; blockId < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS; blockId++)
-    {
-        mState.mUniformBlockBindings[blockId] = 0;
-    }
     mState.mActiveUniformBlockBindings.reset();
 }
 
@@ -2046,6 +2061,11 @@ bool Program::linkUniforms(const Context *context,
 
     linkSamplerBindings();
 
+    if (!linkAtomicCounterBuffers())
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -2070,6 +2090,42 @@ void Program::linkSamplerBindings()
         mState.mSamplerBindings.emplace_back(
             SamplerBinding(textureType, samplerUniform.elementCount()));
     }
+}
+
+bool Program::linkAtomicCounterBuffers()
+{
+    for (unsigned int index = 0; index < mState.mUniforms.size(); index++)
+    {
+        auto &uniform = mState.mUniforms[index];
+        if (uniform.isAtomicCounter())
+        {
+            bool found = false;
+            for (unsigned int bufferIndex = 0; bufferIndex < mState.mAtomicCounterBuffers.size();
+                 ++bufferIndex)
+            {
+                auto &buffer = mState.mAtomicCounterBuffers[bufferIndex];
+                if (buffer.binding == uniform.binding)
+                {
+                    buffer.memberIndexes.push_back(index);
+                    uniform.bufferIndex = bufferIndex;
+                    found               = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                BackedBufferInfo atomicCounterBuffer;
+                atomicCounterBuffer.binding = uniform.binding;
+                atomicCounterBuffer.memberIndexes.push_back(index);
+                mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
+                uniform.bufferIndex = static_cast<int>(mState.mAtomicCounterBuffers.size() - 1);
+            }
+        }
+    }
+    // TODO(jie.a.chen@intel.com): Count each atomic counter buffer to validate against
+    // gl_Max[Vertex|Fragment|Compute|Combined]AtomicCounterBuffers.
+
+    return true;
 }
 
 bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog,
@@ -2787,6 +2843,13 @@ void Program::setUniformValuesFromBindingQualifiers()
     }
 }
 
+void Program::gatherAtomicCounterBuffers()
+{
+    // TODO(jie.a.chen@intel.com): Get the actual OFFSET and ARRAY_STRIDE from the backend for each
+    // counter.
+    // TODO(jie.a.chen@intel.com): Get the actual BUFFER_DATA_SIZE from backend for each buffer.
+}
+
 void Program::gatherInterfaceBlockInfo(const Context *context)
 {
     ASSERT(mState.mUniformBlocks.empty());
@@ -2892,7 +2955,7 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
             }
 
             LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
-                                     blockIndex, memberInfo);
+                                     -1, blockIndex, memberInfo);
 
             // Since block uniforms have no location, we don't need to store them in the uniform
             // locations list.
@@ -2934,7 +2997,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             }
             UniformBlock block(interfaceBlock.name, true, arrayElement,
                                blockBinding + arrayElement);
-            block.memberUniformIndexes = blockUniformIndexes;
+            block.memberIndexes = blockUniformIndexes;
 
             switch (shaderType)
             {
@@ -2971,7 +3034,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             return;
         }
         UniformBlock block(interfaceBlock.name, false, 0, blockBinding);
-        block.memberUniformIndexes = blockUniformIndexes;
+        block.memberIndexes = blockUniformIndexes;
 
         switch (shaderType)
         {
