@@ -124,8 +124,10 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mFunctionReturnsValue(false),
       mChecksPrecisionErrors(checksPrecErrors),
       mFragmentPrecisionHighOnESSL1(false),
-      mDefaultMatrixPacking(EmpColumnMajor),
-      mDefaultBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
+      mDefaultUniformMatrixPacking(EmpColumnMajor),
+      mDefaultUniformBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
+      mDefaultBufferMatrixPacking(EmpColumnMajor),
+      mDefaultBufferBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
       mDiagnostics(diagnostics),
       mDirectiveHandler(ext,
                         *mDiagnostics,
@@ -148,6 +150,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxUniformLocations(resources.MaxUniformLocations),
       mMaxUniformBufferBindings(resources.MaxUniformBufferBindings),
       mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
+      mMaxShaderStorageBufferBindings(resources.MaxShaderStorageBufferBindings),
       mDeclaringFunction(false)
 {
     mComputeShaderLocalSize.fill(-1);
@@ -426,6 +429,12 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
         case EvqUniform:
             message = "can't modify a uniform";
             break;
+        case EvqBuffer:
+            if (node->getMemoryQualifier().readonly)
+            {
+                message = "can't modify a readonly buffer variable";
+            }
+            break;
         case EvqVaryingIn:
             message = "can't modify a varying";
             break;
@@ -605,6 +614,11 @@ bool TParseContext::checkConstructorArguments(const TSourceLoc &line,
             std::string reason("cannot convert a variable with type ");
             reason += getBasicString(argTyped->getBasicType());
             error(line, reason.c_str(), "constructor");
+            return false;
+        }
+        if (argTyped->getQualifier() == EvqBuffer && argTyped->getMemoryQualifier().writeonly)
+        {
+            error(line, "cannot convert a writeonly buffer variable", "constructor");
             return false;
         }
         if (argTyped->getBasicType() == EbtVoid)
@@ -1037,7 +1051,7 @@ void TParseContext::checkIsParameterQualifierValid(
         checkOutParameterIsNotOpaqueType(line, typeQualifier.qualifier, *type);
     }
 
-    if (!IsImage(type->getBasicType()))
+    if (!IsImage(type->getBasicType()) && typeQualifier.qualifier != EvqBuffer)
     {
         checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, line);
     }
@@ -1193,7 +1207,15 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                       getQualifierString(publicType.qualifier));
                 return;
             }
-
+            break;
+        case EvqBuffer:
+            if (publicType.getBasicType() != EbtInterfaceBlock)
+            {
+                error(identifierLocation,
+                      "cannot declare buffer variables at global scope(outside a block)",
+                      getQualifierString(publicType.qualifier));
+                return;
+            }
         default:
             break;
     }
@@ -1415,13 +1437,28 @@ void TParseContext::checkSamplerBindingIsValid(const TSourceLoc &location,
     }
 }
 
-void TParseContext::checkBlockBindingIsValid(const TSourceLoc &location, int binding, int arraySize)
+void TParseContext::checkBlockBindingIsValid(const TSourceLoc &location,
+                                             const TQualifier &qualifier,
+                                             int binding,
+                                             int arraySize)
 {
     int size = (arraySize == 0 ? 1 : arraySize);
-    if (binding + size > mMaxUniformBufferBindings)
+    if (qualifier == EvqUniform)
     {
-        error(location, "interface block binding greater than MAX_UNIFORM_BUFFER_BINDINGS",
-              "binding");
+        if (binding + size > mMaxUniformBufferBindings)
+        {
+            error(location, "uniform block binding greater than MAX_UNIFORM_BUFFER_BINDINGS",
+                  "binding");
+        }
+    }
+    else if (qualifier == EvqBuffer)
+    {
+        if (binding + size > mMaxShaderStorageBufferBindings)
+        {
+            error(location,
+                  "shader storage block binding greater than MAX_SHADER_STORAGE_BUFFER_BINDINGS",
+                  "binding");
+        }
     }
 }
 void TParseContext::checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding)
@@ -1972,25 +2009,28 @@ void TParseContext::checkLocalVariableConstStorageQualifier(const TQualifierWrap
 void TParseContext::checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &memoryQualifier,
                                                        const TSourceLoc &location)
 {
+    const std::string reason(
+        "Only allowed with shader storage blocks, variables declared within shader storage blocks "
+        "and variables declared as image types.");
     if (memoryQualifier.readonly)
     {
-        error(location, "Only allowed with images.", "readonly");
+        error(location, reason.c_str(), "readonly");
     }
     if (memoryQualifier.writeonly)
     {
-        error(location, "Only allowed with images.", "writeonly");
+        error(location, reason.c_str(), "writeonly");
     }
     if (memoryQualifier.coherent)
     {
-        error(location, "Only allowed with images.", "coherent");
+        error(location, reason.c_str(), "coherent");
     }
     if (memoryQualifier.restrictQualifier)
     {
-        error(location, "Only allowed with images.", "restrict");
+        error(location, reason.c_str(), "restrict");
     }
     if (memoryQualifier.volatileQualifier)
     {
-        error(location, "Only allowed with images.", "volatile");
+        error(location, reason.c_str(), "volatile");
     }
 }
 
@@ -2560,9 +2600,9 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
             return;
         }
 
-        if (typeQualifier.qualifier != EvqUniform)
+        if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
         {
-            error(typeQualifier.line, "invalid qualifier: global layout must be uniform",
+            error(typeQualifier.line, "invalid qualifier: global layout must be blocks",
                   getQualifierString(typeQualifier.qualifier));
             return;
         }
@@ -2578,12 +2618,26 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
         if (layoutQualifier.matrixPacking != EmpUnspecified)
         {
-            mDefaultMatrixPacking = layoutQualifier.matrixPacking;
+            if (typeQualifier.qualifier == EvqUniform)
+            {
+                mDefaultUniformMatrixPacking = layoutQualifier.matrixPacking;
+            }
+            else if (typeQualifier.qualifier == EvqBuffer)
+            {
+                mDefaultBufferMatrixPacking = layoutQualifier.matrixPacking;
+            }
         }
 
         if (layoutQualifier.blockStorage != EbsUnspecified)
         {
-            mDefaultBlockStorage = layoutQualifier.blockStorage;
+            if (typeQualifier.qualifier == EvqUniform)
+            {
+                mDefaultUniformBlockStorage = layoutQualifier.blockStorage;
+            }
+            else if (typeQualifier.qualifier == EvqBuffer)
+            {
+                mDefaultBufferBlockStorage = layoutQualifier.blockStorage;
+            }
         }
     }
 }
@@ -2925,9 +2979,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
-    if (typeQualifier.qualifier != EvqUniform)
+    if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
     {
-        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform",
+        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform or buffer",
               getQualifierString(typeQualifier.qualifier));
     }
 
@@ -2936,7 +2990,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         error(typeQualifier.line, "invalid qualifier on interface block member", "invariant");
     }
 
-    checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
+    if (typeQualifier.qualifier != EvqBuffer)
+    {
+        checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
+    }
 
     // add array index
     unsigned int arraySize = 0;
@@ -2951,8 +3008,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     }
     else
     {
-        checkBlockBindingIsValid(typeQualifier.line, typeQualifier.layoutQualifier.binding,
-                                 arraySize);
+        checkBlockBindingIsValid(typeQualifier.line, typeQualifier.qualifier,
+                                 typeQualifier.layoutQualifier.binding, arraySize);
     }
 
     checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
@@ -2962,12 +3019,26 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     if (blockLayoutQualifier.matrixPacking == EmpUnspecified)
     {
-        blockLayoutQualifier.matrixPacking = mDefaultMatrixPacking;
+        if (typeQualifier.qualifier == EvqUniform)
+        {
+            blockLayoutQualifier.matrixPacking = mDefaultUniformMatrixPacking;
+        }
+        else if (typeQualifier.qualifier == EvqBuffer)
+        {
+            blockLayoutQualifier.matrixPacking = mDefaultBufferMatrixPacking;
+        }
     }
 
     if (blockLayoutQualifier.blockStorage == EbsUnspecified)
     {
-        blockLayoutQualifier.blockStorage = mDefaultBlockStorage;
+        if (typeQualifier.qualifier == EvqUniform)
+        {
+            blockLayoutQualifier.blockStorage = mDefaultUniformBlockStorage;
+        }
+        else if (typeQualifier.qualifier == EvqBuffer)
+        {
+            blockLayoutQualifier.blockStorage = mDefaultBufferBlockStorage;
+        }
     }
 
     checkWorkGroupSizeIsNotSpecified(nameLine, blockLayoutQualifier);
@@ -2997,7 +3068,20 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         switch (qualifier)
         {
             case EvqGlobal:
+                break;
             case EvqUniform:
+                if (typeQualifier.qualifier == EvqBuffer)
+                {
+                    error(field->line(), "invalid qualifier on shader storage block member",
+                          getQualifierString(qualifier));
+                }
+                break;
+            case EvqBuffer:
+                if (typeQualifier.qualifier == EvqUniform)
+                {
+                    error(field->line(), "invalid qualifier on uniform block member",
+                          getQualifierString(qualifier));
+                }
                 break;
             default:
                 error(field->line(), "invalid qualifier on interface block member",
@@ -3894,6 +3978,11 @@ TIntermTyped *TParseContext::createUnaryMath(TOperator op,
                 unaryOpError(loc, GetOperatorString(op), child->getCompleteString());
                 return nullptr;
             }
+            if (child->getQualifier() == EvqBuffer && child->getMemoryQualifier().writeonly)
+            {
+                unaryOpError(loc, GetOperatorString(op), child->getCompleteString());
+                return nullptr;
+            }
         // Operators for built-ins are already type checked against their prototype.
         default:
             break;
@@ -3949,6 +4038,12 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                       GetOperatorString(op));
                 return false;
         }
+    }
+
+    if (right->getQualifier() == EvqBuffer && right->getMemoryQualifier().writeonly)
+    {
+        error(loc, "Invalid operation for buffer variables with writeonly", GetOperatorString(op));
+        return false;
     }
 
     if (left->getType().getStruct() || right->getType().getStruct())
@@ -4734,6 +4829,13 @@ TIntermTyped *TParseContext::addTernarySelection(TIntermTyped *cond,
         // Note that structs containing opaque types don't need to be checked as structs are
         // forbidden below.
         error(loc, "ternary operator is not allowed for opaque types", "?:");
+        return falseExpression;
+    }
+
+    if (trueExpression->getQualifier() == EvqBuffer &&
+        trueExpression->getMemoryQualifier().writeonly)
+    {
+        error(loc, "ternary operator is not allowed for buffer variables with writeonly", "?:");
         return falseExpression;
     }
 

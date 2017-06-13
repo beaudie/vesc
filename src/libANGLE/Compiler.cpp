@@ -113,6 +113,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxAtomicCounterBufferSize      = caps.maxAtomicCounterBufferSize;
 
     mResources.MaxUniformBufferBindings = caps.maxUniformBufferBindings;
+    mResources.MaxShaderStorageBufferBindings = caps.maxShaderStorageBufferBindings;
 
     if (state.getClientMajorVersion() == 2 && !extensions.drawBuffers)
     {
