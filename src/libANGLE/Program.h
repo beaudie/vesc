@@ -24,11 +24,12 @@
 #include "common/mathutil.h"
 #include "common/Optional.h"
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/Uniform.h"
+#include "libANGLE/angletypes.h"
 
 namespace rx
 {
@@ -48,8 +49,6 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
-struct UniformBlock;
-struct LinkedUniform;
 struct PackedVarying;
 
 extern const char * const g_fakepath;
@@ -217,11 +216,7 @@ class ProgramState final : angle::NonCopyable
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const
     {
         ASSERT(uniformBlockIndex < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS);
-        return mUniformBlockBindings[uniformBlockIndex];
-    }
-    const UniformBlockBindingMask &getActiveUniformBlockBindingsMask() const
-    {
-        return mActiveUniformBlockBindings;
+        return mUniformBlocks[uniformBlockIndex].binding;
     }
     const std::vector<sh::Attribute> &getAttributes() const { return mAttributes; }
     const AttributesMask &getActiveAttribLocationsMask() const
@@ -238,15 +233,13 @@ class ProgramState final : angle::NonCopyable
     const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
     const RangeUI &getSamplerUniformRange() const { return mSamplerUniformRange; }
 
-    using UniformBlockBindingArray =
-        std::array<GLuint, IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
-    const UniformBlockBindingArray &getUniformBlockBindings() const
-    {
-        return mUniformBlockBindings;
-    }
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
+    }
+    const std::vector<BackedBufferInfo> &getAtomicCounterBuffers() const
+    {
+        return mAtomicCounterBuffers;
     }
 
     GLint getUniformLocation(const std::string &name) const;
@@ -272,9 +265,6 @@ class ProgramState final : angle::NonCopyable
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
 
-    UniformBlockBindingArray mUniformBlockBindings;
-    UniformBlockBindingMask mActiveUniformBlockBindings;
-
     std::vector<sh::Attribute> mAttributes;
     angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
 
@@ -286,6 +276,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
     std::vector<UniformBlock> mUniformBlocks;
+    std::vector<BackedBufferInfo> mAtomicCounterBuffers;
     RangeUI mSamplerUniformRange;
 
     // An array of the samplers that are used by the program
@@ -505,7 +496,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     using MergedVaryings = std::map<std::string, VaryingRef>;
 
     void unlink();
-    void resetUniformBlockBindings();
 
     bool linkAttributes(const Context *context, InfoLog &infoLog);
     bool validateUniformBlocksCount(GLuint maxUniformBlocks,
@@ -524,6 +514,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                       InfoLog &infoLog,
                       const Bindings &uniformLocationBindings);
     void linkSamplerBindings();
+    bool linkAtomicCounterBuffers();
 
     bool areMatchingInterfaceBlocks(InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,
@@ -549,6 +540,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void setUniformValuesFromBindingQualifiers();
 
+    void gatherAtomicCounterBuffers();
     void gatherInterfaceBlockInfo(const Context *context);
     template <typename VarT>
     void defineUniformBlockMembers(const std::vector<VarT> &fields,

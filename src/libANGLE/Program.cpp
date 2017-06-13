@@ -393,7 +393,6 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLui
 {
     ASSERT(mProgram);
 
-    resetUniformBlockBindings();
     unlink();
 }
 
@@ -601,7 +600,6 @@ Error Program::link(const gl::Context *context)
     unlink();
 
     mInfoLog.reset();
-    resetUniformBlockBindings();
 
     const Caps &caps = data.getCaps();
 
@@ -730,6 +728,7 @@ Error Program::link(const gl::Context *context)
 
     setUniformValuesFromBindingQualifiers();
 
+    gatherAtomicCounterBuffers();
     gatherInterfaceBlockInfo(context);
 
     return NoError();
@@ -1186,7 +1185,8 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
       case GL_UNIFORM_TYPE:         return static_cast<GLint>(uniform.type);
       case GL_UNIFORM_SIZE:         return static_cast<GLint>(uniform.elementCount());
       case GL_UNIFORM_NAME_LENGTH:  return static_cast<GLint>(uniform.name.size() + 1 + (uniform.isArray() ? 3 : 0));
-      case GL_UNIFORM_BLOCK_INDEX:  return uniform.blockIndex;
+      case GL_UNIFORM_BLOCK_INDEX:
+          return uniform.bufferIndex;
       case GL_UNIFORM_OFFSET:       return uniform.blockInfo.offset;
       case GL_UNIFORM_ARRAY_STRIDE: return uniform.blockInfo.arrayStride;
       case GL_UNIFORM_MATRIX_STRIDE: return uniform.blockInfo.matrixStride;
@@ -1552,23 +1552,13 @@ const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
 
 void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
-    mState.mUniformBlockBindings[uniformBlockIndex] = uniformBlockBinding;
-    mState.mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlockBinding != 0);
+    mState.mUniformBlocks[uniformBlockIndex].binding = uniformBlockBinding;
     mProgram->setUniformBlockBinding(uniformBlockIndex, uniformBlockBinding);
 }
 
 GLuint Program::getUniformBlockBinding(GLuint uniformBlockIndex) const
 {
     return mState.getUniformBlockBinding(uniformBlockIndex);
-}
-
-void Program::resetUniformBlockBindings()
-{
-    for (unsigned int blockId = 0; blockId < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS; blockId++)
-    {
-        mState.mUniformBlockBindings[blockId] = 0;
-    }
-    mState.mActiveUniformBlockBindings.reset();
 }
 
 void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode)
@@ -1739,6 +1729,11 @@ bool Program::linkUniforms(const Context *context,
 
     linkSamplerBindings();
 
+    if (!linkAtomicCounterBuffers())
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -1763,6 +1758,42 @@ void Program::linkSamplerBindings()
         mState.mSamplerBindings.emplace_back(
             SamplerBinding(textureType, samplerUniform.elementCount()));
     }
+}
+
+bool Program::linkAtomicCounterBuffers()
+{
+    for (unsigned int index = 0; index < mState.mUniforms.size(); index++)
+    {
+        auto &uniform = mState.mUniforms[index];
+        if (uniform.isAtomicCounter())
+        {
+            bool found = false;
+            for (unsigned int bufferIndex = 0; bufferIndex < mState.mAtomicCounterBuffers.size();
+                 ++bufferIndex)
+            {
+                auto &buffer = mState.mAtomicCounterBuffers[bufferIndex];
+                if (buffer.binding == uniform.binding)
+                {
+                    buffer.memberIndexes.push_back(index);
+                    uniform.bufferIndex = bufferIndex;
+                    found               = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                BackedBufferInfo atomicCounterBuffer;
+                atomicCounterBuffer.binding = uniform.binding;
+                atomicCounterBuffer.memberIndexes.push_back(index);
+                mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
+                uniform.bufferIndex = static_cast<int>(mState.mAtomicCounterBuffers.size() - 1);
+            }
+        }
+    }
+    // TODO(jie.a.chen@intel.com): Count each atomic counter buffer to validate against
+    // gl_Max[Vertex|Fragment|Compute|Combined]AtomicCounterBuffers.
+
+    return true;
 }
 
 bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog,
@@ -2480,6 +2511,13 @@ void Program::setUniformValuesFromBindingQualifiers()
     }
 }
 
+void Program::gatherAtomicCounterBuffers()
+{
+    // TODO(jie.a.chen@intel.com): Get the actual OFFSET and ARRAY_STRIDE from the backend for each
+    // counter.
+    // TODO(jie.a.chen@intel.com): Get the actual BUFFER_DATA_SIZE from backend for each buffer.
+}
+
 void Program::gatherInterfaceBlockInfo(const Context *context)
 {
     ASSERT(mState.mUniformBlocks.empty());
@@ -2585,7 +2623,7 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
             }
 
             LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
-                                     blockIndex, memberInfo);
+                                     -1, blockIndex, memberInfo);
 
             // Since block uniforms have no location, we don't need to store them in the uniform
             // locations list.
@@ -2627,7 +2665,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             }
             UniformBlock block(interfaceBlock.name, true, arrayElement,
                                blockBinding + arrayElement);
-            block.memberUniformIndexes = blockUniformIndexes;
+            block.memberIndexes = blockUniformIndexes;
 
             switch (shaderType)
             {
@@ -2664,7 +2702,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             return;
         }
         UniformBlock block(interfaceBlock.name, false, 0, blockBinding);
-        block.memberUniformIndexes = blockUniformIndexes;
+        block.memberIndexes = blockUniformIndexes;
 
         switch (shaderType)
         {

@@ -66,6 +66,11 @@ bool UniformLinker::link(const Context *context,
         return false;
     }
 
+    if (!checkMaxCombinedAtomicCounters(context->getCaps(), infoLog))
+    {
+        return false;
+    }
+
     if (!indexUniforms(infoLog, uniformLocationBindings))
     {
         return false;
@@ -137,6 +142,12 @@ bool UniformLinker::linkValidateUniforms(InfoLog &infoLog,
         vertexUniform.location != fragmentUniform.location)
     {
         infoLog << "Location layout qualifiers for " << uniformName
+                << " differ between vertex and fragment shaders.";
+        return false;
+    }
+    if (vertexUniform.offset != fragmentUniform.offset)
+    {
+        infoLog << "Offset layout qualifiers for " << uniformName
                 << " differ between vertex and fragment shaders.";
         return false;
     }
@@ -325,26 +336,34 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     Shader *shader,
     GLuint maxUniformComponents,
     GLuint maxTextureImageUnits,
+    GLuint maxAtomicCounters,
     const std::string &componentsErrorMessage,
     const std::string &samplerErrorMessage,
+    const std::string &atomicCounterErrorMessage,
     std::vector<LinkedUniform> &samplerUniforms,
     InfoLog &infoLog)
 {
-    VectorAndSamplerCount vasCount;
+    VectorAndOpaqueCount vaoCount;
     for (const sh::Uniform &uniform : shader->getUniforms(context))
     {
-        vasCount += flattenUniform(uniform, &samplerUniforms);
+        vaoCount += flattenUniform(uniform, &samplerUniforms);
     }
 
-    if (vasCount.vectorCount > maxUniformComponents)
+    if (vaoCount.vectorCount > maxUniformComponents)
     {
         infoLog << componentsErrorMessage << maxUniformComponents << ").";
         return false;
     }
 
-    if (vasCount.samplerCount > maxTextureImageUnits)
+    if (vaoCount.samplerCount > maxTextureImageUnits)
     {
         infoLog << samplerErrorMessage << maxTextureImageUnits << ").";
+        return false;
+    }
+
+    if (vaoCount.atomicCounterCount > maxAtomicCounters)
+    {
+        infoLog << atomicCounterErrorMessage << maxAtomicCounters << ").";
         return false;
     }
 
@@ -364,9 +383,10 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
         // TODO (mradev): check whether we need finer-grained component counting
         if (!flattenUniformsAndCheckCapsForShader(
                 context, computeShader, caps.maxComputeUniformComponents / 4,
-                caps.maxComputeTextureImageUnits,
+                caps.maxComputeTextureImageUnits, caps.maxComputeAtomicCounters,
                 "Compute shader active uniforms exceed MAX_COMPUTE_UNIFORM_COMPONENTS (",
                 "Compute shader sampler count exceeds MAX_COMPUTE_TEXTURE_IMAGE_UNITS (",
+                "Compute shader atomic counter count exceeds MAX_COMPUTE_ATOMIC_COUNTERS (",
                 samplerUniforms, infoLog))
         {
             return false;
@@ -378,9 +398,10 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
 
         if (!flattenUniformsAndCheckCapsForShader(
                 context, vertexShader, caps.maxVertexUniformVectors,
-                caps.maxVertexTextureImageUnits,
+                caps.maxVertexTextureImageUnits, caps.maxVertexAtomicCounters,
                 "Vertex shader active uniforms exceed MAX_VERTEX_UNIFORM_VECTORS (",
                 "Vertex shader sampler count exceeds MAX_VERTEX_TEXTURE_IMAGE_UNITS (",
+                "Vertex shader atomic counter count exceeds MAX_VERTEX_ATOMIC_COUNTERS (",
                 samplerUniforms, infoLog))
         {
             return false;
@@ -390,9 +411,11 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
 
         if (!flattenUniformsAndCheckCapsForShader(
                 context, fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits,
+                caps.maxFragmentAtomicCounters,
                 "Fragment shader active uniforms exceed MAX_FRAGMENT_UNIFORM_VECTORS (",
-                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (", samplerUniforms,
-                infoLog))
+                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
+                "Fragment shader atomic counter count exceeds MAX_FRAGMENT_ATOMIC_COUNTERS (",
+                samplerUniforms, infoLog))
         {
             return false;
         }
@@ -402,30 +425,32 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
     return true;
 }
 
-UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniform(
+UniformLinker::VectorAndOpaqueCount UniformLinker::flattenUniform(
     const sh::Uniform &uniform,
     std::vector<LinkedUniform> *samplerUniforms)
 {
     int location                          = uniform.location;
-    VectorAndSamplerCount uniformVasCount = flattenUniformImpl(
-        uniform, uniform.name, samplerUniforms, uniform.staticUse, uniform.binding, &location);
+    VectorAndOpaqueCount uniformVaoCount =
+        flattenUniformImpl(uniform, uniform.name, samplerUniforms, uniform.staticUse,
+                           uniform.binding, uniform.offset, &location);
     if (uniform.staticUse)
     {
-        return uniformVasCount;
+        return uniformVaoCount;
     }
-    return VectorAndSamplerCount();
+    return VectorAndOpaqueCount();
 }
 
-UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
+UniformLinker::VectorAndOpaqueCount UniformLinker::flattenUniformImpl(
     const sh::ShaderVariable &uniform,
     const std::string &fullName,
     std::vector<LinkedUniform> *samplerUniforms,
     bool markStaticUse,
     int binding,
+    int offset,
     int *location)
 {
     ASSERT(location);
-    VectorAndSamplerCount vectorAndSamplerCount;
+    VectorAndOpaqueCount vectorAndOpaqueCount;
 
     if (uniform.isStruct())
     {
@@ -438,16 +463,17 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                vectorAndSamplerCount += flattenUniformImpl(field, fieldFullName, samplerUniforms,
-                                                            markStaticUse, -1, location);
+                vectorAndOpaqueCount += flattenUniformImpl(field, fieldFullName, samplerUniforms,
+                                                           markStaticUse, -1, -1, location);
             }
         }
 
-        return vectorAndSamplerCount;
+        return vectorAndOpaqueCount;
     }
 
     // Not a struct
     bool isSampler                              = IsSamplerType(uniform.type);
+    bool isAtomicCounter                        = IsAtomicCounterType(uniform.type);
     std::vector<gl::LinkedUniform> *uniformList = &mUniforms;
     if (isSampler)
     {
@@ -461,6 +487,10 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
         {
             existingUniform->binding = binding;
         }
+        if (offset != -1)
+        {
+            existingUniform->offset = offset;
+        }
         if (*location != -1)
         {
             existingUniform->location = *location;
@@ -473,7 +503,7 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
     else
     {
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
-                                    binding, *location, -1,
+                                    binding, -1, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
         linkedUniform.staticUse = markStaticUse;
         uniformList->push_back(linkedUniform);
@@ -483,16 +513,37 @@ UniformLinker::VectorAndSamplerCount UniformLinker::flattenUniformImpl(
 
     // Samplers aren't "real" uniforms, so they don't count towards register usage.
     // Likewise, don't count "real" uniforms towards sampler count.
-    vectorAndSamplerCount.vectorCount =
-        (isSampler ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
-    vectorAndSamplerCount.samplerCount = (isSampler ? elementCount : 0);
+    // Atomic counters don't count too. GLES 3.1 P96.
+    vectorAndOpaqueCount.vectorCount =
+        ((isSampler || isAtomicCounter) ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
+    vectorAndOpaqueCount.samplerCount       = (isSampler ? elementCount : 0);
+    vectorAndOpaqueCount.atomicCounterCount = (isAtomicCounter ? elementCount : 0);
 
     if (*location != -1)
     {
         *location += elementCount;
     }
 
-    return vectorAndSamplerCount;
+    return vectorAndOpaqueCount;
+}
+
+bool UniformLinker::checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &infoLog)
+{
+    unsigned int atomicCounterCount = 0;
+    for (const auto &uniform : mUniforms)
+    {
+        if (IsAtomicCounterType(uniform.type) && uniform.staticUse)
+        {
+            atomicCounterCount += uniform.elementCount();
+            if (atomicCounterCount > caps.maxCombinedAtomicCounters)
+            {
+                infoLog << "atomic counter count exceeds MAX_COMBINED_ATOMIC_COUNTERS"
+                        << caps.maxCombinedAtomicCounters << ").";
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 }  // namespace gl
