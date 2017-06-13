@@ -373,7 +373,8 @@ InterfaceBlock::InterfaceBlock()
       layout(BLOCKLAYOUT_PACKED),
       isRowMajorLayout(false),
       binding(-1),
-      staticUse(false)
+      staticUse(false),
+      blockType(BLOCK_UNIFORM)
 {
 }
 
@@ -390,6 +391,7 @@ InterfaceBlock::InterfaceBlock(const InterfaceBlock &other)
       isRowMajorLayout(other.isRowMajorLayout),
       binding(other.binding),
       staticUse(other.staticUse),
+      blockType(other.blockType),
       fields(other.fields)
 {
 }
@@ -404,6 +406,7 @@ InterfaceBlock &InterfaceBlock::operator=(const InterfaceBlock &other)
     isRowMajorLayout = other.isRowMajorLayout;
     binding          = other.binding;
     staticUse        = other.staticUse;
+    blockType        = other.blockType;
     fields           = other.fields;
     return *this;
 }
@@ -417,7 +420,8 @@ bool InterfaceBlock::isSameInterfaceBlockAtLinkTime(const InterfaceBlock &other)
 {
     if (name != other.name || mappedName != other.mappedName || arraySize != other.arraySize ||
         layout != other.layout || isRowMajorLayout != other.isRowMajorLayout ||
-        binding != other.binding || fields.size() != other.fields.size())
+        binding != other.binding || blockType != other.blockType ||
+        fields.size() != other.fields.size())
     {
         return false;
     }
