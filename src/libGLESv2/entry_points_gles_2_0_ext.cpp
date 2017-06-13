@@ -1034,7 +1034,7 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglIma
         }
 
         Texture *texture = context->getTargetTexture(target);
-        Error error      = texture->setEGLImageTarget(target, imageObject);
+        Error error      = texture->setEGLImageTarget(context, target, imageObject);
         if (error.isError())
         {
             context->handleError(error);
@@ -1059,7 +1059,7 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target
         }
 
         Renderbuffer *renderbuffer = context->getGLState().getCurrentRenderbuffer();
-        Error error                = renderbuffer->setStorageEGLImageTarget(imageObject);
+        Error error                = renderbuffer->setStorageEGLImageTarget(context, imageObject);
         if (error.isError())
         {
             context->handleError(error);
@@ -2490,7 +2490,7 @@ ANGLE_EXPORT void GL_APIENTRY TexParameterfvRobustANGLE(GLenum target,
         }
 
         Texture *texture = context->getTargetTexture(target);
-        SetTexParameterfv(texture, pname, params);
+        SetTexParameterfv(context, texture, pname, params);
     }
 }
 
@@ -2513,7 +2513,7 @@ ANGLE_EXPORT void GL_APIENTRY TexParameterivRobustANGLE(GLenum target,
         }
 
         Texture *texture = context->getTargetTexture(target);
-        SetTexParameteriv(texture, pname, params);
+        SetTexParameteriv(context, texture, pname, params);
     }
 }
 

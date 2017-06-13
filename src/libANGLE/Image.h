@@ -42,7 +42,7 @@ class ImageSibling : public RefCountObject, public gl::FramebufferAttachmentObje
     void setTargetImage(egl::Image *imageTarget);
 
     // Orphan all EGL image sources and targets
-    gl::Error orphanImages();
+    gl::Error orphanImages(const gl::Context *context);
 
   private:
     friend class Image;
@@ -93,7 +93,7 @@ class Image final : public RefCountObject
 
     // Called from ImageSibling only to notify the image that a sibling (source or target) has
     // been respecified and state tracking should be updated.
-    gl::Error orphanSibling(ImageSibling *sibling);
+    gl::Error orphanSibling(const gl::Context *context, ImageSibling *sibling);
 
     ImageState mState;
     rx::ImageImpl *mImplementation;
