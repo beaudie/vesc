@@ -210,7 +210,11 @@ bool Uniform::operator==(const Uniform &other) const
 
 bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
 {
-    if (binding != other.binding)
+    // It's not an error to specify a binding on some but not all uniform declarations of a
+    // same name accross various shader stages according to GLSL ES Spec 3.10.4, section 4.4.5.
+    // But section 9.2.1 requires the qualifiers must match exactly. It looks like a spec bug
+    // to be resolved. For now we favor the section 4.4.5 enforcing a consistent match merely.
+    if (binding != -1 && other.binding != -1 && binding != other.binding)
     {
         return false;
     }
@@ -218,7 +222,6 @@ bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
     {
         return false;
     }
-    // TODO(jie.a.chen@intel.com): Add a test case to cover this.
     if (offset != other.offset)
     {
         return false;

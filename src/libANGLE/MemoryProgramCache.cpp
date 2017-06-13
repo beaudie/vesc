@@ -46,6 +46,37 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->structName = stream->readString();
 }
 
+void WriteBackedBufferInfo(BinaryOutputStream *stream, const BackedBufferInfo &var)
+{
+    stream->writeInt(var.binding);
+    stream->writeInt(var.dataSize);
+
+    stream->writeInt(var.vertexStaticUse);
+    stream->writeInt(var.fragmentStaticUse);
+    stream->writeInt(var.computeStaticUse);
+
+    stream->writeInt(var.memberIndexes.size());
+    for (unsigned int memberCounterIndex : var.memberIndexes)
+    {
+        stream->writeInt(memberCounterIndex);
+    }
+}
+
+void LoadBackedBufferInfo(BinaryInputStream *stream, BackedBufferInfo *var)
+{
+    var->binding           = stream->readInt<int>();
+    var->dataSize          = stream->readInt<unsigned int>();
+    var->vertexStaticUse   = stream->readBool();
+    var->fragmentStaticUse = stream->readBool();
+    var->computeStaticUse  = stream->readBool();
+
+    unsigned int numMembers = stream->readInt<unsigned int>();
+    for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
+    {
+        var->memberIndexes.push_back(stream->readInt<unsigned int>());
+    }
+}
+
 }  // anonymous namespace
 
 // static
@@ -101,7 +132,7 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
         LinkedUniform uniform;
         LoadShaderVar(&stream, &uniform);
 
-        uniform.blockIndex                 = stream.readInt<int>();
+        uniform.bufferIndex                = stream.readInt<int>();
         uniform.blockInfo.offset           = stream.readInt<int>();
         uniform.blockInfo.arrayStride      = stream.readInt<int>();
         uniform.blockInfo.matrixStride     = stream.readInt<int>();
@@ -134,20 +165,21 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
         stream.readString(&uniformBlock.name);
         stream.readBool(&uniformBlock.isArray);
         stream.readInt(&uniformBlock.arrayElement);
-        stream.readInt(&uniformBlock.binding);
-        stream.readInt(&uniformBlock.dataSize);
-        stream.readBool(&uniformBlock.vertexStaticUse);
-        stream.readBool(&uniformBlock.fragmentStaticUse);
 
-        unsigned int numMembers = stream.readInt<unsigned int>();
-        for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
-        {
-            uniformBlock.memberUniformIndexes.push_back(stream.readInt<unsigned int>());
-        }
+        LoadBackedBufferInfo(&stream, &uniformBlock);
 
         state->mUniformBlocks.push_back(uniformBlock);
 
         state->mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlock.binding != 0);
+    }
+    unsigned int atomicCounterBufferCount = stream.readInt<unsigned int>();
+    ASSERT(state->mAtomicCounterBuffers.empty());
+    for (unsigned int bufferIndex = 0; bufferIndex < atomicCounterBufferCount; ++bufferIndex)
+    {
+        BackedBufferInfo atomicCounterBuffer;
+        LoadBackedBufferInfo(&stream, &atomicCounterBuffer);
+
+        state->mAtomicCounterBuffers.push_back(atomicCounterBuffer);
     }
 
     unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
@@ -220,6 +252,10 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
         state->mImageBindings.emplace_back(ImageBinding(boundImageUnit, elementCount));
     }
 
+    unsigned int atomicCounterRangeLow  = stream.readInt<unsigned int>();
+    unsigned int atomicCounterRangeHigh = stream.readInt<unsigned int>();
+    state->mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
+
     return program->getImplementation()->load(context, infoLog, &stream);
 }
 
@@ -269,7 +305,7 @@ void MemoryProgramCache::Serialize(const Context *context,
 
         // FIXME: referenced
 
-        stream.writeInt(uniform.blockIndex);
+        stream.writeInt(uniform.bufferIndex);
         stream.writeInt(uniform.blockInfo.offset);
         stream.writeInt(uniform.blockInfo.arrayStride);
         stream.writeInt(uniform.blockInfo.matrixStride);
@@ -292,17 +328,14 @@ void MemoryProgramCache::Serialize(const Context *context,
         stream.writeString(uniformBlock.name);
         stream.writeInt(uniformBlock.isArray);
         stream.writeInt(uniformBlock.arrayElement);
-        stream.writeInt(uniformBlock.binding);
-        stream.writeInt(uniformBlock.dataSize);
 
-        stream.writeInt(uniformBlock.vertexStaticUse);
-        stream.writeInt(uniformBlock.fragmentStaticUse);
+        WriteBackedBufferInfo(&stream, uniformBlock);
+    }
 
-        stream.writeInt(uniformBlock.memberUniformIndexes.size());
-        for (unsigned int memberUniformIndex : uniformBlock.memberUniformIndexes)
-        {
-            stream.writeInt(memberUniformIndex);
-        }
+    stream.writeInt(state.mAtomicCounterBuffers.size());
+    for (const BackedBufferInfo &atomicCounterBuffer : state.mAtomicCounterBuffers)
+    {
+        WriteBackedBufferInfo(&stream, atomicCounterBuffer);
     }
 
     stream.writeInt(state.getLinkedTransformFeedbackVaryings().size());
@@ -362,6 +395,9 @@ void MemoryProgramCache::Serialize(const Context *context,
         stream.writeInt(imageBinding.boundImageUnit);
         stream.writeInt(imageBinding.elementCount);
     }
+
+    stream.writeInt(state.getAtomicCounterUniformRange().low());
+    stream.writeInt(state.getAtomicCounterUniformRange().high());
 
     program->getImplementation()->save(&stream);
 
