@@ -1608,11 +1608,14 @@ void ProgramD3D::initUniformBlockInfo(const gl::Context *context, gl::Shader *sh
         if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
             continue;
 
-        if (mBlockDataSizes.count(interfaceBlock.name) > 0)
-            continue;
+        if (interfaceBlock.blockType == sh::BLOCK_UNIFORM)
+        {
+            if (mBlockDataSizes.count(interfaceBlock.name) > 0)
+                continue;
 
-        size_t dataSize                      = getUniformBlockInfo(interfaceBlock);
-        mBlockDataSizes[interfaceBlock.name] = dataSize;
+            size_t dataSize                      = getUniformBlockInfo(interfaceBlock);
+            mBlockDataSizes[interfaceBlock.name] = dataSize;
+        }
     }
 }
 

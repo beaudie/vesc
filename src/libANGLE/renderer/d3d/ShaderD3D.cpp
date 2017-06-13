@@ -213,7 +213,8 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
 
     for (const sh::InterfaceBlock &interfaceBlock : mData.getInterfaceBlocks())
     {
-        if (interfaceBlock.staticUse)
+        // TODO(jiajia.qin@intel.com): Add shader storage block support
+        if (interfaceBlock.staticUse && interfaceBlock.blockType == sh::BLOCK_UNIFORM)
         {
             unsigned int index = static_cast<unsigned int>(-1);
             bool blockRegisterResult =
