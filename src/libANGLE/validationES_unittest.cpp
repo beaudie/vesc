@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/TextureImpl_mock.h"
 #include "libANGLE/validationES.h"
 #include "tests/angle_unittests_utils.h"
+#include "libANGLE/ErrorStrings.h"
 
 using namespace gl;
 using namespace rx;
@@ -105,7 +106,7 @@ TEST(ValidationESTest, DISABLED_DrawElementsWithMaxIndexGivesError)
                                                 textureCaps, extensions, limitations, false);
 
     // Set the expectation for the validation error here.
-    Error expectedError(gl::InvalidOperation() << g_ExceedsMaxElementErrorMessage);
+    Error expectedError(gl::InvalidOperation() << g_kErrorExceedsMaxElementErrorMessage);
     EXPECT_CALL(testContext, handleError(expectedError)).Times(1);
 
     // Call once with maximum index, and once with an excessive index.
