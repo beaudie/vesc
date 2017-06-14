@@ -11,6 +11,7 @@
 #include <gtest/gtest.h>
 
 #include "libANGLE/ContextState.h"
+#include "libANGLE/ErrorStrings.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/renderer/FramebufferImpl_mock.h"
 #include "libANGLE/renderer/ProgramImpl_mock.h"
@@ -105,7 +106,7 @@ TEST(ValidationESTest, DISABLED_DrawElementsWithMaxIndexGivesError)
                                                 textureCaps, extensions, limitations, false);
 
     // Set the expectation for the validation error here.
-    Error expectedError(gl::InvalidOperation() << g_ExceedsMaxElementErrorMessage);
+    Error expectedError(gl::InvalidOperation() << GET_ERROR_MESSAGE(ExceedsMaxElementErrorMessage));
     EXPECT_CALL(testContext, handleError(expectedError)).Times(1);
 
     // Call once with maximum index, and once with an excessive index.
