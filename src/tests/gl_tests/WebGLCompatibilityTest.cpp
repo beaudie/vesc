@@ -47,6 +47,41 @@ constexpr const char *FloatingPointTextureExtensions[] = {
     "GL_CHROMIUM_color_buffer_float_rgb",
 };
 
+struct Message
+{
+    GLenum source;
+    GLenum type;
+    GLenum id;
+    GLenum severity;
+    std::string message;
+    const void *userParam;
+};
+
+bool operator==(Message a, Message b)
+{
+    if (a.source != b.source || a.type != b.type || a.id != b.id || a.severity != b.severity ||
+        a.message != b.message)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+static void GL_APIENTRY Callback(GLenum source,
+                                 GLenum type,
+                                 GLuint id,
+                                 GLenum severity,
+                                 GLsizei length,
+                                 const GLchar *message,
+                                 const void *userParam)
+{
+    Message m{source, type, id, severity, std::string(message, length), userParam};
+    std::vector<Message> *messages =
+        static_cast<std::vector<Message> *>(const_cast<void *>(userParam));
+    messages->push_back(m);
+}
+
 }  // namespace
 
 namespace angle
@@ -2104,6 +2139,62 @@ TEST_P(WebGLCompatibilityTest, SizedRGBA32FFormats)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 1, 1, 0, GL_RGB, GL_FLOAT, nullptr);
         EXPECT_GL_NO_ERROR();
     }
+}
+
+// Verify functionality of WebGL specific errors using KHR_debug
+TEST_P(WebGLCompatibilityTest, ErrorMessages)
+{
+    if (extensionEnabled("GL_KHR_debug"))
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+    }
+    else
+    {
+        std::cout << "Test skipped because GL_KHR_debug is not available." << std::endl;
+        return;
+    }
+
+    std::vector<Message> messages;
+    glDebugMessageCallbackKHR(Callback, &messages);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+    constexpr GLenum source   = GL_DEBUG_SOURCE_API;
+    constexpr GLenum type     = GL_DEBUG_TYPE_ERROR;
+    constexpr GLenum severity = GL_DEBUG_SEVERITY_HIGH;
+    constexpr GLuint id1      = 1282;
+    constexpr GLuint id2      = 1281;
+    const std::string message1 =
+        "Attributes that begin with 'gl_', 'webgl_', or '_webgl_' are not allowed.";
+    const std::string message2       = "Location lengths must not be greater than 256 characters.";
+    constexpr int maxLocStringLength = 256;
+    const std::string tooLongString(maxLocStringLength + 1, '_');
+    Message expectedMessage;
+
+    GLint numMessages = 0;
+    glGetIntegerv(GL_DEBUG_LOGGED_MESSAGES, &numMessages);
+    EXPECT_EQ(0, numMessages);
+
+    glBindAttribLocation(0, 0, "_webgl_var");
+
+    ASSERT_EQ(1u, messages.size());
+
+    expectedMessage.source   = source;
+    expectedMessage.id       = id1;
+    expectedMessage.type     = type;
+    expectedMessage.severity = severity;
+    expectedMessage.message  = message1;
+
+    Message &m = messages.front();
+    ASSERT_EQ(m, expectedMessage);
+    messages.clear();
+
+    glBindAttribLocation(0, 0, static_cast<const GLchar *>(tooLongString.c_str()));
+
+    expectedMessage.id      = id2;
+    expectedMessage.message = message2;
+
+    m = messages.front();
+    ASSERT_EQ(m, expectedMessage);
 }
 
 // This tests that rendering feedback loops works as expected with WebGL 2.
