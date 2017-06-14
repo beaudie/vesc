@@ -675,6 +675,8 @@ bool ValidateUniform1iv(ValidationContext *context,
                         GLsizei count,
                         const GLint *value);
 bool ValidateUseProgram(Context *context, GLuint program);
+static bool ValidateWebGLNamePrefix(ValidationContext *context, const GLchar *name);
+static bool ValidateWebGLNameLength(ValidationContext *context, const GLchar *name);
 
 }  // namespace gl
 
