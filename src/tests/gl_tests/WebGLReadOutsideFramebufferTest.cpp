@@ -279,7 +279,10 @@ TEST_P(WebGLReadOutsideFramebufferTest, CopyTexSubImage2D)
 // Check that copyTexImage2D sets (0,0,0,0) for pixels outside the framebuffer.
 TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImage2D)
 {
-    // Main(&WebGLReadOutsideFramebufferTest::TestCopyTexImage2D, true);
+    if (IsOpenGL() || IsOpenGLES())
+    {
+        Main(&WebGLReadOutsideFramebufferTest::TestCopyTexImage2D, true);
+    }
 }
 
 ANGLE_INSTANTIATE_TEST(WebGLReadOutsideFramebufferTest,
