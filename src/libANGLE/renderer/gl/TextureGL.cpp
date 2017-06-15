@@ -11,6 +11,7 @@
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
@@ -541,10 +542,18 @@ gl::Error TextureGL::setCompressedSubImage(const gl::Context *context,
 gl::Error TextureGL::copyImage(const gl::Context *context,
                                GLenum target,
                                size_t level,
-                               const gl::Rectangle &sourceArea,
+                               const gl::Rectangle &origSourceArea,
                                GLenum internalFormat,
                                const gl::Framebuffer *source)
 {
+    // Clip source area to framebuffer.
+    const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
+    auto readAttachment                      = sourceFramebufferGL->getState().getReadAttachment();
+    gl::Extents fbSize                       = readAttachment->getSize();
+    gl::Rectangle sourceArea;
+    bool nonempty = ClipRectangle(origSourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
+                                  &sourceArea);
+
     nativegl::CopyTexImageImageFormat copyTexImageFormat = nativegl::GetCopyTexImageImageFormat(
         mFunctions, mWorkarounds, internalFormat, source->getImplementationColorReadType());
 
@@ -561,17 +570,37 @@ gl::Error TextureGL::copyImage(const gl::Context *context,
     }
     else
     {
-        const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
-
-        mStateManager->bindTexture(getTarget(), mTextureID);
-        mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER,
-                                       sourceFramebufferGL->getFramebufferID());
-
         if (UseTexImage2D(getTarget()))
         {
-            mFunctions->copyTexImage2D(target, static_cast<GLint>(level),
-                                       copyTexImageFormat.internalFormat, sourceArea.x,
-                                       sourceArea.y, sourceArea.width, sourceArea.height, 0);
+            void *textureData = nullptr;
+            if (context->getExtensions().webglCompatibility)
+            {
+                angle::MemoryBuffer *zero;
+                context->getScratchBuffer(origSourceArea.width * origSourceArea.height *
+                                              readAttachment->getFormat().info->pixelBytes,
+                                          &zero);
+                zero->fill(0);
+                textureData = zero;
+
+                mStateManager->setPixelUnpackState(gl::PixelUnpackState(1, 0));
+            }
+
+            mStateManager->bindTexture(getTarget(), mTextureID);
+            mFunctions->texImage2D(target, static_cast<GLint>(level),
+                                   copyTexImageFormat.internalFormat, origSourceArea.width,
+                                   origSourceArea.height, 0,
+                                   gl::GetUnsizedFormat(copyTexImageFormat.internalFormat),
+                                   GL_UNSIGNED_BYTE, textureData);
+
+            if (nonempty)
+            {
+                mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER,
+                                               sourceFramebufferGL->getFramebufferID());
+                mFunctions->copyTexSubImage2D(target, static_cast<GLint>(level),
+                                              sourceArea.x - origSourceArea.x,
+                                              sourceArea.y - origSourceArea.y, sourceArea.x,
+                                              sourceArea.y, sourceArea.width, sourceArea.height);
+            }
         }
         else
         {
@@ -587,11 +616,23 @@ gl::Error TextureGL::copyImage(const gl::Context *context,
 gl::Error TextureGL::copySubImage(const gl::Context *context,
                                   GLenum target,
                                   size_t level,
-                                  const gl::Offset &destOffset,
-                                  const gl::Rectangle &sourceArea,
+                                  const gl::Offset &origDestOffset,
+                                  const gl::Rectangle &origSourceArea,
                                   const gl::Framebuffer *source)
 {
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
+
+    // Clip source area to framebuffer.
+    const gl::Extents fbSize = sourceFramebufferGL->getState().getReadAttachment()->getSize();
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
+                       &sourceArea))
+    {
+        // nothing to do
+        return gl::NoError();
+    }
+    gl::Offset destOffset(origDestOffset.x + sourceArea.x - origSourceArea.x,
+                          origDestOffset.y + sourceArea.y - origSourceArea.y, origDestOffset.z);
 
     mStateManager->bindTexture(getTarget(), mTextureID);
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
