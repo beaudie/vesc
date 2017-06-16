@@ -1027,9 +1027,8 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglIma
     Context *context    = thread->getValidContext();
     if (context)
     {
-        egl::Display *display   = thread->getDisplay();
         egl::Image *imageObject = reinterpret_cast<egl::Image *>(image);
-        if (!ValidateEGLImageTargetTexture2DOES(context, display, target, imageObject))
+        if (!ValidateEGLImageTargetTexture2DOES(context, target, imageObject))
         {
             return;
         }
@@ -1053,9 +1052,8 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target
     Context *context    = thread->getValidContext();
     if (context)
     {
-        egl::Display *display   = thread->getDisplay();
         egl::Image *imageObject = reinterpret_cast<egl::Image *>(image);
-        if (!ValidateEGLImageTargetRenderbufferStorageOES(context, display, target, imageObject))
+        if (!ValidateEGLImageTargetRenderbufferStorageOES(context, target, imageObject))
         {
             return;
         }
