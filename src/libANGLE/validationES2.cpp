@@ -232,11 +232,6 @@ bool IsValidCopySubTextureSourceInternalFormat(GLenum internalFormat)
     return IsValidCopyTextureSourceInternalFormatEnum(internalFormat);
 }
 
-bool IsValidCopySubTextureDestionationInternalFormat(GLenum internalFormat)
-{
-    return IsValidCopyTextureSourceInternalFormatEnum(internalFormat);
-}
-
 bool IsValidCopyTextureDestinationInternalFormatEnum(GLint internalFormat)
 {
     // Table 1.0 from the CHROMIUM_copy_texture spec
@@ -276,6 +271,11 @@ bool IsValidCopyTextureDestinationInternalFormatEnum(GLint internalFormat)
         default:
             return false;
     }
+}
+
+bool IsValidCopySubTextureDestionationInternalFormat(GLenum internalFormat)
+{
+    return IsValidCopyTextureDestinationInternalFormatEnum(internalFormat);
 }
 
 bool IsValidCopyTextureDestinationFormatType(Context *context, GLint internalFormat, GLenum type)
