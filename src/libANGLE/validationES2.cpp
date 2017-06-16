@@ -5172,21 +5172,6 @@ bool ValidateShaderSource(ValidationContext *context,
         return false;
     }
 
-    // The WebGL spec (section 6.20) disallows strings containing invalid ESSL characters for
-    // shader-related entry points
-    if (context->getExtensions().webglCompatibility)
-    {
-        for (GLsizei i = 0; i < count; i++)
-        {
-            size_t len = length ? static_cast<size_t>(length[i]) : strlen(string[i]);
-            if (!IsValidESSLString(string[i], len))
-            {
-                context->handleError(InvalidValue() << "Shader source contains invalid characters");
-                return false;
-            }
-        }
-    }
-
     Shader *shaderObject = GetValidShader(context, shader);
     if (!shaderObject)
     {
