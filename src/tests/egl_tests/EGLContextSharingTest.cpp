@@ -49,6 +49,11 @@ class EGLContextSharingTest : public ANGLETest
             }
         }
 
+        // Set default test state to not give an error on shutdown.
+        EGLSurface surface = getEGLWindow()->getSurface();
+        EGLContext context = getEGLWindow()->getContext();
+        eglMakeCurrent(display, surface, surface, context);
+
         ANGLETest::TearDown();
     }
 
