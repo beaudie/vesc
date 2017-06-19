@@ -308,7 +308,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 {
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLuint handle);
-    ~Program();
     void destroy(const Context *context);
 
     GLuint id() const { return mHandle; }
@@ -495,6 +494,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     };
 
   private:
+    ~Program();
+
     struct VaryingRef
     {
         const sh::Varying *get() const { return vertex ? vertex : fragment; }
