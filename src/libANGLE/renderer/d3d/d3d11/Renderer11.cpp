@@ -1362,7 +1362,7 @@ gl::Error Renderer11::generateSwizzle(const gl::Context *context, gl::Texture *t
         ASSERT(textureD3D);
 
         TextureStorage *texStorage = nullptr;
-        ANGLE_TRY(textureD3D->getNativeTexture(&texStorage));
+        ANGLE_TRY(textureD3D->getNativeTexture(context, &texStorage));
 
         if (texStorage)
         {
@@ -1406,7 +1406,8 @@ gl::Error Renderer11::generateSwizzles(const gl::Context *context)
     ANGLE_TRY(generateSwizzles(context, gl::SAMPLER_PIXEL));
     return gl::NoError();
 }
-gl::Error Renderer11::setSamplerState(gl::SamplerType type,
+gl::Error Renderer11::setSamplerState(const gl::Context *context,
+                                      gl::SamplerType type,
                                       int index,
                                       gl::Texture *texture,
                                       const gl::SamplerState &samplerState)
@@ -1416,7 +1417,7 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
     TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
 
     TextureStorage *storage = nullptr;
-    ANGLE_TRY(textureD3D->getNativeTexture(&storage));
+    ANGLE_TRY(textureD3D->getNativeTexture(context, &storage));
 
     // Storage should exist, texture should be complete
     ASSERT(storage);
@@ -1496,7 +1497,10 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
     return gl::NoError();
 }
 
-gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
+gl::Error Renderer11::setTexture(const gl::Context *context,
+                                 gl::SamplerType type,
+                                 int index,
+                                 gl::Texture *texture)
 {
     const d3d11::SharedSRV *textureSRV = nullptr;
 
@@ -1505,14 +1509,14 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
         TextureD3D *textureImpl = GetImplAs<TextureD3D>(texture);
 
         TextureStorage *texStorage = nullptr;
-        ANGLE_TRY(textureImpl->getNativeTexture(&texStorage));
+        ANGLE_TRY(textureImpl->getNativeTexture(context, &texStorage));
 
         // Texture should be complete and have a storage
         ASSERT(texStorage);
 
         TextureStorage11 *storage11 = GetAs<TextureStorage11>(texStorage);
 
-        ANGLE_TRY(storage11->getSRV(texture->getTextureState(), &textureSRV));
+        ANGLE_TRY(storage11->getSRV(context, texture->getTextureState(), &textureSRV));
 
         // If we get an invalid SRV here, something went wrong in the texture class and we're
         // unexpectedly missing the shader resource view.
@@ -3168,7 +3172,7 @@ gl::Error Renderer11::copyImageInternal(const gl::Context *context,
     ASSERT(colorAttachment);
 
     RenderTarget11 *sourceRenderTarget = nullptr;
-    ANGLE_TRY(colorAttachment->getRenderTarget(&sourceRenderTarget));
+    ANGLE_TRY(colorAttachment->getRenderTarget(context, &sourceRenderTarget));
     ASSERT(sourceRenderTarget);
 
     const d3d11::SharedSRV &source = sourceRenderTarget->getBlitShaderResourceView();
@@ -3214,7 +3218,7 @@ gl::Error Renderer11::copyImage2D(const gl::Context *context,
 
     gl::ImageIndex index              = gl::ImageIndex::Make2D(level);
     RenderTargetD3D *destRenderTarget = nullptr;
-    ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
+    ANGLE_TRY(storage11->getRenderTarget(context, index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
     ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
@@ -3239,7 +3243,7 @@ gl::Error Renderer11::copyImageCube(const gl::Context *context,
 
     gl::ImageIndex index              = gl::ImageIndex::MakeCube(target, level);
     RenderTargetD3D *destRenderTarget = nullptr;
-    ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
+    ANGLE_TRY(storage11->getRenderTarget(context, index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
     ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
@@ -3263,7 +3267,7 @@ gl::Error Renderer11::copyImage3D(const gl::Context *context,
 
     gl::ImageIndex index              = gl::ImageIndex::Make3D(level, destOffset.z);
     RenderTargetD3D *destRenderTarget = nullptr;
-    ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
+    ANGLE_TRY(storage11->getRenderTarget(context, index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
     ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
@@ -3287,7 +3291,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Context *context,
 
     gl::ImageIndex index              = gl::ImageIndex::Make2DArray(level, destOffset.z);
     RenderTargetD3D *destRenderTarget = nullptr;
-    ANGLE_TRY(storage11->getRenderTarget(index, &destRenderTarget));
+    ANGLE_TRY(storage11->getRenderTarget(context, index, &destRenderTarget));
     ASSERT(destRenderTarget);
 
     ANGLE_TRY(copyImageInternal(context, framebuffer, sourceRect, destFormat, destOffset,
@@ -3310,10 +3314,10 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
                                   bool unpackPremultiplyAlpha,
                                   bool unpackUnmultiplyAlpha)
 {
-    const TextureD3D *sourceD3D = GetImplAs<TextureD3D>(source);
+    TextureD3D *sourceD3D = GetImplAs<TextureD3D>(source);
 
     TextureStorage *sourceStorage = nullptr;
-    ANGLE_TRY(const_cast<TextureD3D *>(sourceD3D)->getNativeTexture(&sourceStorage));
+    ANGLE_TRY(sourceD3D->getNativeTexture(context, &sourceStorage));
 
     TextureStorage11_2D *sourceStorage11 = GetAs<TextureStorage11_2D>(sourceStorage);
     ASSERT(sourceStorage11);
@@ -3327,13 +3331,13 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
         sourceStorage11->getFormatSet().texFormat == destStorage11->getFormatSet().texFormat)
     {
         const TextureHelper11 *sourceResource = nullptr;
-        ANGLE_TRY(sourceStorage11->getResource(&sourceResource));
+        ANGLE_TRY(sourceStorage11->getResource(context, &sourceResource));
 
         gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(sourceLevel);
         UINT sourceSubresource     = sourceStorage11->getSubresourceIndex(sourceIndex);
 
         const TextureHelper11 *destResource = nullptr;
-        ANGLE_TRY(destStorage11->getResource(&destResource));
+        ANGLE_TRY(destStorage11->getResource(context, &destResource));
 
         gl::ImageIndex destIndex = gl::ImageIndex::MakeGeneric(destTarget, destLevel);
         UINT destSubresource     = destStorage11->getSubresourceIndex(destIndex);
@@ -3354,11 +3358,11 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
     else
     {
         const d3d11::SharedSRV *sourceSRV = nullptr;
-        ANGLE_TRY(sourceStorage11->getSRVLevels(sourceLevel, sourceLevel, &sourceSRV));
+        ANGLE_TRY(sourceStorage11->getSRVLevels(context, sourceLevel, sourceLevel, &sourceSRV));
 
         gl::ImageIndex destIndex             = gl::ImageIndex::MakeGeneric(destTarget, destLevel);
         RenderTargetD3D *destRenderTargetD3D = nullptr;
-        ANGLE_TRY(destStorage11->getRenderTarget(destIndex, &destRenderTargetD3D));
+        ANGLE_TRY(destStorage11->getRenderTarget(context, destIndex, &destRenderTargetD3D));
 
         RenderTarget11 *destRenderTarget11 = GetAs<RenderTarget11>(destRenderTargetD3D);
 
@@ -3391,7 +3395,8 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
+gl::Error Renderer11::copyCompressedTexture(const gl::Context *context,
+                                            const gl::Texture *source,
                                             GLint sourceLevel,
                                             TextureStorage *storage,
                                             GLint destLevel)
@@ -3400,7 +3405,7 @@ gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
     ASSERT(destStorage11);
 
     const TextureHelper11 *destResource = nullptr;
-    ANGLE_TRY(destStorage11->getResource(&destResource));
+    ANGLE_TRY(destStorage11->getResource(context, &destResource));
 
     gl::ImageIndex destIndex = gl::ImageIndex::Make2D(destLevel);
     UINT destSubresource     = destStorage11->getSubresourceIndex(destIndex);
@@ -3409,13 +3414,13 @@ gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
     ASSERT(sourceD3D);
 
     TextureStorage *sourceStorage = nullptr;
-    ANGLE_TRY(sourceD3D->getNativeTexture(&sourceStorage));
+    ANGLE_TRY(sourceD3D->getNativeTexture(context, &sourceStorage));
 
     TextureStorage11_2D *sourceStorage11 = GetAs<TextureStorage11_2D>(sourceStorage);
     ASSERT(sourceStorage11);
 
     const TextureHelper11 *sourceResource = nullptr;
-    ANGLE_TRY(sourceStorage11->getResource(&sourceResource));
+    ANGLE_TRY(sourceStorage11->getResource(context, &sourceResource));
 
     gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(sourceLevel);
     UINT sourceSubresource     = sourceStorage11->getSubresourceIndex(sourceIndex);
@@ -3842,14 +3847,15 @@ ImageD3D *Renderer11::createImage()
     return new Image11(this);
 }
 
-gl::Error Renderer11::generateMipmap(ImageD3D *dest, ImageD3D *src)
+gl::Error Renderer11::generateMipmap(const gl::Context *context, ImageD3D *dest, ImageD3D *src)
 {
     Image11 *dest11 = GetAs<Image11>(dest);
     Image11 *src11  = GetAs<Image11>(src);
-    return Image11::generateMipmap(dest11, src11, mRenderer11DeviceCaps);
+    return Image11::GenerateMipmap(context, dest11, src11, mRenderer11DeviceCaps);
 }
 
-gl::Error Renderer11::generateMipmapUsingD3D(TextureStorage *storage,
+gl::Error Renderer11::generateMipmapUsingD3D(const gl::Context *context,
+                                             TextureStorage *storage,
                                              const gl::TextureState &textureState)
 {
     TextureStorage11 *storage11 = GetAs<TextureStorage11>(storage);
@@ -3858,7 +3864,7 @@ gl::Error Renderer11::generateMipmapUsingD3D(TextureStorage *storage,
     ASSERT(storage11->supportsNativeMipmapFunction());
 
     const d3d11::SharedSRV *srv = nullptr;
-    ANGLE_TRY(storage11->getSRVLevels(textureState.getEffectiveBaseLevel(),
+    ANGLE_TRY(storage11->getSRVLevels(context, textureState.getEffectiveBaseLevel(),
                                       textureState.getEffectiveMaxLevel(), &srv));
 
     mDeviceContext->GenerateMips(srv->get());
@@ -3866,7 +3872,8 @@ gl::Error Renderer11::generateMipmapUsingD3D(TextureStorage *storage,
     return gl::NoError();
 }
 
-gl::Error Renderer11::copyImage(ImageD3D *dest,
+gl::Error Renderer11::copyImage(const gl::Context *context,
+                                ImageD3D *dest,
                                 ImageD3D *source,
                                 const gl::Rectangle &sourceRect,
                                 const gl::Offset &destOffset,
@@ -3876,7 +3883,7 @@ gl::Error Renderer11::copyImage(ImageD3D *dest,
 {
     Image11 *dest11 = GetAs<Image11>(dest);
     Image11 *src11  = GetAs<Image11>(source);
-    return Image11::copyImage(dest11, src11, sourceRect, destOffset, unpackFlipY,
+    return Image11::CopyImage(context, dest11, src11, sourceRect, destOffset, unpackFlipY,
                               unpackPremultiplyAlpha, unpackUnmultiplyAlpha, mRenderer11DeviceCaps);
 }
 
@@ -3942,7 +3949,8 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat,
                                         levels);
 }
 
-gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAttachment,
+gl::Error Renderer11::readFromAttachment(const gl::Context *context,
+                                         const gl::FramebufferAttachment &srcAttachment,
                                          const gl::Rectangle &sourceArea,
                                          GLenum format,
                                          GLenum type,
@@ -3956,7 +3964,7 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     const bool invertTexture = UsePresentPathFast(this, &srcAttachment);
 
     RenderTarget11 *rt11 = nullptr;
-    ANGLE_TRY(srcAttachment.getRenderTarget(&rt11));
+    ANGLE_TRY(srcAttachment.getRenderTarget(context, &rt11));
     ASSERT(rt11->getTexture().valid());
 
     const TextureHelper11 &textureHelper = rt11->getTexture();
@@ -4536,7 +4544,10 @@ angle::WorkaroundsD3D Renderer11::generateWorkarounds() const
     return d3d11::GenerateWorkarounds(mRenderer11DeviceCaps, mAdapterDescription);
 }
 
-gl::Error Renderer11::clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd)
+gl::Error Renderer11::clearTextures(const gl::Context *context,
+                                    gl::SamplerType samplerType,
+                                    size_t rangeStart,
+                                    size_t rangeEnd)
 {
     return mStateManager.clearTextures(samplerType, rangeStart, rangeEnd);
 }

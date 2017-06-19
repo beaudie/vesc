@@ -51,6 +51,8 @@ void RendererD3D::cleanup()
 {
     for (auto &incompleteTexture : mIncompleteTextures)
     {
+        // TODO(jmadill): Use some kind of dummy context here.
+        incompleteTexture.second->destroy(nullptr);
         incompleteTexture.second.set(nullptr);
     }
     mIncompleteTextures.clear();
@@ -94,8 +96,9 @@ gl::Error RendererD3D::applyTextures(const gl::Context *context,
                 !std::binary_search(framebufferTextures.begin(),
                                     framebufferTextures.begin() + framebufferTextureCount, texture))
             {
-                ANGLE_TRY(setSamplerState(shaderType, samplerIndex, texture, samplerState));
-                ANGLE_TRY(setTexture(shaderType, samplerIndex, texture));
+                ANGLE_TRY(
+                    setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
+                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
             }
             else
             {
@@ -104,23 +107,23 @@ gl::Error RendererD3D::applyTextures(const gl::Context *context,
                 gl::Texture *incompleteTexture =
                     getIncompleteTexture(context->getImplementation(), textureType);
 
-                ANGLE_TRY(setSamplerState(shaderType, samplerIndex, incompleteTexture,
+                ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
                                           incompleteTexture->getSamplerState()));
-                ANGLE_TRY(setTexture(shaderType, samplerIndex, incompleteTexture));
+                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
             }
         }
         else
         {
             // No texture bound to this slot even though it is used by the shader, bind a NULL
             // texture
-            ANGLE_TRY(setTexture(shaderType, samplerIndex, nullptr));
+            ANGLE_TRY(setTexture(context, shaderType, samplerIndex, nullptr));
         }
     }
 
     // Set all the remaining textures to NULL
     size_t samplerCount = (shaderType == gl::SAMPLER_PIXEL) ? caps.maxTextureImageUnits
                                                             : caps.maxVertexTextureImageUnits;
-    clearTextures(shaderType, samplerRange, samplerCount);
+    clearTextures(context, shaderType, samplerRange, samplerCount);
 
     return gl::NoError();
 }

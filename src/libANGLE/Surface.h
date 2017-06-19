@@ -36,7 +36,6 @@ namespace egl
 class AttributeMap;
 class Display;
 struct Config;
-class Thread;
 
 struct SurfaceState final : private angle::NonCopyable
 {
@@ -62,16 +61,16 @@ class Surface : public gl::FramebufferAttachmentObject
                         EGLint width,
                         EGLint height);
     Error querySurfacePointerANGLE(EGLint attribute, void **value);
-    Error bindTexImage(gl::Texture *texture, EGLint buffer);
-    Error releaseTexImage(EGLint buffer);
+    Error bindTexImage(const gl::Context *context, gl::Texture *texture, EGLint buffer);
+    Error releaseTexImage(const gl::Context *context, EGLint buffer);
 
     Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc);
 
     EGLint isPostSubBufferSupported() const;
 
     void setSwapInterval(EGLint interval);
-    void setIsCurrent(Display *display, bool isCurrent);
-    void onDestroy(const Display *display);
+    Error setIsCurrent(const gl::Context *context, bool isCurrent);
+    Error onDestroy(const Display *display);
 
     const Config *getConfig() const;
 
@@ -149,7 +148,7 @@ class Surface : public gl::FramebufferAttachmentObject
     gl::Format mDSFormat;
 
   private:
-    void destroy(const egl::Display *display);
+    Error destroyImpl(const Display *display);
 };
 
 class WindowSurface final : public Surface

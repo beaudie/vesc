@@ -236,11 +236,12 @@ bool FramebufferAttachment::operator!=(const FramebufferAttachment &other) const
 }
 
 Error FramebufferAttachmentObject::getAttachmentRenderTarget(
+    const Context *context,
     GLenum binding,
     const ImageIndex &imageIndex,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
-    return getAttachmentImpl()->getAttachmentRenderTarget(binding, imageIndex, rtOut);
+    return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
 }
 
 angle::BroadcastChannel<> *FramebufferAttachmentObject::getDirtyChannel()
