@@ -1030,6 +1030,8 @@ void TParseContext::checkIsParameterQualifierValid(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     TType *type)
 {
+    // The only parameter qualifier a parameter can have are
+    // in, out, inout or const.
     TTypeQualifier typeQualifier = typeQualifierBuilder.getParameterTypeQualifier(mDiagnostics);
 
     if (typeQualifier.qualifier == EvqOut || typeQualifier.qualifier == EvqInOut)
@@ -1839,10 +1841,21 @@ TIntermNode *TParseContext::addLoop(TLoopType type,
     }
     if (cond == nullptr || typedCond)
     {
+        if (type == ELoopDoWhile)
+        {
+            checkIsScalarBool(line, typedCond);
+        }
+        // In the case of other loops, it was checked before that the condition is a scalar boolean.
+        ASSERT(mDiagnostics->numErrors() > 0 || typedCond == nullptr ||
+               (typedCond->getBasicType() == EbtBool && !typedCond->isArray() &&
+                !typedCond->isVector()));
+
         node = new TIntermLoop(type, init, typedCond, expr, TIntermediate::EnsureBlock(body));
         node->setLine(line);
         return node;
     }
+
+    ASSERT(type != ELoopDoWhile);
 
     TIntermDeclaration *declaration = cond->getAsDeclarationNode();
     ASSERT(declaration);
@@ -1866,6 +1879,32 @@ TIntermNode *TParseContext::addLoop(TLoopType type,
     loop->setLine(line);
     block->setLine(line);
     return block;
+}
+
+TIntermNode *TParseContext::addIfElse(TIntermTyped *cond,
+                                      TIntermNodePair code,
+                                      const TSourceLoc &loc)
+{
+    checkIsScalarBool(loc, cond);
+
+    // For compile time constant conditions, prune the code now.
+    if (cond->getAsConstantUnion())
+    {
+        if (cond->getAsConstantUnion()->getBConst(0) == true)
+        {
+            return TIntermediate::EnsureBlock(code.node1);
+        }
+        else
+        {
+            return TIntermediate::EnsureBlock(code.node2);
+        }
+    }
+
+    TIntermIfElse *node = new TIntermIfElse(cond, TIntermediate::EnsureBlock(code.node1),
+                                            TIntermediate::EnsureBlock(code.node2));
+    node->setLine(loc);
+
+    return node;
 }
 
 void TParseContext::addFullySpecifiedType(TPublicType *typeSpecifier)
@@ -2514,6 +2553,22 @@ void TParseContext::setAtomicCounterBindingDefaultOffset(const TPublicType &publ
     mAtomicCounterBindingStates[layoutQualifier.binding].setDefaultOffset(layoutQualifier.offset);
 }
 
+void TParseContext::parseDefaultPrecisionQualifier(const TPrecision precision,
+                                                   const TPublicType &type,
+                                                   const TSourceLoc &loc)
+{
+    if ((precision == EbpHigh) && (getShaderType() == GL_FRAGMENT_SHADER) &&
+        !getFragmentPrecisionHigh())
+    {
+        error(loc, "precision is not supported in fragment shader", "highp");
+    }
+    if (!symbolTable.setDefaultPrecision(type, precision))
+    {
+        error(loc, "illegal type argument for default precision qualifier",
+              getBasicString(type.getBasicType()));
+    }
+}
+
 void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder)
 {
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
@@ -2919,8 +2974,20 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     return new TFunction(name, new TType(type));
 }
 
+TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSourceLoc &loc)
+{
+    checkIsNotReserved(loc, *name);
+    const TType *returnType = TCache::getType(EbtVoid, EbpUndefined);
+    return new TFunction(name, returnType);
+}
+
 TFunction *TParseContext::addConstructorFunc(const TPublicType &publicType)
 {
+    if (mShaderVersion < 300 && publicType.array)
+    {
+        error(publicType.getLine(), "array constructor supported in GLSL ES 3.00 and above only",
+              "[]");
+    }
     if (publicType.isStructSpecifier())
     {
         error(publicType.getLine(), "constructor can't be a structure definition",
@@ -2936,6 +3003,20 @@ TFunction *TParseContext::addConstructorFunc(const TPublicType &publicType)
     }
 
     return new TFunction(nullptr, type, EOpConstruct);
+}
+
+TParameter TParseContext::parseParameterDeclarator(const TPublicType &publicType,
+                                                   const TString *name,
+                                                   const TSourceLoc &nameLoc)
+{
+    if (publicType.getBasicType() == EbtVoid)
+    {
+        error(nameLoc, "illegal use of type 'void'", name->c_str());
+    }
+    checkIsNotReserved(nameLoc, *name);
+    TType *type      = new TType(publicType);
+    TParameter param = {name, type};
+    return param;
 }
 
 // This function is used to test for the correctness of the parameters passed to various constructor
@@ -3837,9 +3918,7 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     }
 
     TTypeSpecifierNonArray typeSpecifierNonArray;
-    typeSpecifierNonArray.initialize(EbtStruct, structLine);
-    typeSpecifierNonArray.userDef           = structureType;
-    typeSpecifierNonArray.isStructSpecifier = true;
+    typeSpecifierNonArray.initializeStruct(structureType, true, structLine);
     exitStructDeclaration();
 
     return typeSpecifierNonArray;
@@ -3979,6 +4058,7 @@ TIntermTyped *TParseContext::createUnaryMath(TOperator op,
 
 TIntermTyped *TParseContext::addUnaryMath(TOperator op, TIntermTyped *child, const TSourceLoc &loc)
 {
+    ASSERT(op != EOpNull);
     TIntermTyped *node = createUnaryMath(op, child, loc);
     if (node == nullptr)
     {
@@ -4447,28 +4527,39 @@ TIntermBranch *TParseContext::addBranch(TOperator op, const TSourceLoc &loc)
                 error(loc, "non-void function must return a value", "return");
             }
             break;
+        case EOpKill:
+            if (mShaderType != GL_FRAGMENT_SHADER)
+            {
+                error(loc, "discard supported in fragment shaders only", "discard");
+            }
+            break;
         default:
-            // No checks for discard
+            UNREACHABLE();
             break;
     }
-    return intermediate.addBranch(op, loc);
+    return addBranch(op, nullptr, loc);
 }
 
 TIntermBranch *TParseContext::addBranch(TOperator op,
-                                        TIntermTyped *returnValue,
+                                        TIntermTyped *expression,
                                         const TSourceLoc &loc)
 {
-    ASSERT(op == EOpReturn);
-    mFunctionReturnsValue = true;
-    if (mCurrentFunctionType->getBasicType() == EbtVoid)
+    if (expression != nullptr)
     {
-        error(loc, "void function cannot return a value", "return");
+        ASSERT(op == EOpReturn);
+        mFunctionReturnsValue = true;
+        if (mCurrentFunctionType->getBasicType() == EbtVoid)
+        {
+            error(loc, "void function cannot return a value", "return");
+        }
+        else if (*mCurrentFunctionType != expression->getType())
+        {
+            error(loc, "function return is not matching type:", "return");
+        }
     }
-    else if (*mCurrentFunctionType != returnValue->getType())
-    {
-        error(loc, "function return is not matching type:", "return");
-    }
-    return intermediate.addBranch(op, returnValue, loc);
+    TIntermBranch *node = new TIntermBranch(op, expression);
+    node->setLine(loc);
+    return node;
 }
 
 void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
