@@ -17,6 +17,7 @@
 #include "common/debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLe/renderer/d3d/d3d11/renderer11_utils.h"
 
 namespace rx
 {
