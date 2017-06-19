@@ -1759,8 +1759,12 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
       case GL_STENCIL_WRITEMASK:                        *params = clampToInt(mDepthStencil.stencilWritemask);     break;
       case GL_STENCIL_BACK_WRITEMASK:                   *params = clampToInt(mDepthStencil.stencilBackWritemask); break;
       case GL_STENCIL_CLEAR_VALUE:                      *params = mStencilClearValue;                             break;
-      case GL_IMPLEMENTATION_COLOR_READ_TYPE:           *params = mReadFramebuffer->getImplementationColorReadType();   break;
-      case GL_IMPLEMENTATION_COLOR_READ_FORMAT:         *params = mReadFramebuffer->getImplementationColorReadFormat(); break;
+      case GL_IMPLEMENTATION_COLOR_READ_TYPE:
+          *params = mReadFramebuffer->getImplementationColorReadType(context);
+          break;
+      case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
+          *params = mReadFramebuffer->getImplementationColorReadFormat(context);
+          break;
       case GL_SAMPLE_BUFFERS:
       case GL_SAMPLES:
         {

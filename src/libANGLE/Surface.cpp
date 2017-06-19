@@ -15,9 +15,11 @@
 #include <iostream>
 
 #include "libANGLE/Config.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 
@@ -75,21 +77,9 @@ Surface::Surface(EGLint surfaceType, const egl::Config *config, const AttributeM
 
 Surface::~Surface()
 {
-    if (mTexture.get())
-    {
-        if (mImplementation)
-        {
-            mImplementation->releaseTexImage(EGL_BACK_BUFFER);
-        }
-        mTexture->releaseTexImageFromSurface();
-        mTexture.set(nullptr);
-    }
-
-    SafeDelete(mState.defaultFramebuffer);
-    SafeDelete(mImplementation);
 }
 
-void Surface::destroy(const Display *display)
+Error Surface::destroyImpl(const Display *display)
 {
     if (mState.defaultFramebuffer)
     {
@@ -99,7 +89,27 @@ void Surface::destroy(const Display *display)
     {
         mImplementation->destroy(display);
     }
+
+    if (mTexture.get())
+    {
+        if (mImplementation)
+        {
+            ANGLE_TRY(mImplementation->releaseTexImage(EGL_BACK_BUFFER));
+        }
+        // TODO(jmadill): Use a dummy context instead of nullptr.
+        auto glErr = mTexture->releaseTexImageFromSurface(nullptr);
+        if (glErr.isError())
+        {
+            return Error(EGL_BAD_SURFACE);
+        }
+        mTexture.set(nullptr);
+    }
+
+    SafeDelete(mState.defaultFramebuffer);
+    SafeDelete(mImplementation);
+
     delete this;
+    return NoError();
 }
 
 Error Surface::initialize(const Display *display)
@@ -117,29 +127,32 @@ Error Surface::initialize(const Display *display)
     return NoError();
 }
 
-void Surface::setIsCurrent(Display *display, bool isCurrent)
+Error Surface::setIsCurrent(const gl::Context *context, bool isCurrent)
 {
     if (isCurrent)
     {
         mCurrentCount++;
-        return;
+        return NoError();
     }
 
     ASSERT(mCurrentCount > 0);
     mCurrentCount--;
     if (mCurrentCount == 0 && mDestroyed)
     {
-        destroy(display);
+        ASSERT(context);
+        return destroyImpl(context->getCurrentDisplay());
     }
+    return NoError();
 }
 
-void Surface::onDestroy(const Display *display)
+Error Surface::onDestroy(const Display *display)
 {
     mDestroyed = true;
     if (mCurrentCount == 0)
     {
-        destroy(display);
+        return destroyImpl(display);
     }
+    return NoError();
 }
 
 EGLint Surface::getType() const
@@ -226,23 +239,33 @@ EGLint Surface::getHeight() const
     return mFixedSize ? static_cast<EGLint>(mFixedHeight) : mImplementation->getHeight();
 }
 
-Error Surface::bindTexImage(gl::Texture *texture, EGLint buffer)
+Error Surface::bindTexImage(const gl::Context *context, gl::Texture *texture, EGLint buffer)
 {
     ASSERT(!mTexture.get());
     ANGLE_TRY(mImplementation->bindTexImage(texture, buffer));
 
-    texture->bindTexImageFromSurface(this);
+    auto glErr = texture->bindTexImageFromSurface(context, this);
+    if (glErr.isError())
+    {
+        return Error(EGL_BAD_SURFACE);
+    }
     mTexture.set(texture);
 
     return NoError();
 }
 
-Error Surface::releaseTexImage(EGLint buffer)
+Error Surface::releaseTexImage(const gl::Context *context, EGLint buffer)
 {
+    ASSERT(context);
+
     ANGLE_TRY(mImplementation->releaseTexImage(buffer));
 
     ASSERT(mTexture.get());
-    mTexture->releaseTexImageFromSurface();
+    auto glErr = mTexture->releaseTexImageFromSurface(context);
+    if (glErr.isError())
+    {
+        return Error(EGL_BAD_SURFACE);
+    }
     mTexture.set(nullptr);
 
     return NoError();

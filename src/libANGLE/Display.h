@@ -53,7 +53,7 @@ class Display final : angle::NonCopyable
     ~Display();
 
     Error initialize();
-    void terminate();
+    Error terminate();
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay,
@@ -96,10 +96,10 @@ class Display final : angle::NonCopyable
 
     Error makeCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context);
 
-    void destroySurface(Surface *surface);
+    Error destroySurface(Surface *surface);
     void destroyImage(Image *image);
     void destroyStream(Stream *stream);
-    void destroyContext(gl::Context *context);
+    Error destroyContext(gl::Context *context);
 
     bool isInitialized() const;
     bool isValidConfig(const Config *config) const;
