@@ -130,8 +130,8 @@ struct TConstParameter
     TConstParameter(const TString *n, TType *t) = delete;
     TConstParameter(TString *n, const TType *t) = delete;
 
-    const TString *name;
-    const TType *type;
+    const TString *const name;
+    const TType *const type;
 };
 
 // The function sub-class of symbols and the parser will need to
@@ -150,7 +150,7 @@ struct TParameter
         return TConstParameter(constName, constType);
     }
 
-    TString *name;
+    const TString *name;
     TType *type;
 };
 

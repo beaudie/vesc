@@ -254,7 +254,11 @@ class TParseContext : angle::NonCopyable
                                   TIntermTyped *initializer,
                                   TIntermDeclaration *declarationOut);
 
+    void parseDefaultPrecisionQualifier(const TPrecision precision,
+                                        const TPublicType &type,
+                                        const TSourceLoc &loc);
     void parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder);
+
     TIntermFunctionPrototype *addFunctionPrototypeDeclaration(const TFunction &parsedFunction,
                                                               const TSourceLoc &location);
     TIntermFunctionDefinition *addFunctionDefinition(TIntermFunctionPrototype *functionPrototype,
@@ -267,7 +271,11 @@ class TParseContext : angle::NonCopyable
     TFunction *parseFunctionHeader(const TPublicType &type,
                                    const TString *name,
                                    const TSourceLoc &location);
+    TFunction *addNonConstructorFunc(const TString *name, const TSourceLoc &loc);
     TFunction *addConstructorFunc(const TPublicType &publicType);
+    TParameter parseParameterDeclarator(const TPublicType &publicType,
+                                        const TString *name,
+                                        const TSourceLoc &nameLoc);
 
     TIntermTyped *addIndexExpression(TIntermTyped *baseExpression,
                                      const TSourceLoc &location,
@@ -351,7 +359,7 @@ class TParseContext : angle::NonCopyable
     TIntermTyped *addComma(TIntermTyped *left, TIntermTyped *right, const TSourceLoc &loc);
 
     TIntermBranch *addBranch(TOperator op, const TSourceLoc &loc);
-    TIntermBranch *addBranch(TOperator op, TIntermTyped *returnValue, const TSourceLoc &loc);
+    TIntermBranch *addBranch(TOperator op, TIntermTyped *expression, const TSourceLoc &loc);
 
     void checkTextureOffsetConst(TIntermAggregate *functionCall);
     void checkImageMemoryAccessForBuiltinFunctions(TIntermAggregate *functionCall);

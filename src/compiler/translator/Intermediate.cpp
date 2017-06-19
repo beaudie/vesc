@@ -225,24 +225,6 @@ TIntermTyped *TIntermediate::AddSwizzle(TIntermTyped *baseExpression,
     return node;
 }
 
-//
-// Add branches.
-//
-TIntermBranch *TIntermediate::addBranch(TOperator branchOp, const TSourceLoc &line)
-{
-    return addBranch(branchOp, 0, line);
-}
-
-TIntermBranch *TIntermediate::addBranch(TOperator branchOp,
-                                        TIntermTyped *expression,
-                                        const TSourceLoc &line)
-{
-    TIntermBranch *node = new TIntermBranch(branchOp, expression);
-    node->setLine(line);
-
-    return node;
-}
-
 TIntermTyped *TIntermediate::foldAggregateBuiltIn(TIntermAggregate *aggregate,
                                                   TDiagnostics *diagnostics)
 {

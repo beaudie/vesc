@@ -51,8 +51,6 @@ class TIntermediate
                                            const TType &type,
                                            const TSourceLoc &line);
 
-    TIntermBranch *addBranch(TOperator, const TSourceLoc &);
-    TIntermBranch *addBranch(TOperator, TIntermTyped *, const TSourceLoc &);
     static TIntermTyped *AddSwizzle(TIntermTyped *baseExpression,
                                     const TVectorFields &fields,
                                     const TSourceLoc &dotLocation);
