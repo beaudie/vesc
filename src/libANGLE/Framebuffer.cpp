@@ -919,19 +919,22 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
     return GL_FRAMEBUFFER_COMPLETE;
 }
 
-Error Framebuffer::discard(size_t count, const GLenum *attachments)
+Error Framebuffer::discard(const Context *context, size_t count, const GLenum *attachments)
 {
-    return mImpl->discard(count, attachments);
+    return mImpl->discard(context, count, attachments);
 }
 
-Error Framebuffer::invalidate(size_t count, const GLenum *attachments)
+Error Framebuffer::invalidate(const Context *context, size_t count, const GLenum *attachments)
 {
-    return mImpl->invalidate(count, attachments);
+    return mImpl->invalidate(context, count, attachments);
 }
 
-Error Framebuffer::invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area)
+Error Framebuffer::invalidateSub(const Context *context,
+                                 size_t count,
+                                 const GLenum *attachments,
+                                 const gl::Rectangle &area)
 {
-    return mImpl->invalidateSub(count, attachments, area);
+    return mImpl->invalidateSub(context, count, attachments, area);
 }
 
 Error Framebuffer::clear(const gl::Context *context, GLbitfield mask)
@@ -997,14 +1000,14 @@ Error Framebuffer::clearBufferfi(const gl::Context *context,
     return mImpl->clearBufferfi(context, buffer, drawbuffer, depth, stencil);
 }
 
-GLenum Framebuffer::getImplementationColorReadFormat() const
+GLenum Framebuffer::getImplementationColorReadFormat(const Context *context) const
 {
-    return mImpl->getImplementationColorReadFormat();
+    return mImpl->getImplementationColorReadFormat(context);
 }
 
-GLenum Framebuffer::getImplementationColorReadType() const
+GLenum Framebuffer::getImplementationColorReadType(const Context *context) const
 {
-    return mImpl->getImplementationColorReadType();
+    return mImpl->getImplementationColorReadType(context);
 }
 
 Error Framebuffer::readPixels(const gl::Context *context,
