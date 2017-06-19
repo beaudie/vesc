@@ -5908,7 +5908,7 @@ bool ValidateLinkProgram(Context *context, GLuint program)
     return true;
 }
 
-bool ValidateReadPixels(ValidationContext *context,
+bool ValidateReadPixels(Context *context,
                         GLint x,
                         GLint y,
                         GLsizei width,
