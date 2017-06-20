@@ -342,6 +342,9 @@ class RendererD3D : public BufferFactoryD3D
                               gl::TextureCapsMap *outTextureCaps,
                               gl::Extensions *outExtensions,
                               gl::Limitations *outLimitations) const = 0;
+    virtual bool instancedPointSpritesActive(ProgramD3D *programD3D, GLenum mode) const;
+    // Support direct drawing.
+    virtual bool supportsFastDraw(const gl::Context *context, GLenum mode, GLenum type) const = 0;
 
     void cleanup();
 
