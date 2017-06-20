@@ -17,6 +17,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "platform/Platform.h"
 
 namespace gl
 {
@@ -472,11 +473,20 @@ void MemoryProgramCache::remove(const ProgramHash &programHash)
     ASSERT(result);
 }
 
-void MemoryProgramCache::put(const ProgramHash &program, angle::MemoryBuffer &&binaryProgram)
+void MemoryProgramCache::put(const ProgramHash &program,
+                             const Context *context,
+                             angle::MemoryBuffer &&binaryProgram)
 {
-    if (!mProgramBinaryCache.put(program, std::move(binaryProgram), binaryProgram.size()))
+    const angle::MemoryBuffer *result =
+        mProgramBinaryCache.put(program, std::move(binaryProgram), binaryProgram.size());
+    if (!result)
     {
         ERR() << "Failed to store binary program in memory cache, program is too large.";
+    }
+    else
+    {
+        auto *platform = ANGLEPlatformCurrent();
+        platform->cacheProgram(platform, program, result->size(), result->data());
     }
 }
 
@@ -486,7 +496,7 @@ void MemoryProgramCache::putProgram(const ProgramHash &programHash,
 {
     angle::MemoryBuffer binaryProgram;
     Serialize(context, program, &binaryProgram);
-    put(programHash, std::move(binaryProgram));
+    put(programHash, context, std::move(binaryProgram));
 }
 
 void MemoryProgramCache::putBinary(const Context *context,
@@ -503,7 +513,7 @@ void MemoryProgramCache::putBinary(const Context *context,
     const auto &programHash = ComputeHash(context, program);
 
     // Store the binary.
-    put(programHash, std::move(binaryProgram));
+    put(programHash, context, std::move(binaryProgram));
 }
 
 void MemoryProgramCache::clear()
