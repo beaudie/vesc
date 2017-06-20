@@ -3488,7 +3488,8 @@ gl::Error Context::preDrawCall(GLenum drawMode)
 {
     syncRendererState();
     InfoLog infoLog;
-    Error err = mImplementation->triggerDrawCallProgramRecompilation(this, &infoLog, mMemoryProgramCache, drawMode);
+    Error err = mImplementation->triggerDrawCallProgramRecompilation(this, &infoLog,
+                                                                     mMemoryProgramCache, drawMode);
     if (err.isError())
     {
         WARN() << "Dynamic recompilation error log: " << infoLog.str();
