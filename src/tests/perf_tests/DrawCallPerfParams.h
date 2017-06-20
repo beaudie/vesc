@@ -14,7 +14,7 @@
 
 #include "ANGLEPerfTest.h"
 
-struct DrawCallPerfParams final : public RenderTestParams
+struct DrawCallPerfParams : public RenderTestParams
 {
     // Common default options
     DrawCallPerfParams()
