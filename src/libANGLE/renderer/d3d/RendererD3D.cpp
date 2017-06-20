@@ -370,6 +370,12 @@ bool RendererD3D::isRobustResourceInitEnabled() const
     return mDisplay->isRobustResourceInitEnabled();
 }
 
+bool RendererD3D::instancedPointSpritesActive(ProgramD3D *programD3D, GLenum mode) const
+{
+    return programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation() &&
+           mode == GL_POINTS;
+}
+
 unsigned int GetBlendSampleMask(const gl::ContextState &data, int samples)
 {
     const auto &glState = data.getState();

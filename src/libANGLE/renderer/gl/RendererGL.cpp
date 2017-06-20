@@ -286,8 +286,7 @@ gl::Error RendererGL::drawElements(const gl::Context *context,
                                    GLenum mode,
                                    GLsizei count,
                                    GLenum type,
-                                   const void *indices,
-                                   const gl::IndexRange &indexRange)
+                                   const void *indices)
 {
     const void *drawIndexPtr = nullptr;
     ANGLE_TRY(mStateManager->setDrawElementsState(context, count, type, indices, 0, &drawIndexPtr));
@@ -305,8 +304,7 @@ gl::Error RendererGL::drawElementsInstanced(const gl::Context *context,
                                             GLsizei count,
                                             GLenum type,
                                             const void *indices,
-                                            GLsizei instances,
-                                            const gl::IndexRange &indexRange)
+                                            GLsizei instances)
 {
     const void *drawIndexPointer = nullptr;
     ANGLE_TRY(mStateManager->setDrawElementsState(context, count, type, indices, instances,
@@ -326,8 +324,7 @@ gl::Error RendererGL::drawRangeElements(const gl::Context *context,
                                         GLuint end,
                                         GLsizei count,
                                         GLenum type,
-                                        const void *indices,
-                                        const gl::IndexRange &indexRange)
+                                        const void *indices)
 {
     const void *drawIndexPointer = nullptr;
     ANGLE_TRY(
