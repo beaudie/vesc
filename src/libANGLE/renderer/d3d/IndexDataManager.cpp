@@ -175,7 +175,7 @@ bool IndexDataManager::isStreamingIndexData(bool primitiveRestartWorkaround,
         return true;
     }
 
-    if ((staticBuffer->getBufferSize() != 0) && (staticBuffer->getIndexType() != dstType))
+    if ((staticBuffer->getBufferSize() == 0) || (staticBuffer->getIndexType() != dstType))
     {
         return true;
     }
