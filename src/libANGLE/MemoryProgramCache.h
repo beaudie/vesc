@@ -99,7 +99,9 @@ class MemoryProgramCache final : angle::NonCopyable
 
   private:
     // Insert or update a binary program. Program contents are transferred.
-    void put(const ProgramHash &programHash, angle::MemoryBuffer &&binaryProgram);
+    void put(const ProgramHash &programHash,
+             const Context *context,
+             angle::MemoryBuffer &&binaryProgram);
 
     angle::SizedMRUCache<ProgramHash, angle::MemoryBuffer> mProgramBinaryCache;
     unsigned int mIssuedWarnings;
