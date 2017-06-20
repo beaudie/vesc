@@ -375,8 +375,7 @@ class Renderer9 : public RendererD3D
                                   GLsizei count,
                                   GLenum type,
                                   const void *indices,
-                                  GLsizei instances,
-                                  const gl::IndexRange &indexRange);
+                                  GLsizei instances);
 
     // Necessary hack for default framebuffers in D3D.
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
@@ -400,8 +399,7 @@ class Renderer9 : public RendererD3D
                              GLint startVertex,
                              GLsizei count,
                              GLsizei instances);
-    gl::Error drawElementsImpl(const gl::ContextState &data,
-                               const TranslatedIndexData &indexInfo,
+    gl::Error drawElementsImpl(const gl::Context *context,
                                GLenum mode,
                                GLsizei count,
                                GLenum type,
