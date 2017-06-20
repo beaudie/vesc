@@ -30,6 +30,7 @@ struct DrawCallPerfParams final : public RenderTestParams
     unsigned int iterations = 50;
     double runTimeSeconds   = 10.0;
     int numTris             = 1;
+    GLenum type             = GL_UNSIGNED_INT;
     bool useFBO             = false;
 };
 

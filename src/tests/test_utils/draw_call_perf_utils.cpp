@@ -137,6 +137,16 @@ GLuint Create2DTriangleBuffer(size_t numTris, GLenum usage)
     return buffer;
 }
 
+GLuint CreateIndexBuffer(size_t numTris, GLenum type, GLenum usage)
+{
+    GLuint buffer = 0u;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numTris * 3 * sizeof(type), nullptr, usage);
+
+    return buffer;
+}
+
 void CreateColorFBO(GLsizei width, GLsizei height, GLuint *fbo, GLuint *texture)
 {
     glGenFramebuffers(1, fbo);
