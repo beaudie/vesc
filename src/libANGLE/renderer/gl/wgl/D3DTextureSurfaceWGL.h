@@ -9,7 +9,7 @@
 #ifndef LIBANGLE_RENDERER_GL_WGL_D3DTEXTIRESURFACEWGL_H_
 #define LIBANGLE_RENDERER_GL_WGL_D3DTEXTIRESURFACEWGL_H_
 
-#include "libANGLE/renderer/gl/SurfaceGL.h"
+#include "libANGLE/renderer/gl/wgl/SurfaceWGL.h"
 
 #include <GL/wglext.h>
 
@@ -22,7 +22,7 @@ class DisplayWGL;
 class StateManagerGL;
 struct WorkaroundsGL;
 
-class D3DTextureSurfaceWGL : public SurfaceGL
+class D3DTextureSurfaceWGL : public SurfaceWGL
 {
   public:
     D3DTextureSurfaceWGL(const egl::SurfaceState &state,
@@ -30,7 +30,6 @@ class D3DTextureSurfaceWGL : public SurfaceGL
                          EGLenum buftype,
                          EGLClientBuffer clientBuffer,
                          DisplayWGL *display,
-                         HGLRC wglContext,
                          HDC deviceContext,
                          ID3D11Device *displayD3D11Device,
                          const FunctionsGL *functionsGL,
@@ -63,6 +62,8 @@ class D3DTextureSurfaceWGL : public SurfaceGL
     EGLint getSwapBehavior() const override;
 
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &data) override;
+
+    HDC getDC() const override;
 
   private:
     EGLenum mBuftype;
