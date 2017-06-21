@@ -616,9 +616,24 @@ Error Program::link(const gl::Context *context)
     const auto &data = context->getContextState();
 
     unlink();
-
-    mInfoLog.reset();
     resetUniformBlockBindings();
+
+    ProgramHash programHash;
+    auto *cache = context->getMemoryProgramCache();
+    if (cache)
+    {
+        ANGLE_TRY_RESULT(cache->getProgram(context, this, &mState, &programHash), mLinked);
+    }
+
+    if (mLinked)
+    {
+        return NoError();
+    }
+
+    // Cache load failed, fall through to normal linking.
+    unlink();
+    resetUniformBlockBindings();
+    mInfoLog.reset();
 
     const Caps &caps = data.getCaps();
 
@@ -749,6 +764,9 @@ Error Program::link(const gl::Context *context)
 
     gatherInterfaceBlockInfo(context);
 
+    // Save to the program cache.
+    cache->putProgram(programHash, context, this);
+
     return NoError();
 }
 
@@ -798,6 +816,14 @@ Error Program::loadBinary(const Context *context,
     const uint8_t *bytes = reinterpret_cast<const uint8_t *>(binary);
     ANGLE_TRY_RESULT(
         MemoryProgramCache::Deserialize(context, this, &mState, bytes, length, mInfoLog), mLinked);
+
+    // Store the binary in the program cache.
+    auto *cache = context->getMemoryProgramCache();
+    if (cache)
+    {
+        cache->putBinary(context, this, bytes, length);
+    }
+
     return NoError();
 #endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
 }
