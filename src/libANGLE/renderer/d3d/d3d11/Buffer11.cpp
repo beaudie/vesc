@@ -113,6 +113,8 @@ class Buffer11::BufferStorage : angle::NonCopyable
 
     virtual bool isMappable(GLbitfield access) const = 0;
 
+    virtual bool gpuAccessible() const = 0;
+
     virtual gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
                                                           size_t sourceOffset,
                                                           size_t size,
@@ -147,6 +149,8 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
     ~NativeStorage() override;
 
     bool isMappable(GLbitfield access) const override;
+
+    bool gpuAccessible() const override { return true; }
 
     const d3d11::Buffer &getBuffer() const { return mBuffer; }
     gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
@@ -186,6 +190,8 @@ class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
 
     bool isMappable(GLbitfield access) const override { return true; }
 
+    bool gpuAccessible() const override { return false; }
+
     gl::ErrorOrResult<const d3d11::Buffer *> getBuffer(SourceIndexData *indexInfo,
                                                        const TranslatedAttribute &attribute,
                                                        GLint startVertex);
@@ -218,6 +224,9 @@ class Buffer11::PackStorage : public Buffer11::BufferStorage
     ~PackStorage() override;
 
     bool isMappable(GLbitfield access) const override { return true; }
+
+    bool gpuAccessible() const override { return false; }
+
     gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
                                                   size_t sourceOffset,
                                                   size_t size,
@@ -254,6 +263,9 @@ class Buffer11::SystemMemoryStorage : public Buffer11::BufferStorage
     ~SystemMemoryStorage() override {}
 
     bool isMappable(GLbitfield access) const override { return true; }
+
+    bool gpuAccessible() const override { return false; }
+
     gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
                                                   size_t sourceOffset,
                                                   size_t size,
@@ -414,14 +426,12 @@ gl::Error Buffer11::copySubData(const gl::Context *context,
         return gl::OutOfMemory() << "Failed to allocate internal staging buffer.";
     }
 
-    // If copying to/from a pixel pack buffer, we must have a staging or
-    // pack buffer partner, because other native buffers can't be mapped
-    if (copyDest->getUsage() == BUFFER_USAGE_PIXEL_PACK && !copySource->isMappable(GL_MAP_READ_BIT))
+    // A staging buffer is needed if there is no cpu-cpu or gpu-gpu copy path avaiable.
+    if (!copyDest->gpuAccessible() && !copySource->isMappable(GL_MAP_READ_BIT))
     {
         ANGLE_TRY_RESULT(sourceBuffer->getStagingStorage(), copySource);
     }
-    else if (copySource->getUsage() == BUFFER_USAGE_PIXEL_PACK &&
-             !copyDest->isMappable(GL_MAP_WRITE_BIT))
+    else if (!copySource->gpuAccessible() && !copyDest->isMappable(GL_MAP_WRITE_BIT))
     {
         ANGLE_TRY_RESULT(getStagingStorage(), copyDest);
     }
