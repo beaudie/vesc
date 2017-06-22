@@ -9,6 +9,7 @@
 
 #include <GLSLANG/ShaderLang.h>
 
+#include "compiler/translator/ExtensionBehavior.h"
 #include "compiler/translator/IntermNode.h"
 
 namespace sh
@@ -24,15 +25,21 @@ TIntermSequence *CreateInitCode(const TIntermSymbol *initializedSymbol);
 // Initialize all uninitialized local variables, so that undefined behavior is avoided.
 void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion);
 
-// This function can initialize all the types that CreateInitCode is able to initialize. For struct
-// typed variables it requires that the struct is found from the symbolTable, which is usually not
-// the case for locally defined struct types.
-// For now it is used for the following two scenarios:
+// This function can initialize all the types that CreateInitCode is able to initialize. All
+// variables must be globals which can be found in the symbol table. For now it is used for the
+// following two scenarios:
 //   1. initializing gl_Position;
 //   2. initializing ESSL 3.00 shaders' output variables.
+// Note: The type of each lvalue in an initializer is retrieved from the symbol table. gl_FragData
+// requires special handling because the number of indices which can be initialized is determined by
+// the API spec and extension support.
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable);
+                         const TSymbolTable &symbolTable,
+                         int shaderVersion,
+                         ShShaderSpec shaderSpec,
+                         const TExtensionBehavior &extensionBehavior,
+                         const ShBuiltInResources &compileResources);
 
 }  // namespace sh
 
