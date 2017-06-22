@@ -42,20 +42,21 @@ class Thread;
 
 namespace gl
 {
+class Buffer;
 class Compiler;
-class Shader;
-class Program;
-class Texture;
-class Framebuffer;
-class Renderbuffer;
 class FenceNV;
 class FenceSync;
+class Framebuffer;
+class MemoryProgramCache;
+class Program;
 class Query;
-class Buffer;
-struct VertexAttribute;
-class VertexArray;
+class Renderbuffer;
 class Sampler;
+class Shader;
+class Texture;
 class TransformFeedback;
+class VertexArray;
+struct VertexAttribute;
 
 class Context final : public ValidationContext
 {
@@ -64,6 +65,7 @@ class Context final : public ValidationContext
             const egl::Config *config,
             const Context *shareContext,
             TextureManager *shareTextures,
+            MemoryProgramCache *memoryProgramCache,
             const egl::AttributeMap &attribs,
             const egl::DisplayExtensions &displayExtensions,
             bool robustResourceInit);
@@ -793,6 +795,8 @@ class Context final : public ValidationContext
 
     void dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
 
+    MemoryProgramCache *getMemoryProgramCache() const { return mMemoryProgramCache; }
+
     template <EntryPoint EP, typename... ParamsT>
     void gatherParams(ParamsT &&... params);
 
@@ -894,6 +898,7 @@ class Context final : public ValidationContext
     egl::Display *mCurrentDisplay;
     Framebuffer *mSurfacelessFramebuffer;
     bool mWebGLContext;
+    MemoryProgramCache *mMemoryProgramCache;
 
     State::DirtyBits mTexImageDirtyBits;
     State::DirtyObjects mTexImageDirtyObjects;
