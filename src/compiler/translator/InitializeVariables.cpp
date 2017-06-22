@@ -84,36 +84,39 @@ void AddArrayZeroInitSequence(const TIntermTyped *initializedNode, TIntermSequen
 
 void InsertInitCode(TIntermSequence *mainBody,
                     const InitVariableList &variables,
-                    const TSymbolTable &symbolTable)
+                    const TSymbolTable &symbolTable,
+                    int shaderVersion,
+                    unsigned accessibleFragDataAttachmentsCount)
 {
     for (const auto &var : variables)
     {
         TString name = TString(var.name.c_str());
-
-        TIntermSymbol *initializedSymbol = nullptr;
-        if (var.isArray())
+        size_t pos   = name.find_last_of('[');
+        if (pos != TString::npos)
         {
-            size_t pos = name.find_last_of('[');
-            if (pos != TString::npos)
-            {
-                name = name.substr(0, pos);
-            }
-            TType arrayType = sh::GetShaderVariableBasicType(var);
-            arrayType.setArraySize(var.elementCount());
-            initializedSymbol = new TIntermSymbol(0, name, arrayType);
+            name = name.substr(0, pos);
         }
-        else if (var.isStruct())
-        {
-            TVariable *structInfo = reinterpret_cast<TVariable *>(symbolTable.findGlobal(name));
-            ASSERT(structInfo);
 
-            initializedSymbol = new TIntermSymbol(0, name, structInfo->getType());
+        const TVariable *symbolInfo = nullptr;
+        if (var.isBuiltIn())
+        {
+            symbolInfo =
+                reinterpret_cast<const TVariable *>(symbolTable.findBuiltIn(name, shaderVersion));
         }
         else
         {
-            TType type        = sh::GetShaderVariableBasicType(var);
-            initializedSymbol = new TIntermSymbol(0, name, type);
+            symbolInfo = reinterpret_cast<const TVariable *>(symbolTable.findGlobal(name));
         }
+        ASSERT(symbolInfo != nullptr);
+
+        TType type = symbolInfo->getType();
+        if (type.getQualifier() == EvqFragData)
+        {
+            // Adjust the number of attachment indices which can be initialized.
+            type.setArraySize(accessibleFragDataAttachmentsCount);
+        }
+
+        TIntermSymbol *initializedSymbol = new TIntermSymbol(0, name, type);
         TIntermSequence *initCode = CreateInitCode(initializedSymbol);
         mainBody->insert(mainBody->begin(), initCode->begin(), initCode->end());
     }
@@ -204,12 +207,15 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion)
 
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable)
+                         const TSymbolTable &symbolTable,
+                         int shaderVersion,
+                         unsigned accessibleFragDataAttachmentsCount)
 {
     TIntermFunctionDefinition *main = FindMain(root);
     ASSERT(main != nullptr);
     TIntermBlock *body = main->getBody();
-    InsertInitCode(body->getSequence(), vars, symbolTable);
+    InsertInitCode(body->getSequence(), vars, symbolTable, shaderVersion,
+                   accessibleFragDataAttachmentsCount);
 }
 
 }  // namespace sh

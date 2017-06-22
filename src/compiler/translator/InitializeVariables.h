@@ -30,9 +30,14 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion);
 // For now it is used for the following two scenarios:
 //   1. initializing gl_Position;
 //   2. initializing ESSL 3.00 shaders' output variables.
+// Note: The type of each lvalue in an initializer is retrieved from the symbol table. gl_FragData
+// requires special handling because the number of indices which can be initialized is determined by
+// the API spec and extension support.
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable);
+                         const TSymbolTable &symbolTable,
+                         int shaderVersion,
+                         unsigned accessibleFragDataAttachmentsCount);
 
 }  // namespace sh
 
