@@ -142,6 +142,7 @@
             'libANGLE/Error.cpp',
             'libANGLE/Error.h',
             'libANGLE/Error.inl',
+            'libANGLE/FastResourceMap.h',
             'libANGLE/Fence.cpp',
             'libANGLE/Fence.h',
             'libANGLE/Framebuffer.cpp',
