@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 {
     TFailCode failCode = ESuccess;
 
-    ShCompileOptions compileOptions = 0;
+    ShCompileOptions compileOptions = SH_INIT_OUTPUT_VARIABLES;
     int numCompiles = 0;
     ShHandle vertexCompiler = 0;
     ShHandle fragmentCompiler = 0;

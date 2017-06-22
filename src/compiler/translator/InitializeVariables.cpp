@@ -84,12 +84,24 @@ void AddArrayZeroInitSequence(const TIntermTyped *initializedNode, TIntermSequen
 
 void InsertInitCode(TIntermSequence *mainBody,
                     const InitVariableList &variables,
-                    const TSymbolTable &symbolTable)
+                    const TSymbolTable &symbolTable,
+                    int shaderVersion)
 {
     for (const auto &var : variables)
     {
         TString name = TString(var.name.c_str());
-
+        const TVariable *symbolInfo = nullptr;
+        if (var.isBuiltIn())
+        {
+            symbolInfo =
+                reinterpret_cast<const TVariable *>(symbolTable.findBuiltIn(name, shaderVersion));
+        }
+        else
+        {
+            symbolInfo = reinterpret_cast<const TVariable *>(symbolTable.findGlobal(name));
+        }
+        TType type =
+            symbolInfo != nullptr ? symbolInfo->getType() : sh::GetShaderVariableBasicType(var);
         TIntermSymbol *initializedSymbol = nullptr;
         if (var.isArray())
         {
@@ -98,20 +110,12 @@ void InsertInitCode(TIntermSequence *mainBody,
             {
                 name = name.substr(0, pos);
             }
-            TType arrayType = sh::GetShaderVariableBasicType(var);
-            arrayType.setArraySize(var.elementCount());
-            initializedSymbol = new TIntermSymbol(0, name, arrayType);
-        }
-        else if (var.isStruct())
-        {
-            TVariable *structInfo = reinterpret_cast<TVariable *>(symbolTable.findGlobal(name));
-            ASSERT(structInfo);
-
-            initializedSymbol = new TIntermSymbol(0, name, structInfo->getType());
+            // Set array size explicitly to address gl_FragData.
+            type.setArraySize(var.arraySize);
+            initializedSymbol = new TIntermSymbol(0, name, type);
         }
         else
         {
-            TType type        = sh::GetShaderVariableBasicType(var);
             initializedSymbol = new TIntermSymbol(0, name, type);
         }
         TIntermSequence *initCode = CreateInitCode(initializedSymbol);
@@ -204,12 +208,13 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion)
 
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable)
+                         const TSymbolTable &symbolTable,
+                         int shaderVersion)
 {
     TIntermFunctionDefinition *main = FindMain(root);
     ASSERT(main != nullptr);
     TIntermBlock *body = main->getBody();
-    InsertInitCode(body->getSequence(), vars, symbolTable);
+    InsertInitCode(body->getSequence(), vars, symbolTable, shaderVersion);
 }
 
 }  // namespace sh
