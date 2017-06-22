@@ -912,7 +912,7 @@ void TCompiler::initializeGLPosition(TIntermBlock *root)
     sh::ShaderVariable var(GL_FLOAT_VEC4, 0);
     var.name = "gl_Position";
     list.push_back(var);
-    InitializeVariables(root, list, symbolTable);
+    InitializeVariables(root, list, symbolTable, shaderVersion, 0u);
 }
 
 void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
@@ -949,7 +949,26 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
-    InitializeVariables(root, list, symbolTable);
+    unsigned accessibleFragDataAttachmentsCount = 0u;
+    if (shaderSpec == SH_WEBGL2_SPEC)
+    {
+        // WebGL2 spec, Editor's draft May 31, 5.13 GLSL ES 1.00 Fragment Shader Output:
+        // "A fragment shader written in The OpenGL ES Shading Language, Version 1.00, that
+        // statically assigns a value to gl_FragData[n] where n does not equal constant value 0 must
+        // fail to compile in the WebGL 2.0 API.".
+        accessibleFragDataAttachmentsCount = 1u;
+    }
+    else if (IsExtensionEnabled(extensionBehavior, "GL_EXT_draw_buffers"))
+    {
+        // The number of available attachments is determined by gl_MaxDrawBuffers.
+        accessibleFragDataAttachmentsCount = compileResources.MaxDrawBuffers;
+    }
+    else
+    {
+        // If GL_EXT_draw_buffers is disabled, the count of available attachments is 1.
+        accessibleFragDataAttachmentsCount = 1u;
+    }
+    InitializeVariables(root, list, symbolTable, shaderVersion, accessibleFragDataAttachmentsCount);
 }
 
 const TExtensionBehavior &TCompiler::getExtensionBehavior() const
