@@ -1606,6 +1606,11 @@ void ProgramD3D::initUniformBlockInfo(const gl::Context *context, gl::Shader *sh
 {
     for (const sh::InterfaceBlock &interfaceBlock : shader->getInterfaceBlocks(context))
     {
+        if (interfaceBlock.blockType != sh::BlockType::BLOCK_UNIFORM)
+        {
+            continue;
+        }
+
         if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
             continue;
 
