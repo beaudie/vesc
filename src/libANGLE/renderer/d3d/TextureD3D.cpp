@@ -12,6 +12,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
@@ -21,8 +22,8 @@
 #include "libANGLE/renderer/d3d/BufferD3D.h"
 #include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/ImageD3D.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/TextureStorage.h"
 
@@ -1034,7 +1035,7 @@ gl::Error TextureD3D_2D::setCompressedSubImage(const gl::Context *context,
 gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
                                    GLenum target,
                                    size_t imageLevel,
-                                   const gl::Rectangle &sourceArea,
+                                   const gl::Rectangle &origSourceArea,
                                    GLenum internalFormat,
                                    const gl::Framebuffer *source)
 {
@@ -1043,12 +1044,31 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
     GLint level                = static_cast<GLint>(imageLevel);
     const gl::InternalFormat &internalFormatInfo =
         gl::GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
-    ANGLE_TRY(redefineImage(context, level, internalFormatInfo.sizedInternalFormat,
-                            gl::Extents(sourceArea.width, sourceArea.height, 1),
+    gl::Extents sourceExtents(origSourceArea.width, origSourceArea.height, 1);
+    ANGLE_TRY(redefineImage(context, level, internalFormatInfo.sizedInternalFormat, sourceExtents,
                             mRenderer->isRobustResourceInitEnabled()));
 
+    if (context->getExtensions().webglCompatibility)
+    {
+        angle::MemoryBuffer *zero;
+        context->getScratchBuffer(
+            origSourceArea.width * origSourceArea.height * internalFormatInfo.pixelBytes, &zero);
+        zero->fill(0);
+        setImage(context, target, imageLevel, internalFormat, sourceExtents,
+                 internalFormatInfo.format, internalFormatInfo.type, gl::PixelUnpackState(1, 0),
+                 zero->data());
+    }
+
+    gl::Extents fbSize = source->getReadColorbuffer()->getSize();
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
+                       &sourceArea))
+    {
+        return gl::NoError();
+    }
+
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
-    gl::Offset destOffset(0, 0, 0);
+    gl::Offset destOffset(sourceArea.x - origSourceArea.x, sourceArea.y - origSourceArea.y, 0);
 
     // If the zero max LOD workaround is active, then we can't sample from individual layers of the framebuffer in shaders,
     // so we should use the non-rendering copy path.
@@ -1075,11 +1095,21 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
 gl::Error TextureD3D_2D::copySubImage(const gl::Context *context,
                                       GLenum target,
                                       size_t imageLevel,
-                                      const gl::Offset &destOffset,
-                                      const gl::Rectangle &sourceArea,
+                                      const gl::Offset &origDestOffset,
+                                      const gl::Rectangle &origSourceArea,
                                       const gl::Framebuffer *source)
 {
-    ASSERT(target == GL_TEXTURE_2D && destOffset.z == 0);
+    ASSERT(target == GL_TEXTURE_2D && origDestOffset.z == 0);
+
+    gl::Extents fbSize = source->getReadColorbuffer()->getSize();
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
+                       &sourceArea))
+    {
+        return gl::NoError();
+    }
+    const gl::Offset destOffset(origDestOffset.x + sourceArea.x - origSourceArea.x,
+                                origDestOffset.y + sourceArea.y - origSourceArea.y, 0);
 
     // can only make our texture storage to a render target if level 0 is defined (with a width & height) and
     // the current level we're copying to is defined (with appropriate format, width & height)
