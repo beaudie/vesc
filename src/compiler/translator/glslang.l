@@ -114,6 +114,7 @@ O           [0-7]
 "attribute"    { return ES2_keyword_ES3_reserved(context, ATTRIBUTE); }
 "const"        { return CONST_QUAL; }
 "uniform"      { return UNIFORM; }
+"buffer"       { return BUFFER; }
 "varying"      { return ES2_keyword_ES3_reserved(context, VARYING); }
 
 "break"        { return BREAK; }
