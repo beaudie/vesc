@@ -10,10 +10,51 @@
 #include "libANGLE/IndexRangeCache.h"
 
 #include "common/debug.h"
+#include "common/third_party/murmurhash/MurmurHash3.h"
+
 #include "libANGLE/formatutils.h"
 
 namespace gl
 {
+
+namespace
+{
+
+constexpr IndexRangeKey CreateIndexRangeKey(GLenum type,
+                                            size_t offset,
+                                            size_t count,
+                                            bool primitiveRestartEnabled)
+{
+    // Pack the type into 2 bits and the primitive restart enabled into 1 bit
+    static_assert(GL_UNSIGNED_BYTE + 2 == GL_UNSIGNED_SHORT,
+                  "unexpected GL_UNSIGNED_BYTE to GL_UNSIGNED_SHORT offset");
+    static_assert(GL_UNSIGNED_BYTE + 4 == GL_UNSIGNED_INT,
+                  "unexpected GL_UNSIGNED_BYTE to GL_UNSIGNED_INT offset");
+    return IndexRangeKey{((type - GL_UNSIGNED_BYTE) << 1) + (primitiveRestartEnabled >> 3), offset,
+                         count};
+}
+
+constexpr GLenum GetIndexRangeType(const IndexRangeKey &key)
+{
+    return ((key[0] & 0x3) >> 1) + GL_UNSIGNED_BYTE;
+}
+
+constexpr size_t GetIndexRangeOffset(const IndexRangeKey &key)
+{
+    return key[1];
+}
+
+constexpr size_t GetIndexRangeCount(const IndexRangeKey &key)
+{
+    return key[2];
+}
+
+constexpr bool GetIndexRangePrimitiveRestartEnabled(const IndexRangeKey &key)
+{
+    return ((key[0] & 0x4) << 3) != 0;
+}
+
+}  // anonymous namespace
 
 void IndexRangeCache::addRange(GLenum type,
                                size_t offset,
@@ -21,7 +62,8 @@ void IndexRangeCache::addRange(GLenum type,
                                bool primitiveRestartEnabled,
                                const IndexRange &range)
 {
-    mIndexRangeCache[IndexRangeKey(type, offset, count, primitiveRestartEnabled)] = range;
+    mIndexRangeCache.insert(
+        std::make_pair(CreateIndexRangeKey(type, offset, count, primitiveRestartEnabled), range));
 }
 
 bool IndexRangeCache::findRange(GLenum type,
@@ -30,7 +72,8 @@ bool IndexRangeCache::findRange(GLenum type,
                                 bool primitiveRestartEnabled,
                                 IndexRange *outRange) const
 {
-    auto i = mIndexRangeCache.find(IndexRangeKey(type, offset, count, primitiveRestartEnabled));
+    auto i =
+        mIndexRangeCache.find(CreateIndexRangeKey(type, offset, count, primitiveRestartEnabled));
     if (i != mIndexRangeCache.end())
     {
         if (outRange)
@@ -57,8 +100,10 @@ void IndexRangeCache::invalidateRange(size_t offset, size_t size)
     auto i = mIndexRangeCache.begin();
     while (i != mIndexRangeCache.end())
     {
-        size_t rangeStart = i->first.offset;
-        size_t rangeEnd   = i->first.offset + (GetTypeInfo(i->first.type).bytes * i->first.count);
+        const IndexRangeKey &key = i->first;
+        size_t rangeStart        = GetIndexRangeOffset(key);
+        size_t rangeEnd =
+            rangeStart + (GetTypeInfo(GetIndexRangeType(key)).bytes * GetIndexRangeCount(key));
 
         if (invalidateEnd < rangeStart || invalidateStart > rangeEnd)
         {
@@ -66,7 +111,7 @@ void IndexRangeCache::invalidateRange(size_t offset, size_t size)
         }
         else
         {
-            mIndexRangeCache.erase(i++);
+            i = mIndexRangeCache.erase(i);
         }
     }
 }
@@ -76,38 +121,13 @@ void IndexRangeCache::clear()
     mIndexRangeCache.clear();
 }
 
-IndexRangeCache::IndexRangeKey::IndexRangeKey()
-    : IndexRangeCache::IndexRangeKey(GL_NONE, 0, 0, false)
+size_t IndexRangeCache::IndexRangeKeyHasher::operator()(const IndexRangeKey &key) const
 {
-}
+    static constexpr unsigned int seed = 0xABCDEF98;
 
-IndexRangeCache::IndexRangeKey::IndexRangeKey(GLenum type_,
-                                              size_t offset_,
-                                              size_t count_,
-                                              bool primitiveRestartEnabled_)
-    : type(type_), offset(offset_), count(count_), primitiveRestartEnabled(primitiveRestartEnabled_)
-{
-}
-
-bool IndexRangeCache::IndexRangeKey::operator<(const IndexRangeKey &rhs) const
-{
-    if (type != rhs.type)
-    {
-        return type < rhs.type;
-    }
-    if (offset != rhs.offset)
-    {
-        return offset < rhs.offset;
-    }
-    if (count != rhs.count)
-    {
-        return count < rhs.count;
-    }
-    if (primitiveRestartEnabled != rhs.primitiveRestartEnabled)
-    {
-        return primitiveRestartEnabled;
-    }
-    return false;
+    size_t hash = 0;
+    MurmurHash3_x86_32(&key, sizeof(key), seed, &hash);
+    return hash;
 }
 
 }

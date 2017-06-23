@@ -16,9 +16,12 @@
 #include "angle_gl.h"
 
 #include <map>
+#include <unordered_map>
 
 namespace gl
 {
+
+using IndexRangeKey = std::array<size_t, 3>;
 
 class IndexRangeCache
 {
@@ -38,20 +41,12 @@ class IndexRangeCache
     void clear();
 
   private:
-    struct IndexRangeKey
+    struct IndexRangeKeyHasher
     {
-        IndexRangeKey();
-        IndexRangeKey(GLenum type, size_t offset, size_t count, bool primitiveRestart);
-
-        bool operator<(const IndexRangeKey &rhs) const;
-
-        GLenum type;
-        size_t offset;
-        size_t count;
-        bool primitiveRestartEnabled;
+        size_t operator()(const IndexRangeKey &key) const;
     };
 
-    typedef std::map<IndexRangeKey, IndexRange> IndexRangeMap;
+    using IndexRangeMap = std::unordered_map<IndexRangeKey, IndexRange, IndexRangeKeyHasher>;
     IndexRangeMap mIndexRangeCache;
 };
 
