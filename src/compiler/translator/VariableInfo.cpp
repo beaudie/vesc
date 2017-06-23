@@ -545,7 +545,13 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
         const TIntermSymbol &variable = *variableNode->getAsSymbolNode();
         if (typedNode.getBasicType() == EbtInterfaceBlock)
         {
-            mInterfaceBlocks->push_back(recordInterfaceBlock(variable));
+            // TODO(jiajia.qin@intel.com): In order not to affect the old set of mInterfaceBlocks,
+            // only uniform blocks are added into mInterfaceBlocks. Refactor it to gather
+            // uniformBlocks and shaderStorageBlocks separately.
+            if (qualifier == EvqUniform)
+            {
+                mInterfaceBlocks->push_back(recordInterfaceBlock(variable));
+            }
         }
         else
         {
@@ -581,17 +587,20 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
         TIntermTyped *blockNode = binaryNode->getLeft()->getAsTyped();
         ASSERT(blockNode);
 
-        TIntermConstantUnion *constantUnion = binaryNode->getRight()->getAsConstantUnion();
-        ASSERT(constantUnion);
+        if (blockNode->getQualifier() == EvqUniform)
+        {
+            TIntermConstantUnion *constantUnion = binaryNode->getRight()->getAsConstantUnion();
+            ASSERT(constantUnion);
 
-        const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
-        InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
-        ASSERT(namedBlock);
-        namedBlock->staticUse = true;
+            const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
+            InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
+            ASSERT(namedBlock);
+            namedBlock->staticUse = true;
 
-        unsigned int fieldIndex = constantUnion->getUConst(0);
-        ASSERT(fieldIndex < namedBlock->fields.size());
-        namedBlock->fields[fieldIndex].staticUse = true;
+            unsigned int fieldIndex = constantUnion->getUConst(0);
+            ASSERT(fieldIndex < namedBlock->fields.size());
+            namedBlock->fields[fieldIndex].staticUse = true;
+        }
         return false;
     }
 
