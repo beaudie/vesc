@@ -242,8 +242,22 @@ bool TCompiler::shouldRunLoopAndIndexingValidation(ShCompileOptions compileOptio
 bool TCompiler::Init(const ShBuiltInResources &resources)
 {
     shaderVersion     = 100;
-    maxUniformVectors = (shaderType == GL_VERTEX_SHADER) ? resources.MaxVertexUniformVectors
-                                                         : resources.MaxFragmentUniformVectors;
+    switch (shaderType)
+    {
+        case GL_VERTEX_SHADER:
+            maxUniformVectors = resources.MaxVertexUniformVectors;
+            break;
+        case GL_FRAGMENT_SHADER:
+            maxUniformVectors = resources.MaxFragmentUniformVectors;
+            break;
+        case GL_COMPUTE_SHADER:
+            // TODO (jiawei.shao@intel.com): check if we need finer-grained component counting
+            maxUniformVectors = resources.MaxComputeUniformComponents / 4;
+            break;
+        default:
+            UNIMPLEMENTED();
+    }
+
     maxExpressionComplexity = resources.MaxExpressionComplexity;
     maxCallStackDepth       = resources.MaxCallStackDepth;
     maxFunctionParameters   = resources.MaxFunctionParameters;
