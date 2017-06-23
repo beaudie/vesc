@@ -34,6 +34,20 @@ BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
     }
 }
 
+BlockType GetBlockType(TQualifier qualifier)
+{
+    switch (qualifier)
+    {
+        case EvqUniform:
+            return BlockType::BLOCK_UNIFORM;
+        case EvqBuffer:
+            return BlockType::BLOCK_BUFFER;
+        default:
+            UNREACHABLE();
+            return BlockType::BLOCK_UNIFORM;
+    }
+}
+
 void ExpandUserDefinedVariable(const ShaderVariable &variable,
                                const std::string &name,
                                const std::string &mappedName,
@@ -326,6 +340,18 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 ASSERT(symbolName.compare(0, 3, "gl_") != 0 || var);
             }
             break;
+            case EvqBuffer:
+            {
+                const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
+
+                InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
+                ASSERT(namedBlock);
+                var = FindVariable(symbolName, &namedBlock->fields);
+
+                // Set static use on the parent interface block here
+                namedBlock->staticUse = true;
+            }
+            break;
             case EvqFragCoord:
                 recordBuiltInVaryingUsed("gl_FragCoord", &mFragCoordAdded);
                 return;
@@ -494,6 +520,7 @@ InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymb
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
     interfaceBlock.binding          = blockType->blockBinding();
     interfaceBlock.layout           = GetBlockLayoutType(blockType->blockStorage());
+    interfaceBlock.blockType        = GetBlockType(variable.getType().getQualifier());
 
     // Gather field information
     for (const TField *field : blockType->fields())
