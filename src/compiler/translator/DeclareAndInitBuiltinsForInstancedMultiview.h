@@ -8,8 +8,9 @@
 // 2) Adds declarations of the global variables ViewID_OVR and InstanceID.
 // 3) Initializes ViewID_OVR and InstanceID depending on the number of views.
 // 4) Replaces every occurrence of gl_ViewID_OVR with ViewID_OVR and marks ViewID_OVR as internal.
-// The pass should be executed before any variables get collected so that usage of gl_InstanceID is
-// recorded.
+// 5) If selectViewportInVertexShader is true, the expression "gl_ViewportIndex = int(ViewID_OVR)"
+// is included at the end of main() The pass should be executed before any variables get collected
+// so that usage of gl_InstanceID is recorded.
 //
 
 #ifndef COMPILER_TRANSLATOR_DECLAREANDINITBUILTINSFORINSTANCEDMULTIVIEW_H_
@@ -20,7 +21,9 @@ class TIntermBlock;
 namespace sh
 {
 
-void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root, unsigned numberOfViews);
+void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
+                                                 unsigned numberOfViews,
+                                                 bool selectViewportInVertexShader);
 
 }  // namespace sh
 
