@@ -77,6 +77,13 @@ void DumpFuzzerCase(char const *const *shaderStrings,
     fclose(f);
 }
 #endif  // defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
+
+bool IsOutputHLSL(ShShaderOutput output)
+{
+    return (output == SH_HLSL_3_0_OUTPUT || output == SH_HLSL_4_1_OUTPUT ||
+            output == SH_HLSL_4_0_FL9_3_OUTPUT);
+}
+
 }  // anonymous namespace
 
 bool IsWebGLBasedSpec(ShShaderSpec spec)
@@ -428,7 +435,13 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && (compileOptions & SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW) &&
             parseContext.isMultiviewExtensionEnabled() && getShaderType() == GL_VERTEX_SHADER)
         {
-            DeclareAndInitBuiltinsForInstancedMultiview(root, getNumViews());
+            // The AST transformation which adds the expression to select the viewport index should
+            // not be done for the HLSL output.
+            const bool selectViewportInVertexShader =
+                (compileOptions & SH_SELECT_VIEW_IN_VERTEX_SHADER) != 0u &&
+                !IsOutputHLSL(outputType);
+            DeclareAndInitBuiltinsForInstancedMultiview(root, getNumViews(),
+                                                        selectViewportInVertexShader);
         }
 
         // gl_Position is always written in compatibility output mode
