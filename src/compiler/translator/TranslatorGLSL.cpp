@@ -53,7 +53,7 @@ void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
     writeVersion(root);
 
     // Write extension behaviour as needed
-    writeExtensionBehavior(root);
+    writeExtensionBehavior(root, compileOptions);
 
     // Write pragmas after extensions because some drivers consider pragmas
     // like non-preprocessor tokens.
@@ -242,7 +242,7 @@ void TranslatorGLSL::writeVersion(TIntermNode *root)
     }
 }
 
-void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
+void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
     const TExtensionBehavior &extBehavior = getExtensionBehavior();
@@ -268,6 +268,13 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
                 sink << "#extension GL_ARB_draw_buffers : " << getBehaviorString(iter.second)
                      << "\n";
             }
+        }
+
+        const bool isMultiviewEnabled =
+            (iter.first == "GL_OVR_multiview" || iter.first == "GL_OVR_multiview2");
+        if ((compileOptions & SH_SELECT_VIEW_IN_VERTEX_SHADER) && isMultiviewEnabled)
+        {
+            sink << "#extension GL_NV_viewport_array2 : " << getBehaviorString(iter.second) << "\n";
         }
     }
 

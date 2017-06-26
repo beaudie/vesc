@@ -138,9 +138,35 @@ void RenameGLViewIDAndMarkAsInternal(TIntermBlock *root)
     root->traverse(&traverser);
 }
 
+// Adds the expression gl_ViewportIndex = int(ViewID_OVR) into the AST.
+void SelectViewportIndexInVertexShader(TIntermBlock *root, TIntermSymbol *viewIDSymbol)
+{
+    // Create gl_ViewportIndex node.
+    TIntermSymbol *viewportIndexSymbol =
+        new TIntermSymbol(0, "gl_ViewportIndex", TType(EbtInt, EbpHigh, EvqViewportIndex));
+
+    // Create int(ViewID_OVR) node.
+    TIntermSequence *viewIDSymbolCastArguments = new TIntermSequence();
+    viewIDSymbolCastArguments->push_back(viewIDSymbol);
+    TIntermAggregate *viewIDAsInt = TIntermAggregate::CreateConstructor(
+        TType(EbtInt, EbpHigh, EvqTemporary), viewIDSymbolCastArguments);
+
+    // Create gl_ViewportIndex = int(ViewID_OVR) node.
+    TIntermBinary *viewIDInitializer =
+        new TIntermBinary(EOpAssign, viewportIndexSymbol, viewIDAsInt);
+
+    TIntermFunctionDefinition *main = FindMain(root);
+    ASSERT(main != nullptr);
+    TIntermBlock *mainBody = main->getBody();
+    ASSERT(mainBody != nullptr);
+    mainBody->getSequence()->insert(mainBody->getSequence()->end(), viewIDInitializer);
+}
+
 }  // namespace
 
-void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root, unsigned numberOfViews)
+void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
+                                                 unsigned numberOfViews,
+                                                 bool selectViewportInVertexShader)
 {
     TIntermSymbol *instanceIDSymbol = new TIntermSymbol(TSymbolTable::nextUniqueId(), "InstanceID",
                                                         TType(EbtInt, EbpHigh, EvqGlobal));
@@ -156,6 +182,10 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root, unsigned nu
     InitializeBuiltinsInMain(root, instanceIDSymbol->deepCopy()->getAsSymbolNode(),
                              viewIDSymbol->deepCopy()->getAsSymbolNode(), numberOfViews);
     RenameGLViewIDAndMarkAsInternal(root);
+    if (selectViewportInVertexShader)
+    {
+        SelectViewportIndexInVertexShader(root, viewIDSymbol->deepCopy()->getAsSymbolNode());
+    }
 }
 
 }  // namespace sh
