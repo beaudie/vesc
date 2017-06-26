@@ -212,12 +212,16 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     unsigned int imageRangeLow  = stream.readInt<unsigned int>();
     unsigned int imageRangeHigh = stream.readInt<unsigned int>();
     state->mImageUniformRange   = RangeUI(imageRangeLow, imageRangeHigh);
-    unsigned int imageCount     = stream.readInt<unsigned int>();
-    for (unsigned int imageIndex = 0; imageIndex < imageCount; ++imageIndex)
+    unsigned int imageBindingCount = stream.readInt<unsigned int>();
+    for (unsigned int imageIndex = 0; imageIndex < imageBindingCount; ++imageIndex)
     {
-        GLuint boundImageUnit = stream.readInt<unsigned int>();
         size_t elementCount   = stream.readInt<size_t>();
-        state->mImageBindings.emplace_back(ImageBinding(boundImageUnit, elementCount));
+        ImageBinding imageBinding(elementCount);
+        for (size_t i = 0; i < elementCount; ++i)
+        {
+            imageBinding.boundImageUnits[i] = stream.readInt<unsigned int>();
+        }
+        state->mImageBindings.emplace_back(imageBinding);
     }
 
     return program->getImplementation()->load(context, infoLog, &stream);
@@ -359,8 +363,11 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(state.getImageBindings().size());
     for (const auto &imageBinding : state.getImageBindings())
     {
-        stream.writeInt(imageBinding.boundImageUnit);
-        stream.writeInt(imageBinding.elementCount);
+        stream.writeInt(imageBinding.boundImageUnits.size());
+        for (size_t i = 0; i < imageBinding.boundImageUnits.size(); ++i)
+        {
+            stream.writeInt(imageBinding.boundImageUnits[i]);
+        }
     }
 
     program->getImplementation()->save(&stream);

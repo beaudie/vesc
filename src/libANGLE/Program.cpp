@@ -1764,10 +1764,13 @@ void Program::linkSamplerAndImageBindings()
         auto &imageUniform = mState.mUniforms[imageIndex];
         if (imageUniform.binding == -1)
         {
-            imageUniform.binding = 0;
+            mState.mImageBindings.emplace_back(ImageBinding(imageUniform.elementCount()));
         }
-        mState.mImageBindings.emplace_back(
-            ImageBinding(imageUniform.binding, imageUniform.elementCount()));
+        else
+        {
+            mState.mImageBindings.emplace_back(
+                ImageBinding(imageUniform.binding, imageUniform.elementCount()));
+        }
     }
 
     high = low;
