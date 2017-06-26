@@ -229,6 +229,8 @@ const ShCompileOptions SH_INITIALIZE_UNINITIALIZED_LOCALS = UINT64_C(1) << 32;
 // num_views;
 const ShCompileOptions SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW = UINT64_C(1) << 33;
 
+const ShCompileOptions SH_SELECT_VIEW_IN_VERTEX_SHADER = UINT64_C(1) << 34;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {

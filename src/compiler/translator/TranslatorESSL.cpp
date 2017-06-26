@@ -125,6 +125,8 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
     {
         if (iter->second != EBhUndefined)
         {
+            const bool isMultiviewEnabled =
+                (iter->first == "GL_OVR_multiview" || iter->first == "GL_OVR_multiview2");
             if (getResources().NV_shader_framebuffer_fetch &&
                 iter->first == "GL_EXT_shader_framebuffer_fetch")
             {
@@ -136,11 +138,15 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                 sink << "#extension GL_NV_draw_buffers : " << getBehaviorString(iter->second)
                      << "\n";
             }
-            else if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM &&
-                     (iter->first == "GL_OVR_multiview" || iter->first == "GL_OVR_multiview2"))
+            else if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM && isMultiviewEnabled)
             {
                 // No output
                 continue;
+            }
+            else if ((compileOptions & SH_SELECT_VIEW_IN_VERTEX_SHADER) && isMultiviewEnabled)
+            {
+                sink << "#extension GL_NV_viewport_array2 : " << getBehaviorString(iter->second)
+                     << "\n";
             }
             else
             {

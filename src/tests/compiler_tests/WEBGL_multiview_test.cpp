@@ -691,3 +691,30 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, ViewIDAndInstanceIDHaveCorrectV
     EXPECT_TRUE(foundInHLSLCode("ViewID_OVR = (uvec1(gl_InstanceID) % 3)"));
     EXPECT_TRUE(foundInHLSLCode("InstanceID = (gl_InstanceID / 3)"));
 }
+
+// The test checks that gl_ViewportIndex is set with correct value.
+TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, GLViewportIndexIsSet)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 3) in;\n"
+        "flat out int myInstance;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position.x = gl_ViewID_OVR == 0u ? 0. : 1.;\n"
+        "   gl_Position.yzw = vec3(0., 0., 1.);\n"
+        "   myInstance = gl_InstanceID;\n"
+        "}\n";
+    compile(shaderString,
+            SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW | SH_SELECT_VIEW_IN_VERTEX_SHADER);
+
+    // Check that the GL_NV_viewport_array2 extension is requested.
+    EXPECT_TRUE(foundInAllGLSLCode("#extension GL_NV_viewport_array2 : require"));
+
+    // Check that the viewport index is selected.
+    EXPECT_TRUE(foundInAllGLSLCode("gl_ViewportIndex = int(webgl_angle_ViewID_OVR)"));
+
+    // Check that there are no expressions containing gl_ViewportIndex in the HLSL output.
+    EXPECT_FALSE(foundInHLSLCode("gl_ViewportIndex"));
+}

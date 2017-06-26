@@ -20,7 +20,9 @@ class TIntermBlock;
 namespace sh
 {
 
-void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root, unsigned numberOfViews);
+void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
+                                                 unsigned numberOfViews,
+                                                 bool selectViewportInVertexShader);
 
 }  // namespace sh
 
