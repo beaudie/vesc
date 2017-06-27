@@ -211,7 +211,7 @@ bool TextureState::isSamplerComplete(const SamplerState &samplerState,
     return mCompletenessCache.samplerComplete;
 }
 
-void TextureState::invalidateCompletenessCache()
+void TextureState::invalidateCompletenessCache() const
 {
     mCompletenessCache.context = 0;
 }
@@ -868,9 +868,9 @@ egl::Stream *Texture::getBoundStream() const
     return mBoundStream;
 }
 
-void Texture::invalidateCompletenessCache()
+void Texture::invalidateCompletenessCache() const
 {
-    mState.invalidateCompletenessCache();
+    mState.invalidateCompletenessCache() const;
     mDirtyChannel.signal();
 }
 
