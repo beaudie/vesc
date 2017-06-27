@@ -208,6 +208,7 @@ TShHandleBase::~TShHandleBase()
 
 TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
     : variablesCollected(false),
+      mGLPositionInitialized(false),
       shaderType(type),
       shaderSpec(spec),
       outputType(output),
@@ -406,12 +407,6 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS))
             arrayBoundsClamper.MarkIndirectArrayBoundsForClamping(root);
 
-        // gl_Position is always written in compatibility output mode
-        if (success && shaderType == GL_VERTEX_SHADER &&
-            ((compileOptions & SH_INIT_GL_POSITION) ||
-             (outputType == SH_GLSL_COMPATIBILITY_OUTPUT)))
-            initializeGLPosition(root);
-
         // This pass might emit short circuits so keep it before the short circuit unfolding
         if (success && (compileOptions & SH_REWRITE_DO_WHILE_LOOPS))
             RewriteDoWhile(root, getTemporaryIndex());
@@ -450,6 +445,17 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             {
                 initializeOutputVariables(root);
             }
+        }
+
+        // gl_Position is always written in compatibility output mode.
+        // It may have been already initialized among other output variables, in that case we don't
+        // need to initialize it twice.
+        if (success && shaderType == GL_VERTEX_SHADER && !mGLPositionInitialized &&
+            ((compileOptions & SH_INIT_GL_POSITION) ||
+             (outputType == SH_GLSL_COMPATIBILITY_OUTPUT)))
+        {
+            initializeGLPosition(root);
+            mGLPositionInitialized = true;
         }
 
         // Removing invariant declarations must be done after collecting variables.
@@ -693,6 +699,7 @@ void TCompiler::clearResults()
     varyings.clear();
     interfaceBlocks.clear();
     variablesCollected = false;
+    mGLPositionInitialized = false;
 
     mNumViews = -1;
 
@@ -951,6 +958,11 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
         for (auto var : varyings)
         {
             list.push_back(var);
+            if (var.name == "gl_Position")
+            {
+                ASSERT(!mGLPositionInitialized);
+                mGLPositionInitialized = true;
+            }
         }
     }
     else
