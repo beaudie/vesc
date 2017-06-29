@@ -538,7 +538,71 @@ void VertexArrayGL::updateAttribDivisor(size_t attribIndex)
     mAppliedBindings[bindingIndex].setDivisor(divisor);
 }
 
-void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::DirtyBits &dirtyBits)
+void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
+                                    size_t attribIndex,
+                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
+{
+    ASSERT(dirtyAttribBits.any());
+
+    for (size_t dirtyBit : dirtyAttribBits)
+    {
+        switch (dirtyBit)
+        {
+            case VertexArray::DIRTY_ATTRIB_ENABLED:
+                updateAttribEnabled(attribIndex);
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_POINTER:
+                updateAttribPointer(context, attribIndex);
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_FORMAT:
+                // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
+                ASSERT(attribIndex == mData.getBindingIndexFromAttribIndex(attribIndex));
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_BINDING:
+                // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
+                ASSERT(attribIndex == mData.getBindingIndexFromAttribIndex(attribIndex));
+                break;
+
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
+                                     size_t bindingIndex,
+                                     const gl::VertexArray::DirtyBindingBits &dirtyBindingBits)
+{
+    ASSERT(dirtyBindingBits.any());
+
+    for (size_t dirtyBit : dirtyBindingBits)
+    {
+        switch (dirtyBit)
+        {
+            case VertexArray::DIRTY_BINDING_BUFFER:
+                // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
+                ASSERT(bindingIndex == mData.getBindingIndexFromAttribIndex(bindingIndex));
+                break;
+
+            case VertexArray::DIRTY_BINDING_DIVISOR:
+                updateAttribDivisor(bindingIndex);
+                break;
+
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+void VertexArrayGL::syncState(const gl::Context *context,
+                              const VertexArray::DirtyBits &dirtyBits,
+                              const gl::VertexArray::DirtyAttribBitsArray &attribBits,
+                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
 {
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
@@ -551,26 +615,15 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
         }
 
         size_t index = VertexArray::GetAttribIndex(dirtyBit);
-        if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED &&
-            dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
+        if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0 &&
+            dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX)
         {
-            updateAttribEnabled(index);
+            syncDirtyAttrib(context, index, attribBits[index]);
         }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_POINTER &&
-                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0 &&
+                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX)
         {
-            updateAttribPointer(context, index);
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_FORMAT &&
-                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_BUFFER)
-        {
-            // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-            ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
-                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
-        {
-            updateAttribDivisor(index);
+            syncDirtyBinding(context, index, bindingBits[index]);
         }
         else
             UNREACHABLE();

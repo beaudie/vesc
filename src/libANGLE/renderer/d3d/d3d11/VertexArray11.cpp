@@ -43,7 +43,9 @@ void VertexArray11::destroy(const gl::Context *context)
 }
 
 void VertexArray11::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits)
+                              const gl::VertexArray::DirtyBits &dirtyBits,
+                              const gl::VertexArray::DirtyAttribBitsArray &attribBits,
+                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
 {
     for (auto dirtyBit : dirtyBits)
     {

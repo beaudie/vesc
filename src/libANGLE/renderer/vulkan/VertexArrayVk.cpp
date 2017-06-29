@@ -26,7 +26,9 @@ void VertexArrayVk::destroy(const gl::Context *context)
 }
 
 void VertexArrayVk::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits)
+                              const gl::VertexArray::DirtyBits &dirtyBits,
+                              const gl::VertexArray::DirtyAttribBitsArray &attribBits,
+                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
 {
     ASSERT(dirtyBits.any());
 

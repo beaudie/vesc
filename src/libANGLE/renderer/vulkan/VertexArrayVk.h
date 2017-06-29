@@ -22,7 +22,9 @@ class VertexArrayVk : public VertexArrayImpl
     void destroy(const gl::Context *context) override;
 
     void syncState(const gl::Context *context,
-                   const gl::VertexArray::DirtyBits &dirtyBits) override;
+                   const gl::VertexArray::DirtyBits &dirtyBits,
+                   const gl::VertexArray::DirtyAttribBitsArray &attribBits,
+                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
 };
 
 }  // namespace rx
