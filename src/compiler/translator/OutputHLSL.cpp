@@ -315,21 +315,21 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
     for (ReferencedSymbols::const_iterator varying = mReferencedVaryings.begin();
          varying != mReferencedVaryings.end(); varying++)
     {
-        const TType &type   = varying->second->getType();
-        const TString &name = varying->second->getSymbol();
+        const TType &type = varying->second->getType();
+        const TName &name = varying->second->getName();
 
         // Program linking depends on this exact format
         varyings += "static " + InterpolationString(type.getQualifier()) + " " + TypeString(type) +
-                    " " + Decorate(name) + ArrayString(type) + " = " + initializer(type) + ";\n";
+                    " " + DecorateVariableIfNeeded(name) + ArrayString(type) + " = " + initializer(type) + ";\n";
     }
 
     for (ReferencedSymbols::const_iterator attribute = mReferencedAttributes.begin();
          attribute != mReferencedAttributes.end(); attribute++)
     {
-        const TType &type   = attribute->second->getType();
-        const TString &name = attribute->second->getSymbol();
+        const TType &type = attribute->second->getType();
+        const TName &name = attribute->second->getName();
 
-        attributes += "static " + TypeString(type) + " " + Decorate(name) + ArrayString(type) +
+        attributes += "static " + TypeString(type) + " " + DecorateVariableIfNeeded(name) + ArrayString(type) +
                       " = " + initializer(type) + ";\n";
     }
 
@@ -788,12 +788,12 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         else if (qualifier == EvqAttribute || qualifier == EvqVertexIn)
         {
             mReferencedAttributes[name] = node;
-            out << Decorate(name);
+            out << DecorateVariableIfNeeded(node->getName());
         }
         else if (IsVarying(qualifier))
         {
             mReferencedVaryings[name] = node;
-            out << Decorate(name);
+            out << DecorateVariableIfNeeded(node->getName());
         }
         else if (qualifier == EvqFragmentOut)
         {
@@ -1120,7 +1120,7 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 {
                     TInterfaceBlock *interfaceBlock = leftType.getInterfaceBlock();
                     const int arrayIndex = node->getRight()->getAsConstantUnion()->getIConst(0);
-                    mReferencedInterfaceBlocks[interfaceBlock->instanceName()] =
+                    mReferencedInterfaceBlocks[interfaceBlock->instanceName().getString()] =
                         node->getLeft()->getAsSymbolNode();
                     out << mUniformHLSL->interfaceBlockInstanceString(*interfaceBlock, arrayIndex);
                     return false;

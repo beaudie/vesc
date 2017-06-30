@@ -77,6 +77,7 @@
             'compiler/translator/IntermTraverse.cpp',
             'compiler/translator/Intermediate.h',
             'compiler/translator/Intermediate.cpp',
+            'compiler/translator/Name.h',
             'compiler/translator/NodeSearch.h',
             'compiler/translator/Operator.cpp',
             'compiler/translator/Operator.h',

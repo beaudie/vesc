@@ -3217,8 +3217,14 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         fieldType->setLayoutQualifier(fieldLayoutQualifier);
     }
 
+    TName *instanceNameObj = nullptr;
+    if (instanceName)
+    {
+        instanceNameObj = new TName(*instanceName);
+    }
+
     TInterfaceBlock *interfaceBlock =
-        new TInterfaceBlock(&blockName, fieldList, instanceName, arraySize, blockLayoutQualifier);
+        new TInterfaceBlock(&blockName, fieldList, instanceNameObj, arraySize, blockLayoutQualifier);
     TType interfaceBlockType(interfaceBlock, typeQualifier.qualifier, blockLayoutQualifier,
                              arraySize);
 

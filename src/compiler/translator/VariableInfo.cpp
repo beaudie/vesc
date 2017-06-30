@@ -489,7 +489,7 @@ InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymb
     interfaceBlock.mappedName =
         TIntermTraverser::hash(blockType->name().c_str(), mHashFunction).c_str();
     interfaceBlock.instanceName =
-        (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
+        (blockType->hasInstanceName() ? blockType->instanceName().getString().c_str() : "");
     interfaceBlock.arraySize        = variable.getArraySize();
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
     interfaceBlock.binding          = blockType->blockBinding();

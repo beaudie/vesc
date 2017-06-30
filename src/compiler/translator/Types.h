@@ -12,6 +12,7 @@
 
 #include "compiler/translator/BaseTypes.h"
 #include "compiler/translator/Common.h"
+#include "compiler/translator/Name.h"
 
 namespace sh
 {
@@ -150,7 +151,7 @@ class TInterfaceBlock : public TFieldListCollection
     POOL_ALLOCATOR_NEW_DELETE();
     TInterfaceBlock(const TString *name,
                     TFieldList *fields,
-                    const TString *instanceName,
+                    const TName *instanceName,
                     int arraySize,
                     const TLayoutQualifier &layoutQualifier)
         : TFieldListCollection(name, fields),
@@ -162,7 +163,7 @@ class TInterfaceBlock : public TFieldListCollection
     {
     }
 
-    const TString &instanceName() const { return *mInstanceName; }
+    const TName &instanceName() const { return *mInstanceName; }
     bool hasInstanceName() const { return mInstanceName != nullptr; }
     bool isArray() const { return mArraySize > 0; }
     int arraySize() const { return mArraySize; }
@@ -177,7 +178,7 @@ class TInterfaceBlock : public TFieldListCollection
     }
 
   private:
-    const TString *mInstanceName;  // for interface block instance names
+    const TName *mInstanceName;  // for interface block instance names
     int mArraySize;                // 0 if not an array
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;

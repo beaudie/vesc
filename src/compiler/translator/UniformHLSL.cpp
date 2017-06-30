@@ -400,7 +400,7 @@ TString UniformHLSL::interfaceBlockString(const TInterfaceBlock &interfaceBlock,
                                           unsigned int arrayIndex)
 {
     const TString &arrayIndexString =
-        (arrayIndex != GL_INVALID_INDEX ? Decorate(str(arrayIndex)) : "");
+        (arrayIndex != GL_INVALID_INDEX ? "_" + str(arrayIndex) : "");
     const TString &blockName = interfaceBlock.name() + arrayIndexString;
     TString hlsl;
 
@@ -431,14 +431,11 @@ TString UniformHLSL::interfaceBlockInstanceString(const TInterfaceBlock &interfa
     {
         return "";
     }
-    else if (interfaceBlock.isArray())
+    if (interfaceBlock.isArray())
     {
-        return DecoratePrivate(interfaceBlock.instanceName()) + "_" + str(arrayIndex);
+        return DecoratePrivate(interfaceBlock.instanceName().getString()) + "_" + str(arrayIndex);
     }
-    else
-    {
-        return Decorate(interfaceBlock.instanceName());
-    }
+    return DecorateVariableIfNeeded(interfaceBlock.instanceName());
 }
 
 TString UniformHLSL::interfaceBlockMembersString(const TInterfaceBlock &interfaceBlock,
