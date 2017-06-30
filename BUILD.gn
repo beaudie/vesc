@@ -760,5 +760,6 @@ executable("angle_shader_translator") {
 
   deps = [
     ":translator"
+    "//build/config:exe_and_shlib_deps",
   ]
 }
