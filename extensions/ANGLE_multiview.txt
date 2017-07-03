@@ -1,0 +1,590 @@
+Name
+
+    ANGLE_multiview
+
+Name Strings
+
+    GL_ANGLE_multiview
+
+Contributors
+
+    TODO
+
+Contact
+
+    TODO
+
+Status
+
+    Implemented in ANGLE r976. (TODO)
+
+Version
+
+    Last Modified Date: February 8, 2017 (TODO)
+    Author Revision: 1
+
+Number
+
+    OpenGL ES Extension #109 (TODO)
+
+Dependencies
+
+    OpenGL 4.3 is required.
+
+Overview
+
+    Multi-view rendering, achieved through the functionality exposed by ANGLE,
+    expects the user to issue for each view almost the same drawing commands
+    and state changes sequentially. This rendering method scales with the
+    number of views and can be detrimental for performance in scenes with
+    many draw calls.
+    
+    This extension addresses the issue by adding means for multi-view
+    side-by-side rendering onto a single 2D texture and layered rendering onto
+    the many layers of a 2D texture array. The new vertex shader 
+    built-in - ViewID_OVR - is added which signifies the view for which the
+    current vertex is being processed, so that per-view transformations can be
+    applied.
+    
+IP Status
+
+    No known IP claims.
+
+New Tokens
+
+    Accepted by the <pname> parameters of GetIntegerv:
+
+        MAX_VIEWS_ANGLE               0x9634
+        FRAMEBUFFER_ATTACHMENT_NUM_VIEWS_ANGLE 0x9635
+        FRAMEBUFFER_ATTACHMENT_MULTIVIEW_LAYOUT_ANGLE 0x9636
+        MULTIVIEW_SIDE_BY_SIDE_ANGLE  0x9637
+        MULTIVIEW_LAYERED_ANGLE       0x9638
+        
+
+New Procedures and Functions
+
+    void FramebufferTextureMultiviewANGLE(enum target, enum attachment, uint texture, int level, enum method, sizei numViews);
+    void ViewportMultiviewANGLE(sizei count, const int *v);
+    void ScissorMultiviewANGLE(sizei count, const int *v);
+
+Additions to Chapter 2 of the OpenGL ES 3.0 Specification
+(OpenGL ES Operation)
+
+    Modify section 2.9.3 Drawing commands, p 28
+    
+    Append to the end of the section:
+    
+    "
+    If any drawing command is called while the bound program uses the
+    multiview extension, the number of views specified in the program must
+    match the number of views available in the draw framebuffer.If there is
+    a mismatch, an INVALID_OPERATION error is generated.
+    "
+
+    Modify section 2.13.1 (Controlling the Viewport), p 82
+    
+    Replace the passage beginning with "Viewport transformation parameters
+    are specified using" till the end of the section with:
+
+    "
+    The command
+    
+        void ViewportSingle ( uint index, int x, int y, sizei w, sizei h )
+
+    does not exist in the GL, but is used to describe functionality in
+    the rest of this section. This command updates a single viewport
+    transformation for the viewport specified by index where x and y give
+    the x and y window coordinates of the viewport’s lower left corner and 
+    w and h give the viewport’s width and height, respectively. The viewport
+    parameters shown in the above equations are found from these values as
+    
+    o_x = x + w /2,
+    o_y = y + h / 2,
+    p_x = w,
+    p  = h.
+    
+    Viewport width and height are clamped to implementation-dependent maximums
+    when specified. The maximum width and height may be found by issuing
+    an appropriate Get command (see chapter 6). The maximum viewport dimensions
+    must be greater than or equal to the larger of the visible dimensions of the
+    display being rendered to (if a display exists), and the largest renderbuffer
+    image which can be successfully created and attached to a framebuffer object
+    (see chapter 4). INVALID_VALUE is generated if either w or h is negative.
+    
+    The state per viewport required to implement the viewport transformation is
+    four integers and two clamped floating-point values. In the initial state, 
+    w and h are set to the width and height, respectively, of the window into
+    which the GL is to do its rendering. If the default framebuffer is bound but
+    no default framebuffer is associated with the GL context (see chapter 4), then
+    w and h are initially set to zero. ox, oy, n, and f are set to w / 2, h / 2,
+    0.0, and 1.0, respectively.
+        
+    The command
+    
+        void Viewport( int x, int y, sizei w, sizei h );
+        
+    sets all available viewports at once to use the same transformation. It is
+    equivalent to:
+        
+    for (sizei i = 0; i < MAX_VIEWS_ANGLE; i++)
+    {
+        ViewportSingle(i, x, y, w, h);
+    }
+    
+    The command
+    
+        void ViewportMultiviewANGLE( sizei count, const int *v );
+        
+    can be used to specify the viewport transformation parameters for all views
+    in the range [0 ; count). count is the number of views to modify. If count
+    is less than 1 or greater than MAX_VIEWS_ANGLE, an INVALID_VALUE error is
+    generated.
+    v specifies each viewport consecutively in the following format:
+    
+        const int v[] = {x_1, y_1, w_1, h_1, ..., x_N, y_N, w_N, h_N}
+    
+    where N is an alias for count. 
+    
+    The command is equivalent to
+    
+        for (sizei i = 0; i < count; i++)
+        {
+            const int x = v[i*4], y = v[i*4 + 1];
+            const sizei w = v[i*4 + 2], h = v[i*4 + 3];
+            ViewportSingle(i, x, y, w, h);
+        }
+    
+    If any two viewports before clamping overlap horizontally, an INVALID_VALUE
+    error is generated. For any two viewports,
+    
+        { x_i, y_i, w_i, h_i }
+        
+    and
+    
+        { x_j, y_j, w_j, h_j }
+    
+    the horizontal overlap test is orchestrated in the following way:
+    
+        int r = max(x_i, x_j);
+        int t = min(x_i + w_i, x_j + w_j);
+        bool overlap = r < t;
+    "
+    
+    Modify section 2.15.2 Transform Feedback Primitive Capture, p 91
+    
+    In the list just after "The error INVALID_OPERATION is generated:" do the
+    following:
+    
+    - Add another bullet point:
+    "
+        * by any Draw* command if there is a bound program which uses the
+          multiview extension and there is an active transform feedback object.
+    "
+    
+    
+Additions to Chapter 3 of the OpenGL ES 3.0 Specification (Rasterization)
+
+    Modify section 3.8.5 (Alternate Texture Image Specification Commands), p 139
+    
+    Add at the end of the section:
+    
+    "Calling CopyTexSubImage3D, CopyTexImage2D, or CopyTexSubImage2D will result
+    in an INVALID_FRAMEBUFFER_OPERATION error if the number of views in the current
+    read framebuffer is greater than 1."
+
+Additions to Chapter 4 of the OpenGL ES 3.0 Specification
+(Per-Fragment Operations and the Framebuffer)
+
+    Modify section 4.1.2 (Scissor Test), p 173
+    
+    Replace the whole section with the following text:
+    
+    "
+    The scissor test determines if (x_w, y_w) lies within the scissor rectangle
+    defined by four values.
+    
+    The command
+    
+        void ScissorSingle( uint index, int left, int bottom, sizei width, sizei height );
+        
+    does not exist in the GL, but it is used to describe functionality in the rest
+    of this section. This command sets the scissor test rectangle for the viewport
+    specified by index.
+    If left <= x_w < left + width and bottom <= y_w < bottom + height for the
+    selected scissor rectangle, then the scissor test passes. Otherwise, the test
+    fails and the fragment is discarded.
+    If either width or height is negative for any scissor rectangle, then an
+    INVALID_VALUE error is generated.
+    The scissor test is enabled or disabled for all viewports using Enable or 
+    Disable with the symbolic constant SCISSOR_TEST. If a scissor test is disabled,
+    the scissor test always passes. The value of the scissor test enable for all
+    viewports can be queried by calling IsEnabled with target SCISSOR_TEST.
+    
+    The state required consists of four integer values per viewport, and a bit indicating
+    whether the test is enabled or disabled for each viewport. In the initial
+    state, left = bottom = 0, and width and height are determined by the size of the
+    window into which the GL is to do its rendering for all viewports. If the default
+    framebuffer is bound but no default framebuffer is associated with the GL context
+    (see chapter 4), then with and height are initially set to zero. Initially, the scissor
+    test is disabled for all viewports.
+    
+    The command
+        
+        void Scissor( int left, int bottom, sizei width, sizei height );
+        
+    sets the scissor rectangle for all viewports to the same values and is equivalent to:
+    
+        for (sizei i = 0; i < MAX_VIEWS_ANGLE; i++)
+        {
+            ScissorSingle(i, left, bottom, width, height);
+        }
+        
+    The command
+    
+        void ScissorMultiviewANGLE( sizei count, const int *v );
+        
+    sets scissor test rectangles for all views in the range [0 ; count). It is equivalent to:
+    
+        for (sizei i = 0; i < count; ++i)
+        {
+            const int left = v[i*4], bottom = v[i*4 + 1];
+            const sizei width = v[i*4 + 2], height = v[i*4 + 3];
+            ScissorSingle(i, left, bottom, width, height);
+        }
+    
+    If count is less than 1 or greater than MAX_VIEWS_ANGLE, an INVALID_VALUE error is
+    generated.
+    If any of the scissor test rectangles overlap horizontally, an INVALID_VALUE error
+    is generated. The test is done in a similar way as in section 2.13.1.
+    "
+
+    Modify section 4.2.3 (Clearing the buffers), p 187
+    
+    Add to the end of paragraph just before the one starting with "The state required for
+    clearing is a clear value":
+    
+    "
+    If multiple scissor rectangles are specified with ScissorMultiviewANGLE, a fragment must
+    pass at least one of the scissor tests.
+    "
+    
+    Modify section 4.3.2 (Reading pixels), p 191
+    
+    Add to the end of the section:
+    
+    "   ReadPIxels generates an INVALID_FRAMEBUFFER_OPERATION error if the number of views in
+    the current read framebuffer is greater than 1."
+    
+    Modify section 4.3.3 (Copying pixels), p 196
+    
+    After the paragraph
+    
+    "Calling BlitFramebuffer will result in an INVALID_OPERATION error if filter is LINEAR and
+    read buffer contains integer data."
+    
+    add a new paragraph:
+    
+    "Calling BlitFramebuffer will result in an INVALID_FRAMEBUFFER_OPERATION error if the number
+    of views in either the current draw framebuffer or read framebuffer is greater than 1."
+    
+    Modify subchapter 4.4 (Framebuffer Objects), p 199
+    
+    Add at end, just before section 4.4.1:
+    
+    "
+    An application-created framebuffer can have multiple views specified 
+    and its attachments used as a surface for multiview rendering. 
+    The number of views a framebuffer can have is in the range [1;MAX_VIEWS_ANGLE].
+    The number of views for any framebuffer is by default 1.
+    "
+    
+    Modify section 4.1.6 (Occlusion queries)
+    
+    Replace the first sentence with:
+    
+    "
+    Occlusion queries use query objects to track whether any fragments or samples pass the
+    depth test for any of the views.
+    "
+    
+    Append to the sentence
+    
+    "While that occlusion query is active, the samples-boolean state is set to TRUE 
+    if any fragment or sample passes the depth test"
+
+    the text
+    
+    " on any of the views."
+    
+    Modify section 4.4.2.4 (Attaching Texture Images to a Framebuffer), p 207
+    
+    Add just before the sentence "Effects of Attaching a Texture Image":
+    
+    "The command
+    
+        FramebufferTextureMultiviewANGLE(enum target, enum attachment, enum textarget, uint texture, int level, enum multiviewLayout, sizei numViews);
+    
+    can be used to attach a texture object as one of the logical buffers of a
+    framebuffer object which is to be used for either side-by-side or layered
+    multiview rendering.
+        
+        An INVALID_ENUM error is generated if target is not FRAMEBUFFER.
+        An INVALID_OPERATION error is generated if attachment is COLOR_ATTACHMENTm
+        where m is greater than or equal to the value of MAX_COLOR_ATTACHMENTS
+        An INVALID_ENUM error is generated if attachment is not one of the attachments
+        in table 4.6, and attachment is not COLOR_ATTACHMENTm where m is greater than
+        or equal to the value of MAX_COLOR_ATTACHMENTS
+        An INVALID_OPERATION error is generated if zero is bound to target.
+        An INVALID_VALUE error is generated if texture is not zero and level is not a
+        supported texture level for textarget, as described above.
+        An INVALID_VALUE error is generated if textarget is not TEXTURE_2D,
+        TEXTURE_2D_MULTISAMPLE, or TEXTURE_2D_ARRAY.
+        An INVALID_OPERATION error is generated if texture is not zero, and does not
+        name an existing texture object of type matching textarget, as described above.
+        An INVALID_OPERATION error is generated if texture is the name of a buffer texture.
+        An INVALID_ENUM error is generated if multiviewLayout is not MULTIVIEW_SIDE_BY_SIDE_ANGLE or MULTIVIEW_LAYERED_ANGLE.
+        An INVALID_VALUE error is generated if numViews is less than 1 or greater
+        than MAX_VIEWS_ANGLE.
+    "
+    
+    Add the following bullet points in the list after "Effects of Attaching a Texture Image":
+    
+    "   * The value of FRAMEBUFFER_ATTACHMENT_NUM_VIEWS_ANGLE is set to <numViews>.
+        * The value of FRAMEBUFFER_ATTACHMENT_MULTIVIEW_LAYOUT_ANGLE is set to <multiviewLayout>
+    "
+    
+    Modify section 4.4.4.2 (Whole Framebuffer Completeness), p 214
+    
+    Add a bullet point after "{ FRAMEBUFFER_INCOMPLETE_MULTISAMPLE }":
+    
+    "* All populated framebuffer attachments have the same number of views and multiview layout.
+    { FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_ANGLE }"
+    
+    The command
+        
+        SelectView( id );
+        
+    does not exist in the GL, but it is used to describe the multi-view functionality
+    in the rest of this section. The effect if this function is to select which is
+    the active viewport
+    and set the value to the vertex shader built-in gl_ViewID_OVR. 
+    
+    Any drawing command <Draw> has the same effect as:
+    
+    for ( sizei id = 0; id < views; id++)
+    {
+        SelectView( id );
+        <Draw>
+    }
+    
+    "
+
+Additions to Chapter 5 of the OpenGL ES 3.0 Specification (Special Functions)
+
+    None
+
+Additions to Chapter 6 of the OpenGL ES 3.0 Specification (State and State
+Requests)
+    
+    Modify section 6.1.13 (Framebuffer Object Queries), p 242
+    
+    Add a bullet point to the first list:
+    
+    " * If <pname> is FRAMEBUFFER_ATTACHMENT_NUM_VIEWS_ANGLE, then <params> will contain
+        the number of views for the specified attachment.
+      * If <pname> is FRAMEBUFFER_ATTACHMENT_MULTIVIEW_LAYOUT_ANGLE, then <params> will
+        contain MULTIVIEW_SIDE_BY_SIDE_ANGLE, MULTIVIEW_LAYERED_ANGLE or NONE.
+    "
+    
+    Changes to table 6.5, p. 250 (Transformation State):
+
+    Replace the entry for VIEWPORT with:
+                                                               Initial
+    Get Value            Type   Get Command      Value        Description              Sec.  
+    ---------            -----  -----------      -------      -----------              ----
+    VIEWPORT             4*Z    GetIntegerv      see 2.13.1   Viewport rectangle       2.13.1
+                                                              for viewport 0
+                                                              
+    VIEWPORT             4*Z    GetIntegeri_v    see 2.13.1   Viewport rectangle       2.13.1
+                                                              for specific viewport
+
+                                                              
+    Changes to table 6.11, p. 256 (Pixel Operations):
+
+    Replace the entry for SCISSOR_BOX with:
+    
+    Get Value            Type   Get Command      Value        Description              Sec.  
+    ---------            -----  -----------      -------      -----------              ----
+    SCISSOR              4*Z    GetIntegerv      see 4.1.2    Scissor box for          2.13.1
+                                                              viewport 0
+                                                              
+    SCISSOR              4*Z    GetIntegeri_v    see 4.1.2    Scissor box for          2.13.1
+                                                              specific viewport
+                                                              
+    
+    Changes to table 6.12, p. 257 (Framebuffer Control):
+    
+    Add the following entry after READ_FRAMEBUFFER_BINDING:
+    
+    Get Value                      Type   Get Command      Value        Description          Sec.
+    ---------                      -----  -----------      -------      -----------          ----
+    FRAMEBUFFER_NUM_VIEWS_ANGLE    Z+     GetIntegerv      1            Number of views      4.4.1 
+                                                                        in the draw 
+                                                                        framebuffer
+    
+    
+    Changes to table 6.28, p. 273 (Implementation Dependent Values):
+    
+    Add the following entry after MAX_VIEWPORT_DIMS:
+    
+    Get Value            Type   Get Command      Value        Description              Sec.  
+    ---------            -----  -----------      -------      -----------              ----
+    MAX_VIEWS_ANGLE      Z+     GetIntegerv      4            Maximum number of        4.4
+                                                              views
+
+Additions to the OpenGL ES 3.0 Shading Language Specification
+
+    Including the following line in a shader can be used to control the
+    language features described in this extension:
+
+      #extension GL_OVR_multiview : <behavior>
+
+    where <behavior> is as specified in section 3.5.
+
+    New preprocessor #defines are added to the OpenGL Shading Language:
+
+      #define GL_OVR_multiview 1
+    
+    Modify section 4.3.8.1 (Input Layout Qualifiers)
+    
+    Replace the first sentence by:
+    
+    "
+    Input variable declarations in the vertex shader can have input layout qualifiers.
+    "
+    
+    Add the following text just before the sentence "Fragment shaders cannot ...":
+    
+    "
+    The number of views to which to the program must render to is specified through the
+    num_views layout qualifier:
+    
+        layout-qualifier-id
+            num_views = integer-constant
+            
+    For example, the following declaration in a vertex shader
+    
+        layout (num_views=4) in;
+        
+    is used to specify that the program renders to 4 views.
+    
+    If num_views is less than 1 or greater than the maximum number of supported views,
+    a compile-time error is generated.
+    If the layout qualifier is declared multiple times and not all declarations specify
+    the same number of views, a compile-time error is generated.
+    "
+    
+    Modify section 7.1 (Vertex Shader Special Variables)
+    
+    Add to the list of built-ins just after the entry for gl_InstanceID:
+    
+    "
+        in highp uint gl_ViewID_OVR;
+    "
+    
+    Add a description for gl_ViewID_OVR just after the paragraph for gl_InstanceID:
+    
+    "
+    The variable gl_ViewID_OVR is a vertex shader input variable that
+    holds the view id which designates the view which the current
+    vertex is being processed for. The variable carries semantic 
+    restrictions:
+    
+    * gl_ViewID_OVR may be used on the right hand side of assignment to gl_Position.x.
+      The right hand side of assignment to gl_Position.x that statically references gl_ViewID_OVR
+      is not allowed to contain any sub-expressions that require an l-value, such as assignment, 
+      increment or decrement. Such right-hand side of assignment is also not allowed to call 1) 
+      any user-defined functions or 2) built-in functions that may have side effects visible in 
+      the shader. Such an assignment to gl_Position.x must not be a part of a larger expression.
+    * gl_ViewID_OVR may also be used in if statement conditions, where the condition is an equality
+      comparison between gl_ViewID_OVR and a literal integer. The if or else branch of such an if
+      statement must contain one assignment to gl_Position.x and nothing else. The right hand
+      side of this assignment is not allowed to contain any sub-expressions that require 
+      an l-value, such as assignment, increment or decrement. Such right-hand side of assignment
+      is also not allowed to call 1) any user-defined functions or 2) built-in functions that
+      may have side effects visible in the shader.
+    * Any other static use of gl_ViewID_OVR is disallowed.
+    * If gl_ViewID_OVR is used in a vertex shader, gl_Position.x may not statically be read from.
+    "
+
+Additions to the AGL/EGL/GLX/WGL Specifications
+
+    None
+
+Interactions with EXT_disjoint_timer_query
+    
+    If there is an active query object for target TIME_ELAPSED_EXT and any Draw* command is
+    called with a program which uses the multiview extension, an INVALID_OPERATION error is
+    generated.
+
+Errors
+
+    INVALID_ENUM by FramebufferTextureMultiviewANGLE if <target> is not FRAMEBUFFER.
+    
+    INVALID_OPERATION by FramebufferTextureMultiviewANGLE if the value of the corresponding binding
+    is zero.
+    
+    INVALID_VALUE by FramebufferTextureMultiviewANGLE if <views> is less than 1 or greater than
+    MAX_VIEWS_ANGLE.
+
+    INVALID_OPERATION by FramebufferTextureMultiviewANGLE if <attachment> is COLOR_ATTACHMENTm where
+    m is greater than or equal to the value of MAX_COLOR_ATTACHMENTS.
+    
+    INVALID_ENUM by FramebufferTextureMultiviewANGLE if <attachment> is not one of the attachments in
+    table 4.6, and attachment is not COLOR_ATTACHMENTm where m is greater than or equal to the value
+    of MAX_COLOR_ATTACHMENTS.
+    
+    INVALID_VALUE by FramebufferTextureMultiviewANGLE if <texture> is not zero and level is not a
+    supported texture level for textarget, as described above.
+    
+    INVALID_VALUE by FramebufferTextureMultiviewANGLE if <textarget> is not TEXTURE_2D,
+    TEXTURE_2D_MULTISAMPLE, or TEXTURE_2D_ARRAY.
+    
+    INVALID_OPERATION by FramebufferTextureMultiviewANGLE if <texture> is not zero, and does not
+    name an existing texture object of type matching textarget, as described above.
+    
+    INVALID_OPERATION by FramebufferTextureMultiviewANGLE if <texture> is the name of a
+    buffer texture.
+    
+    INVALID_ENUM by FramebufferTextureMultiviewANGLE if <multiviewLayout> is not MULTIVIEW_SIDE_BY_SIDE_ANGLE or MULTIVIEW_LAYERED_ANGLE.
+    
+    INVALID_VALUE by FramebufferTextureMultiviewANGLE if <numViews> is less than
+    1 or greater than MAX_VIEWS_ANGLE.
+    
+    INVALID_VALUE by ViewportMultiviewANGLE if <count> is less than 1 or greater than
+    MAX_VIEWS_ANGLE, if any of the of the viewports' width or height is less than 0,
+    or if any of the viewport's rectangles overlap horizontally.
+    
+    INVALID_VALUE by ScissorMultiviewANGLE if <count> is less than 1 or greater than
+    MAX_VIEWS_ANGLE, if any of the of the rectangles' width or height is less than 0,
+    or if any of the rectangles overlap horizontally.
+
+    INVALID_OPERATION by any Draw command if the number of views in the draw framebuffer
+    does not match the number of views specified in the program.
+    
+    INVALID_OPERATION by any Draw command associated with a program which uses the multiview
+    extension if there is either an active transform feedback object, or an active query
+    object with target TIME_ELAPSED_EXT.
+
+    INVALID_FRAMEBUFFER_OPERATION by CopyTexSubImage3D, CopyTexImage2D, and CopyTexSubImage2D
+    if the number of views in the current read framebuffer is greater than 1. 
+    
+    INVALID_FRAMEBUFFER_OPERATION by ReadPIxels if the number of views in the current read
+    framebuffer is greater than 1.
+    
+    INVALID_FRAMEBUFFER_OPERATION by BlitFramebuffer if the number of views in either the
+    current draw framebuffer or read framebuffer is greater than 1.
+    
+Issues
+
+    (TODO)
