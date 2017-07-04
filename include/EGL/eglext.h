@@ -537,6 +537,11 @@ EGLAPI EGLBoolean EGLAPIENTRY eglPresentationTimeANDROID (EGLDisplay dpy, EGLSur
 #define EGL_D3D11_DEVICE_ANGLE            0x33A1
 #endif /* EGL_ANGLE_device_d3d */
 
+#ifndef EGL_ANGLE_iosurface_client_buffer
+#define EGL_ANGLE_iosurface_client_buffer 1
+#define EGL_IOSURFACE_ANGLE 0x3454
+#endif /* EGL_ANGLE_iosurface_client_buffer */
+
 #ifndef EGL_ANGLE_query_surface_pointer
 #define EGL_ANGLE_query_surface_pointer 1
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYSURFACEPOINTERANGLEPROC) (EGLDisplay dpy, EGLSurface surface, EGLint attribute, void **value);

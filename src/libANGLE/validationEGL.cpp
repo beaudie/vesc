@@ -1026,6 +1026,17 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
           }
           break;
 
+      case EGL_IOSURFACE_ANGLE:
+          if (!displayExtensions.iosurfaceClientBuffer)
+          {
+              return EglBadParameter();
+          }
+          if (buffer == nullptr)
+          {
+              return EglBadParameter();
+          }
+          break;
+
       default:
           return EglBadParameter();
     }
