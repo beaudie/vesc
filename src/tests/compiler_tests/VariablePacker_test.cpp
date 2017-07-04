@@ -28,7 +28,7 @@ static sh::GLenum types[] = {
   GL_SAMPLER_2D,            // 15
   GL_SAMPLER_CUBE,          // 16
   GL_SAMPLER_EXTERNAL_OES,  // 17
-  GL_SAMPLER_2D_RECT_ARB,   // 18
+  GL_SAMPLER_2D_RECT_ANGLE, // 18
   GL_UNSIGNED_INT,          // 19
   GL_UNSIGNED_INT_VEC2,     // 20
   GL_UNSIGNED_INT_VEC3,     // 21
