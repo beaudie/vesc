@@ -861,6 +861,9 @@ bool ValidTextureTarget(const ValidationContext *context, GLenum target)
         case GL_TEXTURE_CUBE_MAP:
             return true;
 
+        case GL_TEXTURE_RECTANGLE:
+            return context->getExtensions().textureRectangle;
+
         case GL_TEXTURE_3D:
         case GL_TEXTURE_2D_ARRAY:
             return (context->getClientMajorVersion() >= 3);
@@ -880,6 +883,9 @@ bool ValidTexture2DTarget(const ValidationContext *context, GLenum target)
         case GL_TEXTURE_2D:
         case GL_TEXTURE_CUBE_MAP:
             return true;
+
+        case GL_TEXTURE_RECTANGLE:
+            return context->getExtensions().textureRectangle;
 
         default:
             return false;
@@ -924,6 +930,8 @@ bool ValidTexture2DDestinationTarget(const ValidationContext *context, GLenum ta
         case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             return true;
+        case GL_TEXTURE_RECTANGLE:
+            return context->getExtensions().textureRectangle;
         default:
             return false;
     }
@@ -1023,6 +1031,8 @@ bool ValidTexLevelDestinationTarget(const ValidationContext *context, GLenum tar
         case GL_TEXTURE_2D_ARRAY:
         case GL_TEXTURE_2D_MULTISAMPLE:
             return true;
+        case GL_TEXTURE_RECTANGLE:
+            return context->getExtensions().textureRectangle;
         default:
             return false;
     }
@@ -1095,6 +1105,8 @@ bool ValidMipLevel(const ValidationContext *context, GLenum target, GLint level)
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             maxDimension = caps.maxCubeMapTextureSize;
             break;
+        case GL_TEXTURE_RECTANGLE:
+            return caps.maxRectangleTextureSize;
         case GL_TEXTURE_3D:
             maxDimension = caps.max3DTextureSize;
             break;
@@ -2477,6 +2489,14 @@ bool ValidateStateQuery(ValidationContext *context,
         case GL_TEXTURE_BINDING_3D:
         case GL_TEXTURE_BINDING_2D_ARRAY:
             break;
+        case GL_TEXTURE_BINDING_RECTANGLE:
+            if (!context->getExtensions().textureRectangle)
+            {
+                context->handleError(InvalidEnum()
+                                     << "ARB_texture_rectangle extension not enabled");
+                return false;
+            }
+            break;
         case GL_TEXTURE_BINDING_EXTERNAL_OES:
             if (!context->getExtensions().eglStreamConsumerExternal &&
                 !context->getExtensions().eglImageExternal)
@@ -2646,6 +2666,9 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             maxDimension = caps.maxCubeMapTextureSize;
             break;
+
+        case GL_TEXTURE_RECTANGLE:
+            return caps.maxRectangleTextureSize;
 
         case GL_TEXTURE_2D_ARRAY:
             maxDimension = caps.max2DTextureSize;

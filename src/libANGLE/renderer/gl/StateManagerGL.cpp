@@ -133,6 +133,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     ASSERT(mFunctions);
 
     mTextures[GL_TEXTURE_2D].resize(rendererCaps.maxCombinedTextureImageUnits);
+    mTextures[GL_TEXTURE_RECTANGLE].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_CUBE_MAP].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_2D_ARRAY].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_3D].resize(rendererCaps.maxCombinedTextureImageUnits);
