@@ -1045,6 +1045,17 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
           }
           break;
 
+      case EGL_IOSURFACE_ANGLE:
+          if (!displayExtensions.iosurfaceClientBuffer)
+          {
+              return EglBadParameter();
+          }
+          if (buffer == nullptr)
+          {
+              return EglBadParameter();
+          }
+          break;
+
       default:
           return EglBadParameter();
     }
@@ -1058,9 +1069,10 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         {
           case EGL_WIDTH:
           case EGL_HEIGHT:
-            if (!displayExtensions.d3dShareHandleClientBuffer)
-            {
-                return EglBadParameter();
+              if (!displayExtensions.d3dShareHandleClientBuffer &&
+                  !displayExtensions.iosurfaceClientBuffer)
+              {
+                  return EglBadParameter();
             }
             if (value < 0)
             {
@@ -1075,6 +1087,12 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
               case EGL_TEXTURE_RGB:
               case EGL_TEXTURE_RGBA:
                 break;
+              case EGL_TEXTURE_BGRA_ANGLE:
+                  if (!displayExtensions.iosurfaceClientBuffer)
+                  {
+                      return EglBadParameter();
+                  }
+                  break;
               default:
                   return EglBadAttribute();
             }
@@ -1086,6 +1104,13 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
               case EGL_NO_TEXTURE:
               case EGL_TEXTURE_2D:
                 break;
+              case EGL_TEXTURE_RECTANGLE_ANGLE:
+                  if (!displayExtensions.iosurfaceClientBuffer)
+                  {
+                      return EglBadParameter();
+                  }
+                  break;
+
               default:
                   return EglBadAttribute();
             }
@@ -1100,6 +1125,13 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
                   return EglBadAttribute()
                          << "EGL_FLEXIBLE_SURFACE_COMPATIBILITY_SUPPORTED_ANGLE cannot be used "
                             "without EGL_ANGLE_flexible_surface_compatibility support.";
+              }
+              break;
+
+          case EGL_IOSURFACE_PLANE_ANGLE:
+              if (!displayExtensions.iosurfaceClientBuffer)
+              {
+                  return EglBadAttribute();
               }
               break;
 
@@ -1121,8 +1153,9 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         return EglBadMatch();
     }
 
-    if ((textureFormat == EGL_TEXTURE_RGB  && config->bindToTextureRGB  != EGL_TRUE) ||
-        (textureFormat == EGL_TEXTURE_RGBA && config->bindToTextureRGBA != EGL_TRUE))
+    if ((textureFormat == EGL_TEXTURE_RGB && config->bindToTextureRGB != EGL_TRUE) ||
+        (textureFormat == EGL_TEXTURE_RGBA && config->bindToTextureRGBA != EGL_TRUE) ||
+        (textureFormat == EGL_TEXTURE_BGRA_ANGLE && config->bindToTextureRGBA != EGL_TRUE))
     {
         return EglBadAttribute();
     }
@@ -1141,6 +1174,35 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         if (textureFormat != EGL_NO_TEXTURE && !caps.textureNPOT && (!gl::isPow2(width) || !gl::isPow2(height)))
         {
             return EglBadMatch();
+        }
+    }
+
+    if (buftype == EGL_IOSURFACE_ANGLE)
+    {
+        EGLint width  = static_cast<EGLint>(attributes.get(EGL_WIDTH, 0));
+        EGLint height = static_cast<EGLint>(attributes.get(EGL_HEIGHT, 0));
+
+        if (width == 0 || height == 0)
+        {
+            return EglBadAttribute();
+        }
+
+        EGLenum format = static_cast<EGLenum>(attributes.get(EGL_TEXTURE_FORMAT, EGL_NONE));
+        if (format != EGL_TEXTURE_BGRA_ANGLE)
+        {
+            return EglBadAttribute();
+        }
+
+        EGLenum target = static_cast<EGLenum>(attributes.get(EGL_TEXTURE_TARGET, EGL_NONE));
+        if (target != EGL_TEXTURE_RECTANGLE_ANGLE)
+        {
+            return EglBadAttribute();
+        }
+
+        int plane = static_cast<int>(attributes.get(EGL_IOSURFACE_PLANE_ANGLE, -1));
+        if (plane < 0)
+        {
+            return EglBadAttribute();
         }
     }
 
