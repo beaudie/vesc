@@ -95,8 +95,6 @@ Additions to Chapter 3 of the EGL 1.4 Specification (EGL Functions and Errors)
     GL_RED            GL_UNSIGNED_SHORT               GL_R16UI
     GL_RG             GL_UNSIGNED_BYTE                GL_RG
     GL_BGRA           GL_UNSIGNED_INT_8_8_8_8_REV     GL_RGBA
-    GL_BGRA           GL_UNSIGNED_INT_8_8_8_8_REV     GL_RGBA
-    GL_BGRA           GL_UNSIGNED_INT_8_8_8_8_REV     GL_RGBA
     GL_RGBA           GL_HALF_FLOAT                   GL_RGBA
     ---------------------------------------------------------------------------
     Table egl.iosurface.formats - Valid combinations of format, type and

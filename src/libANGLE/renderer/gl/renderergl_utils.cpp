@@ -1081,6 +1081,8 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxGeometryShaderStorageBlocks =
             QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT);
     }
+
+    extensions->textureFormatBGRA8888 = true;
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
