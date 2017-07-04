@@ -1193,6 +1193,10 @@ GL_APICALL void GL_APIENTRY glGetTranslatedShaderSourceANGLE (GLuint shader, GLs
 #endif
 #endif /* GL_ANGLE_translated_shader_source */
 
+#define GL_MAX_RECTANGLE_TEXTURE_SIZE 0x84F8
+#define GL_TEXTURE_RECTANGLE 0x84F5
+#define GL_TEXTURE_BINDING_RECTANGLE 0x84F6
+
 #ifndef GL_APPLE_clip_distance
 #define GL_APPLE_clip_distance 1
 #define GL_MAX_CLIP_DISTANCES_APPLE       0x0D32

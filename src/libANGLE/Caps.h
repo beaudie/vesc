@@ -363,6 +363,10 @@ struct Extensions
 
     // GL_ANGLE_robust_resource_initialization
     bool robustResourceInitialization;
+
+    // GL_ARB_texture_rectangle TODO should really be GL_ANGLE_texture_rectangle
+    // but Chromium doesn't know how to handle that yet.
+    bool textureRectangle;
 };
 
 struct ExtensionInfo
@@ -425,6 +429,7 @@ struct Caps
     GLuint64 maxElementIndex;
     GLuint max3DTextureSize;
     GLuint max2DTextureSize;
+    GLuint maxRectangleTextureSize;
     GLuint maxArrayTextureLayers;
     GLfloat maxLODBias;
     GLuint maxCubeMapTextureSize;

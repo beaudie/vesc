@@ -216,6 +216,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_STENCIL_CLEAR_VALUE:
         case GL_SUBPIXEL_BITS:
         case GL_MAX_TEXTURE_SIZE:
+        case GL_MAX_RECTANGLE_TEXTURE_SIZE:
         case GL_MAX_CUBE_MAP_TEXTURE_SIZE:
         case GL_SAMPLE_BUFFERS:
         case GL_SAMPLES:
@@ -226,6 +227,16 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_RESET_NOTIFICATION_STRATEGY_EXT:
         case GL_NUM_PROGRAM_BINARY_FORMATS_OES:
         {
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        }
+        case GL_TEXTURE_BINDING_RECTANGLE:
+        {
+            if (!getExtensions().textureRectangle)
+            {
+                return false;
+            }
             *type      = GL_INT;
             *numParams = 1;
             return true;

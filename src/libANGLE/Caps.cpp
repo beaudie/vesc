@@ -226,7 +226,8 @@ Extensions::Extensions()
       pathRendering(false),
       surfacelessContext(false),
       clientArrays(false),
-      robustResourceInitialization(false)
+      robustResourceInitialization(false),
+      textureRectangle(false)
 {
 }
 
@@ -694,6 +695,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_surfaceless_context"] = esOnlyExtension(&Extensions::surfacelessContext);
         map["GL_ANGLE_client_arrays"] = esOnlyExtension(&Extensions::clientArrays);
         map["GL_ANGLE_robust_resource_initialization"] = esOnlyExtension(&Extensions::robustResourceInitialization);
+        map["GL_ARB_texture_rectangle"] = esOnlyExtension(&Extensions::textureRectangle);
         // clang-format on
 
         return map;
@@ -741,6 +743,7 @@ Caps::Caps()
     : maxElementIndex(0),
       max3DTextureSize(0),
       max2DTextureSize(0),
+      maxRectangleTextureSize(0),
       maxArrayTextureLayers(0),
       maxLODBias(0),
       maxCubeMapTextureSize(0),

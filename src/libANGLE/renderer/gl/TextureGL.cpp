@@ -40,7 +40,8 @@ size_t GetLevelInfoIndex(GLenum target, size_t level)
 
 bool UseTexImage2D(GLenum textureType)
 {
-    return textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP;
+    return textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP ||
+           textureType == GL_TEXTURE_RECTANGLE;
 }
 
 bool UseTexImage3D(GLenum textureType)
@@ -932,7 +933,7 @@ gl::Error TextureGL::generateMipmap(const gl::Context *context)
 
 gl::Error TextureGL::bindTexImage(const gl::Context *context, egl::Surface *surface)
 {
-    ASSERT(getTarget() == GL_TEXTURE_2D);
+    ASSERT(getTarget() == GL_TEXTURE_2D || getTarget() == GL_TEXTURE_RECTANGLE);
 
     // Make sure this texture is bound
     mStateManager->bindTexture(getTarget(), mTextureID);
@@ -944,7 +945,7 @@ gl::Error TextureGL::bindTexImage(const gl::Context *context, egl::Surface *surf
 gl::Error TextureGL::releaseTexImage(const gl::Context *context)
 {
     // Not all Surface implementations reset the size of mip 0 when releasing, do it manually
-    ASSERT(getTarget() == GL_TEXTURE_2D);
+    ASSERT(getTarget() == GL_TEXTURE_2D || getTarget() == GL_TEXTURE_RECTANGLE);
 
     mStateManager->bindTexture(getTarget(), mTextureID);
     if (UseTexImage2D(getTarget()))
