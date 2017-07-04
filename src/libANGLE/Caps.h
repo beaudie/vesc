@@ -681,6 +681,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_program_cache_control
     bool programCacheControl;
+
+    // EGL_ANGLE_iosurface_client_buffer
+    bool iosurfaceClientBuffer;
 };
 
 struct DeviceExtensions

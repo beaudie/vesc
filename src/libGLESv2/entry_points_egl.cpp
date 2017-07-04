@@ -23,6 +23,7 @@
 #include "libANGLE/validationEGL.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "common/version.h"
 
 #include "platform/Platform.h"
@@ -779,7 +780,8 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
     gl::Context *context = thread->getContext();
     if (context)
     {
-        gl::Texture *textureObject = context->getTargetTexture(GL_TEXTURE_2D);
+        GLenum target = egl_gl::EGLTextureTargetToGLTextureTarget(eglSurface->getTextureTarget());
+        gl::Texture *textureObject = context->getTargetTexture(target);
         ASSERT(textureObject != nullptr);
 
         if (textureObject->getImmutableFormat())

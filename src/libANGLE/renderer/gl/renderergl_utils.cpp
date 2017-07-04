@@ -1010,6 +1010,7 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxRectangleTextureSize =
             QuerySingleGLInt(functions, GL_MAX_RECTANGLE_TEXTURE_SIZE_ANGLE);
     }
+    extensions->textureFormatBGRA8888 = true;
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
