@@ -1045,6 +1045,17 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
           }
           break;
 
+      case EGL_IOSURFACE_ANGLE:
+          if (!displayExtensions.iosurfaceClientBuffer)
+          {
+              return EglBadParameter();
+          }
+          if (buffer == nullptr)
+          {
+              return EglBadParameter();
+          }
+          break;
+
       default:
           return EglBadParameter();
     }
@@ -1058,9 +1069,10 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         {
           case EGL_WIDTH:
           case EGL_HEIGHT:
-            if (!displayExtensions.d3dShareHandleClientBuffer)
-            {
-                return EglBadParameter();
+              if (buftype != EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE &&
+                  buftype != EGL_IOSURFACE_ANGLE)
+              {
+                  return EglBadParameter();
             }
             if (value < 0)
             {
@@ -1076,7 +1088,11 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
               case EGL_TEXTURE_RGBA:
                 break;
               default:
-                  return EglBadAttribute();
+                  if (buftype != EGL_IOSURFACE_ANGLE)
+                  {
+                      return EglBadAttribute();
+                  }
+                  break;
             }
             break;
 
@@ -1086,6 +1102,13 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
               case EGL_NO_TEXTURE:
               case EGL_TEXTURE_2D:
                 break;
+              case EGL_TEXTURE_RECTANGLE_ANGLE:
+                  if (buftype != EGL_IOSURFACE_ANGLE)
+                  {
+                      return EglBadParameter();
+                  }
+                  break;
+
               default:
                   return EglBadAttribute();
             }
@@ -1103,6 +1126,27 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
               }
               break;
 
+          case EGL_IOSURFACE_PLANE_ANGLE:
+              if (buftype != EGL_IOSURFACE_ANGLE)
+              {
+                  return EglBadAttribute();
+              }
+              break;
+
+          case EGL_TEXTURE_TYPE_ANGLE:
+              if (buftype != EGL_IOSURFACE_ANGLE)
+              {
+                  return EglBadAttribute();
+              }
+              break;
+
+          case EGL_TEXTURE_INTERNAL_FORMAT_ANGLE:
+              if (buftype != EGL_IOSURFACE_ANGLE)
+              {
+                  return EglBadAttribute();
+              }
+              break;
+
           default:
               return EglBadAttribute();
         }
@@ -1115,16 +1159,19 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
 
     EGLAttrib textureFormat = attributes.get(EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE);
     EGLAttrib textureTarget = attributes.get(EGL_TEXTURE_TARGET, EGL_NO_TEXTURE);
-    if ((textureFormat != EGL_NO_TEXTURE && textureTarget == EGL_NO_TEXTURE) ||
-        (textureFormat == EGL_NO_TEXTURE && textureTarget != EGL_NO_TEXTURE))
+    if (buftype != EGL_IOSURFACE_ANGLE)
     {
-        return EglBadMatch();
-    }
+        if ((textureFormat != EGL_NO_TEXTURE && textureTarget == EGL_NO_TEXTURE) ||
+            (textureFormat == EGL_NO_TEXTURE && textureTarget != EGL_NO_TEXTURE))
+        {
+            return EglBadMatch();
+        }
 
-    if ((textureFormat == EGL_TEXTURE_RGB  && config->bindToTextureRGB  != EGL_TRUE) ||
-        (textureFormat == EGL_TEXTURE_RGBA && config->bindToTextureRGBA != EGL_TRUE))
-    {
-        return EglBadAttribute();
+        if ((textureFormat == EGL_TEXTURE_RGB && config->bindToTextureRGB != EGL_TRUE) ||
+            (textureFormat == EGL_TEXTURE_RGBA && config->bindToTextureRGBA != EGL_TRUE))
+        {
+            return EglBadAttribute();
+        }
     }
 
     if (buftype == EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE)
@@ -1141,6 +1188,24 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         if (textureFormat != EGL_NO_TEXTURE && !caps.textureNPOT && (!gl::isPow2(width) || !gl::isPow2(height)))
         {
             return EglBadMatch();
+        }
+    }
+
+    if (buftype == EGL_IOSURFACE_ANGLE)
+    {
+        EGLenum target = static_cast<EGLenum>(attributes.get(EGL_TEXTURE_TARGET, EGL_NONE));
+        if (target != EGL_TEXTURE_RECTANGLE_ANGLE)
+        {
+            return EglBadAttribute();
+        }
+
+        if (!attributes.contains(EGL_WIDTH) || !attributes.contains(EGL_HEIGHT) ||
+            !attributes.contains(EGL_TEXTURE_FORMAT) ||
+            !attributes.contains(EGL_TEXTURE_TYPE_ANGLE) ||
+            !attributes.contains(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE) ||
+            !attributes.contains(EGL_IOSURFACE_PLANE_ANGLE))
+        {
+            return EglBadParameter();
         }
     }
 
