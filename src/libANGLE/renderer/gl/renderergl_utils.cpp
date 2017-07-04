@@ -956,6 +956,7 @@ void GenerateCaps(const FunctionsGL *functions,
 
     // TODO detect this properly
     extensions->textureRectangle      = true;
+    extensions->textureFormatBGRA8888 = true;
     caps->maxRectangleTextureSize     = QuerySingleGLInt(functions, GL_MAX_RECTANGLE_TEXTURE_SIZE);
 }
 

@@ -1087,7 +1087,8 @@ DisplayExtensions::DisplayExtensions()
       pixelFormatFloat(false),
       surfacelessContext(false),
       displayTextureShareGroup(false),
-      createContextClientArrays(false)
+      createContextClientArrays(false),
+      iosurfaceClientBuffer(false)
 {
 }
 
@@ -1130,6 +1131,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_surfaceless_context",                         surfacelessContext,                 &extensionStrings);
     InsertExtensionString("EGL_ANGLE_display_texture_share_group",               displayTextureShareGroup,           &extensionStrings);
     InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_iosurface_client_buffer",                   iosurfaceClientBuffer,              &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
     // clang-format on
