@@ -48,6 +48,28 @@ void UnmultiplyAlpha(gl::ColorF *color)
     }
 }
 
+void ClipChannelsR(gl::ColorF *color)
+{
+    color->green = 0.0f;
+    color->blue  = 0.0f;
+    color->alpha = 1.0f;
+}
+
+void ClipChannelsRG(gl::ColorF *color)
+{
+    color->blue  = 0.0f;
+    color->alpha = 1.0f;
+}
+
+void ClipChannelsRGB(gl::ColorF *color)
+{
+    color->alpha = 1.0f;
+}
+
+void ClipChannelsNoOp(gl::ColorF *color)
+{
+}
+
 void WriteUintColor(const gl::ColorF &color,
                     ColorWriteFunction colorWriteFunction,
                     uint8_t *destPixelData)
@@ -150,6 +172,7 @@ gl::Error Image11::CopyImage(const gl::Context *context,
     GLuint sourcePixelBytes =
         gl::GetSizedInternalFormatInfo(sourceFormat.fboImplementationInternalFormat).pixelBytes;
 
+    GLenum destUnsizedFormat = gl::GetUnsizedFormat(dest->getInternalFormat());
     const auto &destFormat = d3d11::Format::Get(dest->getInternalFormat(), rendererCaps).format();
     const auto &destFormatInfo =
         gl::GetSizedInternalFormatInfo(destFormat.fboImplementationInternalFormat);
@@ -172,6 +195,20 @@ gl::Error Image11::CopyImage(const gl::Context *context,
         }
     }
 
+    auto clipChannelsFunction = ClipChannelsNoOp;
+    switch (destUnsizedFormat)
+    {
+        case GL_RED:
+            clipChannelsFunction = ClipChannelsR;
+            break;
+        case GL_RG:
+            clipChannelsFunction = ClipChannelsRG;
+            break;
+        case GL_RGB:
+            clipChannelsFunction = ClipChannelsRGB;
+            break;
+    }
+
     auto writeFunction =
         (destFormatInfo.componentType == GL_UNSIGNED_INT) ? WriteUintColor : WriteFloatColor;
 
@@ -189,6 +226,7 @@ gl::Error Image11::CopyImage(const gl::Context *context,
                                            reinterpret_cast<uint8_t *>(&sourceColor));
 
             conversionFunction(&sourceColor);
+            clipChannelsFunction(&sourceColor);
 
             int destX = destOffset.x + x;
             int destY = destOffset.y;
