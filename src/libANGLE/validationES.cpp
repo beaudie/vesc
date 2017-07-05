@@ -750,6 +750,11 @@ bool ValidateVertexShaderAttributeTypeMatch(ValidationContext *context)
 
     for (const auto &shaderAttribute : program->getAttributes())
     {
+        if (shaderAttribute.name == "gl_VertexID" || shaderAttribute.name == "gl_InstanceID")
+        {
+            continue;
+        }
+
         GLenum shaderInputType = VariableComponentType(shaderAttribute.type);
 
         const auto &attrib = vao->getVertexAttribute(shaderAttribute.location);
