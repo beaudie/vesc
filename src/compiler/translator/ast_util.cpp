@@ -6,6 +6,8 @@
 
 #include "compiler/translator/ast_util.h"
 
+#include "compiler/translator/SymbolTable.h"
+
 namespace sh
 {
 
@@ -145,6 +147,13 @@ TIntermConstantUnion *CreateBoolNode(bool value)
     TType type(EbtBool, EbpUndefined, EvqConst, 1);
     TIntermConstantUnion *node = new TIntermConstantUnion(u, type);
     return node;
+}
+
+TIntermSymbol *ReferToGlobalSymbol(const TString &name, const TSymbolTable &symbolTable)
+{
+    TVariable *var = reinterpret_cast<TVariable *>(symbolTable.findGlobal(name));
+    ASSERT(var);
+    return new TIntermSymbol(var->getUniqueId(), name, var->getType());
 }
 
 }  // namespace sh
