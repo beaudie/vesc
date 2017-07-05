@@ -341,6 +341,9 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
         const d3d11::Format &depthBufferFormatInfo =
             d3d11::Format::Get(mDepthBufferFormat, mRenderer->getRenderer11DeviceCaps());
 
+        D3D11_TEXTURE2D_DESC offscreenTextureDesc = {0};
+        mOffscreenTexture.getDesc(&offscreenTextureDesc);
+
         D3D11_TEXTURE2D_DESC depthStencilTextureDesc;
         depthStencilTextureDesc.Width = backbufferWidth;
         depthStencilTextureDesc.Height = backbufferHeight;
@@ -348,7 +351,7 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
         depthStencilTextureDesc.MipLevels = 1;
         depthStencilTextureDesc.ArraySize = 1;
         depthStencilTextureDesc.SampleDesc.Count   = getD3DSamples();
-        depthStencilTextureDesc.SampleDesc.Quality = 0;
+        depthStencilTextureDesc.SampleDesc.Quality = offscreenTextureDesc.SampleDesc.Quality;
         depthStencilTextureDesc.Usage = D3D11_USAGE_DEFAULT;
         depthStencilTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
