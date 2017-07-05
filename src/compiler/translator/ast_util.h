@@ -30,6 +30,8 @@ TIntermTyped *CreateZero(const TType &type);
 TIntermConstantUnion *CreateIndexNode(int index);
 TIntermConstantUnion *CreateBool(bool value);
 
+TIntermSymbol *ReferToGlobalSymbol(const TString &name, const TSymbolTable &symbolTable);
+
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_ASTUTIL_H_
