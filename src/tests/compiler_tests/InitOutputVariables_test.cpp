@@ -11,6 +11,7 @@
 
 #include "compiler/translator/FindMain.h"
 #include "compiler/translator/IntermTraverse.h"
+#include "compiler/translator/ast_util.h"
 #include "tests/test_utils/ShaderCompileTreeTest.h"
 
 #include <algorithm>
@@ -77,7 +78,7 @@ ExpectedLValues CreateIndexedLValueNodeList(const TString &lValueName,
     {
         expected[index] =
             new TIntermBinary(EOpIndexDirect, new TIntermSymbol(0, lValueName, elementType),
-                              TIntermTyped::CreateIndexNode(static_cast<int>(index)));
+                              CreateIndexNode(static_cast<int>(index)));
     }
     return expected;
 }
