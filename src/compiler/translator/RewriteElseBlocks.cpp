@@ -12,6 +12,7 @@
 #include "compiler/translator/Intermediate.h"
 #include "compiler/translator/NodeSearch.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/ast_util.h"
 
 namespace sh
 {
@@ -84,8 +85,7 @@ TIntermNode *ElseBlockRewriter::rewriteIfElse(TIntermIfElse *ifElse)
         // returns (that are unreachable) we can silence this compile error.
         if (mFunctionType && mFunctionType->getBasicType() != EbtVoid)
         {
-            TIntermNode *returnNode =
-                new TIntermBranch(EOpReturn, TIntermTyped::CreateZero(*mFunctionType));
+            TIntermNode *returnNode = new TIntermBranch(EOpReturn, CreateZeroNode(*mFunctionType));
             negatedElse = new TIntermBlock();
             negatedElse->appendStatement(returnNode);
         }

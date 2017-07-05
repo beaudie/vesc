@@ -149,6 +149,8 @@
             'compiler/translator/VariableInfo.h',
             'compiler/translator/VariablePacker.cpp',
             'compiler/translator/VariablePacker.h',
+            'compiler/translator/ast_util.cpp',
+            'compiler/translator/ast_util.h',
             'compiler/translator/blocklayout.cpp',
             'compiler/translator/blocklayout.h',
             'compiler/translator/glslang.h',

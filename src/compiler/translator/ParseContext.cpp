@@ -14,6 +14,7 @@
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/ValidateGlobalInitializer.h"
 #include "compiler/translator/ValidateSwitch.h"
+#include "compiler/translator/ast_util.h"
 #include "compiler/translator/glslang.h"
 #include "compiler/translator/util.h"
 
@@ -3062,14 +3063,14 @@ TIntermTyped *TParseContext::addConstructor(TIntermSequence *arguments,
         {
             error(line, "implicitly sized array constructor must have at least one argument", "[]");
             type.setArraySize(1u);
-            return TIntermTyped::CreateZero(type);
+            return CreateZeroNode(type);
         }
         type.setArraySize(static_cast<unsigned int>(arguments->size()));
     }
 
     if (!checkConstructorArguments(line, arguments, type))
     {
-        return TIntermTyped::CreateZero(type);
+        return CreateZeroNode(type);
     }
 
     TIntermAggregate *constructorNode = TIntermAggregate::CreateConstructor(type, arguments);
@@ -3506,7 +3507,7 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             }
             if (fieldFound)
             {
-                TIntermTyped *index = TIntermTyped::CreateIndexNode(i);
+                TIntermTyped *index = CreateIndexNode(i);
                 index->setLine(fieldLocation);
                 return intermediate.addIndex(EOpIndexDirectStruct, baseExpression, index,
                                              dotLocation, mDiagnostics);
@@ -3540,7 +3541,7 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             }
             if (fieldFound)
             {
-                TIntermTyped *index = TIntermTyped::CreateIndexNode(i);
+                TIntermTyped *index = CreateIndexNode(i);
                 index->setLine(fieldLocation);
                 return intermediate.addIndex(EOpIndexDirectInterfaceBlock, baseExpression, index,
                                              dotLocation, mDiagnostics);
@@ -4990,7 +4991,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunction *fnCall,
     }
 
     // Error message was already written. Put on a dummy node for error recovery.
-    return TIntermTyped::CreateZero(TType(EbtFloat, EbpMedium, EvqConst));
+    return CreateZeroNode(TType(EbtFloat, EbpMedium, EvqConst));
 }
 
 TIntermTyped *TParseContext::addTernarySelection(TIntermTyped *cond,
