@@ -36,6 +36,9 @@ TIntermConstantUnion *CreateBoolNode(bool value);
 TIntermBlock *EnsureBlock(TIntermNode *node);
 
 TIntermSymbol *ReferToGlobalSymbol(const TString &name, const TSymbolTable &symbolTable);
+TIntermSymbol *ReferToBuiltInSymbol(const TString &name,
+                                    const TSymbolTable &symbolTable,
+                                    int shaderVersion);
 
 }  // namespace sh
 
