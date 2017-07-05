@@ -22,7 +22,9 @@ class TIntermBlock;
 // If gl_FragColor is in outputVariables, it is replaced by gl_FragData.
 void EmulateGLFragColorBroadcast(TIntermBlock *root,
                                  int maxDrawBuffers,
-                                 std::vector<OutputVariable> *outputVariables);
+                                 std::vector<OutputVariable> *outputVariables,
+                                 const TSymbolTable &symbolTable,
+                                 int shaderVersion);
 }
 
 #endif  // COMPILER_TRANSLATOR_EMULATEGLFRAGCOLORBROADCAST_H_

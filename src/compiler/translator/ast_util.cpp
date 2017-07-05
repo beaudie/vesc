@@ -155,4 +155,13 @@ TIntermSymbol *ReferToGlobalSymbol(const TString &name, const TSymbolTable &symb
     return new TIntermSymbol(var->getUniqueId(), name, var->getType());
 }
 
+TIntermSymbol *ReferToBuiltInSymbol(const TString &name,
+                                    const TSymbolTable &symbolTable,
+                                    int shaderVersion)
+{
+    const TVariable *var =
+        reinterpret_cast<const TVariable *>(symbolTable.findBuiltIn(name, shaderVersion));
+    return new TIntermSymbol(var->getUniqueId(), name, var->getType());
+}
+
 }  // namespace sh
