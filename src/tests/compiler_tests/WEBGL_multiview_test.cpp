@@ -66,6 +66,25 @@ class SymbolOccurrenceCounterByName : public SymbolOccurrenceCounter
     TString mSymbolName;
 };
 
+class SymbolOccurrenceCounterByNameAndQualifier : public SymbolOccurrenceCounter
+{
+  public:
+    SymbolOccurrenceCounterByNameAndQualifier(const TString &symbolName, TQualifier qualifier)
+        : mSymbolName(symbolName), mSymbolQualifier(qualifier)
+    {
+    }
+
+    bool shouldCountSymbol(const TIntermSymbol *node) const override
+    {
+        return node->getName().getString() == mSymbolName &&
+               node->getQualifier() == mSymbolQualifier;
+    }
+
+  private:
+    TString mSymbolName;
+    TQualifier mSymbolQualifier;
+};
+
 class WEBGLMultiviewVertexShaderTest : public ShaderCompileTreeTest
 {
   public:
@@ -121,6 +140,33 @@ class WEBGLMultiviewVertexShaderOutputCodeTest : public MatchOutputCodeTest
 #endif
     }
 };
+
+namespace
+{
+// Checks that the variable with the given name and qualifier occurs n times in the AST. Also, it
+// checks that there are not other variables with the same name but different qualifier.
+void VariableOccursNTimes(TIntermBlock *root,
+                          const TString &varName,
+                          const TQualifier varQualifier,
+                          unsigned n)
+{
+    // Check that there are n occurrences of the variable with the given name and qualifier.
+    SymbolOccurrenceCounterByNameAndQualifier viewIDByNameAndQualifier(varName, varQualifier);
+    root->traverse(&viewIDByNameAndQualifier);
+    EXPECT_EQ(n, viewIDByNameAndQualifier.getNumberOfOccurrences());
+
+    // Check that there are n occurrences of the variable with the given name. By this we guarantee
+    // that also all occurrences of the variable are with the given qualifier.
+    SymbolOccurrenceCounterByName viewIDByName(varName);
+    root->traverse(&viewIDByName);
+    EXPECT_EQ(n, viewIDByName.getNumberOfOccurrences());
+}
+
+void VariableOccursOnce(TIntermBlock *root, const TString &varName, const TQualifier varQualifier)
+{
+    VariableOccursNTimes(root, varName, varQualifier, 1u);
+}
+}  // namespace
 
 // Invalid combination of extensions (restricted in the WEBGL_multiview spec).
 TEST_F(WEBGLMultiviewVertexShaderTest, InvalidBothMultiviewAndMultiview2)
@@ -663,9 +709,9 @@ TEST_F(WEBGLMultiviewVertexShaderTest, GLViewIDIsRenamed)
     mASTRoot->traverse(&glViewIDOVRByQualifier);
     EXPECT_EQ(0u, glViewIDOVRByQualifier.getNumberOfOccurrences());
 
-    SymbolOccurrenceCounterByName viewIDByName("ViewID_OVR");
-    mASTRoot->traverse(&viewIDByName);
-    EXPECT_EQ(6u, viewIDByName.getNumberOfOccurrences());
+    SymbolOccurrenceCounterByNameAndQualifier viewIDByNameAndQualifier("ViewID_OVR", EvqVertexOut);
+    mASTRoot->traverse(&viewIDByNameAndQualifier);
+    EXPECT_EQ(6u, viewIDByNameAndQualifier.getNumberOfOccurrences());
 }
 
 // The test checks that ViewID_OVR and InstanceID have the correct initializers based on the
@@ -690,4 +736,74 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, ViewIDAndInstanceIDHaveCorrectV
 
     EXPECT_TRUE(foundInHLSLCode("ViewID_OVR = (uvec1(gl_InstanceID) % 3)"));
     EXPECT_TRUE(foundInHLSLCode("InstanceID = (gl_InstanceID / 3)"));
+}
+
+// Test that ViewID_OVR is declared in an ESSL 3.00 fragment shader and decorated as an input
+// variable. ViewID_OVR should occur exactly once.
+TEST_F(WEBGLMultiviewFragmentShaderTest, ViewIDDeclaredAsFragmentInput)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    mExtraCompileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
+    compileAssumeSuccess(shaderString);
+    VariableOccursOnce(mASTRoot, "ViewID_OVR", EvqFragmentIn);
+}
+
+// Test that ViewID_OVR is declared in an ESSL 1.00 fragment shader and decorated as a varying.
+// ViewID_OVR should occur exactly once.
+TEST_F(WEBGLMultiviewFragmentShaderTest, ViewIDDeclaredAsInputVarying)
+{
+    const std::string &shaderString =
+        "#extension GL_OVR_multiview2 : require\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    mExtraCompileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
+    compileAssumeSuccess(shaderString);
+    VariableOccursOnce(mASTRoot, "ViewID_OVR", EvqVaryingIn);
+}
+
+// Test that ViewID_OVR is declared in an ESSL 1.00 vertex shader and decorated as a varying.
+// ViewID_OVR should occur twice - once for declaration and once for initialization.
+TEST_F(WEBGLMultiviewVertexShaderTest, ViewIDDeclaredAsOutputVarying)
+{
+    const std::string &shaderString =
+        "#extension GL_OVR_multiview2 : require\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    mExtraCompileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
+    compileAssumeSuccess(shaderString);
+    VariableOccursNTimes(mASTRoot, "ViewID_OVR", EvqVaryingOut, 2u);
+}
+
+// Test that there are no leaks of initialization of ViewID_OVR or declarations and initializations
+// of InstanceID.
+TEST_F(WEBGLMultiviewFragmentShaderTest, NoInstanceID)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    mExtraCompileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
+    compileAssumeSuccess(shaderString);
+
+    // Check that there are no occurrences of InstanceID. An incorrect implementation of the
+    // SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW pass might decide to declare and initialize
+    // InstanceID.
+    SymbolOccurrenceCounterByName instanceIDByName("InstanceID");
+    mASTRoot->traverse(&instanceIDByName);
+    EXPECT_EQ(0u, instanceIDByName.getNumberOfOccurrences());
+
+    // Check that there are no occurrences of gl_InstanceID. The reason is the same as in the
+    // previous check.
+    SymbolOccurrenceCounterByName glInstanceIDByName("gl_InstanceID");
+    mASTRoot->traverse(&glInstanceIDByName);
+    EXPECT_EQ(0u, glInstanceIDByName.getNumberOfOccurrences());
 }
