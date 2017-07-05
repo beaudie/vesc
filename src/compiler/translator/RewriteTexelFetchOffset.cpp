@@ -11,6 +11,7 @@
 #include "common/angleutils.h"
 #include "compiler/translator/IntermTraverse.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/ast_util.h"
 
 namespace sh
 {
@@ -107,7 +108,7 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
         TIntermSequence *constructOffsetIvecArguments = new TIntermSequence();
         constructOffsetIvecArguments->push_back(sequence->at(3)->getAsTyped());
 
-        TIntermTyped *zeroNode = TIntermTyped::CreateZero(TType(EbtInt));
+        TIntermTyped *zeroNode = CreateZero(TType(EbtInt));
         constructOffsetIvecArguments->push_back(zeroNode);
 
         offsetNode = TIntermAggregate::CreateConstructor(texCoordNode->getType(),

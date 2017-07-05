@@ -11,6 +11,7 @@
 #include "compiler/translator/FindMain.h"
 #include "compiler/translator/IntermTraverse.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/ast_util.h"
 #include "compiler/translator/util.h"
 
 namespace sh
@@ -29,7 +30,7 @@ void AddArrayZeroInitSequence(const TIntermTyped *initializedNode,
 
 TIntermBinary *CreateZeroInitAssignment(const TIntermTyped *initializedNode)
 {
-    TIntermTyped *zero = TIntermTyped::CreateZero(initializedNode->getType());
+    TIntermTyped *zero = CreateZero(initializedNode->getType());
     return new TIntermBinary(EOpAssign, initializedNode->deepCopy(), zero);
 }
 
@@ -40,8 +41,8 @@ void AddStructZeroInitSequence(const TIntermTyped *initializedNode,
     TStructure *structType = initializedNode->getType().getStruct();
     for (int i = 0; i < static_cast<int>(structType->fields().size()); ++i)
     {
-        TIntermBinary *element = new TIntermBinary(
-            EOpIndexDirectStruct, initializedNode->deepCopy(), TIntermTyped::CreateIndexNode(i));
+        TIntermBinary *element = new TIntermBinary(EOpIndexDirectStruct,
+                                                   initializedNode->deepCopy(), CreateIndexNode(i));
         if (element->isArray())
         {
             AddArrayZeroInitSequence(element, initSequenceOut);
@@ -69,8 +70,8 @@ void AddArrayZeroInitSequence(const TIntermTyped *initializedNode, TIntermSequen
     // http://crbug.com/709317
     for (unsigned int i = 0; i < initializedNode->getArraySize(); ++i)
     {
-        TIntermBinary *element = new TIntermBinary(EOpIndexDirect, initializedNode->deepCopy(),
-                                                   TIntermTyped::CreateIndexNode(i));
+        TIntermBinary *element =
+            new TIntermBinary(EOpIndexDirect, initializedNode->deepCopy(), CreateIndexNode(i));
         if (element->getType().isStructureContainingArrays())
         {
             AddStructZeroInitSequence(element, initSequenceOut);
@@ -175,8 +176,8 @@ class InitializeLocalsTraverser : public TIntermTraverser
                 }
                 else
                 {
-                    TIntermBinary *init = new TIntermBinary(
-                        EOpInitialize, symbol, TIntermTyped::CreateZero(symbol->getType()));
+                    TIntermBinary *init =
+                        new TIntermBinary(EOpInitialize, symbol, CreateZero(symbol->getType()));
                     queueReplacementWithParent(node, symbol, init, OriginalNode::BECOMES_CHILD);
                 }
             }
