@@ -341,6 +341,14 @@ class TParseContext : angle::NonCopyable
                        const TSourceLoc &intValueLine,
                        const std::string &intValueString,
                        int *numViews);
+    void parseNumInvocations(int intValue,
+                             const TSourceLoc &intValueLine,
+                             const std::string &intValueString,
+                             int *numInvocations);
+    void parseNumMaxVertices(int intValue,
+                             const TSourceLoc &intValueLine,
+                             const std::string &intValueString,
+                             int *numMaxVertices);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
                                           const TSourceLoc &qualifierTypeLine);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
@@ -408,7 +416,18 @@ class TParseContext : angle::NonCopyable
                                       TIntermTyped *falseExpression,
                                       const TSourceLoc &line);
 
-    // TODO(jmadill): make this private
+    int getGeometryMaxVertices() const { return mGeometryMaxVertices; }
+    int getGeometryInvocations() const { return mGeometryInvocations; }
+    TLayoutPrimitiveType getGeometryInputPrimitiveType() const
+    {
+        return mGeometryInputPrimitiveType;
+    }
+    TLayoutPrimitiveType getGeometryOutputPrimitiveType() const
+    {
+        return mGeometryOutputPrimitiveType;
+    }
+
+    // TODO(jmadill): make these private
     TSymbolTable &symbolTable;   // symbol table that goes with the language currently being parsed
 
   private:
@@ -508,6 +527,10 @@ class TParseContext : angle::NonCopyable
     void setAtomicCounterBindingDefaultOffset(const TPublicType &declaration,
                                               const TSourceLoc &location);
 
+    bool checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderInputLayoutQualifier(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderOutputLayoutQualifier(const TTypeQualifier &typeQualifier);
+
     // Set to true when the last/current declarator list was started with an empty declaration. The
     // non-empty declaration error check will need to be performed if the empty declaration is
     // followed by a declarator.
@@ -561,6 +584,14 @@ class TParseContext : angle::NonCopyable
 
     // Track the state of each atomic counter binding.
     std::map<int, AtomicCounterBindingState> mAtomicCounterBindingStates;
+
+    // Track the geometry shader global parameters declared in layout.
+    TLayoutPrimitiveType mGeometryInputPrimitiveType;
+    TLayoutPrimitiveType mGeometryOutputPrimitiveType;
+    int mGeometryInvocations;
+    int mGeometryMaxVertices;
+    int mMaxGeometryInvocations;
+    int mMaxGeometryMaxVertices;
 };
 
 int PaParseStrings(size_t count,
