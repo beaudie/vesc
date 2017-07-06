@@ -39,16 +39,6 @@
 
 // OpenGL Failing Tests
 1442 OPENGL : dEQP-GLES31.functional.texture.multisample.samples_* = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_min_filter = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_mag_filter = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_wrap_s = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_wrap_t = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_wrap_r = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_min_lod = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_max_lod = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_compare_mode = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_compare_func = FAIL
-1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_base_level = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_2d_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_2d_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_int_2d = FAIL
