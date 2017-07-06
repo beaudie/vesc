@@ -175,6 +175,11 @@ class TParseContext : angle::NonCopyable
         return mMultiviewAvailable &&
                (isExtensionEnabled("GL_OVR_multiview") || isExtensionEnabled("GL_OVR_multiview2"));
     }
+    bool isGeometryShaderExtensionEnabled() const
+    {
+        return isExtensionEnabled("GL_OES_geometry_shader") ||
+               isExtensionEnabled("GL_EXT_geometry_shader");
+    }
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc,
                                const char *name,
@@ -340,6 +345,14 @@ class TParseContext : angle::NonCopyable
                        const TSourceLoc &intValueLine,
                        const std::string &intValueString,
                        int *numViews);
+    void parseInvocations(int intValue,
+                          const TSourceLoc &intValueLine,
+                          const std::string &intValueString,
+                          int *numInvocations);
+    void parseMaxVertices(int intValue,
+                          const TSourceLoc &intValueLine,
+                          const std::string &intValueString,
+                          int *numMaxVertices);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
                                           const TSourceLoc &qualifierTypeLine);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
@@ -406,6 +419,20 @@ class TParseContext : angle::NonCopyable
                                       TIntermTyped *trueExpression,
                                       TIntermTyped *falseExpression,
                                       const TSourceLoc &line);
+
+    int getGeometryShaderMaxVertices() const { return mGeometryShaderMaxVertices; }
+    int getGeometryShaderInvocations() const
+    {
+        return (mGeometryShaderInvocations > 0) ? mGeometryShaderInvocations : 1;
+    }
+    TLayoutPrimitiveType getGeometryShaderInputPrimitiveType() const
+    {
+        return mGeometryShaderInputPrimitiveType;
+    }
+    TLayoutPrimitiveType getGeometryShaderOutputPrimitiveType() const
+    {
+        return mGeometryShaderOutputPrimitiveType;
+    }
 
     // TODO(jmadill): make this private
     TSymbolTable &symbolTable;   // symbol table that goes with the language currently being parsed
@@ -510,6 +537,10 @@ class TParseContext : angle::NonCopyable
     void setAtomicCounterBindingDefaultOffset(const TPublicType &declaration,
                                               const TSourceLoc &location);
 
+    bool checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderInputLayoutQualifier(const TTypeQualifier &typeQualifier);
+    bool parseGeometryShaderOutputLayoutQualifier(const TTypeQualifier &typeQualifier);
+
     // Set to true when the last/current declarator list was started with an empty declaration. The
     // non-empty declaration error check will need to be performed if the empty declaration is
     // followed by a declarator.
@@ -566,6 +597,14 @@ class TParseContext : angle::NonCopyable
 
     // Track the state of each atomic counter binding.
     std::map<int, AtomicCounterBindingState> mAtomicCounterBindingStates;
+
+    // Track the geometry shader global parameters declared in layout.
+    TLayoutPrimitiveType mGeometryShaderInputPrimitiveType;
+    TLayoutPrimitiveType mGeometryShaderOutputPrimitiveType;
+    int mGeometryShaderInvocations;
+    int mGeometryShaderMaxVertices;
+    int mMaxGeometryShaderInvocations;
+    int mMaxGeometryShaderMaxVertices;
 };
 
 int PaParseStrings(size_t count,
