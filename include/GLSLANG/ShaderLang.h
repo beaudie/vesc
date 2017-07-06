@@ -25,7 +25,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 176
+#define ANGLE_SH_VERSION 177
 
 enum ShShaderSpec
 {
@@ -287,6 +287,7 @@ struct ShBuiltInResources
     int ARM_shader_framebuffer_fetch;
     int OVR_multiview;
     int EXT_YUV_target;
+    int EXT_geometry_shader;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
@@ -401,6 +402,12 @@ struct ShBuiltInResources
 
     // maximum number of uniform block bindings
     int MaxUniformBufferBindings;
+
+    // EXT_geometry_shader constants
+    // TODO(jiawei.shao@intel.com): add complete geometry shader constants.
+    int MaxGeometryOutputVertices;
+    int MaxGeometryUniformComponents;
+    int MaxGeometryShaderInvocations;
 };
 
 //
