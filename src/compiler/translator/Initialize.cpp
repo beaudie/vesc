@@ -902,6 +902,10 @@ void IdentifyBuiltIns(sh::GLenum type,
         }
         break;
 
+        case GL_GEOMETRY_SHADER_EXT:
+            // TODO(jiawei.shao@intel.com): add Geometry Shader built-in variables.
+            break;
+
         default:
             assert(false && "Language not supported");
     }
@@ -941,6 +945,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     if (resources.EXT_YUV_target)
     {
         extBehavior["GL_EXT_YUV_target"] = EBhUndefined;
+    }
+    if (resources.EXT_geometry_shader)
+    {
+        extBehavior["GL_EXT_geometry_shader"] = EBhUndefined;
     }
 }
 

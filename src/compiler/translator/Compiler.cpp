@@ -145,9 +145,12 @@ int GetMaxUniformVectorsForShaderType(GLenum shaderType, const ShBuiltInResource
             return resources.MaxVertexUniformVectors;
         case GL_FRAGMENT_SHADER:
             return resources.MaxFragmentUniformVectors;
+
+        // TODO (jiawei.shao@intel.com): check if we need finer-grained component counting
         case GL_COMPUTE_SHADER:
-            // TODO (jiawei.shao@intel.com): check if we need finer-grained component counting
             return resources.MaxComputeUniformComponents / 4;
+        case GL_GEOMETRY_SHADER_EXT:
+            return resources.MaxGeometryUniformComponents / 4;
         default:
             UNIMPLEMENTED();
             return -1;
@@ -242,6 +245,10 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mDiagnostics(infoSink.info),
       mSourcePath(nullptr),
       mComputeShaderLocalSizeDeclared(false),
+      mGeometryMaxVertices(-1),
+      mGeometryInvocations(0),
+      mGeometryInputPrimitiveType(EgsUndefined),
+      mGeometryOutputPrimitiveType(EgsUndefined),
       mTemporaryId()
 {
     mComputeShaderLocalSize.fill(1);
@@ -358,6 +365,14 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             // Can't enable both extensions at the same time.
             mDiagnostics.globalError("Can't enable both OVR_multiview and OVR_multiview2");
             success = false;
+        }
+
+        if (success && shaderType == GL_GEOMETRY_SHADER_EXT)
+        {
+            mGeometryInputPrimitiveType  = parseContext.getGeometryInputPrimitiveType();
+            mGeometryOutputPrimitiveType = parseContext.getGeometryOutputPrimitiveType();
+            mGeometryMaxVertices         = parseContext.getGeometryMaxVertices();
+            mGeometryInvocations         = parseContext.getGeometryInvocations();
         }
 
         // Disallow expressions deemed too complex.
@@ -620,15 +635,13 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
             symbolTable.setDefaultPrecision(EbtInt, EbpMedium);
             break;
         case GL_VERTEX_SHADER:
-            symbolTable.setDefaultPrecision(EbtInt, EbpHigh);
-            symbolTable.setDefaultPrecision(EbtFloat, EbpHigh);
-            break;
         case GL_COMPUTE_SHADER:
+        case GL_GEOMETRY_SHADER_EXT:
             symbolTable.setDefaultPrecision(EbtInt, EbpHigh);
             symbolTable.setDefaultPrecision(EbtFloat, EbpHigh);
             break;
         default:
-            assert(false && "Language not supported");
+            UNIMPLEMENTED();
     }
     // Set defaults for sampler types that have default precision, even those that are
     // only available if an extension exists.
@@ -688,6 +701,7 @@ void TCompiler::setResourceString()
         << ":ARM_shader_framebuffer_fetch:" << compileResources.ARM_shader_framebuffer_fetch
         << ":OVR_multiview:" << compileResources.OVR_multiview
         << ":EXT_YUV_target:" << compileResources.EXT_YUV_target
+        << ":EXT_geometry_shader:" << compileResources.EXT_geometry_shader
         << ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
         << ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
         << ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset
@@ -719,7 +733,10 @@ void TCompiler::setResourceString()
         << ":MaxVertexAtomicCounterBuffers:" << compileResources.MaxVertexAtomicCounterBuffers
         << ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
         << ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
-        << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize;
+        << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize
+        << ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
+        << ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+        << ":MaxGeometryAtomicCounters:" << compileResources.MaxGeometryShaderInvocations;
     // clang-format on
 
     builtInResourcesString = strstream.str();
@@ -742,6 +759,11 @@ void TCompiler::clearResults()
     mGLPositionInitialized = false;
 
     mNumViews = -1;
+
+    mGeometryInputPrimitiveType  = EgsUndefined;
+    mGeometryOutputPrimitiveType = EgsUndefined;
+    mGeometryInvocations         = 0;
+    mGeometryMaxVertices         = -1;
 
     builtInFunctionEmulator.cleanup();
 
