@@ -120,9 +120,7 @@ void UseInterfaceBlockFields(TIntermBlock *root,
                              const InterfaceBlockList &blocks,
                              const TSymbolTable &symbolTable)
 {
-    TIntermFunctionDefinition *main = FindMain(root);
-    TIntermBlock *mainBody          = main->getBody();
-    ASSERT(mainBody);
+    TIntermBlock *mainBody = FindMainBody(root);
     InsertUseCode(mainBody->getSequence(), blocks, symbolTable);
 }
 
