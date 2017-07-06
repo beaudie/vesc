@@ -5571,6 +5571,26 @@ bool ValidateTexParameterBase(Context *context,
             break;
     }
 
+    if (target == GL_TEXTURE_2D_MULTISAMPLE)
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_MIN_FILTER:
+            case GL_TEXTURE_MAG_FILTER:
+            case GL_TEXTURE_WRAP_S:
+            case GL_TEXTURE_WRAP_T:
+            case GL_TEXTURE_WRAP_R:
+            case GL_TEXTURE_MIN_LOD:
+            case GL_TEXTURE_MAX_LOD:
+            case GL_TEXTURE_COMPARE_MODE:
+            case GL_TEXTURE_COMPARE_FUNC:
+                context->handleError(InvalidEnum() << "INVALID_ENUM error is generated if target "
+                                                      "is TEXTURE_2D_MULTISAMPLE, and pname is any "
+                                                      "sampler state from table 20.11.");
+                return false;
+        }
+    }
+
     switch (pname)
     {
         case GL_TEXTURE_WRAP_S:
@@ -5673,6 +5693,12 @@ bool ValidateTexParameterBase(Context *context,
             {
                 context->handleError(InvalidOperation()
                                      << "Base level must be 0 for external textures.");
+                return false;
+            }
+            if (target == GL_TEXTURE_2D_MULTISAMPLE && static_cast<GLuint>(params[0]) != 0)
+            {
+                context->handleError(InvalidOperation()
+                                     << "Base level must be 0 for multisampled textures.");
                 return false;
             }
             break;
