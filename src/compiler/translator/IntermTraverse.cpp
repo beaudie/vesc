@@ -699,11 +699,10 @@ void TIntermTraverser::clearReplacementQueue()
     mInsertions.clear();
 }
 
-void TIntermTraverser::queueReplacement(TIntermNode *original,
-                                        TIntermNode *replacement,
+void TIntermTraverser::queueReplacement(TIntermNode *replacement,
                                         OriginalNode originalStatus)
 {
-    queueReplacementWithParent(getParentNode(), original, replacement, originalStatus);
+    queueReplacementWithParent(getParentNode(), mPath.back(), replacement, originalStatus);
 }
 
 void TIntermTraverser::queueReplacementWithParent(TIntermNode *parent,
