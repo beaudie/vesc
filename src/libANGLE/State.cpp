@@ -1917,6 +1917,11 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         *params =
             getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D_ARRAY);
         break;
+      case GL_TEXTURE_BINDING_2D_MULTISAMPLE:
+          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+          *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
+                                        GL_TEXTURE_2D_MULTISAMPLE);
+          break;
       case GL_TEXTURE_BINDING_EXTERNAL_OES:
           ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
           *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
