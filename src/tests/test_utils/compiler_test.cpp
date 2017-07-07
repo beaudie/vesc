@@ -103,6 +103,11 @@ void MatchOutputCodeTest::addOutputType(const ShShaderOutput outputType)
     mOutputCode[outputType] = std::string();
 }
 
+bool MatchOutputCodeTest::isOutputTypeAdded(const ShShaderOutput outputType) const
+{
+    return mOutputCode.find(outputType) != mOutputCode.end();
+}
+
 ShBuiltInResources *MatchOutputCodeTest::getResources()
 {
     return &mResources;
@@ -140,14 +145,19 @@ bool MatchOutputCodeTest::compileWithSettings(ShShaderOutput output,
 
 bool MatchOutputCodeTest::foundInCode(ShShaderOutput output, const char *stringToFind) const
 {
+    return findInCode(output, stringToFind) != std::string::npos;
+}
+
+size_t MatchOutputCodeTest::findInCode(ShShaderOutput output, const char *stringToFind) const
+{
     const auto code = mOutputCode.find(output);
     EXPECT_NE(mOutputCode.end(), code);
     if (code == mOutputCode.end())
     {
-        return false;
+        return std::string::npos;
     }
 
-    return code->second.find(stringToFind) != std::string::npos;
+    return code->second.find(stringToFind);
 }
 
 bool MatchOutputCodeTest::foundInCode(ShShaderOutput output,
