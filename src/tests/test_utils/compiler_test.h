@@ -46,6 +46,7 @@ class MatchOutputCodeTest : public testing::Test
                         ShShaderOutput outputType);
 
     void addOutputType(const ShShaderOutput outputType);
+    bool isOutputTypeAdded(const ShShaderOutput outputType) const;
 
     ShBuiltInResources *getResources();
 
@@ -64,6 +65,9 @@ class MatchOutputCodeTest : public testing::Test
     }
 
     bool foundInCode(ShShaderOutput output, const char *stringToFind) const;
+    // Returns the position of the first character of the first match in the translated output
+    // source. If no matches are found, then string::npos is returned.
+    size_t findInCode(ShShaderOutput output, const char *stringToFind) const;
 
     // Test that the string occurs for exactly expectedOccurrences times
     bool foundInCode(ShShaderOutput output,
