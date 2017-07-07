@@ -46,6 +46,7 @@ class MatchOutputCodeTest : public testing::Test
                         ShShaderOutput outputType);
 
     void addOutputType(const ShShaderOutput outputType);
+    bool isOutputTypeAdded(const ShShaderOutput outputType) const;
 
     ShBuiltInResources *getResources();
 
@@ -64,6 +65,7 @@ class MatchOutputCodeTest : public testing::Test
     }
 
     bool foundInCode(ShShaderOutput output, const char *stringToFind) const;
+    size_t findInCode(ShShaderOutput output, const char *stringToFind) const;
 
     // Test that the string occurs for exactly expectedOccurrences times
     bool foundInCode(ShShaderOutput output,
