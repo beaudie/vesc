@@ -123,20 +123,27 @@ class WEBGLMultiviewVertexShaderOutputCodeTest : public MatchOutputCodeTest
         : MatchOutputCodeTest(GL_VERTEX_SHADER, 0, SH_ESSL_OUTPUT)
     {
         addOutputType(SH_GLSL_COMPATIBILITY_OUTPUT);
-#if defined(ANGLE_ENABLE_HLSL)
-        addOutputType(SH_HLSL_4_1_OUTPUT);
-#endif
+
         getResources()->OVR_multiview = 1;
         getResources()->MaxViewsOVR   = 4;
     }
+
+    void requestHLSLOutput()
+    {
+#if defined(ANGLE_ENABLE_HLSL)
+        addOutputType(SH_HLSL_4_1_OUTPUT);
+#endif
+    }
+
     bool foundInAllGLSLCode(const char *str)
     {
-        return foundInCode(SH_GLSL_COMPATIBILITY_OUTPUT, str) && foundInCode(SH_ESSL_OUTPUT, str);
+        return foundInGLSLCode(str) && foundInESSLCode(str);
     }
 
     bool foundInHLSLCode(const char *stringToFind) const
     {
 #if defined(ANGLE_ENABLE_HLSL)
+        ASSERT(isOutputTypeAdded(SH_HLSL_4_1_OUTPUT));
         return foundInCode(SH_HLSL_4_1_OUTPUT, stringToFind);
 #else
         return true;
@@ -723,6 +730,7 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, ViewIDAndInstanceIDHaveCorrectV
         "   gl_Position.yzw = vec3(0., 0., 1.);\n"
         "   myInstance = gl_InstanceID;\n"
         "}\n";
+    requestHLSLOutput();
     compile(shaderString, SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW);
 
     EXPECT_TRUE(foundInAllGLSLCode("webgl_angle_ViewID_OVR = (uint(gl_InstanceID) % 3u)"));
@@ -808,6 +816,40 @@ TEST_F(WEBGLMultiviewVertexShaderTest, ViewIDDeclaredAsFlatOutput)
     mExtraCompileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
     compileAssumeSuccess(shaderString);
     VariableOccursNTimes(mASTRoot, "ViewID_OVR", EvqFlatOut, 2u);
+}
+
+// The test checks that the code to select the viewport is present in the output code for
+// GLSL/ESSL.
+TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, GLViewportIndexIsSet)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 3) in;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    compile(shaderString, SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW |
+                              SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER);
+
+    // Check that the GL_NV_viewport_array2 extension is requested.
+    EXPECT_TRUE(foundInAllGLSLCode("#extension GL_NV_viewport_array2 : require"));
+
+    const char glViewportIndexAssignment[] = "gl_ViewportIndex = int(webgl_angle_ViewID_OVR)";
+
+    // Check that the viewport index is selected.
+    EXPECT_TRUE(foundInAllGLSLCode(glViewportIndexAssignment));
+
+    // ViewID initialization must happen before gl_ViewportIndex is set.
+    const char viewIDOVRAssignment[] = "webgl_angle_ViewID_OVR = (uint(gl_InstanceID) % 3u)";
+    size_t viewIDOVRAssignmentLoc = findInCode(SH_GLSL_COMPATIBILITY_OUTPUT, viewIDOVRAssignment);
+    size_t glViewportIndexAssignmentLoc =
+        findInCode(SH_GLSL_COMPATIBILITY_OUTPUT, glViewportIndexAssignment);
+    EXPECT_LT(viewIDOVRAssignmentLoc, glViewportIndexAssignmentLoc);
+
+    viewIDOVRAssignmentLoc       = findInCode(SH_ESSL_OUTPUT, viewIDOVRAssignment);
+    glViewportIndexAssignmentLoc = findInCode(SH_ESSL_OUTPUT, glViewportIndexAssignment);
+    EXPECT_LT(viewIDOVRAssignmentLoc, glViewportIndexAssignmentLoc);
 }
 
 }  // namespace
