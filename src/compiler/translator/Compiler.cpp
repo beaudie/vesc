@@ -38,6 +38,7 @@
 #include "compiler/translator/ValidateMultiviewWebGL.h"
 #include "compiler/translator/ValidateOutputs.h"
 #include "compiler/translator/VariablePacker.h"
+#include "compiler/translator/util.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
 namespace sh
@@ -79,6 +80,7 @@ void DumpFuzzerCase(char const *const *shaderStrings,
     fclose(f);
 }
 #endif  // defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
+
 }  // anonymous namespace
 
 bool IsWebGLBasedSpec(ShShaderSpec spec)
@@ -431,7 +433,8 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && (compileOptions & SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW) &&
             parseContext.isMultiviewExtensionEnabled() && getShaderType() != GL_COMPUTE_SHADER)
         {
-            DeclareAndInitBuiltinsForInstancedMultiview(root, getNumViews(), getShaderType());
+            DeclareAndInitBuiltinsForInstancedMultiview(root, mNumViews, shaderType, compileOptions,
+                                                        outputType);
         }
 
         // This pass might emit short circuits so keep it before the short circuit unfolding

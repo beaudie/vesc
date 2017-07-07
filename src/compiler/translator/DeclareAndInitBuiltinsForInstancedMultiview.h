@@ -12,11 +12,13 @@
 // its qualifier to EvqTemporary.
 // - Add initializers of ViewID_OVR and InstanceID to the beginning of the body of main. The pass
 // should be executed before any variables get collected so that usage of gl_InstanceID is recorded.
+// - If selectViewport is true, the expression "gl_ViewportIndex = int(ViewID_OVR)".
 //
 
 #ifndef COMPILER_TRANSLATOR_DECLAREANDINITBUILTINSFORINSTANCEDMULTIVIEW_H_
 #define COMPILER_TRANSLATOR_DECLAREANDINITBUILTINSFORINSTANCEDMULTIVIEW_H_
 
+#include "GLSLANG/ShaderLang.h"
 #include "angle_gl.h"
 
 class TIntermBlock;
@@ -26,7 +28,9 @@ namespace sh
 
 void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
                                                  unsigned numberOfViews,
-                                                 GLenum shaderType);
+                                                 GLenum shaderType,
+                                                 ShCompileOptions compileOptions,
+                                                 ShShaderOutput shaderOutput);
 
 }  // namespace sh
 
