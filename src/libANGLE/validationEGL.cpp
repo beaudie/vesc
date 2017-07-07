@@ -714,6 +714,20 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
               }
               break;
 
+          case EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE:
+              if (!display->getExtensions().programCacheControl)
+              {
+                  return EglBadAttribute()
+                         << "Attribute EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE "
+                            "requires EGL_ANGLE_program_cache_control.";
+              }
+              if (value != EGL_TRUE && value != EGL_FALSE)
+              {
+                  return EglBadAttribute() << "EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE must "
+                                              "be EGL_TRUE or EGL_FALSE.";
+              }
+              break;
+
           default:
               return EglBadAttribute() << "Unknown attribute.";
         }
