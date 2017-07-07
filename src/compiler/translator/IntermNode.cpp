@@ -1043,6 +1043,24 @@ TQualifier TIntermTernary::DetermineQualifier(TIntermTyped *cond,
     return EvqTemporary;
 }
 
+TIntermTyped *TIntermTernary::fold()
+{
+    if (mCondition->getAsConstantUnion())
+    {
+        if (mCondition->getAsConstantUnion()->getBConst(0))
+        {
+            mTrueExpression->getTypePointer()->setQualifier(mType.getQualifier());
+            return mTrueExpression;
+        }
+        else
+        {
+            mFalseExpression->getTypePointer()->setQualifier(mType.getQualifier());
+            return mFalseExpression;
+        }
+    }
+    return this;
+}
+
 void TIntermSwizzle::promote()
 {
     TQualifier resultQualifier = EvqTemporary;
@@ -1116,7 +1134,8 @@ void TIntermBinary::promote()
     ASSERT(!isMultiplication() ||
            mOp == GetMulOpBasedOnOperands(mLeft->getType(), mRight->getType()));
 
-    // Comma is handled as a special case.
+    // Comma is handled as a special case. Note that the comma node qualifier depends on the shader
+    // version and so is not being set here.
     if (mOp == EOpComma)
     {
         setType(mRight->getType());
@@ -1351,7 +1370,7 @@ TIntermTyped *TIntermSwizzle::fold()
     TIntermConstantUnion *operandConstant = mOperand->getAsConstantUnion();
     if (operandConstant == nullptr)
     {
-        return nullptr;
+        return this;
     }
 
     TConstantUnion *constArray = new TConstantUnion[mSwizzleOffsets.size()];
@@ -1368,11 +1387,20 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
     TIntermConstantUnion *rightConstant = mRight->getAsConstantUnion();
     switch (mOp)
     {
+        case EOpComma:
+        {
+            if (mLeft->hasSideEffects())
+            {
+                return this;
+            }
+            mRight->getTypePointer()->setQualifier(mType.getQualifier());
+            return mRight;
+        }
         case EOpIndexDirect:
         {
             if (leftConstant == nullptr || rightConstant == nullptr)
             {
-                return nullptr;
+                return this;
             }
             int index = rightConstant->getIConst(0);
 
@@ -1383,7 +1411,7 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
         {
             if (leftConstant == nullptr || rightConstant == nullptr)
             {
-                return nullptr;
+                return this;
             }
             const TFieldList &fields = mLeft->getType().getStruct()->fields();
             size_t index             = static_cast<size_t>(rightConstant->getIConst(0));
@@ -1400,15 +1428,19 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
         case EOpIndexIndirect:
         case EOpIndexDirectInterfaceBlock:
             // Can never be constant folded.
-            return nullptr;
+            return this;
         default:
         {
             if (leftConstant == nullptr || rightConstant == nullptr)
             {
-                return nullptr;
+                return this;
             }
             TConstantUnion *constArray =
                 leftConstant->foldBinary(mOp, rightConstant, diagnostics, mLeft->getLine());
+            if (!constArray)
+            {
+                return this;
+            }
 
             // Nodes may be constant folded without being qualified as constant.
             return CreateFoldedNode(constArray, this, mType.getQualifier());
@@ -1421,7 +1453,7 @@ TIntermTyped *TIntermUnary::fold(TDiagnostics *diagnostics)
     TIntermConstantUnion *operandConstant = mOperand->getAsConstantUnion();
     if (operandConstant == nullptr)
     {
-        return nullptr;
+        return this;
     }
 
     TConstantUnion *constArray = nullptr;
@@ -1449,6 +1481,10 @@ TIntermTyped *TIntermUnary::fold(TDiagnostics *diagnostics)
             constArray = operandConstant->foldUnaryComponentWise(mOp, diagnostics);
             break;
     }
+    if (constArray == nullptr)
+    {
+        return this;
+    }
 
     // Nodes may be constant folded without being qualified as constant.
     return CreateFoldedNode(constArray, this, mType.getQualifier());
@@ -1461,7 +1497,7 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
     {
         if (param->getAsConstantUnion() == nullptr)
         {
-            return nullptr;
+            return this;
         }
     }
     TConstantUnion *constArray = nullptr;
