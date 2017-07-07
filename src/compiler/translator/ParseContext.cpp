@@ -176,21 +176,19 @@ TParseContext::~TParseContext()
 {
 }
 
-//
-// Look at a '.' field selector string and change it into offsets
-// for a vector.
-//
-bool TParseContext::parseVectorFields(const TString &compString,
+bool TParseContext::parseVectorFields(const TSourceLoc &line,
+                                      const TString &compString,
                                       int vecSize,
-                                      TVectorFields &fields,
-                                      const TSourceLoc &line)
+                                      TVector<int> *fieldOffsets)
 {
-    fields.num = (int)compString.size();
-    if (fields.num > 4)
+    ASSERT(fieldOffsets);
+    size_t fieldCount = compString.size();
+    if (fieldCount > 4u)
     {
         error(line, "illegal vector field selection", compString.c_str());
         return false;
     }
+    fieldOffsets->resize(fieldCount);
 
     enum
     {
@@ -199,57 +197,57 @@ bool TParseContext::parseVectorFields(const TString &compString,
         estpq
     } fieldSet[4];
 
-    for (int i = 0; i < fields.num; ++i)
+    for (int i = 0; i < fieldOffsets->size(); ++i)
     {
         switch (compString[i])
         {
             case 'x':
-                fields.offsets[i] = 0;
+                (*fieldOffsets)[i] = 0;
                 fieldSet[i]       = exyzw;
                 break;
             case 'r':
-                fields.offsets[i] = 0;
+                (*fieldOffsets)[i] = 0;
                 fieldSet[i]       = ergba;
                 break;
             case 's':
-                fields.offsets[i] = 0;
+                (*fieldOffsets)[i] = 0;
                 fieldSet[i]       = estpq;
                 break;
             case 'y':
-                fields.offsets[i] = 1;
+                (*fieldOffsets)[i] = 1;
                 fieldSet[i]       = exyzw;
                 break;
             case 'g':
-                fields.offsets[i] = 1;
+                (*fieldOffsets)[i] = 1;
                 fieldSet[i]       = ergba;
                 break;
             case 't':
-                fields.offsets[i] = 1;
+                (*fieldOffsets)[i] = 1;
                 fieldSet[i]       = estpq;
                 break;
             case 'z':
-                fields.offsets[i] = 2;
+                (*fieldOffsets)[i] = 2;
                 fieldSet[i]       = exyzw;
                 break;
             case 'b':
-                fields.offsets[i] = 2;
+                (*fieldOffsets)[i] = 2;
                 fieldSet[i]       = ergba;
                 break;
             case 'p':
-                fields.offsets[i] = 2;
+                (*fieldOffsets)[i] = 2;
                 fieldSet[i]       = estpq;
                 break;
 
             case 'w':
-                fields.offsets[i] = 3;
+                (*fieldOffsets)[i] = 3;
                 fieldSet[i]       = exyzw;
                 break;
             case 'a':
-                fields.offsets[i] = 3;
+                (*fieldOffsets)[i] = 3;
                 fieldSet[i]       = ergba;
                 break;
             case 'q':
-                fields.offsets[i] = 3;
+                (*fieldOffsets)[i] = 3;
                 fieldSet[i]       = estpq;
                 break;
             default:
@@ -258,9 +256,9 @@ bool TParseContext::parseVectorFields(const TString &compString,
         }
     }
 
-    for (int i = 0; i < fields.num; ++i)
+    for (int i = 0; i < fieldOffsets->size(); ++i)
     {
-        if (fields.offsets[i] >= vecSize)
+        if ((*fieldOffsets)[i] >= vecSize)
         {
             error(line, "vector field selection out of range", compString.c_str());
             return false;
@@ -1682,8 +1680,9 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
     }
     else
     {
-        return intermediate.addSymbol(variable->getUniqueId(), variable->getName(),
-                                      variable->getType(), location);
+        TIntermSymbol *symbolNode = new TIntermSymbol(variable->getUniqueId(), variable->getName(), variable->getType());
+        symbolNode->setLine(location);
+        return symbolNode;
     }
 }
 
@@ -1800,8 +1799,9 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         }
     }
 
-    TIntermSymbol *intermSymbol = intermediate.addSymbol(
-        variable->getUniqueId(), variable->getName(), variable->getType(), line);
+    TIntermSymbol *intermSymbol = new TIntermSymbol(
+        variable->getUniqueId(), variable->getName(), variable->getType());
+    intermSymbol->setLine(line);
     *initNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
     if (*initNode == nullptr)
     {
@@ -2188,7 +2188,7 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         // But if the empty declaration is declaring a struct type, the symbol node will store that.
         if (type.getBasicType() == EbtStruct)
         {
-            symbol = intermediate.addSymbol(0, "", type, identifierOrTypeLocation);
+            symbol = new TIntermSymbol(0, "", type);
         }
         else if (IsAtomicCounter(publicType.getBasicType()))
         {
@@ -2213,8 +2213,7 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
 
         if (variable)
         {
-            symbol = intermediate.addSymbol(variable->getUniqueId(), identifier, type,
-                                            identifierOrTypeLocation);
+            symbol = new TIntermSymbol(variable->getUniqueId(), identifier, type);
         }
     }
 
@@ -2222,6 +2221,7 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
     declaration->setLine(identifierOrTypeLocation);
     if (symbol)
     {
+        symbol->setLine(identifierOrTypeLocation);
         declaration->appendDeclarator(symbol);
     }
     return declaration;
@@ -2263,10 +2263,10 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
     TIntermDeclaration *declaration = new TIntermDeclaration();
     declaration->setLine(identifierLocation);
 
-    TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
-    if (variable && symbol)
+    if (variable)
     {
-        symbol->setId(variable->getUniqueId());
+        TIntermSymbol *symbol = new TIntermSymbol(variable->getUniqueId(), identifier, arrayType);
+        symbol->setLine(identifierLocation);
         declaration->appendDeclarator(symbol);
     }
 
@@ -2394,8 +2394,8 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
 
     symbolTable.addInvariantVarying(std::string(identifier->c_str()));
 
-    TIntermSymbol *intermSymbol =
-        intermediate.addSymbol(variable->getUniqueId(), *identifier, type, identifierLoc);
+    TIntermSymbol *intermSymbol = new TIntermSymbol(variable->getUniqueId(), *identifier, type);
+    intermSymbol->setLine(identifierLoc);
 
     return new TIntermInvariantDeclaration(intermSymbol, identifierLoc);
 }
@@ -2426,10 +2426,10 @@ void TParseContext::parseDeclarator(TPublicType &publicType,
     }
     declareVariable(identifierLocation, identifier, type, &variable);
 
-    TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, type, identifierLocation);
-    if (variable && symbol)
+    if (variable)
     {
-        symbol->setId(variable->getUniqueId());
+        TIntermSymbol *symbol = new TIntermSymbol(variable->getUniqueId(), identifier, type);
+        symbol->setLine(identifierLocation);
         declarationOut->appendDeclarator(symbol);
     }
 }
@@ -2469,8 +2469,9 @@ void TParseContext::parseArrayDeclarator(TPublicType &publicType,
         declareVariable(identifierLocation, identifier, arrayType, &variable);
 
         TIntermSymbol *symbol =
-            intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
-        if (variable && symbol)
+            new TIntermSymbol(0, identifier, arrayType);
+        symbol->setLine(identifierLocation);
+        if (variable)
             symbol->setId(variable->getUniqueId());
 
         declarationOut->appendDeclarator(symbol);
@@ -2744,6 +2745,8 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
     {
         const TConstParameter &param = function.getParam(i);
 
+        TIntermSymbol *symbol = nullptr;
+
         // If the parameter has no name, it's not an error, just don't add it to symbol table (could
         // be used for unused args).
         if (param.name != nullptr)
@@ -2751,20 +2754,25 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
             TVariable *variable = new TVariable(param.name, *param.type);
 
             // Insert the parameter in the symbol table.
-            if (insertParametersToSymbolTable && !symbolTable.declare(variable))
+            if (insertParametersToSymbolTable)
             {
-                error(location, "redefinition", variable->getName().c_str());
-                prototype->appendParameter(intermediate.addSymbol(0, "", *param.type, location));
-                continue;
+                if (symbolTable.declare(variable))
+                {
+                    symbol = new TIntermSymbol(variable->getUniqueId(), variable->getName(), variable->getType());
+                }
+                else
+                {
+                    error(location, "redefinition", variable->getName().c_str());
+                }
             }
-            TIntermSymbol *symbol = intermediate.addSymbol(
-                variable->getUniqueId(), variable->getName(), variable->getType(), location);
-            prototype->appendParameter(symbol);
         }
-        else
+        if (!symbol)
         {
-            prototype->appendParameter(intermediate.addSymbol(0, "", *param.type, location));
+            // The parameter had no name or declaring the symbol failed - either way, add a nameless symbol.
+            symbol = new TIntermSymbol(0, "", *param.type);
         }
+        symbol->setLine(location);
+        prototype->appendParameter(symbol);
     }
     return prototype;
 }
@@ -3259,8 +3267,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         symbolName = instanceTypeDef->getName();
     }
 
-    TIntermSymbol *blockSymbol =
-        intermediate.addSymbol(symbolId, symbolName, interfaceBlockType, typeQualifier.line);
+    TIntermSymbol *blockSymbol = new TIntermSymbol(symbolId, symbolName, interfaceBlockType);
+    blockSymbol->setLine(typeQualifier.line);
     TIntermDeclaration *declaration = new TIntermDeclaration();
     declaration->appendDeclarator(blockSymbol);
     declaration->setLine(nameLine);
@@ -3432,8 +3440,10 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
     }
     else
     {
-        return intermediate.addIndex(EOpIndexIndirect, baseExpression, indexExpression, location,
-                                     mDiagnostics);
+        TIntermBinary *node = new TIntermBinary(EOpIndexIndirect, baseExpression, indexExpression);
+        node->setLine(location);
+        // Indirect indexing can never be constant folded.
+        return node;
     }
 }
 
@@ -3474,15 +3484,22 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
 
     if (baseExpression->isVector())
     {
-        TVectorFields fields;
-        if (!parseVectorFields(fieldString, baseExpression->getNominalSize(), fields,
-                               fieldLocation))
+        TVector<int> fieldOffsets;
+        if (!parseVectorFields(fieldLocation, fieldString, baseExpression->getNominalSize(), &fieldOffsets))
         {
-            fields.num        = 1;
-            fields.offsets[0] = 0;
+            fieldOffsets.resize(1);
+            fieldOffsets[0] = 0;
+        }
+        TIntermSwizzle *node = new TIntermSwizzle(baseExpression, fieldOffsets);
+        node->setLine(dotLocation);
+
+        TIntermTyped *folded = node->fold();
+        if (folded)
+        {
+            return folded;
         }
 
-        return TIntermediate::AddSwizzle(baseExpression, fields, dotLocation);
+        return node;
     }
     else if (baseExpression->getBasicType() == EbtStruct)
     {
@@ -3542,8 +3559,10 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             {
                 TIntermTyped *index = TIntermTyped::CreateIndexNode(i);
                 index->setLine(fieldLocation);
-                return intermediate.addIndex(EOpIndexDirectInterfaceBlock, baseExpression, index,
-                                             dotLocation, mDiagnostics);
+                TIntermBinary *node = new TIntermBinary(EOpIndexDirectInterfaceBlock, baseExpression, index);
+                node->setLine(dotLocation);
+                // Indexing interface blocks can never be constant folded.
+                return node;
             }
             else
             {
@@ -4065,12 +4084,8 @@ TIntermSwitch *TParseContext::addSwitch(TIntermTyped *init,
         }
     }
 
-    TIntermSwitch *node = intermediate.addSwitch(init, statementList, loc);
-    if (node == nullptr)
-    {
-        error(loc, "erroneous switch statement", "switch");
-        return nullptr;
-    }
+    TIntermSwitch *node = new TIntermSwitch(init, statementList);
+    node->setLine(loc);
     return node;
 }
 
@@ -4099,12 +4114,8 @@ TIntermCase *TParseContext::addCase(TIntermTyped *condition, const TSourceLoc &l
     {
         error(condition->getLine(), "case label must be constant", "case");
     }
-    TIntermCase *node = intermediate.addCase(condition, loc);
-    if (node == nullptr)
-    {
-        error(loc, "erroneous case statement", "case");
-        return nullptr;
-    }
+    TIntermCase *node = new TIntermCase(condition);
+    node->setLine(loc);
     return node;
 }
 
@@ -4115,12 +4126,8 @@ TIntermCase *TParseContext::addDefault(const TSourceLoc &loc)
         error(loc, "default labels need to be inside switch statements", "default");
         return nullptr;
     }
-    TIntermCase *node = intermediate.addCase(nullptr, loc);
-    if (node == nullptr)
-    {
-        error(loc, "erroneous default statement", "default");
-        return nullptr;
-    }
+    TIntermCase *node = new TIntermCase(nullptr);
+    node->setLine(loc);
     return node;
 }
 
@@ -4623,7 +4630,19 @@ TIntermTyped *TParseContext::addComma(TIntermTyped *left,
               ",");
     }
 
-    return TIntermediate::AddComma(left, right, loc, mShaderVersion);
+    TIntermTyped *commaNode = nullptr;
+    if (!left->hasSideEffects())
+    {
+        commaNode = right;
+    }
+    else
+    {
+        commaNode = new TIntermBinary(EOpComma, left, right);
+        commaNode->setLine(loc);
+    }
+    TQualifier resultQualifier = TIntermBinary::GetCommaQualifier(mShaderVersion, left, right);
+    commaNode->getTypePointer()->setQualifier(resultQualifier);
+    return commaNode;
 }
 
 TIntermBranch *TParseContext::addBranch(TOperator op, const TSourceLoc &loc)
@@ -5002,8 +5021,10 @@ TIntermTyped *TParseContext::addTernarySelection(TIntermTyped *cond,
 
     if (trueExpression->getType() != falseExpression->getType())
     {
-        binaryOpError(loc, "?:", trueExpression->getCompleteString(),
-                      falseExpression->getCompleteString());
+        std::stringstream reasonStream;
+        reasonStream << "mismatching ternary operator operand types '" << trueExpression->getCompleteString() << " and '" << falseExpression->getCompleteString() << "'";
+        std::string reason = reasonStream.str();
+        error(loc, reason.c_str(), "?:");
         return falseExpression;
     }
     if (IsOpaqueType(trueExpression->getBasicType()))
@@ -5042,7 +5063,29 @@ TIntermTyped *TParseContext::addTernarySelection(TIntermTyped *cond,
         return falseExpression;
     }
 
-    return TIntermediate::AddTernarySelection(cond, trueExpression, falseExpression, loc);
+    // Note that the node resulting from here can be a constant union without being qualified as
+    // constant.
+    if (cond->getAsConstantUnion())
+    {
+        TQualifier resultQualifier =
+            TIntermTernary::DetermineQualifier(cond, trueExpression, falseExpression);
+        if (cond->getAsConstantUnion()->getBConst(0))
+        {
+            trueExpression->getTypePointer()->setQualifier(resultQualifier);
+            return trueExpression;
+        }
+        else
+        {
+            falseExpression->getTypePointer()->setQualifier(resultQualifier);
+            return falseExpression;
+        }
+    }
+
+    // Make a ternary node.
+    TIntermTernary *node = new TIntermTernary(cond, trueExpression, falseExpression);
+    node->setLine(loc);
+
+    return node;
 }
 
 //

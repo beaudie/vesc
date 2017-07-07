@@ -27,22 +27,6 @@ namespace sh
 /////////////////////////////////////////////////////////////////////////////
 
 //
-// Add a terminal node for an identifier in an expression.
-//
-// Returns the added node.
-//
-TIntermSymbol *TIntermediate::addSymbol(int id,
-                                        const TString &name,
-                                        const TType &type,
-                                        const TSourceLoc &line)
-{
-    TIntermSymbol *node = new TIntermSymbol(id, name, type);
-    node->setLine(line);
-
-    return node;
-}
-
-//
 // Connect two nodes through an index operator, where the left node is the base
 // of an array or struct, and the right node is a direct or indirect offset.
 //
@@ -84,80 +68,6 @@ TIntermBlock *TIntermediate::EnsureBlock(TIntermNode *node)
     return blockNode;
 }
 
-TIntermTyped *TIntermediate::AddComma(TIntermTyped *left,
-                                      TIntermTyped *right,
-                                      const TSourceLoc &line,
-                                      int shaderVersion)
-{
-    TIntermTyped *commaNode = nullptr;
-    if (!left->hasSideEffects())
-    {
-        commaNode = right;
-    }
-    else
-    {
-        commaNode = new TIntermBinary(EOpComma, left, right);
-        commaNode->setLine(line);
-    }
-    TQualifier resultQualifier = TIntermBinary::GetCommaQualifier(shaderVersion, left, right);
-    commaNode->getTypePointer()->setQualifier(resultQualifier);
-    return commaNode;
-}
-
-// For "?:" test nodes.  There are three children; a condition,
-// a true path, and a false path.  The two paths are specified
-// as separate parameters.
-//
-// Returns the ternary node created, or one of trueExpression and falseExpression if the expression
-// could be folded.
-TIntermTyped *TIntermediate::AddTernarySelection(TIntermTyped *cond,
-                                                 TIntermTyped *trueExpression,
-                                                 TIntermTyped *falseExpression,
-                                                 const TSourceLoc &line)
-{
-    // Note that the node resulting from here can be a constant union without being qualified as
-    // constant.
-    if (cond->getAsConstantUnion())
-    {
-        TQualifier resultQualifier =
-            TIntermTernary::DetermineQualifier(cond, trueExpression, falseExpression);
-        if (cond->getAsConstantUnion()->getBConst(0))
-        {
-            trueExpression->getTypePointer()->setQualifier(resultQualifier);
-            return trueExpression;
-        }
-        else
-        {
-            falseExpression->getTypePointer()->setQualifier(resultQualifier);
-            return falseExpression;
-        }
-    }
-
-    // Make a ternary node.
-    TIntermTernary *node = new TIntermTernary(cond, trueExpression, falseExpression);
-    node->setLine(line);
-
-    return node;
-}
-
-TIntermSwitch *TIntermediate::addSwitch(TIntermTyped *init,
-                                        TIntermBlock *statementList,
-                                        const TSourceLoc &line)
-{
-    TIntermSwitch *node = new TIntermSwitch(init, statementList);
-    node->setLine(line);
-
-    return node;
-}
-
-TIntermCase *TIntermediate::addCase(TIntermTyped *condition, const TSourceLoc &line)
-{
-    TIntermCase *node = new TIntermCase(condition);
-    node->setLine(line);
-
-    return node;
-}
-
 //
 // Constant terminal nodes.  Has a union that contains bool, float or int constants
 //
@@ -170,27 +80,6 @@ TIntermConstantUnion *TIntermediate::addConstantUnion(const TConstantUnion *cons
 {
     TIntermConstantUnion *node = new TIntermConstantUnion(constantUnion, type);
     node->setLine(line);
-
-    return node;
-}
-
-TIntermTyped *TIntermediate::AddSwizzle(TIntermTyped *baseExpression,
-                                        const TVectorFields &fields,
-                                        const TSourceLoc &dotLocation)
-{
-    TVector<int> fieldsVector;
-    for (int i = 0; i < fields.num; ++i)
-    {
-        fieldsVector.push_back(fields.offsets[i]);
-    }
-    TIntermSwizzle *node = new TIntermSwizzle(baseExpression, fieldsVector);
-    node->setLine(dotLocation);
-
-    TIntermTyped *folded = node->fold();
-    if (folded)
-    {
-        return folded;
-    }
 
     return node;
 }
