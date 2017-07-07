@@ -53,7 +53,7 @@ void TranslatorGLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
     writeVersion(root);
 
     // Write extension behaviour as needed
-    writeExtensionBehavior(root);
+    writeExtensionBehavior(root, compileOptions);
 
     // Write pragmas after extensions because some drivers consider pragmas
     // like non-preprocessor tokens.
@@ -242,7 +242,7 @@ void TranslatorGLSL::writeVersion(TIntermNode *root)
     }
 }
 
-void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
+void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
     const TExtensionBehavior &extBehavior = getExtensionBehavior();
@@ -287,6 +287,12 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
         // on drivers that don't have the extension at all as it would break WebGL 1 for
         // some users.
         sink << "#extension GL_ARB_gpu_shader5 : enable\n";
+    }
+
+    if ((compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u &&
+        getShaderType() == GL_VERTEX_SHADER)
+    {
+        sink << "#extension GL_NV_viewport_array2 : require\n";
     }
 
     TExtensionGLSL extensionGLSL(getOutputType());

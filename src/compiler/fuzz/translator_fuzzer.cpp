@@ -14,6 +14,7 @@
 
 #include "angle_gl.h"
 #include "compiler/translator/Compiler.h"
+#include "compiler/translator/util.h"
 
 using namespace sh;
 
@@ -81,6 +82,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     if (spec != SH_GLES2_SPEC && type != SH_WEBGL_SPEC && spec != SH_GLES3_SPEC &&
         spec != SH_WEBGL2_SPEC)
     {
+        return 0;
+    }
+
+    if (!(IsOutputGLSL(output) || IsOutputESSL(output)) &&
+        (options & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u)
+    {
+        // This compiler option is only available in ESSL and GLSL.
         return 0;
     }
 

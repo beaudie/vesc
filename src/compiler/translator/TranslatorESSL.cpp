@@ -121,8 +121,9 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
     TInfoSinkBase &sink                   = getInfoSink().obj;
     const TExtensionBehavior &extBehavior = getExtensionBehavior();
     const bool isMultiviewExtEmulated =
-        (compileOptions & (SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM |
-                           SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW)) != 0u;
+        (compileOptions &
+         (SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM | SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW |
+          SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER)) != 0u;
 
     for (TExtensionBehavior::const_iterator iter = extBehavior.begin(); iter != extBehavior.end();
          ++iter)
@@ -152,6 +153,11 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                      << "\n";
             }
         }
+    }
+    if ((compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u &&
+        getShaderType() == GL_VERTEX_SHADER)
+    {
+        sink << "#extension GL_NV_viewport_array2 : require\n";
     }
 }
 
