@@ -128,8 +128,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
                              bool checksPrecErrors,
                              TDiagnostics *diagnostics,
                              const ShBuiltInResources &resources)
-    : intermediate(),
-      symbolTable(symt),
+    : symbolTable(symt),
       mDeferredNonEmptyDeclarationErrorCheck(false),
       mShaderType(type),
       mShaderSpec(spec),
@@ -1558,6 +1557,15 @@ sh::WorkGroupSize TParseContext::getComputeShaderLocalSize() const
     return result;
 }
 
+TIntermConstantUnion *TParseContext::addScalarLiteral(const TConstantUnion *constantUnion,
+                                                      const TSourceLoc &line)
+{
+    TIntermConstantUnion *node = new TIntermConstantUnion(
+        constantUnion, TType(constantUnion->getType(), EbpUndefined, EvqConst));
+    node->setLine(line);
+    return node;
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 //
 // Non-Errors.
@@ -1654,10 +1662,12 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
               "gl_ViewID_OVR");
     }
 
+    TIntermTyped *node = nullptr;
+
     if (variable->getConstPointer())
     {
         const TConstantUnion *constArray = variable->getConstPointer();
-        return intermediate.addConstantUnion(constArray, variable->getType(), location);
+        node = new TIntermConstantUnion(constArray, variable->getType());
     }
     else if (variable->getType().getQualifier() == EvqWorkGroupSize &&
              mComputeShaderLocalSizeDeclared)
@@ -1676,15 +1686,15 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
 
         TType type(variable->getType());
         type.setQualifier(EvqConst);
-        return intermediate.addConstantUnion(constArray, type, location);
+        node = new TIntermConstantUnion(constArray, type);
     }
     else
     {
-        TIntermSymbol *symbolNode =
-            new TIntermSymbol(variable->getUniqueId(), variable->getName(), variable->getType());
-        symbolNode->setLine(location);
-        return symbolNode;
+        node = new TIntermSymbol(variable->getUniqueId(), variable->getName(), variable->getType());
     }
+    ASSERT(node != nullptr);
+    node->setLine(location);
+    return node;
 }
 
 // Initializers show up in several places in the grammar.  Have one set of
@@ -3338,10 +3348,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             error(location, " left of '[' is not of type array, matrix, or vector ", "expression");
         }
 
-        TConstantUnion *unionArray = new TConstantUnion[1];
-        unionArray->setFConst(0.0f);
-        return intermediate.addConstantUnion(unionArray, TType(EbtFloat, EbpHigh, EvqConst),
-                                             location);
+        return TIntermTyped::CreateZero(TType(EbtFloat, EbpHigh, EvqConst));
     }
 
     TIntermConstantUnion *indexConstantUnion = indexExpression->getAsConstantUnion();
@@ -3377,7 +3384,15 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         // handle this case is to report a warning instead of an error and force the index to be in
         // the correct range.
         bool outOfRangeIndexIsError = indexExpression->getQualifier() == EvqConst;
-        int index                   = indexConstantUnion->getIConst(0);
+        int index                   = 0;
+        if (indexConstantUnion->getBasicType() == EbtInt)
+        {
+            index = indexConstantUnion->getIConst(0);
+        }
+        else if (indexConstantUnion->getBasicType() == EbtUInt)
+        {
+            index = static_cast<int>(indexConstantUnion->getUConst(0));
+        }
 
         int safeIndex = -1;
 
@@ -4555,14 +4570,12 @@ TIntermTyped *TParseContext::addBinaryMathBooleanResult(TOperator op,
                                                         const TSourceLoc &loc)
 {
     TIntermTyped *node = addBinaryMathInternal(op, left, right, loc);
-    if (node == 0)
+    if (node == nullptr)
     {
         binaryOpError(loc, GetOperatorString(op), left->getCompleteString(),
                       right->getCompleteString());
-        TConstantUnion *unionArray = new TConstantUnion[1];
-        unionArray->setBConst(false);
-        return intermediate.addConstantUnion(unionArray, TType(EbtBool, EbpUndefined, EvqConst),
-                                             loc);
+        node = TIntermTyped::CreateZero(TType(EbtBool, EbpUndefined, EvqConst));
+        node->setLine(loc);
     }
     return node;
 }
@@ -4894,7 +4907,10 @@ TIntermTyped *TParseContext::addMethod(TFunction *fnCall,
         }
     }
     unionArray->setIConst(arraySize);
-    return intermediate.addConstantUnion(unionArray, TType(EbtInt, EbpUndefined, EvqConst), loc);
+    TIntermConstantUnion *node =
+        new TIntermConstantUnion(unionArray, TType(EbtInt, EbpUndefined, EvqConst));
+    node->setLine(loc);
+    return node;
 }
 
 TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunction *fnCall,
