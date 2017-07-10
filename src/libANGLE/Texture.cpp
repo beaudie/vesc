@@ -218,11 +218,6 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         return false;
     }
 
-    if (!baseImageDesc.format.info->filterSupport(data.getClientVersion(), data.getExtensions()) &&
-        !IsPointSampled(samplerState))
-    {
-        return false;
-    }
     bool npotSupport = data.getExtensions().textureNPOT || data.getClientMajorVersion() >= 3;
     if (!npotSupport)
     {
