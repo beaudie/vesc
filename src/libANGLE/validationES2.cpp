@@ -6033,7 +6033,6 @@ bool ValidateGenTextures(Context *context, GLint n, GLuint *)
 
 bool ValidateGenerateMipmap(Context *context, GLenum target)
 {
-	printf("enter validateGenerateMipmap");
     if (!ValidTextureTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidTextureTarget);
@@ -6080,7 +6079,6 @@ bool ValidateGenerateMipmap(Context *context, GLenum target)
         (!formatCaps.renderable && !format.info->isLUMA()))
     {
         context->handleError(InvalidOperation());
-		printf("generatemipmap formatCaps invalid operation\n");
         return false;
     }
 
