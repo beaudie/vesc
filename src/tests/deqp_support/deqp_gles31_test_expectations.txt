@@ -51,12 +51,8 @@
 1442 OPENGL : dEQP-GLES31.functional.texture.multisample.negative.texture_base_level = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_2d_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_2d_array = FAIL
-1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_int_2d = FAIL
-1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_int_2d = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_int_2d_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_int_2d_array = FAIL
-1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_uint_2d = FAIL
-1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_uint_2d = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_uint_2d_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_uint_2d_array = FAIL
 
