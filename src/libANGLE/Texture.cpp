@@ -1087,6 +1087,21 @@ Error Texture::setStorageMultisample(const Context *context,
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples,
                                         fixedSampleLocations);
 
+    // Acordding to es 3.1 spec 8.16, 'The effective internal format specified for the texture
+    // arrays is a sized internal color format that is not texture - filterable(see table 8.13), and
+    // either the magnification filter is not NEAREST or the minification filter is neither NEAREST
+    // nor NEAREST_MIPMAP_NEAREST'. As to Table 20.11, The default value of minFilter is
+    // NEAREST_MIPMAP_LINEAR, magFilter is LINEAR. So, if filter is default value and format is a
+    // sized internal format that is not filterable in table 8.13, the texture is incomplete. So, we
+    // set minfilter and magfilter to NEAREST to avoid this conflict.
+    Format format(internalFormat);
+    const auto &contextState = context->getContextState();
+    if (!format.info->filterSupport(contextState.getClientVersion(), contextState.getExtensions()))
+    {
+        mState.mSamplerState.minFilter = GL_NEAREST;
+        mState.mSamplerState.magFilter = GL_NEAREST;
+    }
+
     signalDirty();
 
     return NoError();
