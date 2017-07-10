@@ -218,8 +218,7 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         return false;
     }
 
-    if (!baseImageDesc.format.info->filterSupport(data.getClientVersion(), data.getExtensions()) &&
-        !IsPointSampled(samplerState))
+    if (!IsPointSampled(samplerState))
     {
         return false;
     }
