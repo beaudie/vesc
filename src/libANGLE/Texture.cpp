@@ -24,12 +24,6 @@ namespace gl
 
 namespace
 {
-bool IsPointSampled(const SamplerState &samplerState)
-{
-    return (samplerState.magFilter == GL_NEAREST &&
-            (samplerState.minFilter == GL_NEAREST ||
-             samplerState.minFilter == GL_NEAREST_MIPMAP_NEAREST));
-}
 
 size_t GetImageDescIndex(GLenum target, size_t level)
 {
@@ -218,11 +212,6 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         return false;
     }
 
-    if (!baseImageDesc.format.info->filterSupport(data.getClientVersion(), data.getExtensions()) &&
-        !IsPointSampled(samplerState))
-    {
-        return false;
-    }
     bool npotSupport = data.getExtensions().textureNPOT || data.getClientMajorVersion() >= 3;
     if (!npotSupport)
     {
