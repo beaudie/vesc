@@ -199,6 +199,16 @@ bool TextureState::isCubeComplete() const
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
                                               const ContextState &data) const
 {
+    // According to es 3.1 spec, texture is justified as incomplete if sized internalformat is
+    // unfilterable(table 20.11) and filter is not GL_NEAREST(8.16). The default value of minFilter
+    // is NEAREST_MIPMAP_LINEAR and magFilter is LINEAR(table 20.11,). For multismaple texture,
+    // filter state of multisample texture is ignored(11.1.3.3). So it shouldn't be judged as
+    // incomplete texture. So, we ignore filtering for multisample texture completeness here.
+    if (mTarget == GL_TEXTURE_2D_MULTISAMPLE)
+    {
+        return true;
+    }
+
     if (mBaseLevel > mMaxLevel)
     {
         return false;
