@@ -1087,6 +1087,15 @@ Error Texture::setStorageMultisample(const Context *context,
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples,
                                         fixedSampleLocations);
 
+    // According to es 3.1 spec, texture is justified as incomplete if sized internalformat is
+    // unfilterable(table 20.11) and filter is not GL_NEAREST(8.16). The default value of minFilter
+    // is NEAREST_MIPMAP_LINEAR and magFilter is LINEAR(table 20.11,). For multismaple texture,
+    // filter state of multisample texture is ignored(11.1.3.3). So it shouldn't be judged as
+    // incomplete texture. So, we set minfilter and magfilter of multisample texture to NEAREST to
+    // avoid this conflict.
+    mState.mSamplerState.minFilter = GL_NEAREST;
+    mState.mSamplerState.magFilter = GL_NEAREST;
+
     signalDirty();
 
     return NoError();
