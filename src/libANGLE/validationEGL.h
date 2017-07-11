@@ -131,4 +131,21 @@ Error ValidateGetPlatformDisplayEXT(EGLenum platform,
                                     const EGLint *attrib_list);
 }  // namespace egl
 
+#define ANGLE_EGL_TRY(THREAD, EXPR)                   \
+    {                                                 \
+        auto ANGLE_LOCAL_VAR = (EXPR);                \
+        if (ANGLE_LOCAL_VAR.isError())                \
+            return THREAD->setError(ANGLE_LOCAL_VAR); \
+    }
+
+#define ANGLE_EGL_TRY_RETURN(THREAD, EXPR, RETVAL) \
+    {                                              \
+        auto ANGLE_LOCAL_VAR = (EXPR);             \
+        if (ANGLE_LOCAL_VAR.isError())             \
+        {                                          \
+            THREAD->setError(ANGLE_LOCAL_VAR);     \
+            return RETVAL;                         \
+        }                                          \
+    }
+
 #endif // LIBANGLE_VALIDATIONEGL_H_
