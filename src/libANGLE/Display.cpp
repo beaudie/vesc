@@ -741,10 +741,22 @@ Error Display::createContext(const Config *configuration,
         shareTextures = mTextureManager;
     }
 
-    // Memory cache temporarily disabled to prevent double memory use in Chrome.
-    // TODO(jmadill): Re-enable once we have memory cache control.
+    gl::MemoryProgramCache *cachePointer = &mMemoryProgramCache;
+
+    // Check context creation attributes to see if we should enable the cache.
+    if (mAttributeMap.get(EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE, EGL_TRUE) == EGL_FALSE)
+    {
+        cachePointer = nullptr;
+    }
+
+    // A program cache size of zero indicates it should be disabled.
+    if (mMemoryProgramCache.maxSize() == 0)
+    {
+        cachePointer = nullptr;
+    }
+
     gl::Context *context =
-        new gl::Context(mImplementation, configuration, shareContext, shareTextures, nullptr,
+        new gl::Context(mImplementation, configuration, shareContext, shareTextures, cachePointer,
                         attribs, mDisplayExtensions, isRobustResourceInitEnabled());
 
     ASSERT(context != nullptr);
@@ -1014,6 +1026,9 @@ void Display::initDisplayExtensions()
     // Force EGL_KHR_get_all_proc_addresses on.
     mDisplayExtensions.getAllProcAddresses = true;
 
+    // Enable program cache control since it is not back-end dependent.
+    mDisplayExtensions.programCacheControl = true;
+
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
 
@@ -1108,6 +1123,109 @@ bool Display::isRobustResourceInitEnabled() const
 {
     return (mAttributeMap.get(EGL_DISPLAY_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_FALSE) ==
             EGL_TRUE);
+}
+
+EGLint Display::programCacheGetAttrib(EGLenum attrib)
+{
+    switch (attrib)
+    {
+        case EGL_PROGRAM_CACHE_KEY_LENGTH_ANGLE:
+            return static_cast<EGLint>(gl::kProgramHashLength);
+
+        case EGL_PROGRAM_CACHE_SIZE_ANGLE:
+            return static_cast<EGLint>(mMemoryProgramCache.entryCount());
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+Error Display::programCacheQuery(EGLint index,
+                                 void *key,
+                                 EGLint *keysize,
+                                 void *binary,
+                                 EGLint *binarysize)
+{
+    ASSERT(index >= 0 && index < static_cast<EGLint>(mMemoryProgramCache.entryCount()));
+
+    const angle::MemoryBuffer *programBinary = nullptr;
+    gl::ProgramHash programHash;
+    // TODO(jmadill): Make this thread-safe.
+    bool result =
+        mMemoryProgramCache.getAt(static_cast<size_t>(index), &programHash, &programBinary);
+    if (!result)
+    {
+        return EglBadAccess() << "Program binary not accessible.";
+    }
+
+    ASSERT(keysize && binarysize);
+
+    if (key)
+    {
+        auto memcpyResult = memcpy_s(key, *keysize, programHash.data(), gl::kProgramHashLength);
+        if (memcpyResult != 0)
+        {
+            return EglBadAccess() << "Program key too large or changed during access.";
+        }
+    }
+
+    if (binary)
+    {
+        if (programBinary->size() > static_cast<size_t>(*binarysize))
+        {
+            return EglBadAccess() << "Program binary too large or changed during access.";
+        }
+
+        auto memcpyResult =
+            memcpy_s(binary, *binarysize, programBinary->data(), programBinary->size());
+        if (memcpyResult != 0)
+        {
+            return EglBadAccess() << "Program binary too large or changed during access.";
+        }
+    }
+
+    *binarysize = static_cast<EGLint>(programBinary->size());
+    *keysize    = static_cast<EGLint>(gl::kProgramHashLength);
+
+    return NoError();
+}
+
+Error Display::programCachePopulate(const void *key,
+                                    EGLint keysize,
+                                    const void *binary,
+                                    EGLint binarysize)
+{
+    gl::ProgramHash programHash;
+    auto memcpyResult = memcpy_s(programHash.data(), programHash.size(), key, keysize);
+    if (memcpyResult != 0)
+    {
+        return EglBadAccess() << "Program key size mismatch.";
+    }
+
+    mMemoryProgramCache.putBinary(programHash, reinterpret_cast<const uint8_t *>(binary),
+                                  static_cast<size_t>(binarysize));
+    return NoError();
+}
+
+EGLint Display::programCacheResize(EGLint limit, EGLenum mode)
+{
+    switch (mode)
+    {
+        case EGL_PROGRAM_CACHE_RESIZE_ANGLE:
+        {
+            size_t initialSize = mMemoryProgramCache.size();
+            mMemoryProgramCache.resize(static_cast<size_t>(limit));
+            return static_cast<EGLint>(initialSize);
+        }
+
+        case EGL_PROGRAM_CACHE_TRIM_ANGLE:
+            return static_cast<EGLint>(mMemoryProgramCache.trim(static_cast<size_t>(limit)));
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
 }
 
 }  // namespace egl

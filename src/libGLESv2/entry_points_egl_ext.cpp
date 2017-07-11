@@ -790,8 +790,29 @@ EGLint EGLAPIENTRY ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLenum attrib = 0x%X)", dpy, attrib);
 
-    UNIMPLEMENTED();
-    return 0;
+    Display *display = static_cast<Display *>(dpy);
+    Thread *thread   = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(thread, ValidateDisplay(display), 0);
+
+    if (!display->getExtensions().programCacheControl)
+    {
+        thread->setError(EglBadAccess() << "Extension not supported");
+        return 0;
+    }
+
+    switch (attrib)
+    {
+        case EGL_PROGRAM_CACHE_KEY_LENGTH_ANGLE:
+        case EGL_PROGRAM_CACHE_SIZE_ANGLE:
+            break;
+
+        default:
+            thread->setError(EglBadParameter() << "Invalid program cache attribute.");
+            return 0;
+    }
+
+    return display->programCacheGetAttrib(attrib);
 }
 
 void EGLAPIENTRY ProgramCacheQueryANGLE(EGLDisplay dpy,
@@ -806,7 +827,43 @@ void EGLAPIENTRY ProgramCacheQueryANGLE(EGLDisplay dpy,
         "0x%0.8p, void *binary = 0x%0.8p, EGLint *size = 0x%0.8p)",
         dpy, index, key, keysize, binary, binarysize);
 
-    UNIMPLEMENTED();
+    Display *display = static_cast<Display *>(dpy);
+    Thread *thread   = GetCurrentThread();
+
+    ANGLE_EGL_TRY(thread, ValidateDisplay(display));
+
+    if (!display->getExtensions().programCacheControl)
+    {
+        thread->setError(EglBadAccess() << "Extension not supported");
+        return;
+    }
+
+    if (index < 0 || index >= display->programCacheGetAttrib(EGL_PROGRAM_CACHE_SIZE_ANGLE))
+    {
+        thread->setError(EglBadParameter() << "Program index out of range.");
+        return;
+    }
+
+    if (keysize == nullptr || binarysize == nullptr)
+    {
+        thread->setError(EglBadParameter()
+                         << "keysize and binarysize must always be valid pointers.");
+        return;
+    }
+
+    if (binary && *keysize != static_cast<EGLint>(gl::kProgramHashLength))
+    {
+        thread->setError(EglBadParameter() << "Invalid program key size.");
+        return;
+    }
+
+    if ((key == nullptr) != (binary == nullptr))
+    {
+        thread->setError(EglBadParameter() << "key and binary must both be null or both non-null.");
+        return;
+    }
+
+    ANGLE_EGL_TRY(thread, display->programCacheQuery(index, key, keysize, binary, binarysize));
 }
 
 void EGLAPIENTRY ProgramCachePopulateANGLE(EGLDisplay dpy,
@@ -820,14 +877,72 @@ void EGLAPIENTRY ProgramCachePopulateANGLE(EGLDisplay dpy,
         "0x%0.8p, EGLint *size = 0x%0.8p)",
         dpy, key, keysize, binary, binarysize);
 
-    UNIMPLEMENTED();
+    Display *display = static_cast<Display *>(dpy);
+    Thread *thread   = GetCurrentThread();
+
+    ANGLE_EGL_TRY(thread, ValidateDisplay(display));
+
+    if (!display->getExtensions().programCacheControl)
+    {
+        thread->setError(EglBadAccess() << "Extension not supported");
+        return;
+    }
+
+    if (keysize != static_cast<EGLint>(gl::kProgramHashLength))
+    {
+        thread->setError(EglBadParameter() << "Invalid program key size.");
+        return;
+    }
+
+    if (key == nullptr || binary == nullptr)
+    {
+        thread->setError(EglBadParameter() << "null pointer in arguments.");
+        return;
+    }
+
+    // TODO(jmadill): Pick an upper bound for binarysize.
+    if (binarysize <= 0)
+    {
+        thread->setError(EglBadParameter() << "binarysize must be positive.");
+        return;
+    }
+
+    ANGLE_EGL_TRY(thread, display->programCachePopulate(key, keysize, binary, binarysize));
 }
 
 EGLint EGLAPIENTRY ProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode)
 {
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint limit = %d, EGLenum mode = 0x%X)", dpy, limit, mode);
-    UNIMPLEMENTED();
-    return 0;
+
+    Display *display = static_cast<Display *>(dpy);
+    Thread *thread   = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(thread, ValidateDisplay(display), 0);
+
+    if (!display->getExtensions().programCacheControl)
+    {
+        thread->setError(EglBadAccess() << "Extension not supported");
+        return 0;
+    }
+
+    if (limit < 0)
+    {
+        thread->setError(EglBadParameter() << "limit must be non-negative.");
+        return 0;
+    }
+
+    switch (mode)
+    {
+        case EGL_PROGRAM_CACHE_RESIZE_ANGLE:
+        case EGL_PROGRAM_CACHE_TRIM_ANGLE:
+            break;
+
+        default:
+            thread->setError(EglBadParameter() << "Invalid cache resize mode.");
+            return 0;
+    }
+
+    return display->programCacheResize(limit, mode);
 }
 
 }  // namespace egl
