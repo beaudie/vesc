@@ -186,11 +186,7 @@ GLenum GLVariableType(const TType &type)
 {
     if (type.getBasicType() == EbtFloat)
     {
-        if (type.isScalar())
-        {
-            return GL_FLOAT;
-        }
-        else if (type.isVector())
+        if (type.isVector())
         {
             switch (type.getNominalSize())
             {
@@ -252,15 +248,11 @@ GLenum GLVariableType(const TType &type)
             }
         }
         else
-            UNREACHABLE();
+            return GL_FLOAT;
     }
     else if (type.getBasicType() == EbtInt)
     {
-        if (type.isScalar())
-        {
-            return GL_INT;
-        }
-        else if (type.isVector())
+        if (type.isVector())
         {
             switch (type.getNominalSize())
             {
@@ -275,15 +267,14 @@ GLenum GLVariableType(const TType &type)
             }
         }
         else
-            UNREACHABLE();
+        {
+            ASSERT(!type.isMatrix());
+            return GL_INT;
+        }
     }
     else if (type.getBasicType() == EbtUInt)
     {
-        if (type.isScalar())
-        {
-            return GL_UNSIGNED_INT;
-        }
-        else if (type.isVector())
+        if (type.isVector())
         {
             switch (type.getNominalSize())
             {
@@ -298,15 +289,14 @@ GLenum GLVariableType(const TType &type)
             }
         }
         else
-            UNREACHABLE();
+        {
+            ASSERT(!type.isMatrix());
+            return GL_UNSIGNED_INT;
+        }
     }
     else if (type.getBasicType() == EbtBool)
     {
-        if (type.isScalar())
-        {
-            return GL_BOOL;
-        }
-        else if (type.isVector())
+        if (type.isVector())
         {
             switch (type.getNominalSize())
             {
@@ -321,7 +311,10 @@ GLenum GLVariableType(const TType &type)
             }
         }
         else
-            UNREACHABLE();
+        {
+            ASSERT(!type.isMatrix());
+            return GL_BOOL;
+        }
     }
 
     switch (type.getBasicType())
