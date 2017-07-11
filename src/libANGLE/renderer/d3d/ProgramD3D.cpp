@@ -1604,7 +1604,7 @@ GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLo
 
 void ProgramD3D::initUniformBlockInfo(const gl::Context *context, gl::Shader *shader)
 {
-    for (const sh::InterfaceBlock &interfaceBlock : shader->getInterfaceBlocks(context))
+    for (const sh::InterfaceBlock &interfaceBlock : shader->getUniformBlocks(context))
     {
         if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
             continue;
@@ -1640,8 +1640,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
         if (uniformBlock.vertexStaticUse)
         {
             ASSERT(vertexShaderD3D != nullptr);
-            unsigned int baseRegister =
-                vertexShaderD3D->getInterfaceBlockRegister(uniformBlock.name);
+            unsigned int baseRegister = vertexShaderD3D->getUniformBlockRegister(uniformBlock.name);
             d3dUniformBlock.vsRegisterIndex = baseRegister + uniformBlockElement;
         }
 
@@ -1649,7 +1648,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
         {
             ASSERT(fragmentShaderD3D != nullptr);
             unsigned int baseRegister =
-                fragmentShaderD3D->getInterfaceBlockRegister(uniformBlock.name);
+                fragmentShaderD3D->getUniformBlockRegister(uniformBlock.name);
             d3dUniformBlock.psRegisterIndex = baseRegister + uniformBlockElement;
         }
 
@@ -1657,7 +1656,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
         {
             ASSERT(computeShaderD3D != nullptr);
             unsigned int baseRegister =
-                computeShaderD3D->getInterfaceBlockRegister(uniformBlock.name);
+                computeShaderD3D->getUniformBlockRegister(uniformBlock.name);
             d3dUniformBlock.csRegisterIndex = baseRegister + uniformBlockElement;
         }
 
