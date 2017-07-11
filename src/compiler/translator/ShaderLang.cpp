@@ -369,6 +369,28 @@ const std::vector<InterfaceBlock> *GetInterfaceBlocks(const ShHandle handle)
     return GetShaderVariables<InterfaceBlock>(handle);
 }
 
+const std::vector<InterfaceBlock> *GetUniformBlocks(const ShHandle handle)
+{
+    ASSERT(handle);
+
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return &compiler->getUniformBlocks();
+}
+
+const std::vector<InterfaceBlock> *GetShaderStorageBlocks(const ShHandle handle)
+{
+    ASSERT(handle);
+
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return &compiler->getShaderStorageBlocks();
+}
+
 WorkGroupSize GetComputeShaderLocalGroupSize(const ShHandle handle)
 {
     ASSERT(handle);
@@ -396,9 +418,9 @@ bool CheckVariablesWithinPackingLimits(int maxVectors, const std::vector<ShaderV
     return packer.CheckVariablesWithinPackingLimits(maxVectors, variables);
 }
 
-bool GetInterfaceBlockRegister(const ShHandle handle,
-                               const std::string &interfaceBlockName,
-                               unsigned int *indexOut)
+bool GetUniformBlockRegister(const ShHandle handle,
+                             const std::string &uniformBlockName,
+                             unsigned int *indexOut)
 {
 #ifdef ANGLE_ENABLE_HLSL
     ASSERT(indexOut);
@@ -406,12 +428,12 @@ bool GetInterfaceBlockRegister(const ShHandle handle,
     TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
     ASSERT(translator);
 
-    if (!translator->hasInterfaceBlock(interfaceBlockName))
+    if (!translator->hasUniformBlock(uniformBlockName))
     {
         return false;
     }
 
-    *indexOut = translator->getInterfaceBlockRegister(interfaceBlockName);
+    *indexOut = translator->getUniformBlockRegister(uniformBlockName);
     return true;
 #else
     return false;
