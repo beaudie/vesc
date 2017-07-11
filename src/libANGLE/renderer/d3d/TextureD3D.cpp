@@ -2591,26 +2591,15 @@ gl::Error TextureD3D_3D::copySubImage(const gl::Context *context,
     // Currently, 3D single-layer blits are broken because we don't know how to make an SRV
     // for a single layer of a 3D texture.
     // TODO(jmadill): Investigate 3D blits in D3D11.
-    // gl::ImageIndex index = gl::ImageIndex::Make3D(level);
 
-    // if (!canCreateRenderTargetForImage(index))
+    gl::ImageIndex index = gl::ImageIndex::Make3D(level);
+    if (mTexStorage)
     {
-        ANGLE_TRY(mImageArray[level]->copyFromFramebuffer(context, clippedDestOffset,
-                                                          clippedSourceArea, source));
-        mDirtyImages = true;
+        mImageArray[level]->copyFromTexStorage(context, index, mTexStorage);
     }
-    // else
-    //{
-    //    ANGLE_TRY(ensureRenderTarget());
-    //    if (isValidLevel(level))
-    //    {
-    //        ANGLE_TRY(updateStorageLevel(context, level));
-    //        ANGLE_TRY(mRenderer->copyImage3D(
-    //            source, sourceArea,
-    //            gl::GetInternalFormatInfo(getBaseLevelInternalFormat()).format,
-    //            destOffset, mTexStorage, level));
-    //    }
-    //}
+    ANGLE_TRY(mImageArray[level]->copyFromFramebuffer(context, clippedDestOffset, clippedSourceArea,
+                                                      source));
+    updateStorageLevel(context, level);
 
     return gl::NoError();
 }
