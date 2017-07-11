@@ -65,7 +65,7 @@ UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL,
                          ShShaderOutput outputType,
                          const std::vector<Uniform> &uniforms)
     : mUniformRegister(0),
-      mInterfaceBlockRegister(0),
+      mUniformBlockRegister(0),
       mSamplerRegister(0),
       mStructureHLSL(structureHLSL),
       mOutputType(outputType),
@@ -78,9 +78,9 @@ void UniformHLSL::reserveUniformRegisters(unsigned int registerCount)
     mUniformRegister = registerCount;
 }
 
-void UniformHLSL::reserveInterfaceBlockRegisters(unsigned int registerCount)
+void UniformHLSL::reserveUniformBlockRegisters(unsigned int registerCount)
 {
-    mInterfaceBlockRegister = registerCount;
+    mUniformBlockRegister = registerCount;
 }
 
 const Uniform *UniformHLSL::findUniformByName(const TString &name) const
@@ -365,10 +365,10 @@ TString UniformHLSL::interfaceBlocksHeader(const ReferencedSymbols &referencedIn
         const TInterfaceBlock &interfaceBlock = *nodeType.getInterfaceBlock();
 
         unsigned int arraySize      = static_cast<unsigned int>(interfaceBlock.arraySize());
-        unsigned int activeRegister = mInterfaceBlockRegister;
+        unsigned int activeRegister = mUniformBlockRegister;
 
-        mInterfaceBlockRegisterMap[interfaceBlock.name().c_str()] = activeRegister;
-        mInterfaceBlockRegister += std::max(1u, arraySize);
+        mUniformBlockRegisterMap[interfaceBlock.name().c_str()] = activeRegister;
+        mUniformBlockRegister += std::max(1u, arraySize);
 
         // FIXME: interface block field names
 

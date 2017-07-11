@@ -147,7 +147,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     }
 
     // Reserve registers for the default uniform block and driver constants
-    mUniformHLSL->reserveInterfaceBlockRegisters(2);
+    mUniformHLSL->reserveUniformBlockRegisters(2);
 }
 
 OutputHLSL::~OutputHLSL()
@@ -231,9 +231,9 @@ void OutputHLSL::makeFlaggedStructMaps(const std::vector<TIntermTyped *> &flagge
     }
 }
 
-const std::map<std::string, unsigned int> &OutputHLSL::getInterfaceBlockRegisterMap() const
+const std::map<std::string, unsigned int> &OutputHLSL::getUniformBlockRegisterMap() const
 {
-    return mUniformHLSL->getInterfaceBlockRegisterMap();
+    return mUniformHLSL->getUniformBlockRegisterMap();
 }
 
 const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() const
