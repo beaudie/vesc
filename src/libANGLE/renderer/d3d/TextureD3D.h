@@ -140,6 +140,7 @@ class TextureD3D : public TextureImpl
 
     bool canCreateRenderTargetForImage(const gl::ImageIndex &index) const;
     gl::Error ensureRenderTarget(const gl::Context *context);
+    gl::Error copyImageToStorageIfDirty(const gl::Context *context, const gl::ImageIndex &index);
 
     virtual gl::Error createCompleteStorage(bool renderTarget,
                                             TexStoragePointer *outTexStorage) const = 0;

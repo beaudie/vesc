@@ -560,6 +560,22 @@ gl::Error TextureD3D::ensureRenderTarget(const gl::Context *context)
     return gl::NoError();
 }
 
+gl::Error TextureD3D::copyImageToStorageIfDirty(const gl::Context *context,
+                                                const gl::ImageIndex &index)
+{
+    ASSERT(mTexStorage);
+
+    ImageD3D *image = getImage(index);
+    if (image->isDirty())
+    {
+        gl::Box entireArea(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth());
+        ANGLE_TRY(image->copyToStorage(context, mTexStorage, index, entireArea));
+    }
+    image->markClean();
+
+    return gl::NoError();
+}
+
 bool TextureD3D::canCreateRenderTargetForImage(const gl::ImageIndex &index) const
 {
     ImageD3D *image = getImage(index);
@@ -1098,7 +1114,7 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
     else
     {
         ANGLE_TRY(ensureRenderTarget(context));
-        mImageArray[level]->markClean();
+        ANGLE_TRY(copyImageToStorageIfDirty(context, index));
 
         if (sourceArea.width != 0 && sourceArea.height != 0 && isValidLevel(level))
         {
@@ -1839,7 +1855,7 @@ gl::Error TextureD3D_Cube::copyImage(const gl::Context *context,
     else
     {
         ANGLE_TRY(ensureRenderTarget(context));
-        mImageArray[faceIndex][level]->markClean();
+        ANGLE_TRY(copyImageToStorageIfDirty(context, index));
 
         ASSERT(size.width == size.height);
 
@@ -3145,6 +3161,7 @@ gl::Error TextureD3D_2DArray::copySubImage(const gl::Context *context,
     else
     {
         ANGLE_TRY(ensureRenderTarget(context));
+        ANGLE_TRY(copyImageToStorageIfDirty(context, index));
 
         if (isValidLevel(level))
         {
