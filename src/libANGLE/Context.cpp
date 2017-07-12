@@ -1832,10 +1832,10 @@ void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    syncRendererState();
-    auto error = mImplementation->drawArrays(this, mode, first, count);
-    handleError(error);
-    if (!error.isError())
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
+    if (!handleError(mImplementation->drawArrays(this, mode, first, count)).isError())
     {
         MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
     }
@@ -1843,10 +1843,11 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 
 void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     auto error = mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount);
-    handleError(error);
-    if (!error.isError())
+    if (!handleError(error).isError())
     {
         MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
     }
@@ -1854,7 +1855,9 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
 
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(mImplementation->drawElements(this, mode, count, type, indices, indexRange));
 }
@@ -1865,7 +1868,9 @@ void Context::drawElementsInstanced(GLenum mode,
                                     const void *indices,
                                     GLsizei instances)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(mImplementation->drawElementsInstanced(this, mode, count, type, indices, instances,
                                                        indexRange));
@@ -1878,7 +1883,9 @@ void Context::drawRangeElements(GLenum mode,
                                 GLenum type,
                                 const void *indices)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     const IndexRange &indexRange = getParams<HasIndexRange>().getIndexRange().value();
     handleError(mImplementation->drawRangeElements(this, mode, start, end, count, type, indices,
                                                    indexRange));
@@ -1886,13 +1893,17 @@ void Context::drawRangeElements(GLenum mode,
 
 void Context::drawArraysIndirect(GLenum mode, const void *indirect)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     handleError(mImplementation->drawArraysIndirect(this, mode, indirect));
 }
 
 void Context::drawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
 {
-    syncRendererState();
+    if (handleError(preDrawCall(mode)).isError())
+        return;
+
     handleError(mImplementation->drawElementsIndirect(this, mode, type, indirect));
 }
 
@@ -2175,7 +2186,7 @@ GLint Context::getProgramResourceLocation(GLuint program,
     return QueryProgramResourceLocation(programObject, programInterface, name);
 }
 
-void Context::handleError(const Error &error)
+Error Context::handleError(const Error &error)
 {
     if (error.isError())
     {
@@ -2193,6 +2204,8 @@ void Context::handleError(const Error &error)
                                  GL_DEBUG_SEVERITY_HIGH, error.getMessage());
         }
     }
+
+    return error;
 }
 
 // Get one of the recorded errors and clear its flag, if any.
@@ -3481,6 +3494,19 @@ void Context::syncStateForClear()
 void Context::syncStateForBlit()
 {
     syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
+}
+
+gl::Error Context::preDrawCall(GLenum drawMode)
+{
+    syncRendererState();
+    InfoLog infoLog;
+    Error err = mImplementation->triggerDrawCallProgramRecompilation(this, &infoLog,
+                                                                     mMemoryProgramCache, drawMode);
+    if (err.isError())
+    {
+        WARN() << "Dynamic recompilation error log: " << infoLog.str();
+    }
+    return err;
 }
 
 void Context::activeTexture(GLenum texture)
