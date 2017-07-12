@@ -21,6 +21,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "platform/WorkaroundsD3D.h"
 
 namespace egl
@@ -336,6 +337,8 @@ class RendererD3D : public BufferFactoryD3D
 
     bool isRobustResourceInitEnabled() const;
 
+    Serial generateSerial();
+
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual void generateCaps(gl::Caps *outCaps,
@@ -386,6 +389,8 @@ class RendererD3D : public BufferFactoryD3D
     bool mDeviceLost;
 
     angle::WorkerThreadPool mWorkerThreadPool;
+
+    SerialFactory mSerialFactory;
 };
 
 unsigned int GetBlendSampleMask(const gl::ContextState &data, int samples);
