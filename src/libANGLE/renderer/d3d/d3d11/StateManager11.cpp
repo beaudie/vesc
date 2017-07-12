@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 
 namespace rx
 {
@@ -1223,8 +1224,10 @@ void StateManager11::setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT str
 
 gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMode)
 {
-    const auto &data    = context->getContextState();
-    const auto &glState = data.getState();
+    const auto &glState = context->getGLState();
+
+    // TODO(jmadill): Use dirty bits.
+    ANGLE_TRY(syncProgram(context, drawMode));
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
@@ -1245,7 +1248,7 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     // TODO(jmadill): This can be recomputed only on framebuffer changes.
     RenderTarget11 *firstRT = framebuffer11->getFirstRenderTarget();
     int samples             = (firstRT ? firstRT->getSamples() : 0);
-    unsigned int sampleMask = GetBlendSampleMask(data, samples);
+    unsigned int sampleMask = GetBlendSampleMask(glState, samples);
     if (sampleMask != mCurSampleMask)
     {
         mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
@@ -1262,7 +1265,7 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
                 ANGLE_TRY(syncFramebuffer(context, framebuffer));
                 break;
             case DIRTY_BIT_VIEWPORT_STATE:
-                syncViewport(&data.getCaps(), glState.getViewport(), glState.getNearPlane(),
+                syncViewport(&context->getCaps(), glState.getViewport(), glState.getNearPlane(),
                              glState.getFarPlane());
                 break;
             case DIRTY_BIT_SCISSOR_STATE:
@@ -1286,6 +1289,11 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop.
     ASSERT(mInternalDirtyBits.none());
+
+    // This must happen after viewport sync, because the viewport affects builtin uniforms.
+    // TODO(jmadill): Use dirty bits.
+    auto *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+    ANGLE_TRY(programD3D->applyUniforms(drawMode));
 
     return gl::NoError();
 }
@@ -1354,6 +1362,54 @@ void StateManager11::setComputeShader(const d3d11::ComputeShader *shader)
         mRenderer->getDeviceContext()->CSSetShader(appliedShader, nullptr, 0);
         mAppliedComputeShader = serial;
     }
+}
+
+gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMode)
+{
+    // This method is called single-threaded.
+    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
+
+    const auto &glState    = context->getGLState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+    programD3D->updateCachedInputLayout(glState);
+
+    const auto &inputLayout = programD3D->getCachedInputLayout();
+
+    ShaderExecutableD3D *vertexExe = nullptr;
+    ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
+
+    const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+    ShaderExecutableD3D *pixelExe          = nullptr;
+    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(context, drawFramebuffer, &pixelExe));
+
+    ShaderExecutableD3D *geometryExe = nullptr;
+    ANGLE_TRY(programD3D->getGeometryExecutableForPrimitiveType(context->getContextState(),
+                                                                drawMode, &geometryExe, nullptr));
+
+    const d3d11::VertexShader *vertexShader =
+        (vertexExe ? &GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : nullptr);
+
+    // Skip pixel shader if we're doing rasterizer discard.
+    const d3d11::PixelShader *pixelShader = nullptr;
+    if (!glState.getRasterizerState().rasterizerDiscard)
+    {
+        pixelShader = (pixelExe ? &GetAs<ShaderExecutable11>(pixelExe)->getPixelShader() : nullptr);
+    }
+
+    const d3d11::GeometryShader *geometryShader = nullptr;
+    if (glState.isTransformFeedbackActiveUnpaused())
+    {
+        geometryShader =
+            (vertexExe ? &GetAs<ShaderExecutable11>(vertexExe)->getStreamOutShader() : nullptr);
+    }
+    else
+    {
+        geometryShader =
+            (geometryExe ? &GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : nullptr);
+    }
+
+    setDrawShaders(vertexShader, geometryShader, pixelShader);
+    return gl::NoError();
 }
 
 }  // namespace rx
