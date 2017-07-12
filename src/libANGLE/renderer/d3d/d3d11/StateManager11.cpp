@@ -236,11 +236,16 @@ void StateManager11::setViewportBounds(const int width, const int height)
     }
 }
 
-void StateManager11::syncPresentPath(bool presentPathFastActive,
-                                     const gl::FramebufferAttachment *framebufferAttachment)
+void StateManager11::checkPresentPath(const gl::Context *context)
 {
-    const int colorBufferHeight =
-        framebufferAttachment ? framebufferAttachment->getSize().height : 0;
+    if (!mRenderer->presentPathFastEnabled())
+        return;
+
+    const auto *framebuffer          = context->getGLState().getDrawFramebuffer();
+    const auto *firstColorAttachment = framebuffer->getFirstColorbuffer();
+    const bool presentPathFastActive = UsePresentPathFast(mRenderer, firstColorAttachment);
+
+    const int colorBufferHeight = firstColorAttachment ? firstColorAttachment->getSize().height : 0;
 
     if ((mCurPresentPathFastEnabled != presentPathFastActive) ||
         (presentPathFastActive && (colorBufferHeight != mCurPresentPathFastColorBufferHeight)))
@@ -486,7 +491,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 }
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
-                mRenderTargetIsDirty = true;
+                invalidateRenderTarget(context);
                 break;
             default:
                 if (dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
@@ -554,20 +559,7 @@ gl::Error StateManager11::syncBlendState(const gl::Context *context,
 
 gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
 {
-    const auto &fbo = *glState.getDrawFramebuffer();
-
-    // Disable the depth test/depth write if we are using a stencil-only attachment.
-    // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
-    // nor write to the unused depth part of this emulated texture.
-    bool disableDepth = (!fbo.hasDepth() && fbo.hasStencil());
-
-    // Similarly we disable the stencil portion of the DS attachment if the app only binds depth.
-    bool disableStencil = (fbo.hasDepth() && !fbo.hasStencil());
-
-    // CurDisableDepth/Stencil are reset automatically after we call forceSetDepthStencilState.
-    if (!mDepthStencilStateIsDirty && mCurDisableDepth.valid() &&
-        disableDepth == mCurDisableDepth.value() && mCurDisableStencil.valid() &&
-        disableStencil == mCurDisableStencil.value())
+    if (!mDepthStencilStateIsDirty)
     {
         return gl::NoError();
     }
@@ -575,8 +567,6 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
     mCurDepthStencilState = glState.getDepthStencilState();
     mCurStencilRef        = glState.getStencilRef();
     mCurStencilBackRef    = glState.getStencilBackRef();
-    mCurDisableDepth      = disableDepth;
-    mCurDisableStencil    = disableStencil;
 
     // get the maximum size of the stencil ref
     unsigned int maxStencil = 0;
@@ -590,25 +580,26 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
     ASSERT((mCurDepthStencilState.stencilMask & maxStencil) ==
            (mCurDepthStencilState.stencilBackMask & maxStencil));
 
-    ID3D11DepthStencilState *dxDepthStencilState = nullptr;
-    gl::DepthStencilState dsStateKey             = glState.getDepthStencilState();
+    gl::DepthStencilState modifiedGLState = glState.getDepthStencilState();
 
-    if (disableDepth)
+    ASSERT(mCurDisableDepth.valid() && mCurDisableStencil.valid());
+
+    if (mCurDisableDepth.value())
     {
-        dsStateKey.depthTest = false;
-        dsStateKey.depthMask = false;
+        modifiedGLState.depthTest = false;
+        modifiedGLState.depthMask = false;
     }
 
-    if (disableStencil)
+    if (mCurDisableStencil.value())
     {
-        dsStateKey.stencilWritemask     = 0;
-        dsStateKey.stencilBackWritemask = 0;
-        dsStateKey.stencilTest          = false;
+        modifiedGLState.stencilWritemask     = 0;
+        modifiedGLState.stencilBackWritemask = 0;
+        modifiedGLState.stencilTest          = false;
     }
 
-    ANGLE_TRY(mRenderer->getDepthStencilState(dsStateKey, &dxDepthStencilState));
-
-    ASSERT(dxDepthStencilState);
+    ID3D11DepthStencilState *d3dState = nullptr;
+    ANGLE_TRY(mRenderer->getDepthStencilState(modifiedGLState, &d3dState));
+    ASSERT(d3dState);
 
     // Max D3D11 stencil reference value is 0xFF,
     // corresponding to the max 8 bits in a stencil buffer
@@ -620,21 +611,29 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
                   "Unexpected value of D3D11_DEFAULT_STENCIL_WRITE_MASK");
     UINT dxStencilRef = std::min<UINT>(mCurStencilRef, 0xFFu);
 
-    mRenderer->getDeviceContext()->OMSetDepthStencilState(dxDepthStencilState, dxStencilRef);
+    mRenderer->getDeviceContext()->OMSetDepthStencilState(d3dState, dxStencilRef);
 
     mDepthStencilStateIsDirty = false;
 
     return gl::NoError();
 }
 
-gl::Error StateManager11::syncRasterizerState(const gl::RasterizerState &rasterState)
+gl::Error StateManager11::syncRasterizerState(const gl::Context *context, GLenum drawMode)
 {
+    bool pointDrawMode = (drawMode == GL_POINTS);
+    if (pointDrawMode != mCurRasterState.pointDrawMode)
+    {
+        mRasterizerStateIsDirty = true;
+    }
+
     // TODO: Remove pointDrawMode and multiSample from gl::RasterizerState.
-    if (!mRasterizerStateIsDirty && rasterState.pointDrawMode == mCurRasterState.pointDrawMode &&
-        rasterState.multiSample == mCurRasterState.multiSample)
+    if (!mRasterizerStateIsDirty)
     {
         return gl::NoError();
     }
+
+    gl::RasterizerState rasterState = context->getGLState().getRasterizerState();
+    rasterState.pointDrawMode       = pointDrawMode;
 
     ID3D11RasterizerState *dxRasterState = nullptr;
 
@@ -807,20 +806,69 @@ void StateManager11::syncViewport(const gl::Caps *caps,
     mViewportStateIsDirty = false;
 }
 
-void StateManager11::invalidateRenderTarget()
+void StateManager11::invalidateRenderTarget(const gl::Context *context)
 {
     mRenderTargetIsDirty = true;
+
+    // nullptr only on display initialization.
+    if (!context)
+    {
+        return;
+    }
+
+    gl::Framebuffer *fbo = context->getGLState().getDrawFramebuffer();
+
+    if (!fbo)
+    {
+        return;
+    }
+
+    // Disable the depth test/depth write if we are using a stencil-only attachment.
+    // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
+    // nor write to the unused depth part of this emulated texture.
+    bool disableDepth = (!fbo->hasDepth() && fbo->hasStencil());
+
+    // Similarly we disable the stencil portion of the DS attachment if the app only binds depth.
+    bool disableStencil = (fbo->hasDepth() && !fbo->hasStencil());
+
+    if (mCurDisableDepth.valid() && disableDepth == mCurDisableDepth.value() &&
+        mCurDisableStencil.valid() && disableStencil == mCurDisableStencil.value())
+    {
+        mDepthStencilStateIsDirty = true;
+        mCurDisableDepth          = disableDepth;
+        mCurDisableStencil        = disableStencil;
+    }
+
+    // Since framebuffer->getSamples will return the original samples which may be different with
+    // the sample counts that we set in render target view, here we use renderTarget->getSamples to
+    // get the actual samples.
+    mCurFramebufferSamples            = 0;
+    Framebuffer11 *fbo11              = GetImplAs<Framebuffer11>(fbo);
+    RenderTarget11 *firstRenderTarget = fbo11->getFirstRenderTarget();
+    if (firstRenderTarget)
+    {
+        mCurFramebufferSamples = firstRenderTarget->getSamples();
+    }
+
+    bool multiSample = (mCurFramebufferSamples.value() != 0);
+    if (multiSample != mCurRasterState.multiSample)
+    {
+        mRasterizerStateIsDirty     = true;
+        mCurRasterState.multiSample = multiSample;
+    }
+
+    checkPresentPath(context);
 }
 
-void StateManager11::invalidateBoundViews()
+void StateManager11::invalidateBoundViews(const gl::Context *context)
 {
     mCurVertexSRVs.clear();
     mCurPixelSRVs.clear();
 
-    invalidateRenderTarget();
+    invalidateRenderTarget(context);
 }
 
-void StateManager11::invalidateEverything()
+void StateManager11::invalidateEverything(const gl::Context *context)
 {
     mBlendStateIsDirty        = true;
     mDepthStencilStateIsDirty = true;
@@ -831,7 +879,7 @@ void StateManager11::invalidateEverything()
     // We reset the current SRV data because it might not be in sync with D3D's state
     // anymore. For example when a currently used SRV is used as an RTV, D3D silently
     // remove it from its state.
-    invalidateBoundViews();
+    invalidateBoundViews(context);
 
     // All calls to IASetInputLayout go through the state manager, so it shouldn't be
     // necessary to invalidate the state.
@@ -847,19 +895,21 @@ void StateManager11::invalidateVertexBuffer()
     mDirtyVertexBufferRange = gl::RangeUI(0, limit);
 }
 
-void StateManager11::setOneTimeRenderTarget(ID3D11RenderTargetView *rtv,
+void StateManager11::setOneTimeRenderTarget(const gl::Context *context,
+                                            ID3D11RenderTargetView *rtv,
                                             ID3D11DepthStencilView *dsv)
 {
     mRenderer->getDeviceContext()->OMSetRenderTargets(1, &rtv, dsv);
-    mRenderTargetIsDirty = true;
+    invalidateRenderTarget(context);
 }
 
-void StateManager11::setOneTimeRenderTargets(ID3D11RenderTargetView **rtvs,
+void StateManager11::setOneTimeRenderTargets(const gl::Context *context,
+                                             ID3D11RenderTargetView **rtvs,
                                              UINT numRtvs,
                                              ID3D11DepthStencilView *dsv)
 {
     mRenderer->getDeviceContext()->OMSetRenderTargets(numRtvs, (numRtvs > 0) ? rtvs : nullptr, dsv);
-    mRenderTargetIsDirty = true;
+    invalidateRenderTarget(context);
 }
 
 void StateManager11::onBeginQuery(Query11 *query)
@@ -1252,11 +1302,6 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     ASSERT(framebuffer && !framebuffer->hasAnyDirtyBit() && framebuffer->cachedComplete());
     ANGLE_TRY(syncFramebuffer(context, framebuffer));
 
-    // Set the present path state
-    auto firstColorAttachment        = framebuffer->getFirstColorbuffer();
-    const bool presentPathFastActive = UsePresentPathFast(mRenderer, firstColorAttachment);
-    syncPresentPath(presentPathFastActive, firstColorAttachment);
-
     // Setting viewport state
     syncViewport(&data.getCaps(), glState.getViewport(), glState.getNearPlane(),
                  glState.getFarPlane());
@@ -1265,25 +1310,11 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
 
     // Applying rasterizer state to D3D11 device
-    // Since framebuffer->getSamples will return the original samples which may be different with
-    // the sample counts that we set in render target view, here we use renderTarget->getSamples to
-    // get the actual samples.
-    GLsizei samples = 0;
-    if (firstColorAttachment)
-    {
-        ASSERT(firstColorAttachment->isAttached());
-        RenderTarget11 *renderTarget = nullptr;
-        ANGLE_TRY(firstColorAttachment->getRenderTarget(context, &renderTarget));
-        samples = renderTarget->getSamples();
-    }
-    gl::RasterizerState rasterizer = glState.getRasterizerState();
-    rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
-    rasterizer.multiSample         = (samples != 0);
-
-    ANGLE_TRY(syncRasterizerState(rasterizer));
+    ANGLE_TRY(syncRasterizerState(context, drawMode));
 
     // Setting blend state
-    unsigned int mask = GetBlendSampleMask(data, samples);
+    ASSERT(mCurFramebufferSamples.valid());
+    unsigned int mask = GetBlendSampleMask(data, mCurFramebufferSamples.value());
     ANGLE_TRY(syncBlendState(context, framebuffer, glState.getBlendState(), glState.getBlendColor(),
                              mask));
 
