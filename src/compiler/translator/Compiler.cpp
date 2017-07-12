@@ -437,7 +437,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         // This pass might emit short circuits so keep it before the short circuit unfolding
         if (success && (compileOptions & SH_REWRITE_DO_WHILE_LOOPS))
-            RewriteDoWhile(root, getTemporaryId());
+            RewriteDoWhile(root);
 
         if (success && (compileOptions & SH_ADD_AND_TRUE_TO_LOOP_CONDITION))
             sh::AddAndTrueToLoopCondition(root);
@@ -503,8 +503,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         if (success && (compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS))
         {
-            ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh,
-                                              getTemporaryId());
+            ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh);
         }
 
         if (success && (compileOptions & SH_REGENERATE_STRUCT_NAMES))
@@ -541,7 +540,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
                                        IntermNodePatternMatcher::kMultiDeclaration |
                                            IntermNodePatternMatcher::kArrayDeclaration |
                                            IntermNodePatternMatcher::kNamelessStructDeclaration,
-                                       getTemporaryId(), getSymbolTable(), getShaderVersion());
+                                       getSymbolTable(), getShaderVersion());
             }
             // We only really need to separate array declarations and nameless struct declarations,
             // but it's simpler to just use the regular SeparateDeclarations.

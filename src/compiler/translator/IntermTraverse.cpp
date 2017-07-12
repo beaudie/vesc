@@ -218,14 +218,13 @@ TIntermBinary *TIntermTraverser::createTempAssignment(TIntermTyped *rightNode)
     return assignment;
 }
 
-void TIntermTraverser::useTemporaryId(TSymbolUniqueId *temporaryId)
-{
-    mTemporaryId = temporaryId;
-}
-
 void TIntermTraverser::nextTemporaryId()
 {
-    ASSERT(mTemporaryId != nullptr);
+    if (mTemporaryId == nullptr)
+    {
+        mTemporaryId = new TSymbolUniqueId();
+        return;
+    }
     *mTemporaryId = TSymbolUniqueId();
 }
 

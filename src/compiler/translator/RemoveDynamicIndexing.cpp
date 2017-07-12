@@ -524,13 +524,10 @@ void RemoveDynamicIndexingTraverser::nextIteration()
 }  // namespace
 
 void RemoveDynamicIndexing(TIntermNode *root,
-                           TSymbolUniqueId *temporaryId,
                            const TSymbolTable &symbolTable,
                            int shaderVersion)
 {
     RemoveDynamicIndexingTraverser traverser(symbolTable, shaderVersion);
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     do
     {
         traverser.nextIteration();

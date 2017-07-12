@@ -20,8 +20,7 @@ class TSymbolUniqueId;
 
 void ScalarizeVecAndMatConstructorArgs(TIntermBlock *root,
                                        sh::GLenum shaderType,
-                                       bool fragmentPrecisionHigh,
-                                       TSymbolUniqueId *temporaryId);
+                                       bool fragmentPrecisionHigh);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_SCALARIZEVECANDMATCONSTRUCTORARGS_H_

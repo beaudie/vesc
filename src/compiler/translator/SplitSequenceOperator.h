@@ -21,7 +21,6 @@ class TSymbolUniqueId;
 
 void SplitSequenceOperator(TIntermNode *root,
                            int patternsToSplitMask,
-                           TSymbolUniqueId *temporaryId,
                            const TSymbolTable &symbolTable,
                            int shaderVersion);
 

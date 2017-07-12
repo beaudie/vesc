@@ -151,11 +151,9 @@ void RecordConstantPrecisionTraverser::nextIteration()
 
 }  // namespace
 
-void RecordConstantPrecision(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void RecordConstantPrecision(TIntermNode *root)
 {
     RecordConstantPrecisionTraverser traverser;
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     // Iterate as necessary, and reset the traverser between iterations.
     do
     {

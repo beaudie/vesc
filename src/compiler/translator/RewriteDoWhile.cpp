@@ -146,13 +146,9 @@ class DoWhileRewriter : public TIntermTraverser
 
 }  // anonymous namespace
 
-void RewriteDoWhile(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void RewriteDoWhile(TIntermNode *root)
 {
-    ASSERT(temporaryId != 0);
-
     DoWhileRewriter rewriter;
-    rewriter.useTemporaryId(temporaryId);
-
     root->traverse(&rewriter);
 }
 

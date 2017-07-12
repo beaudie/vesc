@@ -22,7 +22,7 @@ namespace sh
 class TIntermNode;
 class TSymbolUniqueId;
 
-void ExpandIntegerPowExpressions(TIntermNode *root, TSymbolUniqueId *temporaryId);
+void ExpandIntegerPowExpressions(TIntermNode *root);
 
 }  // namespace sh
 

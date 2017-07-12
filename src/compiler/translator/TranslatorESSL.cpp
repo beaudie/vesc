@@ -62,7 +62,7 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
         emulatePrecision.writeEmulationHelpers(sink, shaderVer, SH_ESSL_OUTPUT);
     }
 
-    RecordConstantPrecision(root, getTemporaryId());
+    RecordConstantPrecision(root);
 
     // Write emulated built-in functions if needed.
     if (!getBuiltInFunctionEmulator().isOutputEmpty())

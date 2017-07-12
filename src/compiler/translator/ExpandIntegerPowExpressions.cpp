@@ -22,7 +22,7 @@ namespace
 class Traverser : public TIntermTraverser
 {
   public:
-    static void Apply(TIntermNode *root, TSymbolUniqueId *temporaryId);
+    static void Apply(TIntermNode *root);
 
   private:
     Traverser();
@@ -33,10 +33,9 @@ class Traverser : public TIntermTraverser
 };
 
 // static
-void Traverser::Apply(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void Traverser::Apply(TIntermNode *root)
 {
     Traverser traverser;
-    traverser.useTemporaryId(temporaryId);
     do
     {
         traverser.nextIteration();
@@ -146,9 +145,9 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
 }  // anonymous namespace
 
-void ExpandIntegerPowExpressions(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void ExpandIntegerPowExpressions(TIntermNode *root)
 {
-    Traverser::Apply(root, temporaryId);
+    Traverser::Apply(root);
 }
 
 }  // namespace sh

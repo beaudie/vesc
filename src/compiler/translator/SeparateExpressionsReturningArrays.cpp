@@ -110,11 +110,9 @@ void SeparateExpressionsTraverser::nextIteration()
 
 }  // namespace
 
-void SeparateExpressionsReturningArrays(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void SeparateExpressionsReturningArrays(TIntermNode *root)
 {
     SeparateExpressionsTraverser traverser;
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     // Separate one expression at a time, and reset the traverser between iterations.
     do
     {

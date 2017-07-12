@@ -138,13 +138,10 @@ bool SplitSequenceOperatorTraverser::visitTernary(Visit visit, TIntermTernary *n
 
 void SplitSequenceOperator(TIntermNode *root,
                            int patternsToSplitMask,
-                           TSymbolUniqueId *temporaryId,
                            const TSymbolTable &symbolTable,
                            int shaderVersion)
 {
     SplitSequenceOperatorTraverser traverser(patternsToSplitMask, symbolTable, shaderVersion);
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     // Separate one expression at a time, and reset the traverser between iterations.
     do
     {

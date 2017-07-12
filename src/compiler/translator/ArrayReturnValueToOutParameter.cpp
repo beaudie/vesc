@@ -56,7 +56,7 @@ TIntermAggregate *CreateReplacementCall(TIntermAggregate *originalCall,
 class ArrayReturnValueToOutParameterTraverser : private TIntermTraverser
 {
   public:
-    static void apply(TIntermNode *root, TSymbolUniqueId *temporaryId);
+    static void apply(TIntermNode *root);
 
   private:
     ArrayReturnValueToOutParameterTraverser();
@@ -73,10 +73,9 @@ class ArrayReturnValueToOutParameterTraverser : private TIntermTraverser
     std::map<int, TSymbolUniqueId> mReturnValueIds;
 };
 
-void ArrayReturnValueToOutParameterTraverser::apply(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void ArrayReturnValueToOutParameterTraverser::apply(TIntermNode *root)
 {
     ArrayReturnValueToOutParameterTraverser arrayReturnValueToOutParam;
-    arrayReturnValueToOutParam.useTemporaryId(temporaryId);
     root->traverse(&arrayReturnValueToOutParam);
     arrayReturnValueToOutParam.updateTree();
 }
@@ -204,9 +203,9 @@ bool ArrayReturnValueToOutParameterTraverser::visitBinary(Visit visit, TIntermBi
 
 }  // namespace
 
-void ArrayReturnValueToOutParameter(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void ArrayReturnValueToOutParameter(TIntermNode *root)
 {
-    ArrayReturnValueToOutParameterTraverser::apply(root, temporaryId);
+    ArrayReturnValueToOutParameterTraverser::apply(root);
 }
 
 }  // namespace sh

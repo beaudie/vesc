@@ -61,14 +61,11 @@ TIntermBinary *ConstructMatrixIndexBinaryNode(TIntermSymbol *symbolNode, int col
 class ScalarizeArgsTraverser : public TIntermTraverser
 {
   public:
-    ScalarizeArgsTraverser(sh::GLenum shaderType,
-                           bool fragmentPrecisionHigh,
-                           TSymbolUniqueId *temporaryId)
+    ScalarizeArgsTraverser(sh::GLenum shaderType, bool fragmentPrecisionHigh)
         : TIntermTraverser(true, false, false),
           mShaderType(shaderType),
           mFragmentPrecisionHigh(fragmentPrecisionHigh)
     {
-        useTemporaryId(temporaryId);
     }
 
   protected:
@@ -229,10 +226,9 @@ void ScalarizeArgsTraverser::createTempVariable(TIntermTyped *original)
 
 void ScalarizeVecAndMatConstructorArgs(TIntermBlock *root,
                                        sh::GLenum shaderType,
-                                       bool fragmentPrecisionHigh,
-                                       TSymbolUniqueId *temporaryId)
+                                       bool fragmentPrecisionHigh)
 {
-    ScalarizeArgsTraverser scalarizer(shaderType, fragmentPrecisionHigh, temporaryId);
+    ScalarizeArgsTraverser scalarizer(shaderType, fragmentPrecisionHigh);
     root->traverse(&scalarizer);
 }
 

@@ -170,11 +170,9 @@ void UnfoldShortCircuitTraverser::nextIteration()
 
 }  // namespace
 
-void UnfoldShortCircuitToIf(TIntermNode *root, TSymbolUniqueId *temporaryId)
+void UnfoldShortCircuitToIf(TIntermNode *root)
 {
     UnfoldShortCircuitTraverser traverser;
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     // Unfold one operator at a time, and reset the traverser between iterations.
     do
     {

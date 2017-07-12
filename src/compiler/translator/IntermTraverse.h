@@ -99,9 +99,6 @@ class TIntermTraverser : angle::NonCopyable
     // this function after traversal to perform them.
     void updateTree();
 
-    // Start creating temporary symbols from the given temporary symbol index + 1.
-    void useTemporaryId(TSymbolUniqueId *temporaryId);
-
   protected:
     // Should only be called from traverse*() functions
     void incrementDepth(TIntermNode *current)

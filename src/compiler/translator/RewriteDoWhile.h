@@ -16,7 +16,7 @@ namespace sh
 class TIntermNode;
 class TSymbolUniqueId;
 
-void RewriteDoWhile(TIntermNode *root, TSymbolUniqueId *temporaryId);
+void RewriteDoWhile(TIntermNode *root);
 
 }  // namespace sh
 

@@ -15,7 +15,7 @@ namespace sh
 class TIntermNode;
 class TSymbolUniqueId;
 
-void ArrayReturnValueToOutParameter(TIntermNode *root, TSymbolUniqueId *temporaryId);
+void ArrayReturnValueToOutParameter(TIntermNode *root);
 
 }  // namespace sh
 

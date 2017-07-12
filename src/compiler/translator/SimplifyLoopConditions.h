@@ -19,7 +19,6 @@ class TSymbolUniqueId;
 
 void SimplifyLoopConditions(TIntermNode *root,
                             unsigned int conditionsToSimplify,
-                            TSymbolUniqueId *temporaryId,
                             const TSymbolTable &symbolTable,
                             int shaderVersion);
 }  // namespace sh

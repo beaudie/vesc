@@ -109,10 +109,9 @@ TIntermNode *ElseBlockRewriter::rewriteIfElse(TIntermIfElse *ifElse)
 
 }  // anonymous namespace
 
-void RewriteElseBlocks(TIntermNode *node, TSymbolUniqueId *temporaryId)
+void RewriteElseBlocks(TIntermNode *node)
 {
     ElseBlockRewriter rewriter;
-    rewriter.useTemporaryId(temporaryId);
     node->traverse(&rewriter);
 }
 
