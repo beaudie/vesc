@@ -48,11 +48,12 @@ bool IsMipmapFiltered(const SamplerState &samplerState);
 struct ImageDesc final
 {
     ImageDesc();
-    ImageDesc(const Extents &size, const Format &format);
+    ImageDesc(const Extents &size, const Format &format, const InitState initState);
     ImageDesc(const Extents &size,
               const Format &format,
               const GLsizei samples,
-              const GLboolean fixedSampleLocations);
+              const GLboolean fixedSampleLocations,
+              const InitState initState);
 
     ImageDesc(const ImageDesc &other) = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
@@ -61,6 +62,9 @@ struct ImageDesc final
     Format format;
     GLsizei samples;
     GLboolean fixedSampleLocations;
+
+    // Needed for robust resource initialization.
+    InitState initState;
 };
 
 struct SwizzleState final
@@ -128,11 +132,13 @@ struct TextureState final : private angle::NonCopyable
     void setImageDescChain(GLuint baselevel,
                            GLuint maxLevel,
                            Extents baseSize,
-                           const Format &format);
+                           const Format &format,
+                           InitState initState);
     void setImageDescChainMultisample(Extents baseSize,
                                       const Format &format,
                                       GLsizei samples,
-                                      GLboolean fixedSampleLocations);
+                                      GLboolean fixedSampleLocations,
+                                      InitState initState);
 
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
@@ -371,6 +377,11 @@ class Texture final : public egl::ImageSibling,
     void onDetach(const Context *context) override;
     GLuint getId() const override;
 
+    // Needed for robust resource init.
+    Error ensureInitialized(const Context *context);
+    bool needsInit(const ImageIndex &imageIndex) const override;
+    void markInitialized(const ImageIndex &imageIndex) override;
+
     enum DirtyBitType
     {
         // Sampler state
@@ -421,13 +432,13 @@ class Texture final : public egl::ImageSibling,
                                  const egl::Stream::GLTextureDescription &desc);
     Error releaseImageFromStream(const Context *context);
 
+    Error releaseTexImageInternal(const Context *context);
+
     TextureState mState;
     DirtyBits mDirtyBits;
     rx::TextureImpl *mTexture;
 
     std::string mLabel;
-
-    Error releaseTexImageInternal(const Context *context);
 
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;

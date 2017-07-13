@@ -30,6 +30,12 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
         UNIMPLEMENTED();
         return gl::OutOfMemory() << "getAttachmentRenderTarget not supported.";
     }
+
+    virtual gl::Error initialize(const gl::Context *context, const gl::ImageIndex &imageIndex)
+    {
+        UNIMPLEMENTED();
+        return gl::OutOfMemory() << "initialize not supported.";
+    }
 };
 
 }  // namespace rx

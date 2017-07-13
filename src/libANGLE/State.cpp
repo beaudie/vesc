@@ -2233,4 +2233,24 @@ const ImageUnit &State::getImageUnit(GLuint unit) const
     return mImageUnits[unit];
 }
 
+Error State::clearUnclearedActiveTextures(const Context *context)
+{
+    // This could be potentially sped up by tracking uninitialized-ness of bound textures.
+    // TODO(jmadill): Investigate improving the speed here.
+    ASSERT(mProgram);
+    for (const auto &samplerBinding : mProgram->getSamplerBindings())
+    {
+        for (GLuint textureId : samplerBinding.boundTextureUnits)
+        {
+            auto *texture = mSamplerTextures[samplerBinding.textureType][textureId].get();
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
+        }
+    }
+
+    return NoError();
+}
+
 }  // namespace gl

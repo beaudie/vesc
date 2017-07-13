@@ -170,6 +170,27 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
     return true;
 }
 
+// Needed to index into the attachment arrays/bitsets.
+static_assert(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS ==
+                  gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX,
+              "Framebuffer Dirty bit mismatch");
+static_assert(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS ==
+                  gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT,
+              "Framebuffer Dirty bit mismatch");
+static_assert(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 1 ==
+                  gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT,
+              "Framebuffer Dirty bit mismatch");
+
+Error InitAttachment(const Context *context, FramebufferAttachment *attachment)
+{
+    ASSERT(attachment->isAttached());
+    if (attachment->needsInit())
+    {
+        ANGLE_TRY(attachment->initialize(context));
+    }
+    return NoError();
+}
+
 }  // anonymous namespace
 
 // This constructor is only used for default framebuffers.
@@ -240,18 +261,24 @@ const FramebufferAttachment *FramebufferState::getAttachment(GLenum attachment) 
     }
 }
 
-const FramebufferAttachment *FramebufferState::getReadAttachment() const
+size_t FramebufferState::getReadIndex() const
 {
-    if (mReadBufferState == GL_NONE)
-    {
-        return nullptr;
-    }
     ASSERT(mReadBufferState == GL_BACK ||
            (mReadBufferState >= GL_COLOR_ATTACHMENT0 && mReadBufferState <= GL_COLOR_ATTACHMENT15));
     size_t readIndex = (mReadBufferState == GL_BACK
                             ? 0
                             : static_cast<size_t>(mReadBufferState - GL_COLOR_ATTACHMENT0));
     ASSERT(readIndex < mColorAttachments.size());
+    return readIndex;
+}
+
+const FramebufferAttachment *FramebufferState::getReadAttachment() const
+{
+    if (mReadBufferState == GL_NONE)
+    {
+        return nullptr;
+    }
+    size_t readIndex = getReadIndex();
     return mColorAttachments[readIndex].isAttached() ? &mColorAttachments[readIndex] : nullptr;
 }
 
@@ -563,6 +590,7 @@ void Framebuffer::detachMatchingAttachment(const Context *context,
     {
         attachment->detach(context);
         mDirtyBits.set(dirtyBit);
+        mState.mResourceNeedsInit.set(dirtyBit, false);
     }
 }
 
@@ -1287,6 +1315,7 @@ void Framebuffer::updateAttachment(const Context *context,
 {
     attachment->attach(context, type, binding, textureIndex, resource);
     mDirtyBits.set(dirtyBit);
+    mState.mResourceNeedsInit.set(dirtyBit, attachment->needsInit());
     BindResourceChannel(onDirtyBinding, resource);
 }
 
@@ -1308,10 +1337,13 @@ void Framebuffer::syncState(const Context *context)
     }
 }
 
-void Framebuffer::signal(uint32_t token)
+void Framebuffer::signal(size_t dirtyBit, InitState state)
 {
     // TOOD(jmadill): Make this only update individual attachments to do less work.
     mCachedStatus.reset();
+
+    // Mark the appropriate init flag.
+    mState.mResourceNeedsInit.set(dirtyBit, state == InitState::NeedsInit);
 }
 
 bool Framebuffer::complete(const Context *context)
@@ -1460,6 +1492,44 @@ GLenum Framebuffer::checkStatus(const ValidationContext *context)
 int Framebuffer::getSamples(const ValidationContext *context)
 {
     return getSamples(static_cast<const Context *>(context));
+}
+
+Error Framebuffer::clearUnclearedDrawAttachments(const Context *context)
+{
+    // Note: we don't actually filter by the draw attachment enum. Just init everything.
+
+    for (size_t bit : mState.mResourceNeedsInit)
+    {
+        switch (bit)
+        {
+            case DIRTY_BIT_DEPTH_ATTACHMENT:
+                ANGLE_TRY(InitAttachment(context, &mState.mDepthAttachment));
+                break;
+            case DIRTY_BIT_STENCIL_ATTACHMENT:
+                ANGLE_TRY(InitAttachment(context, &mState.mStencilAttachment));
+                break;
+            default:
+                ANGLE_TRY(InitAttachment(context, &mState.mColorAttachments[bit]));
+                break;
+        }
+    }
+
+    mState.mResourceNeedsInit.reset();
+    return NoError();
+}
+
+Error Framebuffer::clearUnclearedReadAttachment(const Context *context)
+{
+    if (mState.mReadBufferState == GL_NONE)
+        return NoError();
+
+    size_t readIndex = mState.getReadIndex();
+    if (!mState.mResourceNeedsInit[readIndex])
+        return NoError();
+
+    ANGLE_TRY(InitAttachment(context, &mState.mColorAttachments[readIndex]));
+    mState.mResourceNeedsInit.reset(readIndex);
+    return NoError();
 }
 
 }  // namespace gl

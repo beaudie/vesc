@@ -106,6 +106,9 @@ class Surface : public gl::FramebufferAttachmentObject
 
     bool directComposition() const { return mDirectComposition; }
 
+    bool needsInit(const gl::ImageIndex &imageIndex) const override;
+    void markInitialized(const gl::ImageIndex &imageIndex) override;
+
   protected:
     Surface(EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes);
     virtual ~Surface();

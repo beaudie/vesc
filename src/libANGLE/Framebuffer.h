@@ -58,6 +58,7 @@ class FramebufferState final : angle::NonCopyable
     ~FramebufferState();
 
     const std::string &getLabel();
+    size_t getReadIndex() const;
 
     const FramebufferAttachment *getAttachment(GLenum attachment) const;
     const FramebufferAttachment *getReadAttachment() const;
@@ -113,11 +114,14 @@ class FramebufferState final : angle::NonCopyable
     FramebufferAttachment mWebGLDepthAttachment;
     FramebufferAttachment mWebGLStencilAttachment;
     bool mWebGLDepthStencilConsistent;
+
+    // Tracks if we need to initialize the resources for each attachment.
+    angle::BitSet<IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 2> mResourceNeedsInit;
 };
 
-using OnAttachmentDirtyBinding  = angle::ChannelBinding<>;
-using OnAttachmentDirtyChannel  = angle::BroadcastChannel<>;
-using OnAttachmentDirtyReceiver = angle::SignalReceiver<>;
+using OnAttachmentDirtyBinding  = angle::ChannelBinding<size_t, InitState>;
+using OnAttachmentDirtyChannel  = angle::BroadcastChannel<size_t, InitState>;
+using OnAttachmentDirtyReceiver = angle::SignalReceiver<size_t, InitState>;
 
 class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 {
@@ -247,7 +251,7 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
                GLbitfield mask,
                GLenum filter);
 
-    enum DirtyBitType : uint32_t
+    enum DirtyBitType : size_t
     {
         DIRTY_BIT_COLOR_ATTACHMENT_0,
         DIRTY_BIT_COLOR_ATTACHMENT_MAX =
@@ -269,13 +273,16 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
     void syncState(const Context *context);
 
-    // angle::SignalReceiver implementation
-    void signal(uint32_t token) override;
+    // OnAttachmentChangedReceiver implementation
+    void signal(size_t dirtyBit, InitState state) override;
 
     bool formsRenderingFeedbackLoopWith(const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,
                                       GLint copyTextureLevel,
                                       GLint copyTextureLayer) const;
+
+    Error clearUnclearedDrawAttachments(const Context *context);
+    Error clearUnclearedReadAttachment(const Context *context);
 
   private:
     void detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);

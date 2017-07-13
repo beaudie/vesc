@@ -468,6 +468,8 @@ class State : angle::NonCopyable
 
     const ImageUnit &getImageUnit(GLuint unit) const;
 
+    Error clearUnclearedActiveTextures(const Context *context);
+
   private:
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;

@@ -663,6 +663,44 @@ gl::Error TextureD3D::onDestroy(const gl::Context *context)
     return releaseTexStorage(context);
 }
 
+gl::Error TextureD3D::initialize(const gl::Context *context, const gl::ImageIndex &imageIndex)
+{
+    // Fast path: can use a render target clear.
+    if (canCreateRenderTargetForImage(imageIndex))
+    {
+        ANGLE_TRY(ensureRenderTarget(context));
+        ASSERT(mTexStorage);
+        RenderTargetD3D *renderTarget = nullptr;
+        ANGLE_TRY(mTexStorage->getRenderTarget(context, imageIndex, &renderTarget));
+        ANGLE_TRY(mRenderer->initRenderTarget(renderTarget));
+        return gl::NoError();
+    }
+
+    // Slow path: non-renderable texture or the texture levels aren't set up.
+    ImageD3D *image        = getImage(imageIndex);
+    const auto &formatInfo = gl::GetSizedInternalFormatInfo(image->getInternalFormat());
+
+    size_t imageBytes =
+        formatInfo.pixelBytes * image->getWidth() * image->getHeight() * image->getDepth();
+
+    gl::PixelUnpackState defaultUnpackState;
+
+    angle::MemoryBuffer *zeroBuffer = nullptr;
+    ANGLE_TRY(context->getZeroFilledBuffer(imageBytes, &zeroBuffer));
+    if (shouldUseSetData(image))
+    {
+        mTexStorage->setData(context, imageIndex, image, nullptr, formatInfo.type,
+                             defaultUnpackState, zeroBuffer->data());
+    }
+    else
+    {
+        gl::Box fullImageArea(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth());
+        ANGLE_TRY(image->loadData(context, fullImageArea, defaultUnpackState, formatInfo.type,
+                                  zeroBuffer->data(), false));
+    }
+    return gl::NoError();
+}
+
 TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {

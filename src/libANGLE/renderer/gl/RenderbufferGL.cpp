@@ -93,4 +93,10 @@ GLuint RenderbufferGL::getRenderbufferID() const
     return mRenderbufferID;
 }
 
+gl::Error RenderbufferGL::initialize(const gl::Context *context, const gl::ImageIndex &imageIndex)
+{
+    // TODO(jmadill):
+    return gl::NoError();
 }
+
+}  // namespace rx
