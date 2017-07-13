@@ -32,6 +32,7 @@ ERRMSG(ExtensionNotEnabled, "Extension is not enabled.");
 ERRMSG(FramebufferIncompleteAttachment,
        "Attachment type must be compatible with attachment object.");
 ERRMSG(FramebufferInvalidAttachment, "Invalid Attachment Type");
+ERRMSG(FunctionRequiresGLES3OrHigher, "Requires a GLES 3.0 or higher context.");
 ERRMSG(GenerateMipmapNotAllowed, "Compressed textures do not support mipmap generation.");
 ERRMSG(IndexExceedsMax, "Index exceeds MAX_VERTEX_ATTRIBS");
 ERRMSG(InsufficientBufferSize, "Insufficient buffer size.");
