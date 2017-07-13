@@ -12,6 +12,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Renderbuffer.h"
@@ -23,6 +24,45 @@ using namespace angle;
 
 namespace gl
 {
+
+namespace
+{
+bool ValidateFramebufferTextureMultiviewBaseANGLE(Context *context,
+                                                  GLenum target,
+                                                  GLenum attachment,
+                                                  GLuint texture,
+                                                  GLint level,
+                                                  GLsizei numViews)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), FunctionRequiresGLES3OrHigher);
+        return false;
+    }
+
+    if (!ValidateFramebufferTextureBase(context, target, attachment, texture, level))
+    {
+        return false;
+    }
+
+    if (numViews < 1)
+    {
+        context->handleError(InvalidValue() << "numViews canont be less than 1.");
+        return false;
+    }
+
+    const gl::Extensions &extensions = context->getExtensions();
+    if (static_cast<GLuint>(numViews) > extensions.maxViews)
+    {
+        context->handleError(InvalidValue()
+                             << "numViews canont be greater than GL_MAX_VIEWS_ANGLE.");
+        return false;
+    }
+
+    return true;
+}
+
+}  // namespace
 
 static bool ValidateTexImageFormatCombination(gl::Context *context,
                                               GLenum target,
@@ -2569,6 +2609,149 @@ bool ValidateDrawElementsInstanced(ValidationContext *context,
     }
 
     return ValidateDrawElementsInstancedCommon(context, mode, count, type, indices, instanceCount);
+}
+
+bool ValidateFramebufferTextureMultiviewLayeredANGLE(Context *context,
+                                                     GLenum target,
+                                                     GLenum attachment,
+                                                     GLuint texture,
+                                                     GLint level,
+                                                     GLint baseViewIndex,
+                                                     GLsizei numViews)
+{
+
+    if (!ValidateFramebufferTextureMultiviewBaseANGLE(context, target, attachment, texture, level,
+                                                      numViews))
+    {
+        return false;
+    }
+
+    if (baseViewIndex < 0)
+    {
+        context->handleError(InvalidValue() << "baseViewIndex cannot be less than 0.");
+        return false;
+    }
+
+    const gl::Caps &caps = context->getCaps();
+    if (static_cast<GLuint>(baseViewIndex + numViews) > caps.maxArrayTextureLayers)
+    {
+        context->handleError(
+            InvalidValue()
+            << "baseViewIndex+numViews cannot be greater than GL_MAX_ARRAY_TEXTURE_LAYERS.");
+        return false;
+    }
+
+    if (texture != 0)
+    {
+        gl::Texture *tex = context->getTexture(texture);
+        ASSERT(tex);
+
+        switch (tex->getTarget())
+        {
+            case GL_TEXTURE_2D_ARRAY:
+            {
+                if (level > gl::log2(caps.max2DTextureSize))
+                {
+                    context->handleError(InvalidValue());
+                    return false;
+                }
+            }
+            break;
+            default:
+                context->handleError(InvalidOperation());
+                return false;
+        }
+
+        const auto &format = tex->getFormat(tex->getTarget(), level);
+        if (format.info->compressed)
+        {
+            context->handleError(InvalidOperation());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidateFramebufferTextureMultiviewSideBySideANGLE(Context *context,
+                                                        GLenum target,
+                                                        GLenum attachment,
+                                                        GLuint texture,
+                                                        GLint level,
+                                                        GLsizei numViews,
+                                                        const GLint *viewportOffsets)
+{
+    if (!ValidateFramebufferTextureMultiviewBaseANGLE(context, target, attachment, texture, level,
+                                                      numViews))
+    {
+        return false;
+    }
+
+    const GLsizei kNumViewportOffsetValues = numViews * 2;
+    for (GLsizei i = 0; i < kNumViewportOffsetValues; ++i)
+    {
+        if (viewportOffsets[i] < 0)
+        {
+            context->handleError(InvalidValue()
+                                 << "viewportOffsets cannot contain negative values.");
+            return false;
+        }
+    }
+
+    if (texture != 0)
+    {
+        gl::Texture *tex = context->getTexture(texture);
+        ASSERT(tex);
+
+        switch (tex->getTarget())
+        {
+            case GL_TEXTURE_2D:
+            {
+                if (level > gl::log2(context->getCaps().max2DTextureSize))
+                {
+                    context->handleError(InvalidValue());
+                    return false;
+                }
+            }
+            break;
+            default:
+                context->handleError(InvalidOperation());
+                return false;
+        }
+
+        const auto &format = tex->getFormat(tex->getTarget(), level);
+        if (format.info->compressed)
+        {
+            context->handleError(InvalidOperation());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidateFramebufferTextureMultiviewSideBySideRobustANGLE(Context *context,
+                                                              GLenum target,
+                                                              GLenum attachment,
+                                                              GLuint texture,
+                                                              GLint level,
+                                                              GLsizei numViews,
+                                                              GLsizei bufSize,
+                                                              const GLint *viewportOffsets)
+{
+    if (!ValidateRobustEntryPoint(context, bufSize))
+    {
+        return false;
+    }
+
+    const GLsizei kNumViewportOffsetValues = numViews * 2;
+    if (!ValidateRobustBufferSize(context, bufSize, kNumViewportOffsetValues))
+    {
+        return false;
+    }
+
+    return ValidateFramebufferTextureMultiviewSideBySideANGLE(context, target, attachment, texture,
+                                                              level, numViews, viewportOffsets);
 }
 
 }  // namespace gl
