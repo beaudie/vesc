@@ -31,9 +31,7 @@ static const char kFunctionMangledNameSeparator = '(';
 
 }  // anonymous namespace
 
-int TSymbolTable::uniqueIdCounter = 0;
-
-TSymbolUniqueId::TSymbolUniqueId() : mId(TSymbolTable::nextUniqueId())
+TSymbolUniqueId::TSymbolUniqueId(const TSymbolTable *symbolTable) : mId(symbolTable->nextUniqueId())
 {
 }
 
@@ -46,7 +44,8 @@ int TSymbolUniqueId::get() const
     return mId;
 }
 
-TSymbol::TSymbol(const TString *n) : uniqueId(TSymbolTable::nextUniqueId()), name(n)
+TSymbol::TSymbol(TSymbolTable *symbolTable, const TString *n)
+    : uniqueId(symbolTable->nextUniqueId()), name(n)
 {
 }
 
@@ -273,7 +272,7 @@ const TType *VectorType(const TType *type, int size)
 
 TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(const TString *name)
 {
-    TInterfaceBlockName *blockNameSymbol = new TInterfaceBlockName(name);
+    TInterfaceBlockName *blockNameSymbol = new TInterfaceBlockName(this, name);
     if (insert(currentLevel(), blockNameSymbol))
     {
         return blockNameSymbol;
@@ -288,7 +287,7 @@ TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, co
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const TString *name, const TType &type)
 {
-    TVariable *var = new TVariable(name, type);
+    TVariable *var = new TVariable(this, name, type);
     if (insert(level, var))
     {
         // Do lazy initialization for struct types, so we allocate to the current scope.
@@ -306,7 +305,7 @@ TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
                                            const char *name,
                                            const TType &type)
 {
-    TVariable *var = new TVariable(NewPoolTString(name), type);
+    TVariable *var = new TVariable(this, NewPoolTString(name), type);
     if (insert(level, ext, var))
     {
         if (var->getType().getBasicType() == EbtStruct)
@@ -320,7 +319,7 @@ TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
 
 TVariable *TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)
 {
-    TVariable *var = new TVariable(&str->name(), TType(str), true);
+    TVariable *var = new TVariable(this, &str->name(), TType(str), true);
     if (insert(level, var))
     {
         var->getType().realize();
@@ -459,7 +458,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else
     {
-        TFunction *function = new TFunction(NewPoolTString(name), rvalue, op, ext);
+        TFunction *function = new TFunction(this, NewPoolTString(name), rvalue, op, ext);
 
         function->addParameter(TConstParameter(ptype1));
 
@@ -524,7 +523,7 @@ void TSymbolTable::insertBuiltInFunctionNoParameters(ESymbolLevel level,
                                                      const char *name)
 {
     insertUnmangledBuiltInName(name, level);
-    insert(level, new TFunction(NewPoolTString(name), rvalue, op));
+    insert(level, new TFunction(this, NewPoolTString(name), rvalue, op));
 }
 
 TPrecision TSymbolTable::getDefaultPrecision(TBasicType type) const

@@ -102,10 +102,14 @@ void TIntermBranch::traverse(TIntermTraverser *it)
     it->traverseBranch(this);
 }
 
-TIntermTraverser::TIntermTraverser(bool preVisit, bool inVisit, bool postVisit)
+TIntermTraverser::TIntermTraverser(bool preVisit,
+                                   bool inVisit,
+                                   bool postVisit,
+                                   const TSymbolTable *symbolTable)
     : preVisit(preVisit),
       inVisit(inVisit),
       postVisit(postVisit),
+      mSymbolTable(symbolTable),
       mDepth(-1),
       mMaxDepth(0),
       mInGlobalScope(true),
@@ -218,15 +222,15 @@ TIntermBinary *TIntermTraverser::createTempAssignment(TIntermTyped *rightNode)
     return assignment;
 }
 
-void TIntermTraverser::useTemporaryId(TSymbolUniqueId *temporaryId)
-{
-    mTemporaryId = temporaryId;
-}
-
 void TIntermTraverser::nextTemporaryId()
 {
-    ASSERT(mTemporaryId != nullptr);
-    *mTemporaryId = TSymbolUniqueId();
+    ASSERT(mSymbolTable);
+    if (!mTemporaryId)
+    {
+        mTemporaryId = new TSymbolUniqueId(mSymbolTable);
+        return;
+    }
+    *mTemporaryId = TSymbolUniqueId(mSymbolTable);
 }
 
 void TLValueTrackingTraverser::addToFunctionMap(const TSymbolUniqueId &id,
@@ -718,10 +722,9 @@ TLValueTrackingTraverser::TLValueTrackingTraverser(bool preVisit,
                                                    bool postVisit,
                                                    const TSymbolTable &symbolTable,
                                                    int shaderVersion)
-    : TIntermTraverser(preVisit, inVisit, postVisit),
+    : TIntermTraverser(preVisit, inVisit, postVisit, &symbolTable),
       mOperatorRequiresLValue(false),
       mInFunctionCallOutParameter(false),
-      mSymbolTable(symbolTable),
       mShaderVersion(shaderVersion)
 {
 }
@@ -796,7 +799,7 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
             if (!node->isFunctionCall() && !node->isConstructor())
             {
                 builtInFunc = static_cast<TFunction *>(
-                    mSymbolTable.findBuiltIn(node->getSymbolTableMangledName(), mShaderVersion));
+                    mSymbolTable->findBuiltIn(node->getSymbolTableMangledName(), mShaderVersion));
             }
 
             size_t paramIndex = 0;

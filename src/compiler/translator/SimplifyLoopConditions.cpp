@@ -276,13 +276,10 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
 
 void SimplifyLoopConditions(TIntermNode *root,
                             unsigned int conditionsToSimplifyMask,
-                            TSymbolUniqueId *temporaryId,
                             const TSymbolTable &symbolTable,
                             int shaderVersion)
 {
     SimplifyLoopConditionsTraverser traverser(conditionsToSimplifyMask, symbolTable, shaderVersion);
-    ASSERT(temporaryId != nullptr);
-    traverser.useTemporaryId(temporaryId);
     root->traverse(&traverser);
     traverser.updateTree();
 }
