@@ -3525,7 +3525,17 @@ GL_APICALL void GL_APIENTRY FramebufferTextureMultiviewLayeredANGLE(GLenum targe
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d, "
         "GLint baseViewIndex = %d, GLsizei numViews = %d)",
         target, attachment, texture, level, baseViewIndex, numViews);
-    UNIMPLEMENTED();
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateFramebufferTextureMultiviewLayeredANGLE(context, target, attachment, texture,
+                                                             level, baseViewIndex, numViews))
+        {
+            return;
+        }
+        context->framebufferTextureMultiviewLayeredANGLE(target, attachment, texture, level,
+                                                         baseViewIndex, numViews);
+    }
 }
 
 GL_APICALL void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
@@ -3539,7 +3549,17 @@ GL_APICALL void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum ta
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d, "
         "GLsizei numViews = %d, GLsizei* viewportOffsets = 0x%0.8p)",
         target, attachment, texture, level, numViews, viewportOffsets);
-    UNIMPLEMENTED();
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateFramebufferTextureMultiviewSideBySideANGLE(
+                context, target, attachment, texture, level, numViews, viewportOffsets))
+        {
+            return;
+        }
+        context->framebufferTextureMultiviewSideBySideANGLE(target, attachment, texture, level,
+                                                            numViews, viewportOffsets);
+    }
 }
 
 GL_APICALL void GL_APIENTRY
@@ -3555,7 +3575,17 @@ FramebufferTextureMultiviewSideBySideRobustANGLE(GLenum target,
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d, "
         "GLsizei numViews = %d, GLsizei bufSize = %d, GLsizei* viewportOffsets = 0x%0.8p)",
         target, attachment, texture, level, numViews, viewportOffsets);
-    UNIMPLEMENTED();
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateFramebufferTextureMultiviewSideBySideRobustANGLE(
+                context, target, attachment, texture, level, numViews, bufSize, viewportOffsets))
+        {
+            return;
+        }
+        context->framebufferTextureMultiviewSideBySideANGLE(target, attachment, texture, level,
+                                                            numViews, viewportOffsets);
+    }
 }
 
 }  // gl
