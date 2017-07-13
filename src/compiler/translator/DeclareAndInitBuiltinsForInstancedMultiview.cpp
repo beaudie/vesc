@@ -140,7 +140,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
     ASSERT(shaderType == GL_VERTEX_SHADER || shaderType == GL_FRAGMENT_SHADER);
 
     TQualifier viewIDQualifier  = (shaderType == GL_VERTEX_SHADER) ? EvqFlatOut : EvqFlatIn;
-    TIntermSymbol *viewIDSymbol = new TIntermSymbol(TSymbolTable::nextUniqueId(), "ViewID_OVR",
+    TIntermSymbol *viewIDSymbol = new TIntermSymbol(symbolTable.nextUniqueId(), "ViewID_OVR",
                                                     TType(EbtUInt, EbpHigh, viewIDQualifier));
     viewIDSymbol->setInternal(true);
 
@@ -151,7 +151,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
         // Replacing gl_InstanceID with InstanceID should happen before adding the initializers of
         // InstanceID and ViewID.
         TIntermSymbol *instanceIDSymbol = new TIntermSymbol(
-            TSymbolTable::nextUniqueId(), "InstanceID", TType(EbtInt, EbpHigh, EvqGlobal));
+            symbolTable.nextUniqueId(), "InstanceID", TType(EbtInt, EbpHigh, EvqGlobal));
         instanceIDSymbol->setInternal(true);
         DeclareGlobalVariable(root, instanceIDSymbol);
         ReplaceSymbol(root, "gl_InstanceID", instanceIDSymbol);
