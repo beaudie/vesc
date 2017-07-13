@@ -19,6 +19,7 @@ namespace gl
 ERRMSG(ActiveTextureRange, "Cannot be less than 0 or greater than maximum number of textures.");
 ERRMSG(BufferNotBound, "A buffer must be bound.");
 ERRMSG(ClearInvalidMask, "Invalid mask bits.");
+ERRMSG(CompressedTexturesNotAttachable, "Compressed textures cannot be attached to a framebuffer.");
 ERRMSG(CubemapFacesEqualDimensions, "Each cubemap face must have equal width and height.");
 ERRMSG(CubemapIncomplete,
        "Texture is not cubemap complete. All cubemaps faces must be defined and be the same size.");
@@ -32,6 +33,7 @@ ERRMSG(ExtensionNotEnabled, "Extension is not enabled.");
 ERRMSG(FramebufferIncompleteAttachment,
        "Attachment type must be compatible with attachment object.");
 ERRMSG(FramebufferInvalidAttachment, "Invalid Attachment Type");
+ERRMSG(FunctionRequiresGLES3OrHigher, "Function requires GLES 3.0 or higher.");
 ERRMSG(GenerateMipmapNotAllowed, "Compressed textures do not support mipmap generation.");
 ERRMSG(IndexExceedsMax, "Index exceeds MAX_VERTEX_ATTRIBS");
 ERRMSG(InsufficientBufferSize, "Insufficient buffer size.");
@@ -104,6 +106,7 @@ ERRMSG(StencilReferenceMaskOrMismatch,
        "Stencil reference and mask values must be the same for front facing and back facing "
        "triangles.");
 ERRMSG(StrideMustBeMultipleOfType, "Stride must be a multiple of the passed in datatype.");
+ERRMSG(Texture2DLevelOutOfRange, "level cannot be greater than log2(GL_MAX_TEXTURE_SIZE).");
 ERRMSG(TextureNotBound, "A texture must be bound.");
 ERRMSG(TextureNotPow2, "The texture is a non-power-of-two texture.");
 ERRMSG(TypeMustMatchOriginalType,
