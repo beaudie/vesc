@@ -122,7 +122,7 @@ TIntermTyped *CreateZeroNode(const TType &type)
     {
         ASSERT(type.getBasicType() == EbtStruct);
 
-        TStructure *structure = type.getStruct();
+        const TStructure *structure = type.getStruct();
         for (const auto &field : structure->fields())
         {
             arguments->push_back(CreateZeroNode(*field->type()));

@@ -94,10 +94,6 @@ class TSymbol : angle::NonCopyable
 class TVariable : public TSymbol
 {
   public:
-    TVariable(const TString *name, const TType &t, bool uT = false)
-        : TSymbol(name), type(t), userType(uT), unionArray(0)
-    {
-    }
     ~TVariable() override {}
     bool isVariable() const override { return true; }
     TType &getType() { return type; }
@@ -110,8 +106,18 @@ class TVariable : public TSymbol
     void shareConstPointer(const TConstantUnion *constArray) { unionArray = constArray; }
 
   private:
+    friend class TSymbolTable;
+
+    TVariable(const TString *name, const TType &t, bool isUserTypeDefinition = false)
+        : TSymbol(name), type(t), userType(isUserTypeDefinition), unionArray(0)
+    {
+    }
+
     TType type;
+
+    // Set to true if this represents a user type, as opposed to a variable.
     bool userType;
+
     // we are assuming that Pool Allocator will free the memory
     // allocated to unionArray when this object is destroyed.
     const TConstantUnion *unionArray;
@@ -224,9 +230,11 @@ class TFunction : public TSymbol
 class TInterfaceBlockName : public TSymbol
 {
   public:
-    TInterfaceBlockName(const TString *name) : TSymbol(name) {}
-
     virtual ~TInterfaceBlockName() {}
+
+  private:
+    friend class TSymbolTable;
+    TInterfaceBlockName(const TString *name) : TSymbol(name) {}
 };
 
 class TSymbolTableLevel
@@ -319,15 +327,23 @@ class TSymbolTable : angle::NonCopyable
         precisionStack.pop_back();
     }
 
-    bool declare(TSymbol *symbol) { return insert(currentLevel(), symbol); }
-
-    bool insert(ESymbolLevel level, TSymbol *symbol) { return table[level]->insert(symbol); }
-
-    bool insert(ESymbolLevel level, const char *ext, TSymbol *symbol)
+    TVariable *declareVariable(const TString *name, const TType &type)
     {
-        symbol->relateToExtension(ext);
-        return table[level]->insert(symbol);
+        return insertVariable(currentLevel(), name, type);
     }
+
+    TVariable *declareStructType(TStructure *str) { return insertStructType(currentLevel(), str); }
+
+    TInterfaceBlockName *declareInterfaceBlockName(const TString *name);
+
+    TVariable *insertVariable(ESymbolLevel level, const char *name, const TType &type);
+
+    TVariable *insertVariableExt(ESymbolLevel level,
+                                 const char *ext,
+                                 const char *name,
+                                 const TType &type);
+
+    TVariable *insertStructType(ESymbolLevel level, TStructure *str);
 
     bool insertConstInt(ESymbolLevel level, const char *name, int value, TPrecision precision)
     {
@@ -444,8 +460,6 @@ class TSymbolTable : angle::NonCopyable
         return table[currentLevel() - 1];
     }
 
-    void dump(TInfoSink &infoSink) const;
-
     void setDefaultPrecision(TBasicType type, TPrecision prec)
     {
         int indexOfLastElement = static_cast<int>(precisionStack.size()) - 1;
@@ -487,6 +501,16 @@ class TSymbolTable : angle::NonCopyable
 
   private:
     ESymbolLevel currentLevel() const { return static_cast<ESymbolLevel>(table.size() - 1); }
+
+    TVariable *insertVariable(ESymbolLevel level, const TString *name, const TType &type);
+
+    bool insert(ESymbolLevel level, TSymbol *symbol) { return table[level]->insert(symbol); }
+
+    bool insert(ESymbolLevel level, const char *ext, TSymbol *symbol)
+    {
+        symbol->relateToExtension(ext);
+        return table[level]->insert(symbol);
+    }
 
     // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00 and
     // above.
