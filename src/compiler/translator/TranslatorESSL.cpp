@@ -56,13 +56,13 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
 
     if (precisionEmulation)
     {
-        EmulatePrecision emulatePrecision(getSymbolTable(), shaderVer);
+        EmulatePrecision emulatePrecision(&getSymbolTable(), shaderVer);
         root->traverse(&emulatePrecision);
         emulatePrecision.updateTree();
         emulatePrecision.writeEmulationHelpers(sink, shaderVer, SH_ESSL_OUTPUT);
     }
 
-    RecordConstantPrecision(root, getTemporaryId());
+    RecordConstantPrecision(root, &getSymbolTable());
 
     // Write emulated built-in functions if needed.
     if (!getBuiltInFunctionEmulator().isOutputEmpty())
