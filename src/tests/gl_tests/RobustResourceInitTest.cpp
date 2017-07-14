@@ -440,18 +440,18 @@ TEST_P(RobustResourceInitTest, CopyTexSubImage3DTextureWronglyInitialized)
         return;
     }
 
-    constexpr GLint kLayer     = 0;
-    constexpr GLint kWidth     = 2;
-    constexpr GLint kHeight    = 2;
-    constexpr GLint kDepth     = 2;
-    constexpr size_t kDataSize = kWidth * kHeight * 4;
+    constexpr GLint kLayerLocal     = 0;
+    constexpr GLint kWidthLocal     = 2;
+    constexpr GLint kHeightLocal    = 2;
+    constexpr GLint kDepthLocal     = 2;
+    constexpr size_t kDataSizeLocal = kWidthLocal * kHeightLocal * 4;
 
     GLTexture texture2D;
     glBindTexture(GL_TEXTURE_2D, texture2D);
-    constexpr std::array<uint8_t, kDataSize> data = {{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                                                      0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
-                                                      0x0F, 0x10}};
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+    constexpr std::array<uint8_t, kDataSizeLocal> data = {{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                                                           0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
+                                                           0x0F, 0x10}};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidthLocal, kHeightLocal, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  data.data());
 
     GLFramebuffer fbo;
@@ -461,12 +461,12 @@ TEST_P(RobustResourceInitTest, CopyTexSubImage3DTextureWronglyInitialized)
 
     GLTexture texture3D;
     glBindTexture(GL_TEXTURE_3D, texture3D);
-    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidth, kHeight, kDepth);
-    glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, kLayer, 0, 0, kWidth, kHeight);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidthLocal, kHeightLocal, kDepthLocal);
+    glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, kLayerLocal, 0, 0, kWidthLocal, kHeightLocal);
 
-    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0, kLayer);
-    std::array<uint8_t, kDataSize> pixels;
-    glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0, kLayerLocal);
+    std::array<uint8_t, kDataSizeLocal> pixels;
+    glReadPixels(0, 0, kWidthLocal, kHeightLocal, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
     ASSERT_GL_NO_ERROR();
     EXPECT_EQ(data, pixels);
 }
