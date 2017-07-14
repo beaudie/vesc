@@ -138,7 +138,7 @@ class TParseContext : angle::NonCopyable
     void checkIsParameterQualifierValid(const TSourceLoc &line,
                                         const TTypeQualifierBuilder &typeQualifierBuilder,
                                         TType *type);
-    bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
+    bool checkCanUseExtension(const TSourceLoc &line, const char *extension);
 
     // Done for all declarations, whether empty or not.
     void declarationQualifierErrorCheck(const sh::TQualifier qualifier,
