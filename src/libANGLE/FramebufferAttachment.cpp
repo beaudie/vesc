@@ -51,7 +51,12 @@ FramebufferAttachment::Target &FramebufferAttachment::Target::operator=(const Ta
 ////// FramebufferAttachment Implementation //////
 
 FramebufferAttachment::FramebufferAttachment()
-    : mType(GL_NONE), mResource(nullptr)
+    : mType(GL_NONE),
+      mResource(nullptr),
+      mNumViews(1),
+      mMultiviewLayout(GL_NONE),
+      mBaseViewIndex(0),
+      mViewportOffsets(2u, 0)
 {
 }
 
@@ -60,7 +65,11 @@ FramebufferAttachment::FramebufferAttachment(const Context *context,
                                              GLenum binding,
                                              const ImageIndex &textureIndex,
                                              FramebufferAttachmentObject *resource)
-    : mResource(nullptr)
+    : mResource(nullptr),
+      mNumViews(1),
+      mMultiviewLayout(GL_NONE),
+      mBaseViewIndex(0),
+      mViewportOffsets(2u, 0)
 {
     attach(context, type, binding, textureIndex, resource);
 }
@@ -92,6 +101,12 @@ void FramebufferAttachment::detach(const Context *context)
         mResource->onDetach(context);
         mResource = nullptr;
     }
+    mNumViews        = 1;
+    mMultiviewLayout = GL_NONE;
+    mBaseViewIndex   = 0;
+    mViewportOffsets.resize(2u);
+    mViewportOffsets[0] = 0;
+    mViewportOffsets[1] = 0;
 
     // not technically necessary, could omit for performance
     mTarget = Target();
@@ -197,6 +212,29 @@ GLint FramebufferAttachment::layer() const
         return index.layerIndex;
     }
     return 0;
+}
+
+GLint FramebufferAttachment::getNumViews() const
+{
+    ASSERT(mType == GL_TEXTURE);
+    return mNumViews;
+}
+
+GLenum FramebufferAttachment::getMultiviewLayout() const
+{
+    ASSERT(mType == GL_TEXTURE);
+    return mMultiviewLayout;
+}
+
+GLint FramebufferAttachment::getBaseViewIndex() const
+{
+    ASSERT(mType == GL_TEXTURE);
+    return mBaseViewIndex;
+}
+
+void FramebufferAttachment::getMultiviewViewportOffsets(GLint *offsets) const
+{
+    memcpy(offsets, mViewportOffsets.data(), sizeof(GLint) * mViewportOffsets.size());
 }
 
 Texture *FramebufferAttachment::getTexture() const
