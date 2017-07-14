@@ -533,6 +533,22 @@ void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
             *params = attachmentObject->layer();
             break;
 
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_ANGLE:
+            *params = attachmentObject->getNumViews();
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_MULTIVIEW_LAYOUT_ANGLE:
+            *params = static_cast<GLint>(attachmentObject->getMultiviewLayout());
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_ANGLE:
+            *params = attachmentObject->getBaseViewIndex();
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_VIEWPORT_OFFSETS_ANGLE:
+            attachmentObject->getMultiviewViewportOffsets(params);
+            break;
+
         default:
             UNREACHABLE();
             break;

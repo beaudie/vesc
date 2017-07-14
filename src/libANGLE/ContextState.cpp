@@ -511,6 +511,13 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         return false;
     }
 
+    if (getExtensions().multiview && pname == GL_MAX_VIEWS_ANGLE)
+    {
+        *type      = GL_INT;
+        *numParams = 1;
+        return true;
+    }
+
     // Check for ES3.0+ parameter names
     switch (pname)
     {
