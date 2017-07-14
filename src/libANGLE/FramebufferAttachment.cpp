@@ -51,7 +51,12 @@ FramebufferAttachment::Target &FramebufferAttachment::Target::operator=(const Ta
 ////// FramebufferAttachment Implementation //////
 
 FramebufferAttachment::FramebufferAttachment()
-    : mType(GL_NONE), mResource(nullptr)
+    : mType(GL_NONE),
+      mResource(nullptr),
+      mNumViews(1),
+      mMultiviewLayout(GL_NONE),
+      mBaseViewIndex(0),
+      mViewportOffsets(2u, 0)
 {
 }
 
@@ -60,7 +65,11 @@ FramebufferAttachment::FramebufferAttachment(const Context *context,
                                              GLenum binding,
                                              const ImageIndex &textureIndex,
                                              FramebufferAttachmentObject *resource)
-    : mResource(nullptr)
+    : mResource(nullptr),
+      mNumViews(1),
+      mMultiviewLayout(GL_NONE),
+      mBaseViewIndex(0),
+      mViewportOffsets(2u, 0)
 {
     attach(context, type, binding, textureIndex, resource);
 }
@@ -76,6 +85,10 @@ FramebufferAttachment &FramebufferAttachment::operator=(FramebufferAttachment &&
     std::swap(mType, other.mType);
     std::swap(mTarget, other.mTarget);
     std::swap(mResource, other.mResource);
+    std::swap(mNumViews, other.mNumViews);
+    std::swap(mMultiviewLayout, other.mMultiviewLayout);
+    std::swap(mBaseViewIndex, other.mBaseViewIndex);
+    std::swap(mViewportOffsets, other.mViewportOffsets);
     return *this;
 }
 
@@ -92,6 +105,12 @@ void FramebufferAttachment::detach(const Context *context)
         mResource->onDetach(context);
         mResource = nullptr;
     }
+    mNumViews        = 1;
+    mMultiviewLayout = GL_NONE;
+    mBaseViewIndex   = 0;
+    mViewportOffsets.resize(2u);
+    mViewportOffsets[0] = 0;
+    mViewportOffsets[1] = 0;
 
     // not technically necessary, could omit for performance
     mTarget = Target();
@@ -199,6 +218,26 @@ GLint FramebufferAttachment::layer() const
     return 0;
 }
 
+GLint FramebufferAttachment::getNumViews() const
+{
+    return mNumViews;
+}
+
+GLenum FramebufferAttachment::getMultiviewLayout() const
+{
+    return mMultiviewLayout;
+}
+
+GLint FramebufferAttachment::getBaseViewIndex() const
+{
+    return mBaseViewIndex;
+}
+
+void FramebufferAttachment::getMultiviewViewportOffsets(GLint *offsets) const
+{
+    memcpy(offsets, mViewportOffsets.data(), sizeof(GLint) * mViewportOffsets.size());
+}
+
 Texture *FramebufferAttachment::getTexture() const
 {
     return rx::GetAs<Texture>(mResource);
@@ -221,7 +260,18 @@ FramebufferAttachmentObject *FramebufferAttachment::getResource() const
 
 bool FramebufferAttachment::operator==(const FramebufferAttachment &other) const
 {
-    if (mResource != other.mResource || mType != other.mType)
+    if (mResource != other.mResource || mType != other.mType || mNumViews != other.mNumViews ||
+        mMultiviewLayout != other.mMultiviewLayout || mBaseViewIndex != other.mBaseViewIndex)
+    {
+        return false;
+    }
+
+    bool identicalViewportOffsets = (mViewportOffsets.size() == other.mViewportOffsets.size());
+    for (size_t i = 0u; i < mViewportOffsets.size() && identicalViewportOffsets; ++i)
+    {
+        identicalViewportOffsets = (mViewportOffsets[i] == other.mViewportOffsets[i]);
+    }
+    if (!identicalViewportOffsets)
     {
         return false;
     }
