@@ -43,7 +43,7 @@ int TSymbolUniqueId::get() const
 }
 
 TSymbol::TSymbol(TSymbolTable *symbolTable, const TString *n)
-    : uniqueId(symbolTable->nextUniqueId()), name(n)
+    : uniqueId(symbolTable->nextUniqueId()), name(n), extension(nullptr)
 {
 }
 
@@ -507,7 +507,7 @@ void TSymbolTable::insertBuiltInOp(ESymbolLevel level,
     const char *name = GetOperatorString(op);
     ASSERT(strlen(name) > 0);
     insertUnmangledBuiltInName(name, level);
-    insertBuiltIn(level, op, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
+    insertBuiltIn(level, op, nullptr, rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
 }
 
 void TSymbolTable::insertBuiltInOp(ESymbolLevel level,
