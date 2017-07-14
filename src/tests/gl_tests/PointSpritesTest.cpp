@@ -506,6 +506,84 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
     glDeleteProgram(quadProgram);
 }
 
+// This checks for an NVIDIA driver bug where points larger than the maximum reported point size can
+// be drawn. Point size should be clamped to the point size range as specified in GLES 3.0.5 section
+// 3.4.
+TEST_P(PointSpritesTest, PointSizeAboveMaxIsClamped)
+{
+    if (IsD3D9())
+    {
+        // Failed on NVIDIA GeForce GTX 1080 - no pixels from the point were detected in the
+        // framebuffer. http://anglebug.com/2111
+        std::cout << "Test skipped on D3D9." << std::endl;
+        return;
+    }
+
+    GLfloat pointSizeRange[2] = {};
+    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
+    GLfloat maxPointSize = pointSizeRange[1];
+
+    if (maxPointSize < 4)
+    {
+        // This test is only able to test larger points.
+        return;
+    }
+
+    const std::string vs =
+        "attribute vec4 vPosition;\n"
+        "uniform float uPointSize;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_PointSize = uPointSize;\n"
+        "    gl_Position  = vPosition;\n"
+        "}\n";
+    const std::string fs =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "}\n";
+    GLuint program = CompileProgram(vs, fs);
+    ASSERT_NE(program, 0u);
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    GLfloat testPointSize = floorf(maxPointSize * 2.0f);
+
+    GLint pointSizeLoc = glGetUniformLocation(program, "uPointSize");
+    glUniform1f(pointSizeLoc, testPointSize);
+    ASSERT_GL_NO_ERROR();
+
+    // The point will be a square centered at gl_Position. We'll offset it from the center of the
+    // viewport on the x axis so that the left edge of the point square is at the center of the
+    // viewport.
+    GLfloat pointXPosition = (0.5f * maxPointSize) * (2.0f / (GLfloat)windowWidth);
+
+    GLuint vertexObject = 0;
+    glGenBuffers(1, &vertexObject);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexObject);
+    GLfloat thePoints[] = {pointXPosition, 0.0f};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(thePoints), thePoints, GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+    ASSERT_GL_NO_ERROR();
+
+    glDeleteBuffers(1, &vertexObject);
+
+    // Pixel on the right of the viewport center should be covered by the point.
+    EXPECT_PIXEL_NEAR(windowWidth / 2 + 2, windowHeight / 2, 255, 0, 0, 255, 4);
+
+    // Pixel on the left of the viewport center should not be covered by the point.
+    EXPECT_PIXEL_NEAR(windowWidth / 2 - 2, windowHeight / 2, 0, 0, 0, 0, 4);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES
 // major version) these tests should be run against.
 //
