@@ -1087,13 +1087,13 @@ void TParseContext::checkIsParameterQualifierValid(
     }
 }
 
-bool TParseContext::checkCanUseExtension(const TSourceLoc &line, const TString &extension)
+bool TParseContext::checkCanUseExtension(const TSourceLoc &line, const char *extension)
 {
     const TExtensionBehavior &extBehavior   = extensionBehavior();
-    TExtensionBehavior::const_iterator iter = extBehavior.find(extension.c_str());
+    TExtensionBehavior::const_iterator iter = extBehavior.find(extension);
     if (iter == extBehavior.end())
     {
-        error(line, "extension is not supported", extension.c_str());
+        error(line, "extension is not supported", extension);
         return false;
     }
     // In GLSL ES, an extension's default behavior is "disable".
@@ -1101,16 +1101,16 @@ bool TParseContext::checkCanUseExtension(const TSourceLoc &line, const TString &
     {
         // TODO(oetuaho@nvidia.com): This is slightly hacky. Might be better if symbols could be
         // associated with more than one extension.
-        if (extension == "GL_OVR_multiview")
+        if (strcmp(extension, "GL_OVR_multiview") == 0)
         {
             return checkCanUseExtension(line, "GL_OVR_multiview2");
         }
-        error(line, "extension is disabled", extension.c_str());
+        error(line, "extension is disabled", extension);
         return false;
     }
     if (iter->second == EBhWarn)
     {
-        warning(line, "extension is being used", extension.c_str());
+        warning(line, "extension is being used", extension);
         return true;
     }
 
@@ -1648,7 +1648,7 @@ const TVariable *TParseContext::getNamedVariable(const TSourceLoc &location,
     const TVariable *variable = static_cast<const TVariable *>(symbol);
 
     if (symbolTable.findBuiltIn(variable->getName(), mShaderVersion) &&
-        !variable->getExtension().empty())
+        variable->getExtension())
     {
         checkCanUseExtension(location, variable->getExtension());
     }
@@ -5089,7 +5089,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunction *fnCall,
             //
             // A declared function.
             //
-            if (builtIn && !fnCandidate->getExtension().empty())
+            if (builtIn && fnCandidate->getExtension())
             {
                 checkCanUseExtension(loc, fnCandidate->getExtension());
             }

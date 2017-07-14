@@ -43,7 +43,7 @@ int TSymbolUniqueId::get() const
 }
 
 TSymbol::TSymbol(TSymbolTable *symbolTable, const TString *n)
-    : uniqueId(symbolTable->nextUniqueId()), name(n)
+    : uniqueId(symbolTable->nextUniqueId()), name(n), extension(nullptr)
 {
 }
 

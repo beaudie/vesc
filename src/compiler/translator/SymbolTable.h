@@ -74,13 +74,15 @@ class TSymbol : angle::NonCopyable
     virtual bool isFunction() const { return false; }
     virtual bool isVariable() const { return false; }
     int getUniqueId() const { return uniqueId; }
-    void relateToExtension(const TString &ext) { extension = ext; }
-    const TString &getExtension() const { return extension; }
+
+    // Note that the character array storage must outlive the TSymbol. Typically it should be a string literal.
+    void relateToExtension(const char *ext) { extension = ext; }
+    const char *getExtension() const { return extension; }
 
   private:
     const int uniqueId;
     const TString *name;
-    TString extension;
+    const char *extension;
 };
 
 // Variable, meaning a symbol that's not a function.
