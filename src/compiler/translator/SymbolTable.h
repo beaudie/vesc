@@ -74,13 +74,16 @@ class TSymbol : angle::NonCopyable
     virtual bool isFunction() const { return false; }
     virtual bool isVariable() const { return false; }
     int getUniqueId() const { return uniqueId; }
-    void relateToExtension(const TString &ext) { extension = ext; }
-    const TString &getExtension() const { return extension; }
+
+    // Note that the character array storage must outlive the TSymbol. Typically it should be a
+    // string literal.
+    void relateToExtension(const char *ext) { extension = ext; }
+    const char *getExtension() const { return extension; }
 
   private:
     const int uniqueId;
     const TString *name;
-    TString extension;
+    const char *extension;
 };
 
 // Variable, meaning a symbol that's not a function.
@@ -166,7 +169,7 @@ class TFunction : public TSymbol
               const TString *name,
               const TType *retType,
               TOperator tOp   = EOpNull,
-              const char *ext = "")
+              const char *ext = nullptr)
         : TSymbol(symbolTable, name),
           returnType(retType),
           mangledName(nullptr),
@@ -404,7 +407,8 @@ class TSymbolTable : angle::NonCopyable
                        const TType *ptype5 = 0)
     {
         insertUnmangledBuiltInName(name, level);
-        insertBuiltIn(level, EOpNull, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
+        insertBuiltIn(level, EOpNull, nullptr, rvalue, name, ptype1, ptype2, ptype3, ptype4,
+                      ptype5);
     }
 
     void insertBuiltIn(ESymbolLevel level,
