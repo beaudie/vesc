@@ -19,6 +19,8 @@ const size_t kDefaultMaxProgramCacheMemoryBytes = 0;
 
 enum
 {
+    MAX_SAMPLE_MASK_WORDS = 1,
+
     MAX_VERTEX_ATTRIBS         = 16,
     MAX_VERTEX_ATTRIB_BINDINGS = 16,
 

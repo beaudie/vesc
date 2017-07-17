@@ -2692,6 +2692,8 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions)
     mCaps.maxFragmentInputComponents =
         std::min<GLuint>(mCaps.maxFragmentInputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
 
+    mCaps.maxSampleMaskWords = std::min<GLuint>(mCaps.maxSampleMaskWords, MAX_SAMPLE_MASK_WORDS);
+
     // WebGL compatibility
     mExtensions.webglCompatibility = mWebGLContext;
     for (const auto &extensionInfo : GetExtensionInfoMap())
@@ -3657,6 +3659,11 @@ void Context::polygonOffset(GLfloat factor, GLfloat units)
 void Context::sampleCoverage(GLfloat value, GLboolean invert)
 {
     mGLState.setSampleCoverageParams(clamp01(value), invert == GL_TRUE);
+}
+
+void Context::sampleMaski(GLuint maskNumber, GLbitfield mask)
+{
+    mGLState.setSampleMaskParams(maskNumber, mask);
 }
 
 void Context::scissor(GLint x, GLint y, GLsizei width, GLsizei height)

@@ -2176,6 +2176,20 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_SAMPLE_MASK_VALUE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "Sample mask is not supported in this version of GL"));
+                return false;
+            }
+            if (index >= caps.maxSampleMaskWords)
+            {
+                context->handleError(Error(
+                    GL_INVALID_VALUE, "maskNumber must be smaller than MAX_SAMPLE_MASK_WORDS"));
+                return false;
+            }
+            break;
         default:
             context->handleError(InvalidEnum());
             return false;

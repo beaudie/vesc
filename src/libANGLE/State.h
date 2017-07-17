@@ -123,9 +123,15 @@ class State : angle::NonCopyable
     void setSampleAlphaToCoverage(bool enabled);
     bool isSampleCoverageEnabled() const;
     void setSampleCoverage(bool enabled);
-    void setSampleCoverageParams(GLfloat value, bool invert);
+    void setSampleCoverageParams(GLclampf value, bool invert);
     GLfloat getSampleCoverageValue() const;
     bool getSampleCoverageInvert() const;
+
+    // Multisample mask state manipulation.
+    bool isSampleMaskEnabled() const;
+    void setSampleMaskEnabled(bool enabled);
+    void setSampleMaskParams(GLuint maskNumber, GLbitfield mask);
+    GLbitfield getSampleMaskWord(GLuint maskNumber) const;
 
     // Multisampling/alpha to one manipulation.
     void setSampleAlphaToOne(bool enabled);
@@ -376,7 +382,10 @@ class State : angle::NonCopyable
         DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED,
         DIRTY_BIT_SAMPLE_COVERAGE_ENABLED,
         DIRTY_BIT_SAMPLE_COVERAGE,
-        DIRTY_BIT_DEPTH_TEST_ENABLED,
+        DIRTY_BIT_SAMPLE_MASK_ENABLED,
+        DIRTY_BIT_SAMPLE_MASK_WORD_0,
+        DIRTY_BIT_SAMPLE_MASK_WORD_MAX = DIRTY_BIT_SAMPLE_MASK_WORD_0 + MAX_SAMPLE_MASK_WORDS,
+        DIRTY_BIT_DEPTH_TEST_ENABLED   = DIRTY_BIT_SAMPLE_MASK_WORD_MAX,
         DIRTY_BIT_DEPTH_FUNC,
         DIRTY_BIT_DEPTH_MASK,
         DIRTY_BIT_STENCIL_TEST_ENABLED,
@@ -486,6 +495,9 @@ class State : angle::NonCopyable
     bool mSampleCoverage;
     GLfloat mSampleCoverageValue;
     bool mSampleCoverageInvert;
+    bool mSampleMask;
+    GLuint mMaxSampleMaskWords;
+    std::vector<GLbitfield> mSampleMaskValues;
 
     DepthStencilState mDepthStencil;
     GLint mStencilRef;
