@@ -1262,4 +1262,23 @@ bool ValidateGetProgramInterfaceiv(Context *context,
     return true;
 }
 
+bool ValidateSampleMaski(Context *context, GLuint maskNumber)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
+        return false;
+    }
+
+    if (maskNumber >= context->getCaps().maxSampleMaskWords)
+    {
+        context->handleError(
+            InvalidValue()
+            << "maskNumber cannot be greater than or equal to the value of MAX_SMAPLE_MASK_WORDS.");
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
