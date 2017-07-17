@@ -2319,6 +2319,19 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_SAMPLE_MASK_VALUE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumRequiresGLES31);
+                return false;
+            }
+            if (index >= caps.maxSampleMaskWords)
+            {
+                context->handleError(InvalidValue() << "maskNumber cannot be greater than or equal "
+                                                       "to the value of MAX_SMAPLE_MASK_WORDS.");
+                return false;
+            }
+            break;
         default:
             context->handleError(InvalidEnum());
             return false;
