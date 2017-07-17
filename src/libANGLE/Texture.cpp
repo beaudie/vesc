@@ -1160,7 +1160,7 @@ Error Texture::bindTexImageFromSurface(const Context *context, egl::Surface *sur
     // Set the image info to the size and format of the surface
     ASSERT(mState.mTarget == GL_TEXTURE_2D || mState.mTarget == GL_TEXTURE_RECTANGLE);  // TODO
     Extents size(surface->getWidth(), surface->getHeight(), 1);
-    ImageDesc desc(size, Format(surface->getConfig()->renderTargetFormat));
+    ImageDesc desc(size, Format(GL_BGRA8_EXT));  // TODO
     mState.setImageDesc(mState.mTarget, 0, desc);
     mDirtyChannel.signal();
     return NoError();
