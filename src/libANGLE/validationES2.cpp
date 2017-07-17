@@ -314,6 +314,8 @@ bool IsValidCopyTextureDestinationTarget(Context *context, GLenum textureType, G
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             return textureType == GL_TEXTURE_CUBE_MAP;
 
+        case GL_TEXTURE_RECTANGLE:
+            return textureType == GL_TEXTURE_RECTANGLE && context->getExtensions().textureRectangle;
         // TODO(geofflang): accept GL_TEXTURE_RECTANGLE_ARB if the texture_rectangle extension is
         // supported
 
@@ -328,6 +330,8 @@ bool IsValidCopyTextureSourceTarget(Context *context, GLenum target)
     {
         case GL_TEXTURE_2D:
             return true;
+        case GL_TEXTURE_RECTANGLE:
+            return context->getExtensions().textureRectangle;
 
         // TODO(geofflang): accept GL_TEXTURE_RECTANGLE_ARB if the texture_rectangle extension is
         // supported
@@ -371,6 +375,14 @@ bool IsValidCopyTextureDestinationLevel(Context *context,
     {
         if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
             static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
+        {
+            return false;
+        }
+    }
+    else if (target == GL_TEXTURE_RECTANGLE)
+    {
+        if (static_cast<GLuint>(width) > (caps.maxRectangleTextureSize >> level) ||
+            static_cast<GLuint>(height) > (caps.maxRectangleTextureSize >> level))
         {
             return false;
         }
@@ -882,6 +894,15 @@ bool ValidateES2TexImageParameters(Context *context,
             return false;
         }
     }
+    else if (target == GL_TEXTURE_RECTANGLE)
+    {
+        if (static_cast<GLuint>(width) > (caps.maxRectangleTextureSize >> level) ||
+            static_cast<GLuint>(height) > (caps.maxRectangleTextureSize >> level))
+        {
+            context->handleError(InvalidValue());
+            return false;
+        }
+    }
     else if (IsCubeMapTextureTarget(target))
     {
         if (!isSubImage && width != height)
@@ -1360,7 +1381,7 @@ bool ValidateES2TexStorageParameters(Context *context,
                                      GLsizei width,
                                      GLsizei height)
 {
-    if (target != GL_TEXTURE_2D && target != GL_TEXTURE_CUBE_MAP)
+    if (target != GL_TEXTURE_2D && target != GL_TEXTURE_CUBE_MAP && target != GL_TEXTURE_RECTANGLE)
     {
         context->handleError(InvalidEnum());
         return false;
@@ -1398,6 +1419,14 @@ bool ValidateES2TexStorageParameters(Context *context,
         case GL_TEXTURE_2D:
             if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
                 static_cast<GLuint>(height) > caps.max2DTextureSize)
+            {
+                context->handleError(InvalidValue());
+                return false;
+            }
+            break;
+        case GL_TEXTURE_RECTANGLE:
+            if (static_cast<GLuint>(width) > caps.maxRectangleTextureSize ||
+                static_cast<GLuint>(height) > caps.maxRectangleTextureSize)
             {
                 context->handleError(InvalidValue());
                 return false;
@@ -2674,6 +2703,15 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
     {
         case GL_TEXTURE_2D:
         case GL_TEXTURE_CUBE_MAP:
+            break;
+
+        case GL_TEXTURE_RECTANGLE:
+            if (!context->getExtensions().textureRectangle)
+            {
+                context->handleError(InvalidEnum()
+                                     << "Context does not support GL_ARB_texture_rectangle");
+                return false;
+            }
             break;
 
         case GL_TEXTURE_3D:
@@ -5689,6 +5727,22 @@ bool ValidateFramebufferTexture2D(Context *context,
             }
             break;
 
+            case GL_TEXTURE_RECTANGLE:
+            {
+                if (level > gl::log2(caps.maxRectangleTextureSize))
+                {
+                    context->handleError(InvalidValue());
+                    return false;
+                }
+                if (tex->getTarget() != GL_TEXTURE_RECTANGLE)
+                {
+                    context->handleError(InvalidOperation()
+                                         << "Textarget must match the texture target type.");
+                    return false;
+                }
+            }
+            break;
+
             case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
             case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
             case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
@@ -5836,7 +5890,8 @@ bool ValidateGenerateMipmap(Context *context, GLenum target)
         (!isPow2(static_cast<int>(texture->getWidth(baseTarget, 0))) ||
          !isPow2(static_cast<int>(texture->getHeight(baseTarget, 0)))))
     {
-        ASSERT(target == GL_TEXTURE_2D || target == GL_TEXTURE_CUBE_MAP);
+        ASSERT(target == GL_TEXTURE_2D || target == GL_TEXTURE_RECTANGLE ||
+               target == GL_TEXTURE_CUBE_MAP);
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), TextureNotPow2);
         return false;
     }

@@ -150,6 +150,10 @@ void State::initialize(const Context *context,
         mShaderStorageBuffers.resize(caps.maxShaderStorageBufferBindings);
         mImageUnits.resize(caps.maxImageUnits);
     }
+    if (extensions.textureRectangle)
+    {
+        mSamplerTextures[GL_TEXTURE_RECTANGLE].resize(caps.maxCombinedTextureImageUnits);
+    }
     if (extensions.eglImageExternal || extensions.eglStreamConsumerExternal)
     {
         mSamplerTextures[GL_TEXTURE_EXTERNAL_OES].resize(caps.maxCombinedTextureImageUnits);
@@ -1915,6 +1919,11 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
         *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D);
         break;
+      case GL_TEXTURE_BINDING_RECTANGLE:
+          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+          *params =
+              getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_RECTANGLE);
+          break;
       case GL_TEXTURE_BINDING_CUBE_MAP:
         ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
         *params =
