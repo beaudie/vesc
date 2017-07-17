@@ -35,10 +35,7 @@ TIntermConstantUnion *CreateBoolNode(bool value);
 // If the input node is not a block node, put it inside a block node and return that.
 TIntermBlock *EnsureBlock(TIntermNode *node);
 
-TIntermSymbol *ReferenceGlobalVariable(const TString &name, const TSymbolTable &symbolTable);
-TIntermSymbol *ReferenceBuiltInVariable(const TString &name,
-                                        const TSymbolTable &symbolTable,
-                                        int shaderVersion);
+TIntermSymbol *ReferToGlobalSymbol(const TString &name, const TSymbolTable &symbolTable);
 
 }  // namespace sh
 

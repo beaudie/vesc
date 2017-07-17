@@ -11,7 +11,6 @@
 
 #include "compiler/translator/FindMain.h"
 #include "compiler/translator/InitializeVariables.h"
-#include "compiler/translator/IntermNode_util.h"
 #include "compiler/translator/IntermTraverse.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/util.h"
@@ -44,16 +43,15 @@ class ReplaceVariableTraverser : public TIntermTraverser
     TIntermSymbol *mNewSymbol;
 };
 
-TIntermSymbol *CreateGLInstanceIDSymbol(const TSymbolTable &symbolTable)
+TIntermSymbol *CreateGLInstanceIDSymbol()
 {
-    return ReferenceBuiltInVariable("gl_InstanceID", symbolTable, 300);
+    return new TIntermSymbol(0, "gl_InstanceID", TType(EbtInt, EbpHigh, EvqInstanceID));
 }
 
 // Adds the InstanceID and ViewID_OVR initializers to the end of the initializers' sequence.
 void InitializeViewIDAndInstanceID(TIntermTyped *viewIDSymbol,
                                    TIntermTyped *instanceIDSymbol,
                                    unsigned numberOfViews,
-                                   const TSymbolTable &symbolTable,
                                    TIntermSequence *initializers)
 {
     // Create a signed numberOfViews node.
@@ -64,7 +62,7 @@ void InitializeViewIDAndInstanceID(TIntermTyped *viewIDSymbol,
 
     // Create a gl_InstanceID / numberOfViews node.
     TIntermBinary *normalizedInstanceID =
-        new TIntermBinary(EOpDiv, CreateGLInstanceIDSymbol(symbolTable), numberOfViewsIntSymbol);
+        new TIntermBinary(EOpDiv, CreateGLInstanceIDSymbol(), numberOfViewsIntSymbol);
 
     // Create a InstanceID = gl_InstanceID / numberOfViews node.
     TIntermBinary *instanceIDInitializer =
@@ -73,7 +71,7 @@ void InitializeViewIDAndInstanceID(TIntermTyped *viewIDSymbol,
 
     // Create a uint(gl_InstanceID) node.
     TIntermSequence *glInstanceIDSymbolCastArguments = new TIntermSequence();
-    glInstanceIDSymbolCastArguments->push_back(CreateGLInstanceIDSymbol(symbolTable));
+    glInstanceIDSymbolCastArguments->push_back(CreateGLInstanceIDSymbol());
     TIntermAggregate *glInstanceIDAsUint = TIntermAggregate::CreateConstructor(
         TType(EbtUInt, EbpHigh, EvqTemporary), glInstanceIDSymbolCastArguments);
 
@@ -134,8 +132,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
                                                  unsigned numberOfViews,
                                                  GLenum shaderType,
                                                  ShCompileOptions compileOptions,
-                                                 ShShaderOutput shaderOutput,
-                                                 const TSymbolTable &symbolTable)
+                                                 ShShaderOutput shaderOutput)
 {
     ASSERT(shaderType == GL_VERTEX_SHADER || shaderType == GL_FRAGMENT_SHADER);
 
@@ -157,8 +154,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
         ReplaceSymbol(root, "gl_InstanceID", instanceIDSymbol);
 
         TIntermSequence *initializers = new TIntermSequence();
-        InitializeViewIDAndInstanceID(viewIDSymbol, instanceIDSymbol, numberOfViews, symbolTable,
-                                      initializers);
+        InitializeViewIDAndInstanceID(viewIDSymbol, instanceIDSymbol, numberOfViews, initializers);
 
         // The AST transformation which adds the expression to select the viewport index should
         // be done only for the GLSL and ESSL output.

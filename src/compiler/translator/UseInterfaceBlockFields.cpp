@@ -35,7 +35,7 @@ void AddFieldUseStatements(const ShaderVariable &var,
             name = name.substr(0, pos);
         }
     }
-    TIntermSymbol *symbol = ReferenceGlobalVariable(name, symbolTable);
+    TIntermSymbol *symbol = ReferToGlobalSymbol(name, symbolTable);
     if (var.isArray())
     {
         for (unsigned int i = 0u; i < var.arraySize; ++i)
@@ -77,7 +77,7 @@ void InsertUseCode(TIntermSequence *sequence,
         else if (block.arraySize > 0u)
         {
             TString name(block.instanceName.c_str());
-            TIntermSymbol *arraySymbol = ReferenceGlobalVariable(name, symbolTable);
+            TIntermSymbol *arraySymbol = ReferToGlobalSymbol(name, symbolTable);
             for (unsigned int i = 0u; i < block.arraySize; ++i)
             {
                 TIntermBinary *elementSymbol =
@@ -88,7 +88,7 @@ void InsertUseCode(TIntermSequence *sequence,
         else
         {
             TString name(block.instanceName.c_str());
-            TIntermSymbol *blockSymbol = ReferenceGlobalVariable(name, symbolTable);
+            TIntermSymbol *blockSymbol = ReferToGlobalSymbol(name, symbolTable);
             InsertUseCode(block, blockSymbol, sequence);
         }
     }
