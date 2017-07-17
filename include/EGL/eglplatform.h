@@ -106,9 +106,8 @@ typedef intptr_t EGLNativeDisplayType;
 typedef intptr_t EGLNativeWindowType;
 typedef intptr_t EGLNativePixmapType;
 
-#elif defined(__unix__)
+#elif defined(ANGLE_USE_X11)
 
-/* X11 (tentative)  */
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -116,8 +115,18 @@ typedef Display *EGLNativeDisplayType;
 typedef Pixmap   EGLNativePixmapType;
 typedef Window   EGLNativeWindowType;
 
+#elif defined(WL_EGL_PLATFORM)
+
+typedef struct wl_display    *EGLNativeDisplayType;
+typedef struct wl_egl_pixmap *EGLNativePixmapType;
+typedef struct wl_egl_window *EGLNativeWindowType;
+
 #else
-#error "Platform not recognized"
+
+typedef void             *EGLNativeDisplayType;
+typedef khronos_uintptr_t EGLNativePixmapType;
+typedef khronos_uintptr_t EGLNativeWindowType;
+
 #endif
 
 /* EGL 1.2 types, renamed for consistency in EGL 1.3 */
