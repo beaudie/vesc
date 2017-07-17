@@ -895,4 +895,24 @@ bool ValidateBindImageTexture(Context *context,
 
     return true;
 }
+
+bool ValidateSampleMaski(Context *context, GLuint maskNumber)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1"));
+        return false;
+    }
+
+    if (maskNumber >= context->getCaps().maxSampleMaskWords)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE,
+                  "maskNumber is greater than or equal to the value of MAX_SMAPLE_MASK_WORDS."));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl

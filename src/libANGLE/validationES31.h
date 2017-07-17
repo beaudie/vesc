@@ -96,6 +96,8 @@ bool ValidateBindImageTexture(Context *context,
                               GLenum access,
                               GLenum format);
 
+bool ValidateSampleMaski(Context *context, GLuint maskNumber);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
