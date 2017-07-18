@@ -1555,4 +1555,24 @@ int Framebuffer::getSamples(const ValidationContext *context)
     return getSamples(static_cast<const Context *>(context));
 }
 
+const std::vector<Offset> *Framebuffer::getViewportOffsets() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return nullptr;
+    }
+    return &attachment->getMultiviewViewportOffsets();
+}
+
+GLenum Framebuffer::getMultiviewLayout() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return GL_NONE;
+    }
+    return attachment->getMultiviewLayout();
+}
+
 }  // namespace gl
