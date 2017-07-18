@@ -164,6 +164,9 @@ class State : angle::NonCopyable
     // Viewport state setter/getter
     void setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height);
     const Rectangle &getViewport() const;
+    const std::vector<Offset> &getViewportOffsets() const;
+
+    bool isDrawFramebufferSideBySide() const;
 
     // Texture binding & active texture unit manipulation
     void setActiveSampler(unsigned int active);
@@ -364,6 +367,11 @@ class State : angle::NonCopyable
 
     enum DirtyBitType
     {
+        // GL_ANGLE_multiview dirty bit to address changes in the viewport offsets. It can be
+        // triggered either by a side-by-side framebuffer transition or adding an attachment. It has
+        // to be the first in the enumeration to guarantee that scissor and viewport state is
+        // handled correctly.
+        DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS,
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
         DIRTY_BIT_SCISSOR,
         DIRTY_BIT_VIEWPORT,
@@ -456,6 +464,7 @@ class State : angle::NonCopyable
     void syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
     void syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
+    void setViewportOffsets(const std::vector<Offset> &viewportOffsets);
 
     void setImageUnit(const Context *context,
                       GLuint unit,
@@ -469,6 +478,8 @@ class State : angle::NonCopyable
     const ImageUnit &getImageUnit(GLuint unit) const;
 
   private:
+    void setViewportOffsetsFromDrawFramebuffer();
+
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;
     GLuint mMaxCombinedTextureImageUnits;
@@ -502,6 +513,9 @@ class State : angle::NonCopyable
     Rectangle mViewport;
     float mNearZ;
     float mFarZ;
+
+    std::vector<Offset> mDrawFramebufferViewportOffsets;
+    bool mDrawFramebufferIsSideBySide;
 
     BindingPointer<Buffer> mArrayBuffer;
     BindingPointer<Buffer> mDrawIndirectBuffer;
