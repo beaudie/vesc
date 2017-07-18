@@ -107,11 +107,13 @@ class CollectVariablesTest : public testing::Test
         *outResult = &outputVariable;
     }
 
-    void compile(const std::string &shaderString)
+    void compile(const std::string &shaderString, ShCompileOptions compileOptions)
     {
         const char *shaderStrings[] = {shaderString.c_str()};
-        ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES));
+        ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES | compileOptions));
     }
+
+    void compile(const std::string &shaderString) { compile(shaderString, 0u); }
 
     ::GLenum mShaderType;
     std::unique_ptr<TranslatorGLSL> mTranslator;
@@ -152,6 +154,7 @@ TEST_F(CollectFragmentVariablesTest, SimpleOutputVar)
     EXPECT_TRUE(outputVariable.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable.type);
     EXPECT_EQ("out_fragColor", outputVariable.name);
+    EXPECT_FALSE(outputVariable.isInternal);
 }
 
 TEST_F(CollectFragmentVariablesTest, LocationOutputVar)
@@ -177,6 +180,7 @@ TEST_F(CollectFragmentVariablesTest, LocationOutputVar)
     EXPECT_TRUE(outputVariable.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable.type);
     EXPECT_EQ("out_fragColor", outputVariable.name);
+    EXPECT_FALSE(outputVariable.isInternal);
 }
 
 TEST_F(CollectVertexVariablesTest, LocationAttribute)
@@ -201,6 +205,7 @@ TEST_F(CollectVertexVariablesTest, LocationAttribute)
     EXPECT_TRUE(attribute.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, attribute.type);
     EXPECT_EQ("in_Position", attribute.name);
+    EXPECT_FALSE(attribute.isInternal);
 }
 
 TEST_F(CollectVertexVariablesTest, SimpleInterfaceBlock)
@@ -237,6 +242,7 @@ TEST_F(CollectVertexVariablesTest, SimpleInterfaceBlock)
     EXPECT_EQ("f", field.name);
     EXPECT_FALSE(field.isRowMajorLayout);
     EXPECT_TRUE(field.fields.empty());
+    EXPECT_FALSE(field.isInternal);
 }
 
 TEST_F(CollectVertexVariablesTest, SimpleInstancedInterfaceBlock)
@@ -435,6 +441,7 @@ TEST_F(CollectVertexVariablesTest, VaryingInterpolation)
     EXPECT_GLENUM_EQ(GL_FLOAT, varying->type);
     EXPECT_EQ("vary", varying->name);
     EXPECT_EQ(INTERPOLATION_CENTROID, varying->interpolation);
+    EXPECT_FALSE(varying->isInternal);
 }
 
 // Test for builtin uniform "gl_DepthRange" (Vertex shader)
@@ -477,6 +484,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1FragColor)
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_FragData built-in usage in ESSL1 fragment shader is reflected in the output
@@ -503,6 +511,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1FragData)
     EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_FragDataEXT built-in usage in ESSL1 fragment shader is reflected in the output
@@ -526,6 +535,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1FragDepthMediump)
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_FragDataEXT built-in usage in ESSL1 fragment shader is reflected in the output
@@ -549,6 +559,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1FragDepthHighp)
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_FragData built-in usage in ESSL3 fragment shader is reflected in the output
@@ -572,6 +583,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL3FragDepthHighp)
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_SecondaryFragColorEXT built-in usage in ESSL1 fragment shader is reflected in the
@@ -600,6 +612,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 
     outputVariable = nullptr;
     validateOutputVariableForShader(secondaryFragColorShader, 1u, "gl_SecondaryFragColorEXT",
@@ -608,6 +621,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     EXPECT_EQ(0u, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 // Test that gl_SecondaryFragDataEXT built-in usage in ESSL1 fragment shader is reflected in the
@@ -638,6 +652,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 
     outputVariable = nullptr;
     validateOutputVariableForShader(secondaryFragDataShader, 1u, "gl_SecondaryFragDataEXT",
@@ -646,6 +661,7 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
+    EXPECT_FALSE(outputVariable->isInternal);
 }
 
 static khronos_uint64_t SimpleTestHash(const char *str, size_t len)
@@ -766,6 +782,7 @@ TEST_F(CollectFragmentVariablesTest, MultiDeclaration)
     EXPECT_TRUE(uniform.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT, uniform.type);
     EXPECT_EQ("uA", uniform.name);
+    EXPECT_FALSE(uniform.isInternal);
 
     const Uniform &uniformB = uniforms[1];
     EXPECT_EQ(0u, uniformB.arraySize);
@@ -773,6 +790,7 @@ TEST_F(CollectFragmentVariablesTest, MultiDeclaration)
     EXPECT_TRUE(uniformB.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT, uniformB.type);
     EXPECT_EQ("uB", uniformB.name);
+    EXPECT_FALSE(uniformB.isInternal);
 }
 
 // Test a uniform declaration starting with an empty declarator.
@@ -799,4 +817,42 @@ TEST_F(CollectFragmentVariablesTest, EmptyDeclarator)
     EXPECT_TRUE(uniformB.staticUse);
     EXPECT_GLENUM_EQ(GL_FLOAT, uniformB.type);
     EXPECT_EQ("uB", uniformB.name);
+    EXPECT_FALSE(uniformB.isInternal);
+}
+
+// Test ViewID_OVR added for instanced multiview.
+TEST_F(CollectVertexVariablesTest, ViewID_OVR)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(0.0);\n"
+        "}\n";
+
+    ShBuiltInResources resources = mTranslator->getResources();
+    resources.OVR_multiview      = 1;
+    resources.MaxViewsOVR        = 4;
+    initTranslator(resources);
+
+    compile(shaderString, SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW |
+                              SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER);
+
+    const auto &varyings = mTranslator->getVaryings();
+    ASSERT_EQ(2u, varyings.size());
+
+    const Varying *viewID = &varyings[0];
+    if (viewID->name == "gl_Position")
+    {
+        viewID = &varyings[1];
+    }
+    EXPECT_EQ(0u, viewID->arraySize);
+    EXPECT_GLENUM_EQ(GL_HIGH_INT, viewID->precision);
+    EXPECT_TRUE(viewID->staticUse);
+    EXPECT_GLENUM_EQ(GL_UNSIGNED_INT, viewID->type);
+    EXPECT_EQ("ViewID_OVR", viewID->name);
+    EXPECT_EQ("webgl_angle_ViewID_OVR", viewID->mappedName);
+    EXPECT_TRUE(viewID->isInternal);
 }
