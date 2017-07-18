@@ -234,6 +234,18 @@ void GetObjectLabelBase(const std::string &objectLabel,
     }
 }
 
+bool IsDrawFramebuffer(GLenum target)
+{
+    switch (target)
+    {
+        case GL_DRAW_FRAMEBUFFER:
+        case GL_FRAMEBUFFER:
+            return true;
+        default:
+            return false;
+    }
+}
+
 }  // anonymous namespace
 
 namespace gl
@@ -385,6 +397,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mReadPixelsDirtyBits.set(State::DIRTY_BIT_PACK_BUFFER_BINDING);
     mReadPixelsDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
 
+    mClearDirtyBits.set(State::DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
     mClearDirtyBits.set(State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
     mClearDirtyBits.set(State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
     mClearDirtyBits.set(State::DIRTY_BIT_SCISSOR);
@@ -398,6 +411,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mClearDirtyBits.set(State::DIRTY_BIT_STENCIL_WRITEMASK_BACK);
     mClearDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
 
+    mBlitDirtyBits.set(State::DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
     mBlitDirtyBits.set(State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
     mBlitDirtyBits.set(State::DIRTY_BIT_SCISSOR);
     mBlitDirtyBits.set(State::DIRTY_BIT_FRAMEBUFFER_SRGB);
@@ -3035,6 +3049,10 @@ void Context::framebufferTexture2D(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(GetDefaultViewportOffsetVector());
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3058,6 +3076,10 @@ void Context::framebufferRenderbuffer(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(GetDefaultViewportOffsetVector());
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3093,6 +3115,10 @@ void Context::framebufferTextureLayer(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(GetDefaultViewportOffsetVector());
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3123,10 +3149,19 @@ void Context::framebufferTextureMultiviewSideBySideANGLE(GLenum target,
         ImageIndex index = ImageIndex::Make2D(level);
         framebuffer->setAttachmentMultiviewSideBySide(this, GL_TEXTURE, attachment, index,
                                                       textureObj, numViews, viewportOffsets);
+        if (IsDrawFramebuffer(target))
+        {
+            mGLState.setViewportOffsets(
+                TransformViewportOffsetArrayToVectorOfOffsets(viewportOffsets, numViews));
+        }
     }
     else
     {
         framebuffer->resetAttachment(this, attachment);
+        if (IsDrawFramebuffer(target))
+        {
+            mGLState.setViewportOffsets(GetDefaultViewportOffsetVector());
+        }
     }
 
     mGLState.setObjectDirty(target);
