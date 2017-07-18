@@ -1140,6 +1140,9 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
                   gl::TextureCapsMap *textureCapsMap, gl::Extensions *extensions, gl::Limitations *limitations)
 {
     GLuint maxSamples = 0;
+    GLuint maxIntegerSamples        = 0;
+    GLuint maxColorTextureSamples   = 0;
+    GLuint maxDepthTextureSamples   = 0;
     D3D_FEATURE_LEVEL featureLevel = renderer11DeviceCaps.featureLevel;
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (GLenum internalFormat : allFormats)
@@ -1150,7 +1153,20 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 
         maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
 
-        if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
+        const gl::InternalFormat formatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
+        if (formatInfo.componentType == GL_INT || formatInfo.componentType == GL_UNSIGNED_INT)
+        {
+            maxIntegerSamples = std::max(maxIntegerSamples, textureCaps.getMaxSamples());
+        }
+        if (formatInfo.depthBits > 0)
+        {
+            maxDepthTextureSamples = std::max(maxDepthTextureSamples, textureCaps.getMaxSamples());
+        }
+        if (formatInfo.redBits > 0)
+        {
+            maxColorTextureSamples = std::max(maxColorTextureSamples, textureCaps.getMaxSamples());
+        }
+        if (formatInfo.compressed)
         {
             caps->compressedTextureFormats.push_back(internalFormat);
         }
@@ -1294,7 +1310,9 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 
     // Multisample limits
     caps->maxSamples = maxSamples;
-    caps->maxColorTextureSamples = maxSamples;
+    caps->maxIntegerSamples      = maxIntegerSamples;
+    caps->maxColorTextureSamples = maxColorTextureSamples;
+    caps->maxDepthTextureSamples = maxDepthTextureSamples;
 
     // GL extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);

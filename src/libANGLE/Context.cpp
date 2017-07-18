@@ -2737,7 +2737,8 @@ void Context::updateCaps()
         {
             formatCaps.sampleCounts.clear();
         }
-        else
+        // Skip updating MAX_*_SAMPLES if the format isn't required to support renderbuffers.
+        else if (formatInfo.isRequiredRenderbufferFormat(getClientVersion()))
         {
             // We may have limited the max samples for some required renderbuffer formats due to
             // non-conformant formats. In this case MAX_SAMPLES needs to be lowered accordingly.
@@ -2746,8 +2747,7 @@ void Context::updateCaps()
             // GLES 3.0.5 section 4.4.2.2: "Implementations must support creation of renderbuffers
             // in these required formats with up to the value of MAX_SAMPLES multisamples, with the
             // exception of signed and unsigned integer formats."
-            if (formatInfo.componentType != GL_INT && formatInfo.componentType != GL_UNSIGNED_INT &&
-                formatInfo.isRequiredRenderbufferFormat(getClientVersion()))
+            if (formatInfo.componentType != GL_INT && formatInfo.componentType != GL_UNSIGNED_INT)
             {
                 ASSERT(getClientVersion() < ES_3_0 || formatMaxSamples >= 4);
                 mCaps.maxSamples = std::min(mCaps.maxSamples, formatMaxSamples);
