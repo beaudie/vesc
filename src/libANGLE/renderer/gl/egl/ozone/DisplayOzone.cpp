@@ -723,7 +723,7 @@ void DisplayOzone::drawWithTexture(Buffer *buffer)
     sm->setDepthMask(true);
     sm->setDepthRange(0, 1);
     sm->setDepthFunc(GL_LESS);
-    sm->setViewport(gl::Rectangle(0, 0, mWidth, mHeight));
+    sm->setViewport(gl::Rectangle(0, 0, mWidth, mHeight), false);
     sm->activeTexture(0);
     GLuint tex = buffer->getTexture();
     sm->bindTexture(GL_TEXTURE_2D, tex);
