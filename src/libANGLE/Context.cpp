@@ -2743,6 +2743,12 @@ void Context::updateCaps()
             // non-conformant formats. In this case MAX_SAMPLES needs to be lowered accordingly.
             GLuint formatMaxSamples = formatCaps.getMaxSamples();
 
+            // Skip formats that don't support multisample.
+            if (formatMaxSamples == 0)
+            {
+                continue;
+            }
+
             // GLES 3.0.5 section 4.4.2.2: "Implementations must support creation of renderbuffers
             // in these required formats with up to the value of MAX_SAMPLES multisamples, with the
             // exception of signed and unsigned integer formats."
