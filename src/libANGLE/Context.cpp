@@ -2753,8 +2753,11 @@ void Context::updateCaps()
                 mCaps.maxSamples = std::min(mCaps.maxSamples, formatMaxSamples);
             }
 
-            // Handle GLES 3.1 MAX_*_SAMPLES values similarly to MAX_SAMPLES.
-            if (getClientVersion() >= ES_3_1)
+            // Handle GLES 3.1 MAX_*_SAMPLES values similarly to MAX_SAMPLES:
+            // - The formats that don't support multisampling have no valid sample counts.
+            // - Multisampling support is guaranteed for required renderbuffer formats, so we won't
+            //   miss any required formats.
+            if (getClientVersion() >= ES_3_1 && formatMaxSamples > 0)
             {
                 // GLES 3.1 section 9.2.5: "Implementations must support creation of renderbuffers
                 // in these required formats with up to the value of MAX_SAMPLES multisamples, with
