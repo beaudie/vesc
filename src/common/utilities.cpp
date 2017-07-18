@@ -691,26 +691,6 @@ int VariableSortOrder(GLenum type)
       case GL_INT:
       case GL_BOOL:
       case GL_UNSIGNED_INT:
-      case GL_SAMPLER_2D:
-      case GL_SAMPLER_CUBE:
-      case GL_SAMPLER_EXTERNAL_OES:
-      case GL_SAMPLER_2D_RECT_ARB:
-      case GL_SAMPLER_2D_ARRAY:
-      case GL_SAMPLER_2D_MULTISAMPLE:
-      case GL_SAMPLER_3D:
-      case GL_INT_SAMPLER_2D:
-      case GL_INT_SAMPLER_3D:
-      case GL_INT_SAMPLER_CUBE:
-      case GL_INT_SAMPLER_2D_ARRAY:
-      case GL_INT_SAMPLER_2D_MULTISAMPLE:
-      case GL_UNSIGNED_INT_SAMPLER_2D:
-      case GL_UNSIGNED_INT_SAMPLER_3D:
-      case GL_UNSIGNED_INT_SAMPLER_CUBE:
-      case GL_UNSIGNED_INT_SAMPLER_2D_ARRAY:
-      case GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE:
-      case GL_SAMPLER_2D_SHADOW:
-      case GL_SAMPLER_2D_ARRAY_SHADOW:
-      case GL_SAMPLER_CUBE_SHADOW:
         return 6;
 
       default:
