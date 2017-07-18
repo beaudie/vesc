@@ -973,7 +973,11 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
     {
         for (auto var : varyings)
         {
-            list.push_back(var);
+            // We trust that internal output variables are initialized when needed. They are also usually not added to the symbol table.
+            if (!var.isInternal)
+            {
+                list.push_back(var);
+            }
             if (var.name == "gl_Position")
             {
                 ASSERT(!mGLPositionInitialized);
