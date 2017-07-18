@@ -43,6 +43,9 @@ struct Format;
 class Renderbuffer;
 class Texture;
 
+std::vector<Offset> TransformViewportOffsetArrayToVectorOfOffsets(const GLint *viewportOffsets,
+                                                                  GLsizei numViews);
+
 // FramebufferAttachment implements a GL framebuffer attachment.
 // Attachments are "light" containers, which store pointers to ref-counted GL objects.
 // We support GL texture (2D/3D/Cube/2D array) and renderbuffer object attachments.

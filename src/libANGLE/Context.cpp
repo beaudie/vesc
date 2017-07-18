@@ -234,6 +234,18 @@ void GetObjectLabelBase(const std::string &objectLabel,
     }
 }
 
+bool IsDrawFramebuffer(GLenum target)
+{
+    switch (target)
+    {
+        case GL_DRAW_FRAMEBUFFER:
+        case GL_FRAMEBUFFER:
+            return true;
+        default:
+            return false;
+    }
+}
+
 }  // anonymous namespace
 
 namespace gl
@@ -3035,6 +3047,12 @@ void Context::framebufferTexture2D(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(TransformViewportOffsetArrayToVectorOfOffsets(
+            FramebufferAttachment::kDefaultViewportOffsets,
+            FramebufferAttachment::kDefaultNumViews));
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3058,6 +3076,12 @@ void Context::framebufferRenderbuffer(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(TransformViewportOffsetArrayToVectorOfOffsets(
+            FramebufferAttachment::kDefaultViewportOffsets,
+            FramebufferAttachment::kDefaultNumViews));
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3093,6 +3117,12 @@ void Context::framebufferTextureLayer(GLenum target,
         framebuffer->resetAttachment(this, attachment);
     }
 
+    if (IsDrawFramebuffer(target))
+    {
+        mGLState.setViewportOffsets(TransformViewportOffsetArrayToVectorOfOffsets(
+            FramebufferAttachment::kDefaultViewportOffsets,
+            FramebufferAttachment::kDefaultNumViews));
+    }
     mGLState.setObjectDirty(target);
 }
 
@@ -3123,10 +3153,21 @@ void Context::framebufferTextureMultiviewSideBySideANGLE(GLenum target,
         ImageIndex index = ImageIndex::Make2D(level);
         framebuffer->setAttachmentMultiviewSideBySide(this, GL_TEXTURE, attachment, index,
                                                       textureObj, numViews, viewportOffsets);
+        if (IsDrawFramebuffer(target))
+        {
+            mGLState.setViewportOffsets(
+                TransformViewportOffsetArrayToVectorOfOffsets(viewportOffsets, numViews));
+        }
     }
     else
     {
         framebuffer->resetAttachment(this, attachment);
+        if (IsDrawFramebuffer(target))
+        {
+            mGLState.setViewportOffsets(TransformViewportOffsetArrayToVectorOfOffsets(
+                FramebufferAttachment::kDefaultViewportOffsets,
+                FramebufferAttachment::kDefaultNumViews));
+        }
     }
 
     mGLState.setObjectDirty(target);

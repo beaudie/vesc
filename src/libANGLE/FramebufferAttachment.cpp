@@ -21,6 +21,17 @@
 namespace gl
 {
 
+std::vector<Offset> TransformViewportOffsetArrayToVectorOfOffsets(const GLint *viewportOffsets,
+                                                                  GLsizei numViews)
+{
+    std::vector<Offset> offsetVector(numViews);
+    for (size_t i = 0u; i < offsetVector.size(); ++i)
+    {
+        offsetVector[i] = Offset(viewportOffsets[i * 2u], viewportOffsets[i * 2u + 1u], 0);
+    }
+    return offsetVector;
+}
+
 ////// FramebufferAttachment::Target Implementation //////
 
 FramebufferAttachment::Target::Target()
@@ -56,7 +67,8 @@ FramebufferAttachment::FramebufferAttachment()
       mNumViews(kDefaultNumViews),
       mMultiviewLayout(kDefaultMultiviewLayout),
       mBaseViewIndex(kDefaultBaseViewIndex),
-      mViewportOffsets(1u)
+      mViewportOffsets(
+          TransformViewportOffsetArrayToVectorOfOffsets(kDefaultViewportOffsets, kDefaultNumViews))
 {
 }
 
@@ -105,8 +117,8 @@ void FramebufferAttachment::detach(const Context *context)
     mNumViews        = kDefaultNumViews;
     mMultiviewLayout = kDefaultMultiviewLayout;
     mBaseViewIndex   = kDefaultBaseViewIndex;
-    mViewportOffsets.resize(1u);
-    mViewportOffsets[0] = Offset();
+    mViewportOffsets =
+        TransformViewportOffsetArrayToVectorOfOffsets(kDefaultViewportOffsets, kDefaultNumViews);
 
     // not technically necessary, could omit for performance
     mTarget = Target();
@@ -133,11 +145,7 @@ void FramebufferAttachment::attach(const Context *context,
     mNumViews        = numViews;
     mBaseViewIndex   = baseViewIndex;
     mMultiviewLayout = multiviewLayout;
-    mViewportOffsets.resize(numViews);
-    for (size_t i = 0u; i < mViewportOffsets.size(); ++i)
-    {
-        mViewportOffsets[i] = Offset(viewportOffsets[i * 2u], viewportOffsets[i * 2u + 1u], 0);
-    }
+    mViewportOffsets = TransformViewportOffsetArrayToVectorOfOffsets(viewportOffsets, numViews);
     resource->onAttach(context);
 
     if (mResource != nullptr)
