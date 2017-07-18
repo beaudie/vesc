@@ -113,6 +113,84 @@ TEST_P(AtomicCounterBufferTest31, OffsetNotAllSpecifiedWithSameValue)
     EXPECT_EQ(0u, program);
 }
 
+TEST_P(AtomicCounterBufferTest31, BasicAtomicCounterFunction)
+{
+    const std::string &vertShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "in highp vec4 a_position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
+
+    const std::string &fragShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint ac;\n"
+        "out highp vec4 my_color;\n"
+        "void main()\n"
+        "{\n"
+        "    my_color = vec4(0.0);\n"
+        "    uint a1 = atomicCounter(ac);\n"
+        "    if (a1 == 3u) my_color = vec4(1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertShader, fragShader);
+
+    glUseProgram(program.get());
+
+    // The initial value of counter at offset 4 is 3u.
+    unsigned int bufferData[3] = {11u, 3u, 1u};
+    GLBuffer atomicCounterBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 2, atomicCounterBuffer);
+
+    drawQuad(program.get(), "a_position", 0.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
+TEST_P(AtomicCounterBufferTest31, ComputeAtomicCounterIncrement)
+{
+    const std::string &csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint ac;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicCounterIncrement(ac);\n"
+        "    atomicCounterIncrement(ac);\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    // The initial value of counter at offset 4 is 3u.
+    unsigned int bufferData[3] = {11u, 3u, 1u};
+    GLBuffer atomicCounterBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 2, atomicCounterBuffer);
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    void *mappedBuffer =
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
+    memcpy(bufferData, mappedBuffer, sizeof(bufferData));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    EXPECT_EQ(11u, bufferData[0]);
+    EXPECT_EQ(5u, bufferData[1]);
+    EXPECT_EQ(1u, bufferData[2]);
+}
+
 ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
