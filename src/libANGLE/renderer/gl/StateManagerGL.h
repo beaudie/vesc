@@ -73,9 +73,9 @@ class StateManagerGL final : angle::NonCopyable
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
     void setScissorTestEnabled(bool enabled);
-    void setScissor(const gl::Rectangle &scissor);
+    void setScissor(const gl::Rectangle &scissor, bool isDrawframebufferSideBySide);
 
-    void setViewport(const gl::Rectangle &viewport);
+    void setViewport(const gl::Rectangle &viewport, bool isDrawframebufferSideBySide);
     void setDepthRange(float near, float far);
 
     void setBlendEnabled(bool enabled);
@@ -179,7 +179,12 @@ class StateManagerGL final : angle::NonCopyable
     gl::Error setGenericDrawState(const gl::Context *context);
 
     void setTextureCubemapSeamlessEnabled(bool enabled);
-
+    void setViewportOffsets(bool isDrawframebufferSideBySide,
+                            const gl::Rectangle &viewport,
+                            const gl::Rectangle &scissor,
+                            const std::vector<gl::Offset> &viewportOffsets);
+    void setScissorArrayv();
+    void setViewportArrayv();
     const FunctionsGL *mFunctions;
 
     GLuint mProgram;
@@ -249,6 +254,9 @@ class StateManagerGL final : angle::NonCopyable
     gl::Rectangle mViewport;
     float mNear;
     float mFar;
+
+    // ANGLE_multiview
+    std::vector<gl::Offset> mViewportOffsets;
 
     bool mBlendEnabled;
     gl::ColorF mBlendColor;
