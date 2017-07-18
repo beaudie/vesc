@@ -71,7 +71,7 @@ class ScopedGLState : angle::NonCopyable
         {
             mStateManager->setScissorTestEnabled(false);
         }
-        mStateManager->setViewport(viewport);
+        mStateManager->setViewport(viewport, false);
         mStateManager->setDepthRange(0.0f, 1.0f);
         mStateManager->setBlendEnabled(false);
         mStateManager->setColorMask(true, true, true, true);
