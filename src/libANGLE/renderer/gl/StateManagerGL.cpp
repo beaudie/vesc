@@ -71,8 +71,10 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mScissorTestEnabled(false),
       mScissor(0, 0, 0, 0),
       mViewport(0, 0, 0, 0),
+      mViewportOffsets(gl::GetDefaultViewportOffsetVector()),
       mNear(0.0f),
       mFar(1.0f),
+      mIsDrawbufferSideBySide(false),
       mBlendEnabled(false),
       mBlendColor(0, 0, 0, 0),
       mSourceBlendRGB(GL_ONE),
@@ -988,24 +990,58 @@ void StateManagerGL::setScissorTestEnabled(bool enabled)
     }
 }
 
-void StateManagerGL::setScissor(const gl::Rectangle &scissor)
+void StateManagerGL::setScissor(const gl::Rectangle &scissor, bool forceUpdate)
 {
-    if (scissor != mScissor)
+    if (scissor != mScissor || forceUpdate)
     {
         mScissor = scissor;
-        mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
-
+        if (!mIsDrawbufferSideBySide)
+        {
+            mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
+        }
+        else
+        {
+            ASSERT(mFunctions->scissorArrayv);
+            std::vector<GLint> scissorData(4u * mViewportOffsets.size());
+            for (size_t i = 0u; i < mViewportOffsets.size(); ++i)
+            {
+                scissorData[i * 4u]      = mScissor.x + mViewportOffsets[i].x;
+                scissorData[i * 4u + 1u] = mScissor.y + mViewportOffsets[i].y;
+                scissorData[i * 4u + 2u] = mScissor.width;
+                scissorData[i * 4u + 3u] = mScissor.height;
+            }
+            mFunctions->scissorArrayv(0u, static_cast<GLsizei>(mViewportOffsets.size()),
+                                      scissorData.data());
+        }
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
     }
 }
 
-void StateManagerGL::setViewport(const gl::Rectangle &viewport)
+void StateManagerGL::setViewport(const gl::Rectangle &viewport, bool forceUpdate)
 {
-    if (viewport != mViewport)
+    if (viewport != mViewport || forceUpdate)
     {
         mViewport = viewport;
-        mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
-
+        if (!mIsDrawbufferSideBySide)
+        {
+            mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+        }
+        else
+        {
+            ASSERT(mFunctions->viewportArrayv);
+            std::vector<GLfloat> viewportData(4u * mViewportOffsets.size());
+            const float widthAsFloat  = static_cast<float>(mViewport.width);
+            const float heightAsFloat = static_cast<float>(mViewport.height);
+            for (size_t i = 0u; i < mViewportOffsets.size(); ++i)
+            {
+                viewportData[i * 4u]      = static_cast<float>(mViewport.x + mViewportOffsets[i].x);
+                viewportData[i * 4u + 1u] = static_cast<float>(mViewport.y + mViewportOffsets[i].y);
+                viewportData[i * 4u + 2u] = widthAsFloat;
+                viewportData[i * 4u + 3u] = heightAsFloat;
+            }
+            mFunctions->viewportArrayv(0u, static_cast<GLsizei>(mViewportOffsets.size()),
+                                       viewportData.data());
+        }
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
     }
 }
@@ -1489,10 +1525,10 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 setScissorTestEnabled(state.isScissorTestEnabled());
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
-                setScissor(state.getScissor());
+                setScissor(state.getScissor(), false);
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                setViewport(state.getViewport());
+                setViewport(state.getViewport(), false);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 setDepthRange(state.getNearPlane(), state.getFarPlane());
@@ -1696,6 +1732,14 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 // TODO(jmadill): implement this
                 break;
+            case gl::State::DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS:
+                handleViewportOffsetsChange(state.getViewport(), state.getScissor(),
+                                            state.getViewportOffsets());
+                break;
+            case gl::State::DIRTY_BIT_SIDE_BY_SIDE_FRAMEBUFFER_TRANSITION:
+                handleFramebufferSideBySideTransition(state.isDrawframebufferSideBySide(),
+                                                      state.isScissorTestEnabled());
+                break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
                 break;
@@ -1892,6 +1936,34 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
         else
         {
             mFunctions->disable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+        }
+    }
+}
+
+void StateManagerGL::handleViewportOffsetsChange(const gl::Rectangle &viewport,
+                                                 const gl::Rectangle &scissor,
+                                                 const std::vector<gl::Offset> &viewportOffsets)
+{
+    if (mViewportOffsets != viewportOffsets)
+    {
+        mViewportOffsets = viewportOffsets;
+        setViewport(viewport, true);
+        setScissor(scissor, true);
+    }
+}
+
+void StateManagerGL::handleFramebufferSideBySideTransition(bool sideBySide, bool scissorTest)
+{
+    if (sideBySide != mIsDrawbufferSideBySide)
+    {
+        mIsDrawbufferSideBySide = sideBySide;
+        if (!mIsDrawbufferSideBySide)
+        {
+            setScissorTestEnabled(scissorTest);
+        }
+        else
+        {
+            setScissorTestEnabled(true);
         }
     }
 }
