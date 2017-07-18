@@ -54,6 +54,8 @@ State::State()
       mClientArraysEnabled(true),
       mNearZ(0),
       mFarZ(0),
+      mDrawFramebufferViewportOffsets(GetDefaultViewportOffsetVector()),
+      mDrawFramebufferIsSideBySide(false),
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
@@ -122,6 +124,9 @@ void State::initialize(const Context *context,
     mViewport.height = 0;
     mNearZ = 0.0f;
     mFarZ = 1.0f;
+
+    mDrawFramebufferViewportOffsets = GetDefaultViewportOffsetVector();
+    mDrawFramebufferIsSideBySide    = false;
 
     mBlend.colorMaskRed = true;
     mBlend.colorMaskGreen = true;
@@ -219,6 +224,9 @@ void State::reset(const Context *context)
     mArrayBuffer.set(context, nullptr);
     mDrawIndirectBuffer.set(context, nullptr);
     mRenderbuffer.set(context, nullptr);
+
+    mDrawFramebufferViewportOffsets = GetDefaultViewportOffsetVector();
+    mDrawFramebufferIsSideBySide    = false;
 
     if (mProgram)
     {
@@ -749,6 +757,16 @@ const Rectangle &State::getViewport() const
     return mViewport;
 }
 
+const std::vector<Offset> &State::getViewportOffsets() const
+{
+    return mDrawFramebufferViewportOffsets;
+}
+
+bool State::isDrawFramebufferSideBySide() const
+{
+    return mDrawFramebufferIsSideBySide;
+}
+
 void State::setActiveSampler(unsigned int active)
 {
     mActiveSampler = active;
@@ -959,6 +977,32 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     if (mDrawFramebuffer && mDrawFramebuffer->hasAnyDirtyBit())
     {
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+    }
+
+    if (framebuffer != nullptr &&
+        framebuffer->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
+    {
+        if (!mDrawFramebufferIsSideBySide)
+        {
+            mDrawFramebufferIsSideBySide = true;
+            // If the previous draw framebuffer doesn't have a side-by-side layout, we have to
+            // notify of a transition.
+            mDirtyBits.set(DIRTY_BIT_SCISSOR_TEST_ENABLED);
+        }
+        // If the new draw framebuffer has a side-by-side layout, the viewport offsets might have to
+        // be applied for calculating the new viewport and scissor rectangles for each view.
+        setViewportOffsetsFromDrawFramebuffer();
+        mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
+    }
+    else if (mDrawFramebufferIsSideBySide)
+    {
+        // If the old framebuffer has a side-by-side layout and the new one doesn't, the viewport
+        // and scissor state has to be restored.
+        mDrawFramebufferIsSideBySide = false;
+        mDirtyBits.set(DIRTY_BIT_SCISSOR_TEST_ENABLED);
+
+        setViewportOffsetsFromDrawFramebuffer();
+        mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
     }
 }
 
@@ -2216,6 +2260,12 @@ void State::setObjectDirty(GLenum target)
     }
 }
 
+void State::setViewportOffsets(const std::vector<Offset> &viewportOffsets)
+{
+    mDrawFramebufferViewportOffsets = viewportOffsets;
+    mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
+}
+
 void State::setImageUnit(const Context *context,
                          GLuint unit,
                          Texture *texture,
@@ -2236,6 +2286,19 @@ void State::setImageUnit(const Context *context,
 const ImageUnit &State::getImageUnit(GLuint unit) const
 {
     return mImageUnits[unit];
+}
+
+void State::setViewportOffsetsFromDrawFramebuffer()
+{
+    if (!mDrawFramebuffer || !mDrawFramebufferIsSideBySide ||
+        !mDrawFramebuffer->getViewportOffsets())
+    {
+        mDrawFramebufferViewportOffsets = GetDefaultViewportOffsetVector();
+    }
+    else
+    {
+        mDrawFramebufferViewportOffsets = *mDrawFramebuffer->getViewportOffsets();
+    }
 }
 
 }  // namespace gl
