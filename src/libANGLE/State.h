@@ -164,6 +164,9 @@ class State : angle::NonCopyable
     // Viewport state setter/getter
     void setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height);
     const Rectangle &getViewport() const;
+    const std::vector<Offset> *getViewportOffsets() const;
+
+    bool isDrawframebufferSideBySide() const;
 
     // Texture binding & active texture unit manipulation
     void setActiveSampler(unsigned int active);
@@ -364,6 +367,9 @@ class State : angle::NonCopyable
 
     enum DirtyBitType
     {
+        DIRTY_BIT_SIDE_BY_SIDE_FRAMEBUFFER_TRANSITION,
+        DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS,  // GL_ANGLE_multiview apply the necessary changes for
+                                                  // multiview side-by-side rendering.
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
         DIRTY_BIT_SCISSOR,
         DIRTY_BIT_VIEWPORT,
@@ -425,7 +431,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_PATH_RENDERING_MATRIX_MV,    // CHROMIUM_path_rendering path model view matrix
         DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ,  // CHROMIUM_path_rendering path projection matrix
         DIRTY_BIT_PATH_RENDERING_STENCIL_STATE,
-        DIRTY_BIT_FRAMEBUFFER_SRGB,  // GL_EXT_sRGB_write_control
+        DIRTY_BIT_FRAMEBUFFER_SRGB,            // GL_EXT_sRGB_write_control
         DIRTY_BIT_CURRENT_VALUE_0,
         DIRTY_BIT_CURRENT_VALUE_MAX = DIRTY_BIT_CURRENT_VALUE_0 + MAX_VERTEX_ATTRIBS,
         DIRTY_BIT_INVALID           = DIRTY_BIT_CURRENT_VALUE_MAX,
@@ -456,6 +462,8 @@ class State : angle::NonCopyable
     void syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
     void syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
+    void makeViewportOffsetsBitDirty();
+
 
     void setImageUnit(const Context *context,
                       GLuint unit,
@@ -502,6 +510,8 @@ class State : angle::NonCopyable
     Rectangle mViewport;
     float mNearZ;
     float mFarZ;
+
+    bool mDrawFramebufferIsSideBySide;
 
     BindingPointer<Buffer> mArrayBuffer;
     BindingPointer<Buffer> mDrawIndirectBuffer;

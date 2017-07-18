@@ -241,9 +241,9 @@ GLint FramebufferAttachment::getBaseViewIndex() const
     return mBaseViewIndex;
 }
 
-const std::vector<Offset> &FramebufferAttachment::getMultiviewViewportOffsets() const
+const std::vector<Offset> *FramebufferAttachment::getMultiviewViewportOffsets() const
 {
-    return mViewportOffsets;
+    return &mViewportOffsets;
 }
 
 Texture *FramebufferAttachment::getTexture() const

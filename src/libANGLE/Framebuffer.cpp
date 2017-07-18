@@ -34,6 +34,23 @@ namespace gl
 namespace
 {
 
+const gl::FramebufferAttachment *GetAnyAttachment(const gl::FramebufferState &state)
+{
+    const FramebufferAttachment *colorAttachment = state.getFirstColorAttachment();
+    if (colorAttachment != nullptr)
+    {
+        return colorAttachment;
+    }
+
+    const FramebufferAttachment *depthAttachment = state.getDepthAttachment();
+    if (depthAttachment != nullptr)
+    {
+        return depthAttachment;
+    }
+
+    return state.getStencilOrDepthStencilAttachment();
+}
+
 void BindResourceChannel(OnAttachmentDirtyBinding *binding, FramebufferAttachmentObject *resource)
 {
     binding->bind(resource ? resource->getDirtyChannel() : nullptr);
@@ -1553,6 +1570,22 @@ GLenum Framebuffer::checkStatus(const ValidationContext *context)
 int Framebuffer::getSamples(const ValidationContext *context)
 {
     return getSamples(static_cast<const Context *>(context));
+}
+
+const std::vector<Offset> *Framebuffer::getViewportOffsets() const
+{
+    const FramebufferAttachment *attachment = GetAnyAttachment(mState);
+    return attachment == nullptr ? nullptr : attachment->getMultiviewViewportOffsets();
+}
+
+GLenum Framebuffer::getMultiviewLayout() const
+{
+    const FramebufferAttachment *attachment = GetAnyAttachment(mState);
+    if (attachment == nullptr)
+    {
+        return GL_NONE;
+    }
+    return attachment->getMultiviewLayout();
 }
 
 }  // namespace gl

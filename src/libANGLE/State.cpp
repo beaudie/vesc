@@ -54,6 +54,7 @@ State::State()
       mClientArraysEnabled(true),
       mNearZ(0),
       mFarZ(0),
+      mDrawFramebufferIsSideBySide(false),
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
@@ -122,6 +123,8 @@ void State::initialize(const Context *context,
     mViewport.height = 0;
     mNearZ = 0.0f;
     mFarZ = 1.0f;
+
+    mDrawFramebufferIsSideBySide = false;
 
     mBlend.colorMaskRed = true;
     mBlend.colorMaskGreen = true;
@@ -219,6 +222,8 @@ void State::reset(const Context *context)
     mArrayBuffer.set(context, nullptr);
     mDrawIndirectBuffer.set(context, nullptr);
     mRenderbuffer.set(context, nullptr);
+
+    mDrawFramebufferIsSideBySide = false;
 
     if (mProgram)
     {
@@ -749,6 +754,16 @@ const Rectangle &State::getViewport() const
     return mViewport;
 }
 
+const std::vector<Offset> *State::getViewportOffsets() const
+{
+    return mDrawFramebuffer->getViewportOffsets();
+}
+
+bool State::isDrawframebufferSideBySide() const
+{
+    return mDrawFramebufferIsSideBySide;
+}
+
 void State::setActiveSampler(unsigned int active)
 {
     mActiveSampler = active;
@@ -952,6 +967,23 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 {
     if (mDrawFramebuffer == framebuffer)
         return;
+
+    if (framebuffer != nullptr &&
+        framebuffer->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
+    {
+        // If the new framebuffer has a side-by-side layout, the viewport offsets have to be
+        // applied.
+        mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_FRAMEBUFFER_TRANSITION);
+        mDrawFramebufferIsSideBySide = true;
+    }
+    else if (mDrawFramebuffer != nullptr &&
+             mDrawFramebuffer->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
+    {
+        // If the old framebuffer has a side-by-side layout and the new one doesn't, the viewport
+        // and scissor state have to be restored.
+        mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_FRAMEBUFFER_TRANSITION);
+        mDrawFramebufferIsSideBySide = false;
+    }
 
     mDrawFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
@@ -2214,6 +2246,11 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
+}
+
+void State::makeViewportOffsetsBitDirty()
+{
+    mDirtyBits.set(DIRTY_BIT_SIDE_BY_SIDE_VIEWPORT_OFFSETS);
 }
 
 void State::setImageUnit(const Context *context,

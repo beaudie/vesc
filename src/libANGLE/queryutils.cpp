@@ -544,7 +544,7 @@ void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
 
         case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_VIEWPORT_OFFSETS_ANGLE:
         {
-            const std::vector<Offset> &offsets = attachmentObject->getMultiviewViewportOffsets();
+            const std::vector<Offset> &offsets = *attachmentObject->getMultiviewViewportOffsets();
             for (size_t i = 0u; i < offsets.size(); ++i)
             {
                 params[i * 2u]      = offsets[i].x;

@@ -3130,6 +3130,7 @@ void Context::framebufferTextureMultiviewSideBySideANGLE(GLenum target,
     }
 
     mGLState.setObjectDirty(target);
+    mGLState.makeViewportOffsetsBitDirty();
 }
 
 void Context::drawBuffers(GLsizei n, const GLenum *bufs)
