@@ -311,6 +311,25 @@ void RobustResourceInitTest::checkFramebufferNonZeroPixels(int skipX,
     EXPECT_EQ(0, k);
 }
 
+// Basic test that renderbuffers are initialized correctly.
+TEST_P(RobustResourceInitTest, Renderbuffer)
+{
+    if (!setup())
+    {
+        return;
+    }
+
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kWidth, kHeight);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+
+    checkFramebufferNonZeroPixels(0, 0, 0, 0, GLColor::black);
+}
+
 // Reading an uninitialized texture (texImage2D) should succeed with all bytes set to 0.
 TEST_P(RobustResourceInitTest, ReadingUninitializedTexture)
 {
@@ -362,6 +381,24 @@ TEST_P(RobustResourceInitTest, ReuploadingClearsTexture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     checkNonZeroPixels(&tex, 0, 0, 0, 0, GLColor::transparentBlack);
     EXPECT_GL_NO_ERROR();
+}
+
+// Basic test that textures are initialized correctly.
+TEST_P(RobustResourceInitTest, Texture)
+{
+    if (!setup())
+    {
+        return;
+    }
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    checkFramebufferNonZeroPixels(0, 0, 0, 0, GLColor::black);
 }
 
 // Cover the case where null pixel data is uploaded to a texture and then sub image is used to
@@ -469,6 +506,41 @@ TEST_P(RobustResourceInitTest, CopyTexSubImage3DTextureWronglyInitialized)
     glReadPixels(0, 0, kTextureWidth, kTextureHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
     ASSERT_GL_NO_ERROR();
     EXPECT_EQ(data, pixels);
+}
+
+// Tests that drawing with an uninitialized Texture works as expected.
+TEST_P(RobustResourceInitTest, DrawWithTexture)
+{
+    if (!setup())
+    {
+        return;
+    }
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    const std::string &vertexShader =
+        "attribute vec2 position;\n"
+        "varying vec2 texCoord;\n"
+        "void main() {\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "    texCoord = (position * 0.5) + 0.5;\n"
+        "}";
+    const std::string &fragmentShader =
+        "precision mediump float;\n"
+        "varying vec2 texCoord;\n"
+        "uniform sampler2D tex;\n"
+        "void main() {\n"
+        "    gl_FragColor = texture2D(tex, texCoord);\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    drawQuad(program, "position", 0.5f);
+
+    checkFramebufferNonZeroPixels(0, 0, 0, 0, GLColor::black);
 }
 
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
