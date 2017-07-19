@@ -3233,4 +3233,10 @@ gl::Error Renderer9::clearRenderTarget(RenderTargetD3D *renderTarget, const gl::
     return gl::InternalError() << "clearRenderTarget is not implemented on D3D9";
 }
 
+gl::Error Renderer9::initRenderTarget(RenderTargetD3D *renderTarget)
+{
+    // TODO(jmadill)
+    return gl::NoError();
+}
+
 }  // namespace rx

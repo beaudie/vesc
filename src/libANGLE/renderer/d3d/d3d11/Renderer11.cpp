@@ -4975,4 +4975,9 @@ gl::Error Renderer11::clearRenderTarget(RenderTargetD3D *renderTarget,
     return gl::NoError();
 }
 
+gl::Error Renderer11::initRenderTarget(RenderTargetD3D *renderTarget)
+{
+    return mClear->initRenderTarget(renderTarget);
+}
+
 }  // namespace rx

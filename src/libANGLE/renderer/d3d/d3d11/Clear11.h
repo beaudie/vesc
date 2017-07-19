@@ -42,6 +42,8 @@ class Clear11 : angle::NonCopyable
                                const ClearParameters &clearParams,
                                const gl::FramebufferState &fboData);
 
+    gl::Error initRenderTarget(RenderTargetD3D *renderTarget);
+
   private:
     class ShaderManager final : angle::NonCopyable
     {
