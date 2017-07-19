@@ -892,11 +892,14 @@ TEST_P(WebGLCompatibilityTest, InvalidAttributeAndUniformNames)
         "precision highp float;\n"
         "uniform vec4 ";
     frag += validUniformName;
+    // Insert illegal characters into comments
     frag +=
         ";\n"
+        "    // $ \" @ /*\n"
         "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
+        "{/*\n"
+        "    ` @ $\n"
+        "    */gl_FragColor = vec4(1.0);\n"
         "}\n";
 
     ANGLE_GL_PROGRAM(program, vert, frag);
