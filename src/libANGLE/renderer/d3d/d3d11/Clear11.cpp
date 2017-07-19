@@ -32,9 +32,8 @@ namespace rx
 
 namespace
 {
-
-static constexpr uint32_t g_ConstantBufferSize = sizeof(RtvDsvClearInfo<float>);
-static constexpr uint32_t g_VertexSize         = sizeof(d3d11::PositionVertex);
+constexpr uint32_t g_ConstantBufferSize = sizeof(RtvDsvClearInfo<float>);
+constexpr uint32_t g_VertexSize         = sizeof(d3d11::PositionVertex);
 
 // Updates color, depth and alpha components of cached CB if necessary.
 // Returns true if any constants are updated, false otherwise.
@@ -78,6 +77,22 @@ bool UpdateDataCache(RtvDsvClearInfo<T> *dataCache,
     }
 
     return cacheDirty;
+}
+
+bool IsArrayRTV(ID3D11RenderTargetView *rtv)
+{
+    D3D11_RENDER_TARGET_VIEW_DESC desc;
+    rtv->GetDesc(&desc);
+    if (desc.ViewDimension == D3D11_RTV_DIMENSION_TEXTURE1DARRAY &&
+        desc.Texture1DArray.ArraySize > 1)
+        return true;
+    if (desc.ViewDimension == D3D11_RTV_DIMENSION_TEXTURE2DARRAY &&
+        desc.Texture2DArray.ArraySize > 1)
+        return true;
+    if (desc.ViewDimension == D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY &&
+        desc.Texture2DMSArray.ArraySize > 1)
+        return true;
+    return false;
 }
 }  // anonymous namespace
 
@@ -720,4 +735,31 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
 
     return gl::NoError();
 }
+
+gl::Error Clear11::initRenderTarget(RenderTargetD3D *renderTarget)
+{
+    RenderTarget11 *rt11         = GetAs<RenderTarget11>(renderTarget);
+    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+
+    if (rt11->getDepthStencilView().valid())
+    {
+        const auto &format    = rt11->getFormatSet();
+        const UINT clearFlags = (format.format().depthBits > 0 ? D3D11_CLEAR_DEPTH : 0) |
+                                (format.format().stencilBits ? D3D11_CLEAR_STENCIL : 0);
+        context->ClearDepthStencilView(rt11->getDepthStencilView().get(), clearFlags, 1.0f, 0);
+        return gl::NoError();
+    }
+
+    ID3D11RenderTargetView *rtv = rt11->getRenderTargetView().get();
+
+    // There are complications with some types of RTV and FL 9_3 with ClearRenderTargetView.
+    // See https://msdn.microsoft.com/en-us/library/windows/desktop/ff476388(v=vs.85).aspx
+    ASSERT(mRenderer->getRenderer11DeviceCaps().featureLevel > D3D_FEATURE_LEVEL_9_3 ||
+           !IsArrayRTV(rtv));
+
+    constexpr FLOAT transparentBlack[4] = {0, 0, 0, 0};
+    context->ClearRenderTargetView(rtv, transparentBlack);
+    return gl::NoError();
+}
+
 }  // namespace rx

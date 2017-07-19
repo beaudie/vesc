@@ -398,6 +398,8 @@ class Renderer9 : public RendererD3D
     gl::Error clearRenderTarget(RenderTargetD3D *renderTarget,
                                 const gl::ColorF &clearValues) override;
 
+    gl::Error initRenderTarget(RenderTargetD3D *renderTarget) override;
+
   protected:
     gl::Error clearTextures(const gl::Context *context,
                             gl::SamplerType samplerType,
