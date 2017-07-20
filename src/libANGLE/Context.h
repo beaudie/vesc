@@ -832,6 +832,17 @@ class Context final : public ValidationContext
     egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }
 
   private:
+    // Enum containing the different types of Clear* commands.
+    enum class ClearCommandType
+    {
+        Clear,
+        ClearBufferfv,
+        ClearBufferuiv,
+        ClearBufferiv,
+        ClearBufferfi
+    };
+
+  private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();
@@ -859,6 +870,14 @@ class Context final : public ValidationContext
 
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+
+    void genericSideBySideClear(ClearCommandType clearCommandType,
+                                GLbitfield mask,
+                                GLenum buffer,
+                                GLint drawbuffer,
+                                const uint8_t *values,
+                                GLfloat depth,
+                                GLint stencil);
 
     std::unique_ptr<rx::ContextImpl> mImplementation;
 
