@@ -167,6 +167,7 @@ class State : angle::NonCopyable
     const std::vector<Offset> &getViewportOffsets() const;
 
     bool isDrawFramebufferSideBySide() const;
+    void setDrawframebufferSideBySide(bool sideBySide);
 
     // Texture binding & active texture unit manipulation
     void setActiveSampler(unsigned int active);

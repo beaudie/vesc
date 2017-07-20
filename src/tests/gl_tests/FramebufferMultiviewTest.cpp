@@ -14,13 +14,22 @@ using namespace angle;
 namespace
 {
 
-GLuint CreateTexture2D(GLenum internalFormat, GLenum format, GLenum type)
+GLuint CreateTexture2D(GLenum internalFormat,
+                       GLenum format,
+                       GLenum type,
+                       GLsizei width,
+                       GLsizei height)
 {
     GLuint tex;
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, format, type, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
     return tex;
+}
+
+GLuint CreateTexture2D(GLenum internalFormat, GLenum format, GLenum type)
+{
+    return CreateTexture2D(internalFormat, format, type, 1, 1);
 }
 
 }  // namespace
@@ -30,8 +39,8 @@ class FramebufferMultiviewTest : public ANGLETest
   protected:
     FramebufferMultiviewTest() : mFramebuffer(0), mTexture2D(0), mTexture2DArray(0)
     {
-        setWindowWidth(128);
-        setWindowHeight(128);
+        setWindowWidth(4);
+        setWindowHeight(2);
         setWebGLCompatibilityEnabled(true);
     }
 
@@ -69,11 +78,11 @@ class FramebufferMultiviewTest : public ANGLETest
         ANGLETest::TearDown();
     }
 
-    void createTexture2DArray()
+    void createTexture2DArray(GLsizei width, GLsizei height, GLsizei numLayers)
     {
         glGenTextures(1, &mTexture2DArray);
         glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture2DArray);
-        glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA16F, 1, 1, 2);
+        glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA16F, width, height, numLayers);
         ASSERT_GL_NO_ERROR();
     }
 
@@ -209,7 +218,7 @@ TEST_P(FramebufferMultiviewTest, InvalidMultiviewLayeredArguments)
         return;
     }
 
-    createTexture2DArray();
+    createTexture2DArray(1, 1, 2);
     // Negative base view index.
     glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture2DArray,
                                               0, -1, 1);
@@ -377,6 +386,58 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsSideBySide)
 
     glDeleteTextures(1, &depthTexture);
     glDeleteTextures(1, &otherTexture);
+}
+
+// Test that glFramebufferTextureMultiviewSideBySideANGLE modifies the internal multiview state.
+TEST_P(FramebufferMultiviewTest, SideBySideClear)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    mTexture2D                     = CreateTexture2D(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, 4, 2);
+    const GLint viewportOffsets[4] = {0, 0, 3, 0};
+    glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture2D,
+                                                 0, 2, &viewportOffsets[0]);
+
+    // Create and bind a normal framebuffer to access the 2D texture.
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture2D, 0);
+
+    // Clear the contents of the texture.
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Bind and specify viewport/scissor dimensions for each view.
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glViewport(0, 0, 1, 2);
+    glScissor(0, 0, 1, 2);
+
+    glClearColor(1, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // column 0
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, 1, 255, 0, 0, 0);
+
+    // column 1
+    EXPECT_PIXEL_EQ(1, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(1, 1, 0, 0, 0, 0);
+
+    // column 2
+    EXPECT_PIXEL_EQ(2, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(2, 1, 0, 0, 0, 0);
+
+    // column 3
+    EXPECT_PIXEL_EQ(3, 0, 255, 0, 0, 0);
+    EXPECT_PIXEL_EQ(3, 1, 255, 0, 0, 0);
+
+    glDeleteFramebuffers(1, &fbo);
 }
 
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest, ES3_OPENGL());
