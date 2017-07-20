@@ -2878,26 +2878,62 @@ void Context::blitFramebuffer(GLint srcX0,
 
 void Context::clear(GLbitfield mask)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clear(this, mask));
+    if (mGLState.isDrawFramebufferSideBySide())
+    {
+        genericSideBySideClear(ClearCommandType::Clear, mask, GL_NONE, 0, nullptr, GL_NONE,
+                               GL_NONE);
+    }
+    else
+    {
+        syncStateForClear();
+        handleError(mGLState.getDrawFramebuffer()->clear(this, mask));
+    }
 }
 
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferfv(this, buffer, drawbuffer, values));
+    if (mGLState.isDrawFramebufferSideBySide())
+    {
+        genericSideBySideClear(ClearCommandType::ClearBufferfv, static_cast<GLbitfield>(0u), buffer,
+                               drawbuffer, reinterpret_cast<const uint8_t *>(values), GL_NONE,
+                               GL_NONE);
+    }
+    else
+    {
+        syncStateForClear();
+        handleError(mGLState.getDrawFramebuffer()->clearBufferfv(this, buffer, drawbuffer, values));
+    }
 }
 
 void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferuiv(this, buffer, drawbuffer, values));
+    if (mGLState.isDrawFramebufferSideBySide())
+    {
+        genericSideBySideClear(ClearCommandType::ClearBufferuiv, static_cast<GLbitfield>(0u),
+                               buffer, drawbuffer, reinterpret_cast<const uint8_t *>(values),
+                               GL_NONE, GL_NONE);
+    }
+    else
+    {
+        syncStateForClear();
+        handleError(
+            mGLState.getDrawFramebuffer()->clearBufferuiv(this, buffer, drawbuffer, values));
+    }
 }
 
 void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferiv(this, buffer, drawbuffer, values));
+    if (mGLState.isDrawFramebufferSideBySide())
+    {
+        genericSideBySideClear(ClearCommandType::ClearBufferiv, static_cast<GLbitfield>(0u), buffer,
+                               drawbuffer, reinterpret_cast<const uint8_t *>(values), GL_NONE,
+                               GL_NONE);
+    }
+    else
+    {
+        syncStateForClear();
+        handleError(mGLState.getDrawFramebuffer()->clearBufferiv(this, buffer, drawbuffer, values));
+    }
 }
 
 void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
@@ -2912,8 +2948,78 @@ void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLin
         return;
     }
 
-    syncStateForClear();
-    handleError(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
+    if (mGLState.isDrawFramebufferSideBySide())
+    {
+        genericSideBySideClear(ClearCommandType::ClearBufferfi, static_cast<GLbitfield>(0u), buffer,
+                               drawbuffer, nullptr, depth, stencil);
+    }
+    else
+    {
+        syncStateForClear();
+        handleError(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
+    }
+}
+
+void Context::genericSideBySideClear(ClearCommandType clearCommandType,
+                                     GLbitfield mask,
+                                     GLenum buffer,
+                                     GLint drawbuffer,
+                                     const uint8_t *values,
+                                     GLfloat depth,
+                                     GLint stencil)
+{
+    const auto &viewportOffsets  = mGLState.getViewportOffsets();
+    Framebuffer *drawFramebuffer = mGLState.getDrawFramebuffer();
+    ASSERT(drawFramebuffer != nullptr);
+
+    // Record viewport and scissor state before modifying them.
+    Rectangle viewport = mGLState.getViewport();
+    Rectangle scissor  = mGLState.getScissor();
+    bool scissorTest   = mGLState.isScissorTestEnabled();
+
+    // Iterate over the views, update the viewport and scissor state and issue a clear.
+    mGLState.setDrawframebufferSideBySide(false);
+    mGLState.setScissorTest(true);
+    for (size_t i = 0u; i < viewportOffsets.size(); ++i)
+    {
+        const auto &offset = viewportOffsets[i];
+        mGLState.setViewportParams(viewport.x + offset.x, viewport.y + offset.y, viewport.width,
+                                   viewport.height);
+        mGLState.setScissorParams(scissor.x + offset.x, scissor.y + offset.y, scissor.width,
+                                  scissor.height);
+        syncStateForClear();
+
+        switch (clearCommandType)
+        {
+            case ClearCommandType::Clear:
+                handleError(drawFramebuffer->clear(this, mask));
+                break;
+            case ClearCommandType::ClearBufferfv:
+                handleError(drawFramebuffer->clearBufferfv(
+                    this, buffer, drawbuffer, reinterpret_cast<const GLfloat *>(values)));
+                break;
+            case ClearCommandType::ClearBufferuiv:
+                handleError(drawFramebuffer->clearBufferuiv(
+                    this, buffer, drawbuffer, reinterpret_cast<const GLuint *>(values)));
+                break;
+            case ClearCommandType::ClearBufferiv:
+                handleError(drawFramebuffer->clearBufferiv(
+                    this, buffer, drawbuffer, reinterpret_cast<const GLint *>(values)));
+                break;
+            case ClearCommandType::ClearBufferfi:
+                handleError(
+                    drawFramebuffer->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
+                break;
+            default:
+                UNREACHABLE();
+        }
+    }
+
+    // Restore state.
+    mGLState.setDrawframebufferSideBySide(true);
+    mGLState.setViewportParams(viewport.x, viewport.y, viewport.width, viewport.height);
+    mGLState.setScissorParams(scissor.x, scissor.y, scissor.width, scissor.height);
+    mGLState.setScissorTest(scissorTest);
 }
 
 void Context::readPixels(GLint x,

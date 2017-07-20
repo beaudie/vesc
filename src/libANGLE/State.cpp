@@ -767,6 +767,11 @@ bool State::isDrawFramebufferSideBySide() const
     return mDrawFramebufferIsSideBySide;
 }
 
+void State::setDrawframebufferSideBySide(bool sideBySide)
+{
+    mDrawFramebufferIsSideBySide = sideBySide;
+}
+
 void State::setActiveSampler(unsigned int active)
 {
     mActiveSampler = active;
