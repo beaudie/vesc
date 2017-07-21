@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "../src/libANGLE/ErrorStrings.h"
 #include "common/mathutil.h"
 #include "test_utils/gl_raii.h"
 
@@ -46,6 +47,42 @@ constexpr const char *FloatingPointTextureExtensions[] = {
     "GL_CHROMIUM_color_buffer_float_rgba",
     "GL_CHROMIUM_color_buffer_float_rgb",
 };
+
+struct Message
+{
+    GLenum source;
+    GLenum type;
+    GLenum id;
+    GLenum severity;
+    std::string message;
+    const void *userParam;
+
+    inline bool operator==(Message a)
+    {
+        if (a.source == source && a.type == type && a.id == id && a.message == message)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+};
+
+static void GL_APIENTRY Callback(GLenum source,
+                                 GLenum type,
+                                 GLuint id,
+                                 GLenum severity,
+                                 GLsizei length,
+                                 const GLchar *message,
+                                 const void *userParam)
+{
+    Message m{source, type, id, severity, std::string(message, length), userParam};
+    std::vector<Message> *messages =
+        static_cast<std::vector<Message> *>(const_cast<void *>(userParam));
+    messages->push_back(m);
+}
 
 }  // namespace
 
@@ -978,6 +1015,21 @@ TEST_P(WebGL2CompatibilityTest, ShaderSourceLineContinuation)
     glDeleteShader(shader);
 }
 
+// Tests bindAttribLocations for reserved prefixes and length limits
+TEST_P(WebGLCompatibilityTest, BindAttribLocationLimitation)
+{
+    constexpr int maxLocStringLength = 256;
+    const std::string tooLongString(maxLocStringLength + 1, '_');
+
+    glBindAttribLocation(0, 0, "_webgl_var");
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glBindAttribLocation(0, 0, static_cast<const GLchar *>(tooLongString.c_str()));
+
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
 // Test the checks for OOB reads in the vertex buffers, instanced version
 TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
 {
@@ -1306,7 +1358,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
     glEnableVertexAttribArray(posLocation);
 
     GLBuffer indexBuffer;
-    const GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0};
+    const GLubyte indices[] = {0, 0, 0, 0, 0, 0, 0, 0};
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -1317,10 +1369,10 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, zeroIndices);
     ASSERT_GL_NO_ERROR();
 
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, zeroIndices);
+    glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, zeroIndices);
     ASSERT_GL_NO_ERROR();
 
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, zeroIndices + 1);
+    glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, zeroIndices + 1);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
@@ -2164,6 +2216,48 @@ TEST_P(WebGLCompatibilityTest, SizedRGBA32FFormats)
     }
 }
 
+// Verify functionality of WebGL specific errors using KHR_debug
+TEST_P(WebGLCompatibilityTest, ErrorMessages)
+{
+    if (extensionEnabled("GL_KHR_debug"))
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+    }
+    else
+    {
+        std::cout << "Test skipped because GL_KHR_debug is not available." << std::endl;
+        return;
+    }
+
+    std::vector<Message> messages;
+    glDebugMessageCallbackKHR(Callback, &messages);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+    constexpr GLenum source    = GL_DEBUG_SOURCE_API;
+    constexpr GLenum type      = GL_DEBUG_TYPE_ERROR;
+    constexpr GLenum severity  = GL_DEBUG_SEVERITY_HIGH;
+    constexpr GLuint id1       = 1282;
+    const std::string message1 = gl::kErrorWebglBindAttribLocationReservedPrefix;
+    Message expectedMessage;
+
+    GLint numMessages = 0;
+    glGetIntegerv(GL_DEBUG_LOGGED_MESSAGES, &numMessages);
+    EXPECT_EQ(0, numMessages);
+
+    glBindAttribLocation(0, 0, "_webgl_var");
+
+    ASSERT_EQ(1u, messages.size());
+
+    expectedMessage.source   = source;
+    expectedMessage.id       = id1;
+    expectedMessage.type     = type;
+    expectedMessage.severity = severity;
+    expectedMessage.message  = message1;
+
+    Message &m = messages.front();
+    ASSERT_TRUE(m == expectedMessage);
+}
+
 // This tests that rendering feedback loops works as expected with WebGL 2.
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
@@ -2988,6 +3082,17 @@ TEST_P(WebGL2CompatibilityTest, NoAttributeVertexShader)
     glDrawArrays(GL_TRIANGLES, 0, 6);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Tests bindAttribLocations for length limit
+TEST_P(WebGL2CompatibilityTest, BindAttribLocationLimitation)
+{
+    constexpr int maxLocStringLength = 1024;
+    const std::string tooLongString(maxLocStringLength + 1, '_');
+
+    glBindAttribLocation(0, 0, static_cast<const GLchar *>(tooLongString.c_str()));
+
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
