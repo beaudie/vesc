@@ -39,6 +39,32 @@ void BindResourceChannel(OnAttachmentDirtyBinding *binding, FramebufferAttachmen
     binding->bind(resource ? resource->getDirtyChannel() : nullptr);
 }
 
+bool CheckMultiviewState(const FramebufferAttachment *firstAttachment,
+                         const FramebufferAttachment *secondAttachment)
+{
+    ASSERT(firstAttachment && secondAttachment);
+    ASSERT(firstAttachment->isAttached() && secondAttachment->isAttached());
+
+    if (firstAttachment->getNumViews() != secondAttachment->getNumViews())
+    {
+        return false;
+    }
+    if (firstAttachment->getBaseViewIndex() != secondAttachment->getBaseViewIndex())
+    {
+        return false;
+    }
+    if (firstAttachment->getMultiviewLayout() != secondAttachment->getMultiviewLayout())
+    {
+        return false;
+    }
+    if (firstAttachment->getMultiviewViewportOffsets() !=
+        secondAttachment->getMultiviewViewportOffsets())
+    {
+        return false;
+    }
+    return true;
+}
+
 bool CheckAttachmentCompleteness(const Context *context, const FramebufferAttachment &attachment)
 {
     ASSERT(attachment.isAttached());
@@ -798,6 +824,8 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
     Optional<GLboolean> fixedSampleLocations;
     bool hasRenderbuffer = false;
 
+    const FramebufferAttachment *anyAttachment = getFirstNonNullAttachment();
+
     for (const FramebufferAttachment &colorAttachment : mState.mColorAttachments)
     {
         if (colorAttachment.isAttached())
@@ -836,6 +864,11 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
                 }
             }
 
+            if (!CheckMultiviewState(anyAttachment, &colorAttachment))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_ANGLE;
+            }
+
             hasRenderbuffer = hasRenderbuffer || (colorAttachment.type() == GL_RENDERBUFFER);
             hasAttachments  = true;
         }
@@ -861,6 +894,11 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
             return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
         }
 
+        if (!CheckMultiviewState(anyAttachment, &depthAttachment))
+        {
+            return GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_ANGLE;
+        }
+
         hasRenderbuffer = hasRenderbuffer || (depthAttachment.type() == GL_RENDERBUFFER);
         hasAttachments  = true;
     }
@@ -883,6 +921,11 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
                                                &fixedSampleLocations))
         {
             return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
+        }
+
+        if (!CheckMultiviewState(anyAttachment, &stencilAttachment))
+        {
+            return GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_ANGLE;
         }
 
         hasRenderbuffer = hasRenderbuffer || (stencilAttachment.type() == GL_RENDERBUFFER);
@@ -910,6 +953,11 @@ GLenum Framebuffer::checkStatusImpl(const Context *context)
                 mState.mWebGLDepthStencilAttachment.getStencilSize() == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
+            }
+
+            if (!CheckMultiviewState(anyAttachment, &mState.mWebGLDepthStencilAttachment))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_ANGLE;
             }
         }
         else if (mState.mStencilAttachment.isAttached() &&
