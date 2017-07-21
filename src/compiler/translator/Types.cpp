@@ -551,7 +551,8 @@ bool TStructure::containsSamplers() const
 void TType::createSamplerSymbols(const TString &namePrefix,
                                  const TString &apiNamePrefix,
                                  TVector<TIntermSymbol *> *outputSymbols,
-                                 TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames) const
+                                 TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                                 TSymbolTable *symbolTable) const
 {
     if (isStructureContainingSamplers())
     {
@@ -566,18 +567,20 @@ void TType::createSamplerSymbols(const TString &namePrefix,
                 TStringStream elementApiName;
                 elementApiName << apiNamePrefix << "[" << arrayIndex << "]";
                 elementType.createSamplerSymbols(elementName.str(), elementApiName.str(),
-                                                 outputSymbols, outputSymbolsToAPINames);
+                                                 outputSymbols, outputSymbolsToAPINames,
+                                                 symbolTable);
             }
         }
         else
         {
             structure->createSamplerSymbols(namePrefix, apiNamePrefix, outputSymbols,
-                                            outputSymbolsToAPINames);
+                                            outputSymbolsToAPINames, symbolTable);
         }
         return;
     }
+
     ASSERT(IsSampler(type));
-    TIntermSymbol *symbol = new TIntermSymbol(0, namePrefix, *this);
+    TIntermSymbol *symbol = new TIntermSymbol(symbolTable->nextUniqueId(), namePrefix, *this);
     outputSymbols->push_back(symbol);
     if (outputSymbolsToAPINames)
     {
@@ -588,7 +591,8 @@ void TType::createSamplerSymbols(const TString &namePrefix,
 void TStructure::createSamplerSymbols(const TString &namePrefix,
                                       const TString &apiNamePrefix,
                                       TVector<TIntermSymbol *> *outputSymbols,
-                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames) const
+                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                                      TSymbolTable *symbolTable) const
 {
     ASSERT(containsSamplers());
     for (auto &field : *mFields)
@@ -599,7 +603,7 @@ void TStructure::createSamplerSymbols(const TString &namePrefix,
             TString fieldName    = namePrefix + "_" + field->name();
             TString fieldApiName = apiNamePrefix + "." + field->name();
             fieldType->createSamplerSymbols(fieldName, fieldApiName, outputSymbols,
-                                            outputSymbolsToAPINames);
+                                            outputSymbolsToAPINames, symbolTable);
         }
     }
 }
