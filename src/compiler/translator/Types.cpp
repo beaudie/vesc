@@ -549,8 +549,13 @@ void TStructure::createSamplerSymbols(const TString &structName,
                                       const TString &structAPIName,
                                       const unsigned int arrayOfStructsSize,
                                       TVector<TIntermSymbol *> *outputSymbols,
-                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames) const
+                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                                      TSymbolTable *symbolTable) const
 {
+    // TODO: Consider creating some other kind of nodes here - this is the only case where it
+    // doesn't really seem that appropriate to have symbol ids on the nodes. Maybe add a new node
+    // type for raw nodes with TType?
+
     for (auto &field : *mFields)
     {
         const TType *fieldType = field->type();
@@ -562,7 +567,8 @@ void TStructure::createSamplerSymbols(const TString &structName,
                 {
                     TStringStream name;
                     name << structName << "_" << arrayIndex << "_" << field->name();
-                    TIntermSymbol *symbol = new TIntermSymbol(0, name.str(), *fieldType);
+                    TIntermSymbol *symbol =
+                        new TIntermSymbol(symbolTable->nextUniqueId(), name.str(), *fieldType);
                     outputSymbols->push_back(symbol);
 
                     if (outputSymbolsToAPINames)
@@ -576,7 +582,8 @@ void TStructure::createSamplerSymbols(const TString &structName,
             else
             {
                 TString symbolName    = structName + "_" + field->name();
-                TIntermSymbol *symbol = new TIntermSymbol(0, symbolName, *fieldType);
+                TIntermSymbol *symbol =
+                    new TIntermSymbol(symbolTable->nextUniqueId(), symbolName, *fieldType);
                 outputSymbols->push_back(symbol);
 
                 if (outputSymbolsToAPINames)
@@ -603,14 +610,14 @@ void TStructure::createSamplerSymbols(const TString &structName,
                     }
                     fieldType->createSamplerSymbols(fieldName.str(), fieldAPIName.str(),
                                                     nestedArrayOfStructsSize, outputSymbols,
-                                                    outputSymbolsToAPINames);
+                                                    outputSymbolsToAPINames, symbolTable);
                 }
             }
             else
             {
                 fieldType->createSamplerSymbols(
                     structName + "_" + field->name(), structAPIName + "." + field->name(),
-                    nestedArrayOfStructsSize, outputSymbols, outputSymbolsToAPINames);
+                    nestedArrayOfStructsSize, outputSymbols, outputSymbolsToAPINames, symbolTable);
             }
         }
     }

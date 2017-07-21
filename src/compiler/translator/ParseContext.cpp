@@ -2254,7 +2254,7 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         // But if the empty declaration is declaring a struct type, the symbol node will store that.
         if (type.getBasicType() == EbtStruct)
         {
-            symbol = new TIntermSymbol(0, "", type);
+            symbol = new TIntermSymbol(symbolTable.getEmptySymbolId(), "", type);
         }
         else if (IsAtomicCounter(publicType.getBasicType()))
         {
@@ -2853,7 +2853,7 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
         {
             // The parameter had no name or declaring the symbol failed - either way, add a nameless
             // symbol.
-            symbol = new TIntermSymbol(0, "", *param.type);
+            symbol = new TIntermSymbol(symbolTable.getEmptySymbolId(), "", *param.type);
         }
         symbol->setLine(location);
         prototype->appendParameter(symbol);
@@ -3362,7 +3362,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                              arraySize);
 
     TString symbolName = "";
-    int symbolId       = 0;
+    const TSymbolUniqueId *symbolId = nullptr;
 
     if (!instanceName)
     {
@@ -3387,6 +3387,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                       field->name().c_str());
             }
         }
+        symbolId = &symbolTable.getEmptySymbolId();
     }
     else
     {
@@ -3397,7 +3398,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         if (instanceTypeDef)
         {
             instanceTypeDef->setQualifier(typeQualifier.qualifier);
-            symbolId = instanceTypeDef->getUniqueId();
+            symbolId = &instanceTypeDef->getUniqueId();
         }
         else
         {
@@ -3407,11 +3408,16 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         symbolName = *instanceName;
     }
 
-    TIntermSymbol *blockSymbol = new TIntermSymbol(symbolId, symbolName, interfaceBlockType);
-    blockSymbol->setLine(typeQualifier.line);
-    TIntermDeclaration *declaration = new TIntermDeclaration();
-    declaration->appendDeclarator(blockSymbol);
-    declaration->setLine(nameLine);
+    TIntermDeclaration *declaration = nullptr;
+
+    if (symbolId)
+    {
+        TIntermSymbol *blockSymbol = new TIntermSymbol(*symbolId, symbolName, interfaceBlockType);
+        blockSymbol->setLine(typeQualifier.line);
+        declaration = new TIntermDeclaration();
+        declaration->appendDeclarator(blockSymbol);
+        declaration->setLine(nameLine);
+    }
 
     exitStructDeclaration();
     return declaration;

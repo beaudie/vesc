@@ -12,6 +12,7 @@
 
 #include "compiler/translator/BaseTypes.h"
 #include "compiler/translator/Common.h"
+#include "compiler/translator/SymbolUniqueId.h"
 
 namespace sh
 {
@@ -104,15 +105,12 @@ class TStructure : public TFieldListCollection
                               const TString &structAPIName,
                               const unsigned int arrayOfStructsSize,
                               TVector<TIntermSymbol *> *outputSymbols,
-                              TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames) const;
+                              TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                              TSymbolTable *symbolTable) const;
 
     bool equals(const TStructure &other) const;
 
-    int uniqueId() const
-    {
-        ASSERT(mUniqueId != 0);
-        return mUniqueId;
-    }
+    int uniqueId() const { return mUniqueId.get(); }
 
     void setAtGlobalScope(bool atGlobalScope) { mAtGlobalScope = atGlobalScope; }
 
@@ -139,7 +137,7 @@ class TStructure : public TFieldListCollection
     int calculateDeepestNesting() const;
 
     mutable int mDeepestNesting;
-    const int mUniqueId;
+    const TSymbolUniqueId mUniqueId;
     bool mAtGlobalScope;
 };
 
@@ -477,11 +475,12 @@ class TType
                               const TString &structAPIName,
                               const unsigned int arrayOfStructsSize,
                               TVector<TIntermSymbol *> *outputSymbols,
-                              TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames) const
+                              TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                              TSymbolTable *symbolTable) const
     {
         ASSERT(structure != nullptr && structure->containsSamplers());
         structure->createSamplerSymbols(structName, structAPIName, arrayOfStructsSize,
-                                        outputSymbols, outputSymbolsToAPINames);
+                                        outputSymbols, outputSymbolsToAPINames, symbolTable);
     }
 
     // Initializes all lazily-initialized members.
