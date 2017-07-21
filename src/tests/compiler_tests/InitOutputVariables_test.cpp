@@ -12,6 +12,7 @@
 #include "compiler/translator/FindMain.h"
 #include "compiler/translator/IntermNode_util.h"
 #include "compiler/translator/IntermTraverse.h"
+#include "compiler/translator/SymbolTable.h"
 #include "tests/test_utils/ShaderCompileTreeTest.h"
 
 #include <algorithm>
@@ -63,13 +64,19 @@ bool AreLValuesTheSame(TIntermTyped *expected, TIntermTyped *candidate)
 
 TIntermTyped *CreateLValueNode(const TString &lValueName, const TType &type)
 {
-    return new TIntermSymbol(0, lValueName, type);
+    // We're using a dummy symbol table here, don't need to assign proper symbol ids to these nodes.
+    TSymbolTable symbolTable;
+    return new TIntermSymbol(symbolTable.nextUniqueId(), lValueName, type);
 }
 
 ExpectedLValues CreateIndexedLValueNodeList(const TString &lValueName,
                                             TType elementType,
                                             unsigned arraySize)
 {
+    // We're using a dummy symbol table here, don't need to assign proper symbol ids to these nodes.
+    TSymbolTable symbolTable;
+    TSymbolUniqueId symbolId = symbolTable.nextUniqueId();
+
     ASSERT(elementType.isArray() == false);
     elementType.makeArray(arraySize);
 
@@ -77,7 +84,7 @@ ExpectedLValues CreateIndexedLValueNodeList(const TString &lValueName,
     for (unsigned index = 0u; index < arraySize; ++index)
     {
         expected[index] =
-            new TIntermBinary(EOpIndexDirect, new TIntermSymbol(0, lValueName, elementType),
+            new TIntermBinary(EOpIndexDirect, new TIntermSymbol(symbolId, lValueName, elementType),
                               CreateIndexNode(static_cast<int>(index)));
     }
     return expected;
