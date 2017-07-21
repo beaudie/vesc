@@ -98,6 +98,11 @@ ContextState::~ContextState()
     // Handles are released by the Context.
 }
 
+bool ContextState::isWebGL() const
+{
+    return mExtensions.webglCompatibility;
+}
+
 bool ContextState::isWebGL1() const
 {
     return (mExtensions.webglCompatibility && mClientVersion.major == 2);
