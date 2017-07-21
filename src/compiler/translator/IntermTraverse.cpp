@@ -176,7 +176,7 @@ TIntermSymbol *TIntermTraverser::createTempSymbol(const TType &type, TQualifier 
     symbolNameOut << "s" << (mTemporaryId->get());
     TString symbolName = symbolNameOut.c_str();
 
-    TIntermSymbol *node = new TIntermSymbol(mTemporaryId->get(), symbolName, type);
+    TIntermSymbol *node = new TIntermSymbol(*mTemporaryId, symbolName, type);
     node->setInternal(true);
 
     ASSERT(qualifier == EvqTemporary || qualifier == EvqConst || qualifier == EvqGlobal);

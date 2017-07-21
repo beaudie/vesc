@@ -252,7 +252,8 @@ void UniformHLSL::outputUniform(TInfoSinkBase &out,
 
 void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                                  ShShaderOutput outputType,
-                                 const ReferencedSymbols &referencedUniforms)
+                                 const ReferencedSymbols &referencedUniforms,
+                                 TSymbolTable *symbolTable)
 {
     if (!referencedUniforms.empty())
     {
@@ -287,7 +288,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                 TVector<TIntermSymbol *> samplerSymbols;
                 TMap<TIntermSymbol *, TString> symbolsToAPINames;
                 type.createSamplerSymbols("angle_" + name.getString(), name.getString(),
-                                          &samplerSymbols, &symbolsToAPINames);
+                                          &samplerSymbols, &symbolsToAPINames, symbolTable);
                 for (TIntermSymbol *sampler : samplerSymbols)
                 {
                     const TType &samplerType = sampler->getType();
