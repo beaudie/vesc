@@ -92,8 +92,9 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
                        ShShaderOutput outputType,
                        int numRenderTargets,
                        const std::vector<Uniform> &uniforms,
-                       ShCompileOptions compileOptions)
-    : TIntermTraverser(true, true, true),
+                       ShCompileOptions compileOptions,
+                       TSymbolTable *symbolTable)
+    : TIntermTraverser(true, true, true, symbolTable),
       mShaderType(shaderType),
       mShaderVersion(shaderVersion),
       mExtensionBehavior(extensionBehavior),
@@ -353,7 +354,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
     out << mStructureHLSL->structsHeader();
 
-    mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms);
+    mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms, mSymbolTable);
     out << mUniformHLSL->uniformBlocksHeader(mReferencedUniformBlocks);
 
     if (!mEqualityFunctions.empty())
@@ -1830,7 +1831,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     TString structName = samplerNamePrefixFromStruct(typedArg);
                     argType.createSamplerSymbols("angle_" + structName, "",
                                                  argType.isArray() ? argType.getArraySize() : 0u,
-                                                 &samplerSymbols, nullptr);
+                                                 &samplerSymbols, nullptr, mSymbolTable);
                     for (const TIntermSymbol *sampler : samplerSymbols)
                     {
                         if (mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
@@ -2576,7 +2577,7 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
         ASSERT(qualifier != EvqOut && qualifier != EvqInOut);
         TVector<TIntermSymbol *> samplerSymbols;
         type.createSamplerSymbols("angle" + nameStr, "", type.isArray() ? type.getArraySize() : 0u,
-                                  &samplerSymbols, nullptr);
+                                  &samplerSymbols, nullptr, mSymbolTable);
         for (const TIntermSymbol *sampler : samplerSymbols)
         {
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
