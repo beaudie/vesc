@@ -182,9 +182,9 @@ void Shader::getInfoLog(const Context *context, GLsizei bufSize, GLsizei *length
     }
 }
 
-int Shader::getSourceLength() const
+unsigned int Shader::getSourceLength() const
 {
-    return mState.mSource.empty() ? 0 : (static_cast<int>(mState.mSource.length()) + 1);
+    return mState.mSource.empty() ? 0 : (static_cast<unsigned int>(mState.mSource.length()) + 1);
 }
 
 int Shader::getTranslatedSourceLength(const Context *context)

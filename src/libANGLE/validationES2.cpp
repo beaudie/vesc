@@ -4267,6 +4267,46 @@ bool ValidateAttachShader(ValidationContext *context, GLuint program, GLuint sha
     return true;
 }
 
+static bool ValidateWebGLNamePrefix(ValidationContext *context, const GLchar *name)
+{
+    ASSERT(context->getExtensions().webglCompatibility);
+
+    // WebGL 1.0 [Section 6.16] GLSL Constructs
+    // Identifiers starting with "webgl_" and "_webgl_" are reserved for use by WebGL.
+    if (strncmp(name, "webgl_", strlen("webgl_")) == 0 ||
+        strncmp(name, "_webgl_", strlen("_webgl_")) == 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), WebglBindAttribLocationReservedPrefix);
+        return false;
+    }
+
+    return true;
+}
+
+static bool ValidateWebGLNameLength(ValidationContext *context, const GLchar *name)
+{
+    ASSERT(context->getExtensions().webglCompatibility);
+
+    if (context->isWebGL1() && strlen(name) > 256)
+    {
+        // WebGL 1.0 [Section 6.21] Maxmimum Uniform and Attribute Location Lengths
+        // WebGL imposes a limit of 256 characters on the lengths of uniform and attribute
+        // locations.
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), WebglNameLengthLimitExceeded);
+
+        return false;
+    }
+    else if (strlen(name) > 1024)
+    {
+        // WebGL 2.0 [Section 4.3.2] WebGL 2.0 imposes a limit of 1024 characters on the lengths of
+        // uniform and attribute locations.
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), Webgl2NameLengthLimitExceeded);
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateBindAttribLocation(ValidationContext *context,
                                 GLuint program,
                                 GLuint index,
@@ -4290,6 +4330,14 @@ bool ValidateBindAttribLocation(ValidationContext *context,
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidNameCharacters);
         return false;
+    }
+
+    if (context->isWebGL())
+    {
+        if (!ValidateWebGLNamePrefix(context, name) || !ValidateWebGLNameLength(context, name))
+        {
+            return false;
+        }
     }
 
     return GetValidProgram(context, program) != nullptr;
@@ -4736,6 +4784,19 @@ bool ValidateColorMask(ValidationContext *context,
 
 bool ValidateCompileShader(ValidationContext *context, GLuint shader)
 {
+    const Shader *s = context->getShader(shader);
+
+    if (s && !s->getSourceLength())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), NoShaderSource);
+        return false;
+    }
+    else if (!s)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidShaderName);
+        return false;
+    }
+
     return true;
 }
 

@@ -104,6 +104,7 @@ ERRMSG(InvalidVertexAttrSize, "Vertex attribute size must be 1, 2, 3, or 4.");
 ERRMSG(InvalidWidth, "Invalid width.");
 ERRMSG(InvalidWrapModeTexture, "Invalid wrap mode for texture type.");
 ERRMSG(LevelNotZero, "Texture level must be zero.");
+ERRMSG(MismatchedByteCountType, "Buffer size does not align with data type.");
 ERRMSG(MismatchedFormat, "Format must match internal format.");
 ERRMSG(MismatchedTargetAndFormat, "Invalid texture target and format combination.");
 ERRMSG(MismatchedTypeAndFormat, "Invalid format and type combination.");
@@ -121,6 +122,7 @@ ERRMSG(NegativePrimcount, "Primcount must be greater than or equal to zero.");
 ERRMSG(NegativeSize, "Cannot have negative height or width.");
 ERRMSG(NegativeStart, "Cannot have negative start.");
 ERRMSG(NegativeStride, "Cannot have negative stride.");
+ERRMSG(NoShaderSource, "Cannot compile shader without source.");
 ERRMSG(NoSuchPath, "No such path object.");
 ERRMSG(NoZeroDivisor, "At least one enabled attribute must have a divisor of zero.");
 ERRMSG(ObjectNotGenerated, "Object cannot be used because it has not been generated.");
@@ -156,8 +158,11 @@ ERRMSG(UnknownParameter, "Unknown parameter value.");
 ERRMSG(VertexArrayNoBuffer, "An enabled vertex array has no buffer.");
 ERRMSG(VertexArrayNoBufferPointer, "An enabled vertex array has no buffer and no pointer.");
 ERRMSG(ViewportNegativeSize, "Viewport size cannot be negative.");
+ERRMSG(Webgl2NameLengthLimitExceeded, "Location lengths must not be greater than 1024 characters.");
 ERRMSG(WebglBindAttribLocationReservedPrefix,
        "Attributes that begin with 'webgl_', or '_webgl_' are not allowed.");
+ERRMSG(WebglNameLengthLimitExceeded,
+       "Location name lengths must not be greater than 256 characters.");
 }
 #undef ERRMSG
 #endif  // LIBANGLE_ERRORSTRINGS_H_

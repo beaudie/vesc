@@ -95,6 +95,31 @@ class GLProgram
   private:
     GLuint mHandle;
 };
+
+class GLShader
+{
+  public:
+    GLShader(GLuint shaderType) { mHandle = glCreateShader(shaderType); }
+    ~GLShader() { glDeleteShader(mHandle); }
+
+    void compile() { glCompileShader(mHandle); }
+    void shaderSource(GLsizei count, const GLchar **string, const GLint *length)
+    {
+        glShaderSource(mHandle, count, string, length);
+    }
+
+    bool valid() const { return mHandle != 0; }
+
+    GLuint get()
+    {
+        ASSERT(valid());
+        return mHandle;
+    }
+
+  private:
+    GLuint mHandle;
+};
+
 }  // namespace priv
 
 #define ANGLE_GL_PROGRAM(name, vertex, fragment) \

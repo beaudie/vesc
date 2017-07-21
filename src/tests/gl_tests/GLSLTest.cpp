@@ -1587,6 +1587,22 @@ TEST_P(GLSLTest, StructSpecifiersUniforms)
     EXPECT_NE(0u, program);
 }
 
+// Test for error when shader source isn't specified
+TEST_P(GLSLTest, NoShaderSource)
+{
+    priv::GLShader shader(GL_FRAGMENT_SHADER);
+    shader.compile();
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    const char *sourceArray[1] = {""};
+    constexpr GLint lengths[1] = {0};
+    shader.shaderSource(static_cast<GLsizei>(ArraySize(sourceArray)), sourceArray, lengths);
+    shader.compile();
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 // Test that gl_DepthRange is not stored as a uniform location. Since uniforms
 // beginning with "gl_" are filtered out by our validation logic, we must
 // bypass the validation to test the behaviour of the implementation.
