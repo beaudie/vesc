@@ -110,11 +110,13 @@ void DeclareGlobalVariable(TIntermBlock *root, TIntermTyped *typedNode)
 }
 
 // Adds the expression gl_ViewportIndex = int(ViewID_OVR) to the end of the initializers' sequence.
-void SelectViewportIndexInVertexShader(TIntermTyped *viewIDSymbol, TIntermSequence *initializers)
+void SelectViewportIndexInVertexShader(TIntermTyped *viewIDSymbol,
+                                       TIntermSequence *initializers,
+                                       const TSymbolTable &symbolTable)
 {
     // Create a gl_ViewportIndex node.
     TIntermSymbol *viewportIndexSymbol =
-        new TIntermSymbol(0, "gl_ViewportIndex", TType(EbtInt, EbpHigh, EvqViewportIndex));
+        ReferenceBuiltInVariable("gl_ViewportIndex", symbolTable, 0);
 
     // Create an int(ViewID_OVR) node.
     TIntermSequence *viewIDSymbolCastArguments = new TIntermSequence();
@@ -170,7 +172,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
         if (selectViewport)
         {
             // Setting a value to gl_ViewportIndex should happen after ViewID_OVR's initialization.
-            SelectViewportIndexInVertexShader(viewIDSymbol->deepCopy(), initializers);
+            SelectViewportIndexInVertexShader(viewIDSymbol->deepCopy(), initializers, *symbolTable);
         }
 
         // Insert initializers at the beginning of main().
