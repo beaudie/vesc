@@ -89,7 +89,9 @@ static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::Supp
     }
 }
 
-static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, const WorkaroundsGL& workarounds, GLenum internalFormat)
+static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
+                                                 const WorkaroundsGL &workarounds,
+                                                 GLenum internalFormat)
 {
     ASSERT(functions->getError() == GL_NO_ERROR);
 
@@ -116,7 +118,8 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, c
         }
 
         GLint numSamples = 0;
-        functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS, 1, &numSamples);
+        functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
+                                       1, &numSamples);
 
         if (numSamples > 0)
         {
@@ -242,7 +245,8 @@ void GenerateCaps(const FunctionsGL *functions,
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (GLenum internalFormat : allFormats)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, workarounds, internalFormat);
+        gl::TextureCaps textureCaps =
+            GenerateTextureFormatCaps(functions, workarounds, internalFormat);
         textureCapsMap->insert(internalFormat, textureCaps);
 
         if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)

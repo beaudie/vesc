@@ -53,10 +53,10 @@ class BlitFramebufferANGLETest : public ANGLETest
         mRGBAColorbuffer = 0;
         mRGBAFBO = 0;
         mRGBAMultisampledRenderbuffer = 0;
-        mRGBAMultisampledFBO = 0;
+        mRGBAMultisampledFBO          = 0;
 
-        mBGRAColorbuffer = 0;
-        mBGRAFBO = 0;
+        mBGRAColorbuffer              = 0;
+        mBGRAFBO                      = 0;
         mBGRAMultisampledRenderbuffer = 0;
         mBGRAMultisampledFBO = 0;
     }
@@ -209,7 +209,8 @@ class BlitFramebufferANGLETest : public ANGLETest
             ASSERT_GL_NO_ERROR();
         }
 
-        if (extensionEnabled("GL_ANGLE_framebuffer_multisample") && extensionEnabled("GL_OES_rgb8_rgba8"))
+        if (extensionEnabled("GL_ANGLE_framebuffer_multisample") &&
+            extensionEnabled("GL_OES_rgb8_rgba8"))
         {
             // RGBA single-sampled framebuffer
             glGenTextures(1, &mRGBAColorbuffer);
@@ -227,11 +228,13 @@ class BlitFramebufferANGLETest : public ANGLETest
             // RGBA multisampled framebuffer
             glGenRenderbuffers(1, &mRGBAMultisampledRenderbuffer);
             glBindRenderbuffer(GL_RENDERBUFFER, mRGBAMultisampledRenderbuffer);
-            glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+            glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 1, GL_RGBA8, getWindowWidth(),
+                                                  getWindowHeight());
 
             glGenFramebuffers(1, &mRGBAMultisampledFBO);
             glBindFramebuffer(GL_FRAMEBUFFER, mRGBAMultisampledFBO);
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, mRGBAMultisampledRenderbuffer);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                      mRGBAMultisampledRenderbuffer);
 
             ASSERT_GL_NO_ERROR();
             ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -241,12 +244,13 @@ class BlitFramebufferANGLETest : public ANGLETest
                 // BGRA single-sampled framebuffer
                 glGenTextures(1, &mBGRAColorbuffer);
                 glBindTexture(GL_TEXTURE_2D, mBGRAColorbuffer);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, getWindowWidth(), getWindowHeight(), 0, GL_BGRA_EXT,
-                             GL_UNSIGNED_BYTE, nullptr);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, getWindowWidth(), getWindowHeight(), 0,
+                             GL_BGRA_EXT, GL_UNSIGNED_BYTE, nullptr);
 
                 glGenFramebuffers(1, &mBGRAFBO);
                 glBindFramebuffer(GL_FRAMEBUFFER, mBGRAFBO);
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mBGRAColorbuffer, 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                       mBGRAColorbuffer, 0);
 
                 ASSERT_GL_NO_ERROR();
                 ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -254,11 +258,13 @@ class BlitFramebufferANGLETest : public ANGLETest
                 // BGRA multisampled framebuffer
                 glGenRenderbuffers(1, &mBGRAMultisampledRenderbuffer);
                 glBindRenderbuffer(GL_RENDERBUFFER, mBGRAMultisampledRenderbuffer);
-                glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 1, GL_BGRA8_EXT, getWindowWidth(), getWindowHeight());
+                glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 1, GL_BGRA8_EXT,
+                                                      getWindowWidth(), getWindowHeight());
 
                 glGenFramebuffers(1, &mBGRAMultisampledFBO);
                 glBindFramebuffer(GL_FRAMEBUFFER, mBGRAMultisampledFBO);
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, mBGRAMultisampledRenderbuffer);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                          mBGRAMultisampledRenderbuffer);
 
                 ASSERT_GL_NO_ERROR();
                 ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -349,18 +355,18 @@ class BlitFramebufferANGLETest : public ANGLETest
 
         glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFramebuffer);
-        glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(), getWindowHeight(),
-                               GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                               getWindowHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         EXPECT_GL_NO_ERROR();
 
         glBindFramebuffer(GL_READ_FRAMEBUFFER, drawFramebuffer);
-        EXPECT_PIXEL_EQ(    getWindowWidth() / 4,     getWindowHeight() / 4,   0, 255, 0, 255);
-        EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4,     getWindowHeight() / 4,   0, 255, 0, 255);
-        EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4,   0, 255, 0, 255);
-        EXPECT_PIXEL_EQ(    getWindowWidth() / 4, 3 * getWindowHeight() / 4,   0, 255, 0, 255);
+        EXPECT_PIXEL_EQ(getWindowWidth() / 4, getWindowHeight() / 4, 0, 255, 0, 255);
+        EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, 0, 255, 0, 255);
+        EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, 0, 255, 0, 255);
+        EXPECT_PIXEL_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, 0, 255, 0, 255);
     }
 
-    bool checkExtension(const std::string& extension)
+    bool checkExtension(const std::string &extension)
     {
         if (!extensionEnabled(extension))
         {
