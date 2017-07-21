@@ -94,13 +94,13 @@ static bool ValidateTexImageFormatCombination(gl::Context *context,
     // The type and format are valid if any supported internal format has that type and format
     if (!ValidES3Format(format))
     {
-        context->handleError(InvalidEnum() << "Invalid format.");
+        ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFormat);
         return false;
     }
 
     if (!ValidES3Type(type))
     {
-        context->handleError(InvalidEnum() << "Invalid type.");
+        ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidType);
         return false;
     }
 
@@ -110,7 +110,7 @@ static bool ValidateTexImageFormatCombination(gl::Context *context,
     // the validation codepaths for glTexImage2D/3D, we record a GL_INVALID_VALUE error.
     if (!ValidES3InternalFormat(internalFormat))
     {
-        context->handleError(InvalidValue() << "Invalid internalFormat.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidInternalFormat);
         return false;
     }
 
@@ -1092,7 +1092,7 @@ bool ValidateInvalidateFramebuffer(Context *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Operation only supported on ES 3.0 and above");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -1108,7 +1108,7 @@ bool ValidateInvalidateFramebuffer(Context *context,
             defaultFramebuffer = context->getGLState().getReadFramebuffer()->id() == 0;
             break;
         default:
-            context->handleError(InvalidEnum() << "Invalid framebuffer target");
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
             return false;
     }
 
@@ -1143,7 +1143,7 @@ bool ValidateDrawRangeElements(Context *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -1533,7 +1533,7 @@ bool ValidateProgramParameteri(Context *context, GLuint program, GLenum pname, G
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -1744,7 +1744,7 @@ bool ValidateDrawBuffers(ValidationContext *context, GLsizei n, const GLenum *bu
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2018,7 +2018,7 @@ bool ValidateGenOrDeleteCountES3(Context *context, GLint count)
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
     if (count < 0)
@@ -2033,7 +2033,7 @@ bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode)
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
     switch (primitiveMode)
@@ -2108,7 +2108,7 @@ bool ValidateMapBufferRange(Context *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2122,7 +2122,7 @@ bool ValidateFlushMappedBufferRange(Context *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2253,7 +2253,7 @@ bool ValidateGetIntegeri_v(ValidationContext *context, GLenum target, GLuint ind
 {
     if (context->getClientVersion() < ES_3_0)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.0");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
     return ValidateIndexedStateQuery(context, target, index, nullptr);
@@ -2268,7 +2268,7 @@ bool ValidateGetIntegeri_vRobustANGLE(ValidationContext *context,
 {
     if (context->getClientVersion() < ES_3_0)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.0");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2294,7 +2294,7 @@ bool ValidateGetInteger64i_v(ValidationContext *context, GLenum target, GLuint i
 {
     if (context->getClientVersion() < ES_3_0)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.0");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
     return ValidateIndexedStateQuery(context, target, index, nullptr);
@@ -2309,7 +2309,7 @@ bool ValidateGetInteger64i_vRobustANGLE(ValidationContext *context,
 {
     if (context->getClientVersion() < ES_3_0)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.0");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2340,7 +2340,7 @@ bool ValidateCopyBufferSubData(ValidationContext *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "CopyBufferSubData requires ES 3 or greater");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2422,8 +2422,7 @@ bool ValidateGetStringi(Context *context, GLenum name, GLuint index)
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation()
-                             << "glGetStringi requires OpenGL ES 3.0 or higher.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2441,7 +2440,7 @@ bool ValidateGetStringi(Context *context, GLenum name, GLuint index)
         case GL_REQUESTABLE_EXTENSIONS_ANGLE:
             if (!context->getExtensions().requestExtension)
             {
-                context->handleError(InvalidEnum() << "Invalid name.");
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidName);
                 return false;
             }
             if (index >= context->getRequestableExtensionStringCount())
@@ -2454,7 +2453,7 @@ bool ValidateGetStringi(Context *context, GLenum name, GLuint index)
             break;
 
         default:
-            context->handleError(InvalidEnum() << "Invalid name.");
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidName);
             return false;
     }
 
@@ -2512,8 +2511,7 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation()
-                             << "VertexAttribIPointer requires OpenGL ES 3.0 or higher.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
@@ -2524,7 +2522,7 @@ bool ValidateVertexAttribIPointer(ValidationContext *context,
 
     if (stride < 0)
     {
-        context->handleError(InvalidValue() << "stride cannot be negative.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeStride);
         return false;
     }
 
@@ -2582,13 +2580,13 @@ bool ValidateGetSynciv(Context *context,
 {
     if (context->getClientMajorVersion() < 3)
     {
-        context->handleError(InvalidOperation() << "GetSynciv requires OpenGL ES 3.0 or higher.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
         return false;
     }
 
     if (bufSize < 0)
     {
-        context->handleError(InvalidValue() << "bufSize cannot be negative.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeBufferSize);
         return false;
     }
 
@@ -2608,7 +2606,7 @@ bool ValidateGetSynciv(Context *context,
             break;
 
         default:
-            context->handleError(InvalidEnum() << "Invalid pname.");
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidPname);
             return false;
     }
 
