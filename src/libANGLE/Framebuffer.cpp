@@ -1624,4 +1624,14 @@ GLenum Framebuffer::getMultiviewLayout() const
     return attachment->getMultiviewLayout();
 }
 
+GLsizei Framebuffer::getNumViews() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return FramebufferAttachment::kDefaultNumViews;
+    }
+    return attachment->getNumViews();
+}
+
 }  // namespace gl
