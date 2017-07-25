@@ -40,4 +40,10 @@ gl::Error RenderbufferNULL::setStorageEGLImageTarget(egl::Image *image)
     return gl::NoError();
 }
 
+gl::Error RenderbufferNULL::initializeContents(const gl::Context *context,
+                                               const gl::ImageIndex &imageIndex)
+{
+    return gl::NoError();
+}
+
 }  // namespace rx

@@ -32,6 +32,9 @@ class RenderbufferVk : public RenderbufferImpl
                                         GLenum binding,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
+
+    gl::Error initializeContents(const gl::Context *context,
+                                 const gl::ImageIndex &imageIndex) override;
 };
 
 }  // namespace rx

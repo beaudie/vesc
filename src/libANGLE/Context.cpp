@@ -2825,6 +2825,8 @@ void Context::initWorkarounds()
 Error Context::prepareForDraw(GLenum drawMode)
 {
     syncRendererState();
+    ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
+    ANGLE_TRY(mGLState.getDrawFramebuffer()->clearUnclearedDrawAttachments(this));
 
     InfoLog infoLog;
     Error err = mImplementation->triggerDrawCallProgramRecompilation(this, &infoLog,
