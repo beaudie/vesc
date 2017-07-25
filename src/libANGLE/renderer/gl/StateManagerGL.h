@@ -84,6 +84,9 @@ class StateManagerGL final : angle::NonCopyable
     void setViewportIndexedf(GLuint index, const gl::RectangleF &viewport);
     void setDepthRange(float near, float far);
 
+    void setViewportOffsets(const std::vector<gl::Offset> &kviewportOffsets);
+    void setSideBySide(bool isSideBySide);
+
     void setBlendEnabled(bool enabled);
     void setBlendColor(const gl::ColorF &blendColor);
     void setBlendFuncs(GLenum sourceBlendRGB,
@@ -252,6 +255,7 @@ class StateManagerGL final : angle::NonCopyable
     bool mScissorTestEnabled;
     std::vector<gl::Rectangle> mScissors;
     std::vector<gl::RectangleF> mViewports;
+    std::vector<gl::Offset> mViewportOffsets;
     float mNear;
     float mFar;
 
@@ -320,6 +324,9 @@ class StateManagerGL final : angle::NonCopyable
     GLenum mPathStencilFunc;
     GLint mPathStencilRef;
     GLuint mPathStencilMask;
+
+    bool mIsSideBySideDrawFramebuffer;
+    const bool mIsMultiviewEnabled;
 
     gl::State::DirtyBits mLocalDirtyBits;
 };
