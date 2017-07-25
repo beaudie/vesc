@@ -1366,4 +1366,12 @@ GLenum TextureGL::getTarget() const
 {
     return mState.mTarget;
 }
+
+gl::Error TextureGL::initializeContents(const gl::Context *context,
+                                        const gl::ImageIndex &imageIndex)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
 }
+
+}  // namespace rx

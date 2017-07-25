@@ -3219,8 +3219,9 @@ gl::Error Renderer9::clearRenderTarget(RenderTargetD3D *renderTarget,
                                        const float clearDepthValue,
                                        const unsigned int clearStencilValue)
 {
+    // TODO(jmadill): D3D9 implementation.
     UNIMPLEMENTED();
-    return gl::InternalError() << "clearRenderTarget is not implemented on D3D9";
+    return gl::NoError();
 }
 
 // For each Direct3D sampler of either the pixel or vertex stage,

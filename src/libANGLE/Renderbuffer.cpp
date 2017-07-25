@@ -26,7 +26,8 @@ Renderbuffer::Renderbuffer(rx::RenderbufferImpl *impl, GLuint id)
       mWidth(0),
       mHeight(0),
       mFormat(GL_RGBA4),
-      mSamples(0)
+      mSamples(0),
+      mNeedsInit(false)
 {
 }
 
@@ -66,7 +67,8 @@ Error Renderbuffer::setStorage(const Context *context,
     mFormat         = Format(internalformat);
     mSamples = 0;
 
-    mDirtyChannel.signal();
+    mNeedsInit = true;
+    mDirtyChannel.signal(InitState::NeedsInit);
 
     return NoError();
 }
@@ -86,7 +88,8 @@ Error Renderbuffer::setStorageMultisample(const Context *context,
     mFormat         = Format(internalformat);
     mSamples        = static_cast<GLsizei>(samples);
 
-    mDirtyChannel.signal();
+    mNeedsInit = true;
+    mDirtyChannel.signal(InitState::NeedsInit);
 
     return NoError();
 }
@@ -104,7 +107,8 @@ Error Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image 
     mFormat         = Format(image->getFormat());
     mSamples        = 0;
 
-    mDirtyChannel.signal();
+    mNeedsInit = image->sourceNeedsInit();
+    mDirtyChannel.signal(image->sourceNeedsInit() ? InitState::NeedsInit : InitState::Clean);
 
     return NoError();
 }
@@ -184,4 +188,27 @@ Extents Renderbuffer::getAttachmentSize(const gl::ImageIndex & /*imageIndex*/) c
 {
     return Extents(mWidth, mHeight, 1);
 }
+
+bool Renderbuffer::needsInit(const gl::ImageIndex & /*imageIndex*/) const
+{
+    if (isEGLImageTarget())
+    {
+        return sourceEGLImageNeedsInit();
+    }
+
+    return mNeedsInit;
+}
+
+void Renderbuffer::markInitialized(const gl::ImageIndex & /*imageIndex*/)
+{
+    if (isEGLImageTarget())
+    {
+        markSourceEGLImageInitialized();
+    }
+    else
+    {
+        mNeedsInit = false;
+    }
+}
+
 }  // namespace gl
