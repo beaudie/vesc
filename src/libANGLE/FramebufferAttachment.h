@@ -129,6 +129,7 @@ class FramebufferAttachment final
     bool operator==(const FramebufferAttachment &other) const;
     bool operator!=(const FramebufferAttachment &other) const;
 
+    static const std::vector<Offset> &GetDefaultViewportOffsetVector();
     static const GLsizei kDefaultNumViews;
     static const GLenum kDefaultMultiviewLayout;
     static const GLint kDefaultBaseViewIndex;
