@@ -213,7 +213,12 @@ Error FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
 {
     syncClearState(context, mask);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+    // Each framebuffer has at least one view. Clear it.
     mFunctions->clear(mask);
+
+    // Clear the other side-by-side views.
+    genericSideBySideClear(ClearCommandType::Clear, mask, GL_NONE, 0, nullptr, 0.0f, 0);
 
     return gl::NoError();
 }
@@ -225,7 +230,13 @@ Error FramebufferGL::clearBufferfv(const gl::Context *context,
 {
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+    // Each framebuffer has at least one view. Clear it.
     mFunctions->clearBufferfv(buffer, drawbuffer, values);
+
+    // Clear the other side-by-side views.
+    genericSideBySideClear(ClearCommandType::ClearBufferfv, static_cast<GLbitfield>(0u), buffer,
+                           drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
 
     return gl::NoError();
 }
@@ -237,7 +248,13 @@ Error FramebufferGL::clearBufferuiv(const gl::Context *context,
 {
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+    // Each framebuffer has at least one view. Clear it.
     mFunctions->clearBufferuiv(buffer, drawbuffer, values);
+
+    // Clear the other side-by-side views.
+    genericSideBySideClear(ClearCommandType::ClearBufferuiv, static_cast<GLbitfield>(0u), buffer,
+                           drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
 
     return gl::NoError();
 }
@@ -249,7 +266,13 @@ Error FramebufferGL::clearBufferiv(const gl::Context *context,
 {
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+    // Each framebuffer has at least one view. Clear it.
     mFunctions->clearBufferiv(buffer, drawbuffer, values);
+
+    // Clear the other side-by-side views.
+    genericSideBySideClear(ClearCommandType::ClearBufferiv, static_cast<GLbitfield>(0u), buffer,
+                           drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
 
     return gl::NoError();
 }
@@ -262,9 +285,72 @@ Error FramebufferGL::clearBufferfi(const gl::Context *context,
 {
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+
+    // Each framebuffer has at least one view. Clear it.
     mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
 
+    // Clear the other side-by-side views.
+    genericSideBySideClear(ClearCommandType::ClearBufferfi, static_cast<GLbitfield>(0u), buffer,
+                           drawbuffer, nullptr, depth, stencil);
+
     return gl::NoError();
+}
+
+void FramebufferGL::genericSideBySideClear(ClearCommandType clearCommandType,
+                                           GLbitfield mask,
+                                           GLenum buffer,
+                                           GLint drawbuffer,
+                                           const uint8_t *values,
+                                           GLfloat depth,
+                                           GLint stencil)
+{
+    const FramebufferAttachment *attachment = mState.getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return;
+    }
+
+    GLsizei numViews = attachment->getNumViews();
+    if (attachment->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE &&
+        numViews > 1)
+    {
+        // For side-by-side framebuffers we have to go over each view and set its scissor rectangle
+        // as the first one and just then call Clear*. This is necessary because Clear* commands use
+        // only the first viewport's scissor rectangle.
+        const auto &scissors  = mStateManager->getScissors();
+        auto firstScissorCopy = scissors[0];
+
+        for (GLsizei i = 1; i < numViews; ++i)
+        {
+            mStateManager->setScissorIndexed(0u, scissors[i]);
+            switch (clearCommandType)
+            {
+                case ClearCommandType::Clear:
+                    mFunctions->clear(mask);
+                    break;
+                case ClearCommandType::ClearBufferfv:
+                    mFunctions->clearBufferfv(buffer, drawbuffer,
+                                              reinterpret_cast<const GLfloat *>(values));
+                    break;
+                case ClearCommandType::ClearBufferuiv:
+                    mFunctions->clearBufferuiv(buffer, drawbuffer,
+                                               reinterpret_cast<const GLuint *>(values));
+                    break;
+                case ClearCommandType::ClearBufferiv:
+                    mFunctions->clearBufferiv(buffer, drawbuffer,
+                                              reinterpret_cast<const GLint *>(values));
+                    break;
+                case ClearCommandType::ClearBufferfi:
+                    mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+        }
+
+        // Restore the scissor information.
+        mStateManager->setScissorIndexed(0u, firstScissorCopy);
+    }
 }
 
 GLenum FramebufferGL::getImplementationColorReadFormat(const gl::Context *context) const
