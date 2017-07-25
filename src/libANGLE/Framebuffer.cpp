@@ -1614,4 +1614,24 @@ GLsizei Framebuffer::getNumViews() const
     return attachment->getNumViews();
 }
 
+const std::vector<Offset> &Framebuffer::getViewportOffsets() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return FramebufferAttachment::GetDefaultViewportOffsetVector();
+    }
+    return attachment->getMultiviewViewportOffsets();
+}
+
+GLenum Framebuffer::getMultiviewLayout() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return GL_NONE;
+    }
+    return attachment->getMultiviewLayout();
+}
+
 }  // namespace gl

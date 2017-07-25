@@ -56,6 +56,23 @@ bool AllRectanglesMatch(const gl::TypedRectangle<T> &matchingRectangle,
     }
     return true;
 }
+
+template <typename T>
+std::vector<gl::TypedRectangle<T>> ApplyOffsets(const gl::TypedRectangle<T> &modifiableRectangle,
+                                                const std::vector<gl::Offset> &offsets)
+{
+    std::vector<gl::TypedRectangle<T>> result;
+    result.reserve(offsets.size());
+    T width  = static_cast<T>(modifiableRectangle.width);
+    T height = static_cast<T>(modifiableRectangle.height);
+    for (size_t i = 0u; i < offsets.size(); ++i)
+    {
+        T x = modifiableRectangle.x + static_cast<T>(offset[i].x);
+        T y = modifiableRectangle.y + static_cast<T>(offset[i].y);
+        result.emplace_back(gl::TypedRectangle<T>(x, y, width, height));
+    }
+    return result;
+}
 }  // namespace
 
 StateManagerGL::StateManagerGL(const FunctionsGL *functions,
@@ -91,6 +108,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mScissorTestEnabled(false),
       mScissors(extensions.maxViews),
       mViewports(extensions.maxViews),
+      mViewportOffsets(extensions.maxViews),
       mNear(0.0f),
       mFar(1.0f),
       mBlendEnabled(false),
@@ -148,6 +166,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mPathStencilFunc(GL_ALWAYS),
       mPathStencilRef(0),
       mPathStencilMask(std::numeric_limits<GLuint>::max()),
+      mIsSideBySideDrawFramebuffer(false),
+      mIsMultiviewEnabled(extensions.multiview),
       mLocalDirtyBits()
 {
     ASSERT(mFunctions);
@@ -1083,6 +1103,30 @@ void StateManagerGL::setViewportIndexedf(GLuint index, const gl::RectangleF &vie
     }
 }
 
+void StateManagerGL::setViewportOffsets(const std::vector<gl::Offset> &viewportOffsets)
+{
+    if (!std::equal(viewportOffsets.cbegin(), viewportOffsets.cend(), mViewportOffsets.cbegin()))
+    {
+        const std::vector<gl::RectangleF> &viewportArray =
+            ApplyOffsets<float>(mViewports[0], viewportOffsets);
+        setViewportArrayv(0u, viewportArray);
+
+        const std::vector<gl::Rectangle> &scissorArray =
+            ApplyOffsets<int>(mScissors[0], viewportOffsets);
+        setScissorArrayv(0u, scissorArray);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT_OFFSETS);
+    }
+}
+
+void StateManagerGL::setSideBySide(bool isSideBySide)
+{
+    if (mIsSideBySideDrawFramebuffer != isSideBySide)
+    {
+        mIsSideBySideDrawFramebuffer = isSideBySide;
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SIDE_BY_SIDE_LAYOUT);
+    }
+}
+
 void StateManagerGL::setDepthRange(float near, float far)
 {
     if (mNear != near || mFar != far)
@@ -1540,10 +1584,24 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
     const gl::State &state = context->getGLState();
 
     // The the current framebuffer binding sometimes requires resetting the srgb blending
-    if (glDirtyBits[gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING] &&
-        mFunctions->standard == STANDARD_GL_DESKTOP)
+    if (glDirtyBits[gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING])
     {
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_FRAMEBUFFER_SRGB);
+        if (mFunctions->standard == STANDARD_GL_DESKTOP)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_FRAMEBUFFER_SRGB);
+        }
+
+        if (mIsMultiviewEnabled)
+        {
+            // When a new draw framebuffer is bound, we have to mark the layout, viewport offsets,
+            // scissor test, scissor and viewport rectangle bits as dirty because it could be a
+            // transition from or to a side-by-side draw framebuffer.
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SIDE_BY_SIDE_LAYOUT);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT_OFFSETS);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
+        }
     }
 
     const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits);
@@ -1558,14 +1616,56 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
     {
         switch (dirtyBit)
         {
+            case gl::State::DIRTY_BIT_SIDE_BY_SIDE_LAYOUT:
+            {
+                const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                ASSERT(drawFramebuffer != nullptr);
+                setSideBySide(drawFramebuffer->getMultiviewLayout() ==
+                              GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE);
+            }
+            break;
+            case gl::State::DIRTY_BIT_VIEWPORT_OFFSETS:
+            {
+                const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                ASSERT(drawFramebuffer != nullptr);
+                setViewportOffsets(drawFramebuffer->getViewportOffsets());
+            }
+            break;
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
-                setScissorTestEnabled(state.isScissorTestEnabled());
+                // If the active draw framebuffer has a side-by-side layout, then the scissor test
+                // is always enabled.
+                setScissorTestEnabled(state.isScissorTestEnabled() || mIsSideBySideDrawFramebuffer);
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
-                setScissor(state.getScissor());
-                break;
+            {
+                const gl::Rectangle &scissor = state.getScissor();
+                if (!mIsSideBySideDrawFramebuffer)
+                {
+                    setScissor(scissor);
+                }
+                else
+                {
+                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                    assert(drawFramebuffer != nullptr);
+                    applyViewportOffsetsAndSetScissors(scissor, *drawFramebuffer);
+                }
+            }
+            break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                setViewport(state.getViewport());
+            {
+                const gl::Rectangle &viewport = state.getViewport();
+                if (!mIsSideBySideDrawFramebuffer)
+                {
+                    setViewport(viewport);
+                }
+                else
+                {
+                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                    assert(drawFramebuffer != nullptr);
+                    applyViewportOffsetsAndSetViewports(viewport, *drawFramebuffer);
+                }
+            }
+            break;
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 setDepthRange(state.getNearPlane(), state.getFarPlane());
@@ -1969,6 +2069,43 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
         {
             mFunctions->disable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         }
+    }
+}
+
+// According to the ANGLE_multiview spec, the behavior of glScissor and glViewport is different
+// if the active draw framebuffer has a side-by-side layout. In such situations
+// glScissor and glViewport specify the static offset and dimensions for each view to which
+// the viewport offsets have to be applied to compute the view's final scissor and viewport
+// rectangles.
+void StateManagerGL::applyViewportOffsetsAndSetScissors(const gl::Rectangle &scissor,
+                                                        const gl::Framebuffer &drawFramebuffer)
+{
+
+    const std::vector<gl::Offset> &viewportOffsets = drawFramebuffer.getViewportOffsets();
+    if (!AllRectanglesMatch(scissor, mScissors) ||
+        !std::equal(viewportOffsets.cbegin(), viewportOffsets.cend(), mViewportOffsets.cbegin()))
+    {
+        const std::vector<gl::Rectangle> &scissorArray =
+            ApplyOffsets<int>(scissor, viewportOffsets);
+        std::copy(viewportOffsets.begin(), viewportOffsets.end(), mViewportOffsets.begin());
+        setScissorArrayv(0u, scissorArray);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT_OFFSETS);
+    }
+}
+
+void StateManagerGL::applyViewportOffsetsAndSetViewports(const gl::Rectangle &viewport,
+                                                         const gl::Framebuffer &drawFramebuffer)
+{
+    const std::vector<gl::Offset> &viewportOffsets = drawFramebuffer.getViewportOffsets();
+    const gl::RectangleF &viewportFloat            = gl::ConvertTypedRectangle<float>(viewport);
+    if (!AllRectanglesMatch(viewportFloat, mViewports) ||
+        !std::equal(viewportOffsets.cbegin(), viewportOffsets.cend(), mViewportOffsets.cbegin()))
+    {
+        const std::vector<gl::RectangleF> &viewportArray =
+            ApplyOffsets<float>(viewportFloat, viewportOffsets);
+        std::copy(viewportOffsets.begin(), viewportOffsets.end(), mViewportOffsets.begin());
+        setViewportArrayv(0u, viewportArray);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT_OFFSETS);
     }
 }
 }
