@@ -1046,6 +1046,23 @@ void StateManagerGL::setScissorArrayv(GLuint first, const std::vector<gl::Rectan
     }
 }
 
+void StateManagerGL::setScissorIndexed(GLuint index, const gl::Rectangle &scissor)
+{
+    ASSERT(mFunctions->scissorIndexed != nullptr);
+    ASSERT(static_cast<size_t>(index) < mScissors.size());
+    if (mScissors[index] != scissor)
+    {
+        mScissors[index] = scissor;
+        mFunctions->scissorIndexed(index, scissor.x, scissor.y, scissor.width, scissor.height);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
+    }
+}
+
+const std::vector<gl::Rectangle> &StateManagerGL::getScissors() const
+{
+    return mScissors;
+}
+
 void StateManagerGL::setViewport(const gl::Rectangle &viewport)
 {
     if (!AllRectanglesMatch(viewport, mViewports))

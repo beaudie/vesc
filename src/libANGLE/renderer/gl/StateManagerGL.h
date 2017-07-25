@@ -76,6 +76,7 @@ class StateManagerGL final : angle::NonCopyable
 
     void setScissorTestEnabled(bool enabled);
     void setScissor(const gl::Rectangle &scissor);
+    void setScissorIndexed(GLuint index, const gl::Rectangle &scissor);
     void setScissorArrayv(GLuint first, const std::vector<gl::Rectangle> &viewports);
 
     void setViewport(const gl::Rectangle &viewport);
@@ -177,6 +178,8 @@ class StateManagerGL final : angle::NonCopyable
     gl::Error onMakeCurrent(const gl::Context *context);
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &glDirtyBits);
+
+    const std::vector<gl::Rectangle> &getScissors() const;
 
   private:
     // Set state that's common among draw commands and compute invocations.
