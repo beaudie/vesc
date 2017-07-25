@@ -367,6 +367,10 @@ class State : angle::NonCopyable
 
     enum DirtyBitType
     {
+        // ANGLE_multiview related dirty bits.
+        DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
+        DIRTY_BIT_VIEWPORT_OFFSETS,
+
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
         DIRTY_BIT_SCISSOR,
         DIRTY_BIT_VIEWPORT,
