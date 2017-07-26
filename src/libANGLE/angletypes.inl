@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2015 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2012-2017 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -9,17 +9,22 @@
 namespace gl
 {
 
-inline bool operator==(const Rectangle &a, const Rectangle &b)
+template <typename T>
+bool operator==(const TypedRectangle<T> &a, const TypedRectangle<T> &b)
 {
-    return a.x == b.x &&
-           a.y == b.y &&
-           a.width == b.width &&
-           a.height == b.height;
+    return a.x == b.x && a.y == b.y && a.width == b.width && a.height == b.height;
 }
 
-inline bool operator!=(const Rectangle &a, const Rectangle &b)
+template <typename T>
+bool operator!=(const TypedRectangle<T> &a, const TypedRectangle<T> &b)
 {
     return !(a == b);
+}
+
+template <typename TO, typename FROM>
+TypedRectangle<TO> ConvertTypedRectangle(const TypedRectangle<FROM> &rectangle)
+{
+    return TypedRectangle<TO>(static_cast<TO>(rectangle.x), static_cast<TO>(rectangle.y), static_cast<TO>(rectangle.width), static_cast<TO>(rectangle.height));
 }
 
 inline bool operator==(const SamplerState &a, const SamplerState &b)

@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
 #include <string.h>
+#include <algorithm>
 #include <limits>
 
 #include "common/bitset_utils.h"
@@ -40,7 +41,35 @@ StateManagerGL::IndexedBufferBinding::IndexedBufferBinding() : offset(0), size(0
 {
 }
 
-StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps)
+namespace
+{
+template <typename T>
+bool AllRectanglesMatch(const gl::TypedRectangle<T> &matchingRectangle,
+                        const std::vector<gl::TypedRectangle<T>> &rectangles)
+{
+    for (const auto &rect : rectangles)
+    {
+        if (matchingRectangle != rect)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+template <typename T>
+bool RangeMatches(const std::vector<gl::TypedRectangle<T>> &fullRange,
+                  size_t offset,
+                  const std::vector<gl::TypedRectangle<T>> &footprint)
+{
+    ASSERT(offset + footprint.size() <= fullRange.size());
+    return std::equal(footprint.cbegin(), footprint.cend(), fullRange.cbegin() + offset);
+}
+}
+
+StateManagerGL::StateManagerGL(const FunctionsGL *functions,
+                               const gl::Caps &rendererCaps,
+                               const gl::Extensions &extensions)
     : mFunctions(functions),
       mProgram(0),
       mVAO(0),
@@ -69,8 +98,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mFramebuffers(angle::FramebufferBindingSingletonMax, 0),
       mRenderbuffer(0),
       mScissorTestEnabled(false),
-      mScissor(0, 0, 0, 0),
-      mViewport(0, 0, 0, 0),
+      mScissors(extensions.maxViews),
+      mViewports(extensions.maxViews),
       mNear(0.0f),
       mFar(1.0f),
       mBlendEnabled(false),
@@ -131,6 +160,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mLocalDirtyBits()
 {
     ASSERT(mFunctions);
+    ASSERT(extensions.maxViews >= 1u);
 
     mTextures[GL_TEXTURE_2D].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_CUBE_MAP].resize(rendererCaps.maxCombinedTextureImageUnits);
@@ -990,23 +1020,69 @@ void StateManagerGL::setScissorTestEnabled(bool enabled)
 
 void StateManagerGL::setScissor(const gl::Rectangle &scissor)
 {
-    if (scissor != mScissor)
+    if (!AllRectanglesMatch(scissor, mScissors))
     {
-        mScissor = scissor;
-        mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
+        mScissors.assign(mScissors.size(), scissor);
+        mFunctions->scissor(scissor.x, scissor.y, scissor.width, scissor.height);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
     }
 }
 
+void StateManagerGL::setScissorArrayv(GLuint first, const std::vector<gl::Rectangle> &scissors)
+{
+    ASSERT(mFunctions->scissorArrayv != nullptr);
+    size_t offset = static_cast<size_t>(first);
+    if (!RangeMatches(mScissors, offset, scissors))
+    {
+        std::copy(scissors.begin(), scissors.end(), mScissors.begin() + offset);
+        mFunctions->scissorArrayv(first, static_cast<GLsizei>(scissors.size()), &scissors[0].x);
+    }
+}
+
+void StateManagerGL::setScissorIndexed(GLuint index, const gl::Rectangle &scissor)
+{
+    ASSERT(mFunctions->scissorIndexed != nullptr);
+    ASSERT(static_cast<size_t>(index) < mScissors.size());
+    if (mScissors[index] != scissor)
+    {
+        mScissors[index] = scissor;
+        mFunctions->scissorIndexed(index, scissor.x, scissor.y, scissor.width, scissor.height);
+    }
+}
+
 void StateManagerGL::setViewport(const gl::Rectangle &viewport)
 {
-    if (viewport != mViewport)
+    gl::RectangleF viewportAsFloat = gl::ConvertTypedRectangle<float, int>(viewport);
+    if (!AllRectanglesMatch(viewportAsFloat, mViewports))
     {
-        mViewport = viewport;
-        mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+        mViewports.assign(mViewports.size(), viewportAsFloat);
+        mFunctions->viewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
+    }
+}
+
+void StateManagerGL::setViewportArrayv(GLuint first, const std::vector<gl::RectangleF> &viewports)
+{
+    ASSERT(mFunctions->viewportArrayv != nullptr);
+    size_t offset = static_cast<size_t>(first);
+    if (!RangeMatches(mViewports, offset, viewports))
+    {
+        std::copy(viewports.begin(), viewports.end(), mViewports.begin() + offset);
+        mFunctions->viewportArrayv(first, static_cast<GLsizei>(viewports.size()), &viewports[0].x);
+    }
+}
+
+void StateManagerGL::setViewportIndexedf(GLuint index, const gl::RectangleF &viewport)
+{
+    ASSERT(mFunctions->viewportIndexedf != nullptr);
+    ASSERT(static_cast<size_t>(index) < mViewports.size());
+    if (mViewports[index] != viewport)
+    {
+        mViewports[index] = viewport;
+        mFunctions->viewportIndexedf(index, viewport.x, viewport.y, viewport.width,
+                                     viewport.height);
     }
 }
 

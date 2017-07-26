@@ -19,6 +19,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/signal_utils.h"
 
 namespace rx
@@ -48,7 +49,6 @@ class ValidationContext;
 struct Caps;
 struct Extensions;
 struct ImageIndex;
-struct Rectangle;
 
 class FramebufferState final : angle::NonCopyable
 {
