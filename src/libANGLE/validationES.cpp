@@ -2819,6 +2819,14 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         return false;
     }
 
+    if (framebuffer->getNumViews() != program->getNumViews())
+    {
+        context->handleError(
+            InvalidOperation()
+            << "The number of views in the active program and draw framebuffer does not match.");
+        return false;
+    }
+
     // Uniform buffer validation
     for (unsigned int uniformBlockIndex = 0;
          uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
