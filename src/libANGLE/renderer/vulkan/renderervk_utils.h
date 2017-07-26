@@ -17,6 +17,7 @@
 #include "common/Optional.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/renderer_utils.h"
 
 namespace gl
@@ -24,7 +25,6 @@ namespace gl
 struct Box;
 struct Extents;
 struct RasterizerState;
-struct Rectangle;
 }
 
 namespace rx
