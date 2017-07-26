@@ -1450,7 +1450,7 @@ gl::Error Renderer9::drawElementsImpl(const gl::Context *context,
         for (int i = 0; i < mRepeatDraw; i++)
         {
             mDevice->DrawIndexedPrimitive(mPrimitiveType, -minIndex, minIndex,
-                                          static_cast<UINT>(vertexCount), indexInfo.startIndex,
+                                          static_cast<UINT>(count), indexInfo.startIndex,
                                           mPrimitiveCount);
         }
         return gl::NoError();
