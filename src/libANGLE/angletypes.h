@@ -44,27 +44,36 @@ enum SamplerType
     SAMPLER_COMPUTE
 };
 
-struct Rectangle
+template <typename T>
+struct TypedRectangle
 {
-    Rectangle() : x(0), y(0), width(0), height(0) {}
-    Rectangle(int x_in, int y_in, int width_in, int height_in)
+    TypedRectangle() : x(0), y(0), width(0), height(0) {}
+    TypedRectangle(T x_in, T y_in, T width_in, T height_in)
         : x(x_in), y(y_in), width(width_in), height(height_in)
     {
     }
 
-    int x0() const { return x; }
-    int y0() const { return y; }
-    int x1() const { return x + width; }
-    int y1() const { return y + height; }
+    T x0() const { return x; }
+    T y0() const { return y; }
+    T x1() const { return x + width; }
+    T y1() const { return y + height; }
 
-    int x;
-    int y;
-    int width;
-    int height;
+    T x;
+    T y;
+    T width;
+    T height;
 };
+using Rectangle  = TypedRectangle<int>;
+using RectangleF = TypedRectangle<float>;
 
-bool operator==(const Rectangle &a, const Rectangle &b);
-bool operator!=(const Rectangle &a, const Rectangle &b);
+template <typename T>
+bool operator==(const TypedRectangle<T> &a, const TypedRectangle<T> &b);
+
+template <typename T>
+bool operator!=(const TypedRectangle<T> &a, const TypedRectangle<T> &b);
+
+template <typename TO, typename FROM>
+TypedRectangle<TO> ConvertTypedRectangle(const TypedRectangle<FROM> &rectangle);
 
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection);
 

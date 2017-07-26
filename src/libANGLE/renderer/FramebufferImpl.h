@@ -13,13 +13,13 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/angletypes.h"
 
 namespace gl
 {
 class State;
 class Framebuffer;
 class FramebufferAttachment;
-struct Rectangle;
 }
 
 namespace rx
