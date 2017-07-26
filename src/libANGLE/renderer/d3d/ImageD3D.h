@@ -12,8 +12,8 @@
 #define LIBANGLE_RENDERER_D3D_IMAGED3D_H_
 
 #include "common/debug.h"
-
 #include "libANGLE/Error.h"
+#include "libANGLE/angletypes.h"
 
 namespace gl
 {
@@ -23,7 +23,6 @@ struct ImageIndex;
 struct Box;
 struct Extents;
 struct Offset;
-struct Rectangle;
 struct PixelUnpackState;
 }
 

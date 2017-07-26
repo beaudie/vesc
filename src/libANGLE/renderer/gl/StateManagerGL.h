@@ -35,7 +35,9 @@ class QueryGL;
 class StateManagerGL final : angle::NonCopyable
 {
   public:
-    StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
+    StateManagerGL(const FunctionsGL *functions,
+                   const gl::Caps &rendererCaps,
+                   const gl::Extensions &extensions);
 
     void deleteProgram(GLuint program);
     void deleteVertexArray(GLuint vao);
@@ -74,8 +76,12 @@ class StateManagerGL final : angle::NonCopyable
 
     void setScissorTestEnabled(bool enabled);
     void setScissor(const gl::Rectangle &scissor);
+    void setScissorArrayv(GLuint first, const std::vector<gl::Rectangle> &viewports);
+    void setScissorIndexed(GLuint index, const gl::Rectangle &scissor);
 
     void setViewport(const gl::Rectangle &viewport);
+    void setViewportArrayv(GLuint first, const std::vector<gl::RectangleF> &viewports);
+    void setViewportIndexedf(GLuint index, const gl::RectangleF &viewport);
     void setDepthRange(float near, float far);
 
     void setBlendEnabled(bool enabled);
@@ -244,9 +250,8 @@ class StateManagerGL final : angle::NonCopyable
     GLuint mRenderbuffer;
 
     bool mScissorTestEnabled;
-    gl::Rectangle mScissor;
-
-    gl::Rectangle mViewport;
+    std::vector<gl::Rectangle> mScissors;
+    std::vector<gl::RectangleF> mViewports;
     float mNear;
     float mFar;
 
