@@ -2624,9 +2624,17 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     // In OpenGL ES it is undefined what happens when an operation tries to read from a missing
     // attachment and WebGL defines it to be an error. We do the check unconditionally as the
     // situation is an application error that would lead to a crash in ANGLE.
-    if (readFramebuffer->getReadColorbuffer() == nullptr)
+    const FramebufferAttachment *source = readFramebuffer->getReadColorbuffer();
+    if (source == nullptr)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), MissingReadAttachment);
+        return false;
+    }
+
+    if (source->getMultiviewLayout() != GL_NONE)
+    {
+        context->handleError(InvalidOperation()
+                             << "The active read framebuffer object has multiview attachments.");
         return false;
     }
 
