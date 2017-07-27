@@ -2819,13 +2819,26 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         return false;
     }
 
-    const int programNumViews = program->getNumViews();
-    if (programNumViews != -1 && framebuffer->getNumViews() != programNumViews)
+    if (context->getExtensions().multiview)
     {
-        context->handleError(
-            InvalidOperation()
-            << "The number of views in the active program and draw framebuffer does not match.");
-        return false;
+        const int programNumViews = program->getNumViews();
+        if (programNumViews != -1 && framebuffer->getNumViews() != programNumViews)
+        {
+            context->handleError(InvalidOperation() << "The number of views in the active program "
+                                                       "and draw framebuffer does not match.");
+            return false;
+        }
+
+        const gl::TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
+        if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
+            framebuffer->getNumViews() > 1)
+        {
+            context->handleError(InvalidOperation()
+                                 << "There is an active transform feedback object "
+                                    "when the number of views in the active draw "
+                                    "framebuffer is greater than 1.");
+            return false;
+        }
     }
 
     // Uniform buffer validation
