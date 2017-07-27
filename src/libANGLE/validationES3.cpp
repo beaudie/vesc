@@ -734,6 +734,12 @@ bool ValidateES3CopyTexImageParametersBase(ValidationContext *context,
     }
 
     const FramebufferAttachment *source = framebuffer->getReadColorbuffer();
+    if (source->getMultiviewLayout() != GL_NONE)
+    {
+        context->handleError(InvalidOperation()
+                             << "The active read framebuffer object has multiview attachments.");
+        return false;
+    }
 
     if (isSubImage)
     {
