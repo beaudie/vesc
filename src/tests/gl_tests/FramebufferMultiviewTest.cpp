@@ -379,4 +379,46 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsSideBySide)
     glDeleteTextures(1, &otherTexture);
 }
 
+// Test framebuffer completeness status of a side-by-side framebuffer with color and depth
+// attachments.
+TEST_P(FramebufferMultiviewTest, InvalidCopyTexImage2D)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    mTexture2D = CreateTexture2D(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+    ASSERT_GL_NO_ERROR();
+
+    const GLint viewportOffsets[2] = {0};
+    glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture2D,
+                                                 0, 1, &viewportOffsets[0]);
+    ASSERT_GL_NO_ERROR();
+
+    {
+        GLuint tex = CreateTexture2D(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, 1, 1, 0);
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+        glDeleteTextures(1, &tex);
+    }
+
+    {
+        GLuint tex = 0u;
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_3D, tex);
+        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, 0, 0, 1, 1);
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+        glDeleteTextures(1, &tex);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest, ES3_OPENGL());
