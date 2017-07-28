@@ -126,7 +126,7 @@ ValidationContext::ValidationContext(const ValidationContext *shareContext,
              textureCaps,
              extensions,
              limitations),
-      mSkipValidation(skipValidation),
+      mSkipValidation(true),
       mDisplayTextureShareGroup(shareTextures != nullptr)
 {
 }

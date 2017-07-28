@@ -36,6 +36,8 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     binding   = bindingIn;
     offset    = offsetIn;
     location  = locationIn;
+
+    elementComponents = VariableComponentCount(type);
 }
 
 LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
@@ -44,7 +46,10 @@ LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
-    : sh::Uniform(uniform), bufferIndex(uniform.bufferIndex), blockInfo(uniform.blockInfo)
+    : sh::Uniform(uniform),
+      bufferIndex(uniform.bufferIndex),
+      blockInfo(uniform.blockInfo),
+      elementComponents(uniform.elementComponents)
 {
     // This function is not intended to be called during runtime.
     ASSERT(uniform.mLazyData.empty());
@@ -58,6 +63,8 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     sh::Uniform::operator=(uniform);
     bufferIndex          = uniform.bufferIndex;
     blockInfo            = uniform.blockInfo;
+
+    elementComponents = uniform.elementComponents;
 
     return *this;
 }
@@ -81,18 +88,6 @@ size_t LinkedUniform::dataSize() const
     }
 
     return mLazyData.size();
-}
-
-uint8_t *LinkedUniform::data()
-{
-    if (mLazyData.empty())
-    {
-        // dataSize() will init the data store.
-        size_t size = dataSize();
-        memset(mLazyData.data(), 0, size);
-    }
-
-    return mLazyData.data();
 }
 
 const uint8_t *LinkedUniform::data() const
@@ -123,11 +118,6 @@ bool LinkedUniform::isField() const
 size_t LinkedUniform::getElementSize() const
 {
     return VariableExternalSize(type);
-}
-
-size_t LinkedUniform::getElementComponents() const
-{
-    return VariableComponentCount(type);
 }
 
 uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex)
