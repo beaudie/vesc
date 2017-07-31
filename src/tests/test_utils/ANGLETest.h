@@ -319,6 +319,10 @@ class ANGLETestBase
 
     angle::PlatformMethods mPlatformMethods;
 
+    // Used for indexed quad rendering
+    GLuint mQuadVertexBuffer;
+    GLuint mQuadIndexBuffer;
+
   private:
     bool destroyEGLContext();
 
@@ -329,10 +333,6 @@ class ANGLETestBase
     int mHeight;
 
     bool mIgnoreD3D11SDKLayersWarnings;
-
-    // Used for indexed quad rendering
-    GLuint mQuadVertexBuffer;
-    GLuint mQuadIndexBuffer;
 
     TestPlatformContext mPlatformContext;
 

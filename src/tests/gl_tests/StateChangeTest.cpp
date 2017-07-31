@@ -601,6 +601,189 @@ TEST_P(StateChangeRenderTest, GenerateMipmap)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that vertexAttribDivisor, useProgram and bindVertexArray in a multi-view context propagate
+// the correct divisor to the driver.
+TEST_P(StateChangeTestES3, MultiviewDivisor)
+{
+    PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE =
+        reinterpret_cast<PFNGLREQUESTEXTENSIONANGLEPROC>(
+            eglGetProcAddress("glRequestExtensionANGLE"));
+    ASSERT(glRequestExtensionANGLE != nullptr);
+    if (extensionRequestable("GL_ANGLE_multiview"))
+    {
+        glRequestExtensionANGLE("GL_ANGLE_multiview");
+    }
+
+    if (!extensionEnabled("GL_ANGLE_multiview"))
+    {
+        std::cout << "Test skipped due to missing GL_ANGLE_multiview." << std::endl;
+        return;
+    }
+
+    // Setup texture and framebuffers.
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
+    glBindTexture(GL_TEXTURE_2D, mTextures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    GLint viewportOffsets[4] = {0u, 0u, 1u, 0u};
+    glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 mTextures[0], 0, 2, &viewportOffsets[0]);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+
+    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, DrawBuffers);
+
+    GLuint readFramebuffer;
+    glGenFramebuffers(1, &readFramebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[0],
+                           0);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_READ_FRAMEBUFFER));
+
+    // Create multiview program.
+    const std::string &vs =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "layout(num_views = 2) in;\n"
+        "layout(location = 0) in vec3 vPosition;\n"
+        "layout(location = 1) in float offsetX;\n"
+        "void main()\n"
+        "{\n"
+        "       vec4 p = vec4(vPosition, 1.0);\n"
+        "       p.x += offsetX;\n"
+        "       gl_Position = p;\n"
+        "}\n";
+
+    const std::string &fs =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1,0,0,0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vs, fs);
+
+    const std::string &dummyVS =
+        "#version 300 es\n"
+        "layout(location = 0) in vec3 vPosition;\n"
+        "layout(location = 1) in float offsetX;\n"
+        "void main()\n"
+        "{\n"
+        "       gl_Position = vec4(vPosition, 1.0);\n"
+        "}\n";
+
+    const std::string &dummyFS =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(0,0,0,0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(dummyProgram, dummyVS, dummyFS);
+
+    setupQuadVertexBuffer(0.0f, 1.0f);
+
+    GLBuffer xOffsetVBO;
+    glBindBuffer(GL_ARRAY_BUFFER, xOffsetVBO);
+    const GLfloat xOffsetData[12] = {0.0f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f,
+                                     4.0f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 12, xOffsetData, GL_STATIC_DRAW);
+
+    GLVertexArray vao[2];
+    // Setup vao[0]
+    {
+        glBindVertexArray(vao[0]);
+
+        glBindBuffer(GL_ARRAY_BUFFER, mQuadVertexBuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, xOffsetVBO);
+        glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(1);
+    }
+
+    // Setup vao[1]
+    {
+        glBindVertexArray(vao[1]);
+
+        glBindBuffer(GL_ARRAY_BUFFER, mQuadVertexBuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, xOffsetVBO);
+        glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(1);
+    }
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, 1, 1);
+    glScissor(0, 0, 1, 1);
+    glClearColor(0, 0, 0, 0);
+
+    // Reset.
+    glUseProgram(dummyProgram);
+    glBindVertexArray(vao[0]);
+    glVertexAttribDivisor(1, 1);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    glUseProgram(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Check that vertexAttribDivisor uses the number of views to update the divisor.
+    glUseProgram(program);
+    glVertexAttribDivisor(1, 1);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 0);
+    EXPECT_PIXEL_EQ(1, 0, 255, 0, 0, 0);
+
+    // Reset.
+    glUseProgram(dummyProgram);
+    glVertexAttribDivisor(1, 1);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    glUseProgram(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Check that useProgram uses the number of views to update the divisor.
+    glUseProgram(program);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 0);
+    EXPECT_PIXEL_EQ(1, 0, 255, 0, 0, 0);
+
+    // Reset.
+    glUseProgram(dummyProgram);
+    glVertexAttribDivisor(1, 1);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    glUseProgram(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(0);
+    ASSERT_GL_NO_ERROR();
+
+    // Check that bindVertexArray uses the number of views to update the divisor.
+    {
+        glBindVertexArray(vao[1]);
+        glUseProgram(program);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindVertexArray(0);
+        ASSERT_GL_NO_ERROR();
+    }
+    glBindVertexArray(vao[0]);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 0);
+    EXPECT_PIXEL_EQ(1, 0, 255, 0, 0, 0);
+}
+
 ANGLE_INSTANTIATE_TEST(StateChangeTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
 ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_D3D9(),

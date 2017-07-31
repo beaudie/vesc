@@ -388,6 +388,8 @@ void StateManagerGL::bindVertexArray(GLuint vao, GLuint elementArrayBuffer)
         mVAO                              = vao;
         mBuffers[GL_ELEMENT_ARRAY_BUFFER] = elementArrayBuffer;
         mFunctions->bindVertexArray(vao);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
 }
 
@@ -1891,12 +1893,16 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING:
                 // TODO(jmadill): implement this
+                propagateNumViewsToVAO(context, state.getProgram(),
+                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
                 // TODO: implement this
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 // TODO(jmadill): implement this
+                propagateNumViewsToVAO(context, state.getProgram(),
+                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 // TODO(jmadill): implement this
@@ -2139,6 +2145,21 @@ void StateManagerGL::applyViewportOffsetsAndSetViewports(const gl::Rectangle &vi
         std::copy(viewportOffsets.begin(), viewportOffsets.end(), mViewportOffsets.begin());
         setViewportArrayv(0u, viewportArray);
         mMultiviewDirtyBits.set(MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS);
+    }
+}
+
+void StateManagerGL::propagateNumViewsToVAO(const gl::Context *context,
+                                            const gl::Program *program,
+                                            VertexArrayGL *vao)
+{
+    if (mIsMultiviewEnabled && vao != nullptr)
+    {
+        int programNumViews = 1;
+        if (program && program->usesMultiview())
+        {
+            programNumViews = program->getNumViews();
+        }
+        vao->applyNumViewsToDivisor(context, programNumViews);
     }
 }
 }
