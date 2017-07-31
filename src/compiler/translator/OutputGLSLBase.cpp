@@ -618,11 +618,20 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                 out << ".";
                 const TInterfaceBlock *interfaceBlock =
                     node->getLeft()->getType().getInterfaceBlock();
+
+                TSymbol *buildInInterfaceBlock =
+                    mSymbolTable->findBuiltIn(interfaceBlock->instanceName(), mShaderVersion);
+                if (buildInInterfaceBlock)
+                {
+                    ASSERT(typeid(*buildInInterfaceBlock) == typeid(TVariable));
+                    ASSERT(
+                        static_cast<TVariable *>(buildInInterfaceBlock)->getType().getQualifier() ==
+                        EvqPerVertexIn);
+                }
+
                 const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
                 const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
-
-                TString fieldName = field->name();
-                ASSERT(!mSymbolTable->findBuiltIn(interfaceBlock->name(), mShaderVersion));
+                TString fieldName                 = field->name();
                 fieldName = hashName(TName(fieldName));
 
                 out << fieldName;
@@ -1011,6 +1020,8 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpMemoryBarrierImage:
         case EOpMemoryBarrierShared:
         case EOpGroupMemoryBarrier:
+        case EOpEmitVertex:
+        case EOpEndPrimitive:
             writeBuiltInFunctionTriplet(visit, node->getOp(), node->getUseEmulatedFunction());
             break;
         default:

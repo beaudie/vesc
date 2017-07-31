@@ -107,6 +107,18 @@ class GeometryShaderValidationTest : public ShaderCompileTreeTest
     ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
 };
 
+class FragmentShaderOESGeometryShaderValidationTest : public FragmentShaderValidationTest
+{
+  public:
+    FragmentShaderOESGeometryShaderValidationTest() {}
+
+  protected:
+    void initResources(ShBuiltInResources *resources) override
+    {
+        resources->OES_geometry_shader = 1;
+    }
+};
+
 // This is a test for a bug that used to exist in ANGLE:
 // Calling a function with all parameters missing should not succeed.
 TEST_F(FragmentShaderValidationTest, FunctionParameterMismatch)
@@ -4317,6 +4329,186 @@ TEST_F(FragmentShaderValidationTest, InvalidUseOfMaxVertices)
         "layout(max_vertices = 3) out vec4 myOutput;\n"
         "void main() {\n"
         "   myOutput = myInput;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_PrimitiveID is valid in fragment shader with 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, PrimitiveIDWithExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    vec4 data = vec4(0.1, 0.2, 0.3, 0.4);\n"
+        "    float value = data[gl_PrimitiveID % 4];\n"
+        "    fragColor = vec4(value, 0, 0, 1);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_PrimitiveID is invalid in fragment shader without 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, PrimitiveIDWithoutExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    vec4 data = vec4(0.1, 0.2, 0.3, 0.4);\n"
+        "    float value = data[gl_PrimitiveID % 4];\n"
+        "    fragColor = vec4(value, 0, 0, 1);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_PrimitiveID cannot be l-value in fragment shader.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, AssignValueToPrimitiveID)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    gl_PrimitiveID = 1;\n"
+        "    fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_Layer is valid in fragment shader with 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, LayerWithExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    vec4 data = vec4(0.1, 0.2, 0.3, 0.4);\n"
+        "    float value = data[gl_Layer % 4];\n"
+        "    fragColor = vec4(value, 0, 0, 1);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_Layer is invalid in fragment shader without 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, LayerWithoutExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    vec4 data = vec4(0.1, 0.2, 0.3, 0.4);\n"
+        "    float value = data[gl_Layer % 4];\n"
+        "    fragColor = vec4(value, 0, 0, 1);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that gl_Layer cannot be l-value in fragment shader.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, AssignValueToLayer)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    gl_Layer = 1;\n"
+        "    fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that all built-in constants defined in GL_OES_geometry_shader can be used in fragment shader
+// with 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest, GeometryShaderBuiltInConstants)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    int val1 = gl_MaxGeometryInputComponents;\n"
+        "    int val2 = gl_MaxGeometryOutputComponents;\n"
+        "    int val3 = gl_MaxGeometryImageUniforms;\n"
+        "    int val4 = gl_MaxGeometryTextureImageUnits;\n"
+        "    int val5 = gl_MaxGeometryOutputVertices;\n"
+        "    int val6 = gl_MaxGeometryTotalOutputComponents;\n"
+        "    int val7 = gl_MaxGeometryUniformComponents;\n"
+        "    int val8 = gl_MaxGeometryAtomicCounters;\n"
+        "    int val9 = gl_MaxGeometryAtomicCounterBuffers;\n"
+        "    fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that any built-in constants defined in GL_OES_geometry_shader cannot be used in fragment
+// shader without 'GL_OES_geometry_shader' declared.
+TEST_F(FragmentShaderOESGeometryShaderValidationTest,
+       GeometryShaderBuiltInConstantsWithoutExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(location = 0) out mediump vec4 fragColor;\n"
+        "void main(void)\n"
+        "{\n"
+        "    int val1 = gl_MaxGeometryInputComponents;\n"
+        "    int val2 = gl_MaxGeometryOutputComponents;\n"
+        "    int val3 = gl_MaxGeometryImageUniforms;\n"
+        "    int val4 = gl_MaxGeometryTextureImageUnits;\n"
+        "    int val5 = gl_MaxGeometryOutputVertices;\n"
+        "    int val6 = gl_MaxGeometryTotalOutputComponents;\n"
+        "    int val7 = gl_MaxGeometryUniformComponents;\n"
+        "    int val8 = gl_MaxGeometryAtomicCounters;\n"
+        "    int val9 = gl_MaxGeometryAtomicCounterBuffers;\n"
+        "    fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
         "}\n";
 
     if (compile(shaderString))
