@@ -89,7 +89,7 @@ class VertexArrayGL : public VertexArrayImpl
     void updateAttribFormat(size_t attribIndex);
     void updateAttribBinding(size_t attribIndex);
     void updateBindingBuffer(const gl::Context *context, size_t bindingIndex);
-    void updateBindingDivisor(size_t bindingIndex);
+    void updateBindingDivisor(const gl::Context *context, size_t bindingIndex);
 
     void callVertexAttribPointer(GLuint attribIndex,
                                  const gl::VertexAttribute &attrib,

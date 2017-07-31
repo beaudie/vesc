@@ -13,6 +13,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
@@ -608,9 +609,15 @@ void VertexArrayGL::updateBindingBuffer(const gl::Context *context, size_t bindi
     mAppliedBindings[bindingIndex].setBuffer(context, binding.getBuffer().get());
 }
 
-void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
+void VertexArrayGL::updateBindingDivisor(const gl::Context *context, size_t bindingIndex)
 {
     GLuint newDivisor = mData.getVertexBinding(bindingIndex).getDivisor();
+    const gl::Program *program = context->getGLState().getProgram();
+    ASSERT(program != nullptr);
+    if (program->usesMultiview())
+    {
+        newDivisor *= static_cast<GLuint>(program->getNumViews());
+    }
     if (mAppliedBindings[bindingIndex].getDivisor() == newDivisor)
     {
         return;
@@ -676,7 +683,7 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
         else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
                  dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
         {
-            updateBindingDivisor(index);
+            updateBindingDivisor(context, index);
         }
         else
             UNREACHABLE();
