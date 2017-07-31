@@ -318,6 +318,8 @@ class RendererD3D : public BufferFactoryD3D
 
     virtual gl::Version getMaxSupportedESVersion() const = 0;
 
+    gl::Error initRenderTarget(RenderTargetD3D *renderTarget);
+
     angle::WorkerThreadPool *getWorkerThreadPool();
 
     virtual gl::Error applyComputeUniforms(const ProgramD3D &programD3D,
