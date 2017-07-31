@@ -869,3 +869,204 @@ TEST_F(GeometryShaderTest, invalidLayoutQualifiers)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Verify the built-in variables that Geometry Shader should support
+TEST_F(GeometryShaderTest, BuiltInVariables)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points, invocations = 2) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = gl_in[gl_InvocationID].gl_Position;\n"
+        "    int invocation = gl_InvocationID;\n"
+        "    gl_Layer = invocation;\n"
+        "    int primitiveIn = gl_PrimitiveIDIn;\n"
+        "    gl_PrimitiveID = primitiveIn;\n"
+        "}\n";
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Verify that gl_PrimitiveIDIn cannot be assigned a value.
+TEST_F(GeometryShaderTest, AssignValueToGLPrimitiveIn)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points, invocations = 2) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_PrimitiveIDIn = 1;\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Verify that gl_InvocationID cannot be assigned a value.
+TEST_F(GeometryShaderTest, AssignValueToGLInvocations)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points, invocations = 2) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_InvocationID = 1;\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Verify that gl_in[].gl_Position cannot be assigned a value.
+TEST_F(GeometryShaderTest, AssignValueToGLIn)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_in[0].gl_Position = vec4(0, 0, 0, 1);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Verify that indexing an array with an integer variable on gl_in is legal.
+TEST_F(GeometryShaderTest, IndexGLInByVariable)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (lines) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position;\n"
+        "    for (int i = 0; i < 2; i++)\n"
+        "    {\n"
+        "        position = gl_in[i].gl_Position;\n"
+        "    }\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Verify that indexing an array on gl_in without input primitive declaration causes a compile
+// error.
+TEST_F(GeometryShaderTest, IndexGLInWithoutInputPrimitive)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position = gl_in[0].gl_Position;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Verify that using gl_in.length() without input primitive declaration causes a compile error.
+TEST_F(GeometryShaderTest, UseGLInLengthWithoutInputPrimitive)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    int length = gl_in.length();\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Verify that using gl_in.length() with input primitive declaration can compile.
+TEST_F(GeometryShaderTest, UseGLInLengthWithInputPrimitive)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    int length = gl_in.length();\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Verify that both EmitVertex() and EndPrimitive() are supported in Geometry Shader.
+TEST_F(GeometryShaderTest, GeometryShaderBuiltInFunctions)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = gl_in[0].gl_Position;\n"
+        "    EmitVertex();\n"
+        "    EndPrimitive();\n"
+        "}\n";
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Verify that all required built-in constant values are supported in Geometry Shaders
+TEST_F(GeometryShaderTest, GeometryShaderBuiltInConstants)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    int val1 = gl_MaxGeometryInputComponents;\n"
+        "    int val2 = gl_MaxGeometryOutputComponents;\n"
+        "    int val3 = gl_MaxGeometryImageUniforms;\n"
+        "    int val4 = gl_MaxGeometryTextureImageUnits;\n"
+        "    int val5 = gl_MaxGeometryOutputVertices;\n"
+        "    int val6 = gl_MaxGeometryTotalOutputComponents;\n"
+        "    int val7 = gl_MaxGeometryUniformComponents;\n"
+        "    int val8 = gl_MaxGeometryAtomicCounters;\n"
+        "    int val9 = gl_MaxGeometryAtomicCounterBuffers;\n"
+        "}\n";
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success: \n" << mInfoLog;
+    }
+}
