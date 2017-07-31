@@ -38,7 +38,17 @@ struct LinkedUniform : public sh::Uniform
     ~LinkedUniform();
 
     size_t dataSize() const;
-    uint8_t *data();
+    uint8_t *data()
+    {
+        if (mLazyData.empty())
+        {
+            // dataSize() will init the data store.
+            size_t size = dataSize();
+            memset(mLazyData.data(), 0, size);
+        }
+
+        return mLazyData.data();
+    }
     const uint8_t *data() const;
     bool isSampler() const;
     bool isImage() const;
@@ -46,7 +56,7 @@ struct LinkedUniform : public sh::Uniform
     bool isInDefaultBlock() const;
     bool isField() const;
     size_t getElementSize() const;
-    size_t getElementComponents() const;
+    size_t getElementComponents() const { return elementComponents; }
     uint8_t *getDataPtrToElement(size_t elementIndex);
     const uint8_t *getDataPtrToElement(size_t elementIndex) const;
 
@@ -56,6 +66,8 @@ struct LinkedUniform : public sh::Uniform
 
   private:
     mutable angle::MemoryBuffer mLazyData;
+    // 16-bit or 32-bit might be enough since this value is <= 4.
+    size_t elementComponents;
 };
 
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
