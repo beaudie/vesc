@@ -578,6 +578,78 @@ TEST_P(MultiviewSideBySideRenderTest, DrawArraysInstanced)
     }
 }
 
+TEST_P(MultiviewSideBySideRenderTest, AttribDivisorAfterUseOfProgram)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string &vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "layout(num_views = 2) in;\n"
+        "in vec4 vPosition;\n"
+        "in float offsetX;\n"
+        "in float offsetY;\n"
+        "void main()\n"
+        "{\n"
+        "       vec4 p = vPosition;\n"
+        "       p.xy = p.xy*0.25 - 0.75;\n"
+        "       p.y = -p.y;\n"
+        "       p.x += offsetX;\n"
+        "       p.y -= offsetY;\n"
+        "       gl_Position.x = (gl_ViewID_OVR == 0u ? p.x : p.x + 1.0);\n"
+        "       gl_Position.yzw = p.yzw;\n"
+        "}\n";
+
+    const std::string &fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1,0,0,0);\n"
+        "}\n";
+    createFBO(8, 4, 2);
+    createProgram(vsSource, fsSource);
+
+    GLBuffer xOffsetVBO;
+    glBindBuffer(GL_ARRAY_BUFFER, xOffsetVBO);
+    const GLfloat xOffsetData[4] = {0.0f, 0.5f, 1.0f, 1.0f};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4, xOffsetData, GL_STATIC_DRAW);
+    GLint xOffsetLoc = glGetAttribLocation(mProgram, "offsetX");
+    glVertexAttribPointer(xOffsetLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribDivisor(xOffsetLoc, 3);
+    glEnableVertexAttribArray(xOffsetLoc);
+
+    GLBuffer yOffsetVBO;
+    glBindBuffer(GL_ARRAY_BUFFER, yOffsetVBO);
+    const GLfloat yOffsetData[4] = {0.0f, 0.5f, 1.0f, 1.5f};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4, yOffsetData, GL_STATIC_DRAW);
+    GLint yOffsetLoc = glGetAttribLocation(mProgram, "offsetY");
+    glVertexAttribDivisor(yOffsetLoc, 1);
+    glVertexAttribPointer(yOffsetLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(yOffsetLoc);
+
+    drawQuad(mProgram, "vPosition", 0.0f, -1.0f, true, true, 4);
+    ASSERT_GL_NO_ERROR();
+
+    const GLubyte expectedResult[4][8] = {{0, 255, 0, 0, 0, 0, 0, 255},
+                                          {255, 0, 0, 0, 0, 0, 255, 0},
+                                          {255, 0, 0, 0, 0, 0, 255, 0},
+                                          {255, 0, 0, 0, 0, 0, 255, 0}};
+
+    for (int row = 0; row < 4; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            EXPECT_PIXEL_EQ(col, row, expectedResult[row][col], 0, 0, 0);
+        }
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());
