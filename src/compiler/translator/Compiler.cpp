@@ -473,9 +473,9 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && shouldCollectVariables(compileOptions))
         {
             ASSERT(!variablesCollected);
-            CollectVariables(root, &attributes, &outputVariables, &uniforms, &varyings,
-                             &interfaceBlocks, hashFunction, &symbolTable, shaderVersion,
-                             extensionBehavior);
+            CollectVariables(root, &attributes, &outputVariables, &uniforms, &inputVaryings,
+                             &outputVaryings, &interfaceBlocks, hashFunction, &symbolTable,
+                             shaderVersion, extensionBehavior);
             variablesCollected = true;
             if (compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS)
             {
@@ -760,7 +760,8 @@ void TCompiler::clearResults()
     attributes.clear();
     outputVariables.clear();
     uniforms.clear();
-    varyings.clear();
+    inputVaryings.clear();
+    outputVaryings.clear();
     interfaceBlocks.clear();
     variablesCollected = false;
     mGLPositionInitialized = false;
@@ -999,7 +1000,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
     InitVariableList list;
     if (shaderType == GL_VERTEX_SHADER)
     {
-        for (auto var : varyings)
+        for (auto var : outputVaryings)
         {
             list.push_back(var);
             if (var.name == "gl_Position")
@@ -1060,9 +1061,8 @@ void TCompiler::writePragma(ShCompileOptions compileOptions)
     }
 }
 
-bool TCompiler::isVaryingDefined(const char *varyingName)
+static bool IsVaryingDefined(const char *varyingName, const std::vector<Varying> &varyings)
 {
-    ASSERT(variablesCollected);
     for (size_t ii = 0; ii < varyings.size(); ++ii)
     {
         if (varyings[ii].name == varyingName)
@@ -1070,8 +1070,31 @@ bool TCompiler::isVaryingDefined(const char *varyingName)
             return true;
         }
     }
-
     return false;
+}
+
+bool TCompiler::isVaryingDefined(const char *varyingName)
+{
+    ASSERT(variablesCollected);
+
+    switch (shaderType)
+    {
+        case GL_VERTEX_SHADER:
+        {
+            return IsVaryingDefined(varyingName, outputVaryings);
+        }
+        case GL_FRAGMENT_SHADER:
+        {
+            return IsVaryingDefined(varyingName, inputVaryings);
+        }
+        case GL_COMPUTE_SHADER:
+        {
+            return false;
+        }
+        default:
+            UNREACHABLE();
+            return false;
+    }
 }
 
 }  // namespace sh
