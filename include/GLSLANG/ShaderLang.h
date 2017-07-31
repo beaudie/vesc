@@ -414,10 +414,18 @@ struct ShBuiltInResources
     float MaxPointSize;
 
     // OES_geometry_shader constants
-    // TODO(jiawei.shao@intel.com): add complete geometry shader constants.
     int MaxGeometryUniformComponents;
+    int MaxGeometryUniformBlocks;
+    int MaxGeometryInputComponents;
+    int MaxGeometryOutputComponents;
     int MaxGeometryOutputVertices;
+    int MaxGeometryTotalOutputComponents;
+    int MaxGeometryTextureImageUnits;
+    int MaxGeometryAtomicCounterBuffers;
+    int MaxGeometryAtomicCounters;
+    int MaxGeometryShaderStorageBlocks;
     int MaxGeometryShaderInvocations;
+    int MaxGeometryImageUniforms;
 };
 
 //
