@@ -359,7 +359,6 @@ void Shader::resolveCompile(const Context *context)
     // Gather the shader information
     mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
-    mState.mVaryings        = GetShaderVariables(sh::GetVaryings(compilerHandle));
     mState.mUniforms        = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mInterfaceBlocks = GetShaderVariables(sh::GetInterfaceBlocks(compilerHandle));
 
@@ -376,6 +375,7 @@ void Shader::resolveCompile(const Context *context)
                 mState.mActiveAttributes =
                     GetActiveShaderVariables(sh::GetAttributes(compilerHandle));
                 mState.mNumViews = sh::GetVertexShaderNumViews(compilerHandle);
+                mState.mVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
             }
             break;
         }
@@ -385,6 +385,7 @@ void Shader::resolveCompile(const Context *context)
             std::sort(mState.mVaryings.begin(), mState.mVaryings.end(), CompareShaderVar);
             mState.mActiveOutputVariables =
                 GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
+            mState.mVaryings = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
             break;
         }
         default:
