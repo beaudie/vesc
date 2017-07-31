@@ -13,6 +13,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
@@ -48,6 +49,17 @@ bool IsVertexAttribPointerSupported(size_t attribIndex, const VertexAttribute &a
 {
     return (attribIndex == attrib.bindingIndex && attrib.relativeOffset == 0);
 }
+
+GLuint GetAdjustedDivisor(const Program *program, GLuint divisor)
+{
+    ASSERT(program != nullptr);
+    if (!program->usesMultiview())
+    {
+        return divisor;
+    }
+    return divisor * program->getNumViews();
+}
+
 }  // anonymous namespace
 
 VertexArrayGL::VertexArrayGL(const VertexArrayState &state,
@@ -57,6 +69,7 @@ VertexArrayGL::VertexArrayGL(const VertexArrayState &state,
       mFunctions(functions),
       mStateManager(stateManager),
       mVertexArrayID(0),
+      mAppliedNumViews(1),
       mAppliedElementArrayBuffer(),
       mAppliedBindings(state.getMaxBindings()),
       mStreamingElementArrayBufferSize(0),
@@ -80,6 +93,8 @@ void VertexArrayGL::destroy(const gl::Context *context)
 {
     mStateManager->deleteVertexArray(mVertexArrayID);
     mVertexArrayID = 0;
+    mAppliedNumViews = 1;
+    mLocalDirtyBits.reset();
 
     mStateManager->deleteBuffer(mStreamingElementArrayBuffer);
     mStreamingElementArrayBufferSize = 0;
@@ -166,7 +181,7 @@ gl::Error VertexArrayGL::syncDrawState(const gl::Context *context,
 
     if (attributesNeedStreaming)
     {
-        ANGLE_TRY(streamAttributes(activeAttributesMask, instanceCount, indexRange));
+        ANGLE_TRY(streamAttributes(context, activeAttributesMask, instanceCount, indexRange));
     }
 
     return gl::NoError();
@@ -257,7 +272,8 @@ gl::Error VertexArrayGL::syncIndexData(const gl::Context *context,
     return gl::NoError();
 }
 
-void VertexArrayGL::computeStreamingAttributeSizes(const gl::AttributesMask &activeAttributesMask,
+void VertexArrayGL::computeStreamingAttributeSizes(const gl::Context *context,
+                                                   const gl::AttributesMask &activeAttributesMask,
                                                    GLsizei instanceCount,
                                                    const gl::IndexRange &indexRange,
                                                    size_t *outStreamingDataSize,
@@ -283,13 +299,17 @@ void VertexArrayGL::computeStreamingAttributeSizes(const gl::AttributesMask &act
         // and how much slack space at the beginning of the buffer will be required by determining
         // the attribute with the largest data size.
         size_t typeSize = ComputeVertexAttributeTypeSize(attrib);
-        *outStreamingDataSize += typeSize * ComputeVertexBindingElementCount(
-                                                binding, indexRange.vertexCount(), instanceCount);
+        GLuint adjustedDivisor =
+            GetAdjustedDivisor(context->getGLState().getProgram(), binding.getDivisor());
+        *outStreamingDataSize +=
+            typeSize * ComputeVertexBindingElementCount(adjustedDivisor, indexRange.vertexCount(),
+                                                        instanceCount);
         *outMaxAttributeDataSize = std::max(*outMaxAttributeDataSize, typeSize);
     }
 }
 
-gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttributesMask,
+gl::Error VertexArrayGL::streamAttributes(const gl::Context *context,
+                                          const gl::AttributesMask &activeAttributesMask,
                                           GLsizei instanceCount,
                                           const gl::IndexRange &indexRange) const
 {
@@ -297,7 +317,7 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
     size_t streamingDataSize    = 0;
     size_t maxAttributeDataSize = 0;
 
-    computeStreamingAttributeSizes(activeAttributesMask, instanceCount, indexRange,
+    computeStreamingAttributeSizes(context, activeAttributesMask, instanceCount, indexRange,
                                    &streamingDataSize, &maxAttributeDataSize);
 
     if (streamingDataSize == 0)
@@ -347,15 +367,17 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
             const auto &binding = bindings[attrib.bindingIndex];
             ASSERT(AttributeNeedsStreaming(attrib, binding));
 
-            const size_t streamedVertexCount =
-                ComputeVertexBindingElementCount(binding, indexRange.vertexCount(), instanceCount);
+            GLuint adjustedDivisor =
+                GetAdjustedDivisor(context->getGLState().getProgram(), binding.getDivisor());
+            const size_t streamedVertexCount = ComputeVertexBindingElementCount(
+                adjustedDivisor, indexRange.vertexCount(), instanceCount);
 
             const size_t sourceStride = ComputeVertexAttributeStride(attrib, binding);
             const size_t destStride   = ComputeVertexAttributeTypeSize(attrib);
 
             // Vertices do not apply the 'start' offset when the divisor is non-zero even when doing
             // a non-instanced draw call
-            const size_t firstIndex = binding.getDivisor() == 0 ? indexRange.start : 0;
+            const size_t firstIndex = adjustedDivisor == 0 ? indexRange.start : 0;
 
             // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
             // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt
@@ -608,33 +630,44 @@ void VertexArrayGL::updateBindingBuffer(const gl::Context *context, size_t bindi
     mAppliedBindings[bindingIndex].setBuffer(context, binding.getBuffer().get());
 }
 
-void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
+void VertexArrayGL::updateBindingDivisor(const gl::Context *context, size_t bindingIndex)
 {
-    GLuint newDivisor = mData.getVertexBinding(bindingIndex).getDivisor();
-    if (mAppliedBindings[bindingIndex].getDivisor() == newDivisor)
+    GLuint adjustedDivisor = GetAdjustedDivisor(context->getGLState().getProgram(),
+                                                mData.getVertexBinding(bindingIndex).getDivisor());
+    if (mAppliedBindings[bindingIndex].getDivisor() == adjustedDivisor)
     {
         return;
     }
 
     if (supportVertexAttribBinding())
     {
-        mFunctions->vertexBindingDivisor(static_cast<GLuint>(bindingIndex), newDivisor);
+        mFunctions->vertexBindingDivisor(static_cast<GLuint>(bindingIndex), adjustedDivisor);
     }
     else
     {
         // We can only use VertexAttribDivisor on platforms that don't support Vertex Attrib
         // Binding.
-        mFunctions->vertexAttribDivisor(static_cast<GLuint>(bindingIndex), newDivisor);
+        mFunctions->vertexAttribDivisor(static_cast<GLuint>(bindingIndex), adjustedDivisor);
     }
 
-    mAppliedBindings[bindingIndex].setDivisor(newDivisor);
+    mAppliedBindings[bindingIndex].setDivisor(adjustedDivisor);
+
+    size_t divisorDirtyBit =
+        static_cast<size_t>(VertexArray::DIRTY_BIT_BINDING_0_DIVISOR) + bindingIndex;
+    mLocalDirtyBits.set(divisorDirtyBit);
 }
 
 void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::DirtyBits &dirtyBits)
 {
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
-    for (size_t dirtyBit : dirtyBits)
+    const gl::VertexArray::DirtyBits &glAndLocalDirtyBits = (dirtyBits | mLocalDirtyBits);
+    if (!glAndLocalDirtyBits.any())
+    {
+        return;
+    }
+
+    for (size_t dirtyBit : glAndLocalDirtyBits)
     {
         if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
         {
@@ -676,10 +709,25 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
         else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
                  dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
         {
-            updateBindingDivisor(index);
+            updateBindingDivisor(context, index);
         }
         else
             UNREACHABLE();
+    }
+
+    mLocalDirtyBits.reset();
+}
+
+void VertexArrayGL::applyNumViewsToDivisor(const gl::Context *context, int numViews)
+{
+    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+    if (numViews != mAppliedNumViews)
+    {
+        mAppliedNumViews = numViews;
+        for (size_t index = 0u; index < mAppliedBindings.size(); ++index)
+        {
+            updateBindingDivisor(context, index);
+        }
     }
 }
 

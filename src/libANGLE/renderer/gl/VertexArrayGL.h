@@ -45,6 +45,7 @@ class VertexArrayGL : public VertexArrayImpl
 
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
+    void applyNumViewsToDivisor(const gl::Context *context, int numViews);
 
   private:
     gl::Error syncDrawState(const gl::Context *context,
@@ -69,14 +70,16 @@ class VertexArrayGL : public VertexArrayImpl
 
     // Returns the amount of space needed to stream all attributes that need streaming
     // and the data size of the largest attribute
-    void computeStreamingAttributeSizes(const gl::AttributesMask &activeAttributesMask,
+    void computeStreamingAttributeSizes(const gl::Context *context,
+                                        const gl::AttributesMask &activeAttributesMask,
                                         GLsizei instanceCount,
                                         const gl::IndexRange &indexRange,
                                         size_t *outStreamingDataSize,
                                         size_t *outMaxAttributeDataSize) const;
 
     // Stream attributes that have client data
-    gl::Error streamAttributes(const gl::AttributesMask &activeAttributesMask,
+    gl::Error streamAttributes(const gl::Context *context,
+                               const gl::AttributesMask &activeAttributesMask,
                                GLsizei instanceCount,
                                const gl::IndexRange &indexRange) const;
 
@@ -89,7 +92,7 @@ class VertexArrayGL : public VertexArrayImpl
     void updateAttribFormat(size_t attribIndex);
     void updateAttribBinding(size_t attribIndex);
     void updateBindingBuffer(const gl::Context *context, size_t bindingIndex);
-    void updateBindingDivisor(size_t bindingIndex);
+    void updateBindingDivisor(const gl::Context *context, size_t bindingIndex);
 
     void callVertexAttribPointer(GLuint attribIndex,
                                  const gl::VertexAttribute &attrib,
@@ -100,6 +103,7 @@ class VertexArrayGL : public VertexArrayImpl
     StateManagerGL *mStateManager;
 
     GLuint mVertexArrayID;
+    int mAppliedNumViews;
 
     mutable gl::BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
 
@@ -113,6 +117,7 @@ class VertexArrayGL : public VertexArrayImpl
     mutable GLuint mStreamingArrayBuffer;
 
     gl::AttributesMask mAttributesNeedStreaming;
+    gl::VertexArray::DirtyBits mLocalDirtyBits;
 };
 }
 

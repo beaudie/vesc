@@ -201,12 +201,12 @@ std::array<angle::Vector3, 6> ANGLETestBase::GetQuadVertices()
 }
 
 ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
-    : mEGLWindow(nullptr),
+    : mQuadVertexBuffer(0),
+      mQuadIndexBuffer(0),
+      mEGLWindow(nullptr),
       mWidth(16),
       mHeight(16),
       mIgnoreD3D11SDKLayersWarnings(false),
-      mQuadVertexBuffer(0),
-      mQuadIndexBuffer(0),
       mDeferContextInit(false)
 {
     mEGLWindow = new EGLWindow(params.majorVersion, params.minorVersion, params.eglParameters);
