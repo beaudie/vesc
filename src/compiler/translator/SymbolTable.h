@@ -334,6 +334,9 @@ class TSymbolTable : angle::NonCopyable
     TVariable *declareVariable(const TString *name, const TType &type);
     TVariable *declareStructType(TStructure *str);
     TInterfaceBlockName *declareInterfaceBlockName(const TString *name);
+    TInterfaceBlockName *declareInterfaceBlockNameExt(ESymbolLevel level,
+                                                      const char *ext,
+                                                      const TString *name);
 
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol in case the declaration was successful, and nullptr if the
@@ -355,10 +358,14 @@ class TSymbolTable : angle::NonCopyable
         return insert(level, constant);
     }
 
-    bool insertConstIntExt(ESymbolLevel level, const char *ext, const char *name, int value)
+    bool insertConstIntExt(ESymbolLevel level,
+                           const char *ext,
+                           const char *name,
+                           int value,
+                           TPrecision precision)
     {
         TVariable *constant =
-            new TVariable(this, NewPoolTString(name), TType(EbtInt, EbpUndefined, EvqConst, 1));
+            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1));
         TConstantUnion *unionArray = new TConstantUnion[1];
         unionArray[0].setIConst(value);
         constant->shareConstPointer(unionArray);
@@ -444,6 +451,12 @@ class TSymbolTable : angle::NonCopyable
                                            TOperator op,
                                            const TType *rvalue,
                                            const char *name);
+
+    void insertBuiltInFunctionNoParametersExt(ESymbolLevel level,
+                                              const char *extension,
+                                              TOperator op,
+                                              const TType *rvalue,
+                                              const char *name);
 
     TSymbol *find(const TString &name,
                   int shaderVersion,
