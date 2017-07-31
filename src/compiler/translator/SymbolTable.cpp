@@ -278,14 +278,21 @@ TVariable *TSymbolTable::declareStructType(TStructure *str)
     return insertStructType(currentLevel(), str);
 }
 
-TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(const TString *name)
+TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(ESymbolLevel level,
+                                                             const char *ext,
+                                                             const TString *name)
 {
     TInterfaceBlockName *blockNameSymbol = new TInterfaceBlockName(this, name);
-    if (insert(currentLevel(), blockNameSymbol))
+    if (insert(level, ext, blockNameSymbol))
     {
         return blockNameSymbol;
     }
     return nullptr;
+}
+
+TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(const TString *name)
+{
+    return declareInterfaceBlockName(currentLevel(), "", name);
 }
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, const TType &type)

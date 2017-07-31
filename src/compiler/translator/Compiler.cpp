@@ -475,7 +475,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             ASSERT(!variablesCollected);
             CollectVariables(root, &attributes, &outputVariables, &uniforms, &inputVaryings,
                              &outputVaryings, &interfaceBlocks, hashFunction, &symbolTable,
-                             shaderVersion, extensionBehavior);
+                             shaderVersion, shaderType, extensionBehavior);
             variablesCollected = true;
             if (compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS)
             {
@@ -741,8 +741,15 @@ void TCompiler::setResourceString()
         << ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
         << ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
         << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize
-        << ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
         << ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+        << ":MaxGeometryUniformBlocks:" << compileResources.MaxGeometryUniformBlocks
+        << ":MaxGeometryInputComponents:" << compileResources.MaxGeometryInputComponents
+        << ":MaxGeometryOutputComponents:" << compileResources.MaxGeometryOutputComponents
+        << ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
+        << ":MaxGeometryTotalOutputComponents:" << compileResources.MaxGeometryTotalOutputComponents
+        << ":MaxGeometryTextureImageUnits:" << compileResources.MaxGeometryTextureImageUnits
+        << ":MaxGeometryAtomicCounterBuffers:" << compileResources.MaxGeometryAtomicCounterBuffers
+        << ":MaxGeometryShaderStorageBlocks:" << compileResources.MaxGeometryShaderStorageBlocks
         << ":MaxGeometryShaderInvocations:" << compileResources.MaxGeometryShaderInvocations;
     // clang-format on
 
@@ -998,7 +1005,8 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 void TCompiler::initializeOutputVariables(TIntermBlock *root)
 {
     InitVariableList list;
-    if (shaderType == GL_VERTEX_SHADER)
+
+    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_OES)
     {
         for (auto var : outputVaryings)
         {
