@@ -278,14 +278,21 @@ TVariable *TSymbolTable::declareStructType(TStructure *str)
     return insertStructType(currentLevel(), str);
 }
 
-TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(const TString *name)
+TInterfaceBlockName *TSymbolTable::declareInterfaceBlockNameExt(ESymbolLevel level,
+                                                                const char *ext,
+                                                                const TString *name)
 {
     TInterfaceBlockName *blockNameSymbol = new TInterfaceBlockName(this, name);
-    if (insert(currentLevel(), blockNameSymbol))
+    if (insert(level, ext, blockNameSymbol))
     {
         return blockNameSymbol;
     }
     return nullptr;
+}
+
+TInterfaceBlockName *TSymbolTable::declareInterfaceBlockName(const TString *name)
+{
+    return declareInterfaceBlockNameExt(currentLevel(), "", name);
 }
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, const TType &type)
@@ -530,8 +537,17 @@ void TSymbolTable::insertBuiltInFunctionNoParameters(ESymbolLevel level,
                                                      const TType *rvalue,
                                                      const char *name)
 {
+    insertBuiltInFunctionNoParametersExt(level, "", op, rvalue, name);
+}
+
+void TSymbolTable::insertBuiltInFunctionNoParametersExt(ESymbolLevel level,
+                                                        const char *extension,
+                                                        TOperator op,
+                                                        const TType *rvalue,
+                                                        const char *name)
+{
     insertUnmangledBuiltInName(name, level);
-    insert(level, new TFunction(this, NewPoolTString(name), rvalue, op));
+    insert(level, new TFunction(this, NewPoolTString(name), rvalue, op, extension));
 }
 
 TPrecision TSymbolTable::getDefaultPrecision(TBasicType type) const
