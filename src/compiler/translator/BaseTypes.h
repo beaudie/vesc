@@ -576,6 +576,11 @@ enum TQualifier
     // GLSL ES 3.1 extension OES_geometry_shader qualifiers
     EvqGeometryIn,
     EvqGeometryOut,
+    EvqPerVertexIn,
+    EvqPrimitiveIDIn,
+    EvqInvocationID,
+    EvqPrimitiveID,
+    EvqLayer,
 
     // end of list
     EvqLast
@@ -830,6 +835,11 @@ inline const char *getQualifierString(TQualifier q)
     case EvqWriteOnly:              return "writeonly";
     case EvqGeometryIn:             return "in";
     case EvqGeometryOut:            return "out";
+    case EvqPerVertexIn:            return "gl_in";
+    case EvqPrimitiveIDIn:          return "gl_PrimitiveIDIn";
+    case EvqInvocationID:           return "gl_InvocationID";
+    case EvqPrimitiveID:            return "gl_PrimitiveID";
+    case EvqLayer:                  return "gl_Layer";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on
