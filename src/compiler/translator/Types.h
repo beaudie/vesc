@@ -151,19 +151,21 @@ class TInterfaceBlock : public TFieldListCollection
                     TFieldList *fields,
                     const TString *instanceName,
                     int arraySize,
+                    bool isArray,
                     const TLayoutQualifier &layoutQualifier)
         : TFieldListCollection(name, fields),
           mInstanceName(instanceName),
           mArraySize(arraySize),
           mBlockStorage(layoutQualifier.blockStorage),
           mMatrixPacking(layoutQualifier.matrixPacking),
-          mBinding(layoutQualifier.binding)
+          mBinding(layoutQualifier.binding),
+          mIsArray(isArray)
     {
     }
 
     const TString &instanceName() const { return *mInstanceName; }
     bool hasInstanceName() const { return mInstanceName != nullptr; }
-    bool isArray() const { return mArraySize > 0; }
+    bool isArray() const { return mIsArray; }
     int arraySize() const { return mArraySize; }
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
     TLayoutMatrixPacking matrixPacking() const { return mMatrixPacking; }
@@ -175,12 +177,20 @@ class TInterfaceBlock : public TFieldListCollection
         return mMangledName;
     }
 
+    // For setting the size to 'gl_in' in geometry shader.
+    void setArraySize(int arraySize)
+    {
+        ASSERT(mIsArray && arraySize > 0);
+        mArraySize = arraySize;
+    }
+
   private:
     const TString *mInstanceName;  // for interface block instance names
     int mArraySize;                // 0 if not an array
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
     int mBinding;
+    bool mIsArray;
 };
 
 //
@@ -258,8 +268,7 @@ class TType
     }
     TType(TInterfaceBlock *interfaceBlockIn,
           TQualifier qualifierIn,
-          TLayoutQualifier layoutQualifierIn,
-          int arraySizeIn)
+          TLayoutQualifier layoutQualifierIn)
         : type(EbtInterfaceBlock),
           precision(EbpUndefined),
           qualifier(qualifierIn),
@@ -268,8 +277,29 @@ class TType
           layoutQualifier(layoutQualifierIn),
           primarySize(1),
           secondarySize(1),
-          array(arraySizeIn > 0),
-          arraySize(arraySizeIn),
+          array(interfaceBlockIn->isArray()),
+          arraySize(interfaceBlockIn->arraySize()),
+          interfaceBlock(interfaceBlockIn),
+          structure(0)
+    {
+    }
+    TType(TInterfaceBlock *interfaceBlockIn,
+          TBasicType t,
+          TPrecision p,
+          TQualifier q     = EvqTemporary,
+          unsigned char ps = 1,
+          unsigned char ss = 1,
+          bool a           = false)
+        : type(t),
+          precision(p),
+          qualifier(q),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
+          layoutQualifier(TLayoutQualifier::create()),
+          primarySize(ps),
+          secondarySize(ss),
+          array(a),
+          arraySize(0),
           interfaceBlock(interfaceBlockIn),
           structure(0)
     {
@@ -355,6 +385,7 @@ class TType
             invalidateMangledName();
         }
     }
+
     void clearArrayness()
     {
         if (array)

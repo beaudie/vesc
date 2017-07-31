@@ -676,6 +676,14 @@ void InsertBuiltInFunctions(sh::GLenum type,
                                                       voidType, "groupMemoryBarrier");
     }
 
+    if (type == GL_GEOMETRY_SHADER_OES)
+    {
+        symbolTable.insertBuiltInFunctionNoParameters(ESSL3_1_BUILTINS, EOpEmitVertex, voidType,
+                                                      "EmitVertex");
+        symbolTable.insertBuiltInFunctionNoParameters(ESSL3_1_BUILTINS, EOpEndPrimitive, voidType,
+                                                      "EndPrimitive");
+    }
+
     //
     // Depth range in window coordinates
     //
@@ -720,7 +728,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
     {
         symbolTable.insertConstIntExt(COMMON_BUILTINS, "GL_EXT_blend_func_extended",
                                       "gl_MaxDualSourceDrawBuffersEXT",
-                                      resources.MaxDualSourceDrawBuffers);
+                                      resources.MaxDualSourceDrawBuffers, EbpMedium);
     }
 
     symbolTable.insertConstInt(ESSL3_BUILTINS, "gl_MaxVertexOutputVectors",
@@ -777,6 +785,29 @@ void InsertBuiltInFunctions(sh::GLenum type,
                                resources.MaxCombinedAtomicCounterBuffers, EbpMedium);
     symbolTable.insertConstInt(ESSL3_1_BUILTINS, "gl_MaxAtomicCounterBufferSize",
                                resources.MaxAtomicCounterBufferSize, EbpMedium);
+
+    if (resources.OES_geometry_shader)
+    {
+        constexpr char *ext = "GL_OES_geometry_shader";
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryInputComponents",
+                                      resources.MaxGeometryInputComponents, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryOutputComponents",
+                                      resources.MaxGeometryOutputComponents, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryImageUniforms",
+                                      resources.MaxGeometryImageUniforms, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryTextureImageUnits",
+                                      resources.MaxGeometryTextureImageUnits, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryOutputVertices",
+                                      resources.MaxGeometryOutputVertices, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryTotalOutputComponents",
+                                      resources.MaxGeometryTotalOutputComponents, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryUniformComponents",
+                                      resources.MaxGeometryUniformComponents, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryAtomicCounters",
+                                      resources.MaxGeometryAtomicCounters, EbpMedium);
+        symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryAtomicCounterBuffers",
+                                      resources.MaxGeometryAtomicCounterBuffers, EbpMedium);
+    }
 }
 
 void IdentifyBuiltIns(sh::GLenum type,
@@ -871,6 +902,13 @@ void IdentifyBuiltIns(sh::GLenum type,
                                               "gl_LastFragColorARM",
                                               TType(EbtFloat, EbpMedium, EvqLastFragColor, 4));
             }
+
+            if (resources.OES_geometry_shader)
+            {
+                symbolTable.insertVariableExt(ESSL3_1_BUILTINS, "GL_OES_geometry_shader",
+                                              "gl_PrimitiveID",
+                                              TType(EbtInt, EbpHigh, EvqPrimitiveID, 1));
+            }
         }
 
         break;
@@ -903,8 +941,47 @@ void IdentifyBuiltIns(sh::GLenum type,
         break;
 
         case GL_GEOMETRY_SHADER_OES:
-            // TODO(jiawei.shao@intel.com): add Geometry Shader built-in variables.
-            break;
+        {
+            constexpr char *extension = "GL_OES_geometry_shader";
+
+            // Add built-in interface block gl_PerVertex.
+            // TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
+            const TString *glPerVertexString = NewPoolTString("gl_PerVertex");
+            symbolTable.declareInterfaceBlockName(ESSL3_1_BUILTINS, extension, glPerVertexString);
+
+            TFieldList *fieldList    = NewPoolTFieldList();
+            TSourceLoc zeroSourceLoc = {0, 0, 0, 0};
+            TField *glPositionField  = new TField(new TType(EbtFloat, EbpHigh, EvqPosition, 4),
+                                                 NewPoolTString("gl_Position"), zeroSourceLoc);
+            fieldList->push_back(glPositionField);
+
+            // TODO(jiawei.shao@intel.com): implement GL_OES_geometry_point_size.
+
+            constexpr char *instanceName = "gl_in";
+            TInterfaceBlock *glInBlock =
+                new TInterfaceBlock(glPerVertexString, fieldList, NewPoolTString(instanceName), 0,
+                                    true, TLayoutQualifier::create());
+            symbolTable.insertVariableExt(
+                ESSL3_1_BUILTINS, extension, instanceName,
+                TType(glInBlock, EvqPerVertexIn, TLayoutQualifier::create()));
+
+            symbolTable.insertVariableExt(ESSL3_1_BUILTINS, extension, "gl_PrimitiveIDIn",
+                                          TType(EbtInt, EbpHigh, EvqPrimitiveIDIn, 1));
+            symbolTable.insertVariableExt(ESSL3_1_BUILTINS, extension, "gl_InvocationID",
+                                          TType(EbtInt, EbpHigh, EvqInvocationID, 1));
+
+            TType glPositionType(EbtFloat, EbpHigh, EvqPosition, 4);
+            glPositionType.setInterfaceBlock(new TInterfaceBlock(
+                glPerVertexString, fieldList, nullptr, 0, true, TLayoutQualifier::create()));
+            symbolTable.insertVariableExt(ESSL3_1_BUILTINS, extension, "gl_Position",
+                                          glPositionType);
+
+            symbolTable.insertVariableExt(ESSL3_1_BUILTINS, extension, "gl_PrimitiveID",
+                                          TType(EbtInt, EbpHigh, EvqPrimitiveID, 1));
+            symbolTable.insertVariableExt(ESSL3_1_BUILTINS, extension, "gl_Layer",
+                                          TType(EbtInt, EbpHigh, EvqLayer, 1));
+        }
+        break;
 
         default:
             assert(false && "Language not supported");

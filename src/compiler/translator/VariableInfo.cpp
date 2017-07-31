@@ -149,6 +149,12 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool mSecondaryFragColorEXTAdded;
     bool mSecondaryFragDataEXTAdded;
 
+    bool mPerVertexInAdded;
+    bool mInvocationIDAdded;
+    bool mPrimitiveIDAdded;
+    bool mPrimitiveIDInAdded;
+    bool mLayerAdded;
+
     ShHashFunction64 mHashFunction;
 
     int mShaderVersion;
@@ -188,6 +194,11 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mFragDepthAdded(false),
       mSecondaryFragColorEXTAdded(false),
       mSecondaryFragDataEXTAdded(false),
+      mPerVertexInAdded(false),
+      mInvocationIDAdded(false),
+      mPrimitiveIDAdded(false),
+      mPrimitiveIDInAdded(false),
+      mLayerAdded(false),
       mHashFunction(hashFunction),
       mShaderVersion(shaderVersion),
       mExtensionBehavior(extensionBehavior)
@@ -278,7 +289,35 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
     }
     else if (symbol->getType().getBasicType() == EbtInterfaceBlock)
     {
-        UNREACHABLE();
+        // TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
+        ASSERT(symbol->getQualifier() == EvqPerVertexIn);
+
+        if (!mPerVertexInAdded)
+        {
+            Varying info;
+            constexpr char kName[] = "gl_in";
+            info.name              = kName;
+            info.mappedName        = kName;
+            info.type              = GL_STRUCT_ANGLEX;
+            info.arraySize         = symbol->getArraySize();
+            info.precision         = GL_HIGH_FLOAT;
+            info.staticUse         = true;
+            info.isInvariant       = mSymbolTable->isVaryingInvariant(kName);
+
+            ShaderVariable positionInfo;
+            constexpr char kPositionName[] = "gl_Position";
+            positionInfo.name              = kPositionName;
+            positionInfo.mappedName        = kPositionName;
+            positionInfo.type              = GL_FLOAT_VEC4;
+            positionInfo.arraySize         = 0;
+            positionInfo.precision         = GL_HIGH_FLOAT;
+            positionInfo.staticUse         = true;
+
+            info.fields.push_back(positionInfo);
+
+            mInputVaryings->push_back(info);
+            mPerVertexInAdded = true;
+        }
     }
     else if (symbolName == "gl_DepthRange")
     {
@@ -436,6 +475,18 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 recordBuiltInFragmentOutputUsed("gl_SecondaryFragDataEXT",
                                                 &mSecondaryFragDataEXTAdded);
                 return;
+            case EvqInvocationID:
+                recordBuiltInVaryingUsed("gl_InvocationID", &mInvocationIDAdded, mInputVaryings);
+                return;
+            case EvqPrimitiveIDIn:
+                recordBuiltInVaryingUsed("gl_PrimitiveIDIn", &mPrimitiveIDInAdded, mInputVaryings);
+                return;
+            case EvqPrimitiveID:
+                recordBuiltInVaryingUsed("gl_PrimitiveID", &mPrimitiveIDAdded, mOutputVaryings);
+                return;
+            case EvqLayer:
+                recordBuiltInVaryingUsed("gl_Layer", &mLayerAdded, mOutputVaryings);
+                return;
             default:
                 break;
         }
@@ -534,6 +585,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
     return varying;
 }
 
+// TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks
 InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymbol &variable) const
 {
     const TInterfaceBlock *blockType = variable.getType().getInterfaceBlock();
@@ -659,6 +711,14 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
         ASSERT(constantUnion);
 
         const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
+        ASSERT(interfaceBlock);
+        // TODO(jiawei.shao@intel.com): only set staticUse for current field once
+        // GL_OES_geometry_point_size is enabled.
+        if (interfaceBlock->instanceName() == "gl_in")
+        {
+            return true;
+        }
+
         InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
         // TODO(jiajia.qin@intel.com): Currently, only uniform blocks are added into
         // mInterfaceBlocks.

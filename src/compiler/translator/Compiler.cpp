@@ -741,8 +741,15 @@ void TCompiler::setResourceString()
         << ":MaxFragmentAtomicCounterBuffers:" << compileResources.MaxFragmentAtomicCounterBuffers
         << ":MaxCombinedAtomicCounterBuffers:" << compileResources.MaxCombinedAtomicCounterBuffers
         << ":MaxAtomicCounterBufferSize:" << compileResources.MaxAtomicCounterBufferSize
+		<< ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+        << ":MaxGeometryUniformBlocks:" << compileResources.MaxGeometryUniformBlocks
+        << ":MaxGeometryInputComponents:" << compileResources.MaxGeometryInputComponents
+        << ":MaxGeometryOutputComponents:" << compileResources.MaxGeometryOutputComponents
         << ":MaxGeometryOutputVertices:" << compileResources.MaxGeometryOutputVertices
-        << ":MaxGeometryUniformComponents:" << compileResources.MaxGeometryUniformComponents
+        << ":MaxGeometryTotalOutputComponents:" << compileResources.MaxGeometryTotalOutputComponents
+        << ":MaxGeometryTextureImageUnits:" << compileResources.MaxGeometryTextureImageUnits
+        << ":MaxGeometryAtomicCounterBuffers:" << compileResources.MaxGeometryAtomicCounterBuffers
+        << ":MaxGeometryShaderStorageBlocks:" << compileResources.MaxGeometryShaderStorageBlocks
         << ":MaxGeometryShaderInvocations:" << compileResources.MaxGeometryShaderInvocations;
     // clang-format on
 
@@ -998,7 +1005,8 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 void TCompiler::initializeOutputVariables(TIntermBlock *root)
 {
     InitVariableList list;
-    if (shaderType == GL_VERTEX_SHADER)
+
+    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_OES)
     {
         for (auto var : outputVaryings)
         {
@@ -1018,6 +1026,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
+
     InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
 }
 
