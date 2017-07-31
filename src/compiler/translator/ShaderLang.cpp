@@ -42,10 +42,33 @@ const std::vector<Uniform> *GetVariableList(const TCompiler *compiler)
     return &compiler->getUniforms();
 }
 
+// TODO(jiawei.shao@intel.com): remove this template once GetVaryings() is completely removed from
+// Chromium.
 template <>
 const std::vector<Varying> *GetVariableList(const TCompiler *compiler)
 {
-    return &compiler->getVaryings();
+    switch (compiler->getShaderType())
+    {
+        case GL_VERTEX_SHADER:
+        {
+            return &compiler->getOutputVaryings();
+        }
+        case GL_FRAGMENT_SHADER:
+        {
+            return &compiler->getInputVaryings();
+        }
+        case GL_COMPUTE_SHADER:
+        {
+            ASSERT(compiler->getOutputVaryings().empty() && compiler->getInputVaryings().empty());
+            return &compiler->getOutputVaryings();
+        }
+        // Since geometry shaders have both input and output varyings, we shouldn't call GetVaryings
+        // on a geometry shader.
+        default:
+        {
+            return nullptr;
+        }
+    }
 }
 
 template <>
@@ -66,8 +89,7 @@ const std::vector<InterfaceBlock> *GetVariableList(const TCompiler *compiler)
     return &compiler->getInterfaceBlocks();
 }
 
-template <typename VarT>
-const std::vector<VarT> *GetShaderVariables(const ShHandle handle)
+TCompiler *GetCompilerFromHandle(ShHandle handle)
 {
     if (!handle)
     {
@@ -75,21 +97,19 @@ const std::vector<VarT> *GetShaderVariables(const ShHandle handle)
     }
 
     TShHandleBase *base = static_cast<TShHandleBase *>(handle);
-    TCompiler *compiler = base->getAsCompiler();
+    return base->getAsCompiler();
+}
+
+template <typename VarT>
+const std::vector<VarT> *GetShaderVariables(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
     if (!compiler)
     {
         return nullptr;
     }
 
     return GetVariableList<VarT>(compiler);
-}
-
-TCompiler *GetCompilerFromHandle(ShHandle handle)
-{
-    if (!handle)
-        return nullptr;
-    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
-    return base->getAsCompiler();
 }
 
 #ifdef ANGLE_ENABLE_HLSL
@@ -355,6 +375,27 @@ const std::vector<Uniform> *GetUniforms(const ShHandle handle)
     return GetShaderVariables<Uniform>(handle);
 }
 
+const std::vector<sh::Varying> *GetInputVaryings(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    if (compiler == nullptr)
+    {
+        return nullptr;
+    }
+    return &compiler->getInputVaryings();
+}
+
+const std::vector<sh::Varying> *GetOutputVaryings(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    if (compiler == nullptr)
+    {
+        return nullptr;
+    }
+    return &compiler->getOutputVaryings();
+}
+
+// TODO(jiawei.shao@intel.com): remove this function once it is completely removed from Chromium.
 const std::vector<Varying> *GetVaryings(const ShHandle handle)
 {
     return GetShaderVariables<Varying>(handle);
