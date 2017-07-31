@@ -45,6 +45,7 @@ class VertexArrayGL : public VertexArrayImpl
 
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
+    void applyNumViewsToDivisor(int numViews);
 
   private:
     gl::Error syncDrawState(const gl::Context *context,
@@ -100,6 +101,7 @@ class VertexArrayGL : public VertexArrayImpl
     StateManagerGL *mStateManager;
 
     GLuint mVertexArrayID;
+    int mAppliedNumViews;
 
     mutable gl::BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
 
@@ -113,6 +115,7 @@ class VertexArrayGL : public VertexArrayImpl
     mutable GLuint mStreamingArrayBuffer;
 
     gl::AttributesMask mAttributesNeedStreaming;
+    gl::VertexArray::DirtyBits mLocalDirtyBits;
 };
 }
 
