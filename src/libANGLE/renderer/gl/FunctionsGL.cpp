@@ -1390,6 +1390,7 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glGetActiveUniformBlockiv", getActiveUniformBlockiv);
         ASSIGN("glGetActiveUniformName", getActiveUniformName);
         ASSIGN("glGetActiveUniformsiv", getActiveUniformsiv);
+        ASSIGN("glGetInteger64v", getInteger64v);
         ASSIGN("glGetUniformBlockIndex", getUniformBlockIndex);
         ASSIGN("glGetUniformIndices", getUniformIndices);
         ASSIGN("glPrimitiveRestartIndex", primitiveRestartIndex);
@@ -1409,7 +1410,6 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glFramebufferTexture", framebufferTexture);
         ASSIGN("glGetBufferParameteri64v", getBufferParameteri64v);
         ASSIGN("glGetInteger64i_v", getInteger64i_v);
-        ASSIGN("glGetInteger64v", getInteger64v);
         ASSIGN("glGetMultisamplefv", getMultisamplefv);
         ASSIGN("glGetSynciv", getSynciv);
         ASSIGN("glIsSync", isSync);
