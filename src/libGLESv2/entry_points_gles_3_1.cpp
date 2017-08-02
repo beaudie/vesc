@@ -279,11 +279,12 @@ void GL_APIENTRY BindProgramPipeline(GLuint pipeline)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (pipeline != 0)
+        if (!context->skipValidation() && !ValidateBindProgramPipeline(context, pipeline))
         {
-            // Binding non-zero pipelines is not implemented yet.
-            UNIMPLEMENTED();
+            return;
         }
+
+        context->bindProgramPipeline(pipeline);
     }
 }
 
@@ -293,11 +294,15 @@ void GL_APIENTRY DeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation()  && !ValidateDeleteProgramPipelines(context, n, pipelines))
         {
-            context->handleError(InvalidOperation() << "Entry point not implemented");
+            return;
         }
-        UNIMPLEMENTED();
+
+        for (int i = 0; i < n; i++)
+        {
+            context->deleteProgramPipeline(pipelines[i]);
+        }
     }
 }
 
@@ -307,11 +312,15 @@ void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation() && !ValidateGenProgramPipelines(context, n, pipelines))
         {
-            context->handleError(InvalidOperation() << "Entry point not implemented");
+            return;
         }
-        UNIMPLEMENTED();
+
+        for (int i = 0; i < n; i++)
+        {
+            pipelines[i] = context->createProgramPipeline();
+        }
     }
 }
 
@@ -319,15 +328,19 @@ GLboolean GL_APIENTRY IsProgramPipeline(GLuint pipeline)
 {
     EVENT("(GLuint pipeline = %u)", pipeline);
     Context *context = GetValidGlobalContext();
-    if (context)
+    if (context && pipeline)
     {
-        if (!context->skipValidation())
+        if (context->getClientVersion() < ES_3_1)
         {
-            context->handleError(InvalidOperation() << "Entry point not implemented");
+            context->handleError(InvalidOperation());
+            return GL_FALSE;
         }
-        UNIMPLEMENTED();
+
+        const ProgramPipeline *pipelineObject = context->getProgramPipeline(pipeline);
+        return ((pipelineObject != nullptr) ? GL_TRUE : GL_FALSE);
     }
-    return false;
+
+    return GL_FALSE;
 }
 
 void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)

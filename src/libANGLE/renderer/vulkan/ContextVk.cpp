@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
+#include "libANGLE/renderer/vulkan/ProgramPipelineVk.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -543,6 +544,11 @@ TransformFeedbackImpl *ContextVk::createTransformFeedback(const gl::TransformFee
 SamplerImpl *ContextVk::createSampler()
 {
     return new SamplerVk();
+}
+
+ProgramPipelineImpl *ContextVk::createProgramPipeline(const gl::ProgramPipelineState &state)
+{
+    return new ProgramPipelineVk(state);
 }
 
 std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
