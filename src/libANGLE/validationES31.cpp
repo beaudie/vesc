@@ -13,6 +13,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 
 #include "common/utilities.h"
@@ -1195,6 +1196,45 @@ bool ValidateGetProgramResourceiv(Context *context,
             return false;
         }
     }
+    return true;
+}
+
+bool ValidateGenProgramPipelines(Context *context, GLint n, GLuint *)
+{
+    return ValidateGenOrDeleteES31(context, n);
+}
+
+bool ValidateDeleteProgramPipelines(Context *context, GLint n, const GLuint *)
+{
+    return ValidateGenOrDeleteES31(context, n);
+}
+
+bool ValidateGenOrDeleteES31(Context *context, GLint n)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(InvalidOperation() << "Context does not support GLES 3.1.");
+        return false;
+    }
+
+    return ValidateGenOrDelete(context, n);
+}
+
+bool ValidateBindProgramPipeline(Context *context, GLuint pipeline)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(InvalidOperation() << "Context does not support GLES 3.1.");
+        return false;
+    }
+
+    if (/* !context->getGLState().isBindGeneratesResourceEnabled() && */
+        !context->isProgramPipelineGenerated(pipeline))
+    {
+        context->handleError(InvalidOperation() << "Program pipeline was not generated.");
+        return false;
+    }
+
     return true;
 }
 

@@ -13,6 +13,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/Shader.h"
@@ -104,6 +105,7 @@ template class TypedResourceManager<Renderbuffer, HandleAllocator, RenderbufferM
 template class TypedResourceManager<Sampler, HandleAllocator, SamplerManager>;
 template class TypedResourceManager<Sync, HandleAllocator, SyncManager>;
 template class TypedResourceManager<Framebuffer, HandleAllocator, FramebufferManager>;
+template class TypedResourceManager<ProgramPipeline, HandleAllocator, ProgramPipelineManager>;
 
 // BufferManager Implementation.
 
@@ -438,6 +440,64 @@ void FramebufferManager::invalidateFramebufferComplenessCache() const
             framebuffer.second->invalidateCompletenessCache();
         }
     }
+}
+
+// ProgramPipelineManager Implementation.
+
+// static
+ProgramPipeline *ProgramPipelineManager::AllocateNewObject(rx::GLImplFactory *factory,
+                                                           GLuint handle)
+{
+    // ProgramPipeline *pipeline = new ProgramPipeline(factory->createProgramPipeline(), handle);
+    // ProgramPipeline *pipeline = new ProgramPipeline(factory, this, handle);
+    ProgramPipeline *pipeline = new ProgramPipeline(factory, handle);
+    pipeline->addRef();
+    return pipeline;
+}
+
+// static
+void ProgramPipelineManager::DeleteObject(const Context *context, ProgramPipeline *pipeline)
+{
+    pipeline->release(context);
+}
+
+/* bool ProgramPipelineManager::isProgramPipelineGenerated(GLuint pipeline) const
+{
+    // return pipeline == 0 || mProgramPipelineMap.find(pipeline) != mProgramPipelineMap.end();
+    return pipeline == 0 || mObjectMap.find(pipeline) != mObjectMap.end();
+} */
+
+GLuint ProgramPipelineManager::createProgramPipeline()
+{
+    /*
+        GLuint handle = mProgramPipelineHandleAllocator.allocate();
+
+        mProgramPipelineMap[handle] = nullptr;
+
+        return handle;
+    */
+    return AllocateEmptyObject(&mHandleAllocator, &mObjectMap);
+}
+
+/* void ProgramPipelineManager::deleteProgramPipeline(GLuint pipeline)
+{
+} */
+
+ProgramPipeline *ProgramPipelineManager::getProgramPipeline(GLuint handle) const
+{
+    /* auto pipeline = mProgramPipelineMap.find(handle);
+
+    if (pipeline == mProgramPipelineMap.end())
+    {
+        return nullptr;
+    }
+    else
+    {
+        return pipeline->second;
+    } */
+    // return GetObject(mPipelines, handle);
+    // return GetObject(mObjectMap, handle);
+    return mObjectMap.query(handle);
 }
 
 }  // namespace gl
