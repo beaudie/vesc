@@ -415,8 +415,7 @@ DXGI_FORMAT Image11::getDXGIFormat() const
 }
 
 // Store the pixel rectangle designated by xoffset,yoffset,width,height with pixels stored as
-// format/type at input
-// into the target pixel rectangle.
+// format/type at input into the target pixel rectangle.
 gl::Error Image11::loadData(const gl::Context *context,
                             const gl::Box &area,
                             const gl::PixelUnpackState &unpack,

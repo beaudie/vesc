@@ -2825,6 +2825,8 @@ void Context::initWorkarounds()
 Error Context::prepareForDraw(GLenum drawMode)
 {
     syncRendererState();
+    ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
+    ANGLE_TRY(mGLState.getDrawFramebuffer()->clearUnclearedDrawAttachments(this));
 
     InfoLog infoLog;
     Error err = mImplementation->triggerDrawCallProgramRecompilation(this, &infoLog,
@@ -2951,9 +2953,13 @@ void Context::copyTexImage2D(GLenum target,
 
     Rectangle sourceArea(x, y, width, height);
 
-    const Framebuffer *framebuffer = mGLState.getReadFramebuffer();
+    Framebuffer *framebuffer = mGLState.getReadFramebuffer();
     Texture *texture =
         getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
+
+    // Ensure source FBO is initialized.
+    ANGLE_CONTEXT_TRY(framebuffer->clearUnclearedReadAttachment(this, GL_COLOR_BUFFER_BIT));
+
     handleError(texture->copyImage(this, target, level, sourceArea, internalformat, framebuffer));
 }
 
