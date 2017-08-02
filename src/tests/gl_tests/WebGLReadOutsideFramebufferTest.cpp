@@ -67,6 +67,21 @@ class PixelRect
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     }
 
+    void toTextureCube(GLuint texid) const
+    {
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texid);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
     void readFB(int x, int y)
     {
         glReadPixels(x, y, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, mData.data());
@@ -164,6 +179,18 @@ class WebGLReadOutsideFramebufferTest : public ANGLETest
         // Read framebuffer -> texture -> 'pixelsOut'
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, kReadWidth, kReadHeight, 0);
         readTexture2D(kReadWidth, kReadHeight, pixelsOut);
+    }
+
+    // Read framebuffer to 'pixelsOut' via glCopyTexImage2D.
+    void TestCopyTexImageCube(int x, int y, int, PixelRect *pixelsOut)
+    {
+        // Init texture with given pixels.
+        GLTexture destTexture;
+        pixelsOut->toTextureCube(destTexture.get());
+
+        // Read framebuffer -> texture -> 'pixelsOut'
+        glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, x, y, kReadWidth, kReadHeight, 0);
+        readTextureCube(destTexture, kReadWidth, kReadHeight, pixelsOut);
     }
 
   protected:
@@ -307,6 +334,14 @@ class WebGLReadOutsideFramebufferTest : public ANGLETest
         out->readFB(0, 0);
     }
 
+    void readTextureCube(GLuint texture, GLsizei width, GLsizei height, PixelRect *out)
+    {
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture, 0);
+        out->readFB(0, 0);
+    }
+
     PixelRect mFBData;
     GLuint mProgram;
 };
@@ -363,6 +398,13 @@ TEST_P(WebGL2ReadOutsideFramebufferTest, CopyTexSubImage3D)
     }
 
     Main3D(&WebGLReadOutsideFramebufferTest::TestCopyTexSubImage3D, false);
+}
+
+// Check that copyTexSubImage3D does not set a destination pixel when
+// the corresponding source pixel is outside the framebuffer.
+TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImageCube)
+{
+    Main2D(&WebGLReadOutsideFramebufferTest::TestCopyTexImageCube, true);
 }
 
 ANGLE_INSTANTIATE_TEST(WebGLReadOutsideFramebufferTest,
