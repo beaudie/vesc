@@ -1037,7 +1037,7 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::Context *context,
     // with non-zero-level RTVs. Therefore if level > 0 on 9_3 then there's almost certainly
     // something wrong.
     ASSERT(
-        !(mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3 && level > 0));
+        mRenderer->getRenderer11DeviceCaps().featureLevel > D3D_FEATURE_LEVEL_9_3 || level == 0);
     ASSERT(outRT);
     if (mRenderTarget[level])
     {
@@ -1118,7 +1118,7 @@ gl::Error TextureStorage11_2D::createSRV(const gl::Context *context,
                                          int mipLevels,
                                          DXGI_FORMAT format,
                                          const TextureHelper11 &texture,
-                                         d3d11::SharedSRV *outSRV) const
+                                         d3d11::SharedSRV *outSRV)
 {
     ASSERT(outSRV);
 
@@ -1140,7 +1140,7 @@ gl::Error TextureStorage11_2D::createSRV(const gl::Context *context,
         if (mipLevels == 1 && mMipLevels > 1)
         {
             // We must use a SRV on the level-zero-only texture.
-            ASSERT(mLevelZeroTexture.valid() && texture == mLevelZeroTexture);
+            ANGLE_TRY(ensureTextureExists(1));
             srvTexture = &mLevelZeroTexture;
         }
         else
@@ -1352,7 +1352,7 @@ gl::Error TextureStorage11_External::createSRV(const gl::Context *context,
                                                int mipLevels,
                                                DXGI_FORMAT format,
                                                const TextureHelper11 &texture,
-                                               d3d11::SharedSRV *outSRV) const
+                                               d3d11::SharedSRV *outSRV)
 {
     // Since external textures are treates as non-mipmapped textures, we ignore mipmap levels and
     // use the specified subresource ID the storage was created with.
@@ -1568,7 +1568,7 @@ gl::Error TextureStorage11_EGLImage::createSRV(const gl::Context *context,
                                                int mipLevels,
                                                DXGI_FORMAT format,
                                                const TextureHelper11 &texture,
-                                               d3d11::SharedSRV *outSRV) const
+                                               d3d11::SharedSRV *outSRV)
 {
     ASSERT(baseLevel == 0);
     ASSERT(mipLevels == 1);
@@ -2079,7 +2079,7 @@ gl::Error TextureStorage11_Cube::createSRV(const gl::Context *context,
                                            int mipLevels,
                                            DXGI_FORMAT format,
                                            const TextureHelper11 &texture,
-                                           d3d11::SharedSRV *outSRV) const
+                                           d3d11::SharedSRV *outSRV)
 {
     ASSERT(outSRV);
 
@@ -2116,7 +2116,7 @@ gl::Error TextureStorage11_Cube::createSRV(const gl::Context *context,
         if (mipLevels == 1 && mMipLevels > 1)
         {
             // We must use a SRV on the level-zero-only texture.
-            ASSERT(mLevelZeroTexture.valid() && texture == mLevelZeroTexture);
+            ANGLE_TRY(ensureTextureExists(1));
             srvTexture = &mLevelZeroTexture;
         }
         else
@@ -2402,7 +2402,7 @@ gl::Error TextureStorage11_3D::createSRV(const gl::Context *context,
                                          int mipLevels,
                                          DXGI_FORMAT format,
                                          const TextureHelper11 &texture,
-                                         d3d11::SharedSRV *outSRV) const
+                                         d3d11::SharedSRV *outSRV)
 {
     ASSERT(outSRV);
 
@@ -2711,7 +2711,7 @@ gl::Error TextureStorage11_2DArray::createSRV(const gl::Context *context,
                                               int mipLevels,
                                               DXGI_FORMAT format,
                                               const TextureHelper11 &texture,
-                                              d3d11::SharedSRV *outSRV) const
+                                              d3d11::SharedSRV *outSRV)
 {
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     srvDesc.Format                         = format;
@@ -3081,7 +3081,7 @@ gl::Error TextureStorage11_2DMultisample::createSRV(const gl::Context *context,
                                                     int mipLevels,
                                                     DXGI_FORMAT format,
                                                     const TextureHelper11 &texture,
-                                                    d3d11::SharedSRV *outSRV) const
+                                                    d3d11::SharedSRV *outSRV)
 {
     ASSERT(outSRV);
 
