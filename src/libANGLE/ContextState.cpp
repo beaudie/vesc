@@ -89,7 +89,8 @@ ContextState::ContextState(ContextID contextIn,
       mFenceSyncs(
           AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mFenceSyncs)),
       mPaths(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mPaths)),
-      mFramebuffers(new FramebufferManager())
+      mFramebuffers(new FramebufferManager()),
+      mPipelines(new ProgramPipelineManager())
 {
 }
 
@@ -774,6 +775,11 @@ bool ValidationContext::isRenderbufferGenerated(GLuint renderbuffer) const
 bool ValidationContext::isFramebufferGenerated(GLuint framebuffer) const
 {
     return mState.mFramebuffers->isHandleGenerated(framebuffer);
+}
+
+bool ValidationContext::isProgramPipelineGenerated(GLuint pipeline) const
+{
+    return mState.mPipelines->isHandleGenerated(pipeline);
 }
 
 bool ValidationContext::usingDisplayTextureShareGroup() const

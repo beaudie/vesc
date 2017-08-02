@@ -26,6 +26,7 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/ResourceManager.h"
@@ -476,6 +477,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mFenceSyncs->release(this);
     mState.mPaths->release(this);
     mState.mFramebuffers->release(this);
+    mState.mPipelines->release(this);
 
     return egl::NoError();
 }
@@ -664,6 +666,11 @@ GLuint Context::createQuery()
     return handle;
 }
 
+GLuint Context::createProgramPipeline()
+{
+    return mState.mPipelines->createProgramPipeline();
+}
+
 void Context::deleteBuffer(GLuint buffer)
 {
     if (mState.mBuffers->getBuffer(buffer))
@@ -712,6 +719,16 @@ void Context::deleteFenceSync(GLsync fenceSync)
     // the fence immediately.
     mState.mFenceSyncs->deleteObject(this,
                                      static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
+}
+
+void Context::deleteProgramPipeline(GLuint pipeline)
+{
+    if (mState.mPipelines->getProgramPipeline(pipeline))
+    {
+        detachProgramPipeline(pipeline);
+    }
+
+    mState.mPipelines->deleteObject(this, pipeline);
 }
 
 void Context::deletePaths(GLuint first, GLsizei range)
@@ -916,6 +933,11 @@ Sampler *Context::getSampler(GLuint handle) const
 TransformFeedback *Context::getTransformFeedback(GLuint handle) const
 {
     return mTransformFeedbackMap.query(handle);
+}
+
+ProgramPipeline *Context::getProgramPipeline(GLuint handle) const
+{
+    return mState.mPipelines->getProgramPipeline(handle);
 }
 
 LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
@@ -1179,6 +1201,13 @@ void Context::bindTransformFeedback(GLuint transformFeedbackHandle)
     TransformFeedback *transformFeedback =
         checkTransformFeedbackAllocation(transformFeedbackHandle);
     mGLState.setTransformFeedbackBinding(this, transformFeedback);
+}
+
+void Context::bindProgramPipeline(GLuint pipelineHandle)
+{
+    ProgramPipeline *pipeline =
+        mState.mPipelines->checkProgramPipelineAllocation(mImplementation.get(), pipelineHandle);
+    mGLState.setProgramPipelineBinding(this, pipeline);
 }
 
 Error Context::beginQuery(GLenum target, GLuint query)
@@ -2441,6 +2470,11 @@ void Context::detachTransformFeedback(GLuint transformFeedback)
 void Context::detachSampler(GLuint sampler)
 {
     mGLState.detachSampler(this, sampler);
+}
+
+void Context::detachProgramPipeline(GLuint pipeline)
+{
+    mGLState.detachProgramPipeline(this, pipeline);
 }
 
 void Context::setVertexAttribDivisor(GLuint index, GLuint divisor)

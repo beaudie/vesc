@@ -57,6 +57,7 @@ State::State()
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      // mProgramPipeline(nullptr),
       mVertexArray(nullptr),
       mActiveSampler(0),
       mPrimitiveRestart(false),
@@ -169,6 +170,8 @@ void State::initialize(const Context *context,
 
     mProgram = nullptr;
 
+    // mProgramPipeline = nullptr;
+
     mReadFramebuffer = nullptr;
     mDrawFramebuffer = nullptr;
 
@@ -229,6 +232,12 @@ void State::reset(const Context *context)
         mProgram->release(context);
     }
     mProgram = nullptr;
+
+    /* if (mProgramPipeline)
+    {
+        mProgramPipeline->release(context);
+    } */
+    mProgramPipeline.set(context, nullptr);
 
     mTransformFeedback.set(context, nullptr);
 
@@ -1140,6 +1149,49 @@ bool State::removeTransformFeedbackBinding(const Context *context, GLuint transf
     }
 
     return false;
+}
+
+void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+{
+    mProgramPipeline.set(context, pipeline);
+    /*
+    if (mProgramPipeline != pipeline)
+    {
+        if (mProgramPipeline)
+        {
+            mProgramPipeline->release(context);
+        }
+
+        mProgramPipeline = pipeline;
+
+        if (mProgramPipeline)
+        {
+            pipeline->addRef();
+        }
+    } */
+    /* mPipeline = pipeline;
+    mPipeline.set(DIRTY_BIT_PROGRAM_PIPELINE_BINDING);
+
+    if (mPipeline && mPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+    }*/
+}
+
+/* ProgramPipeline *State::getProgramPipeline() const
+{
+    // return mProgramPipeline;
+    return mProgramPipeline.get();
+} */
+
+void State::detachProgramPipeline(const Context *context, GLuint pipeline)
+{
+    mProgramPipeline.set(context, nullptr);
+    /*
+    if (mProgramPipeline != nullptr && mProgramPipeline->id() == pipeline)
+    {
+        setProgramPipelineBinding(context, nullptr);
+    } */
 }
 
 bool State::isQueryActive(const GLenum type) const

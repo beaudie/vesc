@@ -58,6 +58,7 @@ class Texture;
 class TransformFeedback;
 class VertexArray;
 struct VertexAttribute;
+class ProgramPipeline;
 
 class Context final : public ValidationContext
 {
@@ -88,6 +89,7 @@ class Context final : public ValidationContext
     GLuint createTransformFeedback();
     GLsync createFenceSync();
     GLuint createPaths(GLsizei range);
+    GLuint createProgramPipeline();
 
     void deleteBuffer(GLuint buffer);
     void deleteShader(GLuint shader);
@@ -98,6 +100,7 @@ class Context final : public ValidationContext
     void deleteTransformFeedback(GLuint transformFeedback);
     void deleteFenceSync(GLsync fenceSync);
     void deletePaths(GLuint first, GLsizei range);
+    void deleteProgramPipeline(GLuint pipeline);
 
     // CHROMIUM_path_rendering
     bool hasPathData(GLuint path) const;
@@ -174,6 +177,8 @@ class Context final : public ValidationContext
     void bindTransformFeedback(GLuint transformFeedbackHandle);
     void bindDrawIndirectBuffer(GLuint bufferHandle);
 
+    void bindProgramPipeline(GLuint pipelineHandle);
+
     Error beginQuery(GLenum target, GLuint query);
     Error endQuery(GLenum target);
     Error queryCounter(GLuint id, GLenum target);
@@ -238,6 +243,8 @@ class Context final : public ValidationContext
     Query *getQuery(GLuint handle, bool create, GLenum type);
     Query *getQuery(GLuint handle) const;
     TransformFeedback *getTransformFeedback(GLuint handle) const;
+    ProgramPipeline *getProgramPipeline(GLuint handle) const;
+
     void objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
     void objectPtrLabel(const void *ptr, GLsizei length, const GLchar *label);
     void getObjectLabel(GLenum identifier,
@@ -858,6 +865,7 @@ class Context final : public ValidationContext
     void detachVertexArray(GLuint vertexArray);
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
+    void detachProgramPipeline(GLuint pipeline);
 
     void initRendererString();
     void initVersionStrings();

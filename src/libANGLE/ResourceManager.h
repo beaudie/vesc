@@ -32,6 +32,7 @@ class Framebuffer;
 struct Limitations;
 class Path;
 class Program;
+class ProgramPipeline;
 class Renderbuffer;
 class Sampler;
 class Shader;
@@ -258,6 +259,38 @@ class FramebufferManager
 
   protected:
     ~FramebufferManager() override {}
+};
+
+class ProgramPipelineManager
+    : public TypedResourceManager<ProgramPipeline, HandleAllocator, ProgramPipelineManager>
+{
+  public:
+    // GLuint createProgramPipeline(rx::GLImplFactory *factory);
+    GLuint createProgramPipeline();
+    // void deleteProgramPipeline(const Context *context, GLuint shader);
+    ProgramPipeline *getProgramPipeline(GLuint handle) const;
+    // void setProgramPipelineBinding(ProgramPipeline *pipeline);
+    // bool isProgramPipelineGenerated(GLuint pipeline) const;  // Need re-working
+
+    ProgramPipeline *checkProgramPipelineAllocation(rx::GLImplFactory *factory, GLuint handle)
+    {
+        return checkObjectAllocation(factory, handle);
+    }
+
+    static ProgramPipeline *AllocateNewObject(rx::GLImplFactory *factory, GLuint handle);
+    static void DeleteObject(const Context *context, ProgramPipeline *pipeline);
+
+  protected:
+    ~ProgramPipelineManager() override {}
+
+    // private:
+    // template <typename ObjectType>
+    // void deleteObject(const Context *context, ResourceMap<ObjectType> *objectMap, GLuint id);
+
+    // void reset(const Context *context) override;
+
+    // ResourceMap<ProgramPipeline> mProgramPipelineMap;
+    // HandleAllocator mProgramPipelineHandleAllocator;
 };
 
 }  // namespace gl
