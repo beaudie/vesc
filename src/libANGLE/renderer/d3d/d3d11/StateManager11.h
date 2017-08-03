@@ -174,7 +174,7 @@ class StateManager11 final : angle::NonCopyable
 
     void syncScissorRectangle(const gl::Rectangle &scissor, bool enabled);
 
-    void syncViewport(const gl::Caps *caps, const gl::Rectangle &viewport, float zNear, float zFar);
+    void syncViewport(const gl::Context *context, gl::Framebuffer *framebuffer);
 
     void checkPresentPath(const gl::Context *context);
 
