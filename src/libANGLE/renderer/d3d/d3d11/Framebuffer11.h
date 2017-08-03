@@ -56,6 +56,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
+    const size_t &getActiveRenderTargetCount() const { return mActiveRenderTargetCount; }
+
   private:
     gl::Error clearImpl(const gl::Context *context, const ClearParameters &clearParams) override;
 
@@ -88,6 +90,7 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     void updateColorRenderTarget(const gl::Context *context, size_t colorIndex);
     void updateDepthStencilRenderTarget(const gl::Context *context);
+    void updateActiveRenderTargetCount(const gl::Context *context);
 
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
@@ -97,6 +100,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
     OnRenderTargetDirtyBinding mDepthStencilRenderTargetDirty;
 
     gl::Framebuffer::DirtyBits mInternalDirtyBits;
+
+    size_t mActiveRenderTargetCount;
 };
 
 }

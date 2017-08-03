@@ -8,19 +8,20 @@
 
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 
-#include "common/debug.h"
 #include "common/bitset_utils.h"
-#include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
-#include "libANGLE/renderer/d3d/d3d11/Clear11.h"
-#include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
-#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
-#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
-#include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
-#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
-#include "libANGLE/renderer/d3d/TextureD3D.h"
+#include "common/debug.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/renderer/d3d/TextureD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/Clear11.h"
+#include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
+#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
+#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 using namespace angle;
 
@@ -81,7 +82,8 @@ Framebuffer11::Framebuffer11(const gl::FramebufferState &data, Renderer11 *rende
     : FramebufferD3D(data, renderer),
       mRenderer(renderer),
       mCachedDepthStencilRenderTarget(nullptr),
-      mDepthStencilRenderTargetDirty(this, gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS)
+      mDepthStencilRenderTargetDirty(this, gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS),
+      mActiveRenderTargetCount(0)
 {
     ASSERT(mRenderer != nullptr);
     mCachedColorRenderTargets.fill(nullptr);
@@ -388,6 +390,7 @@ void Framebuffer11::updateColorRenderTarget(const gl::Context *context, size_t c
     UpdateCachedRenderTarget(context, mState.getColorAttachment(colorIndex),
                              mCachedColorRenderTargets[colorIndex],
                              &mColorRenderTargetsDirty[colorIndex]);
+    updateActiveRenderTargetCount(context);
 }
 
 void Framebuffer11::updateDepthStencilRenderTarget(const gl::Context *context)
@@ -412,6 +415,11 @@ void Framebuffer11::syncState(const gl::Context *context,
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
+                break;
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
                 break;
             default:
             {
@@ -477,6 +485,32 @@ RenderTarget11 *Framebuffer11::getFirstRenderTarget() const
     }
 
     return mCachedDepthStencilRenderTarget;
+}
+
+void Framebuffer11::updateActiveRenderTargetCount(const gl::Context *context)
+{
+    const auto &glState          = context->getGLState();
+    gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
+
+    bool skipInactiveRTs   = mRenderer->getWorkarounds().mrtPerfWorkaround;
+    const auto &drawStates = framebuffer->getDrawBufferStates();
+    gl::DrawBufferMask activeProgramOutputs =
+        context->getContextState().getState().getProgram()->getActiveOutputVariables();
+    mActiveRenderTargetCount = 0;
+
+    for (size_t rtIndex = 0; rtIndex < mCachedColorRenderTargets.size(); ++rtIndex)
+    {
+        const RenderTarget11 *renderTarget = mCachedColorRenderTargets[rtIndex];
+
+        // Skip inactive rendertargets if the workaround is enabled.
+        if (skipInactiveRTs &&
+            (!renderTarget || drawStates[rtIndex] == GL_NONE || !activeProgramOutputs[rtIndex]))
+        {
+            continue;
+        }
+
+        mActiveRenderTargetCount++;
+    }
 }
 
 }  // namespace rx

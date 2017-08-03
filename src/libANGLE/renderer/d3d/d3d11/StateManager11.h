@@ -174,7 +174,7 @@ class StateManager11 final : angle::NonCopyable
 
     void syncScissorRectangle(const gl::Rectangle &scissor, bool enabled);
 
-    void syncViewport(const gl::Caps *caps, const gl::Rectangle &viewport, float zNear, float zFar);
+    void syncViewport(const gl::Context *context);
 
     void checkPresentPath(const gl::Context *context);
 
@@ -243,6 +243,10 @@ class StateManager11 final : angle::NonCopyable
     gl::Rectangle mCurViewport;
     float mCurNear;
     float mCurFar;
+
+    // Currently applied framebuffer default parameters
+    GLint mFramebufferDefaultWidth;
+    GLint mFramebufferDefaultHeight;
 
     // Things needed in viewport state
     dx_VertexConstants11 mVertexConstants;
