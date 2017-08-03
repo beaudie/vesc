@@ -4263,6 +4263,8 @@ void Context::setFramebufferParameteri(GLenum target, GLenum pname, GLint param)
 {
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     SetFramebufferParameteri(framebuffer, pname, param);
+
+    mClearDirtyBits.set(State::DIRTY_BIT_VIEWPORT);
 }
 
 Error Context::getScratchBuffer(size_t requstedSizeBytes,
