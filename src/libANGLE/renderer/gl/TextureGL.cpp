@@ -714,8 +714,8 @@ gl::Error TextureGL::copyTexture(const gl::Context *context,
                               gl::GetUnsizedFormat(internalFormat), type);
 
     return copySubTextureHelper(context, target, level, gl::Offset(0, 0, 0), sourceLevel,
-                                sourceArea, internalFormat, unpackFlipY, unpackPremultiplyAlpha,
-                                unpackUnmultiplyAlpha, source);
+                                sourceArea, gl::GetUnsizedFormat(internalFormat), type, unpackFlipY,
+                                unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source);
 }
 
 gl::Error TextureGL::copySubTexture(const gl::Context *context,
@@ -729,10 +729,10 @@ gl::Error TextureGL::copySubTexture(const gl::Context *context,
                                     bool unpackUnmultiplyAlpha,
                                     const gl::Texture *source)
 {
-    GLenum destFormat = mState.getImageDesc(target, level).format.info->format;
+    const gl::InternalFormat &destFormatInfo = *mState.getImageDesc(target, level).format.info;
     return copySubTextureHelper(context, target, level, destOffset, sourceLevel, sourceArea,
-                                destFormat, unpackFlipY, unpackPremultiplyAlpha,
-                                unpackUnmultiplyAlpha, source);
+                                destFormatInfo.format, destFormatInfo.type, unpackFlipY,
+                                unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source);
 }
 
 gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
@@ -742,6 +742,7 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
                                           size_t sourceLevel,
                                           const gl::Rectangle &sourceArea,
                                           GLenum destFormat,
+                                          GLenum destType,
                                           bool unpackFlipY,
                                           bool unpackPremultiplyAlpha,
                                           bool unpackUnmultiplyAlpha,
@@ -761,19 +762,33 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
         (sourceFormat == destFormat && sourceFormat != GL_BGRA_EXT) ||
         (sourceFormat == GL_RGBA && destFormat == GL_RGB);
 
+    GLenum sourceComponentType = sourceImageDesc.format.info->componentType;
+    GLenum destComponentType   = gl::GetInternalFormatInfo(destFormat, destType).componentType;
     if (source->getTarget() == GL_TEXTURE_2D && !unpackFlipY &&
         unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
-        sourceFormatContainSupersetOfDestFormat)
+        sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType)
     {
         return mBlitter->copyTexSubImage(sourceGL, sourceLevel, this, target, level, sourceArea,
                                          destOffset);
     }
 
-    // We can't use copyTexSubImage, do a manual copy
-    return mBlitter->copySubTexture(context, sourceGL, sourceLevel, this, target, level,
-                                    sourceImageDesc.size, sourceArea, destOffset,
-                                    needsLumaWorkaround, sourceLevelInfo.sourceFormat, unpackFlipY,
-                                    unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    // Check if the destination is renderable and copy on the GPU
+    const nativegl::InternalFormat &destFormatNativeInfo =
+        nativegl::GetInternalFormatInfo(destFormat, mFunctions->standard);
+    if (nativegl_gl::MeetsNativeSupportRequirements(mFunctions,
+                                                    destFormatNativeInfo.framebufferAttachment))
+    {
+        return mBlitter->copySubTexture(context, sourceGL, sourceLevel, sourceComponentType, this,
+                                        target, level, destComponentType, sourceImageDesc.size,
+                                        sourceArea, destOffset, needsLumaWorkaround,
+                                        sourceLevelInfo.sourceFormat, unpackFlipY,
+                                        unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    }
+
+    // Fall back to CPU-readback
+    UNIMPLEMENTED();
+
+    return gl::NoError();
 }
 
 gl::Error TextureGL::setStorage(const gl::Context *context,

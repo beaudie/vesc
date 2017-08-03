@@ -28,6 +28,11 @@ struct Version;
 struct Workarounds;
 }
 
+namespace nativegl
+{
+struct SupportRequirement;
+}
+
 namespace rx
 {
 class FunctionsGL;
@@ -43,6 +48,9 @@ std::string GetDriverVersion(const FunctionsGL *functions);
 
 namespace nativegl_gl
 {
+
+bool MeetsNativeSupportRequirements(const FunctionsGL *functions,
+                                    const nativegl::SupportRequirement &requirements);
 
 void GenerateCaps(const FunctionsGL *functions,
                   const WorkaroundsGL &workarounds,

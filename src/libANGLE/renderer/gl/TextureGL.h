@@ -134,6 +134,7 @@ class TextureGL : public TextureImpl
                                    size_t sourceLevel,
                                    const gl::Rectangle &sourceArea,
                                    GLenum destFormat,
+                                   GLenum destType,
                                    bool unpackFlipY,
                                    bool unpackPremultiplyAlpha,
                                    bool unpackUnmultiplyAlpha,
