@@ -58,7 +58,8 @@ VendorID GetVendorID(const FunctionsGL *functions)
 namespace nativegl_gl
 {
 
-static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::SupportRequirement &requirements)
+bool MeetsNativeSupportRequirements(const FunctionsGL *functions,
+                                    const nativegl::SupportRequirement &requirements)
 {
     for (const std::string &extension : requirements.requiredExtensions)
     {
@@ -97,9 +98,11 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
     gl::TextureCaps textureCaps;
 
     const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
-    textureCaps.texturable = MeetsRequirements(functions, formatInfo.texture);
-    textureCaps.filterable = textureCaps.texturable && MeetsRequirements(functions, formatInfo.filter);
-    textureCaps.renderable = MeetsRequirements(functions, formatInfo.framebufferAttachment);
+    textureCaps.texturable = MeetsNativeSupportRequirements(functions, formatInfo.texture);
+    textureCaps.filterable =
+        textureCaps.texturable && MeetsNativeSupportRequirements(functions, formatInfo.filter);
+    textureCaps.renderable =
+        MeetsNativeSupportRequirements(functions, formatInfo.framebufferAttachment);
 
     // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
     // extension GL_ARB_internalformat_query
