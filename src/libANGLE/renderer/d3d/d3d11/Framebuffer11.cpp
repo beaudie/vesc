@@ -413,6 +413,11 @@ void Framebuffer11::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
                 break;
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+                break;
             default:
             {
                 ASSERT(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0 &&
@@ -420,6 +425,9 @@ void Framebuffer11::syncState(const gl::Context *context,
                 size_t colorIndex =
                     static_cast<size_t>(dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
                 updateColorRenderTarget(context, colorIndex);
+
+                // Call this to syncViewport for framebuffer default parameters.
+                mRenderer->getStateManager()->invalidateViewport(context);
                 break;
             }
         }

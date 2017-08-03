@@ -301,6 +301,8 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
                                       GLint copyTextureLevel,
                                       GLint copyTextureLayer) const;
 
+    bool hasAttachments();
+
   private:
     void detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
     void detachMatchingAttachment(const Context *context,
