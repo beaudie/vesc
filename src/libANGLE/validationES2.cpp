@@ -17,6 +17,7 @@
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/InternalEnums.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Texture.h"
@@ -2820,10 +2821,10 @@ bool ValidateFlushMappedBufferRangeEXT(Context *context,
     return ValidateFlushMappedBufferRangeBase(context, target, offset, length);
 }
 
-bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
+bool ValidateBindTexture(Context *context, TextureTarget target, GLuint texture)
 {
     Texture *textureObject = context->getTexture(texture);
-    if (textureObject && textureObject->getTarget() != target && texture != 0)
+    if (textureObject && textureObject->getTarget() != ToGLenum(target) && texture != 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), TypeMustMatchOriginalType);
         return false;
@@ -2838,11 +2839,11 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
 
     switch (target)
     {
-        case GL_TEXTURE_2D:
-        case GL_TEXTURE_CUBE_MAP:
+        case TextureTarget::e2D:
+        case TextureTarget::CubeMap:
             break;
 
-        case GL_TEXTURE_RECTANGLE_ANGLE:
+        case TextureTarget::Rectangle:
             if (!context->getExtensions().textureRectangle)
             {
                 context->handleError(InvalidEnum()
@@ -2851,8 +2852,8 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
             }
             break;
 
-        case GL_TEXTURE_3D:
-        case GL_TEXTURE_2D_ARRAY:
+        case TextureTarget::e3D:
+        case TextureTarget::e2DArray:
             if (context->getClientMajorVersion() < 3)
             {
                 context->handleError(InvalidEnum() << "GLES 3.0 disabled");
@@ -2860,7 +2861,7 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
             }
             break;
 
-        case GL_TEXTURE_2D_MULTISAMPLE:
+        case TextureTarget::e2DMultisample:
             if (context->getClientVersion() < Version(3, 1))
             {
                 context->handleError(InvalidEnum() << "Context does not support GLES3.1");
@@ -2868,7 +2869,7 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
             }
             break;
 
-        case GL_TEXTURE_EXTERNAL_OES:
+        case TextureTarget::External:
             if (!context->getExtensions().eglImageExternal &&
                 !context->getExtensions().eglStreamConsumerExternal)
             {
@@ -2876,9 +2877,6 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
                 return false;
             }
             break;
-        default:
-            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidTextureTarget);
-            return false;
     }
 
     return true;

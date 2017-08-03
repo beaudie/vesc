@@ -301,25 +301,25 @@ Context::Context(rx::EGLImplFactory *implFactory,
     // objects all of whose names are 0.
 
     Texture *zeroTexture2D = new Texture(mImplementation.get(), 0, GL_TEXTURE_2D);
-    mZeroTextures[GL_TEXTURE_2D].set(this, zeroTexture2D);
+    mZeroTextures[TextureTarget::e2D].set(this, zeroTexture2D);
 
     Texture *zeroTextureCube = new Texture(mImplementation.get(), 0, GL_TEXTURE_CUBE_MAP);
-    mZeroTextures[GL_TEXTURE_CUBE_MAP].set(this, zeroTextureCube);
+    mZeroTextures[TextureTarget::CubeMap].set(this, zeroTextureCube);
 
     if (getClientVersion() >= Version(3, 0))
     {
         // TODO: These could also be enabled via extension
         Texture *zeroTexture3D = new Texture(mImplementation.get(), 0, GL_TEXTURE_3D);
-        mZeroTextures[GL_TEXTURE_3D].set(this, zeroTexture3D);
+        mZeroTextures[TextureTarget::e3D].set(this, zeroTexture3D);
 
         Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_ARRAY);
-        mZeroTextures[GL_TEXTURE_2D_ARRAY].set(this, zeroTexture2DArray);
+        mZeroTextures[TextureTarget::e2DArray].set(this, zeroTexture2DArray);
     }
     if (getClientVersion() >= Version(3, 1))
     {
         Texture *zeroTexture2DMultisample =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_MULTISAMPLE);
-        mZeroTextures[GL_TEXTURE_2D_MULTISAMPLE].set(this, zeroTexture2DMultisample);
+        mZeroTextures[TextureTarget::e2DMultisample].set(this, zeroTexture2DMultisample);
 
         bindGenericAtomicCounterBuffer(0);
         for (unsigned int i = 0; i < mCaps.maxAtomicCounterBufferBindings; i++)
@@ -338,14 +338,14 @@ Context::Context(rx::EGLImplFactory *implFactory,
     {
         Texture *zeroTextureRectangle =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_RECTANGLE_ANGLE);
-        mZeroTextures[GL_TEXTURE_RECTANGLE_ANGLE].set(this, zeroTextureRectangle);
+        mZeroTextures[TextureTarget::Rectangle].set(this, zeroTextureRectangle);
     }
 
     if (mExtensions.eglImageExternal || mExtensions.eglStreamConsumerExternal)
     {
         Texture *zeroTextureExternal =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_EXTERNAL_OES);
-        mZeroTextures[GL_TEXTURE_EXTERNAL_OES].set(this, zeroTextureExternal);
+        mZeroTextures[TextureTarget::External].set(this, zeroTextureExternal);
     }
 
     mGLState.initializeZeroTextures(this, mZeroTextures);
@@ -456,10 +456,12 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     for (auto &zeroTexture : mZeroTextures)
     {
-        zeroTexture.second->onDestroy(this);
-        zeroTexture.second.set(this, nullptr);
+        if (zeroTexture.get())
+        {
+            zeroTexture->onDestroy(this);
+            zeroTexture.set(this, nullptr);
+        }
     }
-    mZeroTextures.clear();
 
     SafeDelete(mSurfacelessFramebuffer);
 
@@ -1019,7 +1021,7 @@ void Context::bindElementArrayBuffer(GLuint bufferHandle)
     mGLState.setElementArrayBuffer(this, buffer);
 }
 
-void Context::bindTexture(GLenum target, GLuint handle)
+void Context::bindTexture(TextureTarget target, GLuint handle)
 {
     Texture *texture = nullptr;
 
@@ -1029,7 +1031,7 @@ void Context::bindTexture(GLenum target, GLuint handle)
     }
     else
     {
-        texture = mState.mTextures->checkTextureAllocation(mImplementation.get(), handle, target);
+        texture = mState.mTextures->checkTextureAllocation(mImplementation.get(), handle, ToGLenum(target));
     }
 
     ASSERT(texture);
@@ -1305,12 +1307,16 @@ Query *Context::getQuery(GLuint handle) const
 Texture *Context::getTargetTexture(GLenum target) const
 {
     ASSERT(ValidTextureTarget(this, target) || ValidTextureExternalTarget(this, target));
-    return mGLState.getTargetTexture(target);
+    TextureTarget textureTarget;
+    FromGLenum(target, &textureTarget);
+    return mGLState.getTargetTexture(textureTarget);
 }
 
 Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
 {
-    return mGLState.getSamplerTexture(sampler, type);
+    TextureTarget textureTarget;
+    FromGLenum(type, &textureTarget);
+    return mGLState.getSamplerTexture(sampler, textureTarget);
 }
 
 Compiler *Context::getCompiler() const
@@ -2614,7 +2620,9 @@ void Context::requestExtension(const char *name)
     mState.mTextures->invalidateTextureComplenessCache();
     for (auto &zeroTexture : mZeroTextures)
     {
-        zeroTexture.second->invalidateCompletenessCache();
+        if (zeroTexture.get() != nullptr) {
+            zeroTexture->invalidateCompletenessCache();
+        }
     }
 
     mState.mFramebuffers->invalidateFramebufferComplenessCache();

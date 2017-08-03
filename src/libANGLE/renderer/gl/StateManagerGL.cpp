@@ -872,9 +872,11 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
     for (const gl::SamplerBinding &samplerUniform : program->getSamplerBindings())
     {
         GLenum textureType = samplerUniform.textureType;
+        gl::TextureTarget textureType2;
+        gl::FromGLenum(textureType, &textureType2);
         for (GLuint textureUnitIndex : samplerUniform.boundTextureUnits)
         {
-            gl::Texture *texture       = glState.getSamplerTexture(textureUnitIndex, textureType);
+            gl::Texture *texture       = glState.getSamplerTexture(textureUnitIndex, textureType2);
             const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
 
             const gl::SamplerState &samplerState =

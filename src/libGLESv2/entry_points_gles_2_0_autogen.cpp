@@ -123,9 +123,13 @@ void GL_APIENTRY BindTexture(GLenum target, GLuint texture)
     {
         context->gatherParams<EntryPoint::BindTexture>(target, texture);
 
-        if (context->skipValidation() || ValidateBindTexture(context, target, texture))
+        TextureTarget internalTarget;
+        if (!FromGLenum(target, &internalTarget)) {
+            context->handleError(InvalidEnum());
+        }
+        if (context->skipValidation() || ValidateBindTexture(context, internalTarget, texture))
         {
-            context->bindTexture(target, texture);
+            context->bindTexture(internalTarget, texture);
         }
     }
 }

@@ -2711,8 +2711,10 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
             return false;
     }
 
+    TextureTarget textureType;
+    FromGLenum(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target, &textureType);
     gl::Texture *texture =
-        state.getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
+        state.getTargetTexture(textureType);
     if (!texture)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), TextureNotBound);

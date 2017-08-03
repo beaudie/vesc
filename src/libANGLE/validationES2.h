@@ -11,6 +11,7 @@
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include "libANGLE/InternalEnums.h"
 
 namespace gl
 {
@@ -198,7 +199,7 @@ bool ValidateCompressedTexSubImage2DRobustANGLE(Context *context,
                                                 GLsizei dataSize,
                                                 const void *data);
 
-bool ValidateBindTexture(Context *context, GLenum target, GLuint texture);
+bool ValidateBindTexture(Context *context, TextureTarget target, GLuint texture);
 
 bool ValidateGetBufferPointervOES(Context *context, GLenum target, GLenum pname, void **params);
 bool ValidateMapBufferOES(Context *context, GLenum target, GLenum access);

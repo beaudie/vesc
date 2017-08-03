@@ -21,6 +21,7 @@
 #include "libANGLE/ContextState.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/HandleAllocator.h"
+#include "libANGLE/InternalEnums.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/ResourceMap.h"
 #include "libANGLE/VertexAttribute.h"
@@ -130,7 +131,7 @@ class Context final : public ValidationContext
 
     void bindArrayBuffer(GLuint bufferHandle);
     void bindElementArrayBuffer(GLuint bufferHandle);
-    void bindTexture(GLenum target, GLuint handle);
+    void bindTexture(TextureTarget target, GLuint handle);
     void bindReadFramebuffer(GLuint framebufferHandle);
     void bindDrawFramebuffer(GLuint framebufferHandle);
     void bindVertexArray(GLuint vertexArrayHandle);

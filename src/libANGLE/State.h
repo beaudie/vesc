@@ -16,6 +16,7 @@
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/InternalEnums.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
@@ -33,7 +34,7 @@ class VertexArray;
 class Context;
 struct Caps;
 
-typedef std::map<GLenum, BindingPointer<Texture>> TextureMap;
+typedef EnumArray<BindingPointer<Texture>, TextureTarget, kCountTextureTarget> TextureMap;
 
 class State : angle::NonCopyable
 {
@@ -168,10 +169,10 @@ class State : angle::NonCopyable
     // Texture binding & active texture unit manipulation
     void setActiveSampler(unsigned int active);
     unsigned int getActiveSampler() const;
-    void setSamplerTexture(const Context *context, GLenum type, Texture *texture);
-    Texture *getTargetTexture(GLenum target) const;
-    Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
-    GLuint getSamplerTextureId(unsigned int sampler, GLenum type) const;
+    void setSamplerTexture(const Context *context, TextureTarget type, Texture *texture);
+    Texture *getTargetTexture(TextureTarget target) const;
+    Texture *getSamplerTexture(unsigned int sampler, TextureTarget type) const;
+    GLuint getSamplerTextureId(unsigned int sampler, TextureTarget type) const;
     void detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture);
     void initializeZeroTextures(const Context *context, const TextureMap &zeroTextures);
 
@@ -521,7 +522,7 @@ class State : angle::NonCopyable
     size_t mActiveSampler;  // Active texture unit selector - GL_TEXTURE0
 
     typedef std::vector<BindingPointer<Texture>> TextureBindingVector;
-    typedef std::map<GLenum, TextureBindingVector> TextureBindingMap;
+    typedef EnumArray<TextureBindingVector, TextureTarget, kCountTextureTarget> TextureBindingMap;
     TextureBindingMap mSamplerTextures;
 
     typedef std::vector<BindingPointer<Sampler>> SamplerBindingVector;

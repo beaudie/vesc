@@ -11,6 +11,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
+#include "libANGLE/InternalEnums.h"
 #include "libANGLE/State.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/params.h"
