@@ -43,7 +43,6 @@ std::string GetDriverVersion(const FunctionsGL *functions);
 
 namespace nativegl_gl
 {
-
 void GenerateCaps(const FunctionsGL *functions,
                   const WorkaroundsGL &workarounds,
                   gl::Caps *caps,
@@ -60,6 +59,7 @@ namespace nativegl
 {
 bool SupportsFenceSync(const FunctionsGL *functions);
 bool SupportsOcclusionQueries(const FunctionsGL *functions);
+bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum internalFormat);
 }
 
 bool CanMapBufferForRead(const FunctionsGL *functions);
