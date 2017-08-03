@@ -1647,4 +1647,22 @@ GLenum Framebuffer::getMultiviewLayout() const
     return attachment->getMultiviewLayout();
 }
 
+bool Framebuffer::hasAttachments()
+{
+    for (auto &colorAttachment : mState.getColorAttachments())
+    {
+        if (colorAttachment.isAttached())
+        {
+            return true;
+        }
+    }
+
+    if (mState.getDepthOrStencilAttachment())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 }  // namespace gl
