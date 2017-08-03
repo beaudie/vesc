@@ -58,7 +58,8 @@ VendorID GetVendorID(const FunctionsGL *functions)
 namespace nativegl_gl
 {
 
-static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::SupportRequirement &requirements)
+static bool MeetsRequirements(const FunctionsGL *functions,
+                              const nativegl::SupportRequirement &requirements)
 {
     for (const std::string &extension : requirements.requiredExtensions)
     {
@@ -1119,6 +1120,26 @@ bool SupportsOcclusionQueries(const FunctionsGL *functions)
            functions->hasGLExtension("GL_ARB_occlusion_query2") ||
            functions->isAtLeastGLES(gl::Version(3, 0)) ||
            functions->hasGLESExtension("GL_EXT_occlusion_query_boolean");
+}
+
+bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum internalFormat)
+{
+    // Some desktop drivers allow rendering to formats that are not required by the spec, this is
+    // exposed through the GL_FRAMEBUFFER_RENDERABLE query.
+    if (functions->isAtLeastGL(gl::Version(4, 3)) ||
+        functions->hasGLExtension("GL_ARB_internalformat_query2"))
+    {
+        GLint framebufferRenderable = GL_FALSE;
+        functions->getInternalformativ(target, internalFormat, GL_FRAMEBUFFER_RENDERABLE, 1,
+                                       &framebufferRenderable);
+        return framebufferRenderable != GL_FALSE;
+    }
+    else
+    {
+        const nativegl::InternalFormat &nativeInfo =
+            nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
+        return nativegl_gl::MeetsRequirements(functions, nativeInfo.framebufferAttachment);
+    }
 }
 }
 
