@@ -97,6 +97,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
     OnRenderTargetDirtyBinding mDepthStencilRenderTargetDirty;
 
     gl::Framebuffer::DirtyBits mInternalDirtyBits;
+
+    size_t mActiveRenderTargetCount;
 };
 
 }

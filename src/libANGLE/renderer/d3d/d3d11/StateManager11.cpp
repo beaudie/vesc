@@ -279,6 +279,8 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurViewport(),
       mCurNear(0.0f),
       mCurFar(0.0f),
+      mFramebufferDefaultWidth(0),
+      mFramebufferDefaultHeight(0),
       mViewportBounds(),
       mCurPresentPathFastEnabled(false),
       mCurPresentPathFastColorBufferHeight(0),
@@ -402,6 +404,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
     }
 
     const auto &state = context->getGLState();
+    gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
 
     for (auto dirtyBit : dirtyBits)
     {
@@ -614,7 +617,9 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 }
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                if (state.getViewport() != mCurViewport)
+                if (state.getViewport() != mCurViewport ||
+                    mFramebufferDefaultWidth != framebuffer->getDefaultWidth() ||
+                    mFramebufferDefaultHeight != framebuffer->getDefaultHeight())
                 {
                     mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
                 }
@@ -801,16 +806,16 @@ void StateManager11::syncScissorRectangle(const gl::Rectangle &scissor, bool ena
     mCurScissorEnabled   = enabled;
 }
 
-void StateManager11::syncViewport(const gl::Caps *caps,
-                                  const gl::Rectangle &viewport,
-                                  float zNear,
-                                  float zFar)
+void StateManager11::syncViewport(const gl::Context *context)
 {
-    float actualZNear = gl::clamp01(zNear);
-    float actualZFar  = gl::clamp01(zFar);
+    const auto &glState          = context->getGLState();
+    gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
+    float actualZNear            = gl::clamp01(glState.getNearPlane());
+    float actualZFar             = gl::clamp01(glState.getFarPlane());
 
-    int dxMaxViewportBoundsX = static_cast<int>(caps->maxViewportWidth);
-    int dxMaxViewportBoundsY = static_cast<int>(caps->maxViewportHeight);
+    const auto &caps         = context->getCaps();
+    int dxMaxViewportBoundsX = static_cast<int>(caps.maxViewportWidth);
+    int dxMaxViewportBoundsY = static_cast<int>(caps.maxViewportHeight);
     int dxMinViewportBoundsX = -dxMaxViewportBoundsX;
     int dxMinViewportBoundsY = -dxMaxViewportBoundsY;
 
@@ -823,6 +828,7 @@ void StateManager11::syncViewport(const gl::Caps *caps,
         dxMinViewportBoundsY = 0;
     }
 
+    const auto &viewport   = glState.getViewport();
     int dxViewportTopLeftX = gl::clamp(viewport.x, dxMinViewportBoundsX, dxMaxViewportBoundsX);
     int dxViewportTopLeftY = gl::clamp(viewport.y, dxMinViewportBoundsY, dxMaxViewportBoundsY);
     int dxViewportWidth    = gl::clamp(viewport.width, 0, dxMaxViewportBoundsX - dxViewportTopLeftX);
@@ -851,11 +857,32 @@ void StateManager11::syncViewport(const gl::Caps *caps,
     dxViewport.MinDepth = actualZNear;
     dxViewport.MaxDepth = actualZFar;
 
+    // The es 3.1 spec section 9.2 states that, "If there are no attachments, rendering
+    // will be limited to a rectangle having a lower left of (0, 0) and an upper right of
+    // (width, height), where width and height are the framebuffer object's default width
+    // and height." See http://anglebug.com/1594
+    // If the Framebuffer has no color attachment and the default width or height is smaller
+    // than the current viewport, use the smaller of the two sizes.
+    // If framebuffer default width or height is 0, the params should not set.
+    if (!framebuffer->getActiveColorAttachmentCount() &&
+        !framebuffer->getDepthOrStencilAttachmentCount() &&
+        (framebuffer->getDefaultWidth() != 0 || framebuffer->getDefaultHeight() != 0))
+    {
+        dxViewport.Width = static_cast<GLfloat>(viewport.width < framebuffer->getDefaultWidth()
+                                                    ? viewport.width
+                                                    : framebuffer->getDefaultWidth());
+        dxViewport.Height = static_cast<GLfloat>(viewport.height < framebuffer->getDefaultHeight()
+                                                     ? viewport.height
+                                                     : framebuffer->getDefaultHeight());
+    }
+
     mRenderer->getDeviceContext()->RSSetViewports(1, &dxViewport);
 
     mCurViewport = viewport;
     mCurNear     = actualZNear;
     mCurFar      = actualZFar;
+    mFramebufferDefaultWidth  = framebuffer->getDefaultWidth();
+    mFramebufferDefaultHeight = framebuffer->getDefaultHeight();
 
     // On Feature Level 9_*, we must emulate large and/or negative viewports in the shaders
     // using viewAdjust (like the D3D9 renderer).
@@ -1213,7 +1240,7 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
     const auto &drawStates = framebuffer->getDrawBufferStates();
     gl::DrawBufferMask activeProgramOutputs =
         context->getContextState().getState().getProgram()->getActiveOutputVariables();
-    UINT maxExistingRT     = 0;
+    UINT maxExistingRT = 0;
 
     for (size_t rtIndex = 0; rtIndex < colorRTs.size(); ++rtIndex)
     {
@@ -1243,7 +1270,7 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
 
     // Get the depth stencil buffers
     ID3D11DepthStencilView *framebufferDSV = nullptr;
-    const auto *depthStencilRenderTarget = framebuffer11->getCachedDepthStencilRenderTarget();
+    const auto *depthStencilRenderTarget   = framebuffer11->getCachedDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
         framebufferDSV = depthStencilRenderTarget->getDepthStencilView().get();
@@ -1420,8 +1447,7 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
                 ANGLE_TRY(syncFramebuffer(context, framebuffer));
                 break;
             case DIRTY_BIT_VIEWPORT_STATE:
-                syncViewport(&context->getCaps(), glState.getViewport(), glState.getNearPlane(),
-                             glState.getFarPlane());
+                syncViewport(context);
                 break;
             case DIRTY_BIT_SCISSOR_STATE:
                 syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
