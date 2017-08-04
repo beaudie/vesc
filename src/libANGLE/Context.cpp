@@ -442,7 +442,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (transformFeedback.second != nullptr)
         {
-            transformFeedback.second->release(this);
+            transformFeedback.second->onDestroy(this);
         }
     }
     mTransformFeedbackMap.clear();
@@ -835,7 +835,7 @@ void Context::deleteTransformFeedback(GLuint transformFeedback)
         if (transformFeedbackObject != nullptr)
         {
             detachTransformFeedback(transformFeedback);
-            transformFeedbackObject->release(this);
+            transformFeedbackObject->onDestroy(this);
         }
 
         mTransformFeedbackAllocator.release(transformFeedback);
@@ -2316,7 +2316,6 @@ TransformFeedback *Context::checkTransformFeedbackAllocation(GLuint transformFee
     {
         transformFeedback =
             new TransformFeedback(mImplementation.get(), transformFeedbackHandle, mCaps);
-        transformFeedback->addRef();
         mTransformFeedbackMap.assign(transformFeedbackHandle, transformFeedback);
     }
 
