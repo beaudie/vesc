@@ -458,7 +458,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (transformFeedback.second != nullptr)
         {
-            transformFeedback.second->release(this);
+            transformFeedback.second->onDestroy(this);
         }
     }
     mTransformFeedbackMap.clear();
@@ -2292,7 +2292,6 @@ TransformFeedback *Context::checkTransformFeedbackAllocation(GLuint transformFee
     {
         transformFeedback =
             new TransformFeedback(mImplementation.get(), transformFeedbackHandle, mCaps);
-        transformFeedback->addRef();
         mTransformFeedbackMap.assign(transformFeedbackHandle, transformFeedback);
     }
 

@@ -51,12 +51,14 @@ class TransformFeedbackState final : angle::NonCopyable
     std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
 };
 
-class TransformFeedback final : public RefCountObject, public LabeledObject
+class TransformFeedback final : public LabeledObject
 {
   public:
     TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, const Caps &caps);
     virtual ~TransformFeedback();
     Error onDestroy(const Context *context) override;
+
+    GLuint id() const;
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
@@ -90,6 +92,8 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
   private:
     void bindProgram(const Context *context, Program *program);
+
+    GLuint mId;
 
     TransformFeedbackState mState;
     rx::TransformFeedbackImpl* mImplementation;

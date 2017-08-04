@@ -43,7 +43,7 @@ const std::vector<OffsetBindingPointer<Buffer>> &TransformFeedbackState::getInde
 }
 
 TransformFeedback::TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, const Caps &caps)
-    : RefCountObject(id),
+    : mId(id),
       mState(caps.maxTransformFeedbackSeparateAttributes),
       mImplementation(implFactory->createTransformFeedback(mState))
 {
@@ -71,6 +71,11 @@ Error TransformFeedback::onDestroy(const Context *context)
 TransformFeedback::~TransformFeedback()
 {
     SafeDelete(mImplementation);
+}
+
+GLuint TransformFeedback::id() const
+{
+    return mId;
 }
 
 void TransformFeedback::setLabel(const std::string &label)

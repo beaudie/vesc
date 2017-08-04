@@ -41,7 +41,6 @@ class TransformFeedbackTest : public testing::Test
         mCaps.maxTransformFeedbackSeparateAttributes = 8;
 
         mFeedback = new gl::TransformFeedback(&mMockFactory, 1, mCaps);
-        mFeedback->addRef();
 
         mImpl = rx::GetImplAs<rx::MockTransformFeedbackImpl>(mFeedback);
         EXPECT_CALL(*mImpl, destructor());
@@ -51,7 +50,7 @@ class TransformFeedbackTest : public testing::Test
     {
         if (mFeedback)
         {
-            mFeedback->release(nullptr);
+            mFeedback->onDestroy(nullptr);
         }
 
         // Only needed because the mock is leaked if bugs are present,
@@ -133,12 +132,7 @@ TEST_F(TransformFeedbackTest, BufferBinding)
         }
     }
 
-    // force-release the feedback object to ensure the buffer is released.
-    const size_t releaseCount = mFeedback->getRefCount();
-    for (size_t count = 0; count < releaseCount; ++count)
-    {
-        mFeedback->release(nullptr);
-    }
+    mFeedback->onDestroy(nullptr);
 
     mFeedback = nullptr;
 
