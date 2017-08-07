@@ -364,10 +364,13 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
         framebufferSize = colorAttachment->getSize();
     }
 
-    bool needScissoredClear = false;
-
-    if (clearParams.scissorEnabled)
+    // We always need to enable the scissor test if the fbo has a multiview layout.
+    const bool isSideBySideFBO =
+        (fboData.getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE);
+    bool needScissoredClear = isSideBySideFBO;
+    if (clearParams.scissorEnabled && !isSideBySideFBO)
     {
+        // Do the checks only if the current fbo doesn't have a multiview layout.
         if (clearParams.scissor.x >= framebufferSize.width ||
             clearParams.scissor.y >= framebufferSize.height ||
             clearParams.scissor.x + clearParams.scissor.width <= 0 ||
@@ -382,6 +385,24 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
             clearParams.scissor.x > 0 || clearParams.scissor.y > 0 ||
             clearParams.scissor.x + clearParams.scissor.width < framebufferSize.width ||
             clearParams.scissor.y + clearParams.scissor.height < framebufferSize.height;
+    }
+
+    // Apply viewport offsets to compute the final scissor rectangles. This is valid also for
+    // non-side-by-side framebuffers, because the default viewport offset is {0,0}.
+    const std::vector<gl::Offset> *viewportOffsets = fboData.getViewportOffsets();
+    ASSERT(viewportOffsets != nullptr);
+    const size_t numViews = fboData.getNumViews();
+    std::vector<D3D11_RECT> scissorRects;
+    scissorRects.reserve(numViews);
+    for (size_t i = 0u; i < numViews; ++i)
+    {
+        const gl::Offset &offset = (*viewportOffsets)[i];
+        D3D11_RECT rect;
+        rect.left   = clearParams.scissor.x + offset.x;
+        rect.right  = rect.left + clearParams.scissor.width;
+        rect.top    = clearParams.scissor.y + offset.y;
+        rect.bottom = rect.top + clearParams.scissor.height;
+        scissorRects.emplace_back(rect);
     }
 
     ID3D11DeviceContext *deviceContext   = mRenderer->getDeviceContext();
@@ -480,18 +501,15 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
                 // We shouldn't reach here if deviceContext1 is unavailable.
                 ASSERT(deviceContext1);
 
-                D3D11_RECT rect;
-                rect.left   = clearParams.scissor.x;
-                rect.right  = clearParams.scissor.x + clearParams.scissor.width;
-                rect.top    = clearParams.scissor.y;
-                rect.bottom = clearParams.scissor.y + clearParams.scissor.height;
-
-                deviceContext1->ClearView(framebufferRTV.get(), clearValues, &rect, 1);
+                deviceContext1->ClearView(framebufferRTV.get(), clearValues, scissorRects.data(),
+                                          static_cast<UINT>(scissorRects.size()));
                 if (mRenderer->getWorkarounds().callClearTwiceOnSmallTarget)
                 {
                     if (clearParams.scissor.width <= 16 || clearParams.scissor.height <= 16)
                     {
-                        deviceContext1->ClearView(framebufferRTV.get(), clearValues, &rect, 1);
+                        deviceContext1->ClearView(framebufferRTV.get(), clearValues,
+                                                  scissorRects.data(),
+                                                  static_cast<UINT>(scissorRects.size()));
                     }
                 }
             }
@@ -649,33 +667,11 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
         deviceContext->Unmap(mConstantBuffer.get(), 0);
     }
 
-    // Set the viewport to be the same size as the framebuffer
-    D3D11_VIEWPORT viewport;
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-    viewport.Width    = static_cast<FLOAT>(framebufferSize.width);
-    viewport.Height   = static_cast<FLOAT>(framebufferSize.height);
-    viewport.MinDepth = 0;
-    viewport.MaxDepth = 1;
-    deviceContext->RSSetViewports(1, &viewport);
-
     // Apply state
     deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
 
     const UINT stencilValue = clearParams.stencilValue & 0xFF;
     deviceContext->OMSetDepthStencilState(dsState, stencilValue);
-
-    if (needScissoredClear)
-    {
-        const D3D11_RECT scissorRect = {clearParams.scissor.x, clearParams.scissor.y,
-                                        clearParams.scissor.x1(), clearParams.scissor.y1()};
-        deviceContext->RSSetScissorRects(1, &scissorRect);
-        deviceContext->RSSetState(mScissorEnabledRasterizerState.get());
-    }
-    else
-    {
-        deviceContext->RSSetState(mScissorDisabledRasterizerState.get());
-    }
 
     auto *stateManager = mRenderer->getStateManager();
 
@@ -710,8 +706,46 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     // Apply render targets
     stateManager->setOneTimeRenderTargets(context, &rtvs[0], numRtvs, dsv);
 
-    // Draw the fullscreen quad
-    deviceContext->Draw(6, 0);
+    // Enable/Disable the scissor test.
+    if (needScissoredClear)
+    {
+        deviceContext->RSSetState(mScissorEnabledRasterizerState.get());
+    }
+    else
+    {
+        deviceContext->RSSetState(mScissorDisabledRasterizerState.get());
+    }
+
+    // Set the viewport to be the same size as the framebuffer.
+    D3D11_VIEWPORT viewport;
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    viewport.Width    = static_cast<FLOAT>(framebufferSize.width);
+    viewport.Height   = static_cast<FLOAT>(framebufferSize.height);
+    viewport.MinDepth = 0;
+    viewport.MaxDepth = 1;
+
+    // TODO(mradev): use a geometry shader for the multi-view code path to decrease the number of
+    // state changes and draw calls. Go over each view, update viewport/scissor and draw a quad.
+    for (size_t i = 0u; i < numViews; ++i)
+    {
+        if (needScissoredClear)
+        {
+            deviceContext->RSSetScissorRects(1, &scissorRects[i]);
+
+            // Resize the viewport to match the scissor rectangle so that no redundant fragments are
+            // generated.
+            viewport.TopLeftY = static_cast<FLOAT>(scissorRects[i].top);
+            viewport.TopLeftX = static_cast<FLOAT>(scissorRects[i].left);
+            viewport.Width    = static_cast<FLOAT>(clearParams.scissor.width);
+            viewport.Height   = static_cast<FLOAT>(clearParams.scissor.height);
+        }
+
+        deviceContext->RSSetViewports(1, &viewport);
+
+        // Draw the fullscreen quad.
+        deviceContext->Draw(6, 0);
+    }
 
     // Clean up
     mRenderer->markAllStateDirty(context);
