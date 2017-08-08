@@ -100,7 +100,8 @@ class StateManager11 final : angle::NonCopyable
                                     GLuint numGroupsX,
                                     GLuint numGroupsY,
                                     GLuint numGroupsZ);
-
+    void pixelUniformsDirty();
+    void vertexUniformsDirty();
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
     void setShaderResource(gl::SamplerType shaderType,
@@ -154,7 +155,7 @@ class StateManager11 final : angle::NonCopyable
     void setGeometryShader(const d3d11::GeometryShader *shader);
     void setPixelShader(const d3d11::PixelShader *shader);
     void setComputeShader(const d3d11::ComputeShader *shader);
-
+    void setSamplerDirty();
   private:
     void unsetConflictingSRVs(gl::SamplerType shaderType,
                               uintptr_t resource,
@@ -200,6 +201,7 @@ class StateManager11 final : angle::NonCopyable
     // Faster than calling setTexture a jillion times
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd);
 
+   
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,
@@ -314,6 +316,9 @@ class StateManager11 final : angle::NonCopyable
 
     // Currently applied primitive topology
     D3D11_PRIMITIVE_TOPOLOGY mCurrentPrimitiveTopology;
+    bool mDirtySampler;
+    bool mVertexUniformsDirty;
+    bool mPixelUniformsDirty;
 
     // Currently applied shaders
     ResourceSerial mAppliedVertexShader;
