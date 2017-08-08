@@ -332,6 +332,8 @@ class RendererD3D : public BufferFactoryD3D
 
     Serial generateSerial();
 
+    virtual void invalidateTextureSamplerState();
+
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual void generateCaps(gl::Caps *outCaps,

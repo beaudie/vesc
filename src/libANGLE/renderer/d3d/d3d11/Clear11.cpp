@@ -399,6 +399,8 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
 
     gl::Extents framebufferSize;
 
+    mRenderer->invalidateTextureSamplerState();
+
     const auto *depthStencilAttachment = fboData.getDepthOrStencilAttachment();
     if (depthStencilAttachment != nullptr)
     {
@@ -489,7 +491,7 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     const uint8_t colorMask =
         gl_d3d11::ConvertColorMask(clearParams.colorMaskRed, clearParams.colorMaskGreen,
                                    clearParams.colorMaskBlue, clearParams.colorMaskAlpha);
-
+ 
     const auto &colorAttachments = fboData.getColorAttachments();
     for (auto colorAttachmentIndex : fboData.getEnabledDrawBuffers())
     {

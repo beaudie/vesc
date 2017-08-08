@@ -394,6 +394,7 @@ void Framebuffer11::updateDepthStencilRenderTarget(const gl::Context *context)
 {
     UpdateCachedRenderTarget(context, mState.getDepthOrStencilAttachment(),
                              mCachedDepthStencilRenderTarget, &mDepthStencilRenderTargetDirty);
+
 }
 
 void Framebuffer11::syncState(const gl::Context *context,

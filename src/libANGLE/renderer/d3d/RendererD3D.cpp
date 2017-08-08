@@ -106,6 +106,11 @@ gl::Error RendererD3D::markTransformFeedbackUsage(const gl::ContextState &data)
     return gl::NoError();
 }
 
+void RendererD3D::invalidateTextureSamplerState()
+{
+    return;
+}
+
 size_t RendererD3D::getBoundFramebufferTextures(const gl::ContextState &data,
                                                 FramebufferTextureArray *outTextureArray)
 {
