@@ -329,7 +329,7 @@ class RendererD3D : public BufferFactoryD3D
     gl::Texture *getIncompleteTexture(const gl::Context *context, GLenum type);
 
     Serial generateSerial();
-
+    virtual void setSamplerStateDirty();
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual void generateCaps(gl::Caps *outCaps,
