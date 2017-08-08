@@ -22,6 +22,7 @@
 #include "libANGLE/Query.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/TextureImpl.h"
 
 namespace
 {
@@ -764,6 +765,7 @@ unsigned int State::getActiveSampler() const
 void State::setSamplerTexture(const Context *context, GLenum type, Texture *texture)
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
+    texture->getImplementation()->bindTexture();
 }
 
 Texture *State::getTargetTexture(GLenum target) const
