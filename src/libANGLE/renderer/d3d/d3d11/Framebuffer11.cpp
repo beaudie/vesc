@@ -115,6 +115,8 @@ gl::Error Framebuffer11::clearImpl(const gl::Context *context, const ClearParame
 {
     Clear11 *clearer = mRenderer->getClearer();
 
+    mRenderer->setSamplerStateDirty();
+
     const gl::FramebufferAttachment *colorAttachment = mState.getFirstColorAttachment();
     if (clearParams.scissorEnabled == true && colorAttachment != nullptr &&
         UsePresentPathFast(mRenderer, colorAttachment))
@@ -394,6 +396,7 @@ void Framebuffer11::updateDepthStencilRenderTarget(const gl::Context *context)
 {
     UpdateCachedRenderTarget(context, mState.getDepthOrStencilAttachment(),
                              mCachedDepthStencilRenderTarget, &mDepthStencilRenderTargetDirty);
+
 }
 
 void Framebuffer11::syncState(const gl::Context *context,

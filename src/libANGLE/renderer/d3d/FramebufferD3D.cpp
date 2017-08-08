@@ -109,7 +109,7 @@ gl::Error FramebufferD3D::clearBufferfv(const gl::Context *context,
 {
     // glClearBufferfv can be called to clear the color buffer or depth buffer
     ClearParameters clearParams = GetClearParameters(context->getGLState(), 0);
-
+    mRenderer->setSamplerStateDirty();
     if (buffer == GL_COLOR)
     {
         for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
