@@ -200,6 +200,7 @@ class StateManager11 final : angle::NonCopyable
     // Faster than calling setTexture a jillion times
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd);
 
+    bool mDirtySampler;
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,
