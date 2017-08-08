@@ -77,6 +77,7 @@ TextureD3D::TextureD3D(const gl::TextureState &state, RendererD3D *renderer)
       mDirtyImages(true),
       mImmutable(false),
       mTexStorage(nullptr),
+      mTextureSamplerStateDirty(true),
       mBaseLevel(0)
 {
 }
@@ -246,6 +247,7 @@ gl::Error TextureD3D::setImageImpl(const gl::Context *context,
         }
 
         mDirtyImages = true;
+        setTextureSamplerStateDirty();
     }
 
     return gl::NoError();
@@ -268,6 +270,7 @@ gl::Error TextureD3D::subImage(const gl::Context *context,
     {
         ImageD3D *image = getImage(index);
         ASSERT(image);
+        setTextureSamplerStateDirty();
 
         if (shouldUseSetData(image))
         {
@@ -307,6 +310,7 @@ gl::Error TextureD3D::setCompressedImageImpl(const gl::Context *context,
         ANGLE_TRY(image->loadCompressedData(context, fullImageArea, pixelData));
 
         mDirtyImages = true;
+        setTextureSamplerStateDirty();
     }
 
     return gl::NoError();
@@ -331,6 +335,7 @@ gl::Error TextureD3D::subImageCompressed(const gl::Context *context,
         ANGLE_TRY(image->loadCompressedData(context, area, pixelData));
 
         mDirtyImages = true;
+        setTextureSamplerStateDirty();
     }
 
     return gl::NoError();
@@ -373,6 +378,7 @@ gl::Error TextureD3D::fastUnpackPixels(const gl::Context *context,
                                                  destRenderTarget, sizedInternalFormat, type,
                                                  destArea));
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -446,6 +452,7 @@ gl::Error TextureD3D::generateMipmap(const gl::Context *context)
         ANGLE_TRY(generateMipmapUsingImages(context, maxLevel));
     }
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -625,12 +632,24 @@ gl::Error TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLevel)
         ANGLE_TRY(releaseTexStorage(context));
     }
 
+    setTextureSamplerStateDirty();
+
     return gl::NoError();
 }
 
 void TextureD3D::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
-    // TODO(geofflang): Use dirty bits
+    mTextureSamplerStateDirty = false;
+}
+
+bool TextureD3D::isSamplerStateDirty() const
+{
+    return mTextureSamplerStateDirty;
+}
+
+void TextureD3D::setTextureSamplerStateDirty()
+{
+    mTextureSamplerStateDirty = true;
 }
 
 gl::Error TextureD3D::clearLevel(const gl::Context *context,
@@ -928,6 +947,8 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
         }
     }
 
+    setTextureSamplerStateDirty();
+
     return gl::NoError();
 }
 
@@ -1217,6 +1238,8 @@ gl::Error TextureD3D_2D::initMipmapImages(const gl::Context *context)
 
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
+
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -1889,6 +1912,7 @@ gl::Error TextureD3D_Cube::setStorage(const gl::Context *context,
     ANGLE_TRY(updateStorage(context));
 
     mImmutable = true;
+    setTextureSamplerStateDirty();
 
     return gl::NoError();
 }
@@ -1949,6 +1973,8 @@ gl::Error TextureD3D_Cube::initMipmapImages(const gl::Context *context)
                                     gl::Extents(faceLevelSize, faceLevelSize, 1), false));
         }
     }
+
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -2045,6 +2071,7 @@ gl::Error TextureD3D_Cube::setCompleteTexStorage(const gl::Context *context,
     ANGLE_TRY(releaseTexStorage(context));
     mTexStorage = newCompleteTexStorage;
 
+    setTextureSamplerStateDirty();
     mDirtyImages = true;
     return gl::NoError();
 }
@@ -2525,6 +2552,7 @@ gl::Error TextureD3D_3D::initMipmapImages(const gl::Context *context)
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -3107,6 +3135,7 @@ gl::Error TextureD3D_2DArray::initMipmapImages(const gl::Context *context)
         ANGLE_TRY(redefineImage(context, level, baseFormat, levelLayerSize, false));
     }
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -3180,6 +3209,7 @@ gl::Error TextureD3D_2DArray::setCompleteTexStorage(const gl::Context *context,
     // We do not support managed 2D array storage, as managed storage is ES2/D3D9 only
     ASSERT(!mTexStorage->isManaged());
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 
@@ -3731,6 +3761,7 @@ gl::Error TextureD3D_2DMultisample::setStorageMultisample(const gl::Context *con
 
     mImmutable = false;
 
+    setTextureSamplerStateDirty();
     return gl::NoError();
 }
 

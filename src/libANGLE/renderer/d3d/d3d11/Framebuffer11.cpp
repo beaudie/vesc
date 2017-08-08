@@ -116,6 +116,8 @@ gl::Error Framebuffer11::clearImpl(const gl::Context *context, const ClearParame
 {
     Clear11 *clearer = mRenderer->getClearer();
 
+    mRenderer->invalidateTextureSamplerState();
+
     const gl::FramebufferAttachment *colorAttachment = mState.getFirstColorAttachment();
     if (clearParams.scissorEnabled == true && colorAttachment != nullptr &&
         UsePresentPathFast(mRenderer, colorAttachment))

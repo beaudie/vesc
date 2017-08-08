@@ -99,6 +99,8 @@ class TextureD3D : public TextureImpl
     gl::Error setBaseLevel(const gl::Context *context, GLuint baseLevel) override;
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+    bool isSamplerStateDirty() const;
+    void setTextureSamplerStateDirty();
 
     gl::Error clearLevel(const gl::Context *context,
                          const gl::ImageIndex &index,
@@ -178,6 +180,8 @@ class TextureD3D : public TextureImpl
 
     bool mImmutable;
     TextureStorage *mTexStorage;
+
+    bool mTextureSamplerStateDirty;
 
   private:
     virtual gl::Error initializeStorage(const gl::Context *context, bool renderTarget) = 0;
