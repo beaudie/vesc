@@ -77,7 +77,8 @@ TextureD3D::TextureD3D(const gl::TextureState &state, RendererD3D *renderer)
       mDirtyImages(true),
       mImmutable(false),
       mTexStorage(nullptr),
-      mBaseLevel(0)
+      mBaseLevel(0),
+      mSamplerStateDirty(true)
 {
 }
 
@@ -246,6 +247,7 @@ gl::Error TextureD3D::setImageImpl(const gl::Context *context,
         }
 
         mDirtyImages = true;
+        mSamplerStateDirty = true;
     }
 
     return gl::NoError();
@@ -268,6 +270,7 @@ gl::Error TextureD3D::subImage(const gl::Context *context,
     {
         ImageD3D *image = getImage(index);
         ASSERT(image);
+        mSamplerStateDirty = true;
 
         if (shouldUseSetData(image))
         {
@@ -307,6 +310,7 @@ gl::Error TextureD3D::setCompressedImageImpl(const gl::Context *context,
         ANGLE_TRY(image->loadCompressedData(context, fullImageArea, pixelData));
 
         mDirtyImages = true;
+        mSamplerStateDirty = true;
     }
 
     return gl::NoError();
@@ -331,6 +335,7 @@ gl::Error TextureD3D::subImageCompressed(const gl::Context *context,
         ANGLE_TRY(image->loadCompressedData(context, area, pixelData));
 
         mDirtyImages = true;
+        mSamplerStateDirty = true;
     }
 
     return gl::NoError();
@@ -373,6 +378,7 @@ gl::Error TextureD3D::fastUnpackPixels(const gl::Context *context,
                                                  destRenderTarget, sizedInternalFormat, type,
                                                  destArea));
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -446,6 +452,7 @@ gl::Error TextureD3D::generateMipmap(const gl::Context *context)
         ANGLE_TRY(generateMipmapUsingImages(context, maxLevel));
     }
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -625,12 +632,23 @@ gl::Error TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLevel)
         ANGLE_TRY(releaseTexStorage(context));
     }
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
 void TextureD3D::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
-    // TODO(geofflang): Use dirty bits
+    mSamplerStateDirty = false;
+}
+
+bool TextureD3D::isSamplerStateDirty() const
+{
+    return mSamplerStateDirty;
+}
+
+void TextureD3D::onBind()
+{
+    mSamplerStateDirty = true;
 }
 
 gl::Error TextureD3D::clearLevel(const gl::Context *context,
@@ -1214,6 +1232,8 @@ gl::Error TextureD3D_2D::initMipmapImages(const gl::Context *context)
 
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
+
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -1846,6 +1866,7 @@ gl::Error TextureD3D_Cube::setStorage(const gl::Context *context,
     ANGLE_TRY(updateStorage(context));
 
     mImmutable = true;
+    mSamplerStateDirty = true;
 
     return gl::NoError();
 }
@@ -1906,6 +1927,8 @@ gl::Error TextureD3D_Cube::initMipmapImages(const gl::Context *context)
                                     gl::Extents(faceLevelSize, faceLevelSize, 1), false));
         }
     }
+
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -2002,6 +2025,7 @@ gl::Error TextureD3D_Cube::setCompleteTexStorage(const gl::Context *context,
     ANGLE_TRY(releaseTexStorage(context));
     mTexStorage = newCompleteTexStorage;
 
+    mSamplerStateDirty = true;
     mDirtyImages = true;
     return gl::NoError();
 }
@@ -2482,6 +2506,7 @@ gl::Error TextureD3D_3D::initMipmapImages(const gl::Context *context)
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -3064,6 +3089,7 @@ gl::Error TextureD3D_2DArray::initMipmapImages(const gl::Context *context)
         ANGLE_TRY(redefineImage(context, level, baseFormat, levelLayerSize, false));
     }
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -3137,6 +3163,7 @@ gl::Error TextureD3D_2DArray::setCompleteTexStorage(const gl::Context *context,
     // We do not support managed 2D array storage, as managed storage is ES2/D3D9 only
     ASSERT(!mTexStorage->isManaged());
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 
@@ -3688,6 +3715,7 @@ gl::Error TextureD3D_2DMultisample::setStorageMultisample(const gl::Context *con
 
     mImmutable = false;
 
+    mSamplerStateDirty = true;
     return gl::NoError();
 }
 

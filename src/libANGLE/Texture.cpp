@@ -868,6 +868,11 @@ egl::Stream *Texture::getBoundStream() const
     return mBoundStream;
 }
 
+void Texture::onBind()
+{
+    mTexture->onBind();
+}
+
 void Texture::invalidateCompletenessCache() const
 {
     mState.invalidateCompletenessCache();

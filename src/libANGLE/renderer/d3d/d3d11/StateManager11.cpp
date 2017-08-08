@@ -1560,9 +1560,14 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
                 !std::binary_search(framebufferTextures.begin(),
                                     framebufferTextures.begin() + framebufferTextureCount, texture))
             {
-                ANGLE_TRY(
-                    setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
+                TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
+                if (texture->hasAnyDirtyBit() || textureD3D->isSamplerStateDirty())
+                {
+                    texture->syncImplState();
+                    ANGLE_TRY(
+                        setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
+                    ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
+                }
             }
             else
             {
@@ -1570,10 +1575,15 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
                 // incomplete texture.
                 gl::Texture *incompleteTexture =
                     mRenderer->getIncompleteTexture(context, textureType);
+                TextureD3D *textureD3D = GetImplAs<TextureD3D>(incompleteTexture);
 
-                ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
-                                          incompleteTexture->getSamplerState()));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
+                if (texture->hasAnyDirtyBit() || textureD3D->isSamplerStateDirty())
+                {
+                    texture->syncImplState();
+                    ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
+                                              incompleteTexture->getSamplerState()));
+                    ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
+                }
             }
         }
         else

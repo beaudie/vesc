@@ -764,6 +764,7 @@ unsigned int State::getActiveSampler() const
 void State::setSamplerTexture(const Context *context, GLenum type, Texture *texture)
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
+    texture->onBind();
 }
 
 Texture *State::getTargetTexture(GLenum target) const

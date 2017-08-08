@@ -404,6 +404,7 @@ class Texture final : public egl::ImageSibling,
 
     void syncImplState();
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    void onBind();
 
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
