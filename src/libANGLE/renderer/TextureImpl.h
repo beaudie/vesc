@@ -149,6 +149,7 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
     virtual gl::Error releaseTexImage(const gl::Context *context) = 0;
 
     virtual void syncState(const gl::Texture::DirtyBits &dirtyBits) = 0;
+    virtual void bindTexture() {}
 
   protected:
     const gl::TextureState &mState;
