@@ -535,6 +535,7 @@ class TParseContext : angle::NonCopyable
     bool checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier &typeQualifier);
     bool parseGeometryShaderInputLayoutQualifier(const TTypeQualifier &typeQualifier);
     bool parseGeometryShaderOutputLayoutQualifier(const TTypeQualifier &typeQualifier);
+    void setGeometryShaderInputArraySizes();
 
     // Set to true when the last/current declarator list was started with an empty declaration. The
     // non-empty declaration error check will need to be performed if the empty declaration is
