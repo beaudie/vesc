@@ -146,8 +146,10 @@ class Renderer11 : public RendererD3D
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
     gl::Error applyTransformFeedbackBuffers(const gl::ContextState &data);
-
+    void invalidateTextureSamplerState() override;
     // lost device
+    void setPixelUniformsDirty();
+    void setVertexUniformsDirty();
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 

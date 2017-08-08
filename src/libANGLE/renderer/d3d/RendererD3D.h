@@ -331,6 +331,7 @@ class RendererD3D : public BufferFactoryD3D
     gl::Texture *getIncompleteTexture(const gl::Context *context, GLenum type);
 
     Serial generateSerial();
+    virtual void invalidateTextureSamplerState();
 
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
