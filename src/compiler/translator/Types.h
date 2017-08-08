@@ -150,10 +150,12 @@ class TInterfaceBlock : public TFieldListCollection
     TInterfaceBlock(const TString *name,
                     TFieldList *fields,
                     const TString *instanceName,
-                    int arraySize,
+                    bool isArray,
+                    unsigned int arraySize,
                     const TLayoutQualifier &layoutQualifier)
         : TFieldListCollection(name, fields),
           mInstanceName(instanceName),
+          mIsArray(isArray),
           mArraySize(arraySize),
           mBlockStorage(layoutQualifier.blockStorage),
           mMatrixPacking(layoutQualifier.matrixPacking),
@@ -174,10 +176,16 @@ class TInterfaceBlock : public TFieldListCollection
             mMangledName = buildMangledName("iblock-");
         return mMangledName;
     }
+    void setArraySize(unsigned int arraySize)
+    {
+        ASSERT(mIsArray);
+        mArraySize = arraySize;
+    }
 
   private:
     const TString *mInstanceName;  // for interface block instance names
-    int mArraySize;                // 0 if not an array
+    bool mIsArray;
+    unsigned int mArraySize;
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
     int mBinding;
@@ -258,8 +266,7 @@ class TType
     }
     TType(TInterfaceBlock *interfaceBlockIn,
           TQualifier qualifierIn,
-          TLayoutQualifier layoutQualifierIn,
-          int arraySizeIn)
+          TLayoutQualifier layoutQualifierIn)
         : type(EbtInterfaceBlock),
           precision(EbpUndefined),
           qualifier(qualifierIn),
@@ -268,8 +275,8 @@ class TType
           layoutQualifier(layoutQualifierIn),
           primarySize(1),
           secondarySize(1),
-          array(arraySizeIn > 0),
-          arraySize(arraySizeIn),
+          array(interfaceBlockIn->isArray()),
+          arraySize(interfaceBlockIn->arraySize()),
           interfaceBlock(interfaceBlockIn),
           structure(0)
     {
@@ -353,6 +360,10 @@ class TType
             array     = true;
             arraySize = s;
             invalidateMangledName();
+            if (interfaceBlock)
+            {
+                interfaceBlock->setArraySize(arraySize);
+            }
         }
     }
     void clearArrayness()
