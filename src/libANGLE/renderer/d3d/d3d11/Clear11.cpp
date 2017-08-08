@@ -418,6 +418,8 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
 
     gl::Extents framebufferSize;
 
+    mRenderer->setSamplerStateDirty();
+
     const auto *depthStencilAttachment = fboData.getDepthOrStencilAttachment();
     if (depthStencilAttachment != nullptr)
     {

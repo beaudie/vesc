@@ -2157,6 +2157,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
             mDeviceContext->Map(vertexConstantBuffer->get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
         ASSERT(SUCCEEDED(result));
         mapVS = (float(*)[4])map.pData;
+        ;
     }
 
     if (totalRegisterCountPS > 0 && pixelUniformsDirty)
@@ -4178,6 +4179,21 @@ gl::Error Renderer11::genericDrawElements(const gl::Context *context,
     }
 
     return gl::NoError();
+}
+
+void Renderer11::setSamplerStateDirty()
+{
+    mStateManager.setSamplerDirty();
+}
+
+void Renderer11::setVertexUniformsDirty()
+{
+    mStateManager.vertexUniformsDirty();
+}
+
+void Renderer11::setPixelUniformsDirty()
+{
+    mStateManager.pixelUniformsDirty();
 }
 
 gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
