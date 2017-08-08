@@ -102,7 +102,8 @@ class StateManager11 final : angle::NonCopyable
                                     GLuint numGroupsX,
                                     GLuint numGroupsY,
                                     GLuint numGroupsZ);
-
+    void pixelUniformsDirty();
+    void vertexUniformsDirty();
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
     void setShaderResource(gl::SamplerType shaderType,
@@ -180,6 +181,8 @@ class StateManager11 final : angle::NonCopyable
 
     // Only used in testing.
     InputLayoutCache *getInputLayoutCache() { return &mInputLayoutCache; }
+
+    void invalidateTextureSamplerState();
 
   private:
     void unsetConflictingSRVs(gl::SamplerType shaderType,
@@ -342,6 +345,9 @@ class StateManager11 final : angle::NonCopyable
 
     // Currently applied primitive topology
     D3D11_PRIMITIVE_TOPOLOGY mCurrentPrimitiveTopology;
+    bool mDirtySampler;
+    bool mVertexUniformsDirty;
+    bool mPixelUniformsDirty;
 
     // Currently applied shaders
     ResourceSerial mAppliedVertexShader;

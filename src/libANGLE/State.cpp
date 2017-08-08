@@ -12,10 +12,10 @@
 #include <string.h>
 
 #include "common/bitset_utils.h"
-#include "common/matrix_utils.h"
 #include "common/mathutil.h"
-#include "libANGLE/Context.h"
+#include "common/matrix_utils.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -764,6 +764,7 @@ unsigned int State::getActiveSampler() const
 void State::setSamplerTexture(const Context *context, GLenum type, Texture *texture)
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
+    mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDING);
 }
 
 Texture *State::getTargetTexture(GLenum target) const
