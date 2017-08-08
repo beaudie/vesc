@@ -334,6 +334,9 @@ class TSymbolTable : angle::NonCopyable
     TVariable *declareVariable(const TString *name, const TType &type);
     TVariable *declareStructType(TStructure *str);
     TInterfaceBlockName *declareInterfaceBlockName(const TString *name);
+    TInterfaceBlockName *declareInterfaceBlockNameExt(ESymbolLevel level,
+                                                      const char *ext,
+                                                      const TString *name);
 
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol in case the declaration was successful, and nullptr if the
