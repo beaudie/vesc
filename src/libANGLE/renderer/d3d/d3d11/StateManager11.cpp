@@ -1538,7 +1538,7 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
     ASSERT(!programD3D->isSamplerMappingDirty());
 
     // TODO(jmadill): Use the Program's sampler bindings.
-
+    bool mDirty = false;
     unsigned int samplerRange = programD3D->getUsedSamplerRange(shaderType);
     for (unsigned int samplerIndex = 0; samplerIndex < samplerRange; samplerIndex++)
     {
@@ -1560,9 +1560,15 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
                 !std::binary_search(framebufferTextures.begin(),
                                     framebufferTextures.begin() + framebufferTextureCount, texture))
             {
-                ANGLE_TRY(
-                    setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
+                TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
+                if (texture->hasAnyDirtyBit() || textureD3D->isSamplerStateDirty() || mDirty)
+                {
+                    mDirty = true;
+                    texture->syncImplState();
+                    ANGLE_TRY(
+                        setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
+                    ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
+                }
             }
             else
             {
@@ -1570,10 +1576,16 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
                 // incomplete texture.
                 gl::Texture *incompleteTexture =
                     mRenderer->getIncompleteTexture(context, textureType);
+                TextureD3D *textureD3D = GetImplAs<TextureD3D>(incompleteTexture);
 
-                ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
-                                          incompleteTexture->getSamplerState()));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
+                if (texture->hasAnyDirtyBit() || textureD3D->isSamplerStateDirty())
+                {
+                    mDirty = true;
+                    texture->syncImplState();
+                    ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
+                                              incompleteTexture->getSamplerState()));
+                    ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
+                }
             }
         }
         else
@@ -1583,6 +1595,8 @@ gl::Error StateManager11::applyTextures(const gl::Context *context,
             ANGLE_TRY(setTexture(context, shaderType, samplerIndex, nullptr));
         }
     }
+
+    mDirty = false;
 
     // Set all the remaining textures to NULL
     size_t samplerCount = (shaderType == gl::SAMPLER_PIXEL) ? caps.maxTextureImageUnits
