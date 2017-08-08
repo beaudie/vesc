@@ -903,9 +903,31 @@ void IdentifyBuiltIns(sh::GLenum type,
         break;
 
         case GL_GEOMETRY_SHADER_OES:
-            // TODO(jiawei.shao@intel.com): add Geometry Shader built-in variables.
-            break;
+        {
+            // TODO(jiawei.shao@intel.com): add all Geometry Shader built-in variables.
+            constexpr const char *extension = "GL_OES_geometry_shader";
 
+            // Add built-in interface block gl_PerVertex and the built-in array gl_in.
+            // TODO(jiawei.shao@intel.com): implement GL_OES_geometry_point_size.
+            const TString *glPerVertexString = NewPoolTString("gl_PerVertex");
+            symbolTable.declareInterfaceBlockNameExt(ESSL3_1_BUILTINS, extension,
+                                                     glPerVertexString);
+
+            TFieldList *fieldList    = NewPoolTFieldList();
+            TSourceLoc zeroSourceLoc = {0, 0, 0, 0};
+            TField *glPositionField  = new TField(new TType(EbtFloat, EbpHigh, EvqPosition, 4),
+                                                 NewPoolTString("gl_Position"), zeroSourceLoc);
+            fieldList->push_back(glPositionField);
+
+            TInterfaceBlock *glInBlock =
+                new TInterfaceBlock(glPerVertexString, fieldList, NewPoolTString("gl_in"), true, 0,
+                                    TLayoutQualifier::create());
+            symbolTable.insertVariableExt(
+                ESSL3_1_BUILTINS, extension, "gl_in",
+                TType(glInBlock, EvqPerVertexIn, TLayoutQualifier::create()));
+
+            break;
+        }
         default:
             assert(false && "Language not supported");
     }
