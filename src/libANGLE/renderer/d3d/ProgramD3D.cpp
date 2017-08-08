@@ -1727,6 +1727,36 @@ void ProgramD3D::initializeUniformStorage()
         std::unique_ptr<UniformStorageD3D>(mRenderer->createUniformStorage(computeRegisters * 16u));
 }
 
+bool ProgramD3D::areVertexUniformsDirty()
+{
+    for (const D3DUniform *uniform : mD3DUniforms)
+    {
+        if (uniform->isReferencedByVertexShader())
+        {
+            if (uniform->dirty)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool ProgramD3D::areFragmentUniformsDirty()
+{
+    for (const D3DUniform *uniform : mD3DUniforms)
+    {
+        if (uniform->isReferencedByFragmentShader())
+        {
+            if (uniform->dirty)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
 {
     ASSERT(!mDirtySamplerMapping);

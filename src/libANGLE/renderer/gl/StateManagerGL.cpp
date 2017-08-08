@@ -1914,6 +1914,8 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 // TODO(jmadill): implement this
                 break;
+            case gl::State::DIRTY_BIT_TEXTURE_BINDING:
+                break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
                 break;

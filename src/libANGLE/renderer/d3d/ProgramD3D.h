@@ -193,6 +193,8 @@ class ProgramD3D : public ProgramImpl
                                  const GLfloat *coeffs) override;
 
     void initializeUniformStorage();
+    bool areVertexUniformsDirty();
+    bool areFragmentUniformsDirty();
     gl::Error applyUniforms(GLenum drawMode);
     gl::Error applyComputeUniforms();
     gl::Error applyUniformBuffers(const gl::ContextState &data);
