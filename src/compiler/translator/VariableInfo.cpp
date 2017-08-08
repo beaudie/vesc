@@ -122,6 +122,7 @@ class CollectVariablesTraverser : public TIntermTraverser
                                   std::vector<Varying> *varyings);
     void recordBuiltInFragmentOutputUsed(const char *name, bool *addedFlag);
     void recordBuiltInAttributeUsed(const char *name, bool *addedFlag);
+    void recordGLInUsed();
 
     std::vector<Attribute> *mAttribs;
     std::vector<OutputVariable> *mOutputVariables;
@@ -148,6 +149,8 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool mFragDepthAdded;
     bool mSecondaryFragColorEXTAdded;
     bool mSecondaryFragDataEXTAdded;
+
+    bool mPerVertexInAdded;
 
     ShHashFunction64 mHashFunction;
 
@@ -188,6 +191,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mFragDepthAdded(false),
       mSecondaryFragColorEXTAdded(false),
       mSecondaryFragDataEXTAdded(false),
+      mPerVertexInAdded(false),
       mHashFunction(hashFunction),
       mShaderVersion(shaderVersion),
       mExtensionBehavior(extensionBehavior)
@@ -250,6 +254,37 @@ void CollectVariablesTraverser::recordBuiltInAttributeUsed(const char *name, boo
     }
 }
 
+void CollectVariablesTraverser::recordGLInUsed()
+{
+    if (!mPerVertexInAdded)
+    {
+        Varying info;
+
+        info.name       = "gl_in";
+        info.mappedName = "gl_in";
+        info.type       = GL_STRUCT_ANGLEX;
+        info.staticUse  = true;
+
+        TSymbol *symbol = mSymbolTable->findBuiltIn("gl_in", mShaderVersion);
+        ASSERT(symbol && symbol->isVariable());
+
+        const TVariable *glInVar = static_cast<const TVariable *>(symbol);
+        info.arraySize           = glInVar->getType().getArraySize();
+
+        ShaderVariable positionInfo;
+        positionInfo.name       = "gl_Position";
+        positionInfo.mappedName = "gl_Position";
+        positionInfo.type       = GL_FLOAT_VEC4;
+        positionInfo.arraySize  = 0;
+        positionInfo.precision  = GL_HIGH_FLOAT;
+        positionInfo.staticUse  = true;
+        info.fields.push_back(positionInfo);
+
+        mInputVaryings->push_back(info);
+        mPerVertexInAdded = true;
+    }
+}
+
 // We want to check whether a uniform/varying is statically used
 // because we only count the used ones in packing computing.
 // Also, gl_FragCoord, gl_PointCoord, and gl_FrontFacing count
@@ -278,7 +313,10 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
     }
     else if (symbol->getType().getBasicType() == EbtInterfaceBlock)
     {
-        UNREACHABLE();
+        // TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
+        ASSERT(symbol->getQualifier() == EvqPerVertexIn);
+        recordGLInUsed();
+        return;
     }
     else if (symbolName == "gl_DepthRange")
     {
@@ -534,6 +572,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
     return varying;
 }
 
+// TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
 InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymbol &variable) const
 {
     const TInterfaceBlock *blockType = variable.getType().getInterfaceBlock();
@@ -657,6 +696,24 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
 
         TIntermConstantUnion *constantUnion = binaryNode->getRight()->getAsConstantUnion();
         ASSERT(constantUnion);
+
+        TIntermBinary *interfaceIndexingNode = blockNode->getAsBinaryNode();
+        if (interfaceIndexingNode)
+        {
+            TIntermTyped *interfaceNode = interfaceIndexingNode->getLeft()->getAsTyped();
+            ASSERT(interfaceNode);
+
+            // TODO(jiawei.shao@intel.com):
+            // 1. Implement OES_shader_io_blocks.
+            // 2. Only set staticUse = true to the current field once GL_OES_geometry_point_size is
+            //    enabled.
+            if (interfaceNode->getType().getQualifier() == EvqPerVertexIn)
+            {
+                // We should continue traversing to collect gl_in and the variables in the index
+                // expression.
+                return true;
+            }
+        }
 
         const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
         InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
