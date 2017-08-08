@@ -131,6 +131,43 @@ class CollectFragmentVariablesTest : public CollectVariablesTest
       CollectFragmentVariablesTest() : CollectVariablesTest(GL_FRAGMENT_SHADER) {}
 };
 
+class CollectGeometryVariablesTest : public CollectVariablesTest
+{
+  public:
+    CollectGeometryVariablesTest() : CollectVariablesTest(GL_GEOMETRY_SHADER_OES) {}
+
+  protected:
+    void SetUp() override
+    {
+        ShBuiltInResources resources;
+        InitBuiltInResources(&resources);
+        resources.OES_geometry_shader = 1;
+
+        initTranslator(resources);
+    }
+
+    void initTranslator(const ShBuiltInResources &resources)
+    {
+        mTranslator.reset(
+            new TranslatorGLSL(mShaderType, SH_GLES3_1_SPEC, SH_GLSL_COMPATIBILITY_OUTPUT));
+        ASSERT_TRUE(mTranslator->Init(resources));
+    }
+
+    void compileGeometryShaderWithInputPrimitive(const std::string &inputPrimitive)
+    {
+        std::ostringstream sstream;
+        sstream << "#version 310 es\n"
+                << "#extension GL_OES_geometry_shader : require\n"
+                << "layout (" << inputPrimitive << ") in;\n"
+                << "layout (points, max_vertices = 2) out;\n"
+                << "void main()\n"
+                << "{\n"
+                << "    vec4 value = gl_in[0].gl_Position;\n"
+                << "}\n";
+        compile(sstream.str());
+    }
+};
+
 TEST_F(CollectFragmentVariablesTest, SimpleOutputVar)
 {
     const std::string &shaderString =
@@ -829,4 +866,62 @@ TEST_F(CollectVertexVariablesTest, ViewID_OVR)
     ASSERT_EQ(1u, varyings.size());
     const Varying *varying = &varyings[0];
     EXPECT_EQ("gl_Position", varying->name);
+}
+
+// Test all the fields of gl_in can be collected correctly in a geometry shader.
+TEST_F(CollectGeometryVariablesTest, CollectGLInFields)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 value = gl_in[0].gl_Position;\n"
+        "}\n";
+
+    compile(shaderString);
+
+    ASSERT_TRUE(mTranslator->getOutputVaryings().empty());
+
+    const auto &inputVaryings = mTranslator->getInputVaryings();
+    ASSERT_EQ(1u, inputVaryings.size());
+
+    const Varying *varying = &inputVaryings[0];
+    EXPECT_EQ("gl_in", varying->name);
+    EXPECT_TRUE(varying->staticUse);
+    EXPECT_TRUE(varying->isBuiltIn());
+
+    ASSERT_TRUE(varying->isStruct());
+    ASSERT_EQ(1u, varying->fields.size());
+
+    const ShaderVariable &glPositionField = varying->fields[0];
+    EXPECT_EQ("gl_Position", glPositionField.name);
+    EXPECT_FALSE(glPositionField.isArray());
+    EXPECT_FALSE(glPositionField.isStruct());
+    EXPECT_TRUE(glPositionField.staticUse);
+    EXPECT_TRUE(glPositionField.isBuiltIn());
+    EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, glPositionField.precision);
+    EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, glPositionField.type);
+}
+
+// Test the collected array size of gl_in matches the input primitive declaration.
+TEST_F(CollectGeometryVariablesTest, GLInArraySize)
+{
+    const std::array<std::string, 5> kInputPrimitives = {
+        {"points", "lines", "lines_adjacency", "triangles", "triangles_adjacency"}};
+    constexpr GLuint kArraySizeForInputPrimitives[] = {1u, 2u, 4u, 3u, 6u};
+
+    for (size_t i = 0; i < kInputPrimitives.size(); ++i)
+    {
+        compileGeometryShaderWithInputPrimitive(kInputPrimitives[i]);
+
+        const auto &inputVaryings = mTranslator->getInputVaryings();
+        ASSERT_EQ(1u, inputVaryings.size());
+
+        const Varying *varying = &inputVaryings[0];
+        ASSERT_EQ("gl_in", varying->name);
+        EXPECT_EQ(kArraySizeForInputPrimitives[i], varying->arraySize);
+    }
 }
