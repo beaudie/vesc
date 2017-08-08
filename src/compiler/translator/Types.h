@@ -150,7 +150,7 @@ class TInterfaceBlock : public TFieldListCollection
     TInterfaceBlock(const TString *name,
                     TFieldList *fields,
                     const TString *instanceName,
-                    int arraySize,
+                    unsigned int arraySize,
                     const TLayoutQualifier &layoutQualifier)
         : TFieldListCollection(name, fields),
           mInstanceName(instanceName),
@@ -174,10 +174,15 @@ class TInterfaceBlock : public TFieldListCollection
             mMangledName = buildMangledName("iblock-");
         return mMangledName;
     }
+    void setArraySize(unsigned int arraySize)
+    {
+        ASSERT(isArray());
+        mArraySize = arraySize;
+    }
 
   private:
     const TString *mInstanceName;  // for interface block instance names
-    int mArraySize;                // 0 if not an array
+    unsigned int mArraySize;
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
     int mBinding;
@@ -258,8 +263,7 @@ class TType
     }
     TType(TInterfaceBlock *interfaceBlockIn,
           TQualifier qualifierIn,
-          TLayoutQualifier layoutQualifierIn,
-          int arraySizeIn)
+          TLayoutQualifier layoutQualifierIn)
         : type(EbtInterfaceBlock),
           precision(EbpUndefined),
           qualifier(qualifierIn),
@@ -268,8 +272,8 @@ class TType
           layoutQualifier(layoutQualifierIn),
           primarySize(1),
           secondarySize(1),
-          array(arraySizeIn > 0),
-          arraySize(arraySizeIn),
+          array(interfaceBlockIn->isArray()),
+          arraySize(interfaceBlockIn->arraySize()),
           interfaceBlock(interfaceBlockIn),
           structure(0)
     {
@@ -353,6 +357,10 @@ class TType
             array     = true;
             arraySize = s;
             invalidateMangledName();
+            if (interfaceBlock)
+            {
+                interfaceBlock->setArraySize(arraySize);
+            }
         }
     }
     void clearArrayness()
