@@ -4180,6 +4180,21 @@ gl::Error Renderer11::genericDrawElements(const gl::Context *context,
     return gl::NoError();
 }
 
+void Renderer11::invalidateTextureSamplerState()
+{
+    mStateManager.invalidateTextureSamplerState();
+}
+
+void Renderer11::setVertexUniformsDirty()
+{
+    mStateManager.vertexUniformsDirty();
+}
+
+void Renderer11::setPixelUniformsDirty()
+{
+    mStateManager.pixelUniformsDirty();
+}
+
 gl::Error Renderer11::genericDrawArrays(const gl::Context *context,
                                         GLenum mode,
                                         GLint first,
