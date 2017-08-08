@@ -148,6 +148,7 @@ void GetUniformBlockInfo(const std::vector<VarT> &fields,
 template <typename T>
 static inline void SetIfDirty(T *dest, const T &source, bool *dirtyFlag)
 {
+   
     ASSERT(dest != nullptr);
     ASSERT(dirtyFlag != nullptr);
 
@@ -684,7 +685,7 @@ void ProgramD3D::updateSamplerMapping()
 
         if (!d3dUniform->isSampler())
             continue;
-
+        
         int count = d3dUniform->elementCount();
         const GLint(*v)[4] = reinterpret_cast<const GLint(*)[4]>(d3dUniform->data);
 
@@ -2209,6 +2210,8 @@ void ProgramD3D::setUniform(GLint location, GLsizei countIn, const T *v, GLenum 
     }
     else
         UNREACHABLE();
+
+   
 }
 
 template <int cols, int rows>

@@ -159,8 +159,10 @@ class Renderer11 : public RendererD3D
                                GLenum type,
                                TranslatedIndexData *indexInfo);
     gl::Error applyTransformFeedbackBuffers(const gl::ContextState &data);
-
+    void setSamplerStateDirty() override;
     // lost device
+    void setPixelUniformsDirty();
+    void setVertexUniformsDirty();
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 
