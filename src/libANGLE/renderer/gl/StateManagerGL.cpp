@@ -1887,8 +1887,29 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO(jmadill): implement this
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
+            {
                 // TODO(jmadill): implement this
+                gl::Program *program = state.getProgram();
+                if (program != nullptr && program->usesMultiview())
+                {
+                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                    ASSERT(drawFramebuffer != nullptr);
+                    ProgramGL *programGL = GetImplAs<ProgramGL>(program);
+                    switch (drawFramebuffer->getMultiviewLayout())
+                    {
+                        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+                            programGL->updateForSideBySideRendering();
+                            break;
+                        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+                            programGL->updateForLayeredRendering(
+                                drawFramebuffer->getBaseViewIndex());
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 break;
+            }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
                 // TODO(jmadill): implement this
                 break;
@@ -1901,10 +1922,31 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO: implement this
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
+            {
                 // TODO(jmadill): implement this
                 propagateNumViewsToVAO(state.getProgram(),
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                gl::Program *program = state.getProgram();
+                if (program != nullptr && program->usesMultiview())
+                {
+                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
+                    ASSERT(drawFramebuffer != nullptr);
+                    ProgramGL *programGL = GetImplAs<ProgramGL>(program);
+                    switch (drawFramebuffer->getMultiviewLayout())
+                    {
+                        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+                            programGL->updateForSideBySideRendering();
+                            break;
+                        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+                            programGL->updateForLayeredRendering(
+                                drawFramebuffer->getBaseViewIndex());
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 break;
+            }
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 // TODO(jmadill): implement this
                 break;
