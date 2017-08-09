@@ -62,10 +62,10 @@ class FramebufferMultiviewTest : public ANGLETest
     PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
 };
 
-class FramebufferMultiviewClearTest : public FramebufferMultiviewTest
+class FramebufferMultiviewSideBySideClearTest : public FramebufferMultiviewTest
 {
   protected:
-    FramebufferMultiviewClearTest() {}
+    FramebufferMultiviewSideBySideClearTest() {}
 
     void initializeFBOs(size_t numColorBuffers, bool stencil, bool depth)
     {
@@ -164,8 +164,113 @@ class FramebufferMultiviewClearTest : public FramebufferMultiviewTest
     GLTexture mStencilTex;
 };
 
-// Test that the framebuffer tokens introduced by ANGLE_multiview can be used query the framebuffer
-// state and that their corresponding default values are correctly set.
+class FramebufferMultiviewLayeredClearTest : public FramebufferMultiviewTest
+{
+  protected:
+    FramebufferMultiviewLayeredClearTest() {}
+
+    void initializeFBOs(int width,
+                        int height,
+                        int numLayers,
+                        int baseViewIndex,
+                        int numViews,
+                        int numColorAttachments,
+                        bool stencil,
+                        bool depth)
+    {
+        ASSERT(baseViewIndex + numViews <= numLayers);
+
+        // Generate textures.
+        mColorTex.resize(numColorAttachments);
+        for (int i = 0; i < numColorAttachments; ++i)
+        {
+            glBindTexture(GL_TEXTURE_2D_ARRAY, mColorTex[i]);
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width, height, numLayers, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, nullptr);
+        }
+
+        if (stencil)
+        {
+            glBindTexture(GL_TEXTURE_2D_ARRAY, mStencilTex);
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH24_STENCIL8, width, height, numLayers, 0,
+                         GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+        }
+        else if (depth)
+        {
+            glBindTexture(GL_TEXTURE_2D_ARRAY, mDepthTex);
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F, width, height, numLayers, 0,
+                         GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        }
+
+        // Generate multiview FBO and attach textures.
+        glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+        for (int i = 0; i < numColorAttachments; ++i)
+        {
+            glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER,
+                                                      static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + i),
+                                                      mColorTex[i], 0, baseViewIndex, numViews);
+        }
+
+        if (stencil)
+        {
+            glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                                      mStencilTex, 0, baseViewIndex, numViews);
+        }
+        else if (depth)
+        {
+            glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                                      mDepthTex, 0, baseViewIndex, numViews);
+        }
+
+        const auto &drawBuffers = GetDrawBufferRange(numColorAttachments);
+        glDrawBuffers(numColorAttachments, drawBuffers.data());
+
+        // Generate normal FBOs and attach textures.
+        mNonMultiviewFBO.resize(numLayers);
+        for (int i = 0; i < numLayers; ++i)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, mNonMultiviewFBO[i]);
+            for (int j = 0; j < numColorAttachments; ++j)
+            {
+                glFramebufferTextureLayer(GL_FRAMEBUFFER,
+                                          static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + j),
+                                          mColorTex[j], 0, i);
+            }
+            if (stencil)
+            {
+                glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, mStencilTex,
+                                          0, i);
+            }
+            else if (depth)
+            {
+                glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, mDepthTex, 0, i);
+            }
+            glDrawBuffers(numColorAttachments, drawBuffers.data());
+
+            glClearColor(1, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        }
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    GLColor getLayerColor(GLint x, GLint y, size_t layer, GLenum attachment)
+    {
+        ASSERT(layer < mNonMultiviewFBO.size());
+        glBindFramebuffer(GL_FRAMEBUFFER, mNonMultiviewFBO[layer]);
+        glReadBuffer(attachment);
+        return angle::ReadColor(x, y);
+    }
+
+    GLFramebuffer mMultiviewFBO;
+    std::vector<GLFramebuffer> mNonMultiviewFBO;
+    std::vector<GLTexture> mColorTex;
+    GLTexture mDepthTex;
+    GLTexture mStencilTex;
+};
+
+// Test that the framebuffer tokens introduced by ANGLE_multiview can be used to query the
+// framebuffer state and that their corresponding default values are correctly set.
 TEST_P(FramebufferMultiviewTest, DefaultState)
 {
     if (!requestMultiviewExtension())
@@ -588,7 +693,7 @@ TEST_P(FramebufferMultiviewTest, InvalidReadPixels)
 }
 
 // Test that glClear clears only the contents of each view if the scissor test is enabled.
-TEST_P(FramebufferMultiviewClearTest, SideBySideColorBufferClear)
+TEST_P(FramebufferMultiviewSideBySideClearTest, ColorBufferClear)
 {
     if (!requestMultiviewExtension())
     {
@@ -722,7 +827,7 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsLayered)
 }
 
 // Test that glClear clears all of the contents if the scissor test is disabled.
-TEST_P(FramebufferMultiviewClearTest, SideBySideClearWithDisabledScissorTest)
+TEST_P(FramebufferMultiviewSideBySideClearTest, ClearWithDisabledScissorTest)
 {
     if (!requestMultiviewExtension())
     {
@@ -756,7 +861,7 @@ TEST_P(FramebufferMultiviewClearTest, SideBySideClearWithDisabledScissorTest)
 }
 
 // Test that glClear clears the depth buffer of each view.
-TEST_P(FramebufferMultiviewClearTest, SideBySideDepthBufferClear)
+TEST_P(FramebufferMultiviewSideBySideClearTest, DepthBufferClear)
 {
     if (!requestMultiviewExtension())
     {
@@ -812,7 +917,7 @@ TEST_P(FramebufferMultiviewClearTest, SideBySideDepthBufferClear)
 }
 
 // Test that glClear clears the stencil buffer of each view.
-TEST_P(FramebufferMultiviewClearTest, SideBySideStencilBufferClear)
+TEST_P(FramebufferMultiviewSideBySideClearTest, StencilBufferClear)
 {
     if (!requestMultiviewExtension())
     {
@@ -876,7 +981,7 @@ TEST_P(FramebufferMultiviewClearTest, SideBySideStencilBufferClear)
 }
 
 // Test that glClearBufferf clears the color buffer of each view.
-TEST_P(FramebufferMultiviewClearTest, SideBySideClearBufferF)
+TEST_P(FramebufferMultiviewSideBySideClearTest, ClearBufferF)
 {
     if (!requestMultiviewExtension())
     {
@@ -916,5 +1021,197 @@ TEST_P(FramebufferMultiviewClearTest, SideBySideClearBufferF)
     checkAlternatingColumnsOfRedAndGreenInFBO();
 }
 
+// Test that glClear clears the contents of the color buffer for only the attached layers to a
+// layered FBO.
+TEST_P(FramebufferMultiviewLayeredClearTest, ColorBufferClear)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    initializeFBOs(1, 1, 4, 1, 2, 1, false, false);
+
+    // Bind and specify viewport/scissor dimensions for each view.
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+
+    glClearColor(0, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT0));
+}
+
+// Test that glClearBufferfv can be used to clear individual color buffers of a layered FBO.
+TEST_P(FramebufferMultiviewLayeredClearTest, ClearIndividualColorBuffer)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    initializeFBOs(1, 1, 4, 1, 2, 2, false, false);
+
+    for (int i = 0; i < 2; ++i)
+    {
+        for (int layer = 0; layer < 4; ++layer)
+        {
+            GLenum colorAttachment = static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + i);
+            EXPECT_EQ(GLColor::red, getLayerColor(0, 0, layer, colorAttachment));
+        }
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+
+    float clearValues0[4] = {0.f, 0.f, 1.f, 1.f};
+    glClearBufferfv(GL_COLOR, 0, clearValues0);
+
+    float clearValues1[4] = {0.f, 1.f, 0.f, 1.f};
+    glClearBufferfv(GL_COLOR, 1, clearValues1);
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::blue, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::blue, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT0));
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT1));
+}
+
+// Test that glClearBufferfi clears the contents of the stencil buffer for only the attached layers
+// to a layered FBO.
+TEST_P(FramebufferMultiviewLayeredClearTest, ClearBufferfi)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    // Create program to draw a quad.
+    const std::string &vs =
+        "#version 300 es\n"
+        "in vec3 vPos;\n"
+        "void main(){\n"
+        "   gl_Position = vec4(vPos, 1.);\n"
+        "}\n";
+    const std::string &fs =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "uniform vec3 uCol;\n"
+        "out vec4 col;\n"
+        "void main(){\n"
+        "   col = vec4(uCol,1.);\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, vs, fs);
+    glUseProgram(program);
+    GLuint mColorUniformLoc = glGetUniformLocation(program, "uCol");
+
+    initializeFBOs(1, 1, 4, 1, 2, 1, true, false);
+    glEnable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    // Set clear values.
+    glClearColor(1, 0, 0, 1);
+    glClearStencil(0xFF);
+
+    // Clear the color and stencil buffers of each layer.
+    for (size_t i = 0u; i < mNonMultiviewFBO.size(); ++i)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, mNonMultiviewFBO[i]);
+        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    }
+
+    // Switch to multiview framebuffer and clear portions of the texture.
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+    glClearBufferfi(GL_DEPTH_STENCIL, 0, 0.0f, 0);
+
+    // Draw a fullscreen quad, but adjust the stencil function so that only the cleared regions pass
+    // the test.
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilFunc(GL_EQUAL, 0x00, 0xFF);
+    for (size_t i = 0u; i < mNonMultiviewFBO.size(); ++i)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, mNonMultiviewFBO[i]);
+        glUniform3f(mColorUniformLoc, 0.0f, 1.0f, 0.0f);
+        drawQuad(program, "vPos", 0.0f, 1.0f, true);
+    }
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT0));
+}
+
+// Test that glClear does not clear the content of a detached texture.
+TEST_P(FramebufferMultiviewLayeredClearTest, UnmodifiedDetachedTexture)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    initializeFBOs(1, 1, 4, 1, 2, 2, false, false);
+
+    // Clear all attachments.
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+    glClearColor(0, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    for (int i = 0; i < 2; ++i)
+    {
+        GLenum colorAttachment = static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + i);
+        EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, colorAttachment));
+        EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 1, colorAttachment));
+        EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 2, colorAttachment));
+        EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, colorAttachment));
+    }
+
+    // Detach and clear again.
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+    glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, 0, 0, 1, 2);
+    glClearColor(1, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::green, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT1));
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT1));
+}
+
+// Test that glClear clears only the contents within the scissor rectangle of the attached layers.
+TEST_P(FramebufferMultiviewLayeredClearTest, ScissoredClear)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    initializeFBOs(2, 1, 4, 1, 2, 1, false, false);
+
+    // Bind and specify viewport/scissor dimensions for each view.
+    glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
+
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(1, 0, 1, 1);
+    glClearColor(0, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 0, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::red, getLayerColor(1, 0, 0, GL_COLOR_ATTACHMENT0));
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 1, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(1, 0, 1, GL_COLOR_ATTACHMENT0));
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 2, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::green, getLayerColor(1, 0, 2, GL_COLOR_ATTACHMENT0));
+
+    EXPECT_EQ(GLColor::red, getLayerColor(0, 0, 3, GL_COLOR_ATTACHMENT0));
+    EXPECT_EQ(GLColor::red, getLayerColor(1, 0, 3, GL_COLOR_ATTACHMENT0));
+}
+
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest, ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(FramebufferMultiviewClearTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(FramebufferMultiviewSideBySideClearTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(FramebufferMultiviewLayeredClearTest, ES3_OPENGL());
