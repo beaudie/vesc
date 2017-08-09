@@ -1887,8 +1887,11 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO(jmadill): implement this
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
+            {
                 // TODO(jmadill): implement this
+                updateMultiviewRenderPathUniform(state.getProgram(), state.getDrawFramebuffer());
                 break;
+            }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
                 // TODO(jmadill): implement this
                 break;
@@ -1904,6 +1907,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO(jmadill): implement this
                 propagateNumViewsToVAO(state.getProgram(),
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                updateMultiviewRenderPathUniform(state.getProgram(), state.getDrawFramebuffer());
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 // TODO(jmadill): implement this
@@ -2159,6 +2163,27 @@ void StateManagerGL::propagateNumViewsToVAO(const gl::Program *program, VertexAr
             programNumViews = program->getNumViews();
         }
         vao->applyNumViewsToDivisor(programNumViews);
+    }
+}
+
+void StateManagerGL::updateMultiviewRenderPathUniform(const gl::Program *program,
+                                                      const gl::Framebuffer *drawFramebuffer) const
+{
+    ASSERT(drawFramebuffer != nullptr);
+    if (mIsMultiviewEnabled && program != nullptr && program->usesMultiview())
+    {
+        const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
+        switch (drawFramebuffer->getMultiviewLayout())
+        {
+            case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+                programGL->enableSideBySideRenderingPath();
+                break;
+            case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+                programGL->enableLayeredRenderingPath(drawFramebuffer->getBaseViewIndex());
+                break;
+            default:
+                break;
+        }
     }
 }
 }
