@@ -17,6 +17,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/gl/BlitGL.h"
+#include "libANGLE/renderer/gl/ClearMultiviewGL.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
@@ -64,9 +65,19 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
             else if (texture->getTarget() == GL_TEXTURE_2D_ARRAY ||
                      texture->getTarget() == GL_TEXTURE_3D)
             {
-                functions->framebufferTextureLayer(GL_FRAMEBUFFER, attachmentPoint,
-                                                   textureGL->getTextureID(),
-                                                   attachment->mipLevel(), attachment->layer());
+                if (attachment->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
+                {
+                    ASSERT(functions->framebufferTexture);
+                    functions->framebufferTexture(GL_FRAMEBUFFER, attachmentPoint,
+                                                  textureGL->getTextureID(),
+                                                  attachment->mipLevel());
+                }
+                else
+                {
+                    functions->framebufferTextureLayer(GL_FRAMEBUFFER, attachmentPoint,
+                                                       textureGL->getTextureID(),
+                                                       attachment->mipLevel(), attachment->layer());
+                }
             }
             else
             {
@@ -104,11 +115,25 @@ void RetrieveMultiviewFieldsFromAttachment(const gl::FramebufferAttachment *atta
     }
 }
 
-bool RequiresMultipleClears(const FramebufferAttachment *attachment, bool scissorTestEnabled)
+bool RequiresMultipleSideBySideClears(const FramebufferAttachment *attachment,
+                                      bool scissorTestEnabled)
 {
     return attachment != nullptr &&
            attachment->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE &&
            scissorTestEnabled;
+}
+
+bool RequiresMultipleLayeredClears(const FramebufferAttachment *attachment)
+{
+    if (attachment == nullptr ||
+        attachment->getMultiviewLayout() != GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
+    {
+        return false;
+    }
+    const auto &imageIndex = attachment->getTextureImageIndex();
+    int numLayers =
+        static_cast<int>(attachment->getTexture()->getDepth(imageIndex.type, imageIndex.mipIndex));
+    return attachment->getBaseViewIndex() > 0 || attachment->getNumViews() < numLayers;
 }
 
 }  // namespace
@@ -118,12 +143,14 @@ FramebufferGL::FramebufferGL(const FramebufferState &state,
                              StateManagerGL *stateManager,
                              const WorkaroundsGL &workarounds,
                              BlitGL *blitter,
+                             ClearMultiviewGL *multiviewClearer,
                              bool isDefault)
     : FramebufferImpl(state),
       mFunctions(functions),
       mStateManager(stateManager),
       mWorkarounds(workarounds),
       mBlitter(blitter),
+      mMultiviewClearer(multiviewClearer),
       mFramebufferID(0),
       mIsDefault(isDefault),
       mAppliedEnabledDrawBuffers(1)
@@ -139,12 +166,14 @@ FramebufferGL::FramebufferGL(GLuint id,
                              const FunctionsGL *functions,
                              const WorkaroundsGL &workarounds,
                              BlitGL *blitter,
+                             ClearMultiviewGL *multiviewClearer,
                              StateManagerGL *stateManager)
     : FramebufferImpl(state),
       mFunctions(functions),
       mStateManager(stateManager),
       mWorkarounds(workarounds),
       mBlitter(blitter),
+      mMultiviewClearer(multiviewClearer),
       mFramebufferID(id),
       mIsDefault(true),
       mAppliedEnabledDrawBuffers(1)
@@ -222,11 +251,18 @@ Error FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
     syncClearState(context, mask);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (RequiresMultipleClears(mState.getFirstNonNullAttachment(),
-                               context->getGLState().isScissorTestEnabled()))
+    const auto &firstAttachment = mState.getFirstNonNullAttachment();
+    if (RequiresMultipleSideBySideClears(firstAttachment,
+                                         context->getGLState().isScissorTestEnabled()))
     {
-        genericSideBySideClear(context, ClearCommandType::Clear, mask, GL_NONE, 0, nullptr, 0.0f,
-                               0);
+        mMultiviewClearer->clearSideBySideFBO(mState, context->getGLState().getScissor(),
+                                              ClearCommandType::Clear, mask, GL_NONE, 0, nullptr,
+                                              0.0f, 0);
+    }
+    else if (RequiresMultipleLayeredClears(firstAttachment))
+    {
+        mMultiviewClearer->clearLayeredFBO(mState, ClearCommandType::Clear, mask, GL_NONE, 0,
+                                           nullptr, 0.0f, 0);
     }
     else
     {
@@ -244,12 +280,20 @@ Error FramebufferGL::clearBufferfv(const gl::Context *context,
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (RequiresMultipleClears(mState.getFirstNonNullAttachment(),
-                               context->getGLState().isScissorTestEnabled()))
+    const auto &firstAttachment = mState.getFirstNonNullAttachment();
+    if (RequiresMultipleSideBySideClears(firstAttachment,
+                                         context->getGLState().isScissorTestEnabled()))
     {
-        genericSideBySideClear(context, ClearCommandType::ClearBufferfv,
-                               static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                               reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        mMultiviewClearer->clearSideBySideFBO(mState, context->getGLState().getScissor(),
+                                              ClearCommandType::ClearBufferfv,
+                                              static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                              reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+    }
+    else if (RequiresMultipleLayeredClears(firstAttachment))
+    {
+        mMultiviewClearer->clearLayeredFBO(mState, ClearCommandType::ClearBufferfv,
+                                           static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                           reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
     }
     else
     {
@@ -267,12 +311,20 @@ Error FramebufferGL::clearBufferuiv(const gl::Context *context,
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (RequiresMultipleClears(mState.getFirstNonNullAttachment(),
-                               context->getGLState().isScissorTestEnabled()))
+    const auto &firstAttachment = mState.getFirstNonNullAttachment();
+    if (RequiresMultipleSideBySideClears(firstAttachment,
+                                         context->getGLState().isScissorTestEnabled()))
     {
-        genericSideBySideClear(context, ClearCommandType::ClearBufferuiv,
-                               static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                               reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        mMultiviewClearer->clearSideBySideFBO(mState, context->getGLState().getScissor(),
+                                              ClearCommandType::ClearBufferuiv,
+                                              static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                              reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+    }
+    else if (RequiresMultipleLayeredClears(firstAttachment))
+    {
+        mMultiviewClearer->clearLayeredFBO(mState, ClearCommandType::ClearBufferuiv,
+                                           static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                           reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
     }
     else
     {
@@ -290,12 +342,20 @@ Error FramebufferGL::clearBufferiv(const gl::Context *context,
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (RequiresMultipleClears(mState.getFirstNonNullAttachment(),
-                               context->getGLState().isScissorTestEnabled()))
+    const auto &firstAttachment = mState.getFirstNonNullAttachment();
+    if (RequiresMultipleSideBySideClears(firstAttachment,
+                                         context->getGLState().isScissorTestEnabled()))
     {
-        genericSideBySideClear(context, ClearCommandType::ClearBufferiv,
-                               static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                               reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        mMultiviewClearer->clearSideBySideFBO(mState, context->getGLState().getScissor(),
+                                              ClearCommandType::ClearBufferiv,
+                                              static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                              reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+    }
+    else if (RequiresMultipleLayeredClears(firstAttachment))
+    {
+        mMultiviewClearer->clearLayeredFBO(mState, ClearCommandType::ClearBufferiv,
+                                           static_cast<GLbitfield>(0u), buffer, drawbuffer,
+                                           reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
     }
     else
     {
@@ -314,12 +374,19 @@ Error FramebufferGL::clearBufferfi(const gl::Context *context,
     syncClearBufferState(context, buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (RequiresMultipleClears(mState.getFirstNonNullAttachment(),
-                               context->getGLState().isScissorTestEnabled()))
+    const auto &firstAttachment = mState.getFirstNonNullAttachment();
+    if (RequiresMultipleSideBySideClears(firstAttachment,
+                                         context->getGLState().isScissorTestEnabled()))
     {
-        genericSideBySideClear(context, ClearCommandType::ClearBufferfi,
-                               static_cast<GLbitfield>(0u), buffer, drawbuffer, nullptr, depth,
-                               stencil);
+        mMultiviewClearer->clearSideBySideFBO(
+            mState, context->getGLState().getScissor(), ClearCommandType::ClearBufferfi,
+            static_cast<GLbitfield>(0u), buffer, drawbuffer, nullptr, depth, stencil);
+    }
+    else if (RequiresMultipleLayeredClears(firstAttachment))
+    {
+        mMultiviewClearer->clearLayeredFBO(mState, ClearCommandType::ClearBufferfi,
+                                           static_cast<GLbitfield>(0u), buffer, drawbuffer, nullptr,
+                                           depth, stencil);
     }
     else
     {
@@ -327,55 +394,6 @@ Error FramebufferGL::clearBufferfi(const gl::Context *context,
     }
 
     return gl::NoError();
-}
-
-void FramebufferGL::genericSideBySideClear(const gl::Context *context,
-                                           ClearCommandType clearCommandType,
-                                           GLbitfield mask,
-                                           GLenum buffer,
-                                           GLint drawbuffer,
-                                           const uint8_t *values,
-                                           GLfloat depth,
-                                           GLint stencil)
-{
-    // For side-by-side framebuffers we have to go over each view and set its scissor rectangle
-    // as the first one and just then call Clear*. This is necessary because Clear* commands use
-    // only the first viewport's scissor rectangle.
-    const auto &scissorBase                 = context->getGLState().getScissor();
-    const FramebufferAttachment *attachment = mState.getFirstNonNullAttachment();
-    ASSERT(attachment != nullptr);
-    const auto &viewportOffsets = attachment->getMultiviewViewportOffsets();
-
-    for (size_t i = 0u; i < viewportOffsets.size(); ++i)
-    {
-        gl::Rectangle scissor(scissorBase.x + viewportOffsets[i].x,
-                              scissorBase.y + viewportOffsets[i].y, scissorBase.width,
-                              scissorBase.height);
-        mStateManager->setScissorIndexed(0u, scissor);
-        switch (clearCommandType)
-        {
-            case ClearCommandType::Clear:
-                mFunctions->clear(mask);
-                break;
-            case ClearCommandType::ClearBufferfv:
-                mFunctions->clearBufferfv(buffer, drawbuffer,
-                                          reinterpret_cast<const GLfloat *>(values));
-                break;
-            case ClearCommandType::ClearBufferuiv:
-                mFunctions->clearBufferuiv(buffer, drawbuffer,
-                                           reinterpret_cast<const GLuint *>(values));
-                break;
-            case ClearCommandType::ClearBufferiv:
-                mFunctions->clearBufferiv(buffer, drawbuffer,
-                                          reinterpret_cast<const GLint *>(values));
-                break;
-            case ClearCommandType::ClearBufferfi:
-                mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
-                break;
-            default:
-                UNREACHABLE();
-        }
-    }
 }
 
 GLenum FramebufferGL::getImplementationColorReadFormat(const gl::Context *context) const
