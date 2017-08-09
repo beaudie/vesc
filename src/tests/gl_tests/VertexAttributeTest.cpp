@@ -716,7 +716,7 @@ TEST_P(VertexAttributeTest, DrawElementsBufferTooSmall)
     InitTestData(inputData, expectedData);
 
     TestData data(GL_FLOAT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data());
-    data.bufferOffset = (kVertexCount - 3) * TypeStride(GL_FLOAT);
+    data.bufferOffset = (kVertexCount + 1) * TypeStride(GL_FLOAT);
 
     setupTest(data, 1);
     drawIndexedQuad(mProgram, "position", 0.5f);
