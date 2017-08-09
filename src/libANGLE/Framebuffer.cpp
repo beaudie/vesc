@@ -1627,6 +1627,16 @@ GLsizei Framebuffer::getNumViews() const
     return attachment->getNumViews();
 }
 
+GLint Framebuffer::getBaseViewIndex() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (attachment == nullptr)
+    {
+        return FramebufferAttachment::kDefaultBaseViewIndex;
+    }
+    return attachment->getBaseViewIndex();
+}
+
 const std::vector<Offset> *Framebuffer::getViewportOffsets() const
 {
     const FramebufferAttachment *attachment = getFirstNonNullAttachment();

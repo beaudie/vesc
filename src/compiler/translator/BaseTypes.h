@@ -540,6 +540,7 @@ enum TQualifier
 
     EvqViewIDOVR,      // OVR_multiview
     EvqViewportIndex,  // gl_ViewportIndex
+    EvqLayer,          // gl_Layer
 
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
@@ -807,6 +808,7 @@ inline const char *getQualifierString(TQualifier q)
     case EvqSecondaryFragDataEXT:   return "SecondaryFragDataEXT";
     case EvqViewIDOVR:              return "ViewIDOVR";
     case EvqViewportIndex:          return "ViewportIndex";
+    case EvqLayer:                  return "Layer";
     case EvqLastFragColor:          return "LastFragColor";
     case EvqLastFragData:           return "LastFragData";
     case EvqSmoothOut:              return "smooth out";
