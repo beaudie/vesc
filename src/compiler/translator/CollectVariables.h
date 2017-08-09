@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 //
 
-#ifndef COMPILER_TRANSLATOR_VARIABLEINFO_H_
-#define COMPILER_TRANSLATOR_VARIABLEINFO_H_
+#ifndef COMPILER_TRANSLATOR_COLLECTVARIABLES_H_
+#define COMPILER_TRANSLATOR_COLLECTVARIABLES_H_
 
 #include <GLSLANG/ShaderLang.h>
 
@@ -30,4 +30,4 @@ void CollectVariables(TIntermBlock *root,
                       const TExtensionBehavior &extensionBehavior);
 }
 
-#endif  // COMPILER_TRANSLATOR_VARIABLEINFO_H_
+#endif  // COMPILER_TRANSLATOR_COLLECTVARIABLES_H_
