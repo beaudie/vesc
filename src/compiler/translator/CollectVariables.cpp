@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/VariableInfo.h"
+#include "compiler/translator/CollectVariables.h"
 
 #include "angle_gl.h"
 #include "common/utilities.h"
