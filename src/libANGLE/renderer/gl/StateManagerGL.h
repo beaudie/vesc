@@ -194,6 +194,8 @@ class StateManagerGL final : angle::NonCopyable
     void applyViewportOffsetsAndSetViewports(const gl::Rectangle &viewport,
                                              const gl::Framebuffer &drawFramebuffer);
     void propagateNumViewsToVAO(const gl::Program *program, VertexArrayGL *vao);
+    void updateMultiviewBaseViewLayerIndexUniform(const gl::Program *program,
+                                                  const gl::Framebuffer *drawFramebuffer) const;
 
     enum MultiviewDirtyBitType
     {
