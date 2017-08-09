@@ -8,15 +8,21 @@
 #define COMPILER_TRANSLATOR_VARIABLEPACKER_H_
 
 #include <vector>
-#include "compiler/translator/VariableInfo.h"
+
+#include <GLSLANG/ShaderLang.h>
+
+namespace sh
+{
 
 class VariablePacker
 {
   public:
     // Returns true if the passed in variables pack in maxVectors following
     // the packing rules from the GLSL 1.017 spec, Appendix A, section 7.
-    bool CheckVariablesWithinPackingLimits(unsigned int maxVectors,
-                                           const std::vector<sh::ShaderVariable> &in_variables);
+    // T should be ShaderVariable or one of the subclasses of ShaderVariable.
+    template <typename T>
+    bool checkVariablesWithinPackingLimits(unsigned int maxVectors,
+                                           const std::vector<T> &variables);
 
     // Gets how many components in a row a data type takes.
     static int GetNumComponentsPerRow(sh::GLenum type);
@@ -25,6 +31,21 @@ class VariablePacker
     static int GetNumRows(sh::GLenum type);
 
   private:
+    bool checkExpandedVariablesWithinPackingLimits(unsigned int maxVectors,
+                                                   std::vector<sh::ShaderVariable> *variables);
+
+    static void ExpandUserDefinedVariable(const ShaderVariable &variable,
+                                          const std::string &name,
+                                          const std::string &mappedName,
+                                          bool markStaticUse,
+                                          std::vector<ShaderVariable> *expanded);
+
+    static void ExpandVariable(const ShaderVariable &variable,
+                               const std::string &name,
+                               const std::string &mappedName,
+                               bool markStaticUse,
+                               std::vector<ShaderVariable> *expanded);
+
     static const int kNumColumns      = 4;
     static const unsigned kColumnMask = (1 << kNumColumns) - 1;
 
@@ -37,5 +58,7 @@ class VariablePacker
     int maxRows_;
     std::vector<unsigned> rows_;
 };
+
+}  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_VARIABLEPACKER_H_

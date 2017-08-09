@@ -429,7 +429,7 @@ int GetVertexShaderNumViews(const ShHandle handle)
 bool CheckVariablesWithinPackingLimits(int maxVectors, const std::vector<ShaderVariable> &variables)
 {
     VariablePacker packer;
-    return packer.CheckVariablesWithinPackingLimits(maxVectors, variables);
+    return packer.checkVariablesWithinPackingLimits(maxVectors, variables);
 }
 
 bool GetInterfaceBlockRegister(const ShHandle handle,

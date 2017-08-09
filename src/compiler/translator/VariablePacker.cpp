@@ -11,6 +11,73 @@
 #include "compiler/translator/VariablePacker.h"
 #include "common/utilities.h"
 
+namespace sh
+{
+
+void VariablePacker::ExpandUserDefinedVariable(const ShaderVariable &variable,
+                                               const std::string &name,
+                                               const std::string &mappedName,
+                                               bool markStaticUse,
+                                               std::vector<ShaderVariable> *expanded)
+{
+    ASSERT(variable.isStruct());
+
+    const std::vector<ShaderVariable> &fields = variable.fields;
+
+    for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
+    {
+        const ShaderVariable &field = fields[fieldIndex];
+        ExpandVariable(field, name + "." + field.name, mappedName + "." + field.mappedName,
+                       markStaticUse, expanded);
+    }
+}
+
+void VariablePacker::ExpandVariable(const ShaderVariable &variable,
+                                    const std::string &name,
+                                    const std::string &mappedName,
+                                    bool markStaticUse,
+                                    std::vector<ShaderVariable> *expanded)
+{
+    if (variable.isStruct())
+    {
+        if (variable.isArray())
+        {
+            for (unsigned int elementIndex = 0; elementIndex < variable.elementCount();
+                 elementIndex++)
+            {
+                std::string lname       = name + ::ArrayString(elementIndex);
+                std::string lmappedName = mappedName + ::ArrayString(elementIndex);
+                ExpandUserDefinedVariable(variable, lname, lmappedName, markStaticUse, expanded);
+            }
+        }
+        else
+        {
+            ExpandUserDefinedVariable(variable, name, mappedName, markStaticUse, expanded);
+        }
+    }
+    else
+    {
+        ShaderVariable expandedVar = variable;
+
+        expandedVar.name       = name;
+        expandedVar.mappedName = mappedName;
+
+        // Mark all expanded fields as used if the parent is used
+        if (markStaticUse)
+        {
+            expandedVar.staticUse = true;
+        }
+
+        if (expandedVar.isArray())
+        {
+            expandedVar.name += "[0]";
+            expandedVar.mappedName += "[0]";
+        }
+
+        expanded->push_back(expandedVar);
+    }
+}
+
 int VariablePacker::GetNumComponentsPerRow(sh::GLenum type)
 {
     switch (type)
@@ -159,26 +226,20 @@ bool VariablePacker::searchColumn(int column, int numRows, int *destRow, int *de
     return true;
 }
 
-bool VariablePacker::CheckVariablesWithinPackingLimits(
+bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
     unsigned int maxVectors,
-    const std::vector<sh::ShaderVariable> &in_variables)
+    std::vector<sh::ShaderVariable> *variables)
 {
     ASSERT(maxVectors > 0);
     maxRows_          = maxVectors;
     topNonFullRow_    = 0;
     bottomNonFullRow_ = maxRows_ - 1;
-    std::vector<sh::ShaderVariable> variables;
-
-    for (const auto &variable : in_variables)
-    {
-        ExpandVariable(variable, variable.name, variable.mappedName, variable.staticUse,
-                       &variables);
-    }
 
     // Check whether each variable fits in the available vectors.
-    for (size_t i = 0; i < variables.size(); i++)
+    for (const sh::ShaderVariable &variable : *variables)
     {
-        const sh::ShaderVariable &variable = variables[i];
+        // Structs should have been expanded before reaching here.
+        ASSERT(!variable.isStruct());
         if (variable.elementCount() > maxVectors / GetNumRows(variable.type))
         {
             return false;
@@ -187,15 +248,15 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(
 
     // As per GLSL 1.017 Appendix A, Section 7 variables are packed in specific
     // order by type, then by size of array, largest first.
-    std::sort(variables.begin(), variables.end(), TVariableInfoComparer());
+    std::sort(variables->begin(), variables->end(), TVariableInfoComparer());
     rows_.clear();
     rows_.resize(maxVectors, 0);
 
     // Packs the 4 column variables.
     size_t ii = 0;
-    for (; ii < variables.size(); ++ii)
+    for (; ii < variables->size(); ++ii)
     {
-        const sh::ShaderVariable &variable = variables[ii];
+        const sh::ShaderVariable &variable = (*variables)[ii];
         if (GetNumComponentsPerRow(variable.type) != 4)
         {
             break;
@@ -210,9 +271,9 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(
 
     // Packs the 3 column variables.
     int num3ColumnRows = 0;
-    for (; ii < variables.size(); ++ii)
+    for (; ii < variables->size(); ++ii)
     {
-        const sh::ShaderVariable &variable = variables[ii];
+        const sh::ShaderVariable &variable = (*variables)[ii];
         if (GetNumComponentsPerRow(variable.type) != 3)
         {
             break;
@@ -232,9 +293,9 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(
     int twoColumnRowsAvailable   = maxRows_ - top2ColumnRow;
     int rowsAvailableInColumns01 = twoColumnRowsAvailable;
     int rowsAvailableInColumns23 = twoColumnRowsAvailable;
-    for (; ii < variables.size(); ++ii)
+    for (; ii < variables->size(); ++ii)
     {
-        const sh::ShaderVariable &variable = variables[ii];
+        const sh::ShaderVariable &variable = (*variables)[ii];
         if (GetNumComponentsPerRow(variable.type) != 2)
         {
             break;
@@ -260,9 +321,9 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(
     fillColumns(maxRows_ - numRowsUsedInColumns23, numRowsUsedInColumns23, 2, 2);
 
     // Packs the 1 column variables.
-    for (; ii < variables.size(); ++ii)
+    for (; ii < variables->size(); ++ii)
     {
-        const sh::ShaderVariable &variable = variables[ii];
+        const sh::ShaderVariable &variable = (*variables)[ii];
         ASSERT(1 == GetNumComponentsPerRow(variable.type));
         int numRows        = GetNumRows(variable.type) * variable.elementCount();
         int smallestColumn = -1;
@@ -291,7 +352,29 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(
         fillColumns(topRow, numRows, smallestColumn, 1);
     }
 
-    ASSERT(variables.size() == ii);
+    ASSERT(variables->size() == ii);
 
     return true;
 }
+
+template <typename T>
+bool VariablePacker::checkVariablesWithinPackingLimits(unsigned int maxVectors,
+                                                       const std::vector<T> &variables)
+{
+    std::vector<sh::ShaderVariable> expandedVariables;
+    for (const ShaderVariable &variable : variables)
+    {
+        ExpandVariable(variable, variable.name, variable.mappedName, variable.staticUse,
+                       &expandedVariables);
+    }
+    return checkExpandedVariablesWithinPackingLimits(maxVectors, &expandedVariables);
+}
+
+template bool VariablePacker::checkVariablesWithinPackingLimits<ShaderVariable>(
+    unsigned int maxVectors,
+    const std::vector<ShaderVariable> &variables);
+template bool VariablePacker::checkVariablesWithinPackingLimits<Uniform>(
+    unsigned int maxVectors,
+    const std::vector<Uniform> &variables);
+
+}  // namespace sh
