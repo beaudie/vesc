@@ -35,6 +35,7 @@ ProgramGL::ProgramGL(const gl::ProgramState &data,
       mWorkarounds(workarounds),
       mStateManager(stateManager),
       mEnablePathRendering(enablePathRendering),
+      mMultiviewBaseViewLayerIndexUniformLocation(-1),
       mProgramID(0)
 {
     ASSERT(mFunctions);
@@ -658,6 +659,13 @@ void ProgramGL::postLink()
         mUniformRealLocationMap[uniformLocation] = realLocation;
     }
 
+    if (mState.usesMultiview())
+    {
+        mMultiviewBaseViewLayerIndexUniformLocation =
+            mFunctions->getUniformLocation(mProgramID, "webgl_angle_multiviewBaseViewLayerIndex");
+        ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
+    }
+
     // Discover CHROMIUM_path_rendering fragment inputs if enabled.
     if (!mEnablePathRendering)
         return;
@@ -722,6 +730,25 @@ void ProgramGL::postLink()
             }
         }
     }
+}
+
+void ProgramGL::enableSideBySideRenderingPath() const
+{
+    ASSERT(mState.usesMultiview());
+    ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
+
+    ASSERT(mFunctions->programUniform1i != nullptr);
+    mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation, -1);
+}
+
+void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
+{
+    ASSERT(mState.usesMultiview());
+    ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
+
+    ASSERT(mFunctions->programUniform1i != nullptr);
+    mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
+                                 baseViewIndex);
 }
 
 }  // namespace rx
