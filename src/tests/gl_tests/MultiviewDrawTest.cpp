@@ -218,6 +218,33 @@ class MultiviewSideBySideRenderDualViewTest : public MultiviewSideBySideRenderTe
     GLuint mProgram;
 };
 
+class MultiviewSideBySideOcclussionQueryTest : public MultiviewSideBySideRenderTest
+{
+  protected:
+    MultiviewSideBySideOcclussionQueryTest() {}
+
+    void drawAndCheckOcclussionTestResult(GLuint program, GLenum expectedResult)
+    {
+        GLuint query;
+        glGenQueries(1, &query);
+        glBeginQuery(GL_ANY_SAMPLES_PASSED, query);
+        drawQuad(program, "vPosition", 0.0f, 1.0f, true);
+        glEndQueryEXT(GL_ANY_SAMPLES_PASSED);
+
+        GLuint ready = GL_FALSE;
+        while (ready == GL_FALSE)
+        {
+            glGetQueryObjectuiv(query, GL_QUERY_RESULT_AVAILABLE, &ready);
+        }
+
+        GLuint result = GL_TRUE;
+        glGetQueryObjectuiv(query, GL_QUERY_RESULT, &result);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_GLENUM_EQ(expectedResult, result);
+    }
+};
+
 // The test verifies that glDraw*Indirect:
 // 1) generates an INVALID_OPERATION error if the number of views in the draw framebuffer is greater
 // than 1.
@@ -858,6 +885,115 @@ TEST_P(MultiviewSideBySideRenderTest, DivisorOrderOfOperation)
     EXPECT_PIXEL_EQ(1, 0, 255, 0, 0, 0);
 }
 
+// Test that no fragments pass the occlussion query for a multi-view vertex shader which always
+// transforms geometry to be outside of the clip region.
+TEST_P(MultiviewSideBySideOcclussionQueryTest, OcclusionQueryNothingVisible)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "in vec3 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "       gl_Position.x = 2.0;\n"
+        "       gl_Position.yzw = vec3(vPosition.yz, 1.);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1,0,0,0);\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+    glUseProgram(program);
+    createFBO(2, 1, 2);
+
+    drawAndCheckOcclussionTestResult(program, GL_FALSE);
+}
+
+// Test that there are fragments passing the occlussion query if only the 0th view can produce
+// output.
+TEST_P(MultiviewSideBySideOcclussionQueryTest, OcclusionQueryOnlyLeftVisible)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "in vec3 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "       gl_Position.x = gl_ViewID_OVR == 0u ? vPosition.x : 2.0;\n"
+        "       gl_Position.yzw = vec3(vPosition.yz, 1.);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1,0,0,0);\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+    glUseProgram(program);
+    createFBO(2, 1, 2);
+
+    drawAndCheckOcclussionTestResult(program, GL_TRUE);
+}
+
+// Test that there are fragments passing the occlussion query if only the 1th view can produce
+// output.
+TEST_P(MultiviewSideBySideOcclussionQueryTest, OcclusionQueryOnlyRightVisible)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "in vec3 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "       gl_Position.x = gl_ViewID_OVR == 1u ? vPosition.x : 2.0;\n"
+        "       gl_Position.yzw = vec3(vPosition.yz, 1.);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1,0,0,0);\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+    glUseProgram(program);
+    createFBO(2, 1, 2);
+
+    drawAndCheckOcclussionTestResult(program, GL_TRUE);
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideOcclussionQueryTest, ES3_OPENGL());
