@@ -93,6 +93,7 @@
             '<(angle_path)/src/tests/gl_tests/WebGLCompatibilityTest.cpp',
             '<(angle_path)/src/tests/gl_tests/WebGLFramebufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/WebGLReadOutsideFramebufferTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/CubeMapWTF.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLContextCompatibilityTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLContextSharingTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLProgramCacheControlTest.cpp',
