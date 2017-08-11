@@ -12,6 +12,34 @@
 
 using namespace angle;
 
+namespace
+{
+GLuint CreateSimplePassthroughProgram()
+{
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "layout(location=0) in vec2 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "	gl_Position = vec4(vPosition.xy, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "   col = vec4(1,0,0,0);\n"
+        "}\n";
+    return CompileProgram(vsSource, fsSource);
+}
+
+}  // namespace
+
 class MultiviewDrawTest : public ANGLETest
 {
   protected:
@@ -193,12 +221,7 @@ class MultiviewSideBySideRenderDualViewTest : public MultiviewSideBySideRenderTe
             "}\n";
 
         createFBO(4, 1, 2);
-        createProgram(vsSource, fsSource);
-    }
-
-    void createProgram(const std::string &vs, const std::string &fs)
-    {
-        mProgram = CompileProgram(vs, fs);
+        mProgram = CompileProgram(vsSource, fsSource);
         if (mProgram == 0)
         {
             FAIL() << "shader compilation failed.";
@@ -216,6 +239,37 @@ class MultiviewSideBySideRenderDualViewTest : public MultiviewSideBySideRenderTe
     }
 
     GLuint mProgram;
+};
+
+class MultiviewSideBySideRenderPrimitiveTest : public MultiviewSideBySideRenderTest
+{
+  protected:
+    MultiviewSideBySideRenderPrimitiveTest() {}
+
+    void setupGeometry(const std::vector<float> &vertexData)
+    {
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(),
+                     GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    }
+
+    void checkOutput(const GLubyte expectedRedChannelData[], int width, int height)
+    {
+        for (int w = 0; w < width; ++w)
+        {
+            for (int h = 0; h < height; ++h)
+            {
+                int flatIndex = h * width + w;
+                EXPECT_PIXEL_COLOR_EQ(w, h, GLColor(expectedRedChannelData[flatIndex], 0, 0, 0));
+            }
+        }
+    }
+
+    GLVertexArray vao;
+    GLBuffer vbo;
 };
 
 // The test verifies that glDraw*Indirect:
@@ -621,7 +675,7 @@ TEST_P(MultiviewSideBySideRenderTest, DrawArraysInstanced)
     drawQuad(program, "vPosition", 0.0f, 1.0f, true, true, 2);
     ASSERT_GL_NO_ERROR();
 
-    const GLubyte expectedResult[4][8] = {
+    const GLubyte expectedResult[2][4] = {
         {0, 255, 255, 0}, {0, 255, 255, 0},
     };
     for (int row = 0; row < 2; ++row)
@@ -858,6 +912,199 @@ TEST_P(MultiviewSideBySideRenderTest, DivisorOrderOfOperation)
     EXPECT_PIXEL_EQ(1, 0, 255, 0, 0, 0);
 }
 
+// The test checks that GL_POINTS is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, Points)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "layout(location=0) in vec2 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "	gl_PointSize = 1.0;\n"
+        "	gl_Position = vec4(vPosition.xy, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "   col = vec4(1,0,0,0);\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+    glUseProgram(program);
+
+    createFBO(8, 2, 2);
+
+    std::vector<float> vertexData = {{-0.75f, -0.5f, 0.75f, 0.5f}};
+    setupGeometry(vertexData);
+
+    glDrawArrays(GL_POINTS, 0, 2);
+
+    const GLubyte expectedRedChannelData[2][8] = {{255, 0, 0, 0, 255, 0, 0, 0},
+                                                  {0, 0, 0, 255, 0, 0, 0, 255}};
+    checkOutput(expectedRedChannelData[0], 8, 2);
+}
+
+// The test checks that GL_LINES is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, Lines)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLuint program = CreateSimplePassthroughProgram();
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    createFBO(8, 2, 2);
+
+    std::vector<float> vertexData = {{-1.0f, -0.75f, 1.0f, -0.75f}};
+    setupGeometry(vertexData);
+
+    glDrawArrays(GL_LINES, 0, 2);
+
+    const GLubyte expectedRedChannelData[2][8] = {{255, 255, 255, 255, 255, 255, 255, 255},
+                                                  {0, 0, 0, 0, 0, 0, 0, 0}};
+    checkOutput(expectedRedChannelData[0], 8, 2);
+
+    glDeleteProgram(program);
+}
+
+// The test checks that GL_LINE_STRIP is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, LineStrip)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLuint program = CreateSimplePassthroughProgram();
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    createFBO(8, 2, 2);
+
+    std::vector<float> vertexData = {{-1.0f, -0.75f, 1.0f, -0.75f, 1.0f, 0.75f}};
+    setupGeometry(vertexData);
+
+    glDrawArrays(GL_LINE_STRIP, 0, 3);
+
+    const GLubyte expectedRedChannelData[2][8] = {{255, 255, 255, 255, 255, 255, 255, 255},
+                                                  {0, 0, 0, 255, 0, 0, 0, 255}};
+    checkOutput(expectedRedChannelData[0], 8, 2);
+
+    glDeleteProgram(program);
+}
+
+// The test checks that GL_LINE_LOOP is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, LineLoop)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLuint program = CreateSimplePassthroughProgram();
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    createFBO(8, 3, 2);
+
+    std::vector<float> vertexData = {{-0.75f, 0.75f, -0.75f, -0.75f, 0.75f, -0.75f, 0.75f, 0.75f}};
+    setupGeometry(vertexData);
+
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+    const GLubyte expectedRedChannelData[3][8] = {{255, 255, 255, 255, 255, 255, 255, 255},
+                                                  {255, 0, 0, 255, 255, 0, 0, 255},
+                                                  {255, 255, 255, 255, 255, 255, 255, 255}};
+    checkOutput(expectedRedChannelData[0], 8, 3);
+
+    glDeleteProgram(program);
+}
+
+// The test checks that GL_TRIANGLE_STRIP is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, TriangleStrip)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLuint program = CreateSimplePassthroughProgram();
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<float> vertexData = {{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f}};
+    setupGeometry(vertexData);
+
+    createFBO(4, 2, 2);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    const GLubyte expectedRedChannelData[2][4] = {{0, 0, 0, 0}, {0, 255, 0, 255}};
+    checkOutput(expectedRedChannelData[0], 4, 2);
+
+    glDeleteProgram(program);
+}
+
+// The test checks that GL_TRIANGLE_FAN is correctly rendered.
+TEST_P(MultiviewSideBySideRenderPrimitiveTest, TriangleFan)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLuint program = CreateSimplePassthroughProgram();
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<float> vertexData = {{0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f}};
+    setupGeometry(vertexData);
+
+    createFBO(4, 2, 2);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    const GLubyte expectedRedChannelData[2][4] = {{0, 0, 0, 0}, {0, 255, 0, 255}};
+    checkOutput(expectedRedChannelData[0], 4, 2);
+
+    glDeleteProgram(program);
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderPrimitiveTest, ES3_OPENGL());
