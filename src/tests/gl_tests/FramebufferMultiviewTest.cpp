@@ -503,6 +503,7 @@ TEST_P(FramebufferMultiviewTest, SideBySideClear)
     glBindFramebuffer(GL_FRAMEBUFFER, multiviewFBO);
     glViewport(0, 0, 1, 2);
     glScissor(0, 0, 1, 2);
+    glEnable(GL_SCISSOR_TEST);
 
     glClearColor(1, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
