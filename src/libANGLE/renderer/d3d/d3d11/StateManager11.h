@@ -82,7 +82,7 @@ class StateManager11 final : angle::NonCopyable
     StateManager11(Renderer11 *renderer);
     ~StateManager11();
 
-    void initialize(const gl::Caps &caps);
+    void initialize(const gl::Caps &caps, const gl::Extensions &extensions);
     void deinitialize();
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits);
@@ -199,6 +199,7 @@ class StateManager11 final : angle::NonCopyable
 
     // Faster than calling setTexture a jillion times
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd);
+    void handleDrawFramebufferChange(const gl::Context *context);
 
     enum DirtyBitType
     {
@@ -243,6 +244,10 @@ class StateManager11 final : angle::NonCopyable
     gl::Rectangle mCurViewport;
     float mCurNear;
     float mCurFar;
+
+    // Currently applied viewport offsets.
+    std::vector<gl::Offset> mViewportOffsets;
+    int mNumActiveViews;
 
     // Things needed in viewport state
     dx_VertexConstants11 mVertexConstants;
@@ -334,6 +339,9 @@ class StateManager11 final : angle::NonCopyable
     SamplerMetadata11 mSamplerMetadataVS;
     SamplerMetadata11 mSamplerMetadataPS;
     SamplerMetadata11 mSamplerMetadataCS;
+
+    bool mIsMultiviewEnabled;
+    bool mIsSideBySideDrawFramebuffer;
 };
 
 }  // namespace rx

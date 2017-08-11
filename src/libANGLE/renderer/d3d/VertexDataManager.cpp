@@ -228,6 +228,9 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
 
     translatedAttribs->clear();
 
+    const int divisorMultiplier =
+        (program != nullptr && program->usesMultiview()) ? program->getNumViews() : 1;
+
     for (size_t attribIndex = 0; attribIndex < vertexAttributes.size(); ++attribIndex)
     {
         // Skip attrib locations the program doesn't use.
@@ -248,7 +251,7 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
         translated->attribute        = &attrib;
         translated->binding          = &binding;
         translated->currentValueType = currentValueData.Type;
-        translated->divisor          = binding.getDivisor();
+        translated->divisor          = binding.getDivisor() * divisorMultiplier;
 
         switch (ClassifyAttributeStorage(attrib, binding))
         {
