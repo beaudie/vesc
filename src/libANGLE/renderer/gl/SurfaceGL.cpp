@@ -39,4 +39,12 @@ egl::Error SurfaceGL::unMakeCurrent()
 {
     return egl::NoError();
 }
+
+gl::Error SurfaceGL::initializeContents(const gl::Context *context,
+                                        const gl::ImageIndex &imageIndex)
+{
+    // UNIMPLEMENTED();
+    return gl::NoError();
 }
+
+}  // namespace rx
