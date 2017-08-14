@@ -232,7 +232,7 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < uniformBlockCount;
          ++uniformBlockIndex)
     {
-        UniformBlock uniformBlock;
+        InterfaceBlock uniformBlock;
         stream.readString(&uniformBlock.name);
         stream.readString(&uniformBlock.mappedName);
         stream.readBool(&uniformBlock.isArray);
@@ -244,6 +244,23 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
 
         state->mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlock.binding != 0);
     }
+
+    unsigned int shaderStorageBlockCount = stream.readInt<unsigned int>();
+    ASSERT(state->mShaderStorageBlocks.empty());
+    for (unsigned int shaderStorageBlockIndex = 0;
+         shaderStorageBlockIndex < shaderStorageBlockCount; ++shaderStorageBlockIndex)
+    {
+        InterfaceBlock shaderStorageBlock;
+        stream.readString(&shaderStorageBlock.name);
+        stream.readString(&shaderStorageBlock.mappedName);
+        stream.readBool(&shaderStorageBlock.isArray);
+        stream.readInt(&shaderStorageBlock.arrayElement);
+
+        LoadShaderVariableBuffer(&stream, &shaderStorageBlock);
+
+        state->mShaderStorageBlocks.push_back(shaderStorageBlock);
+    }
+
     unsigned int atomicCounterBufferCount = stream.readInt<unsigned int>();
     ASSERT(state->mAtomicCounterBuffers.empty());
     for (unsigned int bufferIndex = 0; bufferIndex < atomicCounterBufferCount; ++bufferIndex)
@@ -412,7 +429,7 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.getUniformBlocks().size());
-    for (const UniformBlock &uniformBlock : state.getUniformBlocks())
+    for (const InterfaceBlock &uniformBlock : state.getUniformBlocks())
     {
         stream.writeString(uniformBlock.name);
         stream.writeString(uniformBlock.mappedName);
@@ -420,6 +437,17 @@ void MemoryProgramCache::Serialize(const Context *context,
         stream.writeInt(uniformBlock.arrayElement);
 
         WriteShaderVariableBuffer(&stream, uniformBlock);
+    }
+
+    stream.writeInt(state.getShaderStorageBlocks().size());
+    for (const InterfaceBlock &shaderStorageBlock : state.getShaderStorageBlocks())
+    {
+        stream.writeString(shaderStorageBlock.name);
+        stream.writeString(shaderStorageBlock.mappedName);
+        stream.writeInt(shaderStorageBlock.isArray);
+        stream.writeInt(shaderStorageBlock.arrayElement);
+
+        WriteShaderVariableBuffer(&stream, shaderStorageBlock);
     }
 
     stream.writeInt(state.mAtomicCounterBuffers.size());
