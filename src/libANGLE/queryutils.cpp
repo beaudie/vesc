@@ -911,7 +911,7 @@ void QueryActiveUniformBlockiv(const Program *program,
                                GLenum pname,
                                GLint *params)
 {
-    const UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
+    const InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
     switch (pname)
     {
         case GL_UNIFORM_BLOCK_BINDING:

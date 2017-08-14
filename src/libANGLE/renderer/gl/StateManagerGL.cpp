@@ -179,6 +179,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
 
     mIndexedBuffers[GL_UNIFORM_BUFFER].resize(rendererCaps.maxCombinedUniformBlocks);
     mIndexedBuffers[GL_ATOMIC_COUNTER_BUFFER].resize(rendererCaps.maxCombinedAtomicCounterBuffers);
+    mIndexedBuffers[GL_SHADER_STORAGE_BUFFER].resize(rendererCaps.maxCombinedShaderStorageBlocks);
 
     for (GLenum queryType : QueryTypes)
     {
@@ -960,6 +961,28 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
             {
                 bindBufferRange(GL_ATOMIC_COUNTER_BUFFER, binding, bufferGL->getBufferID(),
                                 buffer.getOffset(), buffer.getSize());
+            }
+        }
+    }
+
+    for (size_t blockIndex = 0; blockIndex < program->getActiveShaderStorageBlockCount();
+         blockIndex++)
+    {
+        GLuint binding = program->getShaderStorageBlockBinding(static_cast<GLuint>(blockIndex));
+        const auto &shaderStorageBuffer = glState.getIndexedShaderStorageBuffer(binding);
+
+        if (shaderStorageBuffer.get() != nullptr)
+        {
+            BufferGL *bufferGL = GetImplAs<BufferGL>(shaderStorageBuffer.get());
+
+            if (shaderStorageBuffer.getSize() == 0)
+            {
+                bindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, bufferGL->getBufferID());
+            }
+            else
+            {
+                bindBufferRange(GL_SHADER_STORAGE_BUFFER, binding, bufferGL->getBufferID(),
+                                shaderStorageBuffer.getOffset(), shaderStorageBuffer.getSize());
             }
         }
     }
