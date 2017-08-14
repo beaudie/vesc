@@ -272,6 +272,7 @@ void Shader::compile(const Context *context)
     mState.mUniforms.clear();
     mState.mUniformBlocks.clear();
     mState.mShaderStorageBlocks.clear();
+    mState.mInterfaceBlocks.clear();
     mState.mActiveAttributes.clear();
     mState.mActiveOutputVariables.clear();
     mState.mNumViews = -1;
@@ -364,6 +365,7 @@ void Shader::resolveCompile(const Context *context)
     mState.mUniforms        = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mUniformBlocks       = GetShaderVariables(sh::GetUniformBlocks(compilerHandle));
     mState.mShaderStorageBlocks = GetShaderVariables(sh::GetShaderStorageBlocks(compilerHandle));
+    mState.mInterfaceBlocks     = GetShaderVariables(sh::GetInterfaceBlocks(compilerHandle));
 
     switch (mState.mShaderType)
     {
@@ -463,6 +465,12 @@ const std::vector<sh::InterfaceBlock> &Shader::getShaderStorageBlocks(const Cont
 {
     resolveCompile(context);
     return mState.getShaderStorageBlocks();
+}
+
+const std::vector<sh::InterfaceBlock> &Shader::getInterfaceBlocks(const Context *context)
+{
+    resolveCompile(context);
+    return mState.getInterfaceBlocks();
 }
 
 const std::vector<sh::Attribute> &Shader::getActiveAttributes(const Context *context)
