@@ -241,6 +241,11 @@ class ProgramState final : angle::NonCopyable
         ASSERT(uniformBlockIndex < mUniformBlocks.size());
         return mUniformBlocks[uniformBlockIndex].binding;
     }
+    GLuint getShaderStorageBlockBinding(GLuint blockIndex) const
+    {
+        ASSERT(blockIndex < mShaderStorageBlocks.size());
+        return mShaderStorageBlocks[blockIndex].binding;
+    }
     const UniformBlockBindingMask &getActiveUniformBlockBindingsMask() const
     {
         return mActiveUniformBlockBindings;
@@ -255,7 +260,11 @@ class ProgramState final : angle::NonCopyable
     const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
-    const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
+    const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
+    const std::vector<InterfaceBlock> &getShaderStorageBlocks() const
+    {
+        return mShaderStorageBlocks;
+    }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
     const std::vector<ImageBinding> &getImageBindings() const { return mImageBindings; }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
@@ -314,7 +323,8 @@ class ProgramState final : angle::NonCopyable
     // This makes opaque uniform validation easier, since we don't need a separate list.
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
-    std::vector<UniformBlock> mUniformBlocks;
+    std::vector<InterfaceBlock> mUniformBlocks;
+    std::vector<InterfaceBlock> mShaderStorageBlocks;
     std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
     RangeUI mSamplerUniformRange;
     RangeUI mImageUniformRange;
@@ -463,14 +473,16 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void getActiveUniformBlockName(GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName) const;
     GLuint getActiveUniformBlockCount() const;
+    GLuint getActiveShaderStorageBlockCount() const;
     GLint getActiveUniformBlockMaxLength() const;
 
     GLuint getUniformBlockIndex(const std::string &name) const;
 
     void bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const;
+    GLuint getShaderStorageBlockBinding(GLuint shaderStorageBlockIndex) const;
 
-    const UniformBlock &getUniformBlockByIndex(GLuint index) const;
+    const InterfaceBlock &getUniformBlockByIndex(GLuint index) const;
 
     void setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode);
     void getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const;
@@ -559,16 +571,16 @@ class Program final : angle::NonCopyable, public LabeledObject
     void unlink();
 
     bool linkAttributes(const Context *context, InfoLog &infoLog);
-    bool validateUniformBlocksCount(GLuint maxUniformBlocks,
-                                    const std::vector<sh::InterfaceBlock> &block,
-                                    const std::string &errorMessage,
-                                    InfoLog &infoLog) const;
+    bool validateInterfaceBlocksCount(GLuint maxUniformBlocks,
+                                      const std::vector<sh::InterfaceBlock> &block,
+                                      const std::string &errorMessage,
+                                      InfoLog &infoLog) const;
     bool validateVertexAndFragmentInterfaceBlocks(
         const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
         InfoLog &infoLog,
         bool webglCompatibility) const;
-    bool linkUniformBlocks(const Context *context, InfoLog &infoLog);
+    bool linkInterfaceBlocks(const Context *context, InfoLog &infoLog);
     bool linkVaryings(const Context *context, InfoLog &infoLog) const;
 
     bool linkUniforms(const Context *context,
@@ -610,6 +622,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                                    int blockIndex);
 
     void defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType);
+    void defineShaderStorageBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType);
 
     // Both these function update the cached uniform values and return a modified "count"
     // so that the uniform update doesn't overflow the uniform.
