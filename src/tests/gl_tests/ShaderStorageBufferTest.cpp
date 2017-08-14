@@ -1,0 +1,82 @@
+//
+// Copyright 2017 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// ShaderStorageBufferTest:
+//   Various tests related for shader storage buffers.
+//
+
+#include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
+
+using namespace angle;
+
+namespace
+{
+
+class ShaderStorageBufferTest31 : public ANGLETest
+{
+  protected:
+    ShaderStorageBufferTest31()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+};
+
+// Test shader storage buffer read write.
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWrite)
+{
+    const std::string &csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
+        "layout(binding = 1) buffer blockName {\n"
+        "    uint data[2];\n"
+        "} instanceName;\n"
+        "void main()\n"
+        "{\n"
+        "    instanceName.data[0] = 3u;\n"
+        "    if (instanceName.data[0] == 3u)\n"
+        "        instanceName.data[1] = 4u;\n"
+        "    else\n"
+        "        instanceName.data[1] = 5u;\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    unsigned int bufferData[2] = {0u};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(bufferData), nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer);
+
+    // Dispath compute
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    void *ptr = glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(bufferData), GL_MAP_READ_BIT);
+    memcpy(bufferData, ptr, sizeof(bufferData));
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    EXPECT_EQ(3u, bufferData[0]);
+    EXPECT_EQ(4u, bufferData[1]);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
+
+}  // namespace
