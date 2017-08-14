@@ -229,7 +229,7 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < uniformBlockCount;
          ++uniformBlockIndex)
     {
-        UniformBlock uniformBlock;
+        InterfaceBlock uniformBlock;
         stream.readString(&uniformBlock.name);
         stream.readBool(&uniformBlock.isArray);
         stream.readInt(&uniformBlock.arrayElement);
@@ -406,7 +406,7 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.getUniformBlocks().size());
-    for (const UniformBlock &uniformBlock : state.getUniformBlocks())
+    for (const InterfaceBlock &uniformBlock : state.getUniformBlocks())
     {
         stream.writeString(uniformBlock.name);
         stream.writeInt(uniformBlock.isArray);
