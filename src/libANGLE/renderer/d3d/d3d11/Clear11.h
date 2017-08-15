@@ -53,6 +53,7 @@ class Clear11 : angle::NonCopyable
                                       const uint32_t numRTs,
                                       const d3d11::InputLayout **il,
                                       const d3d11::VertexShader **vs,
+                                      const d3d11::GeometryShader **gs,
                                       const d3d11::PixelShader **ps);
 
       private:
@@ -62,6 +63,7 @@ class Clear11 : angle::NonCopyable
         d3d11::LazyShader<ID3D11VertexShader> mVs9;
         d3d11::LazyShader<ID3D11PixelShader> mPsFloat9;
         d3d11::LazyShader<ID3D11VertexShader> mVs;
+        d3d11::LazyShader<ID3D11GeometryShader> mGs;
         d3d11::LazyShader<ID3D11PixelShader> mPsDepth;
         std::array<d3d11::LazyShader<ID3D11PixelShader>, kNumShaders> mPsFloat;
         std::array<d3d11::LazyShader<ID3D11PixelShader>, kNumShaders> mPsUInt;

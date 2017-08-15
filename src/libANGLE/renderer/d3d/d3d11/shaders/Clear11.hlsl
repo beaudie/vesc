@@ -24,16 +24,45 @@ static const float2 g_Corners[6] =
 
 // Vertex Shaders
 void VS_Clear(in uint id : SV_VertexID,
-              out float4 outPosition : SV_POSITION)
+              in uint instanceID : SV_InstanceID,
+              out float4 outPosition : SV_POSITION,
+              nointerpolation out uint outLayerID : TEXCOORD0)
 {
     float2 corner = g_Corners[id];
     outPosition = float4(corner.x, corner.y, 0.0f, 1.0f);
+    outLayerID = instanceID;
 }
 
 void VS_Clear_FL9( in float4 inPosition : POSITION,
-                   out float4 outPosition : SV_POSITION)
+                   out nointerpolation float4 outPosition : SV_POSITION)
 {
     outPosition = inPosition;
+}
+
+// Geometry shader for clearing layered textures
+struct GS_INPUT
+{
+    float4 inPosition : SV_Position;
+    uint inLayerID : TEXCOORD0;
+};
+
+struct GS_OUTPUT
+{
+    float4 outPosition : SV_Position;
+    nointerpolation uint outLayerID : SV_RenderTargetArrayIndex;
+};
+
+[maxvertexcount(3)]
+void GS_Clear(triangle GS_INPUT input[3], inout TriangleStream<GS_OUTPUT> outStream)
+{
+    GS_OUTPUT output = (GS_OUTPUT)0;
+    for (int i = 0; i < 3; i++)
+    {
+        output.outPosition = input[i].inPosition;
+        output.outLayerID = input[i].inLayerID;
+        outStream.Append(output);
+    }
+    outStream.RestartStrip();
 }
 
 // Pixel Shader Constant Buffers
