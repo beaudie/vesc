@@ -1720,6 +1720,7 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
         ANGLE_TRY(mStateManager.updateVertexOffsetsForPointSpritesEmulation(startVertex, i));
         mDeviceContext->DrawIndexedInstanced(6, count, 0, 0, 0);
     }
+    mStateManager.invalidateVertexBuffer();
     return gl::NoError();
 }
 
@@ -1817,6 +1818,7 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
         ANGLE_TRY(mStateManager.updateVertexOffsetsForPointSpritesEmulation(startVertex, i));
         mDeviceContext->DrawIndexedInstanced(6, elementsToRender, 0, 0, 0);
     }
+    mStateManager.invalidateVertexBuffer();
     return gl::NoError();
 }
 
