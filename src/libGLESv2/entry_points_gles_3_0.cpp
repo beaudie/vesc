@@ -1112,7 +1112,7 @@ void GL_APIENTRY GetUniformuiv(GLuint program, GLint location, GLuint *params)
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformuiv(location, params);
+        programObject->getUniformuiv(context, location, params);
     }
 }
 

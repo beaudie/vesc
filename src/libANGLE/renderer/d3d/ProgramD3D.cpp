@@ -18,6 +18,7 @@
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/features.h"
+#include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
@@ -256,6 +257,111 @@ bool FindFlatInterpolationVarying(const std::vector<sh::Varying> &varyings)
     }
 
     return false;
+}
+
+// This simplified cast function doesn't need to worry about advanced concepts like
+// depth range values, or casting to bool.
+template <typename DestT, typename SrcT>
+DestT UniformStateQueryCast(SrcT value);
+
+// From-Float-To-Integer Casts
+template <>
+GLint UniformStateQueryCast(GLfloat value)
+{
+    return gl::clampCast<GLint>(roundf(value));
+}
+
+template <>
+GLuint UniformStateQueryCast(GLfloat value)
+{
+    return gl::clampCast<GLuint>(roundf(value));
+}
+
+// From-Integer-to-Integer Casts
+template <>
+GLint UniformStateQueryCast(GLuint value)
+{
+    return gl::clampCast<GLint>(value);
+}
+
+template <>
+GLuint UniformStateQueryCast(GLint value)
+{
+    return gl::clampCast<GLuint>(value);
+}
+
+// From-Boolean-to-Anything Casts
+template <>
+GLfloat UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1.0f : 0.0f);
+}
+
+template <>
+GLint UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1 : 0);
+}
+
+template <>
+GLuint UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1u : 0u);
+}
+
+// Default to static_cast
+template <typename DestT, typename SrcT>
+DestT UniformStateQueryCast(SrcT value)
+{
+    return static_cast<DestT>(value);
+}
+
+template <typename SrcT, typename DestT>
+void UniformStateQueryCastLoop(DestT *dataOut, const uint8_t *srcPointer, int components)
+{
+    for (int comp = 0; comp < components; ++comp)
+    {
+        // We only work with strides of 4 bytes for uniform components. (GLfloat/GLint)
+        // Don't use SrcT stride directly since GLboolean has a stride of 1 byte.
+        size_t offset               = comp * 4;
+        const SrcT *typedSrcPointer = reinterpret_cast<const SrcT *>(&srcPointer[offset]);
+        dataOut[comp]               = UniformStateQueryCast<DestT>(*typedSrcPointer);
+    }
+}
+
+template <typename DestT>
+void GetUniformInternal(const gl::VariableLocation &locationInfo,
+                        const gl::LinkedUniform &uniform,
+                        DestT *dataOut)
+{
+    const uint8_t *srcPointer = uniform.getDataPtrToElement(locationInfo.element);
+
+    GLenum componentType = gl::VariableComponentType(uniform.type);
+    if (componentType == gl::GLTypeToGLenum<DestT>::value)
+    {
+        memcpy(dataOut, srcPointer, uniform.getElementSize());
+        return;
+    }
+
+    int components = gl::VariableComponentCount(uniform.type);
+
+    switch (componentType)
+    {
+        case GL_INT:
+            UniformStateQueryCastLoop<GLint>(dataOut, srcPointer, components);
+            break;
+        case GL_UNSIGNED_INT:
+            UniformStateQueryCastLoop<GLuint>(dataOut, srcPointer, components);
+            break;
+        case GL_BOOL:
+            UniformStateQueryCastLoop<GLboolean>(dataOut, srcPointer, components);
+            break;
+        case GL_FLOAT:
+            UniformStateQueryCastLoop<GLfloat>(dataOut, srcPointer, components);
+            break;
+        default:
+            UNREACHABLE();
+    }
 }
 
 }  // anonymous namespace
@@ -2571,6 +2677,27 @@ bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
     }
 
     return false;
+}
+
+void ProgramD3D::getUniformfv(const gl::Context *context, GLint location, GLfloat *params) const
+{
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &uniform         = mState.getUniforms()[locationInfo.index];
+    GetUniformInternal(locationInfo, uniform, params);
+}
+
+void ProgramD3D::getUniformiv(const gl::Context *context, GLint location, GLint *params) const
+{
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &uniform         = mState.getUniforms()[locationInfo.index];
+    GetUniformInternal(locationInfo, uniform, params);
+}
+
+void ProgramD3D::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
+{
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &uniform         = mState.getUniforms()[locationInfo.index];
+    GetUniformInternal(locationInfo, uniform, params);
 }
 
 }  // namespace rx
