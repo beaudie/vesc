@@ -498,6 +498,10 @@ class TParseContext : angle::NonCopyable
 
     void checkYuvIsNotSpecified(const TSourceLoc &location, bool yuv);
 
+    bool checkUnsizedArrayConstructorArgumentDimensionality(TIntermSequence *arguments,
+                                                            TType type,
+                                                            const TSourceLoc &line);
+
     TIntermTyped *addBinaryMathInternal(TOperator op,
                                         TIntermTyped *left,
                                         TIntermTyped *right,
