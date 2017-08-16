@@ -121,6 +121,8 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
     Buffer11 *oldBuffer11   = oldBufferGL ? GetImplAs<Buffer11>(oldBufferGL) : nullptr;
     Buffer11 *newBuffer11   = newBufferGL ? GetImplAs<Buffer11>(newBufferGL) : nullptr;
 
+    StateManager11 *stateManager = GetImplAs<Context11>(context)->getRenderer()->getStateManager();
+
     if (oldBuffer11 != newBuffer11 || oldStorageType != newStorageType)
     {
         // Note that for static callbacks, promotion to a static buffer from a dynamic buffer means
@@ -137,7 +139,11 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
                 case VertexStorageType::DYNAMIC:
                     newChannel = newBuffer11->getStaticBroadcastChannel();
                     break;
+                case VertexStorageType::CURRENT_VALUE:
+                    stateManager->invalidateCurrentValueAttrib(attribIndex);
+                    break;
                 default:
+                    UNREACHABLE();
                     break;
             }
         }
