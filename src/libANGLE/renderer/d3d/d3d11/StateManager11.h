@@ -11,13 +11,15 @@
 
 #include <array>
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/ContextState.h"
 #include "libANGLE/State.h"
+#include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/InputLayoutCache.h"
+#include "libANGLE/renderer/d3d/d3d11/Query11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderStateCache.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
-#include "libANGLE/renderer/d3d/d3d11/Query11.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 
 namespace rx
 {
@@ -82,7 +84,7 @@ class StateManager11 final : angle::NonCopyable
     StateManager11(Renderer11 *renderer);
     ~StateManager11();
 
-    void initialize(const gl::Caps &caps);
+    gl::Error initialize(const gl::Caps &caps);
     void deinitialize();
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits);
@@ -126,8 +128,7 @@ class StateManager11 final : angle::NonCopyable
     void onDeleteQueryObject(Query11 *query);
     gl::Error onMakeCurrent(const gl::Context *context);
 
-    gl::Error updateCurrentValueAttribs(const gl::State &state,
-                                        VertexDataManager *vertexDataManager);
+    gl::Error updateCurrentValueAttribs(const gl::State &state);
 
     const std::vector<TranslatedAttribute> &getCurrentValueAttribs() const;
 
@@ -154,6 +155,31 @@ class StateManager11 final : angle::NonCopyable
     void setGeometryShader(const d3d11::GeometryShader *shader);
     void setPixelShader(const d3d11::PixelShader *shader);
     void setComputeShader(const d3d11::ComputeShader *shader);
+
+    // Not handled by an internal dirty bit because of the extra draw parameters.
+    gl::Error applyVertexBuffer(const gl::Context *context,
+                                GLenum mode,
+                                GLint first,
+                                GLsizei count,
+                                GLsizei instances,
+                                TranslatedIndexData *indexInfo);
+
+    gl::Error applyIndexBuffer(const gl::ContextState &data,
+                               const void *indices,
+                               GLsizei count,
+                               GLenum type,
+                               TranslatedIndexData *indexInfo);
+
+    void setIndexBuffer(ID3D11Buffer *buffer,
+                        DXGI_FORMAT indexFormat,
+                        unsigned int offset,
+                        bool indicesChanged);
+
+    gl::Error updateVertexOffsetsForPointSpritesEmulation(GLint startVertex,
+                                                          GLsizei emulatedInstanceId);
+
+    // Only used in testing.
+    InputLayoutCache *getInputLayoutCache() { return &mInputLayoutCache; }
 
   private:
     void unsetConflictingSRVs(gl::SamplerType shaderType,
@@ -334,6 +360,17 @@ class StateManager11 final : angle::NonCopyable
     SamplerMetadata11 mSamplerMetadataVS;
     SamplerMetadata11 mSamplerMetadataPS;
     SamplerMetadata11 mSamplerMetadataCS;
+
+    // Currently applied index buffer
+    ID3D11Buffer *mAppliedIB;
+    DXGI_FORMAT mAppliedIBFormat;
+    unsigned int mAppliedIBOffset;
+    bool mAppliedIBChanged;
+
+    // Vertex, index and input layouts
+    VertexDataManager mVertexDataManager;
+    IndexDataManager mIndexDataManager;
+    InputLayoutCache mInputLayoutCache;
 };
 
 }  // namespace rx
