@@ -275,4 +275,12 @@ std::string ToString(const T &value)
 #define ANGLE_INLINE inline
 #endif
 
+#ifndef ANGLE_STRINGIFY
+#define ANGLE_STRINGIFY(x) #x
+#endif
+
+#ifndef ANGLE_MACRO_STRINGIFY
+#define ANGLE_MACRO_STRINGIFY(x) ANGLE_STRINGIFY(x)
+#endif
+
 #endif // COMMON_ANGLEUTILS_H_
