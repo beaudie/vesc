@@ -72,6 +72,15 @@ class ProgramImpl : angle::NonCopyable
     virtual void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
     virtual void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
 
+    // Done in the back-end to avoid having to keep a system copy of uniform data.
+    virtual void getUniformfv(const gl::Context *context,
+                              GLint location,
+                              GLfloat *params) const = 0;
+    virtual void getUniformiv(const gl::Context *context, GLint location, GLint *params) const = 0;
+    virtual void getUniformuiv(const gl::Context *context,
+                               GLint location,
+                               GLuint *params) const = 0;
+
     // TODO: synchronize in syncState when dirty bits exist.
     virtual void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) = 0;
 
