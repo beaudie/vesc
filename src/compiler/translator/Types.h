@@ -150,11 +150,9 @@ class TInterfaceBlock : public TFieldListCollection
     TInterfaceBlock(const TString *name,
                     TFieldList *fields,
                     const TString *instanceName,
-                    int arraySize,
                     const TLayoutQualifier &layoutQualifier)
         : TFieldListCollection(name, fields),
           mInstanceName(instanceName),
-          mArraySize(arraySize),
           mBlockStorage(layoutQualifier.blockStorage),
           mMatrixPacking(layoutQualifier.matrixPacking),
           mBinding(layoutQualifier.binding)
@@ -163,8 +161,6 @@ class TInterfaceBlock : public TFieldListCollection
 
     const TString &instanceName() const { return *mInstanceName; }
     bool hasInstanceName() const { return mInstanceName != nullptr; }
-    bool isArray() const { return mArraySize > 0; }
-    int arraySize() const { return mArraySize; }
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
     TLayoutMatrixPacking matrixPacking() const { return mMatrixPacking; }
     int blockBinding() const { return mBinding; }
@@ -177,7 +173,6 @@ class TInterfaceBlock : public TFieldListCollection
 
   private:
     const TString *mInstanceName;  // for interface block instance names
-    int mArraySize;                // 0 if not an array
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
     int mBinding;
