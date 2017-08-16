@@ -194,6 +194,7 @@ class LazyResource : angle::NonCopyable
     const Resource11<GetD3D11Type<ResourceT>> &getObj() const { return mResource; }
 
   protected:
+    LazyResource(LazyResource &&other) : mResource(std::move(other.mResource)) {}
     gl::Error resolveImpl(Renderer11 *renderer,
                           const GetDescType<ResourceT> &desc,
                           GetInitDataType<ResourceT> *initData,
@@ -223,6 +224,13 @@ class LazyShader final : public LazyResource<GetResourceTypeFromD3D11<D3D11Shade
     gl::Error resolve(Renderer11 *renderer) override
     {
         return this->resolveImpl(renderer, mByteCode, nullptr, mName);
+    }
+
+    LazyShader(LazyShader &&shader)
+        : LazyResource(std::move(shader)),
+          mByteCode(std::move(shader.mByteCode)),
+          mName(shader.mName)
+    {
     }
 
   private:
