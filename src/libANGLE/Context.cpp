@@ -4617,14 +4617,14 @@ void Context::getUniformfv(GLuint program, GLint location, GLfloat *params)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
-    programObject->getUniformfv(location, params);
+    programObject->getUniformfv(this, location, params);
 }
 
 void Context::getUniformiv(GLuint program, GLint location, GLint *params)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
-    programObject->getUniformiv(location, params);
+    programObject->getUniformiv(this, location, params);
 }
 
 GLint Context::getUniformLocation(GLuint program, const GLchar *name)
