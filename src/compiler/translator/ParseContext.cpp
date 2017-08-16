@@ -655,7 +655,7 @@ bool TParseContext::checkConstructorArguments(const TSourceLoc &line,
     {
         // The size of an unsized constructor should already have been determined.
         ASSERT(!type.isUnsizedArray());
-        if (static_cast<size_t>(type.getArraySize()) != arguments->size())
+        if (static_cast<size_t>(type.getOutermostArraySize()) != arguments->size())
         {
             error(line, "array constructor needs one argument per array element", "constructor");
             return false;
@@ -670,7 +670,7 @@ bool TParseContext::checkConstructorArguments(const TSourceLoc &line,
                 error(line, "constructing from a non-dereferenced array", "constructor");
                 return false;
             }
-            if (!argType.sameElementType(type))
+            if (!argType.isElementTypeOf(type))
             {
                 error(line, "Array constructor argument has an incorrect type", "constructor");
                 return false;
@@ -1032,7 +1032,14 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     {
         const TVariable *maxDrawBuffers = static_cast<const TVariable *>(
             symbolTable.findBuiltIn("gl_MaxDrawBuffers", mShaderVersion));
-        if (static_cast<int>(type.getArraySize()) == maxDrawBuffers->getConstPointer()->getIConst())
+        if (type.isArrayOfArrays())
+        {
+            error(line, "redeclaration of gl_LastFragData as an array of arrays",
+                  identifier.c_str());
+            return false;
+        }
+        else if (static_cast<int>(type.getOutermostArraySize()) ==
+                 maxDrawBuffers->getConstPointer()->getIConst())
         {
             if (TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
             {
@@ -1364,7 +1371,9 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
 void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, const TType &type)
 {
     TLayoutQualifier layoutQualifier = type.getLayoutQualifier();
-    int arraySize                    = type.isArray() ? type.getArraySize() : 1;
+    // TODO: Handle arrays of arrays here. Probably can't assert no arrays of arrays, it could
+    // happen at least in error cases.
+    int arraySize = type.isArray() ? type.getOutermostArraySize() : 1;
     if (IsImage(type.getBasicType()))
     {
         checkImageBindingIsValid(identifierLocation, layoutQualifier.binding, arraySize);
@@ -1774,17 +1783,11 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
     TVariable *variable = nullptr;
     if (type.isUnsizedArray())
     {
-        // We have not checked yet whether the initializer actually is an array or not.
-        if (initializer->isArray())
-        {
-            type.setArraySize(initializer->getArraySize());
-        }
-        else
-        {
-            // Having a non-array initializer for an unsized array will result in an error later,
-            // so we don't generate an error message here.
-            type.setArraySize(1u);
-        }
+        // In case initializer is not an array or type has more dimensions than initializer, this
+        // will default to setting array sizes to 1. We have not checked yet whether the initializer
+        // actually is an array or not. Having a non-array initializer for an unsized array will
+        // result in an error later, so we don't generate an error message here.
+        type.sizeUnsizedArrays(initializer->getType().getArraySizes());
     }
     if (!declareVariable(line, identifier, type, &variable))
     {
@@ -2321,7 +2324,7 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
     unsigned int size = checkIsValidArraySize(identifierLocation, indexExpression);
     // Make the type an array even if size check failed.
     // This ensures useless error messages regarding the variable's non-arrayness won't follow.
-    arrayType.setArraySize(size);
+    arrayType.makeArray(size);
 
     if (IsAtomicCounter(publicType.getBasicType()))
     {
@@ -2532,7 +2535,7 @@ void TParseContext::parseArrayDeclarator(TPublicType &publicType,
     {
         TType arrayType   = TType(publicType);
         unsigned int size = checkIsValidArraySize(arrayLocation, indexExpression);
-        arrayType.setArraySize(size);
+        arrayType.makeArray(size);
 
         if (IsAtomicCounter(publicType.getBasicType()))
         {
@@ -3518,8 +3521,11 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TInterfaceBlock *interfaceBlock =
         new TInterfaceBlock(&blockName, fieldList, instanceName, arraySize, blockLayoutQualifier);
-    TType interfaceBlockType(interfaceBlock, typeQualifier.qualifier, blockLayoutQualifier,
-                             arraySize);
+    TType interfaceBlockType(interfaceBlock, typeQualifier.qualifier, blockLayoutQualifier);
+    if (arrayIndex != nullptr)
+    {
+        interfaceBlockType.makeArray(arraySize);
+    }
 
     TString symbolName = "";
     int symbolId       = 0;
@@ -3703,7 +3709,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             if (safeIndex < 0)
             {
                 safeIndex = checkIndexOutOfRange(outOfRangeIndexIsError, location, index,
-                                                 baseExpression->getArraySize(),
+                                                 baseExpression->getOutermostArraySize(),
                                                  "array index out of range");
             }
         }
@@ -4343,7 +4349,7 @@ TField *TParseContext::parseStructArrayDeclarator(TString *identifier,
 
     TType *type       = new TType(EbtVoid, EbpUndefined);
     unsigned int size = checkIsValidArraySize(arraySizeLoc, arraySize);
-    type->setArraySize(size);
+    type->makeArray(size);
 
     return new TField(type, identifier, loc);
 }
@@ -4385,46 +4391,35 @@ TFieldList *TParseContext::addStructDeclaratorListWithQualifiers(
 }
 
 TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecifier,
-                                                   TFieldList *fieldList)
+                                                   TFieldList *declaratorList)
 {
     checkPrecisionSpecified(typeSpecifier.getLine(), typeSpecifier.precision,
                             typeSpecifier.getBasicType());
 
-    checkIsNonVoid(typeSpecifier.getLine(), (*fieldList)[0]->name(), typeSpecifier.getBasicType());
+    checkIsNonVoid(typeSpecifier.getLine(), (*declaratorList)[0]->name(), typeSpecifier.getBasicType());
 
     checkWorkGroupSizeIsNotSpecified(typeSpecifier.getLine(), typeSpecifier.layoutQualifier);
 
-    for (unsigned int i = 0; i < fieldList->size(); ++i)
+    for (unsigned int i = 0; i < declaratorList->size(); ++i)
     {
-        //
-        // Careful not to replace already known aspects of type, like array-ness
-        //
-        TType *type = (*fieldList)[i]->type();
-        type->setBasicType(typeSpecifier.getBasicType());
-        type->setPrimarySize(typeSpecifier.getPrimarySize());
-        type->setSecondarySize(typeSpecifier.getSecondarySize());
-        type->setPrecision(typeSpecifier.precision);
-        type->setQualifier(typeSpecifier.qualifier);
-        type->setLayoutQualifier(typeSpecifier.layoutQualifier);
-        type->setMemoryQualifier(typeSpecifier.memoryQualifier);
-        type->setInvariant(typeSpecifier.invariant);
-
+        auto declaratorArraySizes = (*declaratorList)[i]->type()->getArraySizes();
         // don't allow arrays of arrays
-        if (type->isArray())
+        if (!declaratorArraySizes.empty())
         {
             checkIsValidTypeForArray(typeSpecifier.getLine(), typeSpecifier);
         }
-        if (typeSpecifier.array)
-            type->setArraySize(static_cast<unsigned int>(typeSpecifier.arraySize));
-        if (typeSpecifier.getUserDef())
+
+        TType *type = (*declaratorList)[i]->type();
+        *type = TType(typeSpecifier);
+        for (unsigned int arraySize : declaratorArraySizes)
         {
-            type->setStruct(typeSpecifier.getUserDef());
+            type->makeArray(arraySize);
         }
 
-        checkIsBelowStructNestingLimit(typeSpecifier.getLine(), *(*fieldList)[i]);
+        checkIsBelowStructNestingLimit(typeSpecifier.getLine(), *(*declaratorList)[i]);
     }
 
-    return fieldList;
+    return declaratorList;
 }
 
 TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
@@ -4735,7 +4730,7 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 return false;
         }
         // At this point, size of implicitly sized arrays should be resolved.
-        if (left->getArraySize() != right->getArraySize())
+        if (left->getType().getArraySizes() != right->getType().getArraySizes())
         {
             error(loc, "array size mismatch", GetOperatorString(op));
             return false;
@@ -5328,7 +5323,7 @@ TIntermTyped *TParseContext::addMethod(TFunction *fnCall,
     }
     else
     {
-        arraySize = typedThis->getArraySize();
+        arraySize = typedThis->getOutermostArraySize();
         if (typedThis->getAsSymbolNode() == nullptr)
         {
             // This code path can be hit with expressions like these:

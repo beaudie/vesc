@@ -133,7 +133,9 @@ unsigned int UniformHLSL::assignSamplerInStructUniformRegister(const TType &type
     ASSERT(IsSampler(type.getBasicType()));
     unsigned int registerIndex                     = mSamplerRegister;
     mUniformRegisterMap[std::string(name.c_str())] = registerIndex;
-    unsigned int registerCount                     = type.isArray() ? type.getArraySize() : 1u;
+    ASSERT(type.isArrayOfArrays());  // TODO: Handle arrays of arrays. It seems to be allowed by the
+                                     // spec.
+    unsigned int registerCount = type.isArray() ? type.getOutermostArraySize() : 1u;
     mSamplerRegister += registerCount;
     if (outRegisterCount)
     {
@@ -180,7 +182,9 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
         {
             out << "static const uint " << DecorateVariableIfNeeded(uniform->getName())
                 << ArrayString(type) << " = {";
-            for (unsigned int i = 0u; i < type.getArraySize(); ++i)
+            ASSERT(!type.isArrayOfArrays());  // TODO: Handle arrays of arrays. It seems to be
+                                              // allowed by the spec.
+            for (unsigned int i = 0u; i < type.getOutermostArraySize(); ++i)
             {
                 if (i > 0u)
                     out << ", ";

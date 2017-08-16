@@ -206,8 +206,9 @@ void CollectVariablesTraverser::setBuiltInInfoFromSymbolTable(const char *name,
     info->name       = name;
     info->mappedName = name;
     info->type       = GLVariableType(type);
-    info->arraySize  = type.isArray() ? type.getArraySize() : 0;
-    info->precision  = GLVariablePrecision(type);
+    ASSERT(!type.isArrayOfArrays());
+    info->arraySize = type.isArray() ? type.getOutermostArraySize() : 0;
+    info->precision = GLVariablePrecision(type);
 }
 
 void CollectVariablesTraverser::recordBuiltInVaryingUsed(const char *name,
@@ -479,7 +480,8 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
     }
     variableOut->name       = name.c_str();
     variableOut->mappedName = HashName(name, mHashFunction).c_str();
-    variableOut->arraySize  = type.getArraySize();
+    ASSERT(!type.isArrayOfArrays());
+    variableOut->arraySize = type.isArray() ? type.getOutermostArraySize() : 0;
 }
 
 Attribute CollectVariablesTraverser::recordAttribute(const TIntermSymbol &variable) const
@@ -545,7 +547,8 @@ InterfaceBlock CollectVariablesTraverser::recordInterfaceBlock(const TIntermSymb
     interfaceBlock.mappedName = HashName(blockType->name().c_str(), mHashFunction).c_str();
     interfaceBlock.instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
-    interfaceBlock.arraySize        = variable.getArraySize();
+    ASSERT(!variable.getType().isArrayOfArrays());  // Disallowed by GLSL ES 3.10 section 4.3.9
+    interfaceBlock.arraySize        = variable.isArray() ? variable.getOutermostArraySize() : 0;
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
     interfaceBlock.binding          = blockType->blockBinding();
     interfaceBlock.layout           = GetBlockLayoutType(blockType->blockStorage());

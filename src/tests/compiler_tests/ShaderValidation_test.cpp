@@ -407,6 +407,25 @@ TEST_F(FragmentShaderValidationTest, ArraysOfArrays2)
     }
 }
 
+// Arrays of arrays are not allowed (ESSL 3.00 section 4.1.9). Test this in a struct.
+TEST_F(FragmentShaderValidationTest, ArraysOfArraysInStruct)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "struct S {\n"
+        "    float[2] foo[3];\n"
+        "};\n"
+        "void main() {\n"
+        "    my_FragColor = vec4(1.0);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
 // Implicitly sized arrays need to be initialized (ESSL 3.00 section 4.1.9)
 TEST_F(FragmentShaderValidationTest, UninitializedImplicitArraySize)
 {
