@@ -26,6 +26,20 @@ namespace rx
 
 namespace
 {
+bool AllRectanglesMatch(const gl::Rectangle &matchingRectangle,
+                        const std::vector<gl::Rectangle> &rectangles,
+                        size_t numActiveViews)
+{
+    for (size_t i = 0u; i < numActiveViews; ++i)
+    {
+        if (matchingRectangle != rectangles[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOURCE_VIEW_DESC desc)
 {
     unsigned mipLevel   = index.mipIndex;
@@ -279,6 +293,8 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurViewport(),
       mCurNear(0.0f),
       mCurFar(0.0f),
+      mViewportOffsets(1u),
+      mNumActiveViews(1u),
       mViewportBounds(),
       mCurPresentPathFastEnabled(false),
       mCurPresentPathFastColorBufferHeight(0),
@@ -287,7 +303,8 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurrentInputLayout(),
       mInputLayoutIsDirty(false),
       mDirtyVertexBufferRange(gl::MAX_VERTEX_ATTRIBS, 0),
-      mCurrentPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED)
+      mCurrentPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
+      mIsMultiviewEnabled(false)
 {
     mCurBlendState.blend                 = false;
     mCurBlendState.sourceBlendRGB        = GL_ONE;
@@ -621,7 +638,30 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
                 invalidateRenderTarget(context);
+                if (mIsMultiviewEnabled)
+                {
+                    handleDrawFramebufferChange(context);
+                }
                 break;
+            case gl::State::DIRTY_BIT_PROGRAM_BINDING:
+            {
+                gl::VertexArray *vao = state.getVertexArray();
+                if (mIsMultiviewEnabled && vao != nullptr)
+                {
+                    // If ANGLE_multiview is enabled, the attribute divisor has to be updated for
+                    // each binding.
+                    VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
+                    gl::VertexArray::DirtyBits divisorMask;
+                    for (int i = gl::VertexArray::DIRTY_BIT_BINDING_0_DIVISOR;
+                         i < gl::VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR; ++i)
+                    {
+                        divisorMask.set(i);
+                    }
+                    vao11->syncState(context, divisorMask);
+                }
+                break;
+            }
+
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 invalidateVertexBuffer();
                 invalidateRenderTarget(context);
@@ -639,6 +679,37 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
     }
 
     // TODO(jmadill): Input layout and vertex buffer state.
+}
+
+void StateManager11::handleDrawFramebufferChange(const gl::Context *context)
+{
+    if (context == nullptr)
+    {
+        return;
+    }
+
+    const auto &glState                    = context->getGLState();
+    const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+    ASSERT(drawFramebuffer != nullptr);
+
+    // Update viewport offsets.
+    const std::vector<gl::Offset> *attachmentViewportOffsets =
+        drawFramebuffer->getViewportOffsets();
+    const std::vector<gl::Offset> &viewportOffsets =
+        attachmentViewportOffsets != nullptr
+            ? *attachmentViewportOffsets
+            : gl::FramebufferAttachment::GetDefaultViewportOffsetVector();
+    mNumActiveViews = viewportOffsets.size();
+    ASSERT(mNumActiveViews > 0u);
+    if (!std::equal(viewportOffsets.cbegin(), viewportOffsets.cend(), mViewportOffsets.cbegin()))
+    {
+        std::copy(viewportOffsets.begin(), viewportOffsets.end(), mViewportOffsets.begin());
+
+        // Because new viewport offsets are to be applied, we have to mark the internal viewport and
+        // scissor state as dirty.
+        mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
+        mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
+    }
 }
 
 gl::Error StateManager11::syncBlendState(const gl::Context *context,
@@ -788,13 +859,21 @@ void StateManager11::syncScissorRectangle(const gl::Rectangle &scissor, bool ena
 
     if (enabled)
     {
-        D3D11_RECT rect;
-        rect.left   = std::max(0, scissor.x);
-        rect.top    = std::max(0, modifiedScissorY);
-        rect.right  = scissor.x + std::max(0, scissor.width);
-        rect.bottom = modifiedScissorY + std::max(0, scissor.height);
-
-        mRenderer->getDeviceContext()->RSSetScissorRects(1, &rect);
+        std::vector<D3D11_RECT> rectangles;
+        rectangles.reserve(mNumActiveViews);
+        for (size_t i = 0u; i < mNumActiveViews; ++i)
+        {
+            D3D11_RECT rect;
+            int x       = scissor.x + mViewportOffsets[i].x;
+            int y       = modifiedScissorY + mViewportOffsets[i].y;
+            rect.left   = std::max(0, x);
+            rect.top    = std::max(0, y);
+            rect.right  = x + std::max(0, scissor.width);
+            rect.bottom = y + std::max(0, scissor.height);
+            rectangles.emplace_back(rect);
+        }
+        mRenderer->getDeviceContext()->RSSetScissorRects(static_cast<UINT>(mNumActiveViews),
+                                                         rectangles.data());
     }
 
     mCurScissorRect      = scissor;
@@ -823,35 +902,51 @@ void StateManager11::syncViewport(const gl::Caps *caps,
         dxMinViewportBoundsY = 0;
     }
 
-    int dxViewportTopLeftX = gl::clamp(viewport.x, dxMinViewportBoundsX, dxMaxViewportBoundsX);
-    int dxViewportTopLeftY = gl::clamp(viewport.y, dxMinViewportBoundsY, dxMaxViewportBoundsY);
-    int dxViewportWidth    = gl::clamp(viewport.width, 0, dxMaxViewportBoundsX - dxViewportTopLeftX);
-    int dxViewportHeight   = gl::clamp(viewport.height, 0, dxMaxViewportBoundsY - dxViewportTopLeftY);
+    std::vector<D3D11_VIEWPORT> dxViewports;
+    dxViewports.reserve(mNumActiveViews);
 
-    D3D11_VIEWPORT dxViewport;
-    dxViewport.TopLeftX = static_cast<float>(dxViewportTopLeftX);
+    int dxViewportTopLeftX = 0;
+    int dxViewportTopLeftY = 0;
+    int dxViewportWidth    = 0;
+    int dxViewportHeight   = 0;
 
-    if (mCurPresentPathFastEnabled)
+    for (size_t i = 0u; i < mNumActiveViews; ++i)
     {
-        // When present path fast is active and we're rendering to framebuffer 0, we must invert
-        // the viewport in Y-axis.
-        // NOTE: We delay the inversion until right before the call to RSSetViewports, and leave
-        // dxViewportTopLeftY unchanged. This allows us to calculate viewAdjust below using the
-        // unaltered dxViewportTopLeftY value.
-        dxViewport.TopLeftY = static_cast<float>(mCurPresentPathFastColorBufferHeight -
-                                                 dxViewportTopLeftY - dxViewportHeight);
-    }
-    else
-    {
-        dxViewport.TopLeftY = static_cast<float>(dxViewportTopLeftY);
+        dxViewportTopLeftX = gl::clamp(viewport.x + mViewportOffsets[i].x, dxMinViewportBoundsX,
+                                       dxMaxViewportBoundsX);
+        dxViewportTopLeftY = gl::clamp(viewport.y + mViewportOffsets[i].y, dxMinViewportBoundsY,
+                                       dxMaxViewportBoundsY);
+        dxViewportWidth  = gl::clamp(viewport.width, 0, dxMaxViewportBoundsX - dxViewportTopLeftX);
+        dxViewportHeight = gl::clamp(viewport.height, 0, dxMaxViewportBoundsY - dxViewportTopLeftY);
+
+        D3D11_VIEWPORT dxViewport;
+        dxViewport.TopLeftX = static_cast<float>(dxViewportTopLeftX);
+
+        if (mCurPresentPathFastEnabled)
+        {
+            // When present path fast is active and we're rendering to framebuffer 0, we must invert
+            // the viewport in Y-axis.
+            // NOTE: We delay the inversion until right before the call to RSSetViewports, and leave
+            // dxViewportTopLeftY unchanged. This allows us to calculate viewAdjust below using the
+            // unaltered dxViewportTopLeftY value.
+            dxViewport.TopLeftY = static_cast<float>(mCurPresentPathFastColorBufferHeight -
+                                                     dxViewportTopLeftY - dxViewportHeight);
+        }
+        else
+        {
+            dxViewport.TopLeftY = static_cast<float>(dxViewportTopLeftY);
+        }
+
+        dxViewport.Width    = static_cast<float>(dxViewportWidth);
+        dxViewport.Height   = static_cast<float>(dxViewportHeight);
+        dxViewport.MinDepth = actualZNear;
+        dxViewport.MaxDepth = actualZFar;
+
+        dxViewports.emplace_back(dxViewport);
     }
 
-    dxViewport.Width    = static_cast<float>(dxViewportWidth);
-    dxViewport.Height   = static_cast<float>(dxViewportHeight);
-    dxViewport.MinDepth = actualZNear;
-    dxViewport.MaxDepth = actualZFar;
-
-    mRenderer->getDeviceContext()->RSSetViewports(1, &dxViewport);
+    mRenderer->getDeviceContext()->RSSetViewports(static_cast<UINT>(dxViewports.size()),
+                                                  dxViewports.data());
 
     mCurViewport = viewport;
     mCurNear     = actualZNear;
@@ -861,6 +956,7 @@ void StateManager11::syncViewport(const gl::Caps *caps,
     // using viewAdjust (like the D3D9 renderer).
     if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
+        const auto &dxViewport         = dxViewports[0];
         mVertexConstants.viewAdjust[0] = static_cast<float>((viewport.width - dxViewportWidth) +
                                                             2 * (viewport.x - dxViewportTopLeftX)) /
                                          dxViewport.Width;
@@ -953,7 +1049,7 @@ void StateManager11::invalidateRenderTarget(const gl::Context *context)
 
     if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
-        auto *firstAttachment = fbo->getFirstNonNullAttachment();
+        const auto *firstAttachment = fbo->getFirstNonNullAttachment();
         const auto &size      = firstAttachment->getSize();
         if (mViewportBounds.width != size.width || mViewportBounds.height != size.height)
         {
@@ -1155,7 +1251,7 @@ void StateManager11::unsetConflictingAttachmentResources(
     }
 }
 
-void StateManager11::initialize(const gl::Caps &caps)
+void StateManager11::initialize(const gl::Caps &caps, const gl::Extensions &extensions)
 {
     mCurVertexSRVs.initialize(caps.maxVertexTextureImageUnits);
     mCurPixelSRVs.initialize(caps.maxTextureImageUnits);
@@ -1176,11 +1272,16 @@ void StateManager11::initialize(const gl::Caps &caps)
     mSamplerMetadataVS.initData(caps.maxVertexTextureImageUnits);
     mSamplerMetadataPS.initData(caps.maxTextureImageUnits);
     mSamplerMetadataCS.initData(caps.maxComputeTextureImageUnits);
+
+    mIsMultiviewEnabled = extensions.multiview;
+    mViewportOffsets.resize(extensions.maxViews);
 }
 
 void StateManager11::deinitialize()
 {
     mCurrentValueAttribs.clear();
+    mIsMultiviewEnabled = false;
+    mViewportOffsets.resize(1u);
 }
 
 gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer)

@@ -38,6 +38,12 @@ class GLWrapper
         return mHandle;
     }
 
+    void deallocate()
+    {
+        DeleteF(1, &mHandle);
+        mHandle = 0;
+    }
+
     operator GLuint() { return get(); }
 
   private:
