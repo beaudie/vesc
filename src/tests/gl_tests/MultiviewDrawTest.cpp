@@ -10,19 +10,24 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
+#include <memory>
+
 using namespace angle;
 
 namespace
 {
-GLuint CreateSimplePassthroughProgram()
+GLuint CreateSimplePassthroughProgram(int numViews)
 {
     const std::string vsSource =
         "#version 300 es\n"
         "#extension GL_OVR_multiview : require\n"
-        "layout(num_views = 2) in;\n"
+        "layout(num_views = " +
+        ToString(numViews) +
+        ") in;\n"
         "layout(location=0) in vec2 vPosition;\n"
         "void main()\n"
         "{\n"
+        "   gl_PointSize = 1.;\n"
         "   gl_Position = vec4(vPosition.xy, 0.0, 1.0);\n"
         "}\n";
 
@@ -137,21 +142,26 @@ class MultiviewSideBySideRenderTest : public MultiviewDrawTest
         ASSERT_TRUE(width % numViews == 0);
         const int widthPerView = width / numViews;
 
+        mColorTexture.reset(new GLTexture());
+        mDepthTexture.reset(new GLTexture());
+        mDrawFramebuffer.reset(new GLFramebuffer());
+        mReadFramebuffer.reset(new GLFramebuffer());
+
         // Create color and depth textures.
-        glBindTexture(GL_TEXTURE_2D, mColorTexture);
+        glBindTexture(GL_TEXTURE_2D, *mColorTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         ASSERT_GL_NO_ERROR();
 
-        glBindTexture(GL_TEXTURE_2D, mDepthTexture);
+        glBindTexture(GL_TEXTURE_2D, *mDepthTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT,
                      GL_FLOAT, NULL);
         glBindTexture(GL_TEXTURE_2D, 0);
         ASSERT_GL_NO_ERROR();
 
         // Create draw framebuffer to be used for side-by-side rendering.
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *mDrawFramebuffer);
         std::vector<GLint> viewportOffsets(numViews * 2u);
         for (int i = 0u; i < numViews; ++i)
         {
@@ -159,10 +169,10 @@ class MultiviewSideBySideRenderTest : public MultiviewDrawTest
             viewportOffsets[i * 2 + 1] = 0;
         }
         glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                     mColorTexture, 0, numViews,
+                                                     *mColorTexture, 0, numViews,
                                                      &viewportOffsets[0]);
         glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                                     mDepthTexture, 0, numViews,
+                                                     *mDepthTexture, 0, numViews,
                                                      &viewportOffsets[0]);
 
         GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
@@ -172,9 +182,9 @@ class MultiviewSideBySideRenderTest : public MultiviewDrawTest
 
         // Create read framebuffer to be used to retrieve the pixel information for testing
         // purposes.
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, *mReadFramebuffer);
         glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                               mColorTexture, 0);
+                               *mColorTexture, 0);
         ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_READ_FRAMEBUFFER));
 
         // Clear the buffers.
@@ -189,10 +199,10 @@ class MultiviewSideBySideRenderTest : public MultiviewDrawTest
         glScissor(0, 0, widthPerView, height);
     }
 
-    GLTexture mColorTexture;
-    GLTexture mDepthTexture;
-    GLFramebuffer mDrawFramebuffer;
-    GLFramebuffer mReadFramebuffer;
+    std::unique_ptr<GLTexture> mColorTexture;
+    std::unique_ptr<GLTexture> mDepthTexture;
+    std::unique_ptr<GLFramebuffer> mDrawFramebuffer;
+    std::unique_ptr<GLFramebuffer> mReadFramebuffer;
 };
 
 class MultiviewSideBySideRenderDualViewTest : public MultiviewSideBySideRenderTest
@@ -1228,7 +1238,7 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, Lines)
         return;
     }
 
-    GLuint program = CreateSimplePassthroughProgram();
+    GLuint program = CreateSimplePassthroughProgram(2);
     ASSERT_NE(program, 0u);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
@@ -1262,7 +1272,7 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, LineStrip)
         return;
     }
 
-    GLuint program = CreateSimplePassthroughProgram();
+    GLuint program = CreateSimplePassthroughProgram(2);
     ASSERT_NE(program, 0u);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
@@ -1296,7 +1306,7 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, LineLoop)
         return;
     }
 
-    GLuint program = CreateSimplePassthroughProgram();
+    GLuint program = CreateSimplePassthroughProgram(2);
     ASSERT_NE(program, 0u);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
@@ -1328,7 +1338,7 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, TriangleStrip)
         return;
     }
 
-    GLuint program = CreateSimplePassthroughProgram();
+    GLuint program = CreateSimplePassthroughProgram(2);
     ASSERT_NE(program, 0u);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
@@ -1355,7 +1365,7 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, TriangleFan)
         return;
     }
 
-    GLuint program = CreateSimplePassthroughProgram();
+    GLuint program = CreateSimplePassthroughProgram(2);
     ASSERT_NE(program, 0u);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
@@ -1387,9 +1397,9 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, NoLeakingFragments)
 
     GLint viewportOffsets[4] = {1, 0, 3, 0};
     glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                 mColorTexture, 0, 2, &viewportOffsets[0]);
+                                                 *mColorTexture, 0, 2, &viewportOffsets[0]);
     glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                                 mDepthTexture, 0, 2, &viewportOffsets[0]);
+                                                 *mDepthTexture, 0, 2, &viewportOffsets[0]);
 
     glViewport(0, 0, 1, 1);
     glScissor(0, 0, 1, 1);
@@ -1449,9 +1459,60 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, NoLeakingFragments)
     }
 }
 
+// Test that useProgram applies the number of views in computing the final value of the attribute
+// divisor.
+TEST_P(MultiviewSideBySideRenderTest, DivisorUpdatedOnProgramChange)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLVertexArray vao;
+    glBindVertexArray(vao);
+    GLBuffer vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    std::vector<Vector2I> windowCoordinates = {Vector2I(0, 0), Vector2I(1, 0), Vector2I(2, 0),
+                                               Vector2I(3, 0)};
+    std::vector<Vector2> vertexDataInClipSpace =
+        ConvertPixelCoordinatesToClipSpace(windowCoordinates, 4, 1);
+    // Fill with x positions so that the resulting clip space coordinate fails the clip test.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vector2) * vertexDataInClipSpace.size(),
+                 vertexDataInClipSpace.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, 0, 0, nullptr);
+    glVertexAttribDivisor(0, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a program and fbo with N views and draw N instances of a point horizontally.
+    for (int numViews = 2; numViews <= 4; ++numViews)
+    {
+        createFBO(numViews * 4, 1, numViews);
+        ASSERT_GL_NO_ERROR();
+
+        GLuint program = CreateSimplePassthroughProgram(numViews);
+        ASSERT_NE(program, 0u);
+        glUseProgram(program);
+        ASSERT_GL_NO_ERROR();
+
+        glDrawArraysInstanced(GL_POINTS, 0, 1, numViews);
+
+        for (int j = 0; j < numViews; ++j)
+        {
+            EXPECT_PIXEL_COLOR_EQ(j, 0, GLColor::red);
+        }
+        for (int j = numViews; j < 4; ++j)
+        {
+            EXPECT_PIXEL_COLOR_EQ(j, 0, GLColor::black);
+        }
+
+        glDeleteProgram(program);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideOcclusionQueryTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideOcclusionQueryTest, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest, ES3_OPENGL(), ES3_D3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderPrimitiveTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderPrimitiveTest, ES3_OPENGL(), ES3_D3D11());
