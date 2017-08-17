@@ -180,6 +180,8 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
     const auto &activeLocations = program->getActiveAttribLocationsMask();
     const auto &attribs         = mData.getVertexAttributes();
     const auto &bindings        = mData.getVertexBindings();
+    const int divisorMultiplier =
+        (program != nullptr && program->usesMultiview()) ? program->getNumViews() : 1;
 
     if (mAttribsToTranslate.any())
     {
@@ -197,7 +199,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
             translatedAttrib->attribute = &attribs[dirtyAttribIndex];
             translatedAttrib->binding   = &bindings[translatedAttrib->attribute->bindingIndex];
             translatedAttrib->currentValueType = currentValue.Type;
-            translatedAttrib->divisor          = translatedAttrib->binding->getDivisor();
+            translatedAttrib->divisor = translatedAttrib->binding->getDivisor() * divisorMultiplier;
 
             switch (mAttributeStorageTypes[dirtyAttribIndex])
             {
@@ -232,7 +234,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
             dynamicAttrib->attribute        = &attribs[dynamicAttribIndex];
             dynamicAttrib->binding          = &bindings[dynamicAttrib->attribute->bindingIndex];
             dynamicAttrib->currentValueType = currentValue.Type;
-            dynamicAttrib->divisor          = dynamicAttrib->binding->getDivisor();
+            dynamicAttrib->divisor = dynamicAttrib->binding->getDivisor() * divisorMultiplier;
         }
 
         ANGLE_TRY(vertexDataManager->storeDynamicAttribs(&mTranslatedAttribs, activeDynamicAttribs,
