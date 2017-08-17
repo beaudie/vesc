@@ -534,6 +534,76 @@ TEST_P(RobustResourceInitTest, BindTexImage)
     eglDestroySurface(display, pbuffer);
 }
 
+// ----
+
+// Test blitting from outside the read buffer.
+TEST_P(RobustResourceInitTest, BlitFromOutsideReadBuffer)
+{
+    ANGLE_SKIP_TEST_IF(!setup() || getClientMajorVersion() < 3);
+
+    // Set up a read and draw framebuffer;
+    constexpr GLuint readSize = 3;
+    constexpr GLuint drawSize = 7;
+
+    std::vector<GLColor> readColors(readSize * readSize, GLColor::red);
+
+    GLTexture readTexture;
+    glBindTexture(GL_TEXTURE_2D, readTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, readSize, readSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 readColors.data());
+
+    GLFramebuffer readFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, readFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, readTexture, 0);
+
+    std::vector<GLColor> drawColors(drawSize * drawSize, GLColor::green);
+
+    GLTexture drawTexture;
+    glBindTexture(GL_TEXTURE_2D, drawTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, drawSize, drawSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 drawColors.data());
+
+    GLFramebuffer drawFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, drawFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, drawTexture, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Blit from a region outside the 3x3 read Framebuffer.
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFramebuffer);
+
+    constexpr GLint readMin = -1;
+    constexpr GLint readMax = 4;
+    constexpr GLint drawMin = 1;
+    constexpr GLint drawMax = 6;
+
+    glBlitFramebuffer(readMin, readMin, readMax, readMax, drawMin, drawMin, drawMax, drawMax,
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify the colors are as expected.
+    glBindFramebuffer(GL_FRAMEBUFFER, drawFramebuffer);
+    std::vector<GLColor> actualColors(drawSize * drawSize);
+    glReadPixels(0, 0, drawSize, drawSize, GL_RGBA, GL_UNSIGNED_BYTE, actualColors.data());
+    for (GLuint drawY = 0; drawY < drawSize; ++drawY)
+    {
+        for (GLuint drawX = 0; drawX < drawSize; ++drawX)
+        {
+            GLuint colorIndex = drawY * drawSize + drawX;
+            if (drawX >= 2 && drawY >= 2 && drawX < (drawSize - 2) && drawY < (drawSize - 2))
+            {
+                // Copied pixel, should be red.
+                EXPECT_EQ(GLColor::red, actualColors[colorIndex]);
+            }
+            else
+            {
+                // Pixel on the border or out of bounds - should be green since it wasn't overwritten.
+                EXPECT_EQ(GLColor::green, actualColors[colorIndex]);
+            }
+        }
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
