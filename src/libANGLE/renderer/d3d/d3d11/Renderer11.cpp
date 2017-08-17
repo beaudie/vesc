@@ -360,6 +360,19 @@ void GetTriFanIndices(const void *indices,
     }
 }
 
+int GetAdjustedInstanceCount(bool usesMultiview, int numViews, int instanceCount)
+{
+    if (!usesMultiview)
+    {
+        return instanceCount;
+    }
+    if (instanceCount == 0)
+    {
+        return numViews;
+    }
+    return numViews * instanceCount;
+}
+
 const uint32_t ScratchMemoryBufferLifetime = 1000;
 
 }  // anonymous namespace
@@ -799,7 +812,7 @@ void Renderer11::initializeDevice()
 
     const gl::Caps &rendererCaps = getNativeCaps();
 
-    mStateManager.initialize(rendererCaps);
+    mStateManager.initialize(rendererCaps, getNativeExtensions());
 
     // No context is available here, use the proxy context in the display.
     markAllStateDirty(mDisplay->getProxyContext());
@@ -1689,7 +1702,10 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
 {
     const auto &data       = context->getContextState();
     const auto &glState    = data.getState();
-    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+    gl::Program *program   = glState.getProgram();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+    GLsizei adjustedInstanceCount =
+        GetAdjustedInstanceCount(program->usesMultiview(), program->getNumViews(), instances);
 
     if (programD3D->usesGeometryShader(mode) && glState.isTransformFeedbackActiveUnpaused())
     {
@@ -1699,9 +1715,9 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
         // geometry shader + pixel shader to rasterize the primitives.
         mStateManager.setPixelShader(nullptr);
 
-        if (instances > 0)
+        if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawInstanced(count, instances, 0, 0);
+            mDeviceContext->DrawInstanced(count, adjustedInstanceCount, 0, 0);
         }
         else
         {
@@ -1727,9 +1743,9 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
         mStateManager.setGeometryShader(
             &GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader());
 
-        if (instances > 0)
+        if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawInstanced(count, instances, 0, 0);
+            mDeviceContext->DrawInstanced(count, adjustedInstanceCount, 0, 0);
         }
         else
         {
@@ -1740,18 +1756,18 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
 
     if (mode == GL_LINE_LOOP)
     {
-        return drawLineLoop(data, count, GL_NONE, nullptr, 0, instances);
+        return drawLineLoop(data, count, GL_NONE, nullptr, 0, adjustedInstanceCount);
     }
 
     if (mode == GL_TRIANGLE_FAN)
     {
-        return drawTriangleFan(data, count, GL_NONE, nullptr, 0, instances);
+        return drawTriangleFan(data, count, GL_NONE, nullptr, 0, adjustedInstanceCount);
     }
 
     bool useInstancedPointSpriteEmulation =
         programD3D->usesPointSize() && getWorkarounds().useInstancedPointSpriteEmulation;
 
-    if (instances > 0)
+    if (adjustedInstanceCount > 0)
     {
         if (mode == GL_POINTS && useInstancedPointSpriteEmulation)
         {
@@ -1763,7 +1779,7 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
 
             // Each instance being rendered requires the inputlayout cache to reapply buffers and
             // offsets.
-            for (GLsizei i = 0; i < instances; i++)
+            for (GLsizei i = 0; i < adjustedInstanceCount; i++)
             {
                 ANGLE_TRY(mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
                     this, startVertex, i));
@@ -1772,7 +1788,7 @@ gl::Error Renderer11::drawArraysImpl(const gl::Context *context,
         }
         else
         {
-            mDeviceContext->DrawInstanced(count, instances, 0, 0);
+            mDeviceContext->DrawInstanced(count, adjustedInstanceCount, 0, 0);
         }
         return gl::NoError();
     }
@@ -1800,6 +1816,9 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
 {
     const auto &data = context->getContextState();
     TranslatedIndexData indexInfo;
+    const gl::Program *program = data.getState().getProgram();
+    GLsizei adjustedInstanceCount =
+        GetAdjustedInstanceCount(program->usesMultiview(), program->getNumViews(), instances);
 
     if (!drawCallNeedsTranslation(context, mode, type))
     {
@@ -1808,9 +1827,10 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
         const gl::Type &typeInfo = gl::GetTypeInfo(type);
         unsigned int startIndexLocation =
             static_cast<unsigned int>(reinterpret_cast<const uintptr_t>(indices)) / typeInfo.bytes;
-        if (instances > 0)
+        if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawIndexedInstanced(count, instances, startIndexLocation, 0, 0);
+            mDeviceContext->DrawIndexedInstanced(count, adjustedInstanceCount, startIndexLocation,
+                                                 0, 0);
         }
         else
         {
@@ -1833,16 +1853,16 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
 
     if (mode == GL_LINE_LOOP)
     {
-        return drawLineLoop(data, count, type, indices, baseVertex, instances);
+        return drawLineLoop(data, count, type, indices, baseVertex, adjustedInstanceCount);
     }
 
     if (mode == GL_TRIANGLE_FAN)
     {
-        return drawTriangleFan(data, count, type, indices, baseVertex, instances);
+        return drawTriangleFan(data, count, type, indices, baseVertex, adjustedInstanceCount);
     }
 
-    const ProgramD3D *programD3D = GetImplAs<ProgramD3D>(data.getState().getProgram());
-    if (instances > 0)
+    const ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+    if (adjustedInstanceCount > 0)
     {
         if (mode == GL_POINTS && programD3D->usesInstancedPointSpriteEmulation())
         {
@@ -1855,7 +1875,7 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
 
             // Each instance being rendered requires the inputlayout cache to reapply buffers and
             // offsets.
-            for (GLsizei i = 0; i < instances; i++)
+            for (GLsizei i = 0; i < adjustedInstanceCount; i++)
             {
                 ANGLE_TRY(mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
                     this, startVertex, i));
@@ -1864,7 +1884,7 @@ gl::Error Renderer11::drawElementsImpl(const gl::Context *context,
         }
         else
         {
-            mDeviceContext->DrawIndexedInstanced(count, instances, 0, baseVertex, 0);
+            mDeviceContext->DrawIndexedInstanced(count, adjustedInstanceCount, 0, baseVertex, 0);
         }
         return gl::NoError();
     }
