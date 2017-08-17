@@ -38,6 +38,34 @@ GLuint CreateSimplePassthroughProgram()
     return CompileProgram(vsSource, fsSource);
 }
 
+GLuint CreatePassthroughPointProgram(int numViews)
+{
+    std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = " +
+        ToString(numViews) +
+        ") in;\n"
+        "layout(location=0) in int vPixelX;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_PointSize = 1.0;\n"
+        "   vec2 pos = 2. * vec2((float(vPixelX) + .5) / 4.0, 0.5) - 1.;\n"
+        "   gl_Position = vec4(pos, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "   col = vec4(1,0,0,1);\n"
+        "}\n";
+    return CompileProgram(vsSource, fsSource);
+}
+
 std::vector<Vector2> ConvertPixelCoordinatesToClipSpace(const std::vector<Vector2I> &pixels,
                                                         int width,
                                                         int height)
@@ -1392,9 +1420,69 @@ TEST_P(MultiviewSideBySideRenderPrimitiveTest, TriangleFan)
     glDeleteProgram(program);
 }
 
+// Test that useProgram applies the number of views in computing the final value of the attribute
+// divisor.
+TEST_P(MultiviewSideBySideRenderTest, DontTouchDivisor)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLVertexArray vao;
+    glBindVertexArray(vao);
+    GLBuffer vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    std::vector<int> pixelXPositions;
+    for (int i = 0; i < 4; ++i)
+    {
+        pixelXPositions.push_back(i);
+    }
+    // Fill with x positions so that the resulting clip space coordinate fails the clip test.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(int) * pixelXPositions.size(), pixelXPositions.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribIPointer(0, 1, GL_INT, 0, nullptr);
+    glVertexAttribDivisor(0, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a program and fbo with N views and draw N instances of a point horizontally.
+    for (int numViews = 2; numViews <= 4; ++numViews)
+    {
+        createFBO(numViews * 4, 1, numViews);
+        ASSERT_GL_NO_ERROR();
+
+        GLuint program = CreatePassthroughPointProgram(numViews);
+        if (program == 0)
+        {
+            FAIL() << "shader compilation failed.";
+        }
+        glUseProgram(program);
+        ASSERT_GL_NO_ERROR();
+
+        glDrawArraysInstanced(GL_POINTS, 0, 1, numViews);
+
+        for (int j = 0; j < numViews; ++j)
+        {
+            EXPECT_PIXEL_COLOR_EQ(j, 0, GLColor::red);
+        }
+        for (int j = numViews; j < 4; ++j)
+        {
+            EXPECT_PIXEL_COLOR_EQ(j, 0, GLColor::black);
+        }
+
+        glDeleteProgram(program);
+
+        mColorTexture.deallocate();
+        mDepthTexture.deallocate();
+        mDrawFramebuffer.deallocate();
+        mReadFramebuffer.deallocate();
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideOcclusionQueryTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderDualViewTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL(), ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideOcclusionQueryTest, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest, ES3_OPENGL(), ES3_D3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderPrimitiveTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderPrimitiveTest, ES3_OPENGL(), ES3_D3D11());

@@ -402,6 +402,7 @@ gl::Error InputLayoutCache::updateInputLayout(Renderer11 *renderer,
     const auto &attribs            = state.getVertexArray()->getVertexAttributes();
     const auto &bindings           = state.getVertexArray()->getVertexBindings();
     const auto &locationToSemantic = programD3D->getAttribLocationToD3DSemantics();
+    int divisorMultiplier          = program->usesMultiview() ? program->getNumViews() : 1;
 
     for (size_t attribIndex : program->getActiveAttribLocationsMask())
     {
@@ -418,7 +419,7 @@ gl::Error InputLayoutCache::updateInputLayout(Renderer11 *renderer,
         gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
 
         layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType,
-                                binding.getDivisor());
+                                binding.getDivisor() * divisorMultiplier);
     }
 
     const d3d11::InputLayout *inputLayout = nullptr;
