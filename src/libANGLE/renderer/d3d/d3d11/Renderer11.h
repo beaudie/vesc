@@ -472,6 +472,8 @@ class Renderer11 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    bool preferUsingDebugDevice() const { return mCreateDebugDevice; }
+
   private:
     gl::Error drawArraysImpl(const gl::Context *context,
                              GLenum mode,
