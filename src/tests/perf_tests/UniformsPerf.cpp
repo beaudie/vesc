@@ -79,6 +79,11 @@ std::string UniformsParams::suffix() const
 
     strstr << RenderTestParams::suffix();
 
+    if (eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
+    {
+        strstr << "_null";
+    }
+
     if (dataType == DataType::VEC4)
     {
         strstr << "_" << (numVertexUniforms + numFragmentUniforms) << "_vec4";
@@ -324,7 +329,7 @@ void UniformsBenchmark::drawLoop(const SetUniformFunc &setUniformsFunc)
         {
             glUseProgram(mPrograms[frameIndex]);
         }
-        else
+        if (params.dataMode == DataMode::UPDATE)
         {
             for (size_t uniform = 0; uniform < mUniformLocations.size(); ++uniform)
             {
@@ -406,12 +411,8 @@ TEST_P(UniformsBenchmark, Run)
 
 ANGLE_INSTANTIATE_TEST(UniformsBenchmark,
                        VectorUniforms(D3D9(), DataMode::UPDATE),
-                       VectorUniforms(D3D11(), DataMode::REPEAT),
                        VectorUniforms(D3D11(), DataMode::UPDATE),
-                       VectorUniforms(OPENGL(), DataMode::REPEAT),
+                       VectorUniforms(D3D11_NULL(), DataMode::UPDATE),
                        VectorUniforms(OPENGL(), DataMode::UPDATE),
-                       MatrixUniforms(D3D11(), DataMode::REPEAT),
-                       MatrixUniforms(D3D11(), DataMode::UPDATE),
-                       MatrixUniforms(OPENGL(), DataMode::REPEAT),
-                       MatrixUniforms(OPENGL(), DataMode::UPDATE),
-                       VectorUniforms(D3D11_NULL(), DataMode::UPDATE, ProgramMode::MULTIPLE));
+                       VectorUniforms(OPENGL_NULL(), DataMode::UPDATE),
+                       VectorUniforms(D3D11_NULL(), DataMode::REPEAT, ProgramMode::MULTIPLE));
