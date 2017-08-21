@@ -753,4 +753,19 @@ void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
                                  baseViewIndex);
 }
 
+void ProgramGL::getUniformfv(const gl::Context *context, GLint location, GLfloat *params) const
+{
+    mFunctions->getUniformfv(mProgramID, uniLoc(location), params);
+}
+
+void ProgramGL::getUniformiv(const gl::Context *context, GLint location, GLint *params) const
+{
+    mFunctions->getUniformiv(mProgramID, uniLoc(location), params);
+}
+
+void ProgramGL::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
+{
+    mFunctions->getUniformuiv(mProgramID, uniLoc(location), params);
+}
+
 }  // namespace rx
