@@ -18,7 +18,8 @@ DisplayEGL::DisplayEGL(const egl::DisplayState &state)
       mEGL(nullptr),
       mConfig(EGL_NO_CONFIG),
       mContext(EGL_NO_CONTEXT),
-      mFunctionsGL(nullptr)
+      mCurrentSurface(EGL_NO_SURFACE),
+      mFunctionsGL(nullptr),
 {
 }
 
@@ -105,6 +106,9 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;
+
+    // Surfaceless contexts are emulated even if there is no native support.
+    outExtensions->surfacelessContext = true;
 }
 
 void DisplayEGL::generateCaps(egl::Caps *outCaps) const
