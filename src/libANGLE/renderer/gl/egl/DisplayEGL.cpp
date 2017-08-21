@@ -18,7 +18,8 @@ DisplayEGL::DisplayEGL(const egl::DisplayState &state)
       mEGL(nullptr),
       mConfig(EGL_NO_CONFIG),
       mContext(EGL_NO_CONTEXT),
-      mFunctionsGL(nullptr)
+      mCurrentSurface(EGL_NO_SURFACE),
+      mFunctionsGL(nullptr),
 {
 }
 
@@ -31,6 +32,34 @@ std::string DisplayEGL::getVendorString() const
     const char *vendor = mEGL->queryString(EGL_VENDOR);
     ASSERT(vendor);
     return vendor;
+}
+
+egl::Error DisplayEGL::makeCurrentSurfaceless(gl::Context *context) override
+{
+    // Nothing to do because EGL always uses the same context and the previous surface can be left
+    // current.
+    return egl::NoError();
+}
+
+egl::Error DisplayEGL::makeCurrent(egl::Surface *drawSurface,
+                                   egl::Surface *readSurface,
+                                   gl::Context *context) override
+{
+    if (drawSurface)
+    {
+        SurfaceEGL *drawSurfaceEGL = GetImplAs<SurfaceEGL>(drawSurface);
+        EGLSurface surface         = drawSurfaceWGL->getSurface();
+        if (surface != mCurrentSurface)
+        {
+            if (mEGL->makeCurrent(mSurface, mContext) == EGL_FALSE)
+            {
+                return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
+            }
+            mCurrentSurface = surface;
+        }
+    }
+
+    return DisplayGL::makeCurrent(drawSurface, readSurface, context);
 }
 
 egl::Error DisplayEGL::initializeContext(const egl::AttributeMap &eglAttributes)
@@ -105,6 +134,9 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;
+
+    // Surfaceless contexts are emulated even if there is no native support.
+    outExtensions->surfacelessContext = true;
 }
 
 void DisplayEGL::generateCaps(egl::Caps *outCaps) const

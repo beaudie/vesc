@@ -44,6 +44,8 @@ class SurfaceEGL : public SurfaceGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
+    EGLSurface getSurface() const;
+
   protected:
     const FunctionsEGL *mEGL;
     EGLConfig mConfig;

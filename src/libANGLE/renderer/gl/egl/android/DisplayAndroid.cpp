@@ -114,6 +114,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         return egl::EglNotInitialized()
                << "eglMakeCurrent failed with " << egl::Error(mEGL->getError());
     }
+    mCurrentSurface = mDummyPbuffer;
 
     mFunctionsGL = mEGL->makeFunctionsGL();
     mFunctionsGL->initialize();
@@ -130,6 +131,7 @@ void DisplayAndroid::terminate()
     {
         ERR() << "eglMakeCurrent error " << egl::Error(mEGL->getError());
     }
+    mCurrentSurface = EGL_NO_SURFACE;
 
     if (mDummyPbuffer != EGL_NO_SURFACE)
     {

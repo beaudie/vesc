@@ -23,17 +23,24 @@ class DisplayEGL : public DisplayGL
 
     std::string getVendorString() const override;
 
+    egl::Error makeCurrent(egl::Surface *drawSurface,
+                           egl::Surface *readSurface,
+                           gl::Context *context) override;
+
   protected:
     egl::Error initializeContext(const egl::AttributeMap &eglAttributes);
 
     FunctionsEGL *mEGL;
     EGLConfig mConfig;
     EGLContext mContext;
+    EGLSurface mCurrentSurface;
     FunctionsGL *mFunctionsGL;
 
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
+
+    egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
     const FunctionsGL *getFunctionsGL() const override;
 };

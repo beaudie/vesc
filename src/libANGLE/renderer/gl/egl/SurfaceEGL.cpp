@@ -39,11 +39,7 @@ SurfaceEGL::~SurfaceEGL()
 
 egl::Error SurfaceEGL::makeCurrent()
 {
-    EGLBoolean success = mEGL->makeCurrent(mSurface, mContext);
-    if (success == EGL_FALSE)
-    {
-        return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
-    }
+    // Handling of makeCurrent is done in DisplayEGL
     return egl::NoError();
 }
 
@@ -131,6 +127,11 @@ EGLint SurfaceEGL::getSwapBehavior() const
     EGLBoolean success = mEGL->querySurface(mSurface, EGL_SWAP_BEHAVIOR, &value);
     ASSERT(success == EGL_TRUE);
     return value;
+}
+
+EGLSurface SurfaceEGL::getSurface() const
+{
+    return mSurface;
 }
 
 }  // namespace rx

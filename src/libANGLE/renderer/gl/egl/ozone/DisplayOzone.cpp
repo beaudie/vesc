@@ -508,6 +508,7 @@ egl::Error DisplayOzone::initialize(egl::Display *display)
     {
         return egl::EglNotInitialized() << "Could not make context current.";
     }
+    mCurrentSurface = EGL_NO_SURFACE;
 
     mFunctionsGL = mEGL->makeFunctionsGL();
     mFunctionsGL->initialize();
@@ -823,6 +824,7 @@ void DisplayOzone::terminate()
         // Mesa might crash if you terminate EGL with a context current
         // then re-initialize EGL, so make our context not current.
         mEGL->makeCurrent(EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        mCurrentSurface = EGL_NO_SURFACE;
         mEGL->destroyContext(mContext);
         mContext = nullptr;
     }
