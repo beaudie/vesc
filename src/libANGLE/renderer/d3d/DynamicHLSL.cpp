@@ -1344,7 +1344,16 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
 
     if (shaderType == SHADER_VERTEX && metadata.hasANGLEMultiviewEnabled())
     {
-        builtins->glViewIDOVR.enable(userSemantic, reservedSemanticIndex++);
+        // TODO (mradev): investigate what happens if VPRT is used and the geometry code path is
+        // necessary.
+        if (metadata.canSelectViewInVS())
+        {
+            builtins->glViewIDOVR.enableSystem("SV_ViewportArrayIndex");
+        }
+        else
+        {
+            builtins->glViewIDOVR.enable(userSemantic, reservedSemanticIndex++);
+        }
     }
 
     if (shaderType == SHADER_PIXEL && metadata.hasANGLEMultiviewEnabled())

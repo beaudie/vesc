@@ -7,6 +7,7 @@
 // Test issuing multiview Draw* commands.
 //
 
+#include "platform/WorkaroundsD3D.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -61,13 +62,18 @@ std::vector<Vector2> ConvertPixelCoordinatesToClipSpace(const std::vector<Vector
 
 struct MultiviewTestParams final : public PlatformParameters
 {
-    MultiviewTestParams(GLenum multiviewLayout, const EGLPlatformParameters &eglPlatformParameters)
-        : PlatformParameters(3, 0, eglPlatformParameters), mMultiviewLayout(multiviewLayout)
+    MultiviewTestParams(GLenum multiviewLayout,
+                        bool forceUseGeometryWorkaround,
+                        const EGLPlatformParameters &eglPlatformParameters)
+        : PlatformParameters(3, 0, eglPlatformParameters),
+          mMultiviewLayout(multiviewLayout),
+          mForceUseGeometryWorkaround(forceUseGeometryWorkaround)
     {
         ASSERT(multiviewLayout == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE ||
                multiviewLayout == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE);
     }
     GLenum mMultiviewLayout;
+    bool mForceUseGeometryWorkaround;
 };
 
 std::ostream &operator<<(std::ostream &os, const MultiviewTestParams &params)
@@ -337,6 +343,11 @@ class MultiviewRenderTest : public MultiviewRenderTestBase,
   protected:
     MultiviewRenderTest() : MultiviewRenderTestBase(GetParam(), GetParam().mMultiviewLayout) {}
     void SetUp() override { MultiviewRenderTestBase::RenderTestSetUp(); }
+
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+    {
+        workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryWorkaround;
+    }
 };
 
 class MultiviewRenderDualViewTest : public MultiviewRenderTest
@@ -466,6 +477,11 @@ class MultiviewSideBySideRenderTest : public MultiviewRenderTestBase,
     {
     }
     void SetUp() override { MultiviewRenderTestBase::RenderTestSetUp(); }
+
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+    {
+        // workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryWorkaround;;
+    }
 };
 
 class MultiviewLayeredRenderTest : public MultiviewRenderTestBase,
@@ -1935,48 +1951,52 @@ TEST_P(MultiviewLayeredRenderTest, RenderToSubrageOfLayers)
 
 MultiviewTestParams SideBySideOpenGL()
 {
-    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, egl_platform::OPENGL());
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, false,
+                               egl_platform::OPENGL());
 }
 
 MultiviewTestParams LayeredOpenGL()
 {
-    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, egl_platform::OPENGL());
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, false,
+                               egl_platform::OPENGL());
 }
 
-MultiviewTestParams SideBySideD3D11()
+MultiviewTestParams SideBySideD3D11(bool useGeometryShaderPath)
 {
-    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, egl_platform::D3D11());
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, useGeometryShaderPath,
+                               egl_platform::D3D11());
 }
 
-MultiviewTestParams LayeredD3D11()
+MultiviewTestParams LayeredD3D11(bool useGeometryShaderPath)
 {
-    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, egl_platform::D3D11());
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, useGeometryShaderPath,
+                               egl_platform::D3D11());
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11(),
-                       LayeredD3D11());
+                       SideBySideD3D11(false),
+                       LayeredD3D11(false));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11(),
-                       LayeredD3D11());
+                       SideBySideD3D11(false),
+                       LayeredD3D11(false));
 ANGLE_INSTANTIATE_TEST(MultiviewOcclusionQueryTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11(),
-                       LayeredD3D11());
+                       SideBySideD3D11(false),
+                       LayeredD3D11(false));
 ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest,
                        SideBySideOpenGL(),
-                       SideBySideD3D11(),
-                       LayeredD3D11());
+                       SideBySideD3D11(false),
+                       LayeredD3D11(false));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderPrimitiveTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11(),
-                       LayeredD3D11());
+                       SideBySideD3D11(false),
+                       LayeredD3D11(false));
 ANGLE_INSTANTIATE_TEST(MultiviewSideBySideRenderTest, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewLayeredRenderTest, ES3_OPENGL(), ES3_D3D11());
