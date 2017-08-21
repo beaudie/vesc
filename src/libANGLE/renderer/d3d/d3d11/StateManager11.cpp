@@ -1818,8 +1818,12 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     const auto &vertexArray = state.getVertexArray();
     auto *vertexArray11     = GetImplAs<VertexArray11>(vertexArray);
 
-    ANGLE_TRY(vertexArray11->updateDirtyAndDynamicAttribs(context, &mVertexDataManager, first,
-                                                          count, instances));
+    if (vertexArray11->hasDirtyOrDynamicAttrib(context))
+    {
+        ANGLE_TRY(vertexArray11->updateDirtyAndDynamicAttribs(context, &mVertexDataManager, first,
+                                                              count, instances));
+        invalidateVertexBuffer();
+    }
 
     ANGLE_TRY(syncCurrentValueAttribs(state));
 
@@ -1834,6 +1838,12 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     {
         numIndicesPerInstance = count;
     }
+
+    if (!mInputLayoutIsDirty)
+    {
+        return gl::NoError();
+    }
+
     const auto &vertexArrayAttribs = vertexArray11->getTranslatedAttribs();
     ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(mRenderer, state, vertexArrayAttribs,
                                                    mCurrentValueAttribs, mode, first, indexInfo,
@@ -1848,6 +1858,7 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     // is clean. This is a bit of a hack.
     vertexArray11->clearDirtyAndPromoteDynamicAttribs(state, count);
 
+    mInputLayoutIsDirty = false;
     return gl::NoError();
 }
 
@@ -1904,6 +1915,7 @@ void StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
     }
 }
 
+// Vertex buffer is invalidated outside this function.
 gl::Error StateManager11::updateVertexOffsetsForPointSpritesEmulation(GLint startVertex,
                                                                       GLsizei emulatedInstanceId)
 {
