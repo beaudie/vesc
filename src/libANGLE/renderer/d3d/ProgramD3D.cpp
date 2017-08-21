@@ -377,6 +377,7 @@ ProgramD3DMetadata::ProgramD3DMetadata(RendererD3D *renderer,
       mUsesViewScale(renderer->presentPathFastEnabled()),
       mHasANGLEMultiviewEnabled(vertexShader->hasANGLEMultiviewEnabled()),
       mUsesViewID(fragmentShader->usesViewID()),
+      mCanSelectViewInVS(renderer->canSelectViewInVS()),
       mVertexShader(vertexShader),
       mFragmentShader(fragmentShader)
 {
@@ -432,6 +433,11 @@ bool ProgramD3DMetadata::hasANGLEMultiviewEnabled() const
 bool ProgramD3DMetadata::usesViewID() const
 {
     return mUsesViewID;
+}
+
+bool ProgramD3DMetadata::canSelectViewInVS() const
+{
+    return mCanSelectViewInVS;
 }
 
 bool ProgramD3DMetadata::addsPointCoordToVertexShader() const
@@ -601,7 +607,7 @@ bool ProgramD3D::usesGeometryShaderForPointSpriteEmulation() const
 
 bool ProgramD3D::usesGeometryShader(GLenum drawMode) const
 {
-    if (mHasANGLEMultiviewEnabled)
+    if (mHasANGLEMultiviewEnabled && !mRenderer->canSelectViewInVS())
     {
         return true;
     }
@@ -1322,8 +1328,8 @@ gl::Error ProgramD3D::getGeometryExecutableForPrimitiveType(const gl::ContextSta
 
     std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(
         geometryShaderType, data, mState, mRenderer->presentPathFastEnabled(),
-        mHasANGLEMultiviewEnabled, usesGeometryShaderForPointSpriteEmulation(),
-        mGeometryShaderPreamble);
+        mHasANGLEMultiviewEnabled, mRenderer->canSelectViewInVS(),
+        usesGeometryShaderForPointSpriteEmulation(), mGeometryShaderPreamble);
 
     gl::InfoLog tempInfoLog;
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
@@ -1623,7 +1629,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         if (mRenderer->getMajorShaderModel() >= 4)
         {
             mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(
-                packing, builtins, mHasANGLEMultiviewEnabled);
+                packing, builtins, mHasANGLEMultiviewEnabled, metadata.canSelectViewInVS());
         }
 
         initAttribLocationsToD3DSemantic(context);

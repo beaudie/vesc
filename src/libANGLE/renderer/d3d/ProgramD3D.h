@@ -130,6 +130,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     bool usesViewScale() const;
     bool hasANGLEMultiviewEnabled() const;
     bool usesViewID() const;
+    bool canSelectViewInVS() const;
     bool addsPointCoordToVertexShader() const;
     bool usesTransformFeedbackGLPosition() const;
     bool usesSystemValuePointSize() const;
@@ -144,6 +145,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     const bool mUsesViewScale;
     const bool mHasANGLEMultiviewEnabled;
     const bool mUsesViewID;
+    const bool mCanSelectViewInVS;
     const ShaderD3D *mVertexShader;
     const ShaderD3D *mFragmentShader;
 };
