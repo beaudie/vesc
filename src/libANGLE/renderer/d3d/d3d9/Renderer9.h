@@ -398,6 +398,12 @@ class Renderer9 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    bool canSelectViewInVS() const override
+    {
+        UNREACHABLE();
+        return false;
+    }
+
   private:
     gl::Error drawArraysImpl(const gl::ContextState &data,
                              GLenum mode,
