@@ -2049,6 +2049,10 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
         workarounds.emulateTinyStencilTextures = false;
     }
 
+    // If the VPAndRTArrayIndexFromAnyShaderFeedingRasterizer feature is not available, we have to
+    // select the viewport / RT array index in the geometry shader.
+    workarounds.selectVpRtInGeometryShader = (deviceCaps.supportsVpRtIndexWriteFromVs == false);
+
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
     platform->overrideWorkaroundsD3D(platform, &workarounds);

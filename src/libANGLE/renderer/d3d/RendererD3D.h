@@ -332,6 +332,8 @@ class RendererD3D : public BufferFactoryD3D
 
     Serial generateSerial();
 
+    virtual bool canWriteVpRtIndexFromVs() const = 0;
+
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual void generateCaps(gl::Caps *outCaps,
