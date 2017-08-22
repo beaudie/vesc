@@ -93,14 +93,14 @@ class WrappedArray final : angle::NonCopyable
 {
   public:
     template <size_t N>
-    constexpr WrappedArray(const T (&data)[N]) : mArray(&data[0]), mSize(N)
+    WrappedArray(const T (&data)[N]) : mArray(&data[0]), mSize(N)
     {
     }
 
-    constexpr WrappedArray() : mArray(nullptr), mSize(0) {}
-    constexpr WrappedArray(const T *data, size_t size) : mArray(data), mSize(size) {}
+    WrappedArray() : mArray(nullptr), mSize(0) {}
+    WrappedArray(const T *data, size_t size) : mArray(data), mSize(size) {}
 
-    constexpr WrappedArray(WrappedArray &&other) : WrappedArray()
+    WrappedArray(WrappedArray &&other) : WrappedArray()
     {
         std::swap(mArray, other.mArray);
         std::swap(mSize, other.mSize);
