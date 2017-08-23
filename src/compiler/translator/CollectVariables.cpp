@@ -100,6 +100,7 @@ class CollectVariablesTraverser : public TIntermTraverser
                               ShHashFunction64 hashFunction,
                               TSymbolTable *symbolTable,
                               int shaderVersion,
+                              GLenum shaderType,
                               const TExtensionBehavior &extensionBehavior);
 
     void visitSymbol(TIntermSymbol *symbol) override;
@@ -157,10 +158,15 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool mSecondaryFragDataEXTAdded;
 
     bool mPerVertexInAdded;
+    bool mPrimitiveIDInAdded;
+    bool mInvocationIDAdded;
+    bool mPrimitiveIDAdded;
+    bool mLayerAdded;
 
     ShHashFunction64 mHashFunction;
 
     int mShaderVersion;
+    GLenum mShaderType;
     const TExtensionBehavior &mExtensionBehavior;
 };
 
@@ -176,6 +182,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
     ShHashFunction64 hashFunction,
     TSymbolTable *symbolTable,
     int shaderVersion,
+    GLenum shaderType,
     const TExtensionBehavior &extensionBehavior)
     : TIntermTraverser(true, false, false, symbolTable),
       mAttribs(attribs),
@@ -202,8 +209,13 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mSecondaryFragColorEXTAdded(false),
       mSecondaryFragDataEXTAdded(false),
       mPerVertexInAdded(false),
+      mPrimitiveIDInAdded(false),
+      mInvocationIDAdded(false),
+      mPrimitiveIDAdded(false),
+      mLayerAdded(false),
       mHashFunction(hashFunction),
       mShaderVersion(shaderVersion),
+      mShaderType(shaderType),
       mExtensionBehavior(extensionBehavior)
 {
 }
@@ -469,6 +481,37 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 recordBuiltInFragmentOutputUsed("gl_SecondaryFragDataEXT",
                                                 &mSecondaryFragDataEXTAdded);
                 return;
+            case EvqInvocationID:
+                recordBuiltInVaryingUsed("gl_InvocationID", &mInvocationIDAdded, mInputVaryings);
+                break;
+            case EvqPrimitiveIDIn:
+                recordBuiltInVaryingUsed("gl_PrimitiveIDIn", &mPrimitiveIDInAdded, mInputVaryings);
+                break;
+            case EvqPrimitiveID:
+                if (mShaderType == GL_GEOMETRY_SHADER_OES)
+                {
+                    recordBuiltInVaryingUsed("gl_PrimitiveID", &mPrimitiveIDAdded, mOutputVaryings);
+                }
+                else
+                {
+                    ASSERT(mShaderType == GL_FRAGMENT_SHADER);
+                    recordBuiltInVaryingUsed("gl_PrimitiveID", &mPrimitiveIDAdded, mInputVaryings);
+                }
+                break;
+            case EvqLayer:
+                if (mShaderType == GL_GEOMETRY_SHADER_OES)
+                {
+                    recordBuiltInVaryingUsed("gl_Layer", &mLayerAdded, mOutputVaryings);
+                }
+                else
+                {
+                    if (!IsExtensionEnabled(mExtensionBehavior, "GL_OVR_multiview"))
+                    {
+                        ASSERT(mShaderType == GL_FRAGMENT_SHADER);
+                        recordBuiltInVaryingUsed("gl_Layer", &mLayerAdded, mInputVaryings);
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -777,11 +820,13 @@ void CollectVariables(TIntermBlock *root,
                       ShHashFunction64 hashFunction,
                       TSymbolTable *symbolTable,
                       int shaderVersion,
+                      GLenum shaderType,
                       const TExtensionBehavior &extensionBehavior)
 {
     CollectVariablesTraverser collect(attributes, outputVariables, uniforms, inputVaryings,
                                       outputVaryings, uniformBlocks, shaderStorageBlocks, inBlocks,
-                                      hashFunction, symbolTable, shaderVersion, extensionBehavior);
+                                      hashFunction, symbolTable, shaderVersion, shaderType,
+                                      extensionBehavior);
     root->traverse(&collect);
 }
 
