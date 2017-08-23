@@ -36,6 +36,8 @@
 1442 D3D11 : dEQP-GLES31.functional.vertex_attribute_binding.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.texture.gather.* = SKIP
+2166 D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.length.mat3_vertex = SKIP
+2166 D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.length.mat3_fragment = SKIP
 
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_framebuffer_width_* = FAIL
@@ -62,6 +64,8 @@
 1951 D3D11 : dEQP-GLES31.functional.state_query.indexed.shader_storage_buffer_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.internal_format.renderbuffer.* = FAIL
 1679 D3D11 : dEQP-GLES31.functional.state_query.texture_level.texture_2d_multisample.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.length.struct_vertex = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.length.struct_fragment = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.texture.texparameter* = SKIP
@@ -1097,16 +1101,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.precision.frexp.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.precision.ldexp.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.functions.overloading.arrays_of_arrays_size_vertex = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.functions.overloading.arrays_of_arrays_size_fragment = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.constructor.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.return.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.parameter.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.implicit_size.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.assignment.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.length.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.array_access.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.arrays_of_arrays.single_statement_multiple_declarations.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.linkage.shader_storage_block.mismatch_number_of_declarations = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.linkage.shader_storage_block.mismatch_order = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.linkage.shader_storage_block.mismatch_type = FAIL
