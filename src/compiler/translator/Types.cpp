@@ -128,9 +128,9 @@ TType::TType(const TPublicType &p)
 {
     ASSERT(primarySize <= 4);
     ASSERT(secondarySize <= 4);
-    if (p.array)
+    if (p.isArray())
     {
-        makeArray(p.arraySize);
+        mArraySizes = *p.arraySizes;
     }
     if (p.getUserDef())
     {
