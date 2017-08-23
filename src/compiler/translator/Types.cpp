@@ -178,9 +178,9 @@ TType::TType(const TPublicType &p)
 {
     ASSERT(primarySize <= 4);
     ASSERT(secondarySize <= 4);
-    if (p.array)
+    if (p.isArray())
     {
-        makeArray(p.arraySize);
+        mArraySizes = *p.arraySizes;
     }
     if (p.getUserDef())
     {
@@ -707,6 +707,12 @@ void TType::makeArray(unsigned int s)
     invalidateMangledName();
 }
 
+void TType::makeArrays(const TVector<unsigned int> &sizes)
+{
+    mArraySizes.insert(mArraySizes.end(), sizes.begin(), sizes.end());
+    invalidateMangledName();
+}
+
 void TType::setArraySize(size_t arrayDimension, unsigned int s)
 {
     ASSERT(arrayDimension < mArraySizes.size());
@@ -932,8 +938,7 @@ void TPublicType::initialize(const TTypeSpecifierNonArray &typeSpecifier, TQuali
     qualifier             = q;
     invariant             = false;
     precision             = EbpUndefined;
-    array                 = false;
-    arraySize             = 0;
+    arraySizes            = nullptr;
 }
 
 void TPublicType::initializeBasicType(TBasicType basicType)
@@ -946,8 +951,7 @@ void TPublicType::initializeBasicType(TBasicType basicType)
     qualifier                           = EvqTemporary;
     invariant                           = false;
     precision                           = EbpUndefined;
-    array                               = false;
-    arraySize                           = 0;
+    arraySizes                          = nullptr;
 }
 
 bool TPublicType::isStructureContainingArrays() const
@@ -970,21 +974,24 @@ bool TPublicType::isStructureContainingType(TBasicType t) const
     return typeSpecifierNonArray.userDef->containsType(t);
 }
 
-void TPublicType::setArraySize(int s)
+void TPublicType::setArraySizes(TVector<unsigned int> *sizes)
 {
-    array     = true;
-    arraySize = s;
+    arraySizes = sizes;
+}
+
+bool TPublicType::isArray() const
+{
+    return arraySizes && !arraySizes->empty();
 }
 
 void TPublicType::clearArrayness()
 {
-    array     = false;
-    arraySize = 0;
+    arraySizes = nullptr;
 }
 
 bool TPublicType::isAggregate() const
 {
-    return array || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
+    return isArray() || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
 }
 
 }  // namespace sh
