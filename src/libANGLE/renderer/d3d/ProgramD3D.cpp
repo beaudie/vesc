@@ -18,6 +18,7 @@
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/features.h"
+#include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
@@ -2600,6 +2601,57 @@ bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
     }
 
     return false;
+}
+
+template <typename DestT>
+void ProgramD3D::getUniformInternal(GLint location, DestT *dataOut) const
+{
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &uniform         = mState.getUniforms()[locationInfo.index];
+
+    const uint8_t *srcPointer = uniform.getDataPtrToElement(locationInfo.element);
+
+    GLenum componentType = gl::VariableComponentType(uniform.type);
+    if (componentType == gl::GLTypeToGLenum<DestT>::value)
+    {
+        memcpy(dataOut, srcPointer, uniform.getElementSize());
+        return;
+    }
+
+    int components = gl::VariableComponentCount(uniform.type);
+
+    switch (componentType)
+    {
+        case GL_INT:
+            UniformStateQueryCastLoop<GLint>(dataOut, srcPointer, components);
+            break;
+        case GL_UNSIGNED_INT:
+            UniformStateQueryCastLoop<GLuint>(dataOut, srcPointer, components);
+            break;
+        case GL_BOOL:
+            UniformStateQueryCastLoop<GLboolean>(dataOut, srcPointer, components);
+            break;
+        case GL_FLOAT:
+            UniformStateQueryCastLoop<GLfloat>(dataOut, srcPointer, components);
+            break;
+        default:
+            UNREACHABLE();
+    }
+}
+
+void ProgramD3D::getUniformfv(const gl::Context *context, GLint location, GLfloat *params) const
+{
+    getUniformInternal(location, params);
+}
+
+void ProgramD3D::getUniformiv(const gl::Context *context, GLint location, GLint *params) const
+{
+    getUniformInternal(location, params);
+}
+
+void ProgramD3D::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
+{
+    getUniformInternal(location, params);
 }
 
 }  // namespace rx

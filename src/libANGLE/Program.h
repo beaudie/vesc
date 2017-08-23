@@ -457,9 +457,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
     void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
 
-    void getUniformfv(GLint location, GLfloat *params) const;
-    void getUniformiv(GLint location, GLint *params) const;
-    void getUniformuiv(GLint location, GLuint *params) const;
+    void getUniformfv(const Context *context, GLint location, GLfloat *params) const;
+    void getUniformiv(const Context *context, GLint location, GLint *params) const;
+    void getUniformuiv(const Context *context, GLint location, GLuint *params) const;
 
     void getActiveUniformBlockName(GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName) const;
     GLuint getActiveUniformBlockCount() const;
@@ -625,9 +625,6 @@ class Program final : angle::NonCopyable, public LabeledObject
                               const uint8_t *destPointer,
                               GLsizei clampedCount,
                               const T *v);
-
-    template <typename DestT>
-    void getUniformInternal(GLint location, DestT *dataOut) const;
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;

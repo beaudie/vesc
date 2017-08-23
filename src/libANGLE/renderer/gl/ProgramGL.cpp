@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "platform/Platform.h"
 
 namespace rx
@@ -751,6 +752,114 @@ void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
     ASSERT(mFunctions->programUniform1i != nullptr);
     mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
                                  baseViewIndex);
+}
+
+// Driver differences mean that doing the uniform value cast ourselves gives consistent results.
+// EG: on NVIDIA drivers, it was observed that getUniformi for MAX_INT+1 returned MIN_INT.
+template <typename DestT>
+void ProgramGL::queryCastUniform(DestT *dataOut,
+                                 GLint location,
+                                 GLenum nativeType,
+                                 int components) const
+{
+    switch (nativeType)
+    {
+        case GL_BOOL:
+        {
+            GLint tempValue[16] = {0};
+            mFunctions->getUniformiv(mProgramID, uniLoc(location), tempValue);
+            UniformStateQueryCastLoop<GLboolean>(
+                dataOut, reinterpret_cast<const uint8_t *>(tempValue), components);
+            break;
+        }
+        case GL_INT:
+        {
+            GLint tempValue[16] = {0};
+            mFunctions->getUniformiv(mProgramID, uniLoc(location), tempValue);
+            UniformStateQueryCastLoop<GLint>(dataOut, reinterpret_cast<const uint8_t *>(tempValue),
+                                             components);
+            break;
+        }
+        case GL_UNSIGNED_INT:
+        {
+            GLuint tempValue[16] = {0};
+            mFunctions->getUniformuiv(mProgramID, uniLoc(location), tempValue);
+            UniformStateQueryCastLoop<GLuint>(dataOut, reinterpret_cast<const uint8_t *>(tempValue),
+                                              components);
+            break;
+        }
+        case GL_FLOAT:
+        {
+            GLfloat tempValue[16] = {0};
+            mFunctions->getUniformfv(mProgramID, uniLoc(location), tempValue);
+            UniformStateQueryCastLoop<GLfloat>(
+                dataOut, reinterpret_cast<const uint8_t *>(tempValue), components);
+            break;
+        }
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void ProgramGL::getUniformfv(const gl::Context *context, GLint location, GLfloat *params) const
+{
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_FLOAT)
+    {
+        mFunctions->getUniformfv(mProgramID, uniLoc(location), params);
+    }
+    else
+    {
+        queryCastUniform(params, location, nativeType, gl::VariableComponentCount(uniform.type));
+    }
+}
+
+void ProgramGL::getUniformiv(const gl::Context *context, GLint location, GLint *params) const
+{
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_INT || nativeType == GL_BOOL)
+    {
+        mFunctions->getUniformiv(mProgramID, uniLoc(location), params);
+    }
+    else
+    {
+        queryCastUniform(params, location, nativeType, gl::VariableComponentCount(uniform.type));
+    }
+}
+
+void ProgramGL::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
+{
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_UNSIGNED_INT)
+    {
+        mFunctions->getUniformuiv(mProgramID, uniLoc(location), params);
+    }
+    else
+    {
+        queryCastUniform(params, location, nativeType, gl::VariableComponentCount(uniform.type));
+    }
+}
+
+void ProgramGL::markUnusedUniformLocations(std::vector<gl::VariableLocation> *uniformLocations)
+{
+    GLint maxLocation = static_cast<GLint>(uniformLocations->size());
+    for (GLint location = 0; location < maxLocation; ++location)
+    {
+        if (uniLoc(location) == -1)
+        {
+            (*uniformLocations)[location].used = false;
+        }
+    }
 }
 
 }  // namespace rx
