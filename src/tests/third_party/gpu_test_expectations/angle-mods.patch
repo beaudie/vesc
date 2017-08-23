@@ -1,7 +1,9 @@
-diff -rupN gpu_test_expectations_reverted/angle_config.h gpu_test_expectations/angle_config.h
---- gpu_test_expectations_reverted/angle_config.h	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/angle_config.h	2017-07-19 18:08:09.552231453 -0400
-@@ -0,0 +1,61 @@
+diff --git a/src/tests/third_party/gpu_test_expectations/angle_config.h b/src/tests/third_party/gpu_test_expectations/angle_config.h
+new file mode 100644
+index 000000000..37ed6d1b1
+--- /dev/null
++++ b/src/tests/third_party/gpu_test_expectations/angle_config.h
+@@ -0,0 +1,62 @@
 +//
 +// Copyright 2015 The ANGLE Project Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
@@ -24,6 +26,7 @@ diff -rupN gpu_test_expectations_reverted/angle_config.h gpu_test_expectations/a
 +#define DCHECK_EQ(A,B) ASSERT((A) == (B))
 +#define DCHECK_NE(A,B) ASSERT((A) != (B))
 +#define DCHECK(X) ASSERT(X)
++#define DLOG(X) std::cerr
 +#define LOG(X) std::cerr
 +
 +#define GPU_EXPORT
@@ -63,19 +66,22 @@ diff -rupN gpu_test_expectations_reverted/angle_config.h gpu_test_expectations/a
 +// clang-format on
 +
 +#endif
-diff -rupN gpu_test_expectations_reverted/gpu_info.cc gpu_test_expectations/gpu_info.cc
---- gpu_test_expectations_reverted/gpu_info.cc	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_info.cc	2017-05-19 17:51:38.665944833 -0400
-@@ -2,7 +2,7 @@
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_info.cc b/src/tests/third_party/gpu_test_expectations/gpu_info.cc
+index 23d52169f..8d41a51ba 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_info.cc
++++ b/src/tests/third_party/gpu_test_expectations/gpu_info.cc
+@@ -2,7 +2,9 @@
  // Use of this source code is governed by a BSD-style license that can be
  // found in the LICENSE file.
  
 -#include "gpu/config/gpu_info.h"
++#include <stdint.h>
++
 +#include "gpu_info.h"
  
  namespace {
  
-@@ -17,31 +17,6 @@ void EnumerateGPUDevice(const gpu::GPUIn
+@@ -17,31 +19,6 @@ void EnumerateGPUDevice(const gpu::GPUInfo::GPUDevice& device,
    enumerator->EndGPUDevice();
  }
  
@@ -107,30 +113,74 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.cc gpu_test_expectations/gpu_
  }  // namespace
  
  namespace gpu {
-@@ -68,9 +43,6 @@ GPUInfo::GPUInfo()
+@@ -57,35 +34,40 @@ GPUInfo::GPUDevice::~GPUDevice() { }
+ GPUInfo::GPUInfo()
+     : optimus(false),
+       amd_switchable(false),
+-      lenovo_dcute(false),
+-      adapter_luid(0),
+       gl_reset_notification_strategy(0),
+-      can_lose_context(false),
+       software_rendering(false),
+       direct_rendering(true),
+       sandboxed(false),
+       process_crash_count(0),
        in_process_gpu(true),
++      passthrough_cmd_decoder(false),
        basic_info_state(kCollectInfoNone),
        context_info_state(kCollectInfoNone),
 -#if defined(OS_WIN)
 -      dx_diagnostics_info_state(kCollectInfoNone),
 -#endif
-       jpeg_decode_accelerator_supported(false) {
+-      jpeg_decode_accelerator_supported(false) {
++      jpeg_decode_accelerator_supported(false)
++{
  }
  
-@@ -78,11 +50,9 @@ GPUInfo::~GPUInfo() { }
++GPUInfo::GPUInfo(const GPUInfo& other) = default;
++
+ GPUInfo::~GPUInfo() { }
  
++const GPUInfo::GPUDevice& GPUInfo::active_gpu() const {
++  if (gpu.active)
++    return gpu;
++  for (const GPUDevice& secondary_gpu : secondary_gpus) {
++    if (secondary_gpu.active)
++      return secondary_gpu;
++  }
++  DLOG(ERROR) << "No active GPU found, returning primary GPU.";
++  return gpu;
++}
++
  void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
    struct GPUInfoKnownFields {
 -    base::TimeDelta initialization_time;
      bool optimus;
      bool amd_switchable;
-     bool lenovo_dcute;
+-    bool lenovo_dcute;
 -    Version display_link_version;
      GPUDevice gpu;
      std::vector<GPUDevice> secondary_gpus;
-     uint64 adapter_luid;
-@@ -110,14 +80,6 @@ void GPUInfo::EnumerateFields(Enumerator
+-    uint64 adapter_luid;
+     std::string driver_vendor;
+     std::string driver_version;
+     std::string driver_date;
+@@ -101,23 +83,18 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
+     std::string gl_ws_vendor;
+     std::string gl_ws_version;
+     std::string gl_ws_extensions;
+-    uint32 gl_reset_notification_strategy;
+-    bool can_lose_context;
++    uint32_t gl_reset_notification_strategy;
+     bool software_rendering;
+     bool direct_rendering;
+     bool sandboxed;
+     int process_crash_count;
      bool in_process_gpu;
++    bool passthrough_cmd_decoder;
++    bool supports_overlays;
++    bool hdr;
++    bool can_support_threaded_texture_mailbox;
      CollectInfoResult basic_info_state;
      CollectInfoResult context_info_state;
 -#if defined(OS_WIN)
@@ -144,7 +194,7 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.cc gpu_test_expectations/gpu_
      bool jpeg_decode_accelerator_supported;
    };
  
-@@ -136,15 +98,9 @@ void GPUInfo::EnumerateFields(Enumerator
+@@ -136,16 +113,8 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
      EnumerateGPUDevice(secondary_gpu, enumerator);
  
    enumerator->BeginAuxAttributes();
@@ -152,16 +202,31 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.cc gpu_test_expectations/gpu_
 -                                     initialization_time);
    enumerator->AddBool("optimus", optimus);
    enumerator->AddBool("amdSwitchable", amd_switchable);
-   enumerator->AddBool("lenovoDcute", lenovo_dcute);
+-  enumerator->AddBool("lenovoDcute", lenovo_dcute);
 -  if (display_link_version.IsValid()) {
 -    enumerator->AddString("displayLinkVersion",
 -                          display_link_version.GetString());
 -  }
-   enumerator->AddInt64("adapterLuid", adapter_luid);
+-  enumerator->AddInt64("adapterLuid", adapter_luid);
    enumerator->AddString("driverVendor", driver_vendor);
    enumerator->AddString("driverVersion", driver_version);
-@@ -171,14 +127,7 @@ void GPUInfo::EnumerateFields(Enumerator
+   enumerator->AddString("driverDate", driver_date);
+@@ -162,23 +131,20 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
+   enumerator->AddInt(
+       "glResetNotificationStrategy",
+       static_cast<int>(gl_reset_notification_strategy));
+-  enumerator->AddBool("can_lose_context", can_lose_context);
+   // TODO(kbr): add performance_stats.
+   enumerator->AddBool("softwareRendering", software_rendering);
+   enumerator->AddBool("directRendering", direct_rendering);
+   enumerator->AddBool("sandboxed", sandboxed);
+   enumerator->AddInt("processCrashCount", process_crash_count);
    enumerator->AddBool("inProcessGpu", in_process_gpu);
++  enumerator->AddBool("passthroughCmdDecoder", passthrough_cmd_decoder);
++  enumerator->AddBool("supportsOverlays", supports_overlays);
++  enumerator->AddBool("hdr", hdr);
++  enumerator->AddBool("canSupportThreadedTextureMailbox",
++                      can_support_threaded_texture_mailbox);
    enumerator->AddInt("basicInfoState", basic_info_state);
    enumerator->AddInt("contextInfoState", context_info_state);
 -#if defined(OS_WIN)
@@ -175,10 +240,16 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.cc gpu_test_expectations/gpu_
    enumerator->AddBool("jpegDecodeAcceleratorSupported",
        jpeg_decode_accelerator_supported);
    enumerator->EndAuxAttributes();
-diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_info.h
---- gpu_test_expectations_reverted/gpu_info.h	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_info.h	2017-05-19 17:51:38.665944833 -0400
-@@ -11,13 +11,7 @@
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_info.h b/src/tests/third_party/gpu_test_expectations/gpu_info.h
+index d6f61fd60..02013bc38 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_info.h
++++ b/src/tests/third_party/gpu_test_expectations/gpu_info.h
+@@ -8,16 +8,16 @@
+ // Provides access to the GPU information for the system
+ // on which chrome is currently running.
+ 
++#include <stdint.h>
++
  #include <string>
  #include <vector>
  
@@ -190,11 +261,53 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
 -#include "gpu/gpu_export.h"
 -#include "ui/gfx/geometry/size.h"
 +#include "angle_config.h"
++
++#if defined(USE_X11) && !defined(OS_CHROMEOS)
++typedef unsigned long VisualID;
++#endif
  
  namespace gpu {
  
-@@ -54,25 +48,6 @@ enum VideoCodecProfile {
-   VIDEO_CODEC_PROFILE_MAX = VP9PROFILE_ANY,
+@@ -39,51 +39,42 @@ enum VideoCodecProfile {
+   VIDEO_CODEC_PROFILE_UNKNOWN = -1,
+   VIDEO_CODEC_PROFILE_MIN = VIDEO_CODEC_PROFILE_UNKNOWN,
+   H264PROFILE_BASELINE = 0,
+-  H264PROFILE_MAIN = 1,
+-  H264PROFILE_EXTENDED = 2,
+-  H264PROFILE_HIGH = 3,
+-  H264PROFILE_HIGH10PROFILE = 4,
+-  H264PROFILE_HIGH422PROFILE = 5,
+-  H264PROFILE_HIGH444PREDICTIVEPROFILE = 6,
+-  H264PROFILE_SCALABLEBASELINE = 7,
+-  H264PROFILE_SCALABLEHIGH = 8,
+-  H264PROFILE_STEREOHIGH = 9,
+-  H264PROFILE_MULTIVIEWHIGH = 10,
+-  VP8PROFILE_ANY = 11,
+-  VP9PROFILE_ANY = 12,
+-  VIDEO_CODEC_PROFILE_MAX = VP9PROFILE_ANY,
++  H264PROFILE_MAIN,
++  H264PROFILE_EXTENDED,
++  H264PROFILE_HIGH,
++  H264PROFILE_HIGH10PROFILE,
++  H264PROFILE_HIGH422PROFILE,
++  H264PROFILE_HIGH444PREDICTIVEPROFILE,
++  H264PROFILE_SCALABLEBASELINE,
++  H264PROFILE_SCALABLEHIGH,
++  H264PROFILE_STEREOHIGH,
++  H264PROFILE_MULTIVIEWHIGH,
++  VP8PROFILE_ANY,
++  VP9PROFILE_PROFILE0,
++  VP9PROFILE_PROFILE1,
++  VP9PROFILE_PROFILE2,
++  VP9PROFILE_PROFILE3,
++  HEVCPROFILE_MAIN,
++  HEVCPROFILE_MAIN10,
++  HEVCPROFILE_MAIN_STILL_PICTURE,
++  DOLBYVISION_PROFILE0,
++  DOLBYVISION_PROFILE4,
++  DOLBYVISION_PROFILE5,
++  DOLBYVISION_PROFILE7,
++  VIDEO_CODEC_PROFILE_MAX = DOLBYVISION_PROFILE7,
  };
  
 -// Specification of a decoding profile supported by a hardware decoder.
@@ -219,10 +332,32 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
  struct GPU_EXPORT GPUInfo {
    struct GPU_EXPORT GPUDevice {
      GPUDevice();
-@@ -104,10 +79,6 @@ struct GPU_EXPORT GPUInfo {
-     return !can_lose_context && !software_rendering;
-   }
+     ~GPUDevice();
  
+-    // The DWORD (uint32) representing the graphics card vendor id.
+-    uint32 vendor_id;
++    // The DWORD (uint32_t) representing the graphics card vendor id.
++    uint32_t vendor_id;
+ 
+-    // The DWORD (uint32) representing the graphics card device id.
++    // The DWORD (uint32_t) representing the graphics card device id.
+     // Device ids are unique to vendor, not to one another.
+-    uint32 device_id;
++    uint32_t device_id;
+ 
+     // Whether this GPU is the currently used one.
+     // Currently this field is only supported and meaningful on OS X.
+@@ -98,41 +89,23 @@ struct GPU_EXPORT GPUInfo {
+   };
+ 
+   GPUInfo();
++  GPUInfo(const GPUInfo& other);
+   ~GPUInfo();
+ 
+-  bool SupportsAccelerated2dCanvas() const {
+-    return !can_lose_context && !software_rendering;
+-  }
+-
 -  // The amount of time taken to get from the process starting to the message
 -  // loop being pumped.
 -  base::TimeDelta initialization_time;
@@ -230,10 +365,12 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
    // Computer has NVIDIA Optimus
    bool optimus;
  
-@@ -117,10 +88,6 @@ struct GPU_EXPORT GPUInfo {
-   // Lenovo dCute is installed. http://crbug.com/181665.
-   bool lenovo_dcute;
+   // Computer has AMD Dynamic Switchable Graphics
+   bool amd_switchable;
  
+-  // Lenovo dCute is installed. http://crbug.com/181665.
+-  bool lenovo_dcute;
+-
 -  // Version of DisplayLink driver installed. Zero if not installed.
 -  // http://crbug.com/177611.
 -  Version display_link_version;
@@ -241,17 +378,62 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
    // Primary GPU, for exmaple, the discrete GPU in a dual GPU machine.
    GPUDevice gpu;
  
-@@ -213,17 +180,7 @@ struct GPU_EXPORT GPUInfo {
+   // Secondary GPUs, for example, the integrated GPU in a dual GPU machine.
+   std::vector<GPUDevice> secondary_gpus;
+ 
+-  // On Windows, the unique identifier of the adapter the GPU process uses.
+-  // The default is zero, which makes the browser process create its D3D device
+-  // on the primary adapter. Note that the primary adapter can change at any
+-  // time so it is better to specify a particular LUID. Note that valid LUIDs
+-  // are always non-zero.
+-  uint64 adapter_luid;
++  // The currently active gpu.
++  const GPUDevice& active_gpu() const;
+ 
+   // The vendor of the graphics driver currently installed.
+   std::string driver_vendor;
+@@ -188,11 +161,7 @@ struct GPU_EXPORT GPUInfo {
+ 
+   // GL reset notification strategy as defined by GL_ARB_robustness. 0 if GPU
+   // reset detection or notification not available.
+-  uint32 gl_reset_notification_strategy;
+-
+-  // The device semantics, i.e. whether the Vista and Windows 7 specific
+-  // semantics are available.
+-  bool can_lose_context;
++  uint32_t gl_reset_notification_strategy;
+ 
+   bool software_rendering;
+ 
+@@ -209,21 +178,25 @@ struct GPU_EXPORT GPUInfo {
+   // True if the GPU is running in the browser process instead of its own.
+   bool in_process_gpu;
+ 
++  // True if the GPU process is using the passthrough command decoder.
++  bool passthrough_cmd_decoder;
++
++  // True if the current set of outputs supports overlays.
++  bool supports_overlays = false;
++
++  // True if the current set of outputs supports HDR.
++  bool hdr = false;
++
++  // True only on android when extensions for threaded mailbox sharing are
++  // present. Threaded mailbox sharing is used on Android only, so this check
++  // is only implemented on Android.
++  bool can_support_threaded_texture_mailbox = false;
++
+   // The state of whether the basic/context/DxDiagnostics info is collected and
    // if the collection fails or not.
    CollectInfoResult basic_info_state;
    CollectInfoResult context_info_state;
 -#if defined(OS_WIN)
 -  CollectInfoResult dx_diagnostics_info_state;
- 
+-
 -  // The information returned by the DirectX Diagnostics Tool.
 -  DxDiagNode dx_diagnostics;
 -#endif
--
+ 
 -  VideoDecodeAcceleratorSupportedProfiles
 -      video_decode_accelerator_supported_profiles;
 -  VideoEncodeAcceleratorSupportedProfiles
@@ -259,7 +441,12 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
    bool jpeg_decode_accelerator_supported;
  
    // Note: when adding new members, please remember to update EnumerateFields
-@@ -243,8 +200,6 @@ struct GPU_EXPORT GPUInfo {
+@@ -239,12 +212,10 @@ struct GPU_EXPORT GPUInfo {
+     // is the root object, but calls to BeginGPUDevice/EndGPUDevice and
+     // BeginAuxAttributes/EndAuxAttributes change the object to which these
+     // calls should apply.
+-    virtual void AddInt64(const char* name, int64 value) = 0;
++    virtual void AddInt64(const char* name, int64_t value) = 0;
      virtual void AddInt(const char* name, int value) = 0;
      virtual void AddString(const char* name, const std::string& value) = 0;
      virtual void AddBool(const char* name, bool value) = 0;
@@ -268,9 +455,10 @@ diff -rupN gpu_test_expectations_reverted/gpu_info.h gpu_test_expectations/gpu_i
  
      // Markers indicating that a GPUDevice is being described.
      virtual void BeginGPUDevice() = 0;
-diff -rupN gpu_test_expectations_reverted/gpu_test_config.cc gpu_test_expectations/gpu_test_config.cc
---- gpu_test_expectations_reverted/gpu_test_config.cc	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_test_config.cc	2017-05-19 18:24:51.028549550 -0400
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_config.cc b/src/tests/third_party/gpu_test_expectations/gpu_test_config.cc
+index a7cc4b412..06a5b9107 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_test_config.cc
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_config.cc
 @@ -2,20 +2,205 @@
  // Use of this source code is governed by a BSD-style license that can be
  // found in the LICENSE file.
@@ -486,72 +674,108 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config.cc gpu_test_expectatio
  namespace gpu {
  
  namespace {
-@@ -245,33 +430,41 @@ bool GPUTestBotConfig::Matches(const std
-   return Matches(config);
+@@ -26,9 +211,9 @@ GPUTestConfig::OS GetCurrentOS() {
+ #elif defined(OS_LINUX) || defined(OS_OPENBSD)
+   return GPUTestConfig::kOsLinux;
+ #elif defined(OS_WIN)
+-  int32 major_version = 0;
+-  int32 minor_version = 0;
+-  int32 bugfix_version = 0;
++  int32_t major_version = 0;
++  int32_t minor_version = 0;
++  int32_t bugfix_version = 0;
+   base::SysInfo::OperatingSystemVersionNumbers(
+       &major_version, &minor_version, &bugfix_version);
+   if (major_version == 5)
+@@ -42,9 +227,9 @@ GPUTestConfig::OS GetCurrentOS() {
+   if (major_version == 10)
+     return GPUTestConfig::kOsWin10;
+ #elif defined(OS_MACOSX)
+-  int32 major_version = 0;
+-  int32 minor_version = 0;
+-  int32 bugfix_version = 0;
++  int32_t major_version = 0;
++  int32_t minor_version = 0;
++  int32_t bugfix_version = 0;
+   base::SysInfo::OperatingSystemVersionNumbers(
+       &major_version, &minor_version, &bugfix_version);
+   if (major_version == 10) {
+@@ -63,6 +248,8 @@ GPUTestConfig::OS GetCurrentOS() {
+         return GPUTestConfig::kOsMacYosemite;
+       case 11:
+         return GPUTestConfig::kOsMacElCapitan;
++      case 12:
++        return GPUTestConfig::kOsMacSierra;
+     }
+   }
+ #elif defined(OS_ANDROID)
+@@ -80,31 +267,33 @@ GPUTestConfig::GPUTestConfig()
+       build_type_(kBuildTypeUnknown),
+       api_(kAPIUnknown) {}
+ 
++GPUTestConfig::GPUTestConfig(const GPUTestConfig& other) = default;
++
+ GPUTestConfig::~GPUTestConfig() {
  }
  
--bool GPUTestBotConfig::LoadCurrentConfig(const GPUInfo* gpu_info) {
--  bool rt;
--  if (gpu_info == NULL) {
--    GPUInfo my_gpu_info;
+-void GPUTestConfig::set_os(int32 os) {
++void GPUTestConfig::set_os(int32_t os) {
+   DCHECK_EQ(0, os & ~(kOsAndroid | kOsWin | kOsMac | kOsLinux | kOsChromeOS));
+   os_ = os;
+ }
+ 
+-void GPUTestConfig::AddGPUVendor(uint32 gpu_vendor) {
++void GPUTestConfig::AddGPUVendor(uint32_t gpu_vendor) {
+   DCHECK_NE(0u, gpu_vendor);
+   for (size_t i = 0; i < gpu_vendor_.size(); ++i)
+     DCHECK_NE(gpu_vendor_[i], gpu_vendor);
+   gpu_vendor_.push_back(gpu_vendor);
+ }
+ 
+-void GPUTestConfig::set_gpu_device_id(uint32 id) {
++void GPUTestConfig::set_gpu_device_id(uint32_t id) {
+   gpu_device_id_ = id;
+ }
+ 
+-void GPUTestConfig::set_build_type(int32 build_type) {
++void GPUTestConfig::set_build_type(int32_t build_type) {
+   DCHECK_EQ(0, build_type & ~(kBuildTypeRelease | kBuildTypeDebug));
+   build_type_ = build_type;
+ }
+ 
+-void GPUTestConfig::set_api(int32 api) {
++void GPUTestConfig::set_api(int32_t api) {
+   DCHECK_EQ(0, api & ~(kAPID3D9 | kAPID3D11 | kAPIGLDesktop | kAPIGLES));
+   api_ = api;
+ }
+@@ -157,7 +346,7 @@ void GPUTestConfig::ClearGPUVendor() {
+ GPUTestBotConfig::~GPUTestBotConfig() {
+ }
+ 
+-void GPUTestBotConfig::AddGPUVendor(uint32 gpu_vendor) {
++void GPUTestBotConfig::AddGPUVendor(uint32_t gpu_vendor) {
+   DCHECK_EQ(0u, GPUTestConfig::gpu_vendor().size());
+   GPUTestConfig::AddGPUVendor(gpu_vendor);
+ }
+@@ -186,6 +375,7 @@ bool GPUTestBotConfig::IsValid() const {
+     case kOsMacMavericks:
+     case kOsMacYosemite:
+     case kOsMacElCapitan:
++    case kOsMacSierra:
+     case kOsLinux:
+     case kOsChromeOS:
+     case kOsAndroid:
+@@ -249,8 +439,7 @@ bool GPUTestBotConfig::LoadCurrentConfig(const GPUInfo* gpu_info) {
+   bool rt;
+   if (gpu_info == NULL) {
+     GPUInfo my_gpu_info;
 -    CollectInfoResult result = CollectGpuID(
 -        &my_gpu_info.gpu.vendor_id, &my_gpu_info.gpu.device_id);
--    if (result != kCollectInfoSuccess) {
--      LOG(ERROR) << "Fail to identify GPU";
--      DisableGPUInfoValidation();
--      rt = true;
--    } else {
--      rt = SetGPUInfo(my_gpu_info);
-+bool GPUTestBotConfig::LoadCurrentConfig(const GPUInfo *gpu_info)
-+{
-+    bool rt;
-+    if (gpu_info == NULL)
-+    {
-+        GPUInfo my_gpu_info;
-+        CollectInfoResult result =
-+            CollectGpuID(&my_gpu_info.gpu.vendor_id, &my_gpu_info.gpu.device_id);
-+        if (result != kCollectInfoSuccess)
-+        {
-+            LOG(ERROR) << "Fail to identify GPU\n";
-+            DisableGPUInfoValidation();
-+            rt = true;
-+        }
-+        else
-+        {
-+            rt = SetGPUInfo(my_gpu_info);
-+        }
-+    }
-+    else
-+    {
-+        rt = SetGPUInfo(*gpu_info);
-+    }
-+    set_os(GetCurrentOS());
-+    if (os() == kOsUnknown)
-+    {
-+        LOG(ERROR) << "Unknown OS\n";
-+        rt = false;
-     }
--  } else {
--    rt = SetGPUInfo(*gpu_info);
--  }
--  set_os(GetCurrentOS());
--  if (os() == kOsUnknown) {
--    LOG(ERROR) << "Unknown OS";
--    rt = false;
--  }
- #if defined(NDEBUG)
--  set_build_type(kBuildTypeRelease);
-+    set_build_type(kBuildTypeRelease);
- #else
--  set_build_type(kBuildTypeDebug);
-+    set_build_type(kBuildTypeDebug);
- #endif
--  return rt;
-+    return rt;
- }
- 
- // static
-@@ -295,21 +488,5 @@ bool GPUTestBotConfig::CurrentConfigMatc
++    CollectInfoResult result = CollectGpuID(&my_gpu_info.gpu.vendor_id, &my_gpu_info.gpu.device_id);
+     if (result != kCollectInfoSuccess) {
+       LOG(ERROR) << "Fail to identify GPU";
+       DisableGPUInfoValidation();
+@@ -295,21 +484,5 @@ bool GPUTestBotConfig::CurrentConfigMatches(
    return false;
  }
  
@@ -573,10 +797,16 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config.cc gpu_test_expectatio
 -
  }  // namespace gpu
  
-diff -rupN gpu_test_expectations_reverted/gpu_test_config.h gpu_test_expectations/gpu_test_config.h
---- gpu_test_expectations_reverted/gpu_test_config.h	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_test_config.h	2017-05-19 17:51:38.665944833 -0400
-@@ -8,9 +8,7 @@
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_config.h b/src/tests/third_party/gpu_test_expectations/gpu_test_config.h
+index b5431e673..23b779c22 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_test_config.h
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_config.h
+@@ -5,12 +5,12 @@
+ #ifndef GPU_CONFIG_GPU_TEST_CONFIG_H_
+ #define GPU_CONFIG_GPU_TEST_CONFIG_H_
+ 
++#include <stdint.h>
++
  #include <string>
  #include <vector>
  
@@ -587,7 +817,93 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config.h gpu_test_expectation
  
  namespace gpu {
  
-@@ -134,9 +132,6 @@ class GPU_EXPORT GPUTestBotConfig : publ
+@@ -31,13 +31,14 @@ class GPU_EXPORT GPUTestConfig {
+     kOsMacMavericks = 1 << 8,
+     kOsMacYosemite = 1 << 9,
+     kOsMacElCapitan = 1 << 10,
++    kOsMacSierra = 1 << 11,
+     kOsMac = kOsMacLeopard | kOsMacSnowLeopard | kOsMacLion |
+              kOsMacMountainLion | kOsMacMavericks | kOsMacYosemite |
+-             kOsMacElCapitan,
+-    kOsLinux = 1 << 11,
+-    kOsChromeOS = 1 << 12,
+-    kOsAndroid = 1 << 13,
+-    kOsWin10 = 1 << 14,
++             kOsMacElCapitan | kOsMacSierra,
++    kOsLinux = 1 << 12,
++    kOsChromeOS = 1 << 13,
++    kOsAndroid = 1 << 14,
++    kOsWin10 = 1 << 15,
+     kOsWin = kOsWinXP | kOsWinVista | kOsWin7 | kOsWin8 | kOsWin10,
+   };
+ 
+@@ -56,20 +57,21 @@ class GPU_EXPORT GPUTestConfig {
+   };
+ 
+   GPUTestConfig();
++  GPUTestConfig(const GPUTestConfig& other);
+   virtual ~GPUTestConfig();
+ 
+-  void set_os(int32 os);
+-  void set_gpu_device_id(uint32 id);
+-  void set_build_type(int32 build_type);
+-  void set_api(int32 api);
++  void set_os(int32_t os);
++  void set_gpu_device_id(uint32_t id);
++  void set_build_type(int32_t build_type);
++  void set_api(int32_t api);
+ 
+-  virtual void AddGPUVendor(uint32 gpu_vendor);
++  virtual void AddGPUVendor(uint32_t gpu_vendor);
+ 
+-  int32 os() const { return os_; }
+-  const std::vector<uint32>& gpu_vendor() const { return gpu_vendor_; }
+-  uint32 gpu_device_id() const { return gpu_device_id_; }
+-  int32 build_type() const { return build_type_; }
+-  int32 api() const { return api_; }
++  int32_t os() const { return os_; }
++  const std::vector<uint32_t>& gpu_vendor() const { return gpu_vendor_; }
++  uint32_t gpu_device_id() const { return gpu_device_id_; }
++  int32_t build_type() const { return build_type_; }
++  int32_t api() const { return api_; }
+ 
+   // Check if the config is valid. For example, if gpu_device_id_ is set, but
+   // gpu_vendor_ is unknown, then it's invalid.
+@@ -91,19 +93,19 @@ class GPU_EXPORT GPUTestConfig {
+ 
+  private:
+   // operating system.
+-  int32 os_;
++  int32_t os_;
+ 
+   // GPU vendor.
+-  std::vector<uint32> gpu_vendor_;
++  std::vector<uint32_t> gpu_vendor_;
+ 
+   // GPU device id (unique to each vendor).
+-  uint32 gpu_device_id_;
++  uint32_t gpu_device_id_;
+ 
+   // Release or Debug.
+-  int32 build_type_;
++  int32_t build_type_;
+ 
+   // Back-end rendering APIs.
+-  int32 api_;
++  int32_t api_;
+ };
+ 
+ class GPU_EXPORT GPUTestBotConfig : public GPUTestConfig {
+@@ -112,7 +114,7 @@ class GPU_EXPORT GPUTestBotConfig : public GPUTestConfig {
+   ~GPUTestBotConfig() override;
+ 
+   // This should only be called when no gpu_vendor is added.
+-  void AddGPUVendor(uint32 gpu_vendor) override;
++  void AddGPUVendor(uint32_t gpu_vendor) override;
+ 
+   // Return false if gpu_info does not have valid vendor_id and device_id.
+   bool SetGPUInfo(const GPUInfo& gpu_info);
+@@ -134,9 +136,6 @@ class GPU_EXPORT GPUTestBotConfig : public GPUTestConfig {
    // Check if this bot's config matches |config_data| or any of the |configs|.
    static bool CurrentConfigMatches(const std::string& config_data);
    static bool CurrentConfigMatches(const std::vector<std::string>& configs);
@@ -597,9 +913,11 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config.h gpu_test_expectation
  };
  
  }  // namespace gpu
-diff -rupN gpu_test_expectations_reverted/gpu_test_config_mac.h gpu_test_expectations/gpu_test_config_mac.h
---- gpu_test_expectations_reverted/gpu_test_config_mac.h	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/gpu_test_config_mac.h	2017-05-19 17:51:38.665944833 -0400
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.h b/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.h
+new file mode 100644
+index 000000000..da22bd6ee
+--- /dev/null
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.h
 @@ -0,0 +1,28 @@
 +//
 +// Copyright 2015 The ANGLE Project Authors. All rights reserved.
@@ -629,9 +947,11 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config_mac.h gpu_test_expecta
 +gpu::GPUInfo::GPUDevice GetActiveGPU();
 +
 +#endif // GPU_TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_
-diff -rupN gpu_test_expectations_reverted/gpu_test_config_mac.mm gpu_test_expectations/gpu_test_config_mac.mm
---- gpu_test_expectations_reverted/gpu_test_config_mac.mm	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/gpu_test_config_mac.mm	2017-05-19 18:24:51.028549550 -0400
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.mm b/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.mm
+new file mode 100644
+index 000000000..e33804b7e
+--- /dev/null
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_config_mac.mm
 @@ -0,0 +1,75 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
@@ -708,9 +1028,10 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_config_mac.mm gpu_test_expect
 +  return gpu;
 +}
 +
-diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_test_expectations/gpu_test_expectations_parser.cc
---- gpu_test_expectations_reverted/gpu_test_expectations_parser.cc	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_test_expectations_parser.cc	2017-07-19 18:56:42.954781389 -0400
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.cc b/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.cc
+index 6dac74e21..7016078c2 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.cc
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.cc
 @@ -2,14 +2,45 @@
  // Use of this source code is governed by a BSD-style license that can be
  // found in the LICENSE file.
@@ -764,7 +1085,32 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
  
  namespace gpu {
  
-@@ -146,9 +177,9 @@ const char* kErrorMessage[] = {
+@@ -40,6 +71,7 @@ enum Token {
+   kConfigMacMavericks,
+   kConfigMacYosemite,
+   kConfigMacElCapitan,
++  kConfigMacSierra,
+   kConfigMac,
+   kConfigLinux,
+   kConfigChromeOS,
+@@ -77,7 +109,7 @@ enum Token {
+ 
+ struct TokenInfo {
+   const char* name;
+-  int32 flag;
++  int32_t flag;
+ };
+ 
+ const TokenInfo kTokenData[] = {
+@@ -94,6 +126,7 @@ const TokenInfo kTokenData[] = {
+     {"mavericks", GPUTestConfig::kOsMacMavericks},
+     {"yosemite", GPUTestConfig::kOsMacYosemite},
+     {"elcapitan", GPUTestConfig::kOsMacElCapitan},
++    {"sierra", GPUTestConfig::kOsMacSierra},
+     {"mac", GPUTestConfig::kOsMac},
+     {"linux", GPUTestConfig::kOsLinux},
+     {"chromeos", GPUTestConfig::kOsChromeOS},
+@@ -146,12 +179,12 @@ const char* kErrorMessage[] = {
  };
  
  Token ParseToken(const std::string& word) {
@@ -775,8 +1121,12 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
 +  if (base::StartsWithASCII(word, "0x", false))
      return kConfigGPUDeviceID;
  
-   for (int32 i = 0; i < kNumberOfExactMatchTokens; ++i) {
-@@ -176,10 +207,10 @@ bool NamesMatching(const std::string& re
+-  for (int32 i = 0; i < kNumberOfExactMatchTokens; ++i) {
++  for (int32_t i = 0; i < kNumberOfExactMatchTokens; ++i) {
+     if (base::LowerCaseEqualsASCII(word, kTokenData[i].name))
+       return static_cast<Token>(i);
+   }
+@@ -176,10 +209,10 @@ bool NamesMatching(const std::string& ref, const std::string& test_name) {
  
  GPUTestExpectationsParser::GPUTestExpectationsParser() {
    // Some sanity check.
@@ -791,7 +1141,7 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
  }
  
  GPUTestExpectationsParser::~GPUTestExpectationsParser() {
-@@ -204,8 +235,8 @@ bool GPUTestExpectationsParser::LoadTest
+@@ -204,8 +237,8 @@ bool GPUTestExpectationsParser::LoadTestExpectations(const std::string& data) {
    return rt;
  }
  
@@ -802,7 +1152,41 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
    entries_.clear();
    error_messages_.clear();
  
-@@ -399,7 +430,7 @@ bool GPUTestExpectationsParser::ParseLin
+@@ -217,7 +250,7 @@ bool GPUTestExpectationsParser::LoadTestExpectations(
+   return LoadTestExpectations(data);
+ }
+ 
+-int32 GPUTestExpectationsParser::GetTestExpectation(
++int32_t GPUTestExpectationsParser::GetTestExpectation(
+     const std::string& test_name,
+     const GPUTestBotConfig& bot_config) const {
+   for (size_t i = 0; i < entries_.size(); ++i) {
+@@ -256,6 +289,7 @@ bool GPUTestExpectationsParser::ParseConfig(
+       case kConfigMacMavericks:
+       case kConfigMacYosemite:
+       case kConfigMacElCapitan:
++      case kConfigMacSierra:
+       case kConfigMac:
+       case kConfigLinux:
+       case kConfigChromeOS:
+@@ -291,7 +325,7 @@ bool GPUTestExpectationsParser::ParseLine(
+   std::vector<std::string> tokens = base::SplitString(
+       line_data, base::kWhitespaceASCII, base::KEEP_WHITESPACE,
+       base::SPLIT_WANT_NONEMPTY);
+-  int32 stage = kLineParserBegin;
++  int32_t stage = kLineParserBegin;
+   GPUTestExpectationEntry entry;
+   entry.line_number = line_number;
+   GPUTestConfig& config = entry.test_config;
+@@ -315,6 +349,7 @@ bool GPUTestExpectationsParser::ParseLine(
+       case kConfigMacMavericks:
+       case kConfigMacYosemite:
+       case kConfigMacElCapitan:
++      case kConfigMacSierra:
+       case kConfigMac:
+       case kConfigLinux:
+       case kConfigChromeOS:
+@@ -399,7 +434,7 @@ bool GPUTestExpectationsParser::ParseLine(
            stage++;
          break;
        default:
@@ -811,7 +1195,37 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
          break;
      }
    }
-@@ -488,7 +519,7 @@ bool GPUTestExpectationsParser::UpdateTe
+@@ -419,8 +454,9 @@ bool GPUTestExpectationsParser::ParseLine(
+   return false;
+ }
+ 
+-bool GPUTestExpectationsParser::UpdateTestConfig(
+-    GPUTestConfig* config, int32 token, size_t line_number) {
++bool GPUTestExpectationsParser::UpdateTestConfig(GPUTestConfig* config,
++                                                 int32_t token,
++                                                 size_t line_number) {
+   DCHECK(config);
+   switch (token) {
+     case kConfigWinXP:
+@@ -436,6 +472,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
+     case kConfigMacMavericks:
+     case kConfigMacYosemite:
+     case kConfigMacElCapitan:
++    case kConfigMacSierra:
+     case kConfigMac:
+     case kConfigLinux:
+     case kConfigChromeOS:
+@@ -452,8 +489,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
+     case kConfigIntel:
+     case kConfigVMWare:
+       {
+-        uint32 gpu_vendor =
+-            static_cast<uint32>(kTokenData[token].flag);
++      uint32_t gpu_vendor = static_cast<uint32_t>(kTokenData[token].flag);
+         for (size_t i = 0; i < config->gpu_vendor().size(); ++i) {
+           if (config->gpu_vendor()[i] == gpu_vendor) {
+             PushErrorMessage(
+@@ -488,7 +524,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
        config->set_api(config->api() | kTokenData[token].flag);
        break;
      default:
@@ -820,7 +1234,16 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
        break;
    }
    return true;
-@@ -529,20 +560,18 @@ bool GPUTestExpectationsParser::DetectCo
+@@ -499,7 +535,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
+     const std::string& gpu_device_id,
+     size_t line_number) {
+   DCHECK(config);
+-  uint32 device_id = 0;
++  uint32_t device_id = 0;
+   if (config->gpu_device_id() != 0 ||
+       !base::HexStringToUInt(gpu_device_id, &device_id) ||
+       device_id == 0) {
+@@ -529,20 +565,18 @@ bool GPUTestExpectationsParser::DetectConflictsBetweenEntries() {
  
  void GPUTestExpectationsParser::PushErrorMessage(
      const std::string& message, size_t line_number) {
@@ -847,10 +1270,17 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.cc gpu_te
  }
  
  GPUTestExpectationsParser:: GPUTestExpectationEntry::GPUTestExpectationEntry()
-diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.h gpu_test_expectations/gpu_test_expectations_parser.h
---- gpu_test_expectations_reverted/gpu_test_expectations_parser.h	2017-07-19 18:00:16.369751203 -0400
-+++ gpu_test_expectations/gpu_test_expectations_parser.h	2017-05-19 17:51:38.665944833 -0400
-@@ -8,10 +8,8 @@
+diff --git a/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.h b/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.h
+index a69f7e96e..269c21544 100644
+--- a/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.h
++++ b/src/tests/third_party/gpu_test_expectations/gpu_test_expectations_parser.h
+@@ -5,13 +5,14 @@
+ #ifndef GPU_CONFIG_GPU_TEST_EXPECTATIONS_PARSER_H_
+ #define GPU_CONFIG_GPU_TEST_EXPECTATIONS_PARSER_H_
+ 
++#include <stddef.h>
++#include <stdint.h>
++
  #include <string>
  #include <vector>
  
@@ -863,7 +1293,7 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.h gpu_tes
  
  namespace gpu {
  
-@@ -32,7 +30,7 @@ class GPU_EXPORT GPUTestExpectationsPars
+@@ -32,14 +33,14 @@ class GPU_EXPORT GPUTestExpectationsParser {
    // save all the entries. Otherwise, generate error messages.
    // Return true if parsing succeeds.
    bool LoadTestExpectations(const std::string& data);
@@ -872,29 +1302,33 @@ diff -rupN gpu_test_expectations_reverted/gpu_test_expectations_parser.h gpu_tes
  
    // Query error messages from the last LoadTestExpectations() call.
    const std::vector<std::string>& GetErrorMessages() const;
-diff -rupN gpu_test_expectations_reverted/HowToMakeChanges.md gpu_test_expectations/HowToMakeChanges.md
---- gpu_test_expectations_reverted/HowToMakeChanges.md	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/HowToMakeChanges.md	2017-05-19 18:24:51.024549569 -0400
-@@ -0,0 +1,22 @@
-+Because the ```gpu_test_expectations``` directory is based on parts of Chromium's ```gpu/config```
-+directory, we want to keep a patch of the changes added to make it compile with ANGLE. This
-+will allow us to merge Chromium changes easily in our ```gpu_test_expectations```.
-+
-+In order to make a change to this directory, do the following:
-+
-+ * copy the directory somewhere like in ```gpu_test_expectations_reverted```
-+ * in ```gpu_test_expectations_reverted``` run ```patch -p 1 -R < angle-mods.patch```
-+ * do your changes in ```gpu_test_expectations```
-+ * delete angle-mods.patch in both directories
-+ * run ```diff -rupN gpu_test_expectations_reverted gpu_test_expectations > angle-mods.patch```
-+ * copy ```angle-mods.patch``` in ```gpu_test_expectations```
-+
-+How to update from Chromium:
-+
-+ * ```git apply -R angle-mods.patch```, ```git add . -u```, ```git commit```
-+ * Copy over Chromium files, ```git add . -u```, ```git commit```
-+ * ```git revert HEAD~```
-+ * ```rm angle-mods.patch```
-+ * ```git diff HEAD~ (`)ls(`) > angle-mods.patch```,```git add angle-mods.patch```, ```git commit --amend```
-+ * ```git rebase -i``` to squash the three patches into one.
-+
+ 
+   // Get the test expectation of a given test on a given bot.
+-  int32 GetTestExpectation(const std::string& test_name,
+-                           const GPUTestBotConfig& bot_config) const;
++  int32_t GetTestExpectation(const std::string& test_name,
++                             const GPUTestBotConfig& bot_config) const;
+ 
+   // Parse a list of config modifiers. If we have a valid entry with no
+   // conflicts, | config | stores it, and the function returns true.
+@@ -51,7 +52,7 @@ class GPU_EXPORT GPUTestExpectationsParser {
+ 
+     std::string test_name;
+     GPUTestConfig test_config;
+-    int32 test_expectation;
++    int32_t test_expectation;
+     size_t line_number;
+   };
+ 
+@@ -60,8 +61,9 @@ class GPU_EXPORT GPUTestExpectationsParser {
+   bool ParseLine(const std::string& line_data, size_t line_number);
+ 
+   // Update OS/GPUVendor/BuildType modifiers. May generate an error message.
+-  bool UpdateTestConfig(
+-      GPUTestConfig* config, int32 token, size_t line_number);
++  bool UpdateTestConfig(GPUTestConfig* config,
++                        int32_t token,
++                        size_t line_number);
+ 
+   // Update GPUDeviceID modifier. May generate an error message.
+   bool UpdateTestConfig(GPUTestConfig* config,
