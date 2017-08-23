@@ -211,9 +211,9 @@ GPUTestConfig::OS GetCurrentOS() {
 #elif defined(OS_LINUX) || defined(OS_OPENBSD)
   return GPUTestConfig::kOsLinux;
 #elif defined(OS_WIN)
-  int32 major_version = 0;
-  int32 minor_version = 0;
-  int32 bugfix_version = 0;
+  int32_t major_version = 0;
+  int32_t minor_version = 0;
+  int32_t bugfix_version = 0;
   base::SysInfo::OperatingSystemVersionNumbers(
       &major_version, &minor_version, &bugfix_version);
   if (major_version == 5)
@@ -227,9 +227,9 @@ GPUTestConfig::OS GetCurrentOS() {
   if (major_version == 10)
     return GPUTestConfig::kOsWin10;
 #elif defined(OS_MACOSX)
-  int32 major_version = 0;
-  int32 minor_version = 0;
-  int32 bugfix_version = 0;
+  int32_t major_version = 0;
+  int32_t minor_version = 0;
+  int32_t bugfix_version = 0;
   base::SysInfo::OperatingSystemVersionNumbers(
       &major_version, &minor_version, &bugfix_version);
   if (major_version == 10) {
@@ -248,6 +248,8 @@ GPUTestConfig::OS GetCurrentOS() {
         return GPUTestConfig::kOsMacYosemite;
       case 11:
         return GPUTestConfig::kOsMacElCapitan;
+      case 12:
+        return GPUTestConfig::kOsMacSierra;
     }
   }
 #elif defined(OS_ANDROID)
@@ -265,31 +267,33 @@ GPUTestConfig::GPUTestConfig()
       build_type_(kBuildTypeUnknown),
       api_(kAPIUnknown) {}
 
+GPUTestConfig::GPUTestConfig(const GPUTestConfig& other) = default;
+
 GPUTestConfig::~GPUTestConfig() {
 }
 
-void GPUTestConfig::set_os(int32 os) {
+void GPUTestConfig::set_os(int32_t os) {
   DCHECK_EQ(0, os & ~(kOsAndroid | kOsWin | kOsMac | kOsLinux | kOsChromeOS));
   os_ = os;
 }
 
-void GPUTestConfig::AddGPUVendor(uint32 gpu_vendor) {
+void GPUTestConfig::AddGPUVendor(uint32_t gpu_vendor) {
   DCHECK_NE(0u, gpu_vendor);
   for (size_t i = 0; i < gpu_vendor_.size(); ++i)
     DCHECK_NE(gpu_vendor_[i], gpu_vendor);
   gpu_vendor_.push_back(gpu_vendor);
 }
 
-void GPUTestConfig::set_gpu_device_id(uint32 id) {
+void GPUTestConfig::set_gpu_device_id(uint32_t id) {
   gpu_device_id_ = id;
 }
 
-void GPUTestConfig::set_build_type(int32 build_type) {
+void GPUTestConfig::set_build_type(int32_t build_type) {
   DCHECK_EQ(0, build_type & ~(kBuildTypeRelease | kBuildTypeDebug));
   build_type_ = build_type;
 }
 
-void GPUTestConfig::set_api(int32 api) {
+void GPUTestConfig::set_api(int32_t api) {
   DCHECK_EQ(0, api & ~(kAPID3D9 | kAPID3D11 | kAPIGLDesktop | kAPIGLES));
   api_ = api;
 }
@@ -342,7 +346,7 @@ void GPUTestConfig::ClearGPUVendor() {
 GPUTestBotConfig::~GPUTestBotConfig() {
 }
 
-void GPUTestBotConfig::AddGPUVendor(uint32 gpu_vendor) {
+void GPUTestBotConfig::AddGPUVendor(uint32_t gpu_vendor) {
   DCHECK_EQ(0u, GPUTestConfig::gpu_vendor().size());
   GPUTestConfig::AddGPUVendor(gpu_vendor);
 }
@@ -371,6 +375,7 @@ bool GPUTestBotConfig::IsValid() const {
     case kOsMacMavericks:
     case kOsMacYosemite:
     case kOsMacElCapitan:
+    case kOsMacSierra:
     case kOsLinux:
     case kOsChromeOS:
     case kOsAndroid:
@@ -430,41 +435,32 @@ bool GPUTestBotConfig::Matches(const std::string& config_data) const {
   return Matches(config);
 }
 
-bool GPUTestBotConfig::LoadCurrentConfig(const GPUInfo *gpu_info)
-{
-    bool rt;
-    if (gpu_info == NULL)
-    {
-        GPUInfo my_gpu_info;
-        CollectInfoResult result =
-            CollectGpuID(&my_gpu_info.gpu.vendor_id, &my_gpu_info.gpu.device_id);
-        if (result != kCollectInfoSuccess)
-        {
-            LOG(ERROR) << "Fail to identify GPU\n";
-            DisableGPUInfoValidation();
-            rt = true;
-        }
-        else
-        {
-            rt = SetGPUInfo(my_gpu_info);
-        }
+bool GPUTestBotConfig::LoadCurrentConfig(const GPUInfo* gpu_info) {
+  bool rt;
+  if (gpu_info == NULL) {
+    GPUInfo my_gpu_info;
+    CollectInfoResult result = CollectGpuID(&my_gpu_info.gpu.vendor_id, &my_gpu_info.gpu.device_id);
+    if (result != kCollectInfoSuccess) {
+      LOG(ERROR) << "Fail to identify GPU";
+      DisableGPUInfoValidation();
+      rt = true;
+    } else {
+      rt = SetGPUInfo(my_gpu_info);
     }
-    else
-    {
-        rt = SetGPUInfo(*gpu_info);
-    }
-    set_os(GetCurrentOS());
-    if (os() == kOsUnknown)
-    {
-        LOG(ERROR) << "Unknown OS\n";
-        rt = false;
-    }
+  } else {
+    rt = SetGPUInfo(*gpu_info);
+  }
+  set_os(GetCurrentOS());
+  if (os() == kOsUnknown) {
+    LOG(ERROR) << "Unknown OS";
+    rt = false;
+  }
 #if defined(NDEBUG)
-    set_build_type(kBuildTypeRelease);
+  set_build_type(kBuildTypeRelease);
 #else
-    set_build_type(kBuildTypeDebug);
+  set_build_type(kBuildTypeDebug);
 #endif
-    return rt;
+  return rt;
 }
 
 // static
