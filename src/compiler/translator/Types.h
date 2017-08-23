@@ -334,6 +334,12 @@ class TType
         mArraySizes.push_back(s);
         invalidateMangledName();
     }
+    // sizes contain new outermost array sizes.
+    void makeArrays(const TVector<unsigned int> &sizes)
+    {
+        mArraySizes.insert(mArraySizes.end(), sizes.begin(), sizes.end());
+        invalidateMangledName();
+    }
     // Here, the array dimension value 0 corresponds to the innermost array.
     void setArraySize(size_t arrayDimension, unsigned int s)
     {
@@ -576,8 +582,8 @@ struct TPublicType
     TQualifier qualifier;
     bool invariant;
     TPrecision precision;
-    bool array;
-    int arraySize;
+    TVector<unsigned int> *arraySizes;  // Either nullptr or empty in case the type is not an array.
+                                        // The last element is the outermost array size.
 
     void initialize(const TTypeSpecifierNonArray &typeSpecifier, TQualifier q)
     {
@@ -587,8 +593,7 @@ struct TPublicType
         qualifier             = q;
         invariant             = false;
         precision             = EbpUndefined;
-        array                 = false;
-        arraySize             = 0;
+        arraySizes            = nullptr;
     }
 
     void initializeBasicType(TBasicType basicType)
@@ -601,8 +606,7 @@ struct TPublicType
         qualifier                           = EvqTemporary;
         invariant                           = false;
         precision                           = EbpUndefined;
-        array                               = false;
-        arraySize                           = 0;
+        arraySizes                          = nullptr;
     }
 
     TBasicType getBasicType() const { return typeSpecifierNonArray.type; }
@@ -636,21 +640,13 @@ struct TPublicType
         return typeSpecifierNonArray.userDef->containsType(t);
     }
 
-    bool isUnsizedArray() const { return array && arraySize == 0; }
-    void setArraySize(int s)
-    {
-        array     = true;
-        arraySize = s;
-    }
-    void clearArrayness()
-    {
-        array     = false;
-        arraySize = 0;
-    }
+    void setArraySizes(TVector<unsigned int> *sizes) { arraySizes = sizes; }
+    bool isArray() const { return arraySizes && !arraySizes->empty(); }
+    void clearArrayness() { arraySizes = nullptr; }
 
     bool isAggregate() const
     {
-        return array || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
+        return isArray() || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
     }
 };
 
