@@ -28,26 +28,6 @@ enum CollectInfoResult {
   kCollectInfoFatalFailure = 3
 };
 
-// Video profile.  This *must* match media::VideoCodecProfile.
-enum VideoCodecProfile {
-  VIDEO_CODEC_PROFILE_UNKNOWN = -1,
-  VIDEO_CODEC_PROFILE_MIN = VIDEO_CODEC_PROFILE_UNKNOWN,
-  H264PROFILE_BASELINE = 0,
-  H264PROFILE_MAIN = 1,
-  H264PROFILE_EXTENDED = 2,
-  H264PROFILE_HIGH = 3,
-  H264PROFILE_HIGH10PROFILE = 4,
-  H264PROFILE_HIGH422PROFILE = 5,
-  H264PROFILE_HIGH444PREDICTIVEPROFILE = 6,
-  H264PROFILE_SCALABLEBASELINE = 7,
-  H264PROFILE_SCALABLEHIGH = 8,
-  H264PROFILE_STEREOHIGH = 9,
-  H264PROFILE_MULTIVIEWHIGH = 10,
-  VP8PROFILE_ANY = 11,
-  VP9PROFILE_ANY = 12,
-  VIDEO_CODEC_PROFILE_MAX = VP9PROFILE_ANY,
-};
-
 struct GPU_EXPORT GPUInfo {
   struct GPU_EXPORT GPUDevice {
     GPUDevice();
@@ -75,31 +55,17 @@ struct GPU_EXPORT GPUInfo {
   GPUInfo();
   ~GPUInfo();
 
-  bool SupportsAccelerated2dCanvas() const {
-    return !can_lose_context && !software_rendering;
-  }
-
   // Computer has NVIDIA Optimus
   bool optimus;
 
   // Computer has AMD Dynamic Switchable Graphics
   bool amd_switchable;
 
-  // Lenovo dCute is installed. http://crbug.com/181665.
-  bool lenovo_dcute;
-
   // Primary GPU, for exmaple, the discrete GPU in a dual GPU machine.
   GPUDevice gpu;
 
   // Secondary GPUs, for example, the integrated GPU in a dual GPU machine.
   std::vector<GPUDevice> secondary_gpus;
-
-  // On Windows, the unique identifier of the adapter the GPU process uses.
-  // The default is zero, which makes the browser process create its D3D device
-  // on the primary adapter. Note that the primary adapter can change at any
-  // time so it is better to specify a particular LUID. Note that valid LUIDs
-  // are always non-zero.
-  uint64 adapter_luid;
 
   // The vendor of the graphics driver currently installed.
   std::string driver_vendor;
@@ -156,10 +122,6 @@ struct GPU_EXPORT GPUInfo {
   // GL reset notification strategy as defined by GL_ARB_robustness. 0 if GPU
   // reset detection or notification not available.
   uint32 gl_reset_notification_strategy;
-
-  // The device semantics, i.e. whether the Vista and Windows 7 specific
-  // semantics are available.
-  bool can_lose_context;
 
   bool software_rendering;
 
