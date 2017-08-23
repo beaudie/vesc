@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <stdint.h>
+
 #include "gpu_info.h"
 
 namespace {
@@ -32,10 +34,7 @@ GPUInfo::GPUDevice::~GPUDevice() { }
 GPUInfo::GPUInfo()
     : optimus(false),
       amd_switchable(false),
-      lenovo_dcute(false),
-      adapter_luid(0),
       gl_reset_notification_strategy(0),
-      can_lose_context(false),
       software_rendering(false),
       direct_rendering(true),
       sandboxed(false),
@@ -43,19 +42,31 @@ GPUInfo::GPUInfo()
       in_process_gpu(true),
       basic_info_state(kCollectInfoNone),
       context_info_state(kCollectInfoNone),
-      jpeg_decode_accelerator_supported(false) {
+      jpeg_decode_accelerator_supported(false)
+{
 }
 
+GPUInfo::GPUInfo(const GPUInfo& other) = default;
+
 GPUInfo::~GPUInfo() { }
+
+const GPUInfo::GPUDevice& GPUInfo::active_gpu() const {
+  if (gpu.active)
+    return gpu;
+  for (const GPUDevice& secondary_gpu : secondary_gpus) {
+    if (secondary_gpu.active)
+      return secondary_gpu;
+  }
+  DLOG(ERROR) << "No active GPU found, returning primary GPU.";
+  return gpu;
+}
 
 void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   struct GPUInfoKnownFields {
     bool optimus;
     bool amd_switchable;
-    bool lenovo_dcute;
     GPUDevice gpu;
     std::vector<GPUDevice> secondary_gpus;
-    uint64 adapter_luid;
     std::string driver_vendor;
     std::string driver_version;
     std::string driver_date;
@@ -71,8 +82,7 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
     std::string gl_ws_vendor;
     std::string gl_ws_version;
     std::string gl_ws_extensions;
-    uint32 gl_reset_notification_strategy;
-    bool can_lose_context;
+    uint32_t gl_reset_notification_strategy;
     bool software_rendering;
     bool direct_rendering;
     bool sandboxed;
@@ -100,8 +110,6 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   enumerator->BeginAuxAttributes();
   enumerator->AddBool("optimus", optimus);
   enumerator->AddBool("amdSwitchable", amd_switchable);
-  enumerator->AddBool("lenovoDcute", lenovo_dcute);
-  enumerator->AddInt64("adapterLuid", adapter_luid);
   enumerator->AddString("driverVendor", driver_vendor);
   enumerator->AddString("driverVersion", driver_version);
   enumerator->AddString("driverDate", driver_date);
@@ -118,7 +126,6 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   enumerator->AddInt(
       "glResetNotificationStrategy",
       static_cast<int>(gl_reset_notification_strategy));
-  enumerator->AddBool("can_lose_context", can_lose_context);
   // TODO(kbr): add performance_stats.
   enumerator->AddBool("softwareRendering", software_rendering);
   enumerator->AddBool("directRendering", direct_rendering);

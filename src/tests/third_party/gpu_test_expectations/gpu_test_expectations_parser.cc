@@ -71,6 +71,7 @@ enum Token {
   kConfigMacMavericks,
   kConfigMacYosemite,
   kConfigMacElCapitan,
+  kConfigMacSierra,
   kConfigMac,
   kConfigLinux,
   kConfigChromeOS,
@@ -108,7 +109,7 @@ enum Token {
 
 struct TokenInfo {
   const char* name;
-  int32 flag;
+  int32_t flag;
 };
 
 const TokenInfo kTokenData[] = {
@@ -125,6 +126,7 @@ const TokenInfo kTokenData[] = {
     {"mavericks", GPUTestConfig::kOsMacMavericks},
     {"yosemite", GPUTestConfig::kOsMacYosemite},
     {"elcapitan", GPUTestConfig::kOsMacElCapitan},
+    {"sierra", GPUTestConfig::kOsMacSierra},
     {"mac", GPUTestConfig::kOsMac},
     {"linux", GPUTestConfig::kOsLinux},
     {"chromeos", GPUTestConfig::kOsChromeOS},
@@ -182,7 +184,7 @@ Token ParseToken(const std::string& word) {
   if (base::StartsWithASCII(word, "0x", false))
     return kConfigGPUDeviceID;
 
-  for (int32 i = 0; i < kNumberOfExactMatchTokens; ++i) {
+  for (int32_t i = 0; i < kNumberOfExactMatchTokens; ++i) {
     if (base::LowerCaseEqualsASCII(word, kTokenData[i].name))
       return static_cast<Token>(i);
   }
@@ -248,7 +250,7 @@ bool GPUTestExpectationsParser::LoadTestExpectationsFromFile(
   return LoadTestExpectations(data);
 }
 
-int32 GPUTestExpectationsParser::GetTestExpectation(
+int32_t GPUTestExpectationsParser::GetTestExpectation(
     const std::string& test_name,
     const GPUTestBotConfig& bot_config) const {
   for (size_t i = 0; i < entries_.size(); ++i) {
@@ -287,6 +289,7 @@ bool GPUTestExpectationsParser::ParseConfig(
       case kConfigMacMavericks:
       case kConfigMacYosemite:
       case kConfigMacElCapitan:
+      case kConfigMacSierra:
       case kConfigMac:
       case kConfigLinux:
       case kConfigChromeOS:
@@ -322,7 +325,7 @@ bool GPUTestExpectationsParser::ParseLine(
   std::vector<std::string> tokens = base::SplitString(
       line_data, base::kWhitespaceASCII, base::KEEP_WHITESPACE,
       base::SPLIT_WANT_NONEMPTY);
-  int32 stage = kLineParserBegin;
+  int32_t stage = kLineParserBegin;
   GPUTestExpectationEntry entry;
   entry.line_number = line_number;
   GPUTestConfig& config = entry.test_config;
@@ -346,6 +349,7 @@ bool GPUTestExpectationsParser::ParseLine(
       case kConfigMacMavericks:
       case kConfigMacYosemite:
       case kConfigMacElCapitan:
+      case kConfigMacSierra:
       case kConfigMac:
       case kConfigLinux:
       case kConfigChromeOS:
@@ -450,8 +454,9 @@ bool GPUTestExpectationsParser::ParseLine(
   return false;
 }
 
-bool GPUTestExpectationsParser::UpdateTestConfig(
-    GPUTestConfig* config, int32 token, size_t line_number) {
+bool GPUTestExpectationsParser::UpdateTestConfig(GPUTestConfig* config,
+                                                 int32_t token,
+                                                 size_t line_number) {
   DCHECK(config);
   switch (token) {
     case kConfigWinXP:
@@ -467,6 +472,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
     case kConfigMacMavericks:
     case kConfigMacYosemite:
     case kConfigMacElCapitan:
+    case kConfigMacSierra:
     case kConfigMac:
     case kConfigLinux:
     case kConfigChromeOS:
@@ -483,8 +489,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
     case kConfigIntel:
     case kConfigVMWare:
       {
-        uint32 gpu_vendor =
-            static_cast<uint32>(kTokenData[token].flag);
+      uint32_t gpu_vendor = static_cast<uint32_t>(kTokenData[token].flag);
         for (size_t i = 0; i < config->gpu_vendor().size(); ++i) {
           if (config->gpu_vendor()[i] == gpu_vendor) {
             PushErrorMessage(
@@ -530,7 +535,7 @@ bool GPUTestExpectationsParser::UpdateTestConfig(
     const std::string& gpu_device_id,
     size_t line_number) {
   DCHECK(config);
-  uint32 device_id = 0;
+  uint32_t device_id = 0;
   if (config->gpu_device_id() != 0 ||
       !base::HexStringToUInt(gpu_device_id, &device_id) ||
       device_id == 0) {
