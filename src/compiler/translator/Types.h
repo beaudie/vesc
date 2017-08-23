@@ -577,8 +577,8 @@ struct TPublicType
     TQualifier qualifier;
     bool invariant;
     TPrecision precision;
-    bool array;
-    int arraySize;
+    TVector<unsigned int> *arraySizes;  // Either nullptr or empty in case the type is not an array.
+                                        // The last element is the outermost array size.
 
     void initialize(const TTypeSpecifierNonArray &typeSpecifier, TQualifier q)
     {
@@ -588,8 +588,7 @@ struct TPublicType
         qualifier             = q;
         invariant             = false;
         precision             = EbpUndefined;
-        array                 = false;
-        arraySize             = 0;
+        arraySizes            = nullptr;
     }
 
     void initializeBasicType(TBasicType basicType)
@@ -602,8 +601,7 @@ struct TPublicType
         qualifier                           = EvqTemporary;
         invariant                           = false;
         precision                           = EbpUndefined;
-        array                               = false;
-        arraySize                           = 0;
+        arraySizes                          = nullptr;
     }
 
     TBasicType getBasicType() const { return typeSpecifierNonArray.type; }
@@ -637,21 +635,37 @@ struct TPublicType
         return typeSpecifierNonArray.userDef->containsType(t);
     }
 
-    bool isUnsizedArray() const { return array && arraySize == 0; }
-    void setArraySize(int s)
+    void setArraySizes(TVector<unsigned int> *sizes) { arraySizes = sizes; }
+    bool isArray() const { return arraySizes && !arraySizes->empty(); }
+    bool isUnsizedArray() const
     {
-        array     = true;
-        arraySize = s;
+        if (!arraySizes)
+        {
+            return false;
+        }
+        for (unsigned int size : *arraySizes)
+        {
+            if (size == 0u)
+            {
+                return true;
+            }
+        }
+        return false;
     }
-    void clearArrayness()
+    void clearArrayness() { arraySizes = nullptr; }
+    // sizes contain new outermost array sizes.
+    void makeArrays(const TVector<unsigned int> &sizes)
     {
-        array     = false;
-        arraySize = 0;
+        if (arraySizes == nullptr)
+        {
+            arraySizes = new TVector<unsigned int>();
+        }
+        arraySizes->insert(arraySizes->end(), sizes.begin(), sizes.end());
     }
 
     bool isAggregate() const
     {
-        return array || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
+        return isArray() || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
     }
 };
 
