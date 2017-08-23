@@ -32,10 +32,7 @@ GPUInfo::GPUDevice::~GPUDevice() { }
 GPUInfo::GPUInfo()
     : optimus(false),
       amd_switchable(false),
-      lenovo_dcute(false),
-      adapter_luid(0),
       gl_reset_notification_strategy(0),
-      can_lose_context(false),
       software_rendering(false),
       direct_rendering(true),
       sandboxed(false),
@@ -52,10 +49,8 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   struct GPUInfoKnownFields {
     bool optimus;
     bool amd_switchable;
-    bool lenovo_dcute;
     GPUDevice gpu;
     std::vector<GPUDevice> secondary_gpus;
-    uint64 adapter_luid;
     std::string driver_vendor;
     std::string driver_version;
     std::string driver_date;
@@ -72,7 +67,6 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
     std::string gl_ws_version;
     std::string gl_ws_extensions;
     uint32 gl_reset_notification_strategy;
-    bool can_lose_context;
     bool software_rendering;
     bool direct_rendering;
     bool sandboxed;
@@ -100,8 +94,6 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   enumerator->BeginAuxAttributes();
   enumerator->AddBool("optimus", optimus);
   enumerator->AddBool("amdSwitchable", amd_switchable);
-  enumerator->AddBool("lenovoDcute", lenovo_dcute);
-  enumerator->AddInt64("adapterLuid", adapter_luid);
   enumerator->AddString("driverVendor", driver_vendor);
   enumerator->AddString("driverVersion", driver_version);
   enumerator->AddString("driverDate", driver_date);
@@ -118,7 +110,6 @@ void GPUInfo::EnumerateFields(Enumerator* enumerator) const {
   enumerator->AddInt(
       "glResetNotificationStrategy",
       static_cast<int>(gl_reset_notification_strategy));
-  enumerator->AddBool("can_lose_context", can_lose_context);
   // TODO(kbr): add performance_stats.
   enumerator->AddBool("softwareRendering", software_rendering);
   enumerator->AddBool("directRendering", direct_rendering);
