@@ -180,7 +180,7 @@ class TParseContext : angle::NonCopyable
     // is not needed in the AST.
     bool executeInitializer(const TSourceLoc &line,
                             const TString &identifier,
-                            const TPublicType &pType,
+                            TType type,
                             TIntermTyped *initializer,
                             TIntermBinary **initNode);
     TIntermNode *addConditionInitializer(const TPublicType &pType,
@@ -209,7 +209,7 @@ class TParseContext : angle::NonCopyable
                                                     const TSourceLoc &identifierLocation,
                                                     const TString &identifier,
                                                     const TSourceLoc &indexLocation,
-                                                    unsigned int arraySize);
+                                                    const TVector<unsigned int> &arraySizes);
     TIntermDeclaration *parseSingleInitDeclaration(const TPublicType &publicType,
                                                    const TSourceLoc &identifierLocation,
                                                    const TString &identifier,
@@ -222,7 +222,7 @@ class TParseContext : angle::NonCopyable
                                                         const TSourceLoc &identifierLocation,
                                                         const TString &identifier,
                                                         const TSourceLoc &indexLocation,
-                                                        unsigned int arraySize,
+                                                        const TVector<unsigned int> &arraySizes,
                                                         const TSourceLoc &initLocation,
                                                         TIntermTyped *initializer);
 
@@ -240,7 +240,7 @@ class TParseContext : angle::NonCopyable
                               const TSourceLoc &identifierLocation,
                               const TString &identifier,
                               const TSourceLoc &arrayLocation,
-                              unsigned int arraySize,
+                              const TVector<unsigned int> &arraySizes,
                               TIntermDeclaration *declarationOut);
     void parseInitDeclarator(const TPublicType &publicType,
                              const TSourceLoc &identifierLocation,
@@ -254,7 +254,7 @@ class TParseContext : angle::NonCopyable
                                   const TSourceLoc &identifierLocation,
                                   const TString &identifier,
                                   const TSourceLoc &indexLocation,
-                                  unsigned int arraySize,
+                                  const TVector<unsigned int> &arraySizes,
                                   const TSourceLoc &initLocation,
                                   TIntermTyped *initializer,
                                   TIntermDeclaration *declarationOut);
@@ -284,7 +284,7 @@ class TParseContext : angle::NonCopyable
 
     TParameter parseParameterArrayDeclarator(const TString *name,
                                              const TSourceLoc &nameLoc,
-                                             unsigned int arraySize,
+                                             const TVector<unsigned int> &arraySizes,
                                              const TSourceLoc &arrayLoc,
                                              TPublicType *elementType);
 
