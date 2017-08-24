@@ -20,6 +20,7 @@ class TOutputESSL : public TOutputGLSLBase
                 ShHashFunction64 hashFunction,
                 NameMap &nameMap,
                 TSymbolTable *symbolTable,
+                const ReservedNameSet &reservedNames,
                 sh::GLenum shaderType,
                 int shaderVersion,
                 bool forceHighp,
