@@ -3781,7 +3781,8 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
                           "[");
                     break;
                 default:
-                    UNREACHABLE();
+                    error(location, "unknown interface block types", "[");
+                    break;
             }
         }
         else if (baseExpression->getQualifier() == EvqFragmentOut)
