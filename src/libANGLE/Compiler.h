@@ -32,6 +32,7 @@ class Compiler final : public RefCountObjectNoID
     ShHandle getCompilerHandle(GLenum type);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
     const std::string &getBuiltinResourcesString(GLenum type);
+    const std::map<std::string, std::string> *getNameManglingMap(GLenum type);
 
   private:
     ~Compiler() override;
