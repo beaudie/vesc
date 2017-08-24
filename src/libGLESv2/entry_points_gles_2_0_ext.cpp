@@ -474,7 +474,7 @@ void GL_APIENTRY GetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSiz
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformfv(location, params);
+        programObject->getUniformfv(context, location, params);
     }
 }
 
@@ -495,7 +495,7 @@ void GL_APIENTRY GetnUniformivEXT(GLuint program, GLint location, GLsizei bufSiz
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformiv(location, params);
+        programObject->getUniformiv(context, location, params);
     }
 }
 
@@ -2288,7 +2288,7 @@ ANGLE_EXPORT void GL_APIENTRY GetUniformfvRobustANGLE(GLuint program,
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformfv(location, params);
+        programObject->getUniformfv(context, location, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2317,7 +2317,7 @@ ANGLE_EXPORT void GL_APIENTRY GetUniformivRobustANGLE(GLuint program,
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformiv(location, params);
+        programObject->getUniformiv(context, location, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2946,7 +2946,7 @@ ANGLE_EXPORT void GL_APIENTRY GetUniformuivRobustANGLE(GLuint program,
         Program *programObject = context->getProgram(program);
         ASSERT(programObject);
 
-        programObject->getUniformuiv(location, params);
+        programObject->getUniformuiv(context, location, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
