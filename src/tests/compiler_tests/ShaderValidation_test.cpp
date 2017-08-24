@@ -4418,3 +4418,47 @@ TEST_F(VertexShaderValidationTest, ViewportIndexInESSL310)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Test that using shader io blocks without declaration of GL_OES_shader_io_block is not allowed.
+TEST_F(VertexShaderValidationTest, IOBlockWithoutExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "out block\n"
+        "{\n"
+        "    vec2 value;\n"
+        "} VSOutput[2];\n"
+        "void main()\n"
+        "{\n"
+        "    int i = 0;\n"
+        "    vec2 value1 = VSOutput[i].value;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that using shader io blocks without declaration of GL_OES_shader_io_block is not allowed.
+TEST_F(FragmentShaderValidationTest, IOBlockWithoutExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in block\n"
+        "{\n"
+        "    vec4 i_color;\n"
+        "} FSInput[2];\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    int i = 0;\n"
+        "    o_color = FSInput[i].i_color;"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
