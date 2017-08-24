@@ -1535,8 +1535,17 @@ bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSi
     switch (mode)
     {
         case GL_POINTS:
-            primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
-            minCount          = 1;
+            // If instanced pointsprites are enabled and the shader uses gl_PointSize, the topology
+            // must be D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST.
+            if (usesPointSize && getWorkarounds().useInstancedPointSpriteEmulation)
+            {
+                primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+            }
+            else
+            {
+                primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+            }
+            minCount = 1;
             break;
         case GL_LINES:
             primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
@@ -1566,15 +1575,6 @@ bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSi
         default:
             UNREACHABLE();
             return false;
-    }
-
-    // If instanced pointsprite emulation is being used and  If gl_PointSize is used in the shader,
-    // GL_POINTS mode is expected to render pointsprites.
-    // Instanced PointSprite emulation requires that the topology to be
-    // D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST.
-    if (mode == GL_POINTS && usesPointSize && getWorkarounds().useInstancedPointSpriteEmulation)
-    {
-        primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
 
     mStateManager.setPrimitiveTopology(primitiveTopology);
@@ -2111,30 +2111,8 @@ gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
 
 // TODO(jmadill): Move to StateManager11.
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
-                                    GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray)
 {
-    unsigned int totalRegisterCountVS = 0;
-    unsigned int totalRegisterCountPS = 0;
-
-    bool vertexUniformsDirty = false;
-    bool pixelUniformsDirty  = false;
-
-    for (const D3DUniform *uniform : uniformArray)
-    {
-        if (uniform->isReferencedByVertexShader() && !uniform->isSampler())
-        {
-            totalRegisterCountVS += uniform->registerCount;
-            vertexUniformsDirty = (vertexUniformsDirty || uniform->dirty);
-        }
-
-        if (uniform->isReferencedByFragmentShader() && !uniform->isSampler())
-        {
-            totalRegisterCountPS += uniform->registerCount;
-            pixelUniformsDirty = (pixelUniformsDirty || uniform->dirty);
-        }
-    }
-
     UniformStorage11 *vertexUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getVertexUniformStorage());
     UniformStorage11 *fragmentUniformStorage =
@@ -2147,7 +2125,9 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     const d3d11::Buffer *pixelConstantBuffer = nullptr;
     ANGLE_TRY(fragmentUniformStorage->getConstantBuffer(this, &pixelConstantBuffer));
 
-    if (totalRegisterCountVS > 0 && vertexUniformsDirty)
+    bool uniformsDirty = programD3D.areUniformsDirty();
+
+    if (vertexUniformStorage->size() > 0 && uniformsDirty)
     {
         D3D11_MAPPED_SUBRESOURCE map = {0};
         HRESULT result =
@@ -2157,7 +2137,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         mDeviceContext->Unmap(vertexConstantBuffer->get(), 0);
     }
 
-    if (totalRegisterCountPS > 0 && pixelUniformsDirty)
+    if (fragmentUniformStorage->size() > 0 && uniformsDirty)
     {
         D3D11_MAPPED_SUBRESOURCE map = {0};
         HRESULT result =
@@ -2184,6 +2164,11 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         mCurrentPixelConstantBuffer = reinterpret_cast<uintptr_t>(appliedPixelConstants);
     }
 
+    return gl::NoError();
+}
+
+gl::Error Renderer11::applyDriverUniforms(const ProgramD3D &programD3D, GLenum drawMode)
+{
     auto *samplerMetadataVS = mStateManager.getVertexSamplerMetadata();
     auto *samplerMetadataPS = mStateManager.getPixelSamplerMetadata();
 
@@ -4282,21 +4267,6 @@ gl::Error Renderer11::dispatchCompute(const gl::Context *context,
 gl::Error Renderer11::applyComputeUniforms(const ProgramD3D &programD3D,
                                            const std::vector<D3DUniform *> &uniformArray)
 {
-    unsigned int totalRegisterCountCS = 0;
-    bool computeUniformsDirty         = false;
-
-    for (const D3DUniform *uniform : uniformArray)
-    {
-        ASSERT(uniform->isReferencedByComputeShader());
-
-        // TODO(Xinghua): add isImage() and isAtomicCounter().
-        if (uniform->isSampler())
-        {
-            totalRegisterCountCS += uniform->registerCount;
-            computeUniformsDirty = (computeUniformsDirty || uniform->dirty);
-        }
-    }
-
     UniformStorage11 *computeUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getComputeUniformStorage());
     ASSERT(computeUniformStorage);
@@ -4306,7 +4276,7 @@ gl::Error Renderer11::applyComputeUniforms(const ProgramD3D &programD3D,
 
     ID3D11Buffer *computeConstantBuffer = computeConstantBufferObj->get();
 
-    if (totalRegisterCountCS > 0 && computeUniformsDirty)
+    if (computeUniformStorage->size() > 0)
     {
         D3D11_MAPPED_SUBRESOURCE map = {0};
         HRESULT result =
