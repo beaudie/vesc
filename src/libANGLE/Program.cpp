@@ -35,76 +35,6 @@ namespace gl
 namespace
 {
 
-// This simplified cast function doesn't need to worry about advanced concepts like
-// depth range values, or casting to bool.
-template <typename DestT, typename SrcT>
-DestT UniformStateQueryCast(SrcT value);
-
-// From-Float-To-Integer Casts
-template <>
-GLint UniformStateQueryCast(GLfloat value)
-{
-    return clampCast<GLint>(roundf(value));
-}
-
-template <>
-GLuint UniformStateQueryCast(GLfloat value)
-{
-    return clampCast<GLuint>(roundf(value));
-}
-
-// From-Integer-to-Integer Casts
-template <>
-GLint UniformStateQueryCast(GLuint value)
-{
-    return clampCast<GLint>(value);
-}
-
-template <>
-GLuint UniformStateQueryCast(GLint value)
-{
-    return clampCast<GLuint>(value);
-}
-
-// From-Boolean-to-Anything Casts
-template <>
-GLfloat UniformStateQueryCast(GLboolean value)
-{
-    return (value == GL_TRUE ? 1.0f : 0.0f);
-}
-
-template <>
-GLint UniformStateQueryCast(GLboolean value)
-{
-    return (value == GL_TRUE ? 1 : 0);
-}
-
-template <>
-GLuint UniformStateQueryCast(GLboolean value)
-{
-    return (value == GL_TRUE ? 1u : 0u);
-}
-
-// Default to static_cast
-template <typename DestT, typename SrcT>
-DestT UniformStateQueryCast(SrcT value)
-{
-    return static_cast<DestT>(value);
-}
-
-template <typename SrcT, typename DestT>
-void UniformStateQueryCastLoop(DestT *dataOut, const uint8_t *srcPointer, int components)
-{
-    for (int comp = 0; comp < components; ++comp)
-    {
-        // We only work with strides of 4 bytes for uniform components. (GLfloat/GLint)
-        // Don't use SrcT stride directly since GLboolean has a stride of 1 byte.
-        size_t offset               = comp * 4;
-        const SrcT *typedSrcPointer = reinterpret_cast<const SrcT *>(&srcPointer[offset]);
-        dataOut[comp]               = UniformStateQueryCast<DestT>(*typedSrcPointer);
-    }
-}
-
 // true if varying x has a higher priority in packing than y
 bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
 {
@@ -191,6 +121,76 @@ bool IncludeSameArrayElement(const std::set<std::string> &nameSet, const std::st
         }
     }
     return false;
+}
+
+// This simplified cast function doesn't need to worry about advanced concepts like
+// depth range values, or casting to bool.
+template <typename DestT, typename SrcT>
+DestT UniformStateQueryCast(SrcT value);
+
+// From-Float-To-Integer Casts
+template <>
+GLint UniformStateQueryCast(GLfloat value)
+{
+    return gl::clampCast<GLint>(roundf(value));
+}
+
+template <>
+GLuint UniformStateQueryCast(GLfloat value)
+{
+    return gl::clampCast<GLuint>(roundf(value));
+}
+
+// From-Integer-to-Integer Casts
+template <>
+GLint UniformStateQueryCast(GLuint value)
+{
+    return gl::clampCast<GLint>(value);
+}
+
+template <>
+GLuint UniformStateQueryCast(GLint value)
+{
+    return gl::clampCast<GLuint>(value);
+}
+
+// From-Boolean-to-Anything Casts
+template <>
+GLfloat UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1.0f : 0.0f);
+}
+
+template <>
+GLint UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1 : 0);
+}
+
+template <>
+GLuint UniformStateQueryCast(GLboolean value)
+{
+    return (value == GL_TRUE ? 1u : 0u);
+}
+
+// Default to static_cast
+template <typename DestT, typename SrcT>
+DestT UniformStateQueryCast(SrcT value)
+{
+    return static_cast<DestT>(value);
+}
+
+template <typename SrcT, typename DestT>
+void UniformStateQueryCastLoop(DestT *dataOut, const uint8_t *srcPointer, int components)
+{
+    for (int comp = 0; comp < components; ++comp)
+    {
+        // We only work with strides of 4 bytes for uniform components. (GLfloat/GLint)
+        // Don't use SrcT stride directly since GLboolean has a stride of 1 byte.
+        size_t offset               = comp * 4;
+        const SrcT *typedSrcPointer = reinterpret_cast<const SrcT *>(&srcPointer[offset]);
+        dataOut[comp]               = UniformStateQueryCast<DestT>(*typedSrcPointer);
+    }
 }
 
 }  // anonymous namespace
@@ -787,6 +787,19 @@ Error Program::link(const gl::Context *context)
     gatherInterfaceBlockInfo(context);
 
     setUniformValuesFromBindingQualifiers();
+
+    // Mark implemenation-specific unreferenced uniforms as ignored.
+    mProgram->markUnusedUniformLocations(&mState.mUniformLocations);
+
+    // Update sampler bindings with unreferenced uniforms.
+    for (const auto &location : mState.mUniformLocations)
+    {
+        if (!location.used && mState.isSamplerUniformIndex(location.index))
+        {
+            GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(location.index);
+            mState.mSamplerBindings[samplerIndex].unreferenced = true;
+        }
+    }
 
     // Save to the program cache.
     if (cache && (mState.mLinkedTransformFeedbackVaryings.empty() ||
@@ -1444,19 +1457,104 @@ void Program::setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean tra
     mProgram->setUniformMatrix4x3fv(location, clampedCount, transpose, v);
 }
 
-void Program::getUniformfv(GLint location, GLfloat *v) const
+// Driver differences mean that doing the uniform value cast ourselves gives consistent results.
+// EG: on NVIDIA drivers, it was observed that getUniformi for MAX_INT+1 returned MIN_INT.
+template <typename DestT>
+void Program::queryCastUniform(const Context *context,
+                               DestT *dataOut,
+                               GLint location,
+                               GLenum nativeType,
+                               int components) const
 {
-    getUniformInternal(location, v);
+    switch (nativeType)
+    {
+        case GL_BOOL:
+        {
+            GLint tempValue[16] = {0};
+            mProgram->getUniformiv(context, location, tempValue);
+            UniformStateQueryCastLoop<GLboolean>(
+                dataOut, reinterpret_cast<const uint8_t *>(tempValue), components);
+            break;
+        }
+        case GL_INT:
+        {
+            GLint tempValue[16] = {0};
+            mProgram->getUniformiv(context, location, tempValue);
+            UniformStateQueryCastLoop<GLint>(dataOut, reinterpret_cast<const uint8_t *>(tempValue),
+                                             components);
+            break;
+        }
+        case GL_UNSIGNED_INT:
+        {
+            GLuint tempValue[16] = {0};
+            mProgram->getUniformuiv(context, location, tempValue);
+            UniformStateQueryCastLoop<GLuint>(dataOut, reinterpret_cast<const uint8_t *>(tempValue),
+                                              components);
+            break;
+        }
+        case GL_FLOAT:
+        {
+            GLfloat tempValue[16] = {0};
+            mProgram->getUniformfv(context, location, tempValue);
+            UniformStateQueryCastLoop<GLfloat>(
+                dataOut, reinterpret_cast<const uint8_t *>(tempValue), components);
+            break;
+        }
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
-void Program::getUniformiv(GLint location, GLint *v) const
+void Program::getUniformfv(const Context *context, GLint location, GLfloat *v) const
 {
-    getUniformInternal(location, v);
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_FLOAT)
+    {
+        mProgram->getUniformfv(context, location, v);
+    }
+    else
+    {
+        queryCastUniform(context, v, location, nativeType,
+                         gl::VariableComponentCount(uniform.type));
+    }
 }
 
-void Program::getUniformuiv(GLint location, GLuint *v) const
+void Program::getUniformiv(const Context *context, GLint location, GLint *v) const
 {
-    getUniformInternal(location, v);
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_INT || nativeType == GL_BOOL)
+    {
+        mProgram->getUniformiv(context, location, v);
+    }
+    else
+    {
+        queryCastUniform(context, v, location, nativeType,
+                         gl::VariableComponentCount(uniform.type));
+    }
+}
+
+void Program::getUniformuiv(const Context *context, GLint location, GLuint *v) const
+{
+    const auto &uniformLocation = mState.getUniformLocations()[location];
+    const auto &uniform         = mState.getUniforms()[uniformLocation.index];
+
+    GLenum nativeType = gl::VariableComponentType(uniform.type);
+    if (nativeType == GL_UNSIGNED_INT)
+    {
+        mProgram->getUniformuiv(context, location, v);
+    }
+    else
+    {
+        queryCastUniform(context, v, location, nativeType,
+                         gl::VariableComponentCount(uniform.type));
+    }
 }
 
 void Program::flagForDeletion()
@@ -1506,6 +1604,9 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
     for (const auto &samplerBinding : mState.mSamplerBindings)
     {
+        if (samplerBinding.unreferenced)
+            continue;
+
         GLenum textureType = samplerBinding.textureType;
 
         for (GLuint textureUnit : samplerBinding.boundTextureUnits)
@@ -1876,7 +1977,7 @@ void Program::linkSamplerAndImageBindings()
         const auto &samplerUniform = mState.mUniforms[samplerIndex];
         GLenum textureType         = SamplerTypeToTextureType(samplerUniform.type);
         mState.mSamplerBindings.emplace_back(
-            SamplerBinding(textureType, samplerUniform.elementCount()));
+            SamplerBinding(textureType, samplerUniform.elementCount(), false));
     }
 }
 
@@ -2982,42 +3083,6 @@ GLsizei Program::setMatrixUniformInternal(GLint location,
     }
 
     return clampedCount;
-}
-
-template <typename DestT>
-void Program::getUniformInternal(GLint location, DestT *dataOut) const
-{
-    const VariableLocation &locationInfo = mState.mUniformLocations[location];
-    const LinkedUniform &uniform         = mState.mUniforms[locationInfo.index];
-
-    const uint8_t *srcPointer = uniform.getDataPtrToElement(locationInfo.element);
-
-    GLenum componentType = VariableComponentType(uniform.type);
-    if (componentType == GLTypeToGLenum<DestT>::value)
-    {
-        memcpy(dataOut, srcPointer, uniform.getElementSize());
-        return;
-    }
-
-    int components = VariableComponentCount(uniform.type);
-
-    switch (componentType)
-    {
-        case GL_INT:
-            UniformStateQueryCastLoop<GLint>(dataOut, srcPointer, components);
-            break;
-        case GL_UNSIGNED_INT:
-            UniformStateQueryCastLoop<GLuint>(dataOut, srcPointer, components);
-            break;
-        case GL_BOOL:
-            UniformStateQueryCastLoop<GLboolean>(dataOut, srcPointer, components);
-            break;
-        case GL_FLOAT:
-            UniformStateQueryCastLoop<GLfloat>(dataOut, srcPointer, components);
-            break;
-        default:
-            UNREACHABLE();
-    }
 }
 
 bool Program::samplesFromTexture(const gl::State &state, GLuint textureID) const
