@@ -7,12 +7,12 @@
 #ifndef COMPILER_TRANSLATOR_TRANSLATORESSL_H_
 #define COMPILER_TRANSLATOR_TRANSLATORESSL_H_
 
-#include "compiler/translator/Compiler.h"
+#include "compiler/translator/TranslatorGLSLBase.h"
 
 namespace sh
 {
 
-class TranslatorESSL : public TCompiler
+class TranslatorESSL : public TranslatorGLSLBase
 {
   public:
     TranslatorESSL(sh::GLenum type, ShShaderSpec spec);

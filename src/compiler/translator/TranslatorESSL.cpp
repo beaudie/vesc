@@ -17,7 +17,7 @@ namespace sh
 {
 
 TranslatorESSL::TranslatorESSL(sh::GLenum type, ShShaderSpec spec)
-    : TCompiler(type, spec, SH_ESSL_OUTPUT)
+    : TranslatorGLSLBase(type, spec, SH_ESSL_OUTPUT)
 {
 }
 
@@ -104,8 +104,8 @@ void TranslatorESSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
 
     // Write translated shader.
     TOutputESSL outputESSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
-                           &getSymbolTable(), getShaderType(), shaderVer, precisionEmulation,
-                           compileOptions);
+                           &getSymbolTable(), getReservedNames(), getShaderType(), shaderVer,
+                           precisionEmulation, compileOptions);
 
     if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {

@@ -140,6 +140,8 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
 
         // Detach the shaders
         mFunctions->detachShader(mProgramID, computeShaderGL->getShaderID());
+
+        mergeMangledNameMap(computeShaderGL->getNameManglingMap());
     }
     else
     {
@@ -190,6 +192,9 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
         // Detach the shaders
         mFunctions->detachShader(mProgramID, vertexShaderGL->getShaderID());
         mFunctions->detachShader(mProgramID, fragmentShaderGL->getShaderID());
+
+        mergeMangledNameMap(vertexShaderGL->getNameManglingMap());
+        mergeMangledNameMap(fragmentShaderGL->getNameManglingMap());
     }
 
     // Verify the link
@@ -650,7 +655,7 @@ void ProgramGL::postLink()
         // "Locations for sequential array indices are not required to be sequential."
         const gl::LinkedUniform &uniform = uniforms[entry.index];
         std::stringstream fullNameStr;
-        fullNameStr << uniform.name;
+        fullNameStr << getMangledName(uniform.name);
         if (uniform.isArray())
         {
             fullNameStr << "[" << entry.element << "]";
@@ -751,6 +756,25 @@ void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
     ASSERT(mFunctions->programUniform1i != nullptr);
     mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
                                  baseViewIndex);
+}
+
+void ProgramGL::mergeMangledNameMap(const std::unordered_map<std::string, std::string> &map)
+{
+    for (const auto &it : map)
+    {
+        ASSERT(mNameManglingMap.count(it.first) == 0 || mNameManglingMap[it.first] == it.second);
+        mNameManglingMap[it.first] = it.second;
+    }
+}
+
+const std::string &ProgramGL::getMangledName(const std::string &name) const
+{
+    const auto &it = mNameManglingMap.find(name);
+    if (it != mNameManglingMap.end())
+    {
+        return it->second;
+    }
+    return name;
 }
 
 }  // namespace rx

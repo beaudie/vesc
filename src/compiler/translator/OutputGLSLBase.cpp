@@ -123,6 +123,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
                                  ShHashFunction64 hashFunction,
                                  NameMap &nameMap,
                                  TSymbolTable *symbolTable,
+                                 const ReservedNameSet &reservedNames,
                                  sh::GLenum shaderType,
                                  int shaderVersion,
                                  ShShaderOutput output,
@@ -133,6 +134,7 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
       mClampingStrategy(clampingStrategy),
       mHashFunction(hashFunction),
       mNameMap(nameMap),
+      mReservedNames(reservedNames),
       mShaderType(shaderType),
       mShaderVersion(shaderVersion),
       mOutput(output),
@@ -1160,16 +1162,27 @@ TString TOutputGLSLBase::hashName(const TName &name)
         // names don't conflict with user-defined names from WebGL.
         return "webgl_angle_" + name.getString();
     }
-    if (mHashFunction == nullptr)
+
+    if (mHashFunction != nullptr)
     {
-        return name.getString();
+        NameMap::const_iterator it = mNameMap.find(name.getString().c_str());
+        if (it != mNameMap.end())
+        {
+            return it->second.c_str();
+        }
+        TString hashedName                 = HashName(name.getString(), mHashFunction);
+        mNameMap[name.getString().c_str()] = hashedName.c_str();
+        return hashedName;
     }
-    NameMap::const_iterator it = mNameMap.find(name.getString().c_str());
-    if (it != mNameMap.end())
-        return it->second.c_str();
-    TString hashedName                 = HashName(name.getString(), mHashFunction);
-    mNameMap[name.getString().c_str()] = hashedName.c_str();
-    return hashedName;
+
+    if (mReservedNames.count(name.getString().c_str()) != 0)
+    {
+        TString decoratedName              = "webgl_reserved_name_" + name.getString();
+        mNameMap[name.getString().c_str()] = decoratedName.c_str();
+        return decoratedName;
+    }
+
+    return name.getString();
 }
 
 TString TOutputGLSLBase::hashVariableName(const TName &name)

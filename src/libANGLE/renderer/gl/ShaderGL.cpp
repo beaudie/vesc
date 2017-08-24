@@ -165,6 +165,11 @@ bool ShaderGL::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog
         return false;
     }
 
+    for (const auto &it : compiler->getNameManglingMap(mData.getShaderType()))
+    {
+        mNameManglingMap.insert(it);
+    }
+
     return true;
 }
 
@@ -178,4 +183,8 @@ GLuint ShaderGL::getShaderID() const
     return mShaderID;
 }
 
+const std::unordered_map<std::string, std::string> &ShaderGL::getNameManglingMap() const
+{
+    return mNameManglingMap;
+}
 }

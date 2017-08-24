@@ -205,4 +205,9 @@ const std::string &Compiler::getBuiltinResourcesString(GLenum type)
     return sh::GetBuiltInResourcesString(getCompilerHandle(type));
 }
 
+const std::map<std::string, std::string> &Compiler::getNameManglingMap(GLenum type)
+{
+    return *sh::GetNameHashingMap(getCompilerHandle(type));
+}
+
 }  // namespace gl
