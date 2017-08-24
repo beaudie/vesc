@@ -3799,7 +3799,8 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
                           "[");
                     break;
                 default:
-                    UNREACHABLE();
+                    ASSERT(mDiagnostics->numErrors() > 0);
+                    break;
             }
         }
         else if (baseExpression->getQualifier() == EvqFragmentOut)
