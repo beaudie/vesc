@@ -1,4 +1,4 @@
-//
+
 // Copyright (c) 2013 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -54,9 +54,8 @@ namespace rx
 
 namespace
 {
-
-static constexpr uint32_t g_ConstantBufferSize = sizeof(RtvDsvClearInfo<float>);
-static constexpr uint32_t g_VertexSize         = sizeof(d3d11::PositionVertex);
+constexpr uint32_t g_ConstantBufferSize = sizeof(RtvDsvClearInfo<float>);
+constexpr uint32_t g_VertexSize         = sizeof(d3d11::PositionVertex);
 
 // Updates color, depth and alpha components of cached CB if necessary.
 // Returns true if any constants are updated, false otherwise.
@@ -820,4 +819,5 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
 
     return gl::NoError();
 }
+
 }  // namespace rx
