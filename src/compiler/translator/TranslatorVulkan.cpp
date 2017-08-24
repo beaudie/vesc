@@ -18,7 +18,7 @@ namespace sh
 {
 
 TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
-    : TCompiler(type, spec, SH_GLSL_450_CORE_OUTPUT)
+    : TranslatorGLSLBase(type, spec, SH_GLSL_450_CORE_OUTPUT)
 {
 }
 
@@ -62,9 +62,9 @@ void TranslatorVulkan::translate(TIntermBlock *root, ShCompileOptions compileOpt
     }
 
     // Write translated shader.
-    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
-                                 getNameMap(), &getSymbolTable(), getShaderType(),
-                                 getShaderVersion(), getOutputType(), compileOptions);
+    TOutputVulkanGLSL outputGLSL(
+        sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(), &getSymbolTable(),
+        getReservedNames(), getShaderType(), getShaderVersion(), getOutputType(), compileOptions);
     root->traverse(&outputGLSL);
 }
 

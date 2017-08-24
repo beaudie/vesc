@@ -186,6 +186,8 @@
             'compiler/translator/OutputGLSLBase.h',
             'compiler/translator/TranslatorGLSL.cpp',
             'compiler/translator/TranslatorGLSL.h',
+            'compiler/translator/TranslatorGLSLBase.cpp',
+            'compiler/translator/TranslatorGLSLBase.h',
             'compiler/translator/VersionGLSL.cpp',
             'compiler/translator/VersionGLSL.h',
         ],

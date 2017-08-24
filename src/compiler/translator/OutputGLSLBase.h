@@ -8,6 +8,7 @@
 #define COMPILER_TRANSLATOR_OUTPUTGLSLBASE_H_
 
 #include <set>
+#include <unordered_set>
 
 #include "compiler/translator/HashNames.h"
 #include "compiler/translator/InfoSink.h"
@@ -15,6 +16,8 @@
 
 namespace sh
 {
+
+using ReservedNameSet = std::unordered_set<std::string>;
 
 class TOutputGLSLBase : public TIntermTraverser
 {
@@ -24,6 +27,7 @@ class TOutputGLSLBase : public TIntermTraverser
                     ShHashFunction64 hashFunction,
                     NameMap &nameMap,
                     TSymbolTable *symbolTable,
+                    const ReservedNameSet &reservedNames,
                     sh::GLenum shaderType,
                     int shaderVersion,
                     ShShaderOutput output,
@@ -99,6 +103,8 @@ class TOutputGLSLBase : public TIntermTraverser
     ShHashFunction64 mHashFunction;
 
     NameMap &mNameMap;
+
+    const ReservedNameSet &mReservedNames;
 
     sh::GLenum mShaderType;
 

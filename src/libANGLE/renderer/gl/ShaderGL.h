@@ -35,6 +35,8 @@ class ShaderGL : public ShaderImpl
 
     GLuint getShaderID() const;
 
+    const std::unordered_map<std::string, std::string> &getNameManglingMap() const;
+
   private:
     const FunctionsGL *mFunctions;
     const WorkaroundsGL &mWorkarounds;
@@ -42,6 +44,7 @@ class ShaderGL : public ShaderImpl
     GLuint mShaderID;
     bool mIsWebGL;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
+    std::unordered_map<std::string, std::string> mNameManglingMap;
 };
 
 }

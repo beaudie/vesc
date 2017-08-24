@@ -87,12 +87,17 @@ class ProgramGL : public ProgramImpl
     void postLink();
     void reapplyUBOBindingsIfNeeded(const gl::Context *context);
 
+    void mergeMangledNameMap(const std::unordered_map<std::string, std::string> &map);
+    const std::string &getMangledName(const std::string &name) const;
+
     // Helper function, makes it simpler to type.
     GLint uniLoc(GLint glLocation) const { return mUniformRealLocationMap[glLocation]; }
 
     const FunctionsGL *mFunctions;
     const WorkaroundsGL &mWorkarounds;
     StateManagerGL *mStateManager;
+
+    std::unordered_map<std::string, std::string> mNameManglingMap;
 
     std::vector<GLint> mUniformRealLocationMap;
     std::vector<GLuint> mUniformBlockRealLocationMap;

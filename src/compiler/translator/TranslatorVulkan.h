@@ -12,12 +12,12 @@
 #ifndef COMPILER_TRANSLATOR_TRANSLATORVULKAN_H_
 #define COMPILER_TRANSLATOR_TRANSLATORVULKAN_H_
 
-#include "compiler/translator/Compiler.h"
+#include "compiler/translator/TranslatorGLSLBase.h"
 
 namespace sh
 {
 
-class TranslatorVulkan : public TCompiler
+class TranslatorVulkan : public TranslatorGLSLBase
 {
   public:
     TranslatorVulkan(sh::GLenum type, ShShaderSpec spec);
