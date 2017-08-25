@@ -440,7 +440,8 @@ class TParseContext : angle::NonCopyable
     // controversial with the offset inheritance as described in ESSL 3.10 section 4.4.6. Currently
     // we treat it as always 4 in favour of the original interpretation in
     // "ARB_shader_atomic_counters".
-    // TODO(jie.a.chen@intel.com): Double check this once the spec vagueness is resolved.
+    // Khronous will fix it in next spec revision.
+    // https://github.com/KhronosGroup/OpenGL-API/issues/5#issuecomment-324143904.
     constexpr static size_t kAtomicCounterArrayStride = 4;
 
     // Returns a clamped index. If it prints out an error message, the token is "[]".
