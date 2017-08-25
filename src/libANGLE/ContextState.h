@@ -97,6 +97,7 @@ class ValidationContext : angle::NonCopyable
                       const TextureCapsMap &textureCaps,
                       const Extensions &extensions,
                       const Limitations &limitations,
+                      bool robustAccess,
                       bool skipValidation);
     virtual ~ValidationContext() {}
 
@@ -112,6 +113,7 @@ class ValidationContext : angle::NonCopyable
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool skipValidation() const { return mSkipValidation; }
+    bool isRobustBufferAccess() const { return mRobustAccess; }
 
     // Specific methods needed for validation.
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams);
@@ -138,6 +140,7 @@ class ValidationContext : angle::NonCopyable
   protected:
     ContextState mState;
     bool mSkipValidation;
+    bool mRobustAccess;
     bool mDisplayTextureShareGroup;
 
     // Caches entry point parameters and values re-used between layers.
