@@ -116,6 +116,7 @@ ValidationContext::ValidationContext(const ValidationContext *shareContext,
                                      const TextureCapsMap &textureCaps,
                                      const Extensions &extensions,
                                      const Limitations &limitations,
+                                     bool robustAccess,
                                      bool skipValidation)
     : mState(reinterpret_cast<ContextID>(this),
              shareContext ? &shareContext->mState : nullptr,
@@ -126,6 +127,7 @@ ValidationContext::ValidationContext(const ValidationContext *shareContext,
              textureCaps,
              extensions,
              limitations),
+      mRobustAccess(robustAccess),
       mSkipValidation(skipValidation),
       mDisplayTextureShareGroup(shareTextures != nullptr)
 {

@@ -261,6 +261,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mTextureCaps,
                         mExtensions,
                         mLimitations,
+                        (GetRobustAccess(attribs) || displayExtensions.createContextRobustness),
                         GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
       mCompiler(),
@@ -271,7 +272,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mResetStatus(GL_NO_ERROR),
       mContextLostForced(false),
       mResetStrategy(GetResetStrategy(attribs)),
-      mRobustAccess(GetRobustAccess(attribs)),
       mCurrentSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mCurrentDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mSurfacelessFramebuffer(nullptr),
@@ -280,11 +280,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u)
 {
-    if (mRobustAccess)
-    {
-        UNIMPLEMENTED();
-    }
-
     initCaps(displayExtensions);
     initWorkarounds();
 

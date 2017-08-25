@@ -3171,6 +3171,18 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
         }
     }
 
+    if (context->isRobustBufferAccess())
+    {
+        // Here we use maxVertex = 0 and vertexCount = 1 to avoid retrieving IndexRange when robust
+        // access is enabled.
+        if (!ValidateDrawAttribs(context, primcount, 0, 1))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     // Use the parameter buffer to retrieve and cache the index range.
     // TODO: offer fast path, with disabled index validation.
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
