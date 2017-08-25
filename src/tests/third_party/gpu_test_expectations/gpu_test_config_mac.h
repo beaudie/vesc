@@ -17,12 +17,11 @@ namespace base {
 class SysInfo
 {
   public:
-    static void OperatingSystemVersionNumbers(
-        int32 *major_version, int32 *minor_version, int32 *bugfix_version);
+    static void OperatingSystemVersionNumbers(int32_t *major_version,
+                                              int32_t *minor_version,
+                                              int32_t *bugfix_version);
 };
 
 } // namespace base
-
-gpu::GPUInfo::GPUDevice GetActiveGPU();
 
 #endif // GPU_TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_

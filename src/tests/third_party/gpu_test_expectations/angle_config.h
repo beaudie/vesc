@@ -20,16 +20,12 @@
 #define DCHECK_EQ(A,B) ASSERT((A) == (B))
 #define DCHECK_NE(A,B) ASSERT((A) != (B))
 #define DCHECK(X) ASSERT(X)
+#define DLOG(X) std::cerr
 #define LOG(X) std::cerr
 
 #define GPU_EXPORT
 
-typedef int32_t int32;
-typedef uint32_t uint32;
-typedef int64_t int64;
-typedef uint64_t uint64;
-
-// Shim Chromium's base by importing functions in the base namespace.
+// Shim Chromium's types by importing symbols in the correct namespaces
 namespace base
 {
     using angle::kWhitespaceASCII;
@@ -41,7 +37,23 @@ namespace base
     using angle::SplitStringAlongWhitespace;
     using angle::HexStringToUInt;
     using angle::ReadFileToString;
-}
+
+    using TimeDelta = int;
+}  // namespace base
+
+namespace gfx
+{
+    class Size
+    {
+      public:
+        int width() const { return 0; }
+        int height() const { return 0; }
+    };
+}  // namespace gfx
+
+struct DxDiagNode
+{
+};
 
 // TODO(jmadill): other platforms
 // clang-format off
