@@ -176,13 +176,6 @@ GLenum GetResetStrategy(const egl::AttributeMap &attribs)
     }
 }
 
-bool GetRobustAccess(const egl::AttributeMap &attribs)
-{
-    return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE) ||
-           ((attribs.get(EGL_CONTEXT_FLAGS_KHR, 0) & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR) !=
-            0);
-}
-
 bool GetDebug(const egl::AttributeMap &attribs)
 {
     return (attribs.get(EGL_CONTEXT_OPENGL_DEBUG, EGL_FALSE) == EGL_TRUE) ||
@@ -271,7 +264,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mResetStatus(GL_NO_ERROR),
       mContextLostForced(false),
       mResetStrategy(GetResetStrategy(attribs)),
-      mRobustAccess(GetRobustAccess(attribs)),
       mCurrentSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mCurrentDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mSurfacelessFramebuffer(nullptr),
@@ -280,11 +272,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u)
 {
-    if (mRobustAccess)
-    {
-        UNIMPLEMENTED();
-    }
-
     initCaps(displayExtensions);
     initWorkarounds();
 
@@ -1229,7 +1216,7 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
             *params = GL_TRUE;
             break;
         case GL_CONTEXT_ROBUST_ACCESS_EXT:
-            *params = mRobustAccess ? GL_TRUE : GL_FALSE;
+            *params = mExtensions.robustBufferAccess ? GL_TRUE : GL_FALSE;
             break;
         default:
             mGLState.getBooleanv(pname, params);
@@ -2609,6 +2596,9 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions)
     // Determine robust resource init availability from EGL.
     mExtensions.robustResourceInitialization =
         egl::Display::GetClientExtensions().displayRobustResourceInitialization;
+
+    // Initialize robust buffer access from EXT_create_context_robustness.
+    mExtensions.robustBufferAccess = displayExtensions.createContextRobustness;
 
     // Enable the cache control query unconditionally.
     mExtensions.programCacheControl = true;

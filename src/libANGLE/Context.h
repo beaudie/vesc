@@ -1004,7 +1004,6 @@ class Context final : public ValidationContext
     GLenum mResetStatus;
     bool mContextLostForced;
     GLenum mResetStrategy;
-    bool mRobustAccess;
     egl::Surface *mCurrentSurface;
     egl::Display *mCurrentDisplay;
     Framebuffer *mSurfacelessFramebuffer;

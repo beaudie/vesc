@@ -953,6 +953,10 @@ void GenerateCaps(const FunctionsGL *functions,
                              functions->hasGLESExtension("GL_KHR_robustness") ||
                              functions->hasGLESExtension("GL_EXT_robustness");
 
+    extensions->robustBufferAccess =
+        extensions->robustBufferAccess && extensions->robustness &&
+        functions->hasGLExtension("GL_KHR_robust_buffer_access_behavior");
+
     extensions->copyTexture = true;
     extensions->syncQuery   = SyncQueryGL::IsSupported(functions);
 
