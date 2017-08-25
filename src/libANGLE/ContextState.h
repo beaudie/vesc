@@ -97,6 +97,7 @@ class ValidationContext : angle::NonCopyable
                       const TextureCapsMap &textureCaps,
                       const Extensions &extensions,
                       const Limitations &limitations,
+                      bool robustAccess,
                       bool skipValidation);
     virtual ~ValidationContext() {}
 
@@ -111,6 +112,7 @@ class ValidationContext : angle::NonCopyable
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
+    bool isRobustBufferAccess() const { return mRobustAccess; }
     bool skipValidation() const { return mSkipValidation; }
 
     // Specific methods needed for validation.
@@ -137,6 +139,7 @@ class ValidationContext : angle::NonCopyable
 
   protected:
     ContextState mState;
+    bool mRobustAccess;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
 
