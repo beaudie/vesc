@@ -20,14 +20,10 @@
 #define DCHECK_EQ(A,B) ASSERT((A) == (B))
 #define DCHECK_NE(A,B) ASSERT((A) != (B))
 #define DCHECK(X) ASSERT(X)
+#define DLOG(X) std::cerr
 #define LOG(X) std::cerr
 
 #define GPU_EXPORT
-
-typedef int32_t int32;
-typedef uint32_t uint32;
-typedef int64_t int64;
-typedef uint64_t uint64;
 
 // Shim Chromium's base by importing functions in the base namespace.
 namespace base
