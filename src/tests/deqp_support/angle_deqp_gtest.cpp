@@ -227,6 +227,16 @@ void dEQPCaseList::initialize()
         Die();
     }
 
+    std::cout << "Detected config:" << std::endl;
+    std::cout << " - os: " << mTestConfig.os() << std::endl;
+    std::cout << " - gpu_device_id: " << mTestConfig.gpu_device_id() << std::endl;
+    std::cout << " - api: " << mTestConfig.api() << std::endl;
+    std::cout << " - build_type: " << mTestConfig.build_type() << std::endl;
+    std::cout << " - gpu_vendor: " << std::endl;
+    for (auto vendor : mTestConfig.gpu_vendor()) {
+        std::cout << "  - " << vendor << std::endl;
+    }
+
     while (!caseListStream.eof())
     {
         std::string inString;
