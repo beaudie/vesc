@@ -8,10 +8,16 @@
 // Provides access to the GPU information for the system
 // on which chrome is currently running.
 
+#include <stdint.h>
+
 #include <string>
 #include <vector>
 
 #include "angle_config.h"
+
+#if defined(USE_X11)
+typedef unsigned long VisualID;
+#endif
 
 namespace gpu {
 
@@ -33,19 +39,29 @@ enum VideoCodecProfile {
   VIDEO_CODEC_PROFILE_UNKNOWN = -1,
   VIDEO_CODEC_PROFILE_MIN = VIDEO_CODEC_PROFILE_UNKNOWN,
   H264PROFILE_BASELINE = 0,
-  H264PROFILE_MAIN = 1,
-  H264PROFILE_EXTENDED = 2,
-  H264PROFILE_HIGH = 3,
-  H264PROFILE_HIGH10PROFILE = 4,
-  H264PROFILE_HIGH422PROFILE = 5,
-  H264PROFILE_HIGH444PREDICTIVEPROFILE = 6,
-  H264PROFILE_SCALABLEBASELINE = 7,
-  H264PROFILE_SCALABLEHIGH = 8,
-  H264PROFILE_STEREOHIGH = 9,
-  H264PROFILE_MULTIVIEWHIGH = 10,
-  VP8PROFILE_ANY = 11,
-  VP9PROFILE_ANY = 12,
-  VIDEO_CODEC_PROFILE_MAX = VP9PROFILE_ANY,
+  H264PROFILE_MAIN,
+  H264PROFILE_EXTENDED,
+  H264PROFILE_HIGH,
+  H264PROFILE_HIGH10PROFILE,
+  H264PROFILE_HIGH422PROFILE,
+  H264PROFILE_HIGH444PREDICTIVEPROFILE,
+  H264PROFILE_SCALABLEBASELINE,
+  H264PROFILE_SCALABLEHIGH,
+  H264PROFILE_STEREOHIGH,
+  H264PROFILE_MULTIVIEWHIGH,
+  VP8PROFILE_ANY,
+  VP9PROFILE_PROFILE0,
+  VP9PROFILE_PROFILE1,
+  VP9PROFILE_PROFILE2,
+  VP9PROFILE_PROFILE3,
+  HEVCPROFILE_MAIN,
+  HEVCPROFILE_MAIN10,
+  HEVCPROFILE_MAIN_STILL_PICTURE,
+  DOLBYVISION_PROFILE0,
+  DOLBYVISION_PROFILE4,
+  DOLBYVISION_PROFILE5,
+  DOLBYVISION_PROFILE7,
+  VIDEO_CODEC_PROFILE_MAX = DOLBYVISION_PROFILE7,
 };
 
 struct GPU_EXPORT GPUInfo {
@@ -53,12 +69,12 @@ struct GPU_EXPORT GPUInfo {
     GPUDevice();
     ~GPUDevice();
 
-    // The DWORD (uint32) representing the graphics card vendor id.
-    uint32 vendor_id;
+    // The DWORD (uint32_t) representing the graphics card vendor id.
+    uint32_t vendor_id;
 
-    // The DWORD (uint32) representing the graphics card device id.
+    // The DWORD (uint32_t) representing the graphics card device id.
     // Device ids are unique to vendor, not to one another.
-    uint32 device_id;
+    uint32_t device_id;
 
     // Whether this GPU is the currently used one.
     // Currently this field is only supported and meaningful on OS X.
@@ -75,18 +91,11 @@ struct GPU_EXPORT GPUInfo {
   GPUInfo();
   ~GPUInfo();
 
-  bool SupportsAccelerated2dCanvas() const {
-    return !can_lose_context && !software_rendering;
-  }
-
   // Computer has NVIDIA Optimus
   bool optimus;
 
   // Computer has AMD Dynamic Switchable Graphics
   bool amd_switchable;
-
-  // Lenovo dCute is installed. http://crbug.com/181665.
-  bool lenovo_dcute;
 
   // Primary GPU, for exmaple, the discrete GPU in a dual GPU machine.
   GPUDevice gpu;
@@ -94,12 +103,8 @@ struct GPU_EXPORT GPUInfo {
   // Secondary GPUs, for example, the integrated GPU in a dual GPU machine.
   std::vector<GPUDevice> secondary_gpus;
 
-  // On Windows, the unique identifier of the adapter the GPU process uses.
-  // The default is zero, which makes the browser process create its D3D device
-  // on the primary adapter. Note that the primary adapter can change at any
-  // time so it is better to specify a particular LUID. Note that valid LUIDs
-  // are always non-zero.
-  uint64 adapter_luid;
+  // The currently active gpu.
+  const GPUDevice& active_gpu() const;
 
   // The vendor of the graphics driver currently installed.
   std::string driver_vendor;
@@ -155,11 +160,7 @@ struct GPU_EXPORT GPUInfo {
 
   // GL reset notification strategy as defined by GL_ARB_robustness. 0 if GPU
   // reset detection or notification not available.
-  uint32 gl_reset_notification_strategy;
-
-  // The device semantics, i.e. whether the Vista and Windows 7 specific
-  // semantics are available.
-  bool can_lose_context;
+  uint32_t gl_reset_notification_strategy;
 
   bool software_rendering;
 
@@ -176,12 +177,31 @@ struct GPU_EXPORT GPUInfo {
   // True if the GPU is running in the browser process instead of its own.
   bool in_process_gpu;
 
+  // True if the GPU process is using the passthrough command decoder.
+  bool passthrough_cmd_decoder;
+
+  // True if the current set of outputs supports overlays.
+  bool supports_overlays = false;
+
+  // True if the current set of outputs supports HDR.
+  bool hdr = false;
+
+  // True only on android when extensions for threaded mailbox sharing are
+  // present. Threaded mailbox sharing is used on Android only, so this check
+  // is only implemented on Android.
+  bool can_support_threaded_texture_mailbox = false;
+
   // The state of whether the basic/context/DxDiagnostics info is collected and
   // if the collection fails or not.
   CollectInfoResult basic_info_state;
   CollectInfoResult context_info_state;
 
   bool jpeg_decode_accelerator_supported;
+
+#if defined(USE_X11)
+  VisualID system_visual;
+  VisualID rgba_visual;
+#endif
 
   // Note: when adding new members, please remember to update EnumerateFields
   // in gpu_info.cc.
@@ -196,7 +216,7 @@ struct GPU_EXPORT GPUInfo {
     // is the root object, but calls to BeginGPUDevice/EndGPUDevice and
     // BeginAuxAttributes/EndAuxAttributes change the object to which these
     // calls should apply.
-    virtual void AddInt64(const char* name, int64 value) = 0;
+    virtual void AddInt64(const char* name, int64_t value) = 0;
     virtual void AddInt(const char* name, int value) = 0;
     virtual void AddString(const char* name, const std::string& value) = 0;
     virtual void AddBool(const char* name, bool value) = 0;
