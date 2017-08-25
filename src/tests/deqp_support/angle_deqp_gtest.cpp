@@ -66,9 +66,9 @@ const char *GetDefaultAPIName()
 #if defined(ANGLE_PLATFORM_WINDOWS)
     return "angle-d3d11";
 #elif defined(ANGLE_PLATFORM_APPLE) || defined(ANGLE_PLATFORM_LINUX)
-    return "angle-gl";
-#elif defined(ANGLE_PLATFORM_ANDROID)
     return "angle-gles";
+#elif defined(ANGLE_PLATFORM_ANDROID)
+    return "angle-gl";
 #else
 #error Unknown platform.
 #endif
@@ -225,6 +225,16 @@ void dEQPCaseList::initialize()
     {
         std::cerr << "Failed to load the case list." << std::endl;
         Die();
+    }
+
+    std::cout << "Detected config:" << std::endl;
+    std::cout << " - os: " << mTestConfig.os() << std::endl;
+    std::cout << " - gpu_device_id: " << mTestConfig.gpu_device_id() << std::endl;
+    std::cout << " - api: " << mTestConfig.api() << std::endl;
+    std::cout << " - build_type: " << mTestConfig.build_type() << std::endl;
+    std::cout << " - gpu_vendor: " << std::endl;
+    for (auto vendor : mTestConfig.gpu_vendor()) {
+        std::cout << "  - " << vendor << std::endl;
     }
 
     while (!caseListStream.eof())
