@@ -13,6 +13,7 @@
 namespace sh
 {
 
+
 class BuiltInFunctionEmulator::BuiltInFunctionEmulationMarker : public TIntermTraverser
 {
   public:
