@@ -23,6 +23,4 @@ class SysInfo
 
 } // namespace base
 
-gpu::GPUInfo::GPUDevice GetActiveGPU();
-
 #endif // GPU_TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_
