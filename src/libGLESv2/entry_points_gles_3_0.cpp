@@ -1448,7 +1448,7 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode,
     }
 }
 
-GLsync GL_APIENTRY FenceSync_(GLenum condition, GLbitfield flags)
+GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
 {
     EVENT("(GLenum condition = 0x%X, GLbitfield flags = 0x%X)", condition, flags);
 
@@ -1475,7 +1475,7 @@ GLsync GL_APIENTRY FenceSync_(GLenum condition, GLbitfield flags)
 
         GLsync fenceSync = context->createFenceSync();
 
-        FenceSync *fenceSyncObject = context->getFenceSync(fenceSync);
+        Sync *fenceSyncObject      = context->getFenceSync(fenceSync);
         Error error                = fenceSyncObject->set(condition, flags);
         if (error.isError())
         {
@@ -1552,7 +1552,7 @@ GLenum GL_APIENTRY ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeou
             return GL_WAIT_FAILED;
         }
 
-        FenceSync *fenceSync = context->getFenceSync(sync);
+        Sync *fenceSync = context->getFenceSync(sync);
 
         if (!fenceSync)
         {
@@ -1600,7 +1600,7 @@ void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
             return;
         }
 
-        FenceSync *fenceSync = context->getFenceSync(sync);
+        Sync *fenceSync = context->getFenceSync(sync);
 
         if (!fenceSync)
         {

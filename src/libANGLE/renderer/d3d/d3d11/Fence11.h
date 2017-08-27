@@ -4,7 +4,8 @@
 // found in the LICENSE file.
 //
 
-// Fence11.h: Defines the rx::FenceNV11 and rx::FenceSync11 classes which implement rx::FenceNVImpl and rx::FenceSyncImpl.
+// Fence11.h: Defines the rx::FenceNV11 and rx::FenceSync11 classes which implement rx::FenceNVImpl
+// and rx::SyncImpl.
 
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_FENCE11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_FENCE11_H_
@@ -34,7 +35,7 @@ class FenceNV11 : public FenceNVImpl
     ID3D11Query *mQuery;
 };
 
-class FenceSync11 : public FenceSyncImpl
+class FenceSync11 : public SyncImpl
 {
   public:
     explicit FenceSync11(Renderer11 *renderer);

@@ -102,7 +102,7 @@ template class TypedResourceManager<Buffer, HandleAllocator, BufferManager>;
 template class TypedResourceManager<Texture, HandleAllocator, TextureManager>;
 template class TypedResourceManager<Renderbuffer, HandleAllocator, RenderbufferManager>;
 template class TypedResourceManager<Sampler, HandleAllocator, SamplerManager>;
-template class TypedResourceManager<FenceSync, HandleAllocator, FenceSyncManager>;
+template class TypedResourceManager<Sync, HandleAllocator, FenceSyncManager>;
 template class TypedResourceManager<Framebuffer, HandleAllocator, FramebufferManager>;
 
 // BufferManager Implementation.
@@ -311,7 +311,7 @@ bool SamplerManager::isSampler(GLuint sampler) const
 // FenceSyncManager Implementation.
 
 // static
-void FenceSyncManager::DeleteObject(const Context *context, FenceSync *fenceSync)
+void FenceSyncManager::DeleteObject(const Context *context, Sync *fenceSync)
 {
     fenceSync->release(context);
 }
@@ -319,13 +319,13 @@ void FenceSyncManager::DeleteObject(const Context *context, FenceSync *fenceSync
 GLuint FenceSyncManager::createFenceSync(rx::GLImplFactory *factory)
 {
     GLuint handle        = mHandleAllocator.allocate();
-    FenceSync *fenceSync = new FenceSync(factory->createFenceSync(), handle);
+    Sync *fenceSync      = new Sync(factory->createFenceSync(), handle);
     fenceSync->addRef();
     mObjectMap.assign(handle, fenceSync);
     return handle;
 }
 
-FenceSync *FenceSyncManager::getFenceSync(GLuint handle) const
+Sync *FenceSyncManager::getFenceSync(GLuint handle) const
 {
     return mObjectMap.query(handle);
 }

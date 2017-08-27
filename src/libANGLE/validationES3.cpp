@@ -2661,7 +2661,7 @@ bool ValidateGetSynciv(Context *context,
         return false;
     }
 
-    FenceSync *fenceSync = context->getFenceSync(sync);
+    Sync *fenceSync = context->getFenceSync(sync);
     if (!fenceSync)
     {
         context->handleError(InvalidValue() << "Invalid sync object.");

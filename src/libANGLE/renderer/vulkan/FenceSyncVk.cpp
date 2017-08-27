@@ -14,7 +14,7 @@
 namespace rx
 {
 
-FenceSyncVk::FenceSyncVk() : FenceSyncImpl()
+FenceSyncVk::FenceSyncVk() : SyncImpl()
 {
 }
 
