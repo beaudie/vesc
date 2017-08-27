@@ -167,6 +167,43 @@ struct EntryPointParam
     using Type = ParamsBase;
 };
 
+// A template struct for determining the default value to return for each entry point.
+template <EntryPoint EP, typename ReturnType>
+struct DefaultReturnType;
+
+// Default return values for each basic return type.
+template <EntryPoint EP>
+struct DefaultReturnType<EP, GLint>
+{
+    static constexpr GLint kValue = -1;
+};
+
+// This doubles as the GLenum return type.
+template <EntryPoint EP>
+struct DefaultReturnType<EP, GLuint>
+{
+    static constexpr GLuint kValue = 0;
+};
+
+template <EntryPoint EP>
+struct DefaultReturnType<EP, GLboolean>
+{
+    static constexpr GLboolean kValue = GL_FALSE;
+};
+
+// Catch-all rule for pointer types.
+template <EntryPoint EP, typename PointerType>
+struct DefaultReturnType<EP, const PointerType *>
+{
+    static constexpr const PointerType *kValue = nullptr;
+};
+
+template <EntryPoint EP, typename ReturnType>
+ANGLE_INLINE ReturnType GetDefaultReturnType()
+{
+    return DefaultReturnType<EP, ReturnType>::kValue;
+}
+
 }  // namespace gl
 
 #endif  // LIBANGLE_PARAMS_H_
