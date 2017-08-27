@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 // FenceSyncNULL.h:
-//    Defines the class interface for FenceSyncNULL, implementing FenceSyncImpl.
+//    Defines the class interface for FenceSyncNULL, implementing SyncImpl.
 //
 
 #ifndef LIBANGLE_RENDERER_NULL_FENCESYNCNULL_H_
@@ -15,7 +15,7 @@
 namespace rx
 {
 
-class FenceSyncNULL : public FenceSyncImpl
+class FenceSyncNULL : public SyncImpl
 {
   public:
     FenceSyncNULL();

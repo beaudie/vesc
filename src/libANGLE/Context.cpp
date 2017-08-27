@@ -827,7 +827,7 @@ Renderbuffer *Context::getRenderbuffer(GLuint handle) const
     return mState.mRenderbuffers->getRenderbuffer(handle);
 }
 
-FenceSync *Context::getFenceSync(GLsync handle) const
+Sync *Context::getFenceSync(GLsync handle) const
 {
     return mState.mFenceSyncs->getFenceSync(
         static_cast<GLuint>(reinterpret_cast<uintptr_t>(handle)));
@@ -4172,7 +4172,7 @@ void Context::renderbufferStorageMultisample(GLenum target,
 
 void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
 {
-    const FenceSync *syncObject = getFenceSync(sync);
+    const Sync *syncObject = getFenceSync(sync);
     handleError(QuerySynciv(syncObject, pname, bufSize, length, values));
 }
 

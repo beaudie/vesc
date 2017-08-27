@@ -121,7 +121,7 @@ FenceNVImpl *Context11::createFenceNV()
     return new FenceNV11(mRenderer);
 }
 
-FenceSyncImpl *Context11::createFenceSync()
+SyncImpl *Context11::createFenceSync()
 {
     return new FenceSync11(mRenderer);
 }

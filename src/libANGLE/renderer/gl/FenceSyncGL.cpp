@@ -15,9 +15,7 @@ namespace rx
 {
 
 FenceSyncGL::FenceSyncGL(const FunctionsGL *functions)
-    : FenceSyncImpl(),
-      mFunctions(functions),
-      mSyncObject(0)
+    : SyncImpl(), mFunctions(functions), mSyncObject(0)
 {
     ASSERT(mFunctions);
 }

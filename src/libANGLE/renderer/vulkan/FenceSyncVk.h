@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 // FenceSyncVk.h:
-//    Defines the class interface for FenceSyncVk, implementing FenceSyncImpl.
+//    Defines the class interface for FenceSyncVk, implementing SyncImpl.
 //
 
 #ifndef LIBANGLE_RENDERER_VULKAN_FENCESYNCVK_H_
@@ -15,7 +15,7 @@
 namespace rx
 {
 
-class FenceSyncVk : public FenceSyncImpl
+class FenceSyncVk : public SyncImpl
 {
   public:
     FenceSyncVk();

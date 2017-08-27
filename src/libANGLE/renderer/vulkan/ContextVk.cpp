@@ -530,7 +530,7 @@ FenceNVImpl *ContextVk::createFenceNV()
     return new FenceNVVk();
 }
 
-FenceSyncImpl *ContextVk::createFenceSync()
+SyncImpl *ContextVk::createFenceSync()
 {
     return new FenceSyncVk();
 }
