@@ -4778,7 +4778,7 @@ bool ValidateGetActiveUniformBlockivRobustANGLE(Context *context,
     return true;
 }
 
-bool ValidateGetInternalFormativ(Context *context,
+bool ValidateGetInternalformativ(Context *context,
                                  GLenum target,
                                  GLenum internalformat,
                                  GLenum pname,
