@@ -5,7 +5,7 @@
 //
 
 // Fence11.cpp: Defines the rx::FenceNV11 and rx::FenceSync11 classes which implement
-// rx::FenceNVImpl and rx::FenceSyncImpl.
+// rx::FenceNVImpl and rx::SyncImpl.
 
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
@@ -119,8 +119,7 @@ gl::Error FenceNV11::finish()
 // We still opt to use QPC. In the present and moving forward, most newer systems will not suffer
 // from buggy implementations.
 
-FenceSync11::FenceSync11(Renderer11 *renderer)
-    : FenceSyncImpl(), mRenderer(renderer), mQuery(nullptr)
+FenceSync11::FenceSync11(Renderer11 *renderer) : SyncImpl(), mRenderer(renderer), mQuery(nullptr)
 {
     LARGE_INTEGER counterFreqency = {};
     BOOL success                  = QueryPerformanceFrequency(&counterFreqency);

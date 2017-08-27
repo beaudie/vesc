@@ -15,7 +15,7 @@ namespace rx
 {
 class FunctionsGL;
 
-class FenceSyncGL : public FenceSyncImpl
+class FenceSyncGL : public SyncImpl
 {
   public:
     explicit FenceSyncGL(const FunctionsGL *functions);
