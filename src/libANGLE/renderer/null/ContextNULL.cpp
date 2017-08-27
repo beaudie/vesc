@@ -347,7 +347,7 @@ FenceNVImpl *ContextNULL::createFenceNV()
     return new FenceNVNULL();
 }
 
-FenceSyncImpl *ContextNULL::createFenceSync()
+SyncImpl *ContextNULL::createSync()
 {
     return new FenceSyncNULL();
 }

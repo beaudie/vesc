@@ -107,7 +107,7 @@ FenceNVImpl *ContextGL::createFenceNV()
     return new FenceNVGL(getFunctions());
 }
 
-FenceSyncImpl *ContextGL::createFenceSync()
+SyncImpl *ContextGL::createSync()
 {
     return new FenceSyncGL(getFunctions());
 }
