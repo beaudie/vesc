@@ -29,6 +29,34 @@ class GLWrapper
     GLWrapper() {}
     ~GLWrapper() { DeleteF(1, &mHandle); }
 
+    // The move-constructor and move-assignment operators are necessary so that the data within a
+    // GLWrapper object can be relocated.
+    GLWrapper(GLWrapper &&rht) : mHandle(rht.mHandle) { rht.mHandle = 0u; }
+
+    GLWrapper &operator=(GLWrapper &&rht)
+    {
+        if (this != &rht)
+        {
+            DeleteF(1, &mHandle);
+            mHandle     = rht.mHandle;
+            rht.mHandle = 0u;
+        }
+        return *this;
+    }
+
+    // The copy-constructor and copy-assignment operator are non-trivial and have to be deleted.
+    GLWrapper &operator=(const GLWrapper &rht) = delete;
+    GLWrapper(const GLWrapper &rht)            = delete;
+
+    void reset()
+    {
+        if (mHandle != 0u)
+        {
+            DeleteF(1, &mHandle);
+            mHandle = 0u;
+        }
+    }
+
     GLuint get()
     {
         if (!mHandle)
@@ -41,7 +69,7 @@ class GLWrapper
     operator GLuint() { return get(); }
 
   private:
-    GLuint mHandle = 0;
+    GLuint mHandle = 0u;
 };
 
 using GLVertexArray       = GLWrapper<glGenVertexArrays, glDeleteVertexArrays>;

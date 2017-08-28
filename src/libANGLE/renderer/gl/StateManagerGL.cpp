@@ -1905,14 +1905,15 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 // TODO(jmadill): implement this
-                propagateNumViewsToVAO(state.getProgram(),
-                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
-                updateMultiviewBaseViewLayerIndexUniform(
-                    state.getProgram(),
-                    state.getDrawFramebuffer()->getImplementation()->getState());
+                updateStateOnMultiviewProgramChange(
+                    state.getProgram(), state.getDrawFramebuffer()->getImplementation()->getState(),
+                    GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 // TODO(jmadill): implement this
+                updateStateOnMultiviewProgramChange(
+                    state.getProgram(), state.getDrawFramebuffer()->getImplementation()->getState(),
+                    GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
@@ -2187,5 +2188,14 @@ void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
                 break;
         }
     }
+}
+
+void StateManagerGL::updateStateOnMultiviewProgramChange(
+    const gl::Program *program,
+    const gl::FramebufferState &drawFramebufferState,
+    VertexArrayGL *vao)
+{
+    propagateNumViewsToVAO(program, vao);
+    updateMultiviewBaseViewLayerIndexUniform(program, drawFramebufferState);
 }
 }
