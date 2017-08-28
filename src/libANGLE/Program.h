@@ -519,6 +519,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getOutputResourceIndex(const GLchar *name) const;
     void getInputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
     void getOutputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
+    void getUniformResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
     const sh::Attribute &getInputResource(GLuint index) const;
     const sh::OutputVariable &getOutputResource(GLuint index) const;
 
@@ -628,6 +629,13 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
+
+    template <typename T>
+    void getResourceName(GLuint index,
+                         const std::vector<T> &resources,
+                         GLsizei bufSize,
+                         GLsizei *length,
+                         GLchar *name) const;
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;
