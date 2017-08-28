@@ -62,6 +62,7 @@ class UniformLinker
 
     bool flattenUniformsAndCheckCapsForShader(const Context *context,
                                               Shader *shader,
+                                              GLenum shaderType,
                                               GLuint maxUniformComponents,
                                               GLuint maxTextureImageUnits,
                                               GLuint maxImageUnits,
@@ -81,7 +82,8 @@ class UniformLinker
     ShaderUniformCount flattenUniform(const sh::Uniform &uniform,
                                       std::vector<LinkedUniform> *samplerUniforms,
                                       std::vector<LinkedUniform> *imageUniforms,
-                                      std::vector<LinkedUniform> *atomicCounterUniforms);
+                                      std::vector<LinkedUniform> *atomicCounterUniforms,
+                                      GLenum shaderType);
 
     // markStaticUse is given as a separate parameter because it is tracked here at struct
     // granularity.
@@ -90,6 +92,7 @@ class UniformLinker
                                           std::vector<LinkedUniform> *samplerUniforms,
                                           std::vector<LinkedUniform> *imageUniforms,
                                           std::vector<LinkedUniform> *atomicCounterUniforms,
+                                          GLenum shaderType,
                                           bool markStaticUse,
                                           int binding,
                                           int offset,
