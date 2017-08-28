@@ -2870,6 +2870,12 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
                 return false;
             }
+
+            if (elementArrayBuffer->getSize() % typeSize != 0)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), MismatchedByteCountType);
+                return false;
+            }
         }
         else if (!indices)
         {
