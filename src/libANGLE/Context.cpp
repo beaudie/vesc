@@ -4627,6 +4627,7 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
+    mGLState.onProgramExecutableChange(programObject);
 }
 
 void Context::releaseShaderCompiler()
