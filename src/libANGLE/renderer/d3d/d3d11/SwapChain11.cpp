@@ -307,6 +307,22 @@ EGLint SwapChain11::resetOffscreenColorBuffer(const gl::Context *context,
         ASSERT(!err.isError());
         mOffscreenSRView.setDebugName("Offscreen back buffer shader resource");
     }
+    else
+    {
+        // Special case for external textures that cannot support sampling. Since internally we
+        // assume our SwapChain is always readable, we make a copy texture that has the same flags
+        // as the SRV except it's readable.
+        D3D11_TEXTURE2D_DESC offscreenCopyDesc = offscreenTextureDesc;
+        offscreenCopyDesc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+        err = mRenderer->allocateTexture(offscreenCopyDesc, backbufferFormatInfo,
+                                         &mOffscreenTextureCopyForSRV);
+        ASSERT(!err.isError());
+        mOffscreenTextureCopyForSRV.setDebugName("Offscreen back buffer copy for SRV");
+        err = mRenderer->allocateResource(offscreenSRVDesc, mOffscreenTextureCopyForSRV.get(),
+                                          &mOffscreenSRView);
+        ASSERT(!err.isError());
+        mOffscreenSRView.setDebugName("Offscreen back buffer shader resource");
+    }
 
     if (previousOffscreenTexture.valid())
     {
@@ -928,7 +944,24 @@ const d3d11::RenderTargetView &SwapChain11::getRenderTarget()
 
 const d3d11::SharedSRV &SwapChain11::getRenderTargetShaderResource()
 {
-    return mNeedsOffscreenTexture ? mOffscreenSRView : mBackBufferSRView;
+    if (!mNeedsOffscreenTexture)
+    {
+        ASSERT(mBackBufferSRView.valid());
+        return mBackBufferSRView;
+    }
+
+    if (!mOffscreenTextureCopyForSRV.valid())
+    {
+        ASSERT(mOffscreenSRView.valid());
+        return mOffscreenSRView;
+    }
+
+    // Need to copy the offscreen texture into the shader-readable copy, since it's external and
+    // we don't know if the copy is up-to-date. This works around the problem we have when the app
+    // passes in a texture that isn't shader-readable.
+    mRenderer->getDeviceContext()->CopyResource(mOffscreenTextureCopyForSRV.get(),
+                                                mOffscreenTexture.get());
+    return mOffscreenSRView;
 }
 
 const d3d11::DepthStencilView &SwapChain11::getDepthStencil()
