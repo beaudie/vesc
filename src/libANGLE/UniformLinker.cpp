@@ -186,7 +186,7 @@ bool UniformLinker::indexUniforms(InfoLog &infoLog,
     {
         const LinkedUniform &uniform = mUniforms[uniformIndex];
 
-        if (uniform.isBuiltIn())
+        if (uniform.isBuiltIn() || IsAtomicCounterType(uniform.type))
         {
             continue;
         }
@@ -334,6 +334,7 @@ void UniformLinker::pruneUnusedUniforms()
 bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     const Context *context,
     Shader *shader,
+    GLenum shaderType,
     GLuint maxUniformComponents,
     GLuint maxTextureImageUnits,
     GLuint maxImageUnits,
@@ -350,8 +351,8 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     ShaderUniformCount shaderUniformCount;
     for (const sh::Uniform &uniform : shader->getUniforms(context))
     {
-        shaderUniformCount +=
-            flattenUniform(uniform, &samplerUniforms, &imageUniforms, &atomicCounterUniforms);
+        shaderUniformCount += flattenUniform(uniform, &samplerUniforms, &imageUniforms,
+                                             &atomicCounterUniforms, shaderType);
     }
 
     if (shaderUniformCount.vectorCount > maxUniformComponents)
@@ -395,7 +396,7 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
 
         // TODO (mradev): check whether we need finer-grained component counting
         if (!flattenUniformsAndCheckCapsForShader(
-                context, computeShader, caps.maxComputeUniformComponents / 4,
+                context, computeShader, GL_COMPUTE_SHADER, caps.maxComputeUniformComponents / 4,
                 caps.maxComputeTextureImageUnits, caps.maxComputeImageUniforms,
                 caps.maxComputeAtomicCounters,
                 "Compute shader active uniforms exceed MAX_COMPUTE_UNIFORM_COMPONENTS (",
@@ -412,7 +413,7 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
         Shader *vertexShader = mState.getAttachedVertexShader();
 
         if (!flattenUniformsAndCheckCapsForShader(
-                context, vertexShader, caps.maxVertexUniformVectors,
+                context, vertexShader, GL_VERTEX_SHADER, caps.maxVertexUniformVectors,
                 caps.maxVertexTextureImageUnits, caps.maxVertexImageUniforms,
                 caps.maxVertexAtomicCounters,
                 "Vertex shader active uniforms exceed MAX_VERTEX_UNIFORM_VECTORS (",
@@ -427,8 +428,9 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
         Shader *fragmentShader = mState.getAttachedFragmentShader();
 
         if (!flattenUniformsAndCheckCapsForShader(
-                context, fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits,
-                caps.maxFragmentImageUniforms, caps.maxFragmentAtomicCounters,
+                context, fragmentShader, GL_FRAGMENT_SHADER, caps.maxFragmentUniformVectors,
+                caps.maxTextureImageUnits, caps.maxFragmentImageUniforms,
+                caps.maxFragmentAtomicCounters,
                 "Fragment shader active uniforms exceed MAX_FRAGMENT_UNIFORM_VECTORS (",
                 "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
                 "Fragment shader image count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
@@ -449,12 +451,14 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
     const sh::Uniform &uniform,
     std::vector<LinkedUniform> *samplerUniforms,
     std::vector<LinkedUniform> *imageUniforms,
-    std::vector<LinkedUniform> *atomicCounterUniforms)
+    std::vector<LinkedUniform> *atomicCounterUniforms,
+    GLenum shaderType)
 {
     int location                          = uniform.location;
-    ShaderUniformCount shaderUniformCount = flattenUniformImpl(
-        uniform, uniform.name, uniform.mappedName, samplerUniforms, imageUniforms,
-        atomicCounterUniforms, uniform.staticUse, uniform.binding, uniform.offset, &location);
+    ShaderUniformCount shaderUniformCount =
+        flattenUniformImpl(uniform, uniform.name, uniform.mappedName, samplerUniforms,
+                           imageUniforms, atomicCounterUniforms, shaderType, uniform.staticUse,
+                           uniform.binding, uniform.offset, &location);
     if (uniform.staticUse)
     {
         return shaderUniformCount;
@@ -469,6 +473,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     std::vector<LinkedUniform> *samplerUniforms,
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
+    GLenum shaderType,
     bool markStaticUse,
     int binding,
     int offset,
@@ -492,7 +497,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
 
                 shaderUniformCount += flattenUniformImpl(
                     field, fieldFullName, fieldFullMappedName, samplerUniforms, imageUniforms,
-                    atomicCounterUniforms, markStaticUse, -1, -1, location);
+                    atomicCounterUniforms, shaderType, markStaticUse, -1, -1, location);
             }
         }
 
@@ -534,15 +539,20 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         if (markStaticUse)
         {
             existingUniform->staticUse = true;
+            existingUniform->setRef(shaderType, GL_TRUE);
         }
     }
     else
     {
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
-                                    binding, -1, *location, -1,
+                                    binding, offset, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
         linkedUniform.mappedName = fullMappedName;
         linkedUniform.staticUse = markStaticUse;
+        if (markStaticUse)
+        {
+            linkedUniform.setRef(shaderType, GL_TRUE);
+        }
 
         uniformList->push_back(linkedUniform);
     }

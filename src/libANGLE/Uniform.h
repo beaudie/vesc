@@ -20,8 +20,20 @@ namespace gl
 {
 struct UniformTypeInfo;
 
+struct ShaderRef
+{
+    ShaderRef();
+    virtual ~ShaderRef();
+
+    void setRef(GLenum shaderType, GLboolean isUsed);
+
+    bool vertexStaticUse;
+    bool fragmentStaticUse;
+    bool computeStaticUse;
+};
+
 // Helper struct representing a single shader uniform
-struct LinkedUniform : public sh::Uniform
+struct LinkedUniform : public sh::Uniform, public ShaderRef
 {
     LinkedUniform();
     LinkedUniform(GLenum type,
@@ -55,21 +67,15 @@ struct LinkedUniform : public sh::Uniform
 
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
 // contain a group of shader variables, and have a GL buffer backed.
-struct ShaderVariableBuffer
+struct ShaderVariableBuffer : public ShaderRef
 {
     ShaderVariableBuffer();
     virtual ~ShaderVariableBuffer();
-    ShaderVariableBuffer(const ShaderVariableBuffer &other) = default;
-    ShaderVariableBuffer &operator=(const ShaderVariableBuffer &other) = default;
     int numActiveVariables() const { return static_cast<int>(memberIndexes.size()); }
 
     int binding;
     unsigned int dataSize;
     std::vector<unsigned int> memberIndexes;
-
-    bool vertexStaticUse;
-    bool fragmentStaticUse;
-    bool computeStaticUse;
 };
 
 using AtomicCounterBuffer = ShaderVariableBuffer;
@@ -83,8 +89,6 @@ struct UniformBlock : public ShaderVariableBuffer
                  bool isArrayIn,
                  unsigned int arrayElementIn,
                  int bindingIn);
-    UniformBlock(const UniformBlock &other) = default;
-    UniformBlock &operator=(const UniformBlock &other) = default;
 
     std::string nameWithArrayIndex() const;
     std::string mappedNameWithArrayIndex() const;
