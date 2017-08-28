@@ -13,6 +13,35 @@
 namespace gl
 {
 
+ShaderRef::ShaderRef() : vertexStaticUse(false), fragmentStaticUse(false), computeStaticUse(false)
+{
+}
+
+ShaderRef::~ShaderRef()
+{
+}
+
+void ShaderRef::setRef(GLenum shaderType)
+{
+    switch (shaderType)
+    {
+        case GL_VERTEX_SHADER:
+            vertexStaticUse = true;
+            break;
+
+        case GL_FRAGMENT_SHADER:
+            fragmentStaticUse = true;
+            break;
+
+        case GL_COMPUTE_SHADER:
+            computeStaticUse = true;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+}
+
 LinkedUniform::LinkedUniform()
     : bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
@@ -44,7 +73,10 @@ LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
-    : sh::Uniform(uniform), bufferIndex(uniform.bufferIndex), blockInfo(uniform.blockInfo)
+    : sh::Uniform(uniform),
+      ShaderRef(uniform),
+      bufferIndex(uniform.bufferIndex),
+      blockInfo(uniform.blockInfo)
 {
     // This function is not intended to be called during runtime.
     ASSERT(uniform.mLazyData.empty());
@@ -56,6 +88,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     ASSERT(uniform.mLazyData.empty());
 
     sh::Uniform::operator=(uniform);
+    ShaderRef::operator  =(uniform);
     bufferIndex          = uniform.bufferIndex;
     blockInfo            = uniform.blockInfo;
 
@@ -129,12 +162,7 @@ const uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex) const
     return const_cast<LinkedUniform *>(this)->getDataPtrToElement(elementIndex);
 }
 
-ShaderVariableBuffer::ShaderVariableBuffer()
-    : binding(0),
-      dataSize(0),
-      vertexStaticUse(false),
-      fragmentStaticUse(false),
-      computeStaticUse(false)
+ShaderVariableBuffer::ShaderVariableBuffer() : binding(0), dataSize(0)
 {
 }
 
