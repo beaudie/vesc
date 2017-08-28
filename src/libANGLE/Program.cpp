@@ -1134,20 +1134,12 @@ size_t Program::getOutputResourceCount() const
     return (mLinked ? mState.mOutputVariables.size() : 0);
 }
 
-void Program::getInputResourceName(GLuint index,
-                                   GLsizei bufSize,
-                                   GLsizei *length,
-                                   GLchar *name) const
-{
-    GLint size;
-    GLenum type;
-    getActiveAttribute(index, bufSize, length, &size, &type, name);
-}
-
-void Program::getOutputResourceName(GLuint index,
-                                    GLsizei bufSize,
-                                    GLsizei *length,
-                                    GLchar *name) const
+template <typename T>
+void Program::getResourceName(GLuint index,
+                              const std::vector<T> &resources,
+                              GLsizei bufSize,
+                              GLsizei *length,
+                              GLchar *name) const
 {
     if (length)
     {
@@ -1162,15 +1154,39 @@ void Program::getOutputResourceName(GLuint index,
         }
         return;
     }
-    ASSERT(index < mState.mOutputVariables.size());
-    const auto &output = mState.mOutputVariables[index];
+    ASSERT(index < resources.size());
+    const auto &resource = resources[index];
 
     if (bufSize > 0)
     {
-        std::string nameWithArray = (output.isArray() ? output.name + "[0]" : output.name);
+        std::string nameWithArray = (resource.isArray() ? resource.name + "[0]" : resource.name);
 
         CopyStringToBuffer(name, nameWithArray, bufSize, length);
     }
+}
+
+void Program::getInputResourceName(GLuint index,
+                                   GLsizei bufSize,
+                                   GLsizei *length,
+                                   GLchar *name) const
+{
+    getResourceName<sh::Attribute>(index, mState.mAttributes, bufSize, length, name);
+}
+
+void Program::getOutputResourceName(GLuint index,
+                                    GLsizei bufSize,
+                                    GLsizei *length,
+                                    GLchar *name) const
+{
+    getResourceName<sh::OutputVariable>(index, mState.mOutputVariables, bufSize, length, name);
+}
+
+void Program::getUniformResourceName(GLuint index,
+                                     GLsizei bufSize,
+                                     GLsizei *length,
+                                     GLchar *name) const
+{
+    getResourceName<LinkedUniform>(index, mState.mUniforms, bufSize, length, name);
 }
 
 const sh::Attribute &Program::getInputResource(GLuint index) const
@@ -1290,7 +1306,7 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
       case GL_UNIFORM_SIZE:         return static_cast<GLint>(uniform.elementCount());
       case GL_UNIFORM_NAME_LENGTH:  return static_cast<GLint>(uniform.name.size() + 1 + (uniform.isArray() ? 3 : 0));
       case GL_UNIFORM_BLOCK_INDEX:
-          return uniform.bufferIndex;
+          return (uniform.isAtomicCounter() ? -1 : uniform.bufferIndex);
       case GL_UNIFORM_OFFSET:       return uniform.blockInfo.offset;
       case GL_UNIFORM_ARRAY_STRIDE: return uniform.blockInfo.arrayStride;
       case GL_UNIFORM_MATRIX_STRIDE: return uniform.blockInfo.matrixStride;
@@ -2777,8 +2793,15 @@ void Program::setUniformValuesFromBindingQualifiers()
 
 void Program::gatherAtomicCounterBuffers()
 {
-    // TODO(jie.a.chen@intel.com): Get the actual OFFSET and ARRAY_STRIDE from the backend for each
-    // counter.
+    for (unsigned int index : mState.mAtomicCounterUniformRange)
+    {
+        auto &uniform                      = mState.mUniforms[index];
+        uniform.blockInfo.offset           = uniform.offset;
+        uniform.blockInfo.arrayStride      = (uniform.isArray() ? 4 : 0);
+        uniform.blockInfo.matrixStride     = 0;
+        uniform.blockInfo.isRowMajorMatrix = false;
+    }
+
     // TODO(jie.a.chen@intel.com): Get the actual BUFFER_DATA_SIZE from backend for each buffer.
 }
 
@@ -2977,27 +3000,7 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
             InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, true, arrayElement,
                                  blockBinding + arrayElement);
             block.memberIndexes = blockIndexes;
-
-            switch (shaderType)
-            {
-                case GL_VERTEX_SHADER:
-                {
-                    block.vertexStaticUse = interfaceBlock.staticUse;
-                    break;
-                }
-                case GL_FRAGMENT_SHADER:
-                {
-                    block.fragmentStaticUse = interfaceBlock.staticUse;
-                    break;
-                }
-                case GL_COMPUTE_SHADER:
-                {
-                    block.computeStaticUse = interfaceBlock.staticUse;
-                    break;
-                }
-                default:
-                    UNREACHABLE();
-            }
+            block.setRef(shaderType, interfaceBlock.staticUse);
 
             // Since all block elements in an array share the same active interface blocks, they
             // will all be active once any block member is used. So, since interfaceBlock.name[0]
@@ -3030,28 +3033,7 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
         InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, false, 0,
                              blockBinding);
         block.memberIndexes = blockIndexes;
-
-        switch (shaderType)
-        {
-            case GL_VERTEX_SHADER:
-            {
-                block.vertexStaticUse = interfaceBlock.staticUse;
-                break;
-            }
-            case GL_FRAGMENT_SHADER:
-            {
-                block.fragmentStaticUse = interfaceBlock.staticUse;
-                break;
-            }
-            case GL_COMPUTE_SHADER:
-            {
-                block.computeStaticUse = interfaceBlock.staticUse;
-                break;
-            }
-            default:
-                UNREACHABLE();
-        }
-
+        block.setRef(shaderType, interfaceBlock.staticUse);
         block.dataSize = static_cast<unsigned int>(blockSize);
         if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
         {
