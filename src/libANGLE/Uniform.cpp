@@ -13,6 +13,32 @@
 namespace gl
 {
 
+ProgramResource::ProgramResource()
+    : vertexStaticUse(false), fragmentStaticUse(false), computeStaticUse(false)
+{
+}
+
+void ProgramResource::setUsed(GLenum shaderType, bool used)
+{
+    switch (shaderType)
+    {
+        case GL_VERTEX_SHADER:
+            vertexStaticUse = used;
+            break;
+
+        case GL_FRAGMENT_SHADER:
+            fragmentStaticUse = used;
+            break;
+
+        case GL_COMPUTE_SHADER:
+            computeStaticUse = used;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+}
+
 LinkedUniform::LinkedUniform()
     : typeInfo(nullptr), bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
@@ -48,6 +74,7 @@ LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
     : sh::Uniform(uniform),
+      ProgramResource(uniform),
       typeInfo(uniform.typeInfo),
       bufferIndex(uniform.bufferIndex),
       blockInfo(uniform.blockInfo)
@@ -57,6 +84,7 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
     sh::Uniform::operator=(uniform);
+    ProgramResource::operator=(uniform);
     typeInfo             = uniform.typeInfo;
     bufferIndex          = uniform.bufferIndex;
     blockInfo            = uniform.blockInfo;
@@ -103,16 +131,7 @@ size_t LinkedUniform::getElementComponents() const
     return typeInfo->componentCount;
 }
 
-ShaderVariableBuffer::ShaderVariableBuffer()
-    : binding(0),
-      dataSize(0),
-      vertexStaticUse(false),
-      fragmentStaticUse(false),
-      computeStaticUse(false)
-{
-}
-
-ShaderVariableBuffer::~ShaderVariableBuffer()
+ShaderVariableBuffer::ShaderVariableBuffer() : binding(0), dataSize(0)
 {
 }
 
