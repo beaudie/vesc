@@ -347,9 +347,9 @@ FenceNVImpl *ContextNULL::createFenceNV()
     return new FenceNVNULL();
 }
 
-FenceSyncImpl *ContextNULL::createFenceSync()
+SyncImpl *ContextNULL::createSync()
 {
-    return new FenceSyncNULL();
+    return new SyncNULL();
 }
 
 TransformFeedbackImpl *ContextNULL::createTransformFeedback(const gl::TransformFeedbackState &state)

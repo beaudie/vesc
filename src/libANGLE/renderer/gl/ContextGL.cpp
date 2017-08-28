@@ -107,9 +107,9 @@ FenceNVImpl *ContextGL::createFenceNV()
     return new FenceNVGL(getFunctions());
 }
 
-FenceSyncImpl *ContextGL::createFenceSync()
+SyncImpl *ContextGL::createSync()
 {
-    return new FenceSyncGL(getFunctions());
+    return new SyncGL(getFunctions());
 }
 
 TransformFeedbackImpl *ContextGL::createTransformFeedback(const gl::TransformFeedbackState &state)

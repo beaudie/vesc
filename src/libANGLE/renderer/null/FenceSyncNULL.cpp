@@ -3,8 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// FenceSyncNULL.cpp:
-//    Implements the class methods for FenceSyncNULL.
+// SyncNULL.cpp:
+//    Implements the class methods for SyncNULL.
 //
 
 #include "libANGLE/renderer/null/FenceSyncNULL.h"
@@ -14,31 +14,31 @@
 namespace rx
 {
 
-FenceSyncNULL::FenceSyncNULL() : FenceSyncImpl()
+SyncNULL::SyncNULL() : SyncImpl()
 {
 }
 
-FenceSyncNULL::~FenceSyncNULL()
+SyncNULL::~SyncNULL()
 {
 }
 
-gl::Error FenceSyncNULL::set(GLenum condition, GLbitfield flags)
+gl::Error SyncNULL::set(GLenum condition, GLbitfield flags)
 {
     return gl::NoError();
 }
 
-gl::Error FenceSyncNULL::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
+gl::Error SyncNULL::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
 {
     *outResult = GL_ALREADY_SIGNALED;
     return gl::NoError();
 }
 
-gl::Error FenceSyncNULL::serverWait(GLbitfield flags, GLuint64 timeout)
+gl::Error SyncNULL::serverWait(GLbitfield flags, GLuint64 timeout)
 {
     return gl::NoError();
 }
 
-gl::Error FenceSyncNULL::getStatus(GLint *outResult)
+gl::Error SyncNULL::getStatus(GLint *outResult)
 {
     *outResult = GL_SIGNALED;
     return gl::NoError();
