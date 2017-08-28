@@ -5179,7 +5179,7 @@ void Context::getActiveUniformsiv(GLuint program,
     for (int uniformId = 0; uniformId < uniformCount; uniformId++)
     {
         const GLuint index = uniformIndices[uniformId];
-        params[uniformId]  = programObject->getActiveUniformi(index, pname);
+        params[uniformId]  = GetUniformResourceProperty(programObject, index, pname);
     }
 }
 
