@@ -84,10 +84,10 @@ TEST_F(FenceNVTest, SetAndTestBehavior)
 }
 
 //
-// FenceSync tests
+// Sync tests
 //
 
-class MockFenceSyncImpl : public rx::FenceSyncImpl
+class MockFenceSyncImpl : public rx::SyncImpl
 {
   public:
     virtual ~MockFenceSyncImpl() { destroy(); }
@@ -107,14 +107,14 @@ class FenceSyncTest : public testing::Test
     {
         mImpl = new MockFenceSyncImpl;
         EXPECT_CALL(*mImpl, destroy());
-        mFence = new gl::FenceSync(mImpl, 1);
+        mFence = new gl::Sync(mImpl, 1);
         mFence->addRef();
     }
 
     virtual void TearDown() { mFence->release(nullptr); }
 
     MockFenceSyncImpl *mImpl;
-    gl::FenceSync* mFence;
+    gl::Sync *mFence;
 };
 
 TEST_F(FenceSyncTest, DestructionDeletesImpl)
@@ -122,7 +122,7 @@ TEST_F(FenceSyncTest, DestructionDeletesImpl)
     MockFenceSyncImpl* impl = new MockFenceSyncImpl;
     EXPECT_CALL(*impl, destroy()).Times(1).RetiresOnSaturation();
 
-    gl::FenceSync* fence = new gl::FenceSync(impl, 1);
+    gl::Sync *fence = new gl::Sync(impl, 1);
     fence->addRef();
     fence->release(nullptr);
 

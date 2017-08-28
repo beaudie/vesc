@@ -3,8 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// FenceSyncNULL.h:
-//    Defines the class interface for FenceSyncNULL, implementing FenceSyncImpl.
+// SyncNULL.h:
+//    Defines the class interface for SyncNULL, implementing SyncImpl.
 //
 
 #ifndef LIBANGLE_RENDERER_NULL_FENCESYNCNULL_H_
@@ -15,11 +15,11 @@
 namespace rx
 {
 
-class FenceSyncNULL : public FenceSyncImpl
+class SyncNULL : public SyncImpl
 {
   public:
-    FenceSyncNULL();
-    ~FenceSyncNULL() override;
+    SyncNULL();
+    ~SyncNULL() override;
 
     gl::Error set(GLenum condition, GLbitfield flags) override;
     gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult) override;

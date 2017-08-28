@@ -3,8 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// FenceSyncVk.h:
-//    Defines the class interface for FenceSyncVk, implementing FenceSyncImpl.
+// SyncVk:
+//    Defines the class interface for SyncVk, implementing SyncImpl.
 //
 
 #ifndef LIBANGLE_RENDERER_VULKAN_FENCESYNCVK_H_
@@ -15,11 +15,11 @@
 namespace rx
 {
 
-class FenceSyncVk : public FenceSyncImpl
+class SyncVk : public SyncImpl
 {
   public:
-    FenceSyncVk();
-    ~FenceSyncVk() override;
+    SyncVk();
+    ~SyncVk() override;
 
     gl::Error set(GLenum condition, GLbitfield flags) override;
     gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult) override;
