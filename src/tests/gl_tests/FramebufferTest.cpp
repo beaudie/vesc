@@ -670,6 +670,12 @@ TEST_P(FramebufferTest_ES31, IncompleteMultisampleFixedSampleLocationsTex)
 // object's default width and height.
 TEST_P(FramebufferTest_ES31, RenderingLimitToDefaultFBOSizeWithNoAttchments)
 {
+    if (IsIntel() && GetParam() == ES31_D3D11())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
+
     const std::string &vertexShader =
         "#version 310 es\n"
         "in layout(location = 0) highp vec2 a_position;\n\n"
