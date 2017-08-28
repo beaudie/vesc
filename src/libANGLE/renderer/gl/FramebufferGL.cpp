@@ -104,7 +104,8 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
     }
 }
 
-void RetrieveMultiviewFieldsFromAttachment(const gl::FramebufferAttachment *attachment,
+// Returns true if multiview fields are retrieved.
+bool RetrieveMultiviewFieldsFromAttachment(const gl::FramebufferAttachment *attachment,
                                            const std::vector<gl::Offset> **viewportOffsets,
                                            GLenum *multiviewLayout,
                                            int *baseViewIndex)
@@ -114,7 +115,9 @@ void RetrieveMultiviewFieldsFromAttachment(const gl::FramebufferAttachment *atta
         *viewportOffsets = &attachment->getMultiviewViewportOffsets();
         *multiviewLayout = attachment->getMultiviewLayout();
         *baseViewIndex   = attachment->getBaseViewIndex();
+        return true;
     }
+    return false;
 }
 
 bool RequiresMultiviewClear(const FramebufferAttachment *attachment, bool scissorTestEnabled)
@@ -585,7 +588,7 @@ void FramebufferGL::syncState(const gl::Context *context, const Framebuffer::Dir
     const std::vector<gl::Offset> *attachmentViewportOffsets = nullptr;
     GLenum multiviewLayout                                   = GL_NONE;
     int baseViewIndex                                        = -1;
-    bool isAttachmentModified                                = false;
+    bool fieldsAreRetrieved                                  = false;
 
     for (auto dirtyBit : dirtyBits)
     {
@@ -594,18 +597,16 @@ void FramebufferGL::syncState(const gl::Context *context, const Framebuffer::Dir
             case Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
                 BindFramebufferAttachment(mFunctions, GL_DEPTH_ATTACHMENT,
                                           mState.getDepthAttachment());
-                RetrieveMultiviewFieldsFromAttachment(mState.getDepthAttachment(),
-                                                      &attachmentViewportOffsets, &multiviewLayout,
-                                                      &baseViewIndex);
-                isAttachmentModified = true;
+                fieldsAreRetrieved = RetrieveMultiviewFieldsFromAttachment(
+                    mState.getDepthAttachment(), &attachmentViewportOffsets, &multiviewLayout,
+                    &baseViewIndex);
                 break;
             case Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
                 BindFramebufferAttachment(mFunctions, GL_STENCIL_ATTACHMENT,
                                           mState.getStencilAttachment());
-                RetrieveMultiviewFieldsFromAttachment(mState.getStencilAttachment(),
-                                                      &attachmentViewportOffsets, &multiviewLayout,
-                                                      &baseViewIndex);
-                isAttachmentModified = true;
+                fieldsAreRetrieved = RetrieveMultiviewFieldsFromAttachment(
+                    mState.getStencilAttachment(), &attachmentViewportOffsets, &multiviewLayout,
+                    &baseViewIndex);
                 break;
             case Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             {
@@ -644,17 +645,15 @@ void FramebufferGL::syncState(const gl::Context *context, const Framebuffer::Dir
                 BindFramebufferAttachment(mFunctions,
                                           static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + index),
                                           mState.getColorAttachment(index));
-                RetrieveMultiviewFieldsFromAttachment(mState.getColorAttachment(index),
-                                                      &attachmentViewportOffsets, &multiviewLayout,
-                                                      &baseViewIndex);
-                isAttachmentModified = true;
+                fieldsAreRetrieved = RetrieveMultiviewFieldsFromAttachment(
+                    mState.getColorAttachment(index), &attachmentViewportOffsets, &multiviewLayout,
+                    &baseViewIndex);
                 break;
             }
         }
     }
 
-    // TODO(mradev): Handle case in which a texture is detached in a multi-view context.
-    if (isAttachmentModified)
+    if (fieldsAreRetrieved)
     {
         const bool isSideBySide = multiviewLayout == GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE;
         mStateManager->setSideBySide(isSideBySide);
