@@ -6,14 +6,20 @@
 import("//build/config/dcheck_always_on.gni")
 import("//build/config/linux/pkg_config.gni")
 import("//build/config/ui.gni")
-import("//testing/libfuzzer/fuzzer_test.gni")
-import("//third_party/angle/gni/angle.gni")
-import("//ui/ozone/ozone.gni")
+import("gni/angle.gni")
 
 declare_args() {
   # Use the PCI lib to collect GPU information on Linux.
   use_libpci = is_linux && (!is_chromecast || is_cast_desktop_build) &&
                (use_x11 || use_ozone)
+}
+
+if (build_with_chromium) {
+  import("//ui/ozone/ozone.gni")
+  import("//testing/libfuzzer/fuzzer_test.gni")
+} else {
+  ozone_platform_gbm = false
+  use_libfuzzer = false
 }
 
 if (ozone_platform_gbm) {
@@ -90,7 +96,7 @@ if (is_win) {
   }
 }
 
-angle_undefine_configs = [ "//build/config/compiler:default_include_dirs" ]
+angle_undefine_configs = [ "//build/config/compiler:default_include_dirs", "//build/config/clang:find_bad_constructs" ]
 
 # Holds the shared includes so we only need to list them once.
 source_set("includes") {
@@ -322,6 +328,8 @@ source_set("translator_fuzzer") {
     "src",
   ]
 
+  configs -= angle_undefine_configs
+
   deps = [
     ":translator",
   ]
@@ -476,7 +484,11 @@ static_library("libANGLE") {
     if (is_linux) {
       sources += rebase_path(gles_gypi.libangle_vulkan_xcb_sources, ".", "src")
     }
-    deps += [ "//third_party/angle/src/vulkan_support:angle_vulkan" ]
+    if (build_with_chromium) {
+      deps += [ "//third_party/angle/src/vulkan_support:angle_vulkan" ]
+    } else {
+      deps += [ "src/vulkan_support:angle_vulkan" ]
+    }
   }
 
   if (angle_enable_null) {
@@ -720,6 +732,7 @@ foreach(is_shared_library,
       ":debug_annotations_config",
       ":extra_warnings",
     ]
+    configs -= [ "//build/config/clang:find_bad_constructs" ]
 
     public_configs = [
       ":angle_util_config",
@@ -761,5 +774,13 @@ executable("angle_shader_translator") {
   deps = [
     ":translator",
     "//build/config:exe_and_shlib_deps",
+  ]
+}
+
+group("all") {
+  testonly = true
+  deps = [
+    "//src/tests:all",
+    "//samples:all",
   ]
 }
