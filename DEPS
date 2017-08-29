@@ -5,8 +5,14 @@ vars = {
 
 deps = {
 
+  'build':
+      Var('chromium_git') + '/chromium/src/build.git' + '@' + '0e2dbe2870c3c336e85c4c2a4d4ab515dd079c92',
+
   'buildtools':
-    Var('chromium_git') + '/chromium/buildtools.git' + '@' + '98f00fa10dbad2cdbb2e297a66c3d6d5bc3994f3',
+    Var('chromium_git') + '/chromium/buildtools.git' + '@' + '5af0a3a8b89827a8634132080a39ab4b63dee489',
+
+  'testing':
+    Var('chromium_git') + '/chromium/src/testing' + '@' + '1a76f45641b0f67b7b1653e0c73d4d8ae8858b15',
 
   # Cherry is a dEQP management GUI written in Go. We use it for viewing test results.
   'third_party/cherry':
@@ -20,9 +26,6 @@ deps = {
 
   'third_party/googletest/src':
     Var('chromium_git') + '/external/github.com/google/googletest.git' + '@' + '7f8fefabedf2965980585be8c2bff97458f28e0b',
-
-  'third_party/gyp':
-    Var('chromium_git') + '/external/gyp' + '@' + 'c6f471687407bf28ddfc63f1a8f47aeb7bf54edc',
 
   'third_party/libpng':
     Var('android_git') + '/platform/external/libpng' + '@' + '094e181e79a3d6c23fd005679025058b7df1ad6c',
@@ -38,6 +41,13 @@ deps = {
 
   'third_party/zlib':
     Var('chromium_git') + '/chromium/src/third_party/zlib' + '@' + '24ab14872e8e068ba08cc31cc3d43bcc6d5cb832',
+
+  'tools/clang':
+      Var('chromium_git') + '/chromium/src/tools/clang.git' + '@' + '40f69660bf3cd407e72b8ae240fdd6c513dddbfe',
+
+  'tools/gyp':
+    Var('chromium_git') + '/external/gyp' + '@' + 'c6f471687407bf28ddfc63f1a8f47aeb7bf54edc',
+
 }
 
 hooks = [
@@ -108,6 +118,13 @@ hooks = [
                 '--bucket', 'chromium-gn',
                 '-s', 'buildtools/linux64/gn.sha1',
     ],
+  },
+  {
+    # Pull clang if needed or requested via GYP_DEFINES.
+    # Note: On Win, this should run after win_toolchain, as it may use it.
+    'name': 'clang',
+    'pattern': '.',
+    'action': ['python', 'tools/clang/scripts/update.py', '--if-needed'],
   },
   {
     # A change to a .gyp, .gypi, or to GYP itself should run the generator.
