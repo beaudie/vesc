@@ -1057,7 +1057,7 @@ bool ValidateES2TexImageParameters(Context *context,
 
     gl::Texture *texture =
         context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
-    if (!texture)
+    if (!texture || texture->id() == 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferNotBound);
         return false;
