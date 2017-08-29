@@ -1,0 +1,29 @@
+config("libpng_config") {
+  include_dirs = [ "." ]
+}
+
+static_library("libpng") {
+  sources = [
+    "png.c",
+    "pngerror.c",
+    "pngget.c",
+    "pngmem.c",
+    "pngpread.c",
+    "pngread.c",
+    "pngrio.c",
+    "pngrtran.c",
+    "pngrutil.c",
+    "pngset.c",
+    "pngtrans.c",
+    "pngwio.c",
+    "pngwrite.c",
+    "pngwtran.c",
+    "pngwutil.c",
+  ]
+  if (is_win) {
+    cflags = [ "/wd4028" ]
+  }
+  configs -= [ "//build/config/compiler:chromium_code" ]
+  public_configs = [ ":libpng_config" ]
+  deps = [ "//third_party/zlib:zlib" ]
+}

@@ -1,0 +1,221 @@
+# Copyright 2017 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build_overrides/build.gni")
+
+if (!build_with_chromium && is_clang) {
+  subtract_configs = [ "//build/config/clang:find_bad_constructs" ]
+} else {
+  subtract_configs = []
+}
+
+config("sample_util_config") {
+  include_dirs = [ "sample_util" ]
+}
+
+static_library("sample_util") {
+  sources = [
+    "sample_util/SampleApplication.cpp",
+    "sample_util/SampleApplication.h",
+    "sample_util/texture_utils.cpp",
+    "sample_util/texture_utils.h",
+    "sample_util/tga_utils.cpp",
+    "sample_util/tga_utils.h",
+  ]
+  deps = [ "//:angle_common",
+           "//:libEGL",
+           "//:libGLESv2",
+           "//:angle_util",
+         ]
+  configs -= subtract_configs
+  public_configs = [ ":sample_util_config" ]
+}
+
+executable("hello_triangle") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "hello_triangle/HelloTriangle.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("mip_map_2d") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "mip_map_2d/MipMap2D.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("multi_texture") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "multi_texture/MultiTexture.cpp" ]
+  configs -= subtract_configs
+  data = [
+    "multi_texture/basemap.tga",
+    "multi_texture/lightmap.tga",
+  ]
+}
+
+executable("multi_window") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "multi_window/MultiWindow.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("multiple_draw_buffers") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "multiple_draw_buffers/MultipleDrawBuffers.cpp" ]
+  configs -= subtract_configs
+  data = [
+    "multiple_draw_buffers/multiple_draw_buffers_copy_fs.glsl",
+    "multiple_draw_buffers/multiple_draw_buffers_fs.glsl",
+    "multiple_draw_buffers/multiple_draw_buffers_vs.glsl",
+  ]
+}
+
+executable("multiview") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "multiview/Multiview.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("particle_system") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "particle_system/ParticleSystem.cpp" ]
+  configs -= subtract_configs
+  data = [
+    "particle_system/smoke.tga",
+  ]
+}
+
+executable("post_sub_buffer") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "post_sub_buffer/PostSubBuffer.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("simple_instancing") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "simple_instancing/SimpleInstancing.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("simple_texture_2d") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "simple_texture_2d/SimpleTexture2D.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("simple_texture_cubemap") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "simple_texture_cubemap/SimpleTextureCubemap.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("simple_vertex_shader") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "simple_vertex_shader/SimpleVertexShader.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("stencil_operations") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "stencil_operations/StencilOperations.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("tex_redef_microbench") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "tex_redef_microbench/TexRedefMicroBench.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("texture_wrap") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "texture_wrap/TextureWrap.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("tri_fan_microbench") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "tri_fan_microbench/TriFanMicroBench.cpp" ]
+  configs -= subtract_configs
+}
+
+executable("WindowTest") {
+  deps = [
+    "//:angle_util",
+    ":sample_util",
+  ]
+  sources = [ "WindowTest/WindowTest.cpp" ]
+  configs -= subtract_configs
+}
+
+group("all") {
+  deps = [
+    ":sample_util",
+    ":hello_triangle",
+    ":mip_map_2d",
+    ":multi_texture",
+    ":multi_window",
+    ":multiple_draw_buffers",
+    ":multiview",
+    ":particle_system",
+    ":post_sub_buffer",
+    ":simple_instancing",
+    ":simple_texture_2d",
+    ":simple_texture_cubemap",
+    ":simple_vertex_shader",
+    ":stencil_operations",
+    ":tex_redef_microbench",
+    ":texture_wrap",
+    ":tri_fan_microbench",
+    ":WindowTest",
+  ]
+}
