@@ -23,6 +23,7 @@
 /src/tests/third_party/gles_conformance_tests
 /testing/gmock
 /testing/gtest
+/third_party/llvm-build/
 /third_party/cherry
 /third_party/deqp/src
 /third_party/glslang-angle/src
@@ -33,6 +34,8 @@
 /third_party/vulkan-validation-layers/src
 /third_party/zlib
 angle_internal
+base/
+build/
 buildtools/
 debug.txt
 Debug/
@@ -50,3 +53,4 @@ Release_ARM/
 Release_Win32/
 Release_x64/
 TestResults.qpa
+tools/clang/
