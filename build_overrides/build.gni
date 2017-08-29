@@ -1,0 +1,2 @@
+ignore_elf32_limitations = true
+linux_use_bundled_binutils_override = false
