@@ -311,11 +311,18 @@ TEST_P(RobustClientMemoryTest, TexImage2D)
     {
         return;
     }
-    GLTexture tex;
-    glBindTexture(GL_TEXTURE_2D, tex.get());
 
     GLsizei dataDimension = 1024;
     std::vector<GLubyte> rgbaData(dataDimension * dataDimension * 4);
+
+    // Test the non-bound texture.
+    glTexImage2DRobustANGLE(GL_TEXTURE_2D, 0, GL_RGBA, dataDimension, dataDimension, 0, GL_RGBA,
+                            GL_UNSIGNED_BYTE, static_cast<GLsizei>(rgbaData.size()),
+                            rgbaData.data());
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex.get());
 
     // Test the regular case
     glTexImage2DRobustANGLE(GL_TEXTURE_2D, 0, GL_RGBA, dataDimension, dataDimension, 0, GL_RGBA,
