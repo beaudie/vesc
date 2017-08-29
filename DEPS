@@ -5,14 +5,17 @@ vars = {
 
 deps = {
 
+  'base':
+    Var('chromium_git') + '/chromium/src/base' + '@' + '5ad241c42e02855451cf588e209f888c2007ac4a',
+
+  'build':
+      Var('chromium_git') + '/chromium/src/build.git' + '@' + '0e2dbe2870c3c336e85c4c2a4d4ab515dd079c92',
+
   'buildtools':
-    Var('chromium_git') + '/chromium/buildtools.git' + '@' + '98f00fa10dbad2cdbb2e297a66c3d6d5bc3994f3',
+    Var('chromium_git') + '/chromium/buildtools.git' + '@' + '5af0a3a8b89827a8634132080a39ab4b63dee489',
 
-  'testing/gmock':
-    Var('chromium_git') + '/external/googlemock.git' + '@' + '0421b6f358139f02e102c9c332ce19a33faf75be', # from svn revision 566
-
-  'testing/gtest':
-    Var('chromium_git') + '/external/github.com/google/googletest.git' + '@' + '6f8a66431cb592dad629028a50b3dd418a408c87',
+  'testing':
+    Var('chromium_git') + '/chromium/src/testing' + '@' + '1a76f45641b0f67b7b1653e0c73d4d8ae8858b15',
 
   # Cherry is a dEQP management GUI written in Go. We use it for viewing test results.
   'third_party/cherry':
@@ -23,6 +26,12 @@ deps = {
 
   'third_party/glslang-angle/src':
     Var('android_git') + '/platform/external/shaderc/glslang' + '@' + '1e275c8486325aaab34734ad9a650c0121c5efdb',
+
+  'third_party/googlemock':
+    Var('chromium_git') + '/external/googlemock.git' + '@' + '0421b6f358139f02e102c9c332ce19a33faf75be', # from svn revision 566
+
+  'third_party/googletest':
+    Var('chromium_git') + '/external/github.com/google/googletest.git' + '@' + '6f8a66431cb592dad629028a50b3dd418a408c87',
 
   'third_party/gyp':
     Var('chromium_git') + '/external/gyp' + '@' + 'c6f471687407bf28ddfc63f1a8f47aeb7bf54edc',
@@ -41,6 +50,10 @@ deps = {
 
   'third_party/zlib':
     Var('chromium_git') + '/chromium/src/third_party/zlib' + '@' + '24ab14872e8e068ba08cc31cc3d43bcc6d5cb832',
+
+  'tools/clang':
+      Var('chromium_git') + '/chromium/src/tools/clang.git' + '@' + '40f69660bf3cd407e72b8ae240fdd6c513dddbfe',
+
 }
 
 hooks = [
@@ -111,6 +124,13 @@ hooks = [
                 '--bucket', 'chromium-gn',
                 '-s', 'buildtools/linux64/gn.sha1',
     ],
+  },
+  {
+    # Pull clang if needed or requested via GYP_DEFINES.
+    # Note: On Win, this should run after win_toolchain, as it may use it.
+    'name': 'clang',
+    'pattern': '.',
+    'action': ['python', 'tools/clang/scripts/update.py', '--if-needed'],
   },
   {
     # A change to a .gyp, .gypi, or to GYP itself should run the generator.
