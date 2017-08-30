@@ -131,6 +131,8 @@
             'compiler/translator/SearchSymbol.h',
             'compiler/translator/SeparateDeclarations.cpp',
             'compiler/translator/SeparateDeclarations.h',
+            'compiler/translator/SetGeometryShaderInputArraySize.cpp',
+            'compiler/translator/SetGeometryShaderInputArraySize.h',
             'compiler/translator/Severity.h',
             'compiler/translator/ShaderLang.cpp',
             'compiler/translator/ShaderVars.cpp',

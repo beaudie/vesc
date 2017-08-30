@@ -347,6 +347,8 @@ class TType
         }
     }
 
+    void setArrayUnsized() { makeArray(0u); }
+
     // Will set unsized array sizes according to arraySizes. In case there are more unsized arrays
     // than there are sizes in arraySizes, defaults to setting array sizes to 1.
     void sizeUnsizedArrays(const TVector<unsigned int> &arraySizes);
