@@ -34,6 +34,7 @@
 #include "compiler/translator/RewriteDoWhile.h"
 #include "compiler/translator/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/SeparateDeclarations.h"
+#include "compiler/translator/SetGeometryShaderInputArraySize.h"
 #include "compiler/translator/SimplifyLoopConditions.h"
 #include "compiler/translator/SplitSequenceOperator.h"
 #include "compiler/translator/UnfoldShortCircuitAST.h"
@@ -369,6 +370,15 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
                 parseContext.getGeometryShaderOutputPrimitiveType();
             mGeometryShaderMaxVertices = parseContext.getGeometryShaderMaxVertices();
             mGeometryShaderInvocations = parseContext.getGeometryShaderInvocations();
+
+            // Assign size to unsized geometry shader input declarations when a valid geometry
+            // shader input primitive declaration is present.
+            if (parseContext.hasUnsizedInputArrayDeclaration() &&
+                mGeometryShaderInputPrimitiveType != EptUndefined)
+            {
+                SetGeometryShaderInputArraySize(root,
+                                                parseContext.getGeometryShaderInputArraySize());
+            }
         }
 
         // Disallow expressions deemed too complex.
@@ -409,7 +419,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         if (success && shaderVersion >= 310)
         {
-            success = ValidateVaryingLocations(root, &mDiagnostics);
+            success = ValidateVaryingLocations(root, &mDiagnostics, shaderType);
         }
 
         if (success && shaderVersion >= 300 && shaderType == GL_FRAGMENT_SHADER)
