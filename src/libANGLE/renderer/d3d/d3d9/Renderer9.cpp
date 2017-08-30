@@ -1854,8 +1854,8 @@ gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
         if (!targetUniform->dirty)
             continue;
 
-        GLfloat *f = (GLfloat *)targetUniform->data;
-        GLint *i   = (GLint *)targetUniform->data;
+        const GLfloat *f = reinterpret_cast<const GLfloat *>(targetUniform->firstNonNullData());
+        const GLint *i   = reinterpret_cast<const GLint *>(targetUniform->firstNonNullData());
 
         switch (targetUniform->type)
         {
