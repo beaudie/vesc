@@ -3375,6 +3375,93 @@ TEST_P(GLSLTest, StructWithSamplerArrayAsFunctionArg)
     EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::green);
 }
 
+// Test calling array length() with a this expression having side effects inside a loop condition.
+// The spec says that sequence operator operands need to run in sequence.
+TEST_P(GLSLTest_ES3, ArrayLengthOnExpressionWithSideEffectsInLoopCondition)
+{
+    const std::string &vertexShader =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "}\n";
+
+    // "a" gets doubled three times in the below program.
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform int u_zero;\n"
+        "int a;\n"
+        "int[2] doubleA()\n"
+        "{\n"
+        "    a *= 2;\n"
+        "    return int[2](a, a);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    a = u_zero + 1;\n"
+        "    for (int i = 0; i < doubleA().length(); ++i)"
+        "    {}\n"
+        "    if (a == 8)\n"
+        "    {\n"
+        "        my_FragColor = vec4(0, 1, 0, 1);\n"
+        "    }\n"
+        "    else\n"
+        "    {\n"
+        "        my_FragColor = vec4(1, 0, 0, 1);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    drawQuad(program.get(), "position", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test calling array length() with a this expression having side effects that interact with side
+// effects of another operand of the same sequence operator. The spec says that sequence operator
+// operands need to run in sequence.
+TEST_P(GLSLTest_ES3, ArrayLengthOnExpressionWithSideEffectsInSequence)
+{
+    const std::string &vertexShader =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "}\n";
+
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform int u_zero;\n"
+        "int a;\n"
+        "int[3] doubleA()\n"
+        "{\n"
+        "    a *= 2;\n"
+        "    return int[3](a, a, a);\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    a = u_zero;\n"
+        "    int b = (a++, doubleA().length());\n"
+        "    if (b == 3 && a == 2)\n"
+        "    {\n"
+        "        my_FragColor = vec4(0, 1, 0, 1);\n"
+        "    }\n"
+        "    else\n"
+        "    {\n"
+        "        my_FragColor = vec4(1, 0, 0, 1);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    drawQuad(program.get(), "position", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),

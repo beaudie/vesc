@@ -10,9 +10,13 @@
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
 #include "compiler/translator/ExtensionGLSL.h"
+#include "compiler/translator/IntermNodePatternMatcher.h"
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/RewriteTexelFetchOffset.h"
 #include "compiler/translator/RewriteUnaryMinusOperatorFloat.h"
+#include "compiler/translator/SeparateDeclarations.h"
+#include "compiler/translator/SimplifyLoopConditions.h"
+#include "compiler/translator/SplitSequenceOperator.h"
 #include "compiler/translator/VersionGLSL.h"
 
 namespace sh
