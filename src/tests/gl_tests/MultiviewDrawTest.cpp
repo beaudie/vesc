@@ -1832,18 +1832,33 @@ MultiviewTestParams SideBySideD3D11()
     return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, egl_platform::D3D11());
 }
 
+MultiviewTestParams LayeredD3D11()
+{
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, egl_platform::D3D11());
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewRenderTest, SideBySideOpenGL(), LayeredOpenGL(), SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewRenderTest,
+                       SideBySideOpenGL(),
+                       LayeredOpenGL(),
+                       SideBySideD3D11(),
+                       LayeredD3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewOcclusionQueryTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest, SideBySideOpenGL(), SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest,
+                       SideBySideOpenGL(),
+                       SideBySideD3D11(),
+                       LayeredD3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderPrimitiveTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());

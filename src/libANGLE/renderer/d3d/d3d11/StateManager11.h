@@ -229,6 +229,10 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncCurrentValueAttribs(const gl::State &state);
 
+    gl::Error syncMultiviewBaseViewLayerIndexUniform(
+        const gl::Program *program,
+        const gl::FramebufferState &drawFramebufferState);
+
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,
@@ -237,6 +241,7 @@ class StateManager11 final : angle::NonCopyable
         DIRTY_BIT_RASTERIZER_STATE,
         DIRTY_BIT_BLEND_STATE,
         DIRTY_BIT_DEPTH_STENCIL_STATE,
+        DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE,
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };

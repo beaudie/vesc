@@ -681,6 +681,11 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 if (mIsMultiviewEnabled)
                 {
                     handleMultiviewDrawFramebufferChange(context);
+                    const gl::Program *program = state.getProgram();
+                    if (program != nullptr && program->usesMultiview())
+                    {
+                        mInternalDirtyBits.set(DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE);
+                    }
                 }
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING:
@@ -691,18 +696,25 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 invalidateVertexBuffer();
                 invalidateRenderTarget(context);
                 gl::VertexArray *vao = state.getVertexArray();
-                if (mIsMultiviewEnabled && vao != nullptr)
+                if (mIsMultiviewEnabled)
                 {
-                    // If ANGLE_multiview is enabled, the attribute divisor has to be updated for
-                    // each binding.
-                    VertexArray11 *vao11       = GetImplAs<VertexArray11>(vao);
                     const gl::Program *program = state.getProgram();
-                    int numViews               = 1;
+                    if (vao != nullptr)
+                    {
+                        // If ANGLE_multiview is enabled, the attribute divisor has to be updated
+                        // for each binding.
+                        VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
+                        int numViews         = 1;
+                        if (program != nullptr && program->usesMultiview())
+                        {
+                            numViews = program->getNumViews();
+                        }
+                        vao11->markAllAttributeDivisorsForAdjustment(numViews);
+                    }
                     if (program != nullptr && program->usesMultiview())
                     {
-                        numViews = program->getNumViews();
+                        mInternalDirtyBits.set(DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE);
                     }
-                    vao11->markAllAttributeDivisorsForAdjustment(numViews);
                 }
             }
             break;
@@ -1609,6 +1621,11 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
             case DIRTY_BIT_DEPTH_STENCIL_STATE:
                 ANGLE_TRY(syncDepthStencilState(glState));
                 break;
+            case DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE:
+                ANGLE_TRY(syncMultiviewBaseViewLayerIndexUniform(
+                    glState.getProgram(),
+                    glState.getDrawFramebuffer()->getImplementation()->getState()));
+                break;
             default:
                 UNREACHABLE();
                 break;
@@ -2105,6 +2122,25 @@ gl::Error StateManager11::updateVertexOffsetsForPointSpritesEmulation(GLint star
 {
     return mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
         mRenderer, mCurrentAttributes, startVertex, emulatedInstanceId);
+}
+
+gl::Error StateManager11::syncMultiviewBaseViewLayerIndexUniform(
+    const gl::Program *program,
+    const gl::FramebufferState &drawFramebufferState)
+{
+
+    switch (drawFramebufferState.getMultiviewLayout())
+    {
+        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+            mRenderer->updateMultiviewConstantBufferData(-1);
+            break;
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            mRenderer->updateMultiviewConstantBufferData(drawFramebufferState.getBaseViewIndex());
+            break;
+        default:
+            break;
+    }
+    return gl::NoError();
 }
 
 }  // namespace rx

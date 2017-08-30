@@ -396,6 +396,11 @@ void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
                    << builtins.glViewportIndex.str() << ";\n";
     }
 
+    if (builtins.glLayer.enabled)
+    {
+        hlslStream << "    nointerpolation uint gl_Layer : " << builtins.glLayer.str() << ";\n";
+    }
+
     std::string varyingSemantic =
         GetVaryingSemantic(mRenderer->getMajorShaderModel(), programUsesPointSize);
 
@@ -909,6 +914,15 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
 
     const auto &vertexBuiltins = builtinsD3D[SHADER_VERTEX];
 
+    if (hasANGLEMultiviewEnabled)
+    {
+        preambleStream << "cbuffer MultiviewDriverConstants : register(b2)\n"
+                       << "{\n"
+                       << "    int multiviewBaseViewLayerIndex : packoffset(c0);\n"
+                       << "};\n"
+                       << "\n";
+    }
+
     preambleStream << "struct GS_INPUT\n";
     generateVaryingLinkHLSL(varyingPacking, vertexBuiltins, builtinsD3D.usesPointSize(),
                             preambleStream);
@@ -948,12 +962,21 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
                    << "#endif  // ANGLE_POINT_SPRITE_SHADER\n"
                    << "}\n";
 
-    if (builtinsD3D[SHADER_GEOMETRY].glViewportIndex.enabled && hasANGLEMultiviewEnabled)
+    if (hasANGLEMultiviewEnabled)
     {
+        ASSERT(builtinsD3D[SHADER_GEOMETRY].glViewportIndex.enabled &&
+               builtinsD3D[SHADER_GEOMETRY].glLayer.enabled);
         preambleStream << "\n"
                        << "void selectView(inout GS_OUTPUT output, GS_INPUT input)\n"
                        << "{\n"
-                       << "    output.gl_ViewportIndex = input.gl_ViewID_OVR;\n"
+                       << "    if (multiviewBaseViewLayerIndex < 0)\n"
+                       << "    {\n"
+                       << "        output.gl_ViewportIndex = input.gl_ViewID_OVR;\n"
+                       << "        output.gl_Layer = 0;\n"
+                       << "    } else {\n"
+                       << "        output.gl_ViewportIndex = 0;\n"
+                       << "        output.gl_Layer = input.gl_ViewID_OVR;\n"
+                       << "    }\n"
                        << "}\n";
     }
 
@@ -1319,6 +1342,7 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
     if (shaderType == SHADER_GEOMETRY && metadata.hasANGLEMultiviewEnabled())
     {
         builtins->glViewportIndex.enableSystem("SV_ViewportArrayIndex");
+        builtins->glLayer.enableSystem("SV_RenderTargetArrayIndex");
     }
 
     // Special case: do not include PSIZE semantic in HLSL 3 pixel shaders
