@@ -339,13 +339,15 @@ Varying::~Varying()
 }
 
 Varying::Varying(const Varying &other)
-    : ShaderVariable(other), interpolation(other.interpolation), isInvariant(other.isInvariant)
+    : VariableWithLocation(other),
+      interpolation(other.interpolation),
+      isInvariant(other.isInvariant)
 {
 }
 
 Varying &Varying::operator=(const Varying &other)
 {
-    ShaderVariable::operator=(other);
+    VariableWithLocation::operator=(other);
     interpolation           = other.interpolation;
     isInvariant             = other.isInvariant;
     return *this;
@@ -353,7 +355,7 @@ Varying &Varying::operator=(const Varying &other)
 
 bool Varying::operator==(const Varying &other) const
 {
-    return (ShaderVariable::operator==(other) && interpolation == other.interpolation &&
+    return (VariableWithLocation::operator==(other) && interpolation == other.interpolation &&
             isInvariant == other.isInvariant);
 }
 

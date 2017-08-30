@@ -32,6 +32,7 @@
 #include "compiler/translator/RewriteDoWhile.h"
 #include "compiler/translator/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/SeparateDeclarations.h"
+#include "compiler/translator/SetGeometryShaderInputArraySize.h"
 #include "compiler/translator/SimplifyLoopConditions.h"
 #include "compiler/translator/UnfoldShortCircuitAST.h"
 #include "compiler/translator/UseInterfaceBlockFields.h"
@@ -375,6 +376,13 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
                 parseContext.getGeometryShaderOutputPrimitiveType();
             mGeometryShaderMaxVertices = parseContext.getGeometryShaderMaxVertices();
             mGeometryShaderInvocations = parseContext.getGeometryShaderInvocations();
+
+            if (parseContext.hasUnsizedInputArrayDeclaration() &&
+                mGeometryShaderInputPrimitiveType != EptUndefined)
+            {
+                SetGeometryShaderInputArraySize(root,
+                                                parseContext.getGeometryShaderInputArraySize());
+            }
         }
 
         // Disallow expressions deemed too complex.
