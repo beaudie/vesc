@@ -610,6 +610,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
 
     Varying varying;
     setCommonVariableProperties(type, variable.getName(), &varying);
+    varying.location = variable.getType().getLayoutQualifier().location;
 
     switch (type.getQualifier())
     {
@@ -619,6 +620,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
         case EvqSmoothOut:
         case EvqFlatOut:
         case EvqCentroidOut:
+        case EvqGeometryOut:
             if (mSymbolTable->isVaryingInvariant(std::string(variable.getSymbol().c_str())) ||
                 type.isInvariant())
             {
