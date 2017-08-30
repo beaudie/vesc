@@ -95,7 +95,6 @@ bool CanSetDefaultPrecisionOnType(const TPublicType &type)
     return true;
 }
 
-// Map input primitive types to input array sizes in a geometry shader.
 GLuint GetGeometryShaderInputArraySize(TLayoutPrimitiveType primitiveType)
 {
     switch (primitiveType)
@@ -206,7 +205,8 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mGeometryShaderMaxVertices(-1),
       mMaxGeometryShaderInvocations(resources.MaxGeometryShaderInvocations),
       mMaxGeometryShaderMaxVertices(resources.MaxGeometryOutputVertices),
-      mGeometryShaderInputArraySize(0)
+      mGeometryShaderInputArraySize(0u),
+      mHasUnsizedInputDeclaration(false)
 {
     mComputeShaderLocalSize.fill(-1);
 }
@@ -475,6 +475,7 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
             break;
         case EvqFragmentIn:
         case EvqVertexIn:
+        case EvqGeometryIn:
         case EvqFlatIn:
         case EvqSmoothIn:
         case EvqCentroidIn:
@@ -1224,9 +1225,9 @@ void TParseContext::declarationQualifierErrorCheck(const sh::TQualifier qualifie
     }
 
     bool canHaveLocation = qualifier == EvqVertexIn || qualifier == EvqFragmentOut;
-    if (mShaderVersion >= 310 && qualifier == EvqUniform)
+    if (mShaderVersion >= 310)
     {
-        canHaveLocation = true;
+        canHaveLocation = canHaveLocation || qualifier == EvqUniform || IsVarying(qualifier);
         // We're not checking whether the uniform location is in range here since that depends on
         // the type of the variable.
         // The type can only be fully determined for non-empty declarations.
@@ -1271,6 +1272,7 @@ void TParseContext::emptyDeclarationErrorCheck(const TPublicType &publicType,
 void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                                                   const TSourceLoc &identifierLocation)
 {
+    // TODO(jiawei.shao@intel.com): implement OES_shader_io_blocks.
     switch (publicType.qualifier)
     {
         case EvqVaryingIn:
@@ -1279,6 +1281,8 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
         case EvqVertexIn:
         case EvqFragmentOut:
         case EvqComputeIn:
+        case EvqGeometryIn:
+        case EvqGeometryOut:
             if (publicType.getBasicType() == EbtStruct)
             {
                 error(identifierLocation, "cannot be used with a structure",
@@ -1810,8 +1814,8 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
         type.setQualifier(EvqConst);
         node = new TIntermConstantUnion(constArray, type);
     }
-    // TODO(jiawei.shao@intel.com): set array sizes for user-defined geometry shader inputs.
-    else if (variable->getType().getQualifier() == EvqPerVertexIn)
+    else if (variable->getType().getQualifier() == EvqPerVertexIn ||
+             IsGeometryShaderInput(mShaderType, variable->getType().getQualifier()))
     {
         TType type(variable->getType());
         type.setArraySize(0, mGeometryShaderInputArraySize);
@@ -2309,6 +2313,13 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         }
     }
 
+    if (IsGeometryShaderInput(mShaderType, type.getQualifier()))
+    {
+        error(identifierOrTypeLocation,
+              "Geometry shader input varying variable must be declared as an array",
+              identifier.c_str());
+    }
+
     declarationQualifierErrorCheck(publicType.qualifier, publicType.layoutQualifier,
                                    identifierOrTypeLocation);
 
@@ -2381,15 +2392,55 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publ
 
     TType arrayType(publicType);
 
-    unsigned int size = checkIsValidArraySize(identifierLocation, indexExpression);
-    // Make the type an array even if size check failed.
-    // This ensures useless error messages regarding the variable's non-arrayness won't follow.
-    arrayType.makeArray(size);
-
-    if (IsAtomicCounter(publicType.getBasicType()))
+    bool isGeometryShaderInput = IsGeometryShaderInput(mShaderType, publicType.qualifier);
+    if (indexExpression == nullptr)
     {
-        checkAtomicCounterOffsetIsNotOverlapped(publicType, kAtomicCounterArrayStride * size, false,
-                                                identifierLocation, arrayType);
+        if (!isGeometryShaderInput)
+        {
+            error(indexLocation, "Invalid unsized array declaration", "");
+            arrayType.setArraySize(0, 1u);
+        }
+
+        if (mGeometryShaderInputPrimitiveType != EptUndefined)
+        {
+            ASSERT(mGeometryShaderInputArraySize > 0u);
+            arrayType.makeArray(mGeometryShaderInputArraySize);
+        }
+        else
+        {
+            arrayType.setArrayUnsized();
+            mHasUnsizedInputDeclaration = true;
+        }
+    }
+    else
+    {
+        unsigned int size = checkIsValidArraySize(identifierLocation, indexExpression);
+        if (isGeometryShaderInput)
+        {
+            if (mGeometryShaderInputArraySize == 0u)
+            {
+                ASSERT(mGeometryShaderInputPrimitiveType == EptUndefined);
+                mGeometryShaderInputArraySize = size;
+            }
+            else if (mGeometryShaderInputArraySize != size)
+            {
+                error(identifierLocation,
+                      "input array sizes doesn't match eariler input primitive or input array size "
+                      "declarations.",
+                      "");
+                size = 1u;
+            }
+        }
+
+        // Make the type an array even if size check failed.
+        // This ensures useless error messages regarding the variable's non-arrayness won't follow.
+        arrayType.makeArray(size);
+
+        if (IsAtomicCounter(publicType.getBasicType()))
+        {
+            checkAtomicCounterOffsetIsNotOverlapped(publicType, kAtomicCounterArrayStride * size,
+                                                    false, identifierLocation, arrayType);
+        }
     }
 
     TVariable *variable = nullptr;
@@ -2746,13 +2797,18 @@ bool TParseContext::checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier 
     }
 }
 
-void TParseContext::setGeometryShaderInputArraySizes()
+void TParseContext::setGeometryShaderInputArraySizeByInputPrimitive(const TSourceLoc &line)
 {
-    // TODO(jiawei.shao@intel.com): check former input array sizes match the input primitive
-    // declaration.
-    ASSERT(mGeometryShaderInputArraySize == 0);
-    mGeometryShaderInputArraySize =
+    unsigned int inputArraySize =
         GetGeometryShaderInputArraySize(mGeometryShaderInputPrimitiveType);
+    if (mGeometryShaderInputArraySize == 0u)
+    {
+        mGeometryShaderInputArraySize = inputArraySize;
+    }
+    else if (mGeometryShaderInputArraySize != inputArraySize)
+    {
+        error(line, "primitive doesn't match the array size of earlier sized inputs.", "layout");
+    }
 }
 
 bool TParseContext::parseGeometryShaderInputLayoutQualifier(const TTypeQualifier &typeQualifier)
@@ -2780,7 +2836,7 @@ bool TParseContext::parseGeometryShaderInputLayoutQualifier(const TTypeQualifier
         if (mGeometryShaderInputPrimitiveType == EptUndefined)
         {
             mGeometryShaderInputPrimitiveType = layoutQualifier.primitiveType;
-            setGeometryShaderInputArraySizes();
+            setGeometryShaderInputArraySizeByInputPrimitive(typeQualifier.line);
         }
         else if (mGeometryShaderInputPrimitiveType != layoutQualifier.primitiveType)
         {
@@ -3767,7 +3823,8 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         return CreateZeroNode(TType(EbtFloat, EbpHigh, EvqConst));
     }
 
-    if (baseExpression->getQualifier() == EvqPerVertexIn)
+    if (baseExpression->getQualifier() == EvqPerVertexIn ||
+        IsGeometryShaderInput(mShaderType, baseExpression->getQualifier()))
     {
         ASSERT(mShaderType == GL_GEOMETRY_SHADER_OES);
         if (mGeometryShaderInputPrimitiveType == EptUndefined)
@@ -5464,10 +5521,21 @@ TIntermTyped *TParseContext::addMethod(TFunction *fnCall,
     {
         error(loc, "length can only be called on arrays", "length");
     }
-    else if (typedThis->getQualifier() == EvqPerVertexIn &&
-             mGeometryShaderInputPrimitiveType == EptUndefined)
+    else if (mGeometryShaderInputPrimitiveType == EptUndefined)
     {
-        error(loc, "missing input primitive declaration before calling length on gl_in", "length");
+        if (typedThis->getQualifier() == EvqPerVertexIn)
+        {
+            error(loc, "missing input primitive declaration before calling length on gl_in",
+                  "length");
+        }
+        else if (IsGeometryShaderInput(mShaderType, typedThis->getQualifier()) &&
+                 typedThis->getOutermostArraySize() == 0)
+        {
+            error(loc,
+                  "missing input primitive declaration before calling length on unsized geometry "
+                  "shader inputs",
+                  "length");
+        }
     }
     else if (typedThis->hasSideEffects())
     {
