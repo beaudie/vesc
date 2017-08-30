@@ -283,7 +283,6 @@ D3DUniform::D3DUniform(GLenum typeIn,
       vsData(nullptr),
       psData(nullptr),
       csData(nullptr),
-      dirty(false),
       vsRegisterIndex(GL_INVALID_INDEX),
       psRegisterIndex(GL_INVALID_INDEX),
       csRegisterIndex(GL_INVALID_INDEX),
@@ -576,7 +575,8 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
       mUsedPixelSamplerRange(0),
       mUsedComputeSamplerRange(0),
       mDirtySamplerMapping(true),
-      mSerial(issueSerial())
+      mSerial(issueSerial()),
+      mUniformsDirty(true)
 {
     mDynamicHLSL = new DynamicHLSL(renderer);
 }
@@ -710,9 +710,6 @@ void ProgramD3D::updateSamplerMapping()
     // Retrieve sampler uniform values
     for (const D3DUniform *d3dUniform : mD3DUniforms)
     {
-        if (!d3dUniform->dirty)
-            continue;
-
         if (!d3dUniform->isSampler())
             continue;
 
@@ -1784,17 +1781,11 @@ void ProgramD3D::initializeUniformStorage()
     }
 }
 
-gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
+gl::Error ProgramD3D::applyUniforms()
 {
     ASSERT(!mDirtySamplerMapping);
-
-    ANGLE_TRY(mRenderer->applyUniforms(*this, drawMode, mD3DUniforms));
-
-    for (D3DUniform *d3dUniform : mD3DUniforms)
-    {
-        d3dUniform->dirty = false;
-    }
-
+    ANGLE_TRY(mRenderer->applyUniforms(*this, mD3DUniforms));
+    mUniformsDirty = false;
     return gl::NoError();
 }
 
@@ -1802,12 +1793,7 @@ gl::Error ProgramD3D::applyComputeUniforms()
 {
     ASSERT(!mDirtySamplerMapping);
     ANGLE_TRY(mRenderer->applyComputeUniforms(*this, mD3DUniforms));
-
-    for (D3DUniform *d3dUniform : mD3DUniforms)
-    {
-        d3dUniform->dirty = false;
-    }
-
+    mUniformsDirty = false;
     return gl::NoError();
 }
 
@@ -1872,14 +1858,7 @@ gl::Error ProgramD3D::applyUniformBuffers(const gl::ContextState &data)
 
 void ProgramD3D::dirtyAllUniforms()
 {
-    for (D3DUniform *d3dUniform : mD3DUniforms)
-    {
-        // Built-in uniforms are not referenced by the shaders. This is only called in D3D9.
-        if (d3dUniform->isReferencedByVertexShader() || d3dUniform->isReferencedByFragmentShader())
-        {
-            d3dUniform->dirty = true;
-        }
-    }
+    mUniformsDirty = true;
 }
 
 void ProgramD3D::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
@@ -2222,7 +2201,6 @@ void ProgramD3D::setUniformImpl(const gl::VariableLocation &locationInfo,
             T *dest         = target + (i * 4);
             const T *source = v + (i * components);
             memcpy(dest, source, components * sizeof(T));
-            targetUniform->dirty = true;
         }
     }
     else if (targetUniform->type == targetBoolType)
@@ -2238,7 +2216,6 @@ void ProgramD3D::setUniformImpl(const gl::VariableLocation &locationInfo,
             {
                 dest[c] = (source[c] == static_cast<T>(0)) ? GL_FALSE : GL_TRUE;
             }
-            targetUniform->dirty = true;
         }
     }
     else
@@ -2254,12 +2231,13 @@ void ProgramD3D::setUniformInternal(GLint location,
     const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
     D3DUniform *targetUniform                = mD3DUniforms[locationInfo.index];
 
+    mUniformsDirty = true;
+
     if (!targetUniform->mSamplerData.empty())
     {
         ASSERT(targetUniformType == GL_INT);
         memcpy(&targetUniform->mSamplerData[locationInfo.element], v, count * sizeof(T));
         mDirtySamplerMapping = true;
-        targetUniform->dirty = true;
         return;
     }
 
@@ -2302,17 +2280,17 @@ void ProgramD3D::setUniformMatrixfvImpl(GLint location,
         // Internally store matrices as transposed versions to accomodate HLSL matrix indexing
         if (transpose == GL_FALSE)
         {
-            targetUniform->dirty =
-                TransposeExpandMatrix<GLfloat, cols, rows>(target, value) || targetUniform->dirty;
+            TransposeExpandMatrix<GLfloat, cols, rows>(target, value);
         }
         else
         {
-            targetUniform->dirty =
-                ExpandMatrix<GLfloat, cols, rows>(target, value) || targetUniform->dirty;
+            ExpandMatrix<GLfloat, cols, rows>(target, value);
         }
         target += targetMatrixStride;
         value += cols * rows;
     }
+
+    mUniformsDirty = true;
 }
 
 template <int cols, int rows>

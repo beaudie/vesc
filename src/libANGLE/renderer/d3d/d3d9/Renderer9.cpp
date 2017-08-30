@@ -1842,16 +1842,22 @@ gl::Error Renderer9::applyShaders(const gl::Context *context, GLenum drawMode)
         mAppliedProgramSerial = programSerial;
     }
 
-    return programD3D->applyUniforms(drawMode);
+    ANGLE_TRY(programD3D->applyUniforms());
+
+    // Driver uniforms
+    mStateManager.setShaderConstants();
+
+    return gl::NoError();
 }
 
 gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
-                                   GLenum /*drawMode*/,
                                    const std::vector<D3DUniform *> &uniformArray)
 {
     for (const D3DUniform *targetUniform : uniformArray)
     {
-        if (!targetUniform->dirty)
+        // Built-in uniforms must be skipped.
+        if (!targetUniform->isReferencedByFragmentShader() &&
+            !targetUniform->isReferencedByVertexShader())
             continue;
 
         const GLfloat *f = reinterpret_cast<const GLfloat *>(targetUniform->firstNonNullData());
@@ -1888,9 +1894,6 @@ gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
                 UNREACHABLE();
         }
     }
-
-    // Driver uniforms
-    mStateManager.setShaderConstants();
 
     return gl::NoError();
 }
