@@ -5012,3 +5012,20 @@ TEST_F(VertexShaderValidationTest, LocationConflictsOnStructElement)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Test that fragment shader cannot declare unsized inputs.
+TEST_F(FragmentShaderValidationTest, UnsizedInputs)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in float i_value[];\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
