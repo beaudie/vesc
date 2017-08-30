@@ -527,6 +527,105 @@ GLint GetOutputResourceProperty(const Program *program, GLuint index, const GLen
     }
 }
 
+GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum programInterface)
+{
+    switch (programInterface)
+    {
+        case GL_PROGRAM_INPUT:
+            return static_cast<GLint>(program->getAttributes().size());
+
+        case GL_PROGRAM_OUTPUT:
+            return static_cast<GLint>(program->getState().getOutputVariables().size());
+
+        case GL_UNIFORM:
+            return static_cast<GLint>(program->getState().getUniforms().size());
+
+        case GL_UNIFORM_BLOCK:
+            return static_cast<GLint>(program->getState().getUniformBlocks().size());
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
+        case GL_TRANSFORM_FEEDBACK_VARYING:
+        case GL_BUFFER_VARIABLE:
+        case GL_SHADER_STORAGE_BLOCK:
+        case GL_ATOMIC_COUNTER_BUFFER:
+            UNIMPLEMENTED();
+            return GL_INVALID_VALUE;
+
+        default:
+            UNREACHABLE();
+            return GL_INVALID_VALUE;
+    }
+}
+
+template <typename T, typename M>
+GLint FindMaxSize(const std::vector<T> &resources, M member)
+{
+    GLint max = 0;
+    for (const T &resource : resources)
+    {
+        max = std::max(max, static_cast<GLint>((resource.*member).size()));
+    }
+    return max;
+}
+
+GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programInterface)
+{
+    GLint maxNameLength;
+    switch (programInterface)
+    {
+        case GL_PROGRAM_INPUT:
+            maxNameLength = FindMaxSize(program->getAttributes(), &sh::Attribute::name);
+            break;
+
+        case GL_PROGRAM_OUTPUT:
+            maxNameLength =
+                FindMaxSize(program->getState().getOutputVariables(), &sh::OutputVariable::name);
+            break;
+
+        case GL_UNIFORM:
+            maxNameLength = FindMaxSize(program->getState().getUniforms(), &LinkedUniform::name);
+            break;
+
+        case GL_UNIFORM_BLOCK:
+            maxNameLength =
+                FindMaxSize(program->getState().getUniformBlocks(), &UniformBlock::name);
+            break;
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
+        case GL_TRANSFORM_FEEDBACK_VARYING:
+        case GL_BUFFER_VARIABLE:
+        case GL_SHADER_STORAGE_BLOCK:
+            UNIMPLEMENTED();
+            return 0;
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+    // This length includes an extra character for the null terminator.
+    return (maxNameLength == 0 ? 0 : maxNameLength + 1);
+}
+
+GLint QueryProgramInterfaceMaxNumActiveVariables(const Program *program, GLenum programInterface)
+{
+    switch (programInterface)
+    {
+        case GL_UNIFORM_BLOCK:
+            return FindMaxSize(program->getState().getUniformBlocks(),
+                               &UniformBlock::memberIndexes);
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
+        case GL_SHADER_STORAGE_BLOCK:
+        case GL_ATOMIC_COUNTER_BUFFER:
+            UNIMPLEMENTED();
+            return 0;
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 }  // anonymous namespace
 
 void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
@@ -1258,6 +1357,30 @@ void QueryProgramResourceiv(const Program *program,
                 UNREACHABLE();
                 params[i] = GL_INVALID_VALUE;
         }
+    }
+}
+
+void QueryProgramInterfaceiv(const Program *program,
+                             GLenum programInterface,
+                             GLenum pname,
+                             GLint *params)
+{
+    switch (pname)
+    {
+        case GL_ACTIVE_RESOURCES:
+            *params = QueryProgramInterfaceActiveResources(program, programInterface);
+            break;
+
+        case GL_MAX_NAME_LENGTH:
+            *params = QueryProgramInterfaceMaxNameLength(program, programInterface);
+            break;
+
+        case GL_MAX_NUM_ACTIVE_VARIABLES:
+            *params = QueryProgramInterfaceMaxNumActiveVariables(program, programInterface);
+            break;
+
+        default:
+            UNREACHABLE();
     }
 }
 
