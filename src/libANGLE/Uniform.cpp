@@ -14,7 +14,7 @@ namespace gl
 {
 
 LinkedUniform::LinkedUniform()
-    : bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
+    : bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo()), typeInfo(nullptr)
 {
 }
 
@@ -36,15 +36,18 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     binding   = bindingIn;
     offset    = offsetIn;
     location  = locationIn;
+
+    typeInfo = &GetUniformTypeInfo(type);
 }
 
 LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
     : sh::Uniform(uniform), bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
+    typeInfo = &GetUniformTypeInfo(type);
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
-    : sh::Uniform(uniform), bufferIndex(uniform.bufferIndex), blockInfo(uniform.blockInfo)
+    : sh::Uniform(uniform), bufferIndex(uniform.bufferIndex), blockInfo(uniform.blockInfo), typeInfo(uniform.typeInfo)
 {
 }
 
@@ -53,6 +56,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     sh::Uniform::operator=(uniform);
     bufferIndex          = uniform.bufferIndex;
     blockInfo            = uniform.blockInfo;
+    typeInfo             = uniform.typeInfo;
 
     return *this;
 }
@@ -68,12 +72,12 @@ bool LinkedUniform::isInDefaultBlock() const
 
 bool LinkedUniform::isSampler() const
 {
-    return IsSamplerType(type);
+    return typeInfo->isSampler;
 }
 
 bool LinkedUniform::isImage() const
 {
-    return IsImageType(type);
+    return typeInfo->isImageType;
 }
 
 bool LinkedUniform::isAtomicCounter() const
@@ -88,12 +92,12 @@ bool LinkedUniform::isField() const
 
 size_t LinkedUniform::getElementSize() const
 {
-    return VariableExternalSize(type);
+    return typeInfo->externalSize;
 }
 
 size_t LinkedUniform::getElementComponents() const
 {
-    return VariableComponentCount(type);
+    return typeInfo->componentCount;
 }
 
 ShaderVariableBuffer::ShaderVariableBuffer()
