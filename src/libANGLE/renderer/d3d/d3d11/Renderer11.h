@@ -458,6 +458,8 @@ class Renderer11 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    gl::Error updateMultiviewConstantBufferData(bool writeToViewportIndex);
+
   private:
     gl::Error drawArraysImpl(const gl::Context *context,
                              GLenum mode,
@@ -611,6 +613,12 @@ class Renderer11 : public RendererD3D
 
     mutable Optional<bool> mSupportsShareHandles;
     ResourceManager11 mResourceManager11;
+
+    // Constant buffer to store a boolean to select the multiview code path in the GS.
+    d3d11::Buffer mMultiviewConstantBuffer;
+    // If true, the code path which writes to the viewport index based on ViewID_OVR will be used.
+    // Otherwise, the code path which writes to the render target array index is used.
+    bool mWriteToViewportIndex;
 };
 
 }  // namespace rx

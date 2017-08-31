@@ -166,8 +166,8 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
         mUniformHLSL->reserveUniformRegisters(3);
     }
 
-    // Reserve registers for the default uniform block and driver constants
-    mUniformHLSL->reserveUniformBlockRegisters(2);
+    // Reserve registers for the default uniform block, driver constants and multi-view block.
+    mUniformHLSL->reserveUniformBlockRegisters(3);
 }
 
 OutputHLSL::~OutputHLSL()
