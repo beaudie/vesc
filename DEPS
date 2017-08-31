@@ -33,8 +33,16 @@ deps = {
   'third_party/gyp':
     Var('chromium_git') + '/external/gyp' + '@' + 'c6f471687407bf28ddfc63f1a8f47aeb7bf54edc',
 
+#XXX who wanted this?
+#  'third_party/icu':
+#    Var('chromium_git') + '/chromium/deps/icu.git' + '@' + '08cb956852a5ccdba7f9c941728bb833529ba3c6',
+
   'third_party/libpng':
     Var('android_git') + '/platform/external/libpng' + '@' + '094e181e79a3d6c23fd005679025058b7df1ad6c',
+
+  #XXX doesn't work
+  #'third_party/libxml':
+  #  Var('chromium_git') + '/chromium/src/third_party/libxml' + '@' + 'cc6c1eb1271f22d3d3aaef1d9ae0053dd22b3fa5',
 
   'third_party/spirv-headers/src':
     Var('android_git') + '/platform/external/shaderc/spirv-headers' + '@' + 'c470b68225a04965bf87d35e143ae92f831e8110',

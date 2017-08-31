@@ -4,7 +4,7 @@
 
 import("//testing/test.gni")
 import("//build/config/chromecast_build.gni")
-import("gni/angle.gni")
+import("//gni/angle.gni")
 
 unittests_gypi = exec_script("//build/gypi_to_gn.py",
                              [
@@ -13,6 +13,12 @@ unittests_gypi = exec_script("//build/gypi_to_gn.py",
                              ],
                              "scope",
                              [ "angle_unittests.gypi" ])
+
+if (build_with_chromium) {
+  floob = "//third_party/angle"
+} else {
+  floob = "//"
+}
 
 test("angle_unittests") {
   include_dirs = [
@@ -28,16 +34,20 @@ test("angle_unittests") {
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
-  sources += [ "//gpu/angle_unittest_main.cc" ]
+  if (build_with_chromium) {
+    sources += [ "//gpu/angle_unittest_main.cc" ]
+  } else {
+    sources += [ "angle_unittests_main.ccp" ]
+  }
 
   deps = [
-    "//base",
-    "//base/test:test_support",
-    "//testing/gmock",
-    "//testing/gtest",
-    "//third_party/angle:libANGLE",
-    "//third_party/angle:preprocessor",
-    "//third_party/angle:translator",
+    #"//base",
+    #"//base/test:test_support",
+    #"//testing/gmock",
+    #"//testing/gtest",
+    floob + ":libANGLE",
+    floob + ":preprocessor",
+    floob + ":translator",
   ]
 }
 
@@ -75,11 +85,15 @@ if (is_win || is_linux || is_mac || is_android) {
                              "../..")
     }
 
-    sources += [ "//gpu/angle_end2end_tests_main.cc" ]
+    if (build_with_chromium) {
+      sources += [ "//gpu/angle_end2end_tests_main.cc" ]
+    } else {
+      sources += [ "angle_end2end_tests_main.cpp" ]
+    }
 
     configs += [
-      "//third_party/angle:internal_config",
-      "//third_party/angle:libANGLE_config",
+      floob + ":internal_config",
+      floob + ":libANGLE_config",
     ]
 
     if (is_linux && !is_component_build) {
@@ -88,16 +102,16 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     deps = [
-      "//base",
-      "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
-      "//third_party/angle:angle_image_util",
-      "//third_party/angle:angle_util",
-      "//third_party/angle:libEGL",
-      "//third_party/angle:libGLESv2",
-      "//third_party/angle:preprocessor",
-      "//third_party/angle:translator",
+      #"//base",
+      #"//base/test:test_support",
+      #"//testing/gmock",
+      #"//testing/gtest",
+      floob + ":angle_image_util",
+      floob + ":angle_util",
+      floob + ":libEGL",
+      floob + ":libGLESv2",
+      floob + ":preprocessor",
+      floob + ":translator",
     ]
   }
 
@@ -131,24 +145,28 @@ if (is_win || is_linux || is_mac || is_android) {
 
     # Share the same main file as end2end_tests.
     # TODO(jmadill): Probably should rename this if we're sharing.
-    sources += [ "//gpu/angle_end2end_tests_main.cc" ]
+    if (build_with_chromium) {
+      sources += [ "//gpu/angle_end2end_tests_main.cc" ]
+    } else {
+      sources += [ "angle_end2end_tests_main.cpp" ]
+    }
 
     configs += [
-      "//third_party/angle:internal_config",
-      "//third_party/angle:libANGLE_config",
+      floob + ":internal_config",
+      floob + ":libANGLE_config",
     ]
 
     deps = [
-      "//base",
-      "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
-      "//third_party/angle:angle_util_static",
-      "//third_party/angle:libANGLE",
-      "//third_party/angle:libEGL_static",
-      "//third_party/angle:libGLESv2_static",
-      "//third_party/angle:preprocessor",
-      "//third_party/angle:translator",
+      #"//base",
+      #"//base/test:test_support",
+      #"//testing/gmock",
+      #"//testing/gtest",
+      floob + ":angle_util_static",
+      floob + ":libANGLE",
+      floob + ":libEGL_static",
+      floob + ":libGLESv2_static",
+      floob + ":preprocessor",
+      floob + ":translator",
     ]
   }
 }
@@ -176,22 +194,26 @@ if (is_win || is_linux) {
           rebase_path(perftests_gypi.angle_perf_tests_win_sources, ".", "../..")
     }
 
-    sources += [ "//gpu/angle_perftests_main.cc" ]
+    if (build_with_chromium) {
+      sources += [ "//gpu/angle_perftests_main.cc" ]
+    } else {
+      sources += [ "angle_perftests_main.cpp" ]
+    }
 
     configs += [
-      "//third_party/angle:internal_config",
-      "//third_party/angle:libANGLE_config",
+      floob + ":internal_config",
+      floob + ":libANGLE_config",
     ]
 
     deps = [
-      "//base",
-      "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
-      "//third_party/angle:angle_util_static",
-      "//third_party/angle:libANGLE",
-      "//third_party/angle:libEGL_static",
-      "//third_party/angle:libGLESv2_static",
+      #"//base",
+      #"//base/test:test_support",
+      #"//testing/gmock",
+      #"//testing/gtest",
+      floob + ":angle_util_static",
+      floob + ":libANGLE",
+      floob + ":libEGL_static",
+      floob + ":libGLESv2_static",
     ]
   }
 }
@@ -309,11 +331,11 @@ if (build_angle_deqp_tests) {
   source_set("angle_deqp_gtest_support") {
     testonly = true
     public_deps = [
-      "//base",
-      "//base/test:test_support",
+      #"//base",
+      #"//base/test:test_support",
       "//testing/gtest",
-      "//third_party/angle:angle_common",
-      "//third_party/angle:angle_util",
+      #"//third_party/angle:angle_common",
+      #"//third_party/angle:angle_util",
     ]
     public_configs = [ ":angle_deqp_gtest_support_config" ]
     sources = deqp_gypi.deqp_gpu_test_expectations_sources
