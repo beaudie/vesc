@@ -381,6 +381,9 @@ class StateManager11 final : angle::NonCopyable
     InputLayoutCache mInputLayoutCache;
     std::vector<const TranslatedAttribute *> mCurrentAttributes;
     Optional<GLint> mLastFirstVertex;
+    Optional<GLint> mLastInstanceCount;
+    Optional<GLint> mLastDrawMode;
+    Optional<GLint> mLastDrawCount;
 
     // ANGLE_multiview.
     bool mIsMultiviewEnabled;
