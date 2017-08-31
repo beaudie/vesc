@@ -1817,6 +1817,54 @@ TEST_P(MultiviewRenderTest, DivisorUpdatedOnProgramChange)
     }
 }
 
+// The test gl_ViewID_OVR is correctly propagated to the fragment shader.
+TEST_P(MultiviewRenderTest, SelectColorBasedOnViewIDOVR)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "layout(num_views = 3) in;\n"
+        "in vec3 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(vPosition, 1.);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    if (gl_ViewID_OVR == 0u) {\n"
+        "       col = vec4(1,0,0,1);\n"
+        "    } else if (gl_ViewID_OVR == 1u) {\n"
+        "       col = vec4(0,1,0,1);\n"
+        "    } else if (gl_ViewID_OVR == 2u) {\n"
+        "       col = vec4(0,0,1,1);\n"
+        "    } else {\n"
+        "       col = vec4(0,0,0,0);\n"
+        "    }\n"
+        "}\n";
+
+    createFBO(1, 1, 3);
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+    glUseProgram(program);
+
+    drawQuad(program, "vPosition", 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(GLColor::red, GetViewColor(0, 0, 0));
+    EXPECT_EQ(GLColor::green, GetViewColor(0, 0, 1));
+    EXPECT_EQ(GLColor::blue, GetViewColor(0, 0, 2));
+}
+
 MultiviewTestParams SideBySideOpenGL()
 {
     return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, egl_platform::OPENGL());
@@ -1832,18 +1880,33 @@ MultiviewTestParams SideBySideD3D11()
     return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, egl_platform::D3D11());
 }
 
+MultiviewTestParams LayeredD3D11()
+{
+    return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, egl_platform::D3D11());
+}
+
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewRenderTest, SideBySideOpenGL(), LayeredOpenGL(), SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewRenderTest,
+                       SideBySideOpenGL(),
+                       LayeredOpenGL(),
+                       SideBySideD3D11(),
+                       LayeredD3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewOcclusionQueryTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
-ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest, SideBySideOpenGL(), SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());
+ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest,
+                       SideBySideOpenGL(),
+                       SideBySideD3D11(),
+                       LayeredD3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderPrimitiveTest,
                        SideBySideOpenGL(),
                        LayeredOpenGL(),
-                       SideBySideD3D11());
+                       SideBySideD3D11(),
+                       LayeredD3D11());
