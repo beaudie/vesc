@@ -743,6 +743,7 @@ void StateManager11::handleMultiviewDrawFramebufferChange(const gl::Context *con
         mInternalDirtyBits.set(DIRTY_BIT_VIEWPORT_STATE);
         mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
     }
+    mInternalDirtyBits.set(DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE);
 }
 
 gl::Error StateManager11::syncBlendState(const gl::Context *context,
@@ -1609,6 +1610,10 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
             case DIRTY_BIT_DEPTH_STENCIL_STATE:
                 ANGLE_TRY(syncDepthStencilState(glState));
                 break;
+            case DIRTY_BIT_MULTIVIEW_BASE_VIEW_INDEX_STATE:
+                ANGLE_TRY(syncMultiviewBaseViewLayerIndexUniform(
+                    glState.getDrawFramebuffer()->getImplementation()->getState()));
+                break;
             default:
                 UNREACHABLE();
                 break;
@@ -2105,6 +2110,23 @@ gl::Error StateManager11::updateVertexOffsetsForPointSpritesEmulation(GLint star
 {
     return mInputLayoutCache.updateVertexOffsetsForPointSpritesEmulation(
         mRenderer, mCurrentAttributes, startVertex, emulatedInstanceId);
+}
+
+gl::Error StateManager11::syncMultiviewBaseViewLayerIndexUniform(
+    const gl::FramebufferState &drawFramebufferState)
+{
+    switch (drawFramebufferState.getMultiviewLayout())
+    {
+        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+            mRenderer->updateMultiviewConstantBufferData(-1);
+            break;
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            mRenderer->updateMultiviewConstantBufferData(0);
+            break;
+        default:
+            break;
+    }
+    return gl::NoError();
 }
 
 }  // namespace rx

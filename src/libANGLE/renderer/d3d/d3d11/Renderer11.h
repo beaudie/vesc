@@ -458,6 +458,8 @@ class Renderer11 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    gl::Error updateMultiviewConstantBufferData(int baseViewIndex);
+
   private:
     gl::Error drawArraysImpl(const gl::Context *context,
                              GLenum mode,
@@ -611,6 +613,10 @@ class Renderer11 : public RendererD3D
 
     mutable Optional<bool> mSupportsShareHandles;
     ResourceManager11 mResourceManager11;
+
+    // Constant buffer to store the base view index.
+    d3d11::Buffer mMultiviewConstantBuffer;
+    int mAppliedBaseViewIndex;
 };
 
 }  // namespace rx
