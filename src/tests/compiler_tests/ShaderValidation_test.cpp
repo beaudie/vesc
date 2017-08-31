@@ -4751,3 +4751,49 @@ TEST_F(FragmentShaderValidationTest, AssignValueToCentroidIn)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Test that using 'location' layout qualifier on vertex shader outputs is legal in GLSL ES 3.1
+// shaders.
+TEST_F(VertexShaderValidationTest, UseLocationOnVertexOut)
+{
+    std::array<std::string, 4> kInterpolationQualifiers = {{"", "flat", "smooth", "centroid"}};
+
+    for (const std::string &qualifier : kInterpolationQualifiers)
+    {
+        std::ostringstream stream;
+        stream << "#version 310 es\n"
+               << "layout (location = 1) " << qualifier << " out vec4 o_color;\n"
+               << "void main()\n"
+               << "{\n"
+               << "}\n";
+
+        if (!compile(stream.str()))
+        {
+            FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+        }
+    }
+}
+
+// Test that using 'location' layout qualifier on fragment shader inputs is legal in GLSL ES 3.1
+// shaders.
+TEST_F(FragmentShaderValidationTest, UseLocationOnFragmentIn)
+{
+    std::array<std::string, 4> kInterpolationQualifiers = {{"", "flat", "smooth", "centroid"}};
+
+    for (const std::string &qualifier : kInterpolationQualifiers)
+    {
+        std::ostringstream stream;
+        stream << "#version 310 es\n"
+               << "precision mediump float;\n"
+               << "layout (location = 1) " << qualifier << " in vec4 v_color;\n"
+               << "out vec4 o_color;\n"
+               << "void main()\n"
+               << "{\n"
+               << "}\n";
+
+        if (!compile(stream.str()))
+        {
+            FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+        }
+    }
+}
