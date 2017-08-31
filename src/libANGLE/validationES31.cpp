@@ -1244,6 +1244,8 @@ bool ValidateIsProgramPipeline(Context *context, GLuint pipeline)
         context->handleError(InvalidOperation() << "Context does not support GLES 3.1.");
         return false;
     }
+
+    return true;
 }
 
 }  // namespace gl
