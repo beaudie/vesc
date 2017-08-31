@@ -900,7 +900,7 @@ void TParseContext::checkLocationIsNotSpecified(const TSourceLoc &location,
         if (mShaderVersion >= 310)
         {
             errorMsg =
-                "invalid layout qualifier: only valid on program inputs, outputs, and uniforms";
+                "invalid layout qualifier: only valid on shader inputs, outputs, and uniforms";
         }
         error(location, errorMsg, "location");
     }
@@ -1224,12 +1224,21 @@ void TParseContext::declarationQualifierErrorCheck(const sh::TQualifier qualifie
     }
 
     bool canHaveLocation = qualifier == EvqVertexIn || qualifier == EvqFragmentOut;
-    if (mShaderVersion >= 310 && qualifier == EvqUniform)
+    if (mShaderVersion >= 310)
     {
-        canHaveLocation = true;
+        // [GLSL ES 3.1] Chapter 4.4.1 Page 53:
+        // All shaders except compute shaders allow input layout qualifiers on input variable
+        // declarations. The layout qualifier identifier for shader inputs is:
+        //   layout-qualifier-id:
+        //     location = integer-constant
+        // [GLSL ES 3.1] Chapter 4.4.2 Page 54:
+        // Vertex and fragment shaders allow location layout qualifiers on output variable
+        // declarations.
+        canHaveLocation = canHaveLocation || qualifier == EvqUniform || IsVaryingGLES3(qualifier);
         // We're not checking whether the uniform location is in range here since that depends on
         // the type of the variable.
         // The type can only be fully determined for non-empty declarations.
+        //
     }
     if (!canHaveLocation)
     {

@@ -36,8 +36,11 @@ bool strtof_clamp(const std::string &str, float *value);
 GLenum GLVariableType(const TType &type);
 GLenum GLVariablePrecision(const TType &type);
 bool IsVaryingIn(TQualifier qualifier);
+bool IsVaryingInGLES3(TQualifier qualifier);
 bool IsVaryingOut(TQualifier qualifier);
+bool IsVaryingOutGLES3(TQualifier qualifier);
 bool IsVarying(TQualifier qualifier);
+bool IsVaryingGLES3(TQualifier qualifier);
 InterpolationType GetInterpolationType(TQualifier qualifier);
 
 // Returns array brackets including size with outermost array size first, as specified in GLSL ES

@@ -447,11 +447,10 @@ TString ArrayString(const TType &type)
     return arrayString.str();
 }
 
-bool IsVaryingOut(TQualifier qualifier)
+bool IsVaryingOutGLES3(TQualifier qualifier)
 {
     switch (qualifier)
     {
-        case EvqVaryingOut:
         case EvqSmoothOut:
         case EvqFlatOut:
         case EvqCentroidOut:
@@ -459,17 +458,19 @@ bool IsVaryingOut(TQualifier qualifier)
             return true;
 
         default:
-            break;
+            return false;
     }
-
-    return false;
 }
 
-bool IsVaryingIn(TQualifier qualifier)
+bool IsVaryingOut(TQualifier qualifier)
+{
+    return IsVaryingOutGLES3(qualifier) || qualifier == EvqVaryingOut;
+}
+
+bool IsVaryingInGLES3(TQualifier qualifier)
 {
     switch (qualifier)
     {
-        case EvqVaryingIn:
         case EvqSmoothIn:
         case EvqFlatIn:
         case EvqCentroidIn:
@@ -477,15 +478,23 @@ bool IsVaryingIn(TQualifier qualifier)
             return true;
 
         default:
-            break;
+            return false;
     }
+}
 
-    return false;
+bool IsVaryingIn(TQualifier qualifier)
+{
+    return IsVaryingInGLES3(qualifier) || qualifier == EvqVaryingIn;
 }
 
 bool IsVarying(TQualifier qualifier)
 {
     return IsVaryingIn(qualifier) || IsVaryingOut(qualifier);
+}
+
+bool IsVaryingGLES3(TQualifier qualifier)
+{
+    return IsVaryingInGLES3(qualifier) || IsVaryingOutGLES3(qualifier);
 }
 
 InterpolationType GetInterpolationType(TQualifier qualifier)
