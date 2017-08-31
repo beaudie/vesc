@@ -32,7 +32,14 @@ struct dx_VertexConstants11
     float depthRange[4];
     float viewAdjust[4];
     float viewCoords[4];
-    float viewScale[4];
+    float viewScale[2];
+    // multiviewWriteToViewportIndex is used to select either the side-by-side or layered code-path
+    // in the GS. It's value, if set, is either 0.0f or 1.0f. The value is updated whenever a
+    // multi-view draw framebuffer is made active.
+    float multiviewWriteToViewportIndex;
+
+    // Added here to manually pad the struct.
+    float padding;
 };
 
 struct dx_PixelConstants11
@@ -40,7 +47,14 @@ struct dx_PixelConstants11
     float depthRange[4];
     float viewCoords[4];
     float depthFront[4];
-    float viewScale[4];
+    float viewScale[2];
+    // multiviewWriteToViewportIndex is used to select either the side-by-side or layered code-path
+    // in the GS. It's value, if set, is either 0.0f or 1.0f. The value is updated whenever a
+    // multi-view draw framebuffer is made active.
+    float multiviewWriteToViewportIndex;
+
+    // Added here to manually pad the struct.
+    float padding;
 };
 
 struct dx_ComputeConstants11
