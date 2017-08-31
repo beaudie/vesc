@@ -183,7 +183,7 @@ struct InterfaceBlockField : public ShaderVariable
     bool isRowMajorLayout;
 };
 
-struct Varying : public ShaderVariable
+struct Varying : public VariableWithLocation
 {
     Varying();
     ~Varying();
