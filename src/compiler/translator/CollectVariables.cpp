@@ -108,10 +108,8 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
 
   private:
-    std::string getMappedName(const TName &name) const;
-
     void setCommonVariableProperties(const TType &type,
-                                     const TName &name,
+                                     const TString &name,
                                      ShaderVariable *variableOut) const;
 
     Attribute recordAttribute(const TIntermSymbol &variable) const;
@@ -229,11 +227,6 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mShaderType(shaderType),
       mExtensionBehavior(extensionBehavior)
 {
-}
-
-std::string CollectVariablesTraverser::getMappedName(const TName &name) const
-{
-    return HashName(name, mHashFunction, nullptr).c_str();
 }
 
 void CollectVariablesTraverser::setBuiltInInfoFromSymbolTable(const char *name,
@@ -542,7 +535,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
 }
 
 void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
-                                                            const TName &name,
+                                                            const TString &name,
                                                             ShaderVariable *variableOut) const
 {
     ASSERT(variableOut);
@@ -567,12 +560,12 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
             // Regardless of the variable type (uniform, in/out etc.) its fields are always plain
             // ShaderVariable objects.
             ShaderVariable fieldVariable;
-            setCommonVariableProperties(*field->type(), TName(field->name()), &fieldVariable);
+            setCommonVariableProperties(*field->type(), field->name(), &fieldVariable);
             variableOut->fields.push_back(fieldVariable);
         }
     }
-    variableOut->name       = name.getString().c_str();
-    variableOut->mappedName = getMappedName(name);
+    variableOut->name       = name.c_str();
+    variableOut->mappedName = HashName(name, mHashFunction).c_str();
 
     // TODO(oetuaho@nvidia.com): Uniforms can be arrays of arrays, so this assert will need to be
     // removed.
@@ -586,7 +579,7 @@ Attribute CollectVariablesTraverser::recordAttribute(const TIntermSymbol &variab
     ASSERT(!type.getStruct());
 
     Attribute attribute;
-    setCommonVariableProperties(type, variable.getName(), &attribute);
+    setCommonVariableProperties(type, variable.getSymbol(), &attribute);
 
     attribute.location = type.getLayoutQualifier().location;
     return attribute;
@@ -598,7 +591,7 @@ OutputVariable CollectVariablesTraverser::recordOutputVariable(const TIntermSymb
     ASSERT(!type.getStruct());
 
     OutputVariable outputVariable;
-    setCommonVariableProperties(type, variable.getName(), &outputVariable);
+    setCommonVariableProperties(type, variable.getSymbol(), &outputVariable);
 
     outputVariable.location = type.getLayoutQualifier().location;
     return outputVariable;
@@ -609,7 +602,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
     const TType &type = variable.getType();
 
     Varying varying;
-    setCommonVariableProperties(type, variable.getName(), &varying);
+    setCommonVariableProperties(type, variable.getSymbol(), &varying);
 
     switch (type.getQualifier())
     {
@@ -644,7 +637,7 @@ void CollectVariablesTraverser::recordInterfaceBlock(const TType &interfaceBlock
     ASSERT(blockType);
 
     interfaceBlock->name       = blockType->name().c_str();
-    interfaceBlock->mappedName = getMappedName(TName(blockType->name()));
+    interfaceBlock->mappedName = HashName(blockType->name().c_str(), mHashFunction).c_str();
     interfaceBlock->instanceName =
         (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     ASSERT(!interfaceBlockType.isArrayOfArrays());  // Disallowed by GLSL ES 3.10 section 4.3.9
@@ -665,7 +658,7 @@ void CollectVariablesTraverser::recordInterfaceBlock(const TType &interfaceBlock
         const TType &fieldType = *field->type();
 
         InterfaceBlockField fieldVariable;
-        setCommonVariableProperties(fieldType, TName(field->name()), &fieldVariable);
+        setCommonVariableProperties(fieldType, field->name(), &fieldVariable);
         fieldVariable.isRowMajorLayout =
             (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
         interfaceBlock->fields.push_back(fieldVariable);
@@ -675,7 +668,7 @@ void CollectVariablesTraverser::recordInterfaceBlock(const TType &interfaceBlock
 Uniform CollectVariablesTraverser::recordUniform(const TIntermSymbol &variable) const
 {
     Uniform uniform;
-    setCommonVariableProperties(variable.getType(), variable.getName(), &uniform);
+    setCommonVariableProperties(variable.getType(), variable.getSymbol(), &uniform);
     uniform.binding  = variable.getType().getLayoutQualifier().binding;
     uniform.location = variable.getType().getLayoutQualifier().location;
     uniform.offset   = variable.getType().getLayoutQualifier().offset;

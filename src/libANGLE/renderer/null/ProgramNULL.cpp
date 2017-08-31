@@ -183,9 +183,7 @@ void ProgramNULL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint unifor
 {
 }
 
-bool ProgramNULL::getUniformBlockSize(const std::string &blockName,
-                                      const std::string &blockMappedName,
-                                      size_t *sizeOut) const
+bool ProgramNULL::getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const
 {
     // TODO(geofflang): Compute reasonable sizes?
     *sizeOut = 0;
@@ -193,7 +191,6 @@ bool ProgramNULL::getUniformBlockSize(const std::string &blockName,
 }
 
 bool ProgramNULL::getUniformBlockMemberInfo(const std::string &memberUniformName,
-                                            const std::string &memberUniformMappedName,
                                             sh::BlockMemberInfo *memberInfoOut) const
 {
     // TODO(geofflang): Compute reasonable values?

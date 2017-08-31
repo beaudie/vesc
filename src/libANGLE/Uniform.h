@@ -94,7 +94,6 @@ struct UniformBlock : public ShaderVariableBuffer
 {
     UniformBlock();
     UniformBlock(const std::string &nameIn,
-                 const std::string &mappedNameIn,
                  bool isArrayIn,
                  unsigned int arrayElementIn,
                  int bindingIn);
@@ -102,10 +101,8 @@ struct UniformBlock : public ShaderVariableBuffer
     UniformBlock &operator=(const UniformBlock &other) = default;
 
     std::string nameWithArrayIndex() const;
-    std::string mappedNameWithArrayIndex() const;
 
     std::string name;
-    std::string mappedName;
     bool isArray;
     unsigned int arrayElement;
 };

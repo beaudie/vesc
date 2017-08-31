@@ -453,8 +453,8 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
 {
     int location                          = uniform.location;
     ShaderUniformCount shaderUniformCount = flattenUniformImpl(
-        uniform, uniform.name, uniform.mappedName, samplerUniforms, imageUniforms,
-        atomicCounterUniforms, uniform.staticUse, uniform.binding, uniform.offset, &location);
+        uniform, uniform.name, samplerUniforms, imageUniforms, atomicCounterUniforms,
+        uniform.staticUse, uniform.binding, uniform.offset, &location);
     if (uniform.staticUse)
     {
         return shaderUniformCount;
@@ -465,7 +465,6 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
 UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     const sh::ShaderVariable &uniform,
     const std::string &fullName,
-    const std::string &fullMappedName,
     std::vector<LinkedUniform> *samplerUniforms,
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
@@ -487,12 +486,10 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
             {
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
-                const std::string &fieldFullMappedName =
-                    (fullMappedName + elementString + "." + field.mappedName);
 
-                shaderUniformCount += flattenUniformImpl(
-                    field, fieldFullName, fieldFullMappedName, samplerUniforms, imageUniforms,
-                    atomicCounterUniforms, markStaticUse, -1, -1, location);
+                shaderUniformCount +=
+                    flattenUniformImpl(field, fieldFullName, samplerUniforms, imageUniforms,
+                                       atomicCounterUniforms, markStaticUse, -1, -1, location);
             }
         }
 
@@ -541,7 +538,6 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
                                     binding, -1, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
-        linkedUniform.mappedName = fullMappedName;
         linkedUniform.staticUse = markStaticUse;
 
         uniformList->push_back(linkedUniform);
