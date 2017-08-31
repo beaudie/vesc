@@ -777,9 +777,14 @@ executable("angle_shader_translator") {
   ]
 }
 
-#TODO, doesn't work yet
-#group("all") {
-#  deps = [
-#    "//src/tests:angle_end2end_tests",
-#  ]
-#}
+# TODO, doesn't work yet
+group("all") {
+  testonly = true
+  deps = [
+    "//src/tests:angle_unittests",
+    "//src/tests:angle_end2end_tests",
+    "//src/tests:angle_white_box_tests",
+    "//src/tests:angle_perftests",
+    #WIP "//src/tests:angle_deqp_gles2_tests",
+  ]
+}
