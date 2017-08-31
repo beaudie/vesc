@@ -38,6 +38,7 @@
 #include "compiler/translator/ValidateLimitations.h"
 #include "compiler/translator/ValidateMaxParameters.h"
 #include "compiler/translator/ValidateOutputs.h"
+#include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/VariablePacker.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
@@ -394,6 +395,11 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success)
             PruneEmptyDeclarations(root);
 
+        if (success && shaderVersion >= 310)
+        {
+            success = ValidateVaryingLocations(root, &mDiagnostics);
+        }
+
         if (success && shaderVersion >= 300 && shaderType == GL_FRAGMENT_SHADER)
         {
             success = ValidateOutputs(root, getExtensionBehavior(), compileResources.MaxDrawBuffers,
@@ -589,8 +595,8 @@ bool TCompiler::compile(const char *const shaderStrings[],
         if (compileOptions & SH_INTERMEDIATE_TREE)
             OutputTree(root, infoSink.info);
 
-        if (compileOptions & SH_OBJECT_CODE)
-            translate(root, compileOptions);
+        // if (compileOptions & SH_OBJECT_CODE)
+        translate(root, compileOptions);
 
         // The IntermNode tree doesn't need to be deleted here, since the
         // memory will be freed in a big chunk by the PoolAllocator.
