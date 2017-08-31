@@ -2388,6 +2388,7 @@ void Renderer11::releaseDeviceResources()
     mDriverConstantBufferVS.reset();
     mDriverConstantBufferPS.reset();
     mDriverConstantBufferCS.reset();
+    mMultiviewConstantBuffer.reset();
     mSyncQuery.reset();
 }
 
@@ -4525,6 +4526,50 @@ gl::Error Renderer11::clearRenderTarget(RenderTargetD3D *renderTarget,
 
     mDeviceContext->ClearRenderTargetView(rtv.get(), &clearColorValue.red);
 
+    return gl::NoError();
+}
+
+gl::Error Renderer11::updateMultiviewConstantBufferData(int baseViewIndex)
+{
+    const UINT kMultiviewCBufferSizeInBytes = 16u;
+    const int bufferData[4]                 = {baseViewIndex, 0, 0, 0};
+
+    if (!mMultiviewConstantBuffer.valid())
+    {
+        D3D11_BUFFER_DESC bufferDesc;
+        bufferDesc.ByteWidth           = kMultiviewCBufferSizeInBytes;
+        bufferDesc.Usage               = D3D11_USAGE_DYNAMIC;
+        bufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+        bufferDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+        bufferDesc.MiscFlags           = 0;
+        bufferDesc.StructureByteStride = 0;
+
+        D3D11_SUBRESOURCE_DATA initialData;
+        initialData.pSysMem          = bufferData;
+        initialData.SysMemPitch      = 0;
+        initialData.SysMemSlicePitch = 0;
+
+        ANGLE_TRY(allocateResource(bufferDesc, &initialData, &mMultiviewConstantBuffer));
+        mMultiviewConstantBuffer.setDebugName("Multiview Constant Buffer");
+
+        ID3D11Buffer *buffer = mMultiviewConstantBuffer.get();
+        mDeviceContext->GSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_MULTIVIEW_DRIVER,
+                                             1, &buffer);
+    }
+    else if (mAppliedBaseViewIndex != baseViewIndex)
+    {
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        HRESULT result = mDeviceContext->Map(mMultiviewConstantBuffer.get(), 0,
+                                             D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        if (FAILED(result))
+        {
+            return gl::OutOfMemory()
+                   << "StateManager11: Failed to map multiview CB, " << gl::FmtHR(result);
+        }
+        memcpy(mappedResource.pData, bufferData, kMultiviewCBufferSizeInBytes);
+        mDeviceContext->Unmap(mMultiviewConstantBuffer.get(), 0);
+    }
+    mAppliedBaseViewIndex = baseViewIndex;
     return gl::NoError();
 }
 
