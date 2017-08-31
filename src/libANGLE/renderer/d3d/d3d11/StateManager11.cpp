@@ -1144,6 +1144,9 @@ void StateManager11::invalidateEverything(const gl::Context *context)
     mAppliedIBOffset = 0;
 
     mLastFirstVertex.reset();
+    mLastInstanceCount.reset();
+    mLastDrawMode.reset();
+    mLastDrawCount.reset();
 }
 
 void StateManager11::invalidateVertexBuffer()
@@ -1983,9 +1986,14 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
         indexInfo->srcIndexData.srcIndicesChanged = mAppliedIBChanged;
     }
 
-    if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != first)
+    if (mLastFirstVertex != first || mLastInstanceCount != instances || mLastDrawMode != mode ||
+        mLastDrawCount != count)
+        ;
     {
         mLastFirstVertex    = first;
+        mLastInstanceCount  = instances;
+        mLastDrawMode       = mode;
+        mLastDrawCount      = count;
         mInputLayoutIsDirty = true;
     }
 
