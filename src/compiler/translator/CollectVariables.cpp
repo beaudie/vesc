@@ -610,6 +610,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
 
     Varying varying;
     setCommonVariableProperties(type, variable.getName(), &varying);
+    varying.location = type.getLayoutQualifier().location;
 
     switch (type.getQualifier())
     {
