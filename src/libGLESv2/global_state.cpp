@@ -37,41 +37,24 @@ namespace egl
 namespace
 {
 
-static TLSIndex threadTLS = TLS_INVALID_INDEX;
+Thread* currentThread = nullptr;
 
 Thread *AllocateCurrentThread()
 {
-    ASSERT(threadTLS != TLS_INVALID_INDEX);
-    if (threadTLS == TLS_INVALID_INDEX)
-    {
-        return nullptr;
+    if (currentThread == nullptr) {
+        currentThread = new Thread();
     }
-
-    Thread *thread = new Thread();
-    if (!SetTLSValue(threadTLS, thread))
-    {
-        ERR() << "Could not set thread local storage.";
-        return nullptr;
-    }
-
-    return thread;
+    return currentThread;
 }
 
 }  // anonymous namespace
 
 Thread *GetCurrentThread()
 {
-    // Create a TLS index if one has not been created for this DLL
-    if (threadTLS == TLS_INVALID_INDEX)
-    {
-        threadTLS = CreateTLSIndex();
+    if (currentThread == nullptr) {
+        currentThread = new Thread();
     }
-
-    Thread *current = static_cast<Thread *>(GetTLSValue(threadTLS));
-
-    // ANGLE issue 488: when the dll is loaded after thread initialization,
-    // thread local storage (current) might not exist yet.
-    return (current ? current : AllocateCurrentThread());
+    return currentThread;
 }
 
 }  // namespace egl
@@ -85,40 +68,18 @@ namespace
 
 bool DeallocateCurrentThread()
 {
-    Thread *thread = static_cast<Thread *>(GetTLSValue(threadTLS));
-    SafeDelete(thread);
-    return SetTLSValue(threadTLS, nullptr);
+    SafeDelete(currentThread);
+    return true;
 }
 
 bool InitializeProcess()
 {
-    threadTLS = CreateTLSIndex();
-    if (threadTLS == TLS_INVALID_INDEX)
-    {
-        return false;
-    }
-
-    return AllocateCurrentThread() != nullptr;
+    return true;
 }
 
 bool TerminateProcess()
 {
-    if (!DeallocateCurrentThread())
-    {
-        return false;
-    }
-
-    if (threadTLS != TLS_INVALID_INDEX)
-    {
-        TLSIndex tlsCopy = threadTLS;
-        threadTLS        = TLS_INVALID_INDEX;
-
-        if (!DestroyTLSIndex(tlsCopy))
-        {
-            return false;
-        }
-    }
-
+    SafeDelete(currentThread)
     return true;
 }
 
