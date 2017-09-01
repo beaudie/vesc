@@ -2965,15 +2965,13 @@ void Program::updateSamplerUniform(const VariableLocation &locationInfo,
                                    const GLint *v)
 {
     // Invalidate the validation cache only if we modify the sampler data.
-    if (mState.isSamplerUniformIndex(locationInfo.index))
-    {
-        GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(locationInfo.index);
-        std::vector<GLuint> *boundTextureUnits =
-            &mState.mSamplerBindings[samplerIndex].boundTextureUnits;
+    ASSERT(mState.isSamplerUniformIndex(locationInfo.index));
+    GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(locationInfo.index);
+    std::vector<GLuint> *boundTextureUnits =
+        &mState.mSamplerBindings[samplerIndex].boundTextureUnits;
 
-        std::copy(v, v + clampedCount, boundTextureUnits->begin() + locationInfo.element);
-        mCachedValidateSamplersResult.reset();
-    }
+    std::copy(v, v + clampedCount, boundTextureUnits->begin() + locationInfo.element);
+    mCachedValidateSamplersResult.reset();
 }
 
 template <typename T>

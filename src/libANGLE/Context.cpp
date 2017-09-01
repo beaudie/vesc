@@ -1728,24 +1728,28 @@ void Context::texParameterf(GLenum target, GLenum pname, GLfloat param)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameterf(this, texture, pname, param);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameterfv(GLenum target, GLenum pname, const GLfloat *params)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameterfv(this, texture, pname, params);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameteri(GLenum target, GLenum pname, GLint param)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameteri(this, texture, pname, param);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameteriv(this, texture, pname, params);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
@@ -3337,6 +3341,9 @@ void Context::generateMipmap(GLenum target)
 {
     Texture *texture = getTargetTexture(target);
     handleError(texture->generateMipmap(this));
+
+    // Mark the texture object as dirty - it could have a changed completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::copyTextureCHROMIUM(GLuint sourceId,
@@ -3467,6 +3474,9 @@ void Context::syncStateForReadPixels()
 void Context::syncStateForTexImage()
 {
     syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
+
+    // Mark the texture object as dirty - texImage calls can change texture completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::syncStateForClear()

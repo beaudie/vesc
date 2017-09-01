@@ -13,10 +13,11 @@
 #include <map>
 
 #include "angle_gl.h"
+#include "common/Optional.h"
 #include "common/debug.h"
 #include "libANGLE/Caps.h"
-#include "libANGLE/Debug.h"
 #include "libANGLE/Constants.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Image.h"
@@ -41,6 +42,7 @@ namespace gl
 {
 class ContextState;
 class Framebuffer;
+class Sampler;
 class Texture;
 
 bool IsMipmapFiltered(const SamplerState &samplerState);
@@ -98,7 +100,7 @@ struct TextureState final : private angle::NonCopyable
     void setMaxLevel(GLuint maxLevel);
 
     bool isCubeComplete() const;
-    bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
+    bool getCachedCompleteness() const;
 
     void invalidateCompletenessCache() const;
 
@@ -156,22 +158,7 @@ struct TextureState final : private angle::NonCopyable
 
     std::vector<ImageDesc> mImageDescs;
 
-    struct SamplerCompletenessCache
-    {
-        SamplerCompletenessCache();
-
-        // Context used to generate this cache entry
-        ContextID context;
-
-        // All values that affect sampler completeness that are not stored within
-        // the texture itself
-        SamplerState samplerState;
-
-        // Result of the sampler completeness with the above parameters
-        bool samplerComplete;
-    };
-
-    mutable SamplerCompletenessCache mCompletenessCache;
+    mutable Optional<bool> mCompletenessCache;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -255,6 +242,7 @@ class Texture final : public egl::ImageSibling,
     GLenum getUsage() const;
 
     const TextureState &getTextureState() const;
+    bool getCachedCompleteness() const;
 
     size_t getWidth(GLenum target, size_t level) const;
     size_t getHeight(GLenum target, size_t level) const;
@@ -359,6 +347,13 @@ class Texture final : public egl::ImageSibling,
     egl::Stream *getBoundStream() const;
 
     void invalidateCompletenessCache() const;
+
+    enum class Completeness
+    {
+        CHANGED,
+        UNCHANGED,
+    };
+    Completeness updateCompleteness(const Context *context, const Sampler *optionalSampler);
 
     rx::TextureImpl *getImplementation() const { return mTexture; }
 
