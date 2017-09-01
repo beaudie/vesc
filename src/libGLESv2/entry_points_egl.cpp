@@ -794,6 +794,9 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
             thread->setError(error);
             return EGL_FALSE;
         }
+
+        // Notify the context of a texture change.
+        context->onTextureChange(textureObject);
     }
 
     thread->setError(NoError());
@@ -865,12 +868,17 @@ EGLBoolean EGLAPIENTRY ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLin
 
     if (texture)
     {
-        error = eglSurface->releaseTexImage(thread->getContext(), buffer);
+        gl::Context *context = thread->getContext();
+
+        error = eglSurface->releaseTexImage(context, buffer);
         if (error.isError())
         {
             thread->setError(error);
             return EGL_FALSE;
         }
+
+        // Notify the context of a texture change.
+        context->onTextureChange(texture);
     }
 
     thread->setError(NoError());
