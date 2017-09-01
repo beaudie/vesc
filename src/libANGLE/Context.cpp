@@ -4119,6 +4119,8 @@ void Context::texStorage2DMultisample(GLenum target,
                                       GLsizei height,
                                       GLboolean fixedsamplelocations)
 {
+    // FIXME: should mark texture object as dirty.
+
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorageMultisample(this, target, samples, internalformat, size,
@@ -4220,6 +4222,8 @@ void Context::texStorage2D(GLenum target,
                            GLsizei width,
                            GLsizei height)
 {
+    // FIXME: should mark texture object as dirty.
+
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorage(this, target, levels, internalFormat, size));
@@ -4232,6 +4236,8 @@ void Context::texStorage3D(GLenum target,
                            GLsizei height,
                            GLsizei depth)
 {
+    // FIXME: should mark texture object as dirty.
+
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorage(this, target, levels, internalFormat, size));
