@@ -2360,6 +2360,7 @@ void Context::samplerParameteri(GLuint sampler, GLenum pname, GLint param)
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameteri(samplerObject, pname, param);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::samplerParameteriv(GLuint sampler, GLenum pname, const GLint *param)
@@ -2367,6 +2368,7 @@ void Context::samplerParameteriv(GLuint sampler, GLenum pname, const GLint *para
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameteriv(samplerObject, pname, param);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::samplerParameterf(GLuint sampler, GLenum pname, GLfloat param)
@@ -2374,6 +2376,7 @@ void Context::samplerParameterf(GLuint sampler, GLenum pname, GLfloat param)
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterf(samplerObject, pname, param);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::samplerParameterfv(GLuint sampler, GLenum pname, const GLfloat *param)
@@ -2381,6 +2384,7 @@ void Context::samplerParameterfv(GLuint sampler, GLenum pname, const GLfloat *pa
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterfv(samplerObject, pname, param);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params)
@@ -2388,6 +2392,7 @@ void Context::getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params)
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameteriv(samplerObject, pname, params);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *params)
@@ -2395,6 +2400,7 @@ void Context::getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *param
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterfv(samplerObject, pname, params);
+    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::programParameteri(GLuint program, GLenum pname, GLint value)
