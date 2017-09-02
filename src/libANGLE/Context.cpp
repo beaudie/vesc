@@ -5282,4 +5282,11 @@ void Context::getInternalformativ(GLenum target,
     QueryInternalFormativ(formatCaps, pname, bufSize, params);
 }
 
+void Context::onTextureChange(const Texture *texture)
+{
+    // Conservatively assume the whole state is dirty.
+    // TODO(jmadill): More fine-grained update.
+    mGLState.setObjectDirty(GL_TEXTURE);
+}
+
 }  // namespace gl
