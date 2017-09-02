@@ -700,11 +700,11 @@ GLuint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
     }
 }
 
-void ProgramD3D::updateSamplerMapping()
+ProgramD3D::SamplerMapping ProgramD3D::updateSamplerMapping()
 {
     if (!mDirtySamplerMapping)
     {
-        return;
+        return SamplerMapping::WasClean;
     }
 
     mDirtySamplerMapping = false;
@@ -765,6 +765,8 @@ void ProgramD3D::updateSamplerMapping()
             }
         }
     }
+
+    return SamplerMapping::WasDirty;
 }
 
 gl::LinkResult ProgramD3D::load(const gl::Context *context,
