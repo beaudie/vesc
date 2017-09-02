@@ -1585,9 +1585,6 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     }
 
     // TODO(jmadill): Use dirty bits.
-    ANGLE_TRY(generateSwizzles(context));
-
-    // TODO(jmadill): Use dirty bits.
     ANGLE_TRY(syncProgram(context, drawMode));
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
@@ -1642,6 +1639,8 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
                 ANGLE_TRY(syncDepthStencilState(glState));
                 break;
             case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
+                // TODO(jmadill): More fine-grained update.
+                ANGLE_TRY(generateSwizzles(context));
                 ANGLE_TRY(syncTextures(context));
                 break;
             default:
