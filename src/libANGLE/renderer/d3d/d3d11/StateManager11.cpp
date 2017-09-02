@@ -1584,8 +1584,11 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
         invalidateTexturesAndSamplers();
     }
 
-    // TODO(jmadill): Use dirty bits.
-    ANGLE_TRY(generateSwizzles(context));
+    // Swizzling can cause internal state changes with blit shaders.
+    if (mInternalDirtyBits[DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE])
+    {
+        ANGLE_TRY(generateSwizzles(context));
+    }
 
     // TODO(jmadill): Use dirty bits.
     ANGLE_TRY(syncProgram(context, drawMode));
@@ -1642,6 +1645,7 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
                 ANGLE_TRY(syncDepthStencilState(glState));
                 break;
             case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
+                // TODO(jmadill): More fine-grained update.
                 ANGLE_TRY(syncTextures(context));
                 break;
             default:
