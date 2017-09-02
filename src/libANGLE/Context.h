@@ -873,6 +873,8 @@ class Context final : public ValidationContext
                              GLsizei bufSize,
                              GLint *params);
 
+    void programUniform1iv(GLuint program, GLint location, GLsizei count, const GLint *value);
+
     // Returns the error.
     Error handleError(const Error &error) override;
 
@@ -931,7 +933,7 @@ class Context final : public ValidationContext
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();
-    void syncStateForTexImage();
+    void prepareForTexImage();
     void syncStateForClear();
     void syncStateForBlit();
     VertexArray *checkVertexArrayAllocation(GLuint vertexArrayHandle);

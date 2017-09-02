@@ -197,23 +197,14 @@ bool TextureState::isCubeComplete() const
     return true;
 }
 
-bool TextureState::isSamplerComplete(const SamplerState &samplerState,
-                                     const ContextState &data) const
+bool TextureState::getCachedCompleteness() const
 {
-    if (data.getContextID() != mCompletenessCache.context ||
-        mCompletenessCache.samplerState != samplerState)
-    {
-        mCompletenessCache.context         = data.getContextID();
-        mCompletenessCache.samplerState    = samplerState;
-        mCompletenessCache.samplerComplete = computeSamplerCompleteness(samplerState, data);
-    }
-
-    return mCompletenessCache.samplerComplete;
+    return mCompletenessCache.valid() ? mCompletenessCache.value() : false;
 }
 
 void TextureState::invalidateCompletenessCache() const
 {
-    mCompletenessCache.context = 0;
+    mCompletenessCache.reset();
 }
 
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
@@ -501,11 +492,6 @@ void TextureState::clearImageDescs()
         mImageDescs[descIndex] = ImageDesc();
     }
     invalidateCompletenessCache();
-}
-
-TextureState::SamplerCompletenessCache::SamplerCompletenessCache()
-    : context(0), samplerState(), samplerComplete(false)
-{
 }
 
 Texture::Texture(rx::GLImplFactory *factory, GLuint id, GLenum target)
@@ -804,6 +790,11 @@ GLenum Texture::getUsage() const
 const TextureState &Texture::getTextureState() const
 {
     return mState;
+}
+
+bool Texture::getCachedCompleteness() const
+{
+    return mState.getCachedCompleteness();
 }
 
 size_t Texture::getWidth(GLenum target, size_t level) const
@@ -1297,4 +1288,19 @@ rx::FramebufferAttachmentObjectImpl *Texture::getAttachmentImpl() const
 {
     return mTexture;
 }
+
+Texture::Completeness Texture::updateCompleteness(const Context *context,
+                                                  const Sampler *optionalSampler)
+{
+    const gl::SamplerState &samplerState =
+        optionalSampler ? optionalSampler->getSamplerState() : mState.mSamplerState;
+    bool complete = mState.computeSamplerCompleteness(samplerState, context->getContextState());
+
+    Completeness returnValue =
+        mState.mCompletenessCache == complete ? Completeness::UNCHANGED : Completeness::CHANGED;
+    mState.mCompletenessCache = complete;
+
+    return returnValue;
+}
+
 }  // namespace gl

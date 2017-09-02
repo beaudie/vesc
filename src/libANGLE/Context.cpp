@@ -1723,24 +1723,28 @@ void Context::texParameterf(GLenum target, GLenum pname, GLfloat param)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameterf(this, texture, pname, param);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameterfv(GLenum target, GLenum pname, const GLfloat *params)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameterfv(this, texture, pname, params);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameteri(GLenum target, GLenum pname, GLint param)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameteri(this, texture, pname, param);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 {
     Texture *texture = getTargetTexture(target);
     SetTexParameteriv(this, texture, pname, params);
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
@@ -2882,6 +2886,9 @@ void Context::copyTexImage2D(GLenum target,
     Texture *texture =
         getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
     handleError(texture->copyImage(this, target, level, sourceArea, internalformat, framebuffer));
+
+    // Mark the texture object as dirty - copyImage calls can change texture completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::copyTexSubImage2D(GLenum target,
@@ -3169,7 +3176,7 @@ void Context::texImage2D(GLenum target,
                          GLenum type,
                          const void *pixels)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Extents size(width, height, 1);
     Texture *texture =
@@ -3189,7 +3196,7 @@ void Context::texImage3D(GLenum target,
                          GLenum type,
                          const void *pixels)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3213,7 +3220,7 @@ void Context::texSubImage2D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture =
@@ -3240,7 +3247,7 @@ void Context::texSubImage3D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3257,7 +3264,7 @@ void Context::compressedTexImage2D(GLenum target,
                                    GLsizei imageSize,
                                    const void *data)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Extents size(width, height, 1);
     Texture *texture =
@@ -3277,7 +3284,7 @@ void Context::compressedTexImage3D(GLenum target,
                                    GLsizei imageSize,
                                    const void *data)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3296,7 +3303,7 @@ void Context::compressedTexSubImage2D(GLenum target,
                                       GLsizei imageSize,
                                       const void *data)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture =
@@ -3324,7 +3331,7 @@ void Context::compressedTexSubImage3D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    prepareForTexImage();
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3337,6 +3344,9 @@ void Context::generateMipmap(GLenum target)
 {
     Texture *texture = getTargetTexture(target);
     handleError(texture->generateMipmap(this));
+
+    // Mark the texture object as dirty - it could have a changed completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::copyTextureCHROMIUM(GLuint sourceId,
@@ -3350,7 +3360,7 @@ void Context::copyTextureCHROMIUM(GLuint sourceId,
                                   GLboolean unpackPremultiplyAlpha,
                                   GLboolean unpackUnmultiplyAlpha)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3380,7 +3390,7 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
         return;
     }
 
-    syncStateForTexImage();
+    prepareForTexImage();
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3393,7 +3403,7 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
 
 void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
 {
-    syncStateForTexImage();
+    prepareForTexImage();
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3464,9 +3474,13 @@ void Context::syncStateForReadPixels()
     syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
 }
 
-void Context::syncStateForTexImage()
+void Context::prepareForTexImage()
 {
     syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
+
+    // Mark the texture object as dirty - texImage calls can change texture completeness.
+    // For instance, it can make a texture mip complete by adding new levels.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::syncStateForClear()
@@ -4107,6 +4121,9 @@ void Context::texStorage2DMultisample(GLenum target,
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorageMultisample(this, target, samples, internalformat, size,
                                                fixedsamplelocations));
+
+    // Mark the texture object as dirty - storage calls can change texture completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
@@ -4207,6 +4224,9 @@ void Context::texStorage2D(GLenum target,
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorage(this, target, levels, internalFormat, size));
+
+    // Mark the texture object as dirty - storage calls can change texture completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 void Context::texStorage3D(GLenum target,
@@ -4219,6 +4239,9 @@ void Context::texStorage3D(GLenum target,
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorage(this, target, levels, internalFormat, size));
+
+    // Mark the texture object as dirty - storage calls can change texture completeness.
+    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 GLenum Context::checkFramebufferStatus(GLenum target)
@@ -4665,13 +4688,19 @@ void Context::uniform1fv(GLint location, GLsizei count, const GLfloat *v)
 void Context::uniform1i(GLint location, GLint x)
 {
     Program *program = mGLState.getProgram();
-    program->setUniform1iv(location, 1, &x);
+    if (program->setUniform1iv(location, 1, &x) == Program::SetUniformResult::SamplerChanged)
+    {
+        mGLState.setObjectDirty(GL_PROGRAM);
+    }
 }
 
 void Context::uniform1iv(GLint location, GLsizei count, const GLint *v)
 {
     Program *program = mGLState.getProgram();
-    program->setUniform1iv(location, count, v);
+    if (program->setUniform1iv(location, count, v) == Program::SetUniformResult::SamplerChanged)
+    {
+        mGLState.setObjectDirty(GL_PROGRAM);
+    }
 }
 
 void Context::uniform2f(GLint location, GLfloat x, GLfloat y)
@@ -5246,6 +5275,17 @@ void Context::getInternalformativ(GLenum target,
 {
     const TextureCaps &formatCaps = mTextureCaps.get(internalformat);
     QueryInternalFormativ(formatCaps, pname, bufSize, params);
+}
+
+void Context::programUniform1iv(GLuint program, GLint location, GLsizei count, const GLint *value)
+{
+    Program *programObject = getProgram(program);
+    ASSERT(programObject);
+    if (programObject->setUniform1iv(location, count, value) ==
+        Program::SetUniformResult::SamplerChanged)
+    {
+        mGLState.setObjectDirty(GL_PROGRAM);
+    }
 }
 
 }  // namespace gl
