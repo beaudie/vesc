@@ -876,26 +876,18 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
         GLenum textureType = samplerUniform.textureType;
         for (GLuint textureUnitIndex : samplerUniform.boundTextureUnits)
         {
-            gl::Texture *texture       = glState.getSamplerTexture(textureUnitIndex, textureType);
-            const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
+            gl::Texture *texture = glState.getSamplerTexture(textureUnitIndex, textureType);
 
-            const gl::SamplerState &samplerState =
-                sampler ? sampler->getSamplerState() : texture->getSamplerState();
-
-            if (texture != nullptr && texture->getTextureState().isSamplerComplete(
-                                          samplerState, context->getContextState()))
+            if (texture != nullptr && texture->getCachedCompleteness())
             {
                 const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
+                ASSERT(!texture->hasAnyDirtyBit());
+                ASSERT(!textureGL->hasAnyDirtyBit());
 
-                if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID() ||
-                    texture->hasAnyDirtyBit() || textureGL->hasAnyDirtyBit())
+                if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID())
                 {
                     activeTexture(textureUnitIndex);
                     bindTexture(textureType, textureGL->getTextureID());
-
-                    // TODO: Call this from the gl:: layer once other backends use dirty bits for
-                    // texture state.
-                    texture->syncImplState();
                 }
             }
             else
@@ -907,6 +899,7 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
                 }
             }
 
+            const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
             if (sampler != nullptr)
             {
                 const SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
@@ -1904,6 +1897,12 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO: implement this
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 // TODO(jmadill): implement this
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
