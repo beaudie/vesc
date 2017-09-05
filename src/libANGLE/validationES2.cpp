@@ -829,6 +829,56 @@ bool IsValidESSLString(const char *str, size_t len)
     return true;
 }
 
+bool IsValidTextureFormat(Context *context, const GLenum format)
+{
+    if (context->getExtensions().webglCompatibility)
+    {
+        switch (format)
+        {
+            // Allowed color texture formats.
+            case GL_ALPHA:
+            case GL_LUMINANCE:
+            case GL_LUMINANCE_ALPHA:
+            case GL_RGB:
+            case GL_RGBA:
+                break;
+
+            // Allowed depth texture formats.
+            case GL_DEPTH_COMPONENT:
+            case GL_DEPTH_STENCIL_OES:
+                break;
+
+            // Allow extension: GL_EXT_texture_rg
+            case GL_RED_EXT:
+            case GL_RG_EXT:
+                if (context->getExtensions().textureRG)
+                {
+                    break;
+                }
+
+            // Allow extension: GL_EXT_texture_storage
+            case GL_R32F_EXT:
+            case GL_RG32F_EXT:
+                if (context->getExtensions().textureStorage)
+                {
+                    break;
+                }
+
+            // Allow extension: GL_EXT_sRGB
+            case GL_SRGB_EXT:
+            case GL_SRGB_ALPHA_EXT:
+                if (context->getExtensions().sRGB)
+                {
+                    break;
+                }
+
+            default:
+                return false;
+        }
+    }
+    return true;
+}
+
 bool IsValidESSLShaderSourceString(const char *str, size_t len, bool lineContinuationAllowed)
 {
     enum class ParseState
@@ -1250,6 +1300,13 @@ bool ValidateES2TexImageParameters(Context *context,
             default:
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidType);
                 return false;
+        }
+
+        // validate <format> itself
+        if (!IsValidTextureFormat(context, format))
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFormat);
+            return false;
         }
 
         // validate <format> + <type> combinations
