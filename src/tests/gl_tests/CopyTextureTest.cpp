@@ -50,6 +50,9 @@ class CopyTextureTest : public ANGLETest
             glCopySubTextureCHROMIUM = reinterpret_cast<PFNGLCOPYSUBTEXTURECHROMIUMPROC>(
                 eglGetProcAddress("glCopySubTextureCHROMIUM"));
         }
+
+        glRequestExtensionANGLE = reinterpret_cast<PFNGLREQUESTEXTENSIONANGLEPROC>(
+            eglGetProcAddress("glRequestExtensionANGLE"));
     }
 
     void TearDown() override
@@ -81,6 +84,7 @@ class CopyTextureTest : public ANGLETest
 
     PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM       = nullptr;
     PFNGLCOPYSUBTEXTURECHROMIUMPROC glCopySubTextureCHROMIUM = nullptr;
+    PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE   = nullptr;
 };
 
 class CopyTextureTestDest : public CopyTextureTest
@@ -258,6 +262,12 @@ TEST_P(CopyTextureTest, RedefineDestinationTexture)
 {
     if (!checkExtensions())
     {
+        return;
+    }
+
+    if (!extensionEnabled("GL_EXT_texture_format_BGRA8888"))
+    {
+        std::cout << "Test skipped due to missing GL_EXT_texture_format_BGRA8888." << std::endl;
         return;
     }
 
