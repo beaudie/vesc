@@ -2943,6 +2943,23 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
     }
 }
 
+// Verify that only valid texture formats are allowed.
+TEST_P(WebGLCompatibilityTest, InvalidTextureFormat)
+{
+    if (getClientMajorVersion() != 2)
+    {
+        return;
+    }
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1, 1, 0, GL_RGBA32F, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+}
+
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
 // qualifiers.
 TEST_P(WebGL2CompatibilityTest, UniformBlockPrecisionMismatch)
