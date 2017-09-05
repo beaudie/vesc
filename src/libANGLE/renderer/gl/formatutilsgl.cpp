@@ -185,7 +185,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
 
     // From GL_EXT_texture_format_BGRA8888
     InsertFormatMapping(&map, GL_BGRA8_EXT,         VersionOrExts(1, 2, "GL_EXT_bgra"),               AlwaysSupported(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), AlwaysSupported(), NeverSupported()                          );
-    InsertFormatMapping(&map, GL_BGRA_EXT,          VersionOrExts(1, 2, "GL_EXT_bgra"),               AlwaysSupported(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), AlwaysSupported(), NeverSupported()                          );
+    InsertFormatMapping(&map, GL_BGRA_EXT,          VersionOrExts(1, 2, "GL_EXT_bgra"),               AlwaysSupported(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), AlwaysSupported(), ExtsOnly("GL_EXT_texture_format_BGRA8888"));
 
     // Floating point formats
     // Note that GL_EXT_texture_shared_exponent and GL_ARB_color_buffer_float suggest that RGB9_E5
