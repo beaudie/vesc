@@ -1281,8 +1281,14 @@ bool ValidateES2TexImageParameters(Context *context,
                 switch (type)
                 {
                     case GL_UNSIGNED_BYTE:
+                        break;
                     case GL_FLOAT:
                     case GL_HALF_FLOAT_OES:
+                        if (!context->getExtensions().textureFloat)
+                        {
+                            context->handleError(InvalidEnum());
+                            return false;
+                        }
                         break;
                     default:
                         ANGLE_VALIDATION_ERR(context, InvalidOperation(), MismatchedTypeAndFormat);
@@ -1317,6 +1323,11 @@ bool ValidateES2TexImageParameters(Context *context,
                 }
                 break;
             case GL_BGRA_EXT:
+                if (!context->getExtensions().textureFormatBGRA8888)
+                {
+                    context->handleError(InvalidEnum());
+                    return false;
+                }
                 switch (type)
                 {
                     case GL_UNSIGNED_BYTE:
@@ -1367,6 +1378,14 @@ bool ValidateES2TexImageParameters(Context *context,
                     default:
                         ANGLE_VALIDATION_ERR(context, InvalidOperation(), MismatchedTypeAndFormat);
                         return false;
+                }
+                break;
+            case GL_R32F_EXT:
+            case GL_RG32F_EXT:
+                if (!context->getExtensions().textureStorage)
+                {
+                    context->handleError(InvalidEnum());
+                    return false;
                 }
                 break;
             default:
