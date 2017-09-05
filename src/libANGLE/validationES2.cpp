@@ -1369,6 +1369,14 @@ bool ValidateES2TexImageParameters(Context *context,
                         return false;
                 }
                 break;
+            case GL_R32F_EXT:
+            case GL_RG32F_EXT:
+                if (!context->getExtensions().textureStorage)
+                {
+                    context->handleError(InvalidEnum());
+                    return false;
+                }
+                break;
             default:
                 context->handleError(InvalidEnum());
                 return false;
