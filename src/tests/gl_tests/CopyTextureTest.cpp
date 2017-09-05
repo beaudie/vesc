@@ -266,16 +266,26 @@ TEST_P(CopyTextureTest, RedefineDestinationTexture)
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
-    glBindTexture(GL_TEXTURE_2D, mTextures[1]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
-    EXPECT_GL_NO_ERROR();
+	EXPECT_TRUE(extensionEnabled("GL_EXT_texture_format_BGRA8888"));
+	std::cout << "GL_EXT_texture_format_BGRA8888 is enabled." << std::endl;
+
+	if (extensionEnabled("GL_EXT_texture_format_BGRA8888"))
+	{
+		glBindTexture(GL_TEXTURE_2D, mTextures[1]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
+		EXPECT_GL_NO_ERROR();
+	}
 
     // GL_INVALID_OPERATION due to "intrinsic format" != "internal format".
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
-    // GL_INVALID_VALUE due to bad dimensions.
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
-    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+	if (extensionEnabled("GL_EXT_texture_format_BGRA8888"))
+	{
+		// GL_INVALID_VALUE due to bad dimensions.
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
+		EXPECT_GL_ERROR(GL_INVALID_VALUE);
+	}
 
     // If the dest texture has different properties, glCopyTextureCHROMIUM()
     // redefines them.
