@@ -33,11 +33,11 @@ void VS_Clear(in uint id : SV_VertexID,
 void VS_Multiview_Clear(in uint id : SV_VertexID,
                         in uint instanceID : SV_InstanceID,
                         out float4 outPosition : SV_POSITION,
-                        out uint outLayerID : TEXCOORD0)
+                        out uint outViewID : TEXCOORD0)
 {
     float2 corner = g_Corners[id];
     outPosition = float4(corner.x, corner.y, 0.0f, 1.0f);
-    outLayerID = instanceID;
+    outViewID = instanceID;
 }
 
 void VS_Clear_FL9( in float4 inPosition : POSITION,
@@ -50,14 +50,21 @@ void VS_Clear_FL9( in float4 inPosition : POSITION,
 struct GS_INPUT
 {
     float4 inPosition : SV_Position;
-    uint inLayerID : TEXCOORD0;
+    uint inViewID : TEXCOORD0;
 };
 
 struct GS_OUTPUT
 {
     float4 outPosition : SV_Position;
+    uint outViewportIndex : SV_ViewportArrayIndex;
     uint outLayerID : SV_RenderTargetArrayIndex;
 };
+
+// Geometry Shader Constant Buffer
+cbuffer MultiviewDriver : register(b0)
+{
+    float multiviewSelectViewportIndex : packoffset(c1.y);
+}
 
 [maxvertexcount(3)]
 void GS_Multiview_Clear(triangle GS_INPUT input[3], inout TriangleStream<GS_OUTPUT> outStream)
@@ -66,7 +73,15 @@ void GS_Multiview_Clear(triangle GS_INPUT input[3], inout TriangleStream<GS_OUTP
     for (int i = 0; i < 3; i++)
     {
         output.outPosition = input[i].inPosition;
-        output.outLayerID = input[i].inLayerID;
+        if (multiviewSelectViewportIndex)
+        {
+            output.outViewportIndex = input[i].inViewID;
+        }
+        else
+        {
+            output.outViewportIndex = 0;
+            output.outLayerID = input[i].inViewID;
+        }
         outStream.Append(output);
     }
     outStream.RestartStrip();
