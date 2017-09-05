@@ -28,7 +28,8 @@ struct RtvDsvClearInfo
 {
     T r, g, b, a;
     float z;
-    float c1padding[3];
+    float multiviewWriteToViewportIndex;
+    float c1padding[2];
 };
 
 class Clear11 : angle::NonCopyable
@@ -51,7 +52,7 @@ class Clear11 : angle::NonCopyable
         gl::Error getShadersAndLayout(Renderer11 *renderer,
                                       const INT clearType,
                                       const uint32_t numRTs,
-                                      const bool hasLayeredLayout,
+                                      const bool hasMultiviewLayout,
                                       const d3d11::InputLayout **il,
                                       const d3d11::VertexShader **vs,
                                       const d3d11::GeometryShader **gs,

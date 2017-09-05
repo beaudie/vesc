@@ -66,6 +66,7 @@ template <typename T>
 bool UpdateDataCache(RtvDsvClearInfo<T> *dataCache,
                      const gl::Color<T> &color,
                      const float *zValue,
+                     const float multiviewWriteToViewportIndex,
                      const uint32_t numRtvs,
                      const uint8_t writeMask)
 {
@@ -101,7 +102,24 @@ bool UpdateDataCache(RtvDsvClearInfo<T> *dataCache,
         }
     }
 
+    if (multiviewWriteToViewportIndex != dataCache->multiviewWriteToViewportIndex)
+    {
+        dataCache->multiviewWriteToViewportIndex = multiviewWriteToViewportIndex;
+        cacheDirty                               = true;
+    }
+
     return cacheDirty;
+}
+
+float SelectViewThroughViewportIndex(GLenum multiviewLayout)
+{
+    switch (multiviewLayout)
+    {
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            return 0.0f;
+        default:
+            return 1.0f;
+    }
 }
 
 bool AllOffsetsAreNonNegative(const std::vector<gl::Offset> &viewportOffsets)
@@ -148,7 +166,7 @@ Clear11::ShaderManager::~ShaderManager()
 gl::Error Clear11::ShaderManager::getShadersAndLayout(Renderer11 *renderer,
                                                       const INT clearType,
                                                       const uint32_t numRTs,
-                                                      const bool hasLayeredLayout,
+                                                      const bool hasMultiviewLayout,
                                                       const d3d11::InputLayout **il,
                                                       const d3d11::VertexShader **vs,
                                                       const d3d11::GeometryShader **gs,
@@ -178,7 +196,7 @@ gl::Error Clear11::ShaderManager::getShadersAndLayout(Renderer11 *renderer,
         *ps = &mPsFloat9.getObj();
         return gl::NoError();
     }
-    if (!hasLayeredLayout)
+    if (!hasMultiviewLayout)
     {
         ANGLE_TRY(mVs.resolve(renderer));
         *vs = &mVs.getObj();
@@ -186,7 +204,7 @@ gl::Error Clear11::ShaderManager::getShadersAndLayout(Renderer11 *renderer,
     }
     else
     {
-        // For layered framebuffers we have to use the multi-view versions of the VS and GS.
+        // For multiview framebuffers we have to use the multi-view versions of the VS and GS.
         ANGLE_TRY(mVsMultiview.resolve(renderer));
         ANGLE_TRY(mGsMultiview.resolve(renderer));
         *vs = &mVsMultiview.getObj();
@@ -722,21 +740,26 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     }
 
     bool dirtyCb = false;
+    const GLenum multiviewLayout         = fboData.getMultiviewLayout();
+    const float multiviewWriteToViewport = SelectViewThroughViewportIndex(multiviewLayout);
 
     // Compare the input color/z values against the CB cache and update it if necessary
     switch (clearParams.colorType)
     {
         case GL_FLOAT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<float> *>(&mShaderData),
-                                      clearParams.colorF, zValue, numRtvs, colorMask);
+                                      clearParams.colorF, zValue, multiviewWriteToViewport, numRtvs,
+                                      colorMask);
             break;
         case GL_UNSIGNED_INT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<uint32_t> *>(&mShaderData),
-                                      clearParams.colorUI, zValue, numRtvs, colorMask);
+                                      clearParams.colorUI, zValue, multiviewWriteToViewport,
+                                      numRtvs, colorMask);
             break;
         case GL_INT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<int> *>(&mShaderData),
-                                      clearParams.colorI, zValue, numRtvs, colorMask);
+                                      clearParams.colorI, zValue, multiviewWriteToViewport, numRtvs,
+                                      colorMask);
             break;
         default:
             UNREACHABLE();
@@ -761,15 +784,41 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
         deviceContext->Unmap(mConstantBuffer.get(), 0);
     }
 
-    // Set the viewport to be the same size as the framebuffer.
-    D3D11_VIEWPORT viewport;
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-    viewport.Width    = static_cast<FLOAT>(framebufferSize.width);
-    viewport.Height   = static_cast<FLOAT>(framebufferSize.height);
-    viewport.MinDepth = 0;
-    viewport.MaxDepth = 1;
-    deviceContext->RSSetViewports(1, &viewport);
+    if (!(needScissoredClear && isSideBySideFBO))
+    {
+        // If a scissored clear is not necessary, then we need only one viewport for multiview
+        // framebuffers because:
+        // - For layered clears we only select the layer in the GS, but the viewport remains
+        // the same.
+        // - For side-by-side clears we draw one quad which covers the whole framebuffer.
+        // For non-multiview framebuffers we always have one view, and thus we set only one
+        // viewport.
+        D3D11_VIEWPORT viewport;
+        viewport.TopLeftX = 0;
+        viewport.TopLeftY = 0;
+        viewport.Width    = static_cast<FLOAT>(framebufferSize.width);
+        viewport.Height   = static_cast<FLOAT>(framebufferSize.height);
+        viewport.MinDepth = 0;
+        viewport.MaxDepth = 1;
+        deviceContext->RSSetViewports(1, &viewport);
+    }
+    else
+    {
+        // For scissored clears of a side-by-side framebuffers we have to set the viewport for each
+        // view. The viewport is the same as the scissor rectangle for that view.
+        std::vector<D3D11_VIEWPORT> viewports(scissorRects.size());
+        for (size_t i = 0u; i < viewports.size(); ++i)
+        {
+            auto &viewport    = viewports[i];
+            viewport.TopLeftX = static_cast<FLOAT>(scissorRects[i].left);
+            viewport.TopLeftY = static_cast<FLOAT>(scissorRects[i].top);
+            viewport.Width    = static_cast<FLOAT>(clearParams.scissor.width);
+            viewport.Height   = static_cast<FLOAT>(clearParams.scissor.height);
+            viewport.MinDepth = 0;
+            viewport.MaxDepth = 1;
+        }
+        deviceContext->RSSetViewports(static_cast<UINT>(viewports.size()), viewports.data());
+    }
 
     // Apply state
     deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
@@ -793,15 +842,20 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     const d3d11::GeometryShader *gs = nullptr;
     const d3d11::InputLayout *il  = nullptr;
     const d3d11::PixelShader *ps  = nullptr;
-    const bool hasLayeredLayout =
-        (fboData.getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE);
+    const bool hasMultiviewLayout   = (multiviewLayout != GL_NONE);
     ANGLE_TRY(mShaderManager.getShadersAndLayout(mRenderer, clearParams.colorType, numRtvs,
-                                                 hasLayeredLayout, &il, &vs, &gs, &ps));
+                                                 hasMultiviewLayout, &il, &vs, &gs, &ps));
 
     // Apply Shaders
     stateManager->setDrawShaders(vs, gs, ps);
     ID3D11Buffer *constantBuffer = mConstantBuffer.get();
     deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
+    if (hasMultiviewLayout)
+    {
+        // The program used for clearing both layered and side-by-side framebuffers has the geometry
+        // shader stage enabled where it selects either the viewport index or the RT slice.
+        deviceContext->GSSetConstantBuffers(0, 1, &constantBuffer);
+    }
 
     // Bind IL & VB if needed
     deviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
@@ -822,26 +876,42 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     // Apply render targets
     stateManager->setOneTimeRenderTargets(context, &rtvs[0], numRtvs, dsv);
 
-    // If scissors are necessary to be applied, then the number of clears is the number of scissor
-    // rects. If no scissors are necessary, then a single full-size clear is enough.
-    size_t necessaryNumClears = needScissoredClear ? scissorRects.size() : 1u;
-    for (size_t i = 0u; i < necessaryNumClears; ++i)
+    switch (multiviewLayout)
     {
-        if (needScissoredClear)
-        {
-            ASSERT(i < scissorRects.size());
-            deviceContext->RSSetScissorRects(1, &scissorRects[i]);
-        }
-        // Draw the fullscreen quad.
-        if (!hasLayeredLayout || isSideBySideFBO)
-        {
-            deviceContext->Draw(6, 0);
-        }
-        else
-        {
-            ASSERT(hasLayeredLayout);
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            // For layered framebuffers we use the instancing + GS approach to draw a quad on top of
+            // each slice.
+            if (needScissoredClear)
+            {
+                deviceContext->RSSetScissorRects(1, scissorRects.data());
+            }
             deviceContext->DrawInstanced(6, static_cast<UINT>(fboData.getNumViews()), 0, 0);
-        }
+            break;
+        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+            if (needScissoredClear)
+            {
+                // If a scissored clear is necessary, then we have to use the instancing + GS
+                // approach to draw a quad on top of each viewport.
+                deviceContext->RSSetScissorRects(static_cast<UINT>(scissorRects.size()),
+                                                 scissorRects.data());
+                deviceContext->DrawInstanced(6, static_cast<UINT>(fboData.getNumViews()), 0, 0);
+            }
+            else
+            {
+                // If no scissor rectangles are applied, we draw a single quad which covers the
+                // whole framebuffer.
+                deviceContext->Draw(6, 0);
+            }
+            break;
+        case GL_NONE:
+            if (needScissoredClear)
+            {
+                deviceContext->RSSetScissorRects(1, scissorRects.data());
+            }
+            deviceContext->Draw(6, 0);
+            break;
+        default:
+            UNREACHABLE();
     }
 
     // Clean up
