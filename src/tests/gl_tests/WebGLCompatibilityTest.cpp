@@ -227,6 +227,9 @@ class WebGLCompatibilityTest : public ANGLETest
                                  const std::array<GLenum, 2> &drawBuffers,
                                  GLenum expectedError);
 
+    // Called from InvalidTextureFormat
+    void validateTexImageExtensionFormat(GLenum format, const std::string &extName);
+
     PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
 };
 
@@ -2941,6 +2944,68 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
         CheckColors(renderbuffers, 0b0100, unwrittenColor);
         CheckColors(renderbuffers, 0b0011, GLColor::red);
     }
+}
+
+// Verify that a texture format is only allowed with extension enabled.
+void WebGLCompatibilityTest::validateTexImageExtensionFormat(GLenum format,
+                                                             const std::string &extName)
+{
+	std::cout << "Testing " << extName << std::endl;
+
+    // Verify texture format fails by default.
+    glTexImage2D(GL_TEXTURE_2D, 0, format, 1, 1, 0, format, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+	std::cout << "Format belonging to " << extName << " fails when not enabled." << std::endl;
+
+    if (extensionRequestable(extName))
+    {	
+		std::cout << extName << " is requestable." << std::endl;
+
+        // Verify texture format is allowed once extension is enabled.
+        glRequestExtensionANGLE(extName.c_str());
+        EXPECT_TRUE(extensionEnabled(extName));
+
+		std::cout << extName << " is now enabled." << std::endl;
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, 1, 1, 0, format, GL_UNSIGNED_BYTE, nullptr);
+        ASSERT_GL_NO_ERROR();
+
+		std::cout << "Format belonging to " << extName << " succeeds when enabled." << std::endl;
+    }
+	else
+	{
+		std::cout << extName << " is not requestable." << std::endl;
+	}
+}
+
+// Verify that only valid texture formats are allowed.
+TEST_P(WebGLCompatibilityTest, InvalidTextureFormat)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() != 2);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+
+    // Verify valid format is allowed.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify invalid format fails.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1, 1, 0, GL_RGBA32F, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify formats from enableable extensions.
+    validateTexImageExtensionFormat(GL_RG32F_EXT, "GL_EXT_texture_storage");
+
+	// Note: GLES backend reports format as incompatible with level format and must be disabled.
+	if (!IsOpenGLES())
+	{
+		validateTexImageExtensionFormat(GL_RED_EXT, "GL_EXT_texture_rg");
+	}
+
+    validateTexImageExtensionFormat(GL_SRGB_EXT, "GL_EXT_texture_sRGB");
+    validateTexImageExtensionFormat(GL_BGRA_EXT, "GL_EXT_texture_format_BGRA8888");
 }
 
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
