@@ -3388,6 +3388,82 @@ TEST_P(WebGLCompatibilityTest, GenerateMipmapSizedFloatingPointTexture)
     }
 }
 
+// Verify that only valid texture formats are allowed.
+TEST_P(WebGLCompatibilityTest, InvalidTextureFormat)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() != 2);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+
+    // Verify valid format that requires no extension is allowed.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify invalid format that requires no extension fails.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1, 1, 0, GL_RGBA32F, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify format requiring GL_EXT_texture_rg fails by default.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED_EXT, 1, 1, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify format requiring GL_EXT_texture_rg is allowed when enabled.
+    if (extensionRequestable("GL_EXT_texture_rg"))
+    {
+        glRequestExtensionANGLE("GL_EXT_texture_rg");
+        EXPECT_TRUE(extensionEnabled("GL_EXT_texture_rg"));
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED_EXT, 1, 1, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, nullptr);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Verify format requiring GL_EXT_texture_sRGB fails by default.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_EXT, 1, 1, 0, GL_SRGB_EXT, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify format requiring GL_EXT_texture_sRGB is allowed when enabled.
+    if (extensionRequestable("GL_EXT_texture_sRGB"))
+    {
+        glRequestExtensionANGLE("GL_EXT_texture_sRGB");
+        EXPECT_TRUE(extensionEnabled("GL_EXT_texture_sRGB"));
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_EXT, 1, 1, 0, GL_SRGB_EXT, GL_UNSIGNED_BYTE, nullptr);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Verify format requiring GL_EXT_texture_format_BGRA8888 fails by default.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify format requiring GL_EXT_texture_format_BGRA8888 is allowed when enabled.
+    if (extensionRequestable("GL_EXT_texture_format_BGRA8888"))
+    {
+        glRequestExtensionANGLE("GL_EXT_texture_format_BGRA8888");
+        EXPECT_TRUE(extensionEnabled("GL_EXT_texture_format_BGRA8888"));
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, nullptr);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Verify format requiring GL_EXT_texture_rg and GL_OES_texture_float fails by default.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F_EXT, 1, 1, 0, GL_RG32F_EXT, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Verify format requiring GL_EXT_texture_rg and GL_OES_texture_float is allowed when enabled.
+    if (extensionRequestable("GL_EXT_texture_rg") && extensionRequestable("GL_OES_texture_float"))
+    {
+        glRequestExtensionANGLE("GL_EXT_texture_rg");
+        EXPECT_TRUE(extensionEnabled("GL_EXT_texture_rg"));
+
+        glRequestExtensionANGLE("GL_OES_texture_float");
+        EXPECT_TRUE(extensionEnabled("GL_OES_texture_float"));
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F_EXT, 1, 1, 0, GL_RG32F_EXT, GL_UNSIGNED_BYTE, nullptr);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
 // qualifiers.
 TEST_P(WebGL2CompatibilityTest, UniformBlockPrecisionMismatch)
