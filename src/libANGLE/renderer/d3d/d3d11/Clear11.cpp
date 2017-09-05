@@ -66,6 +66,7 @@ template <typename T>
 bool UpdateDataCache(RtvDsvClearInfo<T> *dataCache,
                      const gl::Color<T> &color,
                      const float *zValue,
+                     const float multiviewWriteToViewportIndex,
                      const uint32_t numRtvs,
                      const uint8_t writeMask)
 {
@@ -101,7 +102,24 @@ bool UpdateDataCache(RtvDsvClearInfo<T> *dataCache,
         }
     }
 
+    if (multiviewWriteToViewportIndex != dataCache->multiviewWriteToViewportIndex)
+    {
+        dataCache->multiviewWriteToViewportIndex = multiviewWriteToViewportIndex;
+        cacheDirty                               = true;
+    }
+
     return cacheDirty;
+}
+
+float SelectViewThroughViewportIndex(GLenum multiviewLayout)
+{
+    switch (multiviewLayout)
+    {
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            return 0.0f;
+        default:
+            return 1.0f;
+    }
 }
 
 bool AllOffsetsAreNonNegative(const std::vector<gl::Offset> &viewportOffsets)
@@ -722,21 +740,26 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     }
 
     bool dirtyCb = false;
+    const GLenum multiviewLayout         = fboData.getMultiviewLayout();
+    const float multiviewWriteToViewport = SelectViewThroughViewportIndex(multiviewLayout);
 
     // Compare the input color/z values against the CB cache and update it if necessary
     switch (clearParams.colorType)
     {
         case GL_FLOAT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<float> *>(&mShaderData),
-                                      clearParams.colorF, zValue, numRtvs, colorMask);
+                                      clearParams.colorF, zValue, multiviewWriteToViewport, numRtvs,
+                                      colorMask);
             break;
         case GL_UNSIGNED_INT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<uint32_t> *>(&mShaderData),
-                                      clearParams.colorUI, zValue, numRtvs, colorMask);
+                                      clearParams.colorUI, zValue, multiviewWriteToViewport,
+                                      numRtvs, colorMask);
             break;
         case GL_INT:
             dirtyCb = UpdateDataCache(reinterpret_cast<RtvDsvClearInfo<int> *>(&mShaderData),
-                                      clearParams.colorI, zValue, numRtvs, colorMask);
+                                      clearParams.colorI, zValue, multiviewWriteToViewport, numRtvs,
+                                      colorMask);
             break;
         default:
             UNREACHABLE();
@@ -793,15 +816,19 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     const d3d11::GeometryShader *gs = nullptr;
     const d3d11::InputLayout *il  = nullptr;
     const d3d11::PixelShader *ps  = nullptr;
-    const bool hasLayeredLayout =
-        (fboData.getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE);
+    const bool hasMultiviewLayout   = (multiviewLayout != GL_NONE);
     ANGLE_TRY(mShaderManager.getShadersAndLayout(mRenderer, clearParams.colorType, numRtvs,
-                                                 hasLayeredLayout, &il, &vs, &gs, &ps));
+                                                 hasMultiviewLayout, &il, &vs, &gs, &ps));
 
     // Apply Shaders
     stateManager->setDrawShaders(vs, gs, ps);
     ID3D11Buffer *constantBuffer = mConstantBuffer.get();
     deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
+
+    if (hasMultiviewLayout)
+    {
+        deviceContext->GSSetConstantBuffers(0, 1, &constantBuffer);
+    }
 
     // Bind IL & VB if needed
     deviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
@@ -822,26 +849,39 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
     // Apply render targets
     stateManager->setOneTimeRenderTargets(context, &rtvs[0], numRtvs, dsv);
 
-    // If scissors are necessary to be applied, then the number of clears is the number of scissor
-    // rects. If no scissors are necessary, then a single full-size clear is enough.
-    size_t necessaryNumClears = needScissoredClear ? scissorRects.size() : 1u;
-    for (size_t i = 0u; i < necessaryNumClears; ++i)
+    switch (multiviewLayout)
     {
-        if (needScissoredClear)
-        {
-            ASSERT(i < scissorRects.size());
-            deviceContext->RSSetScissorRects(1, &scissorRects[i]);
-        }
-        // Draw the fullscreen quad.
-        if (!hasLayeredLayout || isSideBySideFBO)
-        {
-            deviceContext->Draw(6, 0);
-        }
-        else
-        {
-            ASSERT(hasLayeredLayout);
+        case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
+            // For a multiview framebuffer we can draw an instance of a quad per view and direct the
+            // geometry towards the corresponding layer/viewport depending on the layout of the
+            // framebuffer.
+            if (needScissoredClear)
+            {
+                deviceContext->RSSetScissorRects(1, scissorRects.data());
+            }
             deviceContext->DrawInstanced(6, static_cast<UINT>(fboData.getNumViews()), 0, 0);
-        }
+            break;
+        case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
+            if (needScissoredClear)
+            {
+                deviceContext->RSSetScissorRects(static_cast<UINT>(scissorRects.size()),
+                                                 scissorRects.data());
+                deviceContext->DrawInstanced(6, static_cast<UINT>(fboData.getNumViews()), 0, 0);
+            }
+            else
+            {
+                deviceContext->Draw(6, 0);
+            }
+            break;
+        case GL_NONE:
+            if (needScissoredClear)
+            {
+                deviceContext->RSSetScissorRects(1, scissorRects.data());
+            }
+            deviceContext->Draw(6, 0);
+            break;
+        default:
+            UNREACHABLE();
     }
 
     // Clean up

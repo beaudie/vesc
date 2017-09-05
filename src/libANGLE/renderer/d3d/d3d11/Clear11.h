@@ -28,7 +28,8 @@ struct RtvDsvClearInfo
 {
     T r, g, b, a;
     float z;
-    float c1padding[3];
+    float multiviewWriteToViewportIndex;
+    float c1padding[2];
 };
 
 class Clear11 : angle::NonCopyable
