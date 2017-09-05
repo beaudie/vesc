@@ -266,6 +266,9 @@ TEST_P(CopyTextureTest, RedefineDestinationTexture)
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
+	EXPECT_TRUE(extensionEnabled("GL_EXT_texture_format_BGRA8888"));
+	std::cout << "GL_EXT_texture_format_BGRA8888 is enabled." << std::endl;
+
     glBindTexture(GL_TEXTURE_2D, mTextures[1]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
     EXPECT_GL_NO_ERROR();
