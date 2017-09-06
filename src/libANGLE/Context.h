@@ -924,6 +924,9 @@ class Context final : public ValidationContext
                       GLsizei height,
                       GLsizei depth);
 
+    // Notify the context that the EGL layer triggered a state change in a Texture.
+    void onTextureChange(const Texture *texture);
+
     egl::Display *getCurrentDisplay() const { return mCurrentDisplay; }
     egl::Surface *getCurrentDrawSurface() const { return mCurrentSurface; }
     egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }

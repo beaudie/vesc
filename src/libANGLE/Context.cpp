@@ -5312,4 +5312,11 @@ void Context::programUniform1iv(GLuint program, GLint location, GLsizei count, c
     }
 }
 
+void Context::onTextureChange(const Texture *texture)
+{
+    // Conservatively assume the whole state is dirty.
+    // TODO(jmadill): More fine-grained update.
+    mGLState.setObjectDirty(GL_TEXTURE);
+}
+
 }  // namespace gl
