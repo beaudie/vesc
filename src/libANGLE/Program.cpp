@@ -794,10 +794,14 @@ Error Program::link(const gl::Context *context)
     // Update sampler bindings with unreferenced uniforms.
     for (const auto &location : mState.mUniformLocations)
     {
-        if (!location.used && mState.isSamplerUniformIndex(location.index))
+        if (location.used && mState.isSamplerUniformIndex(location.index))
         {
-            GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(location.index);
-            mState.mSamplerBindings[samplerIndex].unreferenced = true;
+            const auto &uniform = mState.getUniforms()[location.index];
+            if (!uniform.staticUse)
+            {
+                GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(location.index);
+                mState.mSamplerBindings[samplerIndex].unreferenced = true;
+            }
         }
     }
 

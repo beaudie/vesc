@@ -142,7 +142,7 @@ struct VariableLocation
     unsigned int element;
     unsigned int index;
 
-    // If this is a valid uniform location
+    // If this is a valid uniform location. If used is false, it means there is a gap.
     bool used;
 
     // If this location was bound to an unreferenced uniform.  Setting data on this uniform is a
