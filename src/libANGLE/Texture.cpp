@@ -1101,7 +1101,7 @@ Error Texture::generateMipmap(const Context *context)
 
     if (maxLevel > baseLevel)
     {
-        syncImplState();
+        syncState();
         ANGLE_TRY(mTexture->generateMipmap(context));
 
         const ImageDesc &baseImageInfo =
@@ -1256,7 +1256,7 @@ GLuint Texture::getId() const
     return id();
 }
 
-void Texture::syncImplState()
+void Texture::syncState()
 {
     mTexture->syncState(mDirtyBits);
     mDirtyBits.reset();
