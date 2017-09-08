@@ -859,7 +859,6 @@ TEST_P(MultiviewRenderTest, DrawArraysFourViews)
 
     createFBO(4, 1, 4);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    glUseProgram(program);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
@@ -921,7 +920,6 @@ TEST_P(MultiviewRenderTest, DrawArraysInstanced)
     const int kNumViews   = 2;
     createFBO(kViewWidth, kViewHeight, kNumViews);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    glUseProgram(program);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true, true, 2);
     ASSERT_GL_NO_ERROR();
@@ -986,7 +984,6 @@ TEST_P(MultiviewRenderTest, AttribDivisor)
     const int kNumViews   = 2;
     createFBO(kViewWidth, kViewHeight, kNumViews);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    glUseProgram(program);
 
     GLBuffer xOffsetVBO;
     glBindBuffer(GL_ARRAY_BUFFER, xOffsetVBO);
@@ -1923,7 +1920,6 @@ TEST_P(MultiviewRenderTest, SelectColorBasedOnViewIDOVR)
 
     createFBO(1, 1, 3);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    glUseProgram(program);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
@@ -1964,7 +1960,6 @@ TEST_P(MultiviewLayeredRenderTest, RenderToSubrageOfLayers)
 
     createFBO(1, 1, 2, 4, 1);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    glUseProgram(program);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
