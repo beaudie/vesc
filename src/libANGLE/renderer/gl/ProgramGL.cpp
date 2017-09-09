@@ -654,7 +654,7 @@ void ProgramGL::postLink()
     for (size_t uniformLocation = 0; uniformLocation < uniformLocations.size(); uniformLocation++)
     {
         const auto &entry = uniformLocations[uniformLocation];
-        if (!entry.used)
+        if (!entry.used())
         {
             continue;
         }
@@ -788,7 +788,7 @@ void ProgramGL::markUnusedUniformLocations(std::vector<gl::VariableLocation> *un
     {
         if (uniLoc(location) == -1)
         {
-            (*uniformLocations)[location].used = false;
+            (*uniformLocations)[location].markUnused();
         }
     }
 }
