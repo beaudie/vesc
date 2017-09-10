@@ -390,11 +390,11 @@ bool ValidateTextureSRGBDecodeValue(Context *context, ParamType *params)
     return true;
 }
 
-bool ValidateUniformCommonBase(ValidationContext *context,
-                               gl::Program *program,
-                               GLint location,
-                               GLsizei count,
-                               const LinkedUniform **uniformOut)
+ANGLE_INLINE bool ValidateUniformCommonBase(ValidationContext *context,
+                                            gl::Program *program,
+                                            GLint location,
+                                            GLsizei count,
+                                            const LinkedUniform **uniformOut)
 {
     // TODO(Jiajia): Add image uniform check in future.
     if (count < 0)
