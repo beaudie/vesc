@@ -227,7 +227,7 @@ class StateManager11 final : angle::NonCopyable
                                 GLsizei instances,
                                 TranslatedIndexData *indexInfo);
 
-    gl::Error applyIndexBuffer(const gl::ContextState &data,
+    gl::Error applyIndexBuffer(const gl::Context *context,
                                const void *indices,
                                GLsizei count,
                                GLenum type,
@@ -303,6 +303,7 @@ class StateManager11 final : angle::NonCopyable
     gl::Error applyUniforms(ProgramD3D *programD3D);
 
     gl::Error syncUniformBuffers(const gl::Context *context, ProgramD3D *programD3D);
+    gl::Error syncTransformFeedbackBuffers(const gl::Context *context);
 
     enum DirtyBitType
     {
@@ -483,6 +484,11 @@ class StateManager11 final : angle::NonCopyable
     FragmentConstantBufferArray<ResourceSerial> mCurrentConstantBufferPS;
     FragmentConstantBufferArray<GLintptr> mCurrentConstantBufferPSOffset;
     FragmentConstantBufferArray<GLsizeiptr> mCurrentConstantBufferPSSize;
+
+    // Currently applied transform feedback buffers
+    Serial mAppliedTFSerial;
+
+    Serial mEmptySerial;
 };
 
 }  // namespace rx
