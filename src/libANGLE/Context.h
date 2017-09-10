@@ -932,7 +932,6 @@ class Context final : public ValidationContext
     egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }
 
   private:
-    Error prepareForDraw(GLenum drawMode);
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();
