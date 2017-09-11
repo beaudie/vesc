@@ -139,109 +139,13 @@ TextureCapsMap GenerateMinimumTextureCapsMap(const Version &clientVersion,
     return capsMap;
 }
 
-Extensions::Extensions()
-    : elementIndexUint(false),
-      packedDepthStencil(false),
-      getProgramBinary(false),
-      rgb8rgba8(false),
-      textureFormatBGRA8888(false),
-      readFormatBGRA(false),
-      pixelBufferObject(false),
-      mapBuffer(false),
-      mapBufferRange(false),
-      colorBufferHalfFloat(false),
-      textureHalfFloat(false),
-      textureHalfFloatLinear(false),
-      textureFloat(false),
-      textureFloatLinear(false),
-      textureRG(false),
-      textureCompressionDXT1(false),
-      textureCompressionDXT3(false),
-      textureCompressionDXT5(false),
-      textureCompressionS3TCsRGB(false),
-      textureCompressionASTCHDR(false),
-      textureCompressionASTCLDR(false),
-      compressedETC1RGB8Texture(false),
-      sRGB(false),
-      depthTextures(false),
-      depth32(false),
-      textureStorage(false),
-      textureNPOT(false),
-      drawBuffers(false),
-      textureFilterAnisotropic(false),
-      maxTextureAnisotropy(0.0f),
-      occlusionQueryBoolean(false),
-      fence(false),
-      timerQuery(false),
-      disjointTimerQuery(false),
-      queryCounterBitsTimeElapsed(0),
-      queryCounterBitsTimestamp(0),
-      robustness(false),
-      robustBufferAccessBehavior(false),
-      blendMinMax(false),
-      framebufferBlit(false),
-      framebufferMultisample(false),
-      instancedArrays(false),
-      packReverseRowOrder(false),
-      standardDerivatives(false),
-      shaderTextureLOD(false),
-      shaderFramebufferFetch(false),
-      ARMshaderFramebufferFetch(false),
-      NVshaderFramebufferFetch(false),
-      fragDepth(false),
-      multiview(false),
-      maxViews(1u),
-      textureUsage(false),
-      translatedShaderSource(false),
-      fboRenderMipmap(false),
-      discardFramebuffer(false),
-      debugMarker(false),
-      eglImage(false),
-      eglImageExternal(false),
-      eglImageExternalEssl3(false),
-      eglStreamConsumerExternal(false),
-      unpackSubimage(false),
-      packSubimage(false),
-      vertexArrayObject(false),
-      debug(false),
-      maxDebugMessageLength(0),
-      maxDebugLoggedMessages(0),
-      maxDebugGroupStackDepth(0),
-      maxLabelLength(0),
-      noError(false),
-      lossyETCDecode(false),
-      bindUniformLocation(false),
-      syncQuery(false),
-      copyTexture(false),
-      copyCompressedTexture(false),
-      webglCompatibility(false),
-      requestExtension(false),
-      bindGeneratesResource(false),
-      robustClientMemory(false),
-      textureSRGBDecode(false),
-      sRGBWriteControl(false),
-      colorBufferFloatRGB(false),
-      colorBufferFloatRGBA(false),
-      colorBufferFloat(false),
-      multisampleCompatibility(false),
-      framebufferMixedSamples(false),
-      textureNorm16(false),
-      pathRendering(false),
-      surfacelessContext(false),
-      clientArrays(false),
-      robustResourceInitialization(false),
-      programCacheControl(false),
-      textureRectangle(false)
-{
-}
-
-std::vector<std::string> Extensions::getStrings() const
+std::vector<std::string> GetExtensionsStrings(const Extensions &extensions)
 {
     std::vector<std::string> extensionStrings;
 
     for (const auto &extensionInfo : GetExtensionInfoMap())
     {
-        if (this->*(extensionInfo.second.ExtensionsMember))
+        if (extensions.*(extensionInfo.second.ExtensionsMember))
         {
             extensionStrings.push_back(extensionInfo.first);
         }
@@ -573,31 +477,32 @@ static bool DetermineTextureNorm16Support(const TextureCapsMap &textureCaps)
            GetFormatSupport(textureCaps, requiredRenderFormats, true, false, true);
 }
 
-void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
+void SetTextureExtensionSupport(Extensions *exts, const TextureCapsMap &textureCaps)
 {
-    packedDepthStencil = DeterminePackedDepthStencilSupport(textureCaps);
-    rgb8rgba8 = DetermineRGB8AndRGBA8TextureSupport(textureCaps);
-    textureFormatBGRA8888 = DetermineBGRA8TextureSupport(textureCaps);
-    colorBufferHalfFloat      = DetermineColorBufferHalfFloatSupport(textureCaps);
-    textureHalfFloat = DetermineHalfFloatTextureSupport(textureCaps);
-    textureHalfFloatLinear = DetermineHalfFloatTextureFilteringSupport(textureCaps);
-    textureFloat = DetermineFloatTextureSupport(textureCaps);
-    textureFloatLinear = DetermineFloatTextureFilteringSupport(textureCaps);
-    textureRG = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
-    textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
-    textureCompressionDXT3 = DetermineDXT3TextureSupport(textureCaps);
-    textureCompressionDXT5 = DetermineDXT5TextureSupport(textureCaps);
-    textureCompressionS3TCsRGB = DetermineS3TCsRGBTextureSupport(textureCaps);
-    textureCompressionASTCHDR = DetermineASTCTextureSupport(textureCaps);
-    textureCompressionASTCLDR = textureCompressionASTCHDR;
-    compressedETC1RGB8Texture = DetermineETC1RGB8TextureSupport(textureCaps);
-    sRGB = DetermineSRGBTextureSupport(textureCaps);
-    depthTextures = DetermineDepthTextureSupport(textureCaps);
-    depth32                   = DetermineDepth32Support(textureCaps);
-    colorBufferFloatRGB        = DetermineColorBufferFloatRGBSupport(textureCaps);
-    colorBufferFloatRGBA       = DetermineColorBufferFloatRGBASupport(textureCaps);
-    colorBufferFloat = DetermineColorBufferFloatSupport(textureCaps);
-    textureNorm16             = DetermineTextureNorm16Support(textureCaps);
+    exts->packedDepthStencil     = DeterminePackedDepthStencilSupport(textureCaps);
+    exts->rgb8rgba8              = DetermineRGB8AndRGBA8TextureSupport(textureCaps);
+    exts->textureFormatBGRA8888  = DetermineBGRA8TextureSupport(textureCaps);
+    exts->colorBufferHalfFloat   = DetermineColorBufferHalfFloatSupport(textureCaps);
+    exts->textureHalfFloat       = DetermineHalfFloatTextureSupport(textureCaps);
+    exts->textureHalfFloatLinear = DetermineHalfFloatTextureFilteringSupport(textureCaps);
+    exts->textureFloat           = DetermineFloatTextureSupport(textureCaps);
+    exts->textureFloatLinear     = DetermineFloatTextureFilteringSupport(textureCaps);
+    exts->textureRG =
+        DetermineRGTextureSupport(textureCaps, exts->textureHalfFloat, exts->textureFloat);
+    exts->textureCompressionDXT1     = DetermineDXT1TextureSupport(textureCaps);
+    exts->textureCompressionDXT3     = DetermineDXT3TextureSupport(textureCaps);
+    exts->textureCompressionDXT5     = DetermineDXT5TextureSupport(textureCaps);
+    exts->textureCompressionS3TCsRGB = DetermineS3TCsRGBTextureSupport(textureCaps);
+    exts->textureCompressionASTCHDR  = DetermineASTCTextureSupport(textureCaps);
+    exts->textureCompressionASTCLDR  = exts->textureCompressionASTCHDR;
+    exts->compressedETC1RGB8Texture  = DetermineETC1RGB8TextureSupport(textureCaps);
+    exts->sRGB                       = DetermineSRGBTextureSupport(textureCaps);
+    exts->depthTextures              = DetermineDepthTextureSupport(textureCaps);
+    exts->depth32                    = DetermineDepth32Support(textureCaps);
+    exts->colorBufferFloatRGB        = DetermineColorBufferFloatRGBSupport(textureCaps);
+    exts->colorBufferFloatRGBA       = DetermineColorBufferFloatRGBASupport(textureCaps);
+    exts->colorBufferFloat           = DetermineColorBufferFloatSupport(textureCaps);
+    exts->textureNorm16              = DetermineTextureNorm16Support(textureCaps);
 }
 
 const ExtensionInfoMap &GetExtensionInfoMap()

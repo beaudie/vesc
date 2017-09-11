@@ -8,8 +8,9 @@
 #define LIBANGLE_CAPS_H_
 
 #include "angle_gl.h"
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Version.h"
+#include "libANGLE/angletypes.h"
+#include "platform/Extensions.h"
 
 #include <map>
 #include <set>
@@ -76,307 +77,29 @@ class TextureCapsMap
 TextureCapsMap GenerateMinimumTextureCapsMap(const Version &clientVersion,
                                              const Extensions &extensions);
 
-struct Extensions
-{
-    Extensions();
-
-    // Generate a vector of supported extension strings
-    std::vector<std::string> getStrings() const;
-
-    // Set all texture related extension support based on the supported textures.
-    // Determines support for:
-    // GL_OES_packed_depth_stencil
-    // GL_OES_rgb8_rgba8
-    // GL_EXT_texture_format_BGRA8888
-    // GL_EXT_color_buffer_half_float,
-    // GL_OES_texture_half_float, GL_OES_texture_half_float_linear
-    // GL_OES_texture_float, GL_OES_texture_float_linear
-    // GL_EXT_texture_rg
-    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
-    // GL_ANGLE_texture_compression_dxt5
-    // GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr
-    // GL_OES_compressed_ETC1_RGB8_texture
-    // GL_EXT_sRGB
-    // GL_ANGLE_depth_texture, GL_OES_depth32
-    // GL_EXT_color_buffer_float
-    // GL_EXT_texture_norm16
-    void setTextureExtensionSupport(const TextureCapsMap &textureCaps);
-
-    // ES2 Extension support
-
-    // GL_OES_element_index_uint
-    bool elementIndexUint;
-
-    // GL_OES_packed_depth_stencil
-    bool packedDepthStencil;
-
-    // GL_OES_get_program_binary
-    bool getProgramBinary;
-
-    // GL_OES_rgb8_rgba8
-    // Implies that TextureCaps for GL_RGB8 and GL_RGBA8 exist
-    bool rgb8rgba8;
-
-    // GL_EXT_texture_format_BGRA8888
-    // Implies that TextureCaps for GL_BGRA8 exist
-    bool textureFormatBGRA8888;
-
-    // GL_EXT_read_format_bgra
-    bool readFormatBGRA;
-
-    // GL_NV_pixel_buffer_object
-    bool pixelBufferObject;
-
-    // GL_OES_mapbuffer and GL_EXT_map_buffer_range
-    bool mapBuffer;
-    bool mapBufferRange;
-
-    // GL_EXT_color_buffer_half_float
-    // Together with GL_OES_texture_half_float in a GLES 2.0 context, implies that half-float
-    // textures are renderable.
-    bool colorBufferHalfFloat;
-
-    // GL_OES_texture_half_float and GL_OES_texture_half_float_linear
-    // Implies that TextureCaps for GL_RGB16F, GL_RGBA16F, GL_ALPHA32F_EXT, GL_LUMINANCE32F_EXT and
-    // GL_LUMINANCE_ALPHA32F_EXT exist
-    bool textureHalfFloat;
-    bool textureHalfFloatLinear;
-
-    // GL_OES_texture_float and GL_OES_texture_float_linear
-    // Implies that TextureCaps for GL_RGB32F, GL_RGBA32F, GL_ALPHA16F_EXT, GL_LUMINANCE16F_EXT and
-    // GL_LUMINANCE_ALPHA16F_EXT exist
-    bool textureFloat;
-    bool textureFloatLinear;
-
-    // GL_EXT_texture_rg
-    // Implies that TextureCaps for GL_R8, GL_RG8 (and floating point R/RG texture formats if floating point extensions
-    // are also present) exist
-    bool textureRG;
-
-    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3 and GL_ANGLE_texture_compression_dxt5
-    // Implies that TextureCaps exist for GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
-    // GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE and GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE
-    bool textureCompressionDXT1;
-    bool textureCompressionDXT3;
-    bool textureCompressionDXT5;
-
-    // GL_EXT_texture_compression_s3tc_srgb
-    // Implies that TextureCaps exist for GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
-    // GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, and
-    // GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT
-    bool textureCompressionS3TCsRGB;
-
-    // GL_KHR_texture_compression_astc_hdr
-    bool textureCompressionASTCHDR;
-
-    // GL_KHR_texture_compression_astc_ldr
-    bool textureCompressionASTCLDR;
-
-    // GL_OES_compressed_ETC1_RGB8_texture
-    // Implies that TextureCaps for GL_ETC1_RGB8_OES exist
-    bool compressedETC1RGB8Texture;
-
-    // GL_EXT_sRGB
-    // Implies that TextureCaps for GL_SRGB8_ALPHA8 and GL_SRGB8 exist
-    // TODO: Don't advertise this extension in ES3
-    bool sRGB;
-
-    // GL_ANGLE_depth_texture
-    bool depthTextures;
-
-    // GL_OES_depth32
-    // Allows DEPTH_COMPONENT32_OES as a valid Renderbuffer format.
-    bool depth32;
-
-    // GL_EXT_texture_storage
-    bool textureStorage;
-
-    // GL_OES_texture_npot
-    bool textureNPOT;
-
-    // GL_EXT_draw_buffers
-    bool drawBuffers;
-
-    // GL_EXT_texture_filter_anisotropic
-    bool textureFilterAnisotropic;
-    GLfloat maxTextureAnisotropy;
-
-    // GL_EXT_occlusion_query_boolean
-    bool occlusionQueryBoolean;
-
-    // GL_NV_fence
-    bool fence;
-
-    // GL_ANGLE_timer_query
-    bool timerQuery;
-
-    // GL_EXT_disjoint_timer_query
-    bool disjointTimerQuery;
-    GLuint queryCounterBitsTimeElapsed;
-    GLuint queryCounterBitsTimestamp;
-
-    // GL_EXT_robustness
-    bool robustness;
-
-    // GL_KHR_robust_buffer_access_behavior
-    bool robustBufferAccessBehavior;
-
-    // GL_EXT_blend_minmax
-    bool blendMinMax;
-
-    // GL_ANGLE_framebuffer_blit
-    bool framebufferBlit;
-
-    // GL_ANGLE_framebuffer_multisample
-    bool framebufferMultisample;
-
-    // GL_ANGLE_instanced_arrays
-    bool instancedArrays;
-
-    // GL_ANGLE_pack_reverse_row_order
-    bool packReverseRowOrder;
-
-    // GL_OES_standard_derivatives
-    bool standardDerivatives;
-
-    // GL_EXT_shader_texture_lod
-    bool shaderTextureLOD;
-
-    // GL_EXT_shader_framebuffer_fetch
-    bool shaderFramebufferFetch;
-
-    // GL_ARM_shader_framebuffer_fetch
-    bool ARMshaderFramebufferFetch;
-
-    // GL_NV_shader_framebuffer_fetch
-    bool NVshaderFramebufferFetch;
-
-    // GL_EXT_frag_depth
-    bool fragDepth;
-
-    // ANGLE_multiview
-    bool multiview;
-    GLuint maxViews;
-
-    // GL_ANGLE_texture_usage
-    bool textureUsage;
-
-    // GL_ANGLE_translated_shader_source
-    bool translatedShaderSource;
-
-    // GL_OES_fbo_render_mipmap
-    bool fboRenderMipmap;
-
-    // GL_EXT_discard_framebuffer
-    bool discardFramebuffer;
-
-    // EXT_debug_marker
-    bool debugMarker;
-
-    // GL_OES_EGL_image
-    bool eglImage;
-
-    // GL_OES_EGL_image_external
-    bool eglImageExternal;
-
-    // GL_OES_EGL_image_external_essl3
-    bool eglImageExternalEssl3;
-
-    // NV_EGL_stream_consumer_external
-    bool eglStreamConsumerExternal;
-
-    // EXT_unpack_subimage
-    bool unpackSubimage;
-
-    // NV_pack_subimage
-    bool packSubimage;
-
-    // GL_OES_vertex_array_object
-    bool vertexArrayObject;
-
-    // GL_KHR_debug
-    bool debug;
-    GLuint maxDebugMessageLength;
-    GLuint maxDebugLoggedMessages;
-    GLuint maxDebugGroupStackDepth;
-    GLuint maxLabelLength;
-
-    // KHR_no_error
-    bool noError;
-
-    // GL_ANGLE_lossy_etc_decode
-    bool lossyETCDecode;
-
-    // GL_CHROMIUM_bind_uniform_location
-    bool bindUniformLocation;
-
-    // GL_CHROMIUM_sync_query
-    bool syncQuery;
-
-    // GL_CHROMIUM_copy_texture
-    bool copyTexture;
-
-    // GL_CHROMIUM_copy_compressed_texture
-    bool copyCompressedTexture;
-
-    // GL_ANGLE_webgl_compatibility
-    bool webglCompatibility;
-
-    // GL_ANGLE_request_extension
-    bool requestExtension;
-
-    // GL_CHROMIUM_bind_generates_resource
-    bool bindGeneratesResource;
-
-    // GL_ANGLE_robust_client_memory
-    bool robustClientMemory;
-
-    // GL_EXT_texture_sRGB_decode
-    bool textureSRGBDecode;
-
-    // GL_EXT_sRGB_write_control
-    bool sRGBWriteControl;
-
-    // GL_CHROMIUM_color_buffer_float_rgb
-    bool colorBufferFloatRGB;
-
-    // GL_CHROMIUM_color_buffer_float_rgba
-    bool colorBufferFloatRGBA;
-
-    // ES3 Extension support
-
-    // GL_EXT_color_buffer_float
-    bool colorBufferFloat;
-
-    // GL_EXT_multisample_compatibility.
-    // written against ES 3.1 but can apply to earlier versions.
-    bool multisampleCompatibility;
-
-    // GL_CHROMIUM_framebuffer_mixed_samples
-    bool framebufferMixedSamples;
-
-    // GL_EXT_texture_norm16
-    // written against ES 3.1 but can apply to ES 3.0 as well.
-    bool textureNorm16;
-
-    // GL_CHROMIUM_path_rendering
-    bool pathRendering;
-
-    // GL_OES_surfaceless_context
-    bool surfacelessContext;
-
-    // GL_ANGLE_client_arrays
-    bool clientArrays;
-
-    // GL_ANGLE_robust_resource_initialization
-    bool robustResourceInitialization;
-
-    // GL_ANGLE_program_cache_control
-    bool programCacheControl;
-
-    // GL_ANGLE_texture_rectangle
-    bool textureRectangle;
-};
+// Please see platform/Extensions.h for the Extensions struct, where it is accessible to tests.
+
+// Set all texture related extension support based on the supported textures.
+// Determines support for:
+// GL_OES_packed_depth_stencil
+// GL_OES_rgb8_rgba8
+// GL_EXT_texture_format_BGRA8888
+// GL_EXT_color_buffer_half_float,
+// GL_OES_texture_half_float, GL_OES_texture_half_float_linear
+// GL_OES_texture_float, GL_OES_texture_float_linear
+// GL_EXT_texture_rg
+// GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
+// GL_ANGLE_texture_compression_dxt5
+// GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr
+// GL_OES_compressed_ETC1_RGB8_texture
+// GL_EXT_sRGB
+// GL_ANGLE_depth_texture, GL_OES_depth32
+// GL_EXT_color_buffer_float
+// GL_EXT_texture_norm16
+void SetTextureExtensionSupport(Extensions *extensions, const TextureCapsMap &textureCaps);
+
+// Generate a vector of supported extension strings
+std::vector<std::string> GetExtensionsStrings(const Extensions &extensions);
 
 struct ExtensionInfo
 {

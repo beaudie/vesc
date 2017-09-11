@@ -41,6 +41,7 @@
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/validationES.h"
+#include "platform/Platform.h"
 
 namespace
 {
@@ -2442,7 +2443,7 @@ void Context::initExtensionStrings()
     };
 
     mExtensionStrings.clear();
-    for (const auto &extensionString : mExtensions.getStrings())
+    for (const auto &extensionString : GetExtensionsStrings(mExtensions))
     {
         mExtensionStrings.push_back(MakeStaticString(extensionString));
     }
@@ -2642,6 +2643,10 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions)
 
     mCaps.maxFragmentInputComponents =
         std::min<GLuint>(mCaps.maxFragmentInputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
+
+    // Allow tests to force certain extension settings.
+    auto *platform = ANGLEPlatformCurrent();
+    platform->overrideGLExtensions(platform, &mExtensions);
 
     // WebGL compatibility
     mExtensions.webglCompatibility = mWebGLContext;

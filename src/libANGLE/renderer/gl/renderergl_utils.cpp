@@ -859,7 +859,7 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     // Extension support
-    extensions->setTextureExtensionSupport(*textureCapsMap);
+    SetTextureExtensionSupport(extensions, *textureCapsMap);
     extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
                                    functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_element_index_uint");
     extensions->getProgramBinary = caps->programBinaryFormats.size() > 0;

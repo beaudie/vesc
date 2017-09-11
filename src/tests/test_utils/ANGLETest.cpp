@@ -79,6 +79,15 @@ void TestPlatform_overrideWorkaroundsD3D(angle::PlatformMethods *platform,
     }
 }
 
+void TestPlatform_overrideGLExtensions(angle::PlatformMethods *platform, gl::Extensions *extensions)
+{
+    auto *testPlatformContext = static_cast<TestPlatformContext *>(platform->context);
+    if (testPlatformContext->currentTest)
+    {
+        testPlatformContext->currentTest->overrideGLExtensions(extensions);
+    }
+}
+
 std::array<angle::Vector3, 4> GetIndexedQuadVertices()
 {
     std::array<angle::Vector3, 4> vertices;
@@ -259,6 +268,7 @@ void ANGLETestBase::ANGLETestSetUp()
     }
 
     mPlatformMethods.overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
+    mPlatformMethods.overrideGLExtensions   = angle::TestPlatform_overrideGLExtensions;
     mPlatformMethods.logError               = angle::TestPlatform_logError;
     mPlatformMethods.logWarning             = angle::TestPlatform_logWarning;
     mPlatformMethods.logInfo                = angle::TestPlatform_logInfo;

@@ -52,6 +52,11 @@
 #define EXPECT_GLENUM_NE(expected, actual) \
     EXPECT_NE(static_cast<GLenum>(expected), static_cast<GLenum>(actual))
 
+namespace gl
+{
+struct Extensions;
+}  // namespace gl
+
 namespace angle
 {
 struct GLColorRGB
@@ -229,6 +234,7 @@ class ANGLETestBase
     static bool eglDisplayExtensionEnabled(EGLDisplay display, const std::string &extName);
 
     virtual void overrideWorkaroundsD3D(angle::WorkaroundsD3D *workaroundsD3D) {}
+    virtual void overrideGLExtensions(gl::Extensions *workaroundsD3D) {}
 
   protected:
     void ANGLETestSetUp();

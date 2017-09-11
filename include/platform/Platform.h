@@ -31,6 +31,11 @@
 #   define ANGLE_APIENTRY
 #endif
 
+namespace gl
+{
+struct Extensions;
+}  // namespace gl
+
 namespace angle
 {
 struct WorkaroundsD3D;
@@ -245,6 +250,12 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
 {
 }
 
+// Allows us to programatically override ANGLE's GL extensions for testing purposes.
+using OverrideGLExtensionsFunc = void (*)(PlatformMethods *platform, gl::Extensions *extensions);
+inline void DefaultOverrideGLExtensions(PlatformMethods *platform, gl::Extensions *extensions)
+{
+}
+
 // Platform methods are enumerated here once.
 #define ANGLE_PLATFORM_OP(OP)                                    \
     OP(currentTime, CurrentTime)                                 \
@@ -260,7 +271,8 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
     OP(histogramSparse, HistogramSparse)                         \
     OP(histogramBoolean, HistogramBoolean)                       \
     OP(overrideWorkaroundsD3D, OverrideWorkaroundsD3D)           \
-    OP(cacheProgram, CacheProgram)
+    OP(cacheProgram, CacheProgram)                               \
+    OP(overrideGLExtensions, OverrideGLExtensions)
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
 
