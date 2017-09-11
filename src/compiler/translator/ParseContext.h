@@ -396,6 +396,7 @@ class TParseContext : angle::NonCopyable
     TIntermBranch *addBranch(TOperator op, const TSourceLoc &loc);
     TIntermBranch *addBranch(TOperator op, TIntermTyped *expression, const TSourceLoc &loc);
 
+    void checkTextureGather(TIntermAggregate *functionCall);
     void checkTextureOffsetConst(TIntermAggregate *functionCall);
     void checkImageMemoryAccessForBuiltinFunctions(TIntermAggregate *functionCall);
     void checkImageMemoryAccessForUserDefinedFunctions(const TFunction *functionDefinition,
@@ -579,6 +580,9 @@ class TParseContext : angle::NonCopyable
                                  // gl_Secondary FragColor or both.
     int mMinProgramTexelOffset;
     int mMaxProgramTexelOffset;
+
+    int mMinProgramTextureGatherOffset;
+    int mMaxProgramTextureGatherOffset;
 
     bool mMultiviewAvailable;
 
