@@ -476,6 +476,11 @@ PlatformParameters ES3_D3D11()
     return PlatformParameters(3, 0, egl_platform::D3D11());
 }
 
+PlatformParameters ES3_D3D11(EGLenum presentPath)
+{
+    return PlatformParameters(3, 0, egl_platform::D3D11(presentPath));
+}
+
 PlatformParameters ES3_D3D11_FL11_1()
 {
     return PlatformParameters(3, 0, egl_platform::D3D11_FL11_1());

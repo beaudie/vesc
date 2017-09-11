@@ -385,7 +385,8 @@ gl::Error Image11::copyFromFramebuffer(const gl::Context *context,
     const auto &d3d11Format =
         d3d11::Format::Get(sourceInternalFormat, mRenderer->getRenderer11DeviceCaps());
 
-    if (d3d11Format.texFormat == mDXGIFormat && sourceInternalFormat == mInternalFormat)
+    if (d3d11Format.texFormat == mDXGIFormat && sourceInternalFormat == mInternalFormat &&
+        !UsePresentPathFast(mRenderer, srcAttachment))
     {
         RenderTarget11 *rt11 = nullptr;
         ANGLE_TRY(srcAttachment->getRenderTarget(context, &rt11));

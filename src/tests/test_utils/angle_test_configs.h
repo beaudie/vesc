@@ -110,6 +110,7 @@ PlatformParameters ES2_D3D11_FL10_0_REFERENCE();
 PlatformParameters ES2_D3D11_FL9_3_REFERENCE();
 
 PlatformParameters ES3_D3D11();
+PlatformParameters ES3_D3D11(EGLenum presentPath);
 PlatformParameters ES3_D3D11_FL11_1();
 PlatformParameters ES3_D3D11_FL11_0();
 PlatformParameters ES3_D3D11_FL10_1();

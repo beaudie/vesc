@@ -360,6 +360,92 @@ TEST_P(CopyTexImageTestES3, ReadBufferIsNone)
     glDeleteTextures(1, &tex);
 }
 
+// Read default framebuffer with glCopyTexImage2D(). First init to non-solid color.
+TEST_P(CopyTexImageTestES3, DefaultFramebufferMultiColor)
+{
+    const std::array<GLColor, 4> fourColors = {
+        {GLColor::red, GLColor::green, GLColor::blue, GLColor::yellow}};
+    const std::array<GLColor, 4> black = {
+        {GLColor::black, GLColor::black, GLColor::black, GLColor::black}};
+
+    // Surface may be BGRA or RGBA.
+    GLint format = GL_NONE;
+    glGetIntegerv(GL_IMPLEMENTATION_COLOR_READ_FORMAT, &format);
+    ASSERT_TRUE(format == GL_RGBA || format == GL_BGRA_EXT);
+
+    // Initalize 2x2 colored texture.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, fourColors.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    // Check four corners.
+    const GLint size = getWindowWidth();
+    ASSERT_EQ(size, getWindowHeight());
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, size - 1, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, size - 1, GLColor::yellow);
+
+    // Clear texture data.
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2, 2, GL_RGBA, GL_UNSIGNED_BYTE, black.data());
+
+    // Read from Surface.
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, format, 0, 0, size, size, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear Surface
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(0, size - 1, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, size - 1, GLColor::black);
+
+    // Draw with texture again, should be colored.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, size - 1, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, size - 1, GLColor::yellow);
+
+    // Try again with a totally fresh texture. Use level 1 to confuse ANGLE.
+    GLTexture newTex;
+    glBindTexture(GL_TEXTURE_2D, newTex);
+
+    glCopyTexImage2D(GL_TEXTURE_2D, 1, format, 0, 0, size, size, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear Surface
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(0, size - 1, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, size - 1, GLColor::black);
+
+    // Draw with texture again, should be colored.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, size - 1, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(size - 1, size - 1, GLColor::yellow);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
@@ -370,5 +456,9 @@ ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
                        ES2_OPENGL(3, 3),
                        ES2_OPENGLES());
 
-ANGLE_INSTANTIATE_TEST(CopyTexImageTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(CopyTexImageTestES3,
+                       ES3_D3D11(),
+                       ES3_D3D11(EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
 }
