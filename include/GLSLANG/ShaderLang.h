@@ -343,6 +343,10 @@ struct ShBuiltInResources
 
     // GLES 3.1 constants
 
+    // texture gather offset constraints.
+    int MinProgramTextureGatherOffset;
+    int MaxProgramTextureGatherOffset;
+
     // maximum number of available image units
     int MaxImageUnits;
 
