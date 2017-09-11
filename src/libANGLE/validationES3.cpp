@@ -2021,6 +2021,31 @@ bool ValidateCompressedTexSubImage3DRobustANGLE(Context *context,
                                            height, depth, format, imageSize, data);
 }
 
+static bool ValidateGenOrDeleteES3(Context *context, GLint n)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        context->handleError(InvalidOperation() << "Context does not support GLES3.");
+        return false;
+    }
+    return ValidateGenOrDelete(context, n);
+}
+
+static bool ValidateGenOrDeleteCountES3(Context *context, GLint count)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
+        return false;
+    }
+    if (count < 0)
+    {
+        context->handleError(InvalidValue() << "count < 0");
+        return false;
+    }
+    return true;
+}
+
 bool ValidateGenQueries(Context *context, GLint n, GLuint *)
 {
     return ValidateGenOrDeleteES3(context, n);
@@ -2074,31 +2099,6 @@ bool ValidateGenVertexArrays(Context *context, GLint n, GLuint *)
 bool ValidateDeleteVertexArrays(Context *context, GLint n, const GLuint *)
 {
     return ValidateGenOrDeleteES3(context, n);
-}
-
-bool ValidateGenOrDeleteES3(Context *context, GLint n)
-{
-    if (context->getClientMajorVersion() < 3)
-    {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.");
-        return false;
-    }
-    return ValidateGenOrDelete(context, n);
-}
-
-bool ValidateGenOrDeleteCountES3(Context *context, GLint count)
-{
-    if (context->getClientMajorVersion() < 3)
-    {
-        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
-        return false;
-    }
-    if (count < 0)
-    {
-        context->handleError(InvalidValue() << "count < 0");
-        return false;
-    }
-    return true;
 }
 
 bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode)
