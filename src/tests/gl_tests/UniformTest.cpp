@@ -396,7 +396,15 @@ TEST_P(UniformTest, BooleanArrayUniformStateQuery)
 class UniformTestES3 : public ANGLETest
 {
   protected:
-    UniformTestES3() : mProgram(0) {}
+    UniformTestES3() : mProgram(0)
+    {
+        setWindowWidth(64);
+        setWindowHeight(64);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
 
     void SetUp() override
     {
