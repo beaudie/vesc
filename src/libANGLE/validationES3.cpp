@@ -583,6 +583,7 @@ bool GetUnsizedEffectiveInternalFormatInfo(const InternalFormat &srcFormat,
         { GL_RGBA4,                  GL_RGBA,            1,    4, 1,    4, 1,    4, 1,    4 },
         { GL_RGB5_A1,                GL_RGBA,            5,    5, 5,    5, 5,    5, 1,    1 },
         { GL_RGBA8,                  GL_RGBA,            5,    8, 5,    8, 5,    8, 5,    8 },
+        { GL_BGRA8_EXT,              GL_BGRA_EXT,        8,    8, 8,    8, 8,    8, 8,    8 },
     };
     // clang-format on
 
