@@ -744,10 +744,6 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
             {
                 return EglBadConfig();
             }
-            if (!(configuration->conformant & EGL_OPENGL_ES3_BIT_KHR))
-            {
-                return EglBadConfig();
-            }
             if (display->getMaxSupportedESVersion() <
                 gl::Version(static_cast<GLuint>(clientMajorVersion),
                             static_cast<GLuint>(clientMinorVersion)))
