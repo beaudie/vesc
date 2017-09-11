@@ -565,6 +565,9 @@ Renderer11::Renderer11(egl::Display *display)
         EGL_EXPERIMENTAL_PRESENT_PATH_ANGLE, EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE));
     mPresentPathFastEnabled = (presentPath == EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE);
 
+    // For testing only.
+    mPresentPathFastEnabled = true;
+
 // The D3D11 renderer must choose the D3D9 debug annotator because the D3D11 interface
 // method ID3DUserDefinedAnnotation::GetStatus on desktop builds doesn't work with the Graphics
 // Diagnostics tools in Visual Studio 2013.
@@ -1115,7 +1118,7 @@ egl::ConfigSet Renderer11::generateConfigs()
 
                 // PresentPathFast may not be conformant
                 config.conformant = 0;
-                if (!mPresentPathFastEnabled)
+                //if (!mPresentPathFastEnabled)
                 {
                     // Can only support a conformant ES2 with feature level greater than 10.0.
                     if (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
