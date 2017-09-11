@@ -1153,7 +1153,7 @@ bool ValidateGetProgramResourceiv(Context *context,
 {
     if (context->getClientVersion() < ES_3_1)
     {
-        context->handleError(InvalidOperation() << "Context does not support GLES3.1.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
         return false;
     }
 
