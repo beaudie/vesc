@@ -537,9 +537,10 @@ Renderer11::Renderer11(egl::Display *display)
                 UNREACHABLE();
         }
 
-        const EGLenum presentPath = static_cast<EGLenum>(attributes.get(
-            EGL_EXPERIMENTAL_PRESENT_PATH_ANGLE, EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE));
-        mPresentPathFastEnabled = (presentPath == EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE);
+         //const EGLenum presentPath = static_cast<EGLenum>(attributes.get(
+         //   EGL_EXPERIMENTAL_PRESENT_PATH_ANGLE, EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE));
+         //mPresentPathFastEnabled = (presentPath == EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE);
+        mPresentPathFastEnabled = true;
 
         mCreateDebugDevice = ShouldUseDebugLayers(attributes);
     }
@@ -1082,7 +1083,7 @@ egl::ConfigSet Renderer11::generateConfigs()
 
                 // PresentPathFast may not be conformant
                 config.conformant = 0;
-                if (!mPresentPathFastEnabled)
+                //if (!mPresentPathFastEnabled)
                 {
                     // Can only support a conformant ES2 with feature level greater than 10.0.
                     if (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
