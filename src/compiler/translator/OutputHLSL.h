@@ -200,6 +200,7 @@ class OutputHLSL : public TIntermTraverser
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
     bool mRequiresIEEEStrictCompiling;
+    bool mUsesdFdy;
 
     int mNumRenderTargets;
 
