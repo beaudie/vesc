@@ -187,6 +187,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mUsesDiscardRewriting        = false;
     mUsesNestedBreak             = false;
     mRequiresIEEEStrictCompiling = false;
+    mUsesdFdy                    = false;
 
     mUniqueIndex = 0;
 
@@ -578,7 +579,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
                 out << "    float3 dx_DepthFront : packoffset(c2);\n";
             }
 
-            if (mUsesFragCoord)
+            if (mUsesFragCoord || mUsesdFdy)
             {
                 // dx_ViewScale is only used in the fragment shader to correct
                 // the value for glFragCoord if necessary
@@ -1599,13 +1600,15 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
             }
             break;
         case EOpDFdy:
+            mUsesdFdy = true;
             if (mInsideDiscontinuousLoop || mOutputLod0Function)
             {
                 outputTriplet(out, visit, "(", "", ", 0.0)");
             }
             else
             {
-                outputTriplet(out, visit, "ddy(", "", ")");
+                // Modulate the return value of ddy by the y flip encoded in ViewScale.
+                outputTriplet(out, visit, "(ddy(", "", ") * float2(dx_ViewScale.x, -dx_ViewScale.y))");
             }
             break;
         case EOpFwidth:
