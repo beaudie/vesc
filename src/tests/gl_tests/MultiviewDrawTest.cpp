@@ -594,7 +594,6 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
 // 1) generates an INVALID_OPERATION error if the number of views in the active draw framebuffer and
 // program differs.
 // 2) does not generate any error if the number of views is the same.
-// 3) does not generate any error if the program does not use the multiview extension.
 TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
 {
     if (!requestMultiviewExtension())
@@ -636,30 +635,6 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
     // Check that no errors are generated if the number of views in both program and draw
     // framebuffer matches.
     {
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
-
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        EXPECT_GL_NO_ERROR();
-
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
-        EXPECT_GL_NO_ERROR();
-    }
-
-    // Check that no errors are generated if the program does not use the multiview extension.
-    {
-        const std::string &vsSourceNoMultiview =
-            "#version 300 es\n"
-            "void main()\n"
-            "{}\n";
-        const std::string &fsSourceNoMultiview =
-            "#version 300 es\n"
-            "precision mediump float;\n"
-            "void main()\n"
-            "{}\n";
-        ANGLE_GL_PROGRAM(programNoMultiview, vsSourceNoMultiview, fsSourceNoMultiview);
-        glUseProgram(programNoMultiview);
-
         glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
                                                      0, 2, &viewportOffsets[0]);
 
@@ -1118,14 +1093,17 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
     // It is necessary to call draw, so that the divisor is propagated and to guarantee that dirty
     // bits are cleared.
     glUseProgram(dummyProgram);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBindVertexArray(vao[0]);
     glVertexAttribDivisor(1, 0);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
     glUseProgram(0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
 
     // Check that vertexAttribDivisor uses the number of views to update the divisor.
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(program);
     glVertexAttribDivisor(1, 1);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
@@ -1136,13 +1114,16 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
     // We keep the vao active and propagate the divisor to guarantee that there are no unresolved
     // dirty bits when useProgram is called.
     glUseProgram(dummyProgram);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glVertexAttribDivisor(1, 1);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
     glUseProgram(0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
 
     // Check that useProgram uses the number of views to update the divisor.
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(program);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
     EXPECT_EQ(GLColor::red, GetViewColor(0, 0, 0));
@@ -1150,25 +1131,28 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
 
     // We go through similar steps as before.
     glUseProgram(dummyProgram);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glVertexAttribDivisor(1, 1);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
     glUseProgram(0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
 
     // Check that bindVertexArray uses the number of views to update the divisor.
     {
         // Call useProgram with vao[1] being active to guarantee that useProgram will adjust the
         // divisor for vao[1] only.
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(vao[1]);
         glUseProgram(program);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(0);
         ASSERT_GL_NO_ERROR();
     }
     // Bind vao[0] after useProgram is called to ensure that bindVertexArray is the call which
     // adjusts the divisor.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBindVertexArray(vao[0]);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
     EXPECT_EQ(GLColor::red, GetViewColor(0, 0, 0));
