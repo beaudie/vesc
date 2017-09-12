@@ -329,26 +329,11 @@ gl::Error Framebuffer11::blitImpl(const gl::Context *context,
                 ASSERT(drawRenderTarget);
 
                 const bool invertColorSource   = UsePresentPathFast(mRenderer, readBuffer);
-                gl::Rectangle actualSourceArea = sourceArea;
-                if (invertColorSource)
-                {
-                    RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
-                    actualSourceArea.y                 = readRenderTarget11->getHeight() - sourceArea.y;
-                    actualSourceArea.height            = -sourceArea.height;
-                }
-
                 const bool invertColorDest   = UsePresentPathFast(mRenderer, &drawBuffer);
-                gl::Rectangle actualDestArea = destArea;
-                if (invertColorDest)
-                {
-                    RenderTarget11 *drawRenderTarget11 = GetAs<RenderTarget11>(drawRenderTarget);
-                    actualDestArea.y                   = drawRenderTarget11->getHeight() - destArea.y;
-                    actualDestArea.height              = -destArea.height;
-                }
 
                 ANGLE_TRY(mRenderer->blitRenderbufferRect(
-                    context, actualSourceArea, actualDestArea, readRenderTarget, drawRenderTarget,
-                    filter, scissor, blitRenderTarget, false, false));
+                    context, sourceArea, destArea, readRenderTarget, drawRenderTarget, filter,
+                    scissor, blitRenderTarget, false, false, invertColorSource, invertColorDest));
             }
         }
     }
@@ -369,9 +354,12 @@ gl::Error Framebuffer11::blitImpl(const gl::Context *context,
         ANGLE_TRY(drawBuffer->getRenderTarget(context, &drawRenderTarget));
         ASSERT(drawRenderTarget);
 
-        ANGLE_TRY(mRenderer->blitRenderbufferRect(context, sourceArea, destArea, readRenderTarget,
-                                                  drawRenderTarget, filter, scissor, false,
-                                                  blitDepth, blitStencil));
+        const bool invertColorSource = UsePresentPathFast(mRenderer, readBuffer);
+        const bool invertColorDest   = UsePresentPathFast(mRenderer, drawBuffer);
+
+        ANGLE_TRY(mRenderer->blitRenderbufferRect(
+            context, sourceArea, destArea, readRenderTarget, drawRenderTarget, filter, scissor,
+            false, blitDepth, blitStencil, invertColorSource, invertColorDest));
     }
 
     ANGLE_TRY(markAttachmentsDirty(context));

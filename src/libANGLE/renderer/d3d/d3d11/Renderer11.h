@@ -371,7 +371,9 @@ class Renderer11 : public RendererD3D
                                    const gl::Rectangle *scissor,
                                    bool colorBlit,
                                    bool depthBlit,
-                                   bool stencilBlit);
+                                   bool stencilBlit,
+                                   bool invertReadY,
+                                   bool invertDrawY);
 
     bool isES3Capable() const;
     const Renderer11DeviceCaps &getRenderer11DeviceCaps() const { return mRenderer11DeviceCaps; };

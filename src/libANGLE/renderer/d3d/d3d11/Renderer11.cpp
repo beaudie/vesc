@@ -3469,7 +3469,9 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
                                            const gl::Rectangle *scissor,
                                            bool colorBlit,
                                            bool depthBlit,
-                                           bool stencilBlit)
+                                           bool stencilBlit,
+                                           bool invertReadY,
+                                           bool invertDrawY)
 {
     // Since blitRenderbufferRect is called for each render buffer that needs to be blitted,
     // it should never be the case that both color and depth/stencil need to be blitted at
@@ -3635,6 +3637,18 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
                        readRect.y < 0 || readRect.y + readRect.height > readSize.height ||
                        drawRect.x < 0 || drawRect.x + drawRect.width > drawSize.width ||
                        drawRect.y < 0 || drawRect.y + drawRect.height > drawSize.height;
+
+    if (invertReadY)
+    {
+        readRect.y      = readRenderTarget11->getHeight() - readRect.y;
+        readRect.height = -readRect.height;
+    }
+
+    if (invertDrawY)
+    {
+        drawRect.y      = drawRenderTarget11->getHeight() - drawRect.y;
+        drawRect.height = -drawRect.height;
+    }
 
     bool partialDSBlit =
         (nativeFormat.depthBits > 0 && depthBlit) != (nativeFormat.stencilBits > 0 && stencilBlit);
