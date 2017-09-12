@@ -3375,6 +3375,38 @@ TEST_P(GLSLTest, StructWithSamplerArrayAsFunctionArg)
     EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::green);
 }
 
+// Test shader derivatives.
+TEST_P(GLSLTest_ES3, Derivatives)
+{
+    const std::string vertexShader =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "out vec2 texCoord;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "    texCoord = position * 0.5 + vec2(0.5);\n"
+        "}";
+    const std::string fragmentShader =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec2 texCoord;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    color = vec4(dFdy(texCoord), 0, 1);\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        drawQuad(program, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+        swapBuffers();
+    }
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
