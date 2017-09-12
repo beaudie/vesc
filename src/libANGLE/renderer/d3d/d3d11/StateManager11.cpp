@@ -1337,48 +1337,6 @@ void StateManager11::invalidateBoundViews(const gl::Context *context)
     invalidateRenderTarget(context);
 }
 
-void StateManager11::invalidateEverything(const gl::Context *context)
-{
-    mInternalDirtyBits.set();
-
-    // We reset the current SRV data because it might not be in sync with D3D's state
-    // anymore. For example when a currently used SRV is used as an RTV, D3D silently
-    // remove it from its state.
-    invalidateBoundViews(context);
-
-    // All calls to IASetInputLayout go through the state manager, so it shouldn't be
-    // necessary to invalidate the state.
-
-    // Invalidate the vertex buffer state.
-    invalidateVertexBuffer();
-
-    mCurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
-
-    mAppliedVertexShader.dirty();
-    mAppliedGeometryShader.dirty();
-    mAppliedPixelShader.dirty();
-    mAppliedComputeShader.dirty();
-
-    std::fill(mForceSetVertexSamplerStates.begin(), mForceSetVertexSamplerStates.end(), true);
-    std::fill(mForceSetPixelSamplerStates.begin(), mForceSetPixelSamplerStates.end(), true);
-    std::fill(mForceSetComputeSamplerStates.begin(), mForceSetComputeSamplerStates.end(), true);
-
-    mAppliedIB       = nullptr;
-    mAppliedIBFormat = DXGI_FORMAT_UNKNOWN;
-    mAppliedIBOffset = 0;
-
-    mLastFirstVertex.reset();
-
-    invalidateTexturesAndSamplers();
-
-    invalidateDriverUniforms();
-
-    // As long as all calls to *SSetConstantBuffes go through the StateManager11, it should not be
-    // necessary to invalidate constant buffer state.
-
-    mAppliedTFSerial = Serial();
-}
-
 void StateManager11::invalidateVertexBuffer()
 {
     unsigned int limit = std::min<unsigned int>(mRenderer->getNativeCaps().maxVertexAttributes,
@@ -1578,9 +1536,9 @@ gl::Error StateManager11::initialize(const gl::Caps &caps, const gl::Extensions 
 
     mCurrentValueAttribs.resize(caps.maxVertexAttributes);
 
-    mForceSetVertexSamplerStates.resize(caps.maxVertexTextureImageUnits);
-    mForceSetPixelSamplerStates.resize(caps.maxTextureImageUnits);
-    mForceSetComputeSamplerStates.resize(caps.maxComputeTextureImageUnits);
+    mForceSetVertexSamplerStates.resize(caps.maxVertexTextureImageUnits, true);
+    mForceSetPixelSamplerStates.resize(caps.maxTextureImageUnits, true);
+    mForceSetComputeSamplerStates.resize(caps.maxComputeTextureImageUnits, true);
 
     mCurVertexSamplerStates.resize(caps.maxVertexTextureImageUnits);
     mCurPixelSamplerStates.resize(caps.maxTextureImageUnits);
