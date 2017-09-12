@@ -1839,7 +1839,7 @@ gl::Error Renderer9::applyShaders(const gl::Context *context, GLenum drawMode)
 gl::Error Renderer9::applyUniforms(ProgramD3D *programD3D)
 {
     // Skip updates if we're not dirty.
-    if (!programD3D->areUniformsDirty())
+    if (!programD3D->areVertexUniformsDirty() && !programD3D->areFragmentUniformsDirty())
     {
         return gl::NoError();
     }
