@@ -112,6 +112,17 @@ struct WorkaroundsD3D
     // target slice will be selected in the geometry shader stage. The workaround flag is added to
     // make it possible to select the code path in end2end and performance tests.
     bool selectViewInGeometryShader = false;
+
+    // If rendertarget is not set, the pixel shader will be recompiled to drop 'SV_TARGET'.
+    // On some Intel drivers, when using a pixel shader with no 'SV_TARGET' in a draw, the pixels
+    // are always generated even if they should be discard by 'discard' statements.
+    // See http://anglebug.com/2152
+    bool skipRecompilationNoRenderTarget = false;
+
+    // On some Intel drivers, if rtvMasks is 0 and rendertarget is not set, then rendering samples
+    // always passed neglecting discard of pixel shader. So we set rtvMasks of render target to
+    // D3D11_COLOR_WRITE_ENABLE_ALL to workaround the bug. See http://anglebug.com/2152
+    bool setRenderTargetViewMaskAllPass = false;
 };
 
 }  // namespace angle

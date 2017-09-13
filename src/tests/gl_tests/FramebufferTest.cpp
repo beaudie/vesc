@@ -670,8 +670,10 @@ TEST_P(FramebufferTest_ES31, IncompleteMultisampleFixedSampleLocationsTex)
 // object's default width and height.
 TEST_P(FramebufferTest_ES31, RenderingLimitToDefaultFBOSizeWithNoAttachments)
 {
-    // TODO(yizhou): Investigate why this case fail on Intel GPU.
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsD3D11());
+    if (IsIntel() && IsD3D11())
+    {
+        ignoreD3D11SDKLayersWarnings();
+    }
 
     const std::string &vertexShader =
         "#version 310 es\n"

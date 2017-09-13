@@ -72,6 +72,7 @@ class RenderStateCache : angle::NonCopyable
     void clear();
 
     static d3d11::BlendStateKey GetBlendStateKey(const gl::Context *context,
+                                                 Renderer11 *renderer,
                                                  const gl::Framebuffer *framebuffer,
                                                  const gl::BlendState &blendState);
     gl::Error getBlendState(Renderer11 *renderer,

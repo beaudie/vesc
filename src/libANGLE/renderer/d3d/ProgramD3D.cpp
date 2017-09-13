@@ -2524,10 +2524,20 @@ void ProgramD3D::updateCachedInputLayout(Serial associatedSerial, const gl::Stat
 void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
                                           const gl::Framebuffer *framebuffer)
 {
-    mPixelShaderOutputLayoutCache.clear();
-
     FramebufferD3D *fboD3D   = GetImplAs<FramebufferD3D>(framebuffer);
     const auto &colorbuffers = fboD3D->getColorAttachmentsForRender(context);
+
+    // When framebuffer has no attachments, the pixel shader will be recompiled to drop 'SV_TARGET'.
+    // On Intel drivers, when using a pixel shader with no 'SV_TARGET' in a draw, the pixels are
+    // always generated even if they should be discard by 'discard' statements. So we add a
+    // workaround to keep the cached output layout when framebuffer has no attachments to avoid
+    // shader recompilation on Intel.
+    if (mRenderer->getWorkarounds().skipRecompilationNoRenderTarget && colorbuffers.size() == 0)
+    {
+        return;
+    }
+
+    mPixelShaderOutputLayoutCache.clear();
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
