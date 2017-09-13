@@ -59,7 +59,7 @@ class RefCountObject : RefCountObjectNoID
     GLuint id() const { return mId; }
 
     // A specialized release method for objects which need a destroy context.
-    void release(const gl::Context *context)
+    void release(const Context *context)
     {
         ASSERT(mRefCount > 0);
         if (--mRefCount == 0)
@@ -114,7 +114,9 @@ class BindingPointer
         // addRef first in case newObject == mObject and this is the last reference to it.
         if (newObject != nullptr) reinterpret_cast<const RefCountObject*>(newObject)->addRef();
         if (mObject != nullptr)
+        {
             reinterpret_cast<RefCountObject *>(mObject)->release(context);
+        }
         mObject = newObject;
     }
 

@@ -437,7 +437,8 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (vertexArray.second)
         {
-            vertexArray.second->onDestroy(this);
+            ANGLE_SWALLOW_ERR(vertexArray.second->onDestroy(this));
+            SafeDelete(vertexArray.second);
         }
     }
     mVertexArrayMap.clear();
@@ -453,7 +454,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     for (auto &zeroTexture : mZeroTextures)
     {
-        ANGLE_TRY(zeroTexture.second->onDestroy(this));
         zeroTexture.second.set(this, nullptr);
     }
     mZeroTextures.clear();
@@ -2543,10 +2543,10 @@ void Context::requestExtension(const char *name)
 
     // Invalidate all textures and framebuffer. Some extensions make new formats renderable or
     // sampleable.
-    mState.mTextures->signalAllTexturesDirty();
+    ANGLE_CONTEXT_TRY(mState.mTextures->signalAllTexturesDirty(this));
     for (auto &zeroTexture : mZeroTextures)
     {
-        zeroTexture.second->signalDirty();
+        ANGLE_CONTEXT_TRY(zeroTexture.second->signalDirty(this));
     }
 
     mState.mFramebuffers->invalidateFramebufferComplenessCache();

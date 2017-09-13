@@ -16,23 +16,56 @@ using namespace testing;
 namespace
 {
 
-struct SignalThing : public SignalReceiver<>
+using TestReceiver = SignalReceiver<gl::Error, int>;
+using TestChannel  = BroadcastChannel<gl::Error, int>;
+using TestBinding  = ChannelBinding<gl::Error, int>;
+
+struct SignalThing : public TestReceiver
 {
-    void signal(uint32_t channelID) override { wasSignaled = true; }
+    gl::Error signal(int context, uint32_t channelID) override
+    {
+        wasSignaled = true;
+
+        if (triggerDelete)
+        {
+            currentBinding->bind(nullptr);
+        }
+
+        return gl::NoError();
+    }
     bool wasSignaled = false;
+    bool triggerDelete          = false;
+    TestBinding *currentBinding = nullptr;
 };
 
 // Test that broadcast signals work.
 TEST(SignalTest, BroadcastSignals)
 {
-    BroadcastChannel<> channel;
+    TestChannel channel;
     SignalThing thing;
-    ChannelBinding<> binding(&thing, 0u);
+    TestBinding binding(&thing, 0u);
 
     binding.bind(&channel);
     ASSERT_FALSE(thing.wasSignaled);
-    channel.signal();
+    ASSERT_EQ(gl::NoError(), channel.signal(0));
     ASSERT_TRUE(thing.wasSignaled);
+}
+
+// Test that we can delete from the channel listeners while we're in the signal method.
+TEST(SignalTest, DeleteWhileInSignal)
+{
+    TestChannel channel;
+    SignalThing thing;
+    TestBinding binding(&thing, 0u);
+
+    thing.triggerDelete  = true;
+    thing.currentBinding = &binding;
+
+    binding.bind(&channel);
+    ASSERT_TRUE(channel.hasReceivers());
+    ASSERT_EQ(gl::NoError(), channel.signal(0));
+    ASSERT_TRUE(thing.wasSignaled);
+    ASSERT_FALSE(channel.hasReceivers());
 }
 
 }  // anonymous namespace

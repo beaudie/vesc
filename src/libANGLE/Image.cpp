@@ -130,6 +130,7 @@ gl::Error Image::onDestroy(const gl::Context *context)
         mState.source->removeImageSource(this);
         mState.source.set(context, nullptr);
     }
+
     return gl::NoError();
 }
 

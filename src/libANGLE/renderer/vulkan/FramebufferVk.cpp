@@ -94,12 +94,13 @@ FramebufferVk::~FramebufferVk()
 {
 }
 
-void FramebufferVk::destroy(const gl::Context *context)
+gl::Error FramebufferVk::destroy(const gl::Context *context)
 {
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
     mRenderPass.destroy(device);
     mFramebuffer.destroy(device);
+    return gl::NoError();
 }
 
 void FramebufferVk::destroyDefault(const egl::Display *display)
