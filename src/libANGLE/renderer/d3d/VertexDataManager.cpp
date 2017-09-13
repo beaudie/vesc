@@ -562,7 +562,7 @@ void StoreDirectAttrib(TranslatedAttribute *directAttrib)
     const auto &attrib  = *directAttrib->attribute;
     const auto &binding = *directAttrib->binding;
 
-    gl::Buffer *buffer   = binding.getBuffer().get();
+    gl::Buffer *buffer = binding.getBuffer().get();
     ASSERT(buffer);
     BufferD3D *bufferD3D = GetImplAs<BufferD3D>(buffer);
 

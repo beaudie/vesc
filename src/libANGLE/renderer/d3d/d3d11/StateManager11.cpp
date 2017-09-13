@@ -698,14 +698,17 @@ gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
 
 void StateManager11::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
 {
-    if (!dirtyBits.any())
+    gl::State::DirtyBits mergedDirtyBits = (dirtyBits | mLocalGLDirtyBits);
+    mLocalGLDirtyBits.reset();
+
+    if (!mergedDirtyBits.any())
     {
         return;
     }
 
     const auto &state = context->getGLState();
 
-    for (auto dirtyBit : dirtyBits)
+    for (auto dirtyBit : mergedDirtyBits)
     {
         switch (dirtyBit)
         {
@@ -922,11 +925,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 }
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
-                invalidateRenderTarget(context);
-                if (mIsMultiviewEnabled)
-                {
-                    handleMultiviewDrawFramebufferChange(context);
-                }
+                processFramebufferChange(context);
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING:
                 invalidateVertexBuffer();
@@ -940,7 +939,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
                 invalidateVertexBuffer();
-                invalidateRenderTarget(context);
+                invalidateRenderTarget();
                 invalidateTexturesAndSamplers();
                 invalidateProgramUniforms();
                 invalidateProgramUniformBuffers();
@@ -972,7 +971,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
         }
     }
 
-    // TODO(jmadill): Input layout and vertex buffer state.
+    ASSERT(mLocalGLDirtyBits.none());
 }
 
 void StateManager11::handleMultiviewDrawFramebufferChange(const gl::Context *context)
@@ -1279,26 +1278,22 @@ void StateManager11::syncViewport(const gl::Context *context)
     mShaderConstants.onViewportChange(viewport, adjustViewport, is9_3, mCurPresentPathFastEnabled);
 }
 
-void StateManager11::invalidateRenderTarget(const gl::Context *context)
+void StateManager11::invalidateRenderTarget()
 {
     mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
+}
+
+void StateManager11::processFramebufferChange(const gl::Context *context)
+{
+    ASSERT(context);
+
+    invalidateRenderTarget();
 
     // The D3D11 blend state is heavily dependent on the current render target.
     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
 
-    // nullptr only on display initialization.
-    if (!context)
-    {
-        return;
-    }
-
     gl::Framebuffer *fbo = context->getGLState().getDrawFramebuffer();
-
-    // nullptr fbo can occur in some egl events like display initialization.
-    if (!fbo)
-    {
-        return;
-    }
+    ASSERT(fbo && fbo->isActiveDrawFramebuffer());
 
     // Disable the depth test/depth write if we are using a stencil-only attachment.
     // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
@@ -1335,6 +1330,18 @@ void StateManager11::invalidateRenderTarget(const gl::Context *context)
             invalidateViewport(context);
         }
     }
+
+    if (mIsMultiviewEnabled)
+    {
+        handleMultiviewDrawFramebufferChange(context);
+    }
+
+    // Call this to syncViewport for framebuffer default parameters.
+    // TODO(jmadill): This is probably wrong if the default width changes from non-zero to zero.
+    if (fbo->getDefaultWidth() != 0 || fbo->getDefaultHeight() != 0)
+    {
+        mRenderer->getStateManager()->invalidateViewport(context);
+    }
 }
 
 void StateManager11::invalidateBoundViews(const gl::Context *context)
@@ -1342,7 +1349,7 @@ void StateManager11::invalidateBoundViews(const gl::Context *context)
     mCurVertexSRVs.clear();
     mCurPixelSRVs.clear();
 
-    invalidateRenderTarget(context);
+    invalidateRenderTarget();
 }
 
 void StateManager11::invalidateVertexBuffer()
@@ -1414,7 +1421,7 @@ void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthSte
     }
 
     mRenderer->getDeviceContext()->OMSetRenderTargets(1, &rtv, dsv);
-    mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
+    invalidateRenderTarget();
 }
 
 void StateManager11::setRenderTargets(ID3D11RenderTargetView **rtvs,
@@ -1434,7 +1441,7 @@ void StateManager11::setRenderTargets(ID3D11RenderTargetView **rtvs,
     }
 
     mRenderer->getDeviceContext()->OMSetRenderTargets(numRTVs, (numRTVs > 0) ? rtvs : nullptr, dsv);
-    mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
+    invalidateRenderTarget();
 }
 
 void StateManager11::onBeginQuery(Query11 *query)
@@ -1618,7 +1625,6 @@ gl::Error StateManager11::syncFramebuffer(const gl::Context *context, gl::Frameb
     // this will not report any gl error but will cause the calling method to return.
     if (framebuffer->id() == 0)
     {
-        ASSERT(!framebuffer11->hasAnyInternalDirtyBit());
         const gl::Extents &size = framebuffer->getFirstColorbuffer()->getSize();
         if (size.width == 0 || size.height == 0)
         {
@@ -1838,12 +1844,6 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
     ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
-
-    if (framebuffer11->hasAnyInternalDirtyBit())
-    {
-        ASSERT(framebuffer->id() != 0);
-        framebuffer11->syncInternalState(context);
-    }
 
     bool pointDrawMode = (drawMode == GL_POINTS);
     if (pointDrawMode != mCurRasterState.pointDrawMode)
@@ -2363,10 +2363,7 @@ gl::Error StateManager11::setTexture(const gl::Context *context,
 gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMode)
 {
     const auto &glState = context->getGLState();
-    const auto *va11    = GetImplAs<VertexArray11>(glState.getVertexArray());
     auto *programD3D    = GetImplAs<ProgramD3D>(glState.getProgram());
-
-    programD3D->updateCachedInputLayout(va11->getCurrentStateSerial(), glState);
 
     // Binaries must be compiled before the sync.
     ASSERT(programD3D->hasVertexExecutableForCachedInputLayout());
@@ -2916,6 +2913,11 @@ gl::Error StateManager11::syncTransformFeedbackBuffers(const gl::Context *contex
     tf11->onApply();
 
     return gl::NoError();
+}
+
+void StateManager11::dirtyDrawFramebuffer()
+{
+    mLocalGLDirtyBits.set(gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 }
 
 }  // namespace rx
