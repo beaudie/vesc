@@ -118,7 +118,7 @@ gl::Error GetQueryObjectParameter(gl::Query *query, GLenum pname, T *params)
             gl::Error error = query->isResultAvailable(&available);
             if (!error.isError())
             {
-                *params = gl::ConvertFromGLboolean<T>(available);
+                *params = gl::ConvertFrom<T>(available);
             }
             return error;
         }
