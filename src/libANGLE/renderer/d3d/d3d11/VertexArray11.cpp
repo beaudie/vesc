@@ -53,9 +53,6 @@ void VertexArray11::syncState(const gl::Context *context,
     auto renderer       = GetImplAs<Context11>(context)->getRenderer();
     mCurrentStateSerial = renderer->generateSerial();
 
-    // TODO(jmadill): Individual attribute invalidation.
-    renderer->getStateManager()->invalidateVertexBuffer();
-
     // A mask of attributes that need to be re-evaluated.
     gl::AttributesMask attribsToUpdate;
 
@@ -71,9 +68,18 @@ void VertexArray11::syncState(const gl::Context *context,
         attribsToUpdate.set(attribIndex);
     }
 
-    for (auto attribIndex : attribsToUpdate)
+    if (attribsToUpdate.any())
     {
-        updateVertexAttribStorage(context, attribIndex);
+        // TODO(jmadill): Individual attribute invalidation.
+        renderer->getStateManager()->invalidateVertexBuffer();
+
+        // Changing the vertex attribute state can affect the vertex shader.
+        renderer->getStateManager()->invalidateShaders();
+
+        for (auto attribIndex : attribsToUpdate)
+        {
+            updateVertexAttribStorage(context, attribIndex);
+        }
     }
 }
 
@@ -244,6 +250,11 @@ gl::Error VertexArray11::signal(const gl::Context *context, size_t attribIndex)
 
     // This can change a buffer's storage, we'll need to re-check.
     updateVertexAttribStorage(context, attribIndex);
+
+    // Changing the vertex attribute state can affect the vertex shader.
+    Renderer11 *renderer = GetImplAs<Context11>(context)->getRenderer();
+    renderer->getStateManager()->invalidateShaders();
+
     return gl::NoError();
 }
 
