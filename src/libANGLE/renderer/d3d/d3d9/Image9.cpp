@@ -467,7 +467,7 @@ gl::Error Image9::copyToSurface(IDirect3DSurface9 *destSurface, const gl::Box &a
                    << "Internal CreateOffscreenPlainSurface call failed, " << gl::FmtHR(result);
         }
 
-        copyLockableSurfaces(surf, sourceSurface);
+        ANGLE_SWALLOW_ERR(copyLockableSurfaces(surf, sourceSurface));
         result = device->UpdateSurface(surf, &rect, destSurface, &point);
         SafeRelease(surf);
         ASSERT(SUCCEEDED(result));
