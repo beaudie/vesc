@@ -60,15 +60,33 @@ inline unsigned int ceilPow2(unsigned int x)
     return x;
 }
 
-inline int clampToInt(unsigned int x)
+// Type SrcT range:   |...............|
+// Type DestT rangle:         |...................|
+// Result range:              |.......|
+template <typename DestT, typename SrcT>
+DestT leftClampCast(SrcT value)
 {
-    return static_cast<int>(std::min(x, static_cast<unsigned int>(std::numeric_limits<int>::max())));
+    static const SrcT srcLo = static_cast<SrcT>(std::numeric_limits<DestT>::lowest());
+    return static_cast<DestT>(std::max(srcLo, value));
 }
 
+// Type SrcT range:           |...............|
+// Type DestT rangle: |.................|
+// Result range:              |.........|
+template <typename DestT, typename SrcT>
+DestT rightClampCast(SrcT value)
+{
+    static const SrcT srcHi = static_cast<SrcT>(std::numeric_limits<DestT>::max());
+    return static_cast<DestT>(std::min(srcHi, value));
+}
+
+// Type SrcT range:   |...................................|
+// Type DestT rangle:         |...................|
+// Result range:              |...................|
 template <typename DestT, typename SrcT>
 inline DestT clampCast(SrcT value)
 {
-    static const DestT destLo = std::numeric_limits<DestT>::min();
+    static const DestT destLo = std::numeric_limits<DestT>::lowest();
     static const DestT destHi = std::numeric_limits<DestT>::max();
     static const SrcT srcLo = static_cast<SrcT>(destLo);
     static const SrcT srcHi = static_cast<SrcT>(destHi);
