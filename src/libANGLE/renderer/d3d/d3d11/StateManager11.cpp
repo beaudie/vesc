@@ -15,6 +15,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/Context11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/IndexBuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
@@ -551,7 +552,8 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mVertexDataManager(renderer),
       mIndexDataManager(renderer, RENDERER_D3D11),
       mIsMultiviewEnabled(false),
-      mEmptySerial(mRenderer->generateSerial())
+      mEmptySerial(mRenderer->generateSerial()),
+      mIsTransformFeedbackCurrentlyActiveUnpaused(false)
 {
     mCurBlendState.blend                 = false;
     mCurBlendState.sourceBlendRGB        = GL_ONE;
@@ -896,6 +898,9 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     mCurRasterState.rasterizerDiscard)
                 {
                     mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+
+                    // Enabling/disabling rasterizer discard affects the pixel shader.
+                    invalidateShaders();
                 }
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
@@ -938,6 +943,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
+                mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
                 invalidateVertexBuffer();
                 invalidateRenderTarget();
                 invalidateTexturesAndSamplers();
@@ -1290,6 +1296,9 @@ void StateManager11::processFramebufferChange(const gl::Context *context)
 
     invalidateRenderTarget();
 
+    // The pixel shader is dependent on the output layout.
+    invalidateShaders();
+
     // The D3D11 blend state is heavily dependent on the current render target.
     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
 
@@ -1412,6 +1421,11 @@ void StateManager11::invalidateConstantBuffer(unsigned int slot)
     {
         invalidateProgramUniformBuffers();
     }
+}
+
+void StateManager11::invalidateShaders()
+{
+    mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
 }
 
 void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv)
@@ -1832,15 +1846,20 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
         mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
     }
 
+    // Transform feedback affects the stream-out geometry shader.
+    // TODO(jmadill): Use dirty bits.
+    if (glState.isTransformFeedbackActiveUnpaused() != mIsTransformFeedbackCurrentlyActiveUnpaused)
+    {
+        mIsTransformFeedbackCurrentlyActiveUnpaused = glState.isTransformFeedbackActiveUnpaused();
+        invalidateShaders();
+    }
+
     // Swizzling can cause internal state changes with blit shaders.
     if (mDirtySwizzles)
     {
         ANGLE_TRY(generateSwizzles(context));
         mDirtySwizzles = false;
     }
-
-    // TODO(jmadill): Use dirty bits.
-    ANGLE_TRY(syncProgram(context, drawMode));
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
@@ -1850,6 +1869,9 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
     if (pointDrawMode != mCurRasterState.pointDrawMode)
     {
         mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+
+        // Changing from points to not points (or vice-versa) affects the geometry shader.
+        invalidateShaders();
     }
 
     // TODO(jmadill): This can be recomputed only on framebuffer changes.
@@ -1899,8 +1921,10 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
                 ANGLE_TRY(applyDriverUniforms(*programD3D));
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS:
-                // TOOD(jmadill): Use dirty bits.
                 ANGLE_TRY(syncUniformBuffers(context, programD3D));
+                break;
+            case DIRTY_BIT_SHADERS:
+                ANGLE_TRY(syncProgram(context, drawMode));
                 break;
             default:
                 UNREACHABLE();
@@ -1963,6 +1987,7 @@ void StateManager11::setVertexShader(const d3d11::VertexShader *shader)
         ID3D11VertexShader *appliedShader = shader ? shader->get() : nullptr;
         mRenderer->getDeviceContext()->VSSetShader(appliedShader, nullptr, 0);
         mAppliedVertexShader = serial;
+        invalidateShaders();
     }
 }
 
@@ -1975,6 +2000,7 @@ void StateManager11::setGeometryShader(const d3d11::GeometryShader *shader)
         ID3D11GeometryShader *appliedShader = shader ? shader->get() : nullptr;
         mRenderer->getDeviceContext()->GSSetShader(appliedShader, nullptr, 0);
         mAppliedGeometryShader = serial;
+        invalidateShaders();
     }
 }
 
@@ -1987,6 +2013,7 @@ void StateManager11::setPixelShader(const d3d11::PixelShader *shader)
         ID3D11PixelShader *appliedShader = shader ? shader->get() : nullptr;
         mRenderer->getDeviceContext()->PSSetShader(appliedShader, nullptr, 0);
         mAppliedPixelShader = serial;
+        invalidateShaders();
     }
 }
 
@@ -1999,6 +2026,7 @@ void StateManager11::setComputeShader(const d3d11::ComputeShader *shader)
         ID3D11ComputeShader *appliedShader = shader ? shader->get() : nullptr;
         mRenderer->getDeviceContext()->CSSetShader(appliedShader, nullptr, 0);
         mAppliedComputeShader = serial;
+        // TODO(jmadill): Dirty bits for compute.
     }
 }
 
@@ -2361,8 +2389,20 @@ gl::Error StateManager11::setTexture(const gl::Context *context,
     return gl::NoError();
 }
 
+// Things that affect a program's dirtyness:
+// 1. Directly changing the program executable -> triggered in StateManager11::syncState.
+// 2. The vertex attribute layout              -> triggered in VertexArray11::syncState/signal.
+// 3. The fragment shader's rendertargets      -> triggered in Framebuffer11::syncState/signal.
+// 4. Enabling/disabling rasterizer discard.   -> triggered in StateManager11::syncState.
+// 5. Enabling/disabling transform feedback.   -> checked in StateManager11::updateState.
+// 6. An internal shader was used.             -> triggered in StateManager11::set*Shader.
+// 7. Drawing with/without point sprites.      -> checked in StateManager11::updateState.
+// TODO(jmadill): Use dirty bits for transform feedback.
 gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMode)
 {
+    Context11 *context11 = GetImplAs<Context11>(context);
+    ANGLE_TRY(context11->triggerDrawCallProgramRecompilation(context, drawMode));
+
     const auto &glState = context->getGLState();
     auto *programD3D    = GetImplAs<ProgramD3D>(glState.getProgram());
 
