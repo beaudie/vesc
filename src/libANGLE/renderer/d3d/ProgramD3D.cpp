@@ -2495,10 +2495,19 @@ void ProgramD3D::updateCachedInputLayout(Serial associatedSerial, const gl::Stat
 void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
                                           const gl::Framebuffer *framebuffer)
 {
-    mPixelShaderOutputLayoutCache.clear();
-
     FramebufferD3D *fboD3D   = GetImplAs<FramebufferD3D>(framebuffer);
     const auto &colorbuffers = fboD3D->getColorAttachmentsForRender(context);
+
+    // When fbo has no attachment, keep the cached output layout to avoid shader recompilation.
+    // This workaround an Intel driver bug on D3D. When no output is generated in hlsl shader and
+    // rendertarget is not set, samples will pass out side of current viewport.
+    if (colorbuffers.size() == 0 &&
+        (framebuffer->getDefaultWidth() != 0 || framebuffer->getDefaultHeight() != 0))
+    {
+        return;
+    }
+
+    mPixelShaderOutputLayoutCache.clear();
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
