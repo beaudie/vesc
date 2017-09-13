@@ -166,9 +166,8 @@ class StateManager11 final : angle::NonCopyable
     // Called from VertexArray11::updateVertexAttribStorage.
     void invalidateCurrentValueAttrib(size_t attribIndex);
 
-    // Checks are done on a framebuffer state change to trigger other state changes.
-    // The Context is allowed to be nullptr for these methods, when called in EGL init code.
-    void invalidateRenderTarget(const gl::Context *context);
+    // Called by SwapChain11 (and internally).
+    void invalidateRenderTarget();
 
     // Called by instanced point sprite emulation.
     void invalidateVertexBuffer();
@@ -178,6 +177,9 @@ class StateManager11 final : angle::NonCopyable
 
     // Called by TextureStorage11::markLevelDirty.
     void invalidateSwizzles();
+
+    // Called by the Framebuffer11 directly.
+    void dirtyDrawFramebuffer();
 
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
@@ -284,6 +286,7 @@ class StateManager11 final : angle::NonCopyable
 
     void checkPresentPath(const gl::Context *context);
 
+    void processFramebufferChange(const gl::Context *context);
     gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
     gl::Error syncProgram(const gl::Context *context, GLenum drawMode);
 
@@ -348,6 +351,7 @@ class StateManager11 final : angle::NonCopyable
 
     // Internal dirty bits.
     DirtyBits mInternalDirtyBits;
+    gl::State::DirtyBits mLocalGLDirtyBits;
 
     // Blend State
     gl::BlendState mCurBlendState;
