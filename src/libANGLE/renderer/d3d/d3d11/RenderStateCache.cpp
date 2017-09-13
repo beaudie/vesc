@@ -45,6 +45,7 @@ void RenderStateCache::clear()
 
 // static
 d3d11::BlendStateKey RenderStateCache::GetBlendStateKey(const gl::Context *context,
+                                                        Renderer11 *renderer,
                                                         const gl::Framebuffer *framebuffer,
                                                         const gl::BlendState &blendState)
 {
@@ -81,6 +82,13 @@ d3d11::BlendStateKey RenderStateCache::GetBlendStateKey(const gl::Context *conte
     for (size_t i = colorbuffers.size(); i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
     {
         key.rtvMasks[i] = 0;
+    }
+
+    // This workaround an Intel driver bug on D3D. When trvMasks is 0 and render target
+    // is not set, samples will always pass neglecting discard.
+    if (renderer->getWorkarounds().renderingWithNoRenderTarget && colorbuffers.size() == 0)
+    {
+        key.rtvMasks[0] = D3D11_COLOR_WRITE_ENABLE_ALL;
     }
 
     return key;
