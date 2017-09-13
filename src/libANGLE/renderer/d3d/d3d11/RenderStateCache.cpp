@@ -83,6 +83,17 @@ d3d11::BlendStateKey RenderStateCache::GetBlendStateKey(const gl::Context *conte
         key.rtvMasks[i] = 0;
     }
 
+    // When fbo has no attachment and framebuffer's default size > 0, the rtvMasks should
+    // be set to default value D3D11_COLOR_WRITE_ENABLE_ALL as to msdn link,
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476462(v=vs.85).aspx
+    // This workaround an Intel driver bug on D3D. When trvMasks is 0 and render target
+    // is not set, samples will always pass neglecting discard.
+    if (colorbuffers.size() == 0 &&
+        (framebuffer->getDefaultWidth() != 0 || framebuffer->getDefaultHeight() != 0))
+    {
+        key.rtvMasks[0] = D3D11_COLOR_WRITE_ENABLE_ALL;
+    }
+
     return key;
 }
 
