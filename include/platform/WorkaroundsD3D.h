@@ -112,6 +112,18 @@ struct WorkaroundsD3D
     // target slice will be selected in the geometry shader stage. The workaround flag is added to
     // make it possible to select the code path in end2end and performance tests.
     bool selectViewInGeometryShader = false;
+
+    // When the pixel shader expects a render target view bound to a slot but none is bound, the
+    // behavior of the Intel and Nvidia drivers are different. No warning is generated on Intel
+    // driver, but on nvidia driver a warning is throwned, which lead to failure in angle. So
+    // recompilation of removing shader output is needed for nvidia but unnecessary for Intel.
+    // See http://anglebug.com/2152
+    bool skipRecompilationNoRenderTarget = false;
+
+    // On some Intel drivers, if rtvMasks is 0 and rendertarget is not set, then rendering samples
+    // always passed neglecting discard of pixel shader. So we set rtvMasks of render target to
+    // D3D11_COLOR_WRITE_ENABLE_ALL to workaround the bug. See http://anglebug.com/2152
+    bool setRenderTargetViewMaskAllPass = false;
 };
 
 }  // namespace angle
