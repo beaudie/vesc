@@ -61,8 +61,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
             mD3DTexture = static_cast<IUnknown *>(clientBuffer);
             ASSERT(mD3DTexture != nullptr);
             mD3DTexture->AddRef();
-            mRenderer->getD3DTextureInfo(state.config, mD3DTexture, &mWidth, &mHeight,
-                                         &mRenderTargetFormat);
+            ANGLE_SWALLOW_ERR(mRenderer->getD3DTextureInfo(state.config, mD3DTexture, &mWidth,
+                                                           &mHeight, &mRenderTargetFormat));
             break;
 
         default:
@@ -282,11 +282,11 @@ bool SurfaceD3D::checkForOutOfDateSwapChain(const gl::Context *context)
 
     if (mSwapIntervalDirty)
     {
-        resetSwapChain(context, clientWidth, clientHeight);
+        ANGLE_SWALLOW_ERR(resetSwapChain(context, clientWidth, clientHeight));
     }
     else if (sizeDirty)
     {
-        resizeSwapChain(context, clientWidth, clientHeight);
+        ANGLE_SWALLOW_ERR(resizeSwapChain(context, clientWidth, clientHeight));
     }
 
     return wasDirty;
