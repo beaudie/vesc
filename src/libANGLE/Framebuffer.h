@@ -97,6 +97,8 @@ class FramebufferState final : angle::NonCopyable
     const std::vector<Offset> *getViewportOffsets() const;
     GLint getBaseViewIndex() const;
 
+    bool isActiveDrawFramebuffer() const { return mIsActiveDrawFramebuffer; }
+
   private:
     friend class Framebuffer;
 
@@ -121,6 +123,9 @@ class FramebufferState final : angle::NonCopyable
     FramebufferAttachment mWebGLDepthAttachment;
     FramebufferAttachment mWebGLStencilAttachment;
     bool mWebGLDepthStencilConsistent;
+
+    // A cache value that is useful for the Implementation dirty bits.
+    bool mIsActiveDrawFramebuffer;
 };
 
 class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
@@ -302,6 +307,10 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,
                                       GLint copyTextureLevel,
                                       GLint copyTextureLayer) const;
+
+    // Called by the Context when a Framebuffer is bound/unbound to the DRAW binding.
+    void setActiveDrawFramebuffer(bool isActive);
+    bool isActiveDrawFramebuffer() const { return mState.isActiveDrawFramebuffer(); }
 
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);

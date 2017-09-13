@@ -208,7 +208,8 @@ FramebufferState::FramebufferState()
       mDefaultHeight(0),
       mDefaultSamples(0),
       mDefaultFixedSampleLocations(GL_FALSE),
-      mWebGLDepthStencilConsistent(true)
+      mWebGLDepthStencilConsistent(true),
+      mIsActiveDrawFramebuffer(true)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mEnabledDrawBuffers.set(0);
@@ -223,7 +224,8 @@ FramebufferState::FramebufferState(const Caps &caps)
       mDefaultHeight(0),
       mDefaultSamples(0),
       mDefaultFixedSampleLocations(GL_FALSE),
-      mWebGLDepthStencilConsistent(true)
+      mWebGLDepthStencilConsistent(true),
+      mIsActiveDrawFramebuffer(false)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
@@ -1694,6 +1696,11 @@ const std::vector<Offset> *Framebuffer::getViewportOffsets() const
 GLenum Framebuffer::getMultiviewLayout() const
 {
     return mState.getMultiviewLayout();
+}
+
+void Framebuffer::setActiveDrawFramebuffer(bool isActive)
+{
+    mState.mIsActiveDrawFramebuffer = isActive;
 }
 
 }  // namespace gl
