@@ -1034,7 +1034,7 @@ gl::Error StateManager11::syncBlendState(const gl::Context *context,
 {
     const d3d11::BlendState *dxBlendState = nullptr;
     const d3d11::BlendStateKey &key =
-        RenderStateCache::GetBlendStateKey(context, framebuffer, blendState);
+        RenderStateCache::GetBlendStateKey(context, mRenderer, framebuffer, blendState);
 
     ANGLE_TRY(mRenderer->getBlendState(key, &dxBlendState));
 
