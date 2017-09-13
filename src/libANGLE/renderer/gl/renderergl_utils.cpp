@@ -1055,10 +1055,6 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->dontInitializeUninitializedLocals         = true;
 #endif
 
-#if defined(ANGLE_PLATFORM_ANDROID)
-    workarounds->dontInitializeUninitializedLocals = true;
-#endif
-
     workarounds->finishDoesNotCauseQueriesToBeAvailable =
         functions->standard == STANDARD_GL_DESKTOP && IsNvidia(vendor);
 
