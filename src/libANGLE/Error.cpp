@@ -50,7 +50,7 @@ bool Error::operator==(const Error &other) const
     if ((!mMessage || !other.mMessage) && (!mMessage != !other.mMessage))
         return false;
 
-    return (*mMessage == *other.mMessage);
+    return (!mMessage && !other.mMessage) || (*mMessage == *other.mMessage);
 }
 
 bool Error::operator!=(const Error &other) const
