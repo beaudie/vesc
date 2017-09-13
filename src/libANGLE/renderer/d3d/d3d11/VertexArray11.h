@@ -34,12 +34,12 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
                                            GLint start,
                                            GLsizei count,
                                            GLsizei instances);
-    void clearDirtyAndPromoteDynamicAttribs(const gl::State &state, GLsizei count);
+    gl::Error clearDirtyAndPromoteDynamicAttribs(const gl::Context *context, GLsizei count);
 
     const std::vector<TranslatedAttribute> &getTranslatedAttribs() const;
 
     // SignalReceiver implementation
-    void signal(size_t channelID) override;
+    gl::Error signal(const gl::Context *context, size_t channelID) override;
 
     Serial getCurrentStateSerial() const { return mCurrentStateSerial; }
 

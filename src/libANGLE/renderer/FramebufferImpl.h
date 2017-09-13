@@ -31,7 +31,7 @@ class FramebufferImpl : angle::NonCopyable
   public:
     explicit FramebufferImpl(const gl::FramebufferState &state) : mState(state) {}
     virtual ~FramebufferImpl() {}
-    virtual void destroy(const gl::Context *context) {}
+    virtual gl::Error destroy(const gl::Context *context) { return gl::NoError(); }
     virtual void destroyDefault(const egl::Display *display) {}
 
     virtual gl::Error discard(const gl::Context *context,

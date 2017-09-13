@@ -948,7 +948,6 @@ void State::detachRenderbuffer(const Context *context, GLuint renderbuffer)
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
         }
     }
-
 }
 
 void State::setReadFramebufferBinding(Framebuffer *framebuffer)
@@ -2336,11 +2335,12 @@ const ImageUnit &State::getImageUnit(GLuint unit) const
 }
 
 // Handle a dirty texture event.
-void State::signal(uint32_t textureIndex)
+Error State::signal(const Context *context, uint32_t textureIndex)
 {
     // Conservatively assume all textures are dirty.
     // TODO(jmadill): More fine-grained update.
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+    return NoError();
 }
 
 }  // namespace gl

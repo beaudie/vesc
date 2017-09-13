@@ -840,10 +840,11 @@ egl::Stream *Texture::getBoundStream() const
     return mBoundStream;
 }
 
-void Texture::signalDirty() const
+Error Texture::signalDirty(const Context *context) const
 {
-    mDirtyChannel.signal();
+    ANGLE_TRY(mDirtyChannel.signal(context));
     invalidateCompletenessCache();
+    return NoError();
 }
 
 Error Texture::setImage(const Context *context,
@@ -867,7 +868,7 @@ Error Texture::setImage(const Context *context,
                                  unpackState, pixels));
 
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type)));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -906,7 +907,7 @@ Error Texture::setCompressedImage(const Context *context,
                                            unpackState, imageSize, pixels));
 
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat)));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -947,7 +948,7 @@ Error Texture::copyImage(const Context *context,
         GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
     mState.setImageDesc(target, level, ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
                                                  Format(internalFormatInfo)));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -990,7 +991,7 @@ Error Texture::copyTexture(const Context *context,
     const auto &sourceDesc   = source->mState.getImageDesc(source->getTarget(), 0);
     const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
     mState.setImageDesc(target, level, ImageDesc(sourceDesc.size, Format(internalFormatInfo)));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -1055,7 +1056,7 @@ Error Texture::setStorage(const Context *context,
     mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
 
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -1082,7 +1083,7 @@ Error Texture::setStorageMultisample(const Context *context,
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples,
                                         fixedSampleLocations);
 
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -1112,7 +1113,7 @@ Error Texture::generateMipmap(const Context *context)
         mState.setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format);
     }
 
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
@@ -1134,7 +1135,7 @@ Error Texture::bindTexImageFromSurface(const Context *context, egl::Surface *sur
     Extents size(surface->getWidth(), surface->getHeight(), 1);
     ImageDesc desc(size, Format(surface->getConfig()->renderTargetFormat));
     mState.setImageDesc(mState.mTarget, 0, desc);
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
     return NoError();
 }
 
@@ -1147,7 +1148,7 @@ Error Texture::releaseTexImageFromSurface(const Context *context)
     // Erase the image info for level 0
     ASSERT(mState.mTarget == GL_TEXTURE_2D || mState.mTarget == GL_TEXTURE_RECTANGLE_ANGLE);
     mState.clearImageDesc(mState.mTarget, 0);
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
     return NoError();
 }
 
@@ -1177,7 +1178,7 @@ Error Texture::acquireImageFromStream(const Context *context,
 
     Extents size(desc.width, desc.height, 1);
     mState.setImageDesc(mState.mTarget, 0, ImageDesc(size, Format(desc.internalFormat)));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
     return NoError();
 }
 
@@ -1189,7 +1190,7 @@ Error Texture::releaseImageFromStream(const Context *context)
 
     // Set to incomplete
     mState.clearImageDesc(mState.mTarget, 0);
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
     return NoError();
 }
 
@@ -1224,7 +1225,7 @@ Error Texture::setEGLImageTarget(const Context *context, GLenum target, egl::Ima
 
     mState.clearImageDescs();
     mState.setImageDesc(target, 0, ImageDesc(size, imageTarget->getFormat()));
-    signalDirty();
+    ANGLE_TRY(signalDirty(context));
 
     return NoError();
 }
