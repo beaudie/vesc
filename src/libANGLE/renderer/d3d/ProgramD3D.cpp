@@ -2495,10 +2495,16 @@ void ProgramD3D::updateCachedInputLayout(Serial associatedSerial, const gl::Stat
 void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
                                           const gl::Framebuffer *framebuffer)
 {
-    mPixelShaderOutputLayoutCache.clear();
-
     FramebufferD3D *fboD3D   = GetImplAs<FramebufferD3D>(framebuffer);
     const auto &colorbuffers = fboD3D->getColorAttachmentsForRender(context);
+
+    if (colorbuffers.size() == 0 &&
+        (framebuffer->getDefaultWidth() != 0 || framebuffer->getDefaultHeight() != 0))
+    {
+        return;
+    }
+
+    mPixelShaderOutputLayoutCache.clear();
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
