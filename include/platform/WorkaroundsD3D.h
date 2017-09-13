@@ -112,6 +112,13 @@ struct WorkaroundsD3D
     // target slice will be selected in the geometry shader stage. The workaround flag is added to
     // make it possible to select the code path in end2end and performance tests.
     bool selectViewInGeometryShader = false;
+
+    // When The Pixel Shader expects a Render Target View bound to a slot,but none is bound.
+    // Driver behavior of Intel and nvidia are different. No warning is generated on Intel driver,
+    // but on nvidia driver a warning is throwned, which lead to failure in angle. So
+    // recompilation of removing shader output is needed for nvidia but unnessacery for Intel.
+    // See http://anglebug.com/2152
+    bool renderingWithNoRenderTarget = false;
 };
 
 }  // namespace angle
