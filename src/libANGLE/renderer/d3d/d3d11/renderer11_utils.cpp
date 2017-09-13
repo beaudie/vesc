@@ -2080,6 +2080,8 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
         workarounds.useSystemMemoryForConstantBuffers = true;
         workarounds.disableB5G6R5Support =
             d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion) < IntelDriverVersion(4539);
+        workarounds.skipRecompilationNoRenderTarget = true;
+        workarounds.setRenderTragetViewMaskAllPass  = true;
         if (IsSkylake(adapterDesc.DeviceId))
         {
             workarounds.callClearTwiceOnSmallTarget = true;
