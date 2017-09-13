@@ -12,9 +12,9 @@
 #ifndef LIBANGLE_REFCOUNTOBJECT_H_
 #define LIBANGLE_REFCOUNTOBJECT_H_
 
-#include "common/debug.h"
-
 #include "angle_gl.h"
+#include "common/debug.h"
+#include "libANGLE/Error.h"
 
 #include <cstddef>
 
@@ -26,7 +26,7 @@ class RefCountObjectNoID : angle::NonCopyable
 {
   public:
     RefCountObjectNoID() : mRefCount(0) {}
-    virtual void onDestroy(const gl::Context *context) {}
+    virtual Error onDestroy(const Context *context) { return NoError(); }
 
     void addRef() const { ++mRefCount; }
 
@@ -64,7 +64,11 @@ class RefCountObject : RefCountObjectNoID
         ASSERT(mRefCount > 0);
         if (--mRefCount == 0)
         {
-            onDestroy(context);
+            auto err = onDestroy(context);
+            if (err.isError())
+            {
+                ERR() << "Internal error on object release: " << err;
+            }
             delete this;
         }
     }
