@@ -32,7 +32,9 @@ Renderbuffer::Renderbuffer(rx::RenderbufferImpl *impl, GLuint id)
 
 Error Renderbuffer::onDestroy(const Context *context)
 {
-    return orphanImages(context);
+    ANGLE_TRY(orphanImages(context));
+    ANGLE_TRY(mRenderbuffer->onDestroy(context));
+    return NoError();
 }
 
 Renderbuffer::~Renderbuffer()
@@ -57,14 +59,14 @@ Error Renderbuffer::setStorage(const Context *context,
 {
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mRenderbuffer->setStorage(internalformat, width, height));
+    ANGLE_TRY(mRenderbuffer->setStorage(context, internalformat, width, height));
 
     mWidth          = static_cast<GLsizei>(width);
     mHeight         = static_cast<GLsizei>(height);
     mFormat         = Format(internalformat);
     mSamples = 0;
 
-    mDirtyChannel.signal();
+    ANGLE_TRY(mDirtyChannel.signal(context));
 
     return NoError();
 }
@@ -77,14 +79,15 @@ Error Renderbuffer::setStorageMultisample(const Context *context,
 {
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mRenderbuffer->setStorageMultisample(samples, internalformat, width, height));
+    ANGLE_TRY(
+        mRenderbuffer->setStorageMultisample(context, samples, internalformat, width, height));
 
     mWidth          = static_cast<GLsizei>(width);
     mHeight         = static_cast<GLsizei>(height);
     mFormat         = Format(internalformat);
     mSamples        = static_cast<GLsizei>(samples);
 
-    mDirtyChannel.signal();
+    ANGLE_TRY(mDirtyChannel.signal(context));
 
     return NoError();
 }
@@ -93,7 +96,7 @@ Error Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image 
 {
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mRenderbuffer->setStorageEGLImageTarget(image));
+    ANGLE_TRY(mRenderbuffer->setStorageEGLImageTarget(context, image));
 
     setTargetImage(context, image);
 
@@ -102,7 +105,7 @@ Error Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image 
     mFormat         = Format(image->getFormat());
     mSamples        = 0;
 
-    mDirtyChannel.signal();
+    ANGLE_TRY(mDirtyChannel.signal(context));
 
     return NoError();
 }

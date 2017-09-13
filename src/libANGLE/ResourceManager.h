@@ -154,7 +154,7 @@ class TextureManager : public TypedResourceManager<Texture, HandleAllocator, Tex
     GLuint createTexture();
     Texture *getTexture(GLuint handle) const;
 
-    void signalAllTexturesDirty() const;
+    Error signalAllTexturesDirty(const Context *context) const;
 
     Texture *checkTextureAllocation(rx::GLImplFactory *factory, GLuint handle, GLenum target)
     {

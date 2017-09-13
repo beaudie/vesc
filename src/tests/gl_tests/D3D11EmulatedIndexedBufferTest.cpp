@@ -112,7 +112,7 @@ class D3D11EmulatedIndexedBufferTest : public ANGLETest
     void emulateAndCompare(rx::SourceIndexData *srcData)
     {
         auto bufferOrError =
-            mSourceBuffer->getEmulatedIndexedBuffer(srcData, mTranslatedAttribute, 0);
+            mSourceBuffer->getEmulatedIndexedBuffer(nullptr, srcData, mTranslatedAttribute, 0);
         ASSERT_FALSE(bufferOrError.isError());
         ID3D11Buffer *emulatedBuffer = bufferOrError.getResult();
         ASSERT_TRUE(emulatedBuffer != nullptr);
@@ -179,10 +179,10 @@ TEST_P(D3D11EmulatedIndexedBufferTest, TestSourceBufferRemainsUntouchedAfterExpa
     const uint8_t *sourceBufferMem = nullptr;
     const uint8_t *cleanBufferMem = nullptr;
 
-    gl::Error error = mSourceBuffer->getData(&sourceBufferMem);
+    gl::Error error = mSourceBuffer->getData(nullptr, &sourceBufferMem);
     ASSERT_FALSE(error.isError());
 
-    error = cleanSourceBuffer->getData(&cleanBufferMem);
+    error = cleanSourceBuffer->getData(nullptr, &cleanBufferMem);
     ASSERT_FALSE(error.isError());
 
     int result = memcmp(sourceBufferMem, cleanBufferMem, cleanSourceBuffer->getSize());

@@ -154,7 +154,7 @@ void ShaderProgramManager::reset(const Context *context)
 }
 
 GLuint ShaderProgramManager::createShader(rx::GLImplFactory *factory,
-                                          const gl::Limitations &rendererLimitations,
+                                          const Limitations &rendererLimitations,
                                           GLenum type)
 {
     ASSERT(type == GL_VERTEX_SHADER || type == GL_FRAGMENT_SHADER || type == GL_COMPUTE_SHADER);
@@ -180,7 +180,7 @@ GLuint ShaderProgramManager::createProgram(rx::GLImplFactory *factory)
     return handle;
 }
 
-void ShaderProgramManager::deleteProgram(const gl::Context *context, GLuint program)
+void ShaderProgramManager::deleteProgram(const Context *context, GLuint program)
 {
     deleteObject(context, &mPrograms, program);
 }
@@ -240,15 +240,17 @@ Texture *TextureManager::getTexture(GLuint handle) const
     return mObjectMap.query(handle);
 }
 
-void TextureManager::signalAllTexturesDirty() const
+Error TextureManager::signalAllTexturesDirty(const Context *context) const
 {
     for (const auto &texture : mObjectMap)
     {
         if (texture.second)
         {
-            texture.second->signalDirty();
+            ANGLE_TRY(texture.second->signalDirty(context));
         }
     }
+
+    return NoError();
 }
 
 // RenderbufferManager Implementation.
