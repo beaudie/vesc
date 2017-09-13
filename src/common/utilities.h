@@ -74,85 +74,230 @@ template <typename outT> outT iround(GLfloat value) { return static_cast<outT>(v
 template <typename outT> outT uiround(GLfloat value) { return static_cast<outT>(value + 0.5f); }
 
 // Helper for converting arbitrary GL types to other GL types used in queries and state setting
+// GLES 3.10 section 2.2.1, and 2.2.2
+template <typename T>
+inline bool isGLStateExternalType()
+{
+    return (std::is_same<T, GLfloat>::value || std::is_same<T, GLboolean>::value ||
+            std::is_same<T, GLint>::value || std::is_same<T, GLuint>::value ||
+            std::is_same<T, GLint64>::value);
+}
 
-// TODO(jie.a.chen@intel.com): Add the conversion rule for all helpers as the spec requires:
-// "If a value is so large in magnitude that it cannot be represented with the requested type,"
-// "then the nearest value representable using the requested type is returned."
+template <typename T>
+inline bool isGLStateInternalType()
+{
+    return (std::is_same<T, float>::value || std::is_same<T, bool>::value ||
+            std::is_same<T, int32_t>::value || std::is_same<T, uint32_t>::value ||
+            std::is_same<T, int64_t>::value || std::is_same<T, uint64_t>::value);
+}
+
+// For state-query commands.
+template <typename ReturnType, typename ParamType>
+struct GLTypeConvertFromImpl
+{
+    static ReturnType ConvertFrom(ParamType param)
+    {
+        DCHECK(isGLStateExternalType<ReturnType>() && isGLStateInternalType<ParamType>());
+        return static_cast<ReturnType>(param);
+    }
+};
 
 template <typename ParamType>
-GLuint ConvertToGLuint(ParamType param)
+struct GLTypeConvertFromImpl<GLboolean, ParamType>
 {
-    return static_cast<GLuint>(param);
-}
+    static GLboolean ConvertFrom(ParamType param)
+    {
+        DCHECK(isGLStateInternalType<ParamType>());
+        return (param == 0 ? GL_FALSE : GL_TRUE);
+    }
+};
+
+template <typename ReturnType>
+struct GLTypeConvertFromImpl<ReturnType, float>
+{
+    static ReturnType ConvertFrom(float param)
+    {
+        DCHECK(isGLStateExternalType<ReturnType>() && std::is_integral<ReturnType>::value);
+        return clampCast<ReturnType>(std::round(param));
+    }
+};
+
 template <>
-GLuint ConvertToGLuint(GLfloat param);
-
-template <typename ParamType>
-GLint ConvertToGLint(ParamType param)
+struct GLTypeConvertFromImpl<GLboolean, float>
 {
-    return static_cast<GLint>(param);
-}
+    static GLboolean ConvertFrom(float param) { return (param == 0.0 ? GL_FALSE : GL_TRUE); }
+};
 
 template <>
-GLint ConvertToGLint(uint32_t param);
+struct GLTypeConvertFromImpl<GLfloat, float>
+{
+    static GLfloat ConvertFrom(float param) { return param; }
+};
 
 template <>
-GLint ConvertToGLint(uint64_t param);
+struct GLTypeConvertFromImpl<GLint, uint32_t>
+{
+    static GLint ConvertFrom(uint32_t param) { return rightClampCast<GLint>(param); }
+};
 
 template <>
-GLint ConvertToGLint(GLfloat param);
-
-// Same conversion as uint
-template <typename ParamType>
-GLenum ConvertToGLenum(ParamType param)
+struct GLTypeConvertFromImpl<GLint, uint64_t>
 {
-    return static_cast<GLenum>(ConvertToGLuint(param));
-}
+    static GLint ConvertFrom(uint64_t param) { return rightClampCast<GLint>(param); }
+};
 
-template <typename ParamType>
-GLfloat ConvertToGLfloat(ParamType param)
-{
-    return static_cast<GLfloat>(param);
-}
-
-template <typename ParamType>
-ParamType ConvertFromGLfloat(GLfloat param)
-{
-    return static_cast<ParamType>(param);
-}
 template <>
-GLint ConvertFromGLfloat(GLfloat param);
+struct GLTypeConvertFromImpl<GLint, int64_t>
+{
+    static GLint ConvertFrom(int64_t param) { return clampCast<GLint>(param); }
+};
+
 template <>
-GLuint ConvertFromGLfloat(GLfloat param);
-
-template <typename ParamType>
-ParamType ConvertFromGLenum(GLenum param)
+struct GLTypeConvertFromImpl<GLuint, int32_t>
 {
-    return static_cast<ParamType>(param);
+    static GLuint ConvertFrom(int32_t param) { return leftClampCast<GLuint>(param); }
+};
+
+template <>
+struct GLTypeConvertFromImpl<GLuint, int64_t>
+{
+    static GLuint ConvertFrom(int64_t param) { return clampCast<GLuint>(param); }
+};
+
+template <>
+struct GLTypeConvertFromImpl<GLuint, uint64_t>
+{
+    static GLuint ConvertFrom(uint64_t param) { return clampCast<GLuint>(param); }
+};
+
+template <>
+struct GLTypeConvertFromImpl<GLint64, uint64_t>
+{
+    static GLint64 ConvertFrom(uint64_t param) { return rightClampCast<GLint64>(param); }
+};
+
+template <typename ReturnType, typename ParamType>
+inline ReturnType ConvertFrom(ParamType param)
+{
+    return GLTypeConvertFromImpl<ReturnType, ParamType>::ConvertFrom(param);
 }
 
-template <typename ParamType>
-ParamType ConvertFromGLuint(GLuint param)
+// For state-setting commands.
+template <typename ReturnType, typename ParamType>
+struct GLTypeConvertToImpl
 {
-    return static_cast<ParamType>(param);
-}
+    static ReturnType ConvertTo(ParamType param)
+    {
+        DCHECK(isGLStateExternalType<ParamType>() && isGLStateInternalType<ReturnType>());
+        return static_cast<ReturnType>(param);
+    }
+};
+
+template <typename ReturnType>
+struct GLTypeConvertToImpl<ReturnType, GLboolean>
+{
+    static ReturnType ConvertTo(GLboolean param)
+    {
+        DCHECK(isGLStateInternalType<ReturnType>());
+        return static_cast<ReturnType>(param == GL_TRUE ? 1 : 0);
+    }
+};
+
+template <>
+struct GLTypeConvertToImpl<float, GLboolean>
+{
+    static float ConvertTo(float param) { return (param == GL_TRUE ? 1.0f : 0.0f); }
+};
+
+template <typename ReturnType>
+struct GLTypeConvertToImpl<ReturnType, GLfloat>
+{
+    static ReturnType ConvertTo(GLfloat param)
+    {
+        DCHECK(isGLStateInternalType<ReturnType>() && std::is_integral<ReturnType>::value);
+        return clampCast<ReturnType>(std::round(param));
+    }
+};
 
 template <typename ParamType>
-ParamType ConvertFromGLint(GLint param)
+struct GLTypeConvertToImpl<bool, ParamType>
 {
-    return static_cast<ParamType>(param);
+    static bool ConvertTo(ParamType param) { return param != 0; }
+};
+
+template <>
+struct GLTypeConvertToImpl<bool, GLboolean>
+{
+    static bool ConvertTo(GLboolean param) { return param == GL_TRUE; }
+};
+
+template <>
+struct GLTypeConvertToImpl<bool, GLfloat>
+{
+    static bool ConvertTo(GLfloat param) { return param != 0.0; }
+};
+
+template <>
+struct GLTypeConvertToImpl<float, GLfloat>
+{
+    static float ConvertTo(GLfloat param) { return param; }
+};
+
+template <>
+struct GLTypeConvertToImpl<uint32_t, GLint>
+{
+    static uint32_t ConvertTo(GLint param) { return leftClampCast<uint32_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<uint64_t, GLint>
+{
+    static uint64_t ConvertTo(GLint param) { return leftClampCast<uint64_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<uint32_t, GLint64>
+{
+    static uint32_t ConvertTo(GLint64 param) { return clampCast<uint32_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<uint64_t, GLint64>
+{
+    static uint64_t ConvertTo(GLint64 param) { return leftClampCast<uint64_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<int32_t, GLint64>
+{
+    static int32_t ConvertTo(GLint64 param) { return clampCast<int32_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<int32_t, GLuint>
+{
+    static int32_t ConvertTo(GLuint param) { return rightClampCast<int32_t>(param); }
+};
+
+template <>
+struct GLTypeConvertToImpl<int64_t, GLuint>
+{
+    static int64_t ConvertTo(GLuint param) { return rightClampCast<int64_t>(param); }
+};
+
+template <typename ReturnType, typename ParamType>
+inline ReturnType ConvertTo(ParamType param)
+{
+    return GLTypeConvertToImpl<ReturnType, ParamType>::ConvertTo(param);
 }
 
-template <typename ParamType>
-ParamType ConvertFromGLboolean(GLboolean param)
+// GLES 3.10 Section 2.2.2
+// When querying bitmask (such as SAMPLE_MASK_VALUE or STENCIL_WRITEMASK) with GetIntegerv, the
+// mask value is treated as a signed integer, so that mask values with the high bit set will not be
+// clamped when returned as signed integers.
+inline GLint ConvertFromMaskValue(GLuint value)
 {
-    return static_cast<ParamType>(param ? GL_TRUE : GL_FALSE);
-}
-
-template <typename ParamType>
-ParamType ConvertFromGLint64(GLint64 param)
-{
-    return clampCast<ParamType>(param);
+    return static_cast<GLint>(value);
 }
 
 unsigned int ParseAndStripArrayIndex(std::string *name);
