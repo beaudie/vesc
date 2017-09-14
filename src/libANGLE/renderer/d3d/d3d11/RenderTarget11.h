@@ -34,13 +34,13 @@ class RenderTarget11 : public RenderTargetD3D
 
     virtual unsigned int getSubresourceIndex() const = 0;
 
-    gl::Error signalDirty(const gl::Context *context) override;
-    OnRenderTargetDirtyChannel *getBroadcastChannel() { return &mBroadcastChannel; }
+    gl::Error signalInvalid(const gl::Context *context) override;
+    OnRenderTargetInvalidChannel *getOnInvalidChannel() { return &mOnInvalidChannel; }
 
     const d3d11::Format &getFormatSet() const { return mFormatSet; }
 
   protected:
-    OnRenderTargetDirtyChannel mBroadcastChannel;
+    OnRenderTargetInvalidChannel mOnInvalidChannel;
     const d3d11::Format &mFormatSet;
 };
 
