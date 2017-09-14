@@ -181,6 +181,9 @@ class StateManager11 final : angle::NonCopyable
     // Called by the Framebuffer11 directly.
     void dirtyDrawFramebuffer();
 
+    // Called by the Framebuffer11 and VertexArray11.
+    void invalidateShaders();
+
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
 
@@ -341,6 +344,7 @@ class StateManager11 final : angle::NonCopyable
         DIRTY_BIT_PROGRAM_UNIFORMS,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS,
+        DIRTY_BIT_SHADERS,
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
@@ -514,6 +518,8 @@ class StateManager11 final : angle::NonCopyable
     Serial mAppliedTFSerial;
 
     Serial mEmptySerial;
+
+    bool mIsTransformFeedbackCurrentlyActiveUnpaused;
 };
 
 }  // namespace rx
