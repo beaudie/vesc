@@ -955,7 +955,8 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     {
                         numViews = program->getNumViews();
                     }
-                    vao11->markAllAttributeDivisorsForAdjustment(numViews);
+                    vao11->markAllAttributeDivisorsForAdjustment(
+                        numViews, program->getActiveAttribLocationsMask());
                 }
             }
             break;
@@ -2489,7 +2490,7 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     // update on the second draw call.
     // Hence we clear the flags here, after we've applied vertex data, since we know everything
     // is clean. This is a bit of a hack.
-    ANGLE_TRY(vertexArray11->clearDirtyAndPromoteDynamicAttribs(context, count));
+    ANGLE_TRY(vertexArray11->promoteDynamicAttribs(context, count));
 
     mInputLayoutIsDirty = false;
     return gl::NoError();
