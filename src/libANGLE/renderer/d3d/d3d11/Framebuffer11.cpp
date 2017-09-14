@@ -57,7 +57,7 @@ gl::Error MarkAttachmentsDirty(const gl::Context *context,
 gl::Error UpdateCachedRenderTarget(const gl::Context *context,
                                    const gl::FramebufferAttachment *attachment,
                                    RenderTarget11 *&cachedRenderTarget,
-                                   OnRenderTargetDirtyBinding *channelBinding)
+                                   OnRenderTargetInvalidBinding *channelBinding)
 {
     RenderTarget11 *newRenderTarget = nullptr;
     if (attachment)
@@ -66,7 +66,7 @@ gl::Error UpdateCachedRenderTarget(const gl::Context *context,
     }
     if (newRenderTarget != cachedRenderTarget)
     {
-        auto channel = (newRenderTarget ? newRenderTarget->getBroadcastChannel() : nullptr);
+        auto channel = (newRenderTarget ? newRenderTarget->getOnInvalidChannel() : nullptr);
         channelBinding->bind(channel);
         cachedRenderTarget = newRenderTarget;
     }
