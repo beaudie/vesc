@@ -40,6 +40,17 @@ class RefCountObjectNoID : angle::NonCopyable
         }
     }
 
+    // A specialized release method for objects which need a destroy context.
+    void release(const gl::Context *context)
+    {
+        ASSERT(mRefCount > 0);
+        if (--mRefCount == 0)
+        {
+            onDestroy(context);
+            delete this;
+        }
+    }
+
     size_t getRefCount() const { return mRefCount; }
 
   protected:
@@ -58,15 +69,9 @@ class RefCountObject : RefCountObjectNoID
 
     GLuint id() const { return mId; }
 
-    // A specialized release method for objects which need a destroy context.
     void release(const gl::Context *context)
     {
-        ASSERT(mRefCount > 0);
-        if (--mRefCount == 0)
-        {
-            onDestroy(context);
-            delete this;
-        }
+        RefCountObjectNoID::release(context);
     }
 
     using RefCountObjectNoID::addRef;
@@ -112,9 +117,9 @@ class BindingPointer
     virtual void set(const Context *context, ObjectType *newObject)
     {
         // addRef first in case newObject == mObject and this is the last reference to it.
-        if (newObject != nullptr) reinterpret_cast<const RefCountObject*>(newObject)->addRef();
+        if (newObject != nullptr) reinterpret_cast<const RefCountObjectNoID*>(newObject)->addRef();
         if (mObject != nullptr)
-            reinterpret_cast<RefCountObject *>(mObject)->release(context);
+            reinterpret_cast<RefCountObjectNoID *>(mObject)->release(context);
         mObject = newObject;
     }
 
