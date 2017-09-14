@@ -969,12 +969,21 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     if (mDrawFramebuffer == framebuffer)
         return;
 
+    if (mDrawFramebuffer)
+    {
+        mDrawFramebuffer->setActiveDrawFramebuffer(false);
+    }
+
     mDrawFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
-    if (mDrawFramebuffer && mDrawFramebuffer->hasAnyDirtyBit())
+    if (mDrawFramebuffer)
     {
-        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        mDrawFramebuffer->setActiveDrawFramebuffer(true);
+        if (mDrawFramebuffer->hasAnyDirtyBit())
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        }
     }
 }
 
