@@ -56,33 +56,24 @@ void VertexArray11::syncState(const gl::Context *context,
     // TODO(jmadill): Individual attribute invalidation.
     renderer->getStateManager()->invalidateVertexBuffer();
 
+    // A mask of attributes that need to be re-evaluated.
+    gl::AttributesMask attribsToUpdate;
+
     for (auto dirtyBit : dirtyBits)
     {
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
             continue;
 
-        size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
+        size_t attribIndex = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
         // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-        ASSERT(index == mData.getBindingIndexFromAttribIndex(index));
-        mAttribsToUpdate.set(index);
+        ASSERT(attribIndex == mData.getBindingIndexFromAttribIndex(attribIndex));
+
+        attribsToUpdate.set(attribIndex);
     }
-}
 
-void VertexArray11::flushAttribUpdates(const gl::Context *context)
-{
-    const gl::Program *program  = context->getGLState().getProgram();
-    const auto &activeLocations = program->getActiveAttribLocationsMask();
-
-    if (mAttribsToUpdate.any())
+    for (auto attribIndex : attribsToUpdate)
     {
-        // Skip attrib locations the program doesn't use.
-        gl::AttributesMask activeToUpdate = mAttribsToUpdate & activeLocations;
-
-        for (auto toUpdateIndex : activeToUpdate)
-        {
-            mAttribsToUpdate.reset(toUpdateIndex);
-            updateVertexAttribStorage(context, toUpdateIndex);
-        }
+        updateVertexAttribStorage(context, attribIndex);
     }
 }
 
@@ -158,13 +149,11 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
 
 bool VertexArray11::hasDynamicAttrib(const gl::Context *context)
 {
-    flushAttribUpdates(context);
     return mDynamicAttribsMask.any();
 }
 
 bool VertexArray11::hasDirtyOrDynamicAttrib(const gl::Context *context)
 {
-    flushAttribUpdates(context);
     return mAttribsToTranslate.any() || mDynamicAttribsMask.any();
 }
 
@@ -174,8 +163,6 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
                                                       GLsizei count,
                                                       GLsizei instances)
 {
-    flushAttribUpdates(context);
-
     const auto &glState         = context->getGLState();
     const gl::Program *program  = glState.getProgram();
     const auto &activeLocations = program->getActiveAttribLocationsMask();
@@ -184,11 +171,10 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
     mAppliedNumViewsToDivisor =
         (program != nullptr && program->usesMultiview()) ? program->getNumViews() : 1;
 
-    if (mAttribsToTranslate.any())
+    gl::AttributesMask dirtyActiveAttribs = (mAttribsToTranslate & activeLocations);
+    if (dirtyActiveAttribs.any())
     {
         // Skip attrib locations the program doesn't use, saving for the next frame.
-        gl::AttributesMask dirtyActiveAttribs = (mAttribsToTranslate & activeLocations);
-
         for (auto dirtyAttribIndex : dirtyActiveAttribs)
         {
             mAttribsToTranslate.reset(dirtyAttribIndex);
@@ -252,23 +238,20 @@ const std::vector<TranslatedAttribute> &VertexArray11::getTranslatedAttribs() co
     return mTranslatedAttribs;
 }
 
-gl::Error VertexArray11::signal(const gl::Context *context, size_t channelID)
+gl::Error VertexArray11::signal(const gl::Context *context, size_t attribIndex)
 {
-    ASSERT(mAttributeStorageTypes[channelID] != VertexStorageType::CURRENT_VALUE);
+    ASSERT(mAttributeStorageTypes[attribIndex] != VertexStorageType::CURRENT_VALUE);
 
     // This can change a buffer's storage, we'll need to re-check.
-    // TODO(jmadill): Update immediately.
-    mAttribsToUpdate.set(channelID);
+    updateVertexAttribStorage(context, attribIndex);
     return gl::NoError();
 }
 
-gl::Error VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::Context *context,
-                                                            GLsizei count)
+gl::Error VertexArray11::promoteDynamicAttribs(const gl::Context *context, GLsizei count)
 {
     const gl::State &glState    = context->getGLState();
     const gl::Program *program  = glState.getProgram();
     const auto &activeLocations = program->getActiveAttribLocationsMask();
-    mAttribsToUpdate &= ~activeLocations;
 
     // Promote to static after we clear the dirty attributes, otherwise we can lose dirtyness.
     auto activeDynamicAttribs = (mDynamicAttribsMask & activeLocations);
@@ -277,12 +260,13 @@ gl::Error VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::Context *c
     return gl::NoError();
 }
 
-void VertexArray11::markAllAttributeDivisorsForAdjustment(int numViews)
+void VertexArray11::markAllAttributeDivisorsForAdjustment(int numViews,
+                                                          const gl::AttributesMask &activeAttribs)
 {
     if (mAppliedNumViewsToDivisor != numViews)
     {
         mAppliedNumViewsToDivisor = numViews;
-        mAttribsToUpdate.set();
+        mAttribsToTranslate       = activeAttribs;
     }
 }
 
