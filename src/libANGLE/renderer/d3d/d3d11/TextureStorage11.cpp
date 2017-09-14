@@ -781,14 +781,14 @@ gl::Error TextureStorage11_2D::onDestroy(const gl::Context *context)
 
     if (mLevelZeroRenderTarget)
     {
-        ANGLE_TRY(mLevelZeroRenderTarget->signalDirty(context));
+        ANGLE_TRY(mLevelZeroRenderTarget->signalInvalid(context));
     }
 
     for (auto &rt : mRenderTargets)
     {
         if (rt)
         {
-            ANGLE_TRY(rt->signalDirty(context));
+            ANGLE_TRY(rt->signalInvalid(context));
         }
     }
 
@@ -894,13 +894,13 @@ gl::Error TextureStorage11_2D::useLevelZeroWorkaroundTexture(const gl::Context *
         // Mark everything as dirty to be conservative.
         if (mLevelZeroRenderTarget)
         {
-            ANGLE_TRY(mLevelZeroRenderTarget->signalDirty(context));
+            ANGLE_TRY(mLevelZeroRenderTarget->signalInvalid(context));
         }
         for (auto &renderTarget : mRenderTargets)
         {
             if (renderTarget)
             {
-                ANGLE_TRY(renderTarget->signalDirty(context));
+                ANGLE_TRY(renderTarget->signalInvalid(context));
             }
         }
     }
@@ -1685,7 +1685,7 @@ gl::Error TextureStorage11_Cube::onDestroy(const gl::Context *context)
     {
         if (mLevelZeroRenderTargets[face])
         {
-            ANGLE_TRY(mLevelZeroRenderTargets[face]->signalDirty(context));
+            ANGLE_TRY(mLevelZeroRenderTargets[face]->signalInvalid(context));
         }
     }
 
@@ -1695,7 +1695,7 @@ gl::Error TextureStorage11_Cube::onDestroy(const gl::Context *context)
         {
             if (mRenderTargets[face][level])
             {
-                ANGLE_TRY(mRenderTargets[face][level]->signalDirty(context));
+                ANGLE_TRY(mRenderTargets[face][level]->signalInvalid(context));
             }
         }
     }
@@ -2312,7 +2312,7 @@ gl::Error TextureStorage11_3D::onDestroy(const gl::Context *context)
     {
         if (it.second)
         {
-            ANGLE_TRY(it.second->signalDirty(context));
+            ANGLE_TRY(it.second->signalInvalid(context));
         }
     }
 
@@ -2320,7 +2320,7 @@ gl::Error TextureStorage11_3D::onDestroy(const gl::Context *context)
     {
         if (rt)
         {
-            ANGLE_TRY(rt->signalDirty(context));
+            ANGLE_TRY(rt->signalInvalid(context));
         }
     }
 
@@ -2616,7 +2616,7 @@ gl::Error TextureStorage11_2DArray::onDestroy(const gl::Context *context)
     {
         if (iter.second)
         {
-            ANGLE_TRY(iter.second->signalDirty(context));
+            ANGLE_TRY(iter.second->signalInvalid(context));
         }
     }
 
@@ -2964,7 +2964,7 @@ gl::Error TextureStorage11_2DMultisample::onDestroy(const gl::Context *context)
 {
     if (mRenderTarget)
     {
-        ANGLE_TRY(mRenderTarget->signalDirty(context));
+        ANGLE_TRY(mRenderTarget->signalInvalid(context));
     }
 
     return gl::NoError();

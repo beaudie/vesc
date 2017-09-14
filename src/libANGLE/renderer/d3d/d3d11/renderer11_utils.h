@@ -400,10 +400,10 @@ using OnBufferDataDirtyBinding  = angle::ChannelBinding<gl::Error, const gl::Con
 using OnBufferDataDirtyChannel  = angle::BroadcastChannel<gl::Error, const gl::Context *, size_t>;
 using OnBufferDataDirtyReceiver = angle::SignalReceiver<gl::Error, const gl::Context *, size_t>;
 
-// Used for state change notifications between RenderTarget11 and Framebuffer11.
-using OnRenderTargetDirtyBinding  = angle::ChannelBinding<gl::Error, const gl::Context *, size_t>;
-using OnRenderTargetDirtyChannel  = angle::BroadcastChannel<gl::Error, const gl::Context *, size_t>;
-using OnRenderTargetDirtyReceiver = angle::SignalReceiver<gl::Error, const gl::Context *, size_t>;
+// Used for notifications between RenderTarget11 and Framebuffer11 -- the old RTV is invalid.
+using OnRenderTargetInvalidBinding  = angle::ChannelBinding<gl::Error, const gl::Context *, size_t>;
+using OnRenderTargetInvalidChannel  = angle::BroadcastChannel<gl::Error, const gl::Context *, size_t>;
+using OnRenderTargetInvalidReceiver = angle::SignalReceiver<gl::Error, const gl::Context *, size_t>;
 
 }  // namespace rx
 

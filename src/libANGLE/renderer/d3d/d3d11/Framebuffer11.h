@@ -17,7 +17,7 @@ namespace rx
 {
 class Renderer11;
 
-class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
+class Framebuffer11 : public FramebufferD3D, public OnRenderTargetInvalidReceiver
 {
   public:
     Framebuffer11(const gl::FramebufferState &data, Renderer11 *renderer);
@@ -89,8 +89,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
     RenderTargetArray mCachedColorRenderTargets;
     RenderTarget11 *mCachedDepthStencilRenderTarget;
 
-    std::vector<OnRenderTargetDirtyBinding> mColorRenderTargetsDirty;
-    OnRenderTargetDirtyBinding mDepthStencilRenderTargetDirty;
+    std::vector<OnRenderTargetInvalidBinding> mColorRenderTargetsDirty;
+    OnRenderTargetInvalidBinding mDepthStencilRenderTargetDirty;
 };
 
 }

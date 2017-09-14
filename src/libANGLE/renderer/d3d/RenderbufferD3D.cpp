@@ -113,7 +113,7 @@ gl::Error RenderbufferD3D::deleteRenderTarget(const gl::Context *context)
 {
     if (mRenderTarget)
     {
-        ANGLE_TRY(mRenderTarget->signalDirty(context));
+        ANGLE_TRY(mRenderTarget->signalInvalid(context));
         SafeDelete(mRenderTarget);
     }
 

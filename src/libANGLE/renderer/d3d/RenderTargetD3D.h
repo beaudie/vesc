@@ -34,8 +34,11 @@ class RenderTargetD3D : public FramebufferAttachmentRenderTarget
     virtual unsigned int getSerial() const;
     static unsigned int issueSerials(unsigned int count);
 
-    // Only currently applies to D3D11.
-    virtual gl::Error signalDirty(const gl::Context *context) { return gl::NoError(); }
+    // Notify any interested objects that this RenderTarget is being deleted, or is changing such
+    // that the object itself is invalid.
+    // Only currently applies to D3D11, where the Framebuffer11 is interested in knowing when
+    // attached RTVs are deleted/changed.
+    virtual gl::Error signalInvalid(const gl::Context *context) { return gl::NoError(); }
 
   private:
     const unsigned int mSerial;
