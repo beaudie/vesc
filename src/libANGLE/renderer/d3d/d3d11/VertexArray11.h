@@ -34,7 +34,7 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
                                            GLint start,
                                            GLsizei count,
                                            GLsizei instances);
-    gl::Error clearDirtyAndPromoteDynamicAttribs(const gl::Context *context, GLsizei count);
+    gl::Error promoteDynamicAttribs(const gl::Context *context, GLsizei count);
 
     const std::vector<TranslatedAttribute> &getTranslatedAttribs() const;
 
@@ -45,7 +45,8 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
 
     // In case of a multi-view program change, we have to update all attributes so that the divisor
     // is adjusted.
-    void markAllAttributeDivisorsForAdjustment(int numViews);
+    void markAllAttributeDivisorsForAdjustment(int numViews,
+                                               const gl::AttributesMask &activeAttribs);
 
   private:
     void updateVertexAttribStorage(const gl::Context *context, size_t attribIndex);
@@ -56,9 +57,6 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
 
     // The mask of attributes marked as dynamic.
     gl::AttributesMask mDynamicAttribsMask;
-
-    // A mask of attributes that need to be re-evaluated.
-    gl::AttributesMask mAttribsToUpdate;
 
     // A set of attributes we know are dirty, and need to be re-translated.
     gl::AttributesMask mAttribsToTranslate;
