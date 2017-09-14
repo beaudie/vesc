@@ -446,7 +446,7 @@ void Framebuffer11::syncState(const gl::Context *context,
     }
 }
 
-void Framebuffer11::signal(size_t channelID)
+gl::Error Framebuffer11::signal(const gl::Context *context, size_t channelID)
 {
     if (channelID == gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS)
     {
@@ -459,6 +459,9 @@ void Framebuffer11::signal(size_t channelID)
         mInternalDirtyBits.set(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 + channelID);
         mCachedColorRenderTargets[channelID] = nullptr;
     }
+
+    // TODO(jmadill): Update immediately.
+    return gl::NoError();
 }
 
 gl::Error Framebuffer11::getSamplePosition(size_t index, GLfloat *xy) const

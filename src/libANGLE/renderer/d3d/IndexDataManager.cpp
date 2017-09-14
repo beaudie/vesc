@@ -204,7 +204,8 @@ bool IndexDataManager::IsStreamingIndexData(const gl::Context *context,
 // When we have a buffer with an unsupported format (subcase b) then we need to do some translation:
 // we will start by falling back to streaming, and after a while will start using a static
 // translated copy of the index buffer.
-gl::Error IndexDataManager::prepareIndexData(GLenum srcType,
+gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
+                                             GLenum srcType,
                                              GLsizei count,
                                              gl::Buffer *glBuffer,
                                              const void *indices,
@@ -293,48 +294,32 @@ gl::Error IndexDataManager::prepareIndexData(GLenum srcType,
 
     if (staticBufferInitialized && !staticBufferUsable)
     {
-        buffer->invalidateStaticData();
+        ANGLE_TRY(buffer->invalidateStaticData(context));
         staticBuffer = nullptr;
     }
 
     if (staticBuffer == nullptr || !offsetAligned)
     {
         const uint8_t *bufferData = nullptr;
-        gl::Error error           = buffer->getData(&bufferData);
-        if (error.isError())
-        {
-            return error;
-        }
+        ANGLE_TRY(buffer->getData(context, &bufferData));
         ASSERT(bufferData != nullptr);
 
-        error = streamIndexData(bufferData + offset, count, srcType, dstType,
-                                primitiveRestartFixedIndexEnabled, translated);
-        if (error.isError())
-        {
-            return error;
-        }
-        buffer->promoteStaticUsage(count << srcTypeInfo.bytesShift);
+        ANGLE_TRY(streamIndexData(bufferData + offset, count, srcType, dstType,
+                                  primitiveRestartFixedIndexEnabled, translated));
+        ANGLE_TRY(buffer->promoteStaticUsage(context, count << srcTypeInfo.bytesShift));
     }
     else
     {
         if (!staticBufferInitialized)
         {
             const uint8_t *bufferData = nullptr;
-            gl::Error error           = buffer->getData(&bufferData);
-            if (error.isError())
-            {
-                return error;
-            }
+            ANGLE_TRY(buffer->getData(context, &bufferData));
             ASSERT(bufferData != nullptr);
 
             unsigned int convertCount =
                 static_cast<unsigned int>(buffer->getSize()) >> srcTypeInfo.bytesShift;
-            error = StreamInIndexBuffer(staticBuffer, bufferData, convertCount, srcType, dstType,
-                                        primitiveRestartFixedIndexEnabled, nullptr);
-            if (error.isError())
-            {
-                return error;
-            }
+            ANGLE_TRY(StreamInIndexBuffer(staticBuffer, bufferData, convertCount, srcType, dstType,
+                                          primitiveRestartFixedIndexEnabled, nullptr));
         }
         ASSERT(offsetAligned && staticBuffer->getIndexType() == dstType);
 
