@@ -40,7 +40,7 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
 {
 }
 
-void VertexArray::onDestroy(const Context *context)
+Error VertexArray::onDestroy(const Context *context)
 {
     for (auto &binding : mState.mVertexBindings)
     {
@@ -48,13 +48,12 @@ void VertexArray::onDestroy(const Context *context)
     }
     mState.mElementArrayBuffer.set(context, nullptr);
     mVertexArray->destroy(context);
-    SafeDelete(mVertexArray);
-    delete this;
+    return NoError();
 }
 
 VertexArray::~VertexArray()
 {
-    ASSERT(!mVertexArray);
+    SafeDelete(mVertexArray);
 }
 
 GLuint VertexArray::id() const
