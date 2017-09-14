@@ -2444,6 +2444,10 @@ gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMod
     }
 
     setDrawShaders(vertexShader, geometryShader, pixelShader);
+
+    // Force the dirty bit for programs off.
+    mInternalDirtyBits.reset(DIRTY_BIT_SHADERS);
+
     return gl::NoError();
 }
 
