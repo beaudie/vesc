@@ -2336,11 +2336,31 @@ const ImageUnit &State::getImageUnit(GLuint unit) const
 }
 
 // Handle a dirty texture event.
-void State::signal(uint32_t textureIndex)
+void State::signal(size_t textureIndex, InitState initState)
 {
     // Conservatively assume all textures are dirty.
     // TODO(jmadill): More fine-grained update.
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+}
+
+Error State::clearUnclearedActiveTextures(const Context *context)
+{
+    // This could be potentially sped up by tracking uninitialized-ness of bound textures.
+    // TODO(jmadill): Investigate improving the speed here.
+    ASSERT(mProgram);
+    for (const auto &samplerBinding : mProgram->getSamplerBindings())
+    {
+        for (GLuint textureId : samplerBinding.boundTextureUnits)
+        {
+            auto *texture = mSamplerTextures[samplerBinding.textureType][textureId].get();
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
+        }
+    }
+
+    return NoError();
 }
 
 }  // namespace gl
