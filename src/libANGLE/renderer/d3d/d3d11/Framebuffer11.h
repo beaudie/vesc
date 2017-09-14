@@ -49,11 +49,7 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     RenderTarget11 *getFirstRenderTarget() const;
 
-    bool hasAnyInternalDirtyBit() const;
-    void syncInternalState(const gl::Context *context);
-
     gl::Error signal(const gl::Context *context, size_t channelID) override;
-
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
   private:
@@ -86,8 +82,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const override;
 
-    void updateColorRenderTarget(const gl::Context *context, size_t colorIndex);
-    void updateDepthStencilRenderTarget(const gl::Context *context);
+    gl::Error updateColorRenderTarget(const gl::Context *context, size_t colorIndex);
+    gl::Error updateDepthStencilRenderTarget(const gl::Context *context);
 
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
@@ -95,8 +91,6 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     std::vector<OnRenderTargetDirtyBinding> mColorRenderTargetsDirty;
     OnRenderTargetDirtyBinding mDepthStencilRenderTargetDirty;
-
-    gl::Framebuffer::DirtyBits mInternalDirtyBits;
 };
 
 }
