@@ -567,7 +567,7 @@ Framebuffer::~Framebuffer()
     SafeDelete(mImpl);
 }
 
-void Framebuffer::onDestroy(const Context *context)
+Error Framebuffer::onDestroy(const Context *context)
 {
     for (auto &attachment : mState.mColorAttachments)
     {
@@ -579,7 +579,8 @@ void Framebuffer::onDestroy(const Context *context)
     mState.mWebGLStencilAttachment.detach(context);
     mState.mWebGLDepthStencilAttachment.detach(context);
 
-    mImpl->destroy(context);
+    ANGLE_TRY(mImpl->destroy(context));
+    return NoError();
 }
 
 void Framebuffer::destroyDefault(const egl::Display *display)
@@ -1519,10 +1520,11 @@ void Framebuffer::syncState(const Context *context)
     }
 }
 
-void Framebuffer::signal(uint32_t token)
+Error Framebuffer::signal(const Context *context, uint32_t token)
 {
     // TOOD(jmadill): Make this only update individual attachments to do less work.
     mCachedStatus.reset();
+    return NoError();
 }
 
 bool Framebuffer::complete(const Context *context)

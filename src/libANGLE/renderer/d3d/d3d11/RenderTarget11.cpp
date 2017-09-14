@@ -200,15 +200,17 @@ RenderTarget11::RenderTarget11(const d3d11::Format &formatSet) : mFormatSet(form
 
 RenderTarget11::~RenderTarget11()
 {
-    signalDirty();
+    ASSERT(!mBroadcastChannel.hasReceivers());
 }
 
-void RenderTarget11::signalDirty()
+gl::Error RenderTarget11::signalDirty(const gl::Context *context)
 {
-    mBroadcastChannel.signal();
+    ANGLE_TRY(mBroadcastChannel.signal(context));
 
     // Clear the list. We can't do this in the receiver because it would mutate during iteration.
     mBroadcastChannel.reset();
+
+    return gl::NoError();
 }
 
 TextureRenderTarget11::TextureRenderTarget11(d3d11::RenderTargetView &&rtv,

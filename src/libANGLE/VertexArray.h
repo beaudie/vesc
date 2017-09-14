@@ -75,8 +75,9 @@ class VertexArray final : public LabeledObject
 {
   public:
     VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
+    ~VertexArray();
 
-    void onDestroy(const Context *context);
+    Error onDestroy(const Context *context);
 
     GLuint id() const;
 
@@ -190,8 +191,6 @@ class VertexArray final : public LabeledObject
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
   private:
-    ~VertexArray();
-
     GLuint mId;
 
     VertexArrayState mState;

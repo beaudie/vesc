@@ -206,11 +206,11 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
             switch (mAttributeStorageTypes[dirtyAttribIndex])
             {
                 case VertexStorageType::DIRECT:
-                    VertexDataManager::StoreDirectAttrib(translatedAttrib);
+                    StoreDirectAttrib(translatedAttrib);
                     break;
                 case VertexStorageType::STATIC:
                 {
-                    ANGLE_TRY(VertexDataManager::StoreStaticAttrib(translatedAttrib));
+                    ANGLE_TRY(StoreStaticAttrib(context, translatedAttrib));
                     break;
                 }
                 case VertexStorageType::CURRENT_VALUE:
@@ -240,8 +240,8 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
                 dynamicAttrib->binding->getDivisor() * mAppliedNumViewsToDivisor;
         }
 
-        ANGLE_TRY(vertexDataManager->storeDynamicAttribs(&mTranslatedAttribs, activeDynamicAttribs,
-                                                         start, count, instances));
+        ANGLE_TRY(vertexDataManager->storeDynamicAttribs(
+            context, &mTranslatedAttribs, activeDynamicAttribs, start, count, instances));
     }
 
     return gl::NoError();
@@ -252,23 +252,29 @@ const std::vector<TranslatedAttribute> &VertexArray11::getTranslatedAttribs() co
     return mTranslatedAttribs;
 }
 
-void VertexArray11::signal(size_t channelID)
+gl::Error VertexArray11::signal(const gl::Context *context, size_t channelID)
 {
     ASSERT(mAttributeStorageTypes[channelID] != VertexStorageType::CURRENT_VALUE);
 
     // This can change a buffer's storage, we'll need to re-check.
+    // TODO(jmadill): Update immediately.
     mAttribsToUpdate.set(channelID);
+    return gl::NoError();
 }
 
-void VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::State &state, GLsizei count)
+gl::Error VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::Context *context,
+                                                            GLsizei count)
 {
-    const gl::Program *program  = state.getProgram();
+    const gl::State &glState    = context->getGLState();
+    const gl::Program *program  = glState.getProgram();
     const auto &activeLocations = program->getActiveAttribLocationsMask();
     mAttribsToUpdate &= ~activeLocations;
 
     // Promote to static after we clear the dirty attributes, otherwise we can lose dirtyness.
     auto activeDynamicAttribs = (mDynamicAttribsMask & activeLocations);
-    VertexDataManager::PromoteDynamicAttribs(mTranslatedAttribs, activeDynamicAttribs, count);
+    ANGLE_TRY(VertexDataManager::PromoteDynamicAttribs(context, mTranslatedAttribs,
+                                                       activeDynamicAttribs, count));
+    return gl::NoError();
 }
 
 void VertexArray11::markAllAttributeDivisorsForAdjustment(int numViews)

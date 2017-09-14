@@ -98,6 +98,8 @@ Surface::Surface(EGLint surfaceType, const egl::Config *config, const AttributeM
 
 Surface::~Surface()
 {
+    SafeDelete(mState.defaultFramebuffer);
+    SafeDelete(mImplementation);
 }
 
 Error Surface::destroyImpl(const Display *display)
@@ -117,22 +119,14 @@ Error Surface::destroyImpl(const Display *display)
         {
             ANGLE_TRY(mImplementation->releaseTexImage(EGL_BACK_BUFFER));
         }
-        auto glErr = mTexture->releaseTexImageFromSurface(display->getProxyContext());
-        if (glErr.isError())
-        {
-            return Error(EGL_BAD_SURFACE);
-        }
+        ANGLE_TRY(mTexture->releaseTexImageFromSurface(display->getProxyContext()));
         mTexture.set(nullptr, nullptr);
     }
 
     if (mState.defaultFramebuffer)
     {
-        mState.defaultFramebuffer->onDestroy(display->getProxyContext());
+        ANGLE_TRY(mState.defaultFramebuffer->onDestroy(display->getProxyContext()));
     }
-    SafeDelete(mState.defaultFramebuffer);
-    SafeDelete(mImplementation);
-
-    delete this;
     return NoError();
 }
 
@@ -164,7 +158,9 @@ Error Surface::setIsCurrent(const gl::Context *context, bool isCurrent)
     if (mCurrentCount == 0 && mDestroyed)
     {
         ASSERT(context);
-        return destroyImpl(context->getCurrentDisplay());
+        auto err = destroyImpl(context->getCurrentDisplay());
+        delete this;
+        return err;
     }
     return NoError();
 }
@@ -174,7 +170,9 @@ Error Surface::onDestroy(const Display *display)
     mDestroyed = true;
     if (mCurrentCount == 0)
     {
-        return destroyImpl(display);
+        auto err = destroyImpl(display);
+        delete this;
+        return err;
     }
     return NoError();
 }

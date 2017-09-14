@@ -129,8 +129,8 @@ TEST(ValidationESTest, DISABLED_DrawElementsWithMaxIndexGivesError)
     state.setDrawFramebufferBinding(nullptr);
     state.setProgram(nullptr, nullptr);
 
-    vertexArray->onDestroy(nullptr);
-    framebuffer->onDestroy(nullptr);
+    EXPECT_FALSE(vertexArray->onDestroy(nullptr).isError());
+    EXPECT_FALSE(framebuffer->onDestroy(nullptr).isError());
     program->onDestroy(nullptr);
 }
 
