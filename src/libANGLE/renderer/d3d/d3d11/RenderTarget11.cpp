@@ -200,15 +200,16 @@ RenderTarget11::RenderTarget11(const d3d11::Format &formatSet) : mFormatSet(form
 
 RenderTarget11::~RenderTarget11()
 {
-    ASSERT(!mBroadcastChannel.hasReceivers());
+    ASSERT(!mOnInvalidChannel.hasReceivers());
 }
 
-gl::Error RenderTarget11::signalDirty(const gl::Context *context)
+gl::Error RenderTarget11::signalInvalid(const gl::Context *context)
 {
-    ANGLE_TRY(mBroadcastChannel.signal(context));
+    ANGLE_TRY(mOnInvalidChannel.signal(context));
 
-    // Clear the list. We can't do this in the receiver because it would mutate during iteration.
-    mBroadcastChannel.reset();
+    // Clear the list of recievers. Since this RenderTarget is now invalid, this should be the
+    // last (and only) notification they recieve.
+    mOnInvalidChannel.reset();
 
     return gl::NoError();
 }
