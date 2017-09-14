@@ -21,7 +21,7 @@ class BufferVk : public BufferImpl, public ResourceVk
   public:
     BufferVk(const gl::BufferState &state);
     ~BufferVk() override;
-    void destroy(const gl::Context *context) override;
+    gl::Error destroy(const gl::Context *context) override;
 
     gl::Error setData(const gl::Context *context,
                       GLenum target,
@@ -46,7 +46,8 @@ class BufferVk : public BufferImpl, public ResourceVk
                        void **mapPtr) override;
     gl::Error unmap(const gl::Context *context, GLboolean *result) override;
 
-    gl::Error getIndexRange(GLenum type,
+    gl::Error getIndexRange(const gl::Context *context,
+                            GLenum type,
                             size_t offset,
                             size_t count,
                             bool primitiveRestartEnabled,

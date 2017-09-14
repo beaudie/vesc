@@ -134,7 +134,7 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     Framebuffer(rx::GLImplFactory *factory);
 
     virtual ~Framebuffer();
-    void onDestroy(const Context *context);
+    Error onDestroy(const Context *context);
     void destroyDefault(const egl::Display *display);
 
     void setLabel(const std::string &label) override;
@@ -295,8 +295,8 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
     void syncState(const Context *context);
 
-    // angle::SignalReceiver implementation
-    void signal(uint32_t token) override;
+    // OnAttachmentDirtyReceiver implementation
+    Error signal(const Context *context, uint32_t token) override;
 
     bool formsRenderingFeedbackLoopWith(const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,

@@ -43,9 +43,9 @@ struct Format;
 class Renderbuffer;
 class Texture;
 
-using OnAttachmentDirtyBinding  = angle::ChannelBinding<>;
-using OnAttachmentDirtyChannel  = angle::BroadcastChannel<>;
-using OnAttachmentDirtyReceiver = angle::SignalReceiver<>;
+using OnAttachmentDirtyBinding  = angle::ChannelBinding<Error, const Context *>;
+using OnAttachmentDirtyChannel  = angle::BroadcastChannel<Error, const Context *>;
+using OnAttachmentDirtyReceiver = angle::SignalReceiver<Error, const Context *>;
 
 // FramebufferAttachment implements a GL framebuffer attachment.
 // Attachments are "light" containers, which store pointers to ref-counted GL objects.

@@ -396,14 +396,14 @@ enum class StagingAccess
 bool UsePresentPathFast(const Renderer11 *renderer, const gl::FramebufferAttachment *colorbuffer);
 
 // Used for state change notifications between buffers and vertex arrays.
-using OnBufferDataDirtyBinding  = angle::ChannelBinding<size_t>;
-using OnBufferDataDirtyChannel  = angle::BroadcastChannel<size_t>;
-using OnBufferDataDirtyReceiver = angle::SignalReceiver<size_t>;
+using OnBufferDataDirtyBinding  = angle::ChannelBinding<gl::Error, const gl::Context *, size_t>;
+using OnBufferDataDirtyChannel  = angle::BroadcastChannel<gl::Error, const gl::Context *, size_t>;
+using OnBufferDataDirtyReceiver = angle::SignalReceiver<gl::Error, const gl::Context *, size_t>;
 
 // Used for state change notifications between RenderTarget11 and Framebuffer11.
-using OnRenderTargetDirtyBinding  = angle::ChannelBinding<size_t>;
-using OnRenderTargetDirtyChannel  = angle::BroadcastChannel<size_t>;
-using OnRenderTargetDirtyReceiver = angle::SignalReceiver<size_t>;
+using OnRenderTargetDirtyBinding  = angle::ChannelBinding<gl::Error, const gl::Context *, size_t>;
+using OnRenderTargetDirtyChannel  = angle::BroadcastChannel<gl::Error, const gl::Context *, size_t>;
+using OnRenderTargetDirtyReceiver = angle::SignalReceiver<gl::Error, const gl::Context *, size_t>;
 
 }  // namespace rx
 
