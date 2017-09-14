@@ -54,8 +54,8 @@ class SurfaceD3D : public SurfaceImpl
 
     egl::Error resetSwapChain(const egl::Display *display);
 
-    // Returns true if swapchain changed due to resize or interval update
-    bool checkForOutOfDateSwapChain(const gl::Context *context);
+    // Writes true to 'wasDirty' if swapchain changed due to resize or interval update
+    egl::Error checkForOutOfDateSwapChain(const gl::Context *context);
 
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
                                         GLenum binding,
