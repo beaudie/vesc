@@ -11,12 +11,13 @@
 
 #include "common/utilities.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
-#include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/FramebufferAttachmentObjectImpl.h"
+#include "libANGLE/renderer/FramebufferImpl.h"
 
 namespace gl
 {
@@ -319,6 +320,35 @@ bool FramebufferAttachment::operator!=(const FramebufferAttachment &other) const
     return !(*this == other);
 }
 
+bool FramebufferAttachment::needsInit() const
+{
+    return mResource ? mResource->needsInit(mTarget.textureIndex()) : false;
+}
+
+Error FramebufferAttachment::initializeContents(const Context *context)
+{
+    ASSERT(mResource);
+    ANGLE_TRY(mResource->initializeContents(context, mTarget.textureIndex()));
+    markInitialized();
+    return NoError();
+}
+
+void FramebufferAttachment::markInitialized()
+{
+    ASSERT(mResource);
+    mResource->markInitialized(mTarget.textureIndex());
+}
+
+////// FramebufferAttachmentObject Implementation //////
+
+FramebufferAttachmentObject::FramebufferAttachmentObject(bool needsInit) : mNeedsInit(needsInit)
+{
+}
+
+FramebufferAttachmentObject::~FramebufferAttachmentObject()
+{
+}
+
 Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
     GLenum binding,
@@ -331,6 +361,13 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
 OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
 {
     return &mDirtyChannel;
+}
+
+Error FramebufferAttachmentObject::initializeContents(const Context *context,
+                                                      const ImageIndex &imageIndex)
+{
+    ASSERT(context->isRobustResourceInitEnabled());
+    return getAttachmentImpl()->initializeContents(context, imageIndex);
 }
 
 }  // namespace gl
