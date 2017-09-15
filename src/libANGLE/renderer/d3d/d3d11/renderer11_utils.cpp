@@ -2082,7 +2082,9 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
             d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion) < IntelDriverVersion(4539);
         if (IsSkylake(adapterDesc.DeviceId))
         {
-            workarounds.callClearTwiceOnSmallTarget = true;
+            workarounds.callClearTwiceOnSmallTarget =
+                d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion) <
+                IntelDriverVersion(4771);
             workarounds.emulateIsnanFloat =
                 d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion) <
                 IntelDriverVersion(4542);
