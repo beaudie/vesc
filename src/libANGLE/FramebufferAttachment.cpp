@@ -319,6 +319,35 @@ bool FramebufferAttachment::operator!=(const FramebufferAttachment &other) const
     return !(*this == other);
 }
 
+bool FramebufferAttachment::needsInit() const
+{
+    return mResource ? mResource->needsInit(mTarget.textureIndex()) : false;
+}
+
+Error FramebufferAttachment::initializeContents(const Context *context)
+{
+    ASSERT(mResource);
+    ANGLE_TRY(mResource->initializeContents(context, mTarget.textureIndex()));
+    markInitialized();
+    return NoError();
+}
+
+void FramebufferAttachment::markInitialized()
+{
+    ASSERT(mResource);
+    mResource->markInitialized(mTarget.textureIndex());
+}
+
+////// FramebufferAttachmentObject Implementation //////
+
+FramebufferAttachmentObject::FramebufferAttachmentObject(bool needsInit) : mNeedsInit(needsInit)
+{
+}
+
+FramebufferAttachmentObject::~FramebufferAttachmentObject()
+{
+}
+
 Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
     GLenum binding,
@@ -331,6 +360,12 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
 OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
 {
     return &mDirtyChannel;
+}
+
+Error FramebufferAttachmentObject::initializeContents(const Context *context,
+                                                      const ImageIndex &imageIndex)
+{
+    return getAttachmentImpl()->initializeContents(context, imageIndex);
 }
 
 }  // namespace gl
