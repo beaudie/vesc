@@ -246,7 +246,7 @@ void TextureManager::signalAllTexturesDirty() const
     {
         if (texture.second)
         {
-            texture.second->signalDirty();
+            texture.second->signalDirty(InitState::Clean);
         }
     }
 }
