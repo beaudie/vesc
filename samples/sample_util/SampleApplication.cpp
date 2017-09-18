@@ -25,8 +25,8 @@ SampleApplication::SampleApplication(const std::string &name,
     mEGLWindow->setConfigGreenBits(8);
     mEGLWindow->setConfigBlueBits(8);
     mEGLWindow->setConfigAlphaBits(8);
-    mEGLWindow->setConfigDepthBits(24);
-    mEGLWindow->setConfigStencilBits(8);
+    mEGLWindow->setConfigDepthBits(0);
+    mEGLWindow->setConfigStencilBits(0);
 
     // Disable vsync
     mEGLWindow->setSwapInterval(0);
