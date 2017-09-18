@@ -37,6 +37,7 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b);
 enum BlockLayoutType
 {
     BLOCKLAYOUT_STANDARD,
+    BLOCKLAYOUT_430,  // Shader storage block layout qualifier
     BLOCKLAYOUT_PACKED,
     BLOCKLAYOUT_SHARED
 };
