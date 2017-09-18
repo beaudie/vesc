@@ -30,6 +30,8 @@ BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
             return BLOCKLAYOUT_SHARED;
         case EbsStd140:
             return BLOCKLAYOUT_STANDARD;
+        case EbsStd430:
+            return BLOCKLAYOUT_430;
         default:
             UNREACHABLE();
             return BLOCKLAYOUT_SHARED;

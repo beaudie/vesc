@@ -907,6 +907,17 @@ void TParseContext::checkLocationIsNotSpecified(const TSourceLoc &location,
     }
 }
 
+void TParseContext::checkLayoutTypeMatchBlockType(const TSourceLoc &location,
+                                                  const TLayoutQualifier &layoutQualifier,
+                                                  const TTypeQualifier &typeQualifier)
+{
+    if (layoutQualifier.blockStorage == EbsStd430 && typeQualifier.qualifier != EvqBuffer)
+    {
+        error(location, "The std430 qualifier is supported only for shader storage blocks.",
+              "std430");
+    }
+}
+
 void TParseContext::checkOutParameterIsNotOpaqueType(const TSourceLoc &line,
                                                      TQualifier qualifier,
                                                      const TType &type)
@@ -3508,6 +3519,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
     checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
+    checkLayoutTypeMatchBlockType(typeQualifier.line, blockLayoutQualifier, typeQualifier);
 
     if (blockLayoutQualifier.matrixPacking == EmpUnspecified)
     {
@@ -4050,6 +4062,15 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             error(qualifierTypeLine, "Only std140 layout is allowed in WebGL", "packed");
         }
         qualifier.blockStorage = EbsPacked;
+    }
+    else if (qualifierType == "std430")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (sh::IsWebGLBasedSpec(mShaderSpec))
+        {
+            error(qualifierTypeLine, "Only std140 layout is allowed in WebGL", "std430");
+        }
+        qualifier.blockStorage = EbsStd430;
     }
     else if (qualifierType == "std140")
     {

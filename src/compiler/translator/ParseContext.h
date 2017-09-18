@@ -135,6 +135,9 @@ class TParseContext : angle::NonCopyable
     void checkDeclaratorLocationIsNotSpecified(const TSourceLoc &line, const TPublicType &pType);
     void checkLocationIsNotSpecified(const TSourceLoc &location,
                                      const TLayoutQualifier &layoutQualifier);
+    void checkLayoutTypeMatchBlockType(const TSourceLoc &location,
+                                       const TLayoutQualifier &layoutQualifier,
+                                       const TTypeQualifier &typeQualifier);
     void checkIsParameterQualifierValid(const TSourceLoc &line,
                                         const TTypeQualifierBuilder &typeQualifierBuilder,
                                         TType *type);
