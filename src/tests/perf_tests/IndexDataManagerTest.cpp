@@ -82,7 +82,7 @@ class MockBufferD3D : public rx::BufferD3D
                       GLenum target,
                       const void *data,
                       size_t size,
-                      GLenum) override
+                      gl::BufferUsage) override
     {
         mData.resize(size);
         if (data && size > 0)
