@@ -68,7 +68,7 @@ class BufferD3D : public BufferImpl
 
   protected:
     void updateSerial();
-    void updateD3DBufferUsage(GLenum usage);
+    void updateD3DBufferUsage(gl::BufferUsage usage);
     void emptyStaticBufferCache();
 
     BufferFactoryD3D *mFactory;

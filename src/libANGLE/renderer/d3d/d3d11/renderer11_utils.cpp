@@ -1580,7 +1580,7 @@ UINT8 ConvertColorMask(bool red, bool green, bool blue, bool alpha)
     return mask;
 }
 
-D3D11_CULL_MODE ConvertCullMode(bool cullEnabled, GLenum cullMode)
+D3D11_CULL_MODE ConvertCullMode(bool cullEnabled, gl::CullFace cullMode)
 {
     D3D11_CULL_MODE cull = D3D11_CULL_NONE;
 
@@ -1588,13 +1588,13 @@ D3D11_CULL_MODE ConvertCullMode(bool cullEnabled, GLenum cullMode)
     {
         switch (cullMode)
         {
-            case GL_FRONT:
+            case gl::CullFace::Front:
                 cull = D3D11_CULL_FRONT;
                 break;
-            case GL_BACK:
+            case gl::CullFace::Back:
                 cull = D3D11_CULL_BACK;
                 break;
-            case GL_FRONT_AND_BACK:
+            case gl::CullFace::FrontAndBack:
                 cull = D3D11_CULL_NONE;
                 break;
             default:

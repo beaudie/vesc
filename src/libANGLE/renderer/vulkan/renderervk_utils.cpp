@@ -926,11 +926,11 @@ VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState)
 
     switch (rasterState.cullMode)
     {
-        case GL_FRONT:
+        case gl::CullFace::Front:
             return VK_CULL_MODE_FRONT_BIT;
-        case GL_BACK:
+        case gl::CullFace::Back:
             return VK_CULL_MODE_BACK_BIT;
-        case GL_FRONT_AND_BACK:
+        case gl::CullFace::FrontAndBack:
             return VK_CULL_MODE_FRONT_AND_BACK;
         default:
             UNREACHABLE();
