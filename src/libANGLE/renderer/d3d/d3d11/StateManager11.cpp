@@ -585,7 +585,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
 
     mCurRasterState.rasterizerDiscard   = false;
     mCurRasterState.cullFace            = false;
-    mCurRasterState.cullMode            = GL_BACK;
+    mCurRasterState.cullMode            = gl::CullMode::Back;
     mCurRasterState.frontFace           = GL_CCW;
     mCurRasterState.polygonOffsetFill   = false;
     mCurRasterState.polygonOffsetFactor = 0.0f;

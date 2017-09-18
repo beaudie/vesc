@@ -135,21 +135,22 @@ D3DTEXTUREADDRESS ConvertTextureWrap(GLenum wrap)
     return d3dWrap;
 }
 
-D3DCULL ConvertCullMode(GLenum cullFace, GLenum frontFace)
+D3DCULL ConvertCullMode(gl::CullMode cullFace, GLenum frontFace)
 {
     D3DCULL cull = D3DCULL_CCW;
     switch (cullFace)
     {
-      case GL_FRONT:
-        cull = (frontFace == GL_CCW ? D3DCULL_CW : D3DCULL_CCW);
-        break;
-      case GL_BACK:
-        cull = (frontFace == GL_CCW ? D3DCULL_CCW : D3DCULL_CW);
-        break;
-      case GL_FRONT_AND_BACK:
-        cull = D3DCULL_NONE; // culling will be handled during draw
-        break;
-      default: UNREACHABLE();
+        case gl::CullMode::Front:
+            cull = (frontFace == GL_CCW ? D3DCULL_CW : D3DCULL_CCW);
+            break;
+        case gl::CullMode::Back:
+            cull = (frontFace == GL_CCW ? D3DCULL_CCW : D3DCULL_CW);
+            break;
+        case gl::CullMode::FrontAndBack:
+            cull = D3DCULL_NONE;  // culling will be handled during draw
+            break;
+        default:
+            UNREACHABLE();
     }
 
     return cull;

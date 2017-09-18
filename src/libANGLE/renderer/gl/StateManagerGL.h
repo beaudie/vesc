@@ -112,7 +112,7 @@ class StateManagerGL final : angle::NonCopyable
     void setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppass);
 
     void setCullFaceEnabled(bool enabled);
-    void setCullFace(GLenum cullFace);
+    void setCullFace(gl::CullMode cullFace);
     void setFrontFace(GLenum frontFace);
     void setPolygonOffsetFillEnabled(bool enabled);
     void setPolygonOffset(float factor, float units);
@@ -316,7 +316,7 @@ class StateManagerGL final : angle::NonCopyable
     GLuint mStencilBackWritemask;
 
     bool mCullFaceEnabled;
-    GLenum mCullFace;
+    gl::CullMode mCullFace;
     GLenum mFrontFace;
     bool mPolygonOffsetFillEnabled;
     GLfloat mPolygonOffsetFactor;
