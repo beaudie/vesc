@@ -56,7 +56,7 @@ ERRMSG(InvalidConstantColor,
        "ONE_MINUS_CONSTANT_ALPHA) cannot be used together as source and destination factors in the "
        "blend function.");
 ERRMSG(InvalidCoverMode, "Invalid cover mode.");
-ERRMSG(InvalidCullMode, "Cull mode not recognized.");
+ERRMSG(InvalidCullFace, "Cull mode not recognized.");
 ERRMSG(InvalidDebugSeverity, "Invalid debug severity.");
 ERRMSG(InvalidDebugSource, "Invalid debug source.");
 ERRMSG(InvalidDebugType, "Invalid debug type.");

@@ -414,7 +414,7 @@ void QueryBufferParameterBase(const Buffer *buffer, GLenum pname, ParamType *par
     switch (pname)
     {
         case GL_BUFFER_USAGE:
-            *params = ConvertFromGLenum<ParamType>(buffer->getUsage());
+            *params = ConvertFromGLenum<ParamType>(ToGLenum(buffer->getUsage()));
             break;
         case GL_BUFFER_SIZE:
             *params = ConvertFromGLint64<ParamType>(buffer->getSize());
