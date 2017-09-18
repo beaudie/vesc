@@ -36,7 +36,8 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b);
 // Uniform block layout qualifier, see section 4.3.8.3 of the ESSL 3.00.4 spec
 enum BlockLayoutType
 {
-    BLOCKLAYOUT_STANDARD,
+    BLOCKLAYOUT_STD140,
+    BLOCKLAYOUT_STD430,  // Shader storage block layout qualifier
     BLOCKLAYOUT_PACKED,
     BLOCKLAYOUT_SHARED
 };
