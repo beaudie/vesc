@@ -32,7 +32,7 @@ SurfaceState::SurfaceState(const egl::Config *configIn)
 }
 
 Surface::Surface(EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes)
-    : FramebufferAttachmentObject(),
+    : FramebufferAttachmentObject(false),
       mState(config),
       mImplementation(nullptr),
       mCurrentCount(0),
@@ -396,6 +396,16 @@ GLuint Surface::getId() const
 gl::Framebuffer *Surface::createDefaultFramebuffer(const Display *display)
 {
     return new gl::Framebuffer(display, this);
+}
+
+bool Surface::needsInit(const gl::ImageIndex & /*imageIndex*/) const
+{
+    return false;
+}
+
+void Surface::setInitState(const gl::ImageIndex & /*imageIndex*/, gl::InitState /*initState*/)
+{
+    // No-op.
 }
 
 WindowSurface::WindowSurface(rx::EGLImplFactory *implFactory,
