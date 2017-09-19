@@ -211,7 +211,8 @@ class TextureStorage11_2D : public TextureStorage11
                                      const gl::ImageIndex &index,
                                      Image11 *incomingImage) override;
 
-    gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) override;
+    gl::Error useLevelZeroWorkaroundTexture(const gl::Context *context,
+                                            bool useLevelZeroTexture) override;
 
   protected:
     gl::Error getSwizzleTexture(const TextureHelper11 **outTexture) override;
@@ -325,7 +326,8 @@ class TextureStorage11_EGLImage final : public TextureStorage11
                                      const gl::ImageIndex &index,
                                      Image11 *incomingImage) override;
 
-    gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) override;
+    gl::Error useLevelZeroWorkaroundTexture(const gl::Context *context,
+                                            bool useLevelZeroTexture) override;
 
   protected:
     gl::Error getSwizzleTexture(const TextureHelper11 **outTexture) override;
@@ -379,7 +381,8 @@ class TextureStorage11_Cube : public TextureStorage11
                                      const gl::ImageIndex &index,
                                      Image11 *incomingImage) override;
 
-    gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) override;
+    gl::Error useLevelZeroWorkaroundTexture(const gl::Context *context,
+                                            bool useLevelZeroTexture) override;
 
   protected:
     gl::Error getSwizzleTexture(const TextureHelper11 **outTexture) override;
