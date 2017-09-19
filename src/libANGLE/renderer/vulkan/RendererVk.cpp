@@ -752,7 +752,7 @@ vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo)
     vk::Fence fence;
     ANGLE_TRY(fence.init(mDevice, createInfo));
 
-    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, VK_NULL_HANDLE));
 
     // Store this command buffer in the in-flight list.
     mInFlightFences.emplace_back(std::move(fence), mCurrentQueueSerial);

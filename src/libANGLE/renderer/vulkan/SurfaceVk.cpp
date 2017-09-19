@@ -37,7 +37,7 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
     ASSERT(!presentModes.empty());
 
     // Use FIFO mode for v-sync, since it throttles you to the display rate. Mailbox is more
-    // similar to triple-buffering. For now we hard-code Mailbox for perf tseting.
+    // similar to triple-buffering. For now we hard-code Mailbox for perf testing.
     // TODO(jmadill): Properly select present mode and re-create display if changed.
     VkPresentModeKHR bestChoice = VK_PRESENT_MODE_MAILBOX_KHR;
 
@@ -160,7 +160,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mInstance(VK_NULL_HANDLE),
       mSwapchain(VK_NULL_HANDLE),
       mRenderTarget(),
-      mCurrentSwapchainImageIndex(0)
+      mCurrentSwapchainImageIndex(0),
+      mCurrentImageAvailableSemaphore(0)
 {
     mRenderTarget.extents.width  = static_cast<GLint>(width);
     mRenderTarget.extents.height = static_cast<GLint>(height);
@@ -183,8 +184,15 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     rendererVk->finish();
 
-    mImageAvailableSemaphore.destroy(device);
-    mRenderingCompleteSemaphore.destroy(device);
+    for (auto &imageAvailableSemaphore : mImageAvailableSemaphores)
+    {
+        imageAvailableSemaphore.destroy(device);
+    }
+
+    for (auto &commandsComplete : mCommandsCompleteSemaphores)
+    {
+        commandsComplete.destroy(device);
+    }
 
     for (auto &imageView : mSwapchainImageViews)
     {
@@ -366,6 +374,8 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
 
     mSwapchainImages.resize(imageCount);
     mSwapchainImageViews.resize(imageCount);
+    mImageAvailableSemaphores.resize(imageCount);
+    mCommandsCompleteSemaphores.resize(imageCount);
 
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
@@ -399,12 +409,12 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
 
         mSwapchainImages[imageIndex].retain(device, std::move(image));
         mSwapchainImageViews[imageIndex].retain(device, std::move(imageView));
+
+        ANGLE_TRY(mImageAvailableSemaphores[imageIndex].init(device));
+        ANGLE_TRY(mCommandsCompleteSemaphores[imageIndex].init(device));
     }
 
     ANGLE_TRY(renderer->submitAndFinishCommandBuffer(commandBuffer));
-
-    ANGLE_TRY(mImageAvailableSemaphore.init(device));
-    ANGLE_TRY(mRenderingCompleteSemaphore.init(device));
 
     // Get the first available swapchain iamge.
     ANGLE_TRY(nextSwapchainImage(renderer));
@@ -435,14 +445,15 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
                                   VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                   VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, currentCB);
 
-    ANGLE_TRY(renderer->submitCommandsWithSync(currentCB, mImageAvailableSemaphore,
-                                               mRenderingCompleteSemaphore));
+    ANGLE_TRY(renderer->submitCommandsWithSync(
+        currentCB, mImageAvailableSemaphores[mCurrentImageAvailableSemaphore],
+        mCommandsCompleteSemaphores[mCurrentSwapchainImageIndex]));
 
     VkPresentInfoKHR presentInfo;
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.pNext              = nullptr;
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores    = mRenderingCompleteSemaphore.ptr();
+    presentInfo.pWaitSemaphores    = mCommandsCompleteSemaphores[mCurrentSwapchainImageIndex].ptr();
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &mSwapchain;
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
@@ -460,9 +471,17 @@ vk::Error WindowSurfaceVk::nextSwapchainImage(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
 
-    ANGLE_VK_TRY(vkAcquireNextImageKHR(device, mSwapchain, std::numeric_limits<uint64_t>::max(),
-                                       mImageAvailableSemaphore.getHandle(), VK_NULL_HANDLE,
-                                       &mCurrentSwapchainImageIndex));
+    // Advance the image available semaphore count.
+    if (++mCurrentImageAvailableSemaphore >= mImageAvailableSemaphores.size())
+    {
+        mCurrentImageAvailableSemaphore = 0;
+    }
+
+    // Use a timeout of zero for AcquireNextImage so we don't actually block.
+    ANGLE_VK_TRY(vkAcquireNextImageKHR(
+        device, mSwapchain, 0,
+        mImageAvailableSemaphores[mCurrentImageAvailableSemaphore].getHandle(), VK_NULL_HANDLE,
+        &mCurrentSwapchainImageIndex));
 
     // Update RenderTarget pointers.
     mRenderTarget.image     = &mSwapchainImages[mCurrentSwapchainImageIndex];
