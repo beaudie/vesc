@@ -283,7 +283,7 @@ gl::Error ClearResource(Renderer11 *renderer,
             d3d11::DepthStencilView dsv;
             ANGLE_TRY(renderer->allocateResource(dsvDesc, texture, &dsv));
 
-            context->ClearDepthStencilView(dsv.get(), clearFlags, 1.0f, 0);
+            context->ClearDepthStencilView(dsv.get(), clearFlags, 0.2f, 3);
         }
     }
     else
@@ -292,7 +292,7 @@ gl::Error ClearResource(Renderer11 *renderer,
         d3d11::RenderTargetView rtv;
         ANGLE_TRY(renderer->allocateResourceNoDesc(texture, &rtv));
 
-        const FLOAT zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+        const FLOAT zero[4] = {0.3f, 0.5f, 0.7f, 0.5f};
         context->ClearRenderTargetView(rtv.get(), zero);
     }
 
@@ -312,7 +312,7 @@ gl::Error ClearResource(Renderer11 *renderer,
     d3d11::RenderTargetView rtv;
     ANGLE_TRY(renderer->allocateResourceNoDesc(texture, &rtv));
 
-    const FLOAT zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    const FLOAT zero[4] = {0.3f, 0.5f, 0.7f, 0.5f};
     context->ClearRenderTargetView(rtv.get(), zero);
     return gl::NoError();
 }
@@ -355,7 +355,7 @@ gl::Error ResourceManager11::allocate(Renderer11 *renderer,
     T *resource          = nullptr;
 
     GetInitDataFromD3D11<T> *shadowInitData = initData;
-    if (!shadowInitData && renderer->isRobustResourceInitEnabled())
+    if (!shadowInitData)
     {
         shadowInitData = createInitDataIfNeeded<T>(desc);
     }
@@ -373,7 +373,9 @@ gl::Error ResourceManager11::allocate(Renderer11 *renderer,
                                  << gl::FmtHR(hr);
     }
 
-    if (!shadowInitData && renderer->isRobustResourceInitEnabled())
+    // Only clear to non-default colors if debug layers are enable (for testing).
+    // FIXME
+    if (!shadowInitData)
     {
         ANGLE_TRY(ClearResource(renderer, desc, resource));
     }
@@ -420,7 +422,7 @@ const D3D11_SUBRESOURCE_DATA *ResourceManager11::createInitDataIfNeeded<ID3D11Te
     if (mZeroMemory.size() < requiredSize)
     {
         mZeroMemory.resize(requiredSize);
-        mZeroMemory.fill(0);
+        mZeroMemory.fill(0x48);
     }
 
     const auto &formatSizeInfo = d3d11::GetDXGIFormatSizeInfo(desc->Format);
@@ -466,7 +468,7 @@ const D3D11_SUBRESOURCE_DATA *ResourceManager11::createInitDataIfNeeded<ID3D11Te
     if (mZeroMemory.size() < requiredSize)
     {
         mZeroMemory.resize(requiredSize);
-        mZeroMemory.fill(0);
+        mZeroMemory.fill(0x48);
     }
 
     const auto &formatSizeInfo = d3d11::GetDXGIFormatSizeInfo(desc->Format);
