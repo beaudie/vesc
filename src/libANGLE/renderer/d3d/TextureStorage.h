@@ -36,7 +36,6 @@ class TextureStorage : angle::NonCopyable
 
     virtual gl::Error onDestroy(const gl::Context *context)
     {
-        delete this;
         return gl::NoError();
     }
 
