@@ -33,6 +33,7 @@ class TextureStorage : angle::NonCopyable
 {
   public:
     TextureStorage() {}
+    virtual ~TextureStorage() {}
 
     virtual gl::Error onDestroy(const gl::Context *context)
     {
@@ -66,9 +67,6 @@ class TextureStorage : angle::NonCopyable
     {
         return gl::NoError();
     }
-
-  protected:
-    virtual ~TextureStorage() {}
 };
 
 using TexStoragePointer = angle::UniqueObjectPointer<TextureStorage, gl::Context>;
