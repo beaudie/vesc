@@ -374,7 +374,7 @@ gl::Error TextureStorage11::generateSwizzles(const gl::Context *context,
 
 void TextureStorage11::markLevelDirty(int mipLevel)
 {
-    if (mipLevel >= 0 && static_cast<unsigned int>(mipLevel) < ArraySize(mSwizzleCache))
+    if (mipLevel >= 0 && static_cast<size_t>(mipLevel) < mSwizzleCache.size())
     {
         // The default constructor of SwizzleState has GL_INVALID_INDEX for all channels which is
         // not a valid swizzle combination
@@ -394,9 +394,9 @@ void TextureStorage11::markLevelDirty(int mipLevel)
 
 void TextureStorage11::markDirty()
 {
-    for (unsigned int mipLevel = 0; mipLevel < ArraySize(mSwizzleCache); mipLevel++)
+    for (size_t mipLevel = 0; mipLevel < mSwizzleCache.size(); ++mipLevel)
     {
-        markLevelDirty(mipLevel);
+        markLevelDirty(static_cast<int>(mipLevel));
     }
 }
 
