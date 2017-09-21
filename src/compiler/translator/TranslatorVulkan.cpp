@@ -17,6 +17,46 @@
 namespace sh
 {
 
+namespace
+{
+
+class AssignOutputLocations : public TIntermTraverser
+{
+  public:
+    AssignOutputLocations(const std::map<std::string, int> &locationMap)
+        : TIntermTraverser(true, false, false), mLocationMap(locationMap)
+    {
+    }
+
+    void visitSymbol(TIntermSymbol *symbol) override
+    {
+        auto qualifier = symbol->getQualifier();
+        if (mInGlobalScope && (qualifier == EvqVertexIn || qualifier == EvqAttribute))
+        {
+            const auto &iter = mLocationMap.find(symbol->getName().getString().c_str());
+            if (iter != mLocationMap.end())
+            {
+                int location = iter->second;
+
+                TType newType                       = symbol->getType();
+                TLayoutQualifier newLayoutQualifier = newType.getLayoutQualifier();
+                ASSERT(!newLayoutQualifier.locationsSpecified == 0 ||
+                       newLayoutQualifier.location == location);
+                newLayoutQualifier.location           = location;
+                newLayoutQualifier.locationsSpecified = 1;
+
+                newType.setLayoutQualifier(newLayoutQualifier);
+                symbol->setType(newType);
+            }
+        }
+    }
+
+  private:
+    const std::map<std::string, int> &mLocationMap;
+};
+
+}  // anonymous namespace
+
 TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_GLSL_450_CORE_OUTPUT)
 {
@@ -72,6 +112,12 @@ bool TranslatorVulkan::shouldFlattenPragmaStdglInvariantAll()
 {
     // Not necessary.
     return false;
+}
+
+void TranslatorVulkan::setVertexAttributeInputLocations(
+    const std::map<std::string, int> &locationMap)
+{
+    mVertexAttributeInputLocations = locationMap;
 }
 
 }  // namespace sh

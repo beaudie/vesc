@@ -11,6 +11,8 @@
 
 #include "compiler/translator/OutputVulkanGLSL.h"
 
+#include "compiler/translator/util.h"
+
 namespace sh
 {
 
@@ -23,32 +25,42 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
                                      int shaderVersion,
                                      ShShaderOutput output,
                                      ShCompileOptions compileOptions)
-    : TOutputGLSLBase(objSink,
-                      clampingStrategy,
-                      hashFunction,
-                      nameMap,
-                      symbolTable,
-                      shaderType,
-                      shaderVersion,
-                      output,
-                      compileOptions)
+    : TOutputGLSL(objSink,
+                  clampingStrategy,
+                  hashFunction,
+                  nameMap,
+                  symbolTable,
+                  shaderType,
+                  shaderVersion,
+                  output,
+                  compileOptions)
 {
 }
 
 // TODO(jmadill): This is not complete.
-void TOutputVulkanGLSL::writeLayoutQualifier(const TType &type)
+void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 {
+    const TType &type = variable->getType();
+
+    bool forceLocation =
+        (type.getQualifier() == EvqAttribute || type.getQualifier() == EvqFragmentOut ||
+         type.getQualifier() == EvqVertexIn);
+
+    if (!NeedsToWriteLayoutQualifier(type) && !forceLocation)
+    {
+        return;
+    }
+
     TInfoSinkBase &out                      = objSink();
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
     out << "layout(";
 
-    if (type.getQualifier() == EvqAttribute || type.getQualifier() == EvqFragmentOut ||
-        type.getQualifier() == EvqVertexIn)
-    {
-        // TODO(jmadill): Multiple output locations.
-        out << "location = "
-            << "0";
-    }
+    // This isn't super clean, but it gets the job done.
+    // See corresponding code in GlslangWrapper.cpp.
+    // TODO(jmadill): Ensure declarations are separated.
+    TIntermSymbol *symbol = variable->getAsSymbolNode();
+    ASSERT(symbol);
+    out << "location = @@ LOCATION-" << symbol->getName().getString() << " @@";
 
     if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
     {

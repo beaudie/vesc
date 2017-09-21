@@ -22,9 +22,13 @@ class TranslatorVulkan : public TCompiler
   public:
     TranslatorVulkan(sh::GLenum type, ShShaderSpec spec);
 
+    void setVertexAttributeInputLocations(const std::map<std::string, int> &locationMap) override;
+
   protected:
     void translate(TIntermBlock *root, ShCompileOptions compileOptions) override;
     bool shouldFlattenPragmaStdglInvariantAll() override;
+
+    std::map<std::string, int> mVertexAttributeInputLocations;
 };
 
 }  // namespace sh
