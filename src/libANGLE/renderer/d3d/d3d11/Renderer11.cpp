@@ -839,6 +839,8 @@ egl::Error Renderer11::initializeD3DDevice()
         mRenderer11DeviceCaps.featureLevel = mDevice->GetFeatureLevel();
     }
 
+    mResourceManager11.setAllocationsInitialized(mCreateDebugDevice);
+
     d3d11::SetDebugName(mDeviceContext, "DeviceContext");
 
     return egl::NoError();
@@ -1206,6 +1208,8 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     // D3D11 can be used without a swap chain
     outExtensions->surfacelessContext = true;
+
+    outExtensions->robustResourceInitialization = true;
 }
 
 gl::Error Renderer11::flush()
