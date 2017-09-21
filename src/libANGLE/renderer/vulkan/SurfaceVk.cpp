@@ -150,6 +150,13 @@ gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(
     return gl::InternalError();
 }
 
+gl::Error OffscreenSurfaceVk::initializeContents(const gl::Context *context,
+                                                 const gl::ImageIndex &imageIndex)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
+}
+
 WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
                                  EGLNativeWindowType window,
                                  EGLint width,
@@ -579,6 +586,13 @@ gl::ErrorOrResult<vk::Framebuffer *> WindowSurfaceVk::getCurrentFramebuffer(
     // We should only initialize framebuffers on the first swap.
     ASSERT(mCurrentSwapchainImageIndex == 0u);
     return &mSwapchainFramebuffers[mCurrentSwapchainImageIndex];
+}
+
+gl::Error WindowSurfaceVk::initializeContents(const gl::Context *context,
+                                              const gl::ImageIndex &imageIndex)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
 }
 
 }  // namespace rx
