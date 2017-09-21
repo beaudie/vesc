@@ -45,8 +45,8 @@ class SwapChain11 final : public SwapChainD3D
                     EGLint height) override;
     void recreate() override;
 
-    RenderTargetD3D *getColorRenderTarget() override { return &mColorRenderTarget; }
-    RenderTargetD3D *getDepthStencilRenderTarget() override { return &mDepthStencilRenderTarget; }
+    RenderTargetD3D *getColorRenderTarget() override;
+    RenderTargetD3D *getDepthStencilRenderTarget() override;
 
     const TextureHelper11 &getOffscreenTexture();
     const d3d11::RenderTargetView &getRenderTarget();
