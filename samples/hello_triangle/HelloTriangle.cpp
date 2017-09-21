@@ -20,7 +20,7 @@ class HelloTriangleSample : public SampleApplication
 {
   public:
     HelloTriangleSample()
-        : SampleApplication("HelloTriangle", 1280, 720)
+        : SampleApplication("HelloTriangle", 1280, 720, 2, 0, EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
     {
     }
 
@@ -48,23 +48,25 @@ class HelloTriangleSample : public SampleApplication
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        GLfloat vertices[] = {
+            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
+        };
+
+        glGenBuffers(1, &mBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
         return true;
     }
 
     virtual void destroy()
     {
+        glDeleteBuffers(1, &mBuffer);
         glDeleteProgram(mProgram);
     }
 
     virtual void draw()
     {
-        GLfloat vertices[] =
-        {
-             0.0f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-        };
-
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 
@@ -75,7 +77,7 @@ class HelloTriangleSample : public SampleApplication
         glUseProgram(mProgram);
 
         // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(0);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -83,6 +85,7 @@ class HelloTriangleSample : public SampleApplication
 
   private:
     GLuint mProgram;
+    GLuint mBuffer;
 };
 
 int main(int argc, char **argv)
