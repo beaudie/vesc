@@ -123,6 +123,8 @@ class SurfaceRenderTarget11 : public RenderTarget11
 
   private:
     SwapChain11 *mSwapChain;
+    d3d11::RenderTargetView mNullRTV;
+    d3d11::DepthStencilView mNullDSV;
     bool mDepth;
 };
 

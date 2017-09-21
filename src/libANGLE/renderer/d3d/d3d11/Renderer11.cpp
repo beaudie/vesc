@@ -4004,27 +4004,29 @@ gl::Error Renderer11::clearRenderTarget(RenderTargetD3D *renderTarget,
         mDeviceContext->ClearDepthStencilView(rt11->getDepthStencilView().get(), clearFlags,
                                               clearDepthValue,
                                               static_cast<UINT8>(clearStencilValue));
-        return gl::NoError();
     }
 
-    ASSERT(rt11->getRenderTargetView().valid());
-    ID3D11RenderTargetView *rtv = rt11->getRenderTargetView().get();
-
-    // There are complications with some types of RTV and FL 9_3 with ClearRenderTargetView.
-    // See https://msdn.microsoft.com/en-us/library/windows/desktop/ff476388(v=vs.85).aspx
-    ASSERT(mRenderer11DeviceCaps.featureLevel > D3D_FEATURE_LEVEL_9_3 || !IsArrayRTV(rtv));
-
-    const auto &d3d11Format = rt11->getFormatSet();
-    const auto &glFormat    = gl::GetSizedInternalFormatInfo(renderTarget->getInternalFormat());
-
-    gl::ColorF safeClearColor = clearColorValue;
-
-    if (d3d11Format.format().alphaBits > 0 && glFormat.alphaBits == 0)
+    if (rt11->getRenderTargetView().valid())
     {
-        safeClearColor.alpha = 1.0f;
+        ID3D11RenderTargetView *rtv = rt11->getRenderTargetView().get();
+
+        // There are complications with some types of RTV and FL 9_3 with ClearRenderTargetView.
+        // See https://msdn.microsoft.com/en-us/library/windows/desktop/ff476388(v=vs.85).aspx
+        ASSERT(mRenderer11DeviceCaps.featureLevel > D3D_FEATURE_LEVEL_9_3 || !IsArrayRTV(rtv));
+
+        const auto &d3d11Format = rt11->getFormatSet();
+        const auto &glFormat    = gl::GetSizedInternalFormatInfo(renderTarget->getInternalFormat());
+
+        gl::ColorF safeClearColor = clearColorValue;
+
+        if (d3d11Format.format().alphaBits > 0 && glFormat.alphaBits == 0)
+        {
+            safeClearColor.alpha = 1.0f;
+        }
+
+        mDeviceContext->ClearRenderTargetView(rtv, &safeClearColor.red);
     }
 
-    mDeviceContext->ClearRenderTargetView(rtv, &safeClearColor.red);
     return gl::NoError();
 }
 

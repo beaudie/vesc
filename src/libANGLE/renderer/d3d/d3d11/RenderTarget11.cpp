@@ -334,6 +334,8 @@ SurfaceRenderTarget11::SurfaceRenderTarget11(SwapChain11 *swapChain,
                                              bool depth)
     : RenderTarget11(GetSurfaceFormatSet(depth, swapChain, renderer)),
       mSwapChain(swapChain),
+      mNullRTV(),
+      mNullDSV(),
       mDepth(depth)
 {
     ASSERT(mSwapChain);
@@ -375,14 +377,12 @@ const TextureHelper11 &SurfaceRenderTarget11::getTexture() const
 
 const d3d11::RenderTargetView &SurfaceRenderTarget11::getRenderTargetView() const
 {
-    ASSERT(!mDepth);
-    return mSwapChain->getRenderTarget();
+    return mDepth ? mNullRTV : mSwapChain->getRenderTarget();
 }
 
 const d3d11::DepthStencilView &SurfaceRenderTarget11::getDepthStencilView() const
 {
-    ASSERT(mDepth);
-    return mSwapChain->getDepthStencil();
+    return mDepth ? mSwapChain->getDepthStencil() : mNullDSV;
 }
 
 const d3d11::SharedSRV &SurfaceRenderTarget11::getShaderResourceView() const

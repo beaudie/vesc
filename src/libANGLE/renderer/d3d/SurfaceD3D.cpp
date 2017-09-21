@@ -413,6 +413,14 @@ gl::Error SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error SurfaceD3D::initializeContents(const gl::Context * /*context*/,
+                                         const gl::ImageIndex & /*imageIndex*/)
+{
+    ANGLE_TRY(mRenderer->initRenderTarget(mSwapChain->getColorRenderTarget()));
+    ANGLE_TRY(mRenderer->initRenderTarget(mSwapChain->getDepthStencilRenderTarget()));
+    return gl::NoError();
+}
+
 WindowSurfaceD3D::WindowSurfaceD3D(const egl::SurfaceState &state,
                                    RendererD3D *renderer,
                                    egl::Display *display,
