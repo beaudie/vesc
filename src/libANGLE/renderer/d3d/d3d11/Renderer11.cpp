@@ -4025,6 +4025,7 @@ gl::Error Renderer11::clearRenderTarget(RenderTargetD3D *renderTarget,
     }
 
     mDeviceContext->ClearRenderTargetView(rtv, &safeClearColor.red);
+
     return gl::NoError();
 }
 
