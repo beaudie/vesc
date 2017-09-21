@@ -60,6 +60,8 @@ class SurfaceD3D : public SurfaceImpl
                                         GLenum binding,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
+    gl::Error initializeContents(const gl::Context *context,
+                                 const gl::ImageIndex &imageIndex) override;
 
   protected:
     SurfaceD3D(const egl::SurfaceState &state,

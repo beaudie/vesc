@@ -1002,6 +1002,16 @@ void SwapChain11::recreate()
     // possibly should use this method instead of reset
 }
 
+RenderTargetD3D *SwapChain11::getColorRenderTarget()
+{
+    return &mColorRenderTarget;
+}
+
+RenderTargetD3D *SwapChain11::getDepthStencilRenderTarget()
+{
+    return &mDepthStencilRenderTarget;
+}
+
 egl::Error SwapChain11::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
 {
     if (!mSwapChain)
