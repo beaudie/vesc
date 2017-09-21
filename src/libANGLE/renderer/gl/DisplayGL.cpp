@@ -109,6 +109,12 @@ gl::Version DisplayGL::getMaxSupportedESVersion() const
     return mRenderer->getMaxSupportedESVersion();
 }
 
+void DisplayGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
+{
+    // All OpenGL implementations support robust resource initialization
+    outExtensions->robustResourceInitialization = true;
+}
+
 egl::Error DisplayGL::makeCurrentSurfaceless(gl::Context *context)
 {
     UNIMPLEMENTED();
