@@ -459,6 +459,7 @@ class Renderer11 : public RendererD3D
                                 const unsigned int clearStencilValue) override;
 
     bool canSelectViewInVertexShader() const override;
+    bool preferUsingDebugDevice() const { return mCreateDebugDevice; }
 
   private:
     void generateCaps(gl::Caps *outCaps,
