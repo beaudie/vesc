@@ -2819,9 +2819,24 @@ void Context::initWorkarounds()
 
 Error Context::prepareForDraw()
 {
-    syncRendererState();
     ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
     ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
+    syncRendererState();
+    return NoError();
+}
+
+Error Context::prepareForClear(GLbitfield mask)
+{
+    ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
+    syncRendererState(mClearDirtyBits, mClearDirtyObjects);
+    return NoError();
+}
+
+Error Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
+{
+    ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureClearBufferAttachmentsInitialized(this, buffer,
+                                                                                     drawbuffer));
+    syncRendererState(mClearDirtyBits, mClearDirtyObjects);
     return NoError();
 }
 
@@ -2866,26 +2881,29 @@ void Context::blitFramebuffer(GLint srcX0,
 
 void Context::clear(GLbitfield mask)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clear(this, mask));
+    ANGLE_CONTEXT_TRY(prepareForClear(mask));
+    ANGLE_CONTEXT_TRY(mGLState.getDrawFramebuffer()->clear(this, mask));
 }
 
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferfv(this, buffer, drawbuffer, values));
+    ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+    ANGLE_CONTEXT_TRY(
+        mGLState.getDrawFramebuffer()->clearBufferfv(this, buffer, drawbuffer, values));
 }
 
 void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferuiv(this, buffer, drawbuffer, values));
+    ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+    ANGLE_CONTEXT_TRY(
+        mGLState.getDrawFramebuffer()->clearBufferuiv(this, buffer, drawbuffer, values));
 }
 
 void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
 {
-    syncStateForClear();
-    handleError(mGLState.getDrawFramebuffer()->clearBufferiv(this, buffer, drawbuffer, values));
+    ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+    ANGLE_CONTEXT_TRY(
+        mGLState.getDrawFramebuffer()->clearBufferiv(this, buffer, drawbuffer, values));
 }
 
 void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
@@ -2900,8 +2918,8 @@ void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLin
         return;
     }
 
-    syncStateForClear();
-    handleError(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
+    ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+    ANGLE_CONTEXT_TRY(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
 }
 
 void Context::readPixels(GLint x,
@@ -3529,11 +3547,6 @@ void Context::syncStateForReadPixels()
 void Context::syncStateForTexImage()
 {
     syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
-}
-
-void Context::syncStateForClear()
-{
-    syncRendererState(mClearDirtyBits, mClearDirtyObjects);
 }
 
 void Context::syncStateForBlit()

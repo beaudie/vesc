@@ -951,11 +951,12 @@ class Context final : public ValidationContext
 
   private:
     Error prepareForDraw();
+    Error prepareForClear(GLbitfield mask);
+    Error prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();
     void syncStateForTexImage();
-    void syncStateForClear();
     void syncStateForBlit();
     VertexArray *checkVertexArrayAllocation(GLuint vertexArrayHandle);
     TransformFeedback *checkTransformFeedbackAllocation(GLuint transformFeedback);
