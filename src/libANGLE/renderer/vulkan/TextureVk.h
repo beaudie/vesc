@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_TEXTUREVK_H_
 
 #include "libANGLE/renderer/TextureImpl.h"
+#include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
 {
@@ -104,6 +105,11 @@ class TextureVk : public TextureImpl
                                     GLint internalformat,
                                     const gl::Extents &size,
                                     GLboolean fixedSampleLocations) override;
+
+  private:
+    // TODO(jmadill): support a more flexible storage back-end.
+    vk::Image mImage;
+    vk::ImageView mImageView;
 };
 
 }  // namespace rx

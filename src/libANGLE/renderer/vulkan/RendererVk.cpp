@@ -541,6 +541,9 @@ void RendererVk::generateCaps(gl::Caps *outCaps,
     outCaps->maxVertexAttributes     = gl::MAX_VERTEX_ATTRIBS;
     outCaps->maxVertexAttribBindings = gl::MAX_VERTEX_ATTRIB_BINDINGS;
     outCaps->maxVaryingVectors            = 16;
+    outCaps->maxTextureImageUnits         = 1;
+    outCaps->maxCombinedTextureImageUnits = 1;
+    outCaps->max2DTextureSize             = 1024;
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.

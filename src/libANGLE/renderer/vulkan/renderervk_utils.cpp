@@ -459,6 +459,7 @@ Error Image::init(VkDevice device, const VkImageCreateInfo &createInfo)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateImage(device, &createInfo, nullptr, &mHandle));
+    mCurrentLayout = createInfo.initialLayout;
     return NoError();
 }
 
@@ -720,6 +721,8 @@ Error StagingImage::init(VkDevice device,
     createInfo.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
     createInfo.queueFamilyIndexCount = 1;
     createInfo.pQueueFamilyIndices   = &queueFamilyIndex;
+
+    // TODO(jmadill): Should be predefined?
     createInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
 
     ANGLE_TRY(mImage.init(device, createInfo));

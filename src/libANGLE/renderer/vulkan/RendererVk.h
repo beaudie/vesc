@@ -92,6 +92,16 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    uint32_t getQueueFamilyIndex() const
+    {
+        return mCurrentQueueFamilyIndex;
+    }
+
+    uint32_t getHostVisibleMemoryIndex() const
+    {
+        return mHostVisibleMemoryIndex;
+    }
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
