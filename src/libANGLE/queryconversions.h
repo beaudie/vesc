@@ -18,7 +18,8 @@ class Context;
 
 // Helper class for converting a GL type to a GLenum:
 // We can't use CastStateValueEnum generally, because of GLboolean + GLubyte overlap.
-// We restrict our use to CastStateValue, where it eliminates duplicate parameters.
+// We restrict our use to CastFromStateValue and CastQueryValueTo, where it eliminates
+// duplicate parameters.
 
 template <typename GLType>
 struct GLTypeToGLenum
@@ -47,10 +48,23 @@ struct GLTypeToGLenum<GLint64>
     static constexpr GLenum value = GL_INT_64_ANGLEX;
 };
 template <>
+struct GLTypeToGLenum<GLuint64>
+{
+    static constexpr GLenum value = GL_UINT_64_ANGLEX;
+};
+template <>
 struct GLTypeToGLenum<GLfloat>
 {
     static constexpr GLenum value = GL_FLOAT;
 };
+
+GLint CastMaskValue(const Context *context, GLuint value);
+
+template <typename QueryT, typename NativeT>
+QueryT CastFromStateValue(GLenum pname, NativeT value);
+
+template <typename NativeT, typename QueryT>
+NativeT CastQueryValueTo(GLenum pname, QueryT value);
 
 // The GL state query API types are: bool, int, uint, float, int64
 template <typename QueryT>
