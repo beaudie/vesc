@@ -21,6 +21,7 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/queryconversions.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 
@@ -33,6 +34,7 @@ namespace gl
 {
 namespace
 {
+
 bool ValidateDrawAttribs(ValidationContext *context,
                          GLint primcount,
                          GLint maxVertex,
@@ -257,7 +259,7 @@ bool ValidReadPixelsFormatType(ValidationContext *context,
 template <typename ParamType>
 bool ValidateTextureWrapModeValue(Context *context, ParamType *params, bool restrictedWrapModes)
 {
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_CLAMP_TO_EDGE:
             break;
@@ -283,7 +285,7 @@ bool ValidateTextureWrapModeValue(Context *context, ParamType *params, bool rest
 template <typename ParamType>
 bool ValidateTextureMinFilterValue(Context *context, ParamType *params, bool restrictedMinFilter)
 {
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_NEAREST:
         case GL_LINEAR:
@@ -312,7 +314,7 @@ bool ValidateTextureMinFilterValue(Context *context, ParamType *params, bool res
 template <typename ParamType>
 bool ValidateTextureMagFilterValue(Context *context, ParamType *params)
 {
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_NEAREST:
         case GL_LINEAR:
@@ -330,7 +332,7 @@ template <typename ParamType>
 bool ValidateTextureCompareModeValue(Context *context, ParamType *params)
 {
     // Acceptable mode parameters from GLES 3.0.2 spec, table 3.17
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_NONE:
         case GL_COMPARE_REF_TO_TEXTURE:
@@ -348,7 +350,7 @@ template <typename ParamType>
 bool ValidateTextureCompareFuncValue(Context *context, ParamType *params)
 {
     // Acceptable function parameters from GLES 3.0.2 spec, table 3.17
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_LEQUAL:
         case GL_GEQUAL:
@@ -377,7 +379,7 @@ bool ValidateTextureSRGBDecodeValue(Context *context, ParamType *params)
         return false;
     }
 
-    switch (ConvertToGLenum(params[0]))
+    switch (ConvertToGLenum(GL_NONE, params[0]))
     {
         case GL_DECODE_EXT:
         case GL_SKIP_DECODE_EXT:
@@ -5387,7 +5389,7 @@ bool ValidateTexParameterBase(Context *context,
             break;
 
         case GL_TEXTURE_USAGE_ANGLE:
-            switch (ConvertToGLenum(params[0]))
+            switch (ConvertToGLenum(GL_NONE, params[0]))
             {
                 case GL_NONE:
                 case GL_FRAMEBUFFER_ATTACHMENT_ANGLE:
@@ -5437,7 +5439,7 @@ bool ValidateTexParameterBase(Context *context,
         case GL_TEXTURE_SWIZZLE_G:
         case GL_TEXTURE_SWIZZLE_B:
         case GL_TEXTURE_SWIZZLE_A:
-            switch (ConvertToGLenum(params[0]))
+            switch (ConvertToGLenum(GL_NONE, params[0]))
             {
                 case GL_RED:
                 case GL_GREEN:
@@ -5493,7 +5495,7 @@ bool ValidateTexParameterBase(Context *context,
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumRequiresGLES31);
                 return false;
             }
-            switch (ConvertToGLenum(params[0]))
+            switch (ConvertToGLenum(GL_NONE, params[0]))
             {
                 case GL_DEPTH_COMPONENT:
                 case GL_STENCIL_INDEX:
