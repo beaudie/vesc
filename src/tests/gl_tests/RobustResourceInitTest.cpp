@@ -300,7 +300,8 @@ class RobustResourceInitTestES3 : public RobustResourceInitTest
 // it only works on the implemented renderers
 TEST_P(RobustResourceInitTest, ExpectedRendererSupport)
 {
-    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsDesktopOpenGL() || IsOpenGLES();
+    bool shouldHaveSupport =
+        IsD3D9() || IsD3D11() || IsD3D11_FL93() || IsDesktopOpenGL() || IsOpenGLES();
     EXPECT_EQ(shouldHaveSupport, hasGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasEGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasRobustSurfaceInit());
