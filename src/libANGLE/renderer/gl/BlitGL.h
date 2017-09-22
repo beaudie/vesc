@@ -19,6 +19,7 @@
 namespace gl
 {
 class Framebuffer;
+struct ImageIndex;
 }
 
 namespace rx
@@ -26,6 +27,7 @@ namespace rx
 
 class FramebufferGL;
 class FunctionsGL;
+class RenderbufferGL;
 class StateManagerGL;
 class TextureGL;
 struct WorkaroundsGL;
@@ -104,9 +106,26 @@ class BlitGL : angle::NonCopyable
                               const gl::Rectangle &sourceArea,
                               const gl::Offset &destOffset);
 
+    gl::Error clearRenderableTexture(TextureGL *source,
+                                     GLenum sizedInternalFormat,
+                                     int numTextureLayers,
+                                     const gl::ImageIndex &imageIndex);
+
+    gl::Error clearRenderbuffer(RenderbufferGL *source, GLenum sizedInternalFormat);
+
+    gl::Error clearFramebuffer(FramebufferGL *source);
+
     gl::Error initializeResources();
 
   private:
+    gl::Error setClearState(bool colorClear,
+                            bool depthClear,
+                            bool stencilClear,
+                            GLbitfield *outClearMask);
+    gl::Error prepareForClear(GLenum sizedInternalFormat,
+                              std::vector<GLenum> *outBindtargets,
+                              GLbitfield *outClearMask);
+
     void orphanScratchTextures();
     void setScratchTextureParameter(GLenum param, GLenum value);
 
