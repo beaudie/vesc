@@ -21,7 +21,12 @@ class SimpleTexture2DSample : public SampleApplication
 {
   public:
     SimpleTexture2DSample()
-        : SampleApplication("SimpleTexture2D", 1280, 720)
+        : SampleApplication("SimpleTexture2D",
+                            1280,
+                            720,
+                            2,
+                            0,
+                            EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
     {
     }
 
@@ -53,8 +58,8 @@ class SimpleTexture2DSample : public SampleApplication
         }
 
         // Get the attribute locations
-        mPositionLoc = glGetAttribLocation(mProgram, "a_position");
-        mTexCoordLoc = glGetAttribLocation(mProgram, "a_texCoord");
+        GLint positionLoc = glGetAttribLocation(mProgram, "a_position");
+        GLint texCoordLoc = glGetAttribLocation(mProgram, "a_texCoord");
 
         // Get the sampler location
         mSamplerLoc = glGetUniformLocation(mProgram, "s_texture");
@@ -64,17 +69,12 @@ class SimpleTexture2DSample : public SampleApplication
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-        return true;
-    }
+        // Use the program object
+        glUseProgram(mProgram);
 
-    virtual void destroy()
-    {
-        glDeleteProgram(mProgram);
-        glDeleteTextures(1, &mTexture);
-    }
+        glGenBuffers(1, &mVertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 
-    virtual void draw()
-    {
         GLfloat vertices[] =
         {
             -0.5f,  0.5f, 0.0f,  // Position 0
@@ -86,24 +86,43 @@ class SimpleTexture2DSample : public SampleApplication
              0.5f,  0.5f, 0.0f,  // Position 3
              1.0f,  0.0f         // TexCoord 3
         };
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        // Load the vertex position
+        glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
+
+        // Load the texture coordinate
+        glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),
+                              reinterpret_cast<void *>(3 * sizeof(float)));
+
+        glEnableVertexAttribArray(positionLoc);
+        glEnableVertexAttribArray(texCoordLoc);
+
         GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
 
+        glGenBuffers(1, &mIndexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        return true;
+    }
+
+    virtual void destroy()
+    {
+        glDeleteBuffers(1, &mIndexBuffer);
+        glDeleteBuffers(1, &mVertexBuffer);
+        glDeleteProgram(mProgram);
+        glDeleteTextures(1, &mTexture);
+    }
+
+    virtual void draw()
+    {
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 
         // Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT);
-
-        // Use the program object
-        glUseProgram(mProgram);
-
-        // Load the vertex position
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices);
-        // Load the texture coordinate
-        glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices + 3);
-
-        glEnableVertexAttribArray(mPositionLoc);
-        glEnableVertexAttribArray(mTexCoordLoc);
 
         // Bind the texture
         glActiveTexture(GL_TEXTURE0);
@@ -112,22 +131,21 @@ class SimpleTexture2DSample : public SampleApplication
         // Set the texture sampler to texture unit to 0
         glUniform1i(mSamplerLoc, 0);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
     }
 
   private:
     // Handle to a program object
-    GLuint mProgram;
-
-    // Attribute locations
-    GLint mPositionLoc;
-    GLint mTexCoordLoc;
+    GLuint mProgram = 0;
 
     // Sampler location
-    GLint mSamplerLoc;
+    GLint mSamplerLoc = -1;
 
     // Texture handle
-    GLuint mTexture;
+    GLuint mTexture = 0;
+
+    GLuint mVertexBuffer = 0;
+    GLuint mIndexBuffer  = 0;
 };
 
 int main(int argc, char **argv)
