@@ -2419,6 +2419,9 @@ Error State::clearUnclearedActiveTextures(const Context *context)
         return NoError();
     }
 
+    // Make sure dirty objects have already been synced.
+    ASSERT(!mDirtyObjects.any());
+
     // TODO(jmadill): Investigate improving the speed here.
     for (Texture *texture : mCompleteTextureCache)
     {
