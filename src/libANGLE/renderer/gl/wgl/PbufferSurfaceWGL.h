@@ -17,6 +17,7 @@ namespace rx
 {
 
 class FunctionsWGL;
+class StateManagerGL;
 
 class PbufferSurfaceWGL : public SurfaceWGL
 {
@@ -70,6 +71,7 @@ class PbufferSurfaceWGL : public SurfaceWGL
     HDC mPbufferDeviceContext;
 
     const FunctionsWGL *mFunctionsWGL;
+    StateManagerGL *mStateManager;
 };
 
 }

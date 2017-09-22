@@ -300,7 +300,7 @@ class RobustResourceInitTestES3 : public RobustResourceInitTest
 // it only works on the implemented renderers
 TEST_P(RobustResourceInitTest, ExpectedRendererSupport)
 {
-    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93();
+    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsDesktopOpenGL() || IsOpenGLES();
     EXPECT_EQ(shouldHaveSupport, hasGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasEGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasRobustSurfaceInit());
@@ -670,7 +670,14 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    }
+    else
+    {
+        std::cout << "Read pixels check skipped because framebuffer was not complete." << std::endl;
+    }
 
     eglDestroySurface(display, pbuffer);
 }

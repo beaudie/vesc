@@ -10,6 +10,8 @@
 
 #include "common/debug.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
+#include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/TextureGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
 
@@ -36,7 +38,8 @@ PbufferSurfaceWGL::PbufferSurfaceWGL(const egl::SurfaceState &state,
       mParentDeviceContext(deviceContext),
       mPbuffer(nullptr),
       mPbufferDeviceContext(nullptr),
-      mFunctionsWGL(functions)
+      mFunctionsWGL(functions),
+      mStateManager(renderer->getStateManager())
 {
 }
 
