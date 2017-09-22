@@ -315,6 +315,10 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
                                       GLint copyTextureLevel,
                                       GLint copyTextureLayer) const;
 
+    Error ensureClearAttachmentsInitialized(const Context *context, GLbitfield mask);
+    Error ensureClearBufferAttachmentsInitialized(const Context *context,
+                                                  GLenum buffer,
+                                                  GLint drawbuffer);
     Error ensureDrawAttachmentsInitialized(const Context *context);
     Error ensureReadAttachmentInitialized(const Context *context, GLbitfield blitMask);
     Box getDimensions() const;
