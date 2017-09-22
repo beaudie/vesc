@@ -1294,24 +1294,7 @@ Error Framebuffer::clear(const gl::Context *context, GLbitfield mask)
         return NoError();
     }
 
-    const auto &blend        = glState.getBlendState();
-    const auto &depthStencil = glState.getDepthStencilState();
-
-    bool color   = (mask & GL_COLOR_BUFFER_BIT) != 0 && !IsColorMaskedOut(blend);
-    bool depth   = (mask & GL_DEPTH_BUFFER_BIT) != 0 && !IsDepthMaskedOut(depthStencil);
-    bool stencil = (mask & GL_STENCIL_BUFFER_BIT) != 0 && !IsStencilMaskedOut(depthStencil);
-
-    if (partialClearNeedsInit(context, color, depth, stencil))
-    {
-        ANGLE_TRY(ensureDrawAttachmentsInitialized(context));
-    }
-
     ANGLE_TRY(mImpl->clear(context, mask));
-
-    if (glState.isRobustResourceInitEnabled())
-    {
-        markDrawAttachmentsInitialized(color, depth, stencil);
-    }
 
     return NoError();
 }
@@ -1327,17 +1310,8 @@ Error Framebuffer::clearBufferfv(const gl::Context *context,
         return NoError();
     }
 
-    if (partialBufferClearNeedsInit(context, buffer))
-    {
-        ANGLE_TRY(ensureBufferInitialized(context, buffer, drawbuffer));
-    }
-
     ANGLE_TRY(mImpl->clearBufferfv(context, buffer, drawbuffer, values));
 
-    if (context->isRobustResourceInitEnabled())
-    {
-        markBufferInitialized(buffer, drawbuffer);
-    }
     return NoError();
 }
 
@@ -1352,17 +1326,8 @@ Error Framebuffer::clearBufferuiv(const gl::Context *context,
         return NoError();
     }
 
-    if (partialBufferClearNeedsInit(context, buffer))
-    {
-        ANGLE_TRY(ensureBufferInitialized(context, buffer, drawbuffer));
-    }
-
     ANGLE_TRY(mImpl->clearBufferuiv(context, buffer, drawbuffer, values));
 
-    if (context->isRobustResourceInitEnabled())
-    {
-        markBufferInitialized(buffer, drawbuffer);
-    }
     return NoError();
 }
 
@@ -1377,17 +1342,8 @@ Error Framebuffer::clearBufferiv(const gl::Context *context,
         return NoError();
     }
 
-    if (partialBufferClearNeedsInit(context, buffer))
-    {
-        ANGLE_TRY(ensureBufferInitialized(context, buffer, drawbuffer));
-    }
-
     ANGLE_TRY(mImpl->clearBufferiv(context, buffer, drawbuffer, values));
 
-    if (context->isRobustResourceInitEnabled())
-    {
-        markBufferInitialized(buffer, drawbuffer);
-    }
     return NoError();
 }
 
@@ -1403,17 +1359,8 @@ Error Framebuffer::clearBufferfi(const gl::Context *context,
         return NoError();
     }
 
-    if (partialBufferClearNeedsInit(context, buffer))
-    {
-        ANGLE_TRY(ensureBufferInitialized(context, buffer, drawbuffer));
-    }
-
     ANGLE_TRY(mImpl->clearBufferfi(context, buffer, drawbuffer, depth, stencil));
 
-    if (context->isRobustResourceInitEnabled())
-    {
-        markBufferInitialized(buffer, drawbuffer);
-    }
     return NoError();
 }
 
@@ -1982,6 +1929,63 @@ const std::vector<Offset> *Framebuffer::getViewportOffsets() const
 GLenum Framebuffer::getMultiviewLayout() const
 {
     return mState.getMultiviewLayout();
+}
+
+Error Framebuffer::ensureClearAttachmentsInitialized(const Context *context, GLbitfield mask)
+{
+    const auto &glState = context->getGLState();
+    if (!context->isRobustResourceInitEnabled() || glState.isRasterizerDiscardEnabled())
+    {
+        return NoError();
+    }
+
+    const auto &blend        = glState.getBlendState();
+    const auto &depthStencil = glState.getDepthStencilState();
+
+    bool color   = (mask & GL_COLOR_BUFFER_BIT) != 0 && !IsColorMaskedOut(blend);
+    bool depth   = (mask & GL_DEPTH_BUFFER_BIT) != 0 && !IsDepthMaskedOut(depthStencil);
+    bool stencil = (mask & GL_STENCIL_BUFFER_BIT) != 0 && !IsStencilMaskedOut(depthStencil);
+
+    if (!color && !depth && !stencil)
+    {
+        return NoError();
+    }
+
+    if (partialClearNeedsInit(context, color, depth, stencil))
+    {
+        ANGLE_TRY(ensureDrawAttachmentsInitialized(context));
+    }
+
+    // If the impl encounters an error during a a full (non-partial) clear, the attachments will
+    // still be marked initialized. This simplifies design, allowing this method to be called before
+    // the clear.
+    markDrawAttachmentsInitialized(color, depth, stencil);
+
+    return NoError();
+}
+
+Error Framebuffer::ensureClearBufferAttachmentsInitialized(const Context *context,
+                                                           GLenum buffer,
+                                                           GLint drawbuffer)
+{
+    if (!context->isRobustResourceInitEnabled() ||
+        context->getGLState().isRasterizerDiscardEnabled() ||
+        IsClearBufferMaskedOut(context, buffer))
+    {
+        return NoError();
+    }
+
+    if (partialBufferClearNeedsInit(context, buffer))
+    {
+        ANGLE_TRY(ensureBufferInitialized(context, buffer, drawbuffer));
+    }
+
+    // If the impl encounters an error during a a full (non-partial) clear, the attachments will
+    // still be marked initialized. This simplifies design, allowing this method to be called before
+    // the clear.
+    markBufferInitialized(buffer, drawbuffer);
+
+    return NoError();
 }
 
 Error Framebuffer::ensureDrawAttachmentsInitialized(const Context *context)
