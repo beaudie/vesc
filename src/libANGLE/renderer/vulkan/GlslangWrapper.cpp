@@ -18,6 +18,8 @@
 
 #include <array>
 
+#include "common/string_utils.h"
+
 namespace rx
 {
 
@@ -70,10 +72,10 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
 {
     std::string vertexSource =
         programState.getAttachedVertexShader()->getTranslatedSource(glContext);
-    const std::string &fragmentSource =
+    std::string fragmentSource =
         programState.getAttachedFragmentShader()->getTranslatedSource(glContext);
 
-    // Parse attribute locations and replace them in the vertex shader.
+    // Set attribute locations and descritor set bindings.
     // See corresponding code in OutputVulkanGLSL.cpp.
     // TODO(jmadill): Also do the same for ESSL 3 fragment outputs.
     for (const auto &attribute : programState.getAttributes())
@@ -87,9 +89,27 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
 
         std::string locationString = Str(attribute.location);
 
-        size_t replacePos = vertexSource.find(searchString);
-        ASSERT(replacePos != std::string::npos);
-        vertexSource.replace(replacePos, searchString.size(), locationString);
+        bool success = angle::ReplaceSubstring(&vertexSource, searchString, locationString);
+        ASSERT(success);
+    }
+
+    for (const auto &uniform : programState.getUniforms())
+    {
+        if (!uniform.staticUse)
+            continue;
+
+        // TODO(jmadill): Struct and array uniforms.
+        ASSERT(!uniform.isStruct() && !uniform.isArray());
+
+        std::stringstream searchStringBuilder;
+        searchStringBuilder << "@@ SET-BINDING-" << uniform.name << " @@";
+        std::string searchString = searchStringBuilder.str();
+
+        // TODO(jmadill): Handle multiple uniforms.
+        std::string setBindingString = "set = 0, binding = 0";
+
+        angle::ReplaceSubstring(&vertexSource, searchString, setBindingString);
+        angle::ReplaceSubstring(&fragmentSource, searchString, setBindingString);
     }
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
