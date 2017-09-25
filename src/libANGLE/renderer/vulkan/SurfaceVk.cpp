@@ -595,8 +595,6 @@ gl::ErrorOrResult<vk::Framebuffer *> WindowSurfaceVk::getCurrentFramebuffer(
         mSwapchainFramebuffers[imageIndex].retain(device, std::move(framebuffer));
     }
 
-    // We should only initialize framebuffers on the first swap.
-    ASSERT(mCurrentSwapchainImageIndex == 0u);
     return &mSwapchainFramebuffers[mCurrentSwapchainImageIndex];
 }
 
