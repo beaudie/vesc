@@ -67,13 +67,22 @@ struct ShaderVariable
     ShaderVariable(const ShaderVariable &other);
     ShaderVariable &operator=(const ShaderVariable &other);
 
-    bool isArray() const { return arraySize > 0 || isUnsizedArray; }
-    unsigned int elementCount() const { return isUnsizedArray ? 0 : std::max(1u, arraySize); }
-    bool isStruct() const { return !fields.empty(); }
+    bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
+    bool isArray() const { return !arraySizes.empty(); }
+    unsigned int getArraySizeProduct() const;
 
     // Array size 0 means not an array when passed to or returned from these functions.
-    unsigned int getOutermostArraySize() const { return arraySize; }
-    void setArraySize(unsigned int size) { arraySize = size; }
+    unsigned int getOutermostArraySize() const { return isArray() ? arraySizes.back() : 0; }
+    void setArraySize(unsigned int size);
+
+    // Turn this ShaderVariable from an array into a specific element in that array. Will update
+    // flattenedOffsetInParentArrays.
+    void indexIntoArray(unsigned int arrayIndex);
+
+    // Return ARRAY_SIZE value that can be queried through the API.
+    int getAPIQueryArraySize() const;
+
+    bool isStruct() const { return !fields.empty(); }
 
     // All of the shader's variables are described using nested data
     // structures. This is needed in order to disambiguate similar looking
@@ -96,11 +105,21 @@ struct ShaderVariable
     GLenum precision;
     std::string name;
     std::string mappedName;
-    unsigned int arraySize;
+
+    // Used to make an array type. Outermost array size is stored at the end of the vector.
+    std::vector<unsigned int> arraySizes;
+
+    // Offset of this variable in parent arrays. In case the parent is an array of arrays, the
+    // offset is outerArrayElement * innerArraySize + innerArrayElement.
+    // For example, if there's a variable declared as size 3 array of size 4 array of int:
+    //   int a[3][4];
+    // then the flattenedOffsetInParentArrays of a[2] would be 2.
+    // and flattenedOffsetInParentArrays of a[2][1] would be 2*4 + 1 = 9.
+    unsigned int flattenedOffsetInParentArrays;
+
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
-    bool isUnsizedArray;
 
   protected:
     bool isSameVariableAtLinkTime(const ShaderVariable &other,
