@@ -174,6 +174,13 @@ class RendererGL : angle::NonCopyable
                               GLuint numGroupsY,
                               GLuint numGroupsZ);
 
+    void onDebugMessage(GLenum source,
+                        GLenum type,
+                        GLuint id,
+                        GLenum severity,
+                        GLsizei length,
+                        const GLchar *message);
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -192,6 +199,7 @@ class RendererGL : angle::NonCopyable
     WorkaroundsGL mWorkarounds;
 
     bool mUseDebugOutput;
+    std::map<GLuint, size_t> mDebugMessageCounts;
 
     // For performance debugging
     bool mSkipDrawCalls;
