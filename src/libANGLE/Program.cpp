@@ -115,7 +115,7 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
     if (x.isArrayElement())
     {
         vx           = *x.varying;
-        vx.arraySize = 0;
+        vx.arraySizes.clear();
         px           = &vx;
     }
     else
@@ -126,7 +126,7 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
     if (y.isArrayElement())
     {
         vy           = *y.varying;
-        vy.arraySize = 0;
+        vy.arraySizes.clear();
         py           = &vy;
     }
     else
@@ -1238,7 +1238,7 @@ void Program::getActiveUniform(GLuint index,
             CopyStringToBuffer(name, string, bufsize, length);
         }
 
-        *size = uniform.elementCount();
+        *size = uniform.getAPIQueryArraySize();
         *type = uniform.type;
     }
     else
@@ -1300,7 +1300,8 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
     switch (pname)
     {
       case GL_UNIFORM_TYPE:         return static_cast<GLint>(uniform.type);
-      case GL_UNIFORM_SIZE:         return static_cast<GLint>(uniform.elementCount());
+      case GL_UNIFORM_SIZE:
+          return static_cast<GLint>(uniform.getAPIQueryArraySize());
       case GL_UNIFORM_NAME_LENGTH:  return static_cast<GLint>(uniform.name.size() + 1 + (uniform.isArray() ? 3 : 0));
       case GL_UNIFORM_BLOCK_INDEX:
           return uniform.bufferIndex;
@@ -1959,12 +1960,12 @@ void Program::linkSamplerAndImageBindings()
         auto &imageUniform = mState.mUniforms[imageIndex];
         if (imageUniform.binding == -1)
         {
-            mState.mImageBindings.emplace_back(ImageBinding(imageUniform.elementCount()));
+            mState.mImageBindings.emplace_back(ImageBinding(imageUniform.getArraySizeProduct()));
         }
         else
         {
             mState.mImageBindings.emplace_back(
-                ImageBinding(imageUniform.binding, imageUniform.elementCount()));
+                ImageBinding(imageUniform.binding, imageUniform.getArraySizeProduct()));
         }
     }
 
@@ -1984,7 +1985,7 @@ void Program::linkSamplerAndImageBindings()
         const auto &samplerUniform = mState.mUniforms[samplerIndex];
         GLenum textureType         = SamplerTypeToTextureType(samplerUniform.type);
         mState.mSamplerBindings.emplace_back(
-            SamplerBinding(textureType, samplerUniform.elementCount(), false));
+            SamplerBinding(textureType, samplerUniform.getArraySizeProduct(), false));
     }
 }
 
@@ -2326,7 +2327,7 @@ bool Program::linkValidateVariablesBase(InfoLog &infoLog, const std::string &var
         infoLog << "Types for " << variableName << " differ between vertex and fragment shaders";
         return false;
     }
-    if (vertexVariable.arraySize != fragmentVariable.arraySize)
+    if (vertexVariable.arraySizes != fragmentVariable.arraySizes)
     {
         infoLog << "Array sizes for " << variableName << " differ between vertex and fragment shaders";
         return false;
@@ -2520,9 +2521,10 @@ bool Program::linkValidateTransformFeedback(const gl::Context *context,
                 uniqueNames.insert(tfVaryingName);
 
                 // TODO(jmadill): Investigate implementation limits on D3D11
-                size_t elementCount =
-                    ((varying->isArray() && subscripts.empty()) ? varying->elementCount()
-                                                                           : 1);
+                ASSERT(!varying->isArrayOfArrays());
+                size_t elementCount = ((varying->isArray() && subscripts.empty())
+                                           ? varying->getOutermostArraySize()
+                                           : 1);
                 size_t componentCount = VariableComponentCount(varying->type) * elementCount;
                 if (mState.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
                     componentCount > caps.maxTransformFeedbackSeparateComponents)
@@ -2724,7 +2726,10 @@ void Program::linkOutputVariables(const Context *context)
         unsigned int baseLocation =
             (outputVariable.location == -1 ? 0u
                                            : static_cast<unsigned int>(outputVariable.location));
-        for (unsigned int elementIndex = 0; elementIndex < outputVariable.elementCount();
+
+        // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays.
+        ASSERT(!outputVariable.isArrayOfArrays());
+        for (unsigned int elementIndex = 0; elementIndex < outputVariable.getOutermostArraySize();
              elementIndex++)
         {
             const unsigned int location = baseLocation + elementIndex;
@@ -2757,7 +2762,8 @@ void Program::linkOutputVariables(const Context *context)
         // Since multiple output locations must be specified, use 0 for non-specified locations.
         int baseLocation = (outputVariable.location == -1 ? 0 : outputVariable.location);
 
-        for (unsigned int elementIndex = 0; elementIndex < outputVariable.elementCount();
+        ASSERT(!outputVariable.isArrayOfArrays());
+        for (unsigned int elementIndex = 0; elementIndex < outputVariable.getOutermostArraySize();
              elementIndex++)
         {
             const int location = baseLocation + elementIndex;
@@ -2778,7 +2784,7 @@ void Program::setUniformValuesFromBindingQualifiers()
             GLint location = mState.getUniformLocation(samplerUniform.name);
             ASSERT(location != -1);
             std::vector<GLint> boundTextureUnits;
-            for (unsigned int elementIndex = 0; elementIndex < samplerUniform.elementCount();
+            for (unsigned int elementIndex = 0; elementIndex < samplerUniform.getArraySizeProduct();
                  ++elementIndex)
             {
                 boundTextureUnits.push_back(samplerUniform.binding + elementIndex);
@@ -2897,6 +2903,33 @@ void Program::gatherInterfaceBlockInfo(const Context *context)
 }
 
 template <typename VarT>
+void Program::defineUniformBlockMemberArrayMembers(const VarT &field,
+                                                   unsigned int arrayNestingIndex,
+                                                   const std::string &prefix,
+                                                   const std::string &mappedPrefix,
+                                                   int blockIndex)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    for (unsigned int arrayElement = 0u;
+         arrayElement < field.arraySizes[field.arraySizes.size() - 1u - arrayNestingIndex];
+         ++arrayElement)
+    {
+        const std::string elementName       = prefix + ArrayString(arrayElement);
+        const std::string elementMappedName = mappedPrefix + ArrayString(arrayElement);
+        if (arrayNestingIndex + 1u < field.arraySizes.size())
+        {
+            defineUniformBlockMemberArrayMembers(field, arrayNestingIndex + 1u, elementName,
+                                                 elementMappedName, blockIndex);
+        }
+        else
+        {
+            defineUniformBlockMembers(field.fields, elementName, elementMappedName, blockIndex);
+        }
+    }
+}
+
+template <typename VarT>
 void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
                                         const std::string &prefix,
                                         const std::string &mappedPrefix,
@@ -2911,14 +2944,14 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
 
         if (field.isStruct())
         {
-            for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
+            if (field.isArray())
             {
-                const std::string uniformElementName =
-                    fullName + (field.isArray() ? ArrayString(arrayElement) : "");
-                const std::string uniformElementMappedName =
-                    fullMappedName + (field.isArray() ? ArrayString(arrayElement) : "");
-                defineUniformBlockMembers(field.fields, uniformElementName,
-                                          uniformElementMappedName, blockIndex);
+                defineUniformBlockMemberArrayMembers(field, 0u, fullName, fullMappedName,
+                                                     blockIndex);
+            }
+            else
+            {
+                defineUniformBlockMembers(field.fields, fullName, fullMappedName, blockIndex);
             }
         }
         else
@@ -2930,8 +2963,8 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
                 continue;
             }
 
-            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
-                                     -1, blockIndex, memberInfo);
+            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySizes, -1,
+                                     -1, -1, blockIndex, memberInfo);
             newUniform.mappedName = fullMappedName;
 
             // Since block uniforms have no location, we don't need to store them in the uniform
@@ -3107,7 +3140,7 @@ GLsizei Program::clampUniformCount(const VariableLocation &locationInfo,
 
     // OpenGL ES 3.0.4 spec pg 67: "Values for any array element that exceeds the highest array
     // element index used, as reported by GetActiveUniform, will be ignored by the GL."
-    unsigned int remainingElements = linkedUniform.elementCount() - locationInfo.element;
+    unsigned int remainingElements = linkedUniform.getArraySizeProduct() - locationInfo.element;
     GLsizei maxElementCount =
         static_cast<GLsizei>(remainingElements * linkedUniform.getElementComponents());
 
@@ -3136,7 +3169,7 @@ GLsizei Program::clampMatrixUniformCount(GLint location,
 
     // OpenGL ES 3.0.4 spec pg 67: "Values for any array element that exceeds the highest array
     // element index used, as reported by GetActiveUniform, will be ignored by the GL."
-    unsigned int remainingElements = linkedUniform.elementCount() - locationInfo.element;
+    unsigned int remainingElements = linkedUniform.getArraySizeProduct() - locationInfo.element;
     return std::min(count, static_cast<GLsizei>(remainingElements));
 }
 
