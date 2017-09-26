@@ -248,7 +248,10 @@ void CollectVariablesTraverser::setBuiltInInfoFromSymbolTable(const char *name,
     info->mappedName = name;
     info->type       = GLVariableType(type);
     ASSERT(!type.isArrayOfArrays());
-    info->arraySize = type.isArray() ? type.getOutermostArraySize() : 0;
+    if (type.isArray())
+    {
+        info->arraySizes.push_back(type.getOutermostArraySize());
+    }
     info->precision = GLVariablePrecision(type);
 }
 
@@ -353,7 +356,6 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             info.name          = kName;
             info.mappedName    = kName;
             info.type          = GL_NONE;
-            info.arraySize     = 0;
             info.precision     = GL_NONE;
             info.staticUse     = true;
 
@@ -362,7 +364,6 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             nearInfo.name          = kNearName;
             nearInfo.mappedName    = kNearName;
             nearInfo.type          = GL_FLOAT;
-            nearInfo.arraySize     = 0;
             nearInfo.precision     = GL_HIGH_FLOAT;
             nearInfo.staticUse     = true;
 
@@ -371,7 +372,6 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             farInfo.name          = kFarName;
             farInfo.mappedName    = kFarName;
             farInfo.type          = GL_FLOAT;
-            farInfo.arraySize     = 0;
             farInfo.precision     = GL_HIGH_FLOAT;
             farInfo.staticUse     = true;
 
@@ -380,7 +380,6 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             diffInfo.name          = kDiffName;
             diffInfo.mappedName    = kDiffName;
             diffInfo.type          = GL_FLOAT;
-            diffInfo.arraySize     = 0;
             diffInfo.precision     = GL_HIGH_FLOAT;
             diffInfo.staticUse     = true;
 
@@ -447,7 +446,6 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                     info.name          = kName;
                     info.mappedName    = kName;
                     info.type          = GL_INT;
-                    info.arraySize     = 0;
                     info.precision     = GL_HIGH_INT;  // Defined by spec.
                     info.staticUse     = true;
                     info.location      = -1;
@@ -477,7 +475,8 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                     setBuiltInInfoFromSymbolTable("gl_FragData", &info);
                     if (!IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
                     {
-                        info.arraySize = 1;
+                        ASSERT(info.arraySizes.size() == 1u);
+                        info.arraySizes.back() = 1u;
                     }
                     info.staticUse = true;
                     mOutputVariables->push_back(info);
@@ -573,10 +572,7 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
     variableOut->name       = name.getString().c_str();
     variableOut->mappedName = getMappedName(name);
 
-    // TODO(oetuaho@nvidia.com): Uniforms can be arrays of arrays, so this assert will need to be
-    // removed.
-    ASSERT(!type.isArrayOfArrays());
-    variableOut->arraySize = type.isArray() ? type.getOutermostArraySize() : 0;
+    variableOut->arraySizes.assign(type.getArraySizes().begin(), type.getArraySizes().end());
 }
 
 Attribute CollectVariablesTraverser::recordAttribute(const TIntermSymbol &variable) const

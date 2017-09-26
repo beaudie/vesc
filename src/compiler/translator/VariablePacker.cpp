@@ -25,11 +25,11 @@ void ExpandVariable(const ShaderVariable &variable,
                     bool markStaticUse,
                     std::vector<ShaderVariable> *expanded);
 
-void ExpandUserDefinedVariable(const ShaderVariable &variable,
-                               const std::string &name,
-                               const std::string &mappedName,
-                               bool markStaticUse,
-                               std::vector<ShaderVariable> *expanded)
+void ExpandStructVariable(const ShaderVariable &variable,
+                          const std::string &name,
+                          const std::string &mappedName,
+                          bool markStaticUse,
+                          std::vector<ShaderVariable> *expanded)
 {
     ASSERT(variable.isStruct());
 
@@ -43,6 +43,33 @@ void ExpandUserDefinedVariable(const ShaderVariable &variable,
     }
 }
 
+void ExpandStructArrayVariable(const ShaderVariable &variable,
+                               unsigned int arrayNestingIndex,
+                               const std::string &name,
+                               const std::string &mappedName,
+                               bool markStaticUse,
+                               std::vector<ShaderVariable> *expanded)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    for (unsigned int arrayElement = 0u;
+         arrayElement < variable.arraySizes[variable.arraySizes.size() - 1u - arrayNestingIndex];
+         ++arrayElement)
+    {
+        const std::string elementName       = name + ArrayString(arrayElement);
+        const std::string elementMappedName = mappedName + ArrayString(arrayElement);
+        if (arrayNestingIndex + 1u < variable.arraySizes.size())
+        {
+            ExpandStructArrayVariable(variable, arrayNestingIndex + 1u, elementName,
+                                      elementMappedName, markStaticUse, expanded);
+        }
+        else
+        {
+            ExpandStructVariable(variable, elementName, elementMappedName, markStaticUse, expanded);
+        }
+    }
+}
+
 void ExpandVariable(const ShaderVariable &variable,
                     const std::string &name,
                     const std::string &mappedName,
@@ -53,17 +80,11 @@ void ExpandVariable(const ShaderVariable &variable,
     {
         if (variable.isArray())
         {
-            for (unsigned int elementIndex = 0; elementIndex < variable.elementCount();
-                 elementIndex++)
-            {
-                std::string lname       = name + ::ArrayString(elementIndex);
-                std::string lmappedName = mappedName + ::ArrayString(elementIndex);
-                ExpandUserDefinedVariable(variable, lname, lmappedName, markStaticUse, expanded);
-            }
+            ExpandStructArrayVariable(variable, 0u, name, mappedName, markStaticUse, expanded);
         }
         else
         {
-            ExpandUserDefinedVariable(variable, name, mappedName, markStaticUse, expanded);
+            ExpandStructVariable(variable, name, mappedName, markStaticUse, expanded);
         }
     }
     else
@@ -81,6 +102,7 @@ void ExpandVariable(const ShaderVariable &variable,
 
         if (expandedVar.isArray())
         {
+            // TODO: Need to handle arrays of arrays?
             expandedVar.name += "[0]";
             expandedVar.mappedName += "[0]";
         }
@@ -120,7 +142,7 @@ struct TVariableInfoComparer
             return lhsSortOrder < rhsSortOrder;
         }
         // Sort by largest first.
-        return lhs.arraySize > rhs.arraySize;
+        return lhs.getArraySizeProduct() > rhs.getArraySizeProduct();
     }
 };
 
@@ -215,7 +237,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
     {
         // Structs should have been expanded before reaching here.
         ASSERT(!variable.isStruct());
-        if (variable.elementCount() > maxVectors / GetVariablePackingRows(variable.type))
+        if (variable.getArraySizeProduct() > maxVectors / GetVariablePackingRows(variable.type))
         {
             return false;
         }
@@ -236,7 +258,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
         {
             break;
         }
-        topNonFullRow_ += GetVariablePackingRows(variable.type) * variable.elementCount();
+        topNonFullRow_ += GetVariablePackingRows(variable.type) * variable.getArraySizeProduct();
     }
 
     if (topNonFullRow_ > maxRows_)
@@ -253,7 +275,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
         {
             break;
         }
-        num3ColumnRows += GetVariablePackingRows(variable.type) * variable.elementCount();
+        num3ColumnRows += GetVariablePackingRows(variable.type) * variable.getArraySizeProduct();
     }
 
     if (topNonFullRow_ + num3ColumnRows > maxRows_)
@@ -275,7 +297,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
         {
             break;
         }
-        int numRows = GetVariablePackingRows(variable.type) * variable.elementCount();
+        int numRows = GetVariablePackingRows(variable.type) * variable.getArraySizeProduct();
         if (numRows <= rowsAvailableInColumns01)
         {
             rowsAvailableInColumns01 -= numRows;
@@ -300,7 +322,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
     {
         const sh::ShaderVariable &variable = (*variables)[ii];
         ASSERT(1 == GetVariablePackingComponentsPerRow(variable.type));
-        int numRows        = GetVariablePackingRows(variable.type) * variable.elementCount();
+        int numRows        = GetVariablePackingRows(variable.type) * variable.getArraySizeProduct();
         int smallestColumn = -1;
         int smallestSize   = maxRows_ + 1;
         int topRow         = -1;
