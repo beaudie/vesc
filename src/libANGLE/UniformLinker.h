@@ -83,6 +83,29 @@ class UniformLinker
                                       std::vector<LinkedUniform> *imageUniforms,
                                       std::vector<LinkedUniform> *atomicCounterUniforms);
 
+    ShaderUniformCount flattenStructArrayUniform(const sh::ShaderVariable &uniform,
+                                                 unsigned int arrayNestingIndex,
+                                                 const std::string &namePrefix,
+                                                 const std::string &mappedNamePrefix,
+                                                 std::vector<LinkedUniform> *samplerUniforms,
+                                                 std::vector<LinkedUniform> *imageUniforms,
+                                                 std::vector<LinkedUniform> *atomicCounterUniforms,
+                                                 bool markStaticUse,
+                                                 int binding,
+                                                 int offset,
+                                                 int *location);
+
+    ShaderUniformCount flattenStructUniform(const std::vector<sh::ShaderVariable> &fields,
+                                            const std::string &namePrefix,
+                                            const std::string &mappedNamePrefix,
+                                            std::vector<LinkedUniform> *samplerUniforms,
+                                            std::vector<LinkedUniform> *imageUniforms,
+                                            std::vector<LinkedUniform> *atomicCounterUniforms,
+                                            bool markStaticUse,
+                                            int binding,
+                                            int offset,
+                                            int *location);
+
     // markStaticUse is given as a separate parameter because it is tracked here at struct
     // granularity.
     ShaderUniformCount flattenUniformImpl(const sh::ShaderVariable &uniform,

@@ -86,6 +86,46 @@ bool IsRowMajorLayout(const sh::ShaderVariable &var)
 }
 
 template <typename VarT>
+void GetUniformBlockStructMemberArrayInfo(const VarT &field,
+                                          unsigned int arrayNestingIndex,
+                                          const std::string &prefix,
+                                          sh::BlockLayoutEncoder *encoder,
+                                          bool inRowMajorLayout,
+                                          std::map<std::string, sh::BlockMemberInfo> *blockInfoOut)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    for (unsigned int arrayElement = 0u;
+         arrayElement < field.arraySizes[field.arraySizes.size() - 1u - arrayNestingIndex];
+         ++arrayElement)
+    {
+        const std::string elementName = prefix + ArrayString(arrayElement);
+        if (arrayNestingIndex + 1u < field.arraySizes.size())
+        {
+            GetUniformBlockStructMemberArrayInfo(field, arrayNestingIndex + 1u, elementName,
+                                                 encoder, inRowMajorLayout, blockInfoOut);
+        }
+        else
+        {
+            GetUniformBlockStructMemberInfo(field.fields, elementName, encoder, inRowMajorLayout,
+                                            blockInfoOut);
+        }
+    }
+}
+
+template <typename VarT>
+void GetUniformBlockStructMemberInfo(const std::vector<VarT> &fields,
+                                     const std::string &fieldName,
+                                     sh::BlockLayoutEncoder *encoder,
+                                     bool inRowMajorLayout,
+                                     std::map<std::string, sh::BlockMemberInfo> *blockInfoOut)
+{
+    encoder->enterAggregateType();
+    GetUniformBlockInfo(fields, fieldName, encoder, inRowMajorLayout, blockInfoOut);
+    encoder->exitAggregateType();
+}
+
+template <typename VarT>
 void GetUniformBlockInfo(const std::vector<VarT> &fields,
                          const std::string &prefix,
                          sh::BlockLayoutEncoder *encoder,
@@ -100,23 +140,22 @@ void GetUniformBlockInfo(const std::vector<VarT> &fields,
         {
             bool rowMajorLayout = (inRowMajorLayout || IsRowMajorLayout(field));
 
-            for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
+            if (field.isArray())
             {
-                encoder->enterAggregateType();
-
-                const std::string uniformElementName =
-                    fieldName + (field.isArray() ? ArrayString(arrayElement) : "");
-                GetUniformBlockInfo(field.fields, uniformElementName, encoder, rowMajorLayout,
-                                    blockInfoOut);
-
-                encoder->exitAggregateType();
+                GetUniformBlockStructMemberArrayInfo(field, 0u, fieldName, encoder, rowMajorLayout,
+                                                     blockInfoOut);
+            }
+            else
+            {
+                GetUniformBlockStructMemberInfo(field.fields, fieldName, encoder, rowMajorLayout,
+                                                blockInfoOut);
             }
         }
         else
         {
             bool isRowMajorMatrix = (gl::IsMatrixType(field.type) && inRowMajorLayout);
             (*blockInfoOut)[fieldName] =
-                encoder->encodeType(field.type, field.arraySize, isRowMajorMatrix);
+                encoder->encodeType(field.type, field.arraySizes, isRowMajorMatrix);
         }
     }
 }
@@ -250,11 +289,11 @@ void GetMatrixUniform(GLint columns, GLint rows, NonFloatT *dataOut, const NonFl
 
 D3DUniform::D3DUniform(GLenum type,
                        const std::string &nameIn,
-                       unsigned int arraySizeIn,
+                       const std::vector<unsigned int> &arraySizesIn,
                        bool defaultBlock)
     : typeInfo(gl::GetUniformTypeInfo(type)),
       name(nameIn),
-      arraySize(arraySizeIn),
+      arraySizes(arraySizesIn),
       vsData(nullptr),
       psData(nullptr),
       csData(nullptr),
@@ -278,9 +317,20 @@ D3DUniform::~D3DUniform()
 {
 }
 
+unsigned int D3DUniform::getArraySizeProduct() const
+{
+    unsigned int arraySizeProduct = 1u;
+    for (unsigned int arraySize : arraySizes)
+    {
+        arraySizeProduct *= arraySize;
+    }
+    return arraySizeProduct;
+}
+
 const uint8_t *D3DUniform::getDataPtrToElement(size_t elementIndex) const
 {
-    ASSERT((arraySize == 0 && elementIndex == 0) || (arraySize > 0 && elementIndex < arraySize));
+    ASSERT((!isArray() && elementIndex == 0) ||
+           (isArray() && elementIndex < getArraySizeProduct()));
 
     if (isSampler())
     {
@@ -829,7 +879,7 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
         const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
 
         D3DUniform *d3dUniform =
-            new D3DUniform(linkedUniform.type, linkedUniform.name, linkedUniform.arraySize,
+            new D3DUniform(linkedUniform.type, linkedUniform.name, linkedUniform.arraySizes,
                            linkedUniform.isInDefaultBlock());
         stream->readInt(&d3dUniform->psRegisterIndex);
         stream->readInt(&d3dUniform->vsRegisterIndex);
@@ -2068,6 +2118,64 @@ D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
     return nullptr;
 }
 
+void ProgramD3D::defineUniformStructFields(GLenum shaderType,
+                                           const std::vector<sh::ShaderVariable> &fields,
+                                           const std::string &namePrefix,
+                                           sh::HLSLBlockEncoder *encoder,
+                                           D3DUniformMap *uniformMap)
+{
+    if (encoder)
+        encoder->enterAggregateType();
+
+    for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
+    {
+        const sh::ShaderVariable &field  = fields[fieldIndex];
+        const std::string &fieldFullName = (namePrefix + "." + field.name);
+
+        // Samplers get their registers assigned in assignAllSamplerRegisters.
+        // Also they couldn't use the same encoder as the rest of the struct, since they are
+        // extracted out of the struct by the shader translator.
+        if (gl::IsSamplerType(field.type))
+        {
+            defineUniform(shaderType, field, fieldFullName, nullptr, uniformMap);
+        }
+        else
+        {
+            defineUniform(shaderType, field, fieldFullName, encoder, uniformMap);
+        }
+    }
+
+    if (encoder)
+        encoder->exitAggregateType();
+}
+
+void ProgramD3D::defineUniformStructArrayFields(GLenum shaderType,
+                                                const sh::ShaderVariable &uniform,
+                                                unsigned int arrayNestingIndex,
+                                                const std::string &prefix,
+                                                sh::HLSLBlockEncoder *encoder,
+                                                D3DUniformMap *uniformMap)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    for (unsigned int arrayElement = 0u;
+         arrayElement < uniform.arraySizes[uniform.arraySizes.size() - 1u - arrayNestingIndex];
+         ++arrayElement)
+    {
+        const std::string &elementString = prefix + ArrayString(arrayElement);
+        if (arrayNestingIndex + 1u < uniform.arraySizes.size())
+        {
+            defineUniformStructArrayFields(shaderType, uniform, arrayNestingIndex + 1u,
+                                           elementString, encoder, uniformMap);
+        }
+        else
+        {
+            defineUniformStructFields(shaderType, uniform.fields, elementString, encoder,
+                                      uniformMap);
+        }
+    }
+}
+
 void ProgramD3D::defineUniform(GLenum shaderType,
                                const sh::ShaderVariable &uniform,
                                const std::string &fullName,
@@ -2076,33 +2184,13 @@ void ProgramD3D::defineUniform(GLenum shaderType,
 {
     if (uniform.isStruct())
     {
-        for (unsigned int elementIndex = 0; elementIndex < uniform.elementCount(); elementIndex++)
+        if (uniform.isArray())
         {
-            const std::string &elementString = (uniform.isArray() ? ArrayString(elementIndex) : "");
-
-            if (encoder)
-                encoder->enterAggregateType();
-
-            for (size_t fieldIndex = 0; fieldIndex < uniform.fields.size(); fieldIndex++)
-            {
-                const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
-                const std::string &fieldFullName = (fullName + elementString + "." + field.name);
-
-                // Samplers get their registers assigned in assignAllSamplerRegisters.
-                // Also they couldn't use the same encoder as the rest of the struct, since they are
-                // extracted out of the struct by the shader translator.
-                if (gl::IsSamplerType(field.type))
-                {
-                    defineUniform(shaderType, field, fieldFullName, nullptr, uniformMap);
-                }
-                else
-                {
-                    defineUniform(shaderType, field, fieldFullName, encoder, uniformMap);
-                }
-            }
-
-            if (encoder)
-                encoder->exitAggregateType();
+            defineUniformStructArrayFields(shaderType, uniform, 0u, fullName, encoder, uniformMap);
+        }
+        else
+        {
+            defineUniformStructFields(shaderType, uniform.fields, fullName, encoder, uniformMap);
         }
         return;
     }
@@ -2115,7 +2203,7 @@ void ProgramD3D::defineUniform(GLenum shaderType,
 
     // Advance the uniform offset, to track registers allocation for structs
     sh::BlockMemberInfo blockInfo =
-        encoder ? encoder->encodeType(uniform.type, uniform.arraySize, false)
+        encoder ? encoder->encodeType(uniform.type, uniform.arraySizes, false)
                 : sh::BlockMemberInfo::getDefaultBlockInfo();
 
     auto uniformMapEntry   = uniformMap->find(fullName);
@@ -2127,7 +2215,7 @@ void ProgramD3D::defineUniform(GLenum shaderType,
     }
     else
     {
-        d3dUniform = new D3DUniform(uniform.type, fullName, uniform.arraySize, true);
+        d3dUniform              = new D3DUniform(uniform.type, fullName, uniform.arraySizes, true);
         (*uniformMap)[fullName] = d3dUniform;
     }
 
@@ -2360,8 +2448,8 @@ void ProgramD3D::assignSamplerRegisters(D3DUniform *d3dUniform)
         ASSERT(computeShaderD3D->hasUniform(d3dUniform));
         d3dUniform->csRegisterIndex = computeShaderD3D->getUniformRegister(d3dUniform->name);
         ASSERT(d3dUniform->csRegisterIndex != GL_INVALID_INDEX);
-        AssignSamplers(d3dUniform->csRegisterIndex, d3dUniform->typeInfo, d3dUniform->arraySize,
-                       mSamplersCS, &mUsedComputeSamplerRange);
+        AssignSamplers(d3dUniform->csRegisterIndex, d3dUniform->typeInfo,
+                       d3dUniform->getArraySizeProduct(), mSamplersCS, &mUsedComputeSamplerRange);
     }
     else
     {
@@ -2374,15 +2462,16 @@ void ProgramD3D::assignSamplerRegisters(D3DUniform *d3dUniform)
         {
             d3dUniform->vsRegisterIndex = vertexShaderD3D->getUniformRegister(d3dUniform->name);
             ASSERT(d3dUniform->vsRegisterIndex != GL_INVALID_INDEX);
-            AssignSamplers(d3dUniform->vsRegisterIndex, d3dUniform->typeInfo, d3dUniform->arraySize,
-                           mSamplersVS, &mUsedVertexSamplerRange);
+            AssignSamplers(d3dUniform->vsRegisterIndex, d3dUniform->typeInfo,
+                           d3dUniform->getArraySizeProduct(), mSamplersVS,
+                           &mUsedVertexSamplerRange);
         }
         if (fragmentShaderD3D->hasUniform(d3dUniform))
         {
             d3dUniform->psRegisterIndex = fragmentShaderD3D->getUniformRegister(d3dUniform->name);
             ASSERT(d3dUniform->psRegisterIndex != GL_INVALID_INDEX);
-            AssignSamplers(d3dUniform->psRegisterIndex, d3dUniform->typeInfo, d3dUniform->arraySize,
-                           mSamplersPS, &mUsedPixelSamplerRange);
+            AssignSamplers(d3dUniform->psRegisterIndex, d3dUniform->typeInfo,
+                           d3dUniform->getArraySizeProduct(), mSamplersPS, &mUsedPixelSamplerRange);
         }
     }
 }

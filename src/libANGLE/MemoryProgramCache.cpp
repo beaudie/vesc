@@ -42,7 +42,11 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeInt(var.precision);
     stream->writeString(var.name);
     stream->writeString(var.mappedName);
-    stream->writeInt(var.arraySize);
+    stream->writeInt(var.arraySizes.size());
+    for (unsigned int arraySize : var.arraySizes)
+    {
+        stream->writeInt(arraySize);
+    }
     stream->writeInt(var.staticUse);
     stream->writeString(var.structName);
     ASSERT(var.fields.empty());
@@ -54,7 +58,11 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->precision  = stream->readInt<GLenum>();
     var->name       = stream->readString();
     var->mappedName = stream->readString();
-    var->arraySize  = stream->readInt<unsigned int>();
+    unsigned int numArraySizes = stream->readInt<unsigned int>();
+    for (unsigned int arraySizeIndex = 0; arraySizeIndex < numArraySizes; ++arraySizeIndex)
+    {
+        var->arraySizes.push_back(stream->readInt<unsigned int>());
+    }
     var->staticUse  = stream->readBool();
     var->structName = stream->readString();
 }
@@ -293,7 +301,11 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
          ++transformFeedbackVaryingIndex)
     {
         sh::Varying varying;
-        stream.readInt(&varying.arraySize);
+        unsigned int numArraySizes = stream.readInt<unsigned int>();
+        for (unsigned int arraySizeIndex = 0; arraySizeIndex < numArraySizes; ++arraySizeIndex)
+        {
+            varying.arraySizes.push_back(stream.readInt<unsigned int>());
+        }
         stream.readInt(&varying.type);
         stream.readString(&varying.name);
 
@@ -461,7 +473,11 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(state.getLinkedTransformFeedbackVaryings().size());
     for (const auto &var : state.getLinkedTransformFeedbackVaryings())
     {
-        stream.writeInt(var.arraySize);
+        stream.writeInt(var.arraySizes.size());
+        for (unsigned int arraySize : var.arraySizes)
+        {
+            stream.writeInt(arraySize);
+        }
         stream.writeInt(var.type);
         stream.writeString(var.name);
 
