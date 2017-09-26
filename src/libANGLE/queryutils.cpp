@@ -444,12 +444,7 @@ GLint GetLocationVariableProperty(const sh::VariableWithLocation &var, GLenum pr
             return clampCast<GLint>(var.type);
 
         case GL_ARRAY_SIZE:
-            // TODO(jie.a.chen@intel.com): check array of array.
-            if (var.isArray() && !var.isStruct())
-            {
-                return clampCast<GLint>(var.elementCount());
-            }
-            return 1;
+            return clampCast<GLint>(var.getAPIQueryArraySize());
 
         case GL_NAME_LENGTH:
         {
@@ -1416,7 +1411,7 @@ GLint GetBufferVariableResourceProperty(const Program *program, GLuint index, co
             return clampCast<GLint>(bufferVariable.type);
 
         case GL_ARRAY_SIZE:
-            return clampCast<GLint>(bufferVariable.elementCount());
+            return clampCast<GLint>(bufferVariable.getAPIQueryArraySize());
 
         case GL_BLOCK_INDEX:
             return bufferVariable.bufferIndex;
