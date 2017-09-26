@@ -43,7 +43,7 @@ struct LinkedUniform : public sh::Uniform, public StaticallyUsed
     LinkedUniform(GLenum type,
                   GLenum precision,
                   const std::string &name,
-                  unsigned int arraySize,
+                  const std::vector<unsigned int> &arraySizes,
                   const int binding,
                   const int offset,
                   const int location,
