@@ -30,13 +30,20 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b)
     return (GetNonAuxiliaryInterpolationType(a) == GetNonAuxiliaryInterpolationType(b));
 }
 
-ShaderVariable::ShaderVariable() : type(0), precision(0), arraySize(0), staticUse(false)
+ShaderVariable::ShaderVariable() : type(0), precision(0), staticUse(false)
+{
+}
+
+ShaderVariable::ShaderVariable(GLenum typeIn) : type(typeIn), precision(0), staticUse(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn, unsigned int arraySizeIn)
-    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false)
+    : type(typeIn), precision(0), staticUse(false)
 {
+    // TODO: Fix this assert.
+    ASSERT(arraySizeIn != 0);
+    arraySizes.push_back(arraySizeIn);
 }
 
 ShaderVariable::~ShaderVariable()
@@ -48,7 +55,7 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       precision(other.precision),
       name(other.name),
       mappedName(other.mappedName),
-      arraySize(other.arraySize),
+      arraySizes(other.arraySizes),
       staticUse(other.staticUse),
       fields(other.fields),
       structName(other.structName)
@@ -61,7 +68,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     precision  = other.precision;
     name       = other.name;
     mappedName = other.mappedName;
-    arraySize  = other.arraySize;
+    arraySizes = other.arraySizes;
     staticUse  = other.staticUse;
     fields     = other.fields;
     structName = other.structName;
@@ -71,7 +78,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
 bool ShaderVariable::operator==(const ShaderVariable &other) const
 {
     if (type != other.type || precision != other.precision || name != other.name ||
-        mappedName != other.mappedName || arraySize != other.arraySize ||
+        mappedName != other.mappedName || arraySizes != other.arraySizes ||
         staticUse != other.staticUse || fields.size() != other.fields.size() ||
         structName != other.structName)
     {
@@ -83,6 +90,16 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
             return false;
     }
     return true;
+}
+
+unsigned int ShaderVariable::getArraySizeProduct() const
+{
+    unsigned int arraySizeProduct = 1u;
+    for (unsigned int arraySize : arraySizes)
+    {
+        arraySizeProduct *= arraySize;
+    }
+    return arraySizeProduct;
 }
 
 bool ShaderVariable::findInfoByMappedName(const std::string &mappedFullName,
@@ -166,7 +183,7 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
     if (matchName && name != other.name)
         return false;
     ASSERT(!matchName || mappedName == other.mappedName);
-    if (arraySize != other.arraySize)
+    if (arraySizes != other.arraySizes)
         return false;
     if (fields.size() != other.fields.size())
         return false;
