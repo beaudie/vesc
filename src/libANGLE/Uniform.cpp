@@ -61,7 +61,7 @@ LinkedUniform::LinkedUniform()
 LinkedUniform::LinkedUniform(GLenum typeIn,
                              GLenum precisionIn,
                              const std::string &nameIn,
-                             unsigned int arraySizeIn,
+                             const std::vector<unsigned int> &arraySizesIn,
                              const int bindingIn,
                              const int offsetIn,
                              const int locationIn,
@@ -72,7 +72,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     type      = typeIn;
     precision = precisionIn;
     name      = nameIn;
-    arraySize = arraySizeIn;
+    arraySizes = arraySizesIn;
     binding   = bindingIn;
     offset    = offsetIn;
     location  = locationIn;
@@ -152,7 +152,7 @@ BufferVariable::BufferVariable()
 BufferVariable::BufferVariable(GLenum typeIn,
                                GLenum precisionIn,
                                const std::string &nameIn,
-                               unsigned int arraySizeIn,
+                               const std::vector<unsigned int> &arraySizesIn,
                                const int bufferIndexIn,
                                const sh::BlockMemberInfo &blockInfoIn)
     : bufferIndex(bufferIndexIn), blockInfo(blockInfoIn), topLevelArraySize(-1)
@@ -160,7 +160,7 @@ BufferVariable::BufferVariable(GLenum typeIn,
     type      = typeIn;
     precision = precisionIn;
     name      = nameIn;
-    arraySize = arraySizeIn;
+    arraySizes = arraySizesIn;
 }
 
 BufferVariable::~BufferVariable()
