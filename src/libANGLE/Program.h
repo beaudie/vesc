@@ -201,6 +201,7 @@ struct TransformFeedbackVarying : public sh::Varying
     TransformFeedbackVarying(const sh::Varying &varyingIn, GLuint index)
         : sh::Varying(varyingIn), arrayIndex(index)
     {
+        ASSERT(!isArrayOfArrays());
     }
     std::string nameWithArrayIndex() const
     {
@@ -212,7 +213,10 @@ struct TransformFeedbackVarying : public sh::Varying
         }
         return fullNameStr.str();
     }
-    GLsizei size() const { return (arrayIndex == GL_INVALID_INDEX ? elementCount() : 1); }
+    GLsizei size() const
+    {
+        return (isArray() && arrayIndex == GL_INVALID_INDEX ? getOutermostArraySize() : 1);
+    }
 
     GLuint arrayIndex;
 };

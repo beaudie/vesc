@@ -87,6 +87,43 @@ class UniformLinker
                                       std::vector<LinkedUniform> *atomicCounterUniforms,
                                       GLenum shaderType);
 
+    ShaderUniformCount flattenStructArrayUniform(const sh::ShaderVariable &uniform,
+                                                 unsigned int arrayNestingIndex,
+                                                 const std::string &namePrefix,
+                                                 const std::string &mappedNamePrefix,
+                                                 std::vector<LinkedUniform> *samplerUniforms,
+                                                 std::vector<LinkedUniform> *imageUniforms,
+                                                 std::vector<LinkedUniform> *atomicCounterUniforms,
+                                                 GLenum shaderType,
+                                                 bool markStaticUse,
+                                                 int binding,
+                                                 int offset,
+                                                 int *location);
+
+    ShaderUniformCount flattenStructUniform(const std::vector<sh::ShaderVariable> &fields,
+                                            const std::string &namePrefix,
+                                            const std::string &mappedNamePrefix,
+                                            std::vector<LinkedUniform> *samplerUniforms,
+                                            std::vector<LinkedUniform> *imageUniforms,
+                                            std::vector<LinkedUniform> *atomicCounterUniforms,
+                                            GLenum shaderType,
+                                            bool markStaticUse,
+                                            int binding,
+                                            int offset,
+                                            int *location);
+
+    ShaderUniformCount flattenArrayUniform(const sh::ShaderVariable &uniform,
+                                           const std::string &fullName,
+                                           const std::string &fullMappedName,
+                                           std::vector<LinkedUniform> *samplerUniforms,
+                                           std::vector<LinkedUniform> *imageUniforms,
+                                           std::vector<LinkedUniform> *atomicCounterUniforms,
+                                           GLenum shaderType,
+                                           bool markStaticUse,
+                                           int binding,
+                                           int offset,
+                                           int *location);
+
     // markStaticUse is given as a separate parameter because it is tracked here at struct
     // granularity.
     ShaderUniformCount flattenUniformImpl(const sh::ShaderVariable &uniform,
@@ -160,6 +197,15 @@ class InterfaceBlockLinker : angle::NonCopyable
     std::vector<ShaderBlocks> mShaderBlocks;
 
     std::vector<InterfaceBlock> *mBlocksOut;
+
+  private:
+    template <typename VarT>
+    void defineBlockMemberStructArrayMembers(const GetBlockMemberInfo &getMemberInfo,
+                                             const VarT &field,
+                                             unsigned int arrayNestingIndex,
+                                             const std::string &prefix,
+                                             const std::string &mappedPrefix,
+                                             int blockIndex) const;
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
