@@ -444,12 +444,7 @@ GLint GetLocationVariableProperty(const sh::VariableWithLocation &var, GLenum pr
             return clampCast<GLint>(var.type);
 
         case GL_ARRAY_SIZE:
-            // TODO(jie.a.chen@intel.com): check array of array.
-            if (var.isArray() && !var.isStruct())
-            {
-                return clampCast<GLint>(var.elementCount());
-            }
-            return 1;
+            return clampCast<GLint>(var.getAPIQueryArraySize());
 
         case GL_NAME_LENGTH:
         {
