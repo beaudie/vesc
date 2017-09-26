@@ -139,6 +139,7 @@ struct VariableLocation
 
     VariableLocation();
     VariableLocation(unsigned int arrayIndex, unsigned int index);
+    VariableLocation(const std::vector<unsigned int> &arrayIndices, unsigned int index);
 
     // If used is false, it means this location is only used to fill an empty space in an array,
     // and there is no corresponding uniform variable for this location. It can also mean the
@@ -202,6 +203,7 @@ struct TransformFeedbackVarying : public sh::Varying
     TransformFeedbackVarying(const sh::Varying &varyingIn, GLuint index)
         : sh::Varying(varyingIn), arrayIndex(index)
     {
+        ASSERT(!isArrayOfArrays());
     }
     std::string nameWithArrayIndex() const
     {
@@ -213,7 +215,7 @@ struct TransformFeedbackVarying : public sh::Varying
         }
         return fullNameStr.str();
     }
-    GLsizei size() const { return (arrayIndex == GL_INVALID_INDEX ? elementCount() : 1); }
+    GLsizei size() const { return (arrayIndex == GL_INVALID_INDEX ? getArraySizeProduct() : 1); }
 
     GLuint arrayIndex;
 };
@@ -637,6 +639,13 @@ class Program final : angle::NonCopyable, public LabeledObject
         const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks);
     void gatherInterfaceBlockInfo(const Context *context);
+
+    template <typename VarT>
+    void defineUniformBlockMemberArrayMembers(const VarT &field,
+                                              unsigned int arrayNestingIndex,
+                                              const std::string &prefix,
+                                              const std::string &mappedPrefix,
+                                              int blockIndex);
     template <typename VarT>
     void defineUniformBlockMembers(const std::vector<VarT> &fields,
                                    const std::string &prefix,
