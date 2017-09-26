@@ -31,19 +31,20 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b)
 }
 
 ShaderVariable::ShaderVariable()
-    : type(0), precision(0), arraySize(0), staticUse(false), isUnsizedArray(false)
+    : type(0), precision(0), flattenedOffsetInParentArrays(0), staticUse(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn)
-    : type(typeIn), precision(0), arraySize(0), staticUse(false), isUnsizedArray(false)
+    : type(typeIn), precision(0), flattenedOffsetInParentArrays(0), staticUse(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn, unsigned int arraySizeIn)
-    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false), isUnsizedArray(false)
+    : type(typeIn), precision(0), flattenedOffsetInParentArrays(0), staticUse(false)
 {
     ASSERT(arraySizeIn != 0);
+    arraySizes.push_back(arraySizeIn);
 }
 
 ShaderVariable::~ShaderVariable()
@@ -55,11 +56,11 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       precision(other.precision),
       name(other.name),
       mappedName(other.mappedName),
-      arraySize(other.arraySize),
+      arraySizes(other.arraySizes),
+      flattenedOffsetInParentArrays(other.flattenedOffsetInParentArrays),
       staticUse(other.staticUse),
       fields(other.fields),
-      structName(other.structName),
-      isUnsizedArray(other.isUnsizedArray)
+      structName(other.structName)
 {
 }
 
@@ -69,20 +70,20 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     precision  = other.precision;
     name       = other.name;
     mappedName = other.mappedName;
-    arraySize  = other.arraySize;
+    arraySizes                    = other.arraySizes;
     staticUse  = other.staticUse;
+    flattenedOffsetInParentArrays = other.flattenedOffsetInParentArrays;
     fields     = other.fields;
     structName = other.structName;
-    isUnsizedArray = other.isUnsizedArray;
     return *this;
 }
 
 bool ShaderVariable::operator==(const ShaderVariable &other) const
 {
     if (type != other.type || precision != other.precision || name != other.name ||
-        mappedName != other.mappedName || arraySize != other.arraySize ||
+        mappedName != other.mappedName || arraySizes != other.arraySizes ||
         staticUse != other.staticUse || fields.size() != other.fields.size() ||
-        structName != other.structName || isUnsizedArray != other.isUnsizedArray)
+        structName != other.structName)
     {
         return false;
     }
@@ -92,6 +93,36 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
             return false;
     }
     return true;
+}
+
+unsigned int ShaderVariable::getArraySizeProduct() const
+{
+    unsigned int arraySizeProduct = 1u;
+    for (unsigned int arraySize : arraySizes)
+    {
+        arraySizeProduct *= arraySize;
+    }
+    return arraySizeProduct;
+}
+
+void ShaderVariable::indexIntoArray(unsigned int arrayIndex)
+{
+    ASSERT(isArray());
+    flattenedOffsetInParentArrays =
+        arrayIndex + getOutermostArraySize() * flattenedOffsetInParentArrays;
+    arraySizes.pop_back();
+}
+
+int ShaderVariable::getAPIQueryArraySize() const
+{
+    // GLES 3.1 Nov 2016 section 7.3.1.1 page 77 specifies that a separate entry should be generated
+    // for each array element when dealing with an array of arrays.
+    ASSERT(!isArrayOfArrays());
+    if (isArray() && !isStruct())
+    {
+        return getOutermostArraySize();
+    }
+    return 1;
 }
 
 bool ShaderVariable::findInfoByMappedName(const std::string &mappedFullName,
@@ -180,7 +211,7 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
     if (matchName && name != other.name)
         return false;
     ASSERT(!matchName || mappedName == other.mappedName);
-    if (arraySize != other.arraySize)
+    if (arraySizes != other.arraySizes)
         return false;
     if (fields.size() != other.fields.size())
         return false;
@@ -197,10 +228,6 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
     }
     if (structName != other.structName)
         return false;
-    if (isUnsizedArray != other.isUnsizedArray)
-    {
-        return false;
-    }
     return true;
 }
 
