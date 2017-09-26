@@ -41,14 +41,25 @@ void ExpandStructVariable(const ShaderVariable &variable,
 }
 
 void ExpandStructArrayVariable(const ShaderVariable &variable,
+                               unsigned int arrayNestingIndex,
                                const std::string &name,
                                std::vector<ShaderVariable> *expanded)
 {
-    for (unsigned int arrayElement = 0u; arrayElement < variable.getOutermostArraySize();
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    for (unsigned int arrayElement = 0u;
+         arrayElement < variable.arraySizes[variable.arraySizes.size() - 1u - arrayNestingIndex];
          ++arrayElement)
     {
         const std::string elementName = name + ArrayString(arrayElement);
-        ExpandStructVariable(variable, elementName, expanded);
+        if (arrayNestingIndex + 1u < variable.arraySizes.size())
+        {
+            ExpandStructArrayVariable(variable, arrayNestingIndex + 1u, elementName, expanded);
+        }
+        else
+        {
+            ExpandStructVariable(variable, elementName, expanded);
+        }
     }
 }
 
@@ -60,7 +71,7 @@ void ExpandVariable(const ShaderVariable &variable,
     {
         if (variable.isArray())
         {
-            ExpandStructArrayVariable(variable, name, expanded);
+            ExpandStructArrayVariable(variable, 0u, name, expanded);
         }
         else
         {
@@ -70,7 +81,6 @@ void ExpandVariable(const ShaderVariable &variable,
     else
     {
         ShaderVariable expandedVar = variable;
-
         expandedVar.name       = name;
 
         expanded->push_back(expandedVar);
@@ -79,7 +89,7 @@ void ExpandVariable(const ShaderVariable &variable,
 
 int GetVariablePackingRows(const ShaderVariable &variable)
 {
-    return GetTypePackingRows(variable.type) * variable.elementCount();
+    return GetTypePackingRows(variable.type) * variable.getArraySizeProduct();
 }
 
 class VariablePacker
@@ -113,7 +123,7 @@ struct TVariableInfoComparer
             return lhsSortOrder < rhsSortOrder;
         }
         // Sort by largest first.
-        return lhs.arraySize > rhs.arraySize;
+        return lhs.getArraySizeProduct() > rhs.getArraySizeProduct();
     }
 };
 
@@ -208,7 +218,7 @@ bool VariablePacker::checkExpandedVariablesWithinPackingLimits(
     {
         // Structs should have been expanded before reaching here.
         ASSERT(!variable.isStruct());
-        if (variable.elementCount() > maxVectors / GetTypePackingRows(variable.type))
+        if (variable.getArraySizeProduct() > maxVectors / GetTypePackingRows(variable.type))
         {
             return false;
         }
