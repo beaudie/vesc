@@ -155,6 +155,51 @@ bool UniformLinker::linkValidateUniforms(InfoLog &infoLog,
     return true;
 }
 
+void UniformLinker::indexUniform(const VariableLocation &location,
+                                 const int preSetLocation,
+                                 const int shaderLocation,
+                                 std::vector<VariableLocation> *unlocatedUniforms,
+                                 std::map<GLuint, VariableLocation> *preLocatedUniforms)
+{
+    if ((location.areAllArrayIndicesZero() && preSetLocation != -1) || shaderLocation != -1)
+    {
+        int elementLocation                    = preSetLocation + location.flattenedArrayOffset;
+        (*preLocatedUniforms)[elementLocation] = location;
+    }
+    else
+    {
+        unlocatedUniforms->push_back(location);
+    }
+}
+
+void UniformLinker::indexUniformArray(const size_t uniformIndex,
+                                      const int preSetLocation,
+                                      const int shaderLocation,
+                                      const LinkedUniform &uniform,
+                                      std::vector<unsigned int> *arrayIndices,
+                                      std::vector<VariableLocation> *unlocatedUniforms,
+                                      std::map<GLuint, VariableLocation> *preLocatedUniforms)
+{
+    for (unsigned int arrayIndex = 0; arrayIndex < uniform.arraySizes.at(arrayIndices->size());
+         arrayIndex++)
+    {
+        arrayIndices->push_back(arrayIndex);
+        if (arrayIndices->size() == uniform.arraySizes.size())
+        {
+            VariableLocation location(*arrayIndices, mUniforms[uniformIndex].arraySizes,
+                                      static_cast<unsigned int>(uniformIndex));
+            indexUniform(location, preSetLocation, shaderLocation, unlocatedUniforms,
+                         preLocatedUniforms);
+        }
+        else
+        {
+            indexUniformArray(uniformIndex, preSetLocation, shaderLocation, uniform, arrayIndices,
+                              unlocatedUniforms, preLocatedUniforms);
+        }
+        arrayIndices->pop_back();
+    }
+}
+
 bool UniformLinker::indexUniforms(InfoLog &infoLog,
                                   const Program::Bindings &uniformLocationBindings)
 {
@@ -199,19 +244,18 @@ bool UniformLinker::indexUniforms(InfoLog &infoLog,
             preSetLocation = shaderLocation;
         }
 
-        for (unsigned int arrayIndex = 0; arrayIndex < uniform.elementCount(); arrayIndex++)
+        if (uniform.isArray())
         {
-            VariableLocation location(arrayIndex, static_cast<unsigned int>(uniformIndex));
-
-            if ((arrayIndex == 0 && preSetLocation != -1) || shaderLocation != -1)
-            {
-                int elementLocation                 = preSetLocation + arrayIndex;
-                preLocatedUniforms[elementLocation] = location;
-            }
-            else
-            {
-                unlocatedUniforms.push_back(location);
-            }
+            std::vector<unsigned int> arrayIndices;
+            indexUniformArray(uniformIndex, preSetLocation, shaderLocation, uniform, &arrayIndices,
+                              &unlocatedUniforms, &preLocatedUniforms);
+        }
+        else
+        {
+            VariableLocation location;
+            location.index = static_cast<unsigned int>(uniformIndex);
+            indexUniform(location, preSetLocation, shaderLocation, &unlocatedUniforms,
+                         &preLocatedUniforms);
         }
     }
 
@@ -269,10 +313,11 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
 
         if (shaderLocation != -1)
         {
-            for (unsigned int arrayIndex = 0; arrayIndex < uniform.elementCount(); arrayIndex++)
+            for (unsigned int elementIndex = 0; elementIndex < uniform.getArraySizeProduct();
+                 elementIndex++)
             {
                 // GLSL ES 3.10 section 4.4.3
-                int elementLocation = shaderLocation + arrayIndex;
+                int elementLocation = shaderLocation + elementIndex;
                 *maxUniformLocation = std::max(*maxUniformLocation, elementLocation);
                 if (reservedLocations->find(elementLocation) != reservedLocations->end())
                 {
@@ -463,6 +508,72 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
     return ShaderUniformCount();
 }
 
+UniformLinker::ShaderUniformCount UniformLinker::flattenStructArrayUniform(
+    const sh::ShaderVariable &uniform,
+    unsigned int arrayNestingIndex,
+    const std::string &namePrefix,
+    const std::string &mappedNamePrefix,
+    std::vector<LinkedUniform> *samplerUniforms,
+    std::vector<LinkedUniform> *imageUniforms,
+    std::vector<LinkedUniform> *atomicCounterUniforms,
+    GLenum shaderType,
+    bool markStaticUse,
+    int binding,
+    int offset,
+    int *location)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    ShaderUniformCount shaderUniformCount;
+    for (unsigned int arrayElement = 0u;
+         arrayElement < uniform.arraySizes[uniform.arraySizes.size() - 1u - arrayNestingIndex];
+         ++arrayElement)
+    {
+        const std::string elementName       = namePrefix + ArrayString(arrayElement);
+        const std::string elementMappedName = mappedNamePrefix + ArrayString(arrayElement);
+        if (arrayNestingIndex + 1u < uniform.arraySizes.size())
+        {
+            shaderUniformCount += flattenStructArrayUniform(
+                uniform, arrayNestingIndex + 1u, elementName, elementMappedName, samplerUniforms,
+                imageUniforms, atomicCounterUniforms, shaderType, markStaticUse, binding, offset,
+                location);
+        }
+        else
+        {
+            shaderUniformCount += flattenStructUniform(
+                uniform.fields, elementName, elementMappedName, samplerUniforms, imageUniforms,
+                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+        }
+    }
+    return shaderUniformCount;
+}
+
+UniformLinker::ShaderUniformCount UniformLinker::flattenStructUniform(
+    const std::vector<sh::ShaderVariable> &fields,
+    const std::string &namePrefix,
+    const std::string &mappedNamePrefix,
+    std::vector<LinkedUniform> *samplerUniforms,
+    std::vector<LinkedUniform> *imageUniforms,
+    std::vector<LinkedUniform> *atomicCounterUniforms,
+    GLenum shaderType,
+    bool markStaticUse,
+    int binding,
+    int offset,
+    int *location)
+{
+    ShaderUniformCount shaderUniformCount;
+    for (const sh::ShaderVariable &field : fields)
+    {
+        const std::string &fieldName       = namePrefix + "." + field.name;
+        const std::string &fieldMappedName = mappedNamePrefix + "." + field.mappedName;
+
+        shaderUniformCount +=
+            flattenUniformImpl(field, fieldName, fieldMappedName, samplerUniforms, imageUniforms,
+                               atomicCounterUniforms, shaderType, markStaticUse, -1, -1, location);
+    }
+    return shaderUniformCount;
+}
+
 UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     const sh::ShaderVariable &uniform,
     const std::string &fullName,
@@ -481,23 +592,18 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
 
     if (uniform.isStruct())
     {
-        for (unsigned int elementIndex = 0; elementIndex < uniform.elementCount(); elementIndex++)
+        if (uniform.isArray())
         {
-            const std::string &elementString = (uniform.isArray() ? ArrayString(elementIndex) : "");
-
-            for (size_t fieldIndex = 0; fieldIndex < uniform.fields.size(); fieldIndex++)
-            {
-                const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
-                const std::string &fieldFullName = (fullName + elementString + "." + field.name);
-                const std::string &fieldFullMappedName =
-                    (fullMappedName + elementString + "." + field.mappedName);
-
-                shaderUniformCount += flattenUniformImpl(
-                    field, fieldFullName, fieldFullMappedName, samplerUniforms, imageUniforms,
-                    atomicCounterUniforms, shaderType, markStaticUse, -1, -1, location);
-            }
+            shaderUniformCount += flattenStructArrayUniform(
+                uniform, 0u, fullName, fullMappedName, samplerUniforms, imageUniforms,
+                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
         }
-
+        else
+        {
+            shaderUniformCount += flattenStructUniform(
+                uniform.fields, fullName, fullMappedName, samplerUniforms, imageUniforms,
+                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+        }
         return shaderUniformCount;
     }
 
@@ -541,7 +647,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     }
     else
     {
-        LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
+        LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySizes,
                                     binding, offset, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
         linkedUniform.mappedName = fullMappedName;
@@ -554,7 +660,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         uniformList->push_back(linkedUniform);
     }
 
-    unsigned int elementCount = uniform.elementCount();
+    unsigned int elementCount = uniform.getArraySizeProduct();
 
     // Samplers and images aren't "real" uniforms, so they don't count towards register usage.
     // Likewise, don't count "real" uniforms towards opaque count.
@@ -579,7 +685,7 @@ bool UniformLinker::checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &in
     {
         if (IsAtomicCounterType(uniform.type) && uniform.staticUse)
         {
-            atomicCounterCount += uniform.elementCount();
+            atomicCounterCount += uniform.getArraySizeProduct();
             if (atomicCounterCount > caps.maxCombinedAtomicCounters)
             {
                 infoLog << "atomic counter count exceeds MAX_COMBINED_ATOMIC_COUNTERS"

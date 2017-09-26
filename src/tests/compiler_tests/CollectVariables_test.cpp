@@ -607,7 +607,8 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1FragData)
     const OutputVariable *outputVariable = nullptr;
     validateOutputVariableForShader(fragDataShader, 0u, "gl_FragData", &outputVariable);
     ASSERT_NE(outputVariable, nullptr);
-    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
+    ASSERT_NE(0u, outputVariable->arraySizes.size());
+    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySizes.back());
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
 }
@@ -742,7 +743,8 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     const OutputVariable *outputVariable = nullptr;
     validateOutputVariableForShader(secondaryFragDataShader, 0u, "gl_FragData", &outputVariable);
     ASSERT_NE(outputVariable, nullptr);
-    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
+    ASSERT_NE(0u, outputVariable->arraySizes.size());
+    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySizes.back());
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
 
@@ -750,7 +752,8 @@ TEST_F(CollectFragmentVariablesTest, OutputVarESSL1EXTBlendFuncExtendedSecondary
     validateOutputVariableForShader(secondaryFragDataShader, 1u, "gl_SecondaryFragDataEXT",
                                     &outputVariable);
     ASSERT_NE(outputVariable, nullptr);
-    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySize);
+    ASSERT_NE(0u, outputVariable->arraySizes.size());
+    EXPECT_EQ(kMaxDrawBuffers, outputVariable->arraySizes.back());
     EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable->type);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable->precision);
 }
