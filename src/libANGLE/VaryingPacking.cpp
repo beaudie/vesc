@@ -48,7 +48,8 @@ bool VaryingPacking::packVarying(const PackedVarying &packedVarying)
     }
 
     // "Arrays of size N are assumed to take N times the size of the base type"
-    varyingRows *= (packedVarying.isArrayElement() ? 1 : varying.elementCount());
+    ASSERT(!varying.isArrayOfArrays());
+    varyingRows *= (packedVarying.isArrayElement() ? 1 : varying.getOutermostArraySize());
 
     unsigned int maxVaryingVectors = static_cast<unsigned int>(mRegisterMap.size());
 
@@ -200,7 +201,8 @@ void VaryingPacking::insert(unsigned int registerRow,
     registerInfo.packedVarying  = &packedVarying;
     registerInfo.registerColumn = registerColumn;
 
-    for (unsigned int arrayElement = 0; arrayElement < varying.elementCount(); ++arrayElement)
+    for (unsigned int arrayElement = 0; arrayElement < varying.getOutermostArraySize();
+         ++arrayElement)
     {
         if (packedVarying.isArrayElement() && arrayElement != packedVarying.arrayIndex)
         {

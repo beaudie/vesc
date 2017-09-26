@@ -120,7 +120,7 @@ struct TVariableInfoComparer
             return lhsSortOrder < rhsSortOrder;
         }
         // Sort by largest first.
-        return lhs.arraySize > rhs.arraySize;
+        return lhs.getArraySizeProduct() > rhs.getArraySizeProduct();
     }
 };
 

@@ -26,13 +26,13 @@ TEST(ShaderVariableTest, FindInfoByMappedName)
     // };
     // B uni[2];
     ShaderVariable uni;
-    uni.arraySize = 2;
+    uni.arraySizes.push_back(2);
     uni.name = "uni";
     uni.mappedName = "m_uni";
     uni.structName = "B";
     {
         ShaderVariable a;
-        a.arraySize = 3;
+        a.arraySizes.push_back(3);
         a.name = "a";
         a.mappedName = "m_a";
         a.structName = "A";
@@ -94,7 +94,6 @@ TEST(ShaderVariableTest, IsSameUniformWithDifferentFieldOrder)
     // };
     // uniform A uni;
     Uniform vx_a;
-    vx_a.arraySize = 0;
     vx_a.name = "uni";
     vx_a.mappedName = "m_uni";
     vx_a.structName = "A";
@@ -116,7 +115,6 @@ TEST(ShaderVariableTest, IsSameUniformWithDifferentFieldOrder)
     // };
     // uniform A uni;
     Uniform fx_a;
-    fx_a.arraySize = 0;
     fx_a.name = "uni";
     fx_a.mappedName = "m_uni";
     fx_a.structName = "A";
@@ -143,7 +141,6 @@ TEST(ShaderVariableTest, IsSameUniformWithDifferentStructNames)
     // };
     // uniform A uni;
     Uniform vx_a;
-    vx_a.arraySize = 0;
     vx_a.name = "uni";
     vx_a.mappedName = "m_uni";
     vx_a.structName = "A";
@@ -165,7 +162,6 @@ TEST(ShaderVariableTest, IsSameUniformWithDifferentStructNames)
     // };
     // uniform B uni;
     Uniform fx_a;
-    fx_a.arraySize = 0;
     fx_a.name = "uni";
     fx_a.mappedName = "m_uni";
     {
@@ -195,7 +191,6 @@ TEST(ShaderVariableTest, IsSameVaryingWithDifferentInvariance)
     // invariant varying float vary;
     Varying vx;
     vx.type = GL_FLOAT;
-    vx.arraySize = 0;
     vx.precision = GL_MEDIUM_FLOAT;
     vx.name = "vary";
     vx.mappedName = "m_vary";
@@ -205,7 +200,6 @@ TEST(ShaderVariableTest, IsSameVaryingWithDifferentInvariance)
     // varying float vary;
     Varying fx;
     fx.type = GL_FLOAT;
-    fx.arraySize = 0;
     fx.precision = GL_MEDIUM_FLOAT;
     fx.name = "vary";
     fx.mappedName = "m_vary";
@@ -428,7 +422,6 @@ TEST(ShaderVariableTest, IsSameVaryingWithDifferentName)
     // Varying float vary1;
     Varying vx;
     vx.type        = GL_FLOAT;
-    vx.arraySize   = 0;
     vx.precision   = GL_MEDIUM_FLOAT;
     vx.name        = "vary1";
     vx.mappedName  = "m_vary1";
@@ -438,7 +431,6 @@ TEST(ShaderVariableTest, IsSameVaryingWithDifferentName)
     // Varying float vary2;
     Varying fx;
     fx.type        = GL_FLOAT;
-    fx.arraySize   = 0;
     fx.precision   = GL_MEDIUM_FLOAT;
     fx.name        = "vary2";
     fx.mappedName  = "m_vary2";

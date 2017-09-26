@@ -64,8 +64,22 @@ struct ShaderVariable
     ShaderVariable(const ShaderVariable &other);
     ShaderVariable &operator=(const ShaderVariable &other);
 
-    bool isArray() const { return arraySize > 0; }
-    unsigned int elementCount() const { return std::max(1u, arraySize); }
+    bool isArrayOfArrays() const { return arraySizes.size() >= 2; }
+    bool isArray() const { return !arraySizes.empty(); }
+    unsigned int getArraySizeProduct() const;
+    unsigned int getOutermostArraySize() const { return arraySizes.back(); }
+
+    // Return ARRAY_SIZE value that can be queried through the API.
+    int getAPIQueryArraySize() const
+    {
+        // GLES 3.1 Nov 2016 section 7.3.1.1 page 82 doesn't make it explicit what should be
+        // returned for arrays of arrays. GLES 3.1 Nov 2016 section 7.6.1 page 103: "Values for any
+        // array element that exceeds the highest array element index used, as reported by
+        // GetActiveUniform, will be ignored by the GL". This would imply that the product of array
+        // sizes should be returned.
+        return isArray() ? getArraySizeProduct() : 1;
+    }
+
     bool isStruct() const { return !fields.empty(); }
 
     // All of the shader's variables are described using nested data
@@ -89,7 +103,10 @@ struct ShaderVariable
     GLenum precision;
     std::string name;
     std::string mappedName;
-    unsigned int arraySize;
+
+    // Used to make an array type. Outermost array size is stored at the end of the vector.
+    std::vector<unsigned int> arraySizes;
+
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;

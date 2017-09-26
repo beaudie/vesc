@@ -20,20 +20,20 @@ BlockLayoutEncoder::BlockLayoutEncoder() : mCurrentOffset(0)
 }
 
 BlockMemberInfo BlockLayoutEncoder::encodeType(GLenum type,
-                                               unsigned int arraySize,
+                                               const std::vector<unsigned int> &arraySizes,
                                                bool isRowMajorMatrix)
 {
     int arrayStride;
     int matrixStride;
 
-    getBlockLayoutInfo(type, arraySize, isRowMajorMatrix, &arrayStride, &matrixStride);
+    getBlockLayoutInfo(type, arraySizes, isRowMajorMatrix, &arrayStride, &matrixStride);
 
     const BlockMemberInfo memberInfo(static_cast<int>(mCurrentOffset * BytesPerComponent),
                                      static_cast<int>(arrayStride * BytesPerComponent),
                                      static_cast<int>(matrixStride * BytesPerComponent),
                                      isRowMajorMatrix);
 
-    advanceOffset(type, arraySize, isRowMajorMatrix, arrayStride, matrixStride);
+    advanceOffset(type, arraySizes, isRowMajorMatrix, arrayStride, matrixStride);
 
     return memberInfo;
 }
@@ -70,7 +70,7 @@ void Std140BlockEncoder::exitAggregateType()
 }
 
 void Std140BlockEncoder::getBlockLayoutInfo(GLenum type,
-                                            unsigned int arraySize,
+                                            const std::vector<unsigned int> &arraySizes,
                                             bool isRowMajorMatrix,
                                             int *arrayStrideOut,
                                             int *matrixStrideOut)
@@ -87,13 +87,13 @@ void Std140BlockEncoder::getBlockLayoutInfo(GLenum type,
         baseAlignment = ComponentsPerRegister;
         matrixStride  = ComponentsPerRegister;
 
-        if (arraySize > 0)
+        if (!arraySizes.empty())
         {
             const int numRegisters = gl::MatrixRegisterCount(type, isRowMajorMatrix);
             arrayStride            = ComponentsPerRegister * numRegisters;
         }
     }
-    else if (arraySize > 0)
+    else if (!arraySizes.empty())
     {
         baseAlignment = ComponentsPerRegister;
         arrayStride   = ComponentsPerRegister;
@@ -111,14 +111,19 @@ void Std140BlockEncoder::getBlockLayoutInfo(GLenum type,
 }
 
 void Std140BlockEncoder::advanceOffset(GLenum type,
-                                       unsigned int arraySize,
+                                       const std::vector<unsigned int> &arraySizes,
                                        bool isRowMajorMatrix,
                                        int arrayStride,
                                        int matrixStride)
 {
-    if (arraySize > 0)
+    if (!arraySizes.empty())
     {
-        mCurrentOffset += arrayStride * arraySize;
+        unsigned int arraySizeProduct = 1u;
+        for (unsigned int arraySize : arraySizes)
+        {
+            arraySizeProduct *= arraySize;
+        }
+        mCurrentOffset += arrayStride * arraySizeProduct;
     }
     else if (gl::IsMatrixType(type))
     {
