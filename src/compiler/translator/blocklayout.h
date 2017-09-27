@@ -45,6 +45,31 @@ struct BlockMemberInfo
     bool isRowMajorMatrix;
 };
 
+struct ShaderStorageBlockMemberInfo : public BlockMemberInfo
+{
+    ShaderStorageBlockMemberInfo() : topLevelArrayStride(-1) {}
+
+    ShaderStorageBlockMemberInfo(int offsetIn,
+                                 int arrayStrideIn,
+                                 int matrixStrideIn,
+                                 bool isRowMajorMatrixIn,
+                                 int topLevelArrayStrideIn)
+        : topLevelArrayStride(topLevelArrayStrideIn)
+    {
+        offset           = offsetIn;
+        arrayStride      = arrayStrideIn;
+        matrixStride     = matrixStrideIn;
+        isRowMajorMatrix = isRowMajorMatrixIn;
+    }
+
+    static ShaderStorageBlockMemberInfo getDefaultShaderStorageBlockInfo()
+    {
+        return ShaderStorageBlockMemberInfo(-1, -1, -1, false, -1);
+    }
+
+    int topLevelArrayStride;
+};
+
 class BlockLayoutEncoder
 {
   public:
