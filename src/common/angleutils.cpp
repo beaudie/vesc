@@ -17,6 +17,18 @@ namespace angle
 const uintptr_t DirtyPointer = std::numeric_limits<uintptr_t>::max();
 }
 
+std::string ArrayString(unsigned int i)
+{
+    // We assume that UINT_MAX and GL_INVALID_INDEX are equal.
+    ASSERT(i != UINT_MAX);
+
+    std::stringstream strstr;
+    strstr << "[";
+    strstr << i;
+    strstr << "]";
+    return strstr.str();
+}
+
 size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
     // The state of the va_list passed to vsnprintf is undefined after the call, do a copy in case
