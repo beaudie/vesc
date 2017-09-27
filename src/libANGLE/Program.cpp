@@ -2928,10 +2928,11 @@ void Program::gatherInterfaceBlockInfo(const Context *context)
 }
 
 template <typename VarT>
-void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
-                                        const std::string &prefix,
-                                        const std::string &mappedPrefix,
-                                        int blockIndex)
+void Program::defineInterfaceBlockMembers(const std::vector<VarT> &fields,
+                                          const std::string &prefix,
+                                          const std::string &mappedPrefix,
+                                          int blockIndex,
+                                          const sh::BlockType blockType)
 {
     for (const VarT &field : fields)
     {
@@ -2944,30 +2945,50 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
         {
             for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
             {
-                const std::string uniformElementName =
+                const std::string elementName =
                     fullName + (field.isArray() ? ArrayString(arrayElement) : "");
-                const std::string uniformElementMappedName =
+                const std::string elementMappedName =
                     fullMappedName + (field.isArray() ? ArrayString(arrayElement) : "");
-                defineUniformBlockMembers(field.fields, uniformElementName,
-                                          uniformElementMappedName, blockIndex);
+                defineInterfaceBlockMembers(field.fields, elementName, elementMappedName,
+                                            blockIndex, blockType);
             }
         }
         else
         {
-            // If getBlockMemberInfo returns false, the uniform is optimized out.
-            sh::BlockMemberInfo memberInfo;
-            if (!mProgram->getUniformBlockMemberInfo(fullName, fullMappedName, &memberInfo))
+            if (blockType == sh::BlockType::BLOCK_UNIFORM)
             {
-                continue;
+                // If getUniformBlockMemberInfo returns false, the uniform is optimized out.
+                sh::BlockMemberInfo memberInfo;
+                if (!mProgram->getUniformBlockMemberInfo(fullName, fullMappedName, &memberInfo))
+                {
+                    continue;
+                }
+
+                LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1,
+                                         -1, -1, blockIndex, memberInfo);
+                newUniform.mappedName = fullMappedName;
+
+                // Since block uniforms have no location, we don't need to store them in the uniform
+                // locations list.
+                mState.mUniforms.push_back(newUniform);
             }
+            else
+            {
+                // If getShaderStorageBlockMemberInfo returns false, the buffer variable is
+                // optimized out.
+                sh::ShaderStorageBlockMemberInfo memberInfo;
+                if (!mProgram->getShaderStorageBlockMemberInfo(fullName, fullMappedName,
+                                                               &memberInfo))
+                {
+                    continue;
+                }
 
-            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
-                                     -1, blockIndex, memberInfo);
-            newUniform.mappedName = fullMappedName;
+                BufferVariable newBufferVariable(field.type, field.precision, fullName,
+                                                 field.arraySize, memberInfo);
+                newBufferVariable.mappedName = fullMappedName;
 
-            // Since block uniforms have no location, we don't need to store them in the uniform
-            // locations list.
-            mState.mUniforms.push_back(newUniform);
+                mState.mBufferVariables.push_back(newBufferVariable);
+            }
         }
     }
 }
@@ -2983,8 +3004,9 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
         // Track the first and last uniform index to determine the range of active uniforms in the
         // block.
         size_t firstBlockUniformIndex = mState.mUniforms.size();
-        defineUniformBlockMembers(interfaceBlock.fields, interfaceBlock.fieldPrefix(),
-                                  interfaceBlock.fieldMappedPrefix(), blockIndex);
+        defineInterfaceBlockMembers(interfaceBlock.fields, interfaceBlock.fieldPrefix(),
+                                    interfaceBlock.fieldMappedPrefix(), blockIndex,
+                                    interfaceBlock.blockType);
         size_t lastBlockUniformIndex = mState.mUniforms.size();
 
         for (size_t blockUniformIndex = firstBlockUniformIndex;
@@ -2995,8 +3017,10 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
     }
     else
     {
-        // TODO(jiajia.qin@intel.com) : Add buffer variables support and calculate the block index.
         ASSERT(interfaceBlock.blockType == sh::BlockType::BLOCK_BUFFER);
+        defineInterfaceBlockMembers(interfaceBlock.fields, interfaceBlock.fieldPrefix(),
+                                    interfaceBlock.fieldMappedPrefix(), -1,
+                                    interfaceBlock.blockType);
     }
     // ESSL 3.10 section 4.4.4 page 58:
     // Any uniform or shader storage block declared without a binding qualifier is initially
@@ -3006,14 +3030,24 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
     {
         for (unsigned int arrayElement = 0; arrayElement < interfaceBlock.arraySize; ++arrayElement)
         {
-            // TODO(jiajia.qin@intel.com) : use GetProgramResourceiv to calculate BUFFER_DATA_SIZE
-            // of UniformBlock and ShaderStorageBlock.
             if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
             {
                 // Don't define this block at all if it's not active in the implementation.
                 if (!mProgram->getUniformBlockSize(
                         interfaceBlock.name + ArrayString(arrayElement),
                         interfaceBlock.mappedName + ArrayString(arrayElement), &blockSize))
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                ASSERT(interfaceBlock.blockType == sh::BlockType::BLOCK_BUFFER);
+                // Don't define this block at all if it's not active in the implementation.
+                if (!mProgram->getProgramResourceBufferDataSize(
+                        interfaceBlock.name + ArrayString(arrayElement),
+                        interfaceBlock.mappedName + ArrayString(arrayElement),
+                        GL_SHADER_STORAGE_BLOCK, &blockSize))
                 {
                     continue;
                 }
@@ -3041,12 +3075,20 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
     }
     else
     {
-        // TODO(jiajia.qin@intel.com) : use GetProgramResourceiv to calculate BUFFER_DATA_SIZE
-        // of UniformBlock and ShaderStorageBlock.
         if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
         {
             if (!mProgram->getUniformBlockSize(interfaceBlock.name, interfaceBlock.mappedName,
                                                &blockSize))
+            {
+                return;
+            }
+        }
+        else
+        {
+            ASSERT(interfaceBlock.blockType == sh::BlockType::BLOCK_BUFFER);
+            if (!mProgram->getProgramResourceBufferDataSize(interfaceBlock.name,
+                                                            interfaceBlock.mappedName,
+                                                            GL_SHADER_STORAGE_BLOCK, &blockSize))
             {
                 return;
             }

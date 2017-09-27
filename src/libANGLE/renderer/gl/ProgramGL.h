@@ -78,6 +78,16 @@ class ProgramGL : public ProgramImpl
                                    const std::string &memberUniformMappedName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
 
+    bool getShaderStorageBlockMemberInfo(
+        const std::string &memberName,
+        const std::string &memberMappedName,
+        sh::ShaderStorageBlockMemberInfo *memberInfoOut) const override;
+
+    bool getProgramResourceBufferDataSize(const std::string &blockName,
+                                          const std::string &blockMappedName,
+                                          GLenum programInterface,
+                                          size_t *sizeOut) const override;
+
     void setPathFragmentInputGen(const std::string &inputName,
                                  GLenum genMode,
                                  GLint components,

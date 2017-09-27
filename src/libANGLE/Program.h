@@ -343,6 +343,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
     std::vector<InterfaceBlock> mUniformBlocks;
+    std::vector<BufferVariable> mBufferVariables;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
     std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
     RangeUI mSamplerUniformRange;
@@ -641,10 +642,11 @@ class Program final : angle::NonCopyable, public LabeledObject
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks);
     void gatherInterfaceBlockInfo(const Context *context);
     template <typename VarT>
-    void defineUniformBlockMembers(const std::vector<VarT> &fields,
-                                   const std::string &prefix,
-                                   const std::string &mappedPrefix,
-                                   int blockIndex);
+    void defineInterfaceBlockMembers(const std::vector<VarT> &fields,
+                                     const std::string &prefix,
+                                     const std::string &mappedPrefix,
+                                     int blockIndex,
+                                     const sh::BlockType blockType);
 
     void defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType);
 
