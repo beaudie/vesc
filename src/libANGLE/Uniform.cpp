@@ -148,6 +148,37 @@ size_t LinkedUniform::getElementComponents() const
     return typeInfo->componentCount;
 }
 
+BufferVariable::BufferVariable()
+    : bufferIndex(-1),
+      blockInfo(sh::ShaderStorageBlockMemberInfo::getDefaultShaderStorageBlockInfo())
+{
+}
+
+BufferVariable::BufferVariable(GLenum typeIn,
+                               GLenum precisionIn,
+                               const std::string &nameIn,
+                               unsigned int arraySizeIn,
+                               const int bufferIndexIn,
+                               const sh::ShaderStorageBlockMemberInfo &blockInfoIn)
+    : bufferIndex(bufferIndexIn), blockInfo(blockInfoIn)
+{
+    type      = typeIn;
+    precision = precisionIn;
+    name      = nameIn;
+    arraySize = arraySizeIn;
+}
+
+BufferVariable::BufferVariable(const BufferVariable &bufferVariable)
+    : sh::ShaderVariable(bufferVariable),
+      bufferIndex(bufferVariable.bufferIndex),
+      blockInfo(bufferVariable.blockInfo)
+{
+}
+
+BufferVariable::~BufferVariable()
+{
+}
+
 ShaderVariableBuffer::ShaderVariableBuffer()
     : binding(0),
       dataSize(0),
