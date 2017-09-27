@@ -2617,6 +2617,24 @@ bool ProgramD3D::getUniformBlockMemberInfo(const std::string &memberUniformName,
     return true;
 }
 
+bool ProgramD3D::getShaderStorageBlockMemberInfo(
+    const std::string &memberName,
+    const std::string &memberMappedName,
+    sh::ShaderStorageBlockMemberInfo *memberInfoOut) const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ProgramD3D::getProgramResourceBufferDataSize(const std::string &blockName,
+                                                  const std::string &blockMappedName,
+                                                  GLenum programInterface,
+                                                  size_t *sizeOut) const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 void ProgramD3D::setPathFragmentInputGen(const std::string &inputName,
                                          GLenum genMode,
                                          GLint components,

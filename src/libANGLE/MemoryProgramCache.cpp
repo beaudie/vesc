@@ -258,6 +258,27 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
         state->mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlock.binding != 0);
     }
 
+    unsigned int bufferVariableCount = stream.readInt<unsigned int>();
+    ASSERT(state->mBufferVariables.empty());
+    for (unsigned int index = 0; index < bufferVariableCount; ++index)
+    {
+        BufferVariable bufferVariable;
+        LoadShaderVar(&stream, &bufferVariable);
+
+        bufferVariable.bufferIndex                   = stream.readInt<int>();
+        bufferVariable.blockInfo.offset              = stream.readInt<int>();
+        bufferVariable.blockInfo.arrayStride         = stream.readInt<int>();
+        bufferVariable.blockInfo.matrixStride        = stream.readInt<int>();
+        bufferVariable.blockInfo.isRowMajorMatrix    = stream.readBool();
+        bufferVariable.blockInfo.topLevelArrayStride = stream.readInt<int>();
+        bufferVariable.topLevelArraySize             = stream.readInt<int>();
+        bufferVariable.vertexStaticUse               = stream.readBool();
+        bufferVariable.fragmentStaticUse             = stream.readBool();
+        bufferVariable.computeStaticUse              = stream.readBool();
+
+        state->mBufferVariables.push_back(bufferVariable);
+    }
+
     unsigned int shaderStorageBlockCount = stream.readInt<unsigned int>();
     ASSERT(state->mShaderStorageBlocks.empty());
     for (unsigned int shaderStorageBlockIndex = 0;
@@ -439,6 +460,23 @@ void MemoryProgramCache::Serialize(const Context *context,
     for (const InterfaceBlock &uniformBlock : state.getUniformBlocks())
     {
         WriteInterfaceBlock(&stream, uniformBlock);
+    }
+
+    stream.writeInt(state.getBufferVariables().size());
+    for (const BufferVariable &bufferVariable : state.getBufferVariables())
+    {
+        WriteShaderVar(&stream, bufferVariable);
+
+        stream.writeInt(bufferVariable.bufferIndex);
+        stream.writeInt(bufferVariable.blockInfo.offset);
+        stream.writeInt(bufferVariable.blockInfo.arrayStride);
+        stream.writeInt(bufferVariable.blockInfo.matrixStride);
+        stream.writeInt(bufferVariable.blockInfo.isRowMajorMatrix);
+        stream.writeInt(bufferVariable.blockInfo.topLevelArrayStride);
+        stream.writeInt(bufferVariable.topLevelArraySize);
+        stream.writeInt(bufferVariable.vertexStaticUse);
+        stream.writeInt(bufferVariable.fragmentStaticUse);
+        stream.writeInt(bufferVariable.computeStaticUse);
     }
 
     stream.writeInt(state.getShaderStorageBlocks().size());
