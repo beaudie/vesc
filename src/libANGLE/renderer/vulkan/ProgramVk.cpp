@@ -544,6 +544,24 @@ bool ProgramVk::getUniformBlockMemberInfo(const std::string &memberUniformName,
     return bool();
 }
 
+bool ProgramVk::getShaderStorageBlockMemberInfo(
+    const std::string &memberName,
+    const std::string &memberMappedName,
+    sh::ShaderStorageBlockMemberInfo *memberInfoOut) const
+{
+    UNIMPLEMENTED();
+    return bool();
+}
+
+bool ProgramVk::getProgramResourceBufferDataSize(const std::string &name,
+                                                 const std::string &mappedName,
+                                                 GLenum programInterface,
+                                                 size_t *sizeOut) const
+{
+    UNIMPLEMENTED();
+    return bool();
+}
+
 void ProgramVk::setPathFragmentInputGen(const std::string &inputName,
                                         GLenum genMode,
                                         GLint components,
