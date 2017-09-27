@@ -37,6 +37,7 @@ void MarkResourceStaticUse(T *resource, GLenum shaderType, bool used)
 
 template void MarkResourceStaticUse(LinkedUniform *resource, GLenum shaderType, bool used);
 template void MarkResourceStaticUse(InterfaceBlock *resource, GLenum shaderType, bool used);
+template void MarkResourceStaticUse(BufferVariable *resource, GLenum shaderType, bool used);
 
 LinkedUniform::LinkedUniform()
     : typeInfo(nullptr),
@@ -146,6 +147,39 @@ size_t LinkedUniform::getElementSize() const
 size_t LinkedUniform::getElementComponents() const
 {
     return typeInfo->componentCount;
+}
+
+BufferVariable::BufferVariable()
+    : bufferIndex(-1),
+      blockInfo(sh::ShaderStorageBlockMemberInfo::getDefaultShaderStorageBlockInfo()),
+      topLevelArraySize(-1),
+      vertexStaticUse(false),
+      fragmentStaticUse(false),
+      computeStaticUse(false)
+{
+}
+
+BufferVariable::BufferVariable(GLenum typeIn,
+                               GLenum precisionIn,
+                               const std::string &nameIn,
+                               unsigned int arraySizeIn,
+                               const int bufferIndexIn,
+                               const sh::ShaderStorageBlockMemberInfo &blockInfoIn)
+    : bufferIndex(bufferIndexIn),
+      blockInfo(blockInfoIn),
+      topLevelArraySize(-1),
+      vertexStaticUse(false),
+      fragmentStaticUse(false),
+      computeStaticUse(false)
+{
+    type      = typeIn;
+    precision = precisionIn;
+    name      = nameIn;
+    arraySize = arraySizeIn;
+}
+
+BufferVariable::~BufferVariable()
+{
 }
 
 ShaderVariableBuffer::ShaderVariableBuffer()
