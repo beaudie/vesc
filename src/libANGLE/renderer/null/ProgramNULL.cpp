@@ -200,6 +200,23 @@ bool ProgramNULL::getUniformBlockMemberInfo(const std::string &memberUniformName
     return true;
 }
 
+bool ProgramNULL::getShaderStorageBlockMemberInfo(const std::string &memberName,
+                                                  const std::string &memberMappedName,
+                                                  sh::BlockMemberInfo *memberInfoOut) const
+{
+    // TODO(jiajia.qin@intel.com): Compute reasonable values?
+    return true;
+}
+
+bool ProgramNULL::getShaderStorageBlockSize(const std::string &name,
+                                            const std::string &mappedName,
+                                            size_t *sizeOut) const
+{
+    // TODO(jiajia.qin@intel.com): Compute reasonable values?
+    *sizeOut = 0;
+    return true;
+}
+
 void ProgramNULL::setPathFragmentInputGen(const std::string &inputName,
                                           GLenum genMode,
                                           GLint components,

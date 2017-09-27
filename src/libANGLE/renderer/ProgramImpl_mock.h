@@ -67,6 +67,10 @@ class MockProgramImpl : public rx::ProgramImpl
                        bool(const std::string &, const std::string &, size_t *));
     MOCK_CONST_METHOD3(getUniformBlockMemberInfo,
                        bool(const std::string &, const std::string &, sh::BlockMemberInfo *));
+    MOCK_CONST_METHOD3(getShaderStorageBlockMemberInfo,
+                       bool(const std::string &, const std::string &, sh::BlockMemberInfo *));
+    MOCK_CONST_METHOD3(getShaderStorageBlockSize,
+                       bool(const std::string &, const std::string &, size_t *));
     MOCK_METHOD4(setPathFragmentInputGen,
                  void(const std::string &, GLenum, GLint, const GLfloat *));
 

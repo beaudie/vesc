@@ -94,6 +94,15 @@ class ProgramImpl : angle::NonCopyable
     virtual bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                            const std::string &memberUniformMappedName,
                                            sh::BlockMemberInfo *memberInfoOut) const = 0;
+
+    virtual bool getShaderStorageBlockMemberInfo(const std::string &memberName,
+                                                 const std::string &memberMappedName,
+                                                 sh::BlockMemberInfo *memberInfoOut) const = 0;
+
+    virtual bool getShaderStorageBlockSize(const std::string &blockName,
+                                           const std::string &blockMappedName,
+                                           size_t *sizeOut) const = 0;
+
     // CHROMIUM_path_rendering
     // Set parameters to control fragment shader input variable interpolation
     virtual void setPathFragmentInputGen(const std::string &inputName,
