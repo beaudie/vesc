@@ -202,6 +202,14 @@ class ProgramD3D : public ProgramImpl
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    const std::string &memberUniformMappedName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
+    bool getShaderStorageBlockMemberInfo(const std::string &memberName,
+                                         const std::string &memberMappedName,
+                                         sh::BlockMemberInfo *memberInfoOut) const override;
+
+    bool getShaderStorageBlockSize(const std::string &blockName,
+                                   const std::string &blockMappedName,
+                                   size_t *sizeOut) const override;
+
     void setPathFragmentInputGen(const std::string &inputName,
                                  GLenum genMode,
                                  GLint components,
