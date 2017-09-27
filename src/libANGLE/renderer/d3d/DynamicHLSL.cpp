@@ -1268,15 +1268,21 @@ void DynamicHLSL::getPixelShaderOutputKey(const gl::ContextState &data,
             const VariableLocation &outputLocation   = outputPair.second;
             const sh::ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
             const std::string &variableName          = "out_" + outputVariable.name;
+
+            // Fragment outputs can't be arrays of arrays. ESSL 3.10 section 4.3.6.
+            ASSERT(outputLocation.arrayElementIndices.size() <= 1u);
             const std::string &elementString =
-                (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
+                (outputLocation.arrayElementIndices.empty()
+                     ? ""
+                     : Str(outputLocation.arrayElementIndices.back()));
 
             ASSERT(outputVariable.staticUse);
 
             PixelShaderOutputVariable outputKeyVariable;
             outputKeyVariable.type        = outputVariable.type;
             outputKeyVariable.name        = variableName + elementString;
-            outputKeyVariable.source      = variableName + ArrayString(outputLocation.element);
+            outputKeyVariable.source =
+                variableName + ArrayIndexString(outputLocation.arrayElementIndices);
             outputKeyVariable.outputIndex = outputPair.first;
 
             outPixelShaderKey->push_back(outputKeyVariable);
