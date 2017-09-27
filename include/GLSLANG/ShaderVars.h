@@ -98,6 +98,7 @@ struct ShaderVariable
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
+    bool isUnsizedArray;
 
   protected:
     bool isSameVariableAtLinkTime(const ShaderVariable &other,
