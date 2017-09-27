@@ -147,7 +147,9 @@ struct VariableLocation
     void markUnused() { index = kUnused; }
     void markIgnored() { ignored = true; }
 
-    unsigned int element;
+    bool areAllElementIndicesZero() const;
+
+    std::vector<unsigned int> arrayElementIndices;  // Outermost array indices are in the back.
     unsigned int index;
 
     // If this location was bound to an unreferenced uniform.  Setting data on this uniform is a
