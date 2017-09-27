@@ -4409,7 +4409,7 @@ bool ValidateBindBuffer(ValidationContext *context, GLenum target, GLuint buffer
 
 bool ValidateBindFramebuffer(ValidationContext *context, GLenum target, GLuint framebuffer)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;
@@ -4793,7 +4793,7 @@ bool ValidateRenderbufferStorageMultisampleANGLE(ValidationContext *context,
 
 bool ValidateCheckFramebufferStatus(ValidationContext *context, GLenum target)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;
@@ -5927,7 +5927,7 @@ bool ValidateFramebufferRenderbuffer(Context *context,
                                      GLenum renderbuffertarget,
                                      GLuint renderbuffer)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;

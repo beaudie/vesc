@@ -755,7 +755,7 @@ bool ValidTexLevelDestinationTarget(const ValidationContext *context, GLenum tar
     }
 }
 
-bool ValidFramebufferTarget(GLenum target)
+bool ValidFramebufferTarget(const ValidationContext *context, GLenum target)
 {
     static_assert(GL_DRAW_FRAMEBUFFER_ANGLE == GL_DRAW_FRAMEBUFFER &&
                       GL_READ_FRAMEBUFFER_ANGLE == GL_READ_FRAMEBUFFER,
@@ -765,10 +765,12 @@ bool ValidFramebufferTarget(GLenum target)
     {
         case GL_FRAMEBUFFER:
             return true;
+
         case GL_READ_FRAMEBUFFER:
-            return true;
         case GL_DRAW_FRAMEBUFFER:
-            return true;
+            return (context->getExtensions().framebufferBlit ||
+                    context->getClientMajorVersion() >= 3);
+
         default:
             return false;
     }
@@ -1272,7 +1274,7 @@ bool ValidateFramebufferRenderbufferParameters(gl::Context *context,
                                                GLenum renderbuffertarget,
                                                GLuint renderbuffer)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum());
         return false;
@@ -2977,7 +2979,7 @@ bool ValidateFramebufferTextureBase(Context *context,
                                     GLuint texture,
                                     GLint level)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;
@@ -3774,7 +3776,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
                                                      GLenum pname,
                                                      GLsizei *numParams)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum());
         return false;
