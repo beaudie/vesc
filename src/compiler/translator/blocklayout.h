@@ -44,6 +44,55 @@ struct BlockMemberInfo
     bool isRowMajorMatrix;
 };
 
+struct ShaderStorageBlockMemberInfo : public BlockMemberInfo
+{
+    ShaderStorageBlockMemberInfo()
+        : blockIndex(-1),
+          topLevelArraySize(-1),
+          topLevelArrayStride(-1),
+          vertexStaticUse(false),
+          fragmentStaticUse(false),
+          computeStaticUse(false)
+    {
+    }
+
+    ShaderStorageBlockMemberInfo(int offsetIn,
+                                 int arrayStrideIn,
+                                 int matrixStrideIn,
+                                 bool isRowMajorMatrixIn,
+                                 int blockIndexIn,
+                                 int topLevelArraySizeIn,
+                                 int topLevelArrayStrideIn,
+                                 bool vertexStaticUseIn,
+                                 bool fragmentStaticUseIn,
+                                 bool computeStaticUseIn)
+        : blockIndex(blockIndexIn),
+          topLevelArraySize(topLevelArraySizeIn),
+          topLevelArrayStride(topLevelArrayStrideIn),
+          vertexStaticUse(vertexStaticUseIn),
+          fragmentStaticUse(fragmentStaticUseIn),
+          computeStaticUse(computeStaticUseIn)
+    {
+        offset           = offsetIn;
+        arrayStride      = arrayStrideIn;
+        matrixStride     = matrixStrideIn;
+        isRowMajorMatrix = isRowMajorMatrixIn;
+    }
+
+    static ShaderStorageBlockMemberInfo getDefaultShaderStorageBlockInfo()
+    {
+        return ShaderStorageBlockMemberInfo(-1, -1, -1, false, -1, -1, -1, false, false, false);
+    }
+
+    int blockIndex;
+    int topLevelArraySize;
+    int topLevelArrayStride;
+
+    bool vertexStaticUse;
+    bool fragmentStaticUse;
+    bool computeStaticUse;
+};
+
 class BlockLayoutEncoder
 {
   public:

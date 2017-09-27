@@ -578,6 +578,68 @@ bool ProgramGL::getUniformBlockMemberInfo(const std::string & /* memberUniformNa
     return true;
 }
 
+bool ProgramGL::getShaderStorageBlockMemberInfo(
+    const std::string & /* memberName */,
+    const std::string &memberUniformMappedName,
+    sh::ShaderStorageBlockMemberInfo *memberInfoOut) const
+{
+    const GLchar *memberNameGLStr = memberUniformMappedName.c_str();
+    GLuint index =
+        mFunctions->getProgramResourceIndex(mProgramID, GL_BUFFER_VARIABLE, memberNameGLStr);
+
+    if (index == GL_INVALID_INDEX)
+    {
+        *memberInfoOut = sh::ShaderStorageBlockMemberInfo::getDefaultShaderStorageBlockInfo();
+        return false;
+    }
+
+    constexpr int kPropCount = 10;
+    std::array<GLenum, kPropCount> props = {
+        {GL_ARRAY_STRIDE, GL_BLOCK_INDEX, GL_IS_ROW_MAJOR, GL_MATRIX_STRIDE, GL_OFFSET,
+         GL_TOP_LEVEL_ARRAY_SIZE, GL_TOP_LEVEL_ARRAY_STRIDE, GL_REFERENCED_BY_VERTEX_SHADER,
+         GL_REFERENCED_BY_FRAGMENT_SHADER, GL_REFERENCED_BY_COMPUTE_SHADER}};
+    std::array<GLint, kPropCount> params;
+    GLsizei length;
+    mFunctions->getProgramResourceiv(mProgramID, GL_BUFFER_VARIABLE, index, kPropCount,
+                                     props.data(), kPropCount, &length, params.data());
+    ASSERT(kPropCount == length);
+    memberInfoOut->arrayStride         = params[0];
+    memberInfoOut->blockIndex          = params[1];
+    memberInfoOut->isRowMajorMatrix    = params[2];
+    memberInfoOut->matrixStride        = params[3];
+    memberInfoOut->offset              = params[4];
+    memberInfoOut->topLevelArraySize   = params[5];
+    memberInfoOut->topLevelArrayStride = params[6];
+    memberInfoOut->vertexStaticUse     = params[7];
+    memberInfoOut->fragmentStaticUse   = params[8];
+    memberInfoOut->computeStaticUse    = params[9];
+
+    return true;
+}
+
+bool ProgramGL::getProgramResourceBufferDataSize(const std::string &name,
+                                                 const std::string &mappedName,
+                                                 const GLenum programInterface,
+                                                 size_t *sizeOut) const
+{
+    const GLchar *nameGLStr = mappedName.c_str();
+    GLuint index = mFunctions->getProgramResourceIndex(mProgramID, programInterface, nameGLStr);
+
+    if (index == GL_INVALID_INDEX)
+    {
+        *sizeOut = 0;
+        return false;
+    }
+
+    GLenum prop    = GL_BUFFER_DATA_SIZE;
+    GLsizei length = 0;
+    GLint dataSize = 0;
+    mFunctions->getProgramResourceiv(mProgramID, programInterface, index, 1, &prop, 1, &length,
+                                     &dataSize);
+    *sizeOut = static_cast<size_t>(dataSize);
+    return true;
+}
+
 void ProgramGL::setPathFragmentInputGen(const std::string &inputName,
                                         GLenum genMode,
                                         GLint components,
