@@ -153,12 +153,6 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             *numParams = static_cast<unsigned int>(getCaps().compressedTextureFormats.size());
             return true;
         }
-        case GL_PROGRAM_BINARY_FORMATS_OES:
-        {
-            *type      = GL_INT;
-            *numParams = static_cast<unsigned int>(getCaps().programBinaryFormats.size());
-            return true;
-        }
         case GL_SHADER_BINARY_FORMATS:
         {
             *type      = GL_INT;
@@ -224,7 +218,6 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_TEXTURE_BINDING_2D:
         case GL_TEXTURE_BINDING_CUBE_MAP:
         case GL_RESET_NOTIFICATION_STRATEGY_EXT:
-        case GL_NUM_PROGRAM_BINARY_FORMATS_OES:
         {
             *type      = GL_INT;
             *numParams = 1;
@@ -465,6 +458,24 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
     // Check for ES3.0+ parameter names which are also exposed as ES2 extensions
     switch (pname)
     {
+        case GL_NUM_PROGRAM_BINARY_FORMATS_OES:
+            if ((getClientMajorVersion() < 3) && !getExtensions().getProgramBinary)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+
+        case GL_PROGRAM_BINARY_FORMATS_OES:
+            if ((getClientMajorVersion() < 3) && !getExtensions().getProgramBinary)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = static_cast<unsigned int>(getCaps().programBinaryFormats.size());
+            return true;
+
         // case GL_FRAMEBUFFER_BINDING: // equivalent to DRAW_FRAMEBUFFER_BINDING_ANGLE
         case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:
         case GL_READ_FRAMEBUFFER_BINDING_ANGLE:
