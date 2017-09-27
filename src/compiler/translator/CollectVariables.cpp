@@ -668,6 +668,7 @@ void CollectVariablesTraverser::recordInterfaceBlock(const TType &interfaceBlock
         setCommonVariableProperties(fieldType, TName(field->name()), &fieldVariable);
         fieldVariable.isRowMajorLayout =
             (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
+        fieldVariable.isUnsizedArray = fieldType.isUnsizedArray();
         interfaceBlock->fields.push_back(fieldVariable);
     }
 }
