@@ -60,6 +60,20 @@ struct LinkedUniform : public sh::Uniform
     bool computeStaticUse;
 };
 
+struct BufferVariable : public sh::ShaderVariable
+{
+    BufferVariable();
+    BufferVariable(GLenum type,
+                   GLenum precision,
+                   const std::string &name,
+                   unsigned int arraySize,
+                   const sh::ShaderStorageBlockMemberInfo &blockInfo);
+    BufferVariable(const BufferVariable &bufferVariable);
+    ~BufferVariable();
+
+    sh::ShaderStorageBlockMemberInfo blockInfo;
+};
+
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
 // contain a group of shader variables, and have a GL buffer backed.
 struct ShaderVariableBuffer
