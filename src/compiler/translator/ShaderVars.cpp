@@ -30,12 +30,13 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b)
     return (GetNonAuxiliaryInterpolationType(a) == GetNonAuxiliaryInterpolationType(b));
 }
 
-ShaderVariable::ShaderVariable() : type(0), precision(0), arraySize(0), staticUse(false)
+ShaderVariable::ShaderVariable()
+    : type(0), precision(0), arraySize(0), staticUse(false), isUnsizedArray(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn, unsigned int arraySizeIn)
-    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false)
+    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false), isUnsizedArray(false)
 {
 }
 
@@ -51,7 +52,8 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       arraySize(other.arraySize),
       staticUse(other.staticUse),
       fields(other.fields),
-      structName(other.structName)
+      structName(other.structName),
+      isUnsizedArray(other.isUnsizedArray)
 {
 }
 
@@ -65,6 +67,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     staticUse  = other.staticUse;
     fields     = other.fields;
     structName = other.structName;
+    isUnsizedArray = other.isUnsizedArray;
     return *this;
 }
 
@@ -73,7 +76,7 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
     if (type != other.type || precision != other.precision || name != other.name ||
         mappedName != other.mappedName || arraySize != other.arraySize ||
         staticUse != other.staticUse || fields.size() != other.fields.size() ||
-        structName != other.structName)
+        structName != other.structName || isUnsizedArray != other.isUnsizedArray)
     {
         return false;
     }
@@ -183,6 +186,10 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
     }
     if (structName != other.structName)
         return false;
+    if (isUnsizedArray != other.isUnsizedArray)
+    {
+        return false;
+    }
     return true;
 }
 
