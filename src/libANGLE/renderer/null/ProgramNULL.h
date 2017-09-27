@@ -100,6 +100,17 @@ class ProgramNULL : public ProgramImpl
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    const std::string &memberUniformMappedName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
+
+    bool getShaderStorageBlockMemberInfo(
+        const std::string &memberName,
+        const std::string &memberMappedName,
+        sh::ShaderStorageBlockMemberInfo *memberInfoOut) const override;
+
+    bool getProgramResourceBufferDataSize(const std::string &blockName,
+                                          const std::string &blockMappedName,
+                                          GLenum programInterface,
+                                          size_t *sizeOut) const override;
+
     // CHROMIUM_path_rendering
     // Set parameters to control fragment shader input variable interpolation
     void setPathFragmentInputGen(const std::string &inputName,
