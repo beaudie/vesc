@@ -658,7 +658,7 @@ bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pna
         return false;
     }
 
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum() << "Invalid framebuffer target.");
         return false;
@@ -734,7 +734,7 @@ bool ValidationGetFramebufferParameteri(Context *context,
         return false;
     }
 
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;
