@@ -209,7 +209,8 @@ class Display final : angle::NonCopyable
 
     // This gl::Context is a simple proxy to the Display for the GL back-end entry points
     // that need access to implementation-specific data, like a Renderer object.
-    angle::UniqueObjectPointer<gl::Context, Display> mProxyContext;
+    angle::UniqueObjectPointer<gl::Context, angle::DefaultDeleter<gl::Context, Display>>
+        mProxyContext;
 };
 
 }  // namespace egl

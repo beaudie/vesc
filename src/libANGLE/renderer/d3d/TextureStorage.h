@@ -70,7 +70,8 @@ class TextureStorage : angle::NonCopyable
     }
 };
 
-using TexStoragePointer = angle::UniqueObjectPointer<TextureStorage, gl::Context>;
+using TexStoragePointer =
+    angle::UniqueObjectPointer<TextureStorage, angle::DefaultDeleter<TextureStorage, gl::Context>>;
 
 }  // namespace rx
 

@@ -681,7 +681,7 @@ Error Display::createImage(const gl::Context *context,
     }
     ASSERT(sibling != nullptr);
 
-    angle::UniqueObjectPointer<Image, gl::Context> imagePtr(
+    angle::UniqueObjectPointer<Image, angle::DefaultDeleter<Image, gl::Context>> imagePtr(
         new Image(mImplementation, target, sibling, attribs), context);
     ANGLE_TRY(imagePtr->initialize());
 
