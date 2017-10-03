@@ -229,6 +229,7 @@ class WebGLReadOutsideFramebufferTest : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
         setWebGLCompatibilityEnabled(true);
+        setRobustResourceInit(true);
     }
 
     void SetUp() override
