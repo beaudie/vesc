@@ -1220,6 +1220,17 @@ bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum
         return nativegl_gl::MeetsRequirements(functions, nativeInfo.framebufferAttachment);
     }
 }
+
+bool UseTexImage2D(GLenum textureType)
+{
+    return textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP ||
+           textureType == GL_TEXTURE_RECTANGLE_ANGLE;
+}
+
+bool UseTexImage3D(GLenum textureType)
+{
+    return textureType == GL_TEXTURE_2D_ARRAY || textureType == GL_TEXTURE_3D;
+}
 }
 
 bool CanMapBufferForRead(const FunctionsGL *functions)

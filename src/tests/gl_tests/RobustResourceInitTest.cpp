@@ -196,13 +196,6 @@ class RobustResourceInitTest : public ANGLETest
 
     bool hasGLExtension()
     {
-        // Skip all tests on the OpenGL backend. It is not fully implemented but still needs to be
-        // exposed to test in Chromium.
-        if (IsDesktopOpenGL() || IsOpenGLES())
-        {
-            return false;
-        }
-
         return extensionEnabled("GL_ANGLE_robust_resource_initialization");
     }
 
@@ -290,7 +283,7 @@ class RobustResourceInitTestES3 : public RobustResourceInitTest
 // it only works on the implemented renderers
 TEST_P(RobustResourceInitTest, ExpectedRendererSupport)
 {
-    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsD3D9();
+    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsD3D9() || IsOpenGL() || IsOpenGLES();
     EXPECT_EQ(shouldHaveSupport, hasGLExtension());
 }
 
@@ -623,7 +616,10 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
 
     EGLint surfaceType = 0;
     eglGetConfigAttrib(display, config, EGL_SURFACE_TYPE, &surfaceType);
-    if ((surfaceType & EGL_PBUFFER_BIT) == 0)
+
+    GLint bindToRGBASupported = EGL_FALSE;
+    eglGetConfigAttrib(display, config, EGL_BIND_TO_TEXTURE_RGBA, &surfaceType);
+    if ((surfaceType & EGL_PBUFFER_BIT) == 0 || bindToRGBASupported == EGL_FALSE)
     {
         std::cout << "Test skipped because EGL config cannot be used to create pbuffers."
                   << std::endl;
@@ -658,7 +654,14 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    }
+    else
+    {
+        std::cout << "Read pixels check skipped because framebuffer was not complete." << std::endl;
+    }
 
     eglDestroySurface(display, pbuffer);
 }
