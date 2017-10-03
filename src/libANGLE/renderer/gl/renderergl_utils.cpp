@@ -1205,8 +1205,14 @@ bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum
 {
     // Some desktop drivers allow rendering to formats that are not required by the spec, this is
     // exposed through the GL_FRAMEBUFFER_RENDERABLE query.
-    if (functions->isAtLeastGL(gl::Version(4, 3)) ||
-        functions->hasGLExtension("GL_ARB_internalformat_query2"))
+    bool hasInternalFormatQuery = functions->isAtLeastGL(gl::Version(4, 3)) ||
+                                  functions->hasGLExtension("GL_ARB_internalformat_query2");
+
+    // Some Intel drivers return GL_FULL_SUPPORT when asked if they support rendering to compressed
+    // texture formats.  Skip any native queries for compressed formats.
+    const gl::InternalFormat &internalFormatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
+
+    if (hasInternalFormatQuery && !internalFormatInfo.compressed)
     {
         GLint framebufferRenderable = GL_NONE;
         functions->getInternalformativ(target, internalFormat, GL_FRAMEBUFFER_RENDERABLE, 1,
@@ -1219,6 +1225,17 @@ bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum
             nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
         return nativegl_gl::MeetsRequirements(functions, nativeInfo.framebufferAttachment);
     }
+}
+
+bool UseTexImage2D(GLenum textureType)
+{
+    return textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP ||
+           textureType == GL_TEXTURE_RECTANGLE_ANGLE;
+}
+
+bool UseTexImage3D(GLenum textureType)
+{
+    return textureType == GL_TEXTURE_2D_ARRAY || textureType == GL_TEXTURE_3D;
 }
 }
 

@@ -196,22 +196,11 @@ class RobustResourceInitTest : public ANGLETest
         setRobustResourceInit(true);
     }
 
-    bool isSkippedPlatform()
-    {
-        // Skip all tests on the OpenGL backend. It is not fully implemented but still needs to be
-        // exposed to test in Chromium.
-        return IsDesktopOpenGL() || IsOpenGLES();
-    }
-
-    bool hasGLExtension()
-    {
-        return !isSkippedPlatform() && extensionEnabled("GL_ANGLE_robust_resource_initialization");
-    }
+    bool hasGLExtension() { return extensionEnabled("GL_ANGLE_robust_resource_initialization"); }
 
     bool hasEGLExtension()
     {
-        return !isSkippedPlatform() &&
-               eglDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+        return eglDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
                                           "EGL_ANGLE_robust_resource_initialization");
     }
 
@@ -312,7 +301,7 @@ class RobustResourceInitTestES3 : public RobustResourceInitTest
 // it only works on the implemented renderers
 TEST_P(RobustResourceInitTest, ExpectedRendererSupport)
 {
-    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsD3D9();
+    bool shouldHaveSupport = IsD3D11() || IsD3D11_FL93() || IsD3D9() || IsOpenGL() || IsOpenGLES();
     EXPECT_EQ(shouldHaveSupport, hasGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasEGLExtension());
     EXPECT_EQ(shouldHaveSupport, hasRobustSurfaceInit());
@@ -650,6 +639,11 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
     // Test skipped because EGL config cannot be used to create pbuffers.
     ANGLE_SKIP_TEST_IF((surfaceType & EGL_PBUFFER_BIT) == 0);
 
+    EGLint bindToSurfaceRGBA = 0;
+    eglGetConfigAttrib(display, config, EGL_BIND_TO_TEXTURE_RGBA, &bindToSurfaceRGBA);
+    // Test skipped because EGL config cannot be used to create pbuffers.
+    ANGLE_SKIP_TEST_IF(bindToSurfaceRGBA == EGL_FALSE);
+
     EGLint attribs[] = {
         EGL_WIDTH,          32,
         EGL_HEIGHT,         32,
@@ -678,7 +672,14 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    }
+    else
+    {
+        std::cout << "Read pixels check skipped because framebuffer was not complete." << std::endl;
+    }
 
     eglDestroySurface(display, pbuffer);
 }

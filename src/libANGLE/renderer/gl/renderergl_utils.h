@@ -61,6 +61,8 @@ namespace nativegl
 bool SupportsFenceSync(const FunctionsGL *functions);
 bool SupportsOcclusionQueries(const FunctionsGL *functions);
 bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum internalFormat);
+bool UseTexImage2D(GLenum textureType);
+bool UseTexImage3D(GLenum textureType);
 }
 
 bool CanMapBufferForRead(const FunctionsGL *functions);
