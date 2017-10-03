@@ -208,7 +208,7 @@ class RobustResourceInitTest : public ANGLETest
         }
 
         // TODO(jmadill): Other back-end support.
-        if (!IsD3D11() && !IsD3D9())
+        if (!IsD3D11() && !IsD3D9() && !IsOpenGL() && !IsOpenGLES())
         {
             return false;
         }
@@ -704,7 +704,14 @@ TEST_P(RobustResourceInitTestES3, BindTexImage)
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColor);
+    }
+    else
+    {
+        std::cout << "Read pixels check skipped because framebuffer was not complete." << std::endl;
+    }
 
     eglDestroySurface(display, pbuffer);
 }
