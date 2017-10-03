@@ -1039,10 +1039,6 @@ Error Texture::copyImage(const Context *context,
     // Ensure source FBO is initialized.
     ANGLE_TRY(source->ensureReadAttachmentInitialized(context, GL_COLOR_BUFFER_BIT));
 
-    // Use the source FBO size as the init image area.
-    Box destBox(0, 0, 0, sourceArea.width, sourceArea.height, 1);
-    ANGLE_TRY(ensureSubImageInitialized(context, target, level, destBox));
-
     ANGLE_TRY(mTexture->copyImage(context, target, level, sourceArea, internalFormat, source));
 
     const InternalFormat &internalFormatInfo =
