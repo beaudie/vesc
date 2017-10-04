@@ -106,6 +106,15 @@
     # Windows SDK library directories for the configurations
     'configurations':
     {
+        'x86_Base':
+        {
+            'defines': [ 'ANGLE_X86_CPU' ],
+        }, # x86_Base
+
+        'x64_Base':
+        {
+            'defines': [ 'ANGLE_X64_CPU' ],
+        },    # x64_Base
         'conditions':
         [
             ['angle_build_winrt==0',
