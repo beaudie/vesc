@@ -48,7 +48,7 @@ class MockFramebufferImpl : public rx::FramebufferImpl
                            GLbitfield,
                            GLenum));
 
-    MOCK_CONST_METHOD0(checkStatus, bool());
+    MOCK_CONST_METHOD1(checkStatus, bool(const gl::Context *));
 
     MOCK_METHOD2(syncState, void(const gl::Context *, const gl::Framebuffer::DirtyBits &));
 
