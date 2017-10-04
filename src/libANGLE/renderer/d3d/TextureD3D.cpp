@@ -2165,16 +2165,27 @@ bool TextureD3D_Cube::isFaceLevelComplete(int faceIndex, int level) const
         return false;
     }
 
+    const ImageD3D *faceLevelImage = mImageArray[faceIndex][level].get();
+
     // "isCubeComplete" checks for base level completeness and we must call that
     // to determine if any face at level 0 is complete. We omit that check here
     // to avoid re-checking cube-completeness for every face at level 0.
     if (level == 0)
     {
-        return true;
+        // Cannot always assume a Level0 texture image (of any face) will be "complete".
+        // At context creation, these texture images will have zero-initialized sizes and should
+        // the developer invalidate them (ex. mismatch), restoring them upon providing a valid
+        // Level0 texture will fail on copy. To avoid this, we only permit "complete" texture images
+        // and by definition, the image dimension of level zero must be positive.
+        if (faceLevelImage->getWidth() > 0 && faceLevelImage->getHeight() > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     // Check that non-zero levels are consistent with the base level.
-    const ImageD3D *faceLevelImage = mImageArray[faceIndex][level].get();
 
     if (faceLevelImage->getInternalFormat() != getBaseLevelInternalFormat())
     {
