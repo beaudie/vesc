@@ -939,7 +939,7 @@ void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *c
     const gl::State &glState   = context->getGLState();
     const gl::Program *program = glState.getProgram();
 
-    const auto &completeTextures = glState.getCompleteTextureCache();
+    const auto &activeTextures = glState.getActiveTextureCache();
     for (const gl::SamplerBinding &samplerBinding : program->getSamplerBindings())
     {
         if (samplerBinding.unreferenced)
@@ -948,28 +948,17 @@ void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *c
         GLenum textureType = samplerBinding.textureType;
         for (GLuint textureUnitIndex : samplerBinding.boundTextureUnits)
         {
-            gl::Texture *texture = completeTextures[textureUnitIndex];
+            gl::Texture *texture = activeTextures[textureUnitIndex];
+            ASSERT(texture);
 
-            // A nullptr texture indicates incomplete.
-            if (texture != nullptr)
-            {
-                const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
-                ASSERT(!texture->hasAnyDirtyBit());
-                ASSERT(!textureGL->hasAnyDirtyBit());
+            const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
+            ASSERT(!texture->hasAnyDirtyBit());
+            ASSERT(!textureGL->hasAnyDirtyBit());
 
-                if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID())
-                {
-                    activeTexture(textureUnitIndex);
-                    bindTexture(textureType, textureGL->getTextureID());
-                }
-            }
-            else
+            if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID())
             {
-                if (mTextures.at(textureType)[textureUnitIndex] != 0)
-                {
-                    activeTexture(textureUnitIndex);
-                    bindTexture(textureType, 0);
-                }
+                activeTexture(textureUnitIndex);
+                bindTexture(textureType, textureGL->getTextureID());
             }
 
             const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);

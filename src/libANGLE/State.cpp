@@ -23,6 +23,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/renderer/ContextImpl.h"
 
 namespace
 {
@@ -166,7 +167,7 @@ void State::initialize(const Context *context,
     {
         mSamplerTextures[GL_TEXTURE_EXTERNAL_OES].resize(caps.maxCombinedTextureImageUnits);
     }
-    mCompleteTextureCache.resize(caps.maxCombinedTextureImageUnits, nullptr);
+    mActiveTextureCache.resize(caps.maxCombinedTextureImageUnits, nullptr);
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
@@ -283,6 +284,14 @@ void State::reset(const Context *context)
 
     // TODO(jmadill): Is this necessary?
     setAllDirtyBits();
+
+    // Clear incomplete textures.
+    for (auto &incompleteTexture : mIncompleteTextures)
+    {
+        ANGLE_SWALLOW_ERR(incompleteTexture.second->onDestroy(context));
+        incompleteTexture.second.set(context, nullptr);
+    }
+    mIncompleteTextures.clear();
 }
 
 const RasterizerState &State::getRasterizerState() const
@@ -2209,15 +2218,15 @@ bool State::hasMappedBuffer(GLenum target) const
     }
 }
 
-void State::syncDirtyObjects(const Context *context)
+Error State::syncDirtyObjects(const Context *context)
 {
     if (!mDirtyObjects.any())
-        return;
+        return NoError();
 
-    syncDirtyObjects(context, mDirtyObjects);
+    return syncDirtyObjects(context, mDirtyObjects);
 }
 
-void State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
+Error State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
 {
     for (auto dirtyObject : bitset)
     {
@@ -2236,7 +2245,7 @@ void State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
                 mVertexArray->syncState(context);
                 break;
             case DIRTY_OBJECT_PROGRAM_TEXTURES:
-                syncProgramTextures(context);
+                ANGLE_TRY(syncProgramTextures(context));
                 break;
 
             default:
@@ -2246,14 +2255,15 @@ void State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
     }
 
     mDirtyObjects &= ~bitset;
+    return NoError();
 }
 
-void State::syncProgramTextures(const Context *context)
+Error State::syncProgramTextures(const Context *context)
 {
     // TODO(jmadill): Fine-grained updates.
     if (!mProgram)
     {
-        return;
+        return NoError();
     }
 
     ASSERT(mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES]);
@@ -2271,28 +2281,29 @@ void State::syncProgramTextures(const Context *context)
         {
             Texture *texture = getSamplerTexture(textureUnitIndex, textureType);
             Sampler *sampler = getSampler(textureUnitIndex);
-            ASSERT(static_cast<size_t>(textureUnitIndex) < mCompleteTextureCache.size());
+            ASSERT(static_cast<size_t>(textureUnitIndex) < mActiveTextureCache.size());
             ASSERT(static_cast<size_t>(textureUnitIndex) < newActiveTextures.size());
 
-            if (texture != nullptr)
-            {
-                // Mark the texture binding bit as dirty if the texture completeness changes.
-                // TODO(jmadill): Use specific dirty bit for completeness change.
-                if (texture->isSamplerComplete(context, sampler))
-                {
-                    texture->syncState();
-                    mCompleteTextureCache[textureUnitIndex] = texture;
-                }
-                else
-                {
-                    mCompleteTextureCache[textureUnitIndex] = nullptr;
-                }
+            // We should always at least have a "zero" texure bound.
+            ASSERT(texture);
 
-                // Bind the texture unconditionally, to recieve completeness change notifications.
-                mCompleteTextureBindings[textureUnitIndex].bind(texture->getDirtyChannel());
-                newActiveTextures.set(textureUnitIndex);
-                mCompleteTexturesMask.set(textureUnitIndex);
+            // Mark the texture binding bit as dirty if the texture completeness changes.
+            // TODO(jmadill): Use specific dirty bit for completeness change.
+            if (texture->isSamplerComplete(context, sampler))
+            {
+                texture->syncState();
+                mActiveTextureCache[textureUnitIndex] = texture;
             }
+            else
+            {
+                ANGLE_TRY(getIncompleteTexture(context, textureType,
+                                               &mActiveTextureCache[textureUnitIndex]));
+            }
+
+            // Bind the texture unconditionally, to recieve completeness change notifications.
+            mCompleteTextureBindings[textureUnitIndex].bind(texture->getDirtyChannel());
+            newActiveTextures.set(textureUnitIndex);
+            mCompleteTexturesMask.set(textureUnitIndex);
 
             if (sampler != nullptr)
             {
@@ -2308,13 +2319,15 @@ void State::syncProgramTextures(const Context *context)
         for (auto textureIndex : negativeMask)
         {
             mCompleteTextureBindings[textureIndex].reset();
-            mCompleteTextureCache[textureIndex] = nullptr;
+            mActiveTextureCache[textureIndex] = nullptr;
             mCompleteTexturesMask.reset(textureIndex);
         }
     }
+
+    return NoError();
 }
 
-void State::syncDirtyObject(const Context *context, GLenum target)
+Error State::syncDirtyObject(const Context *context, GLenum target)
 {
     DirtyObjects localSet;
 
@@ -2340,7 +2353,7 @@ void State::syncDirtyObject(const Context *context, GLenum target)
             break;
     }
 
-    syncDirtyObjects(context, localSet);
+    return syncDirtyObjects(context, localSet);
 }
 
 void State::setObjectDirty(GLenum target)
@@ -2420,13 +2433,73 @@ Error State::clearUnclearedActiveTextures(const Context *context)
     }
 
     // TODO(jmadill): Investigate improving the speed here.
-    for (Texture *texture : mCompleteTextureCache)
+    for (Texture *texture : mActiveTextureCache)
     {
         if (texture)
         {
             ANGLE_TRY(texture->ensureInitialized(context));
         }
     }
+    return NoError();
+}
+
+Error State::getIncompleteTexture(const Context *context, GLenum type, Texture **textureOut)
+{
+    auto iter = mIncompleteTextures.find(type);
+    if (iter != mIncompleteTextures.end())
+    {
+        *textureOut = iter->second.get();
+        return NoError();
+    }
+
+    rx::ContextImpl *implFactory = context->getImplementation();
+
+    const GLubyte color[] = {0, 0, 0, 255};
+    const Extents colorSize(1, 1, 1);
+    const PixelUnpackState unpack(1, 0);
+    const Box area(0, 0, 0, 1, 1, 1);
+
+    // If a texture is external use a 2D texture for the incomplete texture
+    GLenum createType = (type == GL_TEXTURE_EXTERNAL_OES) ? GL_TEXTURE_2D : type;
+
+    Texture *tex = new Texture(implFactory, std::numeric_limits<GLuint>::max(), createType);
+    angle::UniqueObjectPointer<Texture, Context> t(tex, context);
+
+    if (createType == GL_TEXTURE_2D_MULTISAMPLE)
+    {
+        ANGLE_TRY(t->setStorageMultisample(context, createType, 1, GL_RGBA8, colorSize, true));
+    }
+    else
+    {
+        ANGLE_TRY(t->setStorage(context, createType, 1, GL_RGBA8, colorSize));
+    }
+    if (type == GL_TEXTURE_CUBE_MAP)
+    {
+        for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+             face++)
+        {
+            ANGLE_TRY(
+                t->setSubImage(context, unpack, face, 0, area, GL_RGBA, GL_UNSIGNED_BYTE, color));
+        }
+    }
+    else if (type == GL_TEXTURE_2D_MULTISAMPLE)
+    {
+        ColorF clearValue(0, 0, 0, 1);
+        ImageIndex index = ImageIndex::Make2DMultisample();
+
+        // FIXME: should clear to 0, 0, 0, 1. Not 0, 0, 0, 0.
+        ANGLE_TRY(t->initializeContents(context, index));
+    }
+    else
+    {
+        ANGLE_TRY(
+            t->setSubImage(context, unpack, createType, 0, area, GL_RGBA, GL_UNSIGNED_BYTE, color));
+    }
+
+    t->syncState();
+
+    mIncompleteTextures[type].set(context, t.release());
+    *textureOut = mIncompleteTextures[type].get();
     return NoError();
 }
 

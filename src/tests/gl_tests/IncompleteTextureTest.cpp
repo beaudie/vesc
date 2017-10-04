@@ -24,7 +24,7 @@ class IncompleteTextureTest : public ANGLETest
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    void SetUp() override
     {
         ANGLETest::SetUp();
 
@@ -58,29 +58,18 @@ class IncompleteTextureTest : public ANGLETest
         mTextureUniformLocation = glGetUniformLocation(mProgram, "tex");
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         glDeleteProgram(mProgram);
 
         ANGLETest::TearDown();
     }
 
-    void fillTextureData(std::vector<GLubyte> &buffer, GLubyte r, GLubyte g, GLubyte b, GLubyte a)
-    {
-        size_t count = buffer.size() / 4;
-        for (size_t i = 0; i < count; i++)
-        {
-            buffer[i * 4 + 0] = r;
-            buffer[i * 4 + 1] = g;
-            buffer[i * 4 + 2] = b;
-            buffer[i * 4 + 3] = a;
-        }
-    }
-
     GLuint mProgram;
     GLint mTextureUniformLocation;
 };
 
+// Test rendering with an incomplete texture.
 TEST_P(IncompleteTextureTest, IncompleteTexture2D)
 {
     GLTexture tex;
@@ -118,6 +107,7 @@ TEST_P(IncompleteTextureTest, IncompleteTexture2D)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
+// Tests redefining a texture with half the size works as expected.
 TEST_P(IncompleteTextureTest, UpdateTexture)
 {
     GLTexture tex;
@@ -127,36 +117,36 @@ TEST_P(IncompleteTextureTest, UpdateTexture)
     glUseProgram(mProgram);
     glUniform1i(mTextureUniformLocation, 0);
 
-    const GLsizei redTextureWidth = 64;
-    const GLsizei redTextureHeight = 64;
-    std::vector<GLubyte> redTextureData(redTextureWidth * redTextureHeight * 4);
-    fillTextureData(redTextureData, 255, 0, 0, 255);
-    for (size_t i = 0; i < 7; i++)
+    constexpr GLsizei redTextureSize = 64;
+    std::vector<GLColor> redTextureData(redTextureSize * redTextureSize, GLColor::red);
+    for (GLint mip = 0; mip < 7; ++mip)
     {
-        glTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(i), GL_RGBA, redTextureWidth >> i,
-                     redTextureHeight >> i, 0, GL_RGBA, GL_UNSIGNED_BYTE, &redTextureData[0]);
+        const GLsizei mipSize = redTextureSize >> mip;
+
+        glTexImage2D(GL_TEXTURE_2D, mip, GL_RGBA, mipSize, mipSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     redTextureData.data());
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     drawQuad(mProgram, "position", 0.5f);
-    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 
-    const GLsizei greenTextureWidth = 32;
-    const GLsizei greenTextureHeight = 32;
-    std::vector<GLubyte> greenTextureData(greenTextureWidth * greenTextureHeight * 4);
-    fillTextureData(greenTextureData, 0, 255, 0, 255);
+    constexpr GLsizei greenTextureSize = 32;
+    std::vector<GLColor> greenTextureData(greenTextureSize * greenTextureSize, GLColor::green);
 
-    for (size_t i = 0; i < 6; i++)
+    for (GLint mip = 0; mip < 6; ++mip)
     {
-        glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(i), greenTextureWidth >> i,
-                        greenTextureHeight >> i, greenTextureWidth >> i, greenTextureHeight >> i,
-                        GL_RGBA, GL_UNSIGNED_BYTE, &greenTextureData[0]);
+        const GLsizei mipSize = greenTextureSize >> mip;
+
+        glTexSubImage2D(GL_TEXTURE_2D, mip, mipSize, mipSize, mipSize, mipSize, GL_RGBA,
+                        GL_UNSIGNED_BYTE, greenTextureData.data());
     }
 
     drawQuad(mProgram, "position", 0.5f);
-    EXPECT_PIXEL_EQ(getWindowWidth() - greenTextureWidth, getWindowHeight() - greenTextureWidth, 0, 255, 0, 255);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - greenTextureSize, getWindowHeight() - greenTextureSize,
+                          GLColor::green);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
