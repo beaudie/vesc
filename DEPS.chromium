@@ -13,7 +13,7 @@ vars = {
   'android_git': 'https://android.googlesource.com',
 
   # Current revision of dEQP.
-  'deqp_revision': '455d82c60b096e7bd83b6a2f5ed70c61e4bfa759',
+  'deqp_revision': '3a1de9094d072324ef2c16a21c1893b881c2a8e7',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
   'glslang_revision': '1e275c8486325aaab34734ad9a650c0121c5efdb',
