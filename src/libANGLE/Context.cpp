@@ -1902,7 +1902,7 @@ void Context::stencilFillPath(GLuint path, GLenum fillMode, GLuint mask)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilFillPath(pathObj, fillMode, mask);
 }
@@ -1914,7 +1914,7 @@ void Context::stencilStrokePath(GLuint path, GLint reference, GLuint mask)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilStrokePath(pathObj, reference, mask);
 }
@@ -1926,7 +1926,7 @@ void Context::coverFillPath(GLuint path, GLenum coverMode)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->coverFillPath(pathObj, coverMode);
 }
@@ -1938,7 +1938,7 @@ void Context::coverStrokePath(GLuint path, GLenum coverMode)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->coverStrokePath(pathObj, coverMode);
 }
@@ -1950,7 +1950,7 @@ void Context::stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilThenCoverFillPath(pathObj, fillMode, mask, coverMode);
 }
@@ -1965,7 +1965,7 @@ void Context::stencilThenCoverStrokePath(GLuint path,
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilThenCoverStrokePath(pathObj, reference, mask, coverMode);
 }
@@ -1981,7 +1981,7 @@ void Context::coverFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->coverFillPathInstanced(pathObjects, coverMode, transformType, transformValues);
 }
@@ -1997,7 +1997,7 @@ void Context::coverStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->coverStrokePathInstanced(pathObjects, coverMode, transformType,
                                               transformValues);
@@ -2015,7 +2015,7 @@ void Context::stencilFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilFillPathInstanced(pathObjects, fillMode, mask, transformType,
                                               transformValues);
@@ -2033,7 +2033,7 @@ void Context::stencilStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilStrokePathInstanced(pathObjects, reference, mask, transformType,
                                                 transformValues);
@@ -2052,7 +2052,7 @@ void Context::stencilThenCoverFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilThenCoverFillPathInstanced(pathObjects, coverMode, fillMode, mask,
                                                        transformType, transformValues);
@@ -2071,7 +2071,7 @@ void Context::stencilThenCoverStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    syncRendererState();
+    ANGLE_CONTEXT_TRY(syncRendererState());
 
     mImplementation->stencilThenCoverStrokePathInstanced(pathObjects, coverMode, reference, mask,
                                                          transformType, transformValues);
@@ -2819,27 +2819,29 @@ void Context::initWorkarounds()
 
 Error Context::prepareForDraw()
 {
-    syncRendererState();
+    ANGLE_TRY(syncRendererState());
     ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
     ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
     return NoError();
 }
 
-void Context::syncRendererState()
+Error Context::syncRendererState()
 {
-    mGLState.syncDirtyObjects(this);
+    ANGLE_TRY(mGLState.syncDirtyObjects(this));
     const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
     mImplementation->syncState(this, dirtyBits);
     mGLState.clearDirtyBits();
+    return NoError();
 }
 
-void Context::syncRendererState(const State::DirtyBits &bitMask,
-                                const State::DirtyObjects &objectMask)
+Error Context::syncRendererState(const State::DirtyBits &bitMask,
+                                 const State::DirtyObjects &objectMask)
 {
-    mGLState.syncDirtyObjects(this, objectMask);
+    ANGLE_TRY(mGLState.syncDirtyObjects(this, objectMask));
     const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
     mImplementation->syncState(this, dirtyBits);
     mGLState.clearDirtyBits(dirtyBits);
+    return NoError();
 }
 
 void Context::blitFramebuffer(GLint srcX0,
@@ -2859,32 +2861,32 @@ void Context::blitFramebuffer(GLint srcX0,
     Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
     Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
 
-    syncStateForBlit();
+    ANGLE_CONTEXT_TRY(syncStateForBlit());
 
     handleError(drawFramebuffer->blit(this, srcArea, dstArea, mask, filter));
 }
 
 void Context::clear(GLbitfield mask)
 {
-    syncStateForClear();
+    ANGLE_CONTEXT_TRY(syncStateForClear());
     handleError(mGLState.getDrawFramebuffer()->clear(this, mask));
 }
 
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
-    syncStateForClear();
+    ANGLE_CONTEXT_TRY(syncStateForClear());
     handleError(mGLState.getDrawFramebuffer()->clearBufferfv(this, buffer, drawbuffer, values));
 }
 
 void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
-    syncStateForClear();
+    ANGLE_CONTEXT_TRY(syncStateForClear());
     handleError(mGLState.getDrawFramebuffer()->clearBufferuiv(this, buffer, drawbuffer, values));
 }
 
 void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
 {
-    syncStateForClear();
+    ANGLE_CONTEXT_TRY(syncStateForClear());
     handleError(mGLState.getDrawFramebuffer()->clearBufferiv(this, buffer, drawbuffer, values));
 }
 
@@ -2900,7 +2902,7 @@ void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLin
         return;
     }
 
-    syncStateForClear();
+    ANGLE_CONTEXT_TRY(syncStateForClear());
     handleError(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
 }
 
@@ -2917,7 +2919,7 @@ void Context::readPixels(GLint x,
         return;
     }
 
-    syncStateForReadPixels();
+    ANGLE_CONTEXT_TRY(syncStateForReadPixels());
 
     Framebuffer *readFBO = mGLState.getReadFramebuffer();
     ASSERT(readFBO);
@@ -2936,7 +2938,7 @@ void Context::copyTexImage2D(GLenum target,
                              GLint border)
 {
     // Only sync the read FBO
-    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER));
 
     Rectangle sourceArea(x, y, width, height);
 
@@ -2961,7 +2963,7 @@ void Context::copyTexSubImage2D(GLenum target,
     }
 
     // Only sync the read FBO
-    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER));
 
     Offset destOffset(xoffset, yoffset, 0);
     Rectangle sourceArea(x, y, width, height);
@@ -2988,7 +2990,7 @@ void Context::copyTexSubImage3D(GLenum target,
     }
 
     // Only sync the read FBO
-    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER));
 
     Offset destOffset(xoffset, yoffset, zoffset);
     Rectangle sourceArea(x, y, width, height);
@@ -3170,7 +3172,7 @@ void Context::readBuffer(GLenum mode)
 void Context::discardFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(this, target);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, target));
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
@@ -3185,7 +3187,7 @@ void Context::invalidateFramebuffer(GLenum target,
                                     const GLenum *attachments)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(this, target);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, target));
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
@@ -3207,7 +3209,7 @@ void Context::invalidateSubFramebuffer(GLenum target,
                                        GLsizei height)
 {
     // Only sync the FBO
-    mGLState.syncDirtyObject(this, target);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, target));
 
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
@@ -3231,7 +3233,7 @@ void Context::texImage2D(GLenum target,
                          GLenum type,
                          const void *pixels)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Extents size(width, height, 1);
     Texture *texture =
@@ -3251,7 +3253,7 @@ void Context::texImage3D(GLenum target,
                          GLenum type,
                          const void *pixels)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3275,7 +3277,7 @@ void Context::texSubImage2D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture =
@@ -3302,7 +3304,7 @@ void Context::texSubImage3D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3319,7 +3321,7 @@ void Context::compressedTexImage2D(GLenum target,
                                    GLsizei imageSize,
                                    const void *data)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Extents size(width, height, 1);
     Texture *texture =
@@ -3339,7 +3341,7 @@ void Context::compressedTexImage3D(GLenum target,
                                    GLsizei imageSize,
                                    const void *data)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3358,7 +3360,7 @@ void Context::compressedTexSubImage2D(GLenum target,
                                       GLsizei imageSize,
                                       const void *data)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture =
@@ -3386,7 +3388,7 @@ void Context::compressedTexSubImage3D(GLenum target,
         return;
     }
 
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
@@ -3412,7 +3414,7 @@ void Context::copyTextureCHROMIUM(GLuint sourceId,
                                   GLboolean unpackPremultiplyAlpha,
                                   GLboolean unpackUnmultiplyAlpha)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3442,7 +3444,7 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
         return;
     }
 
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3455,7 +3457,7 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
 
 void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
 {
-    syncStateForTexImage();
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
 
     gl::Texture *sourceTexture = getTexture(sourceId);
     gl::Texture *destTexture   = getTexture(destId);
@@ -3521,24 +3523,24 @@ void Context::flushMappedBufferRange(GLenum /*target*/, GLintptr /*offset*/, GLs
     // We do not currently support a non-trivial implementation of FlushMappedBufferRange
 }
 
-void Context::syncStateForReadPixels()
+Error Context::syncStateForReadPixels()
 {
-    syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
+    return syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
 }
 
-void Context::syncStateForTexImage()
+Error Context::syncStateForTexImage()
 {
-    syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
+    return syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
 }
 
-void Context::syncStateForClear()
+Error Context::syncStateForClear()
 {
-    syncRendererState(mClearDirtyBits, mClearDirtyObjects);
+    return syncRendererState(mClearDirtyBits, mClearDirtyObjects);
 }
 
-void Context::syncStateForBlit()
+Error Context::syncStateForBlit()
 {
-    syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
+    return syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
 }
 
 void Context::activeTexture(GLenum texture)
@@ -4180,7 +4182,7 @@ void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     // According to spec 3.1 Table 20.49: Framebuffer Dependent Values,
     // the sample position should be queried by DRAW_FRAMEBUFFER.
-    mGLState.syncDirtyObject(this, GL_DRAW_FRAMEBUFFER);
+    ANGLE_CONTEXT_TRY(mGLState.syncDirtyObject(this, GL_DRAW_FRAMEBUFFER));
     const Framebuffer *framebuffer = mGLState.getDrawFramebuffer();
 
     switch (pname)

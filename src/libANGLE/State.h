@@ -476,9 +476,9 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     typedef angle::BitSet<DIRTY_OBJECT_MAX> DirtyObjects;
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
-    void syncDirtyObjects(const Context *context);
-    void syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
-    void syncDirtyObject(const Context *context, GLenum target);
+    Error syncDirtyObjects(const Context *context);
+    Error syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
+    Error syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
 
     void setImageUnit(const Context *context,
@@ -491,15 +491,17 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
                       GLenum format);
 
     const ImageUnit &getImageUnit(GLuint unit) const;
-    const std::vector<Texture *> &getCompleteTextureCache() const { return mCompleteTextureCache; }
+    const std::vector<Texture *> &getActiveTextureCache() const { return mActiveTextureCache; }
 
     // Handle a dirty texture event.
     void signal(size_t textureIndex, InitState initState) override;
 
     Error clearUnclearedActiveTextures(const Context *context);
 
+    Error getIncompleteTexture(const Context *context, GLenum type, Texture **textureOut);
+
   private:
-    void syncProgramTextures(const Context *context);
+    Error syncProgramTextures(const Context *context);
 
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;
@@ -557,6 +559,12 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     typedef std::map<GLenum, TextureBindingVector> TextureBindingMap;
     TextureBindingMap mSamplerTextures;
 
+    // Incomplete textures are 1x1 texture filled with black. We define them at the top level
+    // since they behave the same independent of back-end. This can be a bit wasteful on the
+    // GL back-end since it doesn't need them, but it does ensure they behave the same on
+    // every platform.
+    TextureMap mIncompleteTextures;
+
     // Texture Completeness Caching
     // ----------------------------
     // The texture completeness cache uses dirty bits to avoid having to scan the list
@@ -572,7 +580,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // A cache of complete textures. nullptr indicates unbound or incomplete.
     // Don't use BindingPointer because this cache is only valid within a draw call.
     // Also stores a notification channel to the texture itself to handle texture change events.
-    std::vector<Texture *> mCompleteTextureCache;
+    std::vector<Texture *> mActiveTextureCache;
     std::vector<OnAttachmentDirtyBinding> mCompleteTextureBindings;
     using ActiveTextureMask = angle::BitSet<IMPLEMENTATION_MAX_ACTIVE_TEXTURES>;
     ActiveTextureMask mCompleteTexturesMask;

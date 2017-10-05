@@ -152,8 +152,6 @@ Renderer9::~Renderer9()
 
 void Renderer9::release()
 {
-    RendererD3D::cleanup();
-
     gl::UninitializeDebugAnnotations();
 
     mTranslatedAttribCache.clear();
@@ -3229,10 +3227,7 @@ gl::Error Renderer9::clearRenderTarget(RenderTargetD3D *renderTarget,
 // looks up the corresponding OpenGL texture image unit and texture type,
 // and sets the texture and its addressing/filtering state (or NULL when inactive).
 // Sampler mapping needs to be up-to-date on the program object before this is called.
-gl::Error Renderer9::applyTextures(const gl::Context *context,
-                                   gl::SamplerType shaderType,
-                                   const FramebufferTextureArray &framebufferTextures,
-                                   size_t framebufferTextureCount)
+gl::Error Renderer9::applyTextures(const gl::Context *context, gl::SamplerType shaderType)
 {
     const auto &glState    = context->getGLState();
     const auto &caps       = context->getCaps();
@@ -3242,49 +3237,21 @@ gl::Error Renderer9::applyTextures(const gl::Context *context,
 
     // TODO(jmadill): Use the Program's sampler bindings.
 
-    const auto &completeTextures = glState.getCompleteTextureCache();
+    const auto &activeTextures = glState.getActiveTextureCache();
 
     unsigned int samplerRange = programD3D->getUsedSamplerRange(shaderType);
     for (unsigned int samplerIndex = 0; samplerIndex < samplerRange; samplerIndex++)
     {
-        GLenum textureType = programD3D->getSamplerTextureType(shaderType, samplerIndex);
-        GLint textureUnit  = programD3D->getSamplerMapping(shaderType, samplerIndex, caps);
-        if (textureUnit != -1)
-        {
-            gl::Texture *texture = completeTextures[textureUnit];
+        GLint textureUnit = programD3D->getSamplerMapping(shaderType, samplerIndex, caps);
+        ASSERT(textureUnit != -1);
+        gl::Texture *texture       = activeTextures[textureUnit];
+        gl::Sampler *samplerObject = glState.getSampler(textureUnit);
 
-            // A nullptr texture indicates incomplete.
-            if (texture &&
-                !std::binary_search(framebufferTextures.begin(),
-                                    framebufferTextures.begin() + framebufferTextureCount, texture))
-            {
-                gl::Sampler *samplerObject = glState.getSampler(textureUnit);
+        const gl::SamplerState &samplerState =
+            samplerObject ? samplerObject->getSamplerState() : texture->getSamplerState();
 
-                const gl::SamplerState &samplerState =
-                    samplerObject ? samplerObject->getSamplerState() : texture->getSamplerState();
-
-                ANGLE_TRY(
-                    setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
-            }
-            else
-            {
-                // Texture is not sampler complete or it is in use by the framebuffer.  Bind the
-                // incomplete texture.
-                gl::Texture *incompleteTexture = nullptr;
-                ANGLE_TRY(getIncompleteTexture(context, textureType, &incompleteTexture));
-
-                ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, incompleteTexture,
-                                          incompleteTexture->getSamplerState()));
-                ANGLE_TRY(setTexture(context, shaderType, samplerIndex, incompleteTexture));
-            }
-        }
-        else
-        {
-            // No texture bound to this slot even though it is used by the shader, bind a NULL
-            // texture
-            ANGLE_TRY(setTexture(context, shaderType, samplerIndex, nullptr));
-        }
+        ANGLE_TRY(setSamplerState(context, shaderType, samplerIndex, texture, samplerState));
+        ANGLE_TRY(setTexture(context, shaderType, samplerIndex, texture));
     }
 
     // Set all the remaining textures to NULL
@@ -3302,14 +3269,8 @@ gl::Error Renderer9::applyTextures(const gl::Context *context,
 
 gl::Error Renderer9::applyTextures(const gl::Context *context)
 {
-    FramebufferTextureArray framebufferTextures;
-    size_t framebufferSerialCount =
-        getBoundFramebufferTextures(context->getContextState(), &framebufferTextures);
-
-    ANGLE_TRY(
-        applyTextures(context, gl::SAMPLER_VERTEX, framebufferTextures, framebufferSerialCount));
-    ANGLE_TRY(
-        applyTextures(context, gl::SAMPLER_PIXEL, framebufferTextures, framebufferSerialCount));
+    ANGLE_TRY(applyTextures(context, gl::SAMPLER_VERTEX));
+    ANGLE_TRY(applyTextures(context, gl::SAMPLER_PIXEL));
     return gl::NoError();
 }
 

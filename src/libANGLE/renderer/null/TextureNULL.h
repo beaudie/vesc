@@ -102,6 +102,8 @@ class TextureNULL : public TextureImpl
 
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
+
+    gl::Error initToBlack(const gl::Context *context) override;
 };
 
 }  // namespace rx

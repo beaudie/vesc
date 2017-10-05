@@ -366,8 +366,6 @@ OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
 Error FramebufferAttachmentObject::initializeContents(const Context *context,
                                                       const ImageIndex &imageIndex)
 {
-    ASSERT(context->isRobustResourceInitEnabled());
-
     // Because gl::Texture cannot support tracking individual layer dirtiness, we only handle
     // initializing entire mip levels for 2D array textures.
     if (imageIndex.type == GL_TEXTURE_2D_ARRAY && imageIndex.hasLayer())

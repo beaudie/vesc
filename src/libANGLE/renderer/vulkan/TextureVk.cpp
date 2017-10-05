@@ -326,4 +326,10 @@ gl::Error TextureVk::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error TextureVk::initToBlack(const gl::Context *context)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
+}
+
 }  // namespace rx

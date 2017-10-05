@@ -2092,8 +2092,6 @@ bool Renderer11::testDeviceResettable()
 
 void Renderer11::release()
 {
-    RendererD3D::cleanup();
-
     mScratchMemoryBuffer.clear();
 
     if (mAnnotator != nullptr)
