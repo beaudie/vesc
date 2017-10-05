@@ -60,7 +60,7 @@ inline ::testing::NiceMock<MockFramebufferImpl> *MakeFramebufferMock()
     ::testing::NiceMock<MockFramebufferImpl> *framebufferImpl =
         new ::testing::NiceMock<MockFramebufferImpl>();
     // TODO(jmadill): add ON_CALLS for other returning methods
-    ON_CALL(*framebufferImpl, checkStatus()).WillByDefault(::testing::Return(true));
+    ON_CALL(*framebufferImpl, checkStatus(testing::_)).WillByDefault(::testing::Return(true));
 
     // We must mock the destructor since NiceMock doesn't work for destructors.
     EXPECT_CALL(*framebufferImpl, destructor()).Times(1).RetiresOnSaturation();

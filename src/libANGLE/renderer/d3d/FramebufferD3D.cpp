@@ -297,6 +297,7 @@ bool FramebufferD3D::checkStatus(const gl::Context *context) const
 
     // D3D11 does not allow for overlapping RenderTargetViews.
     // If WebGL compatibility is enabled, this has already been checked at a higher level.
+    ASSERT(!context->getExtensions().webglCompatibility || mState.colorAttachmentsAreUniqueImages());
     if (!context->getExtensions().webglCompatibility)
     {
         if (!mState.colorAttachmentsAreUniqueImages())
