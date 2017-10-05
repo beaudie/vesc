@@ -94,6 +94,16 @@ inline DestT clampCast(SrcT value)
     return static_cast<DestT>(value);
 }
 
+#if defined(ANGLE_PLATFORM_WINDOWS)
+// Suppress the C4800 warning for visual studio older than 2017.
+// https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-3-c4800.
+template <>
+inline int clampCast<int, bool>(bool value)
+{
+    return (value ? 1 : 0);
+}
+#endif
+
 template<typename T, typename MIN, typename MAX>
 inline T clamp(T x, MIN min, MAX max)
 {
