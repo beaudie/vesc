@@ -94,6 +94,14 @@ inline DestT clampCast(SrcT value)
     return static_cast<DestT>(value);
 }
 
+#if defined(ANGLE_PLATFORM_WINDOWS)
+template <>
+inline int clampCast<int, bool>(bool value)
+{
+    return (value ? 1 : 0);
+}
+#endif
+
 template<typename T, typename MIN, typename MAX>
 inline T clamp(T x, MIN min, MAX max)
 {
