@@ -424,6 +424,26 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
     Error init(VkDevice device, const VkPipelineLayoutCreateInfo &createInfo);
 };
 
+class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDescriptorSetLayout>
+{
+  public:
+    DescriptorSetLayout();
+    void destroy(VkDevice device);
+    using WrappedObject::retain;
+
+    Error init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo);
+};
+
+class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPool>
+{
+  public:
+    DescriptorPool();
+    void destroy(VkDevice device);
+    using WrappedObject::retain;
+
+    Error init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo);
+};
+
 class Fence final : public WrappedObject<Fence, VkFence>
 {
   public:
