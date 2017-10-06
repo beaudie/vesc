@@ -14,6 +14,8 @@
 #include <vector>
 
 #include "angle_gl.h"
+#include "common/utilities.h"
+
 #include <GLSLANG/ShaderLang.h>
 
 namespace sh
