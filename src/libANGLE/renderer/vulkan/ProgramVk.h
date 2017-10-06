@@ -116,6 +116,9 @@ class ProgramVk : public ProgramImpl
     vk::ShaderModule mLinkedVertexModule;
     vk::ShaderModule mLinkedFragmentModule;
     vk::PipelineLayout mPipelineLayout;
+    std::vector<vk::DescriptorSetLayout> mDescriptorSetLayouts;
+    vk::Buffer mDefaultVertexUniforms;
+    vk::Buffer mDefaultFragmentUniforms;
 };
 
 }  // namespace rx
