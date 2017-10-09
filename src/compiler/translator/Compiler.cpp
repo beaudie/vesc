@@ -571,7 +571,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
                                            IntermNodePatternMatcher::kNamelessStructDeclaration,
                                        &getSymbolTable(), getShaderVersion());
             }
-            InitializeUninitializedLocals(root, getShaderVersion());
+            InitializeUninitializedLocals(root, getShaderVersion(), &getSymbolTable());
         }
 
         if (success && getShaderType() == GL_VERTEX_SHADER &&
@@ -1010,7 +1010,7 @@ void TCompiler::initializeGLPosition(TIntermBlock *root)
     sh::ShaderVariable var(GL_FLOAT_VEC4, 0);
     var.name = "gl_Position";
     list.push_back(var);
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior);
 }
 
 void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
@@ -1052,7 +1052,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior);
 }
 
 const TExtensionBehavior &TCompiler::getExtensionBehavior() const
