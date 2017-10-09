@@ -26,7 +26,12 @@ bool IsNamelessStruct(const TIntermTyped *node)
 }
 
 void AddArrayZeroInitSequence(const TIntermTyped *initializedNode,
-                              TIntermSequence *initSequenceOut);
+                              TIntermSequence *initSequenceOut,
+                              TSymbolTable *symbolTable);
+
+void AddStructZeroInitSequence(const TIntermTyped *initializedNode,
+                               TIntermSequence *initSequenceOut,
+                               TSymbolTable *symbolTable);
 
 TIntermBinary *CreateZeroInitAssignment(const TIntermTyped *initializedNode)
 {
@@ -34,8 +39,28 @@ TIntermBinary *CreateZeroInitAssignment(const TIntermTyped *initializedNode)
     return new TIntermBinary(EOpAssign, initializedNode->deepCopy(), zero);
 }
 
+void AddZeroInitSequence(const TIntermTyped *initializedNode,
+                         TIntermSequence *initSequenceOut,
+                         TSymbolTable *symbolTable)
+{
+    if (initializedNode->isArray())
+    {
+        AddArrayZeroInitSequence(initializedNode, initSequenceOut, symbolTable);
+    }
+    else if (initializedNode->getType().isStructureContainingArrays() ||
+             IsNamelessStruct(initializedNode))
+    {
+        AddStructZeroInitSequence(initializedNode, initSequenceOut, symbolTable);
+    }
+    else
+    {
+        initSequenceOut->push_back(CreateZeroInitAssignment(initializedNode));
+    }
+}
+
 void AddStructZeroInitSequence(const TIntermTyped *initializedNode,
-                               TIntermSequence *initSequenceOut)
+                               TIntermSequence *initSequenceOut,
+                               TSymbolTable *symbolTable)
 {
     ASSERT(initializedNode->getBasicType() == EbtStruct);
     TStructure *structType = initializedNode->getType().getStruct();
@@ -43,53 +68,80 @@ void AddStructZeroInitSequence(const TIntermTyped *initializedNode,
     {
         TIntermBinary *element = new TIntermBinary(EOpIndexDirectStruct,
                                                    initializedNode->deepCopy(), CreateIndexNode(i));
-        if (element->isArray())
-        {
-            AddArrayZeroInitSequence(element, initSequenceOut);
-        }
-        else if (element->getType().isStructureContainingArrays())
-        {
-            AddStructZeroInitSequence(element, initSequenceOut);
-        }
-        else
-        {
-            // Structs can't be defined inside structs, so the type of a struct field can't be a
-            // nameless struct.
-            ASSERT(!IsNamelessStruct(element));
-            initSequenceOut->push_back(CreateZeroInitAssignment(element));
-        }
+        // Structs can't be defined inside structs, so the type of a struct field can't be a
+        // nameless struct.
+        ASSERT(!IsNamelessStruct(element));
+        AddZeroInitSequence(element, initSequenceOut, symbolTable);
     }
 }
 
-void AddArrayZeroInitSequence(const TIntermTyped *initializedNode, TIntermSequence *initSequenceOut)
+void AddArrayZeroInitStatementList(const TIntermTyped *initializedNode,
+                                   TIntermSequence *initSequenceOut,
+                                   TSymbolTable *symbolTable)
+{
+    for (unsigned int i = 0; i < initializedNode->getOutermostArraySize(); ++i)
+    {
+        TIntermBinary *element =
+            new TIntermBinary(EOpIndexDirect, initializedNode->deepCopy(), CreateIndexNode(i));
+        AddZeroInitSequence(element, initSequenceOut, symbolTable);
+    }
+}
+
+void AddArrayZeroInitForLoop(const TIntermTyped *initializedNode,
+                             TIntermSequence *initSequenceOut,
+                             TSymbolTable *symbolTable)
 {
     ASSERT(initializedNode->isArray());
     // Assign the array elements one by one to keep the AST compatible with ESSL 1.00 which
     // doesn't have array assignment.
     // Note that it is important to have the array init in the right order to workaround
     // http://crbug.com/709317
-    for (unsigned int i = 0; i < initializedNode->getOutermostArraySize(); ++i)
+
+    TSymbolUniqueId indexSymbol(symbolTable);
+
+    TIntermSymbol *indexSymbolNode = CreateTempSymbolNode(indexSymbol, TType(EbtInt), EvqTemporary);
+    TIntermDeclaration *indexInit =
+        CreateTempInitDeclarationNode(indexSymbol, CreateZeroNode(TType(EbtInt)), EvqTemporary);
+    TIntermConstantUnion *arraySizeNode = CreateIndexNode(initializedNode->getOutermostArraySize());
+    TIntermBinary *indexSmallerThanSize =
+        new TIntermBinary(EOpLessThan, indexSymbolNode->deepCopy(), arraySizeNode);
+    TIntermUnary *indexIncrement = new TIntermUnary(EOpPreIncrement, indexSymbolNode->deepCopy());
+
+    TIntermBlock *forLoopBody       = new TIntermBlock();
+    TIntermSequence *forLoopBodySeq = forLoopBody->getSequence();
+
+    TIntermBinary *element = new TIntermBinary(EOpIndexIndirect, initializedNode->deepCopy(),
+                                               indexSymbolNode->deepCopy());
+    AddZeroInitSequence(element, forLoopBodySeq, symbolTable);
+
+    TIntermLoop *forLoop =
+        new TIntermLoop(ELoopFor, indexInit, indexSmallerThanSize, indexIncrement, forLoopBody);
+    initSequenceOut->push_back(forLoop);
+}
+
+void AddArrayZeroInitSequence(const TIntermTyped *initializedNode,
+                              TIntermSequence *initSequenceOut,
+                              TSymbolTable *symbolTable)
+{
+    if (initializedNode->getQualifier() == EvqFragData ||
+        initializedNode->getQualifier() == EvqFragmentOut ||
+        (initializedNode->getBasicType() != EbtStruct &&
+         !initializedNode->getType().isArrayOfArrays() &&
+         initializedNode->getOutermostArraySize() <= 3u))
     {
-        TIntermBinary *element =
-            new TIntermBinary(EOpIndexDirect, initializedNode->deepCopy(), CreateIndexNode(i));
-        if (element->isArray())
-        {
-            AddArrayZeroInitSequence(element, initSequenceOut);
-        }
-        else if (element->getType().isStructureContainingArrays())
-        {
-            AddStructZeroInitSequence(element, initSequenceOut);
-        }
-        else
-        {
-            initSequenceOut->push_back(CreateZeroInitAssignment(element));
-        }
+        // Fragment outputs should not be indexed by non-constant indices.
+        // Also it doesn't make sense to use loops to initialize very small arrays.
+        AddArrayZeroInitStatementList(initializedNode, initSequenceOut, symbolTable);
+    }
+    else
+    {
+        AddArrayZeroInitForLoop(initializedNode, initSequenceOut, symbolTable);
     }
 }
 
 void InsertInitCode(TIntermSequence *mainBody,
                     const InitVariableList &variables,
-                    const TSymbolTable &symbolTable,
+                    TSymbolTable *symbolTable,
                     int shaderVersion,
                     const TExtensionBehavior &extensionBehavior)
 {
@@ -105,7 +157,7 @@ void InsertInitCode(TIntermSequence *mainBody,
         TIntermTyped *initializedSymbol = nullptr;
         if (var.isBuiltIn())
         {
-            initializedSymbol = ReferenceBuiltInVariable(name, symbolTable, shaderVersion);
+            initializedSymbol = ReferenceBuiltInVariable(name, *symbolTable, shaderVersion);
             if (initializedSymbol->getQualifier() == EvqFragData &&
                 !IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
             {
@@ -121,11 +173,11 @@ void InsertInitCode(TIntermSequence *mainBody,
         }
         else
         {
-            initializedSymbol = ReferenceGlobalVariable(name, symbolTable);
+            initializedSymbol = ReferenceGlobalVariable(name, *symbolTable);
         }
         ASSERT(initializedSymbol != nullptr);
 
-        TIntermSequence *initCode = CreateInitCode(initializedSymbol);
+        TIntermSequence *initCode = CreateInitCode(initializedSymbol, symbolTable);
         mainBody->insert(mainBody->begin(), initCode->begin(), initCode->end());
     }
 }
@@ -133,8 +185,8 @@ void InsertInitCode(TIntermSequence *mainBody,
 class InitializeLocalsTraverser : public TIntermTraverser
 {
   public:
-    InitializeLocalsTraverser(int shaderVersion)
-        : TIntermTraverser(true, false, false), mShaderVersion(shaderVersion)
+    InitializeLocalsTraverser(int shaderVersion, TSymbolTable *symbolTable)
+        : TIntermTraverser(true, false, false, symbolTable), mShaderVersion(shaderVersion)
     {
     }
 
@@ -168,7 +220,8 @@ class InitializeLocalsTraverser : public TIntermTraverser
                     // about further declarators in this declaration depending on the effects of
                     // this declarator.
                     ASSERT(node->getSequence()->size() == 1);
-                    insertStatementsInParentBlock(TIntermSequence(), *CreateInitCode(symbol));
+                    insertStatementsInParentBlock(TIntermSequence(),
+                                                  *CreateInitCode(symbol, mSymbolTable));
                 }
                 else
                 {
@@ -187,35 +240,23 @@ class InitializeLocalsTraverser : public TIntermTraverser
 
 }  // namespace anonymous
 
-TIntermSequence *CreateInitCode(const TIntermTyped *initializedSymbol)
+TIntermSequence *CreateInitCode(const TIntermTyped *initializedSymbol, TSymbolTable *symbolTable)
 {
     TIntermSequence *initCode = new TIntermSequence();
-    if (initializedSymbol->isArray())
-    {
-        AddArrayZeroInitSequence(initializedSymbol, initCode);
-    }
-    else if (initializedSymbol->getType().isStructureContainingArrays() ||
-             IsNamelessStruct(initializedSymbol))
-    {
-        AddStructZeroInitSequence(initializedSymbol, initCode);
-    }
-    else
-    {
-        initCode->push_back(CreateZeroInitAssignment(initializedSymbol));
-    }
+    AddZeroInitSequence(initializedSymbol, initCode, symbolTable);
     return initCode;
 }
 
-void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion)
+void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion, TSymbolTable *symbolTable)
 {
-    InitializeLocalsTraverser traverser(shaderVersion);
+    InitializeLocalsTraverser traverser(shaderVersion, symbolTable);
     root->traverse(&traverser);
     traverser.updateTree();
 }
 
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable,
+                         TSymbolTable *symbolTable,
                          int shaderVersion,
                          const TExtensionBehavior &extensionBehavior)
 {
