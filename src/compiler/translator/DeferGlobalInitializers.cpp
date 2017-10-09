@@ -29,7 +29,8 @@ namespace
 
 void GetDeferredInitializers(TIntermDeclaration *declaration,
                              bool initializeUninitializedGlobals,
-                             TIntermSequence *deferredInitializersOut)
+                             TIntermSequence *deferredInitializersOut,
+                             TSymbolTable *symbolTable)
 {
     // We iterate with an index instead of using an iterator since we're replacing the children of
     // declaration inside the loop.
@@ -94,7 +95,7 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
 
             if (symbolNode->getQualifier() == EvqGlobal && symbolNode->getSymbol() != "")
             {
-                TIntermSequence *initCode = CreateInitCode(symbolNode);
+                TIntermSequence *initCode = CreateInitCode(symbolNode, symbolTable);
                 deferredInitializersOut->insert(deferredInitializersOut->end(), initCode->begin(),
                                                 initCode->end());
             }
@@ -143,7 +144,7 @@ void DeferGlobalInitializers(TIntermBlock *root,
         if (declaration)
         {
             GetDeferredInitializers(declaration, initializeUninitializedGlobals,
-                                    deferredInitializers);
+                                    deferredInitializers, symbolTable);
         }
     }
 
