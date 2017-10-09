@@ -593,9 +593,9 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     // statements from expressions. But it's fine to run after the above SplitSequenceOperator and
     // RemoveArrayLengthMethod since they only have an effect on the AST on ESSL >= 3.00, and the
     // initializers that need to be deferred can only exist in ESSL < 3.00.
-    bool initializeLocalsAndGlobals =
-        (compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && !IsOutputHLSL(getOutputType());
-    DeferGlobalInitializers(root, initializeLocalsAndGlobals, &symbolTable);
+    bool initializeLocalsAndGlobals = (compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && !IsOutputHLSL(getOutputType());
+    bool canUseLoopsToInitialize = !(compileOptions & SH_DONT_USE_LOOPS_TO_INITIALIZE_VARIABLES);
+    DeferGlobalInitializers(root, initializeLocalsAndGlobals, canUseLoopsToInitialize, &symbolTable);
 
     if (initializeLocalsAndGlobals)
     {
@@ -615,7 +615,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                    &getSymbolTable(), getShaderVersion());
         }
 
-        InitializeUninitializedLocals(root, getShaderVersion());
+        InitializeUninitializedLocals(root, getShaderVersion(), canUseLoopsToInitialize,
+                                      &getSymbolTable());
     }
 
     if (getShaderType() == GL_VERTEX_SHADER && (compileOptions & SH_CLAMP_POINT_SIZE))
@@ -1055,7 +1056,7 @@ void TCompiler::initializeGLPosition(TIntermBlock *root)
     sh::ShaderVariable var(GL_FLOAT_VEC4);
     var.name = "gl_Position";
     list.push_back(var);
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior, false);
 }
 
 void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
@@ -1097,7 +1098,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior, false);
 }
 
 const TExtensionBehavior &TCompiler::getExtensionBehavior() const
