@@ -173,7 +173,8 @@ gl::Error Sync11::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResu
     LONGLONG endCounter       = currentCounter.QuadPart + mCounterFrequency * timeoutInSeconds;
 
     // Extremely unlikely, but if mCounterFrequency is large enough, endCounter can wrap
-    if (endCounter < currentCounter.QuadPart) {
+    if (endCounter < currentCounter.QuadPart)
+    {
         endCounter = MAXLONGLONG;
     }
 
