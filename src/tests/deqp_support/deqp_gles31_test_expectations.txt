@@ -36,6 +36,7 @@
 1442 D3D11 : dEQP-GLES31.functional.vertex_attribute_binding.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.texture.gather.* = SKIP
+1442 D3D11 : dEQP-GLES31.functional.image_load_store.* = SKIP
 
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_framebuffer_width_* = FAIL
@@ -44,7 +45,6 @@
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counter_buffers_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counters_* = FAIL
-1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_image_uniforms_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shader_storage_blocks_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_atomic_counter_buffer_bindings_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_atomic_counter_buffer_size_* = FAIL
@@ -81,6 +81,7 @@
 // OPENGL Failing Tests
 1665 WIN NVIDIA OPENGL : dEQP-GLES31.functional.draw_indirect.negative.command_offset_not_in_buffer_unsigned32_wrap = FAIL
 1442 NVIDIA OPENGL : dEQP-GLES31.functional.fbo.no_attachments.maximums.all = FAIL
+1442 OPENGL : dEQP-GLES31.functional.image_load_store.* = FAIL
 
 // OpenGL and D3D11 Failing Tests
 1663 OPENGL D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
@@ -1207,7 +1208,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.all_shared_buffer.22 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.all_shared_buffer.37 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.all_shared_buffer.38 = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.image_load_store.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.atomic_counter.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.stencil_texturing.format.depth32f_stencil8_2d = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.stencil_texturing.format.depth32f_stencil8_2d_array = FAIL
