@@ -263,6 +263,7 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveAttribLocationsMask;
     }
+    unsigned int getMaxActiveAttribLocation() const { return mMaxActiveAttribLocation; }
     DrawBufferMask getActiveOutputVariables() const { return mActiveOutputVariables; }
     const std::vector<sh::OutputVariable> &getOutputVariables() const { return mOutputVariables; }
     const std::map<int, VariableLocation> &getOutputLocations() const { return mOutputLocations; }
@@ -321,6 +322,7 @@ class ProgramState final : angle::NonCopyable
 
     std::vector<sh::Attribute> mAttributes;
     angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
+    unsigned int mMaxActiveAttribLocation;
 
     // Uniforms are sorted in order:
     //  1. Non-opaque uniforms
