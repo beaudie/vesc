@@ -16,6 +16,7 @@
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "compiler/translator/FlagStd140Structs.h"
+#include "compiler/translator/ImageFunctionHLSL.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/NodeSearch.h"
 #include "compiler/translator/RemoveSwitchFallThrough.h"
@@ -154,8 +155,9 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mExcessiveLoopIndex = nullptr;
 
     mStructureHLSL       = new StructureHLSL;
-    mUniformHLSL         = new UniformHLSL(mStructureHLSL, outputType, uniforms);
+    mUniformHLSL         = new UniformHLSL(shaderType, mStructureHLSL, outputType, uniforms);
     mTextureFunctionHLSL = new TextureFunctionHLSL;
+    mImageFunctionHLSL   = new ImageFunctionHLSL;
 
     if (mOutputType == SH_HLSL_3_0_OUTPUT)
     {
@@ -175,6 +177,7 @@ OutputHLSL::~OutputHLSL()
     SafeDelete(mStructureHLSL);
     SafeDelete(mUniformHLSL);
     SafeDelete(mTextureFunctionHLSL);
+    SafeDelete(mImageFunctionHLSL);
     for (auto &eqFunction : mStructEqualityFunctions)
     {
         SafeDelete(eqFunction);
@@ -720,6 +723,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
     bool getDimensionsIgnoresBaseLevel =
         (mCompileOptions & SH_HLSL_GET_DIMENSIONS_IGNORES_BASE_LEVEL) != 0;
     mTextureFunctionHLSL->textureFunctionHeader(out, mOutputType, getDimensionsIgnoresBaseLevel);
+    mImageFunctionHLSL->imageFunctionHeader(out);
 
     if (mUsesFragCoord)
     {
@@ -1842,6 +1846,15 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 // This path is used for internal functions that don't have their definitions in the
                 // AST, such as precision emulation functions.
                 out << DecorateFunctionIfNeeded(node->getFunctionSymbolInfo()->getNameObj()) << "(";
+            }
+            else if (node->getFunctionSymbolInfo()->isImageFunction())
+            {
+                TString name              = node->getFunctionSymbolInfo()->getName();
+                TType type                = (*arguments)[0]->getAsTyped()->getType();
+                TString imageFunctionName = mImageFunctionHLSL->useImageFunction(
+                    name, type.getBasicType(), type.getLayoutQualifier().imageInternalFormat,
+                    type.getMemoryQualifier().readonly);
+                out << imageFunctionName << "(";
             }
             else
             {
