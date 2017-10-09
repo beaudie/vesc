@@ -571,7 +571,9 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                     &symbolTable, shaderVersion);
     }
 
-    DeferGlobalInitializers(root, needToInitializeGlobalsInAST(), &symbolTable);
+    bool canUseLoopsToInitialize = !(compileOptions & SH_DONT_USE_LOOPS_TO_INITIALIZE_VARIABLES);
+    DeferGlobalInitializers(root, needToInitializeGlobalsInAST(), canUseLoopsToInitialize,
+                            &symbolTable);
 
     // Split multi declarations and remove calls to array length().
     // Note that SimplifyLoopConditions needs to be run before any other AST transformations
@@ -590,7 +592,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     RemoveArrayLengthMethod(root);
 
-    if ((compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && getOutputType())
+    if (compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS)
     {
         // Initialize uninitialized local variables.
         // In some cases initializing can generate extra statements in the parent block, such as
@@ -608,7 +610,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                    &getSymbolTable(), getShaderVersion());
         }
 
-        InitializeUninitializedLocals(root, getShaderVersion());
+        InitializeUninitializedLocals(root, getShaderVersion(), canUseLoopsToInitialize,
+                                      &getSymbolTable());
     }
 
     if (getShaderType() == GL_VERTEX_SHADER && (compileOptions & SH_CLAMP_POINT_SIZE))
@@ -1048,7 +1051,7 @@ void TCompiler::initializeGLPosition(TIntermBlock *root)
     sh::ShaderVariable var(GL_FLOAT_VEC4);
     var.name = "gl_Position";
     list.push_back(var);
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior, false);
 }
 
 void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
@@ -1090,7 +1093,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
             list.push_back(var);
         }
     }
-    InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
+    InitializeVariables(root, list, &symbolTable, shaderVersion, extensionBehavior, false);
 }
 
 const TExtensionBehavior &TCompiler::getExtensionBehavior() const
