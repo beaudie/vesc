@@ -73,10 +73,46 @@ static void AssignGLExtensionEntryPoint(const std::vector<std::string> &extensio
     *outFunction = function;
 }
 
+static int Dummy() {
+  return 0;
+}
+
+static GLenum DummyCheckFramebufferStatus(GLenum) {
+  return GL_FRAMEBUFFER_COMPLETE;
+}
+
+static void DummyGetProgramiv(GLuint program, GLenum pname, GLint* params) {
+  switch (pname) {
+    case GL_LINK_STATUS:
+      *params = GL_TRUE;
+      break;
+    case GL_VALIDATE_STATUS:
+      *params = GL_TRUE;
+      break;
+    default:
+      break;
+  }
+}
+
+static void DummyGetShaderiv(GLuint program, GLenum pname, GLint* params) {
+  switch (pname) {
+    case GL_COMPILE_STATUS:
+      *params = GL_TRUE;
+      break;
+    default:
+      break;
+  }
+}
+
 #define ASSIGN_WITH_EXT(EXT, NAME, FP)                                  \
+    AssignGLExtensionEntryPoint(extensions, EXT, reinterpret_cast<void*>(&Dummy), \
+                                reinterpret_cast<void **>(&FP))
+#define ASSIGN(NAME, FP) *reinterpret_cast<void **>(&FP) = reinterpret_cast<void*>(&Dummy);
+
+#define ASSIGN_WITH_EXT_REAL(EXT, NAME, FP)                                  \
     AssignGLExtensionEntryPoint(extensions, EXT, loadProcAddress(NAME), \
                                 reinterpret_cast<void **>(&FP))
-#define ASSIGN(NAME, FP) *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
+#define ASSIGN_REAL(NAME, FP) *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
 
 FunctionsGL::FunctionsGL()
     : version(),
@@ -801,14 +837,14 @@ FunctionsGL::~FunctionsGL()
 void FunctionsGL::initialize()
 {
     // Grab the version number
-    ASSIGN("glGetString", getString);
-    ASSIGN("glGetIntegerv", getIntegerv);
+    ASSIGN_REAL("glGetString", getString);
+    ASSIGN_REAL("glGetIntegerv", getIntegerv);
     GetGLVersion(getString, &version, &standard);
 
     // Grab the GL extensions
     if (isAtLeastGL(gl::Version(3, 0)) || isAtLeastGLES(gl::Version(3, 0)))
     {
-        ASSIGN("glGetStringi", getStringi);
+        ASSIGN_REAL("glGetStringi", getStringi);
         extensions = GetIndexedExtensions(getIntegerv, getStringi);
     }
     else
@@ -850,7 +886,7 @@ void FunctionsGL::initializeProcsDesktopGL()
     // in even older versions.  Always try loading the extensions regardless of GL version.
 
     // GL_NV_internalformat_sample_query
-    ASSIGN_WITH_EXT("GL_NV_internalformat_sample_query", "glGetInternalformatSampleivNV", getInternalformatSampleivNV);
+    ASSIGN_WITH_EXT_REAL("GL_NV_internalformat_sample_query", "glGetInternalformatSampleivNV", getInternalformatSampleivNV);
 
     // GL_ARB_program_interface_query (loading only functions relevant to GL_NV_path_rendering here)
     ASSIGN_WITH_EXT("GL_ARB_program_interface_query", "glGetProgramInterfaceiv", getProgramInterfaceiv);
@@ -937,7 +973,7 @@ void FunctionsGL::initializeProcsDesktopGL()
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glBindFramebufferEXT", bindFramebuffer);
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glDeleteFramebuffersEXT", deleteFramebuffers);
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glGenFramebuffersEXT", genFramebuffers);
-    ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glCheckFramebufferStatusEXT", checkFramebufferStatus);
+    checkFramebufferStatus = &DummyCheckFramebufferStatus; //ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glCheckFramebufferStatusEXT", checkFramebufferStatus);
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glFramebufferTexture1DEXT", framebufferTexture1D);
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glFramebufferTexture2DEXT", framebufferTexture2D);
     ASSIGN_WITH_EXT("GL_EXT_framebuffer_object", "glFramebufferTexture3DEXT", framebufferTexture3D);
@@ -962,7 +998,7 @@ void FunctionsGL::initializeProcsDesktopGL()
     ASSIGN_WITH_EXT("GL_KHR_debug", "glGetObjectPtrLabel", getObjectPtrLabel);
 
     // GL_ARB_internalformat_query
-    ASSIGN_WITH_EXT("GL_ARB_internalformat_query", "glGetInternalformativ", getInternalformativ);
+    ASSIGN_WITH_EXT_REAL("GL_ARB_internalformat_query", "glGetInternalformativ", getInternalformativ);
 
     // GL_ARB_ES2_compatibility
     ASSIGN_WITH_EXT("GL_ARB_ES2_compatibility", "glReleaseShaderCompiler", releaseShaderCompiler);
@@ -1073,8 +1109,8 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glGetDoublev", getDoublev);
         ASSIGN("glGetError", getError);
         ASSIGN("glGetFloatv", getFloatv);
-        ASSIGN("glGetIntegerv", getIntegerv);
-        ASSIGN("glGetString", getString);
+        ASSIGN_REAL("glGetIntegerv", getIntegerv);
+        ASSIGN_REAL("glGetString", getString);
         ASSIGN("glGetTexImage", getTexImage);
         ASSIGN("glGetTexLevelParameterfv", getTexLevelParameterfv);
         ASSIGN("glGetTexLevelParameteriv", getTexLevelParameteriv);
@@ -1202,10 +1238,10 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glGetAttachedShaders", getAttachedShaders);
         ASSIGN("glGetAttribLocation", getAttribLocation);
         ASSIGN("glGetProgramInfoLog", getProgramInfoLog);
-        ASSIGN("glGetProgramiv", getProgramiv);
+        getProgramiv = &DummyGetProgramiv; //ASSIGN("glGetProgramiv", getProgramiv);
         ASSIGN("glGetShaderInfoLog", getShaderInfoLog);
         ASSIGN("glGetShaderSource", getShaderSource);
-        ASSIGN("glGetShaderiv", getShaderiv);
+        getShaderiv = &DummyGetShaderiv; //ASSIGN("glGetShaderiv", getShaderiv);
         ASSIGN("glGetUniformLocation", getUniformLocation);
         ASSIGN("glGetUniformfv", getUniformfv);
         ASSIGN("glGetUniformiv", getUniformiv);
@@ -1303,7 +1339,7 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glBindRenderbuffer", bindRenderbuffer);
         ASSIGN("glBindVertexArray", bindVertexArray);
         ASSIGN("glBlitFramebuffer", blitFramebuffer);
-        ASSIGN("glCheckFramebufferStatus", checkFramebufferStatus);
+        checkFramebufferStatus = &DummyCheckFramebufferStatus; //ASSIGN("glCheckFramebufferStatus", checkFramebufferStatus);
         ASSIGN("glClampColor", clampColor);
         ASSIGN("glClearBufferfi", clearBufferfi);
         ASSIGN("glClearBufferfv", clearBufferfv);
@@ -1332,7 +1368,7 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glGetFramebufferAttachmentParameteriv", getFramebufferAttachmentParameteriv);
         ASSIGN("glGetIntegeri_v", getIntegeri_v);
         ASSIGN("glGetRenderbufferParameteriv", getRenderbufferParameteriv);
-        ASSIGN("glGetStringi", getStringi);
+        ASSIGN_REAL("glGetStringi", getStringi);
         ASSIGN("glGetTexParameterIiv", getTexParameterIiv);
         ASSIGN("glGetTexParameterIuiv", getTexParameterIuiv);
         ASSIGN("glGetTransformFeedbackVarying", getTransformFeedbackVarying);
@@ -1608,7 +1644,7 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glDrawTransformFeedbackInstanced", drawTransformFeedbackInstanced);
         ASSIGN("glDrawTransformFeedbackStreamInstanced", drawTransformFeedbackStreamInstanced);
         ASSIGN("glGetActiveAtomicCounterBufferiv", getActiveAtomicCounterBufferiv);
-        ASSIGN("glGetInternalformativ", getInternalformativ);
+        ASSIGN_REAL("glGetInternalformativ", getInternalformativ);
         ASSIGN("glMemoryBarrier", memoryBarrier);
         ASSIGN("glTexStorage1D", texStorage1D);
         ASSIGN("glTexStorage2D", texStorage2D);
@@ -1630,7 +1666,7 @@ void FunctionsGL::initializeProcsDesktopGL()
         ASSIGN("glFramebufferParameteri", framebufferParameteri);
         ASSIGN("glGetDebugMessageLog", getDebugMessageLog);
         ASSIGN("glGetFramebufferParameteriv", getFramebufferParameteriv);
-        ASSIGN("glGetInternalformati64v", getInternalformati64v);
+        ASSIGN_REAL("glGetInternalformati64v", getInternalformati64v);
         ASSIGN("glGetPointerv", getPointerv);
         ASSIGN("glGetObjectLabel", getObjectLabel);
         ASSIGN("glGetObjectPtrLabel", getObjectPtrLabel);
@@ -1804,7 +1840,7 @@ void FunctionsGL::initializeProcsGLES()
     // clang-format off
 
     // GL_NV_internalformat_sample_query
-    ASSIGN_WITH_EXT("GL_NV_internalformat_sample_query", "glGetInternalformatSampleivNV", getInternalformatSampleivNV);
+    ASSIGN_WITH_EXT_REAL("GL_NV_internalformat_sample_query", "glGetInternalformatSampleivNV", getInternalformatSampleivNV);
 
     // GL_NV_path_rendering
     ASSIGN_WITH_EXT("GL_NV_path_rendering", "glMatrixLoadfEXT", matrixLoadEXT);
@@ -1941,7 +1977,7 @@ void FunctionsGL::initializeProcsGLES()
         ASSIGN("glBlendFuncSeparate", blendFuncSeparate);
         ASSIGN("glBufferData", bufferData);
         ASSIGN("glBufferSubData", bufferSubData);
-        ASSIGN("glCheckFramebufferStatus", checkFramebufferStatus);
+        checkFramebufferStatus = &DummyCheckFramebufferStatus; //ASSIGN("glCheckFramebufferStatus", checkFramebufferStatus);
         ASSIGN("glClear", clear);
         ASSIGN("glClearColor", clearColor);
         ASSIGN("glClearDepthf", clearDepthf);
@@ -1990,15 +2026,15 @@ void FunctionsGL::initializeProcsGLES()
         ASSIGN("glGetError", getError);
         ASSIGN("glGetFloatv", getFloatv);
         ASSIGN("glGetFramebufferAttachmentParameteriv", getFramebufferAttachmentParameteriv);
-        ASSIGN("glGetIntegerv", getIntegerv);
-        ASSIGN("glGetProgramiv", getProgramiv);
+        ASSIGN_REAL("glGetIntegerv", getIntegerv);
+        getProgramiv = &DummyGetProgramiv; //ASSIGN("glGetProgramiv", getProgramiv);
         ASSIGN("glGetProgramInfoLog", getProgramInfoLog);
         ASSIGN("glGetRenderbufferParameteriv", getRenderbufferParameteriv);
-        ASSIGN("glGetShaderiv", getShaderiv);
+        getShaderiv = &DummyGetShaderiv; //ASSIGN("glGetShaderiv", getShaderiv);
         ASSIGN("glGetShaderInfoLog", getShaderInfoLog);
         ASSIGN("glGetShaderPrecisionFormat", getShaderPrecisionFormat);
         ASSIGN("glGetShaderSource", getShaderSource);
-        ASSIGN("glGetString", getString);
+        ASSIGN_REAL("glGetString", getString);
         ASSIGN("glGetTexParameterfv", getTexParameterfv);
         ASSIGN("glGetTexParameteriv", getTexParameteriv);
         ASSIGN("glGetUniformfv", getUniformfv);
@@ -2134,7 +2170,7 @@ void FunctionsGL::initializeProcsGLES()
         ASSIGN("glClearBufferuiv", clearBufferuiv);
         ASSIGN("glClearBufferfv", clearBufferfv);
         ASSIGN("glClearBufferfi", clearBufferfi);
-        ASSIGN("glGetStringi", getStringi);
+        ASSIGN_REAL("glGetStringi", getStringi);
         ASSIGN("glCopyBufferSubData", copyBufferSubData);
         ASSIGN("glGetUniformIndices", getUniformIndices);
         ASSIGN("glGetActiveUniformsiv", getActiveUniformsiv);
@@ -2177,7 +2213,7 @@ void FunctionsGL::initializeProcsGLES()
         ASSIGN("glInvalidateSubFramebuffer", invalidateSubFramebuffer);
         ASSIGN("glTexStorage2D", texStorage2D);
         ASSIGN("glTexStorage3D", texStorage3D);
-        ASSIGN("glGetInternalformativ", getInternalformativ);
+        ASSIGN_REAL("glGetInternalformativ", getInternalformativ);
     }
 
     // 3.1
