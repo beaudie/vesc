@@ -20,10 +20,12 @@ typedef std::vector<sh::ShaderVariable> InitVariableList;
 
 // Return a sequence of assignment operations to initialize "initializedSymbol". initializedSymbol
 // may be an array, struct or any combination of these, as long as it contains only basic types.
-TIntermSequence *CreateInitCode(const TIntermTyped *initializedSymbol);
+TIntermSequence *CreateInitCode(const TIntermTyped *initializedSymbol, TSymbolTable *symbolTable);
 
 // Initialize all uninitialized local variables, so that undefined behavior is avoided.
-void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion);
+void InitializeUninitializedLocals(TIntermBlock *root,
+                                   int shaderVersion,
+                                   TSymbolTable *symbolTable);
 
 // This function can initialize all the types that CreateInitCode is able to initialize. All
 // variables must be globals which can be found in the symbol table. For now it is used for the
@@ -35,7 +37,7 @@ void InitializeUninitializedLocals(TIntermBlock *root, int shaderVersion);
 // enabled extensions.
 void InitializeVariables(TIntermBlock *root,
                          const InitVariableList &vars,
-                         const TSymbolTable &symbolTable,
+                         TSymbolTable *symbolTable,
                          int shaderVersion,
                          const TExtensionBehavior &extensionBehavior);
 
