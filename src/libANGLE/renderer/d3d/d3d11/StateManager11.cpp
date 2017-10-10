@@ -2504,7 +2504,7 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
         mInputLayoutIsDirty = true;
 
         // Determine if we need to update attribs on the next draw.
-        mVertexAttribsNeedTranslation = (vertexArray11->hasDynamicAttrib(context));
+        mVertexAttribsNeedTranslation = (vertexArray11->hasActiveDynamicAttrib(context));
     }
 
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != first)
