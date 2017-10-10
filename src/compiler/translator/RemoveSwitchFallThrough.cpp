@@ -25,9 +25,11 @@ class RemoveSwitchFallThroughTraverser : public TIntermTraverser
 
     void visitSymbol(TIntermSymbol *node) override;
     void visitConstantUnion(TIntermConstantUnion *node) override;
+    bool visitDeclaration(Visit, TIntermDeclaration *node) override;
     bool visitBinary(Visit, TIntermBinary *node) override;
     bool visitUnary(Visit, TIntermUnary *node) override;
     bool visitTernary(Visit visit, TIntermTernary *node) override;
+    bool visitSwizzle(Visit, TIntermSwizzle *node) override;
     bool visitIfElse(Visit visit, TIntermIfElse *node) override;
     bool visitSwitch(Visit, TIntermSwitch *node) override;
     bool visitCase(Visit, TIntermCase *node) override;
@@ -87,6 +89,13 @@ void RemoveSwitchFallThroughTraverser::visitConstantUnion(TIntermConstantUnion *
     mLastStatementWasBreak = false;
 }
 
+bool RemoveSwitchFallThroughTraverser::visitDeclaration(Visit, TIntermDeclaration *node)
+{
+    mPreviousCase->getSequence()->push_back(node);
+    mLastStatementWasBreak = false;
+    return false;
+}
+
 bool RemoveSwitchFallThroughTraverser::visitBinary(Visit, TIntermBinary *node)
 {
     mPreviousCase->getSequence()->push_back(node);
@@ -102,6 +111,13 @@ bool RemoveSwitchFallThroughTraverser::visitUnary(Visit, TIntermUnary *node)
 }
 
 bool RemoveSwitchFallThroughTraverser::visitTernary(Visit, TIntermTernary *node)
+{
+    mPreviousCase->getSequence()->push_back(node);
+    mLastStatementWasBreak = false;
+    return false;
+}
+
+bool RemoveSwitchFallThroughTraverser::visitSwizzle(Visit, TIntermSwizzle *node)
 {
     mPreviousCase->getSequence()->push_back(node);
     mLastStatementWasBreak = false;
