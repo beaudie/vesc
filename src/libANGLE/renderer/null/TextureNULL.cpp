@@ -157,4 +157,9 @@ gl::Error TextureNULL::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error TextureNULL::initToBlack(const gl::Context *context)
+{
+    return gl::NoError();
+}
+
 }  // namespace rx

@@ -746,6 +746,22 @@ gl::Error TextureD3D::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error TextureD3D::initToBlack(const gl::Context *context)
+{
+    ANGLE_TRY(ensureRenderTarget(context));
+    ASSERT(mTexStorage && mTexStorage->isRenderTarget() && mTexStorage->getLevelCount() == 1);
+
+    for (GLint layer = 0; layer < getLayerCount(0); ++layer)
+    {
+        gl::ImageIndex index          = getImageIndex(0, layer);
+        RenderTargetD3D *renderTarget = nullptr;
+        ANGLE_TRY(mTexStorage->getRenderTarget(context, index, &renderTarget));
+        gl::ColorF clearValue(0, 0, 0, 1);
+        ANGLE_TRY(mRenderer->clearRenderTarget(renderTarget, clearValue, 1.0f, 0));
+    }
+    return gl::NoError();
+}
+
 TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {
@@ -3852,8 +3868,7 @@ bool TextureD3D_2DMultisample::isValidIndex(const gl::ImageIndex &index) const
 
 GLsizei TextureD3D_2DMultisample::getLayerCount(int level) const
 {
-    UNIMPLEMENTED();
-    return GLsizei();
+    return 1;
 }
 
 void TextureD3D_2DMultisample::markAllImagesDirty()

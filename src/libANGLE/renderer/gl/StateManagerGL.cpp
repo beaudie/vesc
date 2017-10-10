@@ -971,17 +971,6 @@ void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *c
                     bindTexture(textureType, 0);
                 }
             }
-
-            const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
-            if (sampler != nullptr)
-            {
-                SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
-                bindSampler(textureUnitIndex, samplerGL->getSamplerID());
-            }
-            else
-            {
-                bindSampler(textureUnitIndex, 0);
-            }
         }
     }
 
