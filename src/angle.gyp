@@ -61,6 +61,14 @@
         'vulkan_support/vulkan.gypi',
     ],
 
+    'target_defaults':
+    {
+        'dependencies':
+        [
+            '../gyp/warnings.gyp:gyp_deprecation',
+        ],
+    },
+
     'targets':
     [
         {
