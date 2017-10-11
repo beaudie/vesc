@@ -344,6 +344,8 @@ class Texture final : public egl::ImageSibling,
 
     Error generateMipmap(const Context *context);
 
+    Error initToBlack(const Context *context);
+
     egl::Surface *getBoundSurface() const;
     egl::Stream *getBoundStream() const;
 
