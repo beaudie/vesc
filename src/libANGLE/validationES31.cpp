@@ -259,13 +259,21 @@ bool ValidateProgramResourceIndex(const Program *programObject,
 
         case GL_UNIFORM:
             return (index < static_cast<GLuint>(programObject->getActiveUniformCount()));
+#if 0
+        case GL_UNIFORM_BLOCK:
+            return (index < static_cast<GLuint>(programObject->getActiveUniformBlockCount()));
+
+        case GL_ATOMIC_COUNTER_BUFFER:
+            return (index < static_cast<GLuint>(
+                                programObject->getState().getAtomicCounterBuffers().size()));
+#endif
 
         // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_UNIFORM_BLOCK:
+        case GL_ATOMIC_COUNTER_BUFFER:
         case GL_TRANSFORM_FEEDBACK_VARYING:
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
-        case GL_ATOMIC_COUNTER_BUFFER:
             UNIMPLEMENTED();
             return false;
 
