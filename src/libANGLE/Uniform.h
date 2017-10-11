@@ -20,13 +20,25 @@ namespace gl
 {
 struct UniformTypeInfo;
 
-template <typename T>
-void MarkResourceStaticUse(T *resource, GLenum shaderType, bool used);
+struct ShaderRef
+{
+    ShaderRef();
+    ShaderRef(const ShaderRef &rhs);
+
+    ShaderRef &operator=(const ShaderRef &rhs);
+    ShaderRef &operator|=(const ShaderRef &rhs);
+
+    void setRef(GLenum shaderType, bool used);
+
+    bool vertexStaticUse;
+    bool fragmentStaticUse;
+    bool computeStaticUse;
+};
 
 // Helper struct representing a single shader uniform
 struct LinkedUniform : public sh::Uniform
 {
-    LinkedUniform();
+    LinkedUniform(){};
     LinkedUniform(GLenum type,
                   GLenum precision,
                   const std::string &name,
@@ -54,10 +66,7 @@ struct LinkedUniform : public sh::Uniform
     // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
     int bufferIndex;
     sh::BlockMemberInfo blockInfo;
-
-    bool vertexStaticUse;
-    bool fragmentStaticUse;
-    bool computeStaticUse;
+    ShaderRef shaderRef;
 };
 
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
@@ -71,10 +80,7 @@ struct ShaderVariableBuffer
     int binding;
     unsigned int dataSize;
     std::vector<unsigned int> memberIndexes;
-
-    bool vertexStaticUse;
-    bool fragmentStaticUse;
-    bool computeStaticUse;
+    ShaderRef shaderRef;
 };
 
 using AtomicCounterBuffer = ShaderVariableBuffer;

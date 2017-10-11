@@ -1630,14 +1630,14 @@ void ProgramD3D::ensureUniformBlocksInitialized()
 
         D3DUniformBlock d3dUniformBlock;
 
-        if (uniformBlock.vertexStaticUse)
+        if (uniformBlock.shaderRef.vertexStaticUse)
         {
             ASSERT(vertexShaderD3D != nullptr);
             unsigned int baseRegister = vertexShaderD3D->getUniformBlockRegister(uniformBlock.name);
             d3dUniformBlock.vsRegisterIndex = baseRegister + uniformBlockElement;
         }
 
-        if (uniformBlock.fragmentStaticUse)
+        if (uniformBlock.shaderRef.fragmentStaticUse)
         {
             ASSERT(fragmentShaderD3D != nullptr);
             unsigned int baseRegister =
@@ -1645,7 +1645,7 @@ void ProgramD3D::ensureUniformBlocksInitialized()
             d3dUniformBlock.psRegisterIndex = baseRegister + uniformBlockElement;
         }
 
-        if (uniformBlock.computeStaticUse)
+        if (uniformBlock.shaderRef.computeStaticUse)
         {
             ASSERT(computeShaderD3D != nullptr);
             unsigned int baseRegister =
