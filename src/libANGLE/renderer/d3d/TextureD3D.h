@@ -109,6 +109,8 @@ class TextureD3D : public TextureImpl
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
 
+    gl::Error initToBlack(const gl::Context *context) override;
+
   protected:
     gl::Error setImageImpl(const gl::Context *context,
                            const gl::ImageIndex &index,

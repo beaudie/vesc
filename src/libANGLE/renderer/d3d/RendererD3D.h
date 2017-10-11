@@ -105,8 +105,6 @@ class BufferFactoryD3D : angle::NonCopyable
 };
 
 using AttribIndexArray = std::array<int, gl::MAX_VERTEX_ATTRIBS>;
-using FramebufferTextureArray =
-    std::array<gl::Texture *, gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>;
 
 class RendererD3D : public BufferFactoryD3D
 {
@@ -311,9 +309,6 @@ class RendererD3D : public BufferFactoryD3D
 
     angle::WorkerThreadPool *getWorkerThreadPool();
 
-    size_t getBoundFramebufferTextures(const gl::ContextState &data,
-                                       FramebufferTextureArray *outTextureArray);
-
     gl::Error getIncompleteTexture(const gl::Context *context,
                                    GLenum type,
                                    gl::Texture **textureOut);
@@ -330,8 +325,6 @@ class RendererD3D : public BufferFactoryD3D
                               gl::Limitations *outLimitations) const = 0;
 
     void cleanup();
-
-    // dirtyPointer is a special value that will make the comparison with any valid pointer fail and force the renderer to re-apply the state.
 
     bool skipDraw(const gl::State &glState, GLenum drawMode);
 
@@ -350,7 +343,7 @@ class RendererD3D : public BufferFactoryD3D
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
 
-    gl::TextureMap mIncompleteTextures;
+    IncompleteTextureSet mIncompleteTextures;
 
     mutable bool mWorkaroundsInitialized;
     mutable angle::WorkaroundsD3D mWorkarounds;

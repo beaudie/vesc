@@ -1396,4 +1396,10 @@ gl::Error TextureGL::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error TextureGL::initToBlack(const gl::Context *context)
+{
+    // UNIMPLEMENTED();
+    return gl::NoError();
+}
+
 }  // namespace rx
