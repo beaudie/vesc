@@ -2006,6 +2006,7 @@ bool Program::linkAtomicCounterBuffers()
                 buffer.memberIndexes.push_back(index);
                 uniform.bufferIndex = bufferIndex;
                 found               = true;
+                UnionResourceStaticUse(&buffer, &uniform);
                 break;
             }
         }
@@ -2014,6 +2015,7 @@ bool Program::linkAtomicCounterBuffers()
             AtomicCounterBuffer atomicCounterBuffer;
             atomicCounterBuffer.binding = uniform.binding;
             atomicCounterBuffer.memberIndexes.push_back(index);
+            UnionResourceStaticUse(&atomicCounterBuffer, &uniform);
             mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
             uniform.bufferIndex = static_cast<int>(mState.mAtomicCounterBuffers.size() - 1);
         }
