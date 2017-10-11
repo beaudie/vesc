@@ -103,6 +103,55 @@ class Std140BlockEncoder : public BlockLayoutEncoder
                        int arrayStride,
                        int matrixStride) override;
 };
+
+inline bool IsRowMajorLayout(const sh::InterfaceBlockField &var)
+{
+    return var.isRowMajorLayout;
 }
+
+inline bool IsRowMajorLayout(const sh::ShaderVariable &var)
+{
+    return false;
+}
+
+template <typename VarT, typename ProcessorT>
+void GetUniformBlockInfo(const std::vector<VarT> &fields,
+                         const std::string &prefix,
+                         sh::BlockLayoutEncoder *encoder,
+                         bool inRowMajorLayout,
+                         ProcessorT *processor)
+{
+    for (const VarT &field : fields)
+    {
+        const std::string &fieldName = (prefix.empty() ? field.name : prefix + "." + field.name);
+
+        if (field.isStruct())
+        {
+            bool rowMajorLayout = (inRowMajorLayout || IsRowMajorLayout(field));
+
+            for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
+            {
+                encoder->enterAggregateType();
+
+                const std::string uniformElementName =
+                    fieldName + (field.isArray() ? ArrayString(arrayElement) : "");
+                GetUniformBlockInfo(field.fields, uniformElementName, encoder, rowMajorLayout,
+                                    processor);
+
+                encoder->exitAggregateType();
+            }
+        }
+        else
+        {
+            bool isRowMajorMatrix = (gl::IsMatrixType(field.type) && inRowMajorLayout);
+            const BlockMemberInfo &blockMemberInfo =
+                encoder->encodeType(field.type, field.arraySize, isRowMajorMatrix);
+
+            (*processor)(fieldName, blockMemberInfo);
+        }
+    }
+}
+
+}  // namespace sh
 
 #endif  // COMMON_BLOCKLAYOUT_H_
