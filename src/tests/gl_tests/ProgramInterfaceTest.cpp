@@ -431,6 +431,123 @@ TEST_P(ProgramInterfaceTestES31, GetUniformProperties)
     EXPECT_NE(-1, params[12]);                             // atomic_counter_buffer_index
 }
 
+// Tests the resource property query for uniform block can be done correctly.
+TEST_P(ProgramInterfaceTestES31, GetUniformBlockProperties)
+{
+    const std::string &vertexShaderSource =
+        "#version 310 es\n"
+        "in vec2 position;\n"
+        "out vec2 v;\n"
+        "layout(binding = 2) uniform blockName {\n"
+        "  float f1;\n"
+        "  float f2;\n"
+        "} instanceName;\n"
+        "void main() {\n"
+        "  v = vec2(instanceName.f1, instanceName.f2);\n"
+        "  gl_Position = vec4(position, 0, 1);\n"
+        "}";
+
+    const std::string &fragmentShaderSource =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "in vec2 v;\n"
+        "out vec4 color;\n"
+        "void main() {\n"
+        "  color = vec4(v, 0, 1);\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+
+    GLuint index = glGetProgramResourceIndex(program, GL_UNIFORM_BLOCK, "blockName");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(GL_INVALID_INDEX, index);
+
+    GLchar name[64];
+    GLsizei length;
+    glGetProgramResourceName(program, GL_UNIFORM_BLOCK, index, sizeof(name), &length, name);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(9, length);
+    EXPECT_EQ("blockName", std::string(name));
+
+    constexpr int kPropCount = 8;
+    constexpr int kBufSize   = 256;
+    std::array<GLint, kBufSize> params;
+    std::array<GLenum, kPropCount> props = {
+        {GL_BUFFER_BINDING, GL_BUFFER_DATA_SIZE, GL_NAME_LENGTH, GL_NUM_ACTIVE_VARIABLES,
+         GL_ACTIVE_VARIABLES, GL_REFERENCED_BY_VERTEX_SHADER, GL_REFERENCED_BY_FRAGMENT_SHADER,
+         GL_REFERENCED_BY_COMPUTE_SHADER}};
+    glGetProgramResourceiv(program, GL_UNIFORM_BLOCK, index, kPropCount, props.data(), kPropCount,
+                           &length, params.data());
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(kPropCount, length);
+    EXPECT_EQ(2, params[0]);   // buffer_binding
+    EXPECT_NE(0, params[1]);   // buffer_data_size
+    EXPECT_EQ(10, params[2]);  // name_length
+    EXPECT_EQ(2, params[3]);   // num_active_variables
+    EXPECT_LE(0, params[4]);   // index of 'f1' or 'f2'
+    EXPECT_LE(0, params[5]);   // index of 'f1' or 'f2'
+    EXPECT_EQ(1, params[6]);   // referenced_by_vertex_shader
+    EXPECT_EQ(0, params[7]);   // referenced_by_fragment_shader
+
+    glGetProgramResourceiv(program, GL_UNIFORM_BLOCK, index, kPropCount, props.data(), kBufSize,
+                           &length, params.data());
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(kPropCount + 1, length);
+    EXPECT_EQ(0, params[8]);  // referenced_by_compute_shader
+}
+
+// Tests atomic counter buffer qeury works correctly.
+TEST_P(ProgramInterfaceTestES31, QueryAtomicCounteBuffer)
+{
+    const std::string &vertShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(binding = 2, offset = 0) uniform atomic_uint vcounter;\n"
+        "in highp vec4 a_position;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicCounterIncrement(vcounter);\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
+
+    const std::string &fragShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(binding = 2, offset = 4) uniform atomic_uint fcounter;\n"
+        "out highp vec4 my_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicCounterDecrement(fcounter);\n"
+        "    my_color = vec4(0.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, vertShader, fragShader);
+    GLint num;
+    glGetProgramInterfaceiv(program, GL_ATOMIC_COUNTER_BUFFER, GL_ACTIVE_RESOURCES, &num);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(1, num);
+
+    glGetProgramInterfaceiv(program, GL_ATOMIC_COUNTER_BUFFER, GL_MAX_NUM_ACTIVE_VARIABLES, &num);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(2, num);
+
+    constexpr int kPropCount = 5;
+    std::array<GLint, kPropCount> params;
+    std::array<GLenum, kPropCount> props = {
+        {GL_BUFFER_BINDING, GL_NUM_ACTIVE_VARIABLES, GL_REFERENCED_BY_VERTEX_SHADER,
+         GL_REFERENCED_BY_FRAGMENT_SHADER, GL_REFERENCED_BY_COMPUTE_SHADER}};
+    GLsizei length = 0;
+    glGetProgramResourceiv(program, GL_ATOMIC_COUNTER_BUFFER, 0, kPropCount, props.data(),
+                           kPropCount, &length, params.data());
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(kPropCount, length);
+    EXPECT_EQ(2, params[0]);  // buffer_binding
+    EXPECT_EQ(2, params[1]);  // num_active_variables
+    EXPECT_EQ(1, params[2]);  // referenced_by_vertex_shader
+    EXPECT_EQ(1, params[3]);  // referenced_by_fragment_shader
+    EXPECT_EQ(0, params[4]);  // referenced_by_compute_shader
+}
+
 ANGLE_INSTANTIATE_TEST(ProgramInterfaceTestES31, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // anonymous namespace
