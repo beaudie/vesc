@@ -13,6 +13,7 @@
 #include "compiler/preprocessor/SourceLocation.h"
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/IntermNode_util.h"
+#include "compiler/translator/ReplaceSwitchLastCaseNoOp.h"
 #include "compiler/translator/ValidateGlobalInitializer.h"
 #include "compiler/translator/ValidateSwitch.h"
 #include "compiler/translator/glslang.h"
@@ -4633,13 +4634,16 @@ TIntermSwitch *TParseContext::addSwitch(TIntermTyped *init,
         return nullptr;
     }
 
-    if (statementList)
+    ASSERT(statementList);
+    if (!ValidateSwitchStatementList(switchType, mDiagnostics, statementList, loc))
     {
-        if (!ValidateSwitchStatementList(switchType, mDiagnostics, statementList, loc))
-        {
-            return nullptr;
-        }
+        return nullptr;
     }
+
+    // In case the last case inside a switch statement is a certain type of no-op, it might be
+    // pruned later or GLSL compilers in drivers may not accept it. In this case it will be replaced
+    // with another type of no-op.
+    ReplaceSwitchLastCaseNoOp(statementList, &symbolTable);
 
     TIntermSwitch *node = new TIntermSwitch(init, statementList);
     node->setLine(loc);

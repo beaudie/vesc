@@ -374,6 +374,12 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success && (compileOptions & SH_LIMIT_EXPRESSION_COMPLEXITY))
             success = limitExpressionComplexity(root);
 
+        // Prune empty declarations to work around driver bugs and to keep declaration output
+        // simple. We want to do this before most other operations since TIntermDeclaration nodes
+        // without any children are tricky to work with.
+        if (success)
+            PruneEmptyDeclarations(root);
+
         // Create the function DAG and check there is no recursion
         if (success)
             success = initCallDag(root);
@@ -391,11 +397,6 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
         if (success && !(compileOptions & SH_DONT_PRUNE_UNUSED_FUNCTIONS))
             success = pruneUnusedFunctions(root);
-
-        // Prune empty declarations to work around driver bugs and to keep declaration output
-        // simple.
-        if (success)
-            PruneEmptyDeclarations(root);
 
         if (success && shaderVersion >= 310)
         {
