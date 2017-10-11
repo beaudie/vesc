@@ -34,9 +34,17 @@ void MarkResourceStaticUse(T *resource, GLenum shaderType, bool used)
             UNREACHABLE();
     }
 }
-
 template void MarkResourceStaticUse(LinkedUniform *resource, GLenum shaderType, bool used);
 template void MarkResourceStaticUse(InterfaceBlock *resource, GLenum shaderType, bool used);
+
+template <typename P, typename C>
+void UnionResourceStaticUse(P *parent, C *child)
+{
+    parent->vertexStaticUse |= child->vertexStaticUse;
+    parent->fragmentStaticUse |= child->fragmentStaticUse;
+    parent->computeStaticUse |= child->computeStaticUse;
+}
+template void UnionResourceStaticUse(AtomicCounterBuffer *parent, LinkedUniform *child);
 
 LinkedUniform::LinkedUniform()
     : typeInfo(nullptr),
