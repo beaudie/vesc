@@ -1455,4 +1455,9 @@ Error Texture::ensureSubImageInitialized(const Context *context,
     return NoError();
 }
 
+Error Texture::initToBlack(const Context *context)
+{
+    return mTexture->initToBlack(context);
+}
+
 }  // namespace gl

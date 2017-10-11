@@ -110,6 +110,8 @@ class TextureVk : public TextureImpl, public ResourceVk
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
 
+    gl::Error initToBlack(const gl::Context *context) override;
+
   private:
     // TODO(jmadill): support a more flexible storage back-end.
     vk::Image mImage;

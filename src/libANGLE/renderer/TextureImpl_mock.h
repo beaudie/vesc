@@ -121,6 +121,8 @@ class MockTextureImpl : public TextureImpl
 
     MOCK_METHOD1(syncState, void(const gl::Texture::DirtyBits &));
 
+    MOCK_METHOD1(initToBlack, gl::Error(const gl::Context *));
+
     MOCK_METHOD0(destructor, void());
 
   protected:

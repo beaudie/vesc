@@ -150,6 +150,11 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual void syncState(const gl::Texture::DirtyBits &dirtyBits) = 0;
 
+    // This is a special clear method for multisample textures. This works around a limitation
+    // in the GL front-end where we can't easily bind a temporary Framebuffer and render to it
+    // without disturbing the Context state.
+    virtual gl::Error initToBlack(const gl::Context *context) = 0;
+
   protected:
     const gl::TextureState &mState;
 };
