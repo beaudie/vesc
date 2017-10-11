@@ -10,7 +10,7 @@
 #include <list>
 #include <memory>
 #include <stdint.h>
-#include <string>
+#include <string.h>
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
