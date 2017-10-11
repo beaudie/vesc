@@ -641,11 +641,11 @@ vk::Error ProgramVk::initPipelineLayout(ContextVk *context)
             layoutBinding.descriptorCount = elementCount;
 
             layoutBinding.stageFlags = 0;
-            if (samplerUniform.vertexStaticUse)
+            if (samplerUniform.shaderRef.vertexStaticUse)
             {
                 layoutBinding.stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
             }
-            if (samplerUniform.fragmentStaticUse)
+            if (samplerUniform.shaderRef.fragmentStaticUse)
             {
                 layoutBinding.stageFlags |= VK_SHADER_STAGE_FRAGMENT_BIT;
             }
