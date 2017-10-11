@@ -480,10 +480,11 @@ bool TIntermAggregate::hasSideEffects() const
 
 void TIntermBlock::appendStatement(TIntermNode *statement)
 {
-    // Declaration nodes with no children can appear if all the declarators just added constants to
-    // the symbol table instead of generating code. They're no-ops so they aren't added to blocks.
-    if (statement != nullptr && (statement->getAsDeclarationNode() == nullptr ||
-                                 !statement->getAsDeclarationNode()->getSequence()->empty()))
+    // Declaration nodes with no children can appear if it was an empty declaration or if all the
+    // declarators just added constants to the symbol table instead of generating code. We still
+    // need to add the delcaration to the AST in that case because it might be relevant to the
+    // validity of switch/case.
+    if (statement != nullptr)
     {
         mStatements.push_back(statement);
     }

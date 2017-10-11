@@ -113,6 +113,8 @@
             'compiler/translator/RemoveInvariantDeclaration.h',
             'compiler/translator/RemovePow.cpp',
             'compiler/translator/RemovePow.h',
+            'compiler/translator/ReplaceSwitchLastCaseNoOp.cpp',
+            'compiler/translator/ReplaceSwitchLastCaseNoOp.h',
             'compiler/translator/RewriteDoWhile.cpp',
             'compiler/translator/RewriteDoWhile.h',
             'compiler/translator/RewriteTexelFetchOffset.cpp',
