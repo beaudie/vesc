@@ -438,7 +438,13 @@ if (build_angle_deqp_tests) {
     ]
     configs -= subtract_configs
     public_configs = [ ":angle_deqp_gtest_support_config" ]
+
     sources = deqp_gypi.deqp_gpu_test_expectations_sources
+    if (is_mac) {
+      sources += deqp_gypi.deqp_gpu_test_expectations_sources_mac
+      libs = [ "Cocoa.framework" ]
+    }
+
     if (build_with_chromium) {
       public_deps += [
         "//base",
