@@ -536,7 +536,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         if (markStaticUse)
         {
             existingUniform->staticUse = true;
-            MarkResourceStaticUse(existingUniform, shaderType, true);
+            existingUniform->shaderRef.setRef(shaderType, true);
         }
     }
     else
@@ -548,7 +548,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         linkedUniform.staticUse = markStaticUse;
         if (markStaticUse)
         {
-            MarkResourceStaticUse(&linkedUniform, shaderType, true);
+            linkedUniform.shaderRef.setRef(shaderType, true);
         }
 
         uniformList->push_back(linkedUniform);
