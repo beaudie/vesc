@@ -39,9 +39,6 @@ class TextureStorage9 : public TextureStorage
                                       IDirect3DSurface9 **outSurface) = 0;
     virtual gl::Error getBaseTexture(const gl::Context *context,
                                      IDirect3DBaseTexture9 **outTexture) = 0;
-    gl::Error getRenderTarget(const gl::Context *context,
-                              const gl::ImageIndex &index,
-                              RenderTargetD3D **outRT) override = 0;
 
     int getTopLevel() const override;
     bool isRenderTarget() const override;
