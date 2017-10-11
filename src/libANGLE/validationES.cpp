@@ -4151,6 +4151,7 @@ bool ValidateGetProgramivBase(ValidationContext *context,
             break;
 
         case GL_PROGRAM_SEPARABLE:
+        case GL_ACTIVE_ATOMIC_COUNTER_BUFFERS:
             if (context->getClientVersion() < Version(3, 1))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), ES31Required);
