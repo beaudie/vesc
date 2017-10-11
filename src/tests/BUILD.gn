@@ -16,7 +16,7 @@ unittests_gypi = exec_script("//build/gypi_to_gn.py",
 
 test("angle_unittests") {
   include_dirs = [
-    "testing/gtest/include",
+    "third_party/googletest/include",
     "../../src",
   ]
 
@@ -33,11 +33,11 @@ test("angle_unittests") {
   deps = [
     "//base",
     "//base/test:test_support",
-    "//testing/gmock",
-    "//testing/gtest",
     "//third_party/angle:libANGLE",
     "//third_party/angle:preprocessor",
     "//third_party/angle:translator",
+    "//third_party/googlemock",
+    "//third_party/googletest",
   ]
 }
 
@@ -52,7 +52,7 @@ if (is_win || is_linux || is_mac || is_android) {
 
   test("angle_end2end_tests") {
     include_dirs = [
-      "testing/gtest/include",
+      "third_party/googletest/include",
       "../../src/tests",
       "../../util",
     ]
@@ -90,14 +90,14 @@ if (is_win || is_linux || is_mac || is_android) {
     deps = [
       "//base",
       "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
       "//third_party/angle:angle_image_util",
       "//third_party/angle:angle_util",
       "//third_party/angle:libEGL",
       "//third_party/angle:libGLESv2",
       "//third_party/angle:preprocessor",
       "//third_party/angle:translator",
+      "//third_party/googlemock",
+      "//third_party/googletest",
     ]
   }
 
@@ -111,7 +111,7 @@ if (is_win || is_linux || is_mac || is_android) {
 
   test("angle_white_box_tests") {
     include_dirs = [
-      "testing/gtest/include",
+      "third_party/googletest/include",
       "../../src/tests",
       "../../util",
     ]
@@ -141,14 +141,14 @@ if (is_win || is_linux || is_mac || is_android) {
     deps = [
       "//base",
       "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
       "//third_party/angle:angle_util_static",
       "//third_party/angle:libANGLE",
       "//third_party/angle:libEGL_static",
       "//third_party/angle:libGLESv2_static",
       "//third_party/angle:preprocessor",
       "//third_party/angle:translator",
+      "//third_party/googlemock",
+      "//third_party/googletest",
     ]
   }
 }
@@ -164,7 +164,7 @@ if (is_win || is_linux || is_android) {
 
   test("angle_perftests") {
     include_dirs = [
-      "testing/gtest/include",
+      "third_party/googletest/include",
       "../../src/tests",
       "../../util",
     ]
@@ -191,12 +191,12 @@ if (is_win || is_linux || is_android) {
     deps = [
       "//base",
       "//base/test:test_support",
-      "//testing/gmock",
-      "//testing/gtest",
       "//third_party/angle:angle_util_static",
       "//third_party/angle:libANGLE",
       "//third_party/angle:libEGL_static",
       "//third_party/angle:libGLESv2_static",
+      "//third_party/googlemock",
+      "//third_party/googletest",
     ]
   }
 }
@@ -316,9 +316,9 @@ if (build_angle_deqp_tests) {
     public_deps = [
       "//base",
       "//base/test:test_support",
-      "//testing/gtest",
       "//third_party/angle:angle_common",
       "//third_party/angle:angle_util",
+      "//third_party/googletest",
     ]
     public_configs = [ ":angle_deqp_gtest_support_config" ]
     sources = deqp_gypi.deqp_gpu_test_expectations_sources
