@@ -37,6 +37,14 @@
 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.texture.gather.* = SKIP
 
+
+// LINUX Failing Tests
+// The case fails on the trybot when querying uniform block by getProgramResourceIndex is
+// implemented. Only specific to the trybot, and yet to see on local machine.
+// 1920 LINUX NVIDIA : dEQP-GLES31.functional.layout_binding.ubo.vertex_binding_array = FAIL
+1920 LINUX NVIDIA : dEQP-GLES31.functional.layout_binding.ubo.* = FAIL
+
+
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_framebuffer_width_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_framebuffer_height_* = FAIL

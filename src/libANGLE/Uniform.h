@@ -23,6 +23,9 @@ struct UniformTypeInfo;
 template <typename T>
 void MarkResourceStaticUse(T *resource, GLenum shaderType, bool used);
 
+template <typename P, typename C>
+void UnionResourceStaticUse(P *parent, C *child);
+
 // Helper struct representing a single shader uniform
 struct LinkedUniform : public sh::Uniform
 {
