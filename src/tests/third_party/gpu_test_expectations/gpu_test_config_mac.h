@@ -12,15 +12,12 @@
 
 #include "gpu_info.h"
 
-namespace base {
-
-class SysInfo
+namespace angle
 {
-  public:
-    static void OperatingSystemVersionNumbers(int32_t *major_version,
-                                              int32_t *minor_version,
-                                              int32_t *bugfix_version);
-};
+
+void GetOperatingSystemVersionNumbers(int32_t *major_version,
+                                      int32_t *minor_version,
+                                      int32_t *bugfix_version);
 
 } // namespace base
 
