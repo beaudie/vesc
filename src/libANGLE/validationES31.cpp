@@ -260,12 +260,25 @@ bool ValidateProgramResourceIndex(const Program *programObject,
         case GL_UNIFORM:
             return (index < static_cast<GLuint>(programObject->getActiveUniformCount()));
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_UNIFORM_BLOCK:
+            // return (index < programObject->getActiveUniformBlockCount());
+            //
+            // TODO(jie.a.chen@intel.com): Enable the above check once the below trybot failure
+            // is solved:
+            // angle_deqp_gles31_gl_tests on NVIDIA GPU on Linux
+            // dEQP-GLES31.functional.layout_binding.ubo.vertex_binding_array
+            // It's specific to the trybot only, and not reproducible locally on some NVIDIA GPU on
+            // Linux.
+            return true;
+
+        case GL_ATOMIC_COUNTER_BUFFER:
+            return (index < static_cast<GLuint>(
+                                programObject->getState().getAtomicCounterBuffers().size()));
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
-        case GL_ATOMIC_COUNTER_BUFFER:
             UNIMPLEMENTED();
             return false;
 
