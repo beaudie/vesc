@@ -23,6 +23,7 @@
 #include "compiler/translator/SimplifyLoopConditions.h"
 #include "compiler/translator/SplitSequenceOperator.h"
 #include "compiler/translator/UnfoldShortCircuitToIf.h"
+#include "compiler/translator/WrapSwitchStatementsInBlocks.h"
 
 namespace sh
 {
@@ -84,6 +85,10 @@ void TranslatorHLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
     // in the next release of d3dcompiler.dll, it would be nice to detect the DLL
     // version and only apply the workaround if it is too old.
     sh::BreakVariableAliasingInInnerLoops(root);
+
+    // WrapSwitchStatementsInBlocks should be called after any AST transformations that might
+    // introduce variable declarations inside the main scope of any switch statement.
+    WrapSwitchStatementsInBlocks(root);
 
     bool precisionEmulation =
         getResources().WEBGL_debug_shader_precision && getPragma().debugShaderPrecision;
