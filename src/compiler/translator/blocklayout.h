@@ -103,6 +103,17 @@ class Std140BlockEncoder : public BlockLayoutEncoder
                        int arrayStride,
                        int matrixStride) override;
 };
-}
+
+using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
+
+// Only valid to call with ShaderVariable and InterfaceBlockField.
+template <typename VarT>
+void GetUniformBlockInfo(const std::vector<VarT> &fields,
+                         const std::string &prefix,
+                         sh::BlockLayoutEncoder *encoder,
+                         bool inRowMajorLayout,
+                         BlockLayoutMap *blockLayoutMap);
+
+}  // namespace sh
 
 #endif  // COMMON_BLOCKLAYOUT_H_
