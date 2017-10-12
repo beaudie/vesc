@@ -283,6 +283,9 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
 // config works or errors according to the EGL compatibility rules
 TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
 {
+    // anglebug.com/2183
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsD3D11());
+
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
         EGLConfig config1 = mConfigs[i];
