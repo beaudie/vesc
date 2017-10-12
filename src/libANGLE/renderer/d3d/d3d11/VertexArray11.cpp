@@ -56,15 +56,50 @@ void VertexArray11::syncState(const gl::Context *context,
     // TODO(jmadill): Individual attribute invalidation.
     renderer->getStateManager()->invalidateVertexBuffer();
 
-    for (auto dirtyBit : dirtyBits)
+    if (context->getClientVersion() < gl::ES_3_1)
     {
-        if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
-            continue;
+        for (auto dirtyBit : dirtyBits)
+        {
+            if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+                continue;
 
-        size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
-        // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-        ASSERT(index == mState.getBindingIndexFromAttribIndex(index));
-        mAttribsToUpdate.set(index);
+            size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
+            ASSERT(index == mState.getBindingIndexFromAttribIndex(index));
+            mAttribsToUpdate.set(index);
+        }
+    }
+    else
+    {
+        gl::AttributesMask bindingsToUpdate;
+        for (auto dirtyBit : dirtyBits)
+        {
+            if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+                continue;
+
+            size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
+            if (gl::VertexArray::IsVertexAttribDirtyBit(dirtyBit))
+            {
+                mAttribsToUpdate.set(index);
+            }
+            else
+            {
+                bindingsToUpdate.set(index);
+            }
+        }
+
+        if (bindingsToUpdate.none())
+        {
+            return;
+        }
+
+        const auto &attribs = mState.getVertexAttributes();
+        for (auto cleanAttribIndex : ~mAttribsToUpdate)
+        {
+            if (bindingsToUpdate.test(attribs[cleanAttribIndex].bindingIndex))
+            {
+                mAttribsToUpdate.set(cleanAttribIndex);
+            }
+        }
     }
 }
 

@@ -178,6 +178,8 @@ class VertexArray final : public LabeledObject
         DIRTY_BIT_BINDING_MAX_DIVISOR =
             DIRTY_BIT_BINDING_0_DIVISOR + gl::MAX_VERTEX_ATTRIB_BINDINGS,
 
+        DIRTY_BIT_MIN_BINDING = DIRTY_BIT_BINDING_0_BUFFER,
+
         DIRTY_BIT_UNKNOWN = DIRTY_BIT_BINDING_MAX_DIVISOR,
         DIRTY_BIT_MAX     = DIRTY_BIT_UNKNOWN,
     };
@@ -185,6 +187,11 @@ class VertexArray final : public LabeledObject
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
+    static bool IsVertexAttribDirtyBit(size_t dirtyBit)
+    {
+        ASSERT(dirtyBit < DIRTY_BIT_MAX);
+        return dirtyBit < DIRTY_BIT_MIN_BINDING;
+    }
 
     void syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
