@@ -19,6 +19,12 @@ namespace rx
 {
 class RendererVk;
 
+enum DescriptorPoolIndex : uint8_t
+{
+    UniformBufferPool = 0,
+    TexturePool       = 1,
+};
+
 class ContextVk : public ContextImpl, public ResourceVk
 {
   public:
@@ -26,6 +32,8 @@ class ContextVk : public ContextImpl, public ResourceVk
     ~ContextVk() override;
 
     gl::Error initialize() override;
+
+    void onDestroy(const gl::Context *context) override;
 
     // Flush and finish.
     gl::Error flush() override;
@@ -171,6 +179,10 @@ class ContextVk : public ContextImpl, public ResourceVk
     VkPipelineColorBlendAttachmentState mCurrentBlendAttachmentState;
     VkPipelineColorBlendStateCreateInfo mCurrentBlendState;
     VkGraphicsPipelineCreateInfo mCurrentPipelineInfo;
+
+    // The descriptor pool is externally sychronized, so cannot be accessed from different threads
+    // simulataneously. Hence, we keep it in the ContextVk instead of the RendererVk.
+    vk::DescriptorPool mDescriptorPool;
 };
 
 }  // namespace rx

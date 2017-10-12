@@ -189,6 +189,12 @@ template void GetUniformBlockInfo(const std::vector<InterfaceBlockField> &,
                                   bool,
                                   BlockLayoutMap *);
 
+template void GetUniformBlockInfo(const std::vector<Uniform> &,
+                                  const std::string &,
+                                  sh::BlockLayoutEncoder *,
+                                  bool,
+                                  BlockLayoutMap *);
+
 template void GetUniformBlockInfo(const std::vector<ShaderVariable> &,
                                   const std::string &,
                                   sh::BlockLayoutEncoder *,
