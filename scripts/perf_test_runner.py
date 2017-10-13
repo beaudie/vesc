@@ -99,7 +99,9 @@ print('Using test executable: ' + perftests_path)
 print('Test name: ' + test_name)
 
 # Infinite loop of running the tests.
-while True:
+count = 0
+while count < 10:
+    count += 1
     process = subprocess.Popen([perftests_path, '--gtest_filter=' + test_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, err = process.communicate()
 
