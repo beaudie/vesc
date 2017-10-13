@@ -277,6 +277,35 @@ TEST_P(SimpleOperationTest, DrawIndexedQuad)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Draw with a uniform.
+TEST_P(SimpleOperationTest, DrawQuadWithUniform)
+{
+    const std::string &vertexShader =
+        "attribute vec3 position;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(position, 1);\n"
+        "}";
+    const std::string &fragmentShader =
+        "uniform mediump vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = color;\n"
+        "}";
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+
+    GLint location = glGetUniformLocation(program, "color");
+    ASSERT_NE(-1, location);
+
+    glUseProgram(program);
+    glUniform4f(location, 0.0f, 1.0f, 0.0f, 1.0f);
+
+    drawQuad(program.get(), "position", 0.5f, 1.0f, true);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Tests a shader program with more than one vertex attribute, with vertex buffers.
 TEST_P(SimpleOperationTest, ThreeVertexAttributes)
 {

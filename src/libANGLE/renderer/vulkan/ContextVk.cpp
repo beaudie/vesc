@@ -196,8 +196,37 @@ ContextVk::~ContextVk()
     invalidateCurrentPipeline();
 }
 
+void ContextVk::onDestroy(const gl::Context *context)
+{
+    VkDevice device = mRenderer->getDevice();
+
+    mDescriptorPool.destroy(device);
+}
+
 gl::Error ContextVk::initialize()
 {
+    VkDevice device = mRenderer->getDevice();
+
+    VkDescriptorPoolSize poolSizes[2];
+    poolSizes[UniformBufferPool].type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    poolSizes[UniformBufferPool].descriptorCount = 1024;
+    poolSizes[TexturePool].type                  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    poolSizes[TexturePool].descriptorCount       = 1024;
+
+    VkDescriptorPoolCreateInfo descriptorPoolInfo;
+    descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    descriptorPoolInfo.pNext = nullptr;
+    descriptorPoolInfo.flags = 0;
+
+    // TODO(jmadill): Pick non-arbitrary max.
+    descriptorPoolInfo.maxSets = 2048;
+
+    // Reserve pools for uniform blocks and textures.
+    descriptorPoolInfo.poolSizeCount = 2;
+    descriptorPoolInfo.pPoolSizes    = poolSizes;
+
+    ANGLE_TRY(mDescriptorPool.init(device, descriptorPoolInfo));
+
     return gl::NoError();
 }
 
@@ -280,6 +309,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
     VkDevice device       = mRenderer->getDevice();
     const auto &state     = mState.getState();
     const auto &programGL = state.getProgram();
+    ProgramVk *programVk  = GetImplAs<ProgramVk>(programGL);
     const auto &vao       = state.getVertexArray();
     VertexArrayVk *vkVAO  = GetImplAs<VertexArrayVk>(vao);
     const auto *drawFBO   = state.getDrawFramebuffer();
@@ -304,6 +334,22 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
     // TODO(jmadill): the queue serial should be bound to the pipeline.
     setQueueSerial(queueSerial);
     vkVAO->updateCurrentBufferSerials(programGL->getActiveAttribLocationsMask(), queueSerial);
+
+    // TOOD(jmadill): Can probably use more dirty bits here.
+    ContextVk *contextVk = GetImplAs<ContextVk>(context);
+    ANGLE_TRY(programVk->updateUniforms(contextVk));
+
+    // Bind the graphics descriptor sets.
+    // TODO(jmadill): Handle multiple command buffers.
+    VkDescriptorSet uniformDescriptorSet = programVk->getDescriptorSet();
+    if (uniformDescriptorSet != VK_NULL_HANDLE)
+    {
+        vk::PipelineLayout *pipelineLayout = nullptr;
+        ANGLE_TRY_RESULT(programVk->getPipelineLayout(device), pipelineLayout);
+
+        commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1,
+                                          &uniformDescriptorSet, 0, nullptr);
+    }
 
     return gl::NoError();
 }
@@ -833,6 +879,11 @@ gl::Error ContextVk::dispatchCompute(const gl::Context *context,
 {
     UNIMPLEMENTED();
     return gl::InternalError();
+}
+
+vk::DescriptorPool *ContextVk::getDescriptorPool()
+{
+    return &mDescriptorPool;
 }
 
 }  // namespace rx
