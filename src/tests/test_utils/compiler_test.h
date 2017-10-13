@@ -45,6 +45,11 @@ class MatchOutputCodeTest : public testing::Test
                         ShCompileOptions defaultCompileOptions,
                         ShShaderOutput outputType);
 
+    MatchOutputCodeTest(GLenum shaderType,
+                        ShShaderSpec shaderSpec,
+                        ShCompileOptions defaultCompileOptions,
+                        ShShaderOutput outputType);
+
     void addOutputType(const ShShaderOutput outputType);
 
     ShBuiltInResources *getResources();
@@ -90,6 +95,7 @@ class MatchOutputCodeTest : public testing::Test
                              std::string *infoLog);
 
     GLenum mShaderType;
+    ShShaderSpec mShaderSpec;
     ShCompileOptions mDefaultCompileOptions;
     ShBuiltInResources mResources;
 
