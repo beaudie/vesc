@@ -50,9 +50,9 @@ class ShaderCompileTreeTest : public testing::Test
 
     TIntermBlock *mASTRoot;
 
-  private:
     TranslatorESSL *mTranslator;
 
+  private:
     TPoolAllocator mAllocator;
 };
 

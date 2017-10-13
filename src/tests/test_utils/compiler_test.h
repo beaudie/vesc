@@ -45,6 +45,11 @@ class MatchOutputCodeTest : public testing::Test
                         ShCompileOptions defaultCompileOptions,
                         ShShaderOutput outputType);
 
+    MatchOutputCodeTest(GLenum shaderType,
+                        ShShaderSpec shaderSpec,
+                        ShCompileOptions defaultCompileOptions,
+                        ShShaderOutput outputType);
+
     void addOutputType(const ShShaderOutput outputType);
 
     ShBuiltInResources *getResources();
@@ -82,6 +87,8 @@ class MatchOutputCodeTest : public testing::Test
     // Test that the string is found in none of the outputs
     bool notFoundInCode(const char *stringToFind) const;
 
+    ShBuiltInResources mResources;
+
   private:
     bool compileWithSettings(ShShaderOutput output,
                              const std::string &shaderString,
@@ -90,8 +97,8 @@ class MatchOutputCodeTest : public testing::Test
                              std::string *infoLog);
 
     GLenum mShaderType;
+    ShShaderSpec mShaderSpec;
     ShCompileOptions mDefaultCompileOptions;
-    ShBuiltInResources mResources;
 
     std::map<ShShaderOutput, std::string> mOutputCode;
 };
