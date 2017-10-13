@@ -196,8 +196,37 @@ ContextVk::~ContextVk()
     invalidateCurrentPipeline();
 }
 
+void ContextVk::onDestroy(const gl::Context *context)
+{
+    VkDevice device = mRenderer->getDevice();
+
+    mDescriptorPool.destroy(device);
+}
+
 gl::Error ContextVk::initialize()
 {
+    VkDevice device = mRenderer->getDevice();
+
+    VkDescriptorPoolSize poolSizes[2];
+    poolSizes[UniformBufferPool].type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    poolSizes[UniformBufferPool].descriptorCount = 1024;
+    poolSizes[TexturePool].type                  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    poolSizes[TexturePool].descriptorCount       = 1024;
+
+    VkDescriptorPoolCreateInfo descriptorPoolInfo;
+    descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    descriptorPoolInfo.pNext = nullptr;
+    descriptorPoolInfo.flags = 0;
+
+    // TODO(jmadill): Pick non-arbitrary max.
+    descriptorPoolInfo.maxSets = 2048;
+
+    // Reserve pools for uniform blocks and textures.
+    descriptorPoolInfo.poolSizeCount = 2;
+    descriptorPoolInfo.pPoolSizes    = poolSizes;
+
+    ANGLE_TRY(mDescriptorPool.init(device, descriptorPoolInfo));
+
     return gl::NoError();
 }
 

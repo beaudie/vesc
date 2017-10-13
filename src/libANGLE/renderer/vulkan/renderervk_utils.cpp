@@ -880,6 +880,48 @@ Error PipelineLayout::init(VkDevice device, const VkPipelineLayoutCreateInfo &cr
     return NoError();
 }
 
+// DescriptorSetLayout implementation.
+DescriptorSetLayout::DescriptorSetLayout()
+{
+}
+
+void DescriptorSetLayout::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroyDescriptorSetLayout(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+Error DescriptorSetLayout::init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo)
+{
+    ASSERT(!valid());
+    ANGLE_VK_TRY(vkCreateDescriptorSetLayout(device, &createInfo, nullptr, &mHandle));
+    return NoError();
+}
+
+// DescriptorPool implementation.
+DescriptorPool::DescriptorPool()
+{
+}
+
+void DescriptorPool::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroyDescriptorPool(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+Error DescriptorPool::init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo)
+{
+    ASSERT(!valid());
+    ANGLE_VK_TRY(vkCreateDescriptorPool(device, &createInfo, nullptr, &mHandle));
+    return NoError();
+}
+
 // Fence implementation.
 Fence::Fence()
 {
