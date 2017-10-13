@@ -110,6 +110,8 @@ class Buffer11 : public BufferD3D
     OnBufferDataDirtyChannel *getStaticBroadcastChannel();
     OnBufferDataDirtyChannel *getDirectBroadcastChannel();
 
+    OnBufferDataDirtyChannel *getIndexBufferBroadcastChannel();
+
   private:
     class BufferStorage;
     class EmulatedIndexedStorage;
@@ -173,6 +175,7 @@ class Buffer11 : public BufferD3D
 
     OnBufferDataDirtyChannel mStaticBroadcastChannel;
     OnBufferDataDirtyChannel mDirectBroadcastChannel;
+    OnBufferDataDirtyChannel mIndexBufferBroadcastChannel;
 };
 
 }  // namespace rx
