@@ -24,11 +24,13 @@ VertexArray11::VertexArray11(const gl::VertexArrayState &data)
       mAttributeStorageTypes(data.getMaxAttribs(), VertexStorageType::CURRENT_VALUE),
       mTranslatedAttribs(data.getMaxAttribs()),
       mCurrentBuffers(data.getMaxAttribs()),
-      mAppliedNumViewsToDivisor(1)
+      mAppliedNumViewsToDivisor(1),
+      mIndexDataType(IndexDataType::UNKNOWN),
+      mOnIndexBufferDataDirty(this, gl::MAX_VERTEX_ATTRIBS)
 {
     for (size_t attribIndex = 0; attribIndex < mCurrentBuffers.size(); ++attribIndex)
     {
-        mOnBufferDataDirty.emplace_back(this, attribIndex);
+        mOnVertexBufferDataDirty.emplace_back(this, attribIndex);
     }
 }
 
@@ -41,6 +43,8 @@ void VertexArray11::destroy(const gl::Context *context)
             buffer.set(context, nullptr);
         }
     }
+    if (mCurrentIndexBuffer.get())
+        mCurrentIndexBuffer.set(context, nullptr);
 }
 
 void VertexArray11::syncState(const gl::Context *context,
@@ -59,7 +63,10 @@ void VertexArray11::syncState(const gl::Context *context,
     for (auto dirtyBit : dirtyBits)
     {
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        {
+            renderer->getStateManager()->invalidateIndexBuffer();
             continue;
+        }
 
         size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
         // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
@@ -88,6 +95,36 @@ bool VertexArray11::flushAttribUpdates(const gl::Context *context)
     }
 
     return false;
+}
+
+void VertexArray11::updateIndexDataStorage(const gl::Context *context,
+                                           gl::Buffer *glBuffer,
+                                           IndexDataType dataType)
+{
+    gl::Buffer *oldBufferGL = mCurrentIndexBuffer.get();
+    Buffer11 *oldBuffer11   = oldBufferGL ? GetImplAs<Buffer11>(oldBufferGL) : nullptr;
+    Buffer11 *newBuffer11   = glBuffer ? GetImplAs<Buffer11>(glBuffer) : nullptr;
+
+    if (oldBuffer11 != newBuffer11 || dataType != mIndexDataType)
+    {
+        OnBufferDataDirtyChannel *newChannel = nullptr;
+        switch (dataType)
+        {
+            case IndexDataType::DIRECT:
+                newChannel = newBuffer11->getDirectBroadcastChannel();
+                break;
+            case IndexDataType::STATIC:
+            case IndexDataType::DYNAMIC:
+                newChannel = newBuffer11->getStaticBroadcastChannel();
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+        mOnIndexBufferDataDirty.bind(newChannel);
+        mCurrentIndexBuffer.set(context, glBuffer);
+        mIndexDataType = dataType;
+    }
 }
 
 void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t attribIndex)
@@ -156,7 +193,7 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
             }
         }
 
-        mOnBufferDataDirty[attribIndex].bind(newChannel);
+        mOnVertexBufferDataDirty[attribIndex].bind(newChannel);
         mCurrentBuffers[attribIndex].set(context, binding.getBuffer().get());
     }
 }
@@ -260,14 +297,19 @@ const std::vector<TranslatedAttribute> &VertexArray11::getTranslatedAttribs() co
 
 void VertexArray11::signal(size_t channelID, const gl::Context *context)
 {
-    ASSERT(mAttributeStorageTypes[channelID] != VertexStorageType::CURRENT_VALUE);
-
-    // This can change a buffer's storage, we'll need to re-check.
-    mAttribsToUpdate.set(channelID);
-
-    // Changing the vertex attribute state can affect the vertex shader.
     Renderer11 *renderer = GetImplAs<Context11>(context)->getRenderer();
-    renderer->getStateManager()->invalidateShaders();
+    if (channelID == gl::MAX_VERTEX_ATTRIBS)
+    {
+        renderer->getStateManager()->invalidateIndexBuffer();
+    }
+    else
+    {
+        // This can change a buffer's storage, we'll need to re-check.
+        mAttribsToUpdate.set(channelID);
+
+        // Changing the vertex attribute state can affect the vertex shader.
+        renderer->getStateManager()->invalidateShaders();
+    }
 }
 
 void VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::Context *context, GLsizei count)

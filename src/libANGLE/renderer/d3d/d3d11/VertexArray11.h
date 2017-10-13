@@ -35,6 +35,10 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
                                            GLsizei instances);
     void clearDirtyAndPromoteDynamicAttribs(const gl::Context *context, GLsizei count);
 
+    void updateIndexDataStorage(const gl::Context *context,
+                                gl::Buffer *buffer,
+                                IndexDataType dataType);
+
     const std::vector<TranslatedAttribute> &getTranslatedAttribs() const;
 
     // SignalReceiver implementation
@@ -66,7 +70,11 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
     // We need to keep a safe pointer to the Buffer so we can attach the correct dirty callbacks.
     std::vector<gl::BindingPointer<gl::Buffer>> mCurrentBuffers;
 
-    std::vector<OnBufferDataDirtyBinding> mOnBufferDataDirty;
+    gl::BindingPointer<gl::Buffer> mCurrentIndexBuffer;
+    IndexDataType mIndexDataType;
+
+    std::vector<OnBufferDataDirtyBinding> mOnVertexBufferDataDirty;
+    OnBufferDataDirtyBinding mOnIndexBufferDataDirty;
 
     Serial mCurrentStateSerial;
 

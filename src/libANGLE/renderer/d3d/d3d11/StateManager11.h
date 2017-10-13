@@ -181,6 +181,7 @@ class StateManager11 final : angle::NonCopyable
 
     // Called by the Framebuffer11 and VertexArray11.
     void invalidateShaders();
+    void invalidateIndexBuffer();
 
     // Called by VertexArray11 to trigger attribute translation.
     void invalidateVertexAttributeTranslation();
@@ -247,7 +248,7 @@ class StateManager11 final : angle::NonCopyable
                                GLenum type,
                                TranslatedIndexData *indexInfo);
 
-    bool setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
+    void setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
     gl::Error updateVertexOffsetsForPointSpritesEmulation(GLint startVertex,
                                                           GLsizei emulatedInstanceId);
@@ -477,6 +478,7 @@ class StateManager11 final : angle::NonCopyable
     ID3D11Buffer *mAppliedIB;
     DXGI_FORMAT mAppliedIBFormat;
     unsigned int mAppliedIBOffset;
+    bool mIndexBufferIsDirty;
 
     // Vertex, index and input layouts
     VertexDataManager mVertexDataManager;
