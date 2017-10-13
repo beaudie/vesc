@@ -42,6 +42,7 @@ class GeometryShaderTest : public testing::Test
         bool status         = mTranslator->compile(shaderStrings, 1, SH_OBJECT_CODE | SH_VARIABLES);
         TInfoSink &infoSink = mTranslator->getInfoSink();
         mInfoLog            = infoSink.info.c_str();
+        mTranslatedShaderString = infoSink.obj.c_str();
         return status;
     }
 
@@ -87,6 +88,11 @@ class GeometryShaderTest : public testing::Test
         return sstream.str();
     }
 
+    bool findInTranslatedShader(const std::string &code)
+    {
+        return mTranslatedShaderString.find(code) != std::string::npos;
+    }
+
     const std::string kHeader =
         "#version 310 es\n"
         "#extension GL_OES_geometry_shader : require\n";
@@ -98,6 +104,7 @@ class GeometryShaderTest : public testing::Test
     const std::string kOutputLayout = "layout (points, max_vertices = 1) out;\n";
 
     std::string mInfoLog;
+    std::string mTranslatedShaderString;
     TranslatorESSL *mTranslator = nullptr;
 };
 
@@ -1155,4 +1162,39 @@ TEST_F(GeometryShaderTest, GeometryShaderBuiltInConstantsWithoutExtension)
             FAIL() << "Shader compilation succeeded, expecting failure: \n" << mInfoLog;
         }
     }
+}
+
+// Verify that the member of gl_in won't be changed in the output shader string.
+TEST_F(GeometryShaderTest, ValidateGLInMembersInOutputShaderString)
+{
+    const std::string &shaderString1 =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (lines) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position;\n"
+        "    for (int i = 0; i < 2; i++)\n"
+        "    {\n"
+        "        position = gl_in[i].gl_Position;\n"
+        "    }\n"
+        "}\n";
+
+    ASSERT(compile(shaderString1));
+    EXPECT_TRUE(findInTranslatedShader(".gl_Position"));
+
+    const std::string &shaderString2 =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position;\n"
+        "    position = gl_in[0].gl_Position;\n"
+        "}\n";
+
+    ASSERT(compile(shaderString2));
+    EXPECT_TRUE(findInTranslatedShader(".gl_Position"));
 }
