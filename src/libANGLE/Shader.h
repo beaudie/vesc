@@ -90,6 +90,8 @@ class ShaderState final : angle::NonCopyable
     sh::WorkGroupSize mLocalSize;
 
     std::vector<sh::Varying> mVaryings;
+    std::vector<sh::Varying> mInputVaryings;
+    std::vector<sh::Varying> mOutputVaryings;
     std::vector<sh::Uniform> mUniforms;
     std::vector<sh::InterfaceBlock> mUniformBlocks;
     std::vector<sh::InterfaceBlock> mShaderStorageBlocks;
@@ -101,6 +103,12 @@ class ShaderState final : angle::NonCopyable
 
     // Indicates if this shader has been successfully compiled
     CompileStatus mCompileStatus;
+
+    // OES_geometry_shader
+    GLenum mGeometryShaderInputPrimitiveType;
+    GLenum mGeometryShaderOutputPrimitiveType;
+    int mGeometryShaderInvocations;
+    int mGeometryShaderMaxVertices;
 };
 
 class Shader final : angle::NonCopyable, public LabeledObject

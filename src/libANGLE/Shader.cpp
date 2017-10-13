@@ -79,7 +79,11 @@ ShaderState::ShaderState(GLenum shaderType)
       mShaderType(shaderType),
       mShaderVersion(100),
       mNumViews(-1),
-      mCompileStatus(CompileStatus::NOT_COMPILED)
+      mCompileStatus(CompileStatus::NOT_COMPILED),
+      mGeometryShaderInputPrimitiveType(GL_INVALID_VALUE),
+      mGeometryShaderOutputPrimitiveType(GL_INVALID_VALUE),
+      mGeometryShaderInvocations(1),
+      mGeometryShaderMaxVertices(-1)
 {
     mLocalSize.fill(-1);
 }
@@ -276,6 +280,11 @@ void Shader::compile(const Context *context)
     mState.mActiveOutputVariables.clear();
     mState.mNumViews = -1;
 
+    mState.mGeometryShaderInputPrimitiveType  = GL_INVALID_VALUE;
+    mState.mGeometryShaderOutputPrimitiveType = GL_INVALID_VALUE;
+    mState.mGeometryShaderInvocations         = 1;
+    mState.mGeometryShaderMaxVertices         = -1;
+
     mState.mCompileStatus = CompileStatus::COMPILE_REQUESTED;
     mBoundCompiler.set(context, context->getCompiler());
 
@@ -360,7 +369,16 @@ void Shader::resolveCompile(const Context *context)
     // Gather the shader information
     mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
-    mState.mVaryings        = GetShaderVariables(sh::GetVaryings(compilerHandle));
+    if (mState.mShaderType == GL_GEOMETRY_SHADER_OES)
+    {
+        mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+        mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+    }
+    else
+    {
+        mState.mVaryings = GetShaderVariables(sh::GetVaryings(compilerHandle));
+    }
+
     mState.mUniforms        = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mUniformBlocks       = GetShaderVariables(sh::GetUniformBlocks(compilerHandle));
     mState.mShaderStorageBlocks = GetShaderVariables(sh::GetShaderStorageBlocks(compilerHandle));
@@ -387,6 +405,16 @@ void Shader::resolveCompile(const Context *context)
             std::sort(mState.mVaryings.begin(), mState.mVaryings.end(), CompareShaderVar);
             mState.mActiveOutputVariables =
                 GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
+            break;
+        }
+        case GL_GEOMETRY_SHADER_OES:
+        {
+            mState.mGeometryShaderInputPrimitiveType =
+                sh::GetGeometryShaderInputPrimitiveType(compilerHandle);
+            mState.mGeometryShaderOutputPrimitiveType =
+                sh::GetGeometryShaderOutputPrimitiveType(compilerHandle);
+            mState.mGeometryShaderInvocations = sh::GetGeometryShaderInvocations(compilerHandle);
+            mState.mGeometryShaderMaxVertices = sh::GetGeometryShaderMaxVertices(compilerHandle);
             break;
         }
         default:
