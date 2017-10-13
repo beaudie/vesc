@@ -31,6 +31,7 @@ enum class TExtension
     OES_EGL_image_external,
     OES_EGL_image_external_essl3,
     OES_geometry_shader,
+    EXT_geometry_shader,
     OES_standard_derivatives,
     OVR_multiview
 };
