@@ -64,6 +64,12 @@ TExtension GetExtensionByName(const char *extension)
 
     LIST_EXTENSIONS(RETURN_EXTENSION_IF_NAME_MATCHES)
 
+    // Treat EXT_geometry_shader as OES_geometry_shader in compiler.
+    if (strcmp(extWithoutGLPrefix, "EXT_geometry_shader") == 0)
+    {
+        return TExtension::OES_geometry_shader;
+    }
+
     return TExtension::UNDEFINED;
 }
 

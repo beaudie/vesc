@@ -154,6 +154,27 @@ TEST_F(GeometryShaderTest, Version310WithOESExtension)
     }
 }
 
+// Geometry Shaders are supported in GLSL ES shaders version 310 with EXT_geometry_shader enabled.
+TEST_F(GeometryShaderTest, Version310WithEXTExtension)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "#extension GL_EXT_geometry_shader : require\n"
+        "layout(lines) in;\n"
+        "layout(triangle_strip, max_vertices = 3) out;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = gl_in[0].gl_Position;\n"
+        "    EmitVertex();\n"
+        "    EndPrimitive();\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
 // Missing the declaration of input primitive in a geometry shader should be a link error instead of
 // a compile error.
 TEST_F(GeometryShaderTest, NoInputPrimitives)
