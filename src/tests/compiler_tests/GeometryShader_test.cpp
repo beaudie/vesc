@@ -104,6 +104,12 @@ class GeometryShaderTest : public testing::Test
         return sstream.str();
     }
 
+    bool findInTranslatedShader(const std::string &code)
+    {
+        const std::string translatedShader(mTranslator->getInfoSink().obj.c_str());
+        return translatedShader.find(code) != std::string::npos;
+    }
+
     const std::string kHeader =
         "#version 310 es\n"
         "#extension GL_OES_geometry_shader : require\n";
@@ -1534,4 +1540,39 @@ TEST_F(GeometryShaderTest, InvariantOutput)
     {
         FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
     }
+}
+
+// Verify that the member of gl_in won't be incorrectly changed in the output shader string.
+TEST_F(GeometryShaderTest, ValidateGLInMembersInOutputShaderString)
+{
+    const std::string &shaderString1 =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (lines) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position;\n"
+        "    for (int i = 0; i < 2; i++)\n"
+        "    {\n"
+        "        position = gl_in[i].gl_Position;\n"
+        "    }\n"
+        "}\n";
+
+    ASSERT_TRUE(compile(shaderString1));
+    EXPECT_TRUE(findInTranslatedShader("].gl_Position"));
+
+    const std::string &shaderString2 =
+        "#version 310 es\n"
+        "#extension GL_OES_geometry_shader : require\n"
+        "layout (points) in;\n"
+        "layout (points, max_vertices = 2) out;\n"
+        "void main()\n"
+        "{\n"
+        "    vec4 position;\n"
+        "    position = gl_in[0].gl_Position;\n"
+        "}\n";
+
+    ASSERT_TRUE(compile(shaderString2));
+    EXPECT_TRUE(findInTranslatedShader("].gl_Position"));
 }
