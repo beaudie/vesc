@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
@@ -18,7 +19,99 @@
 namespace rx
 {
 
-ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state)
+namespace
+{
+
+gl::Error InitDefaultUniformBlock(const gl::Context *context,
+                                  VkDevice device,
+                                  gl::Shader *shader,
+                                  vk::Buffer *bufferOut,
+                                  vk::DeviceMemory *bufferMemoryOut,
+                                  sh::BlockLayoutMap *blockLayoutMapOut,
+                                  size_t *requiredSizeOut)
+{
+    const auto &uniforms = shader->getUniforms(context);
+
+    if (uniforms.empty())
+    {
+        *requiredSizeOut = 0;
+        return gl::NoError();
+    }
+
+    sh::Std140BlockEncoder blockEncoder;
+    sh::GetUniformBlockInfo(uniforms, "", &blockEncoder, false, blockLayoutMapOut);
+
+    size_t blockSize = blockEncoder.getBlockSize();
+
+    // TODO(jmadill): I think we still need a valid block for the pipeline even if zero sized.
+    if (blockSize == 0)
+    {
+        *requiredSizeOut = 0;
+        return gl::NoError();
+    }
+
+    VkBufferCreateInfo uniformBufferInfo;
+    uniformBufferInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    uniformBufferInfo.pNext                 = nullptr;
+    uniformBufferInfo.flags                 = 0;
+    uniformBufferInfo.size                  = blockSize;
+    uniformBufferInfo.usage                 = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+    uniformBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    uniformBufferInfo.queueFamilyIndexCount = 0;
+    uniformBufferInfo.pQueueFamilyIndices   = nullptr;
+
+    ANGLE_TRY(bufferOut->init(device, uniformBufferInfo));
+
+    ANGLE_TRY(AllocateBufferMemory(GetImplAs<ContextVk>(context), blockSize, bufferOut,
+                                   bufferMemoryOut, requiredSizeOut));
+
+    return gl::NoError();
+}
+
+template <typename T>
+void UpdateDefaultUniformBlock(GLsizei count,
+                               int componentCount,
+                               const T *v,
+                               const sh::BlockMemberInfo &layoutInfo,
+                               angle::MemoryBuffer *uniformData)
+{
+    // Assume an offset of -1 means the block is unused.
+    if (layoutInfo.offset == -1)
+    {
+        return;
+    }
+
+    size_t elementSize = sizeof(T) * componentCount;
+    if (layoutInfo.arrayStride == 0 || layoutInfo.arrayStride == elementSize)
+    {
+        uint8_t *writePtr = uniformData->data() + layoutInfo.offset;
+        memcpy(writePtr, v, elementSize * count);
+    }
+    else
+    {
+        UNIMPLEMENTED();
+    }
+}
+
+vk::Error SyncDefaultUniformBlock(VkDevice device,
+                                  vk::DeviceMemory *bufferMemory,
+                                  const angle::MemoryBuffer &bufferData)
+{
+    ASSERT(bufferMemory->valid() && !bufferData.empty());
+    uint8_t *mapPointer = nullptr;
+    ANGLE_TRY(bufferMemory->map(device, 0, bufferData.size(), 0, &mapPointer));
+    memcpy(mapPointer, bufferData.data(), bufferData.size());
+    bufferMemory->unmap(device);
+    return vk::NoError();
+}
+
+}  // anonymous namespace
+
+ProgramVk::ProgramVk(const gl::ProgramState &state)
+    : ProgramImpl(state),
+      mVertexUniformsDirty(false),
+      mFragmentUniformsDirty(false),
+      mDescriptorSet(VK_NULL_HANDLE)
 {
 }
 
@@ -29,6 +122,16 @@ ProgramVk::~ProgramVk()
 void ProgramVk::destroy(const gl::Context *contextImpl)
 {
     VkDevice device = GetImplAs<ContextVk>(contextImpl)->getDevice();
+
+    mDefaultVertexUniformsMemory.destroy(device);
+    mDefaultFragmentUniformsMemory.destroy(device);
+    mDefaultVertexUniformsBuffer.destroy(device);
+    mDefaultFragmentUniformsBuffer.destroy(device);
+
+    for (auto &descriptorSetLayout : mDescriptorSetLayouts)
+    {
+        descriptorSetLayout.destroy(device);
+    }
 
     mLinkedFragmentModule.destroy(device);
     mLinkedVertexModule.destroy(device);
@@ -104,6 +207,76 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
     mLinkedVertexModule.retain(device, std::move(vertexModule));
     mLinkedFragmentModule.retain(device, std::move(fragmentModule));
 
+    // Process vertex and fragment uniforms into std140 packing.
+    sh::BlockLayoutMap vertexLayoutMap;
+    size_t requiredVertexUniformsBufferSize = 0;
+    gl::Shader *vertexShader                = mState.getAttachedVertexShader();
+    ANGLE_TRY(InitDefaultUniformBlock(glContext, device, vertexShader,
+                                      &mDefaultVertexUniformsBuffer, &mDefaultVertexUniformsMemory,
+                                      &vertexLayoutMap, &requiredVertexUniformsBufferSize));
+
+    sh::BlockLayoutMap fragmentLayoutMap;
+    size_t requiredFragmentUniformsBufferSize = 0;
+    gl::Shader *fragmentShader                = mState.getAttachedFragmentShader();
+    ANGLE_TRY(InitDefaultUniformBlock(
+        glContext, device, fragmentShader, &mDefaultFragmentUniformsBuffer,
+        &mDefaultFragmentUniformsMemory, &fragmentLayoutMap, &requiredFragmentUniformsBufferSize));
+
+    // Init the default block layout info.
+    const auto &locations = mState.getUniformLocations();
+    const auto &uniforms  = mState.getUniforms();
+    for (size_t locationIndex = 0; locationIndex < locations.size(); ++locationIndex)
+    {
+        DefaultBlockUniformInfo blockInfo;
+
+        const auto &location = locations[locationIndex];
+        if (location.used() && !location.ignored)
+        {
+            const auto &uniform     = uniforms[location.index];
+            std::string uniformName = uniform.name;
+            if (uniform.isArray())
+            {
+                uniformName += ArrayIndexString(location.arrayIndices);
+            }
+
+            auto vertexIt = vertexLayoutMap.find(uniformName);
+            if (vertexIt != vertexLayoutMap.end())
+            {
+                blockInfo.vertexInfo = vertexIt->second;
+            }
+
+            auto fragmentIt = fragmentLayoutMap.find(uniformName);
+            if (fragmentIt != fragmentLayoutMap.end())
+            {
+                blockInfo.fragmentInfo = fragmentIt->second;
+            }
+
+            ASSERT(vertexIt != vertexLayoutMap.end() || fragmentIt != fragmentLayoutMap.end());
+        }
+
+        mDefaultUniformLayout.push_back(blockInfo);
+    }
+
+    if (requiredVertexUniformsBufferSize > 0)
+    {
+        if (!mVertexUniformData.resize(requiredVertexUniformsBufferSize))
+        {
+            return gl::OutOfMemory() << "Memory allocation failure.";
+        }
+        mVertexUniformData.fill(0);
+        mVertexUniformsDirty = true;
+    }
+
+    if (requiredFragmentUniformsBufferSize > 0)
+    {
+        if (!mFragmentUniformData.resize(requiredFragmentUniformsBufferSize))
+        {
+            return gl::OutOfMemory() << "Memory allocation failure.";
+        }
+        mFragmentUniformData.fill(0);
+        mFragmentUniformsDirty = true;
+    }
+
     return true;
 }
 
@@ -113,24 +286,45 @@ GLboolean ProgramVk::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
     return GLboolean();
 }
 
+template <typename T>
+void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType)
+{
+    const DefaultBlockUniformInfo &layoutInfo = mDefaultUniformLayout[location];
+    const gl::VariableLocation &locationInfo  = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &linkedUniform    = mState.getUniforms()[locationInfo.index];
+
+    if (linkedUniform.type == entryPointType)
+    {
+        UpdateDefaultUniformBlock(count, linkedUniform.typeInfo->componentCount, v,
+                                  layoutInfo.vertexInfo, &mVertexUniformData);
+        UpdateDefaultUniformBlock(count, linkedUniform.typeInfo->componentCount, v,
+                                  layoutInfo.fragmentInfo, &mFragmentUniformData);
+    }
+    else
+    {
+        ASSERT(linkedUniform.type == gl::VariableBoolVectorType(entryPointType));
+        UNIMPLEMENTED();
+    }
+}
+
 void ProgramVk::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    UNIMPLEMENTED();
+    setUniformImpl(location, count, v, GL_FLOAT);
 }
 
 void ProgramVk::setUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    UNIMPLEMENTED();
+    setUniformImpl(location, count, v, GL_FLOAT_VEC2);
 }
 
 void ProgramVk::setUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    UNIMPLEMENTED();
+    setUniformImpl(location, count, v, GL_FLOAT_VEC3);
 }
 
 void ProgramVk::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    UNIMPLEMENTED();
+    setUniformImpl(location, count, v, GL_FLOAT_VEC4);
 }
 
 void ProgramVk::setUniform1iv(GLint location, GLsizei count, const GLint *v)
@@ -288,20 +482,91 @@ const vk::ShaderModule &ProgramVk::getLinkedFragmentModule() const
 
 gl::ErrorOrResult<vk::PipelineLayout *> ProgramVk::getPipelineLayout(VkDevice device)
 {
-    vk::PipelineLayout newLayout;
+    if (mPipelineLayout.valid())
+    {
+        return &mPipelineLayout;
+    }
 
-    // TODO(jmadill): Descriptor sets.
+    // Create two descriptor set layouts: one for default uniform info, and one for textures.
+    // Skip one or both if there are no uniforms.
+    VkDescriptorSetLayoutBinding uniformBindings[2];
+    uint32_t blockCount = 0;
+    if (!mVertexUniformData.empty())
+    {
+        auto &layoutBinding = uniformBindings[blockCount];
+
+        layoutBinding.binding            = blockCount;
+        layoutBinding.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        layoutBinding.descriptorCount    = 1;
+        layoutBinding.stageFlags         = VK_SHADER_STAGE_VERTEX_BIT;
+        layoutBinding.pImmutableSamplers = nullptr;
+
+        blockCount++;
+    }
+
+    if (!mFragmentUniformData.empty())
+    {
+        auto &layoutBinding = uniformBindings[blockCount];
+
+        layoutBinding.binding            = blockCount;
+        layoutBinding.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        layoutBinding.descriptorCount    = 1;
+        layoutBinding.stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
+        layoutBinding.pImmutableSamplers = nullptr;
+
+        blockCount++;
+    }
+
+    if (blockCount > 0)
+    {
+        VkDescriptorSetLayoutCreateInfo uniformInfo;
+        uniformInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        uniformInfo.pNext        = nullptr;
+        uniformInfo.flags        = 0;
+        uniformInfo.bindingCount = blockCount;
+        uniformInfo.pBindings    = uniformBindings;
+
+        vk::DescriptorSetLayout uniformLayout;
+        ANGLE_TRY(uniformLayout.init(device, uniformInfo));
+        mDescriptorSetLayouts.push_back(std::move(uniformLayout));
+    }
+
+    VkDescriptorSetLayoutBinding textureBindings[2];
+    textureBindings[0].binding            = 0;
+    textureBindings[0].descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    textureBindings[0].descriptorCount    = 16;
+    textureBindings[0].stageFlags         = VK_SHADER_STAGE_VERTEX_BIT;
+    textureBindings[0].pImmutableSamplers = nullptr;
+
+    textureBindings[1].binding            = 17;
+    textureBindings[1].descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    textureBindings[1].descriptorCount    = 16;
+    textureBindings[1].stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
+    textureBindings[1].pImmutableSamplers = nullptr;
+
+    VkDescriptorSetLayoutCreateInfo textureInfo;
+    textureInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    textureInfo.pNext        = nullptr;
+    textureInfo.flags        = 0;
+    textureInfo.bindingCount = 2;
+    textureInfo.pBindings    = textureBindings;
+
+    vk::DescriptorSetLayout textureLayout;
+    ANGLE_TRY(textureLayout.init(device, textureInfo));
+    mDescriptorSetLayouts.push_back(std::move(textureLayout));
+
     VkPipelineLayoutCreateInfo createInfo;
     createInfo.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     createInfo.pNext                  = nullptr;
     createInfo.flags                  = 0;
-    createInfo.setLayoutCount         = 0;
-    createInfo.pSetLayouts            = nullptr;
+    createInfo.setLayoutCount         = static_cast<uint32_t>(mDescriptorSetLayouts.size());
+    createInfo.pSetLayouts            = mDescriptorSetLayouts[0].ptr();
     createInfo.pushConstantRangeCount = 0;
     createInfo.pPushConstantRanges    = nullptr;
 
-    ANGLE_TRY(newLayout.init(device, createInfo));
-    mPipelineLayout.retain(device, std::move(newLayout));
+    vk::PipelineLayout pipelineLayout;
+    ANGLE_TRY(pipelineLayout.init(device, createInfo));
+    mPipelineLayout.retain(device, std::move(pipelineLayout));
 
     return &mPipelineLayout;
 }
@@ -319,6 +584,125 @@ void ProgramVk::getUniformiv(const gl::Context *context, GLint location, GLint *
 void ProgramVk::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
 {
     UNIMPLEMENTED();
+}
+
+vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
+{
+    if (!mVertexUniformsDirty && !mFragmentUniformsDirty)
+    {
+        return vk::NoError();
+    }
+
+    VkDevice device = contextVk->getDevice();
+
+    // Update buffer memory by immediate mapping. This immediate update only works once.
+    // TODO(jmadill): Handle inserting updates into the command stream, or use dynamic buffers.
+    if (mVertexUniformsDirty)
+    {
+        ANGLE_TRY(
+            SyncDefaultUniformBlock(device, &mDefaultVertexUniformsMemory, mVertexUniformData));
+        mVertexUniformsDirty = false;
+    }
+
+    if (mFragmentUniformsDirty)
+    {
+        ANGLE_TRY(
+            SyncDefaultUniformBlock(device, &mDefaultFragmentUniformsMemory, mFragmentUniformData));
+        mFragmentUniformsDirty = false;
+    }
+
+    if (mDescriptorSet != VK_NULL_HANDLE)
+    {
+        return vk::NoError();
+    }
+
+    // Write out to a new a descriptor set.
+    // TODO(jmadill): Handle descriptor set lifetime.
+    vk::DescriptorPool *descriptorPool = contextVk->getDescriptorPool();
+
+    VkDescriptorSetAllocateInfo allocInfo;
+    allocInfo.sType          = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.pNext          = nullptr;
+    allocInfo.descriptorPool = descriptorPool->getHandle();
+
+    // TODO(jmadill): Handle descriptor set layouts for textures.
+    allocInfo.descriptorSetCount = 1;
+    allocInfo.pSetLayouts        = mDescriptorSetLayouts[0].ptr();
+
+    ANGLE_TRY(descriptorPool->allocateDescriptorSets(device, allocInfo, &mDescriptorSet));
+
+    // FIXME: handle having only of of vertex/fragment uniforms.
+
+    std::array<VkDescriptorBufferInfo, 2> descriptorBufferInfo;
+    std::array<VkWriteDescriptorSet, 2> writeDescriptorInfo;
+    uint32_t bufferCount = 0;
+
+    if (!mVertexUniformData.empty())
+    {
+        auto &bufferInfo = descriptorBufferInfo[bufferCount];
+
+        bufferInfo.buffer = mDefaultVertexUniformsBuffer.getHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+
+        auto &writeInfo = writeDescriptorInfo[bufferCount];
+
+        writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeInfo.pNext            = nullptr;
+        writeInfo.dstSet           = mDescriptorSet;
+        writeInfo.dstBinding       = bufferCount;
+        writeInfo.dstArrayElement  = 0;
+        writeInfo.descriptorCount  = 1;
+        writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        writeInfo.pImageInfo       = nullptr;
+        writeInfo.pBufferInfo      = &bufferInfo;
+        writeInfo.pTexelBufferView = nullptr;
+
+        bufferCount++;
+    }
+
+    if (!mFragmentUniformData.empty())
+    {
+        auto &bufferInfo = descriptorBufferInfo[bufferCount];
+
+        bufferInfo.buffer = mDefaultFragmentUniformsBuffer.getHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+
+        auto &writeInfo = writeDescriptorInfo[bufferCount];
+
+        writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeInfo.pNext            = nullptr;
+        writeInfo.dstSet           = mDescriptorSet;
+        writeInfo.dstBinding       = bufferCount;
+        writeInfo.dstArrayElement  = 0;
+        writeInfo.descriptorCount  = 1;
+        writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        writeInfo.pImageInfo       = nullptr;
+        writeInfo.pBufferInfo      = &bufferInfo;
+        writeInfo.pTexelBufferView = nullptr;
+
+        bufferCount++;
+    }
+
+    vkUpdateDescriptorSets(device, bufferCount, writeDescriptorInfo.data(), 0, nullptr);
+
+    return vk::NoError();
+}
+
+const vk::Buffer &ProgramVk::getDefaultVertexUniformsBuffer() const
+{
+    return mDefaultVertexUniformsBuffer;
+}
+
+const vk::Buffer &ProgramVk::getDefaultFragmentUniformsBuffer() const
+{
+    return mDefaultFragmentUniformsBuffer;
+}
+
+VkDescriptorSet ProgramVk::getDescriptorSet() const
+{
+    return mDescriptorSet;
 }
 
 }  // namespace rx

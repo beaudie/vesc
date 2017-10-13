@@ -102,7 +102,12 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     std::string vertexDefaultUniformsBinding   = "set = 0, binding = 0";
     std::string fragmentDefaultUniformsBinding = "set = 0, binding = 1";
 
-    angle::ReplaceSubstring(&vertexSource, searchString, vertexDefaultUniformsBinding);
+    // If no vertex uniforms, bind fragment uniforms to binding 0.
+    if (!angle::ReplaceSubstring(&vertexSource, searchString, vertexDefaultUniformsBinding))
+    {
+        fragmentDefaultUniformsBinding = vertexDefaultUniformsBinding;
+    }
+
     angle::ReplaceSubstring(&fragmentSource, searchString, fragmentDefaultUniformsBinding);
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
