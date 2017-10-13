@@ -165,6 +165,8 @@ ERRMSG(WebglBindAttribLocationReservedPrefix,
        "Attributes that begin with 'webgl_', or '_webgl_' are not allowed.");
 ERRMSG(WebglNameLengthLimitExceeded,
        "Location name lengths must not be greater than 256 characters.");
+ERRMSG(NoTransformFeedbackOutputVariables,
+       "The active program has specified no output variables to record.");
 }
 #undef ERRMSG
 #endif  // LIBANGLE_ERRORSTRINGS_H_
