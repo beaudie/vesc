@@ -2139,6 +2139,20 @@ bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode)
         }
     }
 
+    auto program = context->getGLState().getProgram();
+
+    if (!program)
+    {
+        context->handleError(InvalidOperation() << "No current program.");
+        return false;
+    }
+
+    if (program->getTransformFeedbackVaryingCount() == 0)
+    {
+        context->handleError(InvalidOperation() << "The active program has specified no output variables to record.");
+        return false;
+    }
+
     return true;
 }
 
