@@ -173,6 +173,9 @@ class StateManager11 final : angle::NonCopyable
     // Called by instanced point sprite emulation.
     void invalidateVertexBuffer();
 
+    // Called by VertexArray11::signal and VertexArray11::syncState.
+    void invalidateIndexBuffer();
+
     // Called by Framebuffer11::syncState for the default sized viewport.
     void invalidateViewport(const gl::Context *context);
 
@@ -247,7 +250,7 @@ class StateManager11 final : angle::NonCopyable
                                GLenum type,
                                TranslatedIndexData *indexInfo);
 
-    bool setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
+    void setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
     gl::Error updateVertexOffsetsForPointSpritesEmulation(GLint startVertex,
                                                           GLsizei emulatedInstanceId);
@@ -477,6 +480,7 @@ class StateManager11 final : angle::NonCopyable
     ID3D11Buffer *mAppliedIB;
     DXGI_FORMAT mAppliedIBFormat;
     unsigned int mAppliedIBOffset;
+    bool mIndexBufferIsDirty;
 
     // Vertex, index and input layouts
     VertexDataManager mVertexDataManager;

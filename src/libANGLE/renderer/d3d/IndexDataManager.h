@@ -39,6 +39,14 @@ class IndexBuffer;
 class BufferD3D;
 class RendererD3D;
 
+enum class IndexDataType
+{
+    UNKNOWN,
+    DIRECT,
+    STATIC,
+    DYNAMIC
+};
+
 struct SourceIndexData
 {
     BufferD3D *srcBuffer;
@@ -58,6 +66,7 @@ struct TranslatedIndexData
     BufferD3D *storage;
     GLenum indexType;
     unsigned int serial;
+    IndexDataType dataType;
 
     SourceIndexData srcIndexData;
 };

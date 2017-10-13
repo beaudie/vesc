@@ -550,6 +550,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mAppliedIB(nullptr),
       mAppliedIBFormat(DXGI_FORMAT_UNKNOWN),
       mAppliedIBOffset(0),
+      mIndexBufferIsDirty(false),
       mVertexDataManager(renderer),
       mIndexDataManager(renderer, RENDERER_D3D11),
       mIsMultiviewEnabled(false),
@@ -1430,6 +1431,11 @@ void StateManager11::invalidateConstantBuffer(unsigned int slot)
 void StateManager11::invalidateShaders()
 {
     mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
+}
+
+void StateManager11::invalidateIndexBuffer()
+{
+    mIndexBufferIsDirty = true;
 }
 
 void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv)
@@ -2559,29 +2565,44 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
     ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, count, elementArrayBuffer, indices,
                                                  indexInfo, glState.isPrimitiveRestartEnabled()));
 
-    ID3D11Buffer *buffer = nullptr;
+    auto *vertexArray11 = GetImplAs<VertexArray11>(vao);
+    vertexArray11->updateIndexDataStorage(context, elementArrayBuffer, indexInfo->dataType);
+
     DXGI_FORMAT bufferFormat =
         (indexInfo->indexType == GL_UNSIGNED_INT) ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
 
-    if (indexInfo->storage)
+    bool indexBufferIsDirty = indexInfo->dataType == IndexDataType::DYNAMIC ||
+                              mIndexBufferIsDirty || bufferFormat != mAppliedIBFormat ||
+                              indexInfo->startOffset != mAppliedIBOffset;
+    if (indexBufferIsDirty)
     {
-        Buffer11 *storage = GetAs<Buffer11>(indexInfo->storage);
-        ANGLE_TRY_RESULT(storage->getBuffer(context, BUFFER_USAGE_INDEX), buffer);
-    }
-    else
-    {
-        IndexBuffer11 *indexBuffer = GetAs<IndexBuffer11>(indexInfo->indexBuffer);
-        buffer                     = indexBuffer->getBuffer().get();
+        ID3D11Buffer *buffer = nullptr;
+
+        if (indexInfo->storage)
+        {
+            Buffer11 *storage = GetAs<Buffer11>(indexInfo->storage);
+            ANGLE_TRY_RESULT(storage->getBuffer(context, BUFFER_USAGE_INDEX), buffer);
+        }
+        else
+        {
+            IndexBuffer11 *indexBuffer = GetAs<IndexBuffer11>(indexInfo->indexBuffer);
+            buffer                     = indexBuffer->getBuffer().get();
+        }
+
+        mRenderer->getDeviceContext()->IASetIndexBuffer(buffer, bufferFormat,
+                                                        indexInfo->startOffset);
+        mAppliedIB          = buffer;
+        mAppliedIBFormat    = bufferFormat;
+        mAppliedIBOffset    = indexInfo->startOffset;
+        mIndexBufferIsDirty = false;
     }
 
     // Track dirty indices in the index range cache.
-    indexInfo->srcIndexData.srcIndicesChanged =
-        setIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
-
+    indexInfo->srcIndexData.srcIndicesChanged = indexBufferIsDirty;
     return gl::NoError();
 }
 
-bool StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
+void StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
                                     DXGI_FORMAT indexFormat,
                                     unsigned int offset)
 {
@@ -2592,10 +2613,7 @@ bool StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
         mAppliedIB       = buffer;
         mAppliedIBFormat = indexFormat;
         mAppliedIBOffset = offset;
-        return true;
     }
-
-    return false;
 }
 
 // Vertex buffer is invalidated outside this function.

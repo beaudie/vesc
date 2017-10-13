@@ -408,6 +408,11 @@ gl::Error Buffer11::setSubData(const gl::Context *context,
     mSize = std::max(mSize, requiredSize);
     invalidateStaticData(context);
 
+    if (target == GL_ELEMENT_ARRAY_BUFFER)
+    {
+        mIndexBufferBroadcastChannel.signal(context);
+    }
+
     return gl::NoError();
 }
 
@@ -470,6 +475,9 @@ gl::Error Buffer11::copySubData(const gl::Context *context,
     mSize = std::max<size_t>(mSize, destOffset + size);
     invalidateStaticData(context);
 
+    // TODO(jiajia.qin@intel.com) only send signal when the write target is index buffer.
+    mIndexBufferBroadcastChannel.signal(context);
+
     return gl::NoError();
 }
 
@@ -515,6 +523,7 @@ gl::Error Buffer11::mapRange(const gl::Context *context,
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
         invalidateStaticData(context);
+        mIndexBufferBroadcastChannel.signal(context);
     }
 
     uint8_t *mappedBuffer = nullptr;
@@ -940,6 +949,11 @@ OnBufferDataDirtyChannel *Buffer11::getStaticBroadcastChannel()
 OnBufferDataDirtyChannel *Buffer11::getDirectBroadcastChannel()
 {
     return &mDirectBroadcastChannel;
+}
+
+OnBufferDataDirtyChannel *Buffer11::getIndexBufferBroadcastChannel()
+{
+    return &mIndexBufferBroadcastChannel;
 }
 
 // Buffer11::BufferStorage implementation

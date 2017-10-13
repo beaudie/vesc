@@ -278,6 +278,7 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
         translated->serial      = buffer->getSerial();
         translated->startIndex  = (offset >> srcTypeInfo.bytesShift);
         translated->startOffset = offset;
+        translated->dataType    = IndexDataType::DIRECT;
         return gl::NoError();
     }
     else
@@ -343,6 +344,7 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
         translated->serial      = staticBuffer->getSerial();
         translated->startIndex  = (offset >> srcTypeInfo.bytesShift);
         translated->startOffset = (offset >> srcTypeInfo.bytesShift) << dstTypeInfo.bytesShift;
+        translated->dataType    = IndexDataType::STATIC;
     }
 
     return gl::NoError();
@@ -373,7 +375,7 @@ gl::Error IndexDataManager::streamIndexData(const void *data,
     translated->serial      = indexBuffer->getSerial();
     translated->startIndex  = (offset >> dstTypeInfo.bytesShift);
     translated->startOffset = offset;
-
+    translated->dataType    = IndexDataType::DYNAMIC;
     return gl::NoError();
 }
 
