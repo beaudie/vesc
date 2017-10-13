@@ -29,6 +29,8 @@ struct Rectangle;
 
 namespace rx
 {
+class ContextVk;
+
 const char *VulkanResultString(VkResult result);
 bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps);
 
@@ -382,16 +384,10 @@ class Buffer final : public WrappedObject<Buffer, VkBuffer>
   public:
     Buffer();
     void destroy(VkDevice device);
-    void retain(VkDevice device, Buffer &&other);
+    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkBufferCreateInfo &createInfo);
-    Error bindMemory(VkDevice device);
-
-    DeviceMemory &getMemory() { return mMemory; }
-    const DeviceMemory &getMemory() const { return mMemory; }
-
-  private:
-    DeviceMemory mMemory;
+    Error bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
 };
 
 class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
@@ -507,6 +503,12 @@ class GarbageObject final : public IGarbageObject
 Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
                                   const VkMemoryRequirements &requirements,
                                   uint32_t propertyFlagMask);
+
+gl::Error AllocateBufferMemory(ContextVk *contextVk,
+                               size_t size,
+                               vk::Buffer *buffer,
+                               vk::DeviceMemory *deviceMemoryOut,
+                               size_t *requiredSizeOut);
 
 namespace gl_vk
 {
