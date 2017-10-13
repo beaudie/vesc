@@ -92,7 +92,17 @@ bool compileTestShader(GLenum type,
 MatchOutputCodeTest::MatchOutputCodeTest(GLenum shaderType,
                                          ShCompileOptions defaultCompileOptions,
                                          ShShaderOutput outputType)
-    : mShaderType(shaderType), mDefaultCompileOptions(defaultCompileOptions)
+    : MatchOutputCodeTest(shaderType, SH_GLES3_SPEC, defaultCompileOptions, outputType)
+{
+}
+
+MatchOutputCodeTest::MatchOutputCodeTest(GLenum shaderType,
+                                         ShShaderSpec shaderSpec,
+                                         ShCompileOptions defaultCompileOptions,
+                                         ShShaderOutput outputType)
+    : mShaderType(shaderType),
+      mShaderSpec(shaderSpec),
+      mDefaultCompileOptions(defaultCompileOptions)
 {
     sh::InitBuiltInResources(&mResources);
     mOutputCode[outputType] = std::string();
@@ -134,7 +144,7 @@ bool MatchOutputCodeTest::compileWithSettings(ShShaderOutput output,
                                               std::string *translatedCode,
                                               std::string *infoLog)
 {
-    return compileTestShader(mShaderType, SH_GLES3_SPEC, output, shaderString, &mResources,
+    return compileTestShader(mShaderType, mShaderSpec, output, shaderString, &mResources,
                              compileOptions, translatedCode, infoLog);
 }
 
