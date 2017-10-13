@@ -112,10 +112,38 @@ class ProgramVk : public ProgramImpl
     const vk::ShaderModule &getLinkedFragmentModule() const;
     gl::ErrorOrResult<vk::PipelineLayout *> getPipelineLayout(VkDevice device);
 
+    vk::Error updateUniforms(ContextVk *contextVk);
+
   private:
+    template <typename T>
+    void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
+
     vk::ShaderModule mLinkedVertexModule;
     vk::ShaderModule mLinkedFragmentModule;
     vk::PipelineLayout mPipelineLayout;
+    std::vector<vk::DescriptorSetLayout> mDescriptorSetLayouts;
+
+    // State for the default uniform blocks.
+    vk::Buffer mDefaultVertexUniformsBuffer;
+    vk::DeviceMemory mDefaultVertexUniformsMemory;
+    vk::Buffer mDefaultFragmentUniformsBuffer;
+    vk::DeviceMemory mDefaultFragmentUniformsMemory;
+
+    // Since the default blocks are laid out in std140, this tells us where to write on a call
+    // to a setUniform method. They are arranged in uniform location order.
+    struct DefaultBlockUniformInfo
+    {
+        sh::BlockMemberInfo vertexInfo;
+        sh::BlockMemberInfo fragmentInfo;
+    };
+
+    std::vector<DefaultBlockUniformInfo> mDefaultUniformLayout;
+
+    // Shadow copies of the vertex and fragment uniform data.
+    angle::MemoryBuffer mVertexUniformData;
+    bool mVertexUniformsDirty;
+    angle::MemoryBuffer mFragmentUniformData;
+    bool mFragmentUniformsDirty;
 };
 
 }  // namespace rx
