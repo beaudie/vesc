@@ -358,7 +358,7 @@ void GetTriFanIndices(const void *indices,
     }
 }
 
-bool DrawCallNeedsTranslation(const gl::Context *context, GLenum mode, GLenum type)
+bool DrawCallNeedsTranslation(const gl::Context *context, GLenum mode)
 {
     const auto &glState     = context->getGLState();
     const auto &vertexArray = glState.getVertexArray();
@@ -378,14 +378,20 @@ bool DrawCallNeedsTranslation(const gl::Context *context, GLenum mode, GLenum ty
         return true;
     }
 
-    if (type != GL_NONE)
+    return false;
+}
+
+bool DrawCallNeedsTranslationWithType(const gl::Context *context, GLenum mode, GLenum type)
+{
+
+    if (DrawCallNeedsTranslation(context, mode))
     {
-        // Only non-streaming index data can be directly used to draw since they don't
-        // need the indices and count informations.
-        return IndexDataManager::IsStreamingIndexData(context, type, RENDERER_D3D11);
+        return true;
     }
 
-    return false;
+    // Only non-streaming index data can be directly used to draw since they don't
+    // need the indices and count informations.
+    return IndexDataManager::IsStreamingIndexData(context, type, RENDERER_D3D11);
 }
 
 bool IsArrayRTV(ID3D11RenderTargetView *rtv)
@@ -1664,28 +1670,24 @@ gl::Error Renderer11::drawElements(const gl::Context *context,
     const gl::Program *program    = glState.getProgram();
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(program, instances);
 
-    if (!DrawCallNeedsTranslation(context, mode, type))
+    ANGLE_TRY(mStateManager.applyIndexBuffer(context, indices, count, type, &indexInfo));
+
+    if (!DrawCallNeedsTranslation(context, mode))
     {
-        ANGLE_TRY(mStateManager.applyIndexBuffer(context, nullptr, 0, type, &indexInfo));
         ANGLE_TRY(mStateManager.applyVertexBuffer(context, mode, 0, 0, 0, &indexInfo));
-        const gl::Type &typeInfo = gl::GetTypeInfo(type);
-        unsigned int startIndexLocation =
-            static_cast<unsigned int>(reinterpret_cast<const uintptr_t>(indices)) / typeInfo.bytes;
         if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawIndexedInstanced(count, adjustedInstanceCount, startIndexLocation,
-                                                 0, 0);
+            mDeviceContext->DrawIndexedInstanced(count, adjustedInstanceCount, 0, 0, 0);
         }
         else
         {
-            mDeviceContext->DrawIndexed(count, startIndexLocation, 0);
+            mDeviceContext->DrawIndexed(count, 0, 0);
         }
         return gl::NoError();
     }
 
     indexInfo.indexRange = context->getParams<gl::HasIndexRange>().getIndexRange().value();
 
-    ANGLE_TRY(mStateManager.applyIndexBuffer(context, indices, count, type, &indexInfo));
     size_t vertexCount = indexInfo.indexRange.vertexCount();
     ANGLE_TRY(mStateManager.applyVertexBuffer(
         context, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
@@ -1771,7 +1773,7 @@ gl::Error Renderer11::drawArraysIndirect(const gl::Context *context,
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
     uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
 
-    if (!DrawCallNeedsTranslation(context, mode, GL_NONE))
+    if (!DrawCallNeedsTranslation(context, mode))
     {
         ANGLE_TRY(mStateManager.applyVertexBuffer(context, mode, 0, 0, 0, nullptr));
         ID3D11Buffer *buffer = nullptr;
@@ -1823,7 +1825,7 @@ gl::Error Renderer11::drawElementsIndirect(const gl::Context *context,
     uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
 
     TranslatedIndexData indexInfo;
-    if (!DrawCallNeedsTranslation(context, mode, type))
+    if (!DrawCallNeedsTranslationWithType(context, mode, type))
     {
         ANGLE_TRY(mStateManager.applyIndexBuffer(context, nullptr, 0, type, &indexInfo));
         ANGLE_TRY(mStateManager.applyVertexBuffer(context, mode, 0, 0, 0, &indexInfo));
