@@ -223,6 +223,11 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
                          const gl::Box &copyRegion,
                          VkImageAspectFlags aspectMask);
 
+    void copyImage(const vk::Image &srcImage,
+                   const vk::Image &dstImage,
+                   uint32_t regionCount,
+                   const VkImageCopy *regions);
+
     void beginRenderPass(const RenderPass &renderPass,
                          const Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
@@ -450,6 +455,14 @@ class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPo
     Error allocateDescriptorSets(VkDevice device,
                                  const VkDescriptorSetAllocateInfo &allocInfo,
                                  VkDescriptorSet *descriptorSetsOut);
+};
+
+class Sampler final : public WrappedObject<Sampler, VkSampler>
+{
+  public:
+    Sampler();
+    void destroy(VkDevice device);
+    Error init(VkDevice device, const VkSamplerCreateInfo &createInfo);
 };
 
 class Fence final : public WrappedObject<Fence, VkFence>

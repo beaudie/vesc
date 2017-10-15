@@ -112,12 +112,15 @@ class ProgramVk : public ProgramImpl
     const vk::ShaderModule &getLinkedFragmentModule() const;
     const vk::PipelineLayout &getPipelineLayout() const;
 
-    vk::Error updateUniforms(ContextVk *contextVk);
-
     const vk::Buffer &getDefaultVertexUniformsBuffer() const;
     const vk::Buffer &getDefaultFragmentUniformsBuffer() const;
 
-    VkDescriptorSet getDescriptorSet() const;
+    const std::vector<VkDescriptorSet> &getDescriptorSets() const;
+    uint32_t getDescriptorSetOffset() const;
+
+    vk::Error updateUniforms(ContextVk *contextVk);
+    void updateTexturesDescriptorSet(ContextVk *contextVk);
+    void invalidateTextures();
 
   private:
     void reset(VkDevice device);
@@ -162,8 +165,10 @@ class ProgramVk : public ProgramImpl
     angle::MemoryBuffer mFragmentUniformData;
     bool mFragmentUniformsDirty;
 
-    // Descriptor set for the uniform blocks for this program.
-    VkDescriptorSet mDescriptorSet;
+    // Descriptor sets for uniform blocks and textures for this program.
+    std::vector<VkDescriptorSet> mDescriptorSets;
+    uint32_t mDescriptorSetOffset;
+    bool mDirtyTextures;
 };
 
 }  // namespace rx
