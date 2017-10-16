@@ -245,6 +245,14 @@ const ShCompileOptions SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER = UINT64_C(1) << 
 // ShBuiltInResources in vertex shaders.
 const ShCompileOptions SH_CLAMP_POINT_SIZE = UINT64_C(1) << 35;
 
+// Turn some arithmetic operations that operate on a float vector-scalar pair into vector-vector
+// operations. This is done recursively. Some scalar binary operations inside vector constructors
+// are also turned into vector operations.
+//
+// This is targeted to work around a bug in NVIDIA OpenGL drivers that was reproducible on NVIDIA
+// driver version 387.92.
+const ShCompileOptions SH_REWRITE_VECTOR_SCALAR_ARITHMETIC = UINT64_C(1) << 36;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
