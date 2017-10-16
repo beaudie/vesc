@@ -43,6 +43,7 @@
 #include "compiler/translator/ValidateOutputs.h"
 #include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/VariablePacker.h"
+#include "compiler/translator/VectorizeVectorScalarArithmetic.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
 namespace sh
@@ -588,6 +589,11 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
             (compileOptions & SH_CLAMP_POINT_SIZE))
         {
             ClampPointSize(root, compileResources.MaxPointSize, &getSymbolTable());
+        }
+
+        if (success /*&& (compileOptions & SH_REWRITE_VECTOR_SCALAR_ARITHMETIC)*/)
+        {
+            VectorizeVectorScalarArithmetic(root);
         }
     }
 
