@@ -72,12 +72,12 @@ class Buffer final : public RefCountObject, public LabeledObject
     const std::string &getLabel() const override;
 
     Error bufferData(const Context *context,
-                     GLenum target,
+                     BufferTarget target,
                      const void *data,
                      GLsizeiptr size,
                      BufferUsage usage);
     Error bufferSubData(const Context *context,
-                        GLenum target,
+                        BufferTarget target,
                         const void *data,
                         GLsizeiptr size,
                         GLintptr offset);
