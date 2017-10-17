@@ -162,7 +162,7 @@ TEST_P(ReadPixelsPBOTest, PBOMapped)
 }
 
 // Test that binding a PBO to ARRAY_BUFFER works as expected.
-TEST_P(ReadPixelsPBOTest, ArrayBufferTarget)
+TEST_P(ReadPixelsPBOTest, ArrayBufferType)
 {
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
