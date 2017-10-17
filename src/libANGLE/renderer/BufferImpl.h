@@ -32,12 +32,12 @@ class BufferImpl : angle::NonCopyable
     virtual void destroy(const gl::Context *context) {}
 
     virtual gl::Error setData(const gl::Context *context,
-                              GLenum target,
+                              gl::BufferTarget target,
                               const void *data,
                               size_t size,
-                              gl::BufferUsage usage)                                = 0;
+                              gl::BufferUsage usage) = 0;
     virtual gl::Error setSubData(const gl::Context *context,
-                                 GLenum target,
+                                 gl::BufferTarget target,
                                  const void *data,
                                  size_t size,
                                  size_t offset) = 0;

@@ -79,7 +79,7 @@ class MockBufferD3D : public rx::BufferD3D
 
     // BufferImpl
     gl::Error setData(const gl::Context *context,
-                      GLenum target,
+                      gl::BufferTarget target,
                       const void *data,
                       size_t size,
                       gl::BufferUsage) override
