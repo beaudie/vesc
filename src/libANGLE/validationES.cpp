@@ -774,29 +774,29 @@ bool ValidFramebufferTarget(GLenum target)
     }
 }
 
-bool ValidBufferTarget(const ValidationContext *context, GLenum target)
+bool ValidBufferType(const ValidationContext *context, BufferType target)
 {
     switch (target)
     {
-        case GL_ARRAY_BUFFER:
-        case GL_ELEMENT_ARRAY_BUFFER:
+        case BufferType::ElementArray:
+        case BufferType::Array:
             return true;
 
-        case GL_PIXEL_PACK_BUFFER:
-        case GL_PIXEL_UNPACK_BUFFER:
+        case BufferType::PixelPack:
+        case BufferType::PixelUnpack:
             return (context->getExtensions().pixelBufferObject ||
                     context->getClientMajorVersion() >= 3);
 
-        case GL_COPY_READ_BUFFER:
-        case GL_COPY_WRITE_BUFFER:
-        case GL_TRANSFORM_FEEDBACK_BUFFER:
-        case GL_UNIFORM_BUFFER:
+        case BufferType::CopyRead:
+        case BufferType::CopyWrite:
+        case BufferType::TransformFeedback:
+        case BufferType::Uniform:
             return (context->getClientMajorVersion() >= 3);
 
-        case GL_ATOMIC_COUNTER_BUFFER:
-        case GL_SHADER_STORAGE_BUFFER:
-        case GL_DRAW_INDIRECT_BUFFER:
-        case GL_DISPATCH_INDIRECT_BUFFER:
+        case BufferType::AtomicCounter:
+        case BufferType::ShaderStorage:
+        case BufferType::DrawIndirect:
+        case BufferType::DispatchIndirect:
             return context->getClientVersion() >= Version(3, 1);
 
         default:
@@ -997,7 +997,8 @@ bool ValidImageDataSize(ValidationContext *context,
                         const void *pixels,
                         GLsizei imageSize)
 {
-    gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    gl::Buffer *pixelUnpackBuffer =
+        context->getGLState().getTargetBuffer(BufferType::PixelUnpack);
     if (pixelUnpackBuffer == nullptr && imageSize < 0)
     {
         // Checks are not required
@@ -2528,7 +2529,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
     const State &state = context->getGLState();
 
     // Check for mapped buffers
-    if (state.hasMappedBuffer(GL_ARRAY_BUFFER))
+    if (state.hasMappedBuffer(BufferType::Array))
     {
         context->handleError(InvalidOperation());
         return false;
@@ -2802,7 +2803,7 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
     }
 
     // Check for mapped buffers
-    if (state.hasMappedBuffer(GL_ELEMENT_ARRAY_BUFFER))
+    if (state.hasMappedBuffer(BufferType::ElementArray))
     {
         context->handleError(InvalidOperation() << "Index buffer is mapped.");
         return false;
@@ -3507,7 +3508,7 @@ bool ValidateDrawBuffersBase(ValidationContext *context, GLsizei n, const GLenum
 }
 
 bool ValidateGetBufferPointervBase(Context *context,
-                                   GLenum target,
+                                   BufferType target,
                                    GLenum pname,
                                    GLsizei *length,
                                    void **params)
@@ -3525,10 +3526,9 @@ bool ValidateGetBufferPointervBase(Context *context,
         return false;
     }
 
-    if (!ValidBufferTarget(context, target))
+    if (!ValidBufferType(context, target))
     {
-        context->handleError(InvalidEnum() << "Buffer target not valid: 0x" << std::hex
-                                           << std::uppercase << target);
+        context->handleError(InvalidEnum() << "Buffer target not valid");
         return false;
     }
 
@@ -3560,9 +3560,9 @@ bool ValidateGetBufferPointervBase(Context *context,
     return true;
 }
 
-bool ValidateUnmapBufferBase(Context *context, GLenum target)
+bool ValidateUnmapBufferBase(Context *context, BufferType target)
 {
-    if (!ValidBufferTarget(context, target))
+    if (!ValidBufferType(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBufferTypes);
         return false;
@@ -3580,12 +3580,12 @@ bool ValidateUnmapBufferBase(Context *context, GLenum target)
 }
 
 bool ValidateMapBufferRangeBase(Context *context,
-                                GLenum target,
+                                BufferType target,
                                 GLintptr offset,
                                 GLsizeiptr length,
                                 GLbitfield access)
 {
-    if (!ValidBufferTarget(context, target))
+    if (!ValidBufferType(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBufferTypes);
         return false;
@@ -3676,7 +3676,7 @@ bool ValidateMapBufferRangeBase(Context *context,
 }
 
 bool ValidateFlushMappedBufferRangeBase(Context *context,
-                                        GLenum target,
+                                        BufferType target,
                                         GLintptr offset,
                                         GLsizeiptr length)
 {
@@ -3692,7 +3692,7 @@ bool ValidateFlushMappedBufferRangeBase(Context *context,
         return false;
     }
 
-    if (!ValidBufferTarget(context, target))
+    if (!ValidBufferType(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBufferTypes);
         return false;
@@ -4049,7 +4049,7 @@ bool ValidateGetFramebufferAttachmentParameterivRobustANGLE(ValidationContext *c
 }
 
 bool ValidateGetBufferParameterivRobustANGLE(ValidationContext *context,
-                                             GLenum target,
+                                             BufferType target,
                                              GLenum pname,
                                              GLsizei bufSize,
                                              GLsizei *length,
@@ -4074,7 +4074,7 @@ bool ValidateGetBufferParameterivRobustANGLE(ValidationContext *context,
 }
 
 bool ValidateGetBufferParameteri64vRobustANGLE(ValidationContext *context,
-                                               GLenum target,
+                                               BufferType target,
                                                GLenum pname,
                                                GLsizei bufSize,
                                                GLsizei *length,
@@ -4702,7 +4702,8 @@ bool ValidateRobustCompressedTexImageBase(ValidationContext *context,
         return false;
     }
 
-    gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    gl::Buffer *pixelUnpackBuffer =
+        context->getGLState().getTargetBuffer(BufferType::PixelUnpack);
     if (pixelUnpackBuffer == nullptr)
     {
         if (dataSize < imageSize)
@@ -4714,7 +4715,7 @@ bool ValidateRobustCompressedTexImageBase(ValidationContext *context,
 }
 
 bool ValidateGetBufferParameterBase(ValidationContext *context,
-                                    GLenum target,
+                                    BufferType target,
                                     GLenum pname,
                                     bool pointerVersion,
                                     GLsizei *numParams)
@@ -4724,7 +4725,7 @@ bool ValidateGetBufferParameterBase(ValidationContext *context,
         *numParams = 0;
     }
 
-    if (!ValidBufferTarget(context, target))
+    if (!ValidBufferType(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBufferTypes);
         return false;
@@ -5201,7 +5202,7 @@ bool ValidateReadPixelsBase(Context *context,
     }
 
     // Check for pixel pack buffer related API errors
-    gl::Buffer *pixelPackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_PACK_BUFFER);
+    gl::Buffer *pixelPackBuffer = context->getGLState().getTargetBuffer(BufferType::PixelPack);
     if (pixelPackBuffer != nullptr && pixelPackBuffer->isMapped())
     {
         // ...the buffer object's data store is currently mapped.

@@ -15,6 +15,7 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 
 #include <cstdint>
 
@@ -23,6 +24,29 @@ namespace gl
 
 template <typename Enum>
 Enum FromGLenum(GLenum from);
+
+enum class BufferType : uint8_t
+{
+    Array             = 0,
+    AtomicCounter     = 1,
+    CopyRead          = 2,
+    CopyWrite         = 3,
+    DispatchIndirect  = 4,
+    DrawIndirect      = 5,
+    ElementArray      = 6,
+    PixelPack         = 7,
+    PixelUnpack       = 8,
+    ShaderStorage     = 9,
+    TransformFeedback = 10,
+    Uniform           = 11,
+
+    InvalidEnum = 12,
+    EnumCount   = 12,
+};
+
+template <>
+BufferType FromGLenum<BufferType>(GLenum from);
+GLenum ToGLenum(BufferType from);
 
 enum class BufferUsage : uint8_t
 {
