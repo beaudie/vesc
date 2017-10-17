@@ -2420,19 +2420,15 @@ void State::signal(size_t textureIndex, InitState initState)
 
 Error State::clearUnclearedActiveTextures(const Context *context)
 {
-    if (!mRobustResourceInit)
+    ASSERT(mRobustResourceInit);
+
+    for (auto textureIndex : mCompleteTexturesMask)
     {
-        return NoError();
+        Texture *texture = mCompleteTextureCache[textureIndex];
+        ASSERT(texture);
+        ANGLE_TRY(texture->ensureInitialized(context));
     }
 
-    // TODO(jmadill): Investigate improving the speed here.
-    for (Texture *texture : mCompleteTextureCache)
-    {
-        if (texture)
-        {
-            ANGLE_TRY(texture->ensureInitialized(context));
-        }
-    }
     return NoError();
 }
 
