@@ -35,7 +35,7 @@ void BufferVk::destroy(const gl::Context *context)
 }
 
 gl::Error BufferVk::setData(const gl::Context *context,
-                            GLenum target,
+                            gl::BufferTarget target,
                             const void *data,
                             size_t size,
                             gl::BufferUsage usage)
@@ -97,7 +97,7 @@ gl::Error BufferVk::setData(const gl::Context *context,
 }
 
 gl::Error BufferVk::setSubData(const gl::Context *context,
-                               GLenum target,
+                               gl::BufferTarget target,
                                const void *data,
                                size_t size,
                                size_t offset)
