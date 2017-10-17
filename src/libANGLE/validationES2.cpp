@@ -2789,12 +2789,15 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     return true;
 }
 
-bool ValidateGetBufferPointervOES(Context *context, GLenum target, GLenum pname, void **params)
+bool ValidateGetBufferPointervOES(Context *context,
+                                  BufferTarget target,
+                                  GLenum pname,
+                                  void **params)
 {
     return ValidateGetBufferPointervBase(context, target, pname, nullptr, params);
 }
 
-bool ValidateMapBufferOES(Context *context, GLenum target, GLenum access)
+bool ValidateMapBufferOES(Context *context, BufferTarget target, GLenum access)
 {
     if (!context->getExtensions().mapBuffer)
     {
@@ -2831,7 +2834,7 @@ bool ValidateMapBufferOES(Context *context, GLenum target, GLenum access)
     return ValidateMapBufferBase(context, target);
 }
 
-bool ValidateUnmapBufferOES(Context *context, GLenum target)
+bool ValidateUnmapBufferOES(Context *context, BufferTarget target)
 {
     if (!context->getExtensions().mapBuffer)
     {
@@ -2843,7 +2846,7 @@ bool ValidateUnmapBufferOES(Context *context, GLenum target)
 }
 
 bool ValidateMapBufferRangeEXT(Context *context,
-                               GLenum target,
+                               BufferTarget target,
                                GLintptr offset,
                                GLsizeiptr length,
                                GLbitfield access)
@@ -2857,7 +2860,7 @@ bool ValidateMapBufferRangeEXT(Context *context,
     return ValidateMapBufferRangeBase(context, target, offset, length, access);
 }
 
-bool ValidateMapBufferBase(Context *context, GLenum target)
+bool ValidateMapBufferBase(Context *context, BufferTarget target)
 {
     Buffer *buffer = context->getGLState().getTargetBuffer(target);
     ASSERT(buffer != nullptr);
@@ -2882,7 +2885,7 @@ bool ValidateMapBufferBase(Context *context, GLenum target)
 }
 
 bool ValidateFlushMappedBufferRangeEXT(Context *context,
-                                       GLenum target,
+                                       BufferTarget target,
                                        GLintptr offset,
                                        GLsizeiptr length)
 {
@@ -4115,7 +4118,7 @@ bool ValidateCreateShader(Context *context, GLenum type)
 }
 
 bool ValidateBufferData(ValidationContext *context,
-                        GLenum target,
+                        BufferTarget target,
                         GLsizeiptr size,
                         const void *data,
                         BufferUsage usage)
@@ -4169,7 +4172,7 @@ bool ValidateBufferData(ValidationContext *context,
 }
 
 bool ValidateBufferSubData(ValidationContext *context,
-                           GLenum target,
+                           BufferTarget target,
                            GLintptr offset,
                            GLsizeiptr size,
                            const void *data)
@@ -4344,7 +4347,7 @@ bool ValidateBindAttribLocation(ValidationContext *context,
     return GetValidProgram(context, program) != nullptr;
 }
 
-bool ValidateBindBuffer(ValidationContext *context, GLenum target, GLuint buffer)
+bool ValidateBindBuffer(ValidationContext *context, BufferTarget target, GLuint buffer)
 {
     if (!ValidBufferTarget(context, target))
     {
@@ -4657,7 +4660,8 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
     // and the pointer argument is not NULL.
     bool nullBufferAllowed = context->getGLState().areClientArraysEnabled() &&
                              context->getGLState().getVertexArray()->id() == 0;
-    if (!nullBufferAllowed && context->getGLState().getArrayBufferId() == 0 && ptr != nullptr)
+    if (!nullBufferAllowed && context->getGLState().getTargetBuffer(BufferTarget::Array) == 0 &&
+        ptr != nullptr)
     {
         context
             ->handleError(InvalidOperation()
@@ -6124,7 +6128,7 @@ bool ValidateGenerateMipmap(Context *context, GLenum target)
 }
 
 bool ValidateGetBufferParameteriv(ValidationContext *context,
-                                  GLenum target,
+                                  BufferTarget target,
                                   GLenum pname,
                                   GLint *params)
 {
