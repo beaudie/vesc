@@ -91,7 +91,7 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
     }
 
     mFunctions = new FunctionsGLCGL(handle);
-    mFunctions->initialize();
+    mFunctions->initialize(display->getAttributeMap());
 
     return DisplayGL::initialize(display);
 }
