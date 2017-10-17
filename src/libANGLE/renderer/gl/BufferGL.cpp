@@ -56,7 +56,7 @@ BufferGL::~BufferGL()
 }
 
 gl::Error BufferGL::setData(const gl::Context * /*context*/,
-                            GLenum /*target*/,
+                            gl::BufferTarget /*target*/,
                             const void *data,
                             size_t size,
                             gl::BufferUsage usage)
@@ -83,7 +83,7 @@ gl::Error BufferGL::setData(const gl::Context * /*context*/,
 }
 
 gl::Error BufferGL::setSubData(const gl::Context * /*context*/,
-                               GLenum /*target*/,
+                               gl::BufferTarget /*target*/,
                                const void *data,
                                size_t size,
                                size_t offset)

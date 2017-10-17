@@ -230,50 +230,19 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     void detachProgramPipeline(const Context *context, GLuint pipeline);
 
     //// Typed buffer binding point manipulation ////
-    // GL_ARRAY_BUFFER
-    void setArrayBufferBinding(const Context *context, Buffer *buffer);
-    GLuint getArrayBufferId() const;
+    void setBufferBinding(const Context *context, BufferTarget target, Buffer *buffer);
+    Buffer *getTargetBuffer(BufferTarget target) const;
+    void setIndexedBufferBinding(const Context *context,
+                                 BufferTarget target,
+                                 GLuint index,
+                                 Buffer *buffer,
+                                 GLintptr offset,
+                                 GLsizeiptr size);
 
-    void setDrawIndirectBufferBinding(const Context *context, Buffer *buffer);
-    Buffer *getDrawIndirectBuffer() const { return mDrawIndirectBuffer.get(); }
-
-    // GL_UNIFORM_BUFFER - Both indexed and generic targets
-    void setGenericUniformBufferBinding(const Context *context, Buffer *buffer);
-    void setIndexedUniformBufferBinding(const Context *context,
-                                        GLuint index,
-                                        Buffer *buffer,
-                                        GLintptr offset,
-                                        GLsizeiptr size);
     const OffsetBindingPointer<Buffer> &getIndexedUniformBuffer(size_t index) const;
-
-    // GL_ATOMIC_COUNTER_BUFFER - Both indexed and generic targets
-    void setGenericAtomicCounterBufferBinding(const Context *context, Buffer *buffer);
-    void setIndexedAtomicCounterBufferBinding(const Context *context,
-                                              GLuint index,
-                                              Buffer *buffer,
-                                              GLintptr offset,
-                                              GLsizeiptr size);
     const OffsetBindingPointer<Buffer> &getIndexedAtomicCounterBuffer(size_t index) const;
-
-    // GL_SHADER_STORAGE_BUFFER - Both indexed and generic targets
-    void setGenericShaderStorageBufferBinding(const Context *context, Buffer *buffer);
-    void setIndexedShaderStorageBufferBinding(const Context *context,
-                                              GLuint index,
-                                              Buffer *buffer,
-                                              GLintptr offset,
-                                              GLsizeiptr size);
     const OffsetBindingPointer<Buffer> &getIndexedShaderStorageBuffer(size_t index) const;
 
-    // GL_COPY_[READ/WRITE]_BUFFER
-    void setCopyReadBufferBinding(const Context *context, Buffer *buffer);
-    void setCopyWriteBufferBinding(const Context *context, Buffer *buffer);
-
-    // GL_PIXEL[PACK/UNPACK]_BUFFER
-    void setPixelPackBufferBinding(const Context *context, Buffer *buffer);
-    void setPixelUnpackBufferBinding(const Context *context, Buffer *buffer);
-
-    // Retrieve typed buffer by target (non-indexed)
-    Buffer *getTargetBuffer(GLenum target) const;
     // Detach a buffer from all bindings
     void detachBuffer(const Context *context, GLuint bufferName);
 
@@ -369,7 +338,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
 
-    bool hasMappedBuffer(GLenum target) const;
+    bool hasMappedBuffer(BufferTarget target) const;
     bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
 
     // Sets the dirty bit for the program executable.
@@ -531,8 +500,6 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     float mNearZ;
     float mFarZ;
 
-    BindingPointer<Buffer> mArrayBuffer;
-    BindingPointer<Buffer> mDrawIndirectBuffer;
     Framebuffer *mReadFramebuffer;
     Framebuffer *mDrawFramebuffer;
     BindingPointer<Renderbuffer> mRenderbuffer;
@@ -579,20 +546,15 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     typedef std::map<GLenum, BindingPointer<Query>> ActiveQueryMap;
     ActiveQueryMap mActiveQueries;
 
-    BindingPointer<Buffer> mGenericUniformBuffer;
-    typedef std::vector<OffsetBindingPointer<Buffer>> BufferVector;
+    using BoundBufferMap = angle::PackedEnumMap<BufferTarget, BindingPointer<Buffer>>;
+    BoundBufferMap mBoundBuffers;
+
+    using BufferVector = std::vector<OffsetBindingPointer<Buffer>>;
     BufferVector mUniformBuffers;
-
-    BindingPointer<TransformFeedback> mTransformFeedback;
-
-    BindingPointer<Buffer> mGenericAtomicCounterBuffer;
     BufferVector mAtomicCounterBuffers;
-
-    BindingPointer<Buffer> mGenericShaderStorageBuffer;
     BufferVector mShaderStorageBuffers;
 
-    BindingPointer<Buffer> mCopyReadBuffer;
-    BindingPointer<Buffer> mCopyWriteBuffer;
+    BindingPointer<TransformFeedback> mTransformFeedback;
 
     BindingPointer<Buffer> mPixelUnpackBuffer;
     PixelUnpackState mUnpack;
