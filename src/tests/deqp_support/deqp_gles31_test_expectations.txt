@@ -77,6 +77,7 @@
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_3 = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_9 = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_10 = SKIP
+1442 D3D11 : dEQP-GLES31.functional.state_query.program.compute_work_group_size_get_programiv = FAIL
 
 // OPENGL Failing Tests
 1665 WIN NVIDIA OPENGL : dEQP-GLES31.functional.draw_indirect.negative.command_offset_not_in_buffer_unsigned32_wrap = FAIL
@@ -1252,7 +1253,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.internal_format.partial_query.num_sample_counts = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.internal_format.partial_query.samples = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program.program_separable_get_programiv = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program.compute_work_group_size_get_programiv = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program.active_atomic_counter_buffers_get_programiv = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program_pipeline.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.synchronization.* = FAIL
