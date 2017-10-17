@@ -305,7 +305,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mFenceNVHandleAllocator.setBaseHandle(0);
 
     // [OpenGL ES 2.0.24] section 3.7 page 83:
-    // In the initial state, TEXTURE_2D and TEXTURE_CUBE_MAP have twodimensional
+    // In the initial state, TEXTURE_2D and TEXTURE_CUBE_MAP have two-dimensional
     // and cube map texture state vectors respectively associated with them.
     // In order that access to these initial textures not be lost, they are treated as texture
     // objects all of whose names are 0.
@@ -331,16 +331,14 @@ Context::Context(rx::EGLImplFactory *implFactory,
             new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_MULTISAMPLE);
         mZeroTextures[GL_TEXTURE_2D_MULTISAMPLE].set(this, zeroTexture2DMultisample);
 
-        bindGenericAtomicCounterBuffer(0);
         for (unsigned int i = 0; i < mCaps.maxAtomicCounterBufferBindings; i++)
         {
-            bindIndexedAtomicCounterBuffer(0, i, 0, 0);
+            bindBufferRange(BufferType::AtomicCounter, 0, i, 0, 0);
         }
 
-        bindGenericShaderStorageBuffer(0);
         for (unsigned int i = 0; i < mCaps.maxShaderStorageBufferBindings; i++)
         {
-            bindIndexedShaderStorageBuffer(0, i, 0, 0);
+            bindBufferRange(BufferType::ShaderStorage, i, 0, 0, 0);
         }
     }
 
@@ -362,22 +360,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mGLState.initializeZeroTextures(this, mZeroTextures);
 
     bindVertexArray(0);
-    bindArrayBuffer(0);
-    bindDrawIndirectBuffer(0);
-    bindElementArrayBuffer(0);
-
-    bindRenderbuffer(GL_RENDERBUFFER, 0);
-
-    bindGenericUniformBuffer(0);
-    for (unsigned int i = 0; i < mCaps.maxUniformBufferBindings; i++)
-    {
-        bindIndexedUniformBuffer(0, i, 0, -1);
-    }
-
-    bindCopyReadBuffer(0);
-    bindCopyWriteBuffer(0);
-    bindPixelPackBuffer(0);
-    bindPixelUnpackBuffer(0);
 
     if (getClientVersion() >= Version(3, 0))
     {
@@ -386,6 +368,18 @@ Context::Context(rx::EGLImplFactory *implFactory,
         // a transform feedback object with a name of zero. That object is bound any time
         // BindTransformFeedback is called with id of zero
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+    }
+
+    for (auto type : angle::AllEnums<BufferType>())
+    {
+        bindBuffer(type, 0);
+    }
+
+    bindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    for (unsigned int i = 0; i < mCaps.maxUniformBufferBindings; i++)
+    {
+        bindBufferRange(BufferType::Uniform, i, 0, 0, -1);
     }
 
     // Initialize dirty bit masks
@@ -936,24 +930,6 @@ bool Context::isSampler(GLuint samplerName) const
     return mState.mSamplers->isSampler(samplerName);
 }
 
-void Context::bindArrayBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setArrayBufferBinding(this, buffer);
-}
-
-void Context::bindDrawIndirectBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setDrawIndirectBufferBinding(this, buffer);
-}
-
-void Context::bindElementArrayBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setElementArrayBuffer(this, buffer);
-}
-
 void Context::bindTexture(GLenum target, GLuint handle)
 {
     Texture *texture = nullptr;
@@ -1018,90 +994,6 @@ void Context::bindImageTexture(GLuint unit,
 {
     Texture *tex = mState.mTextures->getTexture(texture);
     mGLState.setImageUnit(this, unit, tex, level, layered, layer, access, format);
-}
-
-void Context::bindGenericUniformBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setGenericUniformBufferBinding(this, buffer);
-}
-
-void Context::bindIndexedUniformBuffer(GLuint bufferHandle,
-                                       GLuint index,
-                                       GLintptr offset,
-                                       GLsizeiptr size)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setIndexedUniformBufferBinding(this, index, buffer, offset, size);
-}
-
-void Context::bindGenericTransformFeedbackBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.getCurrentTransformFeedback()->bindGenericBuffer(this, buffer);
-}
-
-void Context::bindIndexedTransformFeedbackBuffer(GLuint bufferHandle,
-                                                 GLuint index,
-                                                 GLintptr offset,
-                                                 GLsizeiptr size)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.getCurrentTransformFeedback()->bindIndexedBuffer(this, index, buffer, offset, size);
-}
-
-void Context::bindGenericAtomicCounterBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setGenericAtomicCounterBufferBinding(this, buffer);
-}
-
-void Context::bindIndexedAtomicCounterBuffer(GLuint bufferHandle,
-                                             GLuint index,
-                                             GLintptr offset,
-                                             GLsizeiptr size)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setIndexedAtomicCounterBufferBinding(this, index, buffer, offset, size);
-}
-
-void Context::bindGenericShaderStorageBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setGenericShaderStorageBufferBinding(this, buffer);
-}
-
-void Context::bindIndexedShaderStorageBuffer(GLuint bufferHandle,
-                                             GLuint index,
-                                             GLintptr offset,
-                                             GLsizeiptr size)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setIndexedShaderStorageBufferBinding(this, index, buffer, offset, size);
-}
-
-void Context::bindCopyReadBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setCopyReadBufferBinding(this, buffer);
-}
-
-void Context::bindCopyWriteBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setCopyWriteBufferBinding(this, buffer);
-}
-
-void Context::bindPixelPackBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setPixelPackBufferBinding(this, buffer);
-}
-
-void Context::bindPixelUnpackBuffer(GLuint bufferHandle)
-{
-    Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mGLState.setPixelUnpackBufferBinding(this, buffer);
 }
 
 void Context::useProgram(GLuint program)
@@ -1724,7 +1616,7 @@ void Context::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
-void Context::getBufferParameteriv(GLenum target, GLenum pname, GLint *params)
+void Context::getBufferParameteriv(BufferType target, GLenum pname, GLint *params)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     QueryBufferParameteriv(buffer, pname, params);
@@ -3474,7 +3366,7 @@ void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
     handleError(destTexture->copyCompressedTexture(this, sourceTexture));
 }
 
-void Context::getBufferPointerv(GLenum target, GLenum pname, void **params)
+void Context::getBufferPointerv(BufferType target, GLenum pname, void **params)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3482,7 +3374,7 @@ void Context::getBufferPointerv(GLenum target, GLenum pname, void **params)
     QueryBufferPointerv(buffer, pname, params);
 }
 
-void *Context::mapBuffer(GLenum target, GLenum access)
+void *Context::mapBuffer(BufferType target, GLenum access)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3497,7 +3389,7 @@ void *Context::mapBuffer(GLenum target, GLenum access)
     return buffer->getMapPointer();
 }
 
-GLboolean Context::unmapBuffer(GLenum target)
+GLboolean Context::unmapBuffer(BufferType target)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3513,7 +3405,10 @@ GLboolean Context::unmapBuffer(GLenum target)
     return result;
 }
 
-void *Context::mapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
+void *Context::mapBufferRange(BufferType target,
+                              GLintptr offset,
+                              GLsizeiptr length,
+                              GLbitfield access)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
@@ -3528,7 +3423,9 @@ void *Context::mapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length,
     return buffer->getMapPointer();
 }
 
-void Context::flushMappedBufferRange(GLenum /*target*/, GLintptr /*offset*/, GLsizeiptr /*length*/)
+void Context::flushMappedBufferRange(BufferType /*target*/,
+                                     GLintptr /*offset*/,
+                                     GLsizeiptr /*length*/)
 {
     // We do not currently support a non-trivial implementation of FlushMappedBufferRange
 }
@@ -3846,7 +3743,7 @@ void Context::vertexAttribPointer(GLuint index,
                                   GLsizei stride,
                                   const void *ptr)
 {
-    mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(GL_ARRAY_BUFFER), size,
+    mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferType::Array), size,
                                     type, normalized == GL_TRUE, false, stride, ptr);
 }
 
@@ -3889,7 +3786,7 @@ void Context::vertexAttribIPointer(GLuint index,
                                    GLsizei stride,
                                    const void *pointer)
 {
-    mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(GL_ARRAY_BUFFER), size,
+    mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferType::Array), size,
                                     type, false, true, stride, pointer);
 }
 
@@ -4009,14 +3906,14 @@ void Context::popDebugGroup()
     mGLState.getDebug().popGroup();
 }
 
-void Context::bufferData(GLenum target, GLsizeiptr size, const void *data, BufferUsage usage)
+void Context::bufferData(BufferType target, GLsizeiptr size, const void *data, BufferUsage usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
     handleError(buffer->bufferData(this, target, data, size, usage));
 }
 
-void Context::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
+void Context::bufferSubData(BufferType target, GLintptr offset, GLsizeiptr size, const void *data)
 {
     if (data == nullptr)
     {
@@ -4041,8 +3938,8 @@ const Workarounds &Context::getWorkarounds() const
     return mWorkarounds;
 }
 
-void Context::copyBufferSubData(GLenum readTarget,
-                                GLenum writeTarget,
+void Context::copyBufferSubData(BufferType readTarget,
+                                BufferType writeTarget,
                                 GLintptr readOffset,
                                 GLintptr writeOffset,
                                 GLsizeiptr size)
@@ -4068,90 +3965,25 @@ void Context::bindAttribLocation(GLuint program, GLuint index, const GLchar *nam
     programObject->bindAttributeLocation(index, name);
 }
 
-void Context::bindBuffer(GLenum target, GLuint buffer)
+void Context::bindBuffer(BufferType target, GLuint buffer)
 {
-    switch (target)
-    {
-        case GL_ARRAY_BUFFER:
-            bindArrayBuffer(buffer);
-            break;
-        case GL_ELEMENT_ARRAY_BUFFER:
-            bindElementArrayBuffer(buffer);
-            break;
-        case GL_COPY_READ_BUFFER:
-            bindCopyReadBuffer(buffer);
-            break;
-        case GL_COPY_WRITE_BUFFER:
-            bindCopyWriteBuffer(buffer);
-            break;
-        case GL_PIXEL_PACK_BUFFER:
-            bindPixelPackBuffer(buffer);
-            break;
-        case GL_PIXEL_UNPACK_BUFFER:
-            bindPixelUnpackBuffer(buffer);
-            break;
-        case GL_UNIFORM_BUFFER:
-            bindGenericUniformBuffer(buffer);
-            break;
-        case GL_TRANSFORM_FEEDBACK_BUFFER:
-            bindGenericTransformFeedbackBuffer(buffer);
-            break;
-        case GL_ATOMIC_COUNTER_BUFFER:
-            bindGenericAtomicCounterBuffer(buffer);
-            break;
-        case GL_SHADER_STORAGE_BUFFER:
-            bindGenericShaderStorageBuffer(buffer);
-            break;
-        case GL_DRAW_INDIRECT_BUFFER:
-            bindDrawIndirectBuffer(buffer);
-            break;
-        case GL_DISPATCH_INDIRECT_BUFFER:
-            if (buffer != 0)
-            {
-                // Binding buffers to this binding point is not implemented yet.
-                UNIMPLEMENTED();
-            }
-            break;
-
-        default:
-            UNREACHABLE();
-            break;
-    }
+    Buffer *bufferObject = mState.mBuffers->checkBufferAllocation(mImplementation.get(), buffer);
+    mGLState.setBufferBinding(this, target, bufferObject);
 }
 
-void Context::bindBufferBase(GLenum target, GLuint index, GLuint buffer)
+void Context::bindBufferBase(BufferType target, GLuint index, GLuint buffer)
 {
     bindBufferRange(target, index, buffer, 0, 0);
 }
 
-void Context::bindBufferRange(GLenum target,
+void Context::bindBufferRange(BufferType target,
                               GLuint index,
                               GLuint buffer,
                               GLintptr offset,
                               GLsizeiptr size)
 {
-    switch (target)
-    {
-        case GL_TRANSFORM_FEEDBACK_BUFFER:
-            bindIndexedTransformFeedbackBuffer(buffer, index, offset, size);
-            bindGenericTransformFeedbackBuffer(buffer);
-            break;
-        case GL_UNIFORM_BUFFER:
-            bindIndexedUniformBuffer(buffer, index, offset, size);
-            bindGenericUniformBuffer(buffer);
-            break;
-        case GL_ATOMIC_COUNTER_BUFFER:
-            bindIndexedAtomicCounterBuffer(buffer, index, offset, size);
-            bindGenericAtomicCounterBuffer(buffer);
-            break;
-        case GL_SHADER_STORAGE_BUFFER:
-            bindIndexedShaderStorageBuffer(buffer, index, offset, size);
-            bindGenericShaderStorageBuffer(buffer);
-            break;
-        default:
-            UNREACHABLE();
-            break;
-    }
+    Buffer *bufferObject = mState.mBuffers->checkBufferAllocation(mImplementation.get(), buffer);
+    mGLState.setIndexedBufferBinding(this, target, index, bufferObject, offset, size);
 }
 
 void Context::bindFramebuffer(GLenum target, GLuint framebuffer)
@@ -5302,7 +5134,7 @@ void Context::getInteger64v(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getBufferParameteri64v(GLenum target, GLenum pname, GLint64 *params)
+void Context::getBufferParameteri64v(BufferType target, GLenum pname, GLint64 *params)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
     QueryBufferParameteri64v(buffer, pname, params);
