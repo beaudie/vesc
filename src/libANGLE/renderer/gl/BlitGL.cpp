@@ -179,7 +179,7 @@ gl::Error BlitGL::copyImageToLUMAWorkaroundTexture(const gl::Context *context,
     gl::PixelUnpackState unpack;
     mStateManager->setPixelUnpackState(unpack);
     mStateManager->setPixelUnpackBuffer(
-        context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER));
+        context->getGLState().getTargetBuffer(gl::BufferTarget::PixelUnpack));
     mFunctions->texImage2D(target, static_cast<GLint>(level), internalFormat, sourceArea.width,
                            sourceArea.height, 0, format,
                            source->getImplementationColorReadType(context), nullptr);

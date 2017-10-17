@@ -739,7 +739,7 @@ gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context, GLenu
     }
     bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
-    gl::Buffer *drawIndirectBuffer = glState.getDrawIndirectBuffer();
+    gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferTarget::DrawIndirect);
     ASSERT(drawIndirectBuffer);
     const BufferGL *bufferGL = GetImplAs<BufferGL>(drawIndirectBuffer);
     bindBuffer(GL_DRAW_INDIRECT_BUFFER, bufferGL->getBufferID());
@@ -1887,13 +1887,13 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 setPixelUnpackState(state.getUnpackState());
                 break;
             case gl::State::DIRTY_BIT_UNPACK_BUFFER_BINDING:
-                setPixelUnpackBuffer(state.getTargetBuffer(GL_PIXEL_UNPACK_BUFFER));
+                setPixelUnpackBuffer(state.getTargetBuffer(gl::BufferTarget::PixelUnpack));
                 break;
             case gl::State::DIRTY_BIT_PACK_STATE:
                 setPixelPackState(state.getPackState());
                 break;
             case gl::State::DIRTY_BIT_PACK_BUFFER_BINDING:
-                setPixelPackBuffer(state.getTargetBuffer(GL_PIXEL_PACK_BUFFER));
+                setPixelPackBuffer(state.getTargetBuffer(gl::BufferTarget::PixelPack));
                 break;
             case gl::State::DIRTY_BIT_DITHER_ENABLED:
                 setDitherEnabled(state.isDitherEnabled());

@@ -172,7 +172,7 @@ gl::Error TextureGL::setImage(const gl::Context *context,
                               const gl::PixelUnpackState &unpack,
                               const uint8_t *pixels)
 {
-    const gl::Buffer *unpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    const gl::Buffer *unpackBuffer = context->getGLState().getTargetBuffer(gl::BufferTarget::PixelUnpack);
 
     if (mWorkarounds.unpackOverlappingRowsSeparatelyUnpackBuffer && unpackBuffer &&
         unpack.rowLength != 0 && unpack.rowLength < size.width)
@@ -278,7 +278,7 @@ gl::Error TextureGL::setSubImage(const gl::Context *context,
                                  const uint8_t *pixels)
 {
     ASSERT(CompatibleTextureTarget(getTarget(), target));
-    const gl::Buffer *unpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    const gl::Buffer *unpackBuffer = context->getGLState().getTargetBuffer(gl::BufferTarget::PixelUnpack);
 
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, format, type);

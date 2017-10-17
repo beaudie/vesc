@@ -16,6 +16,74 @@ namespace gl
 {
 
 template <>
+BufferTarget FromGLenum<BufferTarget>(GLenum from)
+{
+    switch (from)
+    {
+        case GL_ARRAY_BUFFER:
+            return BufferTarget::Array;
+        case GL_ATOMIC_COUNTER_BUFFER:
+            return BufferTarget::AtomicCounter;
+        case GL_COPY_READ_BUFFER:
+            return BufferTarget::CopyRead;
+        case GL_COPY_WRITE_BUFFER:
+            return BufferTarget::CopyWrite;
+        case GL_DISPATCH_INDIRECT_BUFFER:
+            return BufferTarget::DispatchIndirect;
+        case GL_DRAW_INDIRECT_BUFFER:
+            return BufferTarget::DrawIndirect;
+        case GL_ELEMENT_ARRAY_BUFFER:
+            return BufferTarget::ElementArray;
+        case GL_PIXEL_PACK_BUFFER:
+            return BufferTarget::PixelPack;
+        case GL_PIXEL_UNPACK_BUFFER:
+            return BufferTarget::PixelUnpack;
+        case GL_SHADER_STORAGE_BUFFER:
+            return BufferTarget::ShaderStorage;
+        case GL_TRANSFORM_FEEDBACK_BUFFER:
+            return BufferTarget::TransformFeedback;
+        case GL_UNIFORM_BUFFER:
+            return BufferTarget::Uniform;
+        default:
+            return BufferTarget::InvalidEnum;
+    }
+}
+
+GLenum ToGLenum(BufferTarget from)
+{
+    switch (from)
+    {
+        case BufferTarget::Array:
+            return GL_ARRAY_BUFFER;
+        case BufferTarget::AtomicCounter:
+            return GL_ATOMIC_COUNTER_BUFFER;
+        case BufferTarget::CopyRead:
+            return GL_COPY_READ_BUFFER;
+        case BufferTarget::CopyWrite:
+            return GL_COPY_WRITE_BUFFER;
+        case BufferTarget::DispatchIndirect:
+            return GL_DISPATCH_INDIRECT_BUFFER;
+        case BufferTarget::DrawIndirect:
+            return GL_DRAW_INDIRECT_BUFFER;
+        case BufferTarget::ElementArray:
+            return GL_ELEMENT_ARRAY_BUFFER;
+        case BufferTarget::PixelPack:
+            return GL_PIXEL_PACK_BUFFER;
+        case BufferTarget::PixelUnpack:
+            return GL_PIXEL_UNPACK_BUFFER;
+        case BufferTarget::ShaderStorage:
+            return GL_SHADER_STORAGE_BUFFER;
+        case BufferTarget::TransformFeedback:
+            return GL_TRANSFORM_FEEDBACK_BUFFER;
+        case BufferTarget::Uniform:
+            return GL_UNIFORM_BUFFER;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
+}
+
+template <>
 BufferUsage FromGLenum<BufferUsage>(GLenum from)
 {
     switch (from)
