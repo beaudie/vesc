@@ -2289,6 +2289,7 @@ void State::syncProgramTextures(const Context *context)
             {
                 texture->syncState();
                 mCompleteTextureCache[textureUnitIndex] = texture;
+                mCompleteTexturesMask.set(textureUnitIndex);
             }
             else
             {
@@ -2298,7 +2299,6 @@ void State::syncProgramTextures(const Context *context)
             // Bind the texture unconditionally, to recieve completeness change notifications.
             mCompleteTextureBindings[textureUnitIndex].bind(texture->getDirtyChannel());
             newActiveTextures.set(textureUnitIndex);
-            mCompleteTexturesMask.set(textureUnitIndex);
 
             if (sampler != nullptr)
             {
@@ -2420,19 +2420,15 @@ void State::signal(size_t textureIndex, InitState initState)
 
 Error State::clearUnclearedActiveTextures(const Context *context)
 {
-    if (!mRobustResourceInit)
+    ASSERT(mRobustResourceInit);
+
+    for (auto textureIndex : mCompleteTexturesMask)
     {
-        return NoError();
+        Texture *texture = mCompleteTextureCache[textureIndex];
+        ASSERT(texture);
+        ANGLE_TRY(texture->ensureInitialized(context));
     }
 
-    // TODO(jmadill): Investigate improving the speed here.
-    for (Texture *texture : mCompleteTextureCache)
-    {
-        if (texture)
-        {
-            ANGLE_TRY(texture->ensureInitialized(context));
-        }
-    }
     return NoError();
 }
 
