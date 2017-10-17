@@ -2824,8 +2824,13 @@ void Context::initWorkarounds()
 Error Context::prepareForDraw()
 {
     syncRendererState();
-    ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
-    ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
+
+    if (isRobustResourceInitEnabled())
+    {
+        ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
+        ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
+    }
+
     return NoError();
 }
 
