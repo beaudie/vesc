@@ -107,9 +107,9 @@ egl::Error DXGISwapChainWindowSurfaceWGL::initialize(const egl::Display *display
     mSwapChainFlags    = 0;
     mDepthBufferFormat = GL_DEPTH24_STENCIL8;
 
-    mFunctionsGL->genFramebuffers(1, &mFramebufferID);
-    mFunctionsGL->genRenderbuffers(1, &mColorRenderbufferID);
-    mFunctionsGL->genRenderbuffers(1, &mDepthRenderbufferID);
+    mFunctionsGL->gl.genFramebuffers(1, &mFramebufferID);
+    mFunctionsGL->gl.genRenderbuffers(1, &mColorRenderbufferID);
+    mFunctionsGL->gl.genRenderbuffers(1, &mDepthRenderbufferID);
 
     return createSwapChain();
 }
@@ -121,7 +121,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::makeCurrent()
 
 egl::Error DXGISwapChainWindowSurfaceWGL::swap(const gl::Context *context)
 {
-    mFunctionsGL->flush();
+    mFunctionsGL->gl.flush();
 
     ANGLE_TRY(setObjectsLocked(false));
 
@@ -146,7 +146,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::postSubBuffer(const gl::Context *conte
 {
     ASSERT(mSwapChain1 != nullptr);
 
-    mFunctionsGL->flush();
+    mFunctionsGL->gl.flush();
 
     ANGLE_TRY(setObjectsLocked(false));
 
@@ -471,7 +471,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
                                   << gl::FmtHR(result);
     }
 
-    mFunctionsGL->genRenderbuffers(1, &mColorRenderbufferID);
+    mFunctionsGL->gl.genRenderbuffers(1, &mColorRenderbufferID);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbufferID);
     mRenderbufferBufferHandle =
         mFunctionsWGL->dxRegisterObjectNV(mDeviceHandle, colorBuffer, mColorRenderbufferID,
@@ -503,28 +503,28 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
 
     ASSERT(mFramebufferID != 0);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctionsGL->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
-                                          mColorRenderbufferID);
+    mFunctionsGL->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                             mColorRenderbufferID);
 
     if (mDepthBufferFormat != GL_NONE)
     {
         ASSERT(mDepthRenderbufferID != 0);
         mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDepthRenderbufferID);
-        mFunctionsGL->renderbufferStorage(GL_RENDERBUFFER, mDepthBufferFormat,
-                                          static_cast<GLsizei>(mWidth),
-                                          static_cast<GLsizei>(mHeight));
+        mFunctionsGL->gl.renderbufferStorage(GL_RENDERBUFFER, mDepthBufferFormat,
+                                             static_cast<GLsizei>(mWidth),
+                                             static_cast<GLsizei>(mHeight));
 
         const gl::InternalFormat &depthStencilFormatInfo =
             gl::GetSizedInternalFormatInfo(mDepthBufferFormat);
         if (depthStencilFormatInfo.depthBits > 0)
         {
-            mFunctionsGL->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                                  GL_RENDERBUFFER, mDepthRenderbufferID);
+            mFunctionsGL->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                                     GL_RENDERBUFFER, mDepthRenderbufferID);
         }
         if (depthStencilFormatInfo.stencilBits > 0)
         {
-            mFunctionsGL->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-                                                  GL_RENDERBUFFER, mDepthRenderbufferID);
+            mFunctionsGL->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                                     GL_RENDERBUFFER, mDepthRenderbufferID);
         }
     }
 
