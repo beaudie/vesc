@@ -52,31 +52,31 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
                 texture->getTarget() == GL_TEXTURE_2D_MULTISAMPLE ||
                 texture->getTarget() == GL_TEXTURE_RECTANGLE_ANGLE)
             {
-                functions->framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint,
-                                                texture->getTarget(), textureGL->getTextureID(),
-                                                attachment->mipLevel());
+                functions->gl.framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint,
+                                                   texture->getTarget(), textureGL->getTextureID(),
+                                                   attachment->mipLevel());
             }
             else if (texture->getTarget() == GL_TEXTURE_CUBE_MAP)
             {
-                functions->framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint,
-                                                attachment->cubeMapFace(),
-                                                textureGL->getTextureID(), attachment->mipLevel());
+                functions->gl.framebufferTexture2D(
+                    GL_FRAMEBUFFER, attachmentPoint, attachment->cubeMapFace(),
+                    textureGL->getTextureID(), attachment->mipLevel());
             }
             else if (texture->getTarget() == GL_TEXTURE_2D_ARRAY ||
                      texture->getTarget() == GL_TEXTURE_3D)
             {
                 if (attachment->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
                 {
-                    ASSERT(functions->framebufferTexture);
-                    functions->framebufferTexture(GL_FRAMEBUFFER, attachmentPoint,
-                                                  textureGL->getTextureID(),
-                                                  attachment->mipLevel());
+                    ASSERT(functions->gl.framebufferTexture);
+                    functions->gl.framebufferTexture(GL_FRAMEBUFFER, attachmentPoint,
+                                                     textureGL->getTextureID(),
+                                                     attachment->mipLevel());
                 }
                 else
                 {
-                    functions->framebufferTextureLayer(GL_FRAMEBUFFER, attachmentPoint,
-                                                       textureGL->getTextureID(),
-                                                       attachment->mipLevel(), attachment->layer());
+                    functions->gl.framebufferTextureLayer(
+                        GL_FRAMEBUFFER, attachmentPoint, textureGL->getTextureID(),
+                        attachment->mipLevel(), attachment->layer());
                 }
             }
             else
@@ -89,8 +89,8 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
             const Renderbuffer *renderbuffer     = attachment->getRenderbuffer();
             const RenderbufferGL *renderbufferGL = GetImplAs<RenderbufferGL>(renderbuffer);
 
-            functions->framebufferRenderbuffer(GL_FRAMEBUFFER, attachmentPoint, GL_RENDERBUFFER,
-                                               renderbufferGL->getRenderbufferID());
+            functions->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, attachmentPoint, GL_RENDERBUFFER,
+                                                  renderbufferGL->getRenderbufferID());
         }
         else
         {
@@ -100,7 +100,7 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
     else
     {
         // Unbind this attachment
-        functions->framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, 0, 0);
+        functions->gl.framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, 0, 0);
     }
 }
 
@@ -198,7 +198,7 @@ FramebufferGL::FramebufferGL(const FramebufferState &state,
 {
     if (!mIsDefault)
     {
-        mFunctions->genFramebuffers(1, &mFramebufferID);
+        mFunctions->gl.genFramebuffers(1, &mFramebufferID);
     }
 }
 
@@ -244,17 +244,17 @@ Error FramebufferGL::invalidate(const gl::Context *context, size_t count, const 
     }
 
     // Since this function is just a hint, only call a native function if it exists.
-    if (mFunctions->invalidateFramebuffer)
+    if (mFunctions->gl.invalidateFramebuffer)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->invalidateFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
-                                          finalAttachmentsPtr);
+        mFunctions->gl.invalidateFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
+                                             finalAttachmentsPtr);
     }
-    else if (mFunctions->discardFramebuffer)
+    else if (mFunctions->gl.discardFramebufferEXT)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->discardFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
-                                       finalAttachmentsPtr);
+        mFunctions->gl.discardFramebufferEXT(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
+                                             finalAttachmentsPtr);
     }
 
     return gl::NoError();
@@ -276,12 +276,12 @@ Error FramebufferGL::invalidateSub(const gl::Context *context,
 
     // Since this function is just a hint and not available until OpenGL 4.3, only call it if it is
     // available.
-    if (mFunctions->invalidateSubFramebuffer)
+    if (mFunctions->gl.invalidateSubFramebuffer)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->invalidateSubFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
-                                             finalAttachmentsPtr, area.x, area.y, area.width,
-                                             area.height);
+        mFunctions->gl.invalidateSubFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
+                                                finalAttachmentsPtr, area.x, area.y, area.width,
+                                                area.height);
     }
 
     return gl::NoError();
@@ -294,7 +294,7 @@ Error FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
 
     if (!RequiresMultiviewClear(mState, context->getGLState().isScissorTestEnabled()))
     {
-        mFunctions->clear(mask);
+        mFunctions->gl.clear(mask);
     }
     else
     {
@@ -316,7 +316,7 @@ Error FramebufferGL::clearBufferfv(const gl::Context *context,
 
     if (!RequiresMultiviewClear(mState, context->getGLState().isScissorTestEnabled()))
     {
-        mFunctions->clearBufferfv(buffer, drawbuffer, values);
+        mFunctions->gl.clearBufferfv(buffer, drawbuffer, values);
     }
     else
     {
@@ -339,7 +339,7 @@ Error FramebufferGL::clearBufferuiv(const gl::Context *context,
 
     if (!RequiresMultiviewClear(mState, context->getGLState().isScissorTestEnabled()))
     {
-        mFunctions->clearBufferuiv(buffer, drawbuffer, values);
+        mFunctions->gl.clearBufferuiv(buffer, drawbuffer, values);
     }
     else
     {
@@ -362,7 +362,7 @@ Error FramebufferGL::clearBufferiv(const gl::Context *context,
 
     if (!RequiresMultiviewClear(mState, context->getGLState().isScissorTestEnabled()))
     {
-        mFunctions->clearBufferiv(buffer, drawbuffer, values);
+        mFunctions->gl.clearBufferiv(buffer, drawbuffer, values);
     }
     else
     {
@@ -386,7 +386,7 @@ Error FramebufferGL::clearBufferfi(const gl::Context *context,
 
     if (!RequiresMultiviewClear(mState, context->getGLState().isScissorTestEnabled()))
     {
-        mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        mFunctions->gl.clearBufferfi(buffer, drawbuffer, depth, stencil);
     }
     else
     {
@@ -580,9 +580,9 @@ Error FramebufferGL::blit(const gl::Context *context,
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
 
-    mFunctions->blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x1(), sourceArea.y1(),
-                                destArea.x, destArea.y, destArea.x1(), destArea.y1(), blitMask,
-                                filter);
+    mFunctions->gl.blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x1(), sourceArea.y1(),
+                                   destArea.x, destArea.y, destArea.x1(), destArea.y1(), blitMask,
+                                   filter);
 
     return gl::NoError();
 }
@@ -590,14 +590,14 @@ Error FramebufferGL::blit(const gl::Context *context,
 gl::Error FramebufferGL::getSamplePosition(size_t index, GLfloat *xy) const
 {
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->getMultisamplefv(GL_SAMPLE_POSITION, static_cast<GLuint>(index), xy);
+    mFunctions->gl.getMultisamplefv(GL_SAMPLE_POSITION, static_cast<GLuint>(index), xy);
     return gl::NoError();
 }
 
 bool FramebufferGL::checkStatus(const gl::Context *context) const
 {
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    GLenum status = mFunctions->checkFramebufferStatus(GL_FRAMEBUFFER);
+    GLenum status = mFunctions->gl.checkFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
     {
         WARN() << "GL framebuffer returned incomplete.";
@@ -645,30 +645,30 @@ void FramebufferGL::syncState(const gl::Context *context, const Framebuffer::Dir
             case Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             {
                 const auto &drawBuffers = mState.getDrawBufferStates();
-                mFunctions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
-                                        drawBuffers.data());
+                mFunctions->gl.drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
+                                           drawBuffers.data());
                 mAppliedEnabledDrawBuffers = mState.getEnabledDrawBuffers();
                 break;
             }
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
-                mFunctions->readBuffer(mState.getReadBufferState());
+                mFunctions->gl.readBuffer(mState.getReadBufferState());
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
-                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
-                                                  mState.getDefaultWidth());
+                mFunctions->gl.framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+                                                     mState.getDefaultWidth());
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
-                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
-                                                  mState.getDefaultHeight());
+                mFunctions->gl.framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
+                                                     mState.getDefaultHeight());
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
-                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
-                                                  mState.getDefaultSamples());
+                mFunctions->gl.framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
+                                                     mState.getDefaultSamples());
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
-                mFunctions->framebufferParameteri(GL_FRAMEBUFFER,
-                                                  GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS,
-                                                  mState.getDefaultFixedSampleLocations());
+                mFunctions->gl.framebufferParameteri(GL_FRAMEBUFFER,
+                                                     GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS,
+                                                     mState.getDefaultFixedSampleLocations());
                 break;
             default:
             {
@@ -727,7 +727,7 @@ void FramebufferGL::maskOutInactiveOutputDrawBuffers(DrawBufferMask maxSet)
         }
 
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->drawBuffers(drawBufferCount, drawBuffers);
+        mFunctions->gl.drawBuffers(drawBufferCount, drawBuffers);
     }
 }
 
@@ -855,7 +855,7 @@ gl::Error FramebufferGL::readPixelsRowByRow(const gl::Context *context,
     pixels += skipBytes;
     for (GLint y = area.y; y < area.y + area.height; ++y)
     {
-        mFunctions->readPixels(area.x, y, area.width, 1, format, type, pixels);
+        mFunctions->gl.readPixels(area.x, y, area.width, 1, format, type, pixels);
         pixels += rowBytes;
     }
 
@@ -874,7 +874,7 @@ gl::Error FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
     if (height > 0)
     {
         mStateManager->setPixelPackState(pack);
-        mFunctions->readPixels(area.x, area.y, area.width, height, format, type, pixels);
+        mFunctions->gl.readPixels(area.x, area.y, area.width, height, format, type, pixels);
     }
 
     if (readLastRowSeparately)
@@ -894,8 +894,8 @@ gl::Error FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
         directPack.pixelBuffer.set(context, nullptr);
 
         pixels += skipBytes + (area.height - 1) * rowBytes;
-        mFunctions->readPixels(area.x, area.y + area.height - 1, area.width, 1, format, type,
-                               pixels);
+        mFunctions->gl.readPixels(area.x, area.y + area.height - 1, area.width, 1, format, type,
+                                  pixels);
     }
 
     return gl::NoError();
