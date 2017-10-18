@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "common/string_utils.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace rx
@@ -71,6 +72,43 @@ static void AssignGLExtensionEntryPoint(const std::vector<std::string> &extensio
     }
 
     *outFunction = function;
+}
+
+static int Dummy()
+{
+    return 0;
+}
+
+static GLenum DummyCheckFramebufferStatus(GLenum)
+{
+    return GL_FRAMEBUFFER_COMPLETE;
+}
+
+static void DummyGetProgramiv(GLuint program, GLenum pname, GLint *params)
+{
+    switch (pname)
+    {
+        case GL_LINK_STATUS:
+            *params = GL_TRUE;
+            break;
+        case GL_VALIDATE_STATUS:
+            *params = GL_TRUE;
+            break;
+        default:
+            break;
+    }
+}
+
+static void DummyGetShaderiv(GLuint program, GLenum pname, GLint *params)
+{
+    switch (pname)
+    {
+        case GL_COMPILE_STATUS:
+            *params = GL_TRUE;
+            break;
+        default:
+            break;
+    }
 }
 
 #define ASSIGN_WITH_EXT(EXT, NAME, FP)                                  \
@@ -790,7 +828,8 @@ FunctionsGL::FunctionsGL()
       eglImageTargetRenderbufferStorageOES(nullptr),
       eglImageTargetTexture2DOES(nullptr),
       discardFramebuffer(nullptr),
-      getInternalformatSampleivNV(nullptr)
+      getInternalformatSampleivNV(nullptr),
+      lastEntryPointGuard(nullptr)
 {
 }
 
@@ -798,7 +837,7 @@ FunctionsGL::~FunctionsGL()
 {
 }
 
-void FunctionsGL::initialize()
+void FunctionsGL::initialize(const egl::AttributeMap &displayAttributes)
 {
     // Grab the version number
     ASSIGN("glGetString", getString);
@@ -817,20 +856,29 @@ void FunctionsGL::initialize()
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
     }
 
-    // Load the entry points
-    switch (standard)
+    EGLint deviceType =
+        static_cast<EGLint>(displayAttributes.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, EGL_NONE));
+    if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
     {
-        case STANDARD_GL_DESKTOP:
-            initializeProcsDesktopGL();
-            break;
+        initializeProcsNULLDriver();
+    }
+    else
+    {
+        // Load the entry points
+        switch (standard)
+        {
+            case STANDARD_GL_DESKTOP:
+                initializeProcsDesktopGL();
+                break;
 
-        case STANDARD_GL_ES:
-            initializeProcsGLES();
-            break;
+            case STANDARD_GL_ES:
+                initializeProcsGLES();
+                break;
 
-        default:
-            UNREACHABLE();
-            break;
+            default:
+                UNREACHABLE();
+                break;
+        }
     }
 }
 
@@ -2338,6 +2386,45 @@ bool FunctionsGL::hasGLExtension(const std::string &ext) const
 bool FunctionsGL::hasGLESExtension(const std::string &ext) const
 {
     return standard == STANDARD_GL_ES && hasExtension(ext);
+}
+
+void FunctionsGL::initializeProcsNULLDriver()
+{
+    // Force all proc pointers to point to "Dummy".
+    intptr_t begin = reinterpret_cast<intptr_t>(&blendFunc);
+    intptr_t end   = reinterpret_cast<intptr_t>(&lastEntryPointGuard);
+
+    for (intptr_t entryPoint = begin; entryPoint != end; entryPoint += sizeof(intptr_t))
+    {
+        *reinterpret_cast<decltype(Dummy) **>(entryPoint) = Dummy;
+    }
+
+    ASSIGN("glGetString", getString);
+    ASSIGN("glGetStringi", getStringi);
+    ASSIGN("glGetIntegerv", getIntegerv);
+
+    getProgramiv = reinterpret_cast<PFNGLGETPROGRAMIVPROC>(&DummyGetProgramiv);
+    getShaderiv  = reinterpret_cast<PFNGLGETSHADERIVPROC>(&DummyGetShaderiv);
+    checkFramebufferStatus =
+        reinterpret_cast<PFNGLCHECKFRAMEBUFFERSTATUSPROC>(&DummyCheckFramebufferStatus);
+
+    if (isAtLeastGLES(gl::Version(3, 0)) || isAtLeastGL(gl::Version(4, 2)))
+    {
+        ASSIGN("glGetInternalformativ", getInternalformativ);
+    }
+    else
+    {
+        ASSIGN_WITH_EXT("GL_ARB_internalformat_query", "glGetInternalformativ",
+                        getInternalformativ);
+    }
+
+    if (isAtLeastGL(gl::Version(4, 3)))
+    {
+        ASSIGN("glGetInternalformati64v", getInternalformati64v);
+    }
+
+    ASSIGN_WITH_EXT("GL_NV_internalformat_sample_query", "glGetInternalformatSampleivNV",
+                    getInternalformatSampleivNV);
 }
 
 }  // namespace gl
