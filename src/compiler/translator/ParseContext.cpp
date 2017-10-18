@@ -4492,7 +4492,11 @@ TField *TParseContext::parseStructArrayDeclarator(TString *identifier,
     checkIsNotReserved(loc, *identifier);
 
     TType *type       = new TType(EbtVoid, EbpUndefined);
-    unsigned int size = checkIsValidArraySize(arraySizeLoc, arraySize);
+    unsigned int size = 0u;
+    if (arraySize)
+    {
+        size = checkIsValidArraySize(arraySizeLoc, arraySize);
+    }
     type->makeArray(size);
 
     return new TField(type, identifier, loc);
