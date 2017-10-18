@@ -134,6 +134,56 @@ TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWrite)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test shader storage buffer that last element may be an array, which is not sized
+// until after link time (dynamically sized).
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferLastElementUnsized)
+{
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
+    const std::string &csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=3, local_size_y=1, local_size_z=1) in;\n"
+        "layout(binding = 1) buffer blockName {\n"
+        "    uint data[];\n"
+        "} instanceName;\n"
+        "void main()\n"
+        "{\n"
+        "    highp uint offset = gl_LocalInvocationID.x;\n"
+        "    instanceName.data[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    unsigned int bufferData[3] = {0u};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(bufferData), nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer);
+
+    // Dispath compute
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    void *ptr = glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(bufferData), GL_MAP_READ_BIT);
+    memcpy(bufferData, ptr, sizeof(bufferData));
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    EXPECT_EQ(0u, bufferData[0]);
+    EXPECT_EQ(1u, bufferData[1]);
+    EXPECT_EQ(2u, bufferData[2]);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace

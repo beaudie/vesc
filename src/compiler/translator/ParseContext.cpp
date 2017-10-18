@@ -3628,6 +3628,20 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         }
     }
 
+    // GLSL ES 3.1.0 section4.3.7, last element of shader storage blocks may be an array that is not
+    // sized
+    // until after link time (dynamically sized), others are invalid.
+    for (size_t memberIndex = 0; memberIndex < fieldList->size(); ++memberIndex)
+    {
+        TField *field    = (*fieldList)[memberIndex];
+        TType *fieldType = field->type();
+        if (fieldType->isUnsizedArray() &&
+            (memberIndex != fieldList->size() - 1 || typeQualifier.qualifier != EvqBuffer))
+        {
+            error(field->line(), "invalid unsized array field of", blockName.c_str());
+        }
+    }
+
     TInterfaceBlock *interfaceBlock =
         new TInterfaceBlock(&blockName, fieldList, instanceName, blockLayoutQualifier);
     TType interfaceBlockType(interfaceBlock, typeQualifier.qualifier, blockLayoutQualifier);
@@ -4492,7 +4506,11 @@ TField *TParseContext::parseStructArrayDeclarator(TString *identifier,
     checkIsNotReserved(loc, *identifier);
 
     TType *type       = new TType(EbtVoid, EbpUndefined);
-    unsigned int size = checkIsValidArraySize(arraySizeLoc, arraySize);
+    unsigned int size = 0u;
+    if (arraySize)
+    {
+        size = checkIsValidArraySize(arraySizeLoc, arraySize);
+    }
     type->makeArray(size);
 
     return new TField(type, identifier, loc);

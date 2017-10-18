@@ -442,7 +442,14 @@ TString ArrayString(const TType &type)
     for (auto arraySizeIter = arraySizes.rbegin(); arraySizeIter != arraySizes.rend();
          ++arraySizeIter)
     {
-        arrayString << "[" << (*arraySizeIter) << "]";
+        if (*arraySizeIter == 0u)
+        {
+            arrayString << "[]";
+        }
+        else
+        {
+            arrayString << "[" << (*arraySizeIter) << "]";
+        }
     }
     return arrayString.str();
 }
