@@ -120,7 +120,7 @@ DisplayOzone::Buffer::Buffer(DisplayOzone *display,
 
 DisplayOzone::Buffer::~Buffer()
 {
-    mDisplay->mFunctionsGL->deleteFramebuffers(1, &mGLFB);
+    mDisplay->mFunctionsGL->gl.deleteFramebuffers(1, &mGLFB);
     reset();
 }
 
@@ -213,34 +213,33 @@ bool DisplayOzone::Buffer::resize(int32_t width, int32_t height)
         return false;
     }
 
-    FunctionsGL *gl    = mDisplay->mFunctionsGL;
+    DispatchTableGL &gl = mDisplay->mFunctionsGL.gl;
     StateManagerGL *sm = mDisplay->getRenderer()->getStateManager();
 
-    gl->genRenderbuffers(1, &mColorBuffer);
+    gl.genRenderbuffers(1, &mColorBuffer);
     sm->bindRenderbuffer(GL_RENDERBUFFER, mColorBuffer);
-    gl->eglImageTargetRenderbufferStorageOES(GL_RENDERBUFFER, mImage);
+    gl.eglImageTargetRenderbufferStorageOES(GL_RENDERBUFFER, mImage);
 
     sm->bindFramebuffer(GL_FRAMEBUFFER, mGLFB);
-    gl->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER,
-                                mColorBuffer);
+    gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER,
+                               mColorBuffer);
 
     if (mDepthBits || mStencilBits)
     {
-        gl->genRenderbuffers(1, &mDSBuffer);
+        gl.genRenderbuffers(1, &mDSBuffer);
         sm->bindRenderbuffer(GL_RENDERBUFFER, mDSBuffer);
-        gl->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
+        gl.renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
     }
 
     if (mDepthBits)
     {
-        gl->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
-                                    mDSBuffer);
+        gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDSBuffer);
     }
 
     if (mStencilBits)
     {
-        gl->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                                    mDSBuffer);
+        gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                   mDSBuffer);
     }
 
     mWidth  = width;
@@ -251,36 +250,36 @@ bool DisplayOzone::Buffer::resize(int32_t width, int32_t height)
 bool DisplayOzone::Buffer::initialize(const NativeWindow *native)
 {
     mNative = native;
-    mDisplay->mFunctionsGL->genFramebuffers(1, &mGLFB);
+    mDisplay->mFunctionsGL->gl.genFramebuffers(1, &mGLFB);
     return resize(native->width, native->height);
 }
 
 bool DisplayOzone::Buffer::initialize(int width, int height)
 {
-    mDisplay->mFunctionsGL->genFramebuffers(1, &mGLFB);
+    mDisplay->mFunctionsGL->gl.genFramebuffers(1, &mGLFB);
     return resize(width, height);
 }
 
 void DisplayOzone::Buffer::bindTexImage()
 {
-    mDisplay->mFunctionsGL->eglImageTargetTexture2DOES(GL_TEXTURE_2D, mImage);
+    mDisplay->mFunctionsGL->gl.eglImageTargetTexture2DOES(GL_TEXTURE_2D, mImage);
 }
 
 GLuint DisplayOzone::Buffer::getTexture()
 {
     // TODO(fjhenigman) Try not to create a new texture every time.  That already works on Intel
     // and should work on Mali with proper fences.
-    FunctionsGL *gl    = mDisplay->mFunctionsGL;
-    StateManagerGL *sm = mDisplay->getRenderer()->getStateManager();
+    DispatchTableGL &gl = mDisplay->mFunctionsGL.gl;
+    StateManagerGL *sm  = mDisplay->getRenderer()->getStateManager();
 
-    gl->genTextures(1, &mTexture);
+    gl.genTextures(1, &mTexture);
     sm->bindTexture(GL_TEXTURE_2D, mTexture);
-    gl->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    gl->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    gl->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    gl->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     ASSERT(mImage != EGL_NO_IMAGE_KHR);
-    gl->eglImageTargetTexture2DOES(GL_TEXTURE_2D, mImage);
+    gl.eglImageTargetTexture2DOES(GL_TEXTURE_2D, mImage);
     return mTexture;
 }
 
@@ -588,16 +587,16 @@ void DisplayOzone::presentScreen()
 
 GLuint DisplayOzone::makeShader(GLuint type, const char *src)
 {
-    FunctionsGL *gl = mFunctionsGL;
-    GLuint shader = gl->createShader(type);
-    gl->shaderSource(shader, 1, &src, nullptr);
-    gl->compileShader(shader);
+    FunctionsGL &gl = mFunctionsGL->gl;
+    GLuint shader   = gl.createShader(type);
+    gl.shaderSource(shader, 1, &src, nullptr);
+    gl.compileShader(shader);
 
     GLchar buf[999];
     GLsizei len;
     GLint compiled;
-    gl->getShaderInfoLog(shader, sizeof(buf), &len, buf);
-    gl->getShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+    gl.getShaderInfoLog(shader, sizeof(buf), &len, buf);
+    gl.getShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (compiled != GL_TRUE)
     {
         WARN() << "DisplayOzone shader compilation error: " << buf;

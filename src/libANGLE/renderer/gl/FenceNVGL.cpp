@@ -19,32 +19,32 @@ FenceNVGL::FenceNVGL(const FunctionsGL *functions)
     : FenceNVImpl(),
       mFunctions(functions)
 {
-    mFunctions->genFencesNV(1, &mFence);
+    mFunctions->gl.genFencesNV(1, &mFence);
 }
 
 FenceNVGL::~FenceNVGL()
 {
-    mFunctions->deleteFencesNV(1, &mFence);
+    mFunctions->gl.deleteFencesNV(1, &mFence);
     mFence = 0;
 }
 
 gl::Error FenceNVGL::set(GLenum condition)
 {
     ASSERT(condition == GL_ALL_COMPLETED_NV);
-    mFunctions->setFenceNV(mFence, condition);
+    mFunctions->gl.setFenceNV(mFence, condition);
     return gl::NoError();
 }
 
 gl::Error FenceNVGL::test(GLboolean *outFinished)
 {
     ASSERT(outFinished);
-    *outFinished = mFunctions->testFenceNV(mFence);
+    *outFinished = mFunctions->gl.testFenceNV(mFence);
     return gl::NoError();
 }
 
 gl::Error FenceNVGL::finish()
 {
-    mFunctions->finishFenceNV(mFence);
+    mFunctions->gl.finishFenceNV(mFence);
     return gl::NoError();
 }
 
