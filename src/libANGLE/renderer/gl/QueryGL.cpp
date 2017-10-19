@@ -95,8 +95,8 @@ gl::Error StandardQueryGL::queryCounter()
     // Directly create a query for the timestamp and add it to the pending query queue, as timestamp
     // queries do not have the traditional begin/end block and never need to be paused/resumed
     GLuint query;
-    mFunctions->genQueries(1, &query);
-    mFunctions->queryCounter(query, GL_TIMESTAMP);
+    mFunctions->gl.genQueries(1, &query);
+    mFunctions->gl.queryCounter(query, GL_TIMESTAMP);
     mPendingQueries.push_back(query);
 
     return gl::NoError();
@@ -184,7 +184,7 @@ gl::Error StandardQueryGL::resume()
             return error;
         }
 
-        mFunctions->genQueries(1, &mActiveQuery);
+        mFunctions->gl.genQueries(1, &mActiveQuery);
         mStateManager->beginQuery(mType, mActiveQuery);
     }
 
@@ -199,7 +199,7 @@ gl::Error StandardQueryGL::flush(bool force)
         if (!force)
         {
             GLuint resultAvailable = 0;
-            mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT_AVAILABLE, &resultAvailable);
+            mFunctions->gl.getQueryObjectuiv(id, GL_QUERY_RESULT_AVAILABLE, &resultAvailable);
             if (resultAvailable == GL_FALSE)
             {
                 return gl::NoError();
@@ -209,16 +209,16 @@ gl::Error StandardQueryGL::flush(bool force)
         // Even though getQueryObjectui64v was introduced for timer queries, there is nothing in the
         // standard that says that it doesn't work for any other queries. It also passes on all the
         // trybots, so we use it if it is available
-        if (mFunctions->getQueryObjectui64v != nullptr)
+        if (mFunctions->gl.getQueryObjectui64v != nullptr)
         {
             GLuint64 result = 0;
-            mFunctions->getQueryObjectui64v(id, GL_QUERY_RESULT, &result);
+            mFunctions->gl.getQueryObjectui64v(id, GL_QUERY_RESULT, &result);
             mResultSum = MergeQueryResults(mType, mResultSum, result);
         }
         else
         {
             GLuint result = 0;
-            mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
+            mFunctions->gl.getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
             mResultSum = MergeQueryResults(mType, mResultSum, static_cast<GLuint64>(result));
         }
 
@@ -242,22 +242,22 @@ class SyncProviderGLSync : public SyncProviderGL
   public:
     SyncProviderGLSync(const FunctionsGL *functions) : mFunctions(functions), mSync(nullptr)
     {
-        mSync = mFunctions->fenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        mSync = mFunctions->gl.fenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
     }
 
-    virtual ~SyncProviderGLSync() { mFunctions->deleteSync(mSync); }
+    virtual ~SyncProviderGLSync() { mFunctions->gl.deleteSync(mSync); }
 
     gl::Error flush(bool force, bool *finished) override
     {
         if (force)
         {
-            mFunctions->clientWaitSync(mSync, 0, 0);
+            mFunctions->gl.clientWaitSync(mSync, 0, 0);
             *finished = true;
         }
         else
         {
             GLint value = 0;
-            mFunctions->getSynciv(mSync, GL_SYNC_STATUS, 1, nullptr, &value);
+            mFunctions->gl.getSynciv(mSync, GL_SYNC_STATUS, 1, nullptr, &value);
             *finished = (value == GL_SIGNALED);
         }
 
@@ -277,27 +277,27 @@ class SyncProviderGLQuery : public SyncProviderGL
                         GLenum queryType)
         : mFunctions(functions), mQuery(0)
     {
-        mFunctions->genQueries(1, &mQuery);
+        mFunctions->gl.genQueries(1, &mQuery);
         ANGLE_SWALLOW_ERR(stateManager->pauseQuery(queryType));
-        mFunctions->beginQuery(queryType, mQuery);
-        mFunctions->endQuery(queryType);
+        mFunctions->gl.beginQuery(queryType, mQuery);
+        mFunctions->gl.endQuery(queryType);
         ANGLE_SWALLOW_ERR(stateManager->resumeQuery(queryType));
     }
 
-    virtual ~SyncProviderGLQuery() { mFunctions->deleteQueries(1, &mQuery); }
+    virtual ~SyncProviderGLQuery() { mFunctions->gl.deleteQueries(1, &mQuery); }
 
     gl::Error flush(bool force, bool *finished) override
     {
         if (force)
         {
             GLint result = 0;
-            mFunctions->getQueryObjectiv(mQuery, GL_QUERY_RESULT, &result);
+            mFunctions->gl.getQueryObjectiv(mQuery, GL_QUERY_RESULT, &result);
             *finished = true;
         }
         else
         {
             GLint available = 0;
-            mFunctions->getQueryObjectiv(mQuery, GL_QUERY_RESULT_AVAILABLE, &available);
+            mFunctions->gl.getQueryObjectiv(mQuery, GL_QUERY_RESULT_AVAILABLE, &available);
             *finished = (available == GL_TRUE);
         }
 

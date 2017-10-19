@@ -46,7 +46,7 @@ BufferGL::BufferGL(const gl::BufferState &state,
     ASSERT(mFunctions);
     ASSERT(mStateManager);
 
-    mFunctions->genBuffers(1, &mBufferID);
+    mFunctions->gl.genBuffers(1, &mBufferID);
 }
 
 BufferGL::~BufferGL()
@@ -62,7 +62,7 @@ gl::Error BufferGL::setData(const gl::Context * /*context*/,
                             gl::BufferUsage usage)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-    mFunctions->bufferData(DestBufferOperationTarget, size, data, ToGLenum(usage));
+    mFunctions->gl.bufferData(DestBufferOperationTarget, size, data, ToGLenum(usage));
 
     if (mShadowBufferData)
     {
@@ -89,7 +89,7 @@ gl::Error BufferGL::setSubData(const gl::Context * /*context*/,
                                size_t offset)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-    mFunctions->bufferSubData(DestBufferOperationTarget, offset, size, data);
+    mFunctions->gl.bufferSubData(DestBufferOperationTarget, offset, size, data);
 
     if (mShadowBufferData && size > 0)
     {
@@ -110,8 +110,8 @@ gl::Error BufferGL::copySubData(const gl::Context *context,
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mStateManager->bindBuffer(SourceBufferOperationTarget, sourceGL->getBufferID());
 
-    mFunctions->copyBufferSubData(SourceBufferOperationTarget, DestBufferOperationTarget,
-                                  sourceOffset, destOffset, size);
+    mFunctions->gl.copyBufferSubData(SourceBufferOperationTarget, DestBufferOperationTarget,
+                                     sourceOffset, destOffset, size);
 
     if (mShadowBufferData && size > 0)
     {
@@ -128,17 +128,17 @@ gl::Error BufferGL::map(const gl::Context *context, GLenum access, void **mapPtr
     {
         *mapPtr = mShadowCopy.data();
     }
-    else if (mFunctions->mapBuffer)
+    else if (mFunctions->gl.mapBuffer)
     {
         mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *mapPtr = mFunctions->mapBuffer(DestBufferOperationTarget, access);
+        *mapPtr = mFunctions->gl.mapBuffer(DestBufferOperationTarget, access);
     }
     else
     {
-        ASSERT(mFunctions->mapBufferRange && access == GL_WRITE_ONLY_OES);
+        ASSERT(mFunctions->gl.mapBufferRange && access == GL_WRITE_ONLY_OES);
         mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *mapPtr =
-            mFunctions->mapBufferRange(DestBufferOperationTarget, 0, mBufferSize, GL_MAP_WRITE_BIT);
+        *mapPtr = mFunctions->gl.mapBufferRange(DestBufferOperationTarget, 0, mBufferSize,
+                                                GL_MAP_WRITE_BIT);
     }
 
     mIsMapped  = true;
@@ -161,7 +161,7 @@ gl::Error BufferGL::mapRange(const gl::Context *context,
     else
     {
         mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *mapPtr = mFunctions->mapBufferRange(DestBufferOperationTarget, offset, length, access);
+        *mapPtr = mFunctions->gl.mapBufferRange(DestBufferOperationTarget, offset, length, access);
     }
 
     mIsMapped  = true;
@@ -179,14 +179,14 @@ gl::Error BufferGL::unmap(const gl::Context *context, GLboolean *result)
     if (mShadowBufferData)
     {
         mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        mFunctions->bufferSubData(DestBufferOperationTarget, mMapOffset, mMapSize,
-                                  mShadowCopy.data() + mMapOffset);
+        mFunctions->gl.bufferSubData(DestBufferOperationTarget, mMapOffset, mMapSize,
+                                     mShadowCopy.data() + mMapOffset);
         *result = GL_TRUE;
     }
     else
     {
         mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *result = mFunctions->unmapBuffer(DestBufferOperationTarget);
+        *result = mFunctions->gl.unmapBuffer(DestBufferOperationTarget);
     }
 
     mIsMapped = false;
@@ -215,7 +215,7 @@ gl::Error BufferGL::getIndexRange(const gl::Context *context,
         const uint8_t *bufferData = MapBufferRangeWithFallback(
             mFunctions, DestBufferOperationTarget, offset, count * typeInfo.bytes, GL_MAP_READ_BIT);
         *outRange = gl::ComputeIndexRange(type, bufferData, count, primitiveRestartEnabled);
-        mFunctions->unmapBuffer(DestBufferOperationTarget);
+        mFunctions->gl.unmapBuffer(DestBufferOperationTarget);
     }
 
     return gl::NoError();

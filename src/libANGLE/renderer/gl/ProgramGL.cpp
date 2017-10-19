@@ -41,12 +41,12 @@ ProgramGL::ProgramGL(const gl::ProgramState &data,
     ASSERT(mFunctions);
     ASSERT(mStateManager);
 
-    mProgramID = mFunctions->createProgram();
+    mProgramID = mFunctions->gl.createProgram();
 }
 
 ProgramGL::~ProgramGL()
 {
-    mFunctions->deleteProgram(mProgramID);
+    mFunctions->gl.deleteProgram(mProgramID);
     mProgramID = 0;
 }
 
@@ -63,7 +63,7 @@ gl::LinkResult ProgramGL::load(const gl::Context *context,
     stream->skip(binaryLength);
 
     // Load the binary
-    mFunctions->programBinary(mProgramID, binaryFormat, binary, binaryLength);
+    mFunctions->gl.programBinary(mProgramID, binaryFormat, binary, binaryLength);
 
     // Verify that the program linked
     if (!checkLinkStatus(infoLog))
@@ -80,12 +80,12 @@ gl::LinkResult ProgramGL::load(const gl::Context *context,
 void ProgramGL::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
     GLint binaryLength = 0;
-    mFunctions->getProgramiv(mProgramID, GL_PROGRAM_BINARY_LENGTH, &binaryLength);
+    mFunctions->gl.getProgramiv(mProgramID, GL_PROGRAM_BINARY_LENGTH, &binaryLength);
 
     std::vector<uint8_t> binary(binaryLength);
     GLenum binaryFormat = GL_NONE;
-    mFunctions->getProgramBinary(mProgramID, binaryLength, &binaryLength, &binaryFormat,
-                                 &binary[0]);
+    mFunctions->gl.getProgramBinary(mProgramID, binaryLength, &binaryLength, &binaryFormat,
+                                    &binary[0]);
 
     stream->writeInt(binaryFormat);
     stream->writeInt(binaryLength);
@@ -111,16 +111,17 @@ void ProgramGL::reapplyUBOBindingsIfNeeded(const gl::Context *context)
 void ProgramGL::setBinaryRetrievableHint(bool retrievable)
 {
     // glProgramParameteri isn't always available on ES backends.
-    if (mFunctions->programParameteri)
+    if (mFunctions->gl.programParameteri)
     {
-        mFunctions->programParameteri(mProgramID, GL_PROGRAM_BINARY_RETRIEVABLE_HINT,
-                                      retrievable ? GL_TRUE : GL_FALSE);
+        mFunctions->gl.programParameteri(mProgramID, GL_PROGRAM_BINARY_RETRIEVABLE_HINT,
+                                         retrievable ? GL_TRUE : GL_FALSE);
     }
 }
 
 void ProgramGL::setSeparable(bool separable)
 {
-    mFunctions->programParameteri(mProgramID, GL_PROGRAM_SEPARABLE, separable ? GL_TRUE : GL_FALSE);
+    mFunctions->gl.programParameteri(mProgramID, GL_PROGRAM_SEPARABLE,
+                                     separable ? GL_TRUE : GL_FALSE);
 }
 
 gl::LinkResult ProgramGL::link(const gl::Context *context,
@@ -133,13 +134,13 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
     {
         const ShaderGL *computeShaderGL = GetImplAs<ShaderGL>(mState.getAttachedComputeShader());
 
-        mFunctions->attachShader(mProgramID, computeShaderGL->getShaderID());
+        mFunctions->gl.attachShader(mProgramID, computeShaderGL->getShaderID());
 
         // Link and verify
-        mFunctions->linkProgram(mProgramID);
+        mFunctions->gl.linkProgram(mProgramID);
 
         // Detach the shaders
-        mFunctions->detachShader(mProgramID, computeShaderGL->getShaderID());
+        mFunctions->gl.detachShader(mProgramID, computeShaderGL->getShaderID());
     }
     else
     {
@@ -155,21 +156,21 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
 
         if (transformFeedbackVaryingMappedNames.empty())
         {
-            if (mFunctions->transformFeedbackVaryings)
+            if (mFunctions->gl.transformFeedbackVaryings)
             {
-                mFunctions->transformFeedbackVaryings(mProgramID, 0, nullptr,
-                                                      mState.getTransformFeedbackBufferMode());
+                mFunctions->gl.transformFeedbackVaryings(mProgramID, 0, nullptr,
+                                                         mState.getTransformFeedbackBufferMode());
             }
         }
         else
         {
-            ASSERT(mFunctions->transformFeedbackVaryings);
+            ASSERT(mFunctions->gl.transformFeedbackVaryings);
             std::vector<const GLchar *> transformFeedbackVaryings;
             for (const auto &varying : transformFeedbackVaryingMappedNames)
             {
                 transformFeedbackVaryings.push_back(varying.c_str());
             }
-            mFunctions->transformFeedbackVaryings(
+            mFunctions->gl.transformFeedbackVaryings(
                 mProgramID, static_cast<GLsizei>(transformFeedbackVaryingMappedNames.size()),
                 &transformFeedbackVaryings[0], mState.getTransformFeedbackBufferMode());
         }
@@ -178,8 +179,8 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
         const ShaderGL *fragmentShaderGL = GetImplAs<ShaderGL>(mState.getAttachedFragmentShader());
 
         // Attach the shaders
-        mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
-        mFunctions->attachShader(mProgramID, fragmentShaderGL->getShaderID());
+        mFunctions->gl.attachShader(mProgramID, vertexShaderGL->getShaderID());
+        mFunctions->gl.attachShader(mProgramID, fragmentShaderGL->getShaderID());
 
         // Bind attribute locations to match the GL layer.
         for (const sh::Attribute &attribute : mState.getAttributes())
@@ -189,16 +190,16 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
                 continue;
             }
 
-            mFunctions->bindAttribLocation(mProgramID, attribute.location,
-                                           attribute.mappedName.c_str());
+            mFunctions->gl.bindAttribLocation(mProgramID, attribute.location,
+                                              attribute.mappedName.c_str());
         }
 
         // Link and verify
-        mFunctions->linkProgram(mProgramID);
+        mFunctions->gl.linkProgram(mProgramID);
 
         // Detach the shaders
-        mFunctions->detachShader(mProgramID, vertexShaderGL->getShaderID());
-        mFunctions->detachShader(mProgramID, fragmentShaderGL->getShaderID());
+        mFunctions->gl.detachShader(mProgramID, vertexShaderGL->getShaderID());
+        mFunctions->gl.detachShader(mProgramID, fragmentShaderGL->getShaderID());
     }
 
     // Verify the link
@@ -225,280 +226,283 @@ GLboolean ProgramGL::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLog
 
 void ProgramGL::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    if (mFunctions->programUniform1fv != nullptr)
+    if (mFunctions->gl.programUniform1fv != nullptr)
     {
-        mFunctions->programUniform1fv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform1fv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform1fv(uniLoc(location), count, v);
+        mFunctions->gl.uniform1fv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    if (mFunctions->programUniform2fv != nullptr)
+    if (mFunctions->gl.programUniform2fv != nullptr)
     {
-        mFunctions->programUniform2fv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform2fv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform2fv(uniLoc(location), count, v);
+        mFunctions->gl.uniform2fv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    if (mFunctions->programUniform3fv != nullptr)
+    if (mFunctions->gl.programUniform3fv != nullptr)
     {
-        mFunctions->programUniform3fv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform3fv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform3fv(uniLoc(location), count, v);
+        mFunctions->gl.uniform3fv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    if (mFunctions->programUniform4fv != nullptr)
+    if (mFunctions->gl.programUniform4fv != nullptr)
     {
-        mFunctions->programUniform4fv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform4fv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform4fv(uniLoc(location), count, v);
+        mFunctions->gl.uniform4fv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
-    if (mFunctions->programUniform1iv != nullptr)
+    if (mFunctions->gl.programUniform1iv != nullptr)
     {
-        mFunctions->programUniform1iv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform1iv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform1iv(uniLoc(location), count, v);
+        mFunctions->gl.uniform1iv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform2iv(GLint location, GLsizei count, const GLint *v)
 {
-    if (mFunctions->programUniform2iv != nullptr)
+    if (mFunctions->gl.programUniform2iv != nullptr)
     {
-        mFunctions->programUniform2iv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform2iv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform2iv(uniLoc(location), count, v);
+        mFunctions->gl.uniform2iv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform3iv(GLint location, GLsizei count, const GLint *v)
 {
-    if (mFunctions->programUniform3iv != nullptr)
+    if (mFunctions->gl.programUniform3iv != nullptr)
     {
-        mFunctions->programUniform3iv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform3iv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform3iv(uniLoc(location), count, v);
+        mFunctions->gl.uniform3iv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform4iv(GLint location, GLsizei count, const GLint *v)
 {
-    if (mFunctions->programUniform4iv != nullptr)
+    if (mFunctions->gl.programUniform4iv != nullptr)
     {
-        mFunctions->programUniform4iv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform4iv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform4iv(uniLoc(location), count, v);
+        mFunctions->gl.uniform4iv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform1uiv(GLint location, GLsizei count, const GLuint *v)
 {
-    if (mFunctions->programUniform1uiv != nullptr)
+    if (mFunctions->gl.programUniform1uiv != nullptr)
     {
-        mFunctions->programUniform1uiv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform1uiv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform1uiv(uniLoc(location), count, v);
+        mFunctions->gl.uniform1uiv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform2uiv(GLint location, GLsizei count, const GLuint *v)
 {
-    if (mFunctions->programUniform2uiv != nullptr)
+    if (mFunctions->gl.programUniform2uiv != nullptr)
     {
-        mFunctions->programUniform2uiv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform2uiv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform2uiv(uniLoc(location), count, v);
+        mFunctions->gl.uniform2uiv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform3uiv(GLint location, GLsizei count, const GLuint *v)
 {
-    if (mFunctions->programUniform3uiv != nullptr)
+    if (mFunctions->gl.programUniform3uiv != nullptr)
     {
-        mFunctions->programUniform3uiv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform3uiv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform3uiv(uniLoc(location), count, v);
+        mFunctions->gl.uniform3uiv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniform4uiv(GLint location, GLsizei count, const GLuint *v)
 {
-    if (mFunctions->programUniform4uiv != nullptr)
+    if (mFunctions->gl.programUniform4uiv != nullptr)
     {
-        mFunctions->programUniform4uiv(mProgramID, uniLoc(location), count, v);
+        mFunctions->gl.programUniform4uiv(mProgramID, uniLoc(location), count, v);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniform4uiv(uniLoc(location), count, v);
+        mFunctions->gl.uniform4uiv(uniLoc(location), count, v);
     }
 }
 
 void ProgramGL::setUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix2fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix2fv != nullptr)
     {
-        mFunctions->programUniformMatrix2fv(mProgramID, uniLoc(location), count, transpose, value);
+        mFunctions->gl.programUniformMatrix2fv(mProgramID, uniLoc(location), count, transpose,
+                                               value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix2fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix2fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix3fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix3fv != nullptr)
     {
-        mFunctions->programUniformMatrix3fv(mProgramID, uniLoc(location), count, transpose, value);
+        mFunctions->gl.programUniformMatrix3fv(mProgramID, uniLoc(location), count, transpose,
+                                               value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix3fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix3fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix4fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix4fv != nullptr)
     {
-        mFunctions->programUniformMatrix4fv(mProgramID, uniLoc(location), count, transpose, value);
+        mFunctions->gl.programUniformMatrix4fv(mProgramID, uniLoc(location), count, transpose,
+                                               value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix4fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix4fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix2x3fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix2x3fv != nullptr)
     {
-        mFunctions->programUniformMatrix2x3fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix2x3fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix2x3fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix2x3fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix3x2fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix3x2fv != nullptr)
     {
-        mFunctions->programUniformMatrix3x2fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix3x2fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix3x2fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix3x2fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix2x4fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix2x4fv != nullptr)
     {
-        mFunctions->programUniformMatrix2x4fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix2x4fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix2x4fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix2x4fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix4x2fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix4x2fv != nullptr)
     {
-        mFunctions->programUniformMatrix4x2fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix4x2fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix4x2fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix4x2fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix3x4fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix3x4fv != nullptr)
     {
-        mFunctions->programUniformMatrix3x4fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix3x4fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix3x4fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix3x4fv(uniLoc(location), count, transpose, value);
     }
 }
 
 void ProgramGL::setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    if (mFunctions->programUniformMatrix4x3fv != nullptr)
+    if (mFunctions->gl.programUniformMatrix4x3fv != nullptr)
     {
-        mFunctions->programUniformMatrix4x3fv(mProgramID, uniLoc(location), count, transpose,
-                                              value);
+        mFunctions->gl.programUniformMatrix4x3fv(mProgramID, uniLoc(location), count, transpose,
+                                                 value);
     }
     else
     {
         mStateManager->useProgram(mProgramID);
-        mFunctions->uniformMatrix4x3fv(uniLoc(location), count, transpose, value);
+        mFunctions->gl.uniformMatrix4x3fv(uniLoc(location), count, transpose, value);
     }
 }
 
@@ -512,7 +516,7 @@ void ProgramGL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformB
         {
             const std::string &mappedNameWithIndex = uniformBlock.mappedNameWithArrayIndex();
             GLuint blockIndex =
-                mFunctions->getUniformBlockIndex(mProgramID, mappedNameWithIndex.c_str());
+                mFunctions->gl.getUniformBlockIndex(mProgramID, mappedNameWithIndex.c_str());
             mUniformBlockRealLocationMap.push_back(blockIndex);
         }
     }
@@ -520,7 +524,7 @@ void ProgramGL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformB
     GLuint realBlockIndex = mUniformBlockRealLocationMap[uniformBlockIndex];
     if (realBlockIndex != GL_INVALID_INDEX)
     {
-        mFunctions->uniformBlockBinding(mProgramID, realBlockIndex, uniformBlockBinding);
+        mFunctions->gl.uniformBlockBinding(mProgramID, realBlockIndex, uniformBlockBinding);
     }
 }
 
@@ -535,7 +539,7 @@ bool ProgramGL::getUniformBlockSize(const std::string & /* blockName */,
 {
     ASSERT(mProgramID != 0u);
 
-    GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, blockMappedName.c_str());
+    GLuint blockIndex = mFunctions->gl.getUniformBlockIndex(mProgramID, blockMappedName.c_str());
     if (blockIndex == GL_INVALID_INDEX)
     {
         *sizeOut = 0;
@@ -543,8 +547,8 @@ bool ProgramGL::getUniformBlockSize(const std::string & /* blockName */,
     }
 
     GLint dataSize = 0;
-    mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE,
-                                        &dataSize);
+    mFunctions->gl.getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE,
+                                           &dataSize);
     *sizeOut = static_cast<size_t>(dataSize);
     return true;
 }
@@ -555,7 +559,7 @@ bool ProgramGL::getUniformBlockMemberInfo(const std::string & /* memberUniformNa
 {
     GLuint uniformIndex;
     const GLchar *memberNameGLStr = memberUniformMappedName.c_str();
-    mFunctions->getUniformIndices(mProgramID, 1, &memberNameGLStr, &uniformIndex);
+    mFunctions->gl.getUniformIndices(mProgramID, 1, &memberNameGLStr, &uniformIndex);
 
     if (uniformIndex == GL_INVALID_INDEX)
     {
@@ -563,17 +567,17 @@ bool ProgramGL::getUniformBlockMemberInfo(const std::string & /* memberUniformNa
         return false;
     }
 
-    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_OFFSET,
-                                    &memberInfoOut->offset);
-    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_ARRAY_STRIDE,
-                                    &memberInfoOut->arrayStride);
-    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_MATRIX_STRIDE,
-                                    &memberInfoOut->matrixStride);
+    mFunctions->gl.getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_OFFSET,
+                                       &memberInfoOut->offset);
+    mFunctions->gl.getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_ARRAY_STRIDE,
+                                       &memberInfoOut->arrayStride);
+    mFunctions->gl.getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_MATRIX_STRIDE,
+                                       &memberInfoOut->matrixStride);
 
     // TODO(jmadill): possibly determine this at the gl::Program level.
     GLint isRowMajorMatrix = 0;
-    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_IS_ROW_MAJOR,
-                                    &isRowMajorMatrix);
+    mFunctions->gl.getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_IS_ROW_MAJOR,
+                                       &isRowMajorMatrix);
     memberInfoOut->isRowMajorMatrix = isRowMajorMatrix != GL_FALSE;
     return true;
 }
@@ -589,9 +593,9 @@ void ProgramGL::setPathFragmentInputGen(const std::string &inputName,
     {
         if (input.mappedName == inputName)
         {
-            mFunctions->programPathFragmentInputGenNV(mProgramID, input.location, genMode,
-                                                      components, coeffs);
-            ASSERT(mFunctions->getError() == GL_NO_ERROR);
+            mFunctions->gl.programPathFragmentInputGenNV(mProgramID, input.location, genMode,
+                                                         components, coeffs);
+            ASSERT(mFunctions->gl.getError() == GL_NO_ERROR);
             return;
         }
     }
@@ -611,21 +615,21 @@ void ProgramGL::preLink()
 bool ProgramGL::checkLinkStatus(gl::InfoLog &infoLog)
 {
     GLint linkStatus = GL_FALSE;
-    mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
+    mFunctions->gl.getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
     if (linkStatus == GL_FALSE)
     {
         // Linking failed, put the error into the info log
         GLint infoLogLength = 0;
-        mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        mFunctions->gl.getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         // Info log length includes the null terminator, so 1 means that the info log is an empty
         // string.
         if (infoLogLength > 1)
         {
             std::vector<char> buf(infoLogLength);
-            mFunctions->getProgramInfoLog(mProgramID, infoLogLength, nullptr, &buf[0]);
+            mFunctions->gl.getProgramInfoLog(mProgramID, infoLogLength, nullptr, &buf[0]);
 
-            mFunctions->deleteProgram(mProgramID);
+            mFunctions->gl.deleteProgram(mProgramID);
             mProgramID = 0;
 
             infoLog << buf.data();
@@ -674,14 +678,14 @@ void ProgramGL::postLink()
         }
         const std::string &fullName = fullNameStr.str();
 
-        GLint realLocation = mFunctions->getUniformLocation(mProgramID, fullName.c_str());
+        GLint realLocation = mFunctions->gl.getUniformLocation(mProgramID, fullName.c_str());
         mUniformRealLocationMap[uniformLocation] = realLocation;
     }
 
     if (mState.usesMultiview())
     {
         mMultiviewBaseViewLayerIndexUniformLocation =
-            mFunctions->getUniformLocation(mProgramID, "multiviewBaseViewLayerIndex");
+            mFunctions->gl.getUniformLocation(mProgramID, "multiviewBaseViewLayerIndex");
         ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
     }
 
@@ -690,14 +694,14 @@ void ProgramGL::postLink()
         return;
 
     GLint numFragmentInputs = 0;
-    mFunctions->getProgramInterfaceiv(mProgramID, GL_FRAGMENT_INPUT_NV, GL_ACTIVE_RESOURCES,
-                                      &numFragmentInputs);
+    mFunctions->gl.getProgramInterfaceiv(mProgramID, GL_FRAGMENT_INPUT_NV, GL_ACTIVE_RESOURCES,
+                                         &numFragmentInputs);
     if (numFragmentInputs <= 0)
         return;
 
     GLint maxNameLength = 0;
-    mFunctions->getProgramInterfaceiv(mProgramID, GL_FRAGMENT_INPUT_NV, GL_MAX_NAME_LENGTH,
-                                      &maxNameLength);
+    mFunctions->gl.getProgramInterfaceiv(mProgramID, GL_FRAGMENT_INPUT_NV, GL_MAX_NAME_LENGTH,
+                                         &maxNameLength);
     ASSERT(maxNameLength);
 
     for (GLint i = 0; i < numFragmentInputs; ++i)
@@ -706,8 +710,8 @@ void ProgramGL::postLink()
         mappedName.resize(maxNameLength);
 
         GLsizei nameLen = 0;
-        mFunctions->getProgramResourceName(mProgramID, GL_FRAGMENT_INPUT_NV, i, maxNameLength,
-                                           &nameLen, &mappedName[0]);
+        mFunctions->gl.getProgramResourceName(mProgramID, GL_FRAGMENT_INPUT_NV, i, maxNameLength,
+                                              &nameLen, &mappedName[0]);
         mappedName.resize(nameLen);
 
         // Ignore built-ins
@@ -718,7 +722,7 @@ void ProgramGL::postLink()
         GLint queryResults[ArraySize(kQueryProperties)];
         GLsizei queryLength = 0;
 
-        mFunctions->getProgramResourceiv(
+        mFunctions->gl.getProgramResourceiv(
             mProgramID, GL_FRAGMENT_INPUT_NV, i, static_cast<GLsizei>(ArraySize(kQueryProperties)),
             kQueryProperties, static_cast<GLsizei>(ArraySize(queryResults)), &queryLength,
             queryResults);
@@ -756,8 +760,8 @@ void ProgramGL::enableSideBySideRenderingPath() const
     ASSERT(mState.usesMultiview());
     ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
 
-    ASSERT(mFunctions->programUniform1i != nullptr);
-    mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation, -1);
+    ASSERT(mFunctions->gl.programUniform1i != nullptr);
+    mFunctions->gl.programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation, -1);
 }
 
 void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
@@ -765,24 +769,24 @@ void ProgramGL::enableLayeredRenderingPath(int baseViewIndex) const
     ASSERT(mState.usesMultiview());
     ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
 
-    ASSERT(mFunctions->programUniform1i != nullptr);
-    mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
-                                 baseViewIndex);
+    ASSERT(mFunctions->gl.programUniform1i != nullptr);
+    mFunctions->gl.programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
+                                    baseViewIndex);
 }
 
 void ProgramGL::getUniformfv(const gl::Context *context, GLint location, GLfloat *params) const
 {
-    mFunctions->getUniformfv(mProgramID, uniLoc(location), params);
+    mFunctions->gl.getUniformfv(mProgramID, uniLoc(location), params);
 }
 
 void ProgramGL::getUniformiv(const gl::Context *context, GLint location, GLint *params) const
 {
-    mFunctions->getUniformiv(mProgramID, uniLoc(location), params);
+    mFunctions->gl.getUniformiv(mProgramID, uniLoc(location), params);
 }
 
 void ProgramGL::getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const
 {
-    mFunctions->getUniformuiv(mProgramID, uniLoc(location), params);
+    mFunctions->gl.getUniformuiv(mProgramID, uniLoc(location), params);
 }
 
 void ProgramGL::markUnusedUniformLocations(std::vector<gl::VariableLocation> *uniformLocations,
