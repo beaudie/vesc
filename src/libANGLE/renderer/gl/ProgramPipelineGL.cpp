@@ -19,14 +19,14 @@ ProgramPipelineGL::ProgramPipelineGL(const gl::ProgramPipelineState &data,
     : ProgramPipelineImpl(data), mFunctions(functions), mProgramPipelineID(0)
 {
     ASSERT(mFunctions);
-    mFunctions->genProgramPipelines(1, &mProgramPipelineID);
+    mFunctions->gl.genProgramPipelines(1, &mProgramPipelineID);
 }
 
 ProgramPipelineGL::~ProgramPipelineGL()
 {
     if (mProgramPipelineID != 0)
     {
-        mFunctions->deleteProgramPipelines(1, &mProgramPipelineID);
+        mFunctions->gl.deleteProgramPipelines(1, &mProgramPipelineID);
         mProgramPipelineID = 0;
     }
 }
