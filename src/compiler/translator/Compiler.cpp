@@ -26,6 +26,7 @@
 #include "compiler/translator/OutputTree.h"
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/PruneEmptyDeclarations.h"
+#include "compiler/translator/PrunePureLiteralStatements.h"
 #include "compiler/translator/RegenerateStructNames.h"
 #include "compiler/translator/RemoveArrayLengthMethod.h"
 #include "compiler/translator/RemoveInvariantDeclaration.h"
@@ -381,11 +382,17 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         if (success)
             PruneEmptyDeclarations(root);
 
+        // The ESSL output doesn't define a default precision for float, so float literal statements
+        // end up with no precision which is invalid ESSL. This also makes it simpler to remove
+        // no-op cases from the end of switch statements.
+        PrunePureLiteralStatements(root);
+
         // In case the last case inside a switch statement is a certain type of no-op, GLSL
         // compilers in drivers may not accept it. In this case we clean up the dead code from the
-        // end of switch statements. This is also required because PruneEmptyDeclarations may have
-        // left switch statements that only contained an empty declaration inside the final case in
-        // an invalid state. Relies on that PruneEmptyDeclarations has already been run.
+        // end of switch statements. This is also required because PruneEmptyDeclarations or
+        // PrunePureLiteralStatements may have left switch statements that only contained an empty
+        // declaration inside the final case in an invalid state. Relies on that
+        // PruneEmptyDeclarations has already been run.
         if (success)
             RemoveNoOpCasesFromEndOfSwitchStatements(root, &symbolTable);
 

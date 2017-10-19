@@ -4,6 +4,8 @@
 // found in the LICENSE file.
 //
 // PrunePureLiteralStatements.h: Removes statements that are literals and nothing else.
+// Note that this may clear statements from after the last case label of a switch
+// statement.
 
 #ifndef COMPILER_TRANSLATOR_PRUNEPURELITERALSTATEMENTS_H_
 #define COMPILER_TRANSLATOR_PRUNEPURELITERALSTATEMENTS_H_

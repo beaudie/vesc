@@ -4,6 +4,8 @@
 // found in the LICENSE file.
 //
 // PrunePureLiteralStatements.cpp: Removes statements that are literals and nothing else.
+// Note that this may clear statements from after the last case label of a switch
+// statement.
 
 #include "compiler/translator/PrunePureLiteralStatements.h"
 
@@ -23,44 +25,14 @@ class PrunePureLiteralStatementsTraverser : public TIntermTraverser
     bool visitBlock(Visit visit, TIntermBlock *node) override
     {
         TIntermSequence *statements = node->getSequence();
-        if (statements == nullptr)
-        {
-            return false;
-        }
 
-        // Empty case statements at the end of a switch are invalid: if the last statements
-        // of a block was a pure literal, also delete all the case statements directly preceding it.
-        bool deleteCaseStatements = false;
-        for (int i = static_cast<int>(statements->size()); i-- > 0;)
+        for (TIntermNode *statement : *statements)
         {
-            TIntermNode *statement = (*statements)[i];
-
             if (statement->getAsConstantUnion() != nullptr)
             {
                 TIntermSequence emptyReplacement;
                 mMultiReplacements.push_back(
                     NodeReplaceWithMultipleEntry(node, statement, emptyReplacement));
-
-                if (i == static_cast<int>(statements->size()) - 1)
-                {
-                    deleteCaseStatements = true;
-                }
-
-                continue;
-            }
-
-            if (deleteCaseStatements)
-            {
-                if (statement->getAsCaseNode() != nullptr)
-                {
-                    TIntermSequence emptyReplacement;
-                    mMultiReplacements.push_back(
-                        NodeReplaceWithMultipleEntry(node, statement, emptyReplacement));
-                }
-                else
-                {
-                    deleteCaseStatements = false;
-                }
             }
         }
 
