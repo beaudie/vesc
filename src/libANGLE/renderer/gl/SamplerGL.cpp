@@ -25,7 +25,8 @@ static inline void SyncSamplerStateMember(const rx::FunctionsGL *functions,
     if (curState.*samplerMember != newState.*samplerMember)
     {
         curState.*samplerMember = newState.*samplerMember;
-        functions->samplerParameterf(sampler, name, static_cast<GLfloat>(curState.*samplerMember));
+        functions->gl.samplerParameterf(sampler, name,
+                                        static_cast<GLfloat>(curState.*samplerMember));
     }
 }
 }
@@ -42,7 +43,7 @@ SamplerGL::SamplerGL(const gl::SamplerState &state,
       mAppliedSamplerState(),
       mSamplerID(0)
 {
-    mFunctions->genSamplers(1, &mSamplerID);
+    mFunctions->gl.genSamplers(1, &mSamplerID);
 }
 
 SamplerGL::~SamplerGL()

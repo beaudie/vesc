@@ -135,7 +135,7 @@ std::vector<PathImpl *> ContextGL::createPaths(GLsizei range)
     std::vector<PathImpl *> ret;
     ret.reserve(range);
 
-    const GLuint first = funcs->genPathsNV(range);
+    const GLuint first = funcs->gl.genPathsNV(range);
     if (first == 0)
         return ret;
 

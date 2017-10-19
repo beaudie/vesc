@@ -39,38 +39,38 @@ PbufferSurfaceCGL::~PbufferSurfaceCGL()
 {
     if (mFramebuffer != 0)
     {
-        mFunctions->deleteFramebuffers(1, &mFramebuffer);
+        mFunctions->gl.deleteFramebuffers(1, &mFramebuffer);
         mFramebuffer = 0;
     }
 
     if (mColorRenderbuffer != 0)
     {
-        mFunctions->deleteRenderbuffers(1, &mColorRenderbuffer);
+        mFunctions->gl.deleteRenderbuffers(1, &mColorRenderbuffer);
         mColorRenderbuffer = 0;
     }
     if (mDSRenderbuffer != 0)
     {
-        mFunctions->deleteRenderbuffers(1, &mDSRenderbuffer);
+        mFunctions->gl.deleteRenderbuffers(1, &mDSRenderbuffer);
         mDSRenderbuffer = 0;
     }
 }
 
 egl::Error PbufferSurfaceCGL::initialize(const egl::Display *display)
 {
-    mFunctions->genRenderbuffers(1, &mColorRenderbuffer);
+    mFunctions->gl.genRenderbuffers(1, &mColorRenderbuffer);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbuffer);
-    mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, mWidth, mHeight);
+    mFunctions->gl.renderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, mWidth, mHeight);
 
-    mFunctions->genRenderbuffers(1, &mDSRenderbuffer);
+    mFunctions->gl.genRenderbuffers(1, &mDSRenderbuffer);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
-    mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight);
+    mFunctions->gl.renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight);
 
-    mFunctions->genFramebuffers(1, &mFramebuffer);
+    mFunctions->gl.genFramebuffers(1, &mFramebuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
-    mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
-                                        mColorRenderbuffer);
-    mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
-                                        GL_RENDERBUFFER, mDSRenderbuffer);
+    mFunctions->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                           mColorRenderbuffer);
+    mFunctions->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                           GL_RENDERBUFFER, mDSRenderbuffer);
 
     return egl::NoError();
 }

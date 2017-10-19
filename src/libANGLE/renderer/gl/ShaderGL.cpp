@@ -38,7 +38,7 @@ ShaderGL::~ShaderGL()
 {
     if (mShaderID != 0)
     {
-        mFunctions->deleteShader(mShaderID);
+        mFunctions->gl.deleteShader(mShaderID);
         mShaderID = 0;
     }
 }
@@ -49,7 +49,7 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
     // Reset the previous state
     if (mShaderID != 0)
     {
-        mFunctions->deleteShader(mShaderID);
+        mFunctions->gl.deleteShader(mShaderID);
         mShaderID = 0;
     }
 
@@ -132,27 +132,27 @@ bool ShaderGL::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog
     const char *translatedSourceCString = mData.getTranslatedSource().c_str();
 
     // Generate a shader object and set the source
-    mShaderID = mFunctions->createShader(mData.getShaderType());
-    mFunctions->shaderSource(mShaderID, 1, &translatedSourceCString, nullptr);
-    mFunctions->compileShader(mShaderID);
+    mShaderID = mFunctions->gl.createShader(mData.getShaderType());
+    mFunctions->gl.shaderSource(mShaderID, 1, &translatedSourceCString, nullptr);
+    mFunctions->gl.compileShader(mShaderID);
 
     // Check for compile errors from the native driver
     GLint compileStatus = GL_FALSE;
-    mFunctions->getShaderiv(mShaderID, GL_COMPILE_STATUS, &compileStatus);
+    mFunctions->gl.getShaderiv(mShaderID, GL_COMPILE_STATUS, &compileStatus);
     if (compileStatus == GL_FALSE)
     {
         // Compilation failed, put the error into the info log
         GLint infoLogLength = 0;
-        mFunctions->getShaderiv(mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        mFunctions->gl.getShaderiv(mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         // Info log length includes the null terminator, so 1 means that the info log is an empty
         // string.
         if (infoLogLength > 1)
         {
             std::vector<char> buf(infoLogLength);
-            mFunctions->getShaderInfoLog(mShaderID, infoLogLength, nullptr, &buf[0]);
+            mFunctions->gl.getShaderInfoLog(mShaderID, infoLogLength, nullptr, &buf[0]);
 
-            mFunctions->deleteShader(mShaderID);
+            mFunctions->gl.deleteShader(mShaderID);
             mShaderID = 0;
 
             *infoLog = &buf[0];
