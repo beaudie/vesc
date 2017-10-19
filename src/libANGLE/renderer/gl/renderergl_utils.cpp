@@ -31,7 +31,8 @@ namespace rx
 {
 VendorID GetVendorID(const FunctionsGL *functions)
 {
-    std::string nativeVendorString(reinterpret_cast<const char *>(functions->getString(GL_VENDOR)));
+    std::string nativeVendorString(
+        reinterpret_cast<const char *>(functions->gl.getString(GL_VENDOR)));
     if (nativeVendorString.find("Intel") != std::string::npos)
     {
         return VENDOR_ID_INTEL;
@@ -92,7 +93,7 @@ static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::Supp
 static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
                                                  GLenum internalFormat)
 {
-    ASSERT(functions->getError() == GL_NO_ERROR);
+    ASSERT(functions->gl.getError() == GL_NO_ERROR);
 
     gl::TextureCaps textureCaps;
 
@@ -103,7 +104,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
 
     // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
     // extension GL_ARB_internalformat_query
-    if (textureCaps.renderable && functions->getInternalformativ)
+    if (textureCaps.renderable && functions->gl.getInternalformativ)
     {
         GLenum queryInternalFormat = internalFormat;
 
@@ -117,14 +118,14 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
         }
 
         GLint numSamples = 0;
-        functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
-                                       1, &numSamples);
+        functions->gl.getInternalformativ(GL_RENDERBUFFER, queryInternalFormat,
+                                          GL_NUM_SAMPLE_COUNTS, 1, &numSamples);
 
         if (numSamples > 0)
         {
             std::vector<GLint> samples(numSamples);
-            functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_SAMPLES,
-                                           static_cast<GLsizei>(samples.size()), &samples[0]);
+            functions->gl.getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_SAMPLES,
+                                              static_cast<GLsizei>(samples.size()), &samples[0]);
 
             if (internalFormat == GL_STENCIL_INDEX8)
             {
@@ -141,16 +142,16 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
                 // exposed through ANGLE. Query which formats are conformant from the driver if
                 // supported.
                 GLint conformant = GL_TRUE;
-                if (functions->getInternalformatSampleivNV)
+                if (functions->gl.getInternalformatSampleivNV)
                 {
-                    ASSERT(functions->getError() == GL_NO_ERROR);
-                    functions->getInternalformatSampleivNV(GL_RENDERBUFFER, queryInternalFormat,
-                                                           samples[sampleIndex], GL_CONFORMANT_NV,
-                                                           1, &conformant);
+                    ASSERT(functions->gl.getError() == GL_NO_ERROR);
+                    functions->gl.getInternalformatSampleivNV(GL_RENDERBUFFER, queryInternalFormat,
+                                                              samples[sampleIndex],
+                                                              GL_CONFORMANT_NV, 1, &conformant);
                     // getInternalFormatSampleivNV does not work for all formats on NVIDIA Shield TV
                     // drivers. Assume that formats with large sample counts are non-conformant in
                     // case the query generates an error.
-                    if (functions->getError() != GL_NO_ERROR)
+                    if (functions->gl.getError() != GL_NO_ERROR)
                     {
                         conformant = (samples[sampleIndex] <= 8) ? GL_TRUE : GL_FALSE;
                     }
@@ -163,28 +164,28 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
         }
     }
 
-    ASSERT(functions->getError() == GL_NO_ERROR);
+    ASSERT(functions->gl.getError() == GL_NO_ERROR);
     return textureCaps;
 }
 
 static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
 {
     GLint result = 0;
-    functions->getIntegerv(name, &result);
+    functions->gl.getIntegerv(name, &result);
     return result;
 }
 
 static GLint QuerySingleIndexGLInt(const FunctionsGL *functions, GLenum name, GLuint index)
 {
     GLint result;
-    functions->getIntegeri_v(name, index, &result);
+    functions->gl.getIntegeri_v(name, index, &result);
     return result;
 }
 
 static GLint QueryGLIntRange(const FunctionsGL *functions, GLenum name, size_t index)
 {
     GLint result[2] = {};
-    functions->getIntegerv(name, result);
+    functions->gl.getIntegerv(name, result);
     return result[index];
 }
 
@@ -193,16 +194,16 @@ static GLint64 QuerySingleGLInt64(const FunctionsGL *functions, GLenum name)
     // Fall back to 32-bit int if 64-bit query is not available. This can become relevant for some
     // caps that are defined as 64-bit values in core spec, but were introduced earlier in
     // extensions as 32-bit. Triggered in some cases by RenderDoc's emulated OpenGL driver.
-    if (!functions->getInteger64v)
+    if (!functions->gl.getInteger64v)
     {
         GLint result = 0;
-        functions->getIntegerv(name, &result);
+        functions->gl.getIntegerv(name, &result);
         return static_cast<GLint64>(result);
     }
     else
     {
         GLint64 result = 0;
-        functions->getInteger64v(name, &result);
+        functions->gl.getInteger64v(name, &result);
         return result;
     }
 }
@@ -210,29 +211,29 @@ static GLint64 QuerySingleGLInt64(const FunctionsGL *functions, GLenum name)
 static GLfloat QuerySingleGLFloat(const FunctionsGL *functions, GLenum name)
 {
     GLfloat result = 0.0f;
-    functions->getFloatv(name, &result);
+    functions->gl.getFloatv(name, &result);
     return result;
 }
 
 static GLfloat QueryGLFloatRange(const FunctionsGL *functions, GLenum name, size_t index)
 {
     GLfloat result[2] = {};
-    functions->getFloatv(name, result);
+    functions->gl.getFloatv(name, result);
     return result[index];
 }
 
 static gl::TypePrecision QueryTypePrecision(const FunctionsGL *functions, GLenum shaderType, GLenum precisionType)
 {
     gl::TypePrecision precision;
-    functions->getShaderPrecisionFormat(shaderType, precisionType, precision.range.data(),
-                                        &precision.precision);
+    functions->gl.getShaderPrecisionFormat(shaderType, precisionType, precision.range.data(),
+                                           &precision.precision);
     return precision;
 }
 
 static GLint QueryQueryValue(const FunctionsGL *functions, GLenum target, GLenum name)
 {
     GLint result;
-    functions->getQueryiv(target, name, &result);
+    functions->gl.getQueryiv(target, name, &result);
     return result;
 }
 
@@ -896,7 +897,7 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->fence = functions->hasGLExtension("GL_NV_fence") || functions->hasGLESExtension("GL_NV_fence");
     extensions->blendMinMax = functions->isAtLeastGL(gl::Version(1, 5)) || functions->hasGLExtension("GL_EXT_blend_minmax") ||
                               functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_EXT_blend_minmax");
-    extensions->framebufferBlit = (functions->blitFramebuffer != nullptr);
+    extensions->framebufferBlit        = (functions->gl.blitFramebuffer != nullptr);
     extensions->framebufferMultisample = caps->maxSamples > 0;
     extensions->standardDerivatives    = functions->isAtLeastGL(gl::Version(2, 0)) ||
                                       functions->hasGLExtension("GL_ARB_fragment_shader") ||
@@ -1149,8 +1150,8 @@ bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum
         functions->hasGLExtension("GL_ARB_internalformat_query2"))
     {
         GLint framebufferRenderable = GL_FALSE;
-        functions->getInternalformativ(target, internalFormat, GL_FRAMEBUFFER_RENDERABLE, 1,
-                                       &framebufferRenderable);
+        functions->gl.getInternalformativ(target, internalFormat, GL_FRAMEBUFFER_RENDERABLE, 1,
+                                          &framebufferRenderable);
         return framebufferRenderable != GL_FALSE;
     }
     else
@@ -1164,8 +1165,8 @@ bool SupportsNativeRendering(const FunctionsGL *functions, GLenum target, GLenum
 
 bool CanMapBufferForRead(const FunctionsGL *functions)
 {
-    return (functions->mapBufferRange != nullptr) ||
-           (functions->mapBuffer != nullptr && functions->standard == STANDARD_GL_DESKTOP);
+    return (functions->gl.mapBufferRange != nullptr) ||
+           (functions->gl.mapBuffer != nullptr && functions->standard == STANDARD_GL_DESKTOP);
 }
 
 uint8_t *MapBufferRangeWithFallback(const FunctionsGL *functions,
@@ -1174,12 +1175,12 @@ uint8_t *MapBufferRangeWithFallback(const FunctionsGL *functions,
                                     size_t length,
                                     GLbitfield access)
 {
-    if (functions->mapBufferRange != nullptr)
+    if (functions->gl.mapBufferRange != nullptr)
     {
         return reinterpret_cast<uint8_t *>(
-            functions->mapBufferRange(target, offset, length, access));
+            functions->gl.mapBufferRange(target, offset, length, access));
     }
-    else if (functions->mapBuffer != nullptr &&
+    else if (functions->gl.mapBuffer != nullptr &&
              (functions->standard == STANDARD_GL_DESKTOP || access == GL_MAP_WRITE_BIT))
     {
         // Only the read and write bits are supported
@@ -1204,7 +1205,7 @@ uint8_t *MapBufferRangeWithFallback(const FunctionsGL *functions,
             return nullptr;
         }
 
-        return reinterpret_cast<uint8_t *>(functions->mapBuffer(target, accessEnum)) + offset;
+        return reinterpret_cast<uint8_t *>(functions->gl.mapBuffer(target, accessEnum)) + offset;
     }
     else
     {
