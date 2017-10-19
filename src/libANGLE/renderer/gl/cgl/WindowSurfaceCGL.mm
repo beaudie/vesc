@@ -105,7 +105,7 @@
         {
             initialized = true;
 
-            mFunctions->genFramebuffers(1, &mReadFramebuffer);
+            mFunctions->gl.genFramebuffers(1, &mReadFramebuffer);
         }
 
         const auto &texture = *mSwapState->beingPresented;
@@ -120,16 +120,16 @@
         // TODO(cwallez) support 2.1 contexts too that don't have blitFramebuffer nor the
         // GL_DRAW_FRAMEBUFFER_BINDING query
         GLint drawFBO;
-        mFunctions->getIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFBO);
+        mFunctions->gl.getIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFBO);
 
-        mFunctions->bindFramebuffer(GL_FRAMEBUFFER, mReadFramebuffer);
-        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                         texture.texture, 0);
+        mFunctions->gl.bindFramebuffer(GL_FRAMEBUFFER, mReadFramebuffer);
+        mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                            texture.texture, 0);
 
-        mFunctions->bindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer);
-        mFunctions->bindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFBO);
-        mFunctions->blitFramebuffer(0, 0, texture.width, texture.height, 0, 0, texture.width,
-                                    texture.height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        mFunctions->gl.bindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer);
+        mFunctions->gl.bindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFBO);
+        mFunctions->gl.blitFramebuffer(0, 0, texture.width, texture.height, 0, 0, texture.width,
+                                       texture.height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
         // Call the super method to flush the context
         [super drawInCGLContext:glContext
@@ -167,13 +167,13 @@ WindowSurfaceCGL::~WindowSurfaceCGL()
     pthread_mutex_destroy(&mSwapState.mutex);
     if (mFramebuffer != 0)
     {
-        mFunctions->deleteFramebuffers(1, &mFramebuffer);
+        mFunctions->gl.deleteFramebuffers(1, &mFramebuffer);
         mFramebuffer = 0;
     }
 
     if (mDSRenderbuffer != 0)
     {
-        mFunctions->deleteRenderbuffers(1, &mDSRenderbuffer);
+        mFunctions->gl.deleteRenderbuffers(1, &mDSRenderbuffer);
         mDSRenderbuffer = 0;
     }
 
@@ -188,7 +188,7 @@ WindowSurfaceCGL::~WindowSurfaceCGL()
     {
         if (mSwapState.textures[i].texture != 0)
         {
-            mFunctions->deleteTextures(1, &mSwapState.textures[i].texture);
+            mFunctions->gl.deleteTextures(1, &mSwapState.textures[i].texture);
             mSwapState.textures[i].texture = 0;
         }
     }
@@ -201,10 +201,10 @@ egl::Error WindowSurfaceCGL::initialize(const egl::Display *display)
 
     for (size_t i = 0; i < ArraySize(mSwapState.textures); ++i)
     {
-        mFunctions->genTextures(1, &mSwapState.textures[i].texture);
+        mFunctions->gl.genTextures(1, &mSwapState.textures[i].texture);
         mStateManager->bindTexture(GL_TEXTURE_2D, mSwapState.textures[i].texture);
-        mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                               GL_UNSIGNED_BYTE, nullptr);
+        mFunctions->gl.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                                  GL_UNSIGNED_BYTE, nullptr);
         mSwapState.textures[i].width  = width;
         mSwapState.textures[i].height = height;
         mSwapState.textures[i].swapId = 0;
@@ -218,16 +218,16 @@ egl::Error WindowSurfaceCGL::initialize(const egl::Display *display)
                                           withFunctions:mFunctions];
     [mLayer addSublayer:mSwapLayer];
 
-    mFunctions->genRenderbuffers(1, &mDSRenderbuffer);
+    mFunctions->gl.genRenderbuffers(1, &mDSRenderbuffer);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
-    mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    mFunctions->gl.renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
-    mFunctions->genFramebuffers(1, &mFramebuffer);
+    mFunctions->gl.genFramebuffers(1, &mFramebuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                     mSwapState.beingRendered->texture, 0);
-    mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                                        mDSRenderbuffer);
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                        mSwapState.beingRendered->texture, 0);
+    mFunctions->gl.framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                           GL_RENDERBUFFER, mDSRenderbuffer);
 
     return egl::Error(EGL_SUCCESS);
 }
@@ -239,7 +239,7 @@ egl::Error WindowSurfaceCGL::makeCurrent()
 
 egl::Error WindowSurfaceCGL::swap(const gl::Context *context)
 {
-    mFunctions->flush();
+    mFunctions->gl.flush();
     mSwapState.beingRendered->swapId = ++mCurrentSwapId;
 
     pthread_mutex_lock(&mSwapState.mutex);
@@ -255,19 +255,19 @@ egl::Error WindowSurfaceCGL::swap(const gl::Context *context)
     if (texture.width != width || texture.height != height)
     {
         mStateManager->bindTexture(GL_TEXTURE_2D, texture.texture);
-        mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                               GL_UNSIGNED_BYTE, nullptr);
+        mFunctions->gl.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                                  GL_UNSIGNED_BYTE, nullptr);
 
         mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
-        mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        mFunctions->gl.renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
         texture.width  = width;
         texture.height = height;
     }
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                     mSwapState.beingRendered->texture, 0);
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                        mSwapState.beingRendered->texture, 0);
 
     return egl::Error(EGL_SUCCESS);
 }

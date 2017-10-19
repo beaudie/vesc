@@ -23,14 +23,14 @@ SyncGL::~SyncGL()
 {
     if (mSyncObject != 0)
     {
-        mFunctions->deleteSync(mSyncObject);
+        mFunctions->gl.deleteSync(mSyncObject);
     }
 }
 
 gl::Error SyncGL::set(GLenum condition, GLbitfield flags)
 {
     ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE && flags == 0);
-    mSyncObject = mFunctions->fenceSync(condition, flags);
+    mSyncObject = mFunctions->gl.fenceSync(condition, flags);
     if (mSyncObject == 0)
     {
         // if glFenceSync fails, it returns 0.
@@ -43,21 +43,21 @@ gl::Error SyncGL::set(GLenum condition, GLbitfield flags)
 gl::Error SyncGL::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
 {
     ASSERT(mSyncObject != 0);
-    *outResult = mFunctions->clientWaitSync(mSyncObject, flags, timeout);
+    *outResult = mFunctions->gl.clientWaitSync(mSyncObject, flags, timeout);
     return gl::NoError();
 }
 
 gl::Error SyncGL::serverWait(GLbitfield flags, GLuint64 timeout)
 {
     ASSERT(mSyncObject != 0);
-    mFunctions->waitSync(mSyncObject, flags, timeout);
+    mFunctions->gl.waitSync(mSyncObject, flags, timeout);
     return gl::NoError();
 }
 
 gl::Error SyncGL::getStatus(GLint *outResult)
 {
     ASSERT(mSyncObject != 0);
-    mFunctions->getSynciv(mSyncObject, GL_SYNC_STATUS, 1, nullptr, outResult);
+    mFunctions->gl.getSynciv(mSyncObject, GL_SYNC_STATUS, 1, nullptr, outResult);
     return gl::NoError();
 }
 }

@@ -26,13 +26,13 @@ gl::Error PathGL::setCommands(GLsizei numCommands,
                               GLenum coordType,
                               const void *coords)
 {
-    mFunctions->pathCommandsNV(mPathID, numCommands, commands, numCoords, coordType, coords);
+    mFunctions->gl.pathCommandsNV(mPathID, numCommands, commands, numCoords, coordType, coords);
     return gl::NoError();
 }
 
 void PathGL::setPathParameter(GLenum pname, GLfloat value)
 {
-    mFunctions->setPathParameterfNV(mPathID, pname, value);
+    mFunctions->gl.pathParameterfNV(mPathID, pname, value);
 }
 
 }  // rx
