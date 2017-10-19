@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "common/string_utils.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace rx
@@ -55,6 +56,40 @@ static std::vector<std::string> GetIndexedExtensions(PFNGLGETINTEGERVPROC getInt
     return result;
 }
 
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+static GLenum DummyCheckFramebufferStatus(GLenum)
+{
+    return GL_FRAMEBUFFER_COMPLETE;
+}
+
+static void DummyGetProgramiv(GLuint program, GLenum pname, GLint *params)
+{
+    switch (pname)
+    {
+        case GL_LINK_STATUS:
+            *params = GL_TRUE;
+            break;
+        case GL_VALIDATE_STATUS:
+            *params = GL_TRUE;
+            break;
+        default:
+            break;
+    }
+}
+
+static void DummyGetShaderiv(GLuint program, GLenum pname, GLint *params)
+{
+    switch (pname)
+    {
+        case GL_COMPILE_STATUS:
+            *params = GL_TRUE;
+            break;
+        default:
+            break;
+    }
+}
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
+
 #define ASSIGN(NAME, FP) *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
 
 FunctionsGL::FunctionsGL() : version(), standard(), extensions()
@@ -65,7 +100,7 @@ FunctionsGL::~FunctionsGL()
 {
 }
 
-void FunctionsGL::initialize()
+void FunctionsGL::initialize(const egl::AttributeMap &displayAttributes)
 {
     // Grab the version number
     ASSIGN("glGetString", gl.getString);
@@ -90,12 +125,18 @@ void FunctionsGL::initialize()
         extensionSet.insert(extension);
     }
 
-    // Note:
-    // Even though extensions are written against specific versions of GL, many drivers expose the
-    // extensions in even older versions.  Always try loading the extensions regardless of GL
-    // version.
+// Note:
+// Even though extensions are written against specific versions of GL, many drivers expose the
+// extensions in even older versions.  Always try loading the extensions regardless of GL
+// version.
 
-    // Load the entry points
+// Load the entry points
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+    EGLint deviceType =
+        static_cast<EGLint>(displayAttributes.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, EGL_NONE));
+#endif  // defined(ANGLE_ENABLE_GL_NULL)
+
     switch (standard)
     {
         case STANDARD_GL_DESKTOP:
@@ -107,16 +148,38 @@ void FunctionsGL::initialize()
                 gl.getIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
             }
 
-            InitializeTableDesktopGL(&gl, this, extensionSet);
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
+            {
+                InitializeTableDesktopGLNULL(&gl, this, extensionSet);
+                initializeDummyFunctionsForNULLDriver(extensionSet);
+            }
+            else
+#endif  // defined(ANGLE_ENABLE_GL_NULL)
+            {
+                InitializeTableDesktopGL(&gl, this, extensionSet);
+            }
             break;
         }
 
         case STANDARD_GL_ES:
+        {
             // No profiles in GLES
             profile = 0;
 
-            InitializeTableGLES(&gl, this, extensionSet);
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
+            {
+                InitializeTableGLESNULL(&gl, this, extensionSet);
+                initializeDummyFunctionsForNULLDriver(extensionSet);
+            }
+            else
+#endif  // defined(ANGLE_ENABLE_GL_NULL)
+            {
+                InitializeTableGLES(&gl, this, extensionSet);
+            }
             break;
+        }
 
         default:
             UNREACHABLE();
@@ -158,5 +221,35 @@ bool FunctionsGL::hasGLESExtension(const std::string &ext) const
 {
     return standard == STANDARD_GL_ES && hasExtension(ext);
 }
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+void FunctionsGL::initializeDummyFunctionsForNULLDriver(const std::set<std::string> &extensionSet)
+{
+    ASSIGN("glGetString", gl.getString);
+    ASSIGN("glGetStringi", gl.getStringi);
+    ASSIGN("glGetIntegerv", gl.getIntegerv);
+
+    gl.getProgramiv = reinterpret_cast<PFNGLGETPROGRAMIVPROC>(&DummyGetProgramiv);
+    gl.getShaderiv  = reinterpret_cast<PFNGLGETSHADERIVPROC>(&DummyGetShaderiv);
+    gl.checkFramebufferStatus =
+        reinterpret_cast<PFNGLCHECKFRAMEBUFFERSTATUSPROC>(&DummyCheckFramebufferStatus);
+
+    if (isAtLeastGLES(gl::Version(3, 0)) || isAtLeastGL(gl::Version(4, 2)) ||
+        extensionSet.count("GL_ARB_internalformat_query") > 0)
+    {
+        ASSIGN("glGetInternalformativ", gl.getInternalformativ);
+    }
+
+    if (isAtLeastGL(gl::Version(4, 3)))
+    {
+        ASSIGN("glGetInternalformati64v", gl.getInternalformati64v);
+    }
+
+    if (extensionSet.count("GL_NV_internalformat_sample_query") > 0)
+    {
+        ASSIGN("glGetInternalformatSampleivNV", gl.getInternalformatSampleivNV);
+    }
+}
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 }  // namespace gl
