@@ -33,7 +33,7 @@ namespace
 gl::Error CheckCompileStatus(const rx::FunctionsGL *functions, GLuint shader)
 {
     GLint compileStatus = GL_FALSE;
-    functions->getShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
+    functions->gl.getShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
 
     ASSERT(compileStatus == GL_TRUE);
     if (compileStatus == GL_FALSE)
@@ -47,7 +47,7 @@ gl::Error CheckCompileStatus(const rx::FunctionsGL *functions, GLuint shader)
 gl::Error CheckLinkStatus(const rx::FunctionsGL *functions, GLuint program)
 {
     GLint linkStatus = GL_FALSE;
-    functions->getProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    functions->gl.getProgramiv(program, GL_LINK_STATUS, &linkStatus);
     ASSERT(linkStatus == GL_TRUE);
     if (linkStatus == GL_FALSE)
     {
@@ -99,7 +99,7 @@ class ScopedGLState : angle::NonCopyable
 
     void willUseTextureUnit(int unit)
     {
-        if (mFunctions->bindSampler)
+        if (mFunctions->gl.bindSampler)
         {
             mStateManager->bindSampler(unit, 0);
         }
@@ -178,9 +178,9 @@ gl::Error BlitGL::copyImageToLUMAWorkaroundTexture(const gl::Context *context,
 
     gl::PixelUnpackState unpack;
     mStateManager->setPixelUnpackState(unpack);
-    mFunctions->texImage2D(target, static_cast<GLint>(level), internalFormat, sourceArea.width,
-                           sourceArea.height, 0, format,
-                           source->getImplementationColorReadType(context), nullptr);
+    mFunctions->gl.texImage2D(target, static_cast<GLint>(level), internalFormat, sourceArea.width,
+                              sourceArea.height, 0, format,
+                              source->getImplementationColorReadType(context), nullptr);
 
     return copySubImageToLUMAWorkaroundTexture(context, texture, textureType, target, lumaFormat,
                                                level, gl::Offset(0, 0, 0), sourceArea, source);
@@ -210,8 +210,8 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *context
         source->getImplementationColorReadType(context));
 
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
-    mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat, sourceArea.x,
-                               sourceArea.y, sourceArea.width, sourceArea.height, 0);
+    mFunctions->gl.copyTexImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat, sourceArea.x,
+                                  sourceArea.y, sourceArea.width, sourceArea.height, 0);
 
     // Set the swizzle of the scratch texture so that the channels sample into the correct emulated
     // LUMA channels.
@@ -219,19 +219,19 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *context
         (lumaFormat == GL_ALPHA) ? GL_ALPHA : GL_RED,
         (lumaFormat == GL_LUMINANCE_ALPHA) ? GL_ALPHA : GL_ZERO, GL_ZERO, GL_ZERO,
     };
-    mFunctions->texParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzle);
+    mFunctions->gl.texParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzle);
 
     // Make a temporary framebuffer using the second scratch texture to render the swizzled result
     // to.
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
-    mFunctions->texImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat, sourceArea.width,
-                           sourceArea.height, 0,
-                           gl::GetUnsizedFormat(copyTexImageFormat.internalFormat),
-                           source->getImplementationColorReadType(context), nullptr);
+    mFunctions->gl.texImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat, sourceArea.width,
+                              sourceArea.height, 0,
+                              gl::GetUnsizedFormat(copyTexImageFormat.internalFormat),
+                              source->getImplementationColorReadType(context), nullptr);
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                     mScratchTextures[1], 0);
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                        mScratchTextures[1], 0);
 
     // Render to the destination texture, sampling from the scratch texture
     ScopedGLState scopedState(mStateManager, mFunctions,
@@ -245,27 +245,28 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *context
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
 
     mStateManager->useProgram(blitProgram->program);
-    mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0);
-    mFunctions->uniform2f(blitProgram->scaleLocation, 1.0, 1.0);
-    mFunctions->uniform2f(blitProgram->offsetLocation, 0.0, 0.0);
-    mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0);
-    mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
+    mFunctions->gl.uniform1i(blitProgram->sourceTextureLocation, 0);
+    mFunctions->gl.uniform2f(blitProgram->scaleLocation, 1.0, 1.0);
+    mFunctions->gl.uniform2f(blitProgram->offsetLocation, 0.0, 0.0);
+    mFunctions->gl.uniform1i(blitProgram->multiplyAlphaLocation, 0);
+    mFunctions->gl.uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
 
     mStateManager->bindVertexArray(mVAO, 0);
-    mFunctions->drawArrays(GL_TRIANGLES, 0, 3);
+    mFunctions->gl.drawArrays(GL_TRIANGLES, 0, 3);
 
     // Copy the swizzled texture to the destination texture
     mStateManager->bindTexture(textureType, texture);
 
     if (target == GL_TEXTURE_3D || target == GL_TEXTURE_2D_ARRAY)
     {
-        mFunctions->copyTexSubImage3D(target, static_cast<GLint>(level), destOffset.x, destOffset.y,
-                                      destOffset.z, 0, 0, sourceArea.width, sourceArea.height);
+        mFunctions->gl.copyTexSubImage3D(target, static_cast<GLint>(level), destOffset.x,
+                                         destOffset.y, destOffset.z, 0, 0, sourceArea.width,
+                                         sourceArea.height);
     }
     else
     {
-        mFunctions->copyTexSubImage2D(target, static_cast<GLint>(level), destOffset.x, destOffset.y,
-                                      0, 0, sourceArea.width, sourceArea.height);
+        mFunctions->gl.copyTexSubImage2D(target, static_cast<GLint>(level), destOffset.x,
+                                         destOffset.y, 0, 0, sourceArea.width, sourceArea.height);
     }
 
     // Finally orphan the scratch textures so they can be GCed by the driver.
@@ -369,8 +370,8 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
         mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceGL->getFramebufferID());
         mStateManager->bindTexture(GL_TEXTURE_2D, textureId);
 
-        mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, inBoundsSource.x, inBoundsSource.y,
-                                   inBoundsSource.width, inBoundsSource.height, 0);
+        mFunctions->gl.copyTexImage2D(GL_TEXTURE_2D, 0, format, inBoundsSource.x, inBoundsSource.y,
+                                      inBoundsSource.width, inBoundsSource.height, 0);
 
         setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, filter);
         setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, filter);
@@ -417,17 +418,17 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
     mStateManager->bindTexture(GL_TEXTURE_2D, textureId);
 
     mStateManager->useProgram(blitProgram->program);
-    mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0);
-    mFunctions->uniform2f(blitProgram->scaleLocation, texCoordScale.x(), texCoordScale.y());
-    mFunctions->uniform2f(blitProgram->offsetLocation, texCoordOffset.x(), texCoordOffset.y());
-    mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0);
-    mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
+    mFunctions->gl.uniform1i(blitProgram->sourceTextureLocation, 0);
+    mFunctions->gl.uniform2f(blitProgram->scaleLocation, texCoordScale.x(), texCoordScale.y());
+    mFunctions->gl.uniform2f(blitProgram->offsetLocation, texCoordOffset.x(), texCoordOffset.y());
+    mFunctions->gl.uniform1i(blitProgram->multiplyAlphaLocation, 0);
+    mFunctions->gl.uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
 
     const FramebufferGL *destGL = GetImplAs<FramebufferGL>(dest);
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, destGL->getFramebufferID());
 
     mStateManager->bindVertexArray(mVAO, 0);
-    mFunctions->drawArrays(GL_TRIANGLES, 0, 3);
+    mFunctions->gl.drawArrays(GL_TRIANGLES, 0, 3);
 
     return gl::NoError();
 }
@@ -501,26 +502,26 @@ gl::Error BlitGL::copySubTexture(const gl::Context *context,
     }
 
     mStateManager->useProgram(blitProgram->program);
-    mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0);
-    mFunctions->uniform2f(blitProgram->scaleLocation, scale.x(), scale.y());
-    mFunctions->uniform2f(blitProgram->offsetLocation, offset.x(), offset.y());
+    mFunctions->gl.uniform1i(blitProgram->sourceTextureLocation, 0);
+    mFunctions->gl.uniform2f(blitProgram->scaleLocation, scale.x(), scale.y());
+    mFunctions->gl.uniform2f(blitProgram->offsetLocation, offset.x(), offset.y());
     if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
     {
-        mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0);
-        mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
+        mFunctions->gl.uniform1i(blitProgram->multiplyAlphaLocation, 0);
+        mFunctions->gl.uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
     }
     else
     {
-        mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, unpackPremultiplyAlpha);
-        mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, unpackUnmultiplyAlpha);
+        mFunctions->gl.uniform1i(blitProgram->multiplyAlphaLocation, unpackPremultiplyAlpha);
+        mFunctions->gl.uniform1i(blitProgram->unMultiplyAlphaLocation, unpackUnmultiplyAlpha);
     }
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, destTarget,
-                                     dest->getTextureID(), static_cast<GLint>(destLevel));
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, destTarget,
+                                        dest->getTextureID(), static_cast<GLint>(destLevel));
 
     mStateManager->bindVertexArray(mVAO, 0);
-    mFunctions->drawArrays(GL_TRIANGLES, 0, 3);
+    mFunctions->gl.drawArrays(GL_TRIANGLES, 0, 3);
 
     return gl::NoError();
 }
@@ -554,8 +555,8 @@ gl::Error BlitGL::copySubTextureCPUReadback(const gl::Context *context,
     uint8_t *destMemory   = buffer->data() + sourceBufferSize;
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, source->getTarget(),
-                                     source->getTextureID(), static_cast<GLint>(sourceLevel));
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, source->getTarget(),
+                                        source->getTextureID(), static_cast<GLint>(sourceLevel));
 
     GLenum readPixelsFormat        = GL_NONE;
     ColorReadFunction readFunction = nullptr;
@@ -572,8 +573,8 @@ gl::Error BlitGL::copySubTextureCPUReadback(const gl::Context *context,
     }
 
     mStateManager->setPixelUnpackState(gl::PixelUnpackState(1, 0));
-    mFunctions->readPixels(sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height,
-                           readPixelsFormat, GL_UNSIGNED_BYTE, sourceMemory);
+    mFunctions->gl.readPixels(sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height,
+                              readPixelsFormat, GL_UNSIGNED_BYTE, sourceMemory);
 
     angle::Format::ID destFormatID =
         angle::Format::InternalFormatToID(destInternalFormatInfo.sizedInternalFormat);
@@ -590,9 +591,9 @@ gl::Error BlitGL::copySubTextureCPUReadback(const gl::Context *context,
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, destFormat, destType);
 
-    mFunctions->texSubImage2D(destTarget, static_cast<GLint>(destLevel), destOffset.x, destOffset.y,
-                              sourceArea.width, sourceArea.height, texSubImageFormat.format,
-                              texSubImageFormat.type, destMemory);
+    mFunctions->gl.texSubImage2D(destTarget, static_cast<GLint>(destLevel), destOffset.x,
+                                 destOffset.y, sourceArea.width, sourceArea.height,
+                                 texSubImageFormat.format, texSubImageFormat.type, destMemory);
 
     return gl::NoError();
 }
@@ -608,14 +609,14 @@ gl::Error BlitGL::copyTexSubImage(TextureGL *source,
     ANGLE_TRY(initializeResources());
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
-    mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                     source->getTextureID(), static_cast<GLint>(sourceLevel));
+    mFunctions->gl.framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                        source->getTextureID(), static_cast<GLint>(sourceLevel));
 
     mStateManager->bindTexture(dest->getTarget(), dest->getTextureID());
 
-    mFunctions->copyTexSubImage2D(destTarget, static_cast<GLint>(destLevel), destOffset.x,
-                                  destOffset.y, sourceArea.x, sourceArea.y, sourceArea.width,
-                                  sourceArea.height);
+    mFunctions->gl.copyTexSubImage2D(destTarget, static_cast<GLint>(destLevel), destOffset.x,
+                                     destOffset.y, sourceArea.x, sourceArea.y, sourceArea.width,
+                                     sourceArea.height);
 
     return gl::NoError();
 }
@@ -626,18 +627,18 @@ gl::Error BlitGL::initializeResources()
     {
         if (mScratchTextures[i] == 0)
         {
-            mFunctions->genTextures(1, &mScratchTextures[i]);
+            mFunctions->gl.genTextures(1, &mScratchTextures[i]);
         }
     }
 
     if (mScratchFBO == 0)
     {
-        mFunctions->genFramebuffers(1, &mScratchFBO);
+        mFunctions->gl.genFramebuffers(1, &mScratchFBO);
     }
 
     if (mVertexBuffer == 0)
     {
-        mFunctions->genBuffers(1, &mVertexBuffer);
+        mFunctions->gl.genBuffers(1, &mVertexBuffer);
         mStateManager->bindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 
         // Use a single, large triangle, to avoid arithmetic precision issues where fragments
@@ -646,12 +647,12 @@ gl::Error BlitGL::initializeResources()
             -0.5f, 0.0f, 1.5f, 0.0f, 0.5f, 2.0f,
         };
 
-        mFunctions->bufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, vertexData, GL_STATIC_DRAW);
+        mFunctions->gl.bufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, vertexData, GL_STATIC_DRAW);
     }
 
     if (mVAO == 0)
     {
-        mFunctions->genVertexArrays(1, &mVAO);
+        mFunctions->gl.genVertexArrays(1, &mVAO);
 
         mStateManager->bindVertexArray(mVAO, 0);
         mStateManager->bindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
@@ -659,12 +660,12 @@ gl::Error BlitGL::initializeResources()
         // Enable all attributes with the same buffer so that it doesn't matter what location the
         // texcoord attribute is assigned
         GLint maxAttributes = 0;
-        mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttributes);
+        mFunctions->gl.getIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttributes);
 
         for (GLint i = 0; i < maxAttributes; i++)
         {
-            mFunctions->enableVertexAttribArray(i);
-            mFunctions->vertexAttribPointer(i, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+            mFunctions->gl.enableVertexAttribArray(i);
+            mFunctions->gl.vertexAttribPointer(i, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
         }
     }
 
@@ -678,8 +679,8 @@ void BlitGL::orphanScratchTextures()
         mStateManager->bindTexture(GL_TEXTURE_2D, texture);
         gl::PixelUnpackState unpack;
         mStateManager->setPixelUnpackState(unpack);
-        mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                               nullptr);
+        mFunctions->gl.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                                  nullptr);
     }
 }
 
@@ -688,8 +689,8 @@ void BlitGL::setScratchTextureParameter(GLenum param, GLenum value)
     for (auto texture : mScratchTextures)
     {
         mStateManager->bindTexture(GL_TEXTURE_2D, texture);
-        mFunctions->texParameteri(GL_TEXTURE_2D, param, value);
-        mFunctions->texParameteri(GL_TEXTURE_2D, param, value);
+        mFunctions->gl.texParameteri(GL_TEXTURE_2D, param, value);
+        mFunctions->gl.texParameteri(GL_TEXTURE_2D, param, value);
     }
 }
 
@@ -722,7 +723,7 @@ gl::Error BlitGL::getBlitProgram(BlitProgramType type, BlitProgram **program)
     BlitProgram &result = mBlitPrograms[type];
     if (result.program == 0)
     {
-        result.program = mFunctions->createProgram();
+        result.program = mFunctions->gl.createProgram();
 
         // Depending on what types need to be output by the shaders, different versions need to be
         // used.
@@ -778,13 +779,13 @@ gl::Error BlitGL::getBlitProgram(BlitProgramType type, BlitProgram **program)
             std::string vsSourceStr  = vsSourceStream.str();
             const char *vsSourceCStr = vsSourceStr.c_str();
 
-            GLuint vs = mFunctions->createShader(GL_VERTEX_SHADER);
-            mFunctions->shaderSource(vs, 1, &vsSourceCStr, nullptr);
-            mFunctions->compileShader(vs);
+            GLuint vs = mFunctions->gl.createShader(GL_VERTEX_SHADER);
+            mFunctions->gl.shaderSource(vs, 1, &vsSourceCStr, nullptr);
+            mFunctions->gl.compileShader(vs);
             ANGLE_TRY(CheckCompileStatus(mFunctions, vs));
 
-            mFunctions->attachShader(result.program, vs);
-            mFunctions->deleteShader(vs);
+            mFunctions->gl.attachShader(result.program, vs);
+            mFunctions->gl.deleteShader(vs);
         }
 
         {
@@ -885,26 +886,26 @@ gl::Error BlitGL::getBlitProgram(BlitProgramType type, BlitProgram **program)
             std::string fsSourceStr  = fsSourceStream.str();
             const char *fsSourceCStr = fsSourceStr.c_str();
 
-            GLuint fs = mFunctions->createShader(GL_FRAGMENT_SHADER);
-            mFunctions->shaderSource(fs, 1, &fsSourceCStr, nullptr);
-            mFunctions->compileShader(fs);
+            GLuint fs = mFunctions->gl.createShader(GL_FRAGMENT_SHADER);
+            mFunctions->gl.shaderSource(fs, 1, &fsSourceCStr, nullptr);
+            mFunctions->gl.compileShader(fs);
             ANGLE_TRY(CheckCompileStatus(mFunctions, fs));
 
-            mFunctions->attachShader(result.program, fs);
-            mFunctions->deleteShader(fs);
+            mFunctions->gl.attachShader(result.program, fs);
+            mFunctions->gl.deleteShader(fs);
         }
 
-        mFunctions->linkProgram(result.program);
+        mFunctions->gl.linkProgram(result.program);
         ANGLE_TRY(CheckLinkStatus(mFunctions, result.program));
 
         result.sourceTextureLocation =
-            mFunctions->getUniformLocation(result.program, "u_source_texture");
-        result.scaleLocation  = mFunctions->getUniformLocation(result.program, "u_scale");
-        result.offsetLocation = mFunctions->getUniformLocation(result.program, "u_offset");
+            mFunctions->gl.getUniformLocation(result.program, "u_source_texture");
+        result.scaleLocation  = mFunctions->gl.getUniformLocation(result.program, "u_scale");
+        result.offsetLocation = mFunctions->gl.getUniformLocation(result.program, "u_offset");
         result.multiplyAlphaLocation =
-            mFunctions->getUniformLocation(result.program, "u_multiply_alpha");
+            mFunctions->gl.getUniformLocation(result.program, "u_multiply_alpha");
         result.unMultiplyAlphaLocation =
-            mFunctions->getUniformLocation(result.program, "u_unmultiply_alpha");
+            mFunctions->gl.getUniformLocation(result.program, "u_unmultiply_alpha");
     }
 
     *program = &result;
