@@ -96,13 +96,6 @@ class FramebufferFormatsTest : public ANGLETest
                                            GLenum attachmentType,
                                            GLenum internalFormat)
     {
-        // TODO(geofflang): Figure out why this is broken on Intel OpenGL
-        if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-        {
-            std::cout << "Test skipped on Intel OpenGL." << std::endl;
-            return;
-        }
-
         int clientVersion = getClientMajorVersion();
         if (clientVersion < minESVersion)
         {
@@ -670,9 +663,6 @@ TEST_P(FramebufferTest_ES31, IncompleteMultisampleFixedSampleLocationsTex)
 // object's default width and height.
 TEST_P(FramebufferTest_ES31, RenderingLimitToDefaultFBOSizeWithNoAttachments)
 {
-    // TODO(yizhou): Investigate why this case fail on Intel GPU.
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsD3D11());
-
     const std::string &vertexShader =
         "#version 310 es\n"
         "in layout(location = 0) highp vec2 a_position;\n\n"

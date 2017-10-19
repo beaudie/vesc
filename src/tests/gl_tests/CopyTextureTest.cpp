@@ -1239,8 +1239,6 @@ TEST_P(CopyTextureTestES3, ES3FloatFormats)
 // Test the newly added ES3 unsigned integer formats
 TEST_P(CopyTextureTestES3, ES3UintFormats)
 {
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsOpenGL() && IsIntel());
-
     if (!checkExtensions())
     {
         return;

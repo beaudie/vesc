@@ -133,13 +133,6 @@ TEST_P(ClearTest, RGBA8Framebuffer)
 
 TEST_P(ClearTest, ClearIssue)
 {
-    // TODO(geofflang): Figure out why this is broken on Intel OpenGL
-    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
-
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
@@ -269,13 +262,6 @@ TEST_P(ClearTestES3, BadFBOSerialBug)
 // Test that SRGB framebuffers clear to the linearized clear color
 TEST_P(ClearTestES3, SRGBClear)
 {
-    // TODO(jmadill): figure out why this fails
-    if (IsIntel() && GetParam() == ES3_OPENGL())
-    {
-        std::cout << "Test skipped on Intel due to failures." << std::endl;
-        return;
-    }
-
     // First make a simple framebuffer, and clear it
     glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
 
@@ -304,13 +290,6 @@ TEST_P(ClearTestES3, MixedSRGBClear)
         return;
     }
 #endif
-
-    // TODO(jmadill): figure out why this fails
-    if (IsIntel() && GetParam() == ES3_OPENGL())
-    {
-        std::cout << "Test skipped on Intel due to failures." << std::endl;
-        return;
-    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
 
@@ -351,14 +330,6 @@ TEST_P(ClearTestES3, MixedSRGBClear)
 // flush or finish after ClearBufferfv or each draw.
 TEST_P(ClearTestES3, RepeatedClear)
 {
-    if (IsD3D11() && IsIntel())
-    {
-        // Note that there's been a bug affecting this test on NVIDIA drivers as well, until fall
-        // 2016 driver releases.
-        std::cout << "Test skipped on Intel D3D11." << std::endl;
-        return;
-    }
-
     const std::string &vertexSource =
         "#version 300 es\n"
         "in highp vec2 position;\n"
