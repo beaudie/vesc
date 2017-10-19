@@ -279,7 +279,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
     mFunctionsGL->initialize();
 
-    mHasRobustness = mFunctionsGL->getGraphicsResetStatus != nullptr;
+    mHasRobustness = mFunctionsGL->gl.getGraphicsResetStatus != nullptr;
     if (mHasWGLCreateContextRobustness != mHasRobustness)
     {
         WARN() << "WGL_ARB_create_context_robustness exists but unable to OpenGL context with "
