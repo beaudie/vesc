@@ -29,7 +29,7 @@ RenderbufferGL::RenderbufferGL(const FunctionsGL *functions,
       mTextureCaps(textureCaps),
       mRenderbufferID(0)
 {
-    mFunctions->genRenderbuffers(1, &mRenderbufferID);
+    mFunctions->gl.genRenderbuffers(1, &mRenderbufferID);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mRenderbufferID);
 }
 
@@ -48,8 +48,8 @@ gl::Error RenderbufferGL::setStorage(const gl::Context *context,
 
     nativegl::RenderbufferFormat renderbufferFormat =
         nativegl::GetRenderbufferFormat(mFunctions, mWorkarounds, internalformat);
-    mFunctions->renderbufferStorage(GL_RENDERBUFFER, renderbufferFormat.internalFormat,
-                                    static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+    mFunctions->gl.renderbufferStorage(GL_RENDERBUFFER, renderbufferFormat.internalFormat,
+                                       static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
     return gl::NoError();
 }
@@ -64,7 +64,7 @@ gl::Error RenderbufferGL::setStorageMultisample(const gl::Context *context,
 
     nativegl::RenderbufferFormat renderbufferFormat =
         nativegl::GetRenderbufferFormat(mFunctions, mWorkarounds, internalformat);
-    mFunctions->renderbufferStorageMultisample(
+    mFunctions->gl.renderbufferStorageMultisample(
         GL_RENDERBUFFER, static_cast<GLsizei>(samples), renderbufferFormat.internalFormat,
         static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
@@ -76,7 +76,7 @@ gl::Error RenderbufferGL::setStorageMultisample(const gl::Context *context,
         GLenum error = GL_NO_ERROR;
         do
         {
-            error = mFunctions->getError();
+            error = mFunctions->gl.getError();
             if (error == GL_OUT_OF_MEMORY)
             {
                 return gl::OutOfMemory();
