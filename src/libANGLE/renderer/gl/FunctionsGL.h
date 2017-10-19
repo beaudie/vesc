@@ -15,6 +15,11 @@
 #include "libANGLE/renderer/gl/functionsgl_enums.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
+namespace egl
+{
+class AttributeMap;
+}  // namespace egl
+
 namespace rx
 {
 
@@ -30,7 +35,7 @@ class FunctionsGL
     FunctionsGL();
     virtual ~FunctionsGL();
 
-    void initialize();
+    void initialize(const egl::AttributeMap &displayAttributes);
 
     // Version information
     gl::Version version;
@@ -58,6 +63,10 @@ class FunctionsGL
     friend void InitializeTableGLES(DispatchTableGL *table,
                                     FunctionsGL *functionsGL,
                                     const std::set<std::string> &extensions);
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+    void initializeDummyFunctionsForNULLDriver(const std::set<std::string> &extensionSet);
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 };
 
 }  // namespace rx
