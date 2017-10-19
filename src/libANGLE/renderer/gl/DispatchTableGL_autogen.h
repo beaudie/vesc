@@ -705,7 +705,7 @@ struct DispatchTableGL final : private angle::NonCopyable
     PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC drawArraysInstancedBaseInstance     = nullptr;
     PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC drawElementsInstancedBaseInstance = nullptr;
     PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC
-        drawElementsInstancedBaseVertexBaseInstance                                    = nullptr;
+    drawElementsInstancedBaseVertexBaseInstance                                        = nullptr;
     PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC drawTransformFeedbackInstanced             = nullptr;
     PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC drawTransformFeedbackStreamInstanced = nullptr;
     PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC getActiveAtomicCounterBufferiv             = nullptr;
@@ -770,6 +770,15 @@ void InitializeTableDesktopGL(DispatchTableGL *table,
 void InitializeTableGLES(DispatchTableGL *table,
                          FunctionsGL *functionsGL,
                          const std::set<std::string> &extensions);
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+void InitializeTableDesktopGLNULL(DispatchTableGL *table,
+                                  FunctionsGL *functionsGL,
+                                  const std::set<std::string> &extensions);
+void InitializeTableGLESNULL(DispatchTableGL *table,
+                             FunctionsGL *functionsGL,
+                             const std::set<std::string> &extensions);
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 }  // namespace rx
 

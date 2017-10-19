@@ -277,7 +277,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mCurrentDC = mDeviceContext;
 
     mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
-    mFunctionsGL->initialize();
+    mFunctionsGL->initialize(displayAttributes);
 
     mHasRobustness = mFunctionsGL->gl.getGraphicsResetStatus != nullptr;
     if (mHasWGLCreateContextRobustness != mHasRobustness)
