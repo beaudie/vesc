@@ -2091,6 +2091,27 @@ void ProgramD3D::defineUniformStructArrayFields(GLenum shaderType,
     }
 }
 
+void ProgramD3D::defineUniformArrayElements(GLenum shaderType,
+    const sh::ShaderVariable &uniform,
+    const std::string &fullName,
+    sh::HLSLBlockEncoder *encoder,
+    D3DUniformMap *uniformMap)
+{
+    if (encoder)
+        encoder->enterAggregateType();
+
+    sh::ShaderVariable uniformElement = uniform;
+    uniformElement.arraySizes.pop_back();
+    for (unsigned int arrayIndex = 0u; arrayIndex < uniform.getOutermostArraySize(); ++arrayIndex)
+    {
+        std::string elementFullName = fullName + ArrayString(arrayIndex);
+        defineUniform(shaderType, uniformElement, elementFullName, encoder, uniformMap);
+    }
+
+    if (encoder)
+        encoder->exitAggregateType();
+}
+
 void ProgramD3D::defineUniform(GLenum shaderType,
                                const sh::ShaderVariable &uniform,
                                const std::string &fullName,
@@ -2107,6 +2128,11 @@ void ProgramD3D::defineUniform(GLenum shaderType,
         {
             defineUniformStructFields(shaderType, uniform.fields, fullName, encoder, uniformMap);
         }
+        return;
+    }
+    if (uniform.isArrayOfArrays())
+    {
+        defineUniformArrayElements(shaderType, uniform, fullName, encoder, uniformMap);
         return;
     }
 

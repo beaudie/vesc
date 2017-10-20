@@ -973,6 +973,48 @@ TEST_P(UniformTest, UniformWithReservedOpenGLName)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
 }
 
+// TODO: This is here just temporarily to have a simpler case to debug, this is covered by dEQP.
+TEST_P(UniformTestES31, GetActiveUniformArrayOfArrays)
+{
+    const std::string &vertShader =
+        R"(#version 310 es
+
+        in vec2 position;
+
+        void main()
+        {
+            gl_Position = vec4(position, 0, 1);
+        })";
+
+    const std::string &fragShader =
+        R"(#version 310 es
+
+        precision highp float;
+
+        uniform float arr[2][3];
+
+        out vec4 my_FragColor;
+
+        void main()
+        {
+            my_FragColor = vec4(arr[1][2]);
+        })";
+
+    ANGLE_GL_PROGRAM(program, vertShader, fragShader);
+
+    GLint activeUniformsCount = 0;
+    glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniformsCount);
+    ASSERT_EQ(2, activeUniformsCount);
+
+    GLint size = 0;
+    GLenum type = GL_NONE;
+    GLchar name[120] = { 0 };
+    glGetActiveUniform(program, 0, 100, nullptr, &size, &type, name);
+    EXPECT_EQ(3, size);
+    EXPECT_GLENUM_EQ(GL_FLOAT, type);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformTest,
                        ES2_D3D9(),

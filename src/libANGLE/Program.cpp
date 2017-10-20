@@ -400,14 +400,53 @@ GLint ProgramState::getUniformLocation(const std::string &name) const
 
         const LinkedUniform &uniform = mUniforms[uniformLocation.index];
 
-        if (uniform.name == baseName)
+        std::vector<unsigned int> uniformSubscripts;
+        std::string uniformBaseName = ParseResourceName(uniform.name, &uniformSubscripts);
+        bool uniformSubscriptsAllZero = true;
+        for (unsigned int uniformSubscript : uniformSubscripts)
+        {
+            if (uniformSubscript != 0)
+            {
+                uniformSubscriptsAllZero = false;
+                break;
+            }
+        }
+        if (uniformBaseName == baseName)
         {
             if (uniform.isArray())
             {
-                if (uniformLocation.arrayIndices == subscripts ||
-                    (uniformLocation.areAllArrayIndicesZero() && subscripts.empty()))
+                if (uniformSubscriptsAllZero && uniformLocation.areAllArrayIndicesZero() && subscripts.empty())
                 {
                     return static_cast<GLint>(location);
+                }
+                else if (uniformSubscripts.size() + uniformLocation.arrayIndices.size() == subscripts.size())
+                {
+                    // Subscripts are split in two places: outer ones are stored in the uniform name, the inner one in the uniform location info.
+                    // TODO: Try to come up with a cleaner solution, this is quite messy.
+                    bool subscriptsMatch = true;
+                    for (size_t subscriptIndex = 0u; subscriptIndex < subscripts.size(); ++subscriptIndex)
+                    {
+                        if (subscriptIndex < uniformLocation.arrayIndices.size())
+                        {
+                            if (uniformLocation.arrayIndices[subscriptIndex] != subscripts[subscriptIndex])
+                            {
+                                subscriptsMatch = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (uniformSubscripts[subscriptIndex - uniformLocation.arrayIndices.size()] != subscripts[subscriptIndex])
+                            {
+                                subscriptsMatch = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (subscriptsMatch)
+                    {
+                        return static_cast<GLint>(location);
+                    }
                 }
             }
             else

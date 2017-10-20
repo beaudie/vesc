@@ -391,6 +391,11 @@ class ProgramD3D : public ProgramImpl
                                         const std::string &prefix,
                                         sh::HLSLBlockEncoder *encoder,
                                         D3DUniformMap *uniformMap);
+    void defineUniformArrayElements(GLenum shaderType,
+        const sh::ShaderVariable &uniform,
+        const std::string &fullName,
+        sh::HLSLBlockEncoder *encoder,
+        D3DUniformMap *uniformMap);
     void defineUniform(GLenum shaderType,
                        const sh::ShaderVariable &uniform,
                        const std::string &fullName,

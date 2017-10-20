@@ -574,6 +574,36 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenStructUniform(
     return shaderUniformCount;
 }
 
+UniformLinker::ShaderUniformCount UniformLinker::flattenArrayUniform(
+    const sh::ShaderVariable &uniform,
+    const std::string &namePrefix,
+    const std::string &mappedNamePrefix,
+    std::vector<LinkedUniform> *samplerUniforms,
+    std::vector<LinkedUniform> *imageUniforms,
+    std::vector<LinkedUniform> *atomicCounterUniforms,
+    GLenum shaderType,
+    bool markStaticUse,
+    int binding,
+    int offset,
+    int *location)
+{
+    ShaderUniformCount shaderUniformCount;
+
+    sh::ShaderVariable uniformElement = uniform;
+    uniformElement.arraySizes.pop_back();
+    for (unsigned int arrayElement = 0u; arrayElement < uniform.getOutermostArraySize();
+         ++arrayElement)
+    {
+        const std::string elementName       = namePrefix + ArrayString(arrayElement);
+        const std::string elementMappedName = mappedNamePrefix + ArrayString(arrayElement);
+
+        shaderUniformCount += flattenUniformImpl(
+            uniformElement, elementName, elementMappedName, samplerUniforms, imageUniforms,
+            atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+    }
+    return shaderUniformCount;
+}
+
 UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     const sh::ShaderVariable &uniform,
     const std::string &fullName,
@@ -605,6 +635,15 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
                 atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
         }
         return shaderUniformCount;
+    }
+    if (uniform.isArrayOfArrays())
+    {
+        // GLES 3.1 November 2016 section 7.3.1 page 77:
+        // "For an active variable declared as an array of an aggregate data type (structures or
+        // arrays), a separate entry will be generated for each active array element"
+        return flattenArrayUniform(uniform, fullName, fullMappedName, samplerUniforms, imageUniforms,
+            atomicCounterUniforms, shaderType, markStaticUse, binding, offset,
+            location);
     }
 
     // Not a struct
