@@ -114,7 +114,11 @@ class ProgramVk : public ProgramImpl
 
     vk::Error updateUniforms(ContextVk *contextVk);
 
-    VkDescriptorSet getDescriptorSet() const;
+    const std::vector<VkDescriptorSet> &getDescriptorSets() const;
+    uint32_t getDescriptorSetOffset() const;
+
+    void updateTexturesDescriptorSet(ContextVk *contextVk);
+    void invalidateTextures();
 
   private:
     void reset(VkDevice device);
@@ -154,8 +158,10 @@ class ProgramVk : public ProgramImpl
     // and Vulkan does not tolerate having null handles in a descriptor set.
     vk::BufferAndMemory mEmptyUniformBlockStorage;
 
-    // Descriptor set for the uniform blocks for this program.
-    VkDescriptorSet mDescriptorSet;
+    // Descriptor sets for uniform blocks and textures for this program.
+    std::vector<VkDescriptorSet> mDescriptorSets;
+    uint32_t mDescriptorSetOffset;
+    bool mDirtyTextures;
 };
 
 }  // namespace rx
