@@ -13,10 +13,18 @@
 #include "libANGLE/Version.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+#include "libANGLE/renderer/gl/null_functions.h"
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
+
 // Check for nullptr so extensions do not overwrite core imports.
 #define ASSIGN(NAME, FP) \
     if (!FP)             \
     *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+#define ASSIGN_NULL(NAME, FP) *reinterpret_cast<void **>(&FP) = FP##NULL
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 namespace rx
 {
@@ -2729,5 +2737,2719 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
         ASSIGN("glStencilThenCoverStrokePathNV", stencilThenCoverStrokePathNV);
     }
 }
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
+                                             const std::set<std::string> &extensions)
+{
+    if (version >= gl::Version(1, 0))
+    {
+        ASSIGN_NULL("glBlendFunc", blendFunc);
+        ASSIGN_NULL("glClear", clear);
+        ASSIGN_NULL("glClearColor", clearColor);
+        ASSIGN_NULL("glClearDepth", clearDepth);
+        ASSIGN_NULL("glClearStencil", clearStencil);
+        ASSIGN_NULL("glColorMask", colorMask);
+        ASSIGN_NULL("glCullFace", cullFace);
+        ASSIGN_NULL("glDepthFunc", depthFunc);
+        ASSIGN_NULL("glDepthMask", depthMask);
+        ASSIGN_NULL("glDepthRange", depthRange);
+        ASSIGN_NULL("glDisable", disable);
+        ASSIGN_NULL("glDrawBuffer", drawBuffer);
+        ASSIGN_NULL("glEnable", enable);
+        ASSIGN_NULL("glFinish", finish);
+        ASSIGN_NULL("glFlush", flush);
+        ASSIGN_NULL("glFrontFace", frontFace);
+        ASSIGN_NULL("glGetBooleanv", getBooleanv);
+        ASSIGN_NULL("glGetDoublev", getDoublev);
+        ASSIGN_NULL("glGetError", getError);
+        ASSIGN_NULL("glGetFloatv", getFloatv);
+        ASSIGN_NULL("glGetIntegerv", getIntegerv);
+        ASSIGN_NULL("glGetString", getString);
+        ASSIGN_NULL("glGetTexImage", getTexImage);
+        ASSIGN_NULL("glGetTexLevelParameterfv", getTexLevelParameterfv);
+        ASSIGN_NULL("glGetTexLevelParameteriv", getTexLevelParameteriv);
+        ASSIGN_NULL("glGetTexParameterfv", getTexParameterfv);
+        ASSIGN_NULL("glGetTexParameteriv", getTexParameteriv);
+        ASSIGN_NULL("glHint", hint);
+        ASSIGN_NULL("glIsEnabled", isEnabled);
+        ASSIGN_NULL("glLineWidth", lineWidth);
+        ASSIGN_NULL("glLogicOp", logicOp);
+        ASSIGN_NULL("glPixelStoref", pixelStoref);
+        ASSIGN_NULL("glPixelStorei", pixelStorei);
+        ASSIGN_NULL("glPointSize", pointSize);
+        ASSIGN_NULL("glPolygonMode", polygonMode);
+        ASSIGN_NULL("glReadBuffer", readBuffer);
+        ASSIGN_NULL("glReadPixels", readPixels);
+        ASSIGN_NULL("glScissor", scissor);
+        ASSIGN_NULL("glStencilFunc", stencilFunc);
+        ASSIGN_NULL("glStencilMask", stencilMask);
+        ASSIGN_NULL("glStencilOp", stencilOp);
+        ASSIGN_NULL("glTexImage1D", texImage1D);
+        ASSIGN_NULL("glTexImage2D", texImage2D);
+        ASSIGN_NULL("glTexParameterf", texParameterf);
+        ASSIGN_NULL("glTexParameterfv", texParameterfv);
+        ASSIGN_NULL("glTexParameteri", texParameteri);
+        ASSIGN_NULL("glTexParameteriv", texParameteriv);
+        ASSIGN_NULL("glViewport", viewport);
+    }
+
+    if (version >= gl::Version(1, 1))
+    {
+        ASSIGN_NULL("glBindTexture", bindTexture);
+        ASSIGN_NULL("glCopyTexImage1D", copyTexImage1D);
+        ASSIGN_NULL("glCopyTexImage2D", copyTexImage2D);
+        ASSIGN_NULL("glCopyTexSubImage1D", copyTexSubImage1D);
+        ASSIGN_NULL("glCopyTexSubImage2D", copyTexSubImage2D);
+        ASSIGN_NULL("glDeleteTextures", deleteTextures);
+        ASSIGN_NULL("glDrawArrays", drawArrays);
+        ASSIGN_NULL("glDrawElements", drawElements);
+        ASSIGN_NULL("glGenTextures", genTextures);
+        ASSIGN_NULL("glIsTexture", isTexture);
+        ASSIGN_NULL("glPolygonOffset", polygonOffset);
+        ASSIGN_NULL("glTexSubImage1D", texSubImage1D);
+        ASSIGN_NULL("glTexSubImage2D", texSubImage2D);
+    }
+
+    if (version >= gl::Version(1, 2))
+    {
+        ASSIGN_NULL("glCopyTexSubImage3D", copyTexSubImage3D);
+        ASSIGN_NULL("glDrawRangeElements", drawRangeElements);
+        ASSIGN_NULL("glTexImage3D", texImage3D);
+        ASSIGN_NULL("glTexSubImage3D", texSubImage3D);
+    }
+
+    if (version >= gl::Version(1, 3))
+    {
+        ASSIGN_NULL("glActiveTexture", activeTexture);
+        ASSIGN_NULL("glCompressedTexImage1D", compressedTexImage1D);
+        ASSIGN_NULL("glCompressedTexImage2D", compressedTexImage2D);
+        ASSIGN_NULL("glCompressedTexImage3D", compressedTexImage3D);
+        ASSIGN_NULL("glCompressedTexSubImage1D", compressedTexSubImage1D);
+        ASSIGN_NULL("glCompressedTexSubImage2D", compressedTexSubImage2D);
+        ASSIGN_NULL("glCompressedTexSubImage3D", compressedTexSubImage3D);
+        ASSIGN_NULL("glGetCompressedTexImage", getCompressedTexImage);
+        ASSIGN_NULL("glSampleCoverage", sampleCoverage);
+    }
+
+    if (version >= gl::Version(1, 4))
+    {
+        ASSIGN_NULL("glBlendColor", blendColor);
+        ASSIGN_NULL("glBlendEquation", blendEquation);
+        ASSIGN_NULL("glBlendFuncSeparate", blendFuncSeparate);
+        ASSIGN_NULL("glMultiDrawArrays", multiDrawArrays);
+        ASSIGN_NULL("glMultiDrawElements", multiDrawElements);
+        ASSIGN_NULL("glPointParameterf", pointParameterf);
+        ASSIGN_NULL("glPointParameterfv", pointParameterfv);
+        ASSIGN_NULL("glPointParameteri", pointParameteri);
+        ASSIGN_NULL("glPointParameteriv", pointParameteriv);
+    }
+
+    if (version >= gl::Version(1, 5))
+    {
+        ASSIGN_NULL("glBeginQuery", beginQuery);
+        ASSIGN_NULL("glBindBuffer", bindBuffer);
+        ASSIGN_NULL("glBufferData", bufferData);
+        ASSIGN_NULL("glBufferSubData", bufferSubData);
+        ASSIGN_NULL("glDeleteBuffers", deleteBuffers);
+        ASSIGN_NULL("glDeleteQueries", deleteQueries);
+        ASSIGN_NULL("glEndQuery", endQuery);
+        ASSIGN_NULL("glGenBuffers", genBuffers);
+        ASSIGN_NULL("glGenQueries", genQueries);
+        ASSIGN_NULL("glGetBufferParameteriv", getBufferParameteriv);
+        ASSIGN_NULL("glGetBufferPointerv", getBufferPointerv);
+        ASSIGN_NULL("glGetBufferSubData", getBufferSubData);
+        ASSIGN_NULL("glGetQueryObjectiv", getQueryObjectiv);
+        ASSIGN_NULL("glGetQueryObjectuiv", getQueryObjectuiv);
+        ASSIGN_NULL("glGetQueryiv", getQueryiv);
+        ASSIGN_NULL("glIsBuffer", isBuffer);
+        ASSIGN_NULL("glIsQuery", isQuery);
+        ASSIGN_NULL("glMapBuffer", mapBuffer);
+        ASSIGN_NULL("glUnmapBuffer", unmapBuffer);
+    }
+
+    if (version >= gl::Version(2, 0))
+    {
+        ASSIGN_NULL("glAttachShader", attachShader);
+        ASSIGN_NULL("glBindAttribLocation", bindAttribLocation);
+        ASSIGN_NULL("glBlendEquationSeparate", blendEquationSeparate);
+        ASSIGN_NULL("glCompileShader", compileShader);
+        ASSIGN_NULL("glCreateProgram", createProgram);
+        ASSIGN_NULL("glCreateShader", createShader);
+        ASSIGN_NULL("glDeleteProgram", deleteProgram);
+        ASSIGN_NULL("glDeleteShader", deleteShader);
+        ASSIGN_NULL("glDetachShader", detachShader);
+        ASSIGN_NULL("glDisableVertexAttribArray", disableVertexAttribArray);
+        ASSIGN_NULL("glDrawBuffers", drawBuffers);
+        ASSIGN_NULL("glEnableVertexAttribArray", enableVertexAttribArray);
+        ASSIGN_NULL("glGetActiveAttrib", getActiveAttrib);
+        ASSIGN_NULL("glGetActiveUniform", getActiveUniform);
+        ASSIGN_NULL("glGetAttachedShaders", getAttachedShaders);
+        ASSIGN_NULL("glGetAttribLocation", getAttribLocation);
+        ASSIGN_NULL("glGetProgramInfoLog", getProgramInfoLog);
+        ASSIGN_NULL("glGetProgramiv", getProgramiv);
+        ASSIGN_NULL("glGetShaderInfoLog", getShaderInfoLog);
+        ASSIGN_NULL("glGetShaderSource", getShaderSource);
+        ASSIGN_NULL("glGetShaderiv", getShaderiv);
+        ASSIGN_NULL("glGetUniformLocation", getUniformLocation);
+        ASSIGN_NULL("glGetUniformfv", getUniformfv);
+        ASSIGN_NULL("glGetUniformiv", getUniformiv);
+        ASSIGN_NULL("glGetVertexAttribPointerv", getVertexAttribPointerv);
+        ASSIGN_NULL("glGetVertexAttribdv", getVertexAttribdv);
+        ASSIGN_NULL("glGetVertexAttribfv", getVertexAttribfv);
+        ASSIGN_NULL("glGetVertexAttribiv", getVertexAttribiv);
+        ASSIGN_NULL("glIsProgram", isProgram);
+        ASSIGN_NULL("glIsShader", isShader);
+        ASSIGN_NULL("glLinkProgram", linkProgram);
+        ASSIGN_NULL("glShaderSource", shaderSource);
+        ASSIGN_NULL("glStencilFuncSeparate", stencilFuncSeparate);
+        ASSIGN_NULL("glStencilMaskSeparate", stencilMaskSeparate);
+        ASSIGN_NULL("glStencilOpSeparate", stencilOpSeparate);
+        ASSIGN_NULL("glUniform1f", uniform1f);
+        ASSIGN_NULL("glUniform1fv", uniform1fv);
+        ASSIGN_NULL("glUniform1i", uniform1i);
+        ASSIGN_NULL("glUniform1iv", uniform1iv);
+        ASSIGN_NULL("glUniform2f", uniform2f);
+        ASSIGN_NULL("glUniform2fv", uniform2fv);
+        ASSIGN_NULL("glUniform2i", uniform2i);
+        ASSIGN_NULL("glUniform2iv", uniform2iv);
+        ASSIGN_NULL("glUniform3f", uniform3f);
+        ASSIGN_NULL("glUniform3fv", uniform3fv);
+        ASSIGN_NULL("glUniform3i", uniform3i);
+        ASSIGN_NULL("glUniform3iv", uniform3iv);
+        ASSIGN_NULL("glUniform4f", uniform4f);
+        ASSIGN_NULL("glUniform4fv", uniform4fv);
+        ASSIGN_NULL("glUniform4i", uniform4i);
+        ASSIGN_NULL("glUniform4iv", uniform4iv);
+        ASSIGN_NULL("glUniformMatrix2fv", uniformMatrix2fv);
+        ASSIGN_NULL("glUniformMatrix3fv", uniformMatrix3fv);
+        ASSIGN_NULL("glUniformMatrix4fv", uniformMatrix4fv);
+        ASSIGN_NULL("glUseProgram", useProgram);
+        ASSIGN_NULL("glValidateProgram", validateProgram);
+        ASSIGN_NULL("glVertexAttrib1d", vertexAttrib1d);
+        ASSIGN_NULL("glVertexAttrib1dv", vertexAttrib1dv);
+        ASSIGN_NULL("glVertexAttrib1f", vertexAttrib1f);
+        ASSIGN_NULL("glVertexAttrib1fv", vertexAttrib1fv);
+        ASSIGN_NULL("glVertexAttrib1s", vertexAttrib1s);
+        ASSIGN_NULL("glVertexAttrib1sv", vertexAttrib1sv);
+        ASSIGN_NULL("glVertexAttrib2d", vertexAttrib2d);
+        ASSIGN_NULL("glVertexAttrib2dv", vertexAttrib2dv);
+        ASSIGN_NULL("glVertexAttrib2f", vertexAttrib2f);
+        ASSIGN_NULL("glVertexAttrib2fv", vertexAttrib2fv);
+        ASSIGN_NULL("glVertexAttrib2s", vertexAttrib2s);
+        ASSIGN_NULL("glVertexAttrib2sv", vertexAttrib2sv);
+        ASSIGN_NULL("glVertexAttrib3d", vertexAttrib3d);
+        ASSIGN_NULL("glVertexAttrib3dv", vertexAttrib3dv);
+        ASSIGN_NULL("glVertexAttrib3f", vertexAttrib3f);
+        ASSIGN_NULL("glVertexAttrib3fv", vertexAttrib3fv);
+        ASSIGN_NULL("glVertexAttrib3s", vertexAttrib3s);
+        ASSIGN_NULL("glVertexAttrib3sv", vertexAttrib3sv);
+        ASSIGN_NULL("glVertexAttrib4Nbv", vertexAttrib4Nbv);
+        ASSIGN_NULL("glVertexAttrib4Niv", vertexAttrib4Niv);
+        ASSIGN_NULL("glVertexAttrib4Nsv", vertexAttrib4Nsv);
+        ASSIGN_NULL("glVertexAttrib4Nub", vertexAttrib4Nub);
+        ASSIGN_NULL("glVertexAttrib4Nubv", vertexAttrib4Nubv);
+        ASSIGN_NULL("glVertexAttrib4Nuiv", vertexAttrib4Nuiv);
+        ASSIGN_NULL("glVertexAttrib4Nusv", vertexAttrib4Nusv);
+        ASSIGN_NULL("glVertexAttrib4bv", vertexAttrib4bv);
+        ASSIGN_NULL("glVertexAttrib4d", vertexAttrib4d);
+        ASSIGN_NULL("glVertexAttrib4dv", vertexAttrib4dv);
+        ASSIGN_NULL("glVertexAttrib4f", vertexAttrib4f);
+        ASSIGN_NULL("glVertexAttrib4fv", vertexAttrib4fv);
+        ASSIGN_NULL("glVertexAttrib4iv", vertexAttrib4iv);
+        ASSIGN_NULL("glVertexAttrib4s", vertexAttrib4s);
+        ASSIGN_NULL("glVertexAttrib4sv", vertexAttrib4sv);
+        ASSIGN_NULL("glVertexAttrib4ubv", vertexAttrib4ubv);
+        ASSIGN_NULL("glVertexAttrib4uiv", vertexAttrib4uiv);
+        ASSIGN_NULL("glVertexAttrib4usv", vertexAttrib4usv);
+        ASSIGN_NULL("glVertexAttribPointer", vertexAttribPointer);
+    }
+
+    if (version >= gl::Version(2, 1))
+    {
+        ASSIGN_NULL("glUniformMatrix2x3fv", uniformMatrix2x3fv);
+        ASSIGN_NULL("glUniformMatrix2x4fv", uniformMatrix2x4fv);
+        ASSIGN_NULL("glUniformMatrix3x2fv", uniformMatrix3x2fv);
+        ASSIGN_NULL("glUniformMatrix3x4fv", uniformMatrix3x4fv);
+        ASSIGN_NULL("glUniformMatrix4x2fv", uniformMatrix4x2fv);
+        ASSIGN_NULL("glUniformMatrix4x3fv", uniformMatrix4x3fv);
+    }
+
+    if (version >= gl::Version(3, 0))
+    {
+        ASSIGN_NULL("glBeginConditionalRender", beginConditionalRender);
+        ASSIGN_NULL("glBeginTransformFeedback", beginTransformFeedback);
+        ASSIGN_NULL("glBindBufferBase", bindBufferBase);
+        ASSIGN_NULL("glBindBufferRange", bindBufferRange);
+        ASSIGN_NULL("glBindFragDataLocation", bindFragDataLocation);
+        ASSIGN_NULL("glBindFramebuffer", bindFramebuffer);
+        ASSIGN_NULL("glBindRenderbuffer", bindRenderbuffer);
+        ASSIGN_NULL("glBindVertexArray", bindVertexArray);
+        ASSIGN_NULL("glBlitFramebuffer", blitFramebuffer);
+        ASSIGN_NULL("glCheckFramebufferStatus", checkFramebufferStatus);
+        ASSIGN_NULL("glClampColor", clampColor);
+        ASSIGN_NULL("glClearBufferfi", clearBufferfi);
+        ASSIGN_NULL("glClearBufferfv", clearBufferfv);
+        ASSIGN_NULL("glClearBufferiv", clearBufferiv);
+        ASSIGN_NULL("glClearBufferuiv", clearBufferuiv);
+        ASSIGN_NULL("glColorMaski", colorMaski);
+        ASSIGN_NULL("glDeleteFramebuffers", deleteFramebuffers);
+        ASSIGN_NULL("glDeleteRenderbuffers", deleteRenderbuffers);
+        ASSIGN_NULL("glDeleteVertexArrays", deleteVertexArrays);
+        ASSIGN_NULL("glDisablei", disablei);
+        ASSIGN_NULL("glEnablei", enablei);
+        ASSIGN_NULL("glEndConditionalRender", endConditionalRender);
+        ASSIGN_NULL("glEndTransformFeedback", endTransformFeedback);
+        ASSIGN_NULL("glFlushMappedBufferRange", flushMappedBufferRange);
+        ASSIGN_NULL("glFramebufferRenderbuffer", framebufferRenderbuffer);
+        ASSIGN_NULL("glFramebufferTexture1D", framebufferTexture1D);
+        ASSIGN_NULL("glFramebufferTexture2D", framebufferTexture2D);
+        ASSIGN_NULL("glFramebufferTexture3D", framebufferTexture3D);
+        ASSIGN_NULL("glFramebufferTextureLayer", framebufferTextureLayer);
+        ASSIGN_NULL("glGenFramebuffers", genFramebuffers);
+        ASSIGN_NULL("glGenRenderbuffers", genRenderbuffers);
+        ASSIGN_NULL("glGenVertexArrays", genVertexArrays);
+        ASSIGN_NULL("glGenerateMipmap", generateMipmap);
+        ASSIGN_NULL("glGetBooleani_v", getBooleani_v);
+        ASSIGN_NULL("glGetFragDataLocation", getFragDataLocation);
+        ASSIGN_NULL("glGetFramebufferAttachmentParameteriv", getFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetIntegeri_v", getIntegeri_v);
+        ASSIGN_NULL("glGetRenderbufferParameteriv", getRenderbufferParameteriv);
+        ASSIGN_NULL("glGetStringi", getStringi);
+        ASSIGN_NULL("glGetTexParameterIiv", getTexParameterIiv);
+        ASSIGN_NULL("glGetTexParameterIuiv", getTexParameterIuiv);
+        ASSIGN_NULL("glGetTransformFeedbackVarying", getTransformFeedbackVarying);
+        ASSIGN_NULL("glGetUniformuiv", getUniformuiv);
+        ASSIGN_NULL("glGetVertexAttribIiv", getVertexAttribIiv);
+        ASSIGN_NULL("glGetVertexAttribIuiv", getVertexAttribIuiv);
+        ASSIGN_NULL("glIsEnabledi", isEnabledi);
+        ASSIGN_NULL("glIsFramebuffer", isFramebuffer);
+        ASSIGN_NULL("glIsRenderbuffer", isRenderbuffer);
+        ASSIGN_NULL("glIsVertexArray", isVertexArray);
+        ASSIGN_NULL("glMapBufferRange", mapBufferRange);
+        ASSIGN_NULL("glRenderbufferStorage", renderbufferStorage);
+        ASSIGN_NULL("glRenderbufferStorageMultisample", renderbufferStorageMultisample);
+        ASSIGN_NULL("glTexParameterIiv", texParameterIiv);
+        ASSIGN_NULL("glTexParameterIuiv", texParameterIuiv);
+        ASSIGN_NULL("glTransformFeedbackVaryings", transformFeedbackVaryings);
+        ASSIGN_NULL("glUniform1ui", uniform1ui);
+        ASSIGN_NULL("glUniform1uiv", uniform1uiv);
+        ASSIGN_NULL("glUniform2ui", uniform2ui);
+        ASSIGN_NULL("glUniform2uiv", uniform2uiv);
+        ASSIGN_NULL("glUniform3ui", uniform3ui);
+        ASSIGN_NULL("glUniform3uiv", uniform3uiv);
+        ASSIGN_NULL("glUniform4ui", uniform4ui);
+        ASSIGN_NULL("glUniform4uiv", uniform4uiv);
+        ASSIGN_NULL("glVertexAttribI1i", vertexAttribI1i);
+        ASSIGN_NULL("glVertexAttribI1iv", vertexAttribI1iv);
+        ASSIGN_NULL("glVertexAttribI1ui", vertexAttribI1ui);
+        ASSIGN_NULL("glVertexAttribI1uiv", vertexAttribI1uiv);
+        ASSIGN_NULL("glVertexAttribI2i", vertexAttribI2i);
+        ASSIGN_NULL("glVertexAttribI2iv", vertexAttribI2iv);
+        ASSIGN_NULL("glVertexAttribI2ui", vertexAttribI2ui);
+        ASSIGN_NULL("glVertexAttribI2uiv", vertexAttribI2uiv);
+        ASSIGN_NULL("glVertexAttribI3i", vertexAttribI3i);
+        ASSIGN_NULL("glVertexAttribI3iv", vertexAttribI3iv);
+        ASSIGN_NULL("glVertexAttribI3ui", vertexAttribI3ui);
+        ASSIGN_NULL("glVertexAttribI3uiv", vertexAttribI3uiv);
+        ASSIGN_NULL("glVertexAttribI4bv", vertexAttribI4bv);
+        ASSIGN_NULL("glVertexAttribI4i", vertexAttribI4i);
+        ASSIGN_NULL("glVertexAttribI4iv", vertexAttribI4iv);
+        ASSIGN_NULL("glVertexAttribI4sv", vertexAttribI4sv);
+        ASSIGN_NULL("glVertexAttribI4ubv", vertexAttribI4ubv);
+        ASSIGN_NULL("glVertexAttribI4ui", vertexAttribI4ui);
+        ASSIGN_NULL("glVertexAttribI4uiv", vertexAttribI4uiv);
+        ASSIGN_NULL("glVertexAttribI4usv", vertexAttribI4usv);
+        ASSIGN_NULL("glVertexAttribIPointer", vertexAttribIPointer);
+    }
+
+    if (version >= gl::Version(3, 1))
+    {
+        ASSIGN_NULL("glCopyBufferSubData", copyBufferSubData);
+        ASSIGN_NULL("glDrawArraysInstanced", drawArraysInstanced);
+        ASSIGN_NULL("glDrawElementsInstanced", drawElementsInstanced);
+        ASSIGN_NULL("glGetActiveUniformBlockName", getActiveUniformBlockName);
+        ASSIGN_NULL("glGetActiveUniformBlockiv", getActiveUniformBlockiv);
+        ASSIGN_NULL("glGetActiveUniformName", getActiveUniformName);
+        ASSIGN_NULL("glGetActiveUniformsiv", getActiveUniformsiv);
+        ASSIGN_NULL("glGetUniformBlockIndex", getUniformBlockIndex);
+        ASSIGN_NULL("glGetUniformIndices", getUniformIndices);
+        ASSIGN_NULL("glPrimitiveRestartIndex", primitiveRestartIndex);
+        ASSIGN_NULL("glTexBuffer", texBuffer);
+        ASSIGN_NULL("glUniformBlockBinding", uniformBlockBinding);
+    }
+
+    if (version >= gl::Version(3, 2))
+    {
+        ASSIGN_NULL("glClientWaitSync", clientWaitSync);
+        ASSIGN_NULL("glDeleteSync", deleteSync);
+        ASSIGN_NULL("glDrawElementsBaseVertex", drawElementsBaseVertex);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertex", drawElementsInstancedBaseVertex);
+        ASSIGN_NULL("glDrawRangeElementsBaseVertex", drawRangeElementsBaseVertex);
+        ASSIGN_NULL("glFenceSync", fenceSync);
+        ASSIGN_NULL("glFramebufferTexture", framebufferTexture);
+        ASSIGN_NULL("glGetBufferParameteri64v", getBufferParameteri64v);
+        ASSIGN_NULL("glGetInteger64i_v", getInteger64i_v);
+        ASSIGN_NULL("glGetInteger64v", getInteger64v);
+        ASSIGN_NULL("glGetMultisamplefv", getMultisamplefv);
+        ASSIGN_NULL("glGetSynciv", getSynciv);
+        ASSIGN_NULL("glIsSync", isSync);
+        ASSIGN_NULL("glMultiDrawElementsBaseVertex", multiDrawElementsBaseVertex);
+        ASSIGN_NULL("glProvokingVertex", provokingVertex);
+        ASSIGN_NULL("glSampleMaski", sampleMaski);
+        ASSIGN_NULL("glTexImage2DMultisample", texImage2DMultisample);
+        ASSIGN_NULL("glTexImage3DMultisample", texImage3DMultisample);
+        ASSIGN_NULL("glWaitSync", waitSync);
+    }
+
+    if (version >= gl::Version(3, 3))
+    {
+        ASSIGN_NULL("glBindFragDataLocationIndexed", bindFragDataLocationIndexed);
+        ASSIGN_NULL("glBindSampler", bindSampler);
+        ASSIGN_NULL("glDeleteSamplers", deleteSamplers);
+        ASSIGN_NULL("glGenSamplers", genSamplers);
+        ASSIGN_NULL("glGetFragDataIndex", getFragDataIndex);
+        ASSIGN_NULL("glGetQueryObjecti64v", getQueryObjecti64v);
+        ASSIGN_NULL("glGetQueryObjectui64v", getQueryObjectui64v);
+        ASSIGN_NULL("glGetSamplerParameterIiv", getSamplerParameterIiv);
+        ASSIGN_NULL("glGetSamplerParameterIuiv", getSamplerParameterIuiv);
+        ASSIGN_NULL("glGetSamplerParameterfv", getSamplerParameterfv);
+        ASSIGN_NULL("glGetSamplerParameteriv", getSamplerParameteriv);
+        ASSIGN_NULL("glIsSampler", isSampler);
+        ASSIGN_NULL("glQueryCounter", queryCounter);
+        ASSIGN_NULL("glSamplerParameterIiv", samplerParameterIiv);
+        ASSIGN_NULL("glSamplerParameterIuiv", samplerParameterIuiv);
+        ASSIGN_NULL("glSamplerParameterf", samplerParameterf);
+        ASSIGN_NULL("glSamplerParameterfv", samplerParameterfv);
+        ASSIGN_NULL("glSamplerParameteri", samplerParameteri);
+        ASSIGN_NULL("glSamplerParameteriv", samplerParameteriv);
+        ASSIGN_NULL("glVertexAttribDivisor", vertexAttribDivisor);
+        ASSIGN_NULL("glVertexAttribP1ui", vertexAttribP1ui);
+        ASSIGN_NULL("glVertexAttribP1uiv", vertexAttribP1uiv);
+        ASSIGN_NULL("glVertexAttribP2ui", vertexAttribP2ui);
+        ASSIGN_NULL("glVertexAttribP2uiv", vertexAttribP2uiv);
+        ASSIGN_NULL("glVertexAttribP3ui", vertexAttribP3ui);
+        ASSIGN_NULL("glVertexAttribP3uiv", vertexAttribP3uiv);
+        ASSIGN_NULL("glVertexAttribP4ui", vertexAttribP4ui);
+        ASSIGN_NULL("glVertexAttribP4uiv", vertexAttribP4uiv);
+    }
+
+    if (version >= gl::Version(4, 0))
+    {
+        ASSIGN_NULL("glBeginQueryIndexed", beginQueryIndexed);
+        ASSIGN_NULL("glBindTransformFeedback", bindTransformFeedback);
+        ASSIGN_NULL("glBlendEquationSeparatei", blendEquationSeparatei);
+        ASSIGN_NULL("glBlendEquationi", blendEquationi);
+        ASSIGN_NULL("glBlendFuncSeparatei", blendFuncSeparatei);
+        ASSIGN_NULL("glBlendFunci", blendFunci);
+        ASSIGN_NULL("glDeleteTransformFeedbacks", deleteTransformFeedbacks);
+        ASSIGN_NULL("glDrawArraysIndirect", drawArraysIndirect);
+        ASSIGN_NULL("glDrawElementsIndirect", drawElementsIndirect);
+        ASSIGN_NULL("glDrawTransformFeedback", drawTransformFeedback);
+        ASSIGN_NULL("glDrawTransformFeedbackStream", drawTransformFeedbackStream);
+        ASSIGN_NULL("glEndQueryIndexed", endQueryIndexed);
+        ASSIGN_NULL("glGenTransformFeedbacks", genTransformFeedbacks);
+        ASSIGN_NULL("glGetActiveSubroutineName", getActiveSubroutineName);
+        ASSIGN_NULL("glGetActiveSubroutineUniformName", getActiveSubroutineUniformName);
+        ASSIGN_NULL("glGetActiveSubroutineUniformiv", getActiveSubroutineUniformiv);
+        ASSIGN_NULL("glGetProgramStageiv", getProgramStageiv);
+        ASSIGN_NULL("glGetQueryIndexediv", getQueryIndexediv);
+        ASSIGN_NULL("glGetSubroutineIndex", getSubroutineIndex);
+        ASSIGN_NULL("glGetSubroutineUniformLocation", getSubroutineUniformLocation);
+        ASSIGN_NULL("glGetUniformSubroutineuiv", getUniformSubroutineuiv);
+        ASSIGN_NULL("glGetUniformdv", getUniformdv);
+        ASSIGN_NULL("glIsTransformFeedback", isTransformFeedback);
+        ASSIGN_NULL("glMinSampleShading", minSampleShading);
+        ASSIGN_NULL("glPatchParameterfv", patchParameterfv);
+        ASSIGN_NULL("glPatchParameteri", patchParameteri);
+        ASSIGN_NULL("glPauseTransformFeedback", pauseTransformFeedback);
+        ASSIGN_NULL("glResumeTransformFeedback", resumeTransformFeedback);
+        ASSIGN_NULL("glUniform1d", uniform1d);
+        ASSIGN_NULL("glUniform1dv", uniform1dv);
+        ASSIGN_NULL("glUniform2d", uniform2d);
+        ASSIGN_NULL("glUniform2dv", uniform2dv);
+        ASSIGN_NULL("glUniform3d", uniform3d);
+        ASSIGN_NULL("glUniform3dv", uniform3dv);
+        ASSIGN_NULL("glUniform4d", uniform4d);
+        ASSIGN_NULL("glUniform4dv", uniform4dv);
+        ASSIGN_NULL("glUniformMatrix2dv", uniformMatrix2dv);
+        ASSIGN_NULL("glUniformMatrix2x3dv", uniformMatrix2x3dv);
+        ASSIGN_NULL("glUniformMatrix2x4dv", uniformMatrix2x4dv);
+        ASSIGN_NULL("glUniformMatrix3dv", uniformMatrix3dv);
+        ASSIGN_NULL("glUniformMatrix3x2dv", uniformMatrix3x2dv);
+        ASSIGN_NULL("glUniformMatrix3x4dv", uniformMatrix3x4dv);
+        ASSIGN_NULL("glUniformMatrix4dv", uniformMatrix4dv);
+        ASSIGN_NULL("glUniformMatrix4x2dv", uniformMatrix4x2dv);
+        ASSIGN_NULL("glUniformMatrix4x3dv", uniformMatrix4x3dv);
+        ASSIGN_NULL("glUniformSubroutinesuiv", uniformSubroutinesuiv);
+    }
+
+    if (version >= gl::Version(4, 1))
+    {
+        ASSIGN_NULL("glActiveShaderProgram", activeShaderProgram);
+        ASSIGN_NULL("glBindProgramPipeline", bindProgramPipeline);
+        ASSIGN_NULL("glClearDepthf", clearDepthf);
+        ASSIGN_NULL("glCreateShaderProgramv", createShaderProgramv);
+        ASSIGN_NULL("glDeleteProgramPipelines", deleteProgramPipelines);
+        ASSIGN_NULL("glDepthRangeArrayv", depthRangeArrayv);
+        ASSIGN_NULL("glDepthRangeIndexed", depthRangeIndexed);
+        ASSIGN_NULL("glDepthRangef", depthRangef);
+        ASSIGN_NULL("glGenProgramPipelines", genProgramPipelines);
+        ASSIGN_NULL("glGetDoublei_v", getDoublei_v);
+        ASSIGN_NULL("glGetFloati_v", getFloati_v);
+        ASSIGN_NULL("glGetProgramBinary", getProgramBinary);
+        ASSIGN_NULL("glGetProgramPipelineInfoLog", getProgramPipelineInfoLog);
+        ASSIGN_NULL("glGetProgramPipelineiv", getProgramPipelineiv);
+        ASSIGN_NULL("glGetShaderPrecisionFormat", getShaderPrecisionFormat);
+        ASSIGN_NULL("glGetVertexAttribLdv", getVertexAttribLdv);
+        ASSIGN_NULL("glIsProgramPipeline", isProgramPipeline);
+        ASSIGN_NULL("glProgramBinary", programBinary);
+        ASSIGN_NULL("glProgramParameteri", programParameteri);
+        ASSIGN_NULL("glProgramUniform1d", programUniform1d);
+        ASSIGN_NULL("glProgramUniform1dv", programUniform1dv);
+        ASSIGN_NULL("glProgramUniform1f", programUniform1f);
+        ASSIGN_NULL("glProgramUniform1fv", programUniform1fv);
+        ASSIGN_NULL("glProgramUniform1i", programUniform1i);
+        ASSIGN_NULL("glProgramUniform1iv", programUniform1iv);
+        ASSIGN_NULL("glProgramUniform1ui", programUniform1ui);
+        ASSIGN_NULL("glProgramUniform1uiv", programUniform1uiv);
+        ASSIGN_NULL("glProgramUniform2d", programUniform2d);
+        ASSIGN_NULL("glProgramUniform2dv", programUniform2dv);
+        ASSIGN_NULL("glProgramUniform2f", programUniform2f);
+        ASSIGN_NULL("glProgramUniform2fv", programUniform2fv);
+        ASSIGN_NULL("glProgramUniform2i", programUniform2i);
+        ASSIGN_NULL("glProgramUniform2iv", programUniform2iv);
+        ASSIGN_NULL("glProgramUniform2ui", programUniform2ui);
+        ASSIGN_NULL("glProgramUniform2uiv", programUniform2uiv);
+        ASSIGN_NULL("glProgramUniform3d", programUniform3d);
+        ASSIGN_NULL("glProgramUniform3dv", programUniform3dv);
+        ASSIGN_NULL("glProgramUniform3f", programUniform3f);
+        ASSIGN_NULL("glProgramUniform3fv", programUniform3fv);
+        ASSIGN_NULL("glProgramUniform3i", programUniform3i);
+        ASSIGN_NULL("glProgramUniform3iv", programUniform3iv);
+        ASSIGN_NULL("glProgramUniform3ui", programUniform3ui);
+        ASSIGN_NULL("glProgramUniform3uiv", programUniform3uiv);
+        ASSIGN_NULL("glProgramUniform4d", programUniform4d);
+        ASSIGN_NULL("glProgramUniform4dv", programUniform4dv);
+        ASSIGN_NULL("glProgramUniform4f", programUniform4f);
+        ASSIGN_NULL("glProgramUniform4fv", programUniform4fv);
+        ASSIGN_NULL("glProgramUniform4i", programUniform4i);
+        ASSIGN_NULL("glProgramUniform4iv", programUniform4iv);
+        ASSIGN_NULL("glProgramUniform4ui", programUniform4ui);
+        ASSIGN_NULL("glProgramUniform4uiv", programUniform4uiv);
+        ASSIGN_NULL("glProgramUniformMatrix2dv", programUniformMatrix2dv);
+        ASSIGN_NULL("glProgramUniformMatrix2fv", programUniformMatrix2fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3dv", programUniformMatrix2x3dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3fv", programUniformMatrix2x3fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4dv", programUniformMatrix2x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4fv", programUniformMatrix2x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix3dv", programUniformMatrix3dv);
+        ASSIGN_NULL("glProgramUniformMatrix3fv", programUniformMatrix3fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2dv", programUniformMatrix3x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2fv", programUniformMatrix3x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4dv", programUniformMatrix3x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4fv", programUniformMatrix3x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4dv", programUniformMatrix4dv);
+        ASSIGN_NULL("glProgramUniformMatrix4fv", programUniformMatrix4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2dv", programUniformMatrix4x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2fv", programUniformMatrix4x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3dv", programUniformMatrix4x3dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3fv", programUniformMatrix4x3fv);
+        ASSIGN_NULL("glReleaseShaderCompiler", releaseShaderCompiler);
+        ASSIGN_NULL("glScissorArrayv", scissorArrayv);
+        ASSIGN_NULL("glScissorIndexed", scissorIndexed);
+        ASSIGN_NULL("glScissorIndexedv", scissorIndexedv);
+        ASSIGN_NULL("glShaderBinary", shaderBinary);
+        ASSIGN_NULL("glUseProgramStages", useProgramStages);
+        ASSIGN_NULL("glValidateProgramPipeline", validateProgramPipeline);
+        ASSIGN_NULL("glVertexAttribL1d", vertexAttribL1d);
+        ASSIGN_NULL("glVertexAttribL1dv", vertexAttribL1dv);
+        ASSIGN_NULL("glVertexAttribL2d", vertexAttribL2d);
+        ASSIGN_NULL("glVertexAttribL2dv", vertexAttribL2dv);
+        ASSIGN_NULL("glVertexAttribL3d", vertexAttribL3d);
+        ASSIGN_NULL("glVertexAttribL3dv", vertexAttribL3dv);
+        ASSIGN_NULL("glVertexAttribL4d", vertexAttribL4d);
+        ASSIGN_NULL("glVertexAttribL4dv", vertexAttribL4dv);
+        ASSIGN_NULL("glVertexAttribLPointer", vertexAttribLPointer);
+        ASSIGN_NULL("glViewportArrayv", viewportArrayv);
+        ASSIGN_NULL("glViewportIndexedf", viewportIndexedf);
+        ASSIGN_NULL("glViewportIndexedfv", viewportIndexedfv);
+    }
+
+    if (version >= gl::Version(4, 2))
+    {
+        ASSIGN_NULL("glBindImageTexture", bindImageTexture);
+        ASSIGN_NULL("glDrawArraysInstancedBaseInstance", drawArraysInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseInstance", drawElementsInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertexBaseInstance",
+                    drawElementsInstancedBaseVertexBaseInstance);
+        ASSIGN_NULL("glDrawTransformFeedbackInstanced", drawTransformFeedbackInstanced);
+        ASSIGN_NULL("glDrawTransformFeedbackStreamInstanced", drawTransformFeedbackStreamInstanced);
+        ASSIGN_NULL("glGetActiveAtomicCounterBufferiv", getActiveAtomicCounterBufferiv);
+        ASSIGN_NULL("glGetInternalformativ", getInternalformativ);
+        ASSIGN_NULL("glMemoryBarrier", memoryBarrier);
+        ASSIGN_NULL("glTexStorage1D", texStorage1D);
+        ASSIGN_NULL("glTexStorage2D", texStorage2D);
+        ASSIGN_NULL("glTexStorage3D", texStorage3D);
+    }
+
+    if (version >= gl::Version(4, 3))
+    {
+        ASSIGN_NULL("glBindVertexBuffer", bindVertexBuffer);
+        ASSIGN_NULL("glClearBufferData", clearBufferData);
+        ASSIGN_NULL("glClearBufferSubData", clearBufferSubData);
+        ASSIGN_NULL("glCopyImageSubData", copyImageSubData);
+        ASSIGN_NULL("glDebugMessageCallback", debugMessageCallback);
+        ASSIGN_NULL("glDebugMessageControl", debugMessageControl);
+        ASSIGN_NULL("glDebugMessageInsert", debugMessageInsert);
+        ASSIGN_NULL("glDispatchCompute", dispatchCompute);
+        ASSIGN_NULL("glDispatchComputeIndirect", dispatchComputeIndirect);
+        ASSIGN_NULL("glFramebufferParameteri", framebufferParameteri);
+        ASSIGN_NULL("glGetDebugMessageLog", getDebugMessageLog);
+        ASSIGN_NULL("glGetFramebufferParameteriv", getFramebufferParameteriv);
+        ASSIGN_NULL("glGetInternalformati64v", getInternalformati64v);
+        ASSIGN_NULL("glGetObjectLabel", getObjectLabel);
+        ASSIGN_NULL("glGetObjectPtrLabel", getObjectPtrLabel);
+        ASSIGN_NULL("glGetPointerv", getPointerv);
+        ASSIGN_NULL("glGetProgramInterfaceiv", getProgramInterfaceiv);
+        ASSIGN_NULL("glGetProgramResourceIndex", getProgramResourceIndex);
+        ASSIGN_NULL("glGetProgramResourceLocation", getProgramResourceLocation);
+        ASSIGN_NULL("glGetProgramResourceLocationIndex", getProgramResourceLocationIndex);
+        ASSIGN_NULL("glGetProgramResourceName", getProgramResourceName);
+        ASSIGN_NULL("glGetProgramResourceiv", getProgramResourceiv);
+        ASSIGN_NULL("glInvalidateBufferData", invalidateBufferData);
+        ASSIGN_NULL("glInvalidateBufferSubData", invalidateBufferSubData);
+        ASSIGN_NULL("glInvalidateFramebuffer", invalidateFramebuffer);
+        ASSIGN_NULL("glInvalidateSubFramebuffer", invalidateSubFramebuffer);
+        ASSIGN_NULL("glInvalidateTexImage", invalidateTexImage);
+        ASSIGN_NULL("glInvalidateTexSubImage", invalidateTexSubImage);
+        ASSIGN_NULL("glMultiDrawArraysIndirect", multiDrawArraysIndirect);
+        ASSIGN_NULL("glMultiDrawElementsIndirect", multiDrawElementsIndirect);
+        ASSIGN_NULL("glObjectLabel", objectLabel);
+        ASSIGN_NULL("glObjectPtrLabel", objectPtrLabel);
+        ASSIGN_NULL("glPopDebugGroup", popDebugGroup);
+        ASSIGN_NULL("glPushDebugGroup", pushDebugGroup);
+        ASSIGN_NULL("glShaderStorageBlockBinding", shaderStorageBlockBinding);
+        ASSIGN_NULL("glTexBufferRange", texBufferRange);
+        ASSIGN_NULL("glTexStorage2DMultisample", texStorage2DMultisample);
+        ASSIGN_NULL("glTexStorage3DMultisample", texStorage3DMultisample);
+        ASSIGN_NULL("glTextureView", textureView);
+        ASSIGN_NULL("glVertexAttribBinding", vertexAttribBinding);
+        ASSIGN_NULL("glVertexAttribFormat", vertexAttribFormat);
+        ASSIGN_NULL("glVertexAttribIFormat", vertexAttribIFormat);
+        ASSIGN_NULL("glVertexAttribLFormat", vertexAttribLFormat);
+        ASSIGN_NULL("glVertexBindingDivisor", vertexBindingDivisor);
+    }
+
+    if (version >= gl::Version(4, 4))
+    {
+        ASSIGN_NULL("glBindBuffersBase", bindBuffersBase);
+        ASSIGN_NULL("glBindBuffersRange", bindBuffersRange);
+        ASSIGN_NULL("glBindImageTextures", bindImageTextures);
+        ASSIGN_NULL("glBindSamplers", bindSamplers);
+        ASSIGN_NULL("glBindTextures", bindTextures);
+        ASSIGN_NULL("glBindVertexBuffers", bindVertexBuffers);
+        ASSIGN_NULL("glBufferStorage", bufferStorage);
+        ASSIGN_NULL("glClearTexImage", clearTexImage);
+        ASSIGN_NULL("glClearTexSubImage", clearTexSubImage);
+    }
+
+    if (version >= gl::Version(4, 5))
+    {
+        ASSIGN_NULL("glBindTextureUnit", bindTextureUnit);
+        ASSIGN_NULL("glBlitNamedFramebuffer", blitNamedFramebuffer);
+        ASSIGN_NULL("glCheckNamedFramebufferStatus", checkNamedFramebufferStatus);
+        ASSIGN_NULL("glClearNamedBufferData", clearNamedBufferData);
+        ASSIGN_NULL("glClearNamedBufferSubData", clearNamedBufferSubData);
+        ASSIGN_NULL("glClearNamedFramebufferfi", clearNamedFramebufferfi);
+        ASSIGN_NULL("glClearNamedFramebufferfv", clearNamedFramebufferfv);
+        ASSIGN_NULL("glClearNamedFramebufferiv", clearNamedFramebufferiv);
+        ASSIGN_NULL("glClearNamedFramebufferuiv", clearNamedFramebufferuiv);
+        ASSIGN_NULL("glClipControl", clipControl);
+        ASSIGN_NULL("glCompressedTextureSubImage1D", compressedTextureSubImage1D);
+        ASSIGN_NULL("glCompressedTextureSubImage2D", compressedTextureSubImage2D);
+        ASSIGN_NULL("glCompressedTextureSubImage3D", compressedTextureSubImage3D);
+        ASSIGN_NULL("glCopyNamedBufferSubData", copyNamedBufferSubData);
+        ASSIGN_NULL("glCopyTextureSubImage1D", copyTextureSubImage1D);
+        ASSIGN_NULL("glCopyTextureSubImage2D", copyTextureSubImage2D);
+        ASSIGN_NULL("glCopyTextureSubImage3D", copyTextureSubImage3D);
+        ASSIGN_NULL("glCreateBuffers", createBuffers);
+        ASSIGN_NULL("glCreateFramebuffers", createFramebuffers);
+        ASSIGN_NULL("glCreateProgramPipelines", createProgramPipelines);
+        ASSIGN_NULL("glCreateQueries", createQueries);
+        ASSIGN_NULL("glCreateRenderbuffers", createRenderbuffers);
+        ASSIGN_NULL("glCreateSamplers", createSamplers);
+        ASSIGN_NULL("glCreateTextures", createTextures);
+        ASSIGN_NULL("glCreateTransformFeedbacks", createTransformFeedbacks);
+        ASSIGN_NULL("glCreateVertexArrays", createVertexArrays);
+        ASSIGN_NULL("glDisableVertexArrayAttrib", disableVertexArrayAttrib);
+        ASSIGN_NULL("glEnableVertexArrayAttrib", enableVertexArrayAttrib);
+        ASSIGN_NULL("glFlushMappedNamedBufferRange", flushMappedNamedBufferRange);
+        ASSIGN_NULL("glGenerateTextureMipmap", generateTextureMipmap);
+        ASSIGN_NULL("glGetCompressedTextureImage", getCompressedTextureImage);
+        ASSIGN_NULL("glGetCompressedTextureSubImage", getCompressedTextureSubImage);
+        ASSIGN_NULL("glGetGraphicsResetStatus", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetNamedBufferParameteri64v", getNamedBufferParameteri64v);
+        ASSIGN_NULL("glGetNamedBufferParameteriv", getNamedBufferParameteriv);
+        ASSIGN_NULL("glGetNamedBufferPointerv", getNamedBufferPointerv);
+        ASSIGN_NULL("glGetNamedBufferSubData", getNamedBufferSubData);
+        ASSIGN_NULL("glGetNamedFramebufferAttachmentParameteriv",
+                    getNamedFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetNamedFramebufferParameteriv", getNamedFramebufferParameteriv);
+        ASSIGN_NULL("glGetNamedRenderbufferParameteriv", getNamedRenderbufferParameteriv);
+        ASSIGN_NULL("glGetQueryBufferObjecti64v", getQueryBufferObjecti64v);
+        ASSIGN_NULL("glGetQueryBufferObjectiv", getQueryBufferObjectiv);
+        ASSIGN_NULL("glGetQueryBufferObjectui64v", getQueryBufferObjectui64v);
+        ASSIGN_NULL("glGetQueryBufferObjectuiv", getQueryBufferObjectuiv);
+        ASSIGN_NULL("glGetTextureImage", getTextureImage);
+        ASSIGN_NULL("glGetTextureLevelParameterfv", getTextureLevelParameterfv);
+        ASSIGN_NULL("glGetTextureLevelParameteriv", getTextureLevelParameteriv);
+        ASSIGN_NULL("glGetTextureParameterIiv", getTextureParameterIiv);
+        ASSIGN_NULL("glGetTextureParameterIuiv", getTextureParameterIuiv);
+        ASSIGN_NULL("glGetTextureParameterfv", getTextureParameterfv);
+        ASSIGN_NULL("glGetTextureParameteriv", getTextureParameteriv);
+        ASSIGN_NULL("glGetTextureSubImage", getTextureSubImage);
+        ASSIGN_NULL("glGetTransformFeedbacki64_v", getTransformFeedbacki64_v);
+        ASSIGN_NULL("glGetTransformFeedbacki_v", getTransformFeedbacki_v);
+        ASSIGN_NULL("glGetTransformFeedbackiv", getTransformFeedbackiv);
+        ASSIGN_NULL("glGetVertexArrayIndexed64iv", getVertexArrayIndexed64iv);
+        ASSIGN_NULL("glGetVertexArrayIndexediv", getVertexArrayIndexediv);
+        ASSIGN_NULL("glGetVertexArrayiv", getVertexArrayiv);
+        ASSIGN_NULL("glGetnCompressedTexImage", getnCompressedTexImage);
+        ASSIGN_NULL("glGetnTexImage", getnTexImage);
+        ASSIGN_NULL("glGetnUniformdv", getnUniformdv);
+        ASSIGN_NULL("glGetnUniformfv", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformiv", getnUniformiv);
+        ASSIGN_NULL("glGetnUniformuiv", getnUniformuiv);
+        ASSIGN_NULL("glInvalidateNamedFramebufferData", invalidateNamedFramebufferData);
+        ASSIGN_NULL("glInvalidateNamedFramebufferSubData", invalidateNamedFramebufferSubData);
+        ASSIGN_NULL("glMapNamedBuffer", mapNamedBuffer);
+        ASSIGN_NULL("glMapNamedBufferRange", mapNamedBufferRange);
+        ASSIGN_NULL("glMemoryBarrierByRegion", memoryBarrierByRegion);
+        ASSIGN_NULL("glNamedBufferData", namedBufferData);
+        ASSIGN_NULL("glNamedBufferStorage", namedBufferStorage);
+        ASSIGN_NULL("glNamedBufferSubData", namedBufferSubData);
+        ASSIGN_NULL("glNamedFramebufferDrawBuffer", namedFramebufferDrawBuffer);
+        ASSIGN_NULL("glNamedFramebufferDrawBuffers", namedFramebufferDrawBuffers);
+        ASSIGN_NULL("glNamedFramebufferParameteri", namedFramebufferParameteri);
+        ASSIGN_NULL("glNamedFramebufferReadBuffer", namedFramebufferReadBuffer);
+        ASSIGN_NULL("glNamedFramebufferRenderbuffer", namedFramebufferRenderbuffer);
+        ASSIGN_NULL("glNamedFramebufferTexture", namedFramebufferTexture);
+        ASSIGN_NULL("glNamedFramebufferTextureLayer", namedFramebufferTextureLayer);
+        ASSIGN_NULL("glNamedRenderbufferStorage", namedRenderbufferStorage);
+        ASSIGN_NULL("glNamedRenderbufferStorageMultisample", namedRenderbufferStorageMultisample);
+        ASSIGN_NULL("glReadnPixels", readnPixels);
+        ASSIGN_NULL("glTextureBarrier", textureBarrier);
+        ASSIGN_NULL("glTextureBuffer", textureBuffer);
+        ASSIGN_NULL("glTextureBufferRange", textureBufferRange);
+        ASSIGN_NULL("glTextureParameterIiv", textureParameterIiv);
+        ASSIGN_NULL("glTextureParameterIuiv", textureParameterIuiv);
+        ASSIGN_NULL("glTextureParameterf", textureParameterf);
+        ASSIGN_NULL("glTextureParameterfv", textureParameterfv);
+        ASSIGN_NULL("glTextureParameteri", textureParameteri);
+        ASSIGN_NULL("glTextureParameteriv", textureParameteriv);
+        ASSIGN_NULL("glTextureStorage1D", textureStorage1D);
+        ASSIGN_NULL("glTextureStorage2D", textureStorage2D);
+        ASSIGN_NULL("glTextureStorage2DMultisample", textureStorage2DMultisample);
+        ASSIGN_NULL("glTextureStorage3D", textureStorage3D);
+        ASSIGN_NULL("glTextureStorage3DMultisample", textureStorage3DMultisample);
+        ASSIGN_NULL("glTextureSubImage1D", textureSubImage1D);
+        ASSIGN_NULL("glTextureSubImage2D", textureSubImage2D);
+        ASSIGN_NULL("glTextureSubImage3D", textureSubImage3D);
+        ASSIGN_NULL("glTransformFeedbackBufferBase", transformFeedbackBufferBase);
+        ASSIGN_NULL("glTransformFeedbackBufferRange", transformFeedbackBufferRange);
+        ASSIGN_NULL("glUnmapNamedBuffer", unmapNamedBuffer);
+        ASSIGN_NULL("glVertexArrayAttribBinding", vertexArrayAttribBinding);
+        ASSIGN_NULL("glVertexArrayAttribFormat", vertexArrayAttribFormat);
+        ASSIGN_NULL("glVertexArrayAttribIFormat", vertexArrayAttribIFormat);
+        ASSIGN_NULL("glVertexArrayAttribLFormat", vertexArrayAttribLFormat);
+        ASSIGN_NULL("glVertexArrayBindingDivisor", vertexArrayBindingDivisor);
+        ASSIGN_NULL("glVertexArrayElementBuffer", vertexArrayElementBuffer);
+        ASSIGN_NULL("glVertexArrayVertexBuffer", vertexArrayVertexBuffer);
+        ASSIGN_NULL("glVertexArrayVertexBuffers", vertexArrayVertexBuffers);
+    }
+
+    if (extensions.count("GL_ARB_ES2_compatibility") != 0)
+    {
+        ASSIGN_NULL("glClearDepthf", clearDepthf);
+        ASSIGN_NULL("glDepthRangef", depthRangef);
+        ASSIGN_NULL("glGetShaderPrecisionFormat", getShaderPrecisionFormat);
+        ASSIGN_NULL("glReleaseShaderCompiler", releaseShaderCompiler);
+        ASSIGN_NULL("glShaderBinary", shaderBinary);
+    }
+
+    if (extensions.count("GL_ARB_ES3_1_compatibility") != 0)
+    {
+        ASSIGN_NULL("glMemoryBarrierByRegion", memoryBarrierByRegion);
+    }
+
+    if (extensions.count("GL_ARB_ES3_2_compatibility") != 0)
+    {
+        ASSIGN_NULL("glPrimitiveBoundingBoxARB", primitiveBoundingBox);
+    }
+
+    if (extensions.count("GL_ARB_base_instance") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysInstancedBaseInstance", drawArraysInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseInstance", drawElementsInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertexBaseInstance",
+                    drawElementsInstancedBaseVertexBaseInstance);
+    }
+
+    if (extensions.count("GL_ARB_blend_func_extended") != 0)
+    {
+        ASSIGN_NULL("glBindFragDataLocationIndexed", bindFragDataLocationIndexed);
+        ASSIGN_NULL("glGetFragDataIndex", getFragDataIndex);
+    }
+
+    if (extensions.count("GL_ARB_buffer_storage") != 0)
+    {
+        ASSIGN_NULL("glBufferStorage", bufferStorage);
+    }
+
+    if (extensions.count("GL_ARB_clear_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glClearBufferData", clearBufferData);
+        ASSIGN_NULL("glClearBufferSubData", clearBufferSubData);
+    }
+
+    if (extensions.count("GL_ARB_clear_texture") != 0)
+    {
+        ASSIGN_NULL("glClearTexImage", clearTexImage);
+        ASSIGN_NULL("glClearTexSubImage", clearTexSubImage);
+    }
+
+    if (extensions.count("GL_ARB_clip_control") != 0)
+    {
+        ASSIGN_NULL("glClipControl", clipControl);
+    }
+
+    if (extensions.count("GL_ARB_color_buffer_float") != 0)
+    {
+        ASSIGN_NULL("glClampColorARB", clampColor);
+    }
+
+    if (extensions.count("GL_ARB_compute_shader") != 0)
+    {
+        ASSIGN_NULL("glDispatchCompute", dispatchCompute);
+        ASSIGN_NULL("glDispatchComputeIndirect", dispatchComputeIndirect);
+    }
+
+    if (extensions.count("GL_ARB_copy_buffer") != 0)
+    {
+        ASSIGN_NULL("glCopyBufferSubData", copyBufferSubData);
+    }
+
+    if (extensions.count("GL_ARB_copy_image") != 0)
+    {
+        ASSIGN_NULL("glCopyImageSubData", copyImageSubData);
+    }
+
+    if (extensions.count("GL_ARB_debug_output") != 0)
+    {
+        ASSIGN_NULL("glDebugMessageCallbackARB", debugMessageCallback);
+        ASSIGN_NULL("glDebugMessageControlARB", debugMessageControl);
+        ASSIGN_NULL("glDebugMessageInsertARB", debugMessageInsert);
+        ASSIGN_NULL("glGetDebugMessageLogARB", getDebugMessageLog);
+    }
+
+    if (extensions.count("GL_ARB_direct_state_access") != 0)
+    {
+        ASSIGN_NULL("glBindTextureUnit", bindTextureUnit);
+        ASSIGN_NULL("glBlitNamedFramebuffer", blitNamedFramebuffer);
+        ASSIGN_NULL("glCheckNamedFramebufferStatus", checkNamedFramebufferStatus);
+        ASSIGN_NULL("glClearNamedBufferData", clearNamedBufferData);
+        ASSIGN_NULL("glClearNamedBufferSubData", clearNamedBufferSubData);
+        ASSIGN_NULL("glClearNamedFramebufferfi", clearNamedFramebufferfi);
+        ASSIGN_NULL("glClearNamedFramebufferfv", clearNamedFramebufferfv);
+        ASSIGN_NULL("glClearNamedFramebufferiv", clearNamedFramebufferiv);
+        ASSIGN_NULL("glClearNamedFramebufferuiv", clearNamedFramebufferuiv);
+        ASSIGN_NULL("glCompressedTextureSubImage1D", compressedTextureSubImage1D);
+        ASSIGN_NULL("glCompressedTextureSubImage2D", compressedTextureSubImage2D);
+        ASSIGN_NULL("glCompressedTextureSubImage3D", compressedTextureSubImage3D);
+        ASSIGN_NULL("glCopyNamedBufferSubData", copyNamedBufferSubData);
+        ASSIGN_NULL("glCopyTextureSubImage1D", copyTextureSubImage1D);
+        ASSIGN_NULL("glCopyTextureSubImage2D", copyTextureSubImage2D);
+        ASSIGN_NULL("glCopyTextureSubImage3D", copyTextureSubImage3D);
+        ASSIGN_NULL("glCreateBuffers", createBuffers);
+        ASSIGN_NULL("glCreateFramebuffers", createFramebuffers);
+        ASSIGN_NULL("glCreateProgramPipelines", createProgramPipelines);
+        ASSIGN_NULL("glCreateQueries", createQueries);
+        ASSIGN_NULL("glCreateRenderbuffers", createRenderbuffers);
+        ASSIGN_NULL("glCreateSamplers", createSamplers);
+        ASSIGN_NULL("glCreateTextures", createTextures);
+        ASSIGN_NULL("glCreateTransformFeedbacks", createTransformFeedbacks);
+        ASSIGN_NULL("glCreateVertexArrays", createVertexArrays);
+        ASSIGN_NULL("glDisableVertexArrayAttrib", disableVertexArrayAttrib);
+        ASSIGN_NULL("glEnableVertexArrayAttrib", enableVertexArrayAttrib);
+        ASSIGN_NULL("glFlushMappedNamedBufferRange", flushMappedNamedBufferRange);
+        ASSIGN_NULL("glGenerateTextureMipmap", generateTextureMipmap);
+        ASSIGN_NULL("glGetCompressedTextureImage", getCompressedTextureImage);
+        ASSIGN_NULL("glGetNamedBufferParameteri64v", getNamedBufferParameteri64v);
+        ASSIGN_NULL("glGetNamedBufferParameteriv", getNamedBufferParameteriv);
+        ASSIGN_NULL("glGetNamedBufferPointerv", getNamedBufferPointerv);
+        ASSIGN_NULL("glGetNamedBufferSubData", getNamedBufferSubData);
+        ASSIGN_NULL("glGetNamedFramebufferAttachmentParameteriv",
+                    getNamedFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetNamedFramebufferParameteriv", getNamedFramebufferParameteriv);
+        ASSIGN_NULL("glGetNamedRenderbufferParameteriv", getNamedRenderbufferParameteriv);
+        ASSIGN_NULL("glGetQueryBufferObjecti64v", getQueryBufferObjecti64v);
+        ASSIGN_NULL("glGetQueryBufferObjectiv", getQueryBufferObjectiv);
+        ASSIGN_NULL("glGetQueryBufferObjectui64v", getQueryBufferObjectui64v);
+        ASSIGN_NULL("glGetQueryBufferObjectuiv", getQueryBufferObjectuiv);
+        ASSIGN_NULL("glGetTextureImage", getTextureImage);
+        ASSIGN_NULL("glGetTextureLevelParameterfv", getTextureLevelParameterfv);
+        ASSIGN_NULL("glGetTextureLevelParameteriv", getTextureLevelParameteriv);
+        ASSIGN_NULL("glGetTextureParameterIiv", getTextureParameterIiv);
+        ASSIGN_NULL("glGetTextureParameterIuiv", getTextureParameterIuiv);
+        ASSIGN_NULL("glGetTextureParameterfv", getTextureParameterfv);
+        ASSIGN_NULL("glGetTextureParameteriv", getTextureParameteriv);
+        ASSIGN_NULL("glGetTransformFeedbacki64_v", getTransformFeedbacki64_v);
+        ASSIGN_NULL("glGetTransformFeedbacki_v", getTransformFeedbacki_v);
+        ASSIGN_NULL("glGetTransformFeedbackiv", getTransformFeedbackiv);
+        ASSIGN_NULL("glGetVertexArrayIndexed64iv", getVertexArrayIndexed64iv);
+        ASSIGN_NULL("glGetVertexArrayIndexediv", getVertexArrayIndexediv);
+        ASSIGN_NULL("glGetVertexArrayiv", getVertexArrayiv);
+        ASSIGN_NULL("glInvalidateNamedFramebufferData", invalidateNamedFramebufferData);
+        ASSIGN_NULL("glInvalidateNamedFramebufferSubData", invalidateNamedFramebufferSubData);
+        ASSIGN_NULL("glMapNamedBuffer", mapNamedBuffer);
+        ASSIGN_NULL("glMapNamedBufferRange", mapNamedBufferRange);
+        ASSIGN_NULL("glNamedBufferData", namedBufferData);
+        ASSIGN_NULL("glNamedBufferStorage", namedBufferStorage);
+        ASSIGN_NULL("glNamedBufferSubData", namedBufferSubData);
+        ASSIGN_NULL("glNamedFramebufferDrawBuffer", namedFramebufferDrawBuffer);
+        ASSIGN_NULL("glNamedFramebufferDrawBuffers", namedFramebufferDrawBuffers);
+        ASSIGN_NULL("glNamedFramebufferParameteri", namedFramebufferParameteri);
+        ASSIGN_NULL("glNamedFramebufferReadBuffer", namedFramebufferReadBuffer);
+        ASSIGN_NULL("glNamedFramebufferRenderbuffer", namedFramebufferRenderbuffer);
+        ASSIGN_NULL("glNamedFramebufferTexture", namedFramebufferTexture);
+        ASSIGN_NULL("glNamedFramebufferTextureLayer", namedFramebufferTextureLayer);
+        ASSIGN_NULL("glNamedRenderbufferStorage", namedRenderbufferStorage);
+        ASSIGN_NULL("glNamedRenderbufferStorageMultisample", namedRenderbufferStorageMultisample);
+        ASSIGN_NULL("glTextureBuffer", textureBuffer);
+        ASSIGN_NULL("glTextureBufferRange", textureBufferRange);
+        ASSIGN_NULL("glTextureParameterIiv", textureParameterIiv);
+        ASSIGN_NULL("glTextureParameterIuiv", textureParameterIuiv);
+        ASSIGN_NULL("glTextureParameterf", textureParameterf);
+        ASSIGN_NULL("glTextureParameterfv", textureParameterfv);
+        ASSIGN_NULL("glTextureParameteri", textureParameteri);
+        ASSIGN_NULL("glTextureParameteriv", textureParameteriv);
+        ASSIGN_NULL("glTextureStorage1D", textureStorage1D);
+        ASSIGN_NULL("glTextureStorage2D", textureStorage2D);
+        ASSIGN_NULL("glTextureStorage2DMultisample", textureStorage2DMultisample);
+        ASSIGN_NULL("glTextureStorage3D", textureStorage3D);
+        ASSIGN_NULL("glTextureStorage3DMultisample", textureStorage3DMultisample);
+        ASSIGN_NULL("glTextureSubImage1D", textureSubImage1D);
+        ASSIGN_NULL("glTextureSubImage2D", textureSubImage2D);
+        ASSIGN_NULL("glTextureSubImage3D", textureSubImage3D);
+        ASSIGN_NULL("glTransformFeedbackBufferBase", transformFeedbackBufferBase);
+        ASSIGN_NULL("glTransformFeedbackBufferRange", transformFeedbackBufferRange);
+        ASSIGN_NULL("glUnmapNamedBuffer", unmapNamedBuffer);
+        ASSIGN_NULL("glVertexArrayAttribBinding", vertexArrayAttribBinding);
+        ASSIGN_NULL("glVertexArrayAttribFormat", vertexArrayAttribFormat);
+        ASSIGN_NULL("glVertexArrayAttribIFormat", vertexArrayAttribIFormat);
+        ASSIGN_NULL("glVertexArrayAttribLFormat", vertexArrayAttribLFormat);
+        ASSIGN_NULL("glVertexArrayBindingDivisor", vertexArrayBindingDivisor);
+        ASSIGN_NULL("glVertexArrayElementBuffer", vertexArrayElementBuffer);
+        ASSIGN_NULL("glVertexArrayVertexBuffer", vertexArrayVertexBuffer);
+        ASSIGN_NULL("glVertexArrayVertexBuffers", vertexArrayVertexBuffers);
+    }
+
+    if (extensions.count("GL_ARB_draw_buffers") != 0)
+    {
+        ASSIGN_NULL("glDrawBuffersARB", drawBuffers);
+    }
+
+    if (extensions.count("GL_ARB_draw_buffers_blend") != 0)
+    {
+        ASSIGN_NULL("glBlendEquationSeparateiARB", blendEquationSeparatei);
+        ASSIGN_NULL("glBlendEquationiARB", blendEquationi);
+        ASSIGN_NULL("glBlendFuncSeparateiARB", blendFuncSeparatei);
+        ASSIGN_NULL("glBlendFunciARB", blendFunci);
+    }
+
+    if (extensions.count("GL_ARB_draw_elements_base_vertex") != 0)
+    {
+        ASSIGN_NULL("glDrawElementsBaseVertex", drawElementsBaseVertex);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertex", drawElementsInstancedBaseVertex);
+        ASSIGN_NULL("glDrawRangeElementsBaseVertex", drawRangeElementsBaseVertex);
+        ASSIGN_NULL("glMultiDrawElementsBaseVertex", multiDrawElementsBaseVertex);
+    }
+
+    if (extensions.count("GL_ARB_draw_indirect") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysIndirect", drawArraysIndirect);
+        ASSIGN_NULL("glDrawElementsIndirect", drawElementsIndirect);
+    }
+
+    if (extensions.count("GL_ARB_draw_instanced") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysInstancedARB", drawArraysInstanced);
+        ASSIGN_NULL("glDrawElementsInstancedARB", drawElementsInstanced);
+    }
+
+    if (extensions.count("GL_ARB_fragment_program") != 0)
+    {
+        ASSIGN_NULL("glGetProgramivARB", getProgramiv);
+        ASSIGN_NULL("glIsProgramARB", isProgram);
+    }
+
+    if (extensions.count("GL_ARB_framebuffer_no_attachments") != 0)
+    {
+        ASSIGN_NULL("glFramebufferParameteri", framebufferParameteri);
+        ASSIGN_NULL("glGetFramebufferParameteriv", getFramebufferParameteriv);
+    }
+
+    if (extensions.count("GL_ARB_framebuffer_object") != 0)
+    {
+        ASSIGN_NULL("glBindFramebuffer", bindFramebuffer);
+        ASSIGN_NULL("glBindRenderbuffer", bindRenderbuffer);
+        ASSIGN_NULL("glBlitFramebuffer", blitFramebuffer);
+        ASSIGN_NULL("glCheckFramebufferStatus", checkFramebufferStatus);
+        ASSIGN_NULL("glDeleteFramebuffers", deleteFramebuffers);
+        ASSIGN_NULL("glDeleteRenderbuffers", deleteRenderbuffers);
+        ASSIGN_NULL("glFramebufferRenderbuffer", framebufferRenderbuffer);
+        ASSIGN_NULL("glFramebufferTexture1D", framebufferTexture1D);
+        ASSIGN_NULL("glFramebufferTexture2D", framebufferTexture2D);
+        ASSIGN_NULL("glFramebufferTexture3D", framebufferTexture3D);
+        ASSIGN_NULL("glFramebufferTextureLayer", framebufferTextureLayer);
+        ASSIGN_NULL("glGenFramebuffers", genFramebuffers);
+        ASSIGN_NULL("glGenRenderbuffers", genRenderbuffers);
+        ASSIGN_NULL("glGenerateMipmap", generateMipmap);
+        ASSIGN_NULL("glGetFramebufferAttachmentParameteriv", getFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetRenderbufferParameteriv", getRenderbufferParameteriv);
+        ASSIGN_NULL("glIsFramebuffer", isFramebuffer);
+        ASSIGN_NULL("glIsRenderbuffer", isRenderbuffer);
+        ASSIGN_NULL("glRenderbufferStorage", renderbufferStorage);
+        ASSIGN_NULL("glRenderbufferStorageMultisample", renderbufferStorageMultisample);
+    }
+
+    if (extensions.count("GL_ARB_geometry_shader4") != 0)
+    {
+        ASSIGN_NULL("glFramebufferTextureARB", framebufferTexture);
+        ASSIGN_NULL("glFramebufferTextureLayerARB", framebufferTextureLayer);
+        ASSIGN_NULL("glProgramParameteriARB", programParameteri);
+    }
+
+    if (extensions.count("GL_ARB_get_program_binary") != 0)
+    {
+        ASSIGN_NULL("glGetProgramBinary", getProgramBinary);
+        ASSIGN_NULL("glProgramBinary", programBinary);
+        ASSIGN_NULL("glProgramParameteri", programParameteri);
+    }
+
+    if (extensions.count("GL_ARB_get_texture_sub_image") != 0)
+    {
+        ASSIGN_NULL("glGetCompressedTextureSubImage", getCompressedTextureSubImage);
+        ASSIGN_NULL("glGetTextureSubImage", getTextureSubImage);
+    }
+
+    if (extensions.count("GL_ARB_gpu_shader_fp64") != 0)
+    {
+        ASSIGN_NULL("glGetUniformdv", getUniformdv);
+        ASSIGN_NULL("glUniform1d", uniform1d);
+        ASSIGN_NULL("glUniform1dv", uniform1dv);
+        ASSIGN_NULL("glUniform2d", uniform2d);
+        ASSIGN_NULL("glUniform2dv", uniform2dv);
+        ASSIGN_NULL("glUniform3d", uniform3d);
+        ASSIGN_NULL("glUniform3dv", uniform3dv);
+        ASSIGN_NULL("glUniform4d", uniform4d);
+        ASSIGN_NULL("glUniform4dv", uniform4dv);
+        ASSIGN_NULL("glUniformMatrix2dv", uniformMatrix2dv);
+        ASSIGN_NULL("glUniformMatrix2x3dv", uniformMatrix2x3dv);
+        ASSIGN_NULL("glUniformMatrix2x4dv", uniformMatrix2x4dv);
+        ASSIGN_NULL("glUniformMatrix3dv", uniformMatrix3dv);
+        ASSIGN_NULL("glUniformMatrix3x2dv", uniformMatrix3x2dv);
+        ASSIGN_NULL("glUniformMatrix3x4dv", uniformMatrix3x4dv);
+        ASSIGN_NULL("glUniformMatrix4dv", uniformMatrix4dv);
+        ASSIGN_NULL("glUniformMatrix4x2dv", uniformMatrix4x2dv);
+        ASSIGN_NULL("glUniformMatrix4x3dv", uniformMatrix4x3dv);
+    }
+
+    if (extensions.count("GL_ARB_imaging") != 0)
+    {
+        ASSIGN_NULL("glBlendColor", blendColor);
+        ASSIGN_NULL("glBlendEquation", blendEquation);
+    }
+
+    if (extensions.count("GL_ARB_instanced_arrays") != 0)
+    {
+        ASSIGN_NULL("glVertexAttribDivisorARB", vertexAttribDivisor);
+    }
+
+    if (extensions.count("GL_ARB_internalformat_query") != 0)
+    {
+        ASSIGN_NULL("glGetInternalformativ", getInternalformativ);
+    }
+
+    if (extensions.count("GL_ARB_internalformat_query2") != 0)
+    {
+        ASSIGN_NULL("glGetInternalformati64v", getInternalformati64v);
+    }
+
+    if (extensions.count("GL_ARB_invalidate_subdata") != 0)
+    {
+        ASSIGN_NULL("glInvalidateBufferData", invalidateBufferData);
+        ASSIGN_NULL("glInvalidateBufferSubData", invalidateBufferSubData);
+        ASSIGN_NULL("glInvalidateFramebuffer", invalidateFramebuffer);
+        ASSIGN_NULL("glInvalidateSubFramebuffer", invalidateSubFramebuffer);
+        ASSIGN_NULL("glInvalidateTexImage", invalidateTexImage);
+        ASSIGN_NULL("glInvalidateTexSubImage", invalidateTexSubImage);
+    }
+
+    if (extensions.count("GL_ARB_map_buffer_range") != 0)
+    {
+        ASSIGN_NULL("glFlushMappedBufferRange", flushMappedBufferRange);
+        ASSIGN_NULL("glMapBufferRange", mapBufferRange);
+    }
+
+    if (extensions.count("GL_ARB_multi_bind") != 0)
+    {
+        ASSIGN_NULL("glBindBuffersBase", bindBuffersBase);
+        ASSIGN_NULL("glBindBuffersRange", bindBuffersRange);
+        ASSIGN_NULL("glBindImageTextures", bindImageTextures);
+        ASSIGN_NULL("glBindSamplers", bindSamplers);
+        ASSIGN_NULL("glBindTextures", bindTextures);
+        ASSIGN_NULL("glBindVertexBuffers", bindVertexBuffers);
+    }
+
+    if (extensions.count("GL_ARB_multi_draw_indirect") != 0)
+    {
+        ASSIGN_NULL("glMultiDrawArraysIndirect", multiDrawArraysIndirect);
+        ASSIGN_NULL("glMultiDrawElementsIndirect", multiDrawElementsIndirect);
+    }
+
+    if (extensions.count("GL_ARB_multisample") != 0)
+    {
+        ASSIGN_NULL("glSampleCoverageARB", sampleCoverage);
+    }
+
+    if (extensions.count("GL_ARB_multitexture") != 0)
+    {
+        ASSIGN_NULL("glActiveTextureARB", activeTexture);
+    }
+
+    if (extensions.count("GL_ARB_occlusion_query") != 0)
+    {
+        ASSIGN_NULL("glBeginQueryARB", beginQuery);
+        ASSIGN_NULL("glDeleteQueriesARB", deleteQueries);
+        ASSIGN_NULL("glEndQueryARB", endQuery);
+        ASSIGN_NULL("glGenQueriesARB", genQueries);
+        ASSIGN_NULL("glGetQueryObjectivARB", getQueryObjectiv);
+        ASSIGN_NULL("glGetQueryObjectuivARB", getQueryObjectuiv);
+        ASSIGN_NULL("glGetQueryivARB", getQueryiv);
+        ASSIGN_NULL("glIsQueryARB", isQuery);
+    }
+
+    if (extensions.count("GL_ARB_point_parameters") != 0)
+    {
+        ASSIGN_NULL("glPointParameterfARB", pointParameterf);
+        ASSIGN_NULL("glPointParameterfvARB", pointParameterfv);
+    }
+
+    if (extensions.count("GL_ARB_program_interface_query") != 0)
+    {
+        ASSIGN_NULL("glGetProgramInterfaceiv", getProgramInterfaceiv);
+        ASSIGN_NULL("glGetProgramResourceIndex", getProgramResourceIndex);
+        ASSIGN_NULL("glGetProgramResourceLocation", getProgramResourceLocation);
+        ASSIGN_NULL("glGetProgramResourceLocationIndex", getProgramResourceLocationIndex);
+        ASSIGN_NULL("glGetProgramResourceName", getProgramResourceName);
+        ASSIGN_NULL("glGetProgramResourceiv", getProgramResourceiv);
+    }
+
+    if (extensions.count("GL_ARB_provoking_vertex") != 0)
+    {
+        ASSIGN_NULL("glProvokingVertex", provokingVertex);
+    }
+
+    if (extensions.count("GL_ARB_robustness") != 0)
+    {
+        ASSIGN_NULL("glGetGraphicsResetStatusARB", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetnCompressedTexImageARB", getnCompressedTexImage);
+        ASSIGN_NULL("glGetnTexImageARB", getnTexImage);
+        ASSIGN_NULL("glGetnUniformdvARB", getnUniformdv);
+        ASSIGN_NULL("glGetnUniformfvARB", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformivARB", getnUniformiv);
+        ASSIGN_NULL("glGetnUniformuivARB", getnUniformuiv);
+        ASSIGN_NULL("glReadnPixelsARB", readnPixels);
+    }
+
+    if (extensions.count("GL_ARB_sample_shading") != 0)
+    {
+        ASSIGN_NULL("glMinSampleShadingARB", minSampleShading);
+    }
+
+    if (extensions.count("GL_ARB_sampler_objects") != 0)
+    {
+        ASSIGN_NULL("glBindSampler", bindSampler);
+        ASSIGN_NULL("glDeleteSamplers", deleteSamplers);
+        ASSIGN_NULL("glGenSamplers", genSamplers);
+        ASSIGN_NULL("glGetSamplerParameterIiv", getSamplerParameterIiv);
+        ASSIGN_NULL("glGetSamplerParameterIuiv", getSamplerParameterIuiv);
+        ASSIGN_NULL("glGetSamplerParameterfv", getSamplerParameterfv);
+        ASSIGN_NULL("glGetSamplerParameteriv", getSamplerParameteriv);
+        ASSIGN_NULL("glIsSampler", isSampler);
+        ASSIGN_NULL("glSamplerParameterIiv", samplerParameterIiv);
+        ASSIGN_NULL("glSamplerParameterIuiv", samplerParameterIuiv);
+        ASSIGN_NULL("glSamplerParameterf", samplerParameterf);
+        ASSIGN_NULL("glSamplerParameterfv", samplerParameterfv);
+        ASSIGN_NULL("glSamplerParameteri", samplerParameteri);
+        ASSIGN_NULL("glSamplerParameteriv", samplerParameteriv);
+    }
+
+    if (extensions.count("GL_ARB_separate_shader_objects") != 0)
+    {
+        ASSIGN_NULL("glActiveShaderProgram", activeShaderProgram);
+        ASSIGN_NULL("glBindProgramPipeline", bindProgramPipeline);
+        ASSIGN_NULL("glCreateShaderProgramv", createShaderProgramv);
+        ASSIGN_NULL("glDeleteProgramPipelines", deleteProgramPipelines);
+        ASSIGN_NULL("glGenProgramPipelines", genProgramPipelines);
+        ASSIGN_NULL("glGetProgramPipelineInfoLog", getProgramPipelineInfoLog);
+        ASSIGN_NULL("glGetProgramPipelineiv", getProgramPipelineiv);
+        ASSIGN_NULL("glIsProgramPipeline", isProgramPipeline);
+        ASSIGN_NULL("glProgramUniform1d", programUniform1d);
+        ASSIGN_NULL("glProgramUniform1dv", programUniform1dv);
+        ASSIGN_NULL("glProgramUniform1f", programUniform1f);
+        ASSIGN_NULL("glProgramUniform1fv", programUniform1fv);
+        ASSIGN_NULL("glProgramUniform1i", programUniform1i);
+        ASSIGN_NULL("glProgramUniform1iv", programUniform1iv);
+        ASSIGN_NULL("glProgramUniform1ui", programUniform1ui);
+        ASSIGN_NULL("glProgramUniform1uiv", programUniform1uiv);
+        ASSIGN_NULL("glProgramUniform2d", programUniform2d);
+        ASSIGN_NULL("glProgramUniform2dv", programUniform2dv);
+        ASSIGN_NULL("glProgramUniform2f", programUniform2f);
+        ASSIGN_NULL("glProgramUniform2fv", programUniform2fv);
+        ASSIGN_NULL("glProgramUniform2i", programUniform2i);
+        ASSIGN_NULL("glProgramUniform2iv", programUniform2iv);
+        ASSIGN_NULL("glProgramUniform2ui", programUniform2ui);
+        ASSIGN_NULL("glProgramUniform2uiv", programUniform2uiv);
+        ASSIGN_NULL("glProgramUniform3d", programUniform3d);
+        ASSIGN_NULL("glProgramUniform3dv", programUniform3dv);
+        ASSIGN_NULL("glProgramUniform3f", programUniform3f);
+        ASSIGN_NULL("glProgramUniform3fv", programUniform3fv);
+        ASSIGN_NULL("glProgramUniform3i", programUniform3i);
+        ASSIGN_NULL("glProgramUniform3iv", programUniform3iv);
+        ASSIGN_NULL("glProgramUniform3ui", programUniform3ui);
+        ASSIGN_NULL("glProgramUniform3uiv", programUniform3uiv);
+        ASSIGN_NULL("glProgramUniform4d", programUniform4d);
+        ASSIGN_NULL("glProgramUniform4dv", programUniform4dv);
+        ASSIGN_NULL("glProgramUniform4f", programUniform4f);
+        ASSIGN_NULL("glProgramUniform4fv", programUniform4fv);
+        ASSIGN_NULL("glProgramUniform4i", programUniform4i);
+        ASSIGN_NULL("glProgramUniform4iv", programUniform4iv);
+        ASSIGN_NULL("glProgramUniform4ui", programUniform4ui);
+        ASSIGN_NULL("glProgramUniform4uiv", programUniform4uiv);
+        ASSIGN_NULL("glProgramUniformMatrix2dv", programUniformMatrix2dv);
+        ASSIGN_NULL("glProgramUniformMatrix2fv", programUniformMatrix2fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3dv", programUniformMatrix2x3dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3fv", programUniformMatrix2x3fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4dv", programUniformMatrix2x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4fv", programUniformMatrix2x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix3dv", programUniformMatrix3dv);
+        ASSIGN_NULL("glProgramUniformMatrix3fv", programUniformMatrix3fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2dv", programUniformMatrix3x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2fv", programUniformMatrix3x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4dv", programUniformMatrix3x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4fv", programUniformMatrix3x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4dv", programUniformMatrix4dv);
+        ASSIGN_NULL("glProgramUniformMatrix4fv", programUniformMatrix4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2dv", programUniformMatrix4x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2fv", programUniformMatrix4x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3dv", programUniformMatrix4x3dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3fv", programUniformMatrix4x3fv);
+        ASSIGN_NULL("glUseProgramStages", useProgramStages);
+        ASSIGN_NULL("glValidateProgramPipeline", validateProgramPipeline);
+    }
+
+    if (extensions.count("GL_ARB_shader_atomic_counters") != 0)
+    {
+        ASSIGN_NULL("glGetActiveAtomicCounterBufferiv", getActiveAtomicCounterBufferiv);
+    }
+
+    if (extensions.count("GL_ARB_shader_image_load_store") != 0)
+    {
+        ASSIGN_NULL("glBindImageTexture", bindImageTexture);
+        ASSIGN_NULL("glMemoryBarrier", memoryBarrier);
+    }
+
+    if (extensions.count("GL_ARB_shader_objects") != 0)
+    {
+        ASSIGN_NULL("glCompileShaderARB", compileShader);
+        ASSIGN_NULL("glGetActiveUniformARB", getActiveUniform);
+        ASSIGN_NULL("glGetShaderSourceARB", getShaderSource);
+        ASSIGN_NULL("glGetUniformLocationARB", getUniformLocation);
+        ASSIGN_NULL("glGetUniformfvARB", getUniformfv);
+        ASSIGN_NULL("glGetUniformivARB", getUniformiv);
+        ASSIGN_NULL("glLinkProgramARB", linkProgram);
+        ASSIGN_NULL("glShaderSourceARB", shaderSource);
+        ASSIGN_NULL("glUniform1fARB", uniform1f);
+        ASSIGN_NULL("glUniform1fvARB", uniform1fv);
+        ASSIGN_NULL("glUniform1iARB", uniform1i);
+        ASSIGN_NULL("glUniform1ivARB", uniform1iv);
+        ASSIGN_NULL("glUniform2fARB", uniform2f);
+        ASSIGN_NULL("glUniform2fvARB", uniform2fv);
+        ASSIGN_NULL("glUniform2iARB", uniform2i);
+        ASSIGN_NULL("glUniform2ivARB", uniform2iv);
+        ASSIGN_NULL("glUniform3fARB", uniform3f);
+        ASSIGN_NULL("glUniform3fvARB", uniform3fv);
+        ASSIGN_NULL("glUniform3iARB", uniform3i);
+        ASSIGN_NULL("glUniform3ivARB", uniform3iv);
+        ASSIGN_NULL("glUniform4fARB", uniform4f);
+        ASSIGN_NULL("glUniform4fvARB", uniform4fv);
+        ASSIGN_NULL("glUniform4iARB", uniform4i);
+        ASSIGN_NULL("glUniform4ivARB", uniform4iv);
+        ASSIGN_NULL("glUniformMatrix2fvARB", uniformMatrix2fv);
+        ASSIGN_NULL("glUniformMatrix3fvARB", uniformMatrix3fv);
+        ASSIGN_NULL("glUniformMatrix4fvARB", uniformMatrix4fv);
+        ASSIGN_NULL("glValidateProgramARB", validateProgram);
+    }
+
+    if (extensions.count("GL_ARB_shader_storage_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glShaderStorageBlockBinding", shaderStorageBlockBinding);
+    }
+
+    if (extensions.count("GL_ARB_shader_subroutine") != 0)
+    {
+        ASSIGN_NULL("glGetActiveSubroutineName", getActiveSubroutineName);
+        ASSIGN_NULL("glGetActiveSubroutineUniformName", getActiveSubroutineUniformName);
+        ASSIGN_NULL("glGetActiveSubroutineUniformiv", getActiveSubroutineUniformiv);
+        ASSIGN_NULL("glGetProgramStageiv", getProgramStageiv);
+        ASSIGN_NULL("glGetSubroutineIndex", getSubroutineIndex);
+        ASSIGN_NULL("glGetSubroutineUniformLocation", getSubroutineUniformLocation);
+        ASSIGN_NULL("glGetUniformSubroutineuiv", getUniformSubroutineuiv);
+        ASSIGN_NULL("glUniformSubroutinesuiv", uniformSubroutinesuiv);
+    }
+
+    if (extensions.count("GL_ARB_sync") != 0)
+    {
+        ASSIGN_NULL("glClientWaitSync", clientWaitSync);
+        ASSIGN_NULL("glDeleteSync", deleteSync);
+        ASSIGN_NULL("glFenceSync", fenceSync);
+        ASSIGN_NULL("glGetInteger64v", getInteger64v);
+        ASSIGN_NULL("glGetSynciv", getSynciv);
+        ASSIGN_NULL("glIsSync", isSync);
+        ASSIGN_NULL("glWaitSync", waitSync);
+    }
+
+    if (extensions.count("GL_ARB_tessellation_shader") != 0)
+    {
+        ASSIGN_NULL("glPatchParameterfv", patchParameterfv);
+        ASSIGN_NULL("glPatchParameteri", patchParameteri);
+    }
+
+    if (extensions.count("GL_ARB_texture_barrier") != 0)
+    {
+        ASSIGN_NULL("glTextureBarrier", textureBarrier);
+    }
+
+    if (extensions.count("GL_ARB_texture_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glTexBufferARB", texBuffer);
+    }
+
+    if (extensions.count("GL_ARB_texture_buffer_range") != 0)
+    {
+        ASSIGN_NULL("glTexBufferRange", texBufferRange);
+    }
+
+    if (extensions.count("GL_ARB_texture_compression") != 0)
+    {
+        ASSIGN_NULL("glCompressedTexImage1DARB", compressedTexImage1D);
+        ASSIGN_NULL("glCompressedTexImage2DARB", compressedTexImage2D);
+        ASSIGN_NULL("glCompressedTexImage3DARB", compressedTexImage3D);
+        ASSIGN_NULL("glCompressedTexSubImage1DARB", compressedTexSubImage1D);
+        ASSIGN_NULL("glCompressedTexSubImage2DARB", compressedTexSubImage2D);
+        ASSIGN_NULL("glCompressedTexSubImage3DARB", compressedTexSubImage3D);
+        ASSIGN_NULL("glGetCompressedTexImageARB", getCompressedTexImage);
+    }
+
+    if (extensions.count("GL_ARB_texture_multisample") != 0)
+    {
+        ASSIGN_NULL("glGetMultisamplefv", getMultisamplefv);
+        ASSIGN_NULL("glSampleMaski", sampleMaski);
+        ASSIGN_NULL("glTexImage2DMultisample", texImage2DMultisample);
+        ASSIGN_NULL("glTexImage3DMultisample", texImage3DMultisample);
+    }
+
+    if (extensions.count("GL_ARB_texture_storage") != 0)
+    {
+        ASSIGN_NULL("glTexStorage1D", texStorage1D);
+        ASSIGN_NULL("glTexStorage2D", texStorage2D);
+        ASSIGN_NULL("glTexStorage3D", texStorage3D);
+    }
+
+    if (extensions.count("GL_ARB_texture_storage_multisample") != 0)
+    {
+        ASSIGN_NULL("glTexStorage2DMultisample", texStorage2DMultisample);
+        ASSIGN_NULL("glTexStorage3DMultisample", texStorage3DMultisample);
+    }
+
+    if (extensions.count("GL_ARB_texture_view") != 0)
+    {
+        ASSIGN_NULL("glTextureView", textureView);
+    }
+
+    if (extensions.count("GL_ARB_timer_query") != 0)
+    {
+        ASSIGN_NULL("glGetQueryObjecti64v", getQueryObjecti64v);
+        ASSIGN_NULL("glGetQueryObjectui64v", getQueryObjectui64v);
+        ASSIGN_NULL("glQueryCounter", queryCounter);
+    }
+
+    if (extensions.count("GL_ARB_transform_feedback2") != 0)
+    {
+        ASSIGN_NULL("glBindTransformFeedback", bindTransformFeedback);
+        ASSIGN_NULL("glDeleteTransformFeedbacks", deleteTransformFeedbacks);
+        ASSIGN_NULL("glDrawTransformFeedback", drawTransformFeedback);
+        ASSIGN_NULL("glGenTransformFeedbacks", genTransformFeedbacks);
+        ASSIGN_NULL("glIsTransformFeedback", isTransformFeedback);
+        ASSIGN_NULL("glPauseTransformFeedback", pauseTransformFeedback);
+        ASSIGN_NULL("glResumeTransformFeedback", resumeTransformFeedback);
+    }
+
+    if (extensions.count("GL_ARB_transform_feedback3") != 0)
+    {
+        ASSIGN_NULL("glBeginQueryIndexed", beginQueryIndexed);
+        ASSIGN_NULL("glDrawTransformFeedbackStream", drawTransformFeedbackStream);
+        ASSIGN_NULL("glEndQueryIndexed", endQueryIndexed);
+        ASSIGN_NULL("glGetQueryIndexediv", getQueryIndexediv);
+    }
+
+    if (extensions.count("GL_ARB_transform_feedback_instanced") != 0)
+    {
+        ASSIGN_NULL("glDrawTransformFeedbackInstanced", drawTransformFeedbackInstanced);
+        ASSIGN_NULL("glDrawTransformFeedbackStreamInstanced", drawTransformFeedbackStreamInstanced);
+    }
+
+    if (extensions.count("GL_ARB_uniform_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glBindBufferBase", bindBufferBase);
+        ASSIGN_NULL("glBindBufferRange", bindBufferRange);
+        ASSIGN_NULL("glGetActiveUniformBlockName", getActiveUniformBlockName);
+        ASSIGN_NULL("glGetActiveUniformBlockiv", getActiveUniformBlockiv);
+        ASSIGN_NULL("glGetActiveUniformName", getActiveUniformName);
+        ASSIGN_NULL("glGetActiveUniformsiv", getActiveUniformsiv);
+        ASSIGN_NULL("glGetIntegeri_v", getIntegeri_v);
+        ASSIGN_NULL("glGetUniformBlockIndex", getUniformBlockIndex);
+        ASSIGN_NULL("glGetUniformIndices", getUniformIndices);
+        ASSIGN_NULL("glUniformBlockBinding", uniformBlockBinding);
+    }
+
+    if (extensions.count("GL_ARB_vertex_array_object") != 0)
+    {
+        ASSIGN_NULL("glBindVertexArray", bindVertexArray);
+        ASSIGN_NULL("glDeleteVertexArrays", deleteVertexArrays);
+        ASSIGN_NULL("glGenVertexArrays", genVertexArrays);
+        ASSIGN_NULL("glIsVertexArray", isVertexArray);
+    }
+
+    if (extensions.count("GL_ARB_vertex_attrib_64bit") != 0)
+    {
+        ASSIGN_NULL("glGetVertexAttribLdv", getVertexAttribLdv);
+        ASSIGN_NULL("glVertexAttribL1d", vertexAttribL1d);
+        ASSIGN_NULL("glVertexAttribL1dv", vertexAttribL1dv);
+        ASSIGN_NULL("glVertexAttribL2d", vertexAttribL2d);
+        ASSIGN_NULL("glVertexAttribL2dv", vertexAttribL2dv);
+        ASSIGN_NULL("glVertexAttribL3d", vertexAttribL3d);
+        ASSIGN_NULL("glVertexAttribL3dv", vertexAttribL3dv);
+        ASSIGN_NULL("glVertexAttribL4d", vertexAttribL4d);
+        ASSIGN_NULL("glVertexAttribL4dv", vertexAttribL4dv);
+        ASSIGN_NULL("glVertexAttribLPointer", vertexAttribLPointer);
+    }
+
+    if (extensions.count("GL_ARB_vertex_attrib_binding") != 0)
+    {
+        ASSIGN_NULL("glBindVertexBuffer", bindVertexBuffer);
+        ASSIGN_NULL("glVertexAttribBinding", vertexAttribBinding);
+        ASSIGN_NULL("glVertexAttribFormat", vertexAttribFormat);
+        ASSIGN_NULL("glVertexAttribIFormat", vertexAttribIFormat);
+        ASSIGN_NULL("glVertexAttribLFormat", vertexAttribLFormat);
+        ASSIGN_NULL("glVertexBindingDivisor", vertexBindingDivisor);
+    }
+
+    if (extensions.count("GL_ARB_vertex_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glBindBufferARB", bindBuffer);
+        ASSIGN_NULL("glBufferDataARB", bufferData);
+        ASSIGN_NULL("glBufferSubDataARB", bufferSubData);
+        ASSIGN_NULL("glDeleteBuffersARB", deleteBuffers);
+        ASSIGN_NULL("glGenBuffersARB", genBuffers);
+        ASSIGN_NULL("glGetBufferParameterivARB", getBufferParameteriv);
+        ASSIGN_NULL("glGetBufferPointervARB", getBufferPointerv);
+        ASSIGN_NULL("glGetBufferSubDataARB", getBufferSubData);
+        ASSIGN_NULL("glIsBufferARB", isBuffer);
+        ASSIGN_NULL("glMapBufferARB", mapBuffer);
+        ASSIGN_NULL("glUnmapBufferARB", unmapBuffer);
+    }
+
+    if (extensions.count("GL_ARB_vertex_program") != 0)
+    {
+        ASSIGN_NULL("glDisableVertexAttribArrayARB", disableVertexAttribArray);
+        ASSIGN_NULL("glEnableVertexAttribArrayARB", enableVertexAttribArray);
+        ASSIGN_NULL("glGetProgramivARB", getProgramiv);
+        ASSIGN_NULL("glGetVertexAttribPointervARB", getVertexAttribPointerv);
+        ASSIGN_NULL("glGetVertexAttribdvARB", getVertexAttribdv);
+        ASSIGN_NULL("glGetVertexAttribfvARB", getVertexAttribfv);
+        ASSIGN_NULL("glGetVertexAttribivARB", getVertexAttribiv);
+        ASSIGN_NULL("glIsProgramARB", isProgram);
+        ASSIGN_NULL("glVertexAttrib1dARB", vertexAttrib1d);
+        ASSIGN_NULL("glVertexAttrib1dvARB", vertexAttrib1dv);
+        ASSIGN_NULL("glVertexAttrib1fARB", vertexAttrib1f);
+        ASSIGN_NULL("glVertexAttrib1fvARB", vertexAttrib1fv);
+        ASSIGN_NULL("glVertexAttrib1sARB", vertexAttrib1s);
+        ASSIGN_NULL("glVertexAttrib1svARB", vertexAttrib1sv);
+        ASSIGN_NULL("glVertexAttrib2dARB", vertexAttrib2d);
+        ASSIGN_NULL("glVertexAttrib2dvARB", vertexAttrib2dv);
+        ASSIGN_NULL("glVertexAttrib2fARB", vertexAttrib2f);
+        ASSIGN_NULL("glVertexAttrib2fvARB", vertexAttrib2fv);
+        ASSIGN_NULL("glVertexAttrib2sARB", vertexAttrib2s);
+        ASSIGN_NULL("glVertexAttrib2svARB", vertexAttrib2sv);
+        ASSIGN_NULL("glVertexAttrib3dARB", vertexAttrib3d);
+        ASSIGN_NULL("glVertexAttrib3dvARB", vertexAttrib3dv);
+        ASSIGN_NULL("glVertexAttrib3fARB", vertexAttrib3f);
+        ASSIGN_NULL("glVertexAttrib3fvARB", vertexAttrib3fv);
+        ASSIGN_NULL("glVertexAttrib3sARB", vertexAttrib3s);
+        ASSIGN_NULL("glVertexAttrib3svARB", vertexAttrib3sv);
+        ASSIGN_NULL("glVertexAttrib4NbvARB", vertexAttrib4Nbv);
+        ASSIGN_NULL("glVertexAttrib4NivARB", vertexAttrib4Niv);
+        ASSIGN_NULL("glVertexAttrib4NsvARB", vertexAttrib4Nsv);
+        ASSIGN_NULL("glVertexAttrib4NubARB", vertexAttrib4Nub);
+        ASSIGN_NULL("glVertexAttrib4NubvARB", vertexAttrib4Nubv);
+        ASSIGN_NULL("glVertexAttrib4NuivARB", vertexAttrib4Nuiv);
+        ASSIGN_NULL("glVertexAttrib4NusvARB", vertexAttrib4Nusv);
+        ASSIGN_NULL("glVertexAttrib4bvARB", vertexAttrib4bv);
+        ASSIGN_NULL("glVertexAttrib4dARB", vertexAttrib4d);
+        ASSIGN_NULL("glVertexAttrib4dvARB", vertexAttrib4dv);
+        ASSIGN_NULL("glVertexAttrib4fARB", vertexAttrib4f);
+        ASSIGN_NULL("glVertexAttrib4fvARB", vertexAttrib4fv);
+        ASSIGN_NULL("glVertexAttrib4ivARB", vertexAttrib4iv);
+        ASSIGN_NULL("glVertexAttrib4sARB", vertexAttrib4s);
+        ASSIGN_NULL("glVertexAttrib4svARB", vertexAttrib4sv);
+        ASSIGN_NULL("glVertexAttrib4ubvARB", vertexAttrib4ubv);
+        ASSIGN_NULL("glVertexAttrib4uivARB", vertexAttrib4uiv);
+        ASSIGN_NULL("glVertexAttrib4usvARB", vertexAttrib4usv);
+        ASSIGN_NULL("glVertexAttribPointerARB", vertexAttribPointer);
+    }
+
+    if (extensions.count("GL_ARB_vertex_shader") != 0)
+    {
+        ASSIGN_NULL("glBindAttribLocationARB", bindAttribLocation);
+        ASSIGN_NULL("glDisableVertexAttribArrayARB", disableVertexAttribArray);
+        ASSIGN_NULL("glEnableVertexAttribArrayARB", enableVertexAttribArray);
+        ASSIGN_NULL("glGetActiveAttribARB", getActiveAttrib);
+        ASSIGN_NULL("glGetAttribLocationARB", getAttribLocation);
+        ASSIGN_NULL("glGetVertexAttribPointervARB", getVertexAttribPointerv);
+        ASSIGN_NULL("glGetVertexAttribdvARB", getVertexAttribdv);
+        ASSIGN_NULL("glGetVertexAttribfvARB", getVertexAttribfv);
+        ASSIGN_NULL("glGetVertexAttribivARB", getVertexAttribiv);
+        ASSIGN_NULL("glVertexAttrib1dARB", vertexAttrib1d);
+        ASSIGN_NULL("glVertexAttrib1dvARB", vertexAttrib1dv);
+        ASSIGN_NULL("glVertexAttrib1fARB", vertexAttrib1f);
+        ASSIGN_NULL("glVertexAttrib1fvARB", vertexAttrib1fv);
+        ASSIGN_NULL("glVertexAttrib1sARB", vertexAttrib1s);
+        ASSIGN_NULL("glVertexAttrib1svARB", vertexAttrib1sv);
+        ASSIGN_NULL("glVertexAttrib2dARB", vertexAttrib2d);
+        ASSIGN_NULL("glVertexAttrib2dvARB", vertexAttrib2dv);
+        ASSIGN_NULL("glVertexAttrib2fARB", vertexAttrib2f);
+        ASSIGN_NULL("glVertexAttrib2fvARB", vertexAttrib2fv);
+        ASSIGN_NULL("glVertexAttrib2sARB", vertexAttrib2s);
+        ASSIGN_NULL("glVertexAttrib2svARB", vertexAttrib2sv);
+        ASSIGN_NULL("glVertexAttrib3dARB", vertexAttrib3d);
+        ASSIGN_NULL("glVertexAttrib3dvARB", vertexAttrib3dv);
+        ASSIGN_NULL("glVertexAttrib3fARB", vertexAttrib3f);
+        ASSIGN_NULL("glVertexAttrib3fvARB", vertexAttrib3fv);
+        ASSIGN_NULL("glVertexAttrib3sARB", vertexAttrib3s);
+        ASSIGN_NULL("glVertexAttrib3svARB", vertexAttrib3sv);
+        ASSIGN_NULL("glVertexAttrib4NbvARB", vertexAttrib4Nbv);
+        ASSIGN_NULL("glVertexAttrib4NivARB", vertexAttrib4Niv);
+        ASSIGN_NULL("glVertexAttrib4NsvARB", vertexAttrib4Nsv);
+        ASSIGN_NULL("glVertexAttrib4NubARB", vertexAttrib4Nub);
+        ASSIGN_NULL("glVertexAttrib4NubvARB", vertexAttrib4Nubv);
+        ASSIGN_NULL("glVertexAttrib4NuivARB", vertexAttrib4Nuiv);
+        ASSIGN_NULL("glVertexAttrib4NusvARB", vertexAttrib4Nusv);
+        ASSIGN_NULL("glVertexAttrib4bvARB", vertexAttrib4bv);
+        ASSIGN_NULL("glVertexAttrib4dARB", vertexAttrib4d);
+        ASSIGN_NULL("glVertexAttrib4dvARB", vertexAttrib4dv);
+        ASSIGN_NULL("glVertexAttrib4fARB", vertexAttrib4f);
+        ASSIGN_NULL("glVertexAttrib4fvARB", vertexAttrib4fv);
+        ASSIGN_NULL("glVertexAttrib4ivARB", vertexAttrib4iv);
+        ASSIGN_NULL("glVertexAttrib4sARB", vertexAttrib4s);
+        ASSIGN_NULL("glVertexAttrib4svARB", vertexAttrib4sv);
+        ASSIGN_NULL("glVertexAttrib4ubvARB", vertexAttrib4ubv);
+        ASSIGN_NULL("glVertexAttrib4uivARB", vertexAttrib4uiv);
+        ASSIGN_NULL("glVertexAttrib4usvARB", vertexAttrib4usv);
+        ASSIGN_NULL("glVertexAttribPointerARB", vertexAttribPointer);
+    }
+
+    if (extensions.count("GL_ARB_vertex_type_2_10_10_10_rev") != 0)
+    {
+        ASSIGN_NULL("glVertexAttribP1ui", vertexAttribP1ui);
+        ASSIGN_NULL("glVertexAttribP1uiv", vertexAttribP1uiv);
+        ASSIGN_NULL("glVertexAttribP2ui", vertexAttribP2ui);
+        ASSIGN_NULL("glVertexAttribP2uiv", vertexAttribP2uiv);
+        ASSIGN_NULL("glVertexAttribP3ui", vertexAttribP3ui);
+        ASSIGN_NULL("glVertexAttribP3uiv", vertexAttribP3uiv);
+        ASSIGN_NULL("glVertexAttribP4ui", vertexAttribP4ui);
+        ASSIGN_NULL("glVertexAttribP4uiv", vertexAttribP4uiv);
+    }
+
+    if (extensions.count("GL_ARB_viewport_array") != 0)
+    {
+        ASSIGN_NULL("glDepthRangeArrayv", depthRangeArrayv);
+        ASSIGN_NULL("glDepthRangeIndexed", depthRangeIndexed);
+        ASSIGN_NULL("glGetDoublei_v", getDoublei_v);
+        ASSIGN_NULL("glGetFloati_v", getFloati_v);
+        ASSIGN_NULL("glScissorArrayv", scissorArrayv);
+        ASSIGN_NULL("glScissorIndexed", scissorIndexed);
+        ASSIGN_NULL("glScissorIndexedv", scissorIndexedv);
+        ASSIGN_NULL("glViewportArrayv", viewportArrayv);
+        ASSIGN_NULL("glViewportIndexedf", viewportIndexedf);
+        ASSIGN_NULL("glViewportIndexedfv", viewportIndexedfv);
+    }
+
+    if (extensions.count("GL_EXT_blend_color") != 0)
+    {
+        ASSIGN_NULL("glBlendColorEXT", blendColor);
+    }
+
+    if (extensions.count("GL_EXT_blend_equation_separate") != 0)
+    {
+        ASSIGN_NULL("glBlendEquationSeparateEXT", blendEquationSeparate);
+    }
+
+    if (extensions.count("GL_EXT_blend_func_separate") != 0)
+    {
+        ASSIGN_NULL("glBlendFuncSeparateEXT", blendFuncSeparate);
+    }
+
+    if (extensions.count("GL_EXT_copy_texture") != 0)
+    {
+        ASSIGN_NULL("glCopyTexImage1DEXT", copyTexImage1D);
+        ASSIGN_NULL("glCopyTexImage2DEXT", copyTexImage2D);
+        ASSIGN_NULL("glCopyTexSubImage1DEXT", copyTexSubImage1D);
+        ASSIGN_NULL("glCopyTexSubImage2DEXT", copyTexSubImage2D);
+        ASSIGN_NULL("glCopyTexSubImage3DEXT", copyTexSubImage3D);
+    }
+
+    if (extensions.count("GL_EXT_direct_state_access") != 0)
+    {
+        ASSIGN_NULL("glCheckNamedFramebufferStatusEXT", checkNamedFramebufferStatus);
+        ASSIGN_NULL("glClearNamedBufferDataEXT", clearNamedBufferData);
+        ASSIGN_NULL("glClearNamedBufferSubDataEXT", clearNamedBufferSubData);
+        ASSIGN_NULL("glCompressedTextureSubImage1DEXT", compressedTextureSubImage1D);
+        ASSIGN_NULL("glCompressedTextureSubImage2DEXT", compressedTextureSubImage2D);
+        ASSIGN_NULL("glCompressedTextureSubImage3DEXT", compressedTextureSubImage3D);
+        ASSIGN_NULL("glCopyTextureSubImage1DEXT", copyTextureSubImage1D);
+        ASSIGN_NULL("glCopyTextureSubImage2DEXT", copyTextureSubImage2D);
+        ASSIGN_NULL("glCopyTextureSubImage3DEXT", copyTextureSubImage3D);
+        ASSIGN_NULL("glDisableVertexArrayAttribEXT", disableVertexArrayAttrib);
+        ASSIGN_NULL("glEnableVertexArrayAttribEXT", enableVertexArrayAttrib);
+        ASSIGN_NULL("glFlushMappedNamedBufferRangeEXT", flushMappedNamedBufferRange);
+        ASSIGN_NULL("glGenerateTextureMipmapEXT", generateTextureMipmap);
+        ASSIGN_NULL("glGetCompressedTextureImageEXT", getCompressedTextureImage);
+        ASSIGN_NULL("glGetDoublei_vEXT", getDoublei_v);
+        ASSIGN_NULL("glGetFloati_vEXT", getFloati_v);
+        ASSIGN_NULL("glGetFramebufferParameterivEXT", getFramebufferParameteriv);
+        ASSIGN_NULL("glGetNamedBufferParameterivEXT", getNamedBufferParameteriv);
+        ASSIGN_NULL("glGetNamedBufferPointervEXT", getNamedBufferPointerv);
+        ASSIGN_NULL("glGetNamedBufferSubDataEXT", getNamedBufferSubData);
+        ASSIGN_NULL("glGetNamedFramebufferAttachmentParameterivEXT",
+                    getNamedFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetNamedFramebufferParameterivEXT", getNamedFramebufferParameteriv);
+        ASSIGN_NULL("glGetNamedRenderbufferParameterivEXT", getNamedRenderbufferParameteriv);
+        ASSIGN_NULL("glGetTextureImageEXT", getTextureImage);
+        ASSIGN_NULL("glGetTextureLevelParameterfvEXT", getTextureLevelParameterfv);
+        ASSIGN_NULL("glGetTextureLevelParameterivEXT", getTextureLevelParameteriv);
+        ASSIGN_NULL("glGetTextureParameterIivEXT", getTextureParameterIiv);
+        ASSIGN_NULL("glGetTextureParameterIuivEXT", getTextureParameterIuiv);
+        ASSIGN_NULL("glGetTextureParameterfvEXT", getTextureParameterfv);
+        ASSIGN_NULL("glGetTextureParameterivEXT", getTextureParameteriv);
+        ASSIGN_NULL("glMapNamedBufferEXT", mapNamedBuffer);
+        ASSIGN_NULL("glMapNamedBufferRangeEXT", mapNamedBufferRange);
+        ASSIGN_NULL("glNamedBufferDataEXT", namedBufferData);
+        ASSIGN_NULL("glNamedBufferStorageEXT", namedBufferStorage);
+        ASSIGN_NULL("glNamedBufferSubDataEXT", namedBufferSubData);
+        ASSIGN_NULL("glNamedFramebufferParameteriEXT", namedFramebufferParameteri);
+        ASSIGN_NULL("glNamedFramebufferRenderbufferEXT", namedFramebufferRenderbuffer);
+        ASSIGN_NULL("glNamedFramebufferTextureEXT", namedFramebufferTexture);
+        ASSIGN_NULL("glNamedFramebufferTextureLayerEXT", namedFramebufferTextureLayer);
+        ASSIGN_NULL("glNamedRenderbufferStorageEXT", namedRenderbufferStorage);
+        ASSIGN_NULL("glNamedRenderbufferStorageMultisampleEXT",
+                    namedRenderbufferStorageMultisample);
+        ASSIGN_NULL("glProgramUniform1dEXT", programUniform1d);
+        ASSIGN_NULL("glProgramUniform1dvEXT", programUniform1dv);
+        ASSIGN_NULL("glProgramUniform2dEXT", programUniform2d);
+        ASSIGN_NULL("glProgramUniform2dvEXT", programUniform2dv);
+        ASSIGN_NULL("glProgramUniform3dEXT", programUniform3d);
+        ASSIGN_NULL("glProgramUniform3dvEXT", programUniform3dv);
+        ASSIGN_NULL("glProgramUniform4dEXT", programUniform4d);
+        ASSIGN_NULL("glProgramUniform4dvEXT", programUniform4dv);
+        ASSIGN_NULL("glProgramUniformMatrix2dvEXT", programUniformMatrix2dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3dvEXT", programUniformMatrix2x3dv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4dvEXT", programUniformMatrix2x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix3dvEXT", programUniformMatrix3dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2dvEXT", programUniformMatrix3x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4dvEXT", programUniformMatrix3x4dv);
+        ASSIGN_NULL("glProgramUniformMatrix4dvEXT", programUniformMatrix4dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2dvEXT", programUniformMatrix4x2dv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3dvEXT", programUniformMatrix4x3dv);
+        ASSIGN_NULL("glTextureBufferEXT", textureBuffer);
+        ASSIGN_NULL("glTextureBufferRangeEXT", textureBufferRange);
+        ASSIGN_NULL("glTextureParameterIivEXT", textureParameterIiv);
+        ASSIGN_NULL("glTextureParameterIuivEXT", textureParameterIuiv);
+        ASSIGN_NULL("glTextureParameterfEXT", textureParameterf);
+        ASSIGN_NULL("glTextureParameterfvEXT", textureParameterfv);
+        ASSIGN_NULL("glTextureParameteriEXT", textureParameteri);
+        ASSIGN_NULL("glTextureParameterivEXT", textureParameteriv);
+        ASSIGN_NULL("glTextureStorage1DEXT", textureStorage1D);
+        ASSIGN_NULL("glTextureStorage2DEXT", textureStorage2D);
+        ASSIGN_NULL("glTextureStorage2DMultisampleEXT", textureStorage2DMultisample);
+        ASSIGN_NULL("glTextureStorage3DEXT", textureStorage3D);
+        ASSIGN_NULL("glTextureStorage3DMultisampleEXT", textureStorage3DMultisample);
+        ASSIGN_NULL("glTextureSubImage1DEXT", textureSubImage1D);
+        ASSIGN_NULL("glTextureSubImage2DEXT", textureSubImage2D);
+        ASSIGN_NULL("glTextureSubImage3DEXT", textureSubImage3D);
+        ASSIGN_NULL("glUnmapNamedBufferEXT", unmapNamedBuffer);
+    }
+
+    if (extensions.count("GL_EXT_draw_range_elements") != 0)
+    {
+        ASSIGN_NULL("glDrawRangeElementsEXT", drawRangeElements);
+    }
+
+    if (extensions.count("GL_EXT_framebuffer_blit") != 0)
+    {
+        ASSIGN_NULL("glBlitFramebufferEXT", blitFramebuffer);
+    }
+
+    if (extensions.count("GL_EXT_framebuffer_multisample") != 0)
+    {
+        ASSIGN_NULL("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisample);
+    }
+
+    if (extensions.count("GL_EXT_framebuffer_object") != 0)
+    {
+        ASSIGN_NULL("glBindFramebufferEXT", bindFramebuffer);
+        ASSIGN_NULL("glBindRenderbufferEXT", bindRenderbuffer);
+        ASSIGN_NULL("glCheckFramebufferStatusEXT", checkFramebufferStatus);
+        ASSIGN_NULL("glDeleteFramebuffersEXT", deleteFramebuffers);
+        ASSIGN_NULL("glDeleteRenderbuffersEXT", deleteRenderbuffers);
+        ASSIGN_NULL("glFramebufferRenderbufferEXT", framebufferRenderbuffer);
+        ASSIGN_NULL("glFramebufferTexture1DEXT", framebufferTexture1D);
+        ASSIGN_NULL("glFramebufferTexture2DEXT", framebufferTexture2D);
+        ASSIGN_NULL("glFramebufferTexture3DEXT", framebufferTexture3D);
+        ASSIGN_NULL("glGenFramebuffersEXT", genFramebuffers);
+        ASSIGN_NULL("glGenRenderbuffersEXT", genRenderbuffers);
+        ASSIGN_NULL("glGenerateMipmapEXT", generateMipmap);
+        ASSIGN_NULL("glGetFramebufferAttachmentParameterivEXT",
+                    getFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetRenderbufferParameterivEXT", getRenderbufferParameteriv);
+        ASSIGN_NULL("glIsFramebufferEXT", isFramebuffer);
+        ASSIGN_NULL("glIsRenderbufferEXT", isRenderbuffer);
+        ASSIGN_NULL("glRenderbufferStorageEXT", renderbufferStorage);
+    }
+
+    if (extensions.count("GL_EXT_gpu_shader4") != 0)
+    {
+        ASSIGN_NULL("glBindFragDataLocationEXT", bindFragDataLocation);
+        ASSIGN_NULL("glGetFragDataLocationEXT", getFragDataLocation);
+        ASSIGN_NULL("glGetUniformuivEXT", getUniformuiv);
+        ASSIGN_NULL("glUniform1uiEXT", uniform1ui);
+        ASSIGN_NULL("glUniform1uivEXT", uniform1uiv);
+        ASSIGN_NULL("glUniform2uiEXT", uniform2ui);
+        ASSIGN_NULL("glUniform2uivEXT", uniform2uiv);
+        ASSIGN_NULL("glUniform3uiEXT", uniform3ui);
+        ASSIGN_NULL("glUniform3uivEXT", uniform3uiv);
+        ASSIGN_NULL("glUniform4uiEXT", uniform4ui);
+        ASSIGN_NULL("glUniform4uivEXT", uniform4uiv);
+    }
+
+    if (extensions.count("GL_EXT_point_parameters") != 0)
+    {
+        ASSIGN_NULL("glPointParameterfEXT", pointParameterf);
+        ASSIGN_NULL("glPointParameterfvEXT", pointParameterfv);
+    }
+
+    if (extensions.count("GL_EXT_polygon_offset") != 0)
+    {
+        ASSIGN_NULL("glPolygonOffsetEXT", polygonOffset);
+    }
+
+    if (extensions.count("GL_EXT_provoking_vertex") != 0)
+    {
+        ASSIGN_NULL("glProvokingVertexEXT", provokingVertex);
+    }
+
+    if (extensions.count("GL_EXT_shader_image_load_store") != 0)
+    {
+        ASSIGN_NULL("glBindImageTextureEXT", bindImageTexture);
+        ASSIGN_NULL("glMemoryBarrierEXT", memoryBarrier);
+    }
+
+    if (extensions.count("GL_EXT_subtexture") != 0)
+    {
+        ASSIGN_NULL("glTexSubImage1DEXT", texSubImage1D);
+        ASSIGN_NULL("glTexSubImage2DEXT", texSubImage2D);
+    }
+
+    if (extensions.count("GL_EXT_texture3D") != 0)
+    {
+        ASSIGN_NULL("glTexImage3DEXT", texImage3D);
+        ASSIGN_NULL("glTexSubImage3DEXT", texSubImage3D);
+    }
+
+    if (extensions.count("GL_EXT_texture_array") != 0)
+    {
+        ASSIGN_NULL("glFramebufferTextureLayerEXT", framebufferTextureLayer);
+    }
+
+    if (extensions.count("GL_EXT_texture_buffer_object") != 0)
+    {
+        ASSIGN_NULL("glTexBufferEXT", texBuffer);
+    }
+
+    if (extensions.count("GL_EXT_texture_integer") != 0)
+    {
+        ASSIGN_NULL("glGetTexParameterIivEXT", getTexParameterIiv);
+        ASSIGN_NULL("glGetTexParameterIuivEXT", getTexParameterIuiv);
+        ASSIGN_NULL("glTexParameterIivEXT", texParameterIiv);
+        ASSIGN_NULL("glTexParameterIuivEXT", texParameterIuiv);
+    }
+
+    if (extensions.count("GL_EXT_texture_object") != 0)
+    {
+        ASSIGN_NULL("glBindTextureEXT", bindTexture);
+        ASSIGN_NULL("glDeleteTexturesEXT", deleteTextures);
+        ASSIGN_NULL("glGenTexturesEXT", genTextures);
+        ASSIGN_NULL("glIsTextureEXT", isTexture);
+    }
+
+    if (extensions.count("GL_EXT_timer_query") != 0)
+    {
+        ASSIGN_NULL("glGetQueryObjecti64vEXT", getQueryObjecti64v);
+        ASSIGN_NULL("glGetQueryObjectui64vEXT", getQueryObjectui64v);
+    }
+
+    if (extensions.count("GL_EXT_transform_feedback") != 0)
+    {
+        ASSIGN_NULL("glBeginTransformFeedbackEXT", beginTransformFeedback);
+        ASSIGN_NULL("glBindBufferBaseEXT", bindBufferBase);
+        ASSIGN_NULL("glBindBufferRangeEXT", bindBufferRange);
+        ASSIGN_NULL("glEndTransformFeedbackEXT", endTransformFeedback);
+        ASSIGN_NULL("glGetTransformFeedbackVaryingEXT", getTransformFeedbackVarying);
+        ASSIGN_NULL("glTransformFeedbackVaryingsEXT", transformFeedbackVaryings);
+    }
+
+    if (extensions.count("GL_EXT_vertex_array") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysEXT", drawArrays);
+        ASSIGN_NULL("glGetPointervEXT", getPointerv);
+    }
+
+    if (extensions.count("GL_EXT_vertex_attrib_64bit") != 0)
+    {
+        ASSIGN_NULL("glGetVertexAttribLdvEXT", getVertexAttribLdv);
+        ASSIGN_NULL("glVertexAttribL1dEXT", vertexAttribL1d);
+        ASSIGN_NULL("glVertexAttribL1dvEXT", vertexAttribL1dv);
+        ASSIGN_NULL("glVertexAttribL2dEXT", vertexAttribL2d);
+        ASSIGN_NULL("glVertexAttribL2dvEXT", vertexAttribL2dv);
+        ASSIGN_NULL("glVertexAttribL3dEXT", vertexAttribL3d);
+        ASSIGN_NULL("glVertexAttribL3dvEXT", vertexAttribL3dv);
+        ASSIGN_NULL("glVertexAttribL4dEXT", vertexAttribL4d);
+        ASSIGN_NULL("glVertexAttribL4dvEXT", vertexAttribL4dv);
+        ASSIGN_NULL("glVertexAttribLPointerEXT", vertexAttribLPointer);
+    }
+
+    if (extensions.count("GL_KHR_debug") != 0)
+    {
+        ASSIGN_NULL("glDebugMessageCallback", debugMessageCallback);
+        ASSIGN_NULL("glDebugMessageControl", debugMessageControl);
+        ASSIGN_NULL("glDebugMessageInsert", debugMessageInsert);
+        ASSIGN_NULL("glGetDebugMessageLog", getDebugMessageLog);
+        ASSIGN_NULL("glGetObjectLabel", getObjectLabel);
+        ASSIGN_NULL("glGetObjectPtrLabel", getObjectPtrLabel);
+        ASSIGN_NULL("glGetPointerv", getPointerv);
+        ASSIGN_NULL("glObjectLabel", objectLabel);
+        ASSIGN_NULL("glObjectPtrLabel", objectPtrLabel);
+        ASSIGN_NULL("glPopDebugGroup", popDebugGroup);
+        ASSIGN_NULL("glPushDebugGroup", pushDebugGroup);
+    }
+
+    if (extensions.count("GL_KHR_robustness") != 0)
+    {
+        ASSIGN_NULL("glGetGraphicsResetStatus", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetnUniformfv", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformiv", getnUniformiv);
+        ASSIGN_NULL("glGetnUniformuiv", getnUniformuiv);
+        ASSIGN_NULL("glReadnPixels", readnPixels);
+    }
+
+    if (extensions.count("GL_NV_geometry_program4") != 0)
+    {
+        ASSIGN_NULL("glFramebufferTextureEXT", framebufferTexture);
+        ASSIGN_NULL("glFramebufferTextureLayerEXT", framebufferTextureLayer);
+    }
+
+    if (extensions.count("GL_NV_vertex_program4") != 0)
+    {
+        ASSIGN_NULL("glGetVertexAttribIivEXT", getVertexAttribIiv);
+        ASSIGN_NULL("glGetVertexAttribIuivEXT", getVertexAttribIuiv);
+        ASSIGN_NULL("glVertexAttribI1iEXT", vertexAttribI1i);
+        ASSIGN_NULL("glVertexAttribI1ivEXT", vertexAttribI1iv);
+        ASSIGN_NULL("glVertexAttribI1uiEXT", vertexAttribI1ui);
+        ASSIGN_NULL("glVertexAttribI1uivEXT", vertexAttribI1uiv);
+        ASSIGN_NULL("glVertexAttribI2iEXT", vertexAttribI2i);
+        ASSIGN_NULL("glVertexAttribI2ivEXT", vertexAttribI2iv);
+        ASSIGN_NULL("glVertexAttribI2uiEXT", vertexAttribI2ui);
+        ASSIGN_NULL("glVertexAttribI2uivEXT", vertexAttribI2uiv);
+        ASSIGN_NULL("glVertexAttribI3iEXT", vertexAttribI3i);
+        ASSIGN_NULL("glVertexAttribI3ivEXT", vertexAttribI3iv);
+        ASSIGN_NULL("glVertexAttribI3uiEXT", vertexAttribI3ui);
+        ASSIGN_NULL("glVertexAttribI3uivEXT", vertexAttribI3uiv);
+        ASSIGN_NULL("glVertexAttribI4bvEXT", vertexAttribI4bv);
+        ASSIGN_NULL("glVertexAttribI4iEXT", vertexAttribI4i);
+        ASSIGN_NULL("glVertexAttribI4ivEXT", vertexAttribI4iv);
+        ASSIGN_NULL("glVertexAttribI4svEXT", vertexAttribI4sv);
+        ASSIGN_NULL("glVertexAttribI4ubvEXT", vertexAttribI4ubv);
+        ASSIGN_NULL("glVertexAttribI4uiEXT", vertexAttribI4ui);
+        ASSIGN_NULL("glVertexAttribI4uivEXT", vertexAttribI4uiv);
+        ASSIGN_NULL("glVertexAttribI4usvEXT", vertexAttribI4usv);
+        ASSIGN_NULL("glVertexAttribIPointerEXT", vertexAttribIPointer);
+    }
+
+    if (extensions.count("GL_OES_single_precision") != 0)
+    {
+        ASSIGN_NULL("glClearDepthfOES", clearDepthf);
+        ASSIGN_NULL("glDepthRangefOES", depthRangef);
+    }
+}
+
+void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
+                                        const std::set<std::string> &extensions)
+{
+    if (version >= gl::Version(2, 0))
+    {
+        ASSIGN_NULL("glActiveTexture", activeTexture);
+        ASSIGN_NULL("glAttachShader", attachShader);
+        ASSIGN_NULL("glBindAttribLocation", bindAttribLocation);
+        ASSIGN_NULL("glBindBuffer", bindBuffer);
+        ASSIGN_NULL("glBindFramebuffer", bindFramebuffer);
+        ASSIGN_NULL("glBindRenderbuffer", bindRenderbuffer);
+        ASSIGN_NULL("glBindTexture", bindTexture);
+        ASSIGN_NULL("glBlendColor", blendColor);
+        ASSIGN_NULL("glBlendEquation", blendEquation);
+        ASSIGN_NULL("glBlendEquationSeparate", blendEquationSeparate);
+        ASSIGN_NULL("glBlendFunc", blendFunc);
+        ASSIGN_NULL("glBlendFuncSeparate", blendFuncSeparate);
+        ASSIGN_NULL("glBufferData", bufferData);
+        ASSIGN_NULL("glBufferSubData", bufferSubData);
+        ASSIGN_NULL("glCheckFramebufferStatus", checkFramebufferStatus);
+        ASSIGN_NULL("glClear", clear);
+        ASSIGN_NULL("glClearColor", clearColor);
+        ASSIGN_NULL("glClearDepthf", clearDepthf);
+        ASSIGN_NULL("glClearStencil", clearStencil);
+        ASSIGN_NULL("glColorMask", colorMask);
+        ASSIGN_NULL("glCompileShader", compileShader);
+        ASSIGN_NULL("glCompressedTexImage2D", compressedTexImage2D);
+        ASSIGN_NULL("glCompressedTexSubImage2D", compressedTexSubImage2D);
+        ASSIGN_NULL("glCopyTexImage2D", copyTexImage2D);
+        ASSIGN_NULL("glCopyTexSubImage2D", copyTexSubImage2D);
+        ASSIGN_NULL("glCreateProgram", createProgram);
+        ASSIGN_NULL("glCreateShader", createShader);
+        ASSIGN_NULL("glCullFace", cullFace);
+        ASSIGN_NULL("glDeleteBuffers", deleteBuffers);
+        ASSIGN_NULL("glDeleteFramebuffers", deleteFramebuffers);
+        ASSIGN_NULL("glDeleteProgram", deleteProgram);
+        ASSIGN_NULL("glDeleteRenderbuffers", deleteRenderbuffers);
+        ASSIGN_NULL("glDeleteShader", deleteShader);
+        ASSIGN_NULL("glDeleteTextures", deleteTextures);
+        ASSIGN_NULL("glDepthFunc", depthFunc);
+        ASSIGN_NULL("glDepthMask", depthMask);
+        ASSIGN_NULL("glDepthRangef", depthRangef);
+        ASSIGN_NULL("glDetachShader", detachShader);
+        ASSIGN_NULL("glDisable", disable);
+        ASSIGN_NULL("glDisableVertexAttribArray", disableVertexAttribArray);
+        ASSIGN_NULL("glDrawArrays", drawArrays);
+        ASSIGN_NULL("glDrawElements", drawElements);
+        ASSIGN_NULL("glEnable", enable);
+        ASSIGN_NULL("glEnableVertexAttribArray", enableVertexAttribArray);
+        ASSIGN_NULL("glFinish", finish);
+        ASSIGN_NULL("glFlush", flush);
+        ASSIGN_NULL("glFramebufferRenderbuffer", framebufferRenderbuffer);
+        ASSIGN_NULL("glFramebufferTexture2D", framebufferTexture2D);
+        ASSIGN_NULL("glFrontFace", frontFace);
+        ASSIGN_NULL("glGenBuffers", genBuffers);
+        ASSIGN_NULL("glGenFramebuffers", genFramebuffers);
+        ASSIGN_NULL("glGenRenderbuffers", genRenderbuffers);
+        ASSIGN_NULL("glGenTextures", genTextures);
+        ASSIGN_NULL("glGenerateMipmap", generateMipmap);
+        ASSIGN_NULL("glGetActiveAttrib", getActiveAttrib);
+        ASSIGN_NULL("glGetActiveUniform", getActiveUniform);
+        ASSIGN_NULL("glGetAttachedShaders", getAttachedShaders);
+        ASSIGN_NULL("glGetAttribLocation", getAttribLocation);
+        ASSIGN_NULL("glGetBooleanv", getBooleanv);
+        ASSIGN_NULL("glGetBufferParameteriv", getBufferParameteriv);
+        ASSIGN_NULL("glGetError", getError);
+        ASSIGN_NULL("glGetFloatv", getFloatv);
+        ASSIGN_NULL("glGetFramebufferAttachmentParameteriv", getFramebufferAttachmentParameteriv);
+        ASSIGN_NULL("glGetIntegerv", getIntegerv);
+        ASSIGN_NULL("glGetProgramInfoLog", getProgramInfoLog);
+        ASSIGN_NULL("glGetProgramiv", getProgramiv);
+        ASSIGN_NULL("glGetRenderbufferParameteriv", getRenderbufferParameteriv);
+        ASSIGN_NULL("glGetShaderInfoLog", getShaderInfoLog);
+        ASSIGN_NULL("glGetShaderPrecisionFormat", getShaderPrecisionFormat);
+        ASSIGN_NULL("glGetShaderSource", getShaderSource);
+        ASSIGN_NULL("glGetShaderiv", getShaderiv);
+        ASSIGN_NULL("glGetString", getString);
+        ASSIGN_NULL("glGetTexParameterfv", getTexParameterfv);
+        ASSIGN_NULL("glGetTexParameteriv", getTexParameteriv);
+        ASSIGN_NULL("glGetUniformLocation", getUniformLocation);
+        ASSIGN_NULL("glGetUniformfv", getUniformfv);
+        ASSIGN_NULL("glGetUniformiv", getUniformiv);
+        ASSIGN_NULL("glGetVertexAttribPointerv", getVertexAttribPointerv);
+        ASSIGN_NULL("glGetVertexAttribfv", getVertexAttribfv);
+        ASSIGN_NULL("glGetVertexAttribiv", getVertexAttribiv);
+        ASSIGN_NULL("glHint", hint);
+        ASSIGN_NULL("glIsBuffer", isBuffer);
+        ASSIGN_NULL("glIsEnabled", isEnabled);
+        ASSIGN_NULL("glIsFramebuffer", isFramebuffer);
+        ASSIGN_NULL("glIsProgram", isProgram);
+        ASSIGN_NULL("glIsRenderbuffer", isRenderbuffer);
+        ASSIGN_NULL("glIsShader", isShader);
+        ASSIGN_NULL("glIsTexture", isTexture);
+        ASSIGN_NULL("glLineWidth", lineWidth);
+        ASSIGN_NULL("glLinkProgram", linkProgram);
+        ASSIGN_NULL("glPixelStorei", pixelStorei);
+        ASSIGN_NULL("glPolygonOffset", polygonOffset);
+        ASSIGN_NULL("glReadPixels", readPixels);
+        ASSIGN_NULL("glReleaseShaderCompiler", releaseShaderCompiler);
+        ASSIGN_NULL("glRenderbufferStorage", renderbufferStorage);
+        ASSIGN_NULL("glSampleCoverage", sampleCoverage);
+        ASSIGN_NULL("glScissor", scissor);
+        ASSIGN_NULL("glShaderBinary", shaderBinary);
+        ASSIGN_NULL("glShaderSource", shaderSource);
+        ASSIGN_NULL("glStencilFunc", stencilFunc);
+        ASSIGN_NULL("glStencilFuncSeparate", stencilFuncSeparate);
+        ASSIGN_NULL("glStencilMask", stencilMask);
+        ASSIGN_NULL("glStencilMaskSeparate", stencilMaskSeparate);
+        ASSIGN_NULL("glStencilOp", stencilOp);
+        ASSIGN_NULL("glStencilOpSeparate", stencilOpSeparate);
+        ASSIGN_NULL("glTexImage2D", texImage2D);
+        ASSIGN_NULL("glTexParameterf", texParameterf);
+        ASSIGN_NULL("glTexParameterfv", texParameterfv);
+        ASSIGN_NULL("glTexParameteri", texParameteri);
+        ASSIGN_NULL("glTexParameteriv", texParameteriv);
+        ASSIGN_NULL("glTexSubImage2D", texSubImage2D);
+        ASSIGN_NULL("glUniform1f", uniform1f);
+        ASSIGN_NULL("glUniform1fv", uniform1fv);
+        ASSIGN_NULL("glUniform1i", uniform1i);
+        ASSIGN_NULL("glUniform1iv", uniform1iv);
+        ASSIGN_NULL("glUniform2f", uniform2f);
+        ASSIGN_NULL("glUniform2fv", uniform2fv);
+        ASSIGN_NULL("glUniform2i", uniform2i);
+        ASSIGN_NULL("glUniform2iv", uniform2iv);
+        ASSIGN_NULL("glUniform3f", uniform3f);
+        ASSIGN_NULL("glUniform3fv", uniform3fv);
+        ASSIGN_NULL("glUniform3i", uniform3i);
+        ASSIGN_NULL("glUniform3iv", uniform3iv);
+        ASSIGN_NULL("glUniform4f", uniform4f);
+        ASSIGN_NULL("glUniform4fv", uniform4fv);
+        ASSIGN_NULL("glUniform4i", uniform4i);
+        ASSIGN_NULL("glUniform4iv", uniform4iv);
+        ASSIGN_NULL("glUniformMatrix2fv", uniformMatrix2fv);
+        ASSIGN_NULL("glUniformMatrix3fv", uniformMatrix3fv);
+        ASSIGN_NULL("glUniformMatrix4fv", uniformMatrix4fv);
+        ASSIGN_NULL("glUseProgram", useProgram);
+        ASSIGN_NULL("glValidateProgram", validateProgram);
+        ASSIGN_NULL("glVertexAttrib1f", vertexAttrib1f);
+        ASSIGN_NULL("glVertexAttrib1fv", vertexAttrib1fv);
+        ASSIGN_NULL("glVertexAttrib2f", vertexAttrib2f);
+        ASSIGN_NULL("glVertexAttrib2fv", vertexAttrib2fv);
+        ASSIGN_NULL("glVertexAttrib3f", vertexAttrib3f);
+        ASSIGN_NULL("glVertexAttrib3fv", vertexAttrib3fv);
+        ASSIGN_NULL("glVertexAttrib4f", vertexAttrib4f);
+        ASSIGN_NULL("glVertexAttrib4fv", vertexAttrib4fv);
+        ASSIGN_NULL("glVertexAttribPointer", vertexAttribPointer);
+        ASSIGN_NULL("glViewport", viewport);
+    }
+
+    if (version >= gl::Version(3, 0))
+    {
+        ASSIGN_NULL("glBeginQuery", beginQuery);
+        ASSIGN_NULL("glBeginTransformFeedback", beginTransformFeedback);
+        ASSIGN_NULL("glBindBufferBase", bindBufferBase);
+        ASSIGN_NULL("glBindBufferRange", bindBufferRange);
+        ASSIGN_NULL("glBindSampler", bindSampler);
+        ASSIGN_NULL("glBindTransformFeedback", bindTransformFeedback);
+        ASSIGN_NULL("glBindVertexArray", bindVertexArray);
+        ASSIGN_NULL("glBlitFramebuffer", blitFramebuffer);
+        ASSIGN_NULL("glClearBufferfi", clearBufferfi);
+        ASSIGN_NULL("glClearBufferfv", clearBufferfv);
+        ASSIGN_NULL("glClearBufferiv", clearBufferiv);
+        ASSIGN_NULL("glClearBufferuiv", clearBufferuiv);
+        ASSIGN_NULL("glClientWaitSync", clientWaitSync);
+        ASSIGN_NULL("glCompressedTexImage3D", compressedTexImage3D);
+        ASSIGN_NULL("glCompressedTexSubImage3D", compressedTexSubImage3D);
+        ASSIGN_NULL("glCopyBufferSubData", copyBufferSubData);
+        ASSIGN_NULL("glCopyTexSubImage3D", copyTexSubImage3D);
+        ASSIGN_NULL("glDeleteQueries", deleteQueries);
+        ASSIGN_NULL("glDeleteSamplers", deleteSamplers);
+        ASSIGN_NULL("glDeleteSync", deleteSync);
+        ASSIGN_NULL("glDeleteTransformFeedbacks", deleteTransformFeedbacks);
+        ASSIGN_NULL("glDeleteVertexArrays", deleteVertexArrays);
+        ASSIGN_NULL("glDrawArraysInstanced", drawArraysInstanced);
+        ASSIGN_NULL("glDrawBuffers", drawBuffers);
+        ASSIGN_NULL("glDrawElementsInstanced", drawElementsInstanced);
+        ASSIGN_NULL("glDrawRangeElements", drawRangeElements);
+        ASSIGN_NULL("glEndQuery", endQuery);
+        ASSIGN_NULL("glEndTransformFeedback", endTransformFeedback);
+        ASSIGN_NULL("glFenceSync", fenceSync);
+        ASSIGN_NULL("glFlushMappedBufferRange", flushMappedBufferRange);
+        ASSIGN_NULL("glFramebufferTextureLayer", framebufferTextureLayer);
+        ASSIGN_NULL("glGenQueries", genQueries);
+        ASSIGN_NULL("glGenSamplers", genSamplers);
+        ASSIGN_NULL("glGenTransformFeedbacks", genTransformFeedbacks);
+        ASSIGN_NULL("glGenVertexArrays", genVertexArrays);
+        ASSIGN_NULL("glGetActiveUniformBlockName", getActiveUniformBlockName);
+        ASSIGN_NULL("glGetActiveUniformBlockiv", getActiveUniformBlockiv);
+        ASSIGN_NULL("glGetActiveUniformsiv", getActiveUniformsiv);
+        ASSIGN_NULL("glGetBufferParameteri64v", getBufferParameteri64v);
+        ASSIGN_NULL("glGetBufferPointerv", getBufferPointerv);
+        ASSIGN_NULL("glGetFragDataLocation", getFragDataLocation);
+        ASSIGN_NULL("glGetInteger64i_v", getInteger64i_v);
+        ASSIGN_NULL("glGetInteger64v", getInteger64v);
+        ASSIGN_NULL("glGetIntegeri_v", getIntegeri_v);
+        ASSIGN_NULL("glGetInternalformativ", getInternalformativ);
+        ASSIGN_NULL("glGetProgramBinary", getProgramBinary);
+        ASSIGN_NULL("glGetQueryObjectuiv", getQueryObjectuiv);
+        ASSIGN_NULL("glGetQueryiv", getQueryiv);
+        ASSIGN_NULL("glGetSamplerParameterfv", getSamplerParameterfv);
+        ASSIGN_NULL("glGetSamplerParameteriv", getSamplerParameteriv);
+        ASSIGN_NULL("glGetStringi", getStringi);
+        ASSIGN_NULL("glGetSynciv", getSynciv);
+        ASSIGN_NULL("glGetTransformFeedbackVarying", getTransformFeedbackVarying);
+        ASSIGN_NULL("glGetUniformBlockIndex", getUniformBlockIndex);
+        ASSIGN_NULL("glGetUniformIndices", getUniformIndices);
+        ASSIGN_NULL("glGetUniformuiv", getUniformuiv);
+        ASSIGN_NULL("glGetVertexAttribIiv", getVertexAttribIiv);
+        ASSIGN_NULL("glGetVertexAttribIuiv", getVertexAttribIuiv);
+        ASSIGN_NULL("glInvalidateFramebuffer", invalidateFramebuffer);
+        ASSIGN_NULL("glInvalidateSubFramebuffer", invalidateSubFramebuffer);
+        ASSIGN_NULL("glIsQuery", isQuery);
+        ASSIGN_NULL("glIsSampler", isSampler);
+        ASSIGN_NULL("glIsSync", isSync);
+        ASSIGN_NULL("glIsTransformFeedback", isTransformFeedback);
+        ASSIGN_NULL("glIsVertexArray", isVertexArray);
+        ASSIGN_NULL("glMapBufferRange", mapBufferRange);
+        ASSIGN_NULL("glPauseTransformFeedback", pauseTransformFeedback);
+        ASSIGN_NULL("glProgramBinary", programBinary);
+        ASSIGN_NULL("glProgramParameteri", programParameteri);
+        ASSIGN_NULL("glReadBuffer", readBuffer);
+        ASSIGN_NULL("glRenderbufferStorageMultisample", renderbufferStorageMultisample);
+        ASSIGN_NULL("glResumeTransformFeedback", resumeTransformFeedback);
+        ASSIGN_NULL("glSamplerParameterf", samplerParameterf);
+        ASSIGN_NULL("glSamplerParameterfv", samplerParameterfv);
+        ASSIGN_NULL("glSamplerParameteri", samplerParameteri);
+        ASSIGN_NULL("glSamplerParameteriv", samplerParameteriv);
+        ASSIGN_NULL("glTexImage3D", texImage3D);
+        ASSIGN_NULL("glTexStorage2D", texStorage2D);
+        ASSIGN_NULL("glTexStorage3D", texStorage3D);
+        ASSIGN_NULL("glTexSubImage3D", texSubImage3D);
+        ASSIGN_NULL("glTransformFeedbackVaryings", transformFeedbackVaryings);
+        ASSIGN_NULL("glUniform1ui", uniform1ui);
+        ASSIGN_NULL("glUniform1uiv", uniform1uiv);
+        ASSIGN_NULL("glUniform2ui", uniform2ui);
+        ASSIGN_NULL("glUniform2uiv", uniform2uiv);
+        ASSIGN_NULL("glUniform3ui", uniform3ui);
+        ASSIGN_NULL("glUniform3uiv", uniform3uiv);
+        ASSIGN_NULL("glUniform4ui", uniform4ui);
+        ASSIGN_NULL("glUniform4uiv", uniform4uiv);
+        ASSIGN_NULL("glUniformBlockBinding", uniformBlockBinding);
+        ASSIGN_NULL("glUniformMatrix2x3fv", uniformMatrix2x3fv);
+        ASSIGN_NULL("glUniformMatrix2x4fv", uniformMatrix2x4fv);
+        ASSIGN_NULL("glUniformMatrix3x2fv", uniformMatrix3x2fv);
+        ASSIGN_NULL("glUniformMatrix3x4fv", uniformMatrix3x4fv);
+        ASSIGN_NULL("glUniformMatrix4x2fv", uniformMatrix4x2fv);
+        ASSIGN_NULL("glUniformMatrix4x3fv", uniformMatrix4x3fv);
+        ASSIGN_NULL("glUnmapBuffer", unmapBuffer);
+        ASSIGN_NULL("glVertexAttribDivisor", vertexAttribDivisor);
+        ASSIGN_NULL("glVertexAttribI4i", vertexAttribI4i);
+        ASSIGN_NULL("glVertexAttribI4iv", vertexAttribI4iv);
+        ASSIGN_NULL("glVertexAttribI4ui", vertexAttribI4ui);
+        ASSIGN_NULL("glVertexAttribI4uiv", vertexAttribI4uiv);
+        ASSIGN_NULL("glVertexAttribIPointer", vertexAttribIPointer);
+        ASSIGN_NULL("glWaitSync", waitSync);
+    }
+
+    if (version >= gl::Version(3, 1))
+    {
+        ASSIGN_NULL("glActiveShaderProgram", activeShaderProgram);
+        ASSIGN_NULL("glBindImageTexture", bindImageTexture);
+        ASSIGN_NULL("glBindProgramPipeline", bindProgramPipeline);
+        ASSIGN_NULL("glBindVertexBuffer", bindVertexBuffer);
+        ASSIGN_NULL("glCreateShaderProgramv", createShaderProgramv);
+        ASSIGN_NULL("glDeleteProgramPipelines", deleteProgramPipelines);
+        ASSIGN_NULL("glDispatchCompute", dispatchCompute);
+        ASSIGN_NULL("glDispatchComputeIndirect", dispatchComputeIndirect);
+        ASSIGN_NULL("glDrawArraysIndirect", drawArraysIndirect);
+        ASSIGN_NULL("glDrawElementsIndirect", drawElementsIndirect);
+        ASSIGN_NULL("glFramebufferParameteri", framebufferParameteri);
+        ASSIGN_NULL("glGenProgramPipelines", genProgramPipelines);
+        ASSIGN_NULL("glGetBooleani_v", getBooleani_v);
+        ASSIGN_NULL("glGetFramebufferParameteriv", getFramebufferParameteriv);
+        ASSIGN_NULL("glGetMultisamplefv", getMultisamplefv);
+        ASSIGN_NULL("glGetProgramInterfaceiv", getProgramInterfaceiv);
+        ASSIGN_NULL("glGetProgramPipelineInfoLog", getProgramPipelineInfoLog);
+        ASSIGN_NULL("glGetProgramPipelineiv", getProgramPipelineiv);
+        ASSIGN_NULL("glGetProgramResourceIndex", getProgramResourceIndex);
+        ASSIGN_NULL("glGetProgramResourceLocation", getProgramResourceLocation);
+        ASSIGN_NULL("glGetProgramResourceName", getProgramResourceName);
+        ASSIGN_NULL("glGetProgramResourceiv", getProgramResourceiv);
+        ASSIGN_NULL("glGetTexLevelParameterfv", getTexLevelParameterfv);
+        ASSIGN_NULL("glGetTexLevelParameteriv", getTexLevelParameteriv);
+        ASSIGN_NULL("glIsProgramPipeline", isProgramPipeline);
+        ASSIGN_NULL("glMemoryBarrier", memoryBarrier);
+        ASSIGN_NULL("glMemoryBarrierByRegion", memoryBarrierByRegion);
+        ASSIGN_NULL("glProgramUniform1f", programUniform1f);
+        ASSIGN_NULL("glProgramUniform1fv", programUniform1fv);
+        ASSIGN_NULL("glProgramUniform1i", programUniform1i);
+        ASSIGN_NULL("glProgramUniform1iv", programUniform1iv);
+        ASSIGN_NULL("glProgramUniform1ui", programUniform1ui);
+        ASSIGN_NULL("glProgramUniform1uiv", programUniform1uiv);
+        ASSIGN_NULL("glProgramUniform2f", programUniform2f);
+        ASSIGN_NULL("glProgramUniform2fv", programUniform2fv);
+        ASSIGN_NULL("glProgramUniform2i", programUniform2i);
+        ASSIGN_NULL("glProgramUniform2iv", programUniform2iv);
+        ASSIGN_NULL("glProgramUniform2ui", programUniform2ui);
+        ASSIGN_NULL("glProgramUniform2uiv", programUniform2uiv);
+        ASSIGN_NULL("glProgramUniform3f", programUniform3f);
+        ASSIGN_NULL("glProgramUniform3fv", programUniform3fv);
+        ASSIGN_NULL("glProgramUniform3i", programUniform3i);
+        ASSIGN_NULL("glProgramUniform3iv", programUniform3iv);
+        ASSIGN_NULL("glProgramUniform3ui", programUniform3ui);
+        ASSIGN_NULL("glProgramUniform3uiv", programUniform3uiv);
+        ASSIGN_NULL("glProgramUniform4f", programUniform4f);
+        ASSIGN_NULL("glProgramUniform4fv", programUniform4fv);
+        ASSIGN_NULL("glProgramUniform4i", programUniform4i);
+        ASSIGN_NULL("glProgramUniform4iv", programUniform4iv);
+        ASSIGN_NULL("glProgramUniform4ui", programUniform4ui);
+        ASSIGN_NULL("glProgramUniform4uiv", programUniform4uiv);
+        ASSIGN_NULL("glProgramUniformMatrix2fv", programUniformMatrix2fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3fv", programUniformMatrix2x3fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4fv", programUniformMatrix2x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix3fv", programUniformMatrix3fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2fv", programUniformMatrix3x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4fv", programUniformMatrix3x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4fv", programUniformMatrix4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2fv", programUniformMatrix4x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3fv", programUniformMatrix4x3fv);
+        ASSIGN_NULL("glSampleMaski", sampleMaski);
+        ASSIGN_NULL("glTexStorage2DMultisample", texStorage2DMultisample);
+        ASSIGN_NULL("glUseProgramStages", useProgramStages);
+        ASSIGN_NULL("glValidateProgramPipeline", validateProgramPipeline);
+        ASSIGN_NULL("glVertexAttribBinding", vertexAttribBinding);
+        ASSIGN_NULL("glVertexAttribFormat", vertexAttribFormat);
+        ASSIGN_NULL("glVertexAttribIFormat", vertexAttribIFormat);
+        ASSIGN_NULL("glVertexBindingDivisor", vertexBindingDivisor);
+    }
+
+    if (version >= gl::Version(3, 2))
+    {
+        ASSIGN_NULL("glBlendBarrier", blendBarrier);
+        ASSIGN_NULL("glBlendEquationSeparatei", blendEquationSeparatei);
+        ASSIGN_NULL("glBlendEquationi", blendEquationi);
+        ASSIGN_NULL("glBlendFuncSeparatei", blendFuncSeparatei);
+        ASSIGN_NULL("glBlendFunci", blendFunci);
+        ASSIGN_NULL("glColorMaski", colorMaski);
+        ASSIGN_NULL("glCopyImageSubData", copyImageSubData);
+        ASSIGN_NULL("glDebugMessageCallback", debugMessageCallback);
+        ASSIGN_NULL("glDebugMessageControl", debugMessageControl);
+        ASSIGN_NULL("glDebugMessageInsert", debugMessageInsert);
+        ASSIGN_NULL("glDisablei", disablei);
+        ASSIGN_NULL("glDrawElementsBaseVertex", drawElementsBaseVertex);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertex", drawElementsInstancedBaseVertex);
+        ASSIGN_NULL("glDrawRangeElementsBaseVertex", drawRangeElementsBaseVertex);
+        ASSIGN_NULL("glEnablei", enablei);
+        ASSIGN_NULL("glFramebufferTexture", framebufferTexture);
+        ASSIGN_NULL("glGetDebugMessageLog", getDebugMessageLog);
+        ASSIGN_NULL("glGetGraphicsResetStatus", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetObjectLabel", getObjectLabel);
+        ASSIGN_NULL("glGetObjectPtrLabel", getObjectPtrLabel);
+        ASSIGN_NULL("glGetPointerv", getPointerv);
+        ASSIGN_NULL("glGetSamplerParameterIiv", getSamplerParameterIiv);
+        ASSIGN_NULL("glGetSamplerParameterIuiv", getSamplerParameterIuiv);
+        ASSIGN_NULL("glGetTexParameterIiv", getTexParameterIiv);
+        ASSIGN_NULL("glGetTexParameterIuiv", getTexParameterIuiv);
+        ASSIGN_NULL("glGetnUniformfv", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformiv", getnUniformiv);
+        ASSIGN_NULL("glGetnUniformuiv", getnUniformuiv);
+        ASSIGN_NULL("glIsEnabledi", isEnabledi);
+        ASSIGN_NULL("glMinSampleShading", minSampleShading);
+        ASSIGN_NULL("glObjectLabel", objectLabel);
+        ASSIGN_NULL("glObjectPtrLabel", objectPtrLabel);
+        ASSIGN_NULL("glPatchParameteri", patchParameteri);
+        ASSIGN_NULL("glPopDebugGroup", popDebugGroup);
+        ASSIGN_NULL("glPrimitiveBoundingBox", primitiveBoundingBox);
+        ASSIGN_NULL("glPushDebugGroup", pushDebugGroup);
+        ASSIGN_NULL("glReadnPixels", readnPixels);
+        ASSIGN_NULL("glSamplerParameterIiv", samplerParameterIiv);
+        ASSIGN_NULL("glSamplerParameterIuiv", samplerParameterIuiv);
+        ASSIGN_NULL("glTexBuffer", texBuffer);
+        ASSIGN_NULL("glTexBufferRange", texBufferRange);
+        ASSIGN_NULL("glTexParameterIiv", texParameterIiv);
+        ASSIGN_NULL("glTexParameterIuiv", texParameterIuiv);
+        ASSIGN_NULL("glTexStorage3DMultisample", texStorage3DMultisample);
+    }
+
+    if (extensions.count("GL_EXT_base_instance") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysInstancedBaseInstanceEXT", drawArraysInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseInstanceEXT", drawElementsInstancedBaseInstance);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertexBaseInstanceEXT",
+                    drawElementsInstancedBaseVertexBaseInstance);
+    }
+
+    if (extensions.count("GL_EXT_blend_func_extended") != 0)
+    {
+        ASSIGN_NULL("glBindFragDataLocationEXT", bindFragDataLocation);
+        ASSIGN_NULL("glBindFragDataLocationIndexedEXT", bindFragDataLocationIndexed);
+        ASSIGN_NULL("glGetFragDataIndexEXT", getFragDataIndex);
+        ASSIGN_NULL("glGetProgramResourceLocationIndexEXT", getProgramResourceLocationIndex);
+    }
+
+    if (extensions.count("GL_EXT_buffer_storage") != 0)
+    {
+        ASSIGN_NULL("glBufferStorageEXT", bufferStorage);
+    }
+
+    if (extensions.count("GL_EXT_clear_texture") != 0)
+    {
+        ASSIGN_NULL("glClearTexImageEXT", clearTexImage);
+        ASSIGN_NULL("glClearTexSubImageEXT", clearTexSubImage);
+    }
+
+    if (extensions.count("GL_EXT_copy_image") != 0)
+    {
+        ASSIGN_NULL("glCopyImageSubDataEXT", copyImageSubData);
+    }
+
+    if (extensions.count("GL_EXT_discard_framebuffer") != 0)
+    {
+        ASSIGN_NULL("glDiscardFramebufferEXT", discardFramebufferEXT);
+    }
+
+    if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
+    {
+        ASSIGN_NULL("glBeginQueryEXT", beginQuery);
+        ASSIGN_NULL("glDeleteQueriesEXT", deleteQueries);
+        ASSIGN_NULL("glEndQueryEXT", endQuery);
+        ASSIGN_NULL("glGenQueriesEXT", genQueries);
+        ASSIGN_NULL("glGetQueryObjecti64vEXT", getQueryObjecti64v);
+        ASSIGN_NULL("glGetQueryObjectivEXT", getQueryObjectiv);
+        ASSIGN_NULL("glGetQueryObjectui64vEXT", getQueryObjectui64v);
+        ASSIGN_NULL("glGetQueryObjectuivEXT", getQueryObjectuiv);
+        ASSIGN_NULL("glGetQueryivEXT", getQueryiv);
+        ASSIGN_NULL("glIsQueryEXT", isQuery);
+        ASSIGN_NULL("glQueryCounterEXT", queryCounter);
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers") != 0)
+    {
+        ASSIGN_NULL("glDrawBuffersEXT", drawBuffers);
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
+    {
+        ASSIGN_NULL("glBlendEquationSeparateiEXT", blendEquationSeparatei);
+        ASSIGN_NULL("glBlendEquationiEXT", blendEquationi);
+        ASSIGN_NULL("glBlendFuncSeparateiEXT", blendFuncSeparatei);
+        ASSIGN_NULL("glBlendFunciEXT", blendFunci);
+        ASSIGN_NULL("glColorMaskiEXT", colorMaski);
+        ASSIGN_NULL("glDisableiEXT", disablei);
+        ASSIGN_NULL("glEnableiEXT", enablei);
+        ASSIGN_NULL("glIsEnablediEXT", isEnabledi);
+    }
+
+    if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
+    {
+        ASSIGN_NULL("glDrawElementsBaseVertexEXT", drawElementsBaseVertex);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertexEXT", drawElementsInstancedBaseVertex);
+        ASSIGN_NULL("glDrawRangeElementsBaseVertexEXT", drawRangeElementsBaseVertex);
+        ASSIGN_NULL("glMultiDrawElementsBaseVertexEXT", multiDrawElementsBaseVertex);
+    }
+
+    if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
+    {
+        ASSIGN_NULL("glDrawTransformFeedbackEXT", drawTransformFeedback);
+        ASSIGN_NULL("glDrawTransformFeedbackInstancedEXT", drawTransformFeedbackInstanced);
+    }
+
+    if (extensions.count("GL_EXT_geometry_shader") != 0)
+    {
+        ASSIGN_NULL("glFramebufferTextureEXT", framebufferTexture);
+    }
+
+    if (extensions.count("GL_EXT_instanced_arrays") != 0)
+    {
+        ASSIGN_NULL("glVertexAttribDivisorEXT", vertexAttribDivisor);
+    }
+
+    if (extensions.count("GL_EXT_map_buffer_range") != 0)
+    {
+        ASSIGN_NULL("glFlushMappedBufferRangeEXT", flushMappedBufferRange);
+        ASSIGN_NULL("glMapBufferRangeEXT", mapBufferRange);
+    }
+
+    if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
+    {
+        ASSIGN_NULL("glMultiDrawArraysIndirectEXT", multiDrawArraysIndirect);
+        ASSIGN_NULL("glMultiDrawElementsIndirectEXT", multiDrawElementsIndirect);
+    }
+
+    if (extensions.count("GL_EXT_multisampled_render_to_texture") != 0)
+    {
+        ASSIGN_NULL("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisample);
+    }
+
+    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
+    {
+        ASSIGN_NULL("glGetIntegeri_vEXT", getIntegeri_v);
+    }
+
+    if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
+    {
+        ASSIGN_NULL("glBeginQueryEXT", beginQuery);
+        ASSIGN_NULL("glDeleteQueriesEXT", deleteQueries);
+        ASSIGN_NULL("glEndQueryEXT", endQuery);
+        ASSIGN_NULL("glGenQueriesEXT", genQueries);
+        ASSIGN_NULL("glGetQueryObjectuivEXT", getQueryObjectuiv);
+        ASSIGN_NULL("glGetQueryivEXT", getQueryiv);
+        ASSIGN_NULL("glIsQueryEXT", isQuery);
+    }
+
+    if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
+    {
+        ASSIGN_NULL("glPrimitiveBoundingBoxEXT", primitiveBoundingBox);
+    }
+
+    if (extensions.count("GL_EXT_robustness") != 0)
+    {
+        ASSIGN_NULL("glGetGraphicsResetStatusEXT", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetnUniformfvEXT", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformivEXT", getnUniformiv);
+        ASSIGN_NULL("glReadnPixelsEXT", readnPixels);
+    }
+
+    if (extensions.count("GL_EXT_tessellation_shader") != 0)
+    {
+        ASSIGN_NULL("glPatchParameteriEXT", patchParameteri);
+    }
+
+    if (extensions.count("GL_EXT_texture_border_clamp") != 0)
+    {
+        ASSIGN_NULL("glGetSamplerParameterIivEXT", getSamplerParameterIiv);
+        ASSIGN_NULL("glGetSamplerParameterIuivEXT", getSamplerParameterIuiv);
+        ASSIGN_NULL("glGetTexParameterIivEXT", getTexParameterIiv);
+        ASSIGN_NULL("glGetTexParameterIuivEXT", getTexParameterIuiv);
+        ASSIGN_NULL("glSamplerParameterIivEXT", samplerParameterIiv);
+        ASSIGN_NULL("glSamplerParameterIuivEXT", samplerParameterIuiv);
+        ASSIGN_NULL("glTexParameterIivEXT", texParameterIiv);
+        ASSIGN_NULL("glTexParameterIuivEXT", texParameterIuiv);
+    }
+
+    if (extensions.count("GL_EXT_texture_buffer") != 0)
+    {
+        ASSIGN_NULL("glTexBufferEXT", texBuffer);
+        ASSIGN_NULL("glTexBufferRangeEXT", texBufferRange);
+    }
+
+    if (extensions.count("GL_EXT_texture_storage") != 0)
+    {
+        ASSIGN_NULL("glTexStorage1DEXT", texStorage1D);
+        ASSIGN_NULL("glTexStorage2DEXT", texStorage2D);
+        ASSIGN_NULL("glTexStorage3DEXT", texStorage3D);
+        ASSIGN_NULL("glTextureStorage1DEXT", textureStorage1D);
+        ASSIGN_NULL("glTextureStorage2DEXT", textureStorage2D);
+        ASSIGN_NULL("glTextureStorage3DEXT", textureStorage3D);
+    }
+
+    if (extensions.count("GL_EXT_texture_view") != 0)
+    {
+        ASSIGN_NULL("glTextureViewEXT", textureView);
+    }
+
+    if (extensions.count("GL_KHR_debug") != 0)
+    {
+        ASSIGN_NULL("glDebugMessageCallbackKHR", debugMessageCallback);
+        ASSIGN_NULL("glDebugMessageControlKHR", debugMessageControl);
+        ASSIGN_NULL("glDebugMessageInsertKHR", debugMessageInsert);
+        ASSIGN_NULL("glGetDebugMessageLogKHR", getDebugMessageLog);
+        ASSIGN_NULL("glGetObjectLabelKHR", getObjectLabel);
+        ASSIGN_NULL("glGetObjectPtrLabelKHR", getObjectPtrLabel);
+        ASSIGN_NULL("glGetPointervKHR", getPointerv);
+        ASSIGN_NULL("glObjectLabelKHR", objectLabel);
+        ASSIGN_NULL("glObjectPtrLabelKHR", objectPtrLabel);
+        ASSIGN_NULL("glPopDebugGroupKHR", popDebugGroup);
+        ASSIGN_NULL("glPushDebugGroupKHR", pushDebugGroup);
+    }
+
+    if (extensions.count("GL_KHR_robustness") != 0)
+    {
+        ASSIGN_NULL("glGetGraphicsResetStatusKHR", getGraphicsResetStatus);
+        ASSIGN_NULL("glGetnUniformfvKHR", getnUniformfv);
+        ASSIGN_NULL("glGetnUniformivKHR", getnUniformiv);
+        ASSIGN_NULL("glGetnUniformuivKHR", getnUniformuiv);
+        ASSIGN_NULL("glReadnPixelsKHR", readnPixels);
+    }
+
+    if (extensions.count("GL_OES_EGL_image") != 0)
+    {
+        ASSIGN_NULL("glEGLImageTargetRenderbufferStorageOES", eGLImageTargetRenderbufferStorageOES);
+        ASSIGN_NULL("glEGLImageTargetTexture2DOES", eGLImageTargetTexture2DOES);
+    }
+
+    if (extensions.count("GL_OES_copy_image") != 0)
+    {
+        ASSIGN_NULL("glCopyImageSubDataOES", copyImageSubData);
+    }
+
+    if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
+    {
+        ASSIGN_NULL("glBlendEquationSeparateiOES", blendEquationSeparatei);
+        ASSIGN_NULL("glBlendEquationiOES", blendEquationi);
+        ASSIGN_NULL("glBlendFuncSeparateiOES", blendFuncSeparatei);
+        ASSIGN_NULL("glBlendFunciOES", blendFunci);
+        ASSIGN_NULL("glColorMaskiOES", colorMaski);
+        ASSIGN_NULL("glDisableiOES", disablei);
+        ASSIGN_NULL("glEnableiOES", enablei);
+        ASSIGN_NULL("glIsEnablediOES", isEnabledi);
+    }
+
+    if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
+    {
+        ASSIGN_NULL("glDrawElementsBaseVertexOES", drawElementsBaseVertex);
+        ASSIGN_NULL("glDrawElementsInstancedBaseVertexOES", drawElementsInstancedBaseVertex);
+        ASSIGN_NULL("glDrawRangeElementsBaseVertexOES", drawRangeElementsBaseVertex);
+        ASSIGN_NULL("glMultiDrawElementsBaseVertexOES", multiDrawElementsBaseVertex);
+    }
+
+    if (extensions.count("GL_OES_geometry_shader") != 0)
+    {
+        ASSIGN_NULL("glFramebufferTextureOES", framebufferTexture);
+    }
+
+    if (extensions.count("GL_OES_get_program_binary") != 0)
+    {
+        ASSIGN_NULL("glGetProgramBinaryOES", getProgramBinary);
+        ASSIGN_NULL("glProgramBinaryOES", programBinary);
+    }
+
+    if (extensions.count("GL_OES_mapbuffer") != 0)
+    {
+        ASSIGN_NULL("glGetBufferPointervOES", getBufferPointerv);
+        ASSIGN_NULL("glMapBufferOES", mapBuffer);
+        ASSIGN_NULL("glUnmapBufferOES", unmapBuffer);
+    }
+
+    if (extensions.count("GL_OES_primitive_bounding_box") != 0)
+    {
+        ASSIGN_NULL("glPrimitiveBoundingBoxOES", primitiveBoundingBox);
+    }
+
+    if (extensions.count("GL_OES_sample_shading") != 0)
+    {
+        ASSIGN_NULL("glMinSampleShadingOES", minSampleShading);
+    }
+
+    if (extensions.count("GL_OES_tessellation_shader") != 0)
+    {
+        ASSIGN_NULL("glPatchParameteriOES", patchParameteri);
+    }
+
+    if (extensions.count("GL_OES_texture_3D") != 0)
+    {
+        ASSIGN_NULL("glCompressedTexImage3DOES", compressedTexImage3D);
+        ASSIGN_NULL("glCompressedTexSubImage3DOES", compressedTexSubImage3D);
+        ASSIGN_NULL("glCopyTexSubImage3DOES", copyTexSubImage3D);
+        ASSIGN_NULL("glFramebufferTexture3DOES", framebufferTexture3D);
+        ASSIGN_NULL("glTexImage3DOES", texImage3D);
+        ASSIGN_NULL("glTexSubImage3DOES", texSubImage3D);
+    }
+
+    if (extensions.count("GL_OES_texture_border_clamp") != 0)
+    {
+        ASSIGN_NULL("glGetSamplerParameterIivOES", getSamplerParameterIiv);
+        ASSIGN_NULL("glGetSamplerParameterIuivOES", getSamplerParameterIuiv);
+        ASSIGN_NULL("glGetTexParameterIivOES", getTexParameterIiv);
+        ASSIGN_NULL("glGetTexParameterIuivOES", getTexParameterIuiv);
+        ASSIGN_NULL("glSamplerParameterIivOES", samplerParameterIiv);
+        ASSIGN_NULL("glSamplerParameterIuivOES", samplerParameterIuiv);
+        ASSIGN_NULL("glTexParameterIivOES", texParameterIiv);
+        ASSIGN_NULL("glTexParameterIuivOES", texParameterIuiv);
+    }
+
+    if (extensions.count("GL_OES_texture_buffer") != 0)
+    {
+        ASSIGN_NULL("glTexBufferOES", texBuffer);
+        ASSIGN_NULL("glTexBufferRangeOES", texBufferRange);
+    }
+
+    if (extensions.count("GL_OES_texture_storage_multisample_2d_array") != 0)
+    {
+        ASSIGN_NULL("glTexStorage3DMultisampleOES", texStorage3DMultisample);
+    }
+
+    if (extensions.count("GL_OES_texture_view") != 0)
+    {
+        ASSIGN_NULL("glTextureViewOES", textureView);
+    }
+
+    if (extensions.count("GL_OES_vertex_array_object") != 0)
+    {
+        ASSIGN_NULL("glBindVertexArrayOES", bindVertexArray);
+        ASSIGN_NULL("glDeleteVertexArraysOES", deleteVertexArrays);
+        ASSIGN_NULL("glGenVertexArraysOES", genVertexArrays);
+        ASSIGN_NULL("glIsVertexArrayOES", isVertexArray);
+    }
+
+    if (extensions.count("GL_OES_viewport_array") != 0)
+    {
+        ASSIGN_NULL("glDisableiOES", disablei);
+        ASSIGN_NULL("glEnableiOES", enablei);
+        ASSIGN_NULL("glGetFloati_vOES", getFloati_v);
+        ASSIGN_NULL("glIsEnablediOES", isEnabledi);
+        ASSIGN_NULL("glScissorArrayvOES", scissorArrayv);
+        ASSIGN_NULL("glScissorIndexedOES", scissorIndexed);
+        ASSIGN_NULL("glScissorIndexedvOES", scissorIndexedv);
+        ASSIGN_NULL("glViewportArrayvOES", viewportArrayv);
+        ASSIGN_NULL("glViewportIndexedfOES", viewportIndexedf);
+        ASSIGN_NULL("glViewportIndexedfvOES", viewportIndexedfv);
+    }
+}
+
+void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> &extensions)
+{
+    if (extensions.count("GL_EXT_blend_minmax") != 0)
+    {
+        ASSIGN_NULL("glBlendEquationEXT", blendEquation);
+    }
+
+    if (extensions.count("GL_EXT_debug_label") != 0)
+    {
+        ASSIGN_NULL("glGetObjectLabelEXT", getObjectLabel);
+    }
+
+    if (extensions.count("GL_EXT_draw_instanced") != 0)
+    {
+        ASSIGN_NULL("glDrawArraysInstancedEXT", drawArraysInstanced);
+        ASSIGN_NULL("glDrawElementsInstancedEXT", drawElementsInstanced);
+    }
+
+    if (extensions.count("GL_EXT_multi_draw_arrays") != 0)
+    {
+        ASSIGN_NULL("glMultiDrawArraysEXT", multiDrawArrays);
+        ASSIGN_NULL("glMultiDrawElementsEXT", multiDrawElements);
+    }
+
+    if (extensions.count("GL_EXT_separate_shader_objects") != 0)
+    {
+        ASSIGN_NULL("glActiveShaderProgramEXT", activeShaderProgram);
+        ASSIGN_NULL("glBindProgramPipelineEXT", bindProgramPipeline);
+        ASSIGN_NULL("glCreateShaderProgramvEXT", createShaderProgramv);
+        ASSIGN_NULL("glDeleteProgramPipelinesEXT", deleteProgramPipelines);
+        ASSIGN_NULL("glGenProgramPipelinesEXT", genProgramPipelines);
+        ASSIGN_NULL("glGetProgramPipelineInfoLogEXT", getProgramPipelineInfoLog);
+        ASSIGN_NULL("glGetProgramPipelineivEXT", getProgramPipelineiv);
+        ASSIGN_NULL("glIsProgramPipelineEXT", isProgramPipeline);
+        ASSIGN_NULL("glProgramParameteriEXT", programParameteri);
+        ASSIGN_NULL("glProgramUniform1fEXT", programUniform1f);
+        ASSIGN_NULL("glProgramUniform1fvEXT", programUniform1fv);
+        ASSIGN_NULL("glProgramUniform1iEXT", programUniform1i);
+        ASSIGN_NULL("glProgramUniform1ivEXT", programUniform1iv);
+        ASSIGN_NULL("glProgramUniform1uiEXT", programUniform1ui);
+        ASSIGN_NULL("glProgramUniform1uivEXT", programUniform1uiv);
+        ASSIGN_NULL("glProgramUniform2fEXT", programUniform2f);
+        ASSIGN_NULL("glProgramUniform2fvEXT", programUniform2fv);
+        ASSIGN_NULL("glProgramUniform2iEXT", programUniform2i);
+        ASSIGN_NULL("glProgramUniform2ivEXT", programUniform2iv);
+        ASSIGN_NULL("glProgramUniform2uiEXT", programUniform2ui);
+        ASSIGN_NULL("glProgramUniform2uivEXT", programUniform2uiv);
+        ASSIGN_NULL("glProgramUniform3fEXT", programUniform3f);
+        ASSIGN_NULL("glProgramUniform3fvEXT", programUniform3fv);
+        ASSIGN_NULL("glProgramUniform3iEXT", programUniform3i);
+        ASSIGN_NULL("glProgramUniform3ivEXT", programUniform3iv);
+        ASSIGN_NULL("glProgramUniform3uiEXT", programUniform3ui);
+        ASSIGN_NULL("glProgramUniform3uivEXT", programUniform3uiv);
+        ASSIGN_NULL("glProgramUniform4fEXT", programUniform4f);
+        ASSIGN_NULL("glProgramUniform4fvEXT", programUniform4fv);
+        ASSIGN_NULL("glProgramUniform4iEXT", programUniform4i);
+        ASSIGN_NULL("glProgramUniform4ivEXT", programUniform4iv);
+        ASSIGN_NULL("glProgramUniform4uiEXT", programUniform4ui);
+        ASSIGN_NULL("glProgramUniform4uivEXT", programUniform4uiv);
+        ASSIGN_NULL("glProgramUniformMatrix2fvEXT", programUniformMatrix2fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x3fvEXT", programUniformMatrix2x3fv);
+        ASSIGN_NULL("glProgramUniformMatrix2x4fvEXT", programUniformMatrix2x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix3fvEXT", programUniformMatrix3fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x2fvEXT", programUniformMatrix3x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix3x4fvEXT", programUniformMatrix3x4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4fvEXT", programUniformMatrix4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4fvEXT", programUniformMatrix4fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x2fvEXT", programUniformMatrix4x2fv);
+        ASSIGN_NULL("glProgramUniformMatrix4x3fvEXT", programUniformMatrix4x3fv);
+        ASSIGN_NULL("glUseProgramStagesEXT", useProgramStages);
+        ASSIGN_NULL("glValidateProgramPipelineEXT", validateProgramPipeline);
+    }
+
+    if (extensions.count("GL_NV_fence") != 0)
+    {
+        ASSIGN_NULL("glDeleteFencesNV", deleteFencesNV);
+        ASSIGN_NULL("glFinishFenceNV", finishFenceNV);
+        ASSIGN_NULL("glGenFencesNV", genFencesNV);
+        ASSIGN_NULL("glGetFenceivNV", getFenceivNV);
+        ASSIGN_NULL("glIsFenceNV", isFenceNV);
+        ASSIGN_NULL("glSetFenceNV", setFenceNV);
+        ASSIGN_NULL("glTestFenceNV", testFenceNV);
+    }
+
+    if (extensions.count("GL_NV_framebuffer_mixed_samples") != 0)
+    {
+        ASSIGN_NULL("glCoverageModulationNV", coverageModulationNV);
+    }
+
+    if (extensions.count("GL_NV_internalformat_sample_query") != 0)
+    {
+        ASSIGN_NULL("glGetInternalformatSampleivNV", getInternalformatSampleivNV);
+    }
+
+    if (extensions.count("GL_NV_path_rendering") != 0)
+    {
+        ASSIGN_NULL("glCoverFillPathInstancedNV", coverFillPathInstancedNV);
+        ASSIGN_NULL("glCoverFillPathNV", coverFillPathNV);
+        ASSIGN_NULL("glCoverStrokePathInstancedNV", coverStrokePathInstancedNV);
+        ASSIGN_NULL("glCoverStrokePathNV", coverStrokePathNV);
+        ASSIGN_NULL("glDeletePathsNV", deletePathsNV);
+        ASSIGN_NULL("glGenPathsNV", genPathsNV);
+        ASSIGN_NULL("glGetPathParameterfvNV", getPathParameterfvNV);
+        ASSIGN_NULL("glGetPathParameterivNV", getPathParameterivNV);
+        ASSIGN_NULL("glIsPathNV", isPathNV);
+        ASSIGN_NULL("glMatrixLoadfEXT", matrixLoadfEXT);
+        ASSIGN_NULL("glPathCommandsNV", pathCommandsNV);
+        ASSIGN_NULL("glPathParameterfNV", pathParameterfNV);
+        ASSIGN_NULL("glPathParameteriNV", pathParameteriNV);
+        ASSIGN_NULL("glPathStencilFuncNV", pathStencilFuncNV);
+        ASSIGN_NULL("glProgramPathFragmentInputGenNV", programPathFragmentInputGenNV);
+        ASSIGN_NULL("glStencilFillPathInstancedNV", stencilFillPathInstancedNV);
+        ASSIGN_NULL("glStencilFillPathNV", stencilFillPathNV);
+        ASSIGN_NULL("glStencilStrokePathInstancedNV", stencilStrokePathInstancedNV);
+        ASSIGN_NULL("glStencilStrokePathNV", stencilStrokePathNV);
+        ASSIGN_NULL("glStencilThenCoverFillPathInstancedNV", stencilThenCoverFillPathInstancedNV);
+        ASSIGN_NULL("glStencilThenCoverFillPathNV", stencilThenCoverFillPathNV);
+        ASSIGN_NULL("glStencilThenCoverStrokePathInstancedNV",
+                    stencilThenCoverStrokePathInstancedNV);
+        ASSIGN_NULL("glStencilThenCoverStrokePathNV", stencilThenCoverStrokePathNV);
+    }
+}
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 }  // namespace rx
