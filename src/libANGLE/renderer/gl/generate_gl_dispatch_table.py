@@ -25,6 +25,8 @@ def safe_append(the_dict, key, element):
 gl_xml_path = os.path.join('..', '..', '..', '..', 'scripts', 'gl.xml')
 dispatch_header_path = 'DispatchTableGL_autogen.h'
 dispatch_source_path = 'DispatchTableGL_autogen.cpp'
+null_functions_header_path = 'null_functions.h'
+null_functions_source_path = 'null_functions.cpp'
 
 # Load the JSON and XML data.
 data_source_name = 'gl_bindings_data.json'
@@ -79,9 +81,14 @@ gl_extension_requirements = {}
 gles2_extension_requirements = {}
 both_extension_requirements = {}
 
+# Used later in the NULL bindings.
+all_entry_points = []
+
 for comment, entry_points in json_data.iteritems():
     for entry_point_no_prefix in entry_points:
         entry_point = "gl" + entry_point_no_prefix
+
+        all_entry_points.append(entry_point)
 
         gl_required = None
         gles2_required = None
@@ -176,6 +183,12 @@ class DispatchTableGL : angle::NonCopyable
     void initProcsDesktopGL(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsGLES(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsSharedExtensions(const std::set<std::string> &extensions);
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+    void initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions);
+    void initProcsGLESNULL(const gl::Version &version, const std::set<std::string> &extensions);
+    void initProcsSharedExtensionsNULL(const std::set<std::string> &extensions);
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 }};
 
 }}  // namespace rx
@@ -222,8 +235,16 @@ dispatch_table_source_template = """// GENERATED FILE - DO NOT EDIT.
 #include "libANGLE/Version.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+#include "libANGLE/renderer/gl/null_functions.h"
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
+
 // Check for nullptr so extensions do not overwrite core imports.
 #define ASSIGN(NAME, FP) if (!FP) *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+#define ASSIGN_NULL(NAME, FP) *reinterpret_cast<void **>(&FP) = FP ## NULL
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 namespace rx
 {{
@@ -246,6 +267,27 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
 {{
 {both_extensions_data}
 }}
+
+#if defined(ANGLE_ENABLE_OPENGL_NULL)
+void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions)
+{{
+{gl_null_data}
+
+{gl_null_extensions_data}
+}}
+
+void DispatchTableGL::initProcsGLESNULL(const gl::Version &version, const std::set<std::string> &extensions)
+{{
+{gles2_null_data}
+
+{gles2_null_extensions_data}
+}}
+
+void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> &extensions)
+{{
+{both_null_extensions_data}
+}}
+#endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 }}  // namespace rx
 """
@@ -286,6 +328,9 @@ both_extensions_data = []
 for extension, entry_points in sorted(both_extension_requirements.iteritems()):
     both_extensions_data.append(format_extension_requirements_lines(extension, entry_points, "gles2|gl"))
 
+def nullify(data):
+    return [entry.replace('ASSIGN', 'ASSIGN_NULL') for entry in data]
+
 dispatch_table_source = dispatch_table_source_template.format(
     script_name = os.path.basename(sys.argv[0]),
     data_source_name = data_source_name,
@@ -295,7 +340,107 @@ dispatch_table_source = dispatch_table_source_template.format(
     gl_extensions_data = "\n\n".join(gl_extensions_data),
     gles2_data = "\n\n".join(gles2_data),
     gles2_extensions_data = "\n\n".join(gles2_extensions_data),
-    both_extensions_data = "\n\n".join(both_extensions_data))
+    both_extensions_data = "\n\n".join(both_extensions_data),
+    gl_null_data = "\n\n".join(nullify(gl_data)),
+    gl_null_extensions_data = "\n\n".join(nullify(gl_extensions_data)),
+    gles2_null_data = "\n\n".join(nullify(gles2_data)),
+    gles2_null_extensions_data = "\n\n".join(nullify(gles2_extensions_data)),
+    both_null_extensions_data = "\n\n".join(nullify(both_extensions_data)))
 
 with open(dispatch_source_path, "w") as out:
     out.write(dispatch_table_source)
+
+# Generate the NULL/stub entry points.
+# Process the whole set of commands
+
+def format_param(param):
+    return "".join(param.itertext())
+
+command_defs = {}
+command_decls = {}
+
+for command in xml_root.findall('commands/command'):
+    ret_type = 'void'
+    entry = 'void '
+    proto = command.find('proto')
+    command_name = proto.find('name').text
+    if not proto.text:
+        ret_type = proto.find('ptype').text
+        entry = ret_type + ' '
+    entry += first_lower(command_name[2:]) + 'NULL('
+
+    param_text = [format_param(param) for param in command.findall('param')]
+    entry += ', '.join(param_text) + ')'
+
+    command_decls[command_name] = entry + ';'
+
+    entry += '\n{\n'
+    if ret_type != 'void':
+        entry += '    return static_cast<' + ret_type + '>(0);\n'
+    entry += '}'
+
+    command_defs[command_name] = entry
+
+null_decls = [command_decls[entry_point] for entry_point in sorted(all_entry_points)]
+null_stubs = [command_defs[entry_point] for entry_point in sorted(all_entry_points)]
+
+null_functions_header_template = """// GENERATED FILE - DO NOT EDIT.
+// Generated by {script_name} using data from {data_source_name} and gl.xml.
+//
+// Copyright {year} The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// {file_name}:
+//   Declares the NULL/Stub bindings for the OpenGL back-end.
+
+#ifndef LIBGLESV2_RENDERER_GL_NULL_GL_FUNCTIONS_AUTOGEN_H_
+#define LIBGLESV2_RENDERER_GL_NULL_GL_FUNCTIONS_AUTOGEN_H_
+
+#include "libANGLE/renderer/gl/functionsgl_typedefs.h"
+
+namespace rx
+{{
+{table_data}
+}}  // namespace rx
+
+#endif  // LIBGLESV2_RENDERER_GL_NULL_GL_FUNCTIONS_AUTOGEN_H_
+"""
+
+null_functions_header = null_functions_header_template.format(
+    script_name = os.path.basename(sys.argv[0]),
+    data_source_name = data_source_name,
+    year = date.today().year,
+    file_name = null_functions_header_path,
+    table_data = "\n".join(null_decls))
+
+with open(null_functions_header_path, "w") as out:
+    out.write(null_functions_header)
+
+null_functions_source_template = """// GENERATED FILE - DO NOT EDIT.
+// Generated by {script_name} using data from {data_source_name} and gl.xml.
+//
+// Copyright {year} The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// {file_name}:
+//   Defines the NULL/Stub bindings for the OpenGL back-end.
+
+#include "libANGLE/renderer/gl/null_functions.h"
+
+namespace rx
+{{
+{table_data}
+}}  // namespace rx
+"""
+
+null_functions_source = null_functions_source_template.format(
+    script_name = os.path.basename(sys.argv[0]),
+    data_source_name = data_source_name,
+    year = date.today().year,
+    file_name = null_functions_source_path,
+    table_data = "\n\n".join(null_stubs))
+
+with open(null_functions_source_path, "w") as out:
+    out.write(null_functions_source)
