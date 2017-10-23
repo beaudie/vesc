@@ -2661,16 +2661,19 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
             return false;
         }
 
-        // Detect that the vertex shader input types match the attribute types
-        if (!ValidateVertexShaderAttributeTypeMatch(context))
+        if (!context->isWebGL1())
         {
-            return false;
-        }
+            // Detect that the vertex shader input types match the attribute types
+            if (!ValidateVertexShaderAttributeTypeMatch(context))
+            {
+                return false;
+            }
 
-        // Detect that the color buffer types match the fragment shader output types
-        if (!ValidateFragmentShaderColorBufferTypeMatch(context))
-        {
-            return false;
+            // Detect that the color buffer types match the fragment shader output types
+            if (!ValidateFragmentShaderColorBufferTypeMatch(context))
+            {
+                return false;
+            }
         }
     }
 
