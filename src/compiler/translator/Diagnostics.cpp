@@ -91,4 +91,14 @@ void TDiagnostics::resetErrorCount()
     mNumWarnings = 0;
 }
 
+WarningDiagnostics::WarningDiagnostics(TDiagnostics *diagnostics) : mDiagnostics(diagnostics)
+{
+    ASSERT(diagnostics);
+}
+
+void WarningDiagnostics::warning(const TSourceLoc &loc, const char *reason, const char *token)
+{
+    mDiagnostics->warning(loc, reason, token);
+}
+
 }  // namespace sh
