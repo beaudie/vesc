@@ -15,10 +15,12 @@ namespace sh
 {
 
 class TIntermBlock;
+class WarningDiagnostics;
 
 // When given a statementList from a switch AST node, return an updated
 // statementList that has fall-through removed.
-TIntermBlock *RemoveSwitchFallThrough(TIntermBlock *statementList);
+TIntermBlock *RemoveSwitchFallThrough(TIntermBlock *statementList,
+                                      WarningDiagnostics *performanceDiagnostics);
 
 }  // namespace sh
 
