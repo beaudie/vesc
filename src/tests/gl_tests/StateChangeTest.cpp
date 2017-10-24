@@ -740,6 +740,64 @@ TEST_P(StateChangeTestES3, VertexArrayObjectAndDisabledAttributes)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 }
 
+// Simple state change tests, primarily focused on basic object lifetime and dependency management
+// with back-ends that don't support that automatically (i.e. Vulkan).
+class SimpleStateChangeTest : public ANGLETest
+{
+  protected:
+    SimpleStateChangeTest()
+    {
+        setWindowWidth(64);
+        setWindowHeight(64);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+};
+
+// Handles deleting a buffer when it's being used.
+TEST_P(SimpleStateChangeTest, DeleteBufferInUse)
+{
+    std::array<float, 6> floatData = { { 1, 1, 1, 1, 1, 1 } };
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * floatData.size(), floatData.data(), GL_STATIC_DRAW);
+
+    constexpr char vertexShader[] = R"(attribute vec2 position;
+attribute float color;
+varying float vColor;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    vColor = color;
+}
+)";
+
+    constexpr char fragmentShader[] = R"(precision mediump float;
+varying float vColor;
+void main()
+{
+    gl_FragColor = vec4(vColor, 0, 0, 1);
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    glUseProgram(program);
+
+    GLint colorLoc = glGetAttribLocation(program, "color");
+    ASSERT_NE(-1, colorLoc);
+
+    glVertexAttribPointer(colorLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
+    glEnableVertexAttribArray(colorLoc);
+
+    drawQuad(program, "position", 0.5f, 1.0f, true);
+    buffer.reset();
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 ANGLE_INSTANTIATE_TEST(StateChangeTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
 ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_D3D9(),
@@ -747,3 +805,5 @@ ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_OPENGL(),
                        ES2_D3D11_FL9_3());
 ANGLE_INSTANTIATE_TEST(StateChangeTestES3, ES3_D3D11(), ES3_OPENGL());
+
+ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_VULKAN());
