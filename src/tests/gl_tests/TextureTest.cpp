@@ -1747,7 +1747,8 @@ TEST_P(Texture2DTest, NPOTSubImageParameters)
 
     // Supply a 3x3 (i.e. non-power-of-two) subimage to the texture.
     // This should always work, even if GL_OES_texture_npot isn't active.
-    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 3, 3, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    std::array<GLColor, 3 * 3> data;
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 3, 3, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
 
     EXPECT_GL_NO_ERROR();
 }
