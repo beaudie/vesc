@@ -413,7 +413,7 @@ class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
     Error init(VkDevice device, const VkShaderModuleCreateInfo &createInfo);
 };
 
-class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
+class Pipeline : public WrappedObject<Pipeline, VkPipeline>
 {
   public:
     Pipeline();
@@ -557,6 +557,10 @@ struct BufferAndMemory final : private angle::NonCopyable
 {
     vk::Buffer buffer;
     vk::DeviceMemory memory;
+};
+
+class PipelineResource : public ResourceVk, public vk::Pipeline
+{
 };
 
 }  // namespace vk

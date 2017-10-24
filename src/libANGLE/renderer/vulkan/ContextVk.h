@@ -19,7 +19,7 @@ namespace rx
 {
 class RendererVk;
 
-class ContextVk : public ContextImpl, public ResourceVk
+class ContextVk : public ContextImpl
 {
   public:
     ContextVk(const gl::ContextState &state, RendererVk *renderer);
@@ -157,7 +157,7 @@ class ContextVk : public ContextImpl, public ResourceVk
     gl::Error setupDraw(const gl::Context *context, GLenum mode);
 
     RendererVk *mRenderer;
-    vk::Pipeline mCurrentPipeline;
+    vk::PipelineResource mCurrentPipeline;
     GLenum mCurrentDrawMode;
 
     // Keep CreateInfo structures cached so that we can quickly update them when creating

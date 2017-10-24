@@ -336,8 +336,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
     commandBuffer->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
                                      reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
 
-    // TODO(jmadill): the queue serial should be bound to the pipeline.
-    setQueueSerial(queueSerial);
+    // The queue serial is bound to the pipeline.
+    mCurrentPipeline.setQueueSerial(queueSerial);
     vkVAO->updateCurrentBufferSerials(programGL->getActiveAttribLocationsMask(), queueSerial);
 
     // TODO(jmadill): Can probably use more dirty bits here.
@@ -453,7 +453,6 @@ vk::Error ContextVk::getStartedCommandBuffer(vk::CommandBuffer **commandBufferOu
 
 vk::Error ContextVk::submitCommands(vk::CommandBuffer *commandBuffer)
 {
-    setQueueSerial(mRenderer->getCurrentQueueSerial());
     ANGLE_TRY(mRenderer->submitCommandBuffer(commandBuffer));
     return vk::NoError();
 }
@@ -885,7 +884,7 @@ std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
 // TODO(jmadill): Use pipeline cache.
 void ContextVk::invalidateCurrentPipeline()
 {
-    mRenderer->enqueueGarbageOrDeleteNow(*this, mCurrentPipeline);
+    mRenderer->enqueueGarbageOrDeleteNow(mCurrentPipeline, mCurrentPipeline);
 }
 
 gl::Error ContextVk::dispatchCompute(const gl::Context *context,
