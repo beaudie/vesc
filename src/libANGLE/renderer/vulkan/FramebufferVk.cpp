@@ -359,8 +359,7 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
 
 bool FramebufferVk::checkStatus(const gl::Context *context) const
 {
-    UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 void FramebufferVk::syncState(const gl::Context *context,
