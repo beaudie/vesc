@@ -1031,6 +1031,14 @@ bool ValidateES2TexImageParameters(Context *context,
         return false;
     }
 
+    if (isSubImage && pixels == nullptr &&
+        context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER) == nullptr &&
+        context->getExtensions().webglCompatibility)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), PixelDataNotNull);
+        return false;
+    }
+
     // From GL_CHROMIUM_color_buffer_float_rgb[a]:
     // GL_RGB[A] / GL_RGB[A]32F becomes an allowable format / internalformat parameter pair for
     // TexImage2D. The restriction in section 3.7.1 of the OpenGL ES 2.0 spec that the

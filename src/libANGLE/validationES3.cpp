@@ -238,6 +238,14 @@ bool ValidateES3TexImageParametersBase(Context *context,
         return false;
     }
 
+    if (isSubImage && pixels == nullptr &&
+        context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER) == nullptr &&
+        context->getExtensions().webglCompatibility)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), PixelDataNotNull);
+        return false;
+    }
+
     const gl::Caps &caps = context->getCaps();
 
     switch (target)
