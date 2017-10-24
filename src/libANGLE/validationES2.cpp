@@ -1140,6 +1140,12 @@ bool ValidateES2TexImageParameters(Context *context,
             context->handleError(InvalidValue());
             return false;
         }
+
+        if (width > 0 && height > 0 && pixels == nullptr)
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidValue(), PixelDataNull);
+            return false;
+        }
     }
     else
     {
