@@ -995,7 +995,8 @@ bool ValidImageDataSize(ValidationContext *context,
                         GLenum format,
                         GLenum type,
                         const void *pixels,
-                        GLsizei imageSize)
+                        GLsizei imageSize,
+                        bool nullPixelDataValid)
 {
     gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
     if (pixelUnpackBuffer == nullptr && imageSize < 0)
@@ -1042,6 +1043,12 @@ bool ValidImageDataSize(ValidationContext *context,
         {
             context->handleError(InvalidOperation()
                                  << "imageSize must be 0 if no texture data is provided.");
+            return false;
+        }
+
+        if (!nullPixelDataValid && pixels == nullptr && endByte != 0)
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidValue(), PixelDataNotNull);
             return false;
         }
 

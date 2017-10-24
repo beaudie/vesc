@@ -1556,7 +1556,7 @@ bool ValidateES2TexImageParameters(Context *context,
 
     GLenum sizeCheckFormat = isSubImage ? format : internalformat;
     if (!ValidImageDataSize(context, target, width, height, 1, sizeCheckFormat, type, pixels,
-                            imageSize))
+                            imageSize, !isSubImage))
     {
         return false;
     }
