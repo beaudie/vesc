@@ -426,7 +426,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
 
     GLenum sizeCheckFormat = isSubImage ? format : internalformat;
     if (!ValidImageDataSize(context, target, width, height, depth, sizeCheckFormat, type, pixels,
-                            imageSize))
+                            imageSize, !isSubImage))
     {
         return false;
     }

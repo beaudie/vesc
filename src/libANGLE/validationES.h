@@ -68,7 +68,8 @@ bool ValidImageDataSize(ValidationContext *context,
                         GLenum format,
                         GLenum type,
                         const void *pixels,
-                        GLsizei imageSize);
+                        GLsizei imageSize,
+                        bool nullPixelDataValid);
 
 bool ValidQueryType(const Context *context, GLenum queryType);
 
