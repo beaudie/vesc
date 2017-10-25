@@ -17,7 +17,7 @@
 namespace rx
 {
 
-class TextureVk : public TextureImpl, public ResourceVk
+class TextureVk : public TextureImpl
 {
   public:
     TextureVk(const gl::TextureState &state);
@@ -117,10 +117,10 @@ class TextureVk : public TextureImpl, public ResourceVk
 
   private:
     // TODO(jmadill): support a more flexible storage back-end.
-    vk::Image mImage;
-    vk::DeviceMemory mDeviceMemory;
-    vk::ImageView mImageView;
-    vk::Sampler mSampler;
+    vk::Pointer<vk::Image> mImage;
+    vk::Pointer<vk::DeviceMemory> mDeviceMemory;
+    vk::Pointer<vk::ImageView> mImageView;
+    vk::Pointer<vk::Sampler> mSampler;
 
     RenderTargetVk mRenderTarget;
 };

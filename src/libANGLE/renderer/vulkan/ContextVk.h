@@ -19,7 +19,7 @@ namespace rx
 {
 class RendererVk;
 
-class ContextVk : public ContextImpl, public ResourceVk
+class ContextVk : public ContextImpl
 {
   public:
     ContextVk(const gl::ContextState &state, RendererVk *renderer);

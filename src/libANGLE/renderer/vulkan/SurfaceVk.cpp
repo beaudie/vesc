@@ -172,7 +172,6 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
     mRenderTarget.extents.width  = static_cast<GLint>(width);
     mRenderTarget.extents.height = static_cast<GLint>(height);
     mRenderTarget.extents.depth  = 1;
-    mRenderTarget.resource       = this;
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()
@@ -190,17 +189,11 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     rendererVk->finish();
 
-    mAcquireNextImageSemaphore.destroy(device);
+    mAcquireNextImageSemaphore.release(device);
 
     for (auto &swapchainImage : mSwapchainImages)
     {
-        // Although we don't own the swapchain image handles, we need to keep our shutdown clean.
-        swapchainImage.image.reset();
-
-        swapchainImage.imageView.destroy(device);
-        swapchainImage.framebuffer.destroy(device);
-        swapchainImage.imageAcquiredSemaphore.destroy(device);
-        swapchainImage.commandsCompleteSemaphore.destroy(device);
+        swapchainImage.release(device);
     }
 
     if (mSwapchain)
@@ -371,13 +364,13 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
 
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
-        VkImage swapchainImage = swapchainImages[imageIndex];
+        auto &swapchainImage = mSwapchainImages[imageIndex];
 
         VkImageViewCreateInfo imageViewInfo;
         imageViewInfo.sType                           = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         imageViewInfo.pNext                           = nullptr;
         imageViewInfo.flags                           = 0;
-        imageViewInfo.image                           = swapchainImage;
+        imageViewInfo.image                           = swapchainImages[imageIndex];
         imageViewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
         imageViewInfo.format                          = nativeFormat;
         imageViewInfo.components.r                    = VK_COMPONENT_SWIZZLE_R;
@@ -390,16 +383,14 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
         imageViewInfo.subresourceRange.baseArrayLayer = 0;
         imageViewInfo.subresourceRange.layerCount     = 1;
 
-        vk::Image image(swapchainImage);
+        vk::Image image(swapchainImages[imageIndex]);
         vk::ImageView imageView;
-        ANGLE_TRY(imageView.init(device, imageViewInfo));
+        ANGLE_TRY(swapchainImage->imageView.init(device, imageViewInfo));
 
         // Set transfer dest layout, and clear the image to black.
         image.changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                               commandBuffer);
         commandBuffer->clearSingleColorImage(image, transparentBlack);
-
-        auto &member = mSwapchainImages[imageIndex];
 
         member.image.retain(device, std::move(image));
         member.imageView.retain(device, std::move(imageView));
@@ -554,7 +545,7 @@ gl::ErrorOrResult<vk::Framebuffer *> WindowSurfaceVk::getCurrentFramebuffer(
     VkDevice device,
     const vk::RenderPass &compatibleRenderPass)
 {
-    auto &currentFramebuffer = mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+    auto &currentFramebuffer = mSwapchainImages[mCurrentSwapchainImageIndex]->framebuffer;
 
     if (currentFramebuffer.valid())
     {
@@ -577,12 +568,11 @@ gl::ErrorOrResult<vk::Framebuffer *> WindowSurfaceVk::getCurrentFramebuffer(
 
     for (auto &swapchainImage : mSwapchainImages)
     {
-        framebufferInfo.pAttachments = swapchainImage.imageView.ptr();
+        framebufferInfo.pAttachments = swapchainImage->imageView.ptr();
 
         vk::Framebuffer framebuffer;
-        ANGLE_TRY(framebuffer.init(device, framebufferInfo));
-
-        swapchainImage.framebuffer.retain(device, std::move(framebuffer));
+        ANGLE_TRY(swapchainImage->framebuffer.init(device, framebufferInfo));
+        swapchainImage->framebuffer.addRef();
     }
 
     ASSERT(currentFramebuffer.valid());
@@ -594,6 +584,21 @@ gl::Error WindowSurfaceVk::initializeContents(const gl::Context *context,
 {
     UNIMPLEMENTED();
     return gl::NoError();
+}
+
+void WindowSurfaceVk::addCurrentResourcesToCommandBuffer(vk::CommandBuffer *commandBuffer)
+{
+    commandBuffer->addResource(mSwapchainImages[mCurrentSwapchainImageIndex]);
+}
+
+void WindowSurfaceVk::SwapchainImage::destroy(VkDevice device)
+{
+    // Although we don't own the swapchain image handles, we need to keep our shutdown clean.
+    image.reset();
+    imageView.release(device);
+    framebuffer.release(device);
+    imageAcquiredSemaphore.release(device);
+    commandsCompleteSemaphore.release(device);
 }
 
 }  // namespace rx

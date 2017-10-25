@@ -768,21 +768,15 @@ vk::Error RendererVk::createStagingImage(TextureDimension dimension,
                                          const vk::Format &format,
                                          const gl::Extents &extent,
                                          vk::StagingUsage usage,
-                                         vk::StagingImage *imageOut)
+                                         vk::Pointer<vk::StagingImage> *imageOut)
 {
-    ANGLE_TRY(imageOut->init(mDevice, mCurrentQueueFamilyIndex, mMemoryProperties, dimension,
-                             format.native, extent, usage));
-    return vk::NoError();
+    return imageOut->init(mDevice, mCurrentQueueFamilyIndex, mMemoryProperties, dimension,
+                          format.native, extent, usage);
 }
 
 GlslangWrapper *RendererVk::getGlslangWrapper()
 {
     return mGlslangWrapper;
-}
-
-Serial RendererVk::getCurrentQueueSerial() const
-{
-    return mCurrentQueueSerial;
 }
 
 }  // namespace rx

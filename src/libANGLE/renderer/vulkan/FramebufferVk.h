@@ -18,7 +18,7 @@ namespace rx
 class RenderTargetVk;
 class WindowSurfaceVk;
 
-class FramebufferVk : public FramebufferImpl, public ResourceVk
+class FramebufferVk : public FramebufferImpl
 {
   public:
     // Factory methods so we don't have to use constructors with overloads.
@@ -103,8 +103,8 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
 
     WindowSurfaceVk *mBackbuffer;
 
-    vk::RenderPass mRenderPass;
-    vk::Framebuffer mFramebuffer;
+    vk::Pointer<vk::RenderPass> mRenderPass;
+    vk::Pointer<vk::Framebuffer> mFramebuffer;
     bool mInRenderPass;
 };
 

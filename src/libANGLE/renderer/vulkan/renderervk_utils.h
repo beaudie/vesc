@@ -51,38 +51,6 @@ enum DeleteSchedule
     LATER,
 };
 
-// This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
-// at command submission times indicating it's order in the queue. We will use Fences to detect
-// when commands are finished, and then handle lifetime management for the resources.
-// Note that we use a queue order serial instead of a command buffer id serial since a queue can
-// submit multiple command buffers in one API call.
-class ResourceVk
-{
-  public:
-    void setQueueSerial(Serial queueSerial)
-    {
-        ASSERT(queueSerial >= mStoredQueueSerial);
-        mStoredQueueSerial = queueSerial;
-    }
-
-    DeleteSchedule getDeleteSchedule(Serial lastCompletedQueueSerial) const
-    {
-        if (lastCompletedQueueSerial >= mStoredQueueSerial)
-        {
-            return DeleteSchedule::NOW;
-        }
-        else
-        {
-            return DeleteSchedule::LATER;
-        }
-    }
-
-    Serial getStoredQueueSerial() const { return mStoredQueueSerial; }
-
-  private:
-    Serial mStoredQueueSerial;
-};
-
 namespace vk
 {
 class Buffer;
@@ -92,6 +60,9 @@ class Image;
 class Pipeline;
 class PipelineLayout;
 class RenderPass;
+
+template <typename ResourceT>
+class Pointer;
 
 class MemoryProperties final : angle::NonCopyable
 {
@@ -146,8 +117,27 @@ inline Error NoError()
     return Error(VK_SUCCESS);
 }
 
-template <typename DerivedT, typename HandleT>
-class WrappedObject : angle::NonCopyable
+// A vk::Resource is a reference-counted object that can be used in a graphics, compute or copy
+// queue. They are reference counted to keep a fairly simple implementation for lifetime
+// management. The destroy function is virtual so it can be called via release().
+class Resource : angle::NonCopyable
+{
+  public:
+    // Releasing can trigger object deallocation, hence it needs a device context.
+    void release(VkDevice device);
+    void addRef();
+
+  protected:
+    Resource();
+    virtual ~Resource();
+    virtual void destroy(VkDevice device) = 0;
+
+  private:
+    uint32_t mRefCount;
+};
+
+template <typename HandleT>
+class TypedResource : public Resource
 {
   public:
     HandleT getHandle() const { return mHandle; }
@@ -156,60 +146,109 @@ class WrappedObject : angle::NonCopyable
     const HandleT *ptr() const { return &mHandle; }
 
   protected:
-    WrappedObject() : mHandle(VK_NULL_HANDLE) {}
-    WrappedObject(HandleT handle) : mHandle(handle) {}
-    ~WrappedObject() { ASSERT(!valid()); }
-
-    WrappedObject(WrappedObject &&other) : mHandle(other.mHandle)
-    {
-        other.mHandle = VK_NULL_HANDLE;
-    }
-
-    // Only works to initialize empty objects, since we don't have the device handle.
-    WrappedObject &operator=(WrappedObject &&other)
-    {
-        ASSERT(!valid());
-        std::swap(mHandle, other.mHandle);
-        return *this;
-    }
-
-    void retain(VkDevice device, DerivedT &&other)
-    {
-        if (valid())
-        {
-            static_cast<DerivedT *>(this)->destroy(device);
-        }
-        std::swap(mHandle, other.mHandle);
-    }
+    TypedResource() : mHandle(VK_NULL_HANDLE) {}
+    TypedResource(HandleT handle) : mHandle(handle) {}
+    ~TypedResource() override { ASSERT(!valid()); }
 
     HandleT mHandle;
 };
 
-class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
+// Use this smart pointer class to keep references to vk::Resource.
+template <typename ResourceT>
+class Pointer final : angle::NonCopyable
+{
+  public:
+    Pointer() : mResource(nullptr) {}
+    Pointer(Resource *resource) : mResource(resource) { resource->addRef(); }
+    ~Pointer() { ASSERT(!mResource); }
+
+    Pointer(Pointer &&other) : mResource(other.mResource) { other.mResource = nullptr; }
+
+    Pointer &operator=(Pointer &&other)
+    {
+        std::swap(mResource, other.mResource);
+        return *this;
+    }
+
+    void bind(VkDevice device, ResourceT *resource)
+    {
+        reset(device);
+        mResource = resource;
+        mResource->addRef();
+    }
+
+    void reset(VkDevice device)
+    {
+        if (mResource)
+        {
+            mResource->release(device);
+        }
+        mResource = nullptr;
+    }
+
+    ResourceT *release(VkDevice device)
+    {
+        ResourceT *retVal = mResource;
+        reset(device);
+        return retVal;
+    }
+
+    operator ResourceT *() { return mResource; }
+
+    ResourceT *operator->() const { return mResource; }
+
+    ResourceT &operator*()
+    {
+        ASSERT(mResource);
+        return *mResource;
+    }
+
+    const ResourceT &operator*() const
+    {
+        ASSERT(mResource);
+        return *mResource;
+    }
+
+    ResourceT *get() const { return mResource; }
+
+    template <typename... ArgsT>
+    Error init(ArgsT &&... args)
+    {
+        ASSERT(!mResource);
+        mResource = new ResourceT;
+        return mResource->init(std::forward<ArgsT>(args)...);
+    }
+
+    bool valid() const { return mResource && mResource->valid(); }
+
+  private:
+    ResourceT *mResource;
+};
+
+class CommandPool final : public TypedResource<VkCommandPool>
 {
   public:
     CommandPool();
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device) override;
 
     Error init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
 };
 
 // Helper class that wraps a Vulkan command buffer.
-class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
+class CommandBuffer final : public TypedResource<VkCommandBuffer>
 {
   public:
     CommandBuffer();
 
     bool started() const { return mStarted; }
 
-    void destroy(VkDevice device);
-    using WrappedObject::operator=;
+    void destroy(VkDevice device) override;
 
-    void setCommandPool(CommandPool *commandPool);
+    void setCommandPool(VkDevice device, CommandPool *commandPool);
     Error begin(VkDevice device);
     Error end();
-    Error reset();
+    Error reset(VkDevice device);
 
     void singleImageBarrier(VkPipelineStageFlags srcStageMask,
                             VkPipelineStageFlags dstStageMask,
@@ -259,12 +298,15 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
                             uint32_t dynamicOffsetCount,
                             const uint32_t *dynamicOffsets);
 
+    void addResource(Resource *resource);
+
   private:
     bool mStarted;
-    CommandPool *mCommandPool;
+    Pointer<CommandPool> mCommandPool;
+    std::vector<Pointer<Resource>> mResources;
 };
 
-class Image final : public WrappedObject<Image, VkImage>
+class Image final : public TypedResource<VkImage>
 {
   public:
     // Use this constructor if the lifetime of the image is not controlled by ANGLE. (SwapChain)
@@ -275,9 +317,7 @@ class Image final : public WrappedObject<Image, VkImage>
     void reset();
 
     // Called on shutdown when the helper class *does* own the handle to the image resource.
-    void destroy(VkDevice device);
-
-    void retain(VkDevice device, Image &&other);
+    void destroy(VkDevice device) override;
 
     Error init(VkDevice device, const VkImageCreateInfo &createInfo);
 
@@ -301,60 +341,65 @@ class Image final : public WrappedObject<Image, VkImage>
     VkImageLayout mCurrentLayout;
 };
 
-class ImageView final : public WrappedObject<ImageView, VkImageView>
+class ImageView final : public TypedResource<VkImageView>
 {
   public:
     ImageView();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkImageViewCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
+class Semaphore final : public TypedResource<VkSemaphore>
 {
   public:
     Semaphore();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
+class Framebuffer final : public TypedResource<VkFramebuffer>
 {
   public:
     Framebuffer();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkFramebufferCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
+class DeviceMemory final : public TypedResource<VkDeviceMemory>
 {
   public:
     DeviceMemory();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
-    Error allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo);
+    Error init(VkDevice device, const VkMemoryAllocateInfo &allocInfo);
     Error map(VkDevice device,
               VkDeviceSize offset,
               VkDeviceSize size,
               VkMemoryMapFlags flags,
               uint8_t **mapPointer);
     void unmap(VkDevice device);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
+class RenderPass final : public TypedResource<VkRenderPass>
 {
   public:
     RenderPass();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkRenderPassCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
 enum class StagingUsage
@@ -364,13 +409,10 @@ enum class StagingUsage
     Both,
 };
 
-class StagingImage final : angle::NonCopyable
+class StagingImage final : public Resource
 {
   public:
     StagingImage();
-    StagingImage(StagingImage &&other);
-    void destroy(VkDevice device);
-    void retain(VkDevice device, StagingImage &&other);
 
     vk::Error init(VkDevice device,
                    uint32_t queueFamilyIndex,
@@ -386,161 +428,105 @@ class StagingImage final : angle::NonCopyable
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     VkDeviceSize getSize() const { return mSize; }
 
+  protected:
+    void destroy(VkDevice device) override;
+
   private:
     Image mImage;
     DeviceMemory mDeviceMemory;
     VkDeviceSize mSize;
 };
 
-class Buffer final : public WrappedObject<Buffer, VkBuffer>
+class Buffer final : public TypedResource<VkBuffer>
 {
   public:
     Buffer();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkBufferCreateInfo &createInfo);
     Error bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
+class ShaderModule final : public TypedResource<VkShaderModule>
 {
   public:
     ShaderModule();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkShaderModuleCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
+class Pipeline final : public TypedResource<VkPipeline>
 {
   public:
     Pipeline();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error initGraphics(VkDevice device, const VkGraphicsPipelineCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayout>
+class PipelineLayout final : public TypedResource<VkPipelineLayout>
 {
   public:
     PipelineLayout();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
-
     Error init(VkDevice device, const VkPipelineLayoutCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDescriptorSetLayout>
+class DescriptorSetLayout final : public TypedResource<VkDescriptorSetLayout>
 {
   public:
     DescriptorSetLayout();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPool>
+class DescriptorPool final : public TypedResource<VkDescriptorPool>
 {
   public:
     DescriptorPool();
-    void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo);
 
     Error allocateDescriptorSets(VkDevice device,
                                  const VkDescriptorSetAllocateInfo &allocInfo,
                                  VkDescriptorSet *descriptorSetsOut);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class Sampler final : public WrappedObject<Sampler, VkSampler>
+class Sampler final : public TypedResource<VkSampler>
 {
   public:
     Sampler();
-    void destroy(VkDevice device);
     Error init(VkDevice device, const VkSamplerCreateInfo &createInfo);
+
+  protected:
+    void destroy(VkDevice device) override;
 };
 
-class Fence final : public WrappedObject<Fence, VkFence>
+class Fence final : public TypedResource<VkFence>
 {
   public:
     Fence();
-    void destroy(VkDevice fence);
-    using WrappedObject::retain;
-    using WrappedObject::operator=;
 
     Error init(VkDevice device, const VkFenceCreateInfo &createInfo);
     VkResult getStatus(VkDevice device) const;
-};
 
-template <typename ObjT>
-class ObjectAndSerial final : angle::NonCopyable
-{
-  public:
-    ObjectAndSerial(ObjT &&object, Serial queueSerial)
-        : mObject(std::move(object)), mQueueSerial(queueSerial)
-    {
-    }
-
-    ObjectAndSerial(ObjectAndSerial &&other)
-        : mObject(std::move(other.mObject)), mQueueSerial(std::move(other.mQueueSerial))
-    {
-    }
-    ObjectAndSerial &operator=(ObjectAndSerial &&other)
-    {
-        mObject      = std::move(other.mObject);
-        mQueueSerial = std::move(other.mQueueSerial);
-        return *this;
-    }
-
-    void destroy(VkDevice device) { mObject.destroy(device); }
-
-    Serial queueSerial() const { return mQueueSerial; }
-
-    const ObjT &get() const { return mObject; }
-
-  private:
-    ObjT mObject;
-    Serial mQueueSerial;
-};
-
-using CommandBufferAndSerial = ObjectAndSerial<CommandBuffer>;
-using FenceAndSerial         = ObjectAndSerial<Fence>;
-
-class IGarbageObject : angle::NonCopyable
-{
-  public:
-    virtual ~IGarbageObject() {}
-    virtual bool destroyIfComplete(VkDevice device, Serial completedSerial) = 0;
-    virtual void destroy(VkDevice device) = 0;
-};
-
-template <typename T>
-class GarbageObject final : public IGarbageObject
-{
-  public:
-    GarbageObject(Serial serial, T &&object) : mSerial(serial), mObject(std::move(object)) {}
-
-    bool destroyIfComplete(VkDevice device, Serial completedSerial) override
-    {
-        if (completedSerial >= mSerial)
-        {
-            mObject.destroy(device);
-            return true;
-        }
-
-        return false;
-    }
-
-    void destroy(VkDevice device) override { mObject.destroy(device); }
-
-  private:
-    Serial mSerial;
-    T mObject;
+  protected:
+    void destroy(VkDevice device) override;
 };
 
 Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,

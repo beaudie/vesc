@@ -67,31 +67,9 @@ class RendererVk : angle::NonCopyable
                                  const vk::Format &format,
                                  const gl::Extents &extent,
                                  vk::StagingUsage usage,
-                                 vk::StagingImage *imageOut);
+                                 vk::Pointer<vk::StagingImage> *imageOut);
 
     GlslangWrapper *getGlslangWrapper();
-
-    Serial getCurrentQueueSerial() const;
-
-    template <typename T>
-    void enqueueGarbage(Serial serial, T &&object)
-    {
-        mGarbage.emplace_back(std::unique_ptr<vk::GarbageObject<T>>(
-            new vk::GarbageObject<T>(serial, std::move(object))));
-    }
-
-    template <typename T>
-    void enqueueGarbageOrDeleteNow(const ResourceVk &resource, T &&object)
-    {
-        if (resource.getDeleteSchedule(mLastCompletedQueueSerial) == DeleteSchedule::NOW)
-        {
-            object.destroy(mDevice);
-        }
-        else
-        {
-            enqueueGarbage(resource.getStoredQueueSerial(), std::move(object));
-        }
-    }
 
     uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
 
@@ -131,9 +109,8 @@ class RendererVk : angle::NonCopyable
     SerialFactory mQueueSerialFactory;
     Serial mLastCompletedQueueSerial;
     Serial mCurrentQueueSerial;
-    std::vector<vk::CommandBufferAndSerial> mInFlightCommands;
-    std::vector<vk::FenceAndSerial> mInFlightFences;
-    std::vector<std::unique_ptr<vk::IGarbageObject>> mGarbage;
+    std::vector<vk::Pointer<vk::CommandBuffer>> mInFlightCommands;
+    std::vector<vk::Pointer<vk::Fence>> mInFlightFences;
     vk::MemoryProperties mMemoryProperties;
 };
 

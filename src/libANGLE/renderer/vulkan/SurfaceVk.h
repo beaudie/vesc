@@ -60,7 +60,7 @@ class OffscreenSurfaceVk : public SurfaceImpl
     EGLint mHeight;
 };
 
-class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
+class WindowSurfaceVk : public SurfaceImpl
 {
   public:
     WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -104,6 +104,10 @@ class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
         VkDevice device,
         const vk::RenderPass &compatibleRenderPass);
 
+    // Stores the current SwapchainImage in the command buffer list of resources for deferred
+    // deletion.
+    void addCurrentResourcesToCommandBuffer(vk::CommandBuffer *commandBuffer);
+
   protected:
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
@@ -127,8 +131,11 @@ class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
     // problem with needing to know the next available image index before we acquire it.
     vk::Semaphore mAcquireNextImageSemaphore;
 
-    struct SwapchainImage
+    class SwapchainImage : public vk::Resource
     {
+      public:
+        void destroy(VkDevice device) override;
+
         vk::Image image;
         vk::ImageView imageView;
         vk::Framebuffer framebuffer;
@@ -136,7 +143,7 @@ class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
         vk::Semaphore commandsCompleteSemaphore;
     };
 
-    std::vector<SwapchainImage> mSwapchainImages;
+    std::vector<vk::Pointer<SwapchainImage>> mSwapchainImages;
 };
 
 }  // namespace rx
