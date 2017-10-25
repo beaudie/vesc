@@ -577,6 +577,13 @@ void TType::sizeUnsizedArrays(const TVector<unsigned int> &arraySizes)
     invalidateMangledName();
 }
 
+void TType::sizeOutermostUnsizedArray(unsigned int arraySize)
+{
+    ASSERT(isArray());
+    ASSERT(mArraySizes.back() == 0);
+    mArraySizes.back() = arraySize;
+}
+
 TStructure::TStructure(TSymbolTable *symbolTable, const TString *name, TFieldList *fields)
     : TFieldListCollection(name, fields),
       mDeepestNesting(0),
