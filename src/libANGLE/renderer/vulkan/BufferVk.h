@@ -16,7 +16,7 @@
 namespace rx
 {
 
-class BufferVk : public BufferImpl, public ResourceVk
+class BufferVk : public BufferImpl
 {
   public:
     BufferVk(const gl::BufferState &state);
@@ -58,8 +58,8 @@ class BufferVk : public BufferImpl, public ResourceVk
   private:
     vk::Error setDataImpl(VkDevice device, const uint8_t *data, size_t size, size_t offset);
 
-    vk::Buffer mBuffer;
-    vk::DeviceMemory mBufferMemory;
+    vk::Pointer<vk::Buffer> mBuffer;
+    vk::Pointer<vk::DeviceMemory> mBufferMemory;
     size_t mCurrentRequiredSize;
 };
 

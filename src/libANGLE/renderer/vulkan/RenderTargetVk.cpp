@@ -17,8 +17,7 @@ RenderTargetVk::RenderTargetVk()
       image(nullptr),
       imageView(nullptr),
       extents(),
-      samples(VK_SAMPLE_COUNT_1_BIT),
-      resource(nullptr)
+      samples(VK_SAMPLE_COUNT_1_BIT)
 {
 }
 

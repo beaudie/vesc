@@ -29,10 +29,10 @@ BufferVk::~BufferVk()
 void BufferVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = GetImplAs<ContextVk>(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mBuffer));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mBufferMemory));
+    VkDevice device = contextVk->getDevice();
+    mBuffer.reset(device);
+    mBufferMemory.reset(device);
 }
 
 gl::Error BufferVk::setData(const gl::Context *context,
@@ -58,11 +58,9 @@ gl::Error BufferVk::setData(const gl::Context *context,
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
 
-        vk::Buffer newBuffer;
-        ANGLE_TRY(newBuffer.init(device, createInfo));
-        mBuffer.retain(device, std::move(newBuffer));
+        ANGLE_TRY(mBuffer.init(device, createInfo));
 
-        ANGLE_TRY(vk::AllocateBufferMemory(contextVk, size, &mBuffer, &mBufferMemory,
+        ANGLE_TRY(vk::AllocateBufferMemory(contextVk, size, mBuffer.get(), mBufferMemory.get(),
                                            &mCurrentRequiredSize));
     }
 
@@ -80,8 +78,7 @@ gl::Error BufferVk::setSubData(const gl::Context *context,
                                size_t size,
                                size_t offset)
 {
-    ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
-    ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
 
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
@@ -102,13 +99,12 @@ gl::Error BufferVk::copySubData(const gl::Context *context,
 
 gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
 {
-    ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
-    ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
 
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
     ANGLE_TRY(
-        mBufferMemory.map(device, 0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
+        mBufferMemory->map(device, 0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
     return gl::NoError();
 }
@@ -119,24 +115,22 @@ gl::Error BufferVk::mapRange(const gl::Context *context,
                              GLbitfield access,
                              void **mapPtr)
 {
-    ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
-    ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
 
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
-    ANGLE_TRY(mBufferMemory.map(device, offset, length, 0, reinterpret_cast<uint8_t **>(mapPtr)));
+    ANGLE_TRY(mBufferMemory->map(device, offset, length, 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
     return gl::NoError();
 }
 
 gl::Error BufferVk::unmap(const gl::Context *context, GLboolean *result)
 {
-    ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
-    ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
 
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
-    mBufferMemory.unmap(device);
+    mBufferMemory->unmap(device);
 
     return gl::NoError();
 }
@@ -148,15 +142,16 @@ gl::Error BufferVk::getIndexRange(const gl::Context *context,
                                   bool primitiveRestartEnabled,
                                   gl::IndexRange *outRange)
 {
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
+
     VkDevice device = GetImplAs<ContextVk>(context)->getDevice();
 
     // TODO(jmadill): Consider keeping a shadow system memory copy in some cases.
-    ASSERT(mBuffer.valid());
 
     const gl::Type &typeInfo = gl::GetTypeInfo(type);
 
     uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(mBufferMemory.map(device, offset, typeInfo.bytes * count, 0, &mapPointer));
+    ANGLE_TRY(mBufferMemory->map(device, offset, typeInfo.bytes * count, 0, &mapPointer));
 
     *outRange = gl::ComputeIndexRange(type, mapPointer, count, primitiveRestartEnabled);
 
@@ -165,20 +160,22 @@ gl::Error BufferVk::getIndexRange(const gl::Context *context,
 
 vk::Error BufferVk::setDataImpl(VkDevice device, const uint8_t *data, size_t size, size_t offset)
 {
+    ASSERT(mBuffer->valid() && mBufferMemory->valid());
+
     uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(mBufferMemory.map(device, offset, size, 0, &mapPointer));
+    ANGLE_TRY(mBufferMemory->map(device, offset, size, 0, &mapPointer));
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
 
-    mBufferMemory.unmap(device);
+    mBufferMemory->unmap(device);
 
     return vk::NoError();
 }
 
 const vk::Buffer &BufferVk::getVkBuffer() const
 {
-    return mBuffer;
+    return *mBuffer;
 }
 
 }  // namespace rx

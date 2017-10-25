@@ -172,6 +172,7 @@ bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps
 namespace vk
 {
 
+// Error implementation.
 Error::Error(VkResult result) : mResult(result), mFile(nullptr), mLine(0)
 {
     ASSERT(result == VK_SUCCESS);
@@ -488,13 +489,13 @@ Image::Image() : mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED)
 {
 }
 
-Image::Image(VkImage image) : WrappedObject(image), mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED)
+Image::Image(VkImage image) : Resource(image), mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED)
 {
 }
 
 void Image::retain(VkDevice device, Image &&other)
 {
-    WrappedObject::retain(device, std::move(other));
+    Resource::retain(device, std::move(other));
     std::swap(mCurrentLayout, other.mCurrentLayout);
 }
 
@@ -681,7 +682,7 @@ void DeviceMemory::destroy(VkDevice device)
     }
 }
 
-Error DeviceMemory::allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo)
+Error DeviceMemory::init(VkDevice device, const VkMemoryAllocateInfo &allocInfo)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(vkAllocateMemory(device, &allocInfo, nullptr, &mHandle));

@@ -80,19 +80,6 @@ class RendererVk : angle::NonCopyable
             new vk::GarbageObject<T>(serial, std::move(object))));
     }
 
-    template <typename T>
-    void enqueueGarbageOrDeleteNow(const ResourceVk &resource, T &&object)
-    {
-        if (resource.getDeleteSchedule(mLastCompletedQueueSerial) == DeleteSchedule::NOW)
-        {
-            object.destroy(mDevice);
-        }
-        else
-        {
-            enqueueGarbage(resource.getStoredQueueSerial(), std::move(object));
-        }
-    }
-
     uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }

@@ -29,12 +29,12 @@ TextureVk::~TextureVk()
 gl::Error TextureVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = GetImplAs<ContextVk>(context);
-    RendererVk *renderer = contextVk->getRenderer();
+    VkDevice device = contextVk->getDevice();
 
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mImage));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mDeviceMemory));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mImageView));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mSampler));
+    mImage.reset(device);
+    mDeviceMemory.reset(device);
+    mImageView.reset(device);
+    mSampler.reset(device);
 
     return gl::NoError();
 }
@@ -53,7 +53,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     ASSERT(level == 0);
 
     // TODO(jmadill): support texture re-definition.
-    ASSERT(!mImage.valid());
+    ASSERT(!mImage->valid());
 
     // TODO(jmadill): support other types of textures.
     ASSERT(target == GL_TEXTURE_2D);
@@ -91,7 +91,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     // Allocate the device memory for the image.
     // TODO(jmadill): Use more intelligent device memory allocation.
     VkMemoryRequirements memoryRequirements;
-    mImage.getMemoryRequirements(device, &memoryRequirements);
+    mImage->getMemoryRequirements(device, &memoryRequirements);
 
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -104,14 +104,14 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     allocateInfo.allocationSize  = memoryRequirements.size;
     allocateInfo.memoryTypeIndex = memoryIndex;
 
-    ANGLE_TRY(mDeviceMemory.allocate(device, allocateInfo));
-    ANGLE_TRY(mImage.bindMemory(device, mDeviceMemory));
+    ANGLE_TRY(mDeviceMemory.init(device, allocateInfo));
+    ANGLE_TRY(mImage->bindMemory(device, *mDeviceMemory));
 
     VkImageViewCreateInfo viewInfo;
     viewInfo.sType                           = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.pNext                           = nullptr;
     viewInfo.flags                           = 0;
-    viewInfo.image                           = mImage.getHandle();
+    viewInfo.image                           = mImage->getHandle();
     viewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
     viewInfo.format                          = vkFormat.native;
     viewInfo.components.r                    = VK_COMPONENT_SWIZZLE_R;
@@ -150,12 +150,11 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 
     ANGLE_TRY(mSampler.init(device, samplerInfo));
 
-    mRenderTarget.image     = &mImage;
-    mRenderTarget.imageView = &mImageView;
+    mRenderTarget.image     = mImage.get();
+    mRenderTarget.imageView = mImageView.get();
     mRenderTarget.format    = &vkFormat;
     mRenderTarget.extents   = size;
     mRenderTarget.samples   = VK_SAMPLE_COUNT_1_BIT;
-    mRenderTarget.resource  = this;
 
     // Handle initial data.
     // TODO(jmadill): Consider re-using staging texture.
@@ -210,15 +209,14 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(contextVk->getStartedCommandBuffer(&commandBuffer));
-        setQueueSerial(renderer->getCurrentQueueSerial());
 
         stagingImage.getImage().changeLayoutTop(
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
-        mImage.changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        mImage->changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                commandBuffer);
 
         gl::Box wholeRegion(0, 0, 0, size.width, size.height, size.depth);
-        commandBuffer->copySingleImage(stagingImage.getImage(), mImage, wholeRegion,
+        commandBuffer->copySingleImage(stagingImage.getImage(), *mImage, wholeRegion,
                                        VK_IMAGE_ASPECT_COLOR_BIT);
 
         // TODO(jmadill): Re-use staging images.
@@ -374,20 +372,20 @@ gl::Error TextureVk::initializeContents(const gl::Context *context,
 
 const vk::Image &TextureVk::getImage() const
 {
-    ASSERT(mImage.valid());
-    return mImage;
+    ASSERT(mImage->valid());
+    return *mImage;
 }
 
 const vk::ImageView &TextureVk::getImageView() const
 {
-    ASSERT(mImageView.valid());
-    return mImageView;
+    ASSERT(mImageView->valid());
+    return *mImageView;
 }
 
 const vk::Sampler &TextureVk::getSampler() const
 {
-    ASSERT(mSampler.valid());
-    return mSampler;
+    ASSERT(mSampler->valid());
+    return *mSampler;
 }
 
 }  // namespace rx
