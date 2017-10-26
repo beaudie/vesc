@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 
 #include "common/bitset_utils.h"
+#include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
@@ -1979,7 +1980,15 @@ void ProgramD3D::defineUniformsAndAssignRegisters(const gl::Context *context)
         if (!glUniform.isInDefaultBlock())
             continue;
 
-        auto mapEntry = uniformMap.find(glUniform.name);
+        std::string name = glUniform.name;
+        if (glUniform.isArray())
+        {
+            // In the program state, array uniform names include [0] as in the program resource
+            // spec. Here we don't include it.
+            ASSERT(angle::EndsWith(name, "[0]"));
+            name.resize(name.length() - 3);
+        }
+        auto mapEntry = uniformMap.find(name);
         ASSERT(mapEntry != uniformMap.end());
         mD3DUniforms.push_back(mapEntry->second);
     }
