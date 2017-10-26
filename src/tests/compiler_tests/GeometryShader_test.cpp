@@ -1564,3 +1564,33 @@ TEST_F(GeometryShaderOutputCodeTest, ValidateGLInMembersInOutputShaderString)
     compile(shaderString2);
     EXPECT_TRUE(foundInESSLCode("].gl_Position"));
 }
+
+// Verify that Geometry Shaders are supported in GLSL ES version 310 with EXT_geometry_shader
+// enabled.
+TEST_F(GeometryShaderTest, Version310WithEXTExtension)
+{
+    const std::string &shaderString =
+        R"(#version 310 es
+        #extension GL_EXT_geometry_shader : require
+        layout(triangles, invocations = 2) in;
+        layout(triangle_strip, max_vertices = 3) out;
+        in vec4 i_color[];
+        out vec4 o_color;
+        void main()
+        {
+            for (int i = 0; i < i_color.length(); i++)
+            {
+                gl_Position = gl_in[i].gl_Position;
+                o_color = i_color[i];
+                gl_PrimitiveID = gl_PrimitiveIDIn;
+                gl_Layer = gl_InvocationID;
+                EmitVertex();
+            }
+            EndPrimitive();
+        })";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
