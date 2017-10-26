@@ -140,29 +140,13 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
 template <typename VarT>
 GLuint GetResourceIndexFromName(const std::vector<VarT> &list, const std::string &name)
 {
-    std::vector<unsigned int> subscripts;
-    std::string baseName = ParseResourceName(name, &subscripts);
-
-    // The app is not allowed to specify array indices other than 0 for arrays of basic types
-    for (unsigned int subscript : subscripts)
-    {
-        if (subscript != 0u)
-        {
-            return GL_INVALID_INDEX;
-        }
-    }
-
+    std::string nameAsArrayName = name + "[0]";
     for (size_t index = 0; index < list.size(); index++)
     {
         const VarT &resource = list[index];
-        if (resource.name == baseName)
+        if (resource.name == name || (resource.isArray() && resource.name == nameAsArrayName))
         {
-            // TODO(oetuaho@nvidia.com): Check array nesting >= number of specified
-            // subscripts once arrays of arrays are supported in ShaderVariable.
-            if ((resource.isArray() || subscripts.empty()) && subscripts.size() <= 1u)
-            {
-                return static_cast<GLuint>(index);
-            }
+            return static_cast<GLuint>(index);
         }
     }
 
@@ -363,8 +347,15 @@ const std::string &ProgramState::getLabel()
 
 GLint ProgramState::getUniformLocation(const std::string &name) const
 {
-    std::vector<unsigned int> subscripts;
-    std::string baseName = ParseResourceName(name, &subscripts);
+    std::string nameAsArrayName = name + "[0]";
+
+    std::string nameAsArrayElementName(name);
+    unsigned int arrayIndex = ParseAndStripArrayIndex(&nameAsArrayElementName);
+    if (arrayIndex != GL_INVALID_INDEX)
+    {
+        // Replace the final array index in name with zero to match the stored uniform array name.
+        nameAsArrayElementName += "[0]";
+    }
 
     for (size_t location = 0; location < mUniformLocations.size(); ++location)
     {
@@ -376,23 +367,29 @@ GLint ProgramState::getUniformLocation(const std::string &name) const
 
         const LinkedUniform &uniform = mUniforms[uniformLocation.index];
 
-        if (uniform.name == baseName)
+        if (name == uniform.name)
         {
-            if (uniform.isArray())
-            {
-                if (uniformLocation.arrayIndices == subscripts ||
-                    (uniformLocation.areAllArrayIndicesZero() && subscripts.empty()))
-                {
-                    return static_cast<GLint>(location);
-                }
-            }
-            else
-            {
-                if (subscripts.empty())
-                {
-                    return static_cast<GLint>(location);
-                }
-            }
+            // GLES 3.1 November 2016 page 87.
+            // The string exactly matches the name of the active variable.
+            return static_cast<GLint>(location);
+        }
+        if (nameAsArrayName == uniform.name && uniform.isArray())
+        {
+            // The string identifies the base name of an active array, where the string would
+            // exactly match the name of the variable if the suffix "[0]" were appended to the
+            // string.
+            return static_cast<GLint>(location);
+        }
+        if (nameAsArrayElementName == uniform.name && uniform.isArray() &&
+            uniformLocation.arrayIndices[0] == arrayIndex)
+        {
+            // The string identifies an active element of the array, where the string ends with the
+            // concatenation of the "[" character, an integer (with no "+" sign, extra leading
+            // zeroes, or whitespace) identifying an array element, and the "]" character, the
+            // integer is less than the number of active elements of the array variable, and where
+            // the string would exactly match the enumerated name of the array if the decimal
+            // integer were replaced with zero.
+            return static_cast<GLint>(location);
         }
     }
 
@@ -576,8 +573,7 @@ void Program::bindAttributeLocation(GLuint index, const char *name)
 
 void Program::bindUniformLocation(GLuint index, const char *name)
 {
-    // Bind the base uniform name only since array indices other than 0 cannot be bound
-    mUniformLocationBindings.bindLocation(index, ParseResourceName(name, nullptr));
+    mUniformLocationBindings.bindLocation(index, name);
 }
 
 void Program::bindFragmentInputLocation(GLint index, const char *name)
@@ -1133,15 +1129,7 @@ GLint Program::getActiveAttributeMaxLength() const
 
 GLuint Program::getInputResourceIndex(const GLchar *name) const
 {
-    for (GLuint attributeIndex = 0; attributeIndex < mState.mAttributes.size(); ++attributeIndex)
-    {
-        const sh::Attribute &attribute = mState.mAttributes[attributeIndex];
-        if (attribute.name == name)
-        {
-            return attributeIndex;
-        }
-    }
-    return GL_INVALID_INDEX;
+    return GetResourceIndexFromName(mState.mAttributes, std::string(name));
 }
 
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
@@ -1179,9 +1167,7 @@ void Program::getResourceName(GLuint index,
 
     if (bufSize > 0)
     {
-        std::string nameWithArray = (resource.isArray() ? resource.name + "[0]" : resource.name);
-
-        CopyStringToBuffer(name, nameWithArray, bufSize, length);
+        CopyStringToBuffer(name, resource.name, bufSize, length);
     }
 }
 
@@ -1223,16 +1209,26 @@ const sh::OutputVariable &Program::getOutputResource(GLuint index) const
 
 GLint Program::getFragDataLocation(const std::string &name) const
 {
-    std::string baseName(name);
-    unsigned int arrayIndex = ParseAndStripArrayIndex(&baseName);
+    std::string nameAsArrayName = name + "[0]";
+
+    std::string nameAsArrayElementName(name);
+    unsigned int arrayIndex = ParseAndStripArrayIndex(&nameAsArrayElementName);
+    if (arrayIndex != GL_INVALID_INDEX)
+    {
+        // Replace the final array index in name with zero to match the stored uniform array name.
+        nameAsArrayElementName += "[0]";
+    }
+
+    // See ProgramState::getUniformLocation for a more thorough desciption of the algorithm here.
     for (auto outputPair : mState.mOutputLocations)
     {
         const VariableLocation &locationInfo     = outputPair.second;
         const sh::OutputVariable &outputVariable = mState.mOutputVariables[locationInfo.index];
         ASSERT(locationInfo.arrayIndices.size() <= 1);
-        if (outputVariable.name == baseName &&
-            (arrayIndex == GL_INVALID_INDEX || (!locationInfo.arrayIndices.empty() &&
-                                                arrayIndex == locationInfo.arrayIndices.back())))
+        if (outputVariable.name == name ||
+            (outputVariable.name == nameAsArrayName && outputVariable.isArray()) ||
+            (outputVariable.name == nameAsArrayElementName && outputVariable.isArray() &&
+             locationInfo.arrayIndices[0] == arrayIndex))
         {
             return static_cast<GLint>(outputPair.first);
         }
@@ -1256,10 +1252,6 @@ void Program::getActiveUniform(GLuint index,
         if (bufsize > 0)
         {
             std::string string = uniform.name;
-            if (uniform.isArray())
-            {
-                string += "[0]";
-            }
             CopyStringToBuffer(name, string, bufsize, length);
         }
 
@@ -2765,6 +2757,12 @@ void Program::linkOutputVariables(const Context *context)
     {
         const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
 
+        if (outputVariable.isArray())
+        {
+            mState.mOutputVariables[outputVariableIndex].name += "[0]";
+            mState.mOutputVariables[outputVariableIndex].mappedName += "[0]";
+        }
+
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
             continue;
@@ -2935,9 +2933,9 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
 {
     for (const VarT &field : fields)
     {
-        const std::string &fullName = (prefix.empty() ? field.name : prefix + "." + field.name);
+        std::string fullName = (prefix.empty() ? field.name : prefix + "." + field.name);
 
-        const std::string &fullMappedName =
+        std::string fullMappedName =
             (mappedPrefix.empty() ? field.mappedName : mappedPrefix + "." + field.mappedName);
 
         if (field.isStruct())
@@ -2959,6 +2957,12 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
             if (!mProgram->getUniformBlockMemberInfo(fullName, fullMappedName, &memberInfo))
             {
                 continue;
+            }
+
+            if (field.isArray())
+            {
+                fullName += "[0]";
+                fullMappedName += "[0]";
             }
 
             LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,

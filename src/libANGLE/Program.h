@@ -340,7 +340,10 @@ class ProgramState final : angle::NonCopyable
     //  4. Atomic counter uniforms
     //  5. Uniform block uniforms
     // This makes opaque uniform validation easier, since we don't need a separate list.
+    // There's a separate entry for each struct member and each inner array of an array of arrays.
+    // Array uniform names and mapped names include [0] in the end.
     std::vector<LinkedUniform> mUniforms;
+
     std::vector<VariableLocation> mUniformLocations;
     std::vector<InterfaceBlock> mUniformBlocks;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
@@ -355,6 +358,7 @@ class ProgramState final : angle::NonCopyable
     // An array of the images that are used by the program
     std::vector<gl::ImageBinding> mImageBindings;
 
+    // Array output variable names and mapped names include [0] in the end.
     std::vector<sh::OutputVariable> mOutputVariables;
     std::map<int, VariableLocation> mOutputLocations;
     DrawBufferMask mActiveOutputVariables;
