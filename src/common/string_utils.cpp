@@ -158,6 +158,11 @@ Optional<std::vector<wchar_t>> WidenString(size_t length, const char *cString)
     return Optional<std::vector<wchar_t>>(wcstring);
 }
 
+bool BeginsWith(const std::string &str, const std::string &prefix)
+{
+    return strncmp(str.c_str(), prefix.c_str(), prefix.length()) == 0;
+}
+
 bool BeginsWith(const std::string &str, const char *prefix)
 {
     return strncmp(str.c_str(), prefix, strlen(prefix)) == 0;
