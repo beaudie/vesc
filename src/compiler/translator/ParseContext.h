@@ -173,6 +173,7 @@ class TParseContext : angle::NonCopyable
     }
     bool supportsExtension(TExtension extension);
     bool isExtensionEnabled(TExtension extension) const;
+    bool supportsGeometryShaderExtension() const;
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc,
                                const char *name,
