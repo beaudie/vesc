@@ -1160,6 +1160,7 @@ void TParseContext::checkIsParameterQualifierValid(
 bool TParseContext::checkCanUseExtension(const TSourceLoc &line, TExtension extension)
 {
     ASSERT(extension != TExtension::UNDEFINED);
+    ASSERT(extension != TExtension::EXT_geometry_shader);
     const TExtensionBehavior &extBehavior   = extensionBehavior();
     TExtensionBehavior::const_iterator iter = extBehavior.find(extension);
     if (iter == extBehavior.end())
@@ -1170,8 +1171,31 @@ bool TParseContext::checkCanUseExtension(const TSourceLoc &line, TExtension exte
     // In GLSL ES, an extension's default behavior is "disable".
     if (iter->second == EBhDisable || iter->second == EBhUndefined)
     {
-        error(line, "extension is disabled", GetExtensionNameString(extension));
-        return false;
+        // We also need to check EXT_geometry_shader because internally we always use
+        // TExtension::OES_geometry_shader to represent both OES_geometry_shader and
+        // EXT_geometry_shader.
+        if (extension == TExtension::OES_geometry_shader)
+        {
+            iter = extBehavior.find(TExtension::EXT_geometry_shader);
+            ASSERT(iter != extBehavior.end());
+            if (iter->second == EBhUndefined)
+            {
+                error(line, "extension is disabled",
+                      GetExtensionNameString(TExtension::OES_geometry_shader));
+                return false;
+            }
+            else if (iter->second == EBhDisable)
+            {
+                error(line, "extension is disabled",
+                      GetExtensionNameString(TExtension::EXT_geometry_shader));
+                return false;
+            }
+        }
+        else
+        {
+            error(line, "extension is disabled", GetExtensionNameString(extension));
+            return false;
+        }
     }
     if (iter->second == EBhWarn)
     {
@@ -1648,6 +1672,12 @@ bool TParseContext::supportsExtension(TExtension extension)
 bool TParseContext::isExtensionEnabled(TExtension extension) const
 {
     return IsExtensionEnabled(extensionBehavior(), extension);
+}
+
+bool TParseContext::supportsGeometryShaderExtension() const
+{
+    return isExtensionEnabled(TExtension::OES_geometry_shader) ||
+           isExtensionEnabled(TExtension::EXT_geometry_shader);
 }
 
 void TParseContext::handleExtensionDirective(const TSourceLoc &loc,
@@ -4214,46 +4244,43 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.imageInternalFormat = EiifR32UI;
     }
-    else if (qualifierType == "points" && isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "points" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptPoints;
     }
-    else if (qualifierType == "lines" && isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "lines" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLines;
     }
-    else if (qualifierType == "lines_adjacency" &&
-             isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "lines_adjacency" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLinesAdjacency;
     }
-    else if (qualifierType == "triangles" && isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "triangles" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTriangles;
     }
-    else if (qualifierType == "triangles_adjacency" &&
-             isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "triangles_adjacency" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTrianglesAdjacency;
     }
-    else if (qualifierType == "line_strip" && isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "line_strip" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLineStrip;
     }
-    else if (qualifierType == "triangle_strip" &&
-             isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "triangle_strip" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
@@ -4410,14 +4437,12 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
     {
         parseNumViews(intValue, intValueLine, intValueString, &qualifier.numViews);
     }
-    else if (qualifierType == "invocations" &&
-             isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "invocations" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         parseInvocations(intValue, intValueLine, intValueString, &qualifier.invocations);
     }
-    else if (qualifierType == "max_vertices" &&
-             isExtensionEnabled(TExtension::OES_geometry_shader) &&
+    else if (qualifierType == "max_vertices" && supportsGeometryShaderExtension() &&
              mShaderType == GL_GEOMETRY_SHADER_OES)
     {
         parseMaxVertices(intValue, intValueLine, intValueString, &qualifier.maxVertices);
