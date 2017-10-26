@@ -49,6 +49,10 @@ bool ReadFileToString(const std::string &path, std::string *stringOut);
 Optional<std::vector<wchar_t>> WidenString(size_t length, const char *cString);
 
 // Check if the string str begins with the given prefix.
+// The comparison is case sensitive.
+bool BeginsWith(const std::string &str, const std::string &prefix);
+
+// Check if the string str begins with the given prefix.
 // Prefix may not be NULL and needs to be NULL terminated.
 // The comparison is case sensitive.
 bool BeginsWith(const std::string &str, const char *prefix);

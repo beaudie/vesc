@@ -454,11 +454,6 @@ GLint GetLocationVariableProperty(const sh::VariableWithLocation &var, GLenum pr
         case GL_NAME_LENGTH:
         {
             size_t length = var.name.size();
-            if (var.isArray())
-            {
-                // Counts "[0]".
-                length += 3;
-            }
             // ES31 spec p84: This counts the terminating null char.
             ++length;
             return clampCast<GLint>(length);
@@ -1471,7 +1466,7 @@ GLint QueryProgramResourceLocation(const Program *program,
             return program->getFragDataLocation(name);
 
         case GL_UNIFORM:
-            return program->getState().getUniformLocation(name);
+            return program->getUniformLocation(name);
 
         default:
             UNREACHABLE();
