@@ -816,6 +816,38 @@ TEST_P(WebGLCompatibilityTest, EnablePackPackSubImageExtension)
     }
 }
 
+TEST_P(WebGLCompatibilityTest, EnableRGB8RGBA8Extension)
+{
+    EXPECT_FALSE(extensionEnabled("GL_OES_rgb8_rgba8"));
+
+    // This extensions become core in in ES3/WebGL2.
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() >= 3);
+
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    EXPECT_GL_NO_ERROR();
+
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8_OES, 1, 1);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, 1, 1);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    if (extensionRequestable("GL_OES_rgb8_rgba8"))
+    {
+        glRequestExtensionANGLE("GL_OES_rgb8_rgba8");
+        EXPECT_GL_NO_ERROR();
+
+        EXPECT_TRUE(extensionEnabled("GL_OES_rgb8_rgba8"));
+
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8_OES, 1, 1);
+        EXPECT_GL_NO_ERROR();
+
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, 1, 1);
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
 // Verify that the context generates the correct error when the framebuffer attachments are
 // different sizes
 TEST_P(WebGLCompatibilityTest, FramebufferAttachmentSizeMismatch)
