@@ -824,6 +824,19 @@ bool ValidateES3CopyTexImageParametersBase(ValidationContext *context,
         }
     }
 
+    // Validate that there are no copy feedback loops
+    if (source->type() == GL_TEXTURE)
+    {
+        const Texture *sourceTexture = source->getTexture();
+        const Texture *destTexture   = context->getGLState().getTargetTexture(target);
+        if (sourceTexture == destTexture && level == source->getTextureImageIndex().mipIndex &&
+            zoffset == source->getTextureImageIndex().layerIndex)
+        {
+            context->handleError(InvalidOperation());
+            return false;
+        }
+    }
+
     // If width or height is zero, it is a no-op.  Return false without setting an error.
     return (width > 0 && height > 0);
 }
