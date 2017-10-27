@@ -2027,7 +2027,7 @@ bool ValidateCompressedTexSubImage3D(Context *context,
         return false;
     }
 
-    if (!data)
+    if (imageSize != 0 && !data)
     {
         context->handleError(InvalidValue());
         return false;
