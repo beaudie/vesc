@@ -190,7 +190,7 @@ GLint GetVariableLocation(const std::vector<VarT> &list,
                 return static_cast<GLint>(location);
             }
         }
-        if (variable.isArray() && variableLocation.arrayIndices[0] == arrayIndex &&
+        if (variable.isArray() && variableLocation.arrayIndex == arrayIndex &&
             strncmp(variable.name.c_str(), name.c_str(), nameLengthWithoutArrayIndex) == 0 &&
             nameLengthWithoutArrayIndex + 3u == variable.name.length())
         {
@@ -331,26 +331,14 @@ void InfoLog::reset()
 {
 }
 
-VariableLocation::VariableLocation() : index(kUnused), flattenedArrayOffset(0u), ignored(false)
+VariableLocation::VariableLocation() : arrayIndex(0), index(kUnused), ignored(false)
 {
 }
 
 VariableLocation::VariableLocation(unsigned int arrayIndex, unsigned int index)
-    : arrayIndices(1, arrayIndex), index(index), flattenedArrayOffset(arrayIndex), ignored(false)
+    : arrayIndex(arrayIndex), index(index), ignored(false)
 {
     ASSERT(arrayIndex != GL_INVALID_INDEX);
-}
-
-bool VariableLocation::areAllArrayIndicesZero() const
-{
-    for (unsigned int arrayIndex : arrayIndices)
-    {
-        if (arrayIndex != 0)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 void Program::Bindings::bindLocation(GLuint index, const std::string &name)
@@ -3083,7 +3071,7 @@ void Program::updateSamplerUniform(const VariableLocation &locationInfo,
     std::vector<GLuint> *boundTextureUnits =
         &mState.mSamplerBindings[samplerIndex].boundTextureUnits;
 
-    std::copy(v, v + clampedCount, boundTextureUnits->begin() + locationInfo.flattenedArrayOffset);
+    std::copy(v, v + clampedCount, boundTextureUnits->begin() + locationInfo.arrayIndex);
 
     // Invalidate the validation cache.
     mCachedValidateSamplersResult.reset();
@@ -3102,8 +3090,7 @@ GLsizei Program::clampUniformCount(const VariableLocation &locationInfo,
 
     // OpenGL ES 3.0.4 spec pg 67: "Values for any array element that exceeds the highest array
     // element index used, as reported by GetActiveUniform, will be ignored by the GL."
-    unsigned int remainingElements =
-        linkedUniform.elementCount() - locationInfo.flattenedArrayOffset;
+    unsigned int remainingElements = linkedUniform.elementCount() - locationInfo.arrayIndex;
     GLsizei maxElementCount =
         static_cast<GLsizei>(remainingElements * linkedUniform.getElementComponents());
 
@@ -3132,8 +3119,7 @@ GLsizei Program::clampMatrixUniformCount(GLint location,
 
     // OpenGL ES 3.0.4 spec pg 67: "Values for any array element that exceeds the highest array
     // element index used, as reported by GetActiveUniform, will be ignored by the GL."
-    unsigned int remainingElements =
-        linkedUniform.elementCount() - locationInfo.flattenedArrayOffset;
+    unsigned int remainingElements = linkedUniform.elementCount() - locationInfo.arrayIndex;
     return std::min(count, static_cast<GLsizei>(remainingElements));
 }
 
