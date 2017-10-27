@@ -963,25 +963,22 @@ bool ValidCompressedSubImageSize(const ValidationContext *context,
         return false;
     }
 
-    if (CompressedTextureFormatRequiresExactSize(internalFormat))
+    if (xoffset % formatInfo.compressedBlockWidth != 0 ||
+        yoffset % formatInfo.compressedBlockHeight != 0)
     {
-        if (xoffset % formatInfo.compressedBlockWidth != 0 ||
-            yoffset % formatInfo.compressedBlockHeight != 0)
-        {
-            return false;
-        }
+        return false;
+    }
 
-        // Allowed to either have data that is a multiple of block size or is smaller than the block
-        // size but fills the entire mip
-        bool fillsEntireMip = xoffset == 0 && yoffset == 0 &&
-                              static_cast<size_t>(width) == textureWidth &&
-                              static_cast<size_t>(height) == textureHeight;
-        bool sizeMultipleOfBlockSize = (width % formatInfo.compressedBlockWidth) == 0 &&
-                                       (height % formatInfo.compressedBlockHeight) == 0;
-        if (!sizeMultipleOfBlockSize && !fillsEntireMip)
-        {
-            return false;
-        }
+    // Allowed to either have data that is a multiple of block size or is smaller than the block
+    // size but fills the entire mip
+    bool fillsEntireMip = xoffset == 0 && yoffset == 0 &&
+                          static_cast<size_t>(width) == textureWidth &&
+                          static_cast<size_t>(height) == textureHeight;
+    bool sizeMultipleOfBlockSize = (width % formatInfo.compressedBlockWidth) == 0 &&
+                                   (height % formatInfo.compressedBlockHeight) == 0;
+    if (!sizeMultipleOfBlockSize && !fillsEntireMip)
+    {
+        return false;
     }
 
     return true;
