@@ -31,10 +31,10 @@ gl::Error TextureVk::onDestroy(const gl::Context *context)
     ContextVk *contextVk = GetImplAs<ContextVk>(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mImage));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mDeviceMemory));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mImageView));
-    renderer->enqueueGarbageOrDeleteNow(*this, std::move(mSampler));
+    renderer->releaseResource(*this, std::move(mImage));
+    renderer->releaseResource(*this, std::move(mDeviceMemory));
+    renderer->releaseResource(*this, std::move(mImageView));
+    renderer->releaseResource(*this, std::move(mSampler));
 
     return gl::NoError();
 }
@@ -222,7 +222,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
                                        VK_IMAGE_ASPECT_COLOR_BIT);
 
         // TODO(jmadill): Re-use staging images.
-        renderer->enqueueGarbage(renderer->getCurrentQueueSerial(), std::move(stagingImage));
+        renderer->releaseObject(renderer->getCurrentQueueSerial(), std::move(stagingImage));
     }
 
     return gl::NoError();
