@@ -215,7 +215,11 @@ PointSpritesParams D3D9Params()
 PointSpritesParams OpenGLParams()
 {
     PointSpritesParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES();
+#else
     params.eglParameters = egl_platform::OPENGL();
+#endif
     return params;
 }
 

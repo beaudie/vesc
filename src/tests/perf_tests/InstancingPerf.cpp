@@ -347,7 +347,11 @@ InstancingPerfParams InstancingPerfD3D9Params()
 InstancingPerfParams InstancingPerfOpenGLParams()
 {
     InstancingPerfParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = OPENGLES();
+#else
     params.eglParameters = OPENGL();
+#endif
     return params;
 }
 

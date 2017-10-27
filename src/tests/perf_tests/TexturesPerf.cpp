@@ -279,7 +279,11 @@ TexturesParams D3D9Params()
 TexturesParams OpenGLParams()
 {
     TexturesParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES_NULL();
+#else
     params.eglParameters = egl_platform::OPENGL_NULL();
+#endif
     return params;
 }
 

@@ -396,8 +396,13 @@ UniformsParams MatrixUniforms(const EGLPlatformParameters &egl, DataMode dataMod
     params.dataMode      = dataMode;
 
     // Reduce the number of uniforms to fit within smaller upper limits on some configs.
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.numVertexUniforms   = 64;
+    params.numFragmentUniforms = 64;
+#else
     params.numVertexUniforms   = 100;
     params.numFragmentUniforms = 100;
+#endif
 
     return params;
 }
@@ -414,9 +419,19 @@ ANGLE_INSTANTIATE_TEST(UniformsBenchmark,
                        VectorUniforms(D3D11(), DataMode::REPEAT),
                        VectorUniforms(D3D11(), DataMode::UPDATE),
                        VectorUniforms(D3D11_NULL(), DataMode::UPDATE),
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       VectorUniforms(OPENGLES(), DataMode::UPDATE),
+                       VectorUniforms(OPENGLES(), DataMode::REPEAT),
+                       VectorUniforms(OPENGLES_NULL(), DataMode::UPDATE),
+#else
                        VectorUniforms(OPENGL(), DataMode::UPDATE),
                        VectorUniforms(OPENGL(), DataMode::REPEAT),
                        VectorUniforms(OPENGL_NULL(), DataMode::UPDATE),
+#endif
                        MatrixUniforms(D3D11(), DataMode::UPDATE),
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       MatrixUniforms(OPENGLES(), DataMode::UPDATE),
+#else
                        MatrixUniforms(OPENGL(), DataMode::UPDATE),
+#endif
                        VectorUniforms(D3D11_NULL(), DataMode::REPEAT, ProgramMode::MULTIPLE));

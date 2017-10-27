@@ -178,7 +178,11 @@ DrawElementsPerfParams DrawElementsPerfD3D9Params(bool indexBufferChanged)
 DrawElementsPerfParams DrawElementsPerfOpenGLParams(bool indexBufferChanged)
 {
     DrawElementsPerfParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = angle::egl_platform::OPENGLES();
+#else
     params.eglParameters      = angle::egl_platform::OPENGL();
+#endif
     params.indexBufferChanged = indexBufferChanged;
     return params;
 }

@@ -514,10 +514,18 @@ TEST_P(MultiviewCPUBoundBenchmark, Run)
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewCPUBoundBenchmark,
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       NoAcceleration(egl_platform::OPENGLES(), SmallWorkload()),
+#else
                        NoAcceleration(egl_platform::OPENGL(), SmallWorkload()),
+#endif
                        NoAcceleration(egl_platform::D3D11(), SmallWorkload()),
                        SelectViewInGeometryShader(SmallWorkload()),
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       SelectViewInVertexShader(egl_platform::OPENGLES(), SmallWorkload()),
+#else
                        SelectViewInVertexShader(egl_platform::OPENGL(), SmallWorkload()),
+#endif
                        SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload()));
 
 TEST_P(MultiviewGPUBoundBenchmark, Run)
@@ -526,10 +534,18 @@ TEST_P(MultiviewGPUBoundBenchmark, Run)
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewGPUBoundBenchmark,
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       NoAcceleration(egl_platform::OPENGLES(), BigWorkload()),
+#else
                        NoAcceleration(egl_platform::OPENGL(), BigWorkload()),
+#endif
                        NoAcceleration(egl_platform::D3D11(), BigWorkload()),
                        SelectViewInGeometryShader(BigWorkload()),
+#if defined(ANGLE_PLATFORM_ANDROID)
+                       SelectViewInVertexShader(egl_platform::OPENGLES(), BigWorkload()),
+#else
                        SelectViewInVertexShader(egl_platform::OPENGL(), BigWorkload()),
+#endif
                        SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload()));
 
 }  // anonymous namespace

@@ -90,7 +90,7 @@ std::string TexSubImageParams::suffix() const
 }
 
 TexSubImageBenchmark::TexSubImageBenchmark()
-    : ANGLERenderTest("TexSubImage", GetParam()),
+    : ANGLERenderTest("TexSubImage", GetParam(), {"GL_EXT_texture_storage"}),
       mProgram(0),
       mPositionLoc(-1),
       mTexCoordLoc(-1),
@@ -277,7 +277,11 @@ TexSubImageParams D3D9Params()
 TexSubImageParams OpenGLParams()
 {
     TexSubImageParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES();
+#else
     params.eglParameters = egl_platform::OPENGL();
+#endif
     return params;
 }
 

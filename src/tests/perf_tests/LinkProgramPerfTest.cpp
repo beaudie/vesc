@@ -131,7 +131,11 @@ LinkProgramParams LinkProgramD3D9Params()
 LinkProgramParams LinkProgramOpenGLParams()
 {
     LinkProgramParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = OPENGLES();
+#else
     params.eglParameters = OPENGL();
+#endif
     return params;
 }
 

@@ -62,7 +62,11 @@ DrawCallPerfParams DrawCallPerfD3D9Params(bool useNullDevice, bool renderToTextu
 DrawCallPerfParams DrawCallPerfOpenGLParams(bool useNullDevice, bool renderToTexture)
 {
     DrawCallPerfParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = useNullDevice ? OPENGLES_NULL() : OPENGLES();
+#else
     params.eglParameters = useNullDevice ? OPENGL_NULL() : OPENGL();
+#endif
     params.useFBO        = renderToTexture;
     return params;
 }

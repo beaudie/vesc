@@ -373,6 +373,12 @@ EGLPlatformParameters OPENGLES(EGLint major, EGLint minor)
                                  EGL_DONT_CARE);
 }
 
+EGLPlatformParameters OPENGLES_NULL()
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, EGL_DONT_CARE,
+                                 EGL_DONT_CARE, EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+}
+
 EGLPlatformParameters VULKAN()
 {
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE);

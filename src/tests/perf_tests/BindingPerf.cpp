@@ -187,7 +187,11 @@ BindingsParams D3D9Params(AllocationStyle allocationStyle)
 BindingsParams OpenGLParams(AllocationStyle allocationStyle)
 {
     BindingsParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES_NULL();
+#else
     params.eglParameters   = egl_platform::OPENGL_NULL();
+#endif
     params.allocationStyle = allocationStyle;
     return params;
 }

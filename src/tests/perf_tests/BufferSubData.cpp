@@ -371,7 +371,11 @@ BufferSubDataParams BufferUpdateD3D9Params()
 BufferSubDataParams BufferUpdateOpenGLParams()
 {
     BufferSubDataParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES();
+#else
     params.eglParameters = egl_platform::OPENGL();
+#endif
     params.vertexType = GL_FLOAT;
     params.vertexComponentCount = 4;
     params.vertexNormalized = GL_FALSE;
@@ -384,7 +388,8 @@ TEST_P(BufferSubDataBenchmark, Run)
 }
 
 ANGLE_INSTANTIATE_TEST(BufferSubDataBenchmark,
-                       BufferUpdateD3D11Params(), BufferUpdateD3D9Params(),
+                       BufferUpdateD3D11Params(),
+                       BufferUpdateD3D9Params(),
                        BufferUpdateOpenGLParams());
 
 } // namespace

@@ -274,7 +274,11 @@ TextureSamplingParams D3D9Params()
 TextureSamplingParams OpenGLParams()
 {
     TextureSamplingParams params;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    params.eglParameters = egl_platform::OPENGLES();
+#else
     params.eglParameters = egl_platform::OPENGL();
+#endif
     return params;
 }
 
