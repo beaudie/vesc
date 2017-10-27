@@ -1659,6 +1659,11 @@ GLuint Program::getActiveUniformBlockCount() const
     return static_cast<GLuint>(mState.mUniformBlocks.size());
 }
 
+GLuint Program::getActiveAtomicCounterBufferCount() const
+{
+    return static_cast<GLuint>(mState.mAtomicCounterBuffers.size());
+}
+
 GLuint Program::getActiveShaderStorageBlockCount() const
 {
     return static_cast<GLuint>(mState.mShaderStorageBlocks.size());
@@ -2006,6 +2011,7 @@ bool Program::linkAtomicCounterBuffers()
                 buffer.memberIndexes.push_back(index);
                 uniform.bufferIndex = bufferIndex;
                 found               = true;
+                buffer.shaderRef |= uniform.shaderRef;
                 break;
             }
         }
@@ -2014,6 +2020,7 @@ bool Program::linkAtomicCounterBuffers()
             AtomicCounterBuffer atomicCounterBuffer;
             atomicCounterBuffer.binding = uniform.binding;
             atomicCounterBuffer.memberIndexes.push_back(index);
+            atomicCounterBuffer.shaderRef |= uniform.shaderRef;
             mState.mAtomicCounterBuffers.push_back(atomicCounterBuffer);
             uniform.bufferIndex = static_cast<int>(mState.mAtomicCounterBuffers.size() - 1);
         }
@@ -2870,7 +2877,7 @@ void Program::gatherVertexAndFragmentBlockInfo(
                 {
                     if (block.name == fragmentBlock.name)
                     {
-                        block.fragmentStaticUse = fragmentBlock.staticUse;
+                        block.shaderRef.fragmentStaticUse = fragmentBlock.staticUse;
                     }
                 }
             }
@@ -2881,7 +2888,7 @@ void Program::gatherVertexAndFragmentBlockInfo(
                 {
                     if (block.name == fragmentBlock.name)
                     {
-                        block.fragmentStaticUse = fragmentBlock.staticUse;
+                        block.shaderRef.fragmentStaticUse = fragmentBlock.staticUse;
                     }
                 }
             }
@@ -3022,7 +3029,7 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
             InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, true, arrayElement,
                                  blockBinding + arrayElement);
             block.memberIndexes = blockIndexes;
-            MarkResourceStaticUse(&block, shaderType, interfaceBlock.staticUse);
+            block.shaderRef.setRef(shaderType, interfaceBlock.staticUse);
 
             // Since all block elements in an array share the same active interface blocks, they
             // will all be active once any block member is used. So, since interfaceBlock.name[0]
@@ -3055,7 +3062,7 @@ void Program::defineInterfaceBlock(const sh::InterfaceBlock &interfaceBlock, GLe
         InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, false, 0,
                              blockBinding);
         block.memberIndexes = blockIndexes;
-        MarkResourceStaticUse(&block, shaderType, interfaceBlock.staticUse);
+        block.shaderRef.setRef(shaderType, interfaceBlock.staticUse);
         block.dataSize = static_cast<unsigned int>(blockSize);
         if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
         {
