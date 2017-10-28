@@ -811,4 +811,12 @@ void RendererVk::endRenderPass()
     }
 }
 
+void RendererVk::onReleaseRenderPass(const FramebufferVk *framebufferVk)
+{
+    if (mCurrentRenderPassFramebuffer == framebufferVk)
+    {
+        endRenderPass();
+    }
+}
+
 }  // namespace rx
