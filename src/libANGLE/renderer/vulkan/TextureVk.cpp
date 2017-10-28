@@ -230,13 +230,13 @@ gl::Error TextureVk::setImage(const gl::Context *context,
         ANGLE_TRY(contextVk->getStartedCommandBuffer(&commandBuffer));
         setQueueSerial(renderer->getCurrentQueueSerial());
 
+        // Ensure we aren't in a render pass.
+        renderer->endRenderPass();
+
         stagingImage.getImage().changeLayoutTop(
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
         mImage.changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                commandBuffer);
-
-        // Ensure we aren't in a render pass.
-        renderer->endRenderPass();
 
         gl::Box wholeRegion(0, 0, 0, size.width, size.height, size.depth);
         commandBuffer->copySingleImage(stagingImage.getImage(), mImage, wholeRegion,
