@@ -429,8 +429,7 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
     ANGLE_TRY(renderer->getStartedCommandBuffer(&currentCB));
 
     // End render pass
-    FramebufferVk *framebufferVk = GetImplAs<FramebufferVk>(mState.defaultFramebuffer);
-    framebufferVk->endRenderPass(currentCB);
+    renderer->endRenderPass();
 
     auto &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
