@@ -45,17 +45,10 @@ enum class TextureDimension
     TEX_2D_ARRAY,
 };
 
-enum DeleteSchedule
-{
-    NOW,
-    LATER,
-};
-
 // This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
-// at command submission times indicating it's order in the queue. We will use Fences to detect
-// when commands are finished, and then handle lifetime management for the resources.
-// Note that we use a queue order serial instead of a command buffer id serial since a queue can
-// submit multiple command buffers in one API call.
+// at command recording times indicating an order in the queue. We use Fences to detect when
+// commands finish, and then release any unreferenced and deleted resources based on the stored
+// queue serial in a special 'garbage' queue.
 class ResourceVk
 {
   public:
@@ -65,19 +58,7 @@ class ResourceVk
         mStoredQueueSerial = queueSerial;
     }
 
-    DeleteSchedule getDeleteSchedule(Serial lastCompletedQueueSerial) const
-    {
-        if (lastCompletedQueueSerial >= mStoredQueueSerial)
-        {
-            return DeleteSchedule::NOW;
-        }
-        else
-        {
-            return DeleteSchedule::LATER;
-        }
-    }
-
-    Serial getStoredQueueSerial() const { return mStoredQueueSerial; }
+    Serial getQueueSerial() const { return mStoredQueueSerial; }
 
   private:
     Serial mStoredQueueSerial;
@@ -146,6 +127,76 @@ inline Error NoError()
     return Error(VK_SUCCESS);
 }
 
+// Unimplemented handle types:
+// FUNC(Instance) \
+// FUNC(PhysicalDevice) \
+// FUNC(Device) \
+// FUNC(Queue) \
+// FUNC(Event) \
+// FUNC(QueryPool) \
+// FUNC(BufferView) \
+// FUNC(DescriptorSet) \
+// FUNC(PipelineCache) \
+
+#define ANGLE_HANDLE_TYPES_X(FUNC) \
+    FUNC(Semaphore)                \
+    FUNC(CommandBuffer)            \
+    FUNC(Fence)                    \
+    FUNC(DeviceMemory)             \
+    FUNC(Buffer)                   \
+    FUNC(Image)                    \
+    FUNC(ImageView)                \
+    FUNC(ShaderModule)             \
+    FUNC(PipelineLayout)           \
+    FUNC(RenderPass)               \
+    FUNC(Pipeline)                 \
+    FUNC(DescriptorSetLayout)      \
+    FUNC(Sampler)                  \
+    FUNC(DescriptorPool)           \
+    FUNC(Framebuffer)              \
+    FUNC(CommandPool)
+
+#define ANGLE_COMMA_SEP_FUNC(PARAM) PARAM##,
+
+enum class HandleType
+{
+    Invalid,
+    ANGLE_HANDLE_TYPES_X(ANGLE_COMMA_SEP_FUNC)
+};
+
+#undef ANGLE_COMMA_SEP_FUNC
+
+// Returns the HandleType of a Vk Handle.
+template <typename T>
+struct HandleTypeHelper;
+
+class GarbageObject final
+{
+  public:
+    template <typename ObjectT>
+    GarbageObject(Serial serial, const ObjectT &object)
+        : mSerial(serial),
+          mHandleType(GetHandleType<ObjectT>()),
+          mHandle(reinterpret_cast<VkDevice>(object.getHandle()))
+    {
+    }
+
+    GarbageObject();
+    GarbageObject(const GarbageObject &other);
+    GarbageObject &operator=(const GarbageObject &other);
+
+    bool destroyIfComplete(VkDevice device, Serial completedSerial);
+    void destroy(VkDevice device);
+
+  private:
+    // TODO(jmadill): Since many objects will have the same serial, it might be more efficient to
+    // store the serial outside of the garbage object itself. We could index ranges of garbage
+    // objects in the Renderer, using a circular buffer.
+    Serial mSerial;
+    HandleType mHandleType;
+    VkDevice mHandle;
+};
+
 template <typename DerivedT, typename HandleT>
 class WrappedObject : angle::NonCopyable
 {
@@ -154,6 +205,12 @@ class WrappedObject : angle::NonCopyable
     bool valid() const { return (mHandle != VK_NULL_HANDLE); }
 
     const HandleT *ptr() const { return &mHandle; }
+
+    void dumpResources(Serial serial, std::vector<vk::GarbageObject> *garbageQueue)
+    {
+        garbageQueue->emplace_back(serial, *static_cast<DerivedT *>(this));
+        mHandle = VK_NULL_HANDLE;
+    }
 
   protected:
     WrappedObject() : mHandle(VK_NULL_HANDLE) {}
@@ -386,6 +443,8 @@ class StagingImage final : angle::NonCopyable
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     VkDeviceSize getSize() const { return mSize; }
 
+    void dumpResources(Serial serial, std::vector<vk::GarbageObject> *mGarbage);
+
   private:
     Image mImage;
     DeviceMemory mDeviceMemory;
@@ -511,38 +570,6 @@ class ObjectAndSerial final : angle::NonCopyable
 using CommandBufferAndSerial = ObjectAndSerial<CommandBuffer>;
 using FenceAndSerial         = ObjectAndSerial<Fence>;
 
-class IGarbageObject : angle::NonCopyable
-{
-  public:
-    virtual ~IGarbageObject() {}
-    virtual bool destroyIfComplete(VkDevice device, Serial completedSerial) = 0;
-    virtual void destroy(VkDevice device) = 0;
-};
-
-template <typename T>
-class GarbageObject final : public IGarbageObject
-{
-  public:
-    GarbageObject(Serial serial, T &&object) : mSerial(serial), mObject(std::move(object)) {}
-
-    bool destroyIfComplete(VkDevice device, Serial completedSerial) override
-    {
-        if (completedSerial >= mSerial)
-        {
-            mObject.destroy(device);
-            return true;
-        }
-
-        return false;
-    }
-
-    void destroy(VkDevice device) override { mObject.destroy(device); }
-
-  private:
-    Serial mSerial;
-    T mObject;
-};
-
 Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
                                   const VkMemoryRequirements &requirements,
                                   uint32_t propertyFlagMask);
@@ -558,6 +585,23 @@ struct BufferAndMemory final : private angle::NonCopyable
     vk::Buffer buffer;
     vk::DeviceMemory memory;
 };
+
+#define ANGLE_HANDLE_TYPE_HELPER_FUNC(TYPE)                         \
+    \
+template<> struct HandleTypeHelper<TYPE>                            \
+    {                                                               \
+        constexpr static HandleType kHandleType = HandleType::TYPE; \
+    };
+
+ANGLE_HANDLE_TYPES_X(ANGLE_HANDLE_TYPE_HELPER_FUNC)
+
+#undef ANGLE_HANDLE_TYPE_HELPER_FUNC
+
+template <typename ObjectT>
+HandleType GetHandleType()
+{
+    return HandleTypeHelper<ObjectT>::kHandleType;
+}
 
 }  // namespace vk
 
