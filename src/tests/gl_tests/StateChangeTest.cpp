@@ -73,8 +73,6 @@ class StateChangeTestES3 : public StateChangeTest
     StateChangeTestES3() {}
 };
 
-}  // anonymous namespace
-
 // Ensure that CopyTexImage2D syncs framebuffer changes.
 TEST_P(StateChangeTest, CopyTexImage2DSync)
 {
@@ -740,6 +738,230 @@ TEST_P(StateChangeTestES3, VertexArrayObjectAndDisabledAttributes)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 }
 
+// Simple state change tests, primarily focused on basic object lifetime and dependency management
+// with back-ends that don't support that automatically (i.e. Vulkan).
+class SimpleStateChangeTest : public ANGLETest
+{
+  protected:
+    SimpleStateChangeTest()
+    {
+        setWindowWidth(64);
+        setWindowHeight(64);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void simpleDrawWithBuffer(const GLBuffer &buffer);
+};
+
+constexpr char kSimpleVertexShader[] = R"(attribute vec2 position;
+attribute float color;
+varying float vColor;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    vColor = color;
+}
+)";
+
+constexpr char kSimpleFragmentShader[] = R"(precision mediump float;
+varying float vColor;
+void main()
+{
+    gl_FragColor = vec4(vColor, 0, 0, 1);
+}
+)";
+
+void SimpleStateChangeTest::simpleDrawWithBuffer(const GLBuffer &buffer)
+{
+    ANGLE_GL_PROGRAM(program, kSimpleVertexShader, kSimpleFragmentShader);
+    glUseProgram(program);
+
+    GLint colorLoc = glGetAttribLocation(program, "color");
+    ASSERT_NE(-1, colorLoc);
+
+    glVertexAttribPointer(colorLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
+    glEnableVertexAttribArray(colorLoc);
+
+    drawQuad(program, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Handles deleting a Buffer when it's being used.
+TEST_P(SimpleStateChangeTest, DeleteBufferInUse)
+{
+    std::array<float, 6> floatData = {{1, 1, 1, 1, 1, 1}};
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * floatData.size(), floatData.data(),
+                 GL_STATIC_DRAW);
+
+    simpleDrawWithBuffer(buffer);
+
+    buffer.reset();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
+// Tests that resizing a Buffer during a draw works as expected.
+TEST_P(SimpleStateChangeTest, RedefineBufferInUse)
+{
+    std::array<float, 6> floatData = {{1, 1, 1, 1, 1, 1}};
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * floatData.size(), floatData.data(),
+                 GL_STATIC_DRAW);
+
+    // Trigger a pull from the buffer.
+    simpleDrawWithBuffer(buffer);
+
+    // Redefine the buffer that's in-flight.
+    std::array<float, 1024> bigFloatData = {{0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f}};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * bigFloatData.size(), bigFloatData.data(),
+                 GL_STATIC_DRAW);
+
+    // Trigger the flush and verify the first draw worked.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw again and verify the new data is correct.
+    simpleDrawWithBuffer(buffer);
+    EXPECT_PIXEL_NEAR(0, 0, 128, 0, 0, 255, 1);
+}
+
+// Tests that deleting an in-flight Texture does not immediately delete the resource.
+TEST_P(SimpleStateChangeTest, DeleteTextureInUse)
+{
+    std::array<GLColor, 4> colors = {
+        {GLColor::red, GLColor::green, GLColor::blue, GLColor::yellow}};
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, colors.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+    tex.reset();
+    EXPECT_GL_NO_ERROR();
+
+    int w = getWindowWidth() - 2;
+    int h = getWindowHeight() - 2;
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+}
+
+// Tests that redefining an in-flight Texture does not affect the in-flight resource.
+TEST_P(SimpleStateChangeTest, RedefineTextureInUse)
+{
+    std::array<GLColor, 4> colors = {
+        {GLColor::red, GLColor::green, GLColor::blue, GLColor::yellow}};
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, colors.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Draw with the first texture.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+
+    // Redefine the in-flight texture.
+    constexpr int kBigSize = 32;
+    std::vector<GLColor> bigColors;
+    for (int y = 0; y < kBigSize; ++y)
+    {
+        for (int x = 0; x < kBigSize; ++x)
+        {
+            bool xComp = x < kBigSize / 2;
+            bool yComp = y < kBigSize / 2;
+            if (yComp)
+            {
+                bigColors.push_back(xComp ? GLColor::cyan : GLColor::magenta);
+            }
+            else
+            {
+                bigColors.push_back(xComp ? GLColor::yellow : GLColor::white);
+            }
+        }
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, bigColors.data());
+    EXPECT_GL_NO_ERROR();
+
+    // Verify the first draw had the correct data via ReadPixels.
+    int w = getWindowWidth() - 2;
+    int h = getWindowHeight() - 2;
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+
+    // Draw and verify with the redefined data.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::cyan);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::white);
+}
+
+// Tests deleting a Framebuffer that is in use.
+TEST_P(SimpleStateChangeTest, DeleteFramebufferInUse)
+{
+    constexpr int kSize = 16;
+
+    // Create a simple framebuffer.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    glViewport(0, 0, kSize, kSize);
+
+    // Draw a solid red color to the framebuffer.
+    const char vertexShaderSource[] =
+        R"(attribute vec2 position;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+})";
+
+    const char fragmentShaderSource[] =
+        R"(void main()
+{
+    gl_FragColor = vec4(1, 0, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+    drawQuad(program, "position", 0.5f, 1.0f, true);
+
+    // Delete the framebuffer while the call is in flight.
+    framebuffer.reset();
+
+    // Make a new framebuffer so we can read back the texture.
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    // Flush via ReadPixels and check red was drawn.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    ASSERT_GL_NO_ERROR();
+}
+
+}  // anonymous namespace
+
 ANGLE_INSTANTIATE_TEST(StateChangeTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
 ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_D3D9(),
@@ -747,3 +969,5 @@ ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_OPENGL(),
                        ES2_D3D11_FL9_3());
 ANGLE_INSTANTIATE_TEST(StateChangeTestES3, ES3_D3D11(), ES3_OPENGL());
+
+ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_VULKAN(), ES2_OPENGL());

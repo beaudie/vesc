@@ -671,12 +671,18 @@ vk::Error ProgramVk::initPipelineLayout(ContextVk *context)
         mDirtyTextures = true;
     }
 
+    std::vector<VkDescriptorSetLayout> layoutHandles;
+    for (const vk::DescriptorSetLayout &layout : mDescriptorSetLayouts)
+    {
+        layoutHandles.push_back(layout.getHandle());
+    }
+
     VkPipelineLayoutCreateInfo createInfo;
     createInfo.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     createInfo.pNext                  = nullptr;
     createInfo.flags                  = 0;
-    createInfo.setLayoutCount         = static_cast<uint32_t>(mDescriptorSetLayouts.size());
-    createInfo.pSetLayouts            = mDescriptorSetLayouts[0].ptr();
+    createInfo.setLayoutCount         = static_cast<uint32_t>(layoutHandles.size());
+    createInfo.pSetLayouts            = layoutHandles.data();
     createInfo.pushConstantRangeCount = 0;
     createInfo.pPushConstantRanges    = nullptr;
 
