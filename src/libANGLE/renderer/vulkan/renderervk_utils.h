@@ -214,7 +214,6 @@ class WrappedObject : angle::NonCopyable
 
   protected:
     WrappedObject() : mHandle(VK_NULL_HANDLE) {}
-    WrappedObject(HandleT handle) : mHandle(handle) {}
     ~WrappedObject() { ASSERT(!valid()); }
 
     WrappedObject(WrappedObject &&other) : mHandle(other.mHandle)
@@ -228,15 +227,6 @@ class WrappedObject : angle::NonCopyable
         ASSERT(!valid());
         std::swap(mHandle, other.mHandle);
         return *this;
-    }
-
-    void retain(VkDevice device, DerivedT &&other)
-    {
-        if (valid())
-        {
-            static_cast<DerivedT *>(this)->destroy(device);
-        }
-        std::swap(mHandle, other.mHandle);
     }
 
     HandleT mHandle;
@@ -324,17 +314,16 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
 class Image final : public WrappedObject<Image, VkImage>
 {
   public:
-    // Use this constructor if the lifetime of the image is not controlled by ANGLE. (SwapChain)
     Image();
-    explicit Image(VkImage image);
+
+    // Use this method if the lifetime of the image is not controlled by ANGLE. (SwapChain)
+    void setHandle(VkImage handle);
 
     // Called on shutdown when the helper class *doesn't* own the handle to the image resource.
     void reset();
 
     // Called on shutdown when the helper class *does* own the handle to the image resource.
     void destroy(VkDevice device);
-
-    void retain(VkDevice device, Image &&other);
 
     Error init(VkDevice device, const VkImageCreateInfo &createInfo);
 
@@ -363,7 +352,6 @@ class ImageView final : public WrappedObject<ImageView, VkImageView>
   public:
     ImageView();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkImageViewCreateInfo &createInfo);
 };
@@ -373,7 +361,6 @@ class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
   public:
     Semaphore();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device);
 };
@@ -383,7 +370,6 @@ class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
   public:
     Framebuffer();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkFramebufferCreateInfo &createInfo);
 };
@@ -393,7 +379,6 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
   public:
     DeviceMemory();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo);
     Error map(VkDevice device,
@@ -409,7 +394,6 @@ class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
   public:
     RenderPass();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkRenderPassCreateInfo &createInfo);
 };
@@ -427,7 +411,6 @@ class StagingImage final : angle::NonCopyable
     StagingImage();
     StagingImage(StagingImage &&other);
     void destroy(VkDevice device);
-    void retain(VkDevice device, StagingImage &&other);
 
     vk::Error init(VkDevice device,
                    uint32_t queueFamilyIndex,
@@ -456,7 +439,6 @@ class Buffer final : public WrappedObject<Buffer, VkBuffer>
   public:
     Buffer();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkBufferCreateInfo &createInfo);
     Error bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
@@ -467,7 +449,6 @@ class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
   public:
     ShaderModule();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkShaderModuleCreateInfo &createInfo);
 };
@@ -477,7 +458,6 @@ class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
   public:
     Pipeline();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error initGraphics(VkDevice device, const VkGraphicsPipelineCreateInfo &createInfo);
 };
@@ -487,7 +467,6 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
   public:
     PipelineLayout();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkPipelineLayoutCreateInfo &createInfo);
 };
@@ -497,7 +476,6 @@ class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDe
   public:
     DescriptorSetLayout();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo);
 };
@@ -507,7 +485,6 @@ class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPo
   public:
     DescriptorPool();
     void destroy(VkDevice device);
-    using WrappedObject::retain;
 
     Error init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo);
 
@@ -529,7 +506,6 @@ class Fence final : public WrappedObject<Fence, VkFence>
   public:
     Fence();
     void destroy(VkDevice fence);
-    using WrappedObject::retain;
     using WrappedObject::operator=;
 
     Error init(VkDevice device, const VkFenceCreateInfo &createInfo);
