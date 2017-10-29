@@ -70,9 +70,7 @@ Format::ID Format::InternalFormatToID(GLenum internalFormat)
 {{
     switch (internalFormat)
     {{
-        // clang-format off
 {angle_format_switch}
-        // clang-format on
     }}
 }}
 
@@ -231,7 +229,7 @@ def gen_map_switch_string(gl_to_angle):
     switch_data = '';
     for gl_format in gl_to_angle:
         angle_format = gl_to_angle[gl_format]
-        switch_data += "        case " + gl_format + ": return Format::ID::" + angle_format + ";\n"
+        switch_data += "        case " + gl_format + ":\nreturn Format::ID::" + angle_format + ";\n"
     switch_data += "        default: return Format::ID::NONE;"
     return switch_data;
 
