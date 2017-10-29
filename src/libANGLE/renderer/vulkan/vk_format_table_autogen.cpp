@@ -41,8 +41,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x10_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR;
-            formatID                = angle::Format::ID::ASTC_10x10_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x10_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x10_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -50,8 +52,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x10_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x10_KHR;
-            formatID                = angle::Format::ID::ASTC_10x10_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x10_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x10_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x10_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x10_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x10_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -59,8 +63,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x5_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR;
-            formatID                = angle::Format::ID::ASTC_10x5_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x5_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x5_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x5_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x5_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x5_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -68,8 +74,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x5_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x5_KHR;
-            formatID                = angle::Format::ID::ASTC_10x5_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x5_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x5_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x5_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x5_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x5_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -77,8 +85,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x6_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR;
-            formatID                = angle::Format::ID::ASTC_10x6_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x6_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x6_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x6_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x6_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x6_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -86,8 +96,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x6_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x6_KHR;
-            formatID                = angle::Format::ID::ASTC_10x6_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x6_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x6_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x6_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x6_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x6_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -95,8 +107,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x8_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR;
-            formatID                = angle::Format::ID::ASTC_10x8_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x8_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x8_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x8_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x8_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x8_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -104,8 +118,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_10x8_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x8_KHR;
-            formatID                = angle::Format::ID::ASTC_10x8_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_10x8_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_10x8_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_10x8_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_10x8_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_10x8_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -113,8 +129,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_12x10_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR;
-            formatID                = angle::Format::ID::ASTC_12x10_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_12x10_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_12x10_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -122,8 +140,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_12x10_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_12x10_KHR;
-            formatID                = angle::Format::ID::ASTC_12x10_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_12x10_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_12x10_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_12x10_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_12x10_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_12x10_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -135,8 +155,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_12x12_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_12x12_KHR;
-            formatID                = angle::Format::ID::ASTC_12x12_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_12x12_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_12x12_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_12x12_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_12x12_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_12x12_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -144,8 +166,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_4x4_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR;
-            formatID                = angle::Format::ID::ASTC_4x4_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_4x4_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_4x4_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_4x4_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_4x4_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_4x4_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -153,8 +177,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_4x4_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
-            formatID                = angle::Format::ID::ASTC_4x4_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_4x4_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_4x4_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -162,8 +188,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_5x4_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR;
-            formatID                = angle::Format::ID::ASTC_5x4_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_5x4_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_5x4_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_5x4_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_5x4_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_5x4_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -171,8 +199,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_5x4_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_5x4_KHR;
-            formatID                = angle::Format::ID::ASTC_5x4_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_5x4_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_5x4_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_5x4_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_5x4_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_5x4_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -180,8 +210,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_5x5_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR;
-            formatID                = angle::Format::ID::ASTC_5x5_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_5x5_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_5x5_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_5x5_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_5x5_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_5x5_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -189,8 +221,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_5x5_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_5x5_KHR;
-            formatID                = angle::Format::ID::ASTC_5x5_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_5x5_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_5x5_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_5x5_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_5x5_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_5x5_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -198,8 +232,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_6x5_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR;
-            formatID                = angle::Format::ID::ASTC_6x5_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_6x5_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_6x5_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_6x5_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_6x5_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_6x5_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -207,8 +243,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_6x5_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_6x5_KHR;
-            formatID                = angle::Format::ID::ASTC_6x5_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_6x5_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_6x5_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_6x5_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_6x5_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_6x5_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -216,8 +254,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_6x6_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR;
-            formatID                = angle::Format::ID::ASTC_6x6_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_6x6_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_6x6_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_6x6_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_6x6_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_6x6_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -225,8 +265,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_6x6_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_6x6_KHR;
-            formatID                = angle::Format::ID::ASTC_6x6_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_6x6_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_6x6_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_6x6_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_6x6_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_6x6_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -234,8 +276,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x5_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR;
-            formatID                = angle::Format::ID::ASTC_8x5_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x5_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x5_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x5_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x5_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x5_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -243,8 +287,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x5_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x5_KHR;
-            formatID                = angle::Format::ID::ASTC_8x5_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x5_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x5_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x5_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x5_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x5_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -252,8 +298,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x6_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR;
-            formatID                = angle::Format::ID::ASTC_8x6_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x6_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x6_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x6_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x6_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x6_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -261,8 +309,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x6_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x6_KHR;
-            formatID                = angle::Format::ID::ASTC_8x6_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x6_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x6_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x6_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x6_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x6_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -270,8 +320,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x8_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR;
-            formatID                = angle::Format::ID::ASTC_8x8_SRGB_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x8_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x8_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x8_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x8_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x8_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -279,8 +331,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ASTC_8x8_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x8_KHR;
-            formatID                = angle::Format::ID::ASTC_8x8_UNORM_BLOCK;
-            native                  = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ASTC_8x8_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ASTC_8x8_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -288,8 +342,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::B4G4R4A4_UNORM:
         {
             internalFormat          = GL_BGRA4_ANGLEX;
-            formatID                = angle::Format::ID::B4G4R4A4_UNORM;
-            native                  = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::B4G4R4A4_UNORM;
+            vkTextureFormat         = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::B4G4R4A4_UNORM;
+            vkBufferFormat          = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -297,8 +353,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::B5G5R5A1_UNORM:
         {
             internalFormat          = GL_BGR5_A1_ANGLEX;
-            formatID                = angle::Format::ID::B5G5R5A1_UNORM;
-            native                  = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::B5G5R5A1_UNORM;
+            vkTextureFormat         = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::B5G5R5A1_UNORM;
+            vkBufferFormat          = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -306,8 +364,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::B5G6R5_UNORM:
         {
             internalFormat          = GL_BGR565_ANGLEX;
-            formatID                = angle::Format::ID::B5G6R5_UNORM;
-            native                  = VK_FORMAT_B5G6R5_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::B5G6R5_UNORM;
+            vkTextureFormat         = VK_FORMAT_B5G6R5_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::B5G6R5_UNORM;
+            vkBufferFormat          = VK_FORMAT_B5G6R5_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -315,8 +375,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::B8G8R8A8_UNORM:
         {
             internalFormat          = GL_BGRA8_EXT;
-            formatID                = angle::Format::ID::B8G8R8A8_UNORM;
-            native                  = VK_FORMAT_B8G8R8A8_UNORM;
+            textureFormatID         = angle::Format::ID::B8G8R8A8_UNORM;
+            vkTextureFormat         = VK_FORMAT_B8G8R8A8_UNORM;
+            bufferFormatID          = angle::Format::ID::B8G8R8A8_UNORM;
+            vkBufferFormat          = VK_FORMAT_B8G8R8A8_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -328,8 +390,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::BC1_RGBA_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-            formatID                = angle::Format::ID::BC1_RGBA_UNORM_BLOCK;
-            native                  = VK_FORMAT_BC1_RGBA_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::BC1_RGBA_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_BC1_RGBA_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::BC1_RGBA_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_BC1_RGBA_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -341,8 +405,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::BC1_RGB_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-            formatID                = angle::Format::ID::BC1_RGB_UNORM_BLOCK;
-            native                  = VK_FORMAT_BC1_RGB_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::BC1_RGB_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_BC1_RGB_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::BC1_RGB_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_BC1_RGB_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -370,8 +436,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::D16_UNORM:
         {
             internalFormat          = GL_DEPTH_COMPONENT16;
-            formatID                = angle::Format::ID::D16_UNORM;
-            native                  = VK_FORMAT_D16_UNORM;
+            textureFormatID         = angle::Format::ID::D16_UNORM;
+            vkTextureFormat         = VK_FORMAT_D16_UNORM;
+            bufferFormatID          = angle::Format::ID::D16_UNORM;
+            vkBufferFormat          = VK_FORMAT_D16_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -383,8 +451,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::D24_UNORM_S8_UINT:
         {
             internalFormat          = GL_DEPTH24_STENCIL8;
-            formatID                = angle::Format::ID::D24_UNORM_S8_UINT;
-            native                  = VK_FORMAT_D24_UNORM_S8_UINT;
+            textureFormatID         = angle::Format::ID::D24_UNORM_S8_UINT;
+            vkTextureFormat         = VK_FORMAT_D24_UNORM_S8_UINT;
+            bufferFormatID          = angle::Format::ID::D24_UNORM_S8_UINT;
+            vkBufferFormat          = VK_FORMAT_D24_UNORM_S8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -392,8 +462,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::D32_FLOAT:
         {
             internalFormat          = GL_DEPTH_COMPONENT32F;
-            formatID                = angle::Format::ID::D32_FLOAT;
-            native                  = VK_FORMAT_D32_SFLOAT;
+            textureFormatID         = angle::Format::ID::D32_FLOAT;
+            vkTextureFormat         = VK_FORMAT_D32_SFLOAT;
+            bufferFormatID          = angle::Format::ID::D32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_D32_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -409,8 +481,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::EAC_R11G11_SNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SIGNED_RG11_EAC;
-            formatID                = angle::Format::ID::EAC_R11G11_SNORM_BLOCK;
-            native                  = VK_FORMAT_EAC_R11G11_SNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::EAC_R11G11_SNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_EAC_R11G11_SNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::EAC_R11G11_SNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_EAC_R11G11_SNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -418,8 +492,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::EAC_R11G11_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RG11_EAC;
-            formatID                = angle::Format::ID::EAC_R11G11_UNORM_BLOCK;
-            native                  = VK_FORMAT_EAC_R11G11_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::EAC_R11G11_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_EAC_R11G11_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::EAC_R11G11_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_EAC_R11G11_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -427,8 +503,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::EAC_R11_SNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SIGNED_R11_EAC;
-            formatID                = angle::Format::ID::EAC_R11_SNORM_BLOCK;
-            native                  = VK_FORMAT_EAC_R11_SNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::EAC_R11_SNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_EAC_R11_SNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::EAC_R11_SNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_EAC_R11_SNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -436,8 +514,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::EAC_R11_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_R11_EAC;
-            formatID                = angle::Format::ID::EAC_R11_UNORM_BLOCK;
-            native                  = VK_FORMAT_EAC_R11_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::EAC_R11_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_EAC_R11_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::EAC_R11_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_EAC_R11_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -445,8 +525,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;
-            formatID                = angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -454,8 +536,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;
-            formatID                = angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK;
             dataInitializerFunction = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
             break;
         }
@@ -463,8 +547,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
-            formatID                = angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -472,8 +558,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGBA8_ETC2_EAC;
-            formatID                = angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -481,8 +569,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_SRGB8_ETC2;
-            formatID                = angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -490,8 +580,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK:
         {
             internalFormat          = GL_COMPRESSED_RGB8_ETC2;
-            formatID                = angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK;
-            native                  = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
+            textureFormatID         = angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK;
+            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
+            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK;
+            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -539,8 +631,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16A16_FLOAT:
         {
             internalFormat          = GL_RGBA16F;
-            formatID                = angle::Format::ID::R16G16B16A16_FLOAT;
-            native                  = VK_FORMAT_R16G16B16A16_SFLOAT;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -548,8 +642,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16A16_SINT:
         {
             internalFormat          = GL_RGBA16I;
-            formatID                = angle::Format::ID::R16G16B16A16_SINT;
-            native                  = VK_FORMAT_R16G16B16A16_SINT;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_SINT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SINT;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_SINT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -557,8 +653,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16A16_SNORM:
         {
             internalFormat          = GL_RGBA16_SNORM_EXT;
-            formatID                = angle::Format::ID::R16G16B16A16_SNORM;
-            native                  = VK_FORMAT_R16G16B16A16_SNORM;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_SNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SNORM;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_SNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -566,8 +664,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16A16_UINT:
         {
             internalFormat          = GL_RGBA16UI;
-            formatID                = angle::Format::ID::R16G16B16A16_UINT;
-            native                  = VK_FORMAT_R16G16B16A16_UINT;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_UINT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_UINT;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_UINT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -575,8 +675,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16A16_UNORM:
         {
             internalFormat          = GL_RGBA16_EXT;
-            formatID                = angle::Format::ID::R16G16B16A16_UNORM;
-            native                  = VK_FORMAT_R16G16B16A16_UNORM;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_UNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_UNORM;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_UNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -584,8 +686,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16_FLOAT:
         {
             internalFormat          = GL_RGB16F;
-            formatID                = angle::Format::ID::R16G16B16_FLOAT;
-            native                  = VK_FORMAT_R16G16B16_SFLOAT;
+            textureFormatID         = angle::Format::ID::R16G16B16_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R16G16B16_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -593,8 +697,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16_SINT:
         {
             internalFormat          = GL_RGB16I;
-            formatID                = angle::Format::ID::R16G16B16_SINT;
-            native                  = VK_FORMAT_R16G16B16_SINT;
+            textureFormatID         = angle::Format::ID::R16G16B16_SINT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_SINT;
+            bufferFormatID          = angle::Format::ID::R16G16B16_SINT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -602,8 +708,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16_SNORM:
         {
             internalFormat          = GL_RGB16_SNORM_EXT;
-            formatID                = angle::Format::ID::R16G16B16_SNORM;
-            native                  = VK_FORMAT_R16G16B16_SNORM;
+            textureFormatID         = angle::Format::ID::R16G16B16_SNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_SNORM;
+            bufferFormatID          = angle::Format::ID::R16G16B16_SNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -611,8 +719,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16_UINT:
         {
             internalFormat          = GL_RGB16UI;
-            formatID                = angle::Format::ID::R16G16B16_UINT;
-            native                  = VK_FORMAT_R16G16B16_UINT;
+            textureFormatID         = angle::Format::ID::R16G16B16_UINT;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_UINT;
+            bufferFormatID          = angle::Format::ID::R16G16B16_UINT;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -620,8 +730,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16B16_UNORM:
         {
             internalFormat          = GL_RGB16_EXT;
-            formatID                = angle::Format::ID::R16G16B16_UNORM;
-            native                  = VK_FORMAT_R16G16B16_UNORM;
+            textureFormatID         = angle::Format::ID::R16G16B16_UNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_UNORM;
+            bufferFormatID          = angle::Format::ID::R16G16B16_UNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -629,8 +741,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16_FLOAT:
         {
             internalFormat          = GL_RG16F;
-            formatID                = angle::Format::ID::R16G16_FLOAT;
-            native                  = VK_FORMAT_R16G16_SFLOAT;
+            textureFormatID         = angle::Format::ID::R16G16_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R16G16_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R16G16_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R16G16_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -638,8 +752,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16_SINT:
         {
             internalFormat          = GL_RG16I;
-            formatID                = angle::Format::ID::R16G16_SINT;
-            native                  = VK_FORMAT_R16G16_SINT;
+            textureFormatID         = angle::Format::ID::R16G16_SINT;
+            vkTextureFormat         = VK_FORMAT_R16G16_SINT;
+            bufferFormatID          = angle::Format::ID::R16G16_SINT;
+            vkBufferFormat          = VK_FORMAT_R16G16_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -647,8 +763,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16_SNORM:
         {
             internalFormat          = GL_RG16_SNORM_EXT;
-            formatID                = angle::Format::ID::R16G16_SNORM;
-            native                  = VK_FORMAT_R16G16_SNORM;
+            textureFormatID         = angle::Format::ID::R16G16_SNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16_SNORM;
+            bufferFormatID          = angle::Format::ID::R16G16_SNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -656,8 +774,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16_UINT:
         {
             internalFormat          = GL_RG16UI;
-            formatID                = angle::Format::ID::R16G16_UINT;
-            native                  = VK_FORMAT_R16G16_UINT;
+            textureFormatID         = angle::Format::ID::R16G16_UINT;
+            vkTextureFormat         = VK_FORMAT_R16G16_UINT;
+            bufferFormatID          = angle::Format::ID::R16G16_UINT;
+            vkBufferFormat          = VK_FORMAT_R16G16_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -665,8 +785,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16G16_UNORM:
         {
             internalFormat          = GL_RG16_EXT;
-            formatID                = angle::Format::ID::R16G16_UNORM;
-            native                  = VK_FORMAT_R16G16_UNORM;
+            textureFormatID         = angle::Format::ID::R16G16_UNORM;
+            vkTextureFormat         = VK_FORMAT_R16G16_UNORM;
+            bufferFormatID          = angle::Format::ID::R16G16_UNORM;
+            vkBufferFormat          = VK_FORMAT_R16G16_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -674,8 +796,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16_FLOAT:
         {
             internalFormat          = GL_R16F;
-            formatID                = angle::Format::ID::R16_FLOAT;
-            native                  = VK_FORMAT_R16_SFLOAT;
+            textureFormatID         = angle::Format::ID::R16_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R16_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R16_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R16_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -683,8 +807,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16_SINT:
         {
             internalFormat          = GL_R16I;
-            formatID                = angle::Format::ID::R16_SINT;
-            native                  = VK_FORMAT_R16_SINT;
+            textureFormatID         = angle::Format::ID::R16_SINT;
+            vkTextureFormat         = VK_FORMAT_R16_SINT;
+            bufferFormatID          = angle::Format::ID::R16_SINT;
+            vkBufferFormat          = VK_FORMAT_R16_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -692,8 +818,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16_SNORM:
         {
             internalFormat          = GL_R16_SNORM_EXT;
-            formatID                = angle::Format::ID::R16_SNORM;
-            native                  = VK_FORMAT_R16_SNORM;
+            textureFormatID         = angle::Format::ID::R16_SNORM;
+            vkTextureFormat         = VK_FORMAT_R16_SNORM;
+            bufferFormatID          = angle::Format::ID::R16_SNORM;
+            vkBufferFormat          = VK_FORMAT_R16_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -701,8 +829,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16_UINT:
         {
             internalFormat          = GL_R16UI;
-            formatID                = angle::Format::ID::R16_UINT;
-            native                  = VK_FORMAT_R16_UINT;
+            textureFormatID         = angle::Format::ID::R16_UINT;
+            vkTextureFormat         = VK_FORMAT_R16_UINT;
+            bufferFormatID          = angle::Format::ID::R16_UINT;
+            vkBufferFormat          = VK_FORMAT_R16_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -710,8 +840,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R16_UNORM:
         {
             internalFormat          = GL_R16_EXT;
-            formatID                = angle::Format::ID::R16_UNORM;
-            native                  = VK_FORMAT_R16_UNORM;
+            textureFormatID         = angle::Format::ID::R16_UNORM;
+            vkTextureFormat         = VK_FORMAT_R16_UNORM;
+            bufferFormatID          = angle::Format::ID::R16_UNORM;
+            vkBufferFormat          = VK_FORMAT_R16_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -719,8 +851,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32A32_FLOAT:
         {
             internalFormat          = GL_RGBA32F;
-            formatID                = angle::Format::ID::R32G32B32A32_FLOAT;
-            native                  = VK_FORMAT_R32G32B32A32_SFLOAT;
+            textureFormatID         = angle::Format::ID::R32G32B32A32_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32A32_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R32G32B32A32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32A32_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -728,8 +862,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32A32_SINT:
         {
             internalFormat          = GL_RGBA32I;
-            formatID                = angle::Format::ID::R32G32B32A32_SINT;
-            native                  = VK_FORMAT_R32G32B32A32_SINT;
+            textureFormatID         = angle::Format::ID::R32G32B32A32_SINT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32A32_SINT;
+            bufferFormatID          = angle::Format::ID::R32G32B32A32_SINT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32A32_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -737,8 +873,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32A32_UINT:
         {
             internalFormat          = GL_RGBA32UI;
-            formatID                = angle::Format::ID::R32G32B32A32_UINT;
-            native                  = VK_FORMAT_R32G32B32A32_UINT;
+            textureFormatID         = angle::Format::ID::R32G32B32A32_UINT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32A32_UINT;
+            bufferFormatID          = angle::Format::ID::R32G32B32A32_UINT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32A32_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -746,8 +884,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32_FLOAT:
         {
             internalFormat          = GL_RGB32F;
-            formatID                = angle::Format::ID::R32G32B32_FLOAT;
-            native                  = VK_FORMAT_R32G32B32_SFLOAT;
+            textureFormatID         = angle::Format::ID::R32G32B32_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R32G32B32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -755,8 +895,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32_SINT:
         {
             internalFormat          = GL_RGB32I;
-            formatID                = angle::Format::ID::R32G32B32_SINT;
-            native                  = VK_FORMAT_R32G32B32_SINT;
+            textureFormatID         = angle::Format::ID::R32G32B32_SINT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32_SINT;
+            bufferFormatID          = angle::Format::ID::R32G32B32_SINT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -764,8 +906,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32B32_UINT:
         {
             internalFormat          = GL_RGB32UI;
-            formatID                = angle::Format::ID::R32G32B32_UINT;
-            native                  = VK_FORMAT_R32G32B32_UINT;
+            textureFormatID         = angle::Format::ID::R32G32B32_UINT;
+            vkTextureFormat         = VK_FORMAT_R32G32B32_UINT;
+            bufferFormatID          = angle::Format::ID::R32G32B32_UINT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -773,8 +917,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32_FLOAT:
         {
             internalFormat          = GL_RG32F;
-            formatID                = angle::Format::ID::R32G32_FLOAT;
-            native                  = VK_FORMAT_R32G32_SFLOAT;
+            textureFormatID         = angle::Format::ID::R32G32_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R32G32_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R32G32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -782,8 +928,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32_SINT:
         {
             internalFormat          = GL_RG32I;
-            formatID                = angle::Format::ID::R32G32_SINT;
-            native                  = VK_FORMAT_R32G32_SINT;
+            textureFormatID         = angle::Format::ID::R32G32_SINT;
+            vkTextureFormat         = VK_FORMAT_R32G32_SINT;
+            bufferFormatID          = angle::Format::ID::R32G32_SINT;
+            vkBufferFormat          = VK_FORMAT_R32G32_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -791,8 +939,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32G32_UINT:
         {
             internalFormat          = GL_RG32UI;
-            formatID                = angle::Format::ID::R32G32_UINT;
-            native                  = VK_FORMAT_R32G32_UINT;
+            textureFormatID         = angle::Format::ID::R32G32_UINT;
+            vkTextureFormat         = VK_FORMAT_R32G32_UINT;
+            bufferFormatID          = angle::Format::ID::R32G32_UINT;
+            vkBufferFormat          = VK_FORMAT_R32G32_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -800,8 +950,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32_FLOAT:
         {
             internalFormat          = GL_R32F;
-            formatID                = angle::Format::ID::R32_FLOAT;
-            native                  = VK_FORMAT_R32_SFLOAT;
+            textureFormatID         = angle::Format::ID::R32_FLOAT;
+            vkTextureFormat         = VK_FORMAT_R32_SFLOAT;
+            bufferFormatID          = angle::Format::ID::R32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32_SFLOAT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -809,8 +961,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32_SINT:
         {
             internalFormat          = GL_R32I;
-            formatID                = angle::Format::ID::R32_SINT;
-            native                  = VK_FORMAT_R32_SINT;
+            textureFormatID         = angle::Format::ID::R32_SINT;
+            vkTextureFormat         = VK_FORMAT_R32_SINT;
+            bufferFormatID          = angle::Format::ID::R32_SINT;
+            vkBufferFormat          = VK_FORMAT_R32_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -818,8 +972,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R32_UINT:
         {
             internalFormat          = GL_R32UI;
-            formatID                = angle::Format::ID::R32_UINT;
-            native                  = VK_FORMAT_R32_UINT;
+            textureFormatID         = angle::Format::ID::R32_UINT;
+            vkTextureFormat         = VK_FORMAT_R32_UINT;
+            bufferFormatID          = angle::Format::ID::R32_UINT;
+            vkBufferFormat          = VK_FORMAT_R32_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -827,8 +983,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R4G4B4A4_UNORM:
         {
             internalFormat          = GL_RGBA4;
-            formatID                = angle::Format::ID::R4G4B4A4_UNORM;
-            native                  = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::R4G4B4A4_UNORM;
+            vkTextureFormat         = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::R4G4B4A4_UNORM;
+            vkBufferFormat          = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -836,8 +994,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R5G5B5A1_UNORM:
         {
             internalFormat          = GL_RGB5_A1;
-            formatID                = angle::Format::ID::R5G5B5A1_UNORM;
-            native                  = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::R5G5B5A1_UNORM;
+            vkTextureFormat         = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::R5G5B5A1_UNORM;
+            vkBufferFormat          = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -845,8 +1005,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R5G6B5_UNORM:
         {
             internalFormat          = GL_RGB565;
-            formatID                = angle::Format::ID::R5G6B5_UNORM;
-            native                  = VK_FORMAT_R5G6B5_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::R5G6B5_UNORM;
+            vkTextureFormat         = VK_FORMAT_R5G6B5_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::R5G6B5_UNORM;
+            vkBufferFormat          = VK_FORMAT_R5G6B5_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -854,8 +1016,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8A8_SINT:
         {
             internalFormat          = GL_RGBA8I;
-            formatID                = angle::Format::ID::R8G8B8A8_SINT;
-            native                  = VK_FORMAT_R8G8B8A8_SINT;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_SINT;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SINT;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_SINT;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -863,8 +1027,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8A8_SNORM:
         {
             internalFormat          = GL_RGBA8_SNORM;
-            formatID                = angle::Format::ID::R8G8B8A8_SNORM;
-            native                  = VK_FORMAT_R8G8B8A8_SNORM;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_SNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SNORM;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_SNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -872,8 +1038,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8A8_UINT:
         {
             internalFormat          = GL_RGBA8UI;
-            formatID                = angle::Format::ID::R8G8B8A8_UINT;
-            native                  = VK_FORMAT_R8G8B8A8_UINT;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_UINT;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UINT;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_UINT;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -881,8 +1049,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8A8_UNORM:
         {
             internalFormat          = GL_RGBA8;
-            formatID                = angle::Format::ID::R8G8B8A8_UNORM;
-            native                  = VK_FORMAT_R8G8B8A8_UNORM;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_UNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -894,8 +1064,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8_SINT:
         {
             internalFormat          = GL_RGB8I;
-            formatID                = angle::Format::ID::R8G8B8_SINT;
-            native                  = VK_FORMAT_R8G8B8_SINT;
+            textureFormatID         = angle::Format::ID::R8G8B8_SINT;
+            vkTextureFormat         = VK_FORMAT_R8G8B8_SINT;
+            bufferFormatID          = angle::Format::ID::R8G8B8_SINT;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -903,8 +1075,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8_SNORM:
         {
             internalFormat          = GL_RGB8_SNORM;
-            formatID                = angle::Format::ID::R8G8B8_SNORM;
-            native                  = VK_FORMAT_R8G8B8_SNORM;
+            textureFormatID         = angle::Format::ID::R8G8B8_SNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8B8_SNORM;
+            bufferFormatID          = angle::Format::ID::R8G8B8_SNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -912,8 +1086,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8_UINT:
         {
             internalFormat          = GL_RGB8UI;
-            formatID                = angle::Format::ID::R8G8B8_UINT;
-            native                  = VK_FORMAT_R8G8B8_UINT;
+            textureFormatID         = angle::Format::ID::R8G8B8_UINT;
+            vkTextureFormat         = VK_FORMAT_R8G8B8_UINT;
+            bufferFormatID          = angle::Format::ID::R8G8B8_UINT;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -921,9 +1097,11 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8B8_UNORM:
         {
             internalFormat          = GL_RGB8;
-            formatID                = angle::Format::ID::R8G8B8_UNORM;
-            native                  = VK_FORMAT_R8G8B8_UNORM;
-            dataInitializerFunction = nullptr;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
+            bufferFormatID          = angle::Format::ID::R8G8B8_UNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_UNORM;
+            dataInitializerFunction = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
             break;
         }
 
@@ -934,8 +1112,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8_SINT:
         {
             internalFormat          = GL_RG8I;
-            formatID                = angle::Format::ID::R8G8_SINT;
-            native                  = VK_FORMAT_R8G8_SINT;
+            textureFormatID         = angle::Format::ID::R8G8_SINT;
+            vkTextureFormat         = VK_FORMAT_R8G8_SINT;
+            bufferFormatID          = angle::Format::ID::R8G8_SINT;
+            vkBufferFormat          = VK_FORMAT_R8G8_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -943,8 +1123,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8_SNORM:
         {
             internalFormat          = GL_RG8_SNORM;
-            formatID                = angle::Format::ID::R8G8_SNORM;
-            native                  = VK_FORMAT_R8G8_SNORM;
+            textureFormatID         = angle::Format::ID::R8G8_SNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8_SNORM;
+            bufferFormatID          = angle::Format::ID::R8G8_SNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -952,8 +1134,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8_UINT:
         {
             internalFormat          = GL_RG8UI;
-            formatID                = angle::Format::ID::R8G8_UINT;
-            native                  = VK_FORMAT_R8G8_UINT;
+            textureFormatID         = angle::Format::ID::R8G8_UINT;
+            vkTextureFormat         = VK_FORMAT_R8G8_UINT;
+            bufferFormatID          = angle::Format::ID::R8G8_UINT;
+            vkBufferFormat          = VK_FORMAT_R8G8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -961,8 +1145,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8G8_UNORM:
         {
             internalFormat          = GL_RG8;
-            formatID                = angle::Format::ID::R8G8_UNORM;
-            native                  = VK_FORMAT_R8G8_UNORM;
+            textureFormatID         = angle::Format::ID::R8G8_UNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8_UNORM;
+            bufferFormatID          = angle::Format::ID::R8G8_UNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -970,8 +1156,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8_SINT:
         {
             internalFormat          = GL_R8I;
-            formatID                = angle::Format::ID::R8_SINT;
-            native                  = VK_FORMAT_R8_SINT;
+            textureFormatID         = angle::Format::ID::R8_SINT;
+            vkTextureFormat         = VK_FORMAT_R8_SINT;
+            bufferFormatID          = angle::Format::ID::R8_SINT;
+            vkBufferFormat          = VK_FORMAT_R8_SINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -979,8 +1167,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8_SNORM:
         {
             internalFormat          = GL_R8_SNORM;
-            formatID                = angle::Format::ID::R8_SNORM;
-            native                  = VK_FORMAT_R8_SNORM;
+            textureFormatID         = angle::Format::ID::R8_SNORM;
+            vkTextureFormat         = VK_FORMAT_R8_SNORM;
+            bufferFormatID          = angle::Format::ID::R8_SNORM;
+            vkBufferFormat          = VK_FORMAT_R8_SNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -988,8 +1178,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8_UINT:
         {
             internalFormat          = GL_R8UI;
-            formatID                = angle::Format::ID::R8_UINT;
-            native                  = VK_FORMAT_R8_UINT;
+            textureFormatID         = angle::Format::ID::R8_UINT;
+            vkTextureFormat         = VK_FORMAT_R8_UINT;
+            bufferFormatID          = angle::Format::ID::R8_UINT;
+            vkBufferFormat          = VK_FORMAT_R8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -997,8 +1189,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R8_UNORM:
         {
             internalFormat          = GL_R8;
-            formatID                = angle::Format::ID::R8_UNORM;
-            native                  = VK_FORMAT_R8_UNORM;
+            textureFormatID         = angle::Format::ID::R8_UNORM;
+            vkTextureFormat         = VK_FORMAT_R8_UNORM;
+            bufferFormatID          = angle::Format::ID::R8_UNORM;
+            vkBufferFormat          = VK_FORMAT_R8_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -1010,8 +1204,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::S8_UINT:
         {
             internalFormat          = GL_STENCIL_INDEX8;
-            formatID                = angle::Format::ID::S8_UINT;
-            native                  = VK_FORMAT_S8_UINT;
+            textureFormatID         = angle::Format::ID::S8_UINT;
+            vkTextureFormat         = VK_FORMAT_S8_UINT;
+            bufferFormatID          = angle::Format::ID::S8_UINT;
+            vkBufferFormat          = VK_FORMAT_S8_UINT;
             dataInitializerFunction = nullptr;
             break;
         }
