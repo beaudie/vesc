@@ -78,7 +78,7 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
 
     mExtensions.rgb8rgba8 = true;
 
-    mTextureCaps = GenerateMinimumTextureCapsMap(maxClientVersion, mExtensions);
+    InitMinimumTextureCapsMap(maxClientVersion, mExtensions, &mTextureCaps);
 }
 
 ContextNULL::~ContextNULL()
