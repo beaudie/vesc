@@ -76,6 +76,15 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     mExtensions.copyTexture           = true;
     mExtensions.copyCompressedTexture = true;
 
+    mExtensions.textureCompressionDXT1     = true;
+    mExtensions.textureCompressionDXT3     = true;
+    mExtensions.textureCompressionDXT5     = true;
+    mExtensions.textureCompressionS3TCsRGB = true;
+    mExtensions.textureCompressionASTCHDR  = true;
+    mExtensions.textureCompressionASTCLDR  = true;
+    mExtensions.compressedETC1RGB8Texture  = true;
+    mExtensions.lossyETCDecode             = true;
+
     mTextureCaps = GenerateMinimumTextureCapsMap(maxClientVersion, mExtensions);
 }
 

@@ -362,6 +362,17 @@ bool ValidateES3TexImageParametersBase(Context *context,
                                      << "Format must match the internal format of the texture.");
                 return false;
             }
+
+            switch (actualInternalFormat)
+            {
+                case GL_ETC1_RGB8_OES:
+                case GL_ETC1_RGB8_LOSSY_DECODE_ANGLE:
+                    ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidInternalFormat);
+                    return false;
+
+                default:
+                    break;
+            }
         }
         else
         {
