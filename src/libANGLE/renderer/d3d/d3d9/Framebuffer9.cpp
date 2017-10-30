@@ -85,8 +85,6 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Context *context,
                                        const gl::PixelPackState &pack,
                                        uint8_t *pixels)
 {
-    ASSERT(pack.pixelBuffer.get() == nullptr);
-
     const gl::FramebufferAttachment *colorbuffer = mState.getColorAttachment(0);
     ASSERT(colorbuffer);
 
@@ -200,7 +198,7 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Context *context,
     packParams.format      = format;
     packParams.type        = type;
     packParams.outputPitch = static_cast<GLuint>(outputPitch);
-    packParams.pack.copyFrom(context, pack);
+    packParams.pack        = pack;
 
     PackPixels(packParams, d3dFormatInfo.info(), inputPitch, source, pixels);
 
