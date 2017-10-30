@@ -294,6 +294,7 @@ Buffer11::Buffer11(const gl::BufferState &state, Renderer11 *renderer)
       mRenderer(renderer),
       mSize(0),
       mMappedStorage(nullptr),
+      mLatestBufferStorage(nullptr),
       mBufferStorages({}),
       mDeallocThresholds({}),
       mIdleness({}),
@@ -738,6 +739,12 @@ gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getBufferStorage(const gl
 
     ASSERT(newStorage);
 
+    if (!mLatestBufferStorage ||
+        newStorage->getDataRevision() > mLatestBufferStorage->getDataRevision())
+    {
+        mLatestBufferStorage = newStorage;
+    }
+
     ANGLE_TRY(updateBufferStorage(context, newStorage, 0, mSize));
     ANGLE_TRY(garbageCollection(context, usage));
 
@@ -828,71 +835,44 @@ gl::Error Buffer11::updateBufferStorage(const gl::Context *context,
                                         size_t sourceOffset,
                                         size_t storageSize)
 {
-    BufferStorage *latestBuffer = nullptr;
-    ANGLE_TRY_RESULT(getLatestBufferStorage(context), latestBuffer);
-
     ASSERT(storage);
 
-    if (latestBuffer && latestBuffer->getDataRevision() > storage->getDataRevision())
+    if (mLatestBufferStorage &&
+        mLatestBufferStorage->getDataRevision() > storage->getDataRevision())
     {
         // Copy through a staging buffer if we're copying from or to a non-staging, mappable
         // buffer storage. This is because we can't map a GPU buffer, and copy CPU
         // data directly. If we're already using a staging buffer we're fine.
-        if (latestBuffer->getUsage() != BUFFER_USAGE_STAGING &&
+        if (mLatestBufferStorage->getUsage() != BUFFER_USAGE_STAGING &&
             storage->getUsage() != BUFFER_USAGE_STAGING &&
-            (!latestBuffer->isCPUAccessible(GL_MAP_READ_BIT) ||
+            (!mLatestBufferStorage->isCPUAccessible(GL_MAP_READ_BIT) ||
              !storage->isCPUAccessible(GL_MAP_WRITE_BIT)))
         {
             NativeStorage *stagingBuffer = nullptr;
             ANGLE_TRY_RESULT(getStagingStorage(context), stagingBuffer);
 
             CopyResult copyResult = CopyResult::NOT_RECREATED;
-            ANGLE_TRY_RESULT(stagingBuffer->copyFromStorage(context, latestBuffer, 0,
-                                                            latestBuffer->getSize(), 0),
+            ANGLE_TRY_RESULT(stagingBuffer->copyFromStorage(context, mLatestBufferStorage, 0,
+                                                            mLatestBufferStorage->getSize(), 0),
                              copyResult);
-            stagingBuffer->setDataRevision(latestBuffer->getDataRevision());
+            stagingBuffer->setDataRevision(mLatestBufferStorage->getDataRevision());
 
-            latestBuffer = stagingBuffer;
+            mLatestBufferStorage = stagingBuffer;
         }
 
         CopyResult copyResult = CopyResult::NOT_RECREATED;
         ANGLE_TRY_RESULT(
-            storage->copyFromStorage(context, latestBuffer, sourceOffset, storageSize, 0),
+            storage->copyFromStorage(context, mLatestBufferStorage, sourceOffset, storageSize, 0),
             copyResult);
         // If the D3D buffer has been recreated, we should update our serial.
         if (copyResult == CopyResult::RECREATED)
         {
             updateSerial();
         }
-        storage->setDataRevision(latestBuffer->getDataRevision());
+        storage->setDataRevision(mLatestBufferStorage->getDataRevision());
     }
 
     return gl::NoError();
-}
-
-gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getLatestBufferStorage(
-    const gl::Context *context) const
-{
-    // Even though we iterate over all the direct buffers, it is expected that only
-    // 1 or 2 will be present.
-    BufferStorage *latestStorage = nullptr;
-    DataRevision latestRevision  = 0;
-    for (auto &storage : mBufferStorages)
-    {
-        if (storage && (!latestStorage || storage->getDataRevision() > latestRevision))
-        {
-            latestStorage  = storage;
-            latestRevision = storage->getDataRevision();
-        }
-    }
-
-    // resize buffer
-    if (latestStorage && latestStorage->getSize() < mSize)
-    {
-        ANGLE_TRY(latestStorage->resize(context, mSize, true));
-    }
-
-    return latestStorage;
 }
 
 gl::ErrorOrResult<Buffer11::NativeStorage *> Buffer11::getStagingStorage(const gl::Context *context)

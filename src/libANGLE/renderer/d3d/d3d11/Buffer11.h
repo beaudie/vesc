@@ -137,7 +137,10 @@ class Buffer11 : public BufferD3D
                                   size_t storageSize);
     gl::ErrorOrResult<BufferStorage *> getBufferStorage(const gl::Context *context,
                                                         BufferUsage usage);
-    gl::ErrorOrResult<BufferStorage *> getLatestBufferStorage(const gl::Context *context) const;
+    gl::ErrorOrResult<BufferStorage *> getLatestBufferStorage(const gl::Context *context) const
+    {
+        return mLatestBufferStorage;
+    }
 
     gl::ErrorOrResult<BufferStorage *> getConstantBufferRangeStorage(const gl::Context *context,
                                                                      GLintptr offset,
@@ -156,6 +159,8 @@ class Buffer11 : public BufferD3D
     size_t mSize;
 
     BufferStorage *mMappedStorage;
+
+    BufferStorage *mLatestBufferStorage;
 
     std::array<BufferStorage *, BUFFER_USAGE_COUNT> mBufferStorages;
 
