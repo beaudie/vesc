@@ -81,6 +81,10 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     mExtensions.textureCompressionASTCLDR  = true;
     mExtensions.compressedETC1RGB8Texture  = true;
 
+    mExtensions.eglImage                  = true;
+    mExtensions.eglImageExternal          = true;
+    mExtensions.eglImageExternalEssl3     = true;
+    mExtensions.eglStreamConsumerExternal = true;
     mExtensions.textureRectangle          = true;
 
     mExtensions.textureUsage = true;
