@@ -571,7 +571,9 @@ gl::Error BlitGL::copySubTextureCPUReadback(const gl::Context *context,
         readFunction     = angle::ReadColor<angle::R8G8B8A8, GLfloat>;
     }
 
-    mStateManager->setPixelUnpackState(gl::PixelUnpackState(1, 0));
+    gl::PixelUnpackState unpack;
+    unpack.alignment = 1;
+    mStateManager->setPixelUnpackState(unpack);
     mFunctions->readPixels(sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height,
                            readPixelsFormat, GL_UNSIGNED_BYTE, sourceMemory);
 
@@ -585,7 +587,9 @@ gl::Error BlitGL::copySubTextureCPUReadback(const gl::Context *context,
         destInternalFormatInfo.componentType, sourceArea.width, sourceArea.height, unpackFlipY,
         unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 
-    mStateManager->setPixelPackState(gl::PixelPackState(1, false));
+    gl::PixelPackState pack;
+    pack.alignment = 1;
+    mStateManager->setPixelPackState(pack);
 
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, destFormat, destType);
