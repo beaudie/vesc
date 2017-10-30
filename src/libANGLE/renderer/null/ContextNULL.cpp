@@ -85,6 +85,13 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     mExtensions.compressedETC1RGB8Texture  = true;
     mExtensions.lossyETCDecode             = true;
 
+    mExtensions.eglImage                  = true;
+    mExtensions.eglImageExternal          = true;
+    mExtensions.eglImageExternalEssl3     = true;
+    mExtensions.eglStreamConsumerExternal = true;
+
+    mExtensions.textureRectangle = true;
+
     const gl::Version maxClientVersion(3, 1);
     mCaps = GenerateMinimumCaps(maxClientVersion, mExtensions);
 
