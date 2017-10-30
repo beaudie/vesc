@@ -297,6 +297,36 @@ TEST_F(LocationTest, LineOverflowInComment)
     mPreprocessor.lex(&token);
 }
 
+// Test for an error being generated when the line number overflows - inside \n continution version
+TEST_F(LocationTest, LineOverflowInContinuationN)
+{
+    const char *str = "#line 2147483647\n \\\n\n";
+
+    ASSERT_TRUE(mPreprocessor.init(1, &str, NULL));
+
+    using testing::_;
+    // Error reported about EOF.
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_TOKENIZER_ERROR, _, _));
+
+    pp::Token token;
+    mPreprocessor.lex(&token);
+}
+
+// Test for an error being generated when the line number overflows - inside \r\n continution version
+TEST_F(LocationTest, LineOverflowInContinuationRN)
+{
+    const char *str = "#line 2147483647\n \\\r\n\n";
+
+    ASSERT_TRUE(mPreprocessor.init(1, &str, NULL));
+
+    using testing::_;
+    // Error reported about EOF.
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_TOKENIZER_ERROR, _, _));
+
+    pp::Token token;
+    mPreprocessor.lex(&token);
+}
+
 struct LineTestParam
 {
     const char* str;
