@@ -133,14 +133,12 @@ class StateManagerGL final : angle::NonCopyable
                              GLint skipRows,
                              GLint skipPixels,
                              GLint imageHeight,
-                             GLint skipImages,
-                             GLuint unpackBuffer);
+                             GLint skipImages);
     void setPixelPackState(const gl::PixelPackState &pack);
     void setPixelPackState(GLint alignment,
                            GLint rowLength,
                            GLint skipRows,
-                           GLint skipPixels,
-                           GLuint packBuffer);
+                           GLint skipPixels);
 
     void setFramebufferSRGBEnabled(const gl::Context *context, bool enabled);
     void setFramebufferSRGBEnabledForFramebuffer(const gl::Context *context,

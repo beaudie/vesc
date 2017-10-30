@@ -491,14 +491,8 @@ void StateManagerGL::bindImageTexture(GLuint unit,
 
 void StateManagerGL::setPixelUnpackState(const gl::PixelUnpackState &unpack)
 {
-    GLuint unpackBufferID          = 0;
-    const gl::Buffer *unpackBuffer = unpack.pixelBuffer.get();
-    if (unpackBuffer != nullptr)
-    {
-        unpackBufferID = GetImplAs<BufferGL>(unpackBuffer)->getBufferID();
-    }
     setPixelUnpackState(unpack.alignment, unpack.rowLength, unpack.skipRows, unpack.skipPixels,
-                        unpack.imageHeight, unpack.skipImages, unpackBufferID);
+                        unpack.imageHeight, unpack.skipImages);
 }
 
 void StateManagerGL::setPixelUnpackState(GLint alignment,
@@ -506,8 +500,7 @@ void StateManagerGL::setPixelUnpackState(GLint alignment,
                                          GLint skipRows,
                                          GLint skipPixels,
                                          GLint imageHeight,
-                                         GLint skipImages,
-                                         GLuint unpackBuffer)
+                                         GLint skipImages)
 {
     if (mUnpackAlignment != alignment)
     {
@@ -556,26 +549,17 @@ void StateManagerGL::setPixelUnpackState(GLint alignment,
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_SKIP_IMAGES);
     }
-
-    bindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
 }
 
 void StateManagerGL::setPixelPackState(const gl::PixelPackState &pack)
 {
-    GLuint packBufferID          = 0;
-    const gl::Buffer *packBuffer = pack.pixelBuffer.get();
-    if (packBuffer != nullptr)
-    {
-        packBufferID = GetImplAs<BufferGL>(packBuffer)->getBufferID();
-    }
-    setPixelPackState(pack.alignment, pack.rowLength, pack.skipRows, pack.skipPixels, packBufferID);
+    setPixelPackState(pack.alignment, pack.rowLength, pack.skipRows, pack.skipPixels);
 }
 
 void StateManagerGL::setPixelPackState(GLint alignment,
                                        GLint rowLength,
                                        GLint skipRows,
-                                       GLint skipPixels,
-                                       GLuint packBuffer)
+                                       GLint skipPixels)
 {
     if (mPackAlignment != alignment)
     {
@@ -608,8 +592,6 @@ void StateManagerGL::setPixelPackState(GLint alignment,
 
         // TODO: set dirty bit once one exists
     }
-
-    bindBuffer(GL_PIXEL_PACK_BUFFER, packBuffer);
 }
 
 void StateManagerGL::bindFramebuffer(GLenum type, GLuint framebuffer)
