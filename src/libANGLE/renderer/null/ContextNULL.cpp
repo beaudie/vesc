@@ -84,6 +84,8 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     mExtensions.textureCompressionASTCLDR  = true;
     mExtensions.compressedETC1RGB8Texture  = true;
 
+    mExtensions.textureUsage = true;
+
     mTextureCaps = GenerateMinimumTextureCapsMap(maxClientVersion, mExtensions);
 }
 
