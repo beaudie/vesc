@@ -491,125 +491,108 @@ void StateManagerGL::bindImageTexture(GLuint unit,
 
 void StateManagerGL::setPixelUnpackState(const gl::PixelUnpackState &unpack)
 {
-    GLuint unpackBufferID          = 0;
-    const gl::Buffer *unpackBuffer = unpack.pixelBuffer.get();
-    if (unpackBuffer != nullptr)
+    if (mUnpackAlignment != unpack.alignment)
     {
-        unpackBufferID = GetImplAs<BufferGL>(unpackBuffer)->getBufferID();
-    }
-    setPixelUnpackState(unpack.alignment, unpack.rowLength, unpack.skipRows, unpack.skipPixels,
-                        unpack.imageHeight, unpack.skipImages, unpackBufferID);
-}
-
-void StateManagerGL::setPixelUnpackState(GLint alignment,
-                                         GLint rowLength,
-                                         GLint skipRows,
-                                         GLint skipPixels,
-                                         GLint imageHeight,
-                                         GLint skipImages,
-                                         GLuint unpackBuffer)
-{
-    if (mUnpackAlignment != alignment)
-    {
-        mUnpackAlignment = alignment;
+        mUnpackAlignment = unpack.alignment;
         mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, mUnpackAlignment);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ALIGNMENT);
     }
 
-    if (mUnpackRowLength != rowLength)
+    if (mUnpackRowLength != unpack.rowLength)
     {
-        mUnpackRowLength = rowLength;
+        mUnpackRowLength = unpack.rowLength;
         mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, mUnpackRowLength);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH);
     }
 
-    if (mUnpackSkipRows != skipRows)
+    if (mUnpackSkipRows != unpack.skipRows)
     {
-        mUnpackSkipRows = skipRows;
+        mUnpackSkipRows = unpack.skipRows;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_ROWS, mUnpackSkipRows);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_SKIP_ROWS);
     }
 
-    if (mUnpackSkipPixels != skipPixels)
+    if (mUnpackSkipPixels != unpack.skipPixels)
     {
-        mUnpackSkipPixels = skipPixels;
+        mUnpackSkipPixels = unpack.skipPixels;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_PIXELS, mUnpackSkipPixels);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_SKIP_PIXELS);
     }
 
-    if (mUnpackImageHeight != imageHeight)
+    if (mUnpackImageHeight != unpack.imageHeight)
     {
-        mUnpackImageHeight = imageHeight;
+        mUnpackImageHeight = unpack.imageHeight;
         mFunctions->pixelStorei(GL_UNPACK_IMAGE_HEIGHT, mUnpackImageHeight);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_IMAGE_HEIGHT);
     }
 
-    if (mUnpackSkipImages != skipImages)
+    if (mUnpackSkipImages != unpack.skipImages)
     {
-        mUnpackSkipImages = skipImages;
+        mUnpackSkipImages = unpack.skipImages;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_IMAGES, mUnpackSkipImages);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_SKIP_IMAGES);
     }
+}
 
-    bindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
+void StateManagerGL::setPixelUnpackBuffer(const gl::Buffer *pixelBuffer)
+{
+    GLuint bufferID = 0;
+    if (pixelBuffer != nullptr)
+    {
+        bufferID = GetImplAs<BufferGL>(pixelBuffer)->getBufferID();
+    }
+    bindBuffer(GL_PIXEL_UNPACK_BUFFER, bufferID);
 }
 
 void StateManagerGL::setPixelPackState(const gl::PixelPackState &pack)
 {
-    GLuint packBufferID          = 0;
-    const gl::Buffer *packBuffer = pack.pixelBuffer.get();
-    if (packBuffer != nullptr)
+    if (mPackAlignment != pack.alignment)
     {
-        packBufferID = GetImplAs<BufferGL>(packBuffer)->getBufferID();
-    }
-    setPixelPackState(pack.alignment, pack.rowLength, pack.skipRows, pack.skipPixels, packBufferID);
-}
-
-void StateManagerGL::setPixelPackState(GLint alignment,
-                                       GLint rowLength,
-                                       GLint skipRows,
-                                       GLint skipPixels,
-                                       GLuint packBuffer)
-{
-    if (mPackAlignment != alignment)
-    {
-        mPackAlignment = alignment;
+        mPackAlignment = pack.alignment;
         mFunctions->pixelStorei(GL_PACK_ALIGNMENT, mPackAlignment);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_PACK_ALIGNMENT);
     }
 
-    if (mPackRowLength != rowLength)
+    if (mPackRowLength != pack.rowLength)
     {
-        mPackRowLength = rowLength;
+        mPackRowLength = pack.rowLength;
         mFunctions->pixelStorei(GL_PACK_ROW_LENGTH, mPackRowLength);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH);
     }
 
-    if (mPackSkipRows != skipRows)
+    if (mPackSkipRows != pack.skipRows)
     {
-        mPackSkipRows = skipRows;
+        mPackSkipRows = pack.skipRows;
         mFunctions->pixelStorei(GL_PACK_SKIP_ROWS, mPackSkipRows);
 
         // TODO: set dirty bit once one exists
     }
 
-    if (mPackSkipPixels != skipPixels)
+    if (mPackSkipPixels != pack.skipPixels)
     {
-        mPackSkipPixels = skipPixels;
+        mPackSkipPixels = pack.skipPixels;
         mFunctions->pixelStorei(GL_PACK_SKIP_PIXELS, mPackSkipPixels);
 
         // TODO: set dirty bit once one exists
     }
+}
 
-    bindBuffer(GL_PIXEL_PACK_BUFFER, packBuffer);
+void StateManagerGL::setPixelPackBuffer(const gl::Buffer *pixelBuffer)
+{
+    GLuint bufferID = 0;
+    if (pixelBuffer != nullptr)
+    {
+        bufferID = GetImplAs<BufferGL>(pixelBuffer)->getBufferID();
+    }
+    bindBuffer(GL_PIXEL_PACK_BUFFER, bufferID);
 }
 
 void StateManagerGL::bindFramebuffer(GLenum type, GLuint framebuffer)
@@ -1918,8 +1901,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 setPixelUnpackState(state.getUnpackState());
                 break;
             case gl::State::DIRTY_BIT_UNPACK_BUFFER_BINDING:
-                // TODO(jmadill): split this
-                setPixelUnpackState(state.getUnpackState());
+                setPixelUnpackBuffer(state.getTargetBuffer(GL_PIXEL_UNPACK_BUFFER));
                 break;
             case gl::State::DIRTY_BIT_PACK_ALIGNMENT:
                 // TODO(jmadill): split this
@@ -1942,8 +1924,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 setPixelPackState(state.getPackState());
                 break;
             case gl::State::DIRTY_BIT_PACK_BUFFER_BINDING:
-                // TODO(jmadill): split this
-                setPixelPackState(state.getPackState());
+                setPixelPackBuffer(state.getTargetBuffer(GL_PIXEL_PACK_BUFFER));
                 break;
             case gl::State::DIRTY_BIT_DITHER_ENABLED:
                 setDitherEnabled(state.isDitherEnabled());
