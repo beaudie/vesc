@@ -20,6 +20,7 @@
 namespace gl
 {
 class Context;
+class InterfaceBlockLinker;
 class VaryingPacking;
 }
 
@@ -30,6 +31,15 @@ struct BlockMemberInfo;
 
 namespace rx
 {
+// The link operation is responsible for finishing the link of uniform and interface blocks.
+// This way it can filter out unreferenced resources and still have access to the info.
+// TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
+struct LinkedResources
+{
+    const gl::VaryingPacking &varyingPacking;
+    const gl::InterfaceBlockLinker &uniformBlockLinker;
+    const gl::InterfaceBlockLinker &shaderStorageBlockLinker;
+};
 
 class ProgramImpl : angle::NonCopyable
 {
@@ -46,7 +56,7 @@ class ProgramImpl : angle::NonCopyable
     virtual void setSeparable(bool separable)               = 0;
 
     virtual gl::LinkResult link(const gl::Context *context,
-                                const gl::VaryingPacking &packing,
+                                const LinkedResources &resources,
                                 gl::InfoLog &infoLog) = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 

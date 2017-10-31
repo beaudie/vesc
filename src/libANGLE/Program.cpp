@@ -736,6 +736,10 @@ Error Program::link(const gl::Context *context)
         }
 
         gl::VaryingPacking noPacking(0, PackMode::ANGLE_RELAXED);
+        rx::LinkedResources resources = {
+            noPacking,
+        };
+
         ANGLE_TRY_RESULT(mProgram->link(context, noPacking, mInfoLog), mLinked);
         if (!mLinked)
         {
@@ -2862,7 +2866,7 @@ void Program::gatherUniformBlockInfo(const gl::Context *context)
     blockLinker.linkBlocks(getImplBlockSize, getImplMemberInfo);
 }
 
-void Program::gatherShaderStorageBlockInfo(const gl::Context *context)
+void Program::getShaderStorageBlockLinker(const gl::Context *context)
 {
     InterfaceBlockLinker blockLinker(&mState.mShaderStorageBlocks, nullptr);
 

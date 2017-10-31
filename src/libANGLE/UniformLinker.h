@@ -120,6 +120,9 @@ class InterfaceBlockLinker final : angle::NonCopyable
                          std::vector<LinkedUniform> *uniformsOut);
     ~InterfaceBlockLinker();
 
+    InterfaceBlockLinker(InterfaceBlockLinker &&other);
+    InterfaceBlockLinker &operator=(InterfaceBlockLinker &&other);
+
     using GetBlockSize = std::function<
         bool(const std::string &blockName, const std::string &blockMappedName, size_t *sizeOut)>;
     using GetBlockMemberInfo = std::function<

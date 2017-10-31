@@ -775,4 +775,14 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSize &getBlockSize
     }
 }
 
+InterfaceBlockLinker::InterfaceBlockLinker(InterfaceBlockLinker &&other)
+{
+
+}
+
+InterfaceBlockLinker &InterfaceBlockLinker::operator=(InterfaceBlockLinker &&other)
+{
+
+}
+
 }  // namespace gl
