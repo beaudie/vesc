@@ -40,6 +40,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
+                                         DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          GL_RGBA16F,
@@ -50,6 +51,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_ALPHA32F_EXT,
                                          angle::Format::ID::R32G32B32A32_FLOAT,
+                                         DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -67,6 +69,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              angle::Format::ID::A8_UNORM,
                                              DXGI_FORMAT_A8_UNORM,
                                              DXGI_FORMAT_A8_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_A8_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_A8_UNORM,
@@ -78,6 +81,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             {
                 static constexpr Format info(GL_ALPHA8_EXT,
                                              angle::Format::ID::R8G8B8A8_UNORM,
+                                             DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -96,6 +100,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              angle::Format::ID::B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G6R5_UNORM,
@@ -107,6 +112,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             {
                 static constexpr Format info(GL_BGR565_ANGLEX,
                                              angle::Format::ID::R8G8B8A8_UNORM,
+                                             DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -123,6 +129,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
@@ -136,6 +143,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
@@ -149,6 +157,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_B8G8R8A8_UNORM,
@@ -162,6 +171,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8_UNORM,
                                          DXGI_FORMAT_R8_UNORM,
                                          DXGI_FORMAT_R8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UNORM,
@@ -175,6 +185,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8_UNORM,
                                          DXGI_FORMAT_R8G8_UNORM,
                                          DXGI_FORMAT_R8G8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UNORM,
@@ -186,6 +197,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGB8_ETC2,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -203,6 +215,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM,
                                          GL_RGBA8,
                                          nullptr);
@@ -212,6 +225,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -229,6 +243,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM,
                                          GL_RGBA8,
                                          nullptr);
@@ -238,6 +253,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA8_ETC2_EAC,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -256,6 +272,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -264,6 +281,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_10x5_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -282,6 +300,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -290,6 +309,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_10x8_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -308,6 +328,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -316,6 +337,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_12x12_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -334,6 +356,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -342,6 +365,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_5x4_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -360,6 +384,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -368,6 +393,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_6x5_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -386,6 +412,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -394,6 +421,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_8x5_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -412,6 +440,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -420,6 +449,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_RGBA_ASTC_8x8_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -437,6 +467,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM,
                                          GL_RGBA8,
                                          nullptr);
@@ -448,6 +479,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::BC2_RGBA_UNORM_BLOCK,
                                          DXGI_FORMAT_BC2_UNORM,
                                          DXGI_FORMAT_BC2_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC2_UNORM,
@@ -463,6 +495,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC3_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC3_UNORM,
                                          GL_RGBA8,
                                          nullptr);
@@ -474,6 +507,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::BC1_RGB_UNORM_BLOCK,
                                          DXGI_FORMAT_BC1_UNORM,
                                          DXGI_FORMAT_BC1_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM,
@@ -489,6 +523,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_SNORM,
                                          GL_RGBA8_SNORM,
                                          nullptr);
@@ -502,6 +537,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_SNORM,
                                          GL_RGBA8_SNORM,
                                          nullptr);
@@ -511,6 +547,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -529,6 +566,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -537,6 +575,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -555,6 +594,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -563,6 +603,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -581,6 +622,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -589,6 +631,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -607,6 +650,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -615,6 +659,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -633,6 +678,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -641,6 +687,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -659,6 +706,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -667,6 +715,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR,
                                          angle::Format::ID::NONE,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
@@ -685,6 +734,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -695,6 +745,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -708,6 +759,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -723,6 +775,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          GL_RGBA8,
                                          nullptr);
@@ -734,6 +787,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -749,6 +803,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          GL_RGBA8,
                                          nullptr);
@@ -760,6 +815,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::BC1_RGBA_UNORM_SRGB_BLOCK,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
@@ -775,6 +831,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC2_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC2_UNORM_SRGB,
                                          GL_RGBA8,
                                          nullptr);
@@ -788,6 +845,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC3_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC3_UNORM_SRGB,
                                          GL_RGBA8,
                                          nullptr);
@@ -799,6 +857,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::BC1_RGB_UNORM_SRGB_BLOCK,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM_SRGB,
@@ -815,6 +874,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_R24G8_TYPELESS,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              GL_RGBA32F,
@@ -826,6 +886,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                 static constexpr Format info(GL_DEPTH24_STENCIL8,
                                              angle::Format::ID::D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -842,6 +903,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R32G8X24_TYPELESS,
                                          DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_D32_FLOAT_S8X24_UINT,
                                          DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS,
                                          GL_RGBA32F,
@@ -857,6 +919,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_R16_TYPELESS,
                                              DXGI_FORMAT_R16_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D16_UNORM,
                                              DXGI_FORMAT_R16_UNORM,
                                              GL_RGBA16_EXT,
@@ -868,6 +931,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                 static constexpr Format info(GL_DEPTH_COMPONENT16,
                                              angle::Format::ID::D16_UNORM,
                                              DXGI_FORMAT_D16_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D16_UNORM,
@@ -886,6 +950,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_R24G8_TYPELESS,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              GL_RGBA32F,
@@ -897,6 +962,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                 static constexpr Format info(GL_DEPTH_COMPONENT24,
                                              angle::Format::ID::D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -913,6 +979,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R32_TYPELESS,
                                          DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_D32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
                                          GL_RGBA32F,
@@ -928,6 +995,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_R24G8_TYPELESS,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              GL_RGBA32F,
@@ -939,6 +1007,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                 static constexpr Format info(GL_DEPTH_COMPONENT32_OES,
                                              angle::Format::ID::D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -956,6 +1025,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_BC1_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_BC1_UNORM,
                                          GL_RGBA8,
                                          nullptr);
@@ -965,6 +1035,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_ETC1_RGB8_OES,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -981,6 +1052,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
+                                         DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          GL_RGBA16F,
@@ -991,6 +1063,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_LUMINANCE32F_EXT,
                                          angle::Format::ID::R32G32B32A32_FLOAT,
+                                         DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -1007,6 +1080,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          GL_RGBA8,
@@ -1017,6 +1091,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_LUMINANCE8_EXT,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1033,6 +1108,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
+                                         DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          GL_RGBA16F,
@@ -1043,6 +1119,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_LUMINANCE_ALPHA32F_EXT,
                                          angle::Format::ID::R32G32B32A32_FLOAT,
+                                         DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -1061,6 +1138,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          GL_NONE,
                                          nullptr);
             return info;
@@ -1071,6 +1149,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R11G11B10_FLOAT,
                                          DXGI_FORMAT_R11G11B10_FLOAT,
                                          DXGI_FORMAT_R11G11B10_FLOAT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R11G11B10_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R11G11B10_FLOAT,
@@ -1084,6 +1163,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16_FLOAT,
                                          DXGI_FORMAT_R16_FLOAT,
                                          DXGI_FORMAT_R16_FLOAT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_FLOAT,
@@ -1097,6 +1177,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16_SINT,
                                          DXGI_FORMAT_R16_SINT,
                                          DXGI_FORMAT_R16_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_SINT,
@@ -1110,6 +1191,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16_UINT,
                                          DXGI_FORMAT_R16_UINT,
                                          DXGI_FORMAT_R16_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_UINT,
@@ -1123,6 +1205,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16_UNORM,
                                          DXGI_FORMAT_R16_UNORM,
                                          DXGI_FORMAT_R16_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_UNORM,
@@ -1138,6 +1221,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16_SNORM,
                                          GL_RGBA16_SNORM_EXT,
                                          nullptr);
@@ -1147,6 +1231,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_R32F,
                                          angle::Format::ID::R32_FLOAT,
+                                         DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
@@ -1163,6 +1248,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R32_SINT,
                                          DXGI_FORMAT_R32_SINT,
                                          DXGI_FORMAT_R32_SINT,
+                                         DXGI_FORMAT_R32_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32_SINT,
                                          GL_RGBA32I,
@@ -1173,6 +1259,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_R32UI,
                                          angle::Format::ID::R32_UINT,
+                                         DXGI_FORMAT_R32_UINT,
                                          DXGI_FORMAT_R32_UINT,
                                          DXGI_FORMAT_R32_UINT,
                                          DXGI_FORMAT_R32_UINT,
@@ -1188,6 +1275,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8_UNORM,
                                          DXGI_FORMAT_R8_UNORM,
                                          DXGI_FORMAT_R8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UNORM,
@@ -1201,6 +1289,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8_SINT,
                                          DXGI_FORMAT_R8_SINT,
                                          DXGI_FORMAT_R8_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_SINT,
@@ -1214,6 +1303,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8_UINT,
                                          DXGI_FORMAT_R8_UINT,
                                          DXGI_FORMAT_R8_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_UINT,
@@ -1229,6 +1319,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8_SNORM,
                                          GL_RGBA8_SNORM,
                                          nullptr);
@@ -1240,6 +1331,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16_FLOAT,
                                          DXGI_FORMAT_R16G16_FLOAT,
                                          DXGI_FORMAT_R16G16_FLOAT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_FLOAT,
@@ -1253,6 +1345,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16_SINT,
                                          DXGI_FORMAT_R16G16_SINT,
                                          DXGI_FORMAT_R16G16_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_SINT,
@@ -1266,6 +1359,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16_UINT,
                                          DXGI_FORMAT_R16G16_UINT,
                                          DXGI_FORMAT_R16G16_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_UINT,
@@ -1279,6 +1373,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16_UNORM,
                                          DXGI_FORMAT_R16G16_UNORM,
                                          DXGI_FORMAT_R16G16_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_UNORM,
@@ -1294,6 +1389,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16_SNORM,
                                          GL_RGBA16_SNORM_EXT,
                                          nullptr);
@@ -1305,6 +1401,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R32G32_FLOAT,
                                          DXGI_FORMAT_R32G32_FLOAT,
                                          DXGI_FORMAT_R32G32_FLOAT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_FLOAT,
@@ -1318,6 +1415,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R32G32_SINT,
                                          DXGI_FORMAT_R32G32_SINT,
                                          DXGI_FORMAT_R32G32_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_SINT,
@@ -1331,6 +1429,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R32G32_UINT,
                                          DXGI_FORMAT_R32G32_UINT,
                                          DXGI_FORMAT_R32G32_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32_UINT,
@@ -1344,6 +1443,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8_UNORM,
                                          DXGI_FORMAT_R8G8_UNORM,
                                          DXGI_FORMAT_R8G8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UNORM,
@@ -1357,6 +1457,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8_SINT,
                                          DXGI_FORMAT_R8G8_SINT,
                                          DXGI_FORMAT_R8G8_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_SINT,
@@ -1370,6 +1471,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8_UINT,
                                          DXGI_FORMAT_R8G8_UINT,
                                          DXGI_FORMAT_R8G8_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_UINT,
@@ -1385,6 +1487,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8_SNORM,
                                          GL_RGBA8_SNORM,
                                          nullptr);
@@ -1394,6 +1497,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1409,6 +1513,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R10G10B10A2_UNORM,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
@@ -1422,6 +1527,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R10G10B10A2_UINT,
                                          DXGI_FORMAT_R10G10B10A2_UINT,
                                          DXGI_FORMAT_R10G10B10A2_UINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UINT,
@@ -1433,6 +1539,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB16F,
                                          angle::Format::ID::R16G16B16A16_FLOAT,
+                                         DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
@@ -1449,6 +1556,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
+                                         DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
                                          GL_RGBA16I,
@@ -1459,6 +1567,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB16UI,
                                          angle::Format::ID::R16G16B16A16_UINT,
+                                         DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
@@ -1474,6 +1583,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16B16A16_UNORM,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
@@ -1489,6 +1599,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_SNORM,
                                          GL_RGBA16_SNORM_EXT,
                                          Initialize4ComponentData<GLushort, 0x0000, 0x0000, 0x0000, 0x7FFF>);
@@ -1498,6 +1609,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB32F,
                                          angle::Format::ID::R32G32B32A32_FLOAT,
+                                         DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -1514,6 +1626,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
+                                         DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          GL_RGBA32I,
@@ -1524,6 +1637,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB32UI,
                                          angle::Format::ID::R32G32B32A32_UINT,
+                                         DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
@@ -1541,6 +1655,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              angle::Format::ID::B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G6R5_UNORM,
@@ -1552,6 +1667,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             {
                 static constexpr Format info(GL_RGB565,
                                              angle::Format::ID::R8G8B8A8_UNORM,
+                                             DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1570,6 +1686,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              angle::Format::ID::B5G5R5A1_UNORM,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
@@ -1581,6 +1698,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             {
                 static constexpr Format info(GL_RGB5_A1,
                                              angle::Format::ID::R8G8B8A8_UNORM,
+                                             DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1598,6 +1716,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          GL_RGBA8,
@@ -1610,6 +1729,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_SINT,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
@@ -1624,6 +1744,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
+                                         DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
                                          GL_RGBA8UI,
@@ -1634,6 +1755,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGB8_SNORM,
                                          angle::Format::ID::R8G8B8A8_SNORM,
+                                         DXGI_FORMAT_R8G8B8A8_SNORM,
                                          DXGI_FORMAT_R8G8B8A8_SNORM,
                                          DXGI_FORMAT_R8G8B8A8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
@@ -1651,6 +1773,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
                                          GL_RGBA16F_EXT,
                                          nullptr);
@@ -1660,6 +1783,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGBA,
                                          angle::Format::ID::R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1676,6 +1800,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
+                                         DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_FLOAT,
                                          GL_RGBA16F,
@@ -1686,6 +1811,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGBA16I,
                                          angle::Format::ID::R16G16B16A16_SINT,
+                                         DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
                                          DXGI_FORMAT_R16G16B16A16_SINT,
@@ -1702,6 +1828,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
+                                         DXGI_FORMAT_R16G16B16A16_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_UINT,
                                          GL_RGBA16UI,
@@ -1714,6 +1841,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R16G16B16A16_UNORM,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_UNORM,
@@ -1729,6 +1857,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R16G16B16A16_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R16G16B16A16_SNORM,
                                          GL_RGBA16_SNORM_EXT,
                                          nullptr);
@@ -1738,6 +1867,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGBA32F,
                                          angle::Format::ID::R32G32B32A32_FLOAT,
+                                         DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
                                          DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -1754,6 +1884,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
+                                         DXGI_FORMAT_R32G32B32A32_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R32G32B32A32_SINT,
                                          GL_RGBA32I,
@@ -1764,6 +1895,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGBA32UI,
                                          angle::Format::ID::R32G32B32A32_UINT,
+                                         DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
                                          DXGI_FORMAT_R32G32B32A32_UINT,
@@ -1781,6 +1913,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              angle::Format::ID::B4G4R4A4_UNORM,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
@@ -1792,6 +1925,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             {
                 static constexpr Format info(GL_RGBA4,
                                              angle::Format::ID::R8G8B8A8_UNORM,
+                                             DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
                                              DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -1809,6 +1943,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
+                                         DXGI_FORMAT_R8G8B8A8_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          GL_RGBA8,
@@ -1821,6 +1956,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_SINT,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_SINT,
@@ -1832,6 +1968,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_RGBA8UI,
                                          angle::Format::ID::R8G8B8A8_UINT,
+                                         DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
                                          DXGI_FORMAT_R8G8B8A8_UINT,
@@ -1847,6 +1984,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_SNORM,
                                          DXGI_FORMAT_R8G8B8A8_SNORM,
                                          DXGI_FORMAT_R8G8B8A8_SNORM,
+                                         DXGI_FORMAT_R8G8B8A8_SNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_SNORM,
@@ -1860,6 +1998,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -1873,6 +2012,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          angle::Format::ID::R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                         DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -1889,6 +2029,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_R24G8_TYPELESS,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                              GL_RGBA32F,
@@ -1900,6 +2041,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                 static constexpr Format info(GL_STENCIL_INDEX8,
                                              angle::Format::ID::D24_UNORM_S8_UINT,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
+                                             DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
