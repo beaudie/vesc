@@ -17,6 +17,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "platform/WorkaroundsD3D.h"
 
 namespace rx
@@ -31,15 +32,27 @@ class ShaderExecutableD3D;
 #define ANGLE_COMPILE_OPTIMIZATION_LEVEL D3DCOMPILE_OPTIMIZATION_LEVEL1
 #endif
 
+enum RegisterType
+{
+    registerUndefined,
+    registerT,
+    registerU
+};
+
 // Helper struct representing a single shader uniform
 // TODO(jmadill): Make uniform blocks shared between all programs, so we don't need separate
 // register indices.
 struct D3DUniform : private angle::NonCopyable
 {
-    D3DUniform(GLenum type, const std::string &nameIn, unsigned int arraySizeIn, bool defaultBlock);
+    D3DUniform(GLenum type,
+               RegisterType reg,
+               const std::string &nameIn,
+               unsigned int arraySizeIn,
+               bool defaultBlock);
     ~D3DUniform();
 
     bool isSampler() const;
+    bool isImage() const;
     unsigned int elementCount() const { return std::max(1u, arraySize); }
     bool isReferencedByVertexShader() const;
     bool isReferencedByFragmentShader() const;
@@ -59,6 +72,7 @@ struct D3DUniform : private angle::NonCopyable
     uint8_t *csData;
 
     // Register information.
+    RegisterType regType;
     unsigned int vsRegisterIndex;
     unsigned int psRegisterIndex;
     unsigned int csRegisterIndex;
@@ -155,11 +169,9 @@ class ProgramD3D : public ProgramImpl
 
     const std::vector<PixelShaderOutputVariable> &getPixelShaderKey() { return mPixelShaderKey; }
 
-    GLint getSamplerMapping(gl::SamplerType type,
-                            unsigned int samplerIndex,
-                            const gl::Caps &caps) const;
-    GLenum getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const;
-    GLuint getUsedSamplerRange(gl::SamplerType type) const;
+    GLint getSamplerMapping(ShaderType type, unsigned int samplerIndex, const gl::Caps &caps) const;
+    GLenum getSamplerTextureType(ShaderType type, unsigned int samplerIndex) const;
+    GLuint getUsedSamplerRange(ShaderType type) const;
 
     enum SamplerMapping
     {
@@ -168,6 +180,13 @@ class ProgramD3D : public ProgramImpl
     };
 
     SamplerMapping updateSamplerMapping();
+
+    GLint getImageMapping(ShaderType type,
+                          unsigned int imageIndex,
+                          bool readonly,
+                          const gl::Caps &caps) const;
+    GLuint getUsedImageRange(ShaderType type, bool readonly) const;
+    GLenum getImageTextureType(ShaderType type, unsigned int imageIndex, bool readonly) const;
 
     bool usesPointSize() const { return mUsesPointSize; }
     bool usesPointSpriteEmulation() const;
@@ -362,6 +381,14 @@ class ProgramD3D : public ProgramImpl
         GLenum textureType;
     };
 
+    struct Image
+    {
+        Image();
+        bool active;
+        GLint logicalImageUnit;
+        GLenum textureType;
+    };
+
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
 
     void defineUniformsAndAssignRegisters(const gl::Context *context);
@@ -371,6 +398,7 @@ class ProgramD3D : public ProgramImpl
     void defineUniform(GLenum shaderType,
                        const sh::ShaderVariable &uniform,
                        const std::string &fullName,
+                       const RegisterType regType,
                        sh::HLSLBlockEncoder *encoder,
                        D3DUniformMap *uniformMap);
     void assignAllSamplerRegisters();
@@ -381,6 +409,15 @@ class ProgramD3D : public ProgramImpl
                                unsigned int samplerCount,
                                std::vector<Sampler> &outSamplers,
                                GLuint *outUsedRange);
+
+    void assignAllImageRegisters();
+    void assignImageRegisters(D3DUniform *d3dUniform);
+    static void AssignImages(unsigned int startImageIndex,
+                             int startLogicalImageUnit,
+                             const gl::UniformTypeInfo &typeInfo,
+                             unsigned int imageCount,
+                             std::vector<Image> &outImages,
+                             GLuint *outUsedRange);
 
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
@@ -469,6 +506,11 @@ class ProgramD3D : public ProgramImpl
     GLuint mUsedComputeSamplerRange;
     bool mDirtySamplerMapping;
 
+    std::vector<Image> mImagesCS;
+    std::vector<Image> mReadonlyImagesCS;
+    GLuint mUsedComputeImageRange;
+    GLuint mUsedComputeReadonlyImageRange;
+
     // Cache for pixel shader output layout to save reallocations.
     std::vector<GLenum> mPixelShaderOutputLayoutCache;
     Optional<size_t> mCachedPixelExecutableIndex;
@@ -485,6 +527,7 @@ class ProgramD3D : public ProgramImpl
 
     std::vector<D3DVarying> mStreamOutVaryings;
     std::vector<D3DUniform *> mD3DUniforms;
+    std::map<std::string, int> mImageBindingMap;
     std::vector<D3DUniformBlock> mD3DUniformBlocks;
 
     bool mVertexUniformsDirty;

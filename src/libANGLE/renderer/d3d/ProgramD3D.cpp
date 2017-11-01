@@ -23,7 +23,6 @@
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
@@ -53,7 +52,7 @@ void GetDefaultInputLayoutFromShader(const gl::Context *context,
             {
                 GLenum componentType = gl::VariableComponentType(transposedType);
                 GLuint components    = static_cast<GLuint>(gl::VariableColumnCount(transposedType));
-                bool pureInt = (componentType != GL_FLOAT);
+                bool pureInt         = (componentType != GL_FLOAT);
                 gl::VertexFormatType defaultType =
                     gl::GetVertexFormatType(componentType, GL_FALSE, components, pureInt);
 
@@ -111,8 +110,8 @@ bool ExpandMatrix(T *target, const GLfloat *value)
 {
     constexpr int targetWidth  = 4;
     constexpr int targetHeight = rows;
-    constexpr int srcWidth = cols;
-    constexpr int srcHeight = rows;
+    constexpr int srcWidth     = cols;
+    constexpr int srcHeight    = rows;
 
     constexpr int copyWidth  = std::min(targetWidth, srcWidth);
     constexpr int copyHeight = std::min(targetHeight, srcHeight);
@@ -295,6 +294,7 @@ bool UniformBlockInfo::getBlockMemberInfo(const std::string &name,
 // D3DUniform Implementation
 
 D3DUniform::D3DUniform(GLenum type,
+                       RegisterType reg,
                        const std::string &nameIn,
                        unsigned int arraySizeIn,
                        bool defaultBlock)
@@ -304,6 +304,7 @@ D3DUniform::D3DUniform(GLenum type,
       vsData(nullptr),
       psData(nullptr),
       csData(nullptr),
+      regType(reg),
       vsRegisterIndex(GL_INVALID_INDEX),
       psRegisterIndex(GL_INVALID_INDEX),
       csRegisterIndex(GL_INVALID_INDEX),
@@ -339,6 +340,11 @@ const uint8_t *D3DUniform::getDataPtrToElement(size_t elementIndex) const
 bool D3DUniform::isSampler() const
 {
     return typeInfo.isSampler;
+}
+
+bool D3DUniform::isImage() const
+{
+    return typeInfo.isImageType;
 }
 
 bool D3DUniform::isReferencedByVertexShader() const
@@ -551,7 +557,7 @@ void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
         if ((conversionType & VERTEX_CONVERT_GPU) == 0)
             continue;
 
-        GLenum componentType = renderer->getVertexComponentType(vertexFormatType);
+        GLenum componentType   = renderer->getVertexComponentType(vertexFormatType);
         (*signatureOut)[index] = GetAttribType(componentType);
     }
 }
@@ -586,6 +592,10 @@ ProgramD3D::Sampler::Sampler() : active(false), logicalTextureUnit(0), textureTy
 {
 }
 
+ProgramD3D::Image::Image() : active(false), logicalImageUnit(0), textureType(GL_TEXTURE_2D)
+{
+}
+
 unsigned int ProgramD3D::mCurrentSerial = 1;
 
 ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
@@ -603,6 +613,8 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
       mUsedPixelSamplerRange(0),
       mUsedComputeSamplerRange(0),
       mDirtySamplerMapping(true),
+      mUsedComputeImageRange(0),
+      mUsedComputeReadonlyImageRange(0),
       mSerial(issueSerial()),
       mVertexUniformsDirty(true),
       mFragmentUniformsDirty(true),
@@ -645,7 +657,7 @@ bool ProgramD3D::usesInstancedPointSpriteEmulation() const
     return mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
 }
 
-GLint ProgramD3D::getSamplerMapping(gl::SamplerType type,
+GLint ProgramD3D::getSamplerMapping(ShaderType type,
                                     unsigned int samplerIndex,
                                     const gl::Caps &caps) const
 {
@@ -653,21 +665,21 @@ GLint ProgramD3D::getSamplerMapping(gl::SamplerType type,
 
     switch (type)
     {
-        case gl::SAMPLER_PIXEL:
+        case SHADER_PIXEL:
             ASSERT(samplerIndex < caps.maxTextureImageUnits);
             if (samplerIndex < mSamplersPS.size() && mSamplersPS[samplerIndex].active)
             {
                 logicalTextureUnit = mSamplersPS[samplerIndex].logicalTextureUnit;
             }
             break;
-        case gl::SAMPLER_VERTEX:
+        case SHADER_VERTEX:
             ASSERT(samplerIndex < caps.maxVertexTextureImageUnits);
             if (samplerIndex < mSamplersVS.size() && mSamplersVS[samplerIndex].active)
             {
                 logicalTextureUnit = mSamplersVS[samplerIndex].logicalTextureUnit;
             }
             break;
-        case gl::SAMPLER_COMPUTE:
+        case SHADER_COMPUTE:
             ASSERT(samplerIndex < caps.maxComputeTextureImageUnits);
             if (samplerIndex < mSamplersCS.size() && mSamplersCS[samplerIndex].active)
             {
@@ -689,19 +701,19 @@ GLint ProgramD3D::getSamplerMapping(gl::SamplerType type,
 
 // Returns the texture type for a given Direct3D 9 sampler type and
 // index (0-15 for the pixel shader and 0-3 for the vertex shader).
-GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const
+GLenum ProgramD3D::getSamplerTextureType(ShaderType type, unsigned int samplerIndex) const
 {
     switch (type)
     {
-        case gl::SAMPLER_PIXEL:
+        case SHADER_PIXEL:
             ASSERT(samplerIndex < mSamplersPS.size());
             ASSERT(mSamplersPS[samplerIndex].active);
             return mSamplersPS[samplerIndex].textureType;
-        case gl::SAMPLER_VERTEX:
+        case SHADER_VERTEX:
             ASSERT(samplerIndex < mSamplersVS.size());
             ASSERT(mSamplersVS[samplerIndex].active);
             return mSamplersVS[samplerIndex].textureType;
-        case gl::SAMPLER_COMPUTE:
+        case SHADER_COMPUTE:
             ASSERT(samplerIndex < mSamplersCS.size());
             ASSERT(mSamplersCS[samplerIndex].active);
             return mSamplersCS[samplerIndex].textureType;
@@ -712,15 +724,15 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
     return GL_TEXTURE_2D;
 }
 
-GLuint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
+GLuint ProgramD3D::getUsedSamplerRange(ShaderType type) const
 {
     switch (type)
     {
-        case gl::SAMPLER_PIXEL:
+        case SHADER_PIXEL:
             return mUsedPixelSamplerRange;
-        case gl::SAMPLER_VERTEX:
+        case SHADER_VERTEX:
             return mUsedVertexSamplerRange;
-        case gl::SAMPLER_COMPUTE:
+        case SHADER_COMPUTE:
             return mUsedComputeSamplerRange;
         default:
             UNREACHABLE();
@@ -797,6 +809,80 @@ ProgramD3D::SamplerMapping ProgramD3D::updateSamplerMapping()
     return SamplerMapping::WasDirty;
 }
 
+GLint ProgramD3D::getImageMapping(ShaderType type,
+                                  unsigned int imageIndex,
+                                  bool readonly,
+                                  const gl::Caps &caps) const
+{
+    GLint logicalImageUnit = -1;
+    ASSERT(imageIndex < caps.maxImageUnits);
+    switch (type)
+    {
+        case SHADER_COMPUTE:
+            if (readonly && imageIndex < mReadonlyImagesCS.size() &&
+                mReadonlyImagesCS[imageIndex].active)
+            {
+                logicalImageUnit = mReadonlyImagesCS[imageIndex].logicalImageUnit;
+            }
+            else if (imageIndex < mImagesCS.size() && mImagesCS[imageIndex].active)
+            {
+                logicalImageUnit = mImagesCS[imageIndex].logicalImageUnit;
+            }
+            break;
+        // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
+        default:
+            UNREACHABLE();
+    }
+
+    if (logicalImageUnit >= 0 && logicalImageUnit < static_cast<GLint>(caps.maxImageUnits))
+    {
+        return logicalImageUnit;
+    }
+
+    return -1;
+}
+
+GLuint ProgramD3D::getUsedImageRange(ShaderType type, bool readonly) const
+{
+    switch (type)
+    {
+        case SHADER_COMPUTE:
+            return readonly ? mUsedComputeReadonlyImageRange : mUsedComputeImageRange;
+        // TODO(xinghua.cao@intel.com): add image range of vertex shader and pixel shader.
+        default:
+            UNREACHABLE();
+            return 0u;
+    }
+}
+
+GLenum ProgramD3D::getImageTextureType(ShaderType type,
+                                       unsigned int imageIndex,
+                                       bool readonly) const
+{
+    switch (type)
+    {
+        case SHADER_COMPUTE:
+            if (readonly)
+            {
+                ASSERT(imageIndex < mReadonlyImagesCS.size());
+                ASSERT(mReadonlyImagesCS[imageIndex].active);
+                return mReadonlyImagesCS[imageIndex].textureType;
+            }
+            else
+            {
+                ASSERT(imageIndex < mImagesCS.size());
+                ASSERT(mImagesCS[imageIndex].active);
+                return mImagesCS[imageIndex].textureType;
+            }
+        // TODO(xinghua.cao@intel.com): add texture type for readonly image in vertex shader and
+        // pixel shader.
+        default:
+            UNREACHABLE();
+    }
+
+    return GL_TEXTURE_2D;
+}
+
 gl::LinkResult ProgramD3D::load(const gl::Context *context,
                                 gl::InfoLog &infoLog,
                                 gl::BinaryInputStream *stream)
@@ -857,9 +943,31 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
         mSamplersCS.push_back(sampler);
     }
 
+    const unsigned int csImageCount = stream->readInt<unsigned int>();
+    for (unsigned int i = 0; i < csImageCount; ++i)
+    {
+        Image image;
+        stream->readBool(&image.active);
+        stream->readInt(&image.logicalImageUnit);
+        stream->readInt(&image.textureType);
+        mImagesCS.push_back(image);
+    }
+
+    const unsigned int csReadonlyImageCount = stream->readInt<unsigned int>();
+    for (unsigned int i = 0; i < csReadonlyImageCount; ++i)
+    {
+        Image image;
+        stream->readBool(&image.active);
+        stream->readInt(&image.logicalImageUnit);
+        stream->readInt(&image.textureType);
+        mReadonlyImagesCS.push_back(image);
+    }
+
     stream->readInt(&mUsedVertexSamplerRange);
     stream->readInt(&mUsedPixelSamplerRange);
     stream->readInt(&mUsedComputeSamplerRange);
+    stream->readInt(&mUsedComputeImageRange);
+    stream->readInt(&mUsedComputeReadonlyImageRange);
 
     const unsigned int uniformCount = stream->readInt<unsigned int>();
     if (stream->error())
@@ -875,8 +983,9 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
         const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
 
         D3DUniform *d3dUniform =
-            new D3DUniform(linkedUniform.type, linkedUniform.name, linkedUniform.arraySize,
-                           linkedUniform.isInDefaultBlock());
+            new D3DUniform(linkedUniform.type, registerUndefined, linkedUniform.name,
+                           linkedUniform.arraySize, linkedUniform.isInDefaultBlock());
+        stream->readInt<RegisterType>(&d3dUniform->regType);
         stream->readInt(&d3dUniform->psRegisterIndex);
         stream->readInt(&d3dUniform->vsRegisterIndex);
         stream->readInt(&d3dUniform->csRegisterIndex);
@@ -1104,14 +1213,33 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(mSamplersCS[i].textureType);
     }
 
+    stream->writeInt(mImagesCS.size());
+    for (unsigned int i = 0; i < mImagesCS.size(); ++i)
+    {
+        stream->writeInt(mImagesCS[i].active);
+        stream->writeInt(mImagesCS[i].logicalImageUnit);
+        stream->writeInt(mImagesCS[i].textureType);
+    }
+
+    stream->writeInt(mReadonlyImagesCS.size());
+    for (unsigned int i = 0; i < mReadonlyImagesCS.size(); ++i)
+    {
+        stream->writeInt(mReadonlyImagesCS[i].active);
+        stream->writeInt(mReadonlyImagesCS[i].logicalImageUnit);
+        stream->writeInt(mReadonlyImagesCS[i].textureType);
+    }
+
     stream->writeInt(mUsedVertexSamplerRange);
     stream->writeInt(mUsedPixelSamplerRange);
     stream->writeInt(mUsedComputeSamplerRange);
+    stream->writeInt(mUsedComputeImageRange);
+    stream->writeInt(mUsedComputeReadonlyImageRange);
 
     stream->writeInt(mD3DUniforms.size());
     for (const D3DUniform *uniform : mD3DUniforms)
     {
         // Type, name and arraySize are redundant, so aren't stored in the binary.
+        stream->writeInt(static_cast<unsigned int>(uniform->regType));
         stream->writeIntOrNegOne(uniform->psRegisterIndex);
         stream->writeIntOrNegOne(uniform->vsRegisterIndex);
         stream->writeIntOrNegOne(uniform->csRegisterIndex);
@@ -1578,6 +1706,8 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
     if (computeShader)
     {
         mSamplersCS.resize(data.getCaps().maxComputeTextureImageUnits);
+        mImagesCS.resize(data.getCaps().maxImageUnits);
+        mReadonlyImagesCS.resize(data.getCaps().maxImageUnits);
 
         defineUniformsAndAssignRegisters(context);
 
@@ -1634,7 +1764,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
 
         mUsesPointSize = vertexShaderD3D->usesPointSize();
         mDynamicHLSL->getPixelShaderOutputKey(data, mState, metadata, &mPixelShaderKey);
-        mUsesFragDepth = metadata.usesFragDepth();
+        mUsesFragDepth            = metadata.usesFragDepth();
         mUsesViewID               = metadata.usesViewID();
         mHasANGLEMultiviewEnabled = metadata.hasANGLEMultiviewEnabled();
 
@@ -2064,6 +2194,7 @@ void ProgramD3D::defineUniformsAndAssignRegisters(const gl::Context *context)
     }
 
     assignAllSamplerRegisters();
+    assignAllImageRegisters();
     initializeUniformStorage();
 }
 
@@ -2072,20 +2203,43 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
                                    D3DUniformMap *uniformMap)
 {
     // Samplers get their registers assigned in assignAllSamplerRegisters.
-    if (uniform.isBuiltIn() || gl::IsSamplerType(uniform.type))
+    if (uniform.isBuiltIn() || gl::IsSamplerType(uniform.type) || gl::IsImageType(uniform.type))
     {
-        defineUniform(shader->getType(), uniform, uniform.name, nullptr, uniformMap);
+        if (gl::IsSamplerType(uniform.type))
+        {
+            defineUniform(shader->getType(), uniform, uniform.name, registerT, nullptr, uniformMap);
+        }
+        else if (gl::IsImageType(uniform.type))
+        {
+            if (uniform.readonly)
+            {
+                defineUniform(shader->getType(), uniform, uniform.name, registerT, nullptr,
+                              uniformMap);
+            }
+            else
+            {
+                defineUniform(shader->getType(), uniform, uniform.name, registerU, nullptr,
+                              uniformMap);
+            }
+            mImageBindingMap[uniform.name] = uniform.binding;
+        }
+        else
+        {
+            defineUniform(shader->getType(), uniform, uniform.name, registerUndefined, nullptr,
+                          uniformMap);
+        }
         return;
     }
 
     const ShaderD3D *shaderD3D = GetImplAs<ShaderD3D>(shader);
 
     unsigned int startRegister = shaderD3D->getUniformRegister(uniform.name);
-    ShShaderOutput outputType = shaderD3D->getCompilerOutputType();
+    ShShaderOutput outputType  = shaderD3D->getCompilerOutputType();
     sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType), true);
     encoder.skipRegisters(startRegister);
 
-    defineUniform(shader->getType(), uniform, uniform.name, &encoder, uniformMap);
+    defineUniform(shader->getType(), uniform, uniform.name, registerUndefined, &encoder,
+                  uniformMap);
 }
 
 D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
@@ -2104,6 +2258,7 @@ D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
 void ProgramD3D::defineUniform(GLenum shaderType,
                                const sh::ShaderVariable &uniform,
                                const std::string &fullName,
+                               const RegisterType regType,
                                sh::HLSLBlockEncoder *encoder,
                                D3DUniformMap *uniformMap)
 {
@@ -2126,11 +2281,12 @@ void ProgramD3D::defineUniform(GLenum shaderType,
                 // extracted out of the struct by the shader translator.
                 if (gl::IsSamplerType(field.type))
                 {
-                    defineUniform(shaderType, field, fieldFullName, nullptr, uniformMap);
+                    defineUniform(shaderType, field, fieldFullName, registerT, nullptr, uniformMap);
                 }
                 else
                 {
-                    defineUniform(shaderType, field, fieldFullName, encoder, uniformMap);
+                    defineUniform(shaderType, field, fieldFullName, registerUndefined, encoder,
+                                  uniformMap);
                 }
             }
 
@@ -2160,7 +2316,7 @@ void ProgramD3D::defineUniform(GLenum shaderType,
     }
     else
     {
-        d3dUniform = new D3DUniform(uniform.type, fullName, uniform.arraySize, true);
+        d3dUniform = new D3DUniform(uniform.type, regType, fullName, uniform.arraySize, true);
         (*uniformMap)[fullName] = d3dUniform;
     }
 
@@ -2408,11 +2564,84 @@ void ProgramD3D::AssignSamplers(unsigned int startSamplerIndex,
         ASSERT(samplerIndex < outSamplers.size());
         Sampler *sampler            = &outSamplers[samplerIndex];
         sampler->active             = true;
-        sampler->textureType        = typeInfo.samplerTextureType;
+        sampler->textureType        = typeInfo.textureType;
         sampler->logicalTextureUnit = 0;
         *outUsedRange               = std::max(samplerIndex + 1, *outUsedRange);
         samplerIndex++;
     } while (samplerIndex < startSamplerIndex + samplerCount);
+}
+
+void ProgramD3D::assignAllImageRegisters()
+{
+    for (D3DUniform *d3dUniform : mD3DUniforms)
+    {
+        if (d3dUniform->isImage())
+        {
+            assignImageRegisters(d3dUniform);
+        }
+    }
+}
+
+void ProgramD3D::assignImageRegisters(D3DUniform *d3dUniform)
+{
+    ASSERT(d3dUniform->isImage());
+    const gl::Shader *computeShader = mState.getAttachedComputeShader();
+    if (computeShader)
+    {
+        const ShaderD3D *computeShaderD3D = GetImplAs<ShaderD3D>(mState.getAttachedComputeShader());
+        ASSERT(computeShaderD3D->hasUniform(d3dUniform));
+        d3dUniform->csRegisterIndex = computeShaderD3D->getUniformRegister(d3dUniform->name);
+        ASSERT(d3dUniform->csRegisterIndex != GL_INVALID_INDEX);
+        auto bindingIter = mImageBindingMap.find(d3dUniform->name);
+        ASSERT(bindingIter != mImageBindingMap.end());
+        if (d3dUniform->regType == registerT)
+        {
+            AssignImages(d3dUniform->csRegisterIndex, bindingIter->second, d3dUniform->typeInfo,
+                         d3dUniform->arraySize, mReadonlyImagesCS, &mUsedComputeReadonlyImageRange);
+        }
+        else if (d3dUniform->regType == registerU)
+        {
+            AssignImages(d3dUniform->csRegisterIndex, bindingIter->second, d3dUniform->typeInfo,
+                         d3dUniform->arraySize, mImagesCS, &mUsedComputeImageRange);
+        }
+        else
+        {
+            UNREACHABLE();
+        }
+    }
+    else
+    {
+        // TODO(xinghua.cao@intel.com): Implement image variables in vertex shader and pixel shader.
+    }
+}
+
+// static
+void ProgramD3D::AssignImages(unsigned int startImageIndex,
+                              int startLogicalImageUnit,
+                              const gl::UniformTypeInfo &typeInfo,
+                              unsigned int imageCount,
+                              std::vector<Image> &outImages,
+                              GLuint *outUsedRange)
+{
+    unsigned int imageIndex = startImageIndex;
+    // If declare without a binding qualifier, any uniform image variable (include all elements of
+    // unbound image array) shoud be bound to unit zero.
+    bool useDefualtBinding       = startLogicalImageUnit == -1;
+    unsigned int logcalImageUnit = useDefualtBinding ? 0 : startLogicalImageUnit;
+    do
+    {
+        ASSERT(imageIndex < outImages.size());
+        Image *image            = &outImages[imageIndex];
+        image->active           = true;
+        image->logicalImageUnit = logcalImageUnit;
+        image->textureType      = typeInfo.textureType;
+        *outUsedRange           = std::max(imageIndex + 1, *outUsedRange);
+        if (!useDefualtBinding)
+        {
+            imageIndex++;
+            logcalImageUnit++;
+        }
+    } while (imageIndex < startImageIndex + imageCount);
 }
 
 void ProgramD3D::reset()
@@ -2431,12 +2660,12 @@ void ProgramD3D::reset()
     mVertexWorkarounds = angle::CompilerWorkaroundsD3D();
 
     mPixelHLSL.clear();
-    mPixelWorkarounds = angle::CompilerWorkaroundsD3D();
-    mUsesFragDepth = false;
+    mPixelWorkarounds         = angle::CompilerWorkaroundsD3D();
+    mUsesFragDepth            = false;
     mHasANGLEMultiviewEnabled = false;
     mUsesViewID               = false;
     mPixelShaderKey.clear();
-    mUsesPointSize = false;
+    mUsesPointSize         = false;
     mUsesFlatInterpolation = false;
 
     SafeDeleteContainer(mD3DUniforms);
@@ -2449,11 +2678,15 @@ void ProgramD3D::reset()
     mSamplersPS.clear();
     mSamplersVS.clear();
     mSamplersCS.clear();
+    mImagesCS.clear();
+    mReadonlyImagesCS.clear();
 
-    mUsedVertexSamplerRange = 0;
-    mUsedPixelSamplerRange  = 0;
-    mUsedComputeSamplerRange = 0;
-    mDirtySamplerMapping    = true;
+    mUsedVertexSamplerRange        = 0;
+    mUsedPixelSamplerRange         = 0;
+    mUsedComputeSamplerRange       = 0;
+    mDirtySamplerMapping           = true;
+    mUsedComputeImageRange         = 0;
+    mUsedComputeReadonlyImageRange = 0;
 
     mAttribLocationToD3DSemantic.fill(-1);
 
@@ -2607,7 +2840,7 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
             {
                 const auto &varying   = *registerInfo.packedVarying->varying;
                 GLenum transposedType = gl::TransposeMatrixType(varying.type);
-                int componentCount = gl::VariableColumnCount(transposedType);
+                int componentCount    = gl::VariableColumnCount(transposedType);
                 ASSERT(!varying.isBuiltIn());
 
                 // Transform feedback for varying structs is underspecified.

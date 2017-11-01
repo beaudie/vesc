@@ -5,7 +5,8 @@
 //
 
 // TextureStorage11.h: Defines the abstract rx::TextureStorage11 class and its concrete derived
-// classes TextureStorage11_2D and TextureStorage11_Cube, which act as the interface to the D3D11 texture.
+// classes TextureStorage11_2D and TextureStorage11_Cube, which act as the interface to the D3D11
+// texture.
 
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_TEXTURESTORAGE11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_TEXTURESTORAGE11_H_
@@ -45,8 +46,13 @@ class TextureStorage11 : public TextureStorage
   public:
     ~TextureStorage11() override;
 
-    static DWORD GetTextureBindFlags(GLenum internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, bool renderTarget);
-    static DWORD GetTextureMiscFlags(GLenum internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, bool renderTarget, int levels);
+    static DWORD GetTextureBindFlags(GLenum internalFormat,
+                                     const Renderer11DeviceCaps &renderer11DeviceCaps,
+                                     bool renderTarget);
+    static DWORD GetTextureMiscFlags(GLenum internalFormat,
+                                     const Renderer11DeviceCaps &renderer11DeviceCaps,
+                                     bool renderTarget,
+                                     int levels);
 
     UINT getBindFlags() const;
     UINT getMiscFlags() const;
@@ -92,16 +98,22 @@ class TextureStorage11 : public TextureStorage
     virtual gl::Error getSRV(const gl::Context *context,
                              const gl::TextureState &textureState,
                              const d3d11::SharedSRV **outSRV);
+    gl::Error getSRVForImage(const gl::Context *context,
+                             const gl::ImageUnit &imageUnit,
+                             const d3d11::SharedSRV **outSRV);
+    gl::Error getUAVForImage(const gl::Context *context,
+                             const gl::ImageUnit &imageUnit,
+                             const d3d11::SharedUAV **outUAV);
     virtual UINT getSubresourceIndex(const gl::ImageIndex &index) const;
     virtual gl::Error getResource(const gl::Context *context,
-                                  const TextureHelper11 **outResource) = 0;
-    virtual void associateImage(Image11* image, const gl::ImageIndex &index) = 0;
-    virtual void disassociateImage(const gl::ImageIndex &index, Image11* expectedImage) = 0;
+                                  const TextureHelper11 **outResource)                  = 0;
+    virtual void associateImage(Image11 *image, const gl::ImageIndex &index)            = 0;
+    virtual void disassociateImage(const gl::ImageIndex &index, Image11 *expectedImage) = 0;
     virtual void verifyAssociatedImageValid(const gl::ImageIndex &index,
-                                            Image11 *expectedImage) = 0;
+                                            Image11 *expectedImage)                     = 0;
     virtual gl::Error releaseAssociatedImage(const gl::Context *context,
                                              const gl::ImageIndex &index,
-                                             Image11 *incomingImage) = 0;
+                                             Image11 *incomingImage)                    = 0;
 
   protected:
     TextureStorage11(Renderer11 *renderer, UINT bindFlags, UINT miscFlags, GLenum internalFormat);
@@ -116,7 +128,7 @@ class TextureStorage11 : public TextureStorage
         return getResource(context, outResource);
     }
 
-    virtual gl::Error getSwizzleTexture(const TextureHelper11 **outTexture) = 0;
+    virtual gl::Error getSwizzleTexture(const TextureHelper11 **outTexture)          = 0;
     virtual gl::Error getSwizzleRenderTarget(int mipLevel,
                                              const d3d11::RenderTargetView **outRTV) = 0;
     gl::Error getSRVLevel(const gl::Context *context,
@@ -139,7 +151,17 @@ class TextureStorage11 : public TextureStorage
                                 int mipLevels,
                                 DXGI_FORMAT format,
                                 const TextureHelper11 &texture,
-                                d3d11::SharedSRV *outSRV) = 0;
+                                d3d11::SharedSRV *outSRV)         = 0;
+    virtual gl::Error createSRVForImage(const gl::Context *context,
+                                        int level,
+                                        DXGI_FORMAT format,
+                                        const TextureHelper11 &texture,
+                                        d3d11::SharedSRV *outSRV) = 0;
+    virtual gl::Error createUAVForImage(const gl::Context *context,
+                                        int level,
+                                        DXGI_FORMAT format,
+                                        const TextureHelper11 &texture,
+                                        d3d11::SharedUAV *outUAV) = 0;
 
     void verifySwizzleExists(const gl::SwizzleState &swizzleState);
 
@@ -180,6 +202,29 @@ class TextureStorage11 : public TextureStorage
                                    const d3d11::SharedSRV **outSRV);
 
     SRVCache mSrvCache;
+
+    struct ImageKey
+    {
+        ImageKey(int level, bool layered, int layer, GLenum access, GLenum format);
+        bool operator<(const ImageKey &rhs) const;
+        int level;
+        bool layered;
+        int layer;
+        GLenum access;
+        GLenum format;
+    };
+    typedef std::map<ImageKey, d3d11::SharedSRV> SRVCacheForImage;
+    gl::Error getCachedOrCreateSRVForImage(const gl::Context *context,
+                                           const ImageKey &key,
+                                           const d3d11::SharedSRV **outSRV);
+    SRVCacheForImage mSrvCacheForImage;
+
+    typedef std::map<ImageKey, d3d11::SharedUAV> UAVCacheForImage;
+    gl::Error getCachedOrCreateUAVForImage(const gl::Context *context,
+                                           const ImageKey &key,
+                                           const d3d11::SharedUAV **outUAV);
+    UAVCacheForImage mUavCacheForImage;
+
     TexLevelArray<d3d11::SharedSRV> mLevelSRVs;
     TexLevelArray<d3d11::SharedSRV> mLevelBlitSRVs;
 };
@@ -188,7 +233,13 @@ class TextureStorage11_2D : public TextureStorage11
 {
   public:
     TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swapchain);
-    TextureStorage11_2D(Renderer11 *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly = false);
+    TextureStorage11_2D(Renderer11 *renderer,
+                        GLenum internalformat,
+                        bool renderTarget,
+                        GLsizei width,
+                        GLsizei height,
+                        int levels,
+                        bool hintLevelZeroOnly = false);
     ~TextureStorage11_2D() override;
 
     gl::Error onDestroy(const gl::Context *context) override;
@@ -227,20 +278,32 @@ class TextureStorage11_2D : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
 
     TextureHelper11 mTexture;
     TexLevelArray<std::unique_ptr<RenderTarget11>> mRenderTarget;
     bool mHasKeyedMutex;
 
     // These are members related to the zero max-LOD workaround.
-    // D3D11 Feature Level 9_3 can't disable mipmaps on a mipmapped texture (i.e. solely sample from level zero).
-    // These members are used to work around this limitation.
-    // Usually only mTexture XOR mLevelZeroTexture will exist.
-    // For example, if an app creates a texture with only one level, then 9_3 will only create mLevelZeroTexture.
-    // However, in some scenarios, both textures have to be created. This incurs additional memory overhead.
-    // One example of this is an application that creates a texture, calls glGenerateMipmap, and then disables mipmaps on the texture.
-    // A more likely example is an app that creates an empty texture, renders to it, and then calls glGenerateMipmap
-    // TODO: In this rendering scenario, release the mLevelZeroTexture after mTexture has been created to save memory.
+    // D3D11 Feature Level 9_3 can't disable mipmaps on a mipmapped texture (i.e. solely sample from
+    // level zero). These members are used to work around this limitation. Usually only mTexture XOR
+    // mLevelZeroTexture will exist. For example, if an app creates a texture with only one level,
+    // then 9_3 will only create mLevelZeroTexture. However, in some scenarios, both textures have
+    // to be created. This incurs additional memory overhead. One example of this is an application
+    // that creates a texture, calls glGenerateMipmap, and then disables mipmaps on the texture. A
+    // more likely example is an app that creates an empty texture, renders to it, and then calls
+    // glGenerateMipmap
+    // TODO: In this rendering scenario, release the mLevelZeroTexture after mTexture has been
+    // created to save memory.
     TextureHelper11 mLevelZeroTexture;
     std::unique_ptr<RenderTarget11> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
@@ -289,6 +352,16 @@ class TextureStorage11_External : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
 
     TextureHelper11 mTexture;
     int mSubresourceIndex;
@@ -342,6 +415,16 @@ class TextureStorage11_EGLImage final : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
 
     gl::Error getImageRenderTarget(const gl::Context *context, RenderTarget11 **outRT) const;
 
@@ -356,7 +439,12 @@ class TextureStorage11_EGLImage final : public TextureStorage11
 class TextureStorage11_Cube : public TextureStorage11
 {
   public:
-    TextureStorage11_Cube(Renderer11 *renderer, GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly);
+    TextureStorage11_Cube(Renderer11 *renderer,
+                          GLenum internalformat,
+                          bool renderTarget,
+                          int size,
+                          int levels,
+                          bool hintLevelZeroOnly);
     ~TextureStorage11_Cube() override;
 
     gl::Error onDestroy(const gl::Context *context) override;
@@ -397,6 +485,16 @@ class TextureStorage11_Cube : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
     gl::Error createRenderTargetSRV(const TextureHelper11 &texture,
                                     const gl::ImageIndex &index,
                                     DXGI_FORMAT resourceFormat,
@@ -405,7 +503,8 @@ class TextureStorage11_Cube : public TextureStorage11
     TextureHelper11 mTexture;
     CubeFaceArray<TexLevelArray<std::unique_ptr<RenderTarget11>>> mRenderTarget;
 
-    // Level-zero workaround members. See TextureStorage11_2D's workaround members for a description.
+    // Level-zero workaround members. See TextureStorage11_2D's workaround members for a
+    // description.
     TextureHelper11 mLevelZeroTexture;
     CubeFaceArray<std::unique_ptr<RenderTarget11>> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
@@ -419,8 +518,13 @@ class TextureStorage11_Cube : public TextureStorage11
 class TextureStorage11_3D : public TextureStorage11
 {
   public:
-    TextureStorage11_3D(Renderer11 *renderer, GLenum internalformat, bool renderTarget,
-                        GLsizei width, GLsizei height, GLsizei depth, int levels);
+    TextureStorage11_3D(Renderer11 *renderer,
+                        GLenum internalformat,
+                        bool renderTarget,
+                        GLsizei width,
+                        GLsizei height,
+                        GLsizei depth,
+                        int levels);
     ~TextureStorage11_3D() override;
 
     gl::Error onDestroy(const gl::Context *context) override;
@@ -450,6 +554,16 @@ class TextureStorage11_3D : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
 
     typedef std::pair<int, int> LevelLayerKey;
     std::map<LevelLayerKey, std::unique_ptr<RenderTarget11>> mLevelLayerRenderTargets;
@@ -466,8 +580,13 @@ class TextureStorage11_3D : public TextureStorage11
 class TextureStorage11_2DArray : public TextureStorage11
 {
   public:
-    TextureStorage11_2DArray(Renderer11 *renderer, GLenum internalformat, bool renderTarget,
-                             GLsizei width, GLsizei height, GLsizei depth, int levels);
+    TextureStorage11_2DArray(Renderer11 *renderer,
+                             GLenum internalformat,
+                             bool renderTarget,
+                             GLsizei width,
+                             GLsizei height,
+                             GLsizei depth,
+                             int levels);
     ~TextureStorage11_2DArray() override;
 
     gl::Error onDestroy(const gl::Context *context) override;
@@ -521,6 +640,16 @@ class TextureStorage11_2DArray : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
     gl::Error createRenderTargetSRV(const TextureHelper11 &texture,
                                     const gl::ImageIndex &index,
                                     DXGI_FORMAT resourceFormat,
@@ -580,6 +709,16 @@ class TextureStorage11_2DMultisample : public TextureStorage11
                         DXGI_FORMAT format,
                         const TextureHelper11 &texture,
                         d3d11::SharedSRV *outSRV) override;
+    gl::Error createSRVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedSRV *outSRV) override;
+    gl::Error createUAVForImage(const gl::Context *context,
+                                int level,
+                                DXGI_FORMAT format,
+                                const TextureHelper11 &texture,
+                                d3d11::SharedUAV *outUAV) override;
 
     TextureHelper11 mTexture;
     std::unique_ptr<RenderTarget11> mRenderTarget;
