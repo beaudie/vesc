@@ -33,7 +33,7 @@ class ShaderConstants11 : angle::NonCopyable
     ShaderConstants11();
 
     void init(const gl::Caps &caps);
-    size_t getRequiredBufferSize(gl::SamplerType samplerType) const;
+    size_t getRequiredBufferSize(ShaderType shaderType) const;
     void markDirty();
 
     void setComputeWorkGroups(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
@@ -42,12 +42,12 @@ class ShaderConstants11 : angle::NonCopyable
                           const D3D11_VIEWPORT &dxViewport,
                           bool is9_3,
                           bool presentPathFast);
-    void onSamplerChange(gl::SamplerType samplerType,
+    void onSamplerChange(ShaderType shaderType,
                          unsigned int samplerIndex,
                          const gl::Texture &texture);
 
     gl::Error updateBuffer(ID3D11DeviceContext *deviceContext,
-                           gl::SamplerType samplerType,
+                           ShaderType shaderType,
                            const ProgramD3D &programD3D,
                            const d3d11::Buffer &driverConstantBuffer);
 
@@ -206,10 +206,10 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error updateState(const gl::Context *context, GLenum drawMode);
 
-    void setShaderResourceShared(gl::SamplerType shaderType,
+    void setShaderResourceShared(ShaderType shaderType,
                                  UINT resourceSlot,
                                  const d3d11::SharedSRV *srv);
-    void setShaderResource(gl::SamplerType shaderType,
+    void setShaderResource(ShaderType shaderType,
                            UINT resourceSlot,
                            const d3d11::ShaderResourceView *srv);
     void setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY primitiveTopology);
@@ -260,12 +260,14 @@ class StateManager11 final : angle::NonCopyable
 
   private:
     template <typename SRVType>
-    void setShaderResourceInternal(gl::SamplerType shaderType,
-                                   UINT resourceSlot,
-                                   const SRVType *srv);
+    void setShaderResourceInternal(ShaderType shaderType, UINT resourceSlot, const SRVType *srv);
+    template <typename UAVType>
+    void setUnorderedAccessViewInternal(ShaderType shaderType,
+                                        UINT resourceSlot,
+                                        const UAVType *uav);
 
     bool unsetConflictingView(ID3D11View *view);
-    bool unsetConflictingSRVs(gl::SamplerType shaderType,
+    bool unsetConflictingSRVs(ShaderType shaderType,
                               uintptr_t resource,
                               const gl::ImageIndex *index);
     void unsetConflictingAttachmentResources(const gl::FramebufferAttachment *attachment,
@@ -291,26 +293,37 @@ class StateManager11 final : angle::NonCopyable
     gl::Error syncProgram(const gl::Context *context, GLenum drawMode);
 
     gl::Error syncTextures(const gl::Context *context);
-    gl::Error applyTextures(const gl::Context *context, gl::SamplerType shaderType);
+    gl::Error applyTextures(const gl::Context *context, ShaderType shaderType);
+    gl::Error syncTexturesForCompute(const gl::Context *context);
+    gl::Error applyTexturesForCompute(const gl::Context *context);
 
     gl::Error setSamplerState(const gl::Context *context,
-                              gl::SamplerType type,
+                              ShaderType type,
                               int index,
                               gl::Texture *texture,
                               const gl::SamplerState &sampler);
     gl::Error setTexture(const gl::Context *context,
-                         gl::SamplerType type,
+                         ShaderType type,
                          int index,
                          gl::Texture *texture);
+    gl::Error setTextureForImage(const gl::Context *context,
+                                 ShaderType type,
+                                 int index,
+                                 const gl::ImageUnit &imageUnit);
+    gl::Error setRWTextureForImage(const gl::Context *context,
+                                   ShaderType type,
+                                   int index,
+                                   const gl::ImageUnit &imageUnit);
 
     // Faster than calling setTexture a jillion times
-    gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd);
+    gl::Error clearTextures(ShaderType shaderType, size_t rangeStart, size_t rangeEnd);
+    gl::Error clearRWTextures(ShaderType shaderType, size_t rangeStart, size_t rangeEnd);
     void handleMultiviewDrawFramebufferChange(const gl::Context *context);
 
     gl::Error syncCurrentValueAttribs(const gl::State &glState);
 
     gl::Error generateSwizzle(const gl::Context *context, gl::Texture *texture);
-    gl::Error generateSwizzlesForShader(const gl::Context *context, gl::SamplerType type);
+    gl::Error generateSwizzlesForShader(const gl::Context *context, ShaderType type);
     gl::Error generateSwizzles(const gl::Context *context);
 
     gl::Error applyDriverUniforms(const ProgramD3D &programD3D);
@@ -431,9 +444,39 @@ class StateManager11 final : angle::NonCopyable
 
     SRVCache mCurVertexSRVs;
     SRVCache mCurPixelSRVs;
+    SRVCache mCurComputeSRVs;
+
+    struct UAVRecord
+    {
+        uintptr_t uav;
+        uintptr_t resource;
+        D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+    };
+
+    class UAVCache : angle::NonCopyable
+    {
+      public:
+        UAVCache() : mHighestUsedUAV(0) {}
+
+        void initialize(size_t size) { mCurrentUAVs.resize(size); }
+
+        size_t size() const { return mCurrentUAVs.size(); }
+        size_t highestUsed() const { return mHighestUsedUAV; }
+
+        const UAVRecord &operator[](size_t index) const { return mCurrentUAVs[index]; }
+        void clear();
+        void update(size_t resourceIndex, ID3D11UnorderedAccessView *uav);
+
+      private:
+        std::vector<UAVRecord> mCurrentUAVs;
+        size_t mHighestUsedUAV;
+    };
+
+    UAVCache mCurComputeUAVs;
 
     // A block of NULL pointers, cached so we don't re-allocate every draw call
     std::vector<ID3D11ShaderResourceView *> mNullSRVs;
+    std::vector<ID3D11UnorderedAccessView *> mNullUAVs;
 
     // Current translations of "Current-Value" data - owned by Context, not VertexArray.
     gl::AttributesMask mDirtyCurrentValueAttribs;
