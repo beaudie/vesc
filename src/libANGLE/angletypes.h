@@ -40,13 +40,6 @@ enum PrimitiveType
 
 PrimitiveType GetPrimitiveType(GLenum drawMode);
 
-enum SamplerType
-{
-    SAMPLER_PIXEL,
-    SAMPLER_VERTEX,
-    SAMPLER_COMPUTE
-};
-
 struct Rectangle
 {
     Rectangle() : x(0), y(0), width(0), height(0) {}

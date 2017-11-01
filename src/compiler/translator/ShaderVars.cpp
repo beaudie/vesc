@@ -204,7 +204,8 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
     return true;
 }
 
-Uniform::Uniform() : binding(-1), offset(-1)
+Uniform::Uniform() : binding(-1), offset(-1), readonly(false)
+
 {
 }
 
@@ -213,7 +214,10 @@ Uniform::~Uniform()
 }
 
 Uniform::Uniform(const Uniform &other)
-    : VariableWithLocation(other), binding(other.binding), offset(other.offset)
+    : VariableWithLocation(other),
+      binding(other.binding),
+      offset(other.offset),
+      readonly(other.readonly)
 {
 }
 
@@ -222,13 +226,14 @@ Uniform &Uniform::operator=(const Uniform &other)
     VariableWithLocation::operator=(other);
     binding                 = other.binding;
     offset                        = other.offset;
+    readonly                      = other.readonly;
     return *this;
 }
 
 bool Uniform::operator==(const Uniform &other) const
 {
     return VariableWithLocation::operator==(other) && binding == other.binding &&
-           offset == other.offset;
+           offset == other.offset && readonly == other.readonly;
 }
 
 bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
