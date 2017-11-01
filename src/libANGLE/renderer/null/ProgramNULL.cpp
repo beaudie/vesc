@@ -42,7 +42,7 @@ void ProgramNULL::setSeparable(bool separable)
 }
 
 gl::LinkResult ProgramNULL::link(const gl::Context *contextImpl,
-                                 const gl::VaryingPacking &packing,
+                                 const gl::LinkedResources &resources,
                                  gl::InfoLog &infoLog)
 {
     return true;
