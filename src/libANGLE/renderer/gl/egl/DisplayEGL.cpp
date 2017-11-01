@@ -100,8 +100,8 @@ egl::Error DisplayEGL::initializeContext(const egl::AttributeMap &eglAttributes)
 
 void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    outExtensions->createContextRobustness =
-        mEGL->hasExtension("EGL_EXT_create_context_robustness");
+    outExtensions->createContext =
+        mEGL->hasExtension("EGL_KHR_create_context");
 
     outExtensions->postSubBuffer = false;  // Since SurfaceEGL::postSubBuffer is not implemented
 

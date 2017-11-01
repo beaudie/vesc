@@ -4,7 +4,8 @@
 // found in the LICENSE file.
 //
 
-// EGLRobustnessTest.cpp: tests for EGL_EXT_create_context_robustness
+// EGLRobustnessTest.cpp: tests for EGL_KHR_create_context and
+// EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR
 
 #include <gtest/gtest.h>
 
@@ -54,9 +55,9 @@ class EGLRobustnessTest : public ::testing::TestWithParam<angle::PlatformParamet
         ASSERT_TRUE(eglInitialize(mDisplay, nullptr, nullptr) == EGL_TRUE);
 
         const char *extensions = eglQueryString(mDisplay, EGL_EXTENSIONS);
-        if (strstr(extensions, "EGL_EXT_create_context_robustness") == nullptr)
+        if (strstr(extensions, "EGL_KHR_create_context") == nullptr)
         {
-            std::cout << "Test skipped due to missing EGL_EXT_create_context_robustness"
+            std::cout << "Test skipped due to missing EGL_KHR_create_context"
                       << std::endl;
             return;
         }
@@ -89,7 +90,7 @@ class EGLRobustnessTest : public ::testing::TestWithParam<angle::PlatformParamet
     void createContext(EGLint resetStrategy)
     {
         const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 2,
-                                         EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT,
+                                         EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR,
                                          resetStrategy, EGL_NONE};
         mContext = eglCreateContext(mDisplay, mConfig, EGL_NO_CONTEXT, contextAttribs);
         ASSERT_NE(EGL_NO_CONTEXT, mContext);
@@ -177,7 +178,7 @@ TEST_P(EGLRobustnessTest, DISABLED_NoResetNotification)
         return;
     }
 
-    createContext(EGL_NO_RESET_NOTIFICATION_EXT);
+    createContext(EGL_NO_RESET_NOTIFICATION_KHR);
 
     if (!IsWindows())
     {
@@ -203,7 +204,7 @@ TEST_P(EGLRobustnessTest, DISABLED_ResettingDisplayWorks)
         return;
     }
 
-    createContext(EGL_LOSE_CONTEXT_ON_RESET_EXT);
+    createContext(EGL_LOSE_CONTEXT_ON_RESET_KHR);
 
     if (!IsWindows())
     {

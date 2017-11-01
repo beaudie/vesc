@@ -184,7 +184,6 @@ StreamProducerImpl *DisplayNULL::createStreamProducerD3DTextureNV12(
 
 void DisplayNULL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    outExtensions->createContextRobustness            = true;
     outExtensions->postSubBuffer                      = true;
     outExtensions->createContext                      = true;
     outExtensions->deviceQuery                        = true;

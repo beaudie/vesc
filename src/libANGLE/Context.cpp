@@ -163,14 +163,14 @@ gl::Version GetClientVersion(const egl::AttributeMap &attribs)
 
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 {
-    EGLAttrib attrib = attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT,
-                                   EGL_NO_RESET_NOTIFICATION_EXT);
+    EGLAttrib attrib = attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR,
+                                   EGL_NO_RESET_NOTIFICATION_KHR);
     switch (attrib)
     {
         case EGL_NO_RESET_NOTIFICATION:
-            return GL_NO_RESET_NOTIFICATION_EXT;
+            return GL_NO_RESET_NOTIFICATION_KHR;
         case EGL_LOSE_CONTEXT_ON_RESET:
-            return GL_LOSE_CONTEXT_ON_RESET_EXT;
+            return GL_LOSE_CONTEXT_ON_RESET_KHR;
         default:
             UNREACHABLE();
             return GL_NONE;
@@ -179,9 +179,7 @@ GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 
 bool GetRobustAccess(const egl::AttributeMap &attribs)
 {
-    return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE) ||
-           ((attribs.get(EGL_CONTEXT_FLAGS_KHR, 0) & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR) !=
-            0);
+    return bool(attribs.get(EGL_CONTEXT_FLAGS_KHR, 0) & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR);
 }
 
 bool GetDebug(const egl::AttributeMap &attribs)

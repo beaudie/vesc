@@ -568,9 +568,6 @@ struct DisplayExtensions
     // Generate a vector of supported extension strings
     std::vector<std::string> getStrings() const;
 
-    // EGL_EXT_create_context_robustness
-    bool createContextRobustness;
-
     // EGL_ANGLE_d3d_share_handle_client_buffer
     bool d3dShareHandleClientBuffer;
 

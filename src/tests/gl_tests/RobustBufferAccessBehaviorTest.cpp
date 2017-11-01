@@ -38,7 +38,7 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
     {
         EGLWindow *window  = getEGLWindow();
         EGLDisplay display = window->getDisplay();
-        if (!eglDisplayExtensionEnabled(display, "EGL_EXT_create_context_robustness"))
+        if (!eglDisplayExtensionEnabled(display, "EGL_KHR_create_context"))
         {
             return false;
         }

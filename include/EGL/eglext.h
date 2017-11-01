@@ -603,11 +603,13 @@ EGLAPI EGLBoolean EGLAPIENTRY eglCompositorSwapPolicyEXT (EGLint external_win_id
 #endif /* EGL_EXT_compositor */
 
 #ifndef EGL_EXT_create_context_robustness
+/*
 #define EGL_EXT_create_context_robustness 1
 #define EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT 0x30BF
 #define EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT 0x3138
 #define EGL_NO_RESET_NOTIFICATION_EXT     0x31BE
 #define EGL_LOSE_CONTEXT_ON_RESET_EXT     0x31BF
+*/
 #endif /* EGL_EXT_create_context_robustness */
 
 #ifndef EGL_EXT_device_base

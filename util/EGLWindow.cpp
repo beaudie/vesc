@@ -320,7 +320,7 @@ bool EGLWindow::initializeContext()
         return false;
     }
 
-    bool hasRobustness = strstr(displayExtensions, "EGL_EXT_create_context_robustness") != nullptr;
+    bool hasRobustness = strstr(displayExtensions, "EGL_KHR_create_context") != nullptr;
     if (mRobustAccess && !hasRobustness)
     {
         destroyGL();
@@ -386,8 +386,13 @@ bool EGLWindow::initializeContext()
 
         if (hasRobustness)
         {
-            contextAttributes.push_back(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT);
-            contextAttributes.push_back(mRobustAccess ? EGL_TRUE : EGL_FALSE);
+            EGLint contextFlags = 0;
+            if (mRobustAccess)
+            {
+                contextFlags |= EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR;
+            }
+            contextAttributes.push_back(EGL_CONTEXT_FLAGS_KHR);
+            contextAttributes.push_back(contextFlags);
         }
 
         if (hasBindGeneratesResource)
