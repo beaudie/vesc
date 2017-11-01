@@ -426,6 +426,55 @@ TEST_P(ComputeShaderTest, ImageSize)
     EXPECT_GL_NO_ERROR();
 }
 
+// Use image uniform to write texture in compute shader, and verify the content is expected.
+TEST_P(ComputeShaderTest, BindImageTextureWithTexture2D)
+{
+    GLTexture mTexture;
+    GLFramebuffer mFramebuffer;
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=4, local_size_y=2, local_size_z=1) in;\n"
+        "layout(r32ui, binding = 0) writeonly uniform highp uimage2D uImage;"
+        "void main()\n"
+        "{\n"
+        "    imageStore(uImage, ivec2(gl_LocalInvocationID.x, gl_LocalInvocationID.y), uvec4(100, "
+        "0, "
+        "0, 0));"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    glUseProgram(program.get());
+    int width = 4, height = 2;
+    GLuint inputValues[] = {200, 200, 200, 200, 200, 200, 200, 200};
+
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, width, height);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    inputValues);
+    EXPECT_GL_NO_ERROR();
+
+    glBindImageTexture(0, mTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(0);
+    GLuint outputValues[8];
+    GLuint expectedValue = 100;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < width * height; i++)
+    {
+        EXPECT_EQ(expectedValue, outputValues[i]);
+    }
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
