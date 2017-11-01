@@ -602,6 +602,19 @@ InterfaceBlockLinker::~InterfaceBlockLinker()
 {
 }
 
+InterfaceBlockLinker::InterfaceBlockLinker(InterfaceBlockLinker &&other)
+{
+    *this = std::move(other);
+}
+
+InterfaceBlockLinker &InterfaceBlockLinker::operator=(InterfaceBlockLinker &&other)
+{
+    std::swap(mShaderBlocks, other.mShaderBlocks);
+    std::swap(mBlocksOut, other.mBlocksOut);
+    std::swap(mUniformsOut, other.mUniformsOut);
+    return *this;
+}
+
 void InterfaceBlockLinker::addShaderBlocks(GLenum shader,
                                            const std::vector<sh::InterfaceBlock> &blocks)
 {
