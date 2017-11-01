@@ -1164,7 +1164,7 @@ bool ValidateES2TexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
-                if (!context->getExtensions().textureCompressionDXT1)
+                if (!context->getExtensions().textureCompressionDXT3)
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidInternalFormat);
                     return false;

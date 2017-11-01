@@ -237,6 +237,11 @@ class WebGLCompatibilityTest : public ANGLETest
 
     // Called from InvalidTextureFormat
     void validateTexImageExtensionFormat(GLenum format, const std::string &extName);
+    void validateCompressedTexImageExtensionFormat(GLenum format,
+                                                   GLsizei width,
+                                                   GLsizei height,
+                                                   GLsizei imageSize,
+                                                   const std::string &extName);
 
     PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
 };
@@ -3640,6 +3645,53 @@ TEST_P(WebGLCompatibilityTest, InvalidTextureFormat)
 
     validateTexImageExtensionFormat(GL_SRGB_EXT, "GL_EXT_texture_sRGB");
     validateTexImageExtensionFormat(GL_BGRA_EXT, "GL_EXT_texture_format_BGRA8888");
+}
+
+// Verify that a compressed texture format is only allowed with extension enabled.
+void WebGLCompatibilityTest::validateCompressedTexImageExtensionFormat(GLenum format,
+                                                                       GLsizei width,
+                                                                       GLsizei height,
+                                                                       GLsizei imageSize,
+                                                                       const std::string &extName)
+{
+    // Verify texture format fails by default.
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, imageSize, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    if (extensionRequestable(extName))
+    {
+        // Verify texture format is allowed once extension is enabled.
+        glRequestExtensionANGLE(extName.c_str());
+        EXPECT_TRUE(extensionEnabled(extName));
+
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, imageSize, nullptr);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Verify that only valid compressed texture formats are allowed.
+TEST_P(WebGLCompatibilityTest, InvalidCompressedTextureFormat)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() != 2);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+
+    validateCompressedTexImageExtensionFormat(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, /*width*/ 4,
+                                              /*height*/ 4, /*imageSize*/ 8,
+                                              "GL_EXT_texture_compression_dxt1");
+    validateCompressedTexImageExtensionFormat(GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, /*width*/ 4,
+                                              /*height*/ 4, /*imageSize*/ 16,
+                                              "GL_ANGLE_texture_compression_dxt3");
+    validateCompressedTexImageExtensionFormat(GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, /*width*/ 4,
+                                              /*height*/ 4, /*imageSize*/ 16,
+                                              "GL_ANGLE_texture_compression_dxt5");
+    validateCompressedTexImageExtensionFormat(GL_COMPRESSED_SRGB_S3TC_DXT1_EXT, /*width*/ 4,
+                                              /*height*/ 4, /*imageSize*/ 8,
+                                              "GL_EXT_texture_compression_s3tc_srgb");
+    validateCompressedTexImageExtensionFormat(GL_ETC1_RGB8_OES, /*width*/ 4, /*height*/ 4,
+                                              /*imageSize*/ 8,
+                                              "GL_OES_compressed_ETC1_RGB8_texture");
 }
 
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
