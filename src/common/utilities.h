@@ -83,7 +83,7 @@ struct UniformTypeInfo final : angle::NonCopyable
 {
     constexpr UniformTypeInfo(GLenum type,
                               GLenum componentType,
-                              GLenum samplerTextureType,
+                              GLenum textureType,
                               GLenum transposedMatrixType,
                               GLenum boolVectorType,
                               int rowCount,
@@ -97,7 +97,7 @@ struct UniformTypeInfo final : angle::NonCopyable
                               bool isImageType)
         : type(type),
           componentType(componentType),
-          samplerTextureType(samplerTextureType),
+          textureType(textureType),
           transposedMatrixType(transposedMatrixType),
           boolVectorType(boolVectorType),
           rowCount(rowCount),
@@ -114,7 +114,7 @@ struct UniformTypeInfo final : angle::NonCopyable
 
     GLenum type;
     GLenum componentType;
-    GLenum samplerTextureType;
+    GLenum textureType;
     GLenum transposedMatrixType;
     GLenum boolVectorType;
     int rowCount;
