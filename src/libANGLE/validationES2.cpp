@@ -1164,7 +1164,7 @@ bool ValidateES2TexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
-                if (!context->getExtensions().textureCompressionDXT1)
+                if (!context->getExtensions().textureCompressionDXT3)
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidInternalFormat);
                     return false;
@@ -1203,6 +1203,41 @@ bool ValidateES2TexImageParameters(Context *context,
                 {
                     context->handleError(InvalidEnum()
                                          << "ANGLE_lossy_etc_decode extension is not supported");
+                    return false;
+                }
+                break;
+            case GL_COMPRESSED_RGBA_ASTC_4x4_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_5x4_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_5x5_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_6x5_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_6x6_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_8x5_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_8x6_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_8x8_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_10x5_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_10x6_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_10x8_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_10x10_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_12x10_KHR:
+            case GL_COMPRESSED_RGBA_ASTC_12x12_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR:
+            case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR:
+                if (!context->getExtensions().textureCompressionASTCHDR ||
+                    !context->getExtensions().textureCompressionASTCLDR)
+                {
+                    ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidInternalFormat);
                     return false;
                 }
                 break;
