@@ -935,13 +935,13 @@ gl::Error Renderer9::fastCopyBufferToTexture(const gl::Context *context,
 }
 
 gl::Error Renderer9::setSamplerState(const gl::Context *context,
-                                     gl::SamplerType type,
+                                     ShaderType type,
                                      int index,
                                      gl::Texture *texture,
                                      const gl::SamplerState &samplerState)
 {
-    CurSamplerState &appliedSampler = (type == gl::SAMPLER_PIXEL) ? mCurPixelSamplerStates[index]
-                                                                  : mCurVertexSamplerStates[index];
+    CurSamplerState &appliedSampler =
+        (type == SHADER_PIXEL) ? mCurPixelSamplerStates[index] : mCurVertexSamplerStates[index];
 
     // Make sure to add the level offset for our tiny compressed texture workaround
     TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
@@ -957,7 +957,7 @@ gl::Error Renderer9::setSamplerState(const gl::Context *context,
     if (appliedSampler.forceSet || appliedSampler.baseLevel != baseLevel ||
         memcmp(&samplerState, &appliedSampler, sizeof(gl::SamplerState)) != 0)
     {
-        int d3dSamplerOffset = (type == gl::SAMPLER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
+        int d3dSamplerOffset = (type == SHADER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
         int d3dSampler       = index + d3dSamplerOffset;
 
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_ADDRESSU,
@@ -993,17 +993,17 @@ gl::Error Renderer9::setSamplerState(const gl::Context *context,
 }
 
 gl::Error Renderer9::setTexture(const gl::Context *context,
-                                gl::SamplerType type,
+                                ShaderType type,
                                 int index,
                                 gl::Texture *texture)
 {
-    int d3dSamplerOffset              = (type == gl::SAMPLER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
+    int d3dSamplerOffset              = (type == SHADER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
     int d3dSampler                    = index + d3dSamplerOffset;
     IDirect3DBaseTexture9 *d3dTexture = nullptr;
     bool forceSetTexture              = false;
 
     std::vector<uintptr_t> &appliedTextures =
-        (type == gl::SAMPLER_PIXEL) ? mCurPixelTextures : mCurVertexTextures;
+        (type == SHADER_PIXEL) ? mCurPixelTextures : mCurVertexTextures;
 
     if (texture)
     {
@@ -3229,7 +3229,7 @@ gl::Error Renderer9::clearRenderTarget(RenderTargetD3D *renderTarget,
 // looks up the corresponding OpenGL texture image unit and texture type,
 // and sets the texture and its addressing/filtering state (or NULL when inactive).
 // Sampler mapping needs to be up-to-date on the program object before this is called.
-gl::Error Renderer9::applyTextures(const gl::Context *context, gl::SamplerType shaderType)
+gl::Error Renderer9::applyTextures(const gl::Context *context, ShaderType shaderType)
 {
     const auto &glState    = context->getGLState();
     const auto &caps       = context->getCaps();
@@ -3273,8 +3273,8 @@ gl::Error Renderer9::applyTextures(const gl::Context *context, gl::SamplerType s
     }
 
     // Set all the remaining textures to NULL
-    size_t samplerCount = (shaderType == gl::SAMPLER_PIXEL) ? caps.maxTextureImageUnits
-                                                            : caps.maxVertexTextureImageUnits;
+    size_t samplerCount =
+        (shaderType == SHADER_PIXEL) ? caps.maxTextureImageUnits : caps.maxVertexTextureImageUnits;
 
     // TODO(jmadill): faster way?
     for (size_t samplerIndex = samplerRange; samplerIndex < samplerCount; samplerIndex++)
@@ -3287,8 +3287,8 @@ gl::Error Renderer9::applyTextures(const gl::Context *context, gl::SamplerType s
 
 gl::Error Renderer9::applyTextures(const gl::Context *context)
 {
-    ANGLE_TRY(applyTextures(context, gl::SAMPLER_VERTEX));
-    ANGLE_TRY(applyTextures(context, gl::SAMPLER_PIXEL));
+    ANGLE_TRY(applyTextures(context, SHADER_VERTEX));
+    ANGLE_TRY(applyTextures(context, SHADER_PIXEL));
     return gl::NoError();
 }
 
