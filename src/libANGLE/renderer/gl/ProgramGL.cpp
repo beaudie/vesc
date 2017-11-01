@@ -124,7 +124,7 @@ void ProgramGL::setSeparable(bool separable)
 }
 
 gl::LinkResult ProgramGL::link(const gl::Context *context,
-                               const gl::VaryingPacking &packing,
+                               const LinkedResources &resources,
                                gl::InfoLog &infoLog)
 {
     preLink();
