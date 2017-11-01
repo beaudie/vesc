@@ -13,6 +13,7 @@
 
 #include "libANGLE/Program.h"
 #include "libANGLE/Uniform.h"
+#include "libANGLE/VaryingPacking.h"
 
 #include <functional>
 
@@ -120,6 +121,9 @@ class InterfaceBlockLinker final : angle::NonCopyable
                          std::vector<LinkedUniform> *uniformsOut);
     ~InterfaceBlockLinker();
 
+    InterfaceBlockLinker(InterfaceBlockLinker &&other);
+    InterfaceBlockLinker &operator=(InterfaceBlockLinker &&other);
+
     using GetBlockSize = std::function<
         bool(const std::string &blockName, const std::string &blockMappedName, size_t *sizeOut)>;
     using GetBlockMemberInfo = std::function<
@@ -129,7 +133,8 @@ class InterfaceBlockLinker final : angle::NonCopyable
     void addShaderBlocks(GLenum shader, const std::vector<sh::InterfaceBlock> &blocks);
 
     // This is called once during a link operation, after all shader blocks are added.
-    void linkBlocks(const GetBlockSize &getBlockSize, const GetBlockMemberInfo &getMemberInfo) const;
+    void linkBlocks(const GetBlockSize &getBlockSize,
+                    const GetBlockMemberInfo &getMemberInfo) const;
 
   private:
     void defineInterfaceBlock(const GetBlockSize &getBlockSize,
@@ -149,6 +154,16 @@ class InterfaceBlockLinker final : angle::NonCopyable
 
     std::vector<InterfaceBlock> *mBlocksOut;
     std::vector<LinkedUniform> *mUniformsOut;
+};
+
+// The link operation is responsible for finishing the link of uniform and interface blocks.
+// This way it can filter out unreferenced resources and still have access to the info.
+// TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
+struct LinkedResources final : private angle::NonCopyable
+{
+    VaryingPacking varyingPacking;
+    InterfaceBlockLinker uniformBlockLinker;
+    InterfaceBlockLinker shaderStorageBlockLinker;
 };
 
 }  // namespace gl

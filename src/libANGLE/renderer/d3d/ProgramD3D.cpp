@@ -1479,7 +1479,7 @@ gl::LinkResult ProgramD3D::compileComputeExecutable(const gl::Context *context,
 }
 
 gl::LinkResult ProgramD3D::link(const gl::Context *context,
-                                const gl::VaryingPacking &packing,
+                                const gl::LinkedResources &resources,
                                 gl::InfoLog &infoLog)
 {
     const auto &data = context->getContextState();
