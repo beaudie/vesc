@@ -709,6 +709,31 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             return true;
     }
 
+    if (getExtensions().oesGeometryShader)
+    {
+        switch (pname)
+        {
+            case GL_MAX_FRAMEBUFFER_LAYERS_OES:
+            case GL_LAYER_PROVOKING_VERTEX_OES:
+            case GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_OES:
+            case GL_MAX_GEOMETRY_UNIFORM_BLOCKS_OES:
+            case GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_OES:
+            case GL_MAX_GEOMETRY_INPUT_COMPONENTS_OES:
+            case GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_OES:
+            case GL_MAX_GEOMETRY_OUTPUT_VERTICES_OES:
+            case GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_OES:
+            case GL_MAX_GEOMETRY_SHADER_INVOCATIONS_OES:
+            case GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_OES:
+            case GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_OES:
+            case GL_MAX_GEOMETRY_ATOMIC_COUNTERS_OES:
+            case GL_MAX_GEOMETRY_IMAGE_UNIFORMS_OES:
+            case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_OES:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
     return false;
 }
 

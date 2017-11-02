@@ -25,6 +25,8 @@
 #include "platform/Platform.h"
 #include "platform/WorkaroundsD3D.h"
 
+#include <GLES2/gl2ext.h>
+
 namespace rx
 {
 
@@ -949,6 +951,174 @@ size_t GetMaximumComputeImageUniforms(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+size_t GetMaximumFramebufferLayers(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476906(v=vs.85).aspx
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryInputComponents(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_GS_INPUT_REGISTER_COUNT * D3D11_GS_INPUT_REGISTER_COMPONENTS;
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_GS_INPUT_REGISTER_COUNT * D3D11_GS_INPUT_REGISTER_COMPONENTS;
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryOutputComponents(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_GS_OUTPUT_REGISTER_COUNT * D3D11_GS_OUTPUT_REGISTER_COMPONENTS;
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_GS_OUTPUT_REGISTER_COUNT * D3D10_GS_OUTPUT_REGISTER_COMPONENTS;
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryInvocations(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff471425(v=vs.85).aspx
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return 32;
+
+        // GS instancing isn't supported in Shader Model 4.
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return 1;
+
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumCombinedGeometryOutputComponents(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_GS_MAX_OUTPUT_VERTEX_COUNT_ACROSS_INSTANCES;
+
+        // GS instancing isn't supported in Shader Model 4.
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return GetMaximumGeometryOutputComponents(featureLevel);
+
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryTextureImageUnits(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT;
+
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryUniformBlocks(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT -
+                   d3d11::RESERVED_CONSTANT_BUFFER_SLOT_COUNT;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT -
+                   d3d11::RESERVED_CONSTANT_BUFFER_SLOT_COUNT;
+
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumGeometryUniformVectors(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+
+        default:
+            return 0;
+    }
+}
+
+GLenum GetGeometryLayerProvokingVertices(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        // The documentation of SV_RenderTargetArrayIndex states that the value from the leading
+        // vertex will be used.
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/bb509647.aspx
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return GL_FIRST_VERTEX_CONVENTION_OES;
+        default:
+            return GL_UNDEFINED_VERTEX_OES;
+    }
+}
+
+bool GetOESGeometryShaderSupport(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        // D3D10 cannot support OES_geometry_shader because Geometry Shader instancing is only
+        // supported in shader model 5.0 and above.
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff471423(v=vs.85).aspx
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return true;
+        default:
+            return false;
+    }
+}
+
 int GetMinimumTexelOffset(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -1426,6 +1596,36 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
         static_cast<GLuint>(GetMaximumRenderToBufferWindowSize(featureLevel));
     caps->maxFramebufferHeight = caps->maxFramebufferWidth;
 
+    // Geometry shader limits
+    caps->maxFramebufferLayers = static_cast<GLuint>(GetMaximumFramebufferLayers(featureLevel));
+    caps->layerProvokingVertex =
+        static_cast<GLuint>(GetGeometryLayerProvokingVertices(featureLevel));
+    caps->maxGeometryUniformComponents =
+        static_cast<GLuint>(GetMaximumGeometryUniformVectors(featureLevel));
+    caps->maxGeometryUniformBlocks =
+        static_cast<GLuint>(GetMaximumGeometryUniformBlocks(featureLevel));
+    caps->maxCombinedGeometryUniformComponents =
+        (static_cast<GLint>(caps->maxGeometryUniformBlocks) *
+         static_cast<GLint>(caps->maxUniformBlockSize / 4)) +
+        static_cast<GLint>(caps->maxGeometryUniformComponents);
+    caps->maxGeometryInputComponents =
+        static_cast<GLuint>(GetMaximumGeometryInputComponents(featureLevel));
+    caps->maxGeometryOutputComponents =
+        static_cast<GLuint>(GetMaximumGeometryOutputComponents(featureLevel));
+    caps->maxGeometryTotalOutputComponents =
+        static_cast<GLuint>(GetMaximumCombinedGeometryOutputComponents(featureLevel));
+    // TODO(jiawei.shao@intel.com): check if we need to relax this limit
+    caps->maxGeometryOutputVertices = caps->maxGeometryTotalOutputComponents / 4;
+    caps->maxGeometryShaderInvocations =
+        static_cast<GLuint>(GetMaximumGeometryInvocations(featureLevel));
+    caps->maxGeometryTextureImageUnits =
+        static_cast<GLuint>(GetMaximumGeometryTextureImageUnits(featureLevel));
+    // TODO(jiawei.shao@intel.com): set accurate values for these UAV related limits.
+    caps->maxGeometryAtomicCounterBuffers = 0;
+    caps->maxGeometryAtomicCounters       = 0;
+    caps->maxGeometryImageUniforms        = 0;
+    caps->maxGeometryShaderStorageBlocks  = 0;
+
     // GL extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->elementIndexUint = true;
@@ -1482,6 +1682,7 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     extensions->syncQuery                 = GetEventQuerySupport(featureLevel);
     extensions->copyTexture               = true;
     extensions->copyCompressedTexture     = true;
+    extensions->oesGeometryShader         = GetOESGeometryShaderSupport(featureLevel);
 
     // D3D11 Feature Level 10_0+ uses SV_IsFrontFace in HLSL to emulate gl_FrontFacing.
     // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace, and has no equivalent, so can't support gl_FrontFacing.

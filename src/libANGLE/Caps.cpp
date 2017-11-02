@@ -227,7 +227,8 @@ Extensions::Extensions()
       clientArrays(false),
       robustResourceInitialization(false),
       programCacheControl(false),
-      textureRectangle(false)
+      textureRectangle(false),
+      oesGeometryShader(false)
 {
 }
 
@@ -695,6 +696,8 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_robust_resource_initialization"] = esOnlyExtension(&Extensions::robustResourceInitialization);
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControl);
         map["GL_ANGLE_texture_rectangle"] = enableableExtension(&Extensions::textureRectangle);
+		map["GL_OES_geometry_shader"] = esOnlyExtension(&Extensions::oesGeometryShader);
+		map["GL_EXT_geometry_shader"] = esOnlyExtension(&Extensions::oesGeometryShader);
         // clang-format on
 
         return map;
@@ -843,8 +846,28 @@ Caps::Caps()
       maxTransformFeedbackSeparateComponents(0),
 
       // Table 20.49
-      maxSamples(0)
+      maxSamples(0),
 
+      // Table 20.40 (cont.) (OES_geometry_shader)
+      maxFramebufferLayers(0),
+
+      // Table 20.43gs (OES_geometry_shader)
+      layerProvokingVertex(0),
+      maxGeometryUniformComponents(0),
+      maxGeometryUniformBlocks(0),
+      maxGeometryInputComponents(0),
+      maxGeometryOutputComponents(0),
+      maxGeometryOutputVertices(0),
+      maxGeometryTotalOutputComponents(0),
+      maxGeometryTextureImageUnits(0),
+      maxGeometryAtomicCounterBuffers(0),
+      maxGeometryAtomicCounters(0),
+      maxGeometryShaderStorageBlocks(0),
+      maxGeometryShaderInvocations(0),
+
+      // Table 20.46 (OES_geometry_shader)
+      maxGeometryImageUniforms(0),
+      maxCombinedGeometryUniformComponents(0)
 {
     for (size_t i = 0; i < 3; ++i)
     {

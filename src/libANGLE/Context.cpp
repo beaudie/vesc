@@ -1614,6 +1614,53 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
         case GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT:
             *params = mCaps.shaderStorageBufferOffsetAlignment;
             break;
+
+        // GL_OES_geometry_shader
+        case GL_MAX_FRAMEBUFFER_LAYERS_OES:
+            *params = mCaps.maxFramebufferLayers;
+            break;
+        case GL_LAYER_PROVOKING_VERTEX_OES:
+            *params = mCaps.layerProvokingVertex;
+            break;
+        case GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_OES:
+            *params = mCaps.maxGeometryUniformComponents;
+            break;
+        case GL_MAX_GEOMETRY_UNIFORM_BLOCKS_OES:
+            *params = mCaps.maxGeometryUniformBlocks;
+            break;
+        case GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_OES:
+            *params = mCaps.maxCombinedGeometryUniformComponents;
+            break;
+        case GL_MAX_GEOMETRY_INPUT_COMPONENTS_OES:
+            *params = mCaps.maxGeometryInputComponents;
+            break;
+        case GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_OES:
+            *params = mCaps.maxGeometryOutputComponents;
+            break;
+        case GL_MAX_GEOMETRY_OUTPUT_VERTICES_OES:
+            *params = mCaps.maxGeometryOutputVertices;
+            break;
+        case GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_OES:
+            *params = mCaps.maxGeometryTotalOutputComponents;
+            break;
+        case GL_MAX_GEOMETRY_SHADER_INVOCATIONS_OES:
+            *params = mCaps.maxGeometryShaderInvocations;
+            break;
+        case GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_OES:
+            *params = mCaps.maxGeometryTextureImageUnits;
+            break;
+        case GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_OES:
+            *params = mCaps.maxGeometryAtomicCounterBuffers;
+            break;
+        case GL_MAX_GEOMETRY_ATOMIC_COUNTERS_OES:
+            *params = mCaps.maxGeometryAtomicCounters;
+            break;
+        case GL_MAX_GEOMETRY_IMAGE_UNIFORMS_OES:
+            *params = mCaps.maxGeometryImageUniforms;
+            break;
+        case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_OES:
+            *params = mCaps.maxGeometryShaderStorageBlocks;
+            break;
         default:
             mGLState.getIntegerv(this, pname, params);
             break;

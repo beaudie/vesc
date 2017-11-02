@@ -1033,6 +1033,43 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxRectangleTextureSize =
             QuerySingleGLInt(functions, GL_MAX_RECTANGLE_TEXTURE_SIZE_ANGLE);
     }
+
+    if (functions->isAtLeastGL(gl::Version(4, 0)) || functions->isAtLeastGLES(gl::Version(3, 2)) ||
+        functions->hasGLExtension("GL_ARB_geometry_shader4") ||
+        functions->hasGLESExtension("GL_OES_geometry_shader") ||
+        functions->hasGLESExtension("GL_EXT_geometry_shader"))
+    {
+        extensions->oesGeometryShader = true;
+
+        caps->maxFramebufferLayers = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_LAYERS_OES);
+        caps->layerProvokingVertex = QuerySingleGLInt(functions, GL_LAYER_PROVOKING_VERTEX_OES);
+        caps->maxGeometryUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_OES);
+        caps->maxGeometryUniformBlocks =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_UNIFORM_BLOCKS_OES);
+        caps->maxCombinedGeometryUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_OES);
+        caps->maxGeometryInputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_INPUT_COMPONENTS_OES);
+        caps->maxGeometryOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_OES);
+        caps->maxGeometryOutputVertices =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_VERTICES_OES);
+        caps->maxGeometryTotalOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_OES);
+        caps->maxGeometryShaderInvocations =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_INVOCATIONS_OES);
+        caps->maxGeometryTextureImageUnits =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_OES);
+        caps->maxGeometryAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_OES);
+        caps->maxGeometryAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTERS_OES);
+        caps->maxGeometryImageUniforms =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_IMAGE_UNIFORMS_OES);
+        caps->maxGeometryShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_OES);
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
