@@ -635,6 +635,24 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCounterIncrement", atomicCounter);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCounterDecrement", atomicCounter);
 
+    // Insert all atomic memory functions
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicAdd", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicAdd", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicMin", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicMin", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicMax", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicMax", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicAnd", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicAnd", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicOr", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicOr", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicXor", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicXor", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicExchange", uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicExchange", int1, int1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCompSwap", uint1, uint1, uint1);
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicCompSwap", int1, int1, int1);
+
     const TType *gimage2D      = TCache::getType(EbtGImage2D);
     const TType *gimage3D      = TCache::getType(EbtGImage3D);
     const TType *gimage2DArray = TCache::getType(EbtGImage2DArray);
