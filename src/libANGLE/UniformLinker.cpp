@@ -591,4 +591,184 @@ bool UniformLinker::checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &in
     return true;
 }
 
+// InterfaceBlockLinker implementation.
+InterfaceBlockLinker::InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut,
+                                           std::vector<LinkedUniform> *uniformsOut)
+    : mBlocksOut(blocksOut), mUniformsOut(uniformsOut)
+{
+}
+
+InterfaceBlockLinker::~InterfaceBlockLinker()
+{
+}
+
+void InterfaceBlockLinker::addShaderBlocks(GLenum shader,
+                                           const std::vector<sh::InterfaceBlock> &blocks)
+{
+    mShaderBlocks.push_back(std::make_pair(shader, &blocks));
+}
+
+void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
+                                      const GetBlockMemberInfo &getMemberInfo) const
+{
+    std::set<std::string> visitedList;
+
+    for (const auto &shaderBlocks : mShaderBlocks)
+    {
+        GLenum shader = shaderBlocks.first;
+        for (const auto &block : *shaderBlocks.second)
+        {
+            // Only 'packed' blocks are allowed to be considered inactive.
+            if (!block.staticUse && block.layout == sh::BLOCKLAYOUT_PACKED)
+                continue;
+
+            if (visitedList.count(block.name) > 0)
+            {
+                for (InterfaceBlock &priorBlock : *mBlocksOut)
+                {
+                    if (block.name == priorBlock.name && block.staticUse)
+                    {
+                        priorBlock.setStaticUse(shader, true);
+                    }
+                }
+            }
+            else
+            {
+                defineInterfaceBlock(getBlockSize, getMemberInfo, block, shader);
+                visitedList.insert(block.name);
+            }
+        }
+    }
+}
+
+template <typename VarT>
+void InterfaceBlockLinker::defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
+                                              const std::vector<VarT> &fields,
+                                              const std::string &prefix,
+                                              const std::string &mappedPrefix,
+                                              int blockIndex) const
+{
+    for (const VarT &field : fields)
+    {
+        const std::string &fullName = (prefix.empty() ? field.name : prefix + "." + field.name);
+
+        const std::string &fullMappedName =
+            (mappedPrefix.empty() ? field.mappedName : mappedPrefix + "." + field.mappedName);
+
+        if (field.isStruct())
+        {
+            for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
+            {
+                const std::string uniformElementName =
+                    fullName + (field.isArray() ? ArrayString(arrayElement) : "");
+                const std::string uniformElementMappedName =
+                    fullMappedName + (field.isArray() ? ArrayString(arrayElement) : "");
+                defineBlockMembers(getMemberInfo, field.fields, uniformElementName,
+                                   uniformElementMappedName, blockIndex);
+            }
+        }
+        else
+        {
+            // If getBlockMemberInfo returns false, the uniform is optimized out.
+            sh::BlockMemberInfo memberInfo;
+            if (!getMemberInfo(fullName, fullMappedName, &memberInfo))
+            {
+                continue;
+            }
+
+            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize, -1, -1,
+                                     -1, blockIndex, memberInfo);
+            newUniform.mappedName = fullMappedName;
+
+            // Since block uniforms have no location, we don't need to store them in the uniform
+            // locations list.
+            mUniformsOut->push_back(newUniform);
+        }
+    }
+}
+
+void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSize &getBlockSize,
+                                                const GetBlockMemberInfo &getMemberInfo,
+                                                const sh::InterfaceBlock &interfaceBlock,
+                                                GLenum shaderType) const
+{
+    size_t blockSize = 0;
+    std::vector<unsigned int> blockIndexes;
+
+    if (mUniformsOut)
+    {
+        int blockIndex = static_cast<int>(mBlocksOut->size());
+        // Track the first and last uniform index to determine the range of active uniforms in the
+        // block.
+        size_t firstBlockUniformIndex = mUniformsOut->size();
+        defineBlockMembers(getMemberInfo, interfaceBlock.fields, interfaceBlock.fieldPrefix(),
+                           interfaceBlock.fieldMappedPrefix(), blockIndex);
+        size_t lastBlockUniformIndex = mUniformsOut->size();
+
+        for (size_t blockUniformIndex = firstBlockUniformIndex;
+             blockUniformIndex < lastBlockUniformIndex; ++blockUniformIndex)
+        {
+            blockIndexes.push_back(static_cast<unsigned int>(blockUniformIndex));
+        }
+    }
+    else
+    {
+        // TODO(jiajia.qin@intel.com) : Add buffer variables support and calculate the block index.
+        ASSERT(interfaceBlock.blockType == sh::BlockType::BLOCK_BUFFER);
+    }
+
+    // ESSL 3.10 section 4.4.4 page 58:
+    // Any uniform or shader storage block declared without a binding qualifier is initially
+    // assigned to block binding point zero.
+    int blockBinding = (interfaceBlock.binding == -1 ? 0 : interfaceBlock.binding);
+    if (interfaceBlock.arraySize > 0)
+    {
+        for (unsigned int arrayElement = 0; arrayElement < interfaceBlock.arraySize; ++arrayElement)
+        {
+            // TODO(jiajia.qin@intel.com) : use GetProgramResourceiv to calculate BUFFER_DATA_SIZE
+            // of UniformBlock and ShaderStorageBlock.
+            if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
+            {
+                // Don't define this block at all if it's not active in the implementation.
+                if (!getBlockSize(interfaceBlock.name + ArrayString(arrayElement),
+                                  interfaceBlock.mappedName + ArrayString(arrayElement),
+                                  &blockSize))
+                {
+                    continue;
+                }
+            }
+
+            InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, true, arrayElement,
+                                 blockBinding + arrayElement);
+            block.memberIndexes = blockIndexes;
+            block.setStaticUse(shaderType, interfaceBlock.staticUse);
+
+            // Since all block elements in an array share the same active interface blocks, they
+            // will all be active once any block member is used. So, since interfaceBlock.name[0]
+            // was active, here we will add every block element in the array.
+            block.dataSize = static_cast<unsigned int>(blockSize);
+            mBlocksOut->push_back(block);
+        }
+    }
+    else
+    {
+        // TODO(jiajia.qin@intel.com) : use GetProgramResourceiv to calculate BUFFER_DATA_SIZE
+        // of UniformBlock and ShaderStorageBlock.
+        if (interfaceBlock.blockType == sh::BlockType::BLOCK_UNIFORM)
+        {
+            if (!getBlockSize(interfaceBlock.name, interfaceBlock.mappedName, &blockSize))
+            {
+                return;
+            }
+        }
+
+        InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName, false, 0,
+                             blockBinding);
+        block.memberIndexes = blockIndexes;
+        block.setStaticUse(shaderType, interfaceBlock.staticUse);
+        block.dataSize = static_cast<unsigned int>(blockSize);
+        mBlocksOut->push_back(block);
+    }
+}
+
 }  // namespace gl

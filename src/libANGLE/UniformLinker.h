@@ -14,6 +14,8 @@
 #include "libANGLE/Program.h"
 #include "libANGLE/Uniform.h"
 
+#include <functional>
+
 namespace gl
 {
 
@@ -109,6 +111,45 @@ class UniformLinker
     const ProgramState &mState;
     std::vector<LinkedUniform> mUniforms;
     std::vector<VariableLocation> mUniformLocations;
+};
+
+class InterfaceBlockLinker final : angle::NonCopyable
+{
+  public:
+    InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut,
+                         std::vector<LinkedUniform> *uniformsOut);
+    ~InterfaceBlockLinker();
+
+    using GetBlockSize = std::function<
+        bool(const std::string &blockName, const std::string &blockMappedName, size_t *sizeOut)>;
+    using GetBlockMemberInfo = std::function<
+        bool(const std::string &name, const std::string &mappedName, sh::BlockMemberInfo *infoOut)>;
+
+    // This is called once per shader stage.
+    void addShaderBlocks(GLenum shader, const std::vector<sh::InterfaceBlock> &blocks);
+
+    // This is called once during a link operation, after all shader blocks are added.
+    void linkBlocks(const GetBlockSize &getBlockSize,
+                    const GetBlockMemberInfo &getMemberInfo) const;
+
+  private:
+    void defineInterfaceBlock(const GetBlockSize &getBlockSize,
+                              const GetBlockMemberInfo &getMemberInfo,
+                              const sh::InterfaceBlock &interfaceBlock,
+                              GLenum shaderType) const;
+
+    template <typename VarT>
+    void defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
+                            const std::vector<VarT> &fields,
+                            const std::string &prefix,
+                            const std::string &mappedPrefix,
+                            int blockIndex) const;
+
+    using ShaderBlocks = std::pair<GLenum, const std::vector<sh::InterfaceBlock> *>;
+    std::vector<ShaderBlocks> mShaderBlocks;
+
+    std::vector<InterfaceBlock> *mBlocksOut;
+    std::vector<LinkedUniform> *mUniformsOut;
 };
 
 }  // namespace gl
