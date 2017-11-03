@@ -116,10 +116,13 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
             queryInternalFormat = GL_RGBA8;
         }
 
+        ASSERT(functions->getError() == GL_NO_ERROR);
         GLint numSamples = 0;
         functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
                                        1, &numSamples);
-
+        const auto err = functions->getError();
+        ASSERT(err == GL_NO_ERROR ||
+               err == GL_INVALID_ENUM);
         if (numSamples > 0)
         {
             std::vector<GLint> samples(numSamples);
