@@ -49,17 +49,14 @@ class StructureHLSL : angle::NonCopyable
   public:
     StructureHLSL();
 
-    // Returns the name of the constructor function. "name" parameter is the name of the type being
-    // constructed.
-    TString addConstructor(const TType &type,
-                           const TString &name,
-                           const TIntermSequence *parameters);
-    std::string structsHeader() const;
+    // Returns the name of the constructor function.
+    TString addStructConstructor(const TStructure &structure);
+    TString addBuiltInConstructor(const TType &type, const TIntermSequence *parameters);
 
-    TString defineQualified(const TStructure &structure,
-                            bool useHLSLRowMajorPacking,
-                            bool useStd140Packing);
     static TString defineNameless(const TStructure &structure);
+    void ensureStructDefined(const TStructure &structure);
+
+    std::string structsHeader() const;
 
     Std140PaddingHelper getPaddingHelper();
 
@@ -68,8 +65,17 @@ class StructureHLSL : angle::NonCopyable
 
     std::map<TString, int> mStd140StructElementIndexes;
 
-    typedef std::set<TString> StructNames;
-    StructNames mStructNames;
+    struct StructProperties
+    {
+        StructProperties() : hasConstructor(false) {}
+        StructProperties(const StructProperties &) = default;
+        StructProperties &operator=(const StructProperties &) = default;
+
+        bool hasConstructor;
+    };
+
+    typedef std::map<TString, StructProperties> DefinedStructs;
+    DefinedStructs mDefinedStructs;
 
     typedef std::set<TString> Constructors;
     Constructors mConstructors;
@@ -78,10 +84,14 @@ class StructureHLSL : angle::NonCopyable
     StructDeclarations mStructDeclarations;
 
     void storeStd140ElementIndex(const TStructure &structure, bool useHLSLRowMajorPacking);
+    TString defineQualified(const TStructure &structure,
+                            bool useHLSLRowMajorPacking,
+                            bool useStd140Packing);
     static TString define(const TStructure &structure,
                           bool useHLSLRowMajorPacking,
                           bool useStd140Packing,
                           Std140PaddingHelper *padHelper);
+    DefinedStructs::iterator defineVariants(const TStructure &structure, const TString &name);
 };
 }
 

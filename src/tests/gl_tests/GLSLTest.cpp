@@ -3715,6 +3715,40 @@ TEST_P(GLSLTest_ES3, EmptySwitch)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that a constant struct inside an expression is handled correctly.
+TEST_P(GLSLTest_ES3, ConstStructInsideExpression)
+{
+    const std::string &fragmentShader =
+        R"(#version 300 es
+
+        precision highp float;
+        out vec4 my_FragColor;
+
+        uniform float u_zero;
+
+        struct S
+        {
+            float field;
+        };
+
+        void main()
+        {
+            const S constS = S(1.0);
+            S nonConstS = constS;
+            nonConstS.field = u_zero;
+            bool fail = (constS == nonConstS);
+            my_FragColor = vec4(0, 1, 0, 1);
+            if (fail)
+            {
+                my_FragColor = vec4(1, 0, 0, 1);
+            }
+        })";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
