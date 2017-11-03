@@ -116,6 +116,16 @@ GLuint GetGeometryShaderInputArraySize(TLayoutPrimitiveType primitiveType)
     }
 }
 
+bool IsBufferOrSharedVariable(TIntermTyped *var)
+{
+    if (var->isInterfaceBlock() || var->getQualifier() == EvqBuffer ||
+        var->getQualifier() == EvqShared)
+    {
+        return true;
+    }
+    return false;
+}
+
 }  // namespace
 
 // This tracks each binding point's current default offset for inheritance of subsequent
@@ -5592,6 +5602,38 @@ void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
     }
 }
 
+void TParseContext::checkAtomicMemoryBuiltinFunctions(TIntermAggregate *functionCall)
+{
+    const TString &name = functionCall->getFunctionSymbolInfo()->getName();
+    if (name.compare("atomicAdd") == 0 || name.compare("atomicMin") == 0 ||
+        name.compare("atomicMax") == 0 || name.compare("atomicAnd") == 0 ||
+        name.compare("atomicOr") == 0 || name.compare("atomicXor") == 0 ||
+        name.compare("atomicExchange") == 0 || name.compare("atomicCompSwap") == 0)
+    {
+        TIntermSequence *arguments = functionCall->getSequence();
+        TIntermTyped *memNode      = (*arguments)[0]->getAsTyped();
+
+        if (IsBufferOrSharedVariable(memNode))
+        {
+            return;
+        }
+
+        while (memNode->getAsBinaryNode())
+        {
+            memNode = memNode->getAsBinaryNode()->getLeft();
+            if (IsBufferOrSharedVariable(memNode))
+            {
+                return;
+            }
+        }
+
+        error(memNode->getLine(),
+              "The value passed to the mem argument of an atomic memory function does not "
+              "correspond to a buffer or shared variable.",
+              functionCall->getFunctionSymbolInfo()->getName().c_str());
+    }
+}
+
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
 void TParseContext::checkImageMemoryAccessForBuiltinFunctions(TIntermAggregate *functionCall)
 {
@@ -5828,6 +5870,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunction *fnCall,
                     checkTextureOffsetConst(callNode);
                     checkTextureGather(callNode);
                     checkImageMemoryAccessForBuiltinFunctions(callNode);
+                    checkAtomicMemoryBuiltinFunctions(callNode);
                 }
                 else
                 {

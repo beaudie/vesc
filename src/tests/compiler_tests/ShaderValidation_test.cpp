@@ -5292,3 +5292,239 @@ TEST_F(FragmentShaderValidationTest, UnsizedConstArray)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Test that the value passed to the mem argument of an atomic memory function can be a shared
+// variable.
+TEST_F(ComputeShaderValidationTest, AtomicAddWithSharedVariable)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;\n"
+        "shared uint myShared;\n"
+        "void main() {\n"
+        "    atomicAdd(myShared, 2u);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass an element of an array to the mem argument of an atomic memory
+// function, as long as the underlying array is a buffer or shared variable.
+TEST_F(ComputeShaderValidationTest, AtomicAddWithSharedVariableArray)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;\n"
+        "shared uint myShared[2];\n"
+        "void main() {\n"
+        "    atomicAdd(myShared[0], 2u);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass a single component of a vector to the mem argument of an
+// atomic memory function, as long as the underlying vector is a buffer or shared variable.
+TEST_F(ComputeShaderValidationTest, AtomicAddWithSharedVariableVector)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;\n"
+        "shared uvec4 myShared;\n"
+        "void main() {\n"
+        "    atomicAdd(myShared[0], 2u);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that the value passed to the mem argument of an atomic memory function can be a buffer
+// variable.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithBufferVariable)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint a;\n"
+        "layout(std140) buffer bufferName1{\n"
+        "    uint u1;"
+        "};\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(u1, 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass an element of an array to the mem argument of an atomic memory
+// function, as long as the underlying array is a buffer or shared variable.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithBufferVariableArrayElement)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint a;\n"
+        "layout(std140) buffer bufferName1{\n"
+        "    uint u1[2];"
+        "};\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(u1[0], 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass a member of shader storage block instance to the mem argument
+// of an atomic memory function.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithBufferVariableInBlockInstance)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint a;\n"
+        "layout(std140) buffer bufferName{\n"
+        "    uint u1;"
+        "} instanceName;\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(instanceName.u1, 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass a member of shader storage block instance array to the mem
+// argument of an atomic memory function.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithBufferVariableInBlockInstanceArray)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(std140) buffer bufferName{\n"
+        "    uint u1;"
+        "} instanceName[1];\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(instanceName[0].u1, 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is acceptable to pass an element of an array  of a shader storage block instance to
+// the mem argument of an atomic memory function.
+TEST_F(ComputeShaderValidationTest, AtomicAddWithElementOfArrayInBlockInstance)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
+        "layout(std140) buffer blockName {\n"
+        "    uint data[2];\n"
+        "} instanceName;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(instanceName.data[0], 3u);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success:\n" << mInfoLog;
+    }
+}
+
+// Test that it is not allowed to pass an atomic counter variable to the mem argument of an atomic
+// memory function.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithAtomicCounter)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint ac;\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(ac, 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that it is not allowed to pass an element of an atomic counter array to the mem argument of
+// an atomic memory function.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithAtomicCounterArray)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint ac[2];\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    atomicAdd(ac[0], 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+// Test that  it is not allowed to pass an local uint value to the mem argument of an atomic memory
+// function.
+TEST_F(FragmentShaderValidationTest, AtomicAddWithNoneStorageVariable)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 o_color;\n"
+        "void main()\n"
+        "{\n"
+        "    uint test = 1u;\n"
+        "    atomicAdd(test, 2u);\n"
+        "    o_color = vec4(1.0, 0.0, 0.0, 1.0);"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
