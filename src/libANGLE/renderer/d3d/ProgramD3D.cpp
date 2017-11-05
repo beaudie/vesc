@@ -199,6 +199,49 @@ void GetMatrixUniform(GLint columns, GLint rows, NonFloatT *dataOut, const NonFl
     UNREACHABLE();
 }
 
+size_t GetUniformBlockInfo(const sh::InterfaceBlock &interfaceBlock,
+                           sh::BlockLayoutMap *blockInfoOut)
+{
+    ASSERT(interfaceBlock.staticUse || interfaceBlock.layout != sh::BLOCKLAYOUT_PACKED);
+
+    // define member uniforms
+    sh::Std140BlockEncoder std140Encoder;
+    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
+    sh::BlockLayoutEncoder *encoder = nullptr;
+
+    if (interfaceBlock.layout == sh::BLOCKLAYOUT_STD140)
+    {
+        encoder = &std140Encoder;
+    }
+    else
+    {
+        encoder = &hlslEncoder;
+    }
+
+    sh::GetUniformBlockInfo(interfaceBlock.fields, interfaceBlock.fieldPrefix(), encoder,
+                            interfaceBlock.isRowMajorLayout, blockInfoOut);
+
+    return encoder->getBlockSize();
+}
+
+void GetShaderUniformBlockInfo(const gl::Context *context,
+                               gl::Shader *shader,
+                               std::map<std::string, size_t> *blockSizesOut,
+                               sh::BlockLayoutMap *blockInfoOut)
+{
+    for (const sh::InterfaceBlock &interfaceBlock : shader->getUniformBlocks(context))
+    {
+        if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
+            continue;
+
+        if (blockSizesOut->count(interfaceBlock.name) > 0)
+            continue;
+
+        size_t dataSize                       = GetUniformBlockInfo(interfaceBlock, blockInfoOut);
+        (*blockSizesOut)[interfaceBlock.name] = dataSize;
+    }
+}
+
 }  // anonymous namespace
 
 // D3DUniform Implementation
@@ -1028,10 +1071,6 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(uniform->registerElement);
     }
 
-    // Ensure we init the uniform block structure data if we should.
-    // http://anglebug.com/1637
-    ensureUniformBlocksInitialized();
-
     stream->writeInt(mD3DUniformBlocks.size());
     for (const D3DUniformBlock &uniformBlock : mD3DUniformBlocks)
     {
@@ -1505,8 +1544,6 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
             infoLog << "Failed to create D3D compute shader.";
             return result;
         }
-
-        initUniformBlockInfo(context, computeShader);
     }
     else
     {
@@ -1582,10 +1619,9 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
             infoLog << "Failed to create D3D shaders.";
             return result;
         }
-
-        initUniformBlockInfo(context, vertexShader);
-        initUniformBlockInfo(context, fragmentShader);
     }
+
+    linkResources(context, resources);
 
     return true;
 }
@@ -1596,28 +1632,14 @@ GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLo
     return GL_TRUE;
 }
 
-void ProgramD3D::initUniformBlockInfo(const gl::Context *context, gl::Shader *shader)
+void ProgramD3D::initializeUniformBlocks()
 {
-    for (const sh::InterfaceBlock &interfaceBlock : shader->getUniformBlocks(context))
-    {
-        if (!interfaceBlock.staticUse && interfaceBlock.layout == sh::BLOCKLAYOUT_PACKED)
-            continue;
-
-        if (mBlockDataSizes.count(interfaceBlock.name) > 0)
-            continue;
-
-        size_t dataSize                      = getUniformBlockInfo(interfaceBlock);
-        mBlockDataSizes[interfaceBlock.name] = dataSize;
-    }
-}
-
-void ProgramD3D::ensureUniformBlocksInitialized()
-{
-    // Lazy init.
-    if (mState.getUniformBlocks().empty() || !mD3DUniformBlocks.empty())
+    if (mState.getUniformBlocks().empty())
     {
         return;
     }
+
+    ASSERT(mD3DUniformBlocks.empty());
 
     // Assign registers and update sizes.
     const ShaderD3D *vertexShaderD3D = SafeGetImplAs<ShaderD3D>(mState.getAttachedVertexShader());
@@ -1730,8 +1752,6 @@ void ProgramD3D::updateUniformBufferCache(const gl::Caps &caps,
     {
         return;
     }
-
-    ensureUniformBlocksInitialized();
 
     mVertexUBOCache.clear();
     mFragmentUBOCache.clear();
@@ -2278,30 +2298,6 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
     }
 }
 
-size_t ProgramD3D::getUniformBlockInfo(const sh::InterfaceBlock &interfaceBlock)
-{
-    ASSERT(interfaceBlock.staticUse || interfaceBlock.layout != sh::BLOCKLAYOUT_PACKED);
-
-    // define member uniforms
-    sh::Std140BlockEncoder std140Encoder;
-    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
-    sh::BlockLayoutEncoder *encoder = nullptr;
-
-    if (interfaceBlock.layout == sh::BLOCKLAYOUT_STD140)
-    {
-        encoder = &std140Encoder;
-    }
-    else
-    {
-        encoder = &hlslEncoder;
-    }
-
-    sh::GetUniformBlockInfo(interfaceBlock.fields, interfaceBlock.fieldPrefix(), encoder,
-                            interfaceBlock.isRowMajorLayout, &mBlockInfo);
-
-    return encoder->getBlockSize();
-}
-
 void ProgramD3D::assignAllSamplerRegisters()
 {
     for (D3DUniform *d3dUniform : mD3DUniforms)
@@ -2595,40 +2591,6 @@ const D3DUniform *ProgramD3D::getD3DUniformFromLocation(GLint location) const
     return mD3DUniforms[mState.getUniformLocations()[location].index];
 }
 
-bool ProgramD3D::getUniformBlockSize(const std::string &blockName,
-                                     const std::string & /* blockMappedName */,
-                                     size_t *sizeOut) const
-{
-    size_t nameLengthWithoutArrayIndex;
-    gl::ParseArrayIndex(blockName, &nameLengthWithoutArrayIndex);
-    std::string baseName = blockName.substr(0u, nameLengthWithoutArrayIndex);
-
-    auto sizeIter = mBlockDataSizes.find(baseName);
-    if (sizeIter == mBlockDataSizes.end())
-    {
-        *sizeOut = 0;
-        return false;
-    }
-
-    *sizeOut = sizeIter->second;
-    return true;
-}
-
-bool ProgramD3D::getUniformBlockMemberInfo(const std::string &memberUniformName,
-                                           const std::string & /* memberUniformMappedName */,
-                                           sh::BlockMemberInfo *memberInfoOut) const
-{
-    auto infoIter = mBlockInfo.find(memberUniformName);
-    if (infoIter == mBlockInfo.end())
-    {
-        *memberInfoOut = sh::BlockMemberInfo::getDefaultBlockInfo();
-        return false;
-    }
-
-    *memberInfoOut = infoIter->second;
-    return true;
-}
-
 void ProgramD3D::setPathFragmentInputGen(const std::string &inputName,
                                          GLenum genMode,
                                          GLint components,
@@ -2719,6 +2681,67 @@ void ProgramD3D::updateCachedPixelExecutableIndex()
             break;
         }
     }
+}
+
+void ProgramD3D::linkResources(const gl::Context *context, const gl::LinkedResources &resources)
+{
+    sh::BlockLayoutMap blockInfo;
+    std::map<std::string, size_t> blockSizes;
+
+    if (mState.getAttachedVertexShader())
+    {
+        GetShaderUniformBlockInfo(context, mState.getAttachedVertexShader(), &blockSizes,
+                                  &blockInfo);
+    }
+
+    if (mState.getAttachedFragmentShader())
+    {
+        GetShaderUniformBlockInfo(context, mState.getAttachedFragmentShader(), &blockSizes,
+                                  &blockInfo);
+    }
+
+    if (mState.getAttachedComputeShader())
+    {
+        GetShaderUniformBlockInfo(context, mState.getAttachedComputeShader(), &blockSizes,
+                                  &blockInfo);
+    }
+
+    // Gather interface block info.
+    auto getUniformBlockSize = [&blockSizes](const std::string &name, const std::string &mappedName,
+                                             size_t *sizeOut) {
+        size_t nameLengthWithoutArrayIndex;
+        gl::ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
+        std::string baseName = name.substr(0u, nameLengthWithoutArrayIndex);
+        auto sizeIter        = blockSizes.find(baseName);
+        if (sizeIter == blockSizes.end())
+        {
+            *sizeOut = 0;
+            return false;
+        }
+
+        *sizeOut = sizeIter->second;
+        return true;
+    };
+
+    auto getUniformBlockMemberInfo = [&blockInfo](const std::string &name,
+                                                  const std::string &mappedName,
+                                                  sh::BlockMemberInfo *infoOut) {
+        auto infoIter = blockInfo.find(name);
+        if (infoIter == blockInfo.end())
+        {
+            *infoOut = sh::BlockMemberInfo::getDefaultBlockInfo();
+            return false;
+        }
+
+        *infoOut = infoIter->second;
+        return true;
+    };
+
+    resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo);
+    initializeUniformBlocks();
+
+    // TODO(jiajia.qin@intel.com): Determine correct shader storage block info.
+    resources.shaderStorageBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo);
 }
 
 }  // namespace rx
