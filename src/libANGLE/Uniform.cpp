@@ -53,6 +53,11 @@ void StaticallyUsed::unionReferencesWith(const StaticallyUsed &other)
     computeStaticUse |= other.computeStaticUse;
 }
 
+bool StaticallyUsed::anyStaticUse() const
+{
+    return vertexStaticUse | fragmentStaticUse | computeStaticUse;
+}
+
 LinkedUniform::LinkedUniform()
     : typeInfo(nullptr), bufferIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
