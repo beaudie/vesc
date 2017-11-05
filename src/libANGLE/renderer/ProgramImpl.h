@@ -20,7 +20,8 @@
 namespace gl
 {
 class Context;
-class VaryingPacking;
+class InterfaceBlockLinker;
+struct LinkedResources;
 }
 
 namespace sh
@@ -30,7 +31,6 @@ struct BlockMemberInfo;
 
 namespace rx
 {
-
 class ProgramImpl : angle::NonCopyable
 {
   public:
@@ -46,8 +46,8 @@ class ProgramImpl : angle::NonCopyable
     virtual void setSeparable(bool separable)               = 0;
 
     virtual gl::LinkResult link(const gl::Context *context,
-                                const gl::VaryingPacking &packing,
-                                gl::InfoLog &infoLog) = 0;
+                                const gl::LinkedResources &resources,
+                                gl::InfoLog &infoLog)                      = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
