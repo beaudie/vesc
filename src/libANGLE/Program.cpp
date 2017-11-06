@@ -160,7 +160,7 @@ GLint GetVariableLocation(const std::vector<VarT> &list,
                           const std::string &name)
 {
     size_t nameLengthWithoutArrayIndex;
-    unsigned int arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
+	unsigned int arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
 
     for (size_t location = 0u; location < locationList.size(); ++location)
     {
