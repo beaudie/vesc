@@ -79,7 +79,9 @@ TEST(ParseResourceName, TrailingWhitespace)
 TEST(ParseArrayIndex, NoArrayIndex)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(3u, nameLengthWithoutArrayIndex);
 }
 
@@ -87,7 +89,9 @@ TEST(ParseArrayIndex, NoArrayIndex)
 TEST(ParseArrayIndex, EmptyString)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(0u, nameLengthWithoutArrayIndex);
 }
 
@@ -95,7 +99,9 @@ TEST(ParseArrayIndex, EmptyString)
 TEST(ParseArrayIndex, ArrayIndex)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(123u, gl::ParseArrayIndex("foo[123]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[123]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(123u, arrayIndex);
     EXPECT_EQ(3u, nameLengthWithoutArrayIndex);
 }
 
@@ -103,7 +109,9 @@ TEST(ParseArrayIndex, ArrayIndex)
 TEST(ParseArrayIndex, ArrayIndexInMiddle)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[123].bar", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[123].bar", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(12u, nameLengthWithoutArrayIndex);
 }
 
@@ -111,7 +119,9 @@ TEST(ParseArrayIndex, ArrayIndexInMiddle)
 TEST(ParseArrayIndex, TrailingWhitespace)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[123] ", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[123] ", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(9u, nameLengthWithoutArrayIndex);
 }
 
@@ -119,7 +129,9 @@ TEST(ParseArrayIndex, TrailingWhitespace)
 TEST(ParseArrayIndex, MultipleArrayIndices)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(34u, gl::ParseArrayIndex("foo[12][34]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[12][34]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(34u, arrayIndex);
     EXPECT_EQ(7u, nameLengthWithoutArrayIndex);
 }
 
@@ -128,7 +140,9 @@ TEST(ParseArrayIndex, MultipleArrayIndices)
 TEST(ParseArrayIndex, HexArrayIndex)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[0xff]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[0xff]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(9u, nameLengthWithoutArrayIndex);
 }
 
@@ -137,7 +151,9 @@ TEST(ParseArrayIndex, HexArrayIndex)
 TEST(ParseArrayIndex, ArrayIndexLeadingPlus)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[+1]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[+1]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(7u, nameLengthWithoutArrayIndex);
 }
 
@@ -146,7 +162,9 @@ TEST(ParseArrayIndex, ArrayIndexLeadingPlus)
 TEST(ParseArrayIndex, ArrayIndexLeadingWhiteSpace)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[ 0]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[ 0]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(7u, nameLengthWithoutArrayIndex);
 }
 
@@ -155,7 +173,9 @@ TEST(ParseArrayIndex, ArrayIndexLeadingWhiteSpace)
 TEST(ParseArrayIndex, ArrayIndexTrailingWhiteSpace)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[0 ]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[0 ]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(7u, nameLengthWithoutArrayIndex);
 }
 
@@ -164,8 +184,18 @@ TEST(ParseArrayIndex, ArrayIndexTrailingWhiteSpace)
 TEST(ParseArrayIndex, ArrayIndexBogus)
 {
     size_t nameLengthWithoutArrayIndex;
-    EXPECT_EQ(GL_INVALID_INDEX, gl::ParseArrayIndex("foo[0bogus]", &nameLengthWithoutArrayIndex));
+    unsigned int arrayIndex;
+    EXPECT_TRUE(gl::ParseArrayIndex("foo[0bogus]", &nameLengthWithoutArrayIndex, &arrayIndex));
+    EXPECT_EQ(GL_INVALID_INDEX, arrayIndex);
     EXPECT_EQ(11u, nameLengthWithoutArrayIndex);
+}
+
+// Verify that using an index value out-of-range fails.
+TEST(ParseArrayIndex, ArrayIndexOutOfRange)
+{
+    size_t nameLengthWithoutArrayIndex;
+    unsigned int arrayIndex;
+    EXPECT_FALSE(gl::ParseArrayIndex("foo[4294968319]", &nameLengthWithoutArrayIndex, &arrayIndex));
 }
 
 }  // anonymous namespace
