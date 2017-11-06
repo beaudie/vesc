@@ -41,6 +41,14 @@
 // test expectations parser doesn't support having FAIL for GL and SKIP for D3D with the same test filter.
 1442 OPENGL D3D11 : dEQP-GLES31.functional.image_load_store.* = SKIP
 
+// TODO(jiawei.shao@intel.com): Implement FramebufferTextureOES entry point defined in OpenGL ES 3.1 extension GL_OES_geometry_shader
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.framebuffer_* = SKIP
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.layered.* = SKIP
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.invocation_per_layer_* = SKIP
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.multiple_layers_per_invocation_* = SKIP
+// TODO(jiawei.shao@intel.com): Support transform feedback for programs with geometry shader
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.vertex_transform_feedback.* = SKIP
+
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counter_buffers_* = FAIL
@@ -1259,10 +1267,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program.program_separable_get_programiv = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program_pipeline.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.synchronization.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.geometry_linked_vertices_out = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.geometry_linked_input_type = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.geometry_linked_output_type = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.geometry_shader_invocations = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.separate_shader.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.uniform_location.nested_array.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.error_filters.case_11 = FAIL
@@ -1270,12 +1274,10 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.buffer.bind_buffer_range = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader.compile_compute_shader = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.geometry_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.buffer.bind_buffer_range = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader.compile_compute_shader = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.geometry_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.bind_buffer_range = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.read_pixels_format_mismatch = FAIL
@@ -1303,9 +1305,26 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.geometry_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.object_labels.program_pipeline = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.program_interface_query.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.layout_binding.image.image2d.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.layout_binding.image.image3d.* = FAIL
+
+1941 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.*_geometry = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.geometry_shader.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.shaders.linkage.geometry.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.state_query.program.geometry_shader_state_get_programiv = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.geometry_shader = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.geometry_shader = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.geometry_shader = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.query.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.basic.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.input.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.conversion.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.emit.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.varying.* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.geometry_* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.invocation_output_* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.draw_* = FAIL
+1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.negative.* = FAIL
