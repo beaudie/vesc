@@ -770,10 +770,14 @@ std::string ParseResourceName(const std::string &name, std::vector<unsigned int>
     return name.substr(0, baseNameLength);
 }
 
-unsigned int ParseArrayIndex(const std::string &name, size_t *nameLengthWithoutArrayIndexOut)
+bool ParseArrayIndex(const std::string &name,
+                     size_t *nameLengthWithoutArrayIndexOut,
+                     unsigned int *subscriptOut)
 {
     ASSERT(nameLengthWithoutArrayIndexOut != nullptr);
-    unsigned int subscript = GL_INVALID_INDEX;
+
+    unsigned int subscript             = GL_INVALID_INDEX;
+    size_t nameLengthWithoutArrayIndex = name.length();
 
     // Strip any trailing array operator and retrieve the subscript
     size_t open = name.find_last_of('[');
@@ -790,14 +794,24 @@ unsigned int ParseArrayIndex(const std::string &name, size_t *nameLengthWithoutA
         }
         if (indexIsValidDecimalNumber)
         {
-            subscript                       = atoi(name.c_str() + open + 1);
-            *nameLengthWithoutArrayIndexOut = open;
-            return subscript;
+            errno              = 0;  // reset global error flag.
+            unsigned long temp = strtoul(name.c_str() + open + 1, /*endptr*/ nullptr, /*radix*/ 10);
+
+            // Check if resulting integer is out-of-range or conversion error.
+            if ((temp > static_cast<unsigned long>(UINT_MAX)) || (errno != 0 && temp == 0))
+            {
+                return false;
+            }
+
+            subscript                   = static_cast<unsigned int>(temp);
+            nameLengthWithoutArrayIndex = open;
         }
     }
 
-    *nameLengthWithoutArrayIndexOut = name.length();
-    return subscript;
+    *nameLengthWithoutArrayIndexOut = nameLengthWithoutArrayIndex;
+    *subscriptOut                   = subscript;
+
+    return true;
 }
 
 }  // namespace gl

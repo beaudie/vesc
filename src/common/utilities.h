@@ -70,10 +70,12 @@ GLuint GetPrimitiveRestartIndex(GLenum indexType);
 bool IsTriangleMode(GLenum drawMode);
 bool IsIntegerFormat(GLenum unsizedFormat);
 
-// Return the array index at the end of name, and write the length of name before the final array
-// index into nameLengthWithoutArrayIndexOut. In case name doesn't include an array index, return
+// Calculate the array index at the end of name, and write the length of name before the final array
+// index into nameLengthWithoutArrayIndexOut. In case name doesn't include an array index, use
 // GL_INVALID_INDEX and write the length of the original string.
-unsigned int ParseArrayIndex(const std::string &name, size_t *nameLengthWithoutArrayIndexOut);
+bool ParseArrayIndex(const std::string &name,
+                     size_t *nameLengthWithoutArrayIndexOut,
+                     unsigned int *subscriptOut);
 
 struct UniformTypeInfo final : angle::NonCopyable
 {
