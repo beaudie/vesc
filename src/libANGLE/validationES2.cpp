@@ -4154,6 +4154,17 @@ bool ValidateCreateShader(Context *context, GLenum type)
             }
             break;
 
+        case GL_GEOMETRY_SHADER_OES:
+            // Currently we enable or disable both GL_OES_geometry_shader and GL_EXT_geometry_shader
+            // at the same time.
+            ASSERT(context->getExtensions().oesGeometryShader ==
+                   context->getExtensions().extGeometryShader);
+            if (!context->getExtensions().oesGeometryShader)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidShaderType);
+                return false;
+            }
+            break;
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidShaderType);
             return false;
@@ -4338,6 +4349,15 @@ bool ValidateAttachShader(ValidationContext *context, GLuint program, GLuint sha
         case GL_COMPUTE_SHADER:
         {
             if (programObject->getAttachedComputeShader())
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), ShaderAttachmentHasShader);
+                return false;
+            }
+            break;
+        }
+        case GL_GEOMETRY_SHADER_OES:
+        {
+            if (programObject->getAttachedGeometryShader())
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), ShaderAttachmentHasShader);
                 return false;
@@ -4965,6 +4985,11 @@ bool ValidateDetachShader(ValidationContext *context, GLuint program, GLuint sha
         case GL_COMPUTE_SHADER:
         {
             attachedShader = programObject->getAttachedComputeShader();
+            break;
+        }
+        case GL_GEOMETRY_SHADER_OES:
+        {
+            attachedShader = programObject->getAttachedGeometryShader();
             break;
         }
         default:

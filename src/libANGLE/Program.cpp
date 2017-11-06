@@ -461,6 +461,7 @@ ProgramState::ProgramState()
       mAttachedFragmentShader(nullptr),
       mAttachedVertexShader(nullptr),
       mAttachedComputeShader(nullptr),
+      mAttachedGeometryShader(nullptr),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mMaxActiveAttribLocation(0),
       mSamplerUniformRange(0, 0),
@@ -474,7 +475,8 @@ ProgramState::ProgramState()
 
 ProgramState::~ProgramState()
 {
-    ASSERT(!mAttachedVertexShader && !mAttachedFragmentShader && !mAttachedComputeShader);
+    ASSERT(!mAttachedVertexShader && !mAttachedFragmentShader && !mAttachedComputeShader &&
+           !mAttachedGeometryShader);
 }
 
 const std::string &ProgramState::getLabel()
@@ -572,10 +574,16 @@ void Program::onDestroy(const Context *context)
         mState.mAttachedComputeShader = nullptr;
     }
 
+    if (mState.mAttachedGeometryShader != nullptr)
+    {
+        mState.mAttachedGeometryShader->release(context);
+        mState.mAttachedGeometryShader = nullptr;
+    }
+
     mProgram->destroy(context);
 
     ASSERT(!mState.mAttachedVertexShader && !mState.mAttachedFragmentShader &&
-           !mState.mAttachedComputeShader);
+           !mState.mAttachedComputeShader && !mState.mAttachedGeometryShader);
     SafeDelete(mProgram);
 
     delete this;
@@ -616,6 +624,13 @@ void Program::attachShader(Shader *shader)
             mState.mAttachedComputeShader->addRef();
             break;
         }
+        case GL_GEOMETRY_SHADER_OES:
+        {
+            ASSERT(!mState.mAttachedGeometryShader);
+            mState.mAttachedGeometryShader = shader;
+            mState.mAttachedGeometryShader->addRef();
+            break;
+        }
         default:
             UNREACHABLE();
     }
@@ -646,6 +661,13 @@ void Program::detachShader(const Context *context, Shader *shader)
             mState.mAttachedComputeShader = nullptr;
             break;
         }
+        case GL_GEOMETRY_SHADER_OES:
+        {
+            ASSERT(mState.mAttachedGeometryShader == shader);
+            shader->release(context);
+            mState.mAttachedGeometryShader = nullptr;
+            break;
+        }
         default:
             UNREACHABLE();
     }
@@ -654,7 +676,7 @@ void Program::detachShader(const Context *context, Shader *shader)
 int Program::getAttachedShadersCount() const
 {
     return (mState.mAttachedVertexShader ? 1 : 0) + (mState.mAttachedFragmentShader ? 1 : 0) +
-           (mState.mAttachedComputeShader ? 1 : 0);
+           (mState.mAttachedComputeShader ? 1 : 0) + (mState.mAttachedGeometryShader ? 1 : 0);
 }
 
 void Program::bindAttributeLocation(GLuint index, const char *name)
@@ -1149,6 +1171,15 @@ void Program::getAttachedShaders(GLsizei maxCount, GLsizei *count, GLuint *shade
         if (total < maxCount)
         {
             shaders[total] = mState.mAttachedFragmentShader->getHandle();
+            total++;
+        }
+    }
+
+    if (mState.mAttachedGeometryShader)
+    {
+        if (total < maxCount)
+        {
+            shaders[total] = mState.mAttachedGeometryShader->getHandle();
             total++;
         }
     }
