@@ -2600,7 +2600,8 @@ bool ProgramD3D::getUniformBlockSize(const std::string &blockName,
                                      size_t *sizeOut) const
 {
     size_t nameLengthWithoutArrayIndex;
-    gl::ParseArrayIndex(blockName, &nameLengthWithoutArrayIndex);
+    unsigned int arrayIndex;
+    gl::ParseArrayIndex(blockName, &nameLengthWithoutArrayIndex, &arrayIndex);
     std::string baseName = blockName.substr(0u, nameLengthWithoutArrayIndex);
 
     auto sizeIter = mBlockDataSizes.find(baseName);
