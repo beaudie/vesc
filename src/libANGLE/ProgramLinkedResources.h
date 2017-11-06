@@ -199,7 +199,7 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
 // The link operation is responsible for finishing the link of uniform and interface blocks.
 // This way it can filter out unreferenced resources and still have access to the info.
 // TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
-struct LinkedResources
+struct ProgramLinkedResources
 {
     VaryingPacking varyingPacking;
     UniformBlockLinker uniformBlockLinker;
