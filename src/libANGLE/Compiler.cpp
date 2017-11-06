@@ -50,7 +50,8 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
       mResources(),
       mFragmentCompiler(nullptr),
       mVertexCompiler(nullptr),
-      mComputeCompiler(nullptr)
+      mComputeCompiler(nullptr),
+      mGeometryCompiler(nullptr)
 {
     ASSERT(state.getClientMajorVersion() == 2 || state.getClientMajorVersion() == 3);
 
@@ -129,6 +130,12 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     {
         mResources.MaxDrawBuffers = 1;
     }
+
+    // Geometry Shader constants
+    // TODO(jiawei.shao@intel.com): initialize all implementation dependent geometry shader limits.
+    mResources.OES_geometry_shader          = extensions.oesGeometryShader;
+    mResources.MaxGeometryOutputVertices    = caps.maxGeometryOutputVertices;
+    mResources.MaxGeometryShaderInvocations = caps.maxGeometryShaderInvocations;
 }
 
 Compiler::~Compiler()
@@ -182,6 +189,9 @@ ShHandle Compiler::getCompilerHandle(GLenum type)
             break;
         case GL_COMPUTE_SHADER:
             compiler = &mComputeCompiler;
+            break;
+        case GL_GEOMETRY_SHADER_OES:
+            compiler = &mGeometryCompiler;
             break;
         default:
             UNREACHABLE();

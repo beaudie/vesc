@@ -368,6 +368,9 @@ struct Extensions
 
     // GL_ANGLE_texture_rectangle
     bool textureRectangle;
+
+    // GL_OES_geometry_shader and GL_EXT_geometry_shader
+    bool oesGeometryShader;
 };
 
 struct ExtensionInfo
@@ -549,6 +552,12 @@ struct Caps
 
     // ES 3.1 (April 29, 2015) Table 20.49: Framebuffer Dependent Values
     GLuint maxSamples;
+
+    // ES 3.1 extension GL_OES_geometry_shader (May 31, 2016) Table 20.43gs: Implementation
+    // dependent geometry shader limits
+    // TODO(jiawei.shao@intel.com): add all implementation dependent geometry shader limits.
+    GLuint maxGeometryOutputVertices;
+    GLuint maxGeometryShaderInvocations;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
