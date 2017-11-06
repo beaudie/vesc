@@ -25,7 +25,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 185
+#define ANGLE_SH_VERSION 186
 
 enum ShShaderSpec
 {
@@ -585,6 +585,11 @@ bool GetUniformBlockRegister(const ShHandle handle,
 // Gives a map from uniform names to compiler-assigned registers in the default uniform block.
 // Note that the map contains also registers of samplers that have been extracted from structs.
 const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle handle);
+
+GLenum GetGeometryShaderInputPrimitiveType(const ShHandle handle);
+GLenum GetGeometryShaderOutputPrimitiveType(const ShHandle handle);
+int GetGeometryShaderInvocations(const ShHandle handle);
+int GetGeometryShaderMaxVertices(const ShHandle handle);
 
 }  // namespace sh
 
