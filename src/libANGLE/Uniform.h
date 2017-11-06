@@ -30,6 +30,7 @@ struct StaticallyUsed
 
     void setStaticUse(GLenum shaderType, bool used);
     void unionReferencesWith(const StaticallyUsed &other);
+    bool anyStaticUse() const;
 
     bool vertexStaticUse;
     bool fragmentStaticUse;
