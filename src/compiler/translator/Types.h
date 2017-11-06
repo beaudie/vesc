@@ -393,6 +393,8 @@ class TType
         }
     }
 
+    bool isNamelessStruct() const { return type == EbtStruct && structure->name() == ""; }
+
     const TString &getMangledName() const
     {
         if (mangled.empty())
