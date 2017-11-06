@@ -262,7 +262,8 @@ bool UniformBlockInfo::getBlockSize(const std::string &name,
                                     size_t *sizeOut)
 {
     size_t nameLengthWithoutArrayIndex;
-    gl::ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
+	unsigned int indexArray = GL_INVALID_INDEX;
+    gl::ParseArrayIndex(name, &nameLengthWithoutArrayIndex, &indexArray);
     std::string baseName = name.substr(0u, nameLengthWithoutArrayIndex);
     auto sizeIter        = mBlockSizes.find(baseName);
     if (sizeIter == mBlockSizes.end())

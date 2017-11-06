@@ -160,7 +160,12 @@ GLint GetVariableLocation(const std::vector<VarT> &list,
                           const std::string &name)
 {
     size_t nameLengthWithoutArrayIndex;
-    unsigned int arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
+	unsigned int arrayIndex = GL_INVALID_INDEX;
+
+    if (!ParseArrayIndex(name, &nameLengthWithoutArrayIndex, &arrayIndex))
+    {
+        return -1;
+    }
 
     for (size_t location = 0u; location < locationList.size(); ++location)
     {
@@ -640,7 +645,8 @@ BindingInfo Program::getFragmentInputBindingInfo(const Context *context, GLint i
         ret.valid = true;
 
         size_t nameLengthWithoutArrayIndex;
-        unsigned int arrayIndex = ParseArrayIndex(binding.first, &nameLengthWithoutArrayIndex);
+        unsigned int arrayIndex;
+        ParseArrayIndex(binding.first, &nameLengthWithoutArrayIndex, &arrayIndex);
 
         for (const auto &in : inputs)
         {
