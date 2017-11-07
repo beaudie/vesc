@@ -19,6 +19,7 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
@@ -260,6 +261,7 @@ FramebufferState::FramebufferState()
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
       mReadBufferState(GL_BACK),
+      mDrawBufferTypeMask(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -275,6 +277,7 @@ FramebufferState::FramebufferState(const Caps &caps)
       mColorAttachments(caps.maxColorAttachments),
       mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDrawBufferTypeMask(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -821,13 +824,48 @@ void Framebuffer::setDrawBuffers(size_t count, const GLenum *buffers)
     mDirtyBits.set(DIRTY_BIT_DRAW_BUFFERS);
 
     mState.mEnabledDrawBuffers.reset();
+    mState.mDrawBufferTypeMask.reset();
+
     for (size_t index = 0; index < count; ++index)
     {
+        setDrawBufferTypeMask(index);
+
         if (drawStates[index] != GL_NONE && mState.mColorAttachments[index].isAttached())
         {
             mState.mEnabledDrawBuffers.set(index);
+            enableDrawBufferTypeDirtyMask(index);
+        }
+        else
+        {
+            disableDrawBufferTypeDirtyMask(index);
         }
     }
+}
+
+void Framebuffer::setDrawBufferTypeMask(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    // The lower 16 bits represent the types of the 8 draw buffer indexes (2 bits per type)
+    // Shift the result 2 bit type representation over index*2 bits.
+    mState.mDrawBufferTypeMask |= DrawBufferTypeMaskLookup[getDrawbufferWriteType(index)]
+                                  << (index * 2);
+}
+
+void Framebuffer::enableDrawBufferTypeDirtyMask(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    // Use integer 3, or two high bits to denote an enabled index
+    mState.mDrawBufferTypeMask |= 3 << ((index + 8) << 1);
+}
+
+void Framebuffer::disableDrawBufferTypeDirtyMask(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    // Use two zeroed bits to denote a disabled index
+    mState.mDrawBufferTypeMask &= ~(3 << ((index + IMPLEMENTATION_MAX_DRAW_BUFFERS) << 1));
 }
 
 const FramebufferAttachment *Framebuffer::getDrawBuffer(size_t drawBuffer) const
@@ -853,6 +891,11 @@ GLenum Framebuffer::getDrawbufferWriteType(size_t drawBuffer) const
         default:
             return GL_FLOAT;
     }
+}
+
+DrawBufferTypeMask Framebuffer::getDrawBufferTypeMask() const
+{
+    return mState.mDrawBufferTypeMask;
 }
 
 bool Framebuffer::hasEnabledDrawBuffer() const
@@ -1687,6 +1730,8 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             // formsRenderingFeedbackLoopWith
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
             mState.mEnabledDrawBuffers.set(colorIndex, enabled);
+            setDrawBufferTypeMask(colorIndex);
+            enableDrawBufferTypeDirtyMask(colorIndex);
         }
         break;
     }

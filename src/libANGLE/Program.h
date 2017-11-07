@@ -367,6 +367,7 @@ class ProgramState final : angle::NonCopyable
 
     // Fragment output variable base types: FLOAT, INT, or UINT.  Ordered by location.
     std::vector<GLenum> mOutputVariableTypes;
+    DrawBufferTypeMask mOutputTypeMask;
 
     bool mBinaryRetrieveableHint;
     bool mSeparable;
@@ -590,6 +591,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     int getNumViews() const { return mState.getNumViews(); }
     bool usesMultiview() const { return mState.usesMultiview(); }
 
+    DrawBufferTypeMask getOutputTypeMask() const { return mState.mOutputTypeMask; }
+
   private:
     ~Program();
 
@@ -641,6 +644,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     MergedVaryings getMergedVaryings(const Context *context) const;
     std::vector<PackedVarying> getPackedVaryings(const MergedVaryings &mergedVaryings) const;
+    void setOutputTypeMasks(size_t index);
     void linkOutputVariables(const Context *context);
 
     void setUniformValuesFromBindingQualifiers();
@@ -714,6 +718,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Cache for sampler validation
     Optional<bool> mCachedValidateSamplersResult;
     std::vector<GLenum> mTextureUnitTypesCache;
+
+    std::map<GLenum, unsigned short> DrawBufferTypeMaskLookup{{GL_NONE, 0},
+                                                              {GL_INT, 1},
+                                                              {GL_UNSIGNED_INT, 2},
+                                                              {GL_FLOAT, 3}};
 };
 }  // namespace gl
 
