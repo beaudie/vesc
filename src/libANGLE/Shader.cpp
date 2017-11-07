@@ -513,6 +513,26 @@ std::string Shader::getTransformFeedbackVaryingMappedName(const std::string &tfV
             {
                 return varying.mappedName;
             }
+            else if (varying.isStruct())
+            {
+                auto dotPos = tfVaryingName.find(".");
+                if (dotPos != std::string::npos)
+                {
+                    auto varyingName = tfVaryingName.substr(0, dotPos);
+                    auto fieldName   = tfVaryingName.substr(dotPos + 1);
+                    if (varyingName == varying.name)
+                    {
+                        for (const auto &field : varying.fields)
+                        {
+                            ASSERT(!field.isStruct() && !field.isArray());
+                            if (fieldName == field.name)
+                            {
+                                return varying.mappedName + "." + field.mappedName;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     UNREACHABLE();

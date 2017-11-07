@@ -520,6 +520,28 @@ GLint GetOutputResourceProperty(const Program *program, GLuint index, const GLen
     }
 }
 
+GLint GetTransformFeedbackVaryingResourceProperty(const Program *program,
+                                                  GLuint index,
+                                                  const GLenum prop)
+{
+    const auto &tfVariable = program->getTransformFeedbackVaryingResource(index);
+    switch (prop)
+    {
+        case GL_TYPE:
+            return clampCast<GLint>(tfVariable.type);
+
+        case GL_ARRAY_SIZE:
+            return clampCast<GLint>(tfVariable.size());
+
+        case GL_NAME_LENGTH:
+            return clampCast<GLint>(tfVariable.nameWithArrayIndex().size() + 1);
+
+        default:
+            UNREACHABLE();
+            return GL_INVALID_VALUE;
+    }
+}
+
 GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum programInterface)
 {
     switch (programInterface)
@@ -539,8 +561,10 @@ GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum progra
         case GL_ATOMIC_COUNTER_BUFFER:
             return clampCast<GLint>(program->getState().getAtomicCounterBuffers().size());
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
+            return clampCast<GLint>(program->getTransformFeedbackVaryingCount());
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
             UNIMPLEMENTED();
@@ -586,8 +610,11 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
                 FindMaxSize(program->getState().getUniformBlocks(), &InterfaceBlock::name);
             break;
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
+            maxNameLength = clampCast<GLint>(program->getTransformFeedbackVaryingMaxLength() - 1);
+            break;
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
             UNIMPLEMENTED();
@@ -950,7 +977,7 @@ void QueryProgramiv(const Context *context, const Program *program, GLenum pname
             *params = program->getTransformFeedbackBufferMode();
             break;
         case GL_TRANSFORM_FEEDBACK_VARYINGS:
-            *params = program->getTransformFeedbackVaryingCount();
+            *params = clampCast<GLint>(program->getTransformFeedbackVaryingCount());
             break;
         case GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH:
             *params = program->getTransformFeedbackVaryingMaxLength();
@@ -1401,8 +1428,10 @@ GLuint QueryProgramResourceIndex(const Program *program,
         case GL_UNIFORM_BLOCK:
             return program->getUniformBlockIndex(name);
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
+            return program->getTransformFeedbackVaryingResourceIndex(name);
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
             UNIMPLEMENTED();
@@ -1439,8 +1468,11 @@ void QueryProgramResourceName(const Program *program,
             program->getActiveUniformBlockName(index, bufSize, length, name);
             break;
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
+            program->getTransformFeedbackVarying(index, bufSize, length, nullptr, nullptr, name);
+            break;
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
             UNIMPLEMENTED();
@@ -1517,8 +1549,13 @@ void QueryProgramResourceiv(const Program *program,
                 GetAtomicCounterBufferResourceProperty(program, index, props[i], params, bufSize,
                                                        &pos);
                 break;
-            // TODO(jie.a.chen@intel.com): more interfaces.
+
             case GL_TRANSFORM_FEEDBACK_VARYING:
+                params[i] = GetTransformFeedbackVaryingResourceProperty(program, index, props[i]);
+                ++pos;
+                break;
+
+            // TODO(jie.a.chen@intel.com): more interfaces.
             case GL_BUFFER_VARIABLE:
             case GL_SHADER_STORAGE_BLOCK:
                 UNIMPLEMENTED();

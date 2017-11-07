@@ -266,8 +266,10 @@ bool ValidateProgramResourceIndex(const Program *programObject,
         case GL_ATOMIC_COUNTER_BUFFER:
             return (index < programObject->getActiveAtomicCounterBufferCount());
 
-        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_TRANSFORM_FEEDBACK_VARYING:
+            return (index < static_cast<GLuint>(programObject->getTransformFeedbackVaryingCount()));
+
+        // TODO(jie.a.chen@intel.com): more interfaces.
         case GL_BUFFER_VARIABLE:
         case GL_SHADER_STORAGE_BLOCK:
             UNIMPLEMENTED();
