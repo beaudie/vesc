@@ -75,6 +75,7 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     mExtensions.textureRectangle      = true;
     mExtensions.textureUsage          = true;
 
+    mExtensions.textureStorage             = true;
     mExtensions.rgb8rgba8 = true;
     mExtensions.textureCompressionDXT1     = true;
     mExtensions.textureCompressionDXT3     = true;
