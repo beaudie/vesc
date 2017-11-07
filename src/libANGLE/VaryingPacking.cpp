@@ -250,7 +250,7 @@ bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
 
         if (packVarying(packedVarying))
         {
-            uniqueVaryingNames.insert(packedVarying.nameWithArrayIndex());
+            uniqueVaryingNames.insert(packedVarying.fullName());
         }
         else
         {
