@@ -204,6 +204,10 @@ class StateManagerGL final : angle::NonCopyable
 
     void updateProgramTextureAndSamplerBindings(const gl::Context *context);
 
+    void updatedMaskedDrawBuffers(const gl::Context *context,
+                                  const gl::Program *program,
+                                  gl::Framebuffer *fbo);
+
     enum MultiviewDirtyBitType
     {
         MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
