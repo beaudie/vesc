@@ -240,21 +240,21 @@ bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
         const auto &varying = *packedVarying.varying;
 
         // Do not assign registers to built-in or unreferenced varyings
-        if (!varying.staticUse && !packedVarying.isStructField())
+        if (!varying.staticUse && !(packedVarying.isStructField() && !packedVarying.vertexOnly))
         {
             continue;
         }
 
         ASSERT(!varying.isStruct());
-        ASSERT(uniqueVaryingNames.count(packedVarying.nameWithArrayIndex()) == 0);
+        ASSERT(uniqueVaryingNames.count(packedVarying.fullName()) == 0);
 
         if (packVarying(packedVarying))
         {
-            uniqueVaryingNames.insert(packedVarying.nameWithArrayIndex());
+            uniqueVaryingNames.insert(packedVarying.fullName());
         }
         else
         {
-            infoLog << "Could not pack varying " << packedVarying.nameWithArrayIndex();
+            infoLog << "Could not pack varying " << packedVarying.fullName();
             return false;
         }
     }
@@ -272,17 +272,18 @@ bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
             for (const PackedVarying &packedVarying : packedVaryings)
             {
                 const auto &varying = *packedVarying.varying;
-                if (tfVaryingBaseName == varying.name)
+                if (tfVaryingBaseName == varying.name ||
+                    transformFeedbackVaryingName == packedVarying.fullName())
                 {
                     // only pack varyings that are not builtins.
                     if (transformFeedbackVaryingName.compare(0, 3, "gl_") != 0)
                     {
                         if (!packVarying(packedVarying))
                         {
-                            infoLog << "Could not pack varying " << varying.name;
+                            infoLog << "Could not pack varying " << packedVarying.fullName();
                             return false;
                         }
-                        uniqueVaryingNames.insert(packedVarying.nameWithArrayIndex());
+                        uniqueVaryingNames.insert(packedVarying.fullName());
                     }
                     found = true;
                     break;
