@@ -203,6 +203,10 @@ class StateManagerGL final : angle::NonCopyable
 
     void syncTransformFeedbackState(const gl::Context *context);
 
+    void updatedMaskedDrawBuffers(const gl::Context *context,
+                                  const gl::Program *program,
+                                  FramebufferGL *fbo);
+
     enum MultiviewDirtyBitType
     {
         MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
