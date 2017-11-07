@@ -53,6 +53,13 @@ struct PackedVarying
         return fullNameStr.str();
     }
 
+    std::string fullName() const
+    {
+        std::stringstream fullNameStr;
+        fullNameStr << parentStructName << "." << nameWithArrayIndex();
+        return fullNameStr.str();
+    }
+
     const sh::ShaderVariable *varying;
 
     // Transform feedback varyings can be only referenced in the VS.
