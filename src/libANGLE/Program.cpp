@@ -859,6 +859,7 @@ void Program::unlink()
     mState.mOutputVariables.clear();
     mState.mOutputLocations.clear();
     mState.mOutputVariableTypes.clear();
+    mState.mOutputTypeMask.reset();
     mState.mActiveOutputVariables.reset();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
@@ -2704,6 +2705,18 @@ std::vector<PackedVarying> Program::getPackedVaryings(
     return packedVaryings;
 }
 
+void Program::setOutputTypeMasks(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    // Get corresponding mask bits and store in corresponding index within least significant 16 bits
+    mState.mOutputTypeMask |= DrawBufferTypeMaskLookup[mState.mOutputVariableTypes[index]]
+                              << ((index) << 1);
+
+    // Use integer 3 (two high bits) to denote enabled index in index with most significant 16 bits
+    mState.mOutputTypeMask |= 3 << ((index + IMPLEMENTATION_MAX_DRAW_BUFFERS) << 1);
+}
+
 void Program::linkOutputVariables(const Context *context)
 {
     Shader *fragmentShader = mState.mAttachedFragmentShader;
@@ -2711,6 +2724,8 @@ void Program::linkOutputVariables(const Context *context)
 
     ASSERT(mState.mOutputVariableTypes.empty());
     ASSERT(mState.mActiveOutputVariables.none());
+
+    mState.mOutputTypeMask.reset();
 
     // Gather output variable types
     for (const auto &outputVariable : fragmentShader->getActiveOutputVariables(context))
@@ -2735,6 +2750,8 @@ void Program::linkOutputVariables(const Context *context)
             ASSERT(location < mState.mActiveOutputVariables.size());
             mState.mActiveOutputVariables.set(location);
             mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
+
+            setOutputTypeMasks(location);
         }
     }
 
