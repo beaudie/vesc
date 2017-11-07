@@ -219,6 +219,23 @@ bool validateInterfaceBlocksCount(GLuint maxInterfaceBlocks,
     return true;
 }
 
+const sh::ShaderVariable *FindBaseLevelField(const sh::Varying *varying,
+                                             const std::string &fullName)
+{
+    if (varying->isStruct())
+    {
+        for (const auto &field : varying->fields)
+        {
+            ASSERT(!field.isStruct() && !field.isArray());
+            if (fullName == varying->name + "." + field.name)
+            {
+                return &field;
+            }
+        }
+    }
+    return nullptr;
+}
+
 }  // anonymous namespace
 
 const char *const g_fakepath = "C:\\fakepath";
@@ -1797,11 +1814,11 @@ void Program::getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei
     }
 }
 
-GLsizei Program::getTransformFeedbackVaryingCount() const
+size_t Program::getTransformFeedbackVaryingCount() const
 {
     if (mLinked)
     {
-        return static_cast<GLsizei>(mState.mLinkedTransformFeedbackVaryings.size());
+        return mState.mLinkedTransformFeedbackVaryings.size();
     }
     else
     {
@@ -1831,6 +1848,33 @@ GLsizei Program::getTransformFeedbackVaryingMaxLength() const
 GLenum Program::getTransformFeedbackBufferMode() const
 {
     return mState.mTransformFeedbackBufferMode;
+}
+
+GLuint Program::getTransformFeedbackVaryingResourceIndex(const GLchar *name) const
+{
+    std::vector<unsigned int> subscripts;
+    std::string baseName = ParseResourceName(name, &subscripts);
+    size_t subscript     = GL_INVALID_INDEX;
+    if (!subscripts.empty())
+    {
+        subscript = subscripts.back();
+    }
+
+    for (GLuint tfIndex = 0; tfIndex < mState.mLinkedTransformFeedbackVaryings.size(); ++tfIndex)
+    {
+        const auto &tf = mState.mLinkedTransformFeedbackVaryings[tfIndex];
+        if (tf.name == baseName && tf.arrayIndex == subscript)
+        {
+            return tfIndex;
+        }
+    }
+    return GL_INVALID_INDEX;
+}
+
+const TransformFeedbackVarying &Program::getTransformFeedbackVaryingResource(GLuint index) const
+{
+    ASSERT(index < mState.mLinkedTransformFeedbackVaryings.size());
+    return mState.mLinkedTransformFeedbackVaryings[index];
 }
 
 bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
@@ -2505,8 +2549,9 @@ bool Program::linkValidateTransformFeedback(const gl::Context *context,
         for (const auto &ref : varyings)
         {
             const sh::Varying *varying = ref.second.get();
+            const sh::ShaderVariable *field = FindBaseLevelField(varying, tfVaryingName);
 
-            if (baseName == varying->name)
+            if (baseName == varying->name || field != nullptr)
             {
                 if (uniqueNames.count(tfVaryingName) > 0)
                 {
@@ -2625,6 +2670,17 @@ void Program::gatherTransformFeedbackVaryings(const Program::MergedVaryings &var
                     *varying, static_cast<GLuint>(subscript));
                 break;
             }
+            else if (varying->isStruct())
+            {
+                const auto *field = FindBaseLevelField(varying, tfVaryingName);
+                if (field != nullptr)
+                {
+                    TransformFeedbackVarying fieldVarying(*varying, GL_INVALID_INDEX);
+                    fieldVarying.sh::ShaderVariable::operator=(*field);
+                    fieldVarying.name                        = tfVaryingName;
+                    mState.mLinkedTransformFeedbackVaryings.push_back(fieldVarying);
+                }
+            }
         }
     }
 }
@@ -2658,12 +2714,12 @@ std::vector<PackedVarying> Program::getPackedVaryings(
         const sh::Varying *input  = ref.second.vertex;
         const sh::Varying *output = ref.second.fragment;
 
+        // Will get the vertex shader interpolation by default.
+        auto interpolation = ref.second.get()->interpolation;
+
         // Only pack varyings that have a matched input or output, plus special builtins.
         if ((input && output) || (output && output->isBuiltIn()))
         {
-            // Will get the vertex shader interpolation by default.
-            auto interpolation = ref.second.get()->interpolation;
-
             // Note that we lose the vertex shader static use information here. The data for the
             // variable is taken from the fragment shader.
             if (output->isStruct())
@@ -2701,18 +2757,26 @@ std::vector<PackedVarying> Program::getPackedVaryings(
             {
                 continue;
             }
-            if (baseName == input->name)
+
+            if (input->isStruct())
             {
-                // Transform feedback for varying structs is underspecified.
-                // See Khronos bug 9856.
-                // TODO(jmadill): Figure out how to be spec-compliant here.
-                if (!input->isStruct())
+                const sh::ShaderVariable *field = FindBaseLevelField(input, tfVarying);
+                if (field != nullptr)
                 {
-                    packedVaryings.push_back(PackedVarying(*input, input->interpolation));
+                    ASSERT(!field->isStruct() && !field->isArray());
+                    packedVaryings.push_back(PackedVarying(*field, interpolation, input->name));
                     packedVaryings.back().vertexOnly = true;
-                    packedVaryings.back().arrayIndex = static_cast<GLuint>(subscript);
+                    packedVaryings.back().arrayIndex = GL_INVALID_INDEX;
                     uniqueFullNames.insert(tfVarying);
+                    break;
                 }
+            }
+            else if (baseName == input->name)
+            {
+                packedVaryings.push_back(PackedVarying(*input, input->interpolation));
+                packedVaryings.back().vertexOnly = true;
+                packedVaryings.back().arrayIndex = static_cast<GLuint>(subscript);
+                uniqueFullNames.insert(tfVarying);
                 if (subscript == GL_INVALID_INDEX)
                 {
                     break;
