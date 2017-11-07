@@ -607,16 +607,30 @@ void StateManagerGL::bindFramebuffer(GLenum type, GLuint framebuffer)
             mFramebuffers[angle::FramebufferBindingRead] = framebuffer;
             mFramebuffers[angle::FramebufferBindingDraw] = framebuffer;
             mFunctions->bindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+        }
+    }
+    else if (type == GL_READ_FRAMEBUFFER)
+    {
+        if (mFramebuffers[angle::FramebufferBindingRead] != framebuffer)
+        {
+            mFramebuffers[angle::FramebufferBindingRead] = framebuffer;
+            mFunctions->bindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
         }
     }
     else
     {
-        angle::FramebufferBinding binding = angle::EnumToFramebufferBinding(type);
-
-        if (mFramebuffers[binding] != framebuffer)
+        ASSERT(type == GL_DRAW_FRAMEBUFFER);
+        if (mFramebuffers[angle::FramebufferBindingDraw] != framebuffer)
         {
-            mFramebuffers[binding] = framebuffer;
-            mFunctions->bindFramebuffer(type, framebuffer);
+            mFramebuffers[angle::FramebufferBindingDraw] = framebuffer;
+            mFunctions->bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
         }
     }
 }
@@ -999,10 +1013,6 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Context *context)
 
     const gl::State &glState = context->getGLState();
 
-    gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
-    FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
-    bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
-
     // Set the current transform feedback state
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
     if (transformFeedback)
@@ -1019,12 +1029,6 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Context *context)
     {
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
         mPrevDrawTransformFeedback = nullptr;
-    }
-
-    if (context->getExtensions().webglCompatibility)
-    {
-        auto activeOutputs = glState.getProgram()->getState().getActiveOutputVariables();
-        framebufferGL->maskOutInactiveOutputDrawBuffers(activeOutputs);
     }
 
     return gl::NoError();
@@ -1905,14 +1909,22 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO(jmadill): implement this
                 break;
             case gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING:
-                // TODO(jmadill): implement this
+            {
+                gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
+                bindFramebuffer(GL_READ_FRAMEBUFFER, framebufferGL->getFramebufferID());
                 break;
+            }
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
-                // TODO(jmadill): implement this
-                updateMultiviewBaseViewLayerIndexUniform(
-                    state.getProgram(),
-                    state.getDrawFramebuffer()->getImplementation()->getState());
+                gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
+                bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
+
+                const gl::Program *program = state.getProgram();
+                updateMultiviewBaseViewLayerIndexUniform(program, framebufferGL->getState());
+
+                updatedMaskedDrawBuffers(context, program, framebufferGL);
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
@@ -1936,13 +1948,16 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 mProgramTexturesAndSamplersDirty = true;
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
+            {
                 mProgramTexturesAndSamplersDirty = true;
-                propagateNumViewsToVAO(state.getProgram(),
-                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
-                updateMultiviewBaseViewLayerIndexUniform(
-                    state.getProgram(),
-                    state.getDrawFramebuffer()->getImplementation()->getState());
+                gl::Framebuffer *framebuffer     = state.getDrawFramebuffer();
+                FramebufferGL *framebufferGL     = GetImplAs<FramebufferGL>(framebuffer);
+                const gl::Program *program       = state.getProgram();
+                propagateNumViewsToVAO(program, GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                updateMultiviewBaseViewLayerIndexUniform(program, framebufferGL->getState());
+                updatedMaskedDrawBuffers(context, program, framebufferGL);
                 break;
+            }
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
                 break;
@@ -2221,6 +2236,16 @@ void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
             default:
                 break;
         }
+    }
+}
+
+void StateManagerGL::updatedMaskedDrawBuffers(const gl::Context *context,
+                                              const gl::Program *program,
+                                              FramebufferGL *framebuffer)
+{
+    if (context->getExtensions().webglCompatibility && program != nullptr)
+    {
+        framebuffer->maskOutInactiveOutputDrawBuffers(program->getActiveOutputVariables());
     }
 }
 }
