@@ -111,6 +111,7 @@ class FramebufferState final : angle::NonCopyable
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
     DrawBufferMask mEnabledDrawBuffers;
+    DrawBufferTypeMask mDrawBufferTypeMask;
 
     GLint mDefaultWidth;
     GLint mDefaultHeight;
@@ -194,8 +195,12 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     GLenum getDrawBufferState(size_t drawBuffer) const;
     const std::vector<GLenum> &getDrawBufferStates() const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
+    void setDrawBufferTypeMask(size_t index);
+    void enableDrawBufferTypeDirtyMask(size_t index);
+    void disableDrawBufferTypeDirtyMask(size_t index);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
     GLenum getDrawbufferWriteType(size_t drawBuffer) const;
+    DrawBufferTypeMask getDrawBufferTypeMask() const;
     bool hasEnabledDrawBuffer() const;
 
     GLenum getReadBufferState() const;
@@ -382,6 +387,11 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
     // A cache of attached textures for quick validation of feedback loops.
     mutable Optional<std::set<const FramebufferAttachmentObject *>> mAttachedTextures;
+
+    std::map<GLenum, unsigned short> DrawBufferTypeMaskLookup{{GL_NONE, 0},
+                                                              {GL_INT, 1},
+                                                              {GL_UNSIGNED_INT, 2},
+                                                              {GL_FLOAT, 3}};
 };
 
 }  // namespace gl
