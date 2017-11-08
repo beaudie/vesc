@@ -179,6 +179,7 @@
             'libANGLE/LoggingAnnotator.h',
             'libANGLE/MemoryProgramCache.cpp',
             'libANGLE/MemoryProgramCache.h',
+            'libANGLE/PackedGLEnums.cpp',
             'libANGLE/PackedGLEnums.h',
             'libANGLE/PackedGLEnums_autogen.cpp',
             'libANGLE/PackedGLEnums_autogen.h',
