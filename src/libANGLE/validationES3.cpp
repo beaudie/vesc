@@ -1378,8 +1378,7 @@ bool ValidateCompressedTexImage3D(Context *context,
         return false;
     }
 
-    auto blockSizeOrErr =
-        formatInfo.computeCompressedImageSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
+    auto blockSizeOrErr = formatInfo.computeCompressedImageSize(gl::Extents(width, height, depth));
     if (blockSizeOrErr.isError())
     {
         context->handleError(InvalidValue());
@@ -2007,8 +2006,7 @@ bool ValidateCompressedTexSubImage3D(Context *context,
         return false;
     }
 
-    auto blockSizeOrErr =
-        formatInfo.computeCompressedImageSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
+    auto blockSizeOrErr = formatInfo.computeCompressedImageSize(gl::Extents(width, height, depth));
     if (blockSizeOrErr.isError())
     {
         context->handleError(blockSizeOrErr.getError());
