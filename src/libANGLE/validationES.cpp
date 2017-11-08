@@ -755,7 +755,7 @@ bool ValidTexLevelDestinationTarget(const ValidationContext *context, GLenum tar
     }
 }
 
-bool ValidFramebufferTarget(GLenum target)
+bool ValidFramebufferTarget(const ValidationContext *context, GLenum target)
 {
     static_assert(GL_DRAW_FRAMEBUFFER_ANGLE == GL_DRAW_FRAMEBUFFER &&
                       GL_READ_FRAMEBUFFER_ANGLE == GL_READ_FRAMEBUFFER,
@@ -766,7 +766,7 @@ bool ValidFramebufferTarget(GLenum target)
         case GL_FRAMEBUFFER:
             return true;
         case GL_READ_FRAMEBUFFER:
-            return true;
+            return !context->isWebGL1();
         case GL_DRAW_FRAMEBUFFER:
             return true;
         default:
@@ -1168,7 +1168,7 @@ Shader *GetValidShader(ValidationContext *context, GLuint id)
     return validShader;
 }
 
-bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
+bool ValidateAttachmentTarget(ValidationContext *context, GLenum attachment)
 {
     if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
     {
@@ -1266,13 +1266,13 @@ bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
     return true;
 }
 
-bool ValidateFramebufferRenderbufferParameters(gl::Context *context,
+bool ValidateFramebufferRenderbufferParameters(ValidationContext *context,
                                                GLenum target,
                                                GLenum attachment,
                                                GLenum renderbuffertarget,
                                                GLuint renderbuffer)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum());
         return false;
@@ -2971,13 +2971,13 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
     return ValidateDrawInstancedANGLE(context);
 }
 
-bool ValidateFramebufferTextureBase(Context *context,
+bool ValidateFramebufferTextureBase(ValidationContext *context,
                                     GLenum target,
                                     GLenum attachment,
                                     GLuint texture,
                                     GLint level)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;
@@ -3774,7 +3774,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
                                                      GLenum pname,
                                                      GLsizei *numParams)
 {
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum());
         return false;

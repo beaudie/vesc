@@ -786,6 +786,16 @@ Shader *ValidationContext::getShader(GLuint handle) const
     return mState.mShaderPrograms->getShader(handle);
 }
 
+Renderbuffer *ValidationContext::getRenderbuffer(GLuint handle) const
+{
+    return mState.mRenderbuffers->getRenderbuffer(handle);
+}
+
+Texture *ValidationContext::getTexture(GLuint handle) const
+{
+    return mState.mTextures->getTexture(handle);
+}
+
 bool ValidationContext::isTextureGenerated(GLuint texture) const
 {
     return mState.mTextures->isHandleGenerated(texture);

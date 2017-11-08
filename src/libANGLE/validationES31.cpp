@@ -656,7 +656,10 @@ bool ValidateGetMultisamplefv(Context *context, GLenum pname, GLuint index, GLfl
     return true;
 }
 
-bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pname, GLint param)
+bool ValidationFramebufferParameteri(ValidationContext *context,
+                                     GLenum target,
+                                     GLenum pname,
+                                     GLint param)
 {
     if (context->getClientVersion() < ES_3_1)
     {
@@ -664,7 +667,7 @@ bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pna
         return false;
     }
 
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         context->handleError(InvalidEnum() << "Invalid framebuffer target.");
         return false;
@@ -729,7 +732,7 @@ bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pna
     return true;
 }
 
-bool ValidationGetFramebufferParameteri(Context *context,
+bool ValidationGetFramebufferParameteri(ValidationContext *context,
                                         GLenum target,
                                         GLenum pname,
                                         GLint *params)
@@ -740,7 +743,7 @@ bool ValidationGetFramebufferParameteri(Context *context,
         return false;
     }
 
-    if (!ValidFramebufferTarget(target))
+    if (!ValidFramebufferTarget(context, target))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidFramebufferTarget);
         return false;

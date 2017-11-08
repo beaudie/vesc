@@ -627,7 +627,7 @@ bool ValidateDeleteRenderbuffers(Context *context, GLint n, const GLuint *render
 bool ValidateDeleteTextures(Context *context, GLint n, const GLuint *textures);
 bool ValidateDisable(Context *context, GLenum cap);
 bool ValidateEnable(Context *context, GLenum cap);
-bool ValidateFramebufferRenderbuffer(Context *context,
+bool ValidateFramebufferRenderbuffer(ValidationContext *context,
                                      GLenum target,
                                      GLenum attachment,
                                      GLenum renderbuffertarget,

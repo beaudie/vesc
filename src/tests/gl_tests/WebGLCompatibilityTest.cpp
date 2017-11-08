@@ -3487,14 +3487,14 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
     // Checks that the renderbuffers specified by mask have the correct color
     auto CheckColors = [](GLRenderbuffer *renderbuffers, int mask, GLColor color) {
         GLFramebuffer readFBO;
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, readFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, readFBO);
 
         for (int i = 0; i < 4; ++i)
         {
             if (mask & (1 << i))
             {
-                glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                          GL_RENDERBUFFER, renderbuffers[i]);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                          renderbuffers[i]);
                 EXPECT_PIXEL_COLOR_EQ(0, 0, color);
             }
         }
