@@ -260,6 +260,8 @@ FramebufferState::FramebufferState()
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
       mReadBufferState(GL_BACK),
+      mDrawBufferTypeMask(0),
+      mDrawBufferEnabledMask(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -275,6 +277,8 @@ FramebufferState::FramebufferState(const Caps &caps)
       mColorAttachments(caps.maxColorAttachments),
       mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDrawBufferTypeMask(0),
+      mDrawBufferEnabledMask(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -823,12 +827,56 @@ void Framebuffer::setDrawBuffers(size_t count, const GLenum *buffers)
     mDirtyBits.set(DIRTY_BIT_DRAW_BUFFERS);
 
     mState.mEnabledDrawBuffers.reset();
+    mState.mDrawBufferTypeMask    = 0;
+    mState.mDrawBufferEnabledMask = 0;
+
     for (size_t index = 0; index < count; ++index)
     {
+        setDrawBufferTypeMask(index);
+
         if (drawStates[index] != GL_NONE && mState.mColorAttachments[index].isAttached())
         {
             mState.mEnabledDrawBuffers.set(index);
+            setDrawBufferEnabledMask(index, true);
         }
+        else
+        {
+            setDrawBufferEnabledMask(index, false);
+        }
+    }
+}
+
+void Framebuffer::setDrawBufferTypeMask(size_t index)
+{
+    uint32_t mask = 0;
+
+    switch (getDrawbufferWriteType(index))
+    {
+        case GL_INT:
+            mask = 1;
+            break;
+        case GL_UNSIGNED_INT:
+            mask = 2;
+            break;
+        case GL_FLOAT:
+            mask = 3;
+            break;
+        default:
+            mask = 0;
+    }
+
+    mState.mDrawBufferTypeMask |= mask << ((15 - index) * 2);
+}
+
+void Framebuffer::setDrawBufferEnabledMask(size_t index, bool enable)
+{
+    if (enable)
+    {
+        mState.mDrawBufferEnabledMask |= (3 << ((15 - index) * 2));
+    }
+    else
+    {
+        mState.mDrawBufferEnabledMask &= (~(0x3 << ((15 - index) * 2)));
     }
 }
 
@@ -855,6 +903,16 @@ GLenum Framebuffer::getDrawbufferWriteType(size_t drawBuffer) const
         default:
             return GL_FLOAT;
     }
+}
+
+uint32_t Framebuffer::getDrawBufferTypeMask() const
+{
+    return mState.mDrawBufferTypeMask;
+}
+
+uint32_t Framebuffer::getDrawBufferEnabledMask() const
+{
+    return mState.mDrawBufferEnabledMask;
 }
 
 bool Framebuffer::hasEnabledDrawBuffer() const
@@ -1689,6 +1747,8 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             // formsRenderingFeedbackLoopWith
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
             mState.mEnabledDrawBuffers.set(colorIndex, enabled);
+            setDrawBufferTypeMask(colorIndex);
+            setDrawBufferEnabledMask(colorIndex, enabled);
         }
         break;
     }

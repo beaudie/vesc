@@ -520,21 +520,27 @@ bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
     const Program *program         = context->getGLState().getProgram();
     const Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
 
-    const auto &programOutputTypes = program->getOutputVariableTypes();
-    for (size_t drawBufferIdx = 0; drawBufferIdx < programOutputTypes.size(); drawBufferIdx++)
-    {
-        GLenum outputType = programOutputTypes[drawBufferIdx];
-        GLenum inputType  = framebuffer->getDrawbufferWriteType(drawBufferIdx);
-        if (outputType != GL_NONE && inputType != GL_NONE && inputType != outputType)
-        {
-            context->handleError(InvalidOperation() << "Fragment shader output type does not "
-                                                       "match the bound framebuffer attachment "
-                                                       "type.");
-            return false;
-        }
-    }
+    // For performance reasons, validation is done using bitmasks. Each output/input type
+    // is represented by two bits, with the 0 index in the leftmost position.
+    uint32_t p = program->getOutputTypeMask();
+    uint32_t f = framebuffer->getDrawBufferTypeMask();
 
-    return true;
+    // It is possible that not all input or output variables are enabled, so
+    // AND the comparison's type bitmask with enabled variable bitmasks to eliminate these
+    uint32_t p_enabled = program->getOutputEnabledMask();
+    uint32_t f_enabled = framebuffer->getDrawBufferEnabledMask();
+
+    if (((p & f_enabled)) == ((f & p_enabled) & f_enabled))
+    {
+        return true;
+    }
+    else
+    {
+        context->handleError(InvalidOperation() << "Fragment shader output type does not "
+                                                   "match the bound framebuffer attachment "
+                                                   "type.");
+        return false;
+    }
 }
 
 bool ValidateVertexShaderAttributeTypeMatch(ValidationContext *context)
