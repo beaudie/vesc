@@ -111,6 +111,8 @@ class FramebufferState final : angle::NonCopyable
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
     DrawBufferMask mEnabledDrawBuffers;
+    uint32_t mDrawBufferTypeMask;
+    uint32_t mDrawBufferEnabledMask;
 
     GLint mDefaultWidth;
     GLint mDefaultHeight;
@@ -194,8 +196,12 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     GLenum getDrawBufferState(size_t drawBuffer) const;
     const std::vector<GLenum> &getDrawBufferStates() const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
+    void setDrawBufferTypeMask(size_t index);
+    void setDrawBufferEnabledMask(size_t index, bool enable);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
     GLenum getDrawbufferWriteType(size_t drawBuffer) const;
+    uint32_t getDrawBufferTypeMask() const;
+    uint32_t getDrawBufferEnabledMask() const;
     bool hasEnabledDrawBuffer() const;
 
     GLenum getReadBufferState() const;
