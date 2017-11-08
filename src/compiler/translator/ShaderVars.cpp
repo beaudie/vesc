@@ -30,17 +30,18 @@ bool InterpolationTypesMatch(InterpolationType a, InterpolationType b)
     return (GetNonAuxiliaryInterpolationType(a) == GetNonAuxiliaryInterpolationType(b));
 }
 
-ShaderVariable::ShaderVariable() : type(0), precision(0), arraySize(0), staticUse(false)
+ShaderVariable::ShaderVariable()
+    : type(0), precision(0), arraySize(0), staticUse(false), mIsBuiltIn(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn)
-    : type(typeIn), precision(0), arraySize(0), staticUse(false)
+    : type(typeIn), precision(0), arraySize(0), staticUse(false), mIsBuiltIn(false)
 {
 }
 
 ShaderVariable::ShaderVariable(GLenum typeIn, unsigned int arraySizeIn)
-    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false)
+    : type(typeIn), precision(0), arraySize(arraySizeIn), staticUse(false), mIsBuiltIn(false)
 {
     ASSERT(arraySizeIn != 0);
 }
@@ -57,7 +58,8 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       arraySize(other.arraySize),
       staticUse(other.staticUse),
       fields(other.fields),
-      structName(other.structName)
+      structName(other.structName),
+      mIsBuiltIn(other.mIsBuiltIn)
 {
 }
 
@@ -71,6 +73,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     staticUse  = other.staticUse;
     fields     = other.fields;
     structName = other.structName;
+    mIsBuiltIn = other.mIsBuiltIn;
     return *this;
 }
 
@@ -79,7 +82,7 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
     if (type != other.type || precision != other.precision || name != other.name ||
         mappedName != other.mappedName || arraySize != other.arraySize ||
         staticUse != other.staticUse || fields.size() != other.fields.size() ||
-        structName != other.structName)
+        structName != other.structName || mIsBuiltIn != other.mIsBuiltIn)
     {
         return false;
     }
@@ -171,6 +174,7 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
         return false;
     if (matchName && name != other.name)
         return false;
+    ASSERT(mIsBuiltIn == other.mIsBuiltIn);
     ASSERT(!matchName || mappedName == other.mappedName);
     if (arraySize != other.arraySize)
         return false;

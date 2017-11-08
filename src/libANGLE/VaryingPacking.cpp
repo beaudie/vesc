@@ -147,7 +147,7 @@ bool VaryingPacking::packVarying(const PackedVarying &packedVarying)
                     registerInfo.varyingRowIndex   = 0;
                     // Do not record register info for builtins.
                     // TODO(jmadill): Clean this up.
-                    if (!packedVarying.varying->isBuiltIn())
+                    if (!packedVarying.varying->mIsBuiltIn)
                     {
                         mRegisterList.push_back(registerInfo);
                     }
@@ -213,7 +213,7 @@ void VaryingPacking::insert(unsigned int registerRow,
             registerInfo.varyingArrayIndex = arrayElement;
             // Do not record register info for builtins.
             // TODO(jmadill): Clean this up.
-            if (!packedVarying.varying->isBuiltIn())
+            if (!packedVarying.varying->mIsBuiltIn)
             {
                 mRegisterList.push_back(registerInfo);
             }

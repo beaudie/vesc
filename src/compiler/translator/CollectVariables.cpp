@@ -252,6 +252,7 @@ void CollectVariablesTraverser::setBuiltInInfoFromSymbolTable(const char *name,
     ASSERT(!type.isArrayOfArrays());
     info->arraySize = type.isArray() ? type.getOutermostArraySize() : 0;
     info->precision = GLVariablePrecision(type);
+    info->mIsBuiltIn = true;
 }
 
 void CollectVariablesTraverser::recordBuiltInVaryingUsed(const char *name,
@@ -357,6 +358,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             info.type          = GL_NONE;
             info.precision     = GL_NONE;
             info.staticUse     = true;
+            info.mIsBuiltIn    = true;
 
             ShaderVariable nearInfo(GL_FLOAT);
             const char kNearName[] = "near";
@@ -364,6 +366,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             nearInfo.mappedName    = kNearName;
             nearInfo.precision     = GL_HIGH_FLOAT;
             nearInfo.staticUse     = true;
+            nearInfo.mIsBuiltIn    = true;
 
             ShaderVariable farInfo(GL_FLOAT);
             const char kFarName[] = "far";
@@ -371,6 +374,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             farInfo.mappedName    = kFarName;
             farInfo.precision     = GL_HIGH_FLOAT;
             farInfo.staticUse     = true;
+            nearInfo.mIsBuiltIn   = true;
 
             ShaderVariable diffInfo(GL_FLOAT);
             const char kDiffName[] = "diff";
@@ -378,6 +382,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             diffInfo.mappedName    = kDiffName;
             diffInfo.precision     = GL_HIGH_FLOAT;
             diffInfo.staticUse     = true;
+            nearInfo.mIsBuiltIn    = true;
 
             info.fields.push_back(nearInfo);
             info.fields.push_back(farInfo);
@@ -445,6 +450,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                     info.precision     = GL_HIGH_INT;  // Defined by spec.
                     info.staticUse     = true;
                     info.location      = -1;
+                    info.mIsBuiltIn    = true;
                     mAttribs->push_back(info);
                     mInstanceIDAdded = true;
                 }

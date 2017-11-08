@@ -103,7 +103,7 @@ void InsertInitCode(TIntermSequence *mainBody,
         }
 
         TIntermTyped *initializedSymbol = nullptr;
-        if (var.isBuiltIn())
+        if (var.mIsBuiltIn)
         {
             initializedSymbol = ReferenceBuiltInVariable(name, symbolTable, shaderVersion);
             if (initializedSymbol->getQualifier() == EvqFragData &&

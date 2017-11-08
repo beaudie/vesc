@@ -1871,7 +1871,7 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
         bool matched = false;
 
         // Built-in varyings obey special rules
-        if (output.isBuiltIn())
+        if (output.mIsBuiltIn)
         {
             continue;
         }
@@ -1880,7 +1880,7 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
         {
             if (output.name == input.name)
             {
-                ASSERT(!input.isBuiltIn());
+                ASSERT(!input.mIsBuiltIn);
                 if (!linkValidateVaryings(infoLog, output.name, input, output,
                                           vertexShader->getShaderVersion(context)))
                 {
@@ -2463,7 +2463,7 @@ bool Program::linkValidateBuiltInVaryings(const Context *context, InfoLog &infoL
 
     for (const sh::Varying &varying : vertexVaryings)
     {
-        if (!varying.isBuiltIn())
+        if (!varying.mIsBuiltIn)
         {
             continue;
         }
@@ -2479,7 +2479,7 @@ bool Program::linkValidateBuiltInVaryings(const Context *context, InfoLog &infoL
 
     for (const sh::Varying &varying : fragmentVaryings)
     {
-        if (!varying.isBuiltIn())
+        if (!varying.mIsBuiltIn)
         {
             continue;
         }
@@ -2685,7 +2685,7 @@ std::vector<PackedVarying> Program::getPackedVaryings(
         const sh::Varying *output = ref.second.fragment;
 
         // Only pack varyings that have a matched input or output, plus special builtins.
-        if ((input && output) || (output && output->isBuiltIn()))
+        if ((input && output) || (output && output->mIsBuiltIn))
         {
             // Will get the vertex shader interpolation by default.
             auto interpolation = ref.second.get()->interpolation;
@@ -2763,7 +2763,7 @@ void Program::linkOutputVariables(const Context *context)
     // Gather output variable types
     for (const auto &outputVariable : fragmentShader->getActiveOutputVariables(context))
     {
-        if (outputVariable.isBuiltIn() && outputVariable.name != "gl_FragColor" &&
+        if (outputVariable.mIsBuiltIn && outputVariable.name != "gl_FragColor" &&
             outputVariable.name != "gl_FragData")
         {
             continue;
@@ -2807,7 +2807,7 @@ void Program::linkOutputVariables(const Context *context)
         }
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
-        if (outputVariable.isBuiltIn())
+        if (outputVariable.mIsBuiltIn)
             continue;
 
         // Since multiple output locations must be specified, use 0 for non-specified locations.

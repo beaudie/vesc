@@ -90,7 +90,7 @@ struct ShaderVariable
                               const ShaderVariable **leafVar,
                               std::string* originalFullName) const;
 
-    bool isBuiltIn() const { return name.compare(0, 3, "gl_") == 0; }
+    // bool isBuiltIn() const { return name.compare(0, 3, "gl_") == 0; }
 
     GLenum type;
     GLenum precision;
@@ -100,6 +100,7 @@ struct ShaderVariable
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
+    bool mIsBuiltIn;
 
   protected:
     bool isSameVariableAtLinkTime(const ShaderVariable &other,

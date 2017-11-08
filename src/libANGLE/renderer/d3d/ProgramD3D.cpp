@@ -2004,7 +2004,7 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
                                    D3DUniformMap *uniformMap)
 {
     // Samplers get their registers assigned in assignAllSamplerRegisters.
-    if (uniform.isBuiltIn() || gl::IsSamplerType(uniform.type))
+    if (uniform.mIsBuiltIn || gl::IsSamplerType(uniform.type))
     {
         defineUniform(shader->getType(), uniform, uniform.name, nullptr, uniformMap);
         return;
@@ -2564,7 +2564,7 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
                 const auto &varying   = *registerInfo.packedVarying->varying;
                 GLenum transposedType = gl::TransposeMatrixType(varying.type);
                 int componentCount = gl::VariableColumnCount(transposedType);
-                ASSERT(!varying.isBuiltIn());
+                ASSERT(!varying.mIsBuiltIn);
 
                 // Transform feedback for varying structs is underspecified.
                 // See Khronos bug 9856.

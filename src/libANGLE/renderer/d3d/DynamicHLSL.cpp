@@ -785,7 +785,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
     {
         const auto &packedVarying = *registerInfo.packedVarying;
         const auto &varying = *packedVarying.varying;
-        ASSERT(!varying.isBuiltIn() && !varying.isStruct());
+        ASSERT(!varying.mIsBuiltIn && !varying.isStruct());
 
         // Don't reference VS-only transform feedback varyings in the PS. Note that we're relying on
         // that the staticUse flag is set according to usage in the fragment shader.

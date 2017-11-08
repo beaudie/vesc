@@ -201,7 +201,7 @@ bool UniformLinker::indexUniforms(InfoLog &infoLog,
     {
         const LinkedUniform &uniform = mUniforms[uniformIndex];
 
-        if (uniform.isBuiltIn() || IsAtomicCounterType(uniform.type))
+        if (uniform.mIsBuiltIn || IsAtomicCounterType(uniform.type))
         {
             continue;
         }
@@ -274,7 +274,7 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
 {
     for (const LinkedUniform &uniform : mUniforms)
     {
-        if (uniform.isBuiltIn())
+        if (uniform.mIsBuiltIn)
         {
             continue;
         }

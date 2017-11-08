@@ -1040,6 +1040,7 @@ void TCompiler::initializeGLPosition(TIntermBlock *root)
     InitVariableList list;
     sh::ShaderVariable var(GL_FLOAT_VEC4);
     var.name = "gl_Position";
+    var.mIsBuiltIn = true;
     list.push_back(var);
     InitializeVariables(root, list, symbolTable, shaderVersion, extensionBehavior);
 }
