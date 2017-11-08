@@ -122,6 +122,8 @@ class ValidationContext : angle::NonCopyable
 
     Program *getProgram(GLuint handle) const;
     Shader *getShader(GLuint handle) const;
+    Renderbuffer *getRenderbuffer(GLuint handle) const;
+    Texture *getTexture(GLuint handle) const;
 
     bool isTextureGenerated(GLuint texture) const;
     bool isBufferGenerated(GLuint buffer) const;

@@ -36,7 +36,7 @@ bool ValidTextureExternalTarget(const ValidationContext *context, GLenum target)
 bool ValidTexture2DDestinationTarget(const ValidationContext *context, GLenum target);
 bool ValidTexture3DDestinationTarget(const ValidationContext *context, GLenum target);
 bool ValidTexLevelDestinationTarget(const ValidationContext *context, GLenum target);
-bool ValidFramebufferTarget(GLenum target);
+bool ValidFramebufferTarget(const ValidationContext *context, GLenum target);
 bool ValidBufferTarget(const ValidationContext *context, GLenum target);
 bool ValidBufferParameter(const ValidationContext *context, GLenum pname, GLsizei *numParams);
 bool ValidMipLevel(const ValidationContext *context, GLenum target, GLint level);
@@ -89,14 +89,14 @@ Program *GetValidProgram(ValidationContext *context, GLuint id);
 // Errors INVALID_VALUE otherwise and returns NULL
 Shader *GetValidShader(ValidationContext *context, GLuint id);
 
-bool ValidateAttachmentTarget(Context *context, GLenum attachment);
+bool ValidateAttachmentTarget(ValidationContext *context, GLenum attachment);
 bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
                                                GLenum target,
                                                GLsizei samples,
                                                GLenum internalformat,
                                                GLsizei width,
                                                GLsizei height);
-bool ValidateFramebufferRenderbufferParameters(Context *context,
+bool ValidateFramebufferRenderbufferParameters(ValidationContext *context,
                                                GLenum target,
                                                GLenum attachment,
                                                GLenum renderbuffertarget,
@@ -297,7 +297,7 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         const void *indices,
                                         GLsizei primcount);
 
-bool ValidateFramebufferTextureBase(Context *context,
+bool ValidateFramebufferTextureBase(ValidationContext *context,
                                     GLenum target,
                                     GLenum attachment,
                                     GLuint texture,

@@ -48,8 +48,11 @@ bool ValidateDrawIndirectBase(Context *context, GLenum mode, const void *indirec
 bool ValidateDrawArraysIndirect(Context *context, GLenum mode, const void *indirect);
 bool ValidateDrawElementsIndirect(Context *context, GLenum mode, GLenum type, const void *indirect);
 
-bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pname, GLint param);
-bool ValidationGetFramebufferParameteri(Context *context,
+bool ValidationFramebufferParameteri(ValidationContext *context,
+                                     GLenum target,
+                                     GLenum pname,
+                                     GLint param);
+bool ValidationGetFramebufferParameteri(ValidationContext *context,
                                         GLenum target,
                                         GLenum pname,
                                         GLint *params);
