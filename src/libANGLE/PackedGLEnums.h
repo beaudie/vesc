@@ -131,4 +131,12 @@ using PackedEnumBitSet = BitSetT<EnumSize<E>(), uint32_t, E>;
 
 }  // namespace angle
 
+namespace gl
+{
+
+TextureType TextureTargetToType(TextureTarget target);
+TextureTarget NonCubeTextureTypeToTarget(TextureType type);
+
+}  // namespace gl
+
 #endif  // LIBANGLE_PACKEDGLENUMS_H_
