@@ -119,11 +119,12 @@ void GL_APIENTRY BindTexture(GLenum target, GLuint texture)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::BindTexture>(target, texture);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::BindTexture>(targetPacked, texture);
 
-        if (context->skipValidation() || ValidateBindTexture(context, target, texture))
+        if (context->skipValidation() || ValidateBindTexture(context, targetPacked, texture))
         {
-            context->bindTexture(target, texture);
+            context->bindTexture(targetPacked, texture);
         }
     }
 }
@@ -394,15 +395,16 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
         context->gatherParams<EntryPoint::CompressedTexImage2D>(
-            target, level, internalformat, width, height, border, imageSize, data);
+            targetPacked, level, internalformat, width, height, border, imageSize, data);
 
         if (context->skipValidation() ||
-            ValidateCompressedTexImage2D(context, target, level, internalformat, width, height,
-                                         border, imageSize, data))
+            ValidateCompressedTexImage2D(context, targetPacked, level, internalformat, width,
+                                         height, border, imageSize, data))
         {
-            context->compressedTexImage2D(target, level, internalformat, width, height, border,
-                                          imageSize, data);
+            context->compressedTexImage2D(targetPacked, level, internalformat, width, height,
+                                          border, imageSize, data);
         }
     }
 }
@@ -426,15 +428,16 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
         context->gatherParams<EntryPoint::CompressedTexSubImage2D>(
-            target, level, xoffset, yoffset, width, height, format, imageSize, data);
+            targetPacked, level, xoffset, yoffset, width, height, format, imageSize, data);
 
         if (context->skipValidation() ||
-            ValidateCompressedTexSubImage2D(context, target, level, xoffset, yoffset, width, height,
-                                            format, imageSize, data))
+            ValidateCompressedTexSubImage2D(context, targetPacked, level, xoffset, yoffset, width,
+                                            height, format, imageSize, data))
         {
-            context->compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format,
-                                             imageSize, data);
+            context->compressedTexSubImage2D(targetPacked, level, xoffset, yoffset, width, height,
+                                             format, imageSize, data);
         }
     }
 }
@@ -456,14 +459,16 @@ void GL_APIENTRY CopyTexImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::CopyTexImage2D>(target, level, internalformat, x, y,
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::CopyTexImage2D>(targetPacked, level, internalformat, x, y,
                                                           width, height, border);
 
         if (context->skipValidation() ||
-            ValidateCopyTexImage2D(context, target, level, internalformat, x, y, width, height,
-                                   border))
+            ValidateCopyTexImage2D(context, targetPacked, level, internalformat, x, y, width,
+                                   height, border))
         {
-            context->copyTexImage2D(target, level, internalformat, x, y, width, height, border);
+            context->copyTexImage2D(targetPacked, level, internalformat, x, y, width, height,
+                                    border);
         }
     }
 }
@@ -485,13 +490,15 @@ void GL_APIENTRY CopyTexSubImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::CopyTexSubImage2D>(target, level, xoffset, yoffset, x, y,
-                                                             width, height);
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::CopyTexSubImage2D>(targetPacked, level, xoffset, yoffset,
+                                                             x, y, width, height);
 
-        if (context->skipValidation() || ValidateCopyTexSubImage2D(context, target, level, xoffset,
-                                                                   yoffset, x, y, width, height))
+        if (context->skipValidation() ||
+            ValidateCopyTexSubImage2D(context, targetPacked, level, xoffset, yoffset, x, y, width,
+                                      height))
         {
-            context->copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+            context->copyTexSubImage2D(targetPacked, level, xoffset, yoffset, x, y, width, height);
         }
     }
 }
@@ -879,13 +886,15 @@ void GL_APIENTRY FramebufferTexture2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::FramebufferTexture2D>(target, attachment, textarget,
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::FramebufferTexture2D>(targetPacked, attachment, textarget,
                                                                 texture, level);
 
         if (context->skipValidation() ||
-            ValidateFramebufferTexture2D(context, target, attachment, textarget, texture, level))
+            ValidateFramebufferTexture2D(context, targetPacked, attachment, textarget, texture,
+                                         level))
         {
-            context->framebufferTexture2D(target, attachment, textarget, texture, level);
+            context->framebufferTexture2D(targetPacked, attachment, textarget, texture, level);
         }
     }
 }
@@ -929,11 +938,12 @@ void GL_APIENTRY GenerateMipmap(GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GenerateMipmap>(target);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::GenerateMipmap>(targetPacked);
 
-        if (context->skipValidation() || ValidateGenerateMipmap(context, target))
+        if (context->skipValidation() || ValidateGenerateMipmap(context, targetPacked))
         {
-            context->generateMipmap(target);
+            context->generateMipmap(targetPacked);
         }
     }
 }
@@ -1355,11 +1365,13 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetTexParameterfv>(target, pname, params);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::GetTexParameterfv>(targetPacked, pname, params);
 
-        if (context->skipValidation() || ValidateGetTexParameterfv(context, target, pname, params))
+        if (context->skipValidation() ||
+            ValidateGetTexParameterfv(context, targetPacked, pname, params))
         {
-            context->getTexParameterfv(target, pname, params);
+            context->getTexParameterfv(targetPacked, pname, params);
         }
     }
 }
@@ -1372,11 +1384,13 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetTexParameteriv>(target, pname, params);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::GetTexParameteriv>(targetPacked, pname, params);
 
-        if (context->skipValidation() || ValidateGetTexParameteriv(context, target, pname, params))
+        if (context->skipValidation() ||
+            ValidateGetTexParameteriv(context, targetPacked, pname, params))
         {
-            context->getTexParameteriv(target, pname, params);
+            context->getTexParameteriv(targetPacked, pname, params);
         }
     }
 }
@@ -1957,15 +1971,16 @@ void GL_APIENTRY TexImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexImage2D>(target, level, internalformat, width, height,
-                                                      border, format, type, pixels);
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::TexImage2D>(targetPacked, level, internalformat, width,
+                                                      height, border, format, type, pixels);
 
         if (context->skipValidation() ||
-            ValidateTexImage2D(context, target, level, internalformat, width, height, border,
+            ValidateTexImage2D(context, targetPacked, level, internalformat, width, height, border,
                                format, type, pixels))
         {
-            context->texImage2D(target, level, internalformat, width, height, border, format, type,
-                                pixels);
+            context->texImage2D(targetPacked, level, internalformat, width, height, border, format,
+                                type, pixels);
         }
     }
 }
@@ -1977,11 +1992,12 @@ void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexParameterf>(target, pname, param);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexParameterf>(targetPacked, pname, param);
 
-        if (context->skipValidation() || ValidateTexParameterf(context, target, pname, param))
+        if (context->skipValidation() || ValidateTexParameterf(context, targetPacked, pname, param))
         {
-            context->texParameterf(target, pname, param);
+            context->texParameterf(targetPacked, pname, param);
         }
     }
 }
@@ -1994,11 +2010,13 @@ void GL_APIENTRY TexParameterfv(GLenum target, GLenum pname, const GLfloat *para
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexParameterfv>(target, pname, params);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexParameterfv>(targetPacked, pname, params);
 
-        if (context->skipValidation() || ValidateTexParameterfv(context, target, pname, params))
+        if (context->skipValidation() ||
+            ValidateTexParameterfv(context, targetPacked, pname, params))
         {
-            context->texParameterfv(target, pname, params);
+            context->texParameterfv(targetPacked, pname, params);
         }
     }
 }
@@ -2010,11 +2028,12 @@ void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexParameteri>(target, pname, param);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexParameteri>(targetPacked, pname, param);
 
-        if (context->skipValidation() || ValidateTexParameteri(context, target, pname, param))
+        if (context->skipValidation() || ValidateTexParameteri(context, targetPacked, pname, param))
         {
-            context->texParameteri(target, pname, param);
+            context->texParameteri(targetPacked, pname, param);
         }
     }
 }
@@ -2027,11 +2046,13 @@ void GL_APIENTRY TexParameteriv(GLenum target, GLenum pname, const GLint *params
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexParameteriv>(target, pname, params);
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexParameteriv>(targetPacked, pname, params);
 
-        if (context->skipValidation() || ValidateTexParameteriv(context, target, pname, params))
+        if (context->skipValidation() ||
+            ValidateTexParameteriv(context, targetPacked, pname, params))
         {
-            context->texParameteriv(target, pname, params);
+            context->texParameteriv(targetPacked, pname, params);
         }
     }
 }
@@ -2055,15 +2076,16 @@ void GL_APIENTRY TexSubImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexSubImage2D>(target, level, xoffset, yoffset, width,
-                                                         height, format, type, pixels);
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::TexSubImage2D>(targetPacked, level, xoffset, yoffset,
+                                                         width, height, format, type, pixels);
 
         if (context->skipValidation() ||
-            ValidateTexSubImage2D(context, target, level, xoffset, yoffset, width, height, format,
-                                  type, pixels))
+            ValidateTexSubImage2D(context, targetPacked, level, xoffset, yoffset, width, height,
+                                  format, type, pixels))
         {
-            context->texSubImage2D(target, level, xoffset, yoffset, width, height, format, type,
-                                   pixels);
+            context->texSubImage2D(targetPacked, level, xoffset, yoffset, width, height, format,
+                                   type, pixels);
         }
     }
 }
