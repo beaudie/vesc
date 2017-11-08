@@ -176,6 +176,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     unsigned int getActiveSampler() const;
     void setSamplerTexture(const Context *context, GLenum type, Texture *texture);
     Texture *getTargetTexture(GLenum target) const;
+    Texture *getTargetTexture(TextureType type) const;
     Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
     GLuint getSamplerTextureId(unsigned int sampler, GLenum type) const;
     void detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture);
