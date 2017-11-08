@@ -743,35 +743,35 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   247,   247,   248,   251,   261,   264,   269,   274,   279,
-     284,   292,   298,   301,   304,   307,   310,   313,   319,   326,
-     332,   336,   344,   347,   353,   357,   364,   369,   376,   384,
-     387,   390,   396,   399,   402,   405,   412,   413,   414,   415,
-     423,   424,   427,   430,   437,   438,   441,   447,   448,   452,
-     459,   460,   463,   466,   469,   475,   476,   479,   485,   486,
-     493,   494,   501,   502,   509,   510,   516,   517,   523,   524,
-     530,   531,   537,   538,   544,   545,   546,   547,   551,   552,
-     553,   557,   561,   565,   569,   576,   579,   585,   592,   599,
-     602,   605,   609,   613,   617,   621,   625,   632,   639,   642,
-     649,   657,   674,   684,   687,   693,   697,   701,   705,   712,
-     719,   722,   726,   730,   735,   742,   746,   750,   754,   759,
-     766,   770,   776,   779,   785,   789,   796,   802,   806,   810,
-     813,   816,   825,   830,   834,   837,   840,   843,   846,   850,
-     853,   857,   860,   863,   866,   869,   872,   879,   886,   889,
-     892,   898,   905,   908,   914,   917,   920,   923,   929,   932,
-     939,   943,   952,   955,   958,   961,   964,   967,   971,   975,
-     979,   983,   987,   991,   995,   999,  1003,  1007,  1011,  1015,
-    1019,  1023,  1027,  1031,  1035,  1039,  1043,  1047,  1051,  1057,
-    1060,  1063,  1066,  1069,  1072,  1075,  1078,  1081,  1084,  1087,
-    1090,  1093,  1096,  1099,  1102,  1105,  1108,  1111,  1118,  1124,
-    1130,  1133,  1136,  1139,  1142,  1145,  1148,  1151,  1154,  1157,
-    1160,  1163,  1166,  1169,  1172,  1180,  1180,  1183,  1183,  1189,
-    1192,  1198,  1201,  1208,  1212,  1218,  1221,  1227,  1231,  1235,
-    1236,  1242,  1243,  1244,  1245,  1246,  1247,  1248,  1252,  1256,
-    1256,  1256,  1263,  1264,  1268,  1268,  1269,  1269,  1274,  1278,
-    1285,  1289,  1296,  1297,  1301,  1307,  1311,  1320,  1320,  1327,
-    1330,  1336,  1340,  1346,  1346,  1351,  1351,  1355,  1355,  1363,
-    1366,  1372,  1375,  1381,  1385,  1392,  1395,  1398,  1401,  1404,
-    1412,  1418,  1424,  1427,  1433,  1433
+     284,   293,   299,   302,   305,   308,   311,   314,   320,   327,
+     333,   337,   345,   348,   354,   358,   365,   370,   377,   385,
+     388,   391,   397,   400,   403,   406,   413,   414,   415,   416,
+     424,   425,   428,   431,   438,   439,   442,   448,   449,   453,
+     460,   461,   464,   467,   470,   476,   477,   480,   486,   487,
+     494,   495,   502,   503,   510,   511,   517,   518,   524,   525,
+     531,   532,   538,   539,   545,   546,   547,   548,   552,   553,
+     554,   558,   562,   566,   570,   577,   580,   586,   593,   600,
+     603,   606,   610,   614,   618,   622,   626,   633,   640,   643,
+     650,   658,   675,   685,   688,   694,   698,   702,   706,   713,
+     720,   723,   727,   731,   736,   743,   747,   751,   755,   760,
+     767,   771,   777,   780,   786,   790,   797,   803,   807,   811,
+     814,   817,   826,   831,   835,   838,   841,   844,   847,   851,
+     854,   858,   861,   864,   867,   870,   873,   880,   887,   890,
+     893,   899,   906,   909,   915,   918,   921,   924,   930,   933,
+     940,   944,   953,   956,   959,   962,   965,   968,   972,   976,
+     980,   984,   988,   992,   996,  1000,  1004,  1008,  1012,  1016,
+    1020,  1024,  1028,  1032,  1036,  1040,  1044,  1048,  1052,  1059,
+    1062,  1065,  1068,  1071,  1074,  1077,  1080,  1083,  1086,  1089,
+    1092,  1095,  1098,  1101,  1104,  1107,  1110,  1113,  1122,  1129,
+    1136,  1139,  1142,  1145,  1148,  1151,  1154,  1157,  1160,  1163,
+    1166,  1169,  1172,  1175,  1178,  1186,  1186,  1189,  1189,  1195,
+    1198,  1204,  1207,  1214,  1218,  1224,  1227,  1233,  1237,  1241,
+    1242,  1248,  1249,  1250,  1251,  1252,  1253,  1254,  1258,  1262,
+    1262,  1262,  1269,  1270,  1274,  1274,  1275,  1275,  1280,  1284,
+    1291,  1295,  1302,  1303,  1307,  1313,  1317,  1326,  1326,  1333,
+    1336,  1342,  1346,  1352,  1352,  1357,  1357,  1361,  1361,  1369,
+    1372,  1378,  1381,  1387,  1391,  1398,  1401,  1404,  1407,  1410,
+    1418,  1424,  1430,  1433,  1439,  1439
 };
 #endif
 
@@ -2527,7 +2527,8 @@ yyreduce:
   case 10:
 
     {
-        if (!context->isExtensionEnabled(TExtension::EXT_YUV_target)) {
+        if (!context->checkCanUseExtension((yylsp[0]), TExtension::EXT_YUV_target))
+        {
            context->error((yylsp[0]), "unsupported value", (yyvsp[0].lex).string->c_str());
         }
         TConstantUnion *unionArray = new TConstantUnion[1];
@@ -4019,7 +4020,8 @@ yyreduce:
   case 188:
 
     {
-        if (!context->isExtensionEnabled(TExtension::EXT_YUV_target)) {
+        if (!context->checkCanUseExtension((yylsp[0]), TExtension::EXT_YUV_target))
+        {
             context->error((yylsp[0]), "unsupported type", "yuvCscStandardEXT");
         }
         (yyval.interm.typeSpecifierNonArray).initialize(EbtYuvCscStandardEXT, (yylsp[0]));
@@ -4174,8 +4176,10 @@ yyreduce:
   case 207:
 
     {
-        if (!context->supportsExtension(TExtension::OES_EGL_image_external) &&
-            !context->supportsExtension(TExtension::NV_EGL_stream_consumer_external)) {
+        constexpr std::array<TExtension, 2u> extensions{ { TExtension::OES_EGL_image_external,
+                                                           TExtension::NV_EGL_stream_consumer_external } };
+        if (!context->checkCanUseOneOfExtensions((yylsp[0]), extensions))
+        {
             context->error((yylsp[0]), "unsupported type", "samplerExternalOES");
         }
         (yyval.interm.typeSpecifierNonArray).initialize(EbtSamplerExternalOES, (yylsp[0]));
@@ -4186,7 +4190,8 @@ yyreduce:
   case 208:
 
     {
-        if (!context->isExtensionEnabled(TExtension::EXT_YUV_target)) {
+        if (!context->checkCanUseExtension((yylsp[0]), TExtension::EXT_YUV_target))
+        {
             context->error((yylsp[0]), "unsupported type", "__samplerExternal2DY2YEXT");
         }
         (yyval.interm.typeSpecifierNonArray).initialize(EbtSamplerExternal2DY2YEXT, (yylsp[0]));
@@ -4197,7 +4202,8 @@ yyreduce:
   case 209:
 
     {
-        if (!context->supportsExtension(TExtension::ARB_texture_rectangle)) {
+        if (!context->checkCanUseExtension((yylsp[0]), TExtension::ARB_texture_rectangle))
+        {
             context->error((yylsp[0]), "unsupported type", "sampler2DRect");
         }
         (yyval.interm.typeSpecifierNonArray).initialize(EbtSampler2DRect, (yylsp[0]));
