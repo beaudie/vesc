@@ -815,6 +815,11 @@ Texture *State::getTargetTexture(GLenum target) const
     return getSamplerTexture(static_cast<unsigned int>(mActiveSampler), target);
 }
 
+Texture *State::getTargetTexture(TextureType type) const
+{
+    return getTargetTexture(ToGLenum(type));
+}
+
 Texture *State::getSamplerTexture(unsigned int sampler, GLenum type) const
 {
     const auto it = mSamplerTextures.find(type);
