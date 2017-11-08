@@ -109,9 +109,7 @@
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpAtom.cpp',
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpContext.cpp',
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpContext.h',
-            '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpMemory.cpp',
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpScanner.cpp',
-            '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpSymbols.cpp',
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpTokens.cpp',
             '<(glslang_path)/glslang/MachineIndependent/preprocessor/PpTokens.h',
             '<(glslang_path)/glslang/MachineIndependent/propagateNoContraction.cpp',
@@ -130,21 +128,6 @@
             '<(glslang_path)/glslang/MachineIndependent/Versions.h',
             '<(glslang_path)/glslang/OSDependent/osinclude.h',
             '<(glslang_path)/glslang/Public/ShaderLang.h',
-            '<(glslang_path)/hlsl/hlslAttributes.cpp',
-            '<(glslang_path)/hlsl/hlslAttributes.h',
-            '<(glslang_path)/hlsl/hlslGrammar.cpp',
-            '<(glslang_path)/hlsl/hlslGrammar.h',
-            '<(glslang_path)/hlsl/hlslOpMap.cpp',
-            '<(glslang_path)/hlsl/hlslOpMap.h',
-            '<(glslang_path)/hlsl/hlslParseables.cpp',
-            '<(glslang_path)/hlsl/hlslParseables.h',
-            '<(glslang_path)/hlsl/hlslParseHelper.cpp',
-            '<(glslang_path)/hlsl/hlslParseHelper.h',
-            '<(glslang_path)/hlsl/hlslScanContext.cpp',
-            '<(glslang_path)/hlsl/hlslScanContext.h',
-            '<(glslang_path)/hlsl/hlslTokens.h',
-            '<(glslang_path)/hlsl/hlslTokenStream.cpp',
-            '<(glslang_path)/hlsl/hlslTokenStream.h',
             '<(glslang_path)/OGLCompilersDLL/InitializeDll.cpp',
             '<(glslang_path)/OGLCompilersDLL/InitializeDll.h',
             '<(glslang_path)/SPIRV/bitutils.h',
@@ -192,6 +175,9 @@
             '<(spirv_tools_path)/source/diagnostic.h',
             '<(spirv_tools_path)/source/disassemble.cpp',
             '<(spirv_tools_path)/source/enum_set.h',
+            '<(spirv_tools_path)/source/enum_string_mapping.cpp',
+            '<(spirv_tools_path)/source/extensions.cpp',
+            '<(spirv_tools_path)/source/extensions.h',
             '<(spirv_tools_path)/source/ext_inst.cpp',
             '<(spirv_tools_path)/source/ext_inst.h',
             '<(spirv_tools_path)/source/instruction.h',
@@ -216,6 +202,8 @@
             '<(spirv_tools_path)/source/spirv_endian.h',
             '<(spirv_tools_path)/source/spirv_target_env.cpp',
             '<(spirv_tools_path)/source/spirv_target_env.h',
+            '<(spirv_tools_path)/source/spirv_validator_options.cpp',
+            '<(spirv_tools_path)/source/spirv_validator_options.h',
             '<(spirv_tools_path)/source/table.cpp',
             '<(spirv_tools_path)/source/table.h',
             '<(spirv_tools_path)/source/text.cpp',
@@ -226,6 +214,8 @@
             '<(spirv_tools_path)/source/util/hex_float.h',
             '<(spirv_tools_path)/source/util/parse_number.cpp',
             '<(spirv_tools_path)/source/util/parse_number.h',
+            '<(spirv_tools_path)/source/util/string_utils.cpp',
+            '<(spirv_tools_path)/source/util/string_utils.h',
             '<(spirv_tools_path)/source/val/basic_block.cpp',
             '<(spirv_tools_path)/source/val/construct.cpp',
             '<(spirv_tools_path)/source/val/function.cpp',
@@ -233,14 +223,23 @@
             '<(spirv_tools_path)/source/val/validation_state.cpp',
             '<(spirv_tools_path)/source/validate.cpp',
             '<(spirv_tools_path)/source/validate.h',
+            '<(spirv_tools_path)/source/validate_arithmetics.cpp',
+            '<(spirv_tools_path)/source/validate_bitwise.cpp',
+            '<(spirv_tools_path)/source/validate_capability.cpp',
             '<(spirv_tools_path)/source/validate_cfg.cpp',
+            '<(spirv_tools_path)/source/validate_conversion.cpp',
             '<(spirv_tools_path)/source/validate_datarules.cpp',
+            '<(spirv_tools_path)/source/validate_decorations.cpp',
             '<(spirv_tools_path)/source/validate_id.cpp',
             '<(spirv_tools_path)/source/validate_instruction.cpp',
             '<(spirv_tools_path)/source/validate_layout.cpp',
+            '<(spirv_tools_path)/source/validate_logicals.cpp',
+            '<(spirv_tools_path)/source/validate_type_unique.cpp',
         ],
         'vulkan_layer_utils_sources':
         [
+            '<(vulkan_layers_path)/layers/vk_format_utils.cpp',
+            '<(vulkan_layers_path)/layers/vk_format_utils.h',
             '<(vulkan_layers_path)/layers/vk_layer_config.cpp',
             '<(vulkan_layers_path)/layers/vk_layer_config.h',
             '<(vulkan_layers_path)/layers/vk_layer_extension_utils.cpp',
@@ -268,16 +267,14 @@
             '<(vulkan_layers_path)/layers/core_validation.h',
             '<(vulkan_layers_path)/layers/descriptor_sets.cpp',
             '<(vulkan_layers_path)/layers/descriptor_sets.h',
-        ],
-        'VkLayer_swapchain_sources':
-        [
-            '<(vulkan_layers_path)/layers/swapchain.cpp',
-            '<(vulkan_layers_path)/layers/swapchain.h',
+            '<(vulkan_layers_path)/layers/shader_validation.cpp',
+            '<(vulkan_layers_path)/layers/shader_validation.h',
         ],
         'VkLayer_object_tracker_sources':
         [
-            '<(vulkan_layers_path)/layers/object_tracker.cpp',
+            '<(angle_gen_path)/vulkan/object_tracker.cpp',
             '<(vulkan_layers_path)/layers/object_tracker.h',
+            '<(vulkan_layers_path)/layers/object_tracker_utils.cpp',
         ],
         'VkLayer_unique_objects_sources':
         [
@@ -296,15 +293,15 @@
         ],
         'VkLayer_parameter_validation_sources':
         [
-            '<(angle_gen_path)/vulkan/parameter_validation.h',
-            '<(vulkan_layers_path)/layers/parameter_validation.cpp',
+            '<(angle_gen_path)/vulkan/parameter_validation.cpp',
+            '<(vulkan_layers_path)/layers/parameter_validation.h',
+            '<(vulkan_layers_path)/layers/parameter_validation_utils.cpp',
         ],
         'vulkan_gen_json_files_sources_win':
         [
             '<(vulkan_layers_path)/layers/windows/VkLayer_core_validation.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_object_tracker.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_parameter_validation.json',
-            '<(vulkan_layers_path)/layers/windows/VkLayer_swapchain.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_threading.json',
             '<(vulkan_layers_path)/layers/windows/VkLayer_unique_objects.json',
         ],
@@ -313,7 +310,6 @@
             '<(vulkan_layers_path)/layers/linux/VkLayer_core_validation.json',
             '<(vulkan_layers_path)/layers/linux/VkLayer_object_tracker.json',
             '<(vulkan_layers_path)/layers/linux/VkLayer_parameter_validation.json',
-            '<(vulkan_layers_path)/layers/linux/VkLayer_swapchain.json',
             '<(vulkan_layers_path)/layers/linux/VkLayer_threading.json',
             '<(vulkan_layers_path)/layers/linux/VkLayer_unique_objects.json',
         ],
@@ -322,7 +318,6 @@
             '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_core_validation.json',
             '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_object_tracker.json',
             '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_parameter_validation.json',
-            '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_swapchain.json',
             '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_threading.json',
             '<(PRODUCT_DIR)/<(vulkan_json)/VkLayer_unique_objects.json',
         ],
@@ -1033,44 +1028,6 @@
                 },
 
                 {
-                    'target_name': 'VkLayer_swapchain',
-                    'type': 'shared_library',
-                    'dependencies':
-                    [
-                        'vulkan_layer_utils_static',
-                    ],
-                    'sources':
-                    [
-                        '<@(VkLayer_swapchain_sources)',
-                    ],
-                    'actions':
-                    [
-                        {
-                            'action_name': 'layer_swapchain_order_deps',
-                            'message': 'stamping for layer_swapchain_order_deps',
-                            'msvs_cygwin_shell': 0,
-                            'inputs': [ '<@(vulkan_layer_generated_files)' ],
-                            'outputs': [ '<(angle_gen_path)/vulkan/layer_swapchain_order_deps.stamp' ],
-                            'action':
-                            [
-                                'python', '<(angle_path)/gyp/touch_stamp.py',
-                                '<(angle_gen_path)/vulkan/layer_swapchain_order_deps.stamp',
-                            ]
-                        },
-                    ],
-                    'conditions':
-                    [
-                        ['OS=="win"',
-                        {
-                            'sources':
-                            [
-                                '<(vulkan_layers_path)/layers/VkLayer_swapchain.def',
-                            ]
-                        }],
-                    ],
-                },
-
-                {
                     'target_name': 'VkLayer_object_tracker',
                     'type': 'shared_library',
                     'dependencies':
@@ -1298,7 +1255,6 @@
                         # 'VkLayer_core_validation',
                         # 'VkLayer_object_tracker',
                         # 'VkLayer_parameter_validation',
-                        # 'VkLayer_swapchain',
                         # 'VkLayer_threading',
                         # 'VkLayer_unique_objects',
                         'vulkan_loader',
