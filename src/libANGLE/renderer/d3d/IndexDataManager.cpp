@@ -110,7 +110,66 @@ gl::Error StreamInIndexBuffer(IndexBufferInterface *buffer,
     return gl::NoError();
 }
 
+unsigned int ElementTypeSize(GLenum elementType)
+{
+    switch (elementType)
+    {
+        case GL_UNSIGNED_BYTE:
+            return sizeof(GLubyte);
+        case GL_UNSIGNED_SHORT:
+            return sizeof(GLushort);
+        case GL_UNSIGNED_INT:
+            return sizeof(GLuint);
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+bool IsOffsetAligned(GLenum elementType, unsigned int offset)
+{
+    return (offset % ElementTypeSize(elementType) == 0);
+}
 }  // anonymous namespace
+
+IndexStorageType ClassifyIndexStorage(const gl::State &glState,
+                                      const gl::Buffer *elementArrayBuffer,
+                                      GLenum elementType,
+                                      GLenum destElementType,
+                                      const void *indices,
+                                      bool *needsTranslation)
+{
+    // No buffer bound means we are streaming from a client pointer.
+    if (!elementArrayBuffer ||
+        !IsOffsetAligned(elementType,
+                         static_cast<unsigned int>(reinterpret_cast<uintptr_t>(indices))))
+    {
+        *needsTranslation = true;
+        return IndexStorageType::Dynamic;
+    }
+
+    // The buffer can be used directly if the storage supports it and no translation needed.
+    BufferD3D *bufferD3D = GetImplAs<BufferD3D>(elementArrayBuffer);
+    if (bufferD3D->supportsDirectBinding() && destElementType == elementType)
+    {
+        *needsTranslation = false;
+        return IndexStorageType::Direct;
+    }
+
+    // Use a static copy when available.
+    StaticIndexBufferInterface *staticBuffer = bufferD3D->getStaticIndexBuffer();
+    if (staticBuffer != nullptr)
+    {
+        // Need to re-translate the static data if its neve been used, or on a type change.
+        *needsTranslation =
+            (staticBuffer->getBufferSize() == 0 || staticBuffer->getIndexType() != destElementType);
+        return IndexStorageType::Static;
+    }
+
+    // Static buffer not available, fall back to streaming.
+    *needsTranslation = true;
+    return IndexStorageType::Dynamic;
+}
 
 IndexDataManager::IndexDataManager(BufferFactoryD3D *factory, RendererClass rendererClass)
     : mFactory(factory),
@@ -223,22 +282,7 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
     unsigned int offset = static_cast<unsigned int>(reinterpret_cast<uintptr_t>(indices));
     ASSERT(srcTypeInfo.bytes * static_cast<unsigned int>(count) + offset <= buffer->getSize());
 
-    bool offsetAligned;
-    switch (srcType)
-    {
-        case GL_UNSIGNED_BYTE:
-            offsetAligned = (offset % sizeof(GLubyte) == 0);
-            break;
-        case GL_UNSIGNED_SHORT:
-            offsetAligned = (offset % sizeof(GLushort) == 0);
-            break;
-        case GL_UNSIGNED_INT:
-            offsetAligned = (offset % sizeof(GLuint) == 0);
-            break;
-        default:
-            UNREACHABLE();
-            offsetAligned = false;
-    }
+    bool offsetAligned = IsOffsetAligned(srcType, offset);
 
     // Case 2a: the buffer can be used directly
     if (offsetAligned && buffer->supportsDirectBinding() && dstType == srcType)
