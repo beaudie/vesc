@@ -1448,6 +1448,11 @@ gl::Error TextureD3D_2D::setCompleteTexStorage(const gl::Context *context,
 
 gl::Error TextureD3D_2D::updateStorage(const gl::Context *context)
 {
+    if (!mDirtyImages)
+    {
+        return gl::NoError();
+    }
+
     ASSERT(mTexStorage != nullptr);
     GLint storageLevels = mTexStorage->getLevelCount();
     for (int level = 0; level < storageLevels; level++)
@@ -1458,6 +1463,7 @@ gl::Error TextureD3D_2D::updateStorage(const gl::Context *context)
         }
     }
 
+    mDirtyImages = false;
     return gl::NoError();
 }
 
@@ -2131,6 +2137,11 @@ gl::Error TextureD3D_Cube::setCompleteTexStorage(const gl::Context *context,
 
 gl::Error TextureD3D_Cube::updateStorage(const gl::Context *context)
 {
+    if (!mDirtyImages)
+    {
+        return gl::NoError();
+    }
+
     ASSERT(mTexStorage != nullptr);
     GLint storageLevels = mTexStorage->getLevelCount();
     for (int face = 0; face < 6; face++)
@@ -2144,6 +2155,7 @@ gl::Error TextureD3D_Cube::updateStorage(const gl::Context *context)
         }
     }
 
+    mDirtyImages = false;
     return gl::NoError();
 }
 
@@ -2692,6 +2704,11 @@ gl::Error TextureD3D_3D::setCompleteTexStorage(const gl::Context *context,
 
 gl::Error TextureD3D_3D::updateStorage(const gl::Context *context)
 {
+    if (!mDirtyImages)
+    {
+        return gl::NoError();
+    }
+
     ASSERT(mTexStorage != nullptr);
     GLint storageLevels = mTexStorage->getLevelCount();
     for (int level = 0; level < storageLevels; level++)
@@ -2702,6 +2719,7 @@ gl::Error TextureD3D_3D::updateStorage(const gl::Context *context)
         }
     }
 
+    mDirtyImages = false;
     return gl::NoError();
 }
 
@@ -3264,6 +3282,11 @@ gl::Error TextureD3D_2DArray::setCompleteTexStorage(const gl::Context *context,
 
 gl::Error TextureD3D_2DArray::updateStorage(const gl::Context *context)
 {
+    if (!mDirtyImages)
+    {
+        return gl::NoError();
+    }
+
     ASSERT(mTexStorage != nullptr);
     GLint storageLevels = mTexStorage->getLevelCount();
     for (int level = 0; level < storageLevels; level++)
@@ -3274,6 +3297,7 @@ gl::Error TextureD3D_2DArray::updateStorage(const gl::Context *context)
         }
     }
 
+    mDirtyImages = false;
     return gl::NoError();
 }
 
