@@ -545,7 +545,7 @@ bool ValidateVertexShaderAttributeTypeMatch(ValidationContext *context)
     for (const auto &shaderAttribute : program->getAttributes())
     {
         // gl_VertexID and gl_InstanceID are active attributes but don't have a bound attribute.
-        if (shaderAttribute.isBuiltIn())
+        if (shaderAttribute.location == -1)
         {
             continue;
         }
