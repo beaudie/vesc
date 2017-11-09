@@ -922,6 +922,11 @@ inline unsigned long ScanForward(uint32_t bits)
     return firstBitIndex;
 }
 
+inline void ResetBit(uint32_t *bits, size_t bit)
+{
+    _bittestandreset(reinterpret_cast<LONG *>(bits), static_cast<LONG>(bit));
+}
+
 #if defined(ANGLE_IS_64_BIT_CPU)
 inline unsigned long ScanForward(uint64_t bits)
 {
@@ -930,6 +935,11 @@ inline unsigned long ScanForward(uint64_t bits)
     unsigned char ret           = _BitScanForward64(&firstBitIndex, bits);
     ASSERT(ret != 0u);
     return firstBitIndex;
+}
+
+inline void ResetBit(uint64_t *bits, size_t bit)
+{
+    _bittestandreset64(reinterpret_cast<LONG64 *>(bits), static_cast<LONG64>(bit));
 }
 #endif  // defined(ANGLE_IS_64_BIT_CPU)
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
@@ -941,11 +951,23 @@ inline unsigned long ScanForward(uint32_t bits)
     return static_cast<unsigned long>(__builtin_ctz(bits));
 }
 
+// TODO(jmadill): Use BTR instruction.
+inline void ResetBit(uint32_t *bits, size_t bit)
+{
+    *bits &= ~(1 << bit);
+}
+
 #if defined(ANGLE_IS_64_BIT_CPU)
 inline unsigned long ScanForward(uint64_t bits)
 {
     ASSERT(bits != 0u);
     return static_cast<unsigned long>(__builtin_ctzll(bits));
+}
+
+// TODO(jmadill): Use BTR instruction.
+inline void ResetBit(uint64_t *bits, size_t bit)
+{
+    *bits &= ~(1 << bit);
 }
 #endif  // defined(ANGLE_IS_64_BIT_CPU)
 #endif  // defined(ANGLE_PLATFORM_POSIX)

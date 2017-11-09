@@ -56,6 +56,13 @@ compiler_gypi = exec_script("//build/gypi_to_gn.py",
 # ones).
 config("external_config") {
   include_dirs = [ "include" ]
+
+  if (current_cpu == "x86" || current_cpu == "arm") {
+    defines = [ "ANGLE_IS_32_BIT_CPU" ]
+  }
+  if (current_cpu == "x64" || current_cpu == "arm64") {
+    defines = [ "ANGLE_IS_64_BIT_CPU" ]
+  }
 }
 
 # This config is applied to internal Angle targets (not pushed to dependents).
@@ -70,13 +77,6 @@ config("internal_config") {
     "GL_GLEXT_PROTOTYPES",
     "EGL_EGLEXT_PROTOTYPES",
   ]
-
-  if (current_cpu == "x86" || current_cpu == "arm") {
-    defines += [ "ANGLE_IS_32_BIT_CPU" ]
-  }
-  if (current_cpu == "x64" || current_cpu == "arm64") {
-    defines += [ "ANGLE_IS_64_BIT_CPU" ]
-  }
 }
 
 config("extra_warnings") {
@@ -187,7 +187,10 @@ static_library("angle_common") {
   public_deps = [
     ":commit_id",
   ]
-  public_configs = [ ":angle_common_config" ]
+  public_configs = [
+    ":angle_common_config",
+    ":external_config",
+  ]
   all_dependent_configs = [ ":angle_release_asserts_config" ]
 }
 

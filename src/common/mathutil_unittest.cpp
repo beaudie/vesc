@@ -304,6 +304,19 @@ TEST(MathUtilTest, ScanReverse)
     EXPECT_EQ(31ul, gl::ScanReverse(0x80000000ul));
 }
 
+TEST(MathUtilTest, ResetBit)
+{
+    uint32_t num = 0xFFFF;
+    gl::ResetBit(&num, 1);
+    EXPECT_EQ(0xFFFE, num);
+
+#if defined(ANGLE_IS_64_BIT_CPU)
+    uint64_t num64 = 0xFFFF;
+    gl::ResetBit(&num64, 1);
+    EXPECT_EQ(0xFFFE, num64);
+#endif  // defined(ANGLE_IS_64_BIT_CPU)
+}
+
 // Test FindLSB, which finds the least significant 1 bit.
 TEST(MathUtilTest, FindLSB)
 {
