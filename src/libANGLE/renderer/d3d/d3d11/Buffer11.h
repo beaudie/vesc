@@ -152,12 +152,15 @@ class Buffer11 : public BufferD3D
     // For some cases of uniform buffer storage, we can't deallocate system memory storage.
     bool canDeallocateSystemMemory() const;
 
+    void makeLatestStorage(BufferStorage *newLatest, BufferStorage *previousLatest);
+
     Renderer11 *mRenderer;
     size_t mSize;
 
     BufferStorage *mMappedStorage;
 
     std::array<BufferStorage *, BUFFER_USAGE_COUNT> mBufferStorages;
+    BufferStorage *mLatestBufferStorage;
 
     // These two arrays are used to track when to free unused storage.
     std::array<unsigned int, BUFFER_USAGE_COUNT> mDeallocThresholds;
