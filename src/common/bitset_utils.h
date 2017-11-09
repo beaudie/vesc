@@ -50,7 +50,7 @@ class BitSetT final
     {
       public:
         Iterator(const BitSetT &bits);
-        Iterator &operator++();
+        void operator++();
 
         bool operator==(const Iterator &other) const;
         bool operator!=(const Iterator &other) const;
@@ -98,8 +98,8 @@ class BitSetT final
     BitSetT &set();
     BitSetT &set(std::size_t pos, bool value = true);
 
-    BitSetT &reset();
-    BitSetT &reset(std::size_t pos);
+    void reset();
+    void reset(std::size_t pos);
 
     BitSetT &flip();
     BitSetT &flip(std::size_t pos);
@@ -128,7 +128,7 @@ class IterableBitSet : public std::bitset<N>
     {
       public:
         Iterator(const std::bitset<N> &bits);
-        Iterator &operator++();
+        void operator++();
 
         bool operator==(const Iterator &other) const;
         bool operator!=(const Iterator &other) const;
@@ -162,12 +162,11 @@ IterableBitSet<N>::Iterator::Iterator(const std::bitset<N> &bitset)
 }
 
 template <size_t N>
-typename IterableBitSet<N>::Iterator &IterableBitSet<N>::Iterator::operator++()
+void IterableBitSet<N>::Iterator::operator++()
 {
     ASSERT(mBits.any());
     mBits.set(mCurrentBit - mOffset, 0);
     mCurrentBit = getNextBit();
-    return *this;
 }
 
 template <size_t N>
@@ -357,17 +356,15 @@ BitSetT<N, BitsT> &BitSetT<N, BitsT>::set(std::size_t pos, bool value)
 }
 
 template <size_t N, typename BitsT>
-BitSetT<N, BitsT> &BitSetT<N, BitsT>::reset()
+void BitSetT<N, BitsT>::reset()
 {
     mBits = 0;
-    return *this;
 }
 
 template <size_t N, typename BitsT>
-BitSetT<N, BitsT> &BitSetT<N, BitsT>::reset(std::size_t pos)
+void BitSetT<N, BitsT>::reset(std::size_t pos)
 {
-    mBits &= ~Bit(pos);
-    return *this;
+    gl::ResetBit(&mBits, pos);
 }
 
 template <size_t N, typename BitsT>
@@ -394,12 +391,11 @@ BitSetT<N, BitsT>::Iterator::Iterator(const BitSetT &bits) : mBitsCopy(bits), mC
 }
 
 template <size_t N, typename BitsT>
-typename BitSetT<N, BitsT>::Iterator &BitSetT<N, BitsT>::Iterator::operator++()
+void BitSetT<N, BitsT>::Iterator::operator++()
 {
     ASSERT(mBitsCopy.any());
     mBitsCopy.reset(mCurrentBit);
     mCurrentBit = getNextBit();
-    return *this;
 }
 
 template <size_t N, typename BitsT>
