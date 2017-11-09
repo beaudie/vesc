@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "common/debug.h"
+#include "common/utilities.h"
 
 #include <cstdarg>
 
@@ -31,7 +32,7 @@ void Error::createMessageString() const
 {
     if (!mMessage)
     {
-        mMessage.reset(new std::string);
+        mMessage.reset(new std::string(GetGenericErrorMessage(mCode)));
     }
 }
 
@@ -82,7 +83,7 @@ void Error::createMessageString() const
 {
     if (!mMessage)
     {
-        mMessage.reset(new std::string);
+        mMessage.reset(new std::string(GetGenericErrorMessage(mCode)));
     }
 }
 
