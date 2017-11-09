@@ -2555,15 +2555,24 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
                                            bool usePrimitiveRestartWorkaround,
                                            TranslatedIndexData *indexInfo)
 {
-    const auto &glState            = context->getGLState();
-    gl::VertexArray *vao           = glState.getVertexArray();
-    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    const auto &glState  = context->getGLState();
+    gl::VertexArray *vao = glState.getVertexArray();
+    VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
 
-    GLenum dstType =
+    GLenum destElementType =
         GetIndexTranslationDestType(type, count, lazyIndexRange, usePrimitiveRestartWorkaround);
 
-    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, dstType, count, elementArrayBuffer,
-                                                 indices, indexInfo));
+    if (!vao11->updateElementArrayStorage(context, type, destElementType, indices))
+    {
+        // No streaming or index buffer application necessary.
+        *indexInfo = vao11->getCachedTranslatedIndexData().value();
+        return gl::NoError();
+    }
+
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+
+    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, destElementType, count,
+                                                 elementArrayBuffer, indices, indexInfo));
 
     ID3D11Buffer *buffer = nullptr;
     DXGI_FORMAT bufferFormat =
@@ -2584,6 +2593,7 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
     indexInfo->srcIndexData.srcIndicesChanged =
         setIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
 
+    vao11->getCachedTranslatedIndexData() = *indexInfo;
     return gl::NoError();
 }
 

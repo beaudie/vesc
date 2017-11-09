@@ -107,6 +107,30 @@ GLenum GetIndexTranslationDestType(GLenum srcType,
                                    const gl::HasIndexRange &lazyIndexRange,
                                    bool usePrimitiveRestartWorkaround);
 
+enum class IndexStorageType
+{
+    // Dynamic indexes are re-streamed every frame. They come from a client data pointer or
+    // from buffers that are updated frequently.
+    Dynamic,
+
+    // Static indexes are translated from the original storage once, and re-used multiple times.
+    Static,
+
+    // Direct indexes are never transated and are used directly from the source buffer. They are
+    // the fastest available path.
+    Direct,
+
+    // Not a real storage type.
+    Invalid,
+};
+
+IndexStorageType ClassifyIndexStorage(const gl::State &glState,
+                                      const gl::Buffer *elementArrayBuffer,
+                                      GLenum elementType,
+                                      GLenum destElementType,
+                                      const void *indices,
+                                      bool *needsTranslation);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_INDEXDATAMANAGER_H_
