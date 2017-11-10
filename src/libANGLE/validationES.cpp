@@ -3857,7 +3857,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
         case GL_DEPTH:
         case GL_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
-            if (clientVersion < 3)
+            if (!context->isWebGL1())
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidAttachment);
                 return false;
