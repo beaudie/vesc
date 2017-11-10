@@ -235,15 +235,15 @@ TEST_F(NoDebugShaderPrecisionTest, PragmaHasEffectsOnlyWithExtension)
 TEST_F(DebugShaderPrecisionTest, DeclarationsAndConstants)
 {
     const std::string &shaderString =
-        "precision mediump float;\n"
-        "uniform vec4 f;\n"
-        "uniform float uu, uu2;\n"
-        "varying float vv, vv2;\n"
-        "float gg = 0.0, gg2;\n"
-        "void main() {\n"
-        "   float aa = 0.0, aa2;\n"
-        "   gl_FragColor = f;\n"
-        "}\n";
+        R"(precision mediump float;
+        uniform vec4 f;
+        uniform float uu, uu2;
+        varying float vv, vv2;
+        float gg = 0.0, gg2;
+        void main() {
+            float aa = 0.0, aa2;
+            gl_FragColor = f;
+        })";
     compile(shaderString);
     // Declarations or constants should not have rounding inserted around them
     ASSERT_TRUE(notFoundInCode("angle_frm(0"));
