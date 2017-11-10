@@ -1456,6 +1456,11 @@ const VertexAttribCurrentValueData &State::getVertexAttribCurrentValue(size_t at
     return mVertexAttribCurrentValues[attribNum];
 }
 
+const std::vector<VertexAttribCurrentValueData> &State::getVertexAttribCurrentValues() const
+{
+    return mVertexAttribCurrentValues;
+}
+
 const void *State::getVertexAttribPointer(unsigned int attribNum) const
 {
     return getVertexArray()->getVertexAttribute(attribNum).pointer;

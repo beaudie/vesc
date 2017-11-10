@@ -161,6 +161,11 @@ bool ShaderVariable::findInfoByMappedName(const std::string &mappedFullName,
     }
 }
 
+bool ShaderVariable::isBuiltIn() const
+{
+    return (name.size() >= 4 && name[0] == 'g' && name[1] == 'l' && name[2] == '_');
+}
+
 bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
                                               bool matchPrecision,
                                               bool matchName) const
@@ -456,6 +461,11 @@ bool InterfaceBlock::isSameInterfaceBlockAtLinkTime(const InterfaceBlock &other)
     }
 
     return true;
+}
+
+bool InterfaceBlock::isBuiltIn() const
+{
+    return (name.size() >= 4 && name[0] == 'g' && name[1] == 'l' && name[2] == '_');
 }
 
 void WorkGroupSize::fill(int fillValue)
