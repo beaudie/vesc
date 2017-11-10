@@ -3857,11 +3857,17 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
     switch (attachment)
     {
         case GL_BACK:
-        case GL_FRONT:
         case GL_DEPTH:
         case GL_STENCIL:
-        case GL_DEPTH_STENCIL_ATTACHMENT:
             if (clientVersion < 3)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidAttachment);
+                return false;
+            }
+            break;
+
+        case GL_DEPTH_STENCIL_ATTACHMENT:
+            if (clientVersion < 3 && !context->isWebGL())
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidAttachment);
                 return false;
@@ -3919,14 +3925,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
             {
                 case GL_DEPTH_ATTACHMENT:
                 case GL_STENCIL_ATTACHMENT:
-                    break;
-
                 case GL_DEPTH_STENCIL_ATTACHMENT:
-                    if (!framebuffer->hasValidDepthStencil())
-                    {
-                        context->handleError(InvalidOperation());
-                        return false;
-                    }
                     break;
 
                 default:
@@ -4008,7 +4007,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
                 if (clientVersion < 3)
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidEnum(),
-                                         InvalidFramebufferTextureParameter);
+                                         InvalidFramebufferAttachmentParameter);
                     return false;
                 }
                 break;
@@ -4017,13 +4016,13 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
                 if (clientVersion < 3)
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidEnum(),
-                                         InvalidFramebufferTextureParameter);
+                                         InvalidFramebufferAttachmentParameter);
                     return false;
                 }
                 else
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidOperation(),
-                                         InvalidFramebufferTextureParameter);
+                                         InvalidFramebufferAttachmentParameter);
                     return false;
                 }
         }
