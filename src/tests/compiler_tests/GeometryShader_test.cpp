@@ -119,7 +119,6 @@ class GeometryShaderTest : public ShaderCompileTreeTest
         out vec4 o_color;
         void main()
         {
-            int maxValue = gl_MaxGeometryInputComponents;
             for (int i = 0; i < i_color.length(); i++)
             {
                 gl_Position = gl_in[i].gl_Position;
@@ -995,14 +994,15 @@ TEST_F(GeometryShaderTest, UseGLInLengthWithoutInputPrimitive)
 TEST_F(GeometryShaderTest, UseGLInLengthWithInputPrimitive)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "#extension GL_OES_geometry_shader : require\n"
-        "layout (points) in;\n"
-        "layout (points, max_vertices = 2) out;\n"
-        "void main()\n"
-        "{\n"
-        "    int length = gl_in.length();\n"
-        "}\n";
+        R"(#version 310 es
+        #extension GL_OES_geometry_shader : require
+        layout (points) in;
+        layout (points, max_vertices = 2) out;
+        void main()
+        {
+            gl_Position = vec4(gl_in.length());
+            EmitVertex();
+        })";
 
     if (!compile(shaderString))
     {
@@ -1309,15 +1309,16 @@ TEST_F(GeometryShaderTest, IndexingUnsizedInputDeclaredAfterInputPrimitive)
 TEST_F(GeometryShaderTest, CallingLengthOnUnsizedInputDeclaredAfterInputPrimitive)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "#extension GL_OES_geometry_shader : require\n"
-        "layout (points) in;\n"
-        "layout (points, max_vertices = 1) out;\n"
-        "in vec4 texcoord[];\n"
-        "void main()\n"
-        "{\n"
-        "    int length = texcoord.length();\n"
-        "}\n";
+        R"(#version 310 es
+        #extension GL_OES_geometry_shader : require
+        layout (points) in;
+        layout (points, max_vertices = 1) out;
+        in vec4 texcoord[];
+        void main()
+        {
+            gl_Position = vec4(texcoord.length());
+            EmitVertex();
+        })";
 
     if (!compile(shaderString))
     {
@@ -1349,18 +1350,19 @@ TEST_F(GeometryShaderTest, AssignValueToInput)
 TEST_F(GeometryShaderTest, InputWithLocations)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "#extension GL_OES_geometry_shader : require\n"
-        "layout (triangles) in;\n"
-        "layout (points, max_vertices = 1) out;\n"
-        "layout (location = 0) in vec4 texcoord1[];\n"
-        "layout (location = 1) in vec4 texcoord2[];\n"
-        "void main()\n"
-        "{\n"
-        "    int index = 0;\n"
-        "    vec4 coord1 = texcoord1[0];\n"
-        "    vec4 coord2 = texcoord2[index];\n"
-        "}\n";
+        R"(#version 310 es
+        #extension GL_OES_geometry_shader : require
+        layout (triangles) in;
+        layout (points, max_vertices = 1) out;
+        layout (location = 0) in vec4 texcoord1[];
+        layout (location = 1) in vec4 texcoord2[];
+        void main()
+        {
+            int index = 0;
+            vec4 coord1 = texcoord1[0];
+            vec4 coord2 = texcoord2[index];
+            gl_Position = coord1 + coord2;
+        })";
 
     if (!compile(shaderString))
     {
