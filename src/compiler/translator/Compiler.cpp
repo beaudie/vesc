@@ -32,6 +32,7 @@
 #include "compiler/translator/RemoveInvariantDeclaration.h"
 #include "compiler/translator/RemoveNoOpCasesFromEndOfSwitchStatements.h"
 #include "compiler/translator/RemovePow.h"
+#include "compiler/translator/RemoveUnreferencedVariables.h"
 #include "compiler/translator/RewriteDoWhile.h"
 #include "compiler/translator/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/SeparateDeclarations.h"
@@ -467,13 +468,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
-    // Built-in function emulation needs to happen after validateLimitations pass.
-    // TODO(jmadill): Remove global pool allocator.
-    GetGlobalPoolAllocator()->lock();
-    initBuiltInFunctionEmulator(&builtInFunctionEmulator, compileOptions);
-    GetGlobalPoolAllocator()->unlock();
-    builtInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
-
     // Clamping uniform array bounds needs to happen after validateLimitations pass.
     if (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS)
     {
@@ -506,6 +500,58 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         RemovePow(root);
     }
+
+    // Removing invariant declarations must be done after collecting variables.
+    // Otherwise, built-in invariant declarations don't apply.
+    if (RemoveInvariant(shaderType, shaderVersion, outputType, compileOptions))
+    {
+        sh::RemoveInvariantDeclaration(root);
+    }
+
+    if (compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS)
+    {
+        ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh, &symbolTable);
+    }
+
+    if (compileOptions & SH_REGENERATE_STRUCT_NAMES)
+    {
+        RegenerateStructNames gen(&symbolTable, shaderVersion);
+        root->traverse(&gen);
+    }
+
+    if (shaderType == GL_FRAGMENT_SHADER && shaderVersion == 100 &&
+        compileResources.EXT_draw_buffers && compileResources.MaxDrawBuffers > 1 &&
+        IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
+    {
+        EmulateGLFragColorBroadcast(root, compileResources.MaxDrawBuffers, &outputVariables,
+                                    &symbolTable, shaderVersion);
+    }
+
+    // Split multi declarations and remove calls to array length().
+    // Note that SimplifyLoopConditions needs to be run before any other AST transformations
+    // that may need to generate new statements from loop conditions or loop expressions.
+    SimplifyLoopConditions(
+        root,
+        IntermNodePatternMatcher::kMultiDeclaration | IntermNodePatternMatcher::kArrayLengthMethod,
+        &getSymbolTable(), getShaderVersion());
+
+    // Note that separate declarations need to be run before other AST transformations that
+    // generate new statements from expressions.
+    SeparateDeclarations(root);
+
+    SplitSequenceOperator(root, IntermNodePatternMatcher::kArrayLengthMethod, &getSymbolTable(),
+                          getShaderVersion());
+
+    RemoveArrayLengthMethod(root);
+
+    RemoveUnreferencedVariables(root, &symbolTable);
+
+    // Built-in function emulation needs to happen after validateLimitations pass.
+    // TODO(jmadill): Remove global pool allocator.
+    GetGlobalPoolAllocator()->lock();
+    initBuiltInFunctionEmulator(&builtInFunctionEmulator, compileOptions);
+    GetGlobalPoolAllocator()->unlock();
+    builtInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
 
     if (shouldCollectVariables(compileOptions))
     {
@@ -545,50 +591,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         mGLPositionInitialized = true;
     }
 
-    // Removing invariant declarations must be done after collecting variables.
-    // Otherwise, built-in invariant declarations don't apply.
-    if (RemoveInvariant(shaderType, shaderVersion, outputType, compileOptions))
-    {
-        sh::RemoveInvariantDeclaration(root);
-    }
-
-    if (compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS)
-    {
-        ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh, &symbolTable);
-    }
-
-    if (compileOptions & SH_REGENERATE_STRUCT_NAMES)
-    {
-        RegenerateStructNames gen(&symbolTable, shaderVersion);
-        root->traverse(&gen);
-    }
-
-    if (shaderType == GL_FRAGMENT_SHADER && shaderVersion == 100 &&
-        compileResources.EXT_draw_buffers && compileResources.MaxDrawBuffers > 1 &&
-        IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
-    {
-        EmulateGLFragColorBroadcast(root, compileResources.MaxDrawBuffers, &outputVariables,
-                                    &symbolTable, shaderVersion);
-    }
-
     DeferGlobalInitializers(root, needToInitializeGlobalsInAST(), &symbolTable);
-
-    // Split multi declarations and remove calls to array length().
-    // Note that SimplifyLoopConditions needs to be run before any other AST transformations
-    // that may need to generate new statements from loop conditions or loop expressions.
-    SimplifyLoopConditions(
-        root,
-        IntermNodePatternMatcher::kMultiDeclaration | IntermNodePatternMatcher::kArrayLengthMethod,
-        &getSymbolTable(), getShaderVersion());
-
-    // Note that separate declarations need to be run before other AST transformations that
-    // generate new statements from expressions.
-    SeparateDeclarations(root);
-
-    SplitSequenceOperator(root, IntermNodePatternMatcher::kArrayLengthMethod, &getSymbolTable(),
-                          getShaderVersion());
-
-    RemoveArrayLengthMethod(root);
 
     if ((compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && getOutputType())
     {
