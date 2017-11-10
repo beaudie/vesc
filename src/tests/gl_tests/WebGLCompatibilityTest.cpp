@@ -2890,6 +2890,27 @@ TEST_P(WebGLCompatibilityTest, SizedRGBA32FFormats)
     }
 }
 
+// Verify DEPTH_STENCIL_ATTACHMENT is a valid attachment point.
+TEST_P(WebGLCompatibilityTest, DepthStencilAttachment)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() > 2);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+
+    GLint attachmentType;
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                          GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE,
+                                          /*param*/ &attachmentType);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GLENUM_EQ(GL_TEXTURE, attachmentType);
+}
+
 // This tests that rendering feedback loops works as expected with WebGL 2.
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
