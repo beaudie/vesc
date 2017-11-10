@@ -3855,11 +3855,17 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
     switch (attachment)
     {
         case GL_BACK:
-        case GL_FRONT:
         case GL_DEPTH:
         case GL_STENCIL:
-        case GL_DEPTH_STENCIL_ATTACHMENT:
             if (clientVersion < 3)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidAttachment);
+                return false;
+            }
+            break;
+
+        case GL_DEPTH_STENCIL_ATTACHMENT:
+            if (clientVersion < 3 && !context->isWebGL1())
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidAttachment);
                 return false;
@@ -3920,7 +3926,8 @@ bool ValidateGetFramebufferAttachmentParameterivBase(ValidationContext *context,
                     break;
 
                 case GL_DEPTH_STENCIL_ATTACHMENT:
-                    if (!framebuffer->hasValidDepthStencil())
+                    if (!framebuffer->hasValidDepthStencil() && clientVersion < 3 &&
+                        !context->isWebGL1())
                     {
                         context->handleError(InvalidOperation());
                         return false;
