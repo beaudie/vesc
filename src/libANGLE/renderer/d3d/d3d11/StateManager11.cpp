@@ -2558,9 +2558,12 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
     const auto &glState            = context->getGLState();
     gl::VertexArray *vao           = glState.getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
-    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, count, elementArrayBuffer, indices,
-                                                 indexInfo, lazyIndexRange,
-                                                 usePrimitiveRestartWorkaround));
+
+    GLenum dstType =
+        GetIndexTranslationDestType(type, count, lazyIndexRange, usePrimitiveRestartWorkaround);
+
+    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, dstType, count, elementArrayBuffer,
+                                                 indices, indexInfo));
 
     ID3D11Buffer *buffer = nullptr;
     DXGI_FORMAT bufferFormat =

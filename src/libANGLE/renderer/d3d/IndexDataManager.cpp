@@ -192,33 +192,12 @@ bool IndexDataManager::IsStreamingIndexData(const gl::Context *context,
 // translated copy of the index buffer.
 gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
                                              GLenum srcType,
+                                             GLenum dstType,
                                              GLsizei count,
                                              gl::Buffer *glBuffer,
                                              const void *indices,
-                                             TranslatedIndexData *translated,
-                                             const gl::HasIndexRange &lazyIndexRange,
-                                             bool usePrimitiveRestartWorkaround)
+                                             TranslatedIndexData *translated)
 {
-    // Avoid D3D11's primitive restart index value
-    // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb205124(v=vs.85).aspx
-    bool primitiveRestartWorkaround = false;
-    if (usePrimitiveRestartWorkaround)
-    {
-        const gl::IndexRange &indexRange = lazyIndexRange.getIndexRange().value();
-        if (indexRange.vertexIndexCount < static_cast<size_t>(count))
-        {
-            ASSERT(indexRange.end == gl::GetPrimitiveRestartIndex(srcType));
-            primitiveRestartWorkaround = true;
-        }
-    }
-
-    // We should never have to deal with MAX_UINT indices, since we restrict it via
-    // MAX_ELEMENT_INDEX.
-
-    const GLenum dstType = (srcType == GL_UNSIGNED_INT || primitiveRestartWorkaround)
-                               ? GL_UNSIGNED_INT
-                               : GL_UNSIGNED_SHORT;
-
     const gl::Type &srcTypeInfo = gl::GetTypeInfo(srcType);
     const gl::Type &dstTypeInfo = gl::GetTypeInfo(dstType);
 
@@ -367,4 +346,25 @@ gl::Error IndexDataManager::getStreamingIndexBuffer(GLenum destinationIndexType,
     *outBuffer = streamingBuffer.get();
     return gl::NoError();
 }
+
+GLenum GetIndexTranslationDestType(GLenum srcType,
+                                   unsigned int count,
+                                   const gl::HasIndexRange &lazyIndexRange,
+                                   bool usePrimitiveRestartWorkaround)
+{
+    // Avoid D3D11's primitive restart index value
+    // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb205124(v=vs.85).aspx
+    if (usePrimitiveRestartWorkaround)
+    {
+        const gl::IndexRange &indexRange = lazyIndexRange.getIndexRange().value();
+        if (indexRange.vertexIndexCount < static_cast<size_t>(count))
+        {
+            ASSERT(indexRange.end == gl::GetPrimitiveRestartIndex(srcType));
+            return GL_UNSIGNED_INT;
+        }
+    }
+
+    return (srcType == GL_UNSIGNED_INT) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
+}
+
 }  // namespace rx
