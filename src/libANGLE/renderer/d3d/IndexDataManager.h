@@ -74,12 +74,11 @@ class IndexDataManager : angle::NonCopyable
                                      RendererClass rendererClass);
     gl::Error prepareIndexData(const gl::Context *context,
                                GLenum srcType,
+                               GLenum dstType,
                                GLsizei count,
                                gl::Buffer *glBuffer,
                                const void *indices,
-                               TranslatedIndexData *translated,
-                               const gl::HasIndexRange &lazyIndexRange,
-                               bool usePrimitiveRestartWorkaround);
+                               TranslatedIndexData *translated);
 
   private:
     gl::Error streamIndexData(const void *data,
@@ -102,6 +101,11 @@ class IndexDataManager : angle::NonCopyable
 bool UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
                                    GLenum type,
                                    RendererClass rendererClass);
+
+GLenum GetIndexTranslationDestType(GLenum srcType,
+                                   unsigned int count,
+                                   const gl::HasIndexRange &lazyIndexRange,
+                                   bool usePrimitiveRestartWorkaround);
 
 }  // namespace rx
 

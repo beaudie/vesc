@@ -1342,13 +1342,12 @@ gl::Error Renderer9::applyIndexBuffer(const gl::Context *context,
 {
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
-    gl::Error error                = mIndexDataManager->prepareIndexData(
-        context, type, count, elementArrayBuffer, indices, indexInfo,
-        context->getParams<gl::HasIndexRange>(), false);
-    if (error.isError())
-    {
-        return error;
-    }
+
+    GLenum dstType =
+        GetIndexTranslationDestType(type, count, context->getParams<gl::HasIndexRange>(), false);
+
+    ANGLE_TRY(mIndexDataManager->prepareIndexData(context, type, dstType, count, elementArrayBuffer,
+                                                  indices, indexInfo));
 
     // Directly binding the storage buffer is not supported for d3d9
     ASSERT(indexInfo->storage == nullptr);
