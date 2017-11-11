@@ -2552,13 +2552,15 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
                                            GLsizei count,
                                            GLenum type,
                                            const gl::HasIndexRange &lazyIndexRange,
+                                           bool usePrimitiveRestartWorkaround,
                                            TranslatedIndexData *indexInfo)
 {
     const auto &glState            = context->getGLState();
     gl::VertexArray *vao           = glState.getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
     ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, count, elementArrayBuffer, indices,
-                                                 indexInfo, lazyIndexRange));
+                                                 indexInfo, lazyIndexRange,
+                                                 usePrimitiveRestartWorkaround));
 
     ID3D11Buffer *buffer = nullptr;
     DXGI_FORMAT bufferFormat =
@@ -2973,25 +2975,35 @@ DrawCallVertexParams::DrawCallVertexParams(GLint firstVertex,
     : mHasIndexRange(nullptr),
       mFirstVertex(firstVertex),
       mVertexCount(vertexCount),
-      mInstances(instances)
+      mInstances(instances),
+      mBaseVertex(0)
 {
 }
 
 // Use when in a drawElements call.
-DrawCallVertexParams::DrawCallVertexParams(const gl::HasIndexRange &hasIndexRange,
+DrawCallVertexParams::DrawCallVertexParams(bool firstVertexDefinitelyZero,
+                                           const gl::HasIndexRange &hasIndexRange,
                                            GLint baseVertex,
                                            GLsizei instances)
     : mHasIndexRange(&hasIndexRange),
-      mFirstVertex(baseVertex),
+      mFirstVertex(),
       mVertexCount(0),
-      mInstances(instances)
+      mInstances(instances),
+      mBaseVertex(baseVertex)
 {
+    if (firstVertexDefinitelyZero)
+    {
+        mFirstVertex = baseVertex;
+    }
 }
 
 GLint DrawCallVertexParams::firstVertex() const
 {
-    ensureResolved();
-    return mFirstVertex;
+    if (!mFirstVertex.valid())
+    {
+        ensureResolved();
+    }
+    return mFirstVertex.value();
 }
 
 GLsizei DrawCallVertexParams::vertexCount() const
@@ -3011,9 +3023,9 @@ void DrawCallVertexParams::ensureResolved() const
     {
         // Resolve the index range now if we need to.
         const gl::IndexRange &indexRange = mHasIndexRange->getIndexRange().value();
-        mFirstVertex += static_cast<GLint>(indexRange.start);
-        mVertexCount   = static_cast<GLsizei>(indexRange.vertexCount());
-        mHasIndexRange = nullptr;
+        mFirstVertex                     = mBaseVertex + static_cast<GLint>(indexRange.start);
+        mVertexCount                     = static_cast<GLsizei>(indexRange.vertexCount());
+        mHasIndexRange                   = nullptr;
     }
 }
 
