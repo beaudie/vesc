@@ -130,10 +130,9 @@ void IndexDataManager::deinitialize()
     mStreamingBufferInt.reset();
 }
 
-// static
-bool IndexDataManager::UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
-                                                     GLenum type,
-                                                     RendererClass rendererClass)
+bool UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
+                                   GLenum type,
+                                   RendererClass rendererClass)
 {
     // We should never have to deal with primitive restart workaround issue with GL_UNSIGNED_INT
     // indices, since we restrict it via MAX_ELEMENT_INDEX.
@@ -197,13 +196,13 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
                                              gl::Buffer *glBuffer,
                                              const void *indices,
                                              TranslatedIndexData *translated,
-                                             const gl::HasIndexRange &lazyIndexRange)
+                                             const gl::HasIndexRange &lazyIndexRange,
+                                             bool usePrimitiveRestartWorkaround)
 {
     // Avoid D3D11's primitive restart index value
     // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb205124(v=vs.85).aspx
-    bool primitiveRestartFixedIndexEnabled = context->getGLState().isPrimitiveRestartEnabled();
-    bool primitiveRestartWorkaround        = false;
-    if (UsePrimitiveRestartWorkaround(primitiveRestartFixedIndexEnabled, srcType, mRendererClass))
+    bool primitiveRestartWorkaround = false;
+    if (usePrimitiveRestartWorkaround)
     {
         const gl::IndexRange &indexRange = lazyIndexRange.getIndexRange().value();
         if (indexRange.vertexIndexCount < static_cast<size_t>(count))
@@ -230,6 +229,8 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
     translated->srcIndexData.srcIndices   = indices;
     translated->srcIndexData.srcIndexType = srcType;
     translated->srcIndexData.srcCount     = count;
+
+    bool primitiveRestartFixedIndexEnabled = context->getGLState().isPrimitiveRestartEnabled();
 
     // Case 1: the indices are passed by pointer, which forces the streaming of index data
     if (glBuffer == nullptr)

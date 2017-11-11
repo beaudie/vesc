@@ -69,9 +69,6 @@ class IndexDataManager : angle::NonCopyable
 
     void deinitialize();
 
-    static bool UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
-                                              GLenum type,
-                                              RendererClass rendererClass);
     static bool IsStreamingIndexData(const gl::Context *context,
                                      GLenum srcType,
                                      RendererClass rendererClass);
@@ -81,7 +78,8 @@ class IndexDataManager : angle::NonCopyable
                                gl::Buffer *glBuffer,
                                const void *indices,
                                TranslatedIndexData *translated,
-                               const gl::HasIndexRange &lazyIndexRange);
+                               const gl::HasIndexRange &lazyIndexRange,
+                               bool usePrimitiveRestartWorkaround);
 
   private:
     gl::Error streamIndexData(const void *data,
@@ -100,6 +98,11 @@ class IndexDataManager : angle::NonCopyable
     std::unique_ptr<StreamingIndexBufferInterface> mStreamingBufferShort;
     std::unique_ptr<StreamingIndexBufferInterface> mStreamingBufferInt;
 };
+
+bool UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
+                                   GLenum type,
+                                   RendererClass rendererClass);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_INDEXDATAMANAGER_H_

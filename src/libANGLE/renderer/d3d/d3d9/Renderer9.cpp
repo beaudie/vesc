@@ -1342,9 +1342,9 @@ gl::Error Renderer9::applyIndexBuffer(const gl::Context *context,
 {
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
-    gl::Error error =
-        mIndexDataManager->prepareIndexData(context, type, count, elementArrayBuffer, indices,
-                                            indexInfo, context->getParams<gl::HasIndexRange>());
+    gl::Error error                = mIndexDataManager->prepareIndexData(
+        context, type, count, elementArrayBuffer, indices, indexInfo,
+        context->getParams<gl::HasIndexRange>(), false);
     if (error.isError())
     {
         return error;
