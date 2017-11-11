@@ -197,22 +197,24 @@ gl::Error IndexDataManager::prepareIndexData(const gl::Context *context,
                                              gl::Buffer *glBuffer,
                                              const void *indices,
                                              TranslatedIndexData *translated,
-                                             bool primitiveRestartFixedIndexEnabled)
+                                             const gl::HasIndexRange &lazyIndexRange)
 {
     // Avoid D3D11's primitive restart index value
     // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb205124(v=vs.85).aspx
-    bool hasPrimitiveRestartIndex =
-        translated->indexRange.vertexIndexCount < static_cast<size_t>(count) ||
-        translated->indexRange.end == gl::GetPrimitiveRestartIndex(srcType);
-    bool primitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(primitiveRestartFixedIndexEnabled, srcType, mRendererClass) &&
-        hasPrimitiveRestartIndex;
+    bool primitiveRestartFixedIndexEnabled = context->getGLState().isPrimitiveRestartEnabled();
+    bool primitiveRestartWorkaround        = false;
+    if (UsePrimitiveRestartWorkaround(primitiveRestartFixedIndexEnabled, srcType, mRendererClass))
+    {
+        const gl::IndexRange &indexRange = lazyIndexRange.getIndexRange().value();
+        if (indexRange.vertexIndexCount < static_cast<size_t>(count))
+        {
+            ASSERT(indexRange.end == gl::GetPrimitiveRestartIndex(srcType));
+            primitiveRestartWorkaround = true;
+        }
+    }
 
     // We should never have to deal with MAX_UINT indices, since we restrict it via
     // MAX_ELEMENT_INDEX.
-    ASSERT(!(mRendererClass == RENDERER_D3D11 && !primitiveRestartFixedIndexEnabled &&
-             (hasPrimitiveRestartIndex && translated->indexRange.vertexIndexCount != 0) &&
-             srcType == GL_UNSIGNED_INT));
 
     const GLenum dstType = (srcType == GL_UNSIGNED_INT || primitiveRestartWorkaround)
                                ? GL_UNSIGNED_INT
