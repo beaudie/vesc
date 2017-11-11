@@ -50,7 +50,6 @@ struct SourceIndexData
 
 struct TranslatedIndexData
 {
-    gl::IndexRange indexRange;
     unsigned int startIndex;
     unsigned int startOffset;  // In bytes
 
@@ -82,7 +81,7 @@ class IndexDataManager : angle::NonCopyable
                                gl::Buffer *glBuffer,
                                const void *indices,
                                TranslatedIndexData *translated,
-                               bool primitiveRestartFixedIndexEnabled);
+                               const gl::HasIndexRange &lazyIndexRange);
 
   private:
     gl::Error streamIndexData(const void *data,
