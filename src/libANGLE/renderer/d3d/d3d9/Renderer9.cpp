@@ -1342,8 +1342,9 @@ gl::Error Renderer9::applyIndexBuffer(const gl::Context *context,
 {
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
-    gl::Error error = mIndexDataManager->prepareIndexData(context, type, count, elementArrayBuffer,
-                                                          indices, indexInfo, false);
+    gl::Error error =
+        mIndexDataManager->prepareIndexData(context, type, count, elementArrayBuffer, indices,
+                                            indexInfo, context->getParams<gl::HasIndexRange>());
     if (error.isError())
     {
         return error;
@@ -1416,17 +1417,18 @@ gl::Error Renderer9::drawElementsImpl(const gl::Context *context,
                                       GLsizei instances)
 {
     TranslatedIndexData indexInfo;
-    const gl::IndexRange &indexRange =
-        context->getParams<gl::HasIndexRange>().getIndexRange().value();
-    indexInfo.indexRange = indexRange;
+
     ANGLE_TRY(applyIndexBuffer(context, indices, count, mode, type, &indexInfo));
-    size_t vertexCount = indexInfo.indexRange.vertexCount();
-    ANGLE_TRY(applyVertexBuffer(context, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
+
+    const auto &lazyIndexRange       = context->getParams<gl::HasIndexRange>();
+    const gl::IndexRange &indexRange = lazyIndexRange.getIndexRange().value();
+    size_t vertexCount               = indexRange.vertexCount();
+    ANGLE_TRY(applyVertexBuffer(context, mode, static_cast<GLsizei>(indexRange.start),
                                 static_cast<GLsizei>(vertexCount), instances, &indexInfo));
 
     startScene();
 
-    int minIndex = static_cast<int>(indexInfo.indexRange.start);
+    int minIndex = static_cast<int>(indexRange.start);
 
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
