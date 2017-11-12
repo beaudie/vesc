@@ -13,9 +13,47 @@
 
 #include "common/utilities.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/Shader.h"
 
 namespace gl
 {
+
+namespace
+{
+
+// true if varying x has a higher priority in packing than y
+bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
+{
+    // If the PackedVarying 'x' or 'y' to be compared is an array element, this clones an equivalent
+    // non-array shader variable 'vx' or 'vy' for actual comparison instead.
+    sh::ShaderVariable vx, vy;
+    const sh::ShaderVariable *px, *py;
+    if (x.isArrayElement())
+    {
+        vx           = *x.varying;
+        vx.arraySize = 0;
+        px           = &vx;
+    }
+    else
+    {
+        px = x.varying;
+    }
+
+    if (y.isArrayElement())
+    {
+        vy           = *y.varying;
+        vy.arraySize = 0;
+        py           = &vy;
+    }
+    else
+    {
+        py = y.varying;
+    }
+
+    return gl::CompareShaderVar(*px, *py);
+}
+
+}  // anonymous namespace
 
 // Implementation of VaryingPacking
 VaryingPacking::VaryingPacking(GLuint maxVaryingVectors, PackMode packMode)
@@ -226,11 +264,95 @@ void VaryingPacking::insert(unsigned int registerRow,
     }
 }
 
+std::vector<PackedVarying> VaryingPacking::getPackedVaryings(
+    const Program::MergedVaryings &mergedVaryings,
+    const std::vector<std::string> &tfVaryings) const
+{
+    std::vector<PackedVarying> packedVaryings;
+    std::set<std::string> uniqueFullNames;
+
+    for (const auto &ref : mergedVaryings)
+    {
+        const sh::Varying *input  = ref.second.vertex;
+        const sh::Varying *output = ref.second.fragment;
+
+        // Only pack varyings that have a matched input or output, plus special builtins.
+        if ((input && output) || (output && output->isBuiltIn()))
+        {
+            // Will get the vertex shader interpolation by default.
+            auto interpolation = ref.second.get()->interpolation;
+
+            // Note that we lose the vertex shader static use information here. The data for the
+            // variable is taken from the fragment shader.
+            if (output->isStruct())
+            {
+                ASSERT(!output->isArray());
+                for (const auto &field : output->fields)
+                {
+                    ASSERT(!field.isStruct() && !field.isArray());
+                    packedVaryings.push_back(PackedVarying(field, interpolation, output->name));
+                }
+            }
+            else
+            {
+                packedVaryings.push_back(PackedVarying(*output, interpolation));
+            }
+            continue;
+        }
+
+        // Keep Transform FB varyings in the merged list always.
+        if (!input)
+        {
+            continue;
+        }
+
+        for (const std::string &tfVarying : tfVaryings)
+        {
+            std::vector<unsigned int> subscripts;
+            std::string baseName = ParseResourceName(tfVarying, &subscripts);
+            size_t subscript     = GL_INVALID_INDEX;
+            if (!subscripts.empty())
+            {
+                subscript = subscripts.back();
+            }
+            if (uniqueFullNames.count(tfVarying) > 0)
+            {
+                continue;
+            }
+            if (baseName == input->name)
+            {
+                // Transform feedback for varying structs is underspecified.
+                // See Khronos bug 9856.
+                // TODO(jmadill): Figure out how to be spec-compliant here.
+                if (!input->isStruct())
+                {
+                    packedVaryings.push_back(PackedVarying(*input, input->interpolation));
+                    packedVaryings.back().vertexOnly = true;
+                    packedVaryings.back().arrayIndex = static_cast<GLuint>(subscript);
+                    uniqueFullNames.insert(tfVarying);
+                }
+                if (subscript == GL_INVALID_INDEX)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    std::sort(packedVaryings.begin(), packedVaryings.end(), ComparePackedVarying);
+
+    return packedVaryings;
+}
+
 // See comment on packVarying.
 bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
-                                      const std::vector<PackedVarying> &packedVaryings,
+                                      std::vector<PackedVarying> &packedVaryings,
+                                      const Program::MergedVaryings &mergedVaryings,
                                       const std::vector<std::string> &transformFeedbackVaryings)
 {
+
+    packedVaryings = getPackedVaryings(mergedVaryings, transformFeedbackVaryings);
+
     std::set<std::string> uniqueVaryingNames;
 
     // "Variables are packed into the registers one at a time so that they each occupy a contiguous
