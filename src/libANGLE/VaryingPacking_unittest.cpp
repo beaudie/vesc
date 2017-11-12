@@ -6,7 +6,6 @@
 // VaryingPacking_unittest.cpp:
 //   Tests for ANGLE's internal varying packing algorithm.
 //
-
 #include "libANGLE/VaryingPacking.h"
 
 #include <gtest/gtest.h>
