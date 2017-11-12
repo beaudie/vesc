@@ -584,9 +584,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     int getNumViews() const { return mState.getNumViews(); }
     bool usesMultiview() const { return mState.usesMultiview(); }
 
-  private:
-    ~Program();
-
     struct VaryingRef
     {
         const sh::Varying *get() const { return vertex ? vertex : fragment; }
@@ -594,8 +591,10 @@ class Program final : angle::NonCopyable, public LabeledObject
         const sh::Varying *vertex   = nullptr;
         const sh::Varying *fragment = nullptr;
     };
-
     using MergedVaryings = std::map<std::string, VaryingRef>;
+
+  private:
+    ~Program();
 
     void unlink();
 
@@ -634,7 +633,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     void gatherTransformFeedbackVaryings(const MergedVaryings &varyings);
 
     MergedVaryings getMergedVaryings(const Context *context) const;
-    std::vector<PackedVarying> getPackedVaryings(const MergedVaryings &mergedVaryings) const;
     void linkOutputVariables(const Context *context);
 
     void setUniformValuesFromBindingQualifiers();
