@@ -16,6 +16,7 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/Program.h"
 
 namespace gl
 {
@@ -132,7 +133,8 @@ class VaryingPacking final : angle::NonCopyable
     VaryingPacking(GLuint maxVaryingVectors, PackMode packMode);
 
     bool packUserVaryings(gl::InfoLog &infoLog,
-                          const std::vector<PackedVarying> &packedVaryings,
+                          std::vector<PackedVarying> &packedVaryings,
+                          const Program::MergedVaryings &mergedVaryings,
                           const std::vector<std::string> &transformFeedbackVaryings);
 
     struct Register
@@ -158,6 +160,9 @@ class VaryingPacking final : angle::NonCopyable
 
   private:
     bool packVarying(const PackedVarying &packedVarying);
+    std::vector<PackedVarying> getPackedVaryings(const Program::MergedVaryings &mergedVaryings,
+                                                 const std::vector<std::string> &tfVaryings) const;
+
     bool isFree(unsigned int registerRow,
                 unsigned int registerColumn,
                 unsigned int varyingRows,

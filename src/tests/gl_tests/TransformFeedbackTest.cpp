@@ -1192,6 +1192,81 @@ TEST_P(TransformFeedbackTestES31, DifferentArrayElementVaryings)
     ASSERT_GL_NO_ERROR();
 }
 
+#if 0
+// Test transform feedback for struct varying.
+TEST_P(TransformFeedbackTestES31, StructVaryings)
+{
+    const std::string &vertexShaderSource =
+        "#version 310 es\n"
+        "in vec3 position;\n"
+        "struct S {\n"
+        "  vec3 field0;\n"
+        "  vec3 field1;\n"
+        "  vec3 field2;\n"
+        "};\n"         
+        "out S s;\n"
+        "void main() {"
+        "  s.field0 = position;\n"
+        "  s.field1 = vec3(0, 0, 0);\n"
+        "  s.field2 = position;\n"
+        "  gl_Position = vec4(position, 1);\n"
+        "}";
+
+    const std::string &fragmentShaderSource =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "struct S {\n"
+        "  vec3 field0;\n"
+        "  vec3 field1;\n"
+        "  vec3 field2;\n"
+        "};\n"
+        "out vec4 color;\n"
+        "in S s;\n"
+        "void main() {\n"
+        "  color = s.field1;\n"
+        "}";
+
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("s.field0");
+    tfVaryings.push_back("s.field2");
+
+    mProgram = CompileProgramWithTransformFeedback(vertexShaderSource, fragmentShaderSource,
+                                                   tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    ASSERT_NE(0u, mProgram);
+
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(Vector3) * 2 * 6, nullptr, GL_STREAM_DRAW);
+
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedback);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    glUseProgram(mProgram);
+    glBeginTransformFeedback(GL_TRIANGLES);
+    drawQuad(mProgram, "position", 0.5f);
+    glEndTransformFeedback();
+    glUseProgram(0);
+    ASSERT_GL_NO_ERROR();
+
+    const GLvoid *mapPointer =
+        glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(Vector3) * 2 * 6, GL_MAP_READ_BIT);
+    ASSERT_NE(nullptr, mapPointer);
+
+    const auto &quadVertices = GetQuadVertices();
+
+    const Vector3 *vecPointer = static_cast<const Vector3 *>(mapPointer);
+    for (unsigned int vectorIndex = 0; vectorIndex < 3; ++vectorIndex)
+    {
+        unsigned int stream1Index = vectorIndex * 2;
+        unsigned int stream2Index = vectorIndex * 2 + 1;
+        EXPECT_EQ(quadVertices[vectorIndex], vecPointer[stream1Index]);
+        EXPECT_EQ(quadVertices[vectorIndex], vecPointer[stream2Index]);
+    }
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+    ASSERT_GL_NO_ERROR();
+}
+#endif
+
 // Test that nonexistent transform feedback varyings don't assert when linking.
 TEST_P(TransformFeedbackTest, NonExistentTransformFeedbackVarying)
 {

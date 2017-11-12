@@ -28,6 +28,8 @@
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
+#include <iostream>
+
 using namespace angle;
 
 namespace rx
@@ -1248,6 +1250,8 @@ gl::Error ProgramD3D::getPixelExecutableForCachedOutputLayout(ShaderExecutableD3
     std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mPixelHLSL, mPixelShaderKey, mUsesFragDepth, mPixelShaderOutputLayoutCache);
 
+    // std::cout << finalPixelHLSL;
+
     // Generate new pixel executable
     ShaderExecutableD3D *pixelExecutable = nullptr;
 
@@ -1289,6 +1293,7 @@ gl::Error ProgramD3D::getVertexExecutableForCachedInputLayout(ShaderExecutableD3
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
         mVertexHLSL, mCachedInputLayout, mState.getAttributes());
 
+    // std::cout << finalVertexHLSL;
     // Generate new vertex executable
     ShaderExecutableD3D *vertexExecutable = nullptr;
 
