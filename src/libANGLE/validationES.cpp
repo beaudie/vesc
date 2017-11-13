@@ -2588,7 +2588,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
     }
 
     gl::Program *program = state.getProgram();
-    if (!program)
+    if (!program || !program->getAttachedVertexShader() || !program->getAttachedFragmentShader())
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ProgramNotBound);
         return false;
