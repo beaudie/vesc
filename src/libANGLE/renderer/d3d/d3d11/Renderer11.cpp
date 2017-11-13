@@ -1651,8 +1651,7 @@ gl::Error Renderer11::drawElements(const gl::Context *context,
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(program, instances);
 
     if (!DrawCallNeedsTranslation(context, mode) &&
-        !IndexDataManager::UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), type,
-                                                         RENDERER_D3D11))
+        !UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), type, RENDERER_D3D11))
     {
         ANGLE_TRY(mStateManager.applyIndexBuffer(context, indices, count, type, &indexInfo));
 
