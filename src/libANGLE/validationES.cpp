@@ -2596,6 +2596,14 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         return false;
     }
 
+    if (program->isLinked() &&
+        (!program->hasLinkedVertexShader() || !program->hasLinkedFragmentShader()))
+    {
+        context->handleError(InvalidOperation() << "No vertex shader stage"
+                                                   "or no fragment shader stage");
+        return false;
+    }
+
     if (!program->validateSamplers(nullptr, context->getCaps()))
     {
         context->handleError(InvalidOperation());
