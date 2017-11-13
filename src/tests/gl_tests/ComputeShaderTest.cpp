@@ -224,6 +224,37 @@ TEST_P(ComputeShaderTest, AttachmentCount)
     EXPECT_GL_NO_ERROR();
 }
 
+// Attach a compute shader and link, but start rendering.
+TEST_P(ComputeShaderTest, StartRenderingWithComputeProgram)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1) in;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint program = glCreateProgram();
+    GLuint cs      = CompileShader(GL_COMPUTE_SHADER, csSource);
+
+    EXPECT_NE(0u, cs);
+
+    glAttachShader(program, cs);
+    glDeleteShader(cs);
+
+    glLinkProgram(program);
+
+    GLint linkStatus;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(GL_TRUE, linkStatus);
+
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, 0, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 // Attach a vertex and fragment shader and link, but dispatch compute.
 TEST_P(ComputeShaderTest, DispatchComputeWithRenderingProgram)
 {
