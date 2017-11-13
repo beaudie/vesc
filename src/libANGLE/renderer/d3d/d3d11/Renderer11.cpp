@@ -996,7 +996,7 @@ void Renderer11::populateRenderer11DeviceCaps()
     SafeRelease(dxgiAdapter2);
 }
 
-gl::SupportedSampleSet Renderer11::generateSampleSetFromCaps(
+gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
     const gl::TextureCaps &colorBufferFormatCaps,
     const gl::TextureCaps &depthStencilBufferFormatCaps) const
 {
@@ -1022,11 +1022,8 @@ gl::SupportedSampleSet Renderer11::generateSampleSetFromCaps(
         sampleCounts = depthStencilBufferFormatCaps.sampleCounts;
     }
 
-    // In EGL, no multisampling is 0, in D3D its 1, so if 1 exists, insert 0 for EGL to match.
-    if (sampleCounts.find(1) != sampleCounts.end())
-    {
-        sampleCounts.insert(0);
-    }
+    // Always support 0 samples
+    sampleCounts.insert(0);
 
     return sampleCounts;
 }
@@ -1098,7 +1095,7 @@ egl::ConfigSet Renderer11::generateConfigs()
             const gl::Version &maxVersion = getMaxSupportedESVersion();
 
             const gl::SupportedSampleSet sampleCounts =
-                generateSampleSetFromCaps(colorBufferFormatCaps, depthStencilBufferFormatCaps);
+                generateSampleSetForEGLConfig(colorBufferFormatCaps, depthStencilBufferFormatCaps);
 
             for (GLuint sampleCount : sampleCounts)
             {
