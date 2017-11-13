@@ -416,6 +416,7 @@ config("libANGLE_config") {
 
 static_library("libANGLE") {
   sources = rebase_path(gles_gypi.libangle_sources, ".", "src")
+  sources += rebase_path(gles_gypi.libangle_includes, ".", "src")
 
   include_dirs = []
   libs = []
