@@ -50,7 +50,6 @@ struct SourceIndexData
 
 struct TranslatedIndexData
 {
-    gl::IndexRange indexRange;
     unsigned int startIndex;
     unsigned int startOffset;  // In bytes
 
@@ -99,7 +98,7 @@ class IndexDataManager : angle::NonCopyable
 };
 
 GLenum GetIndexTranslationDestType(GLenum srcType,
-                                   const gl::IndexRange &indexRange,
+                                   const gl::HasIndexRange &lazyIndexRange,
                                    bool usePrimitiveRestartWorkaround);
 
 bool UsePrimitiveRestartWorkaround(bool primitiveRestartFixedIndexEnabled,
