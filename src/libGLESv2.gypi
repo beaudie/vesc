@@ -992,6 +992,10 @@
                     'GL_GLEXT_PROTOTYPES',
                     'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
                 ],
+                'msvs_disabled_warnings':
+                [
+                    4577, # 'noexcept' used with no exception handling mode specified; termination on exception is not guaranteed.
+                ],
                 'conditions':
                 [
                     ['OS=="win"', {
