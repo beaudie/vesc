@@ -424,7 +424,8 @@ TEST_P(ProgramBinaryES31Test, ProgramBinaryWithComputeShader)
     // Load a new program with the binary.
     ANGLE_GL_BINARY_ES3_PROGRAM(binaryProgram, binary, binaryFormat);
 
-    // TODO(Xinghua): add dispatch support when available.
+    glUseProgram(binaryProgram.get());
+    glDispatchCompute(8, 4, 2);
 
     ASSERT_GL_NO_ERROR();
 }
