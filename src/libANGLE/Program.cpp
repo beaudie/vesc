@@ -537,6 +537,7 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLui
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
       mLinked(false),
+      mLinkedShaderStages(0),
       mDeleteStatus(false),
       mRefCount(0),
       mResourceManager(manager),
@@ -929,6 +930,9 @@ Error Program::link(const gl::Context *context)
 
     setUniformValuesFromBindingQualifiers();
 
+    ASSERT(mLinked);
+    updateLinkedShaderStages();
+
     // Mark implementation-specific unreferenced uniforms as ignored.
     mProgram->markUnusedUniformLocations(&mState.mUniformLocations, &mState.mSamplerBindings);
 
@@ -944,6 +948,24 @@ Error Program::link(const gl::Context *context)
     ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheMissTimeUS", us);
 
     return NoError();
+}
+
+void Program::updateLinkedShaderStages()
+{
+    if (mState.mAttachedVertexShader)
+    {
+        mLinkedShaderStages |= VERTEX_SHADER_BIT;
+    }
+
+    if (mState.mAttachedFragmentShader)
+    {
+        mLinkedShaderStages |= FRAGMENT_SHADER_BIT;
+    }
+
+    if (mState.mAttachedComputeShader)
+    {
+        mLinkedShaderStages |= COMPUTE_SHADER_BIT;
+    }
 }
 
 // Returns the program object to an unlinked state, before re-linking, or at destruction
