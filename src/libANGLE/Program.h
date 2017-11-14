@@ -11,6 +11,7 @@
 #define LIBANGLE_PROGRAM_H_
 
 #include <GLES2/gl2.h>
+#include <GLES3/gl31.h>
 #include <GLSLANG/ShaderVars.h>
 
 #include <array>
@@ -409,6 +410,13 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const gl::Context *context);
     bool isLinked() const;
 
+    bool hasLinkedVertexShader() const { return mLinkedShaderStages & GL_VERTEX_SHADER_BIT; }
+    bool hasLinkedFragmentShader() const { return mLinkedShaderStages & GL_FRAGMENT_SHADER_BIT; }
+    bool hasLinkedComputeShader() const { return mLinkedShaderStages & GL_COMPUTE_SHADER_BIT; }
+
+    GLbitfield getLinkedShaderStages() const { return mLinkedShaderStages; }
+    void setLinkedShaderStages(GLbitfield stages) { mLinkedShaderStages = stages; }
+
     Error loadBinary(const Context *context,
                      GLenum binaryFormat,
                      const void *binary,
@@ -634,6 +642,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     void linkSamplerAndImageBindings();
     bool linkAtomicCounterBuffers();
 
+    void updateLinkedShaderStages();
+
     bool areMatchingInterfaceBlocks(InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,
                                     const sh::InterfaceBlock &fragmentInterfaceBlock,
@@ -705,6 +715,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     Bindings mFragmentInputBindings;
 
     bool mLinked;
+    GLbitfield mLinkedShaderStages;
     bool mDeleteStatus;   // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;

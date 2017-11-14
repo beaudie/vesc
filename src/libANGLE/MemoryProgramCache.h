@@ -62,7 +62,7 @@ class MemoryProgramCache final : angle::NonCopyable
 
     // Loads program state according to the specified binary blob.
     static LinkResult Deserialize(const Context *context,
-                                  const Program *program,
+                                  Program *program,
                                   ProgramState *state,
                                   const uint8_t *binary,
                                   size_t length,
@@ -91,7 +91,7 @@ class MemoryProgramCache final : angle::NonCopyable
     // Check the cache, and deserialize and load the program if found. Evict existing hash if load
     // fails.
     LinkResult getProgram(const Context *context,
-                          const Program *program,
+                          Program *program,
                           ProgramState *state,
                           ProgramHash *hashOut);
 
