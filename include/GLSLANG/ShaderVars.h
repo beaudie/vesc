@@ -108,6 +108,10 @@ struct ShaderVariable
                               const ShaderVariable **leafVar,
                               std::string* originalFullName) const;
 
+    // Find the child field which matches 'fullName' == this.name + "." + field.name.
+    // Return nullptr if not found.
+    const ShaderVariable *findField(const std::string &fullName) const;
+
     bool isBuiltIn() const;
 
     GLenum type;
@@ -224,7 +228,8 @@ struct Varying : public VariableWithLocation
 {
     Varying();
     ~Varying();
-    Varying(const Varying &otherg);
+    Varying(const Varying &other);
+    Varying(const ShaderVariable &field, const Varying &parent);
     Varying &operator=(const Varying &other);
     bool operator==(const Varying &other) const;
     bool operator!=(const Varying &other) const

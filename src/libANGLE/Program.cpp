@@ -2621,13 +2621,19 @@ bool Program::linkValidateTransformFeedback(const gl::Context *context,
         for (const auto &ref : varyings)
         {
             const sh::Varying *varying = ref.second.get();
+            const sh::ShaderVariable *field = varying->findField(tfVaryingName);
 
-            if (baseName == varying->name)
+            if (baseName == varying->name || field != nullptr)
             {
                 if (uniqueNames.count(tfVaryingName) > 0)
                 {
                     infoLog << "Two transform feedback varyings specify the same output variable ("
                             << tfVaryingName << ").";
+                    return false;
+                }
+                if (varying->isStruct() && field == nullptr)
+                {
+                    infoLog << "Struct cannot be captured directly (" << tfVaryingName << ").";
                     return false;
                 }
                 if (context->getClientVersion() >= Version(3, 1))
@@ -2652,10 +2658,21 @@ bool Program::linkValidateTransformFeedback(const gl::Context *context,
 
                 // GLSL ES 3.10 section 4.3.6: A vertex output can't be an array of arrays.
                 ASSERT(!varying->isArrayOfArrays());
-                size_t elementCount =
-                    ((varying->isArray() && subscripts.empty()) ? varying->getOutermostArraySize()
-                                                                : 1);
-                size_t componentCount = VariableComponentCount(varying->type) * elementCount;
+                size_t elementCount   = 0;
+                size_t componentCount = 0;
+                if (field == nullptr)
+                {
+                    elementCount   = ((varying->isArray() && subscripts.empty())
+                                        ? varying->getOutermostArraySize()
+                                        : 1);
+                    componentCount = VariableComponentCount(varying->type) * elementCount;
+                }
+                else
+                {
+                    ASSERT(!field->isStruct() && !field->isArray());
+                    elementCount   = 1;
+                    componentCount = VariableComponentCount(field->type);
+                }
                 if (mState.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
                     componentCount > caps.maxTransformFeedbackSeparateComponents)
                 {
@@ -2747,6 +2764,15 @@ void Program::gatherTransformFeedbackVaryings(const Program::MergedVaryings &var
                 mState.mLinkedTransformFeedbackVaryings.emplace_back(
                     *varying, static_cast<GLuint>(subscript));
                 break;
+            }
+            else if (varying->isStruct())
+            {
+                const auto *field = varying->findField(tfVaryingName);
+                if (field != nullptr)
+                {
+                    mState.mLinkedTransformFeedbackVaryings.emplace_back(*field, *varying);
+                    break;
+                }
             }
         }
     }
