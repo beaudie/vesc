@@ -139,6 +139,38 @@ unsigned int ShaderVariable::getBasicTypeElementCount() const
     return 1u;
 }
 
+const ShaderVariable *ShaderVariable::findField(const std::string &fullName) const
+{
+    if (!isStruct())
+    {
+        return nullptr;
+    }
+    size_t pos = fullName.find_first_of(".");
+    if (pos == std::string::npos)
+    {
+        return nullptr;
+    }
+    std::string topName = fullName.substr(0, pos);
+    if (topName != name)
+    {
+        return nullptr;
+    }
+    std::string fieldName = fullName.substr(pos + 1);
+    if (fieldName.empty())
+    {
+        return nullptr;
+    }
+    for (const auto &field : fields)
+    {
+        ASSERT(!field.isStruct() && !field.isArray());
+        if (field.name == fieldName)
+        {
+            return &field;
+        }
+    }
+    return nullptr;
+}
+
 bool ShaderVariable::findInfoByMappedName(const std::string &mappedFullName,
                                           const ShaderVariable **leafVar,
                                           std::string *originalFullName) const
@@ -407,6 +439,12 @@ Varying::Varying(const Varying &other)
       interpolation(other.interpolation),
       isInvariant(other.isInvariant)
 {
+}
+
+Varying::Varying(const ShaderVariable &field, const Varying &parent)
+    : interpolation(parent.interpolation), isInvariant(parent.isInvariant)
+{
+    name = parent.name + "." + name;
 }
 
 Varying &Varying::operator=(const Varying &other)
