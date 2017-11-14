@@ -94,6 +94,22 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
     return true;
 }
 
+const ShaderVariable *ShaderVariable::findField(const std::string &fullName) const
+{
+    if (isStruct())
+    {
+        for (const auto &field : fields)
+        {
+            ASSERT(!field.isStruct() && !field.isArray());
+            if (fullName == name + "." + field.name)
+            {
+                return &field;
+            }
+        }
+    }
+    return nullptr;
+}
+
 bool ShaderVariable::findInfoByMappedName(const std::string &mappedFullName,
                                           const ShaderVariable **leafVar,
                                           std::string *originalFullName) const
