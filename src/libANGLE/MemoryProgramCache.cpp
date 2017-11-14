@@ -200,7 +200,7 @@ MemoryProgramCache::~MemoryProgramCache()
 
 // static
 LinkResult MemoryProgramCache::Deserialize(const Context *context,
-                                           const Program *program,
+                                           Program *program,
                                            ProgramState *state,
                                            const uint8_t *binary,
                                            size_t length,
@@ -407,6 +407,8 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     unsigned int atomicCounterRangeHigh = stream.readInt<unsigned int>();
     state->mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
 
+    program->setLinkedShaderStages(stream.readInt<unsigned int>());
+
     return program->getImplementation()->load(context, infoLog, &stream);
 }
 
@@ -569,6 +571,8 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(state.getAtomicCounterUniformRange().low());
     stream.writeInt(state.getAtomicCounterUniformRange().high());
 
+    stream.writeInt(program->getLinkedShaderStages());
+
     program->getImplementation()->save(context, &stream);
 
     ASSERT(binaryOut);
@@ -606,7 +610,7 @@ void MemoryProgramCache::ComputeHash(const Context *context,
 }
 
 LinkResult MemoryProgramCache::getProgram(const Context *context,
-                                          const Program *program,
+                                          Program *program,
                                           ProgramState *state,
                                           ProgramHash *hashOut)
 {
