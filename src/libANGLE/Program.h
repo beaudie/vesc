@@ -31,6 +31,10 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
 
+#define VERTEX_SHADER_BIT 0x00000001
+#define FRAGMENT_SHADER_BIT 0x00000002
+#define COMPUTE_SHADER_BIT 0x00000020
+
 namespace rx
 {
 class GLImplFactory;
@@ -409,6 +413,10 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const gl::Context *context);
     bool isLinked() const;
 
+    bool hasLinkedVertexShader() const { return mLinkedShaderStages & VERTEX_SHADER_BIT; }
+    bool hasLinkedFragmentShader() const { return mLinkedShaderStages & FRAGMENT_SHADER_BIT; }
+    bool hasLinkedComputeShader() const { return mLinkedShaderStages & COMPUTE_SHADER_BIT; }
+
     Error loadBinary(const Context *context,
                      GLenum binaryFormat,
                      const void *binary,
@@ -634,6 +642,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     void linkSamplerAndImageBindings();
     bool linkAtomicCounterBuffers();
 
+    void updateLinkedShaderStages();
+
     bool areMatchingInterfaceBlocks(InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,
                                     const sh::InterfaceBlock &fragmentInterfaceBlock,
@@ -705,6 +715,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     Bindings mFragmentInputBindings;
 
     bool mLinked;
+    GLbitfield mLinkedShaderStages;
     bool mDeleteStatus;   // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;
