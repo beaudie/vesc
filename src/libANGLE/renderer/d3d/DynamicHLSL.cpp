@@ -486,7 +486,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
     // Add stub string to be replaced when shader is dynamically defined by its layout
     vertexStream << "\n" << std::string(VERTEX_ATTRIBUTE_STUB_STRING) << "\n";
 
-    const auto &vertexBuiltins = builtinsD3D[SHADER_VERTEX];
+    const auto &vertexBuiltins = builtinsD3D[gl::SHADER_VERTEX];
 
     // Write the HLSL input/output declarations
     vertexStream << "struct VS_OUTPUT\n";
@@ -652,7 +652,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
                  << "    return output;\n"
                  << "}\n";
 
-    const auto &pixelBuiltins = builtinsD3D[SHADER_PIXEL];
+    const auto &pixelBuiltins = builtinsD3D[gl::SHADER_FRAGMENT];
 
     std::ostringstream pixelStream;
     pixelStream << fragmentShaderGL->getTranslatedSource(context);
@@ -926,14 +926,14 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
 
     std::ostringstream preambleStream;
 
-    const auto &vertexBuiltins = builtinsD3D[SHADER_VERTEX];
+    const auto &vertexBuiltins = builtinsD3D[gl::SHADER_VERTEX];
 
     preambleStream << "struct GS_INPUT\n";
     generateVaryingLinkHLSL(varyingPacking, vertexBuiltins, builtinsD3D.usesPointSize(),
                             preambleStream);
     preambleStream << "\n"
                    << "struct GS_OUTPUT\n";
-    generateVaryingLinkHLSL(varyingPacking, builtinsD3D[SHADER_GEOMETRY],
+    generateVaryingLinkHLSL(varyingPacking, builtinsD3D[gl::SHADER_GEOMETRY],
                             builtinsD3D.usesPointSize(), preambleStream);
     preambleStream
         << "\n"
@@ -951,8 +951,8 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
         preambleStream << "    output.gl_ViewID_OVR = input.gl_ViewID_OVR;\n";
         if (selectViewInVS)
         {
-            ASSERT(builtinsD3D[SHADER_GEOMETRY].glViewportIndex.enabled &&
-                   builtinsD3D[SHADER_GEOMETRY].glLayer.enabled);
+            ASSERT(builtinsD3D[gl::SHADER_GEOMETRY].glViewportIndex.enabled &&
+                   builtinsD3D[gl::SHADER_GEOMETRY].glLayer.enabled);
 
             // If the view is already selected in the VS, then we just pass the gl_ViewportIndex and
             // gl_Layer to the output.
@@ -984,8 +984,8 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
 
     if (hasANGLEMultiviewEnabled && !selectViewInVS)
     {
-        ASSERT(builtinsD3D[SHADER_GEOMETRY].glViewportIndex.enabled &&
-               builtinsD3D[SHADER_GEOMETRY].glLayer.enabled);
+        ASSERT(builtinsD3D[gl::SHADER_GEOMETRY].glViewportIndex.enabled &&
+               builtinsD3D[gl::SHADER_GEOMETRY].glLayer.enabled);
 
         // According to the HLSL reference, using SV_RenderTargetArrayIndex is only valid if the
         // render target is an array resource. Because of this we do not write to gl_Layer if we are
@@ -1324,15 +1324,15 @@ void BuiltinVarying::enable(const std::string &semanticVal, unsigned int indexVa
 BuiltinVaryingsD3D::BuiltinVaryingsD3D(const ProgramD3DMetadata &metadata,
                                        const VaryingPacking &packing)
 {
-    updateBuiltins(SHADER_VERTEX, metadata, packing);
-    updateBuiltins(SHADER_PIXEL, metadata, packing);
+    updateBuiltins(gl::SHADER_VERTEX, metadata, packing);
+    updateBuiltins(gl::SHADER_FRAGMENT, metadata, packing);
     if (metadata.getRendererMajorShaderModel() >= 4)
     {
-        updateBuiltins(SHADER_GEOMETRY, metadata, packing);
+        updateBuiltins(gl::SHADER_GEOMETRY, metadata, packing);
     }
 }
 
-void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
+void BuiltinVaryingsD3D::updateBuiltins(gl::ShaderType shaderType,
                                         const ProgramD3DMetadata &metadata,
                                         const VaryingPacking &packing)
 {
@@ -1347,7 +1347,7 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
     {
         builtins->dxPosition.enableSystem("SV_Position");
     }
-    else if (shaderType == SHADER_PIXEL)
+    else if (shaderType == gl::SHADER_FRAGMENT)
     {
         builtins->dxPosition.enableSystem("VPOS");
     }
@@ -1366,8 +1366,8 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
         builtins->glFragCoord.enable(userSemantic, reservedSemanticIndex++);
     }
 
-    if (shaderType == SHADER_VERTEX ? metadata.addsPointCoordToVertexShader()
-                                    : metadata.usesPointCoord())
+    if (shaderType == gl::SHADER_VERTEX ? metadata.addsPointCoordToVertexShader()
+                                        : metadata.usesPointCoord())
     {
         // SM3 reserves the TEXCOORD semantic for point sprite texcoords (gl_PointCoord)
         // In D3D11 we manually compute gl_PointCoord in the GS.
@@ -1381,7 +1381,7 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
         }
     }
 
-    if (shaderType == SHADER_VERTEX && metadata.hasANGLEMultiviewEnabled())
+    if (shaderType == gl::SHADER_VERTEX && metadata.hasANGLEMultiviewEnabled())
     {
         builtins->glViewIDOVR.enable(userSemantic, reservedSemanticIndex++);
         if (metadata.canSelectViewInVertexShader())
@@ -1391,12 +1391,12 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
         }
     }
 
-    if (shaderType == SHADER_PIXEL && metadata.hasANGLEMultiviewEnabled())
+    if (shaderType == gl::SHADER_FRAGMENT && metadata.hasANGLEMultiviewEnabled())
     {
         builtins->glViewIDOVR.enable(userSemantic, reservedSemanticIndex++);
     }
 
-    if (shaderType == SHADER_GEOMETRY && metadata.hasANGLEMultiviewEnabled())
+    if (shaderType == gl::SHADER_GEOMETRY && metadata.hasANGLEMultiviewEnabled())
     {
         // Although it is possible to retrieve gl_ViewID_OVR from the value of
         // SV_ViewportArrayIndex or SV_RenderTargetArrayIndex based on the multi-view state in the
@@ -1411,7 +1411,7 @@ void BuiltinVaryingsD3D::updateBuiltins(ShaderType shaderType,
 
     // Special case: do not include PSIZE semantic in HLSL 3 pixel shaders
     if (metadata.usesSystemValuePointSize() &&
-        (shaderType != SHADER_PIXEL || metadata.getRendererMajorShaderModel() >= 4))
+        (shaderType != gl::SHADER_FRAGMENT || metadata.getRendererMajorShaderModel() >= 4))
     {
         builtins->glPointSize.enableSystem("PSIZE");
     }
