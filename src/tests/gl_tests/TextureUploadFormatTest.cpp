@@ -7,8 +7,10 @@
 //   Test all texture unpack/upload formats for sampling correctness.
 //
 
+#include "test_utils/ANGLETest.h" // Must include gtest before X.h
+
 #include "common/mathutil.h"
-#include "test_utils/ANGLETest.h"
+#include "common/utilities.h"
 #include "test_utils/gl_raii.h"
 
 using namespace angle;
@@ -230,13 +232,6 @@ void ZeroAndCopy(DestT &dest, const SrcT (&src)[SrcN])
     memcpy(dest.data(), src, sizeof(SrcT) * SrcN);
 }
 
-std::string EnumStr(const GLenum v)
-{
-	std::stringstream ret;
-	ret << "0x" << std::hex << v;
-	return ret.str();
-}
-
 }  // anonymous namespace
 
 // Upload (1,2,5,3) to integer formats, and (1,2,5,3)/8.0 to float formats.
@@ -382,8 +377,9 @@ TEST_P(TextureUploadFormatTest, All)
         auto result = actual.ExpectNear(expected, err);
         if (!result)
         {
-            result << " [" << EnumStr(format.internalFormat) << "/" << EnumStr(format.unpackFormat)
-                   << "/" << EnumStr(format.unpackType) << " " << info << "]";
+            result << " [" << gl::EnumStr(format.internalFormat) << "/"
+                   << gl::EnumStr(format.unpackFormat) << "/" << gl::EnumStr(format.unpackType)
+                   << " " << info << "]";
         }
         EXPECT_TRUE(result);
     };

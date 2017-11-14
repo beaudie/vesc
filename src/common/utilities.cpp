@@ -11,6 +11,7 @@
 #include "common/platform.h"
 
 #include <set>
+#include <sstream>
 
 #if defined(ANGLE_ENABLE_WINDOWS_STORE)
 #  include <wrl.h>
@@ -798,6 +799,108 @@ unsigned int ParseArrayIndex(const std::string &name, size_t *nameLengthWithoutA
 
     *nameLengthWithoutArrayIndexOut = name.length();
     return subscript;
+}
+
+std::string EnumStr(const GLenum v)
+{
+#define _(X)     \
+    case GL_##X: \
+        return #X;
+    switch (v)
+    {
+        _(UNSIGNED_SHORT_5_6_5)
+        _(UNSIGNED_SHORT_4_4_4_4)
+        _(UNSIGNED_SHORT_5_5_5_1)
+        _(UNSIGNED_INT_2_10_10_10_REV)
+        _(UNSIGNED_INT_24_8)
+        _(UNSIGNED_INT_10F_11F_11F_REV)
+        _(UNSIGNED_INT_5_9_9_9_REV)
+        _(FLOAT_32_UNSIGNED_INT_24_8_REV)
+        _(UNSIGNED_BYTE)
+        _(BYTE)
+        _(UNSIGNED_SHORT)
+        _(SHORT)
+        _(HALF_FLOAT)
+        _(HALF_FLOAT_OES)
+        _(UNSIGNED_INT)
+        _(INT)
+        _(FLOAT)
+        _(RGBA)
+        _(RGBA_INTEGER)
+        _(RGB)
+        _(RGB_INTEGER)
+        _(RG)
+        _(RG_INTEGER)
+        _(LUMINANCE_ALPHA)
+        _(RED)
+        _(RED_INTEGER)
+        _(LUMINANCE)
+        _(ALPHA)
+        _(DEPTH_COMPONENT)
+
+        _(RGBA8)
+        _(RGB8)
+        _(RG8)
+        _(R8)
+        _(RGBA8_SNORM)
+        _(RGB8_SNORM)
+        _(RG8_SNORM)
+        _(R8_SNORM)
+        _(RGBA8I)
+        _(RGB8I)
+        _(RG8I)
+        _(R8I)
+        _(RGBA8UI)
+        _(RGB8UI)
+        _(RG8UI)
+        _(R8UI)
+
+        _(RGBA16F)
+        _(RGB16F)
+        _(RG16F)
+        _(R16F)
+        _(RGBA16I)
+        _(RGB16I)
+        _(RG16I)
+        _(R16I)
+        _(RGBA16UI)
+        _(RGB16UI)
+        _(RG16UI)
+        _(R16UI)
+
+        _(RGBA32F)
+        _(RGB32F)
+        _(RG32F)
+        _(R32F)
+        _(RGBA32I)
+        _(RGB32I)
+        _(RG32I)
+        _(R32I)
+        _(RGBA32UI)
+        _(RGB32UI)
+        _(RG32UI)
+        _(R32UI)
+
+        _(RGBA4)
+        _(RGB565)
+        _(RGB5_A1)
+        _(RGB10_A2)
+        _(RGB9_E5)
+        _(R11F_G11F_B10F)
+        _(RGB10_A2UI)
+
+        _(DEPTH_COMPONENT16)
+        _(DEPTH_COMPONENT24)
+        _(DEPTH_COMPONENT32F)
+        _(DEPTH24_STENCIL8)
+        _(DEPTH32F_STENCIL8)
+
+        default:
+            std::stringstream ret;
+            ret << "0x" << std::hex << v;
+            return ret.str();
+    }
+#undef _
 }
 
 }  // namespace gl

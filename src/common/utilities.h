@@ -126,6 +126,8 @@ struct UniformTypeInfo final : angle::NonCopyable
 
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType);
 
+std::string EnumStr(const GLenum v);
+
 }  // namespace gl
 
 namespace egl
