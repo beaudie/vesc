@@ -2701,7 +2701,7 @@ gl::Error Renderer9::loadExecutable(const uint8_t *function,
             *outExecutable = new ShaderExecutable9(function, length, vshader);
         }
         break;
-        case SHADER_PIXEL:
+        case SHADER_FRAGMENT:
         {
             IDirect3DPixelShader9 *pshader = nullptr;
             gl::Error error                = createPixelShader((DWORD *)function, length, &pshader);
@@ -2738,7 +2738,7 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
         case SHADER_VERTEX:
             profileStream << "vs";
             break;
-        case SHADER_PIXEL:
+        case SHADER_FRAGMENT:
             profileStream << "ps";
             break;
         default:

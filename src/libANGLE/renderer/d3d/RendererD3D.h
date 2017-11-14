@@ -18,6 +18,7 @@
 #include "libANGLE/Device.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/WorkerThread.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
@@ -70,15 +71,6 @@ enum RendererClass
 {
     RENDERER_D3D11,
     RENDERER_D3D9
-};
-
-enum ShaderType
-{
-    SHADER_VERTEX,
-    SHADER_PIXEL,
-    SHADER_GEOMETRY,
-    SHADER_COMPUTE,
-    SHADER_TYPE_MAX
 };
 
 // Useful for unit testing

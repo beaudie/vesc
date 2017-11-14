@@ -2863,7 +2863,7 @@ gl::Error Renderer11::loadExecutable(const uint8_t *function,
                                                     std::move(streamOutShader));
         }
         break;
-        case SHADER_PIXEL:
+        case SHADER_FRAGMENT:
         {
             d3d11::PixelShader pixelShader;
             ANGLE_TRY(allocateResource(shaderData, &pixelShader));
@@ -2907,7 +2907,7 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
         case SHADER_VERTEX:
             profileStream << "vs";
             break;
-        case SHADER_PIXEL:
+        case SHADER_FRAGMENT:
             profileStream << "ps";
             break;
         case SHADER_GEOMETRY:
