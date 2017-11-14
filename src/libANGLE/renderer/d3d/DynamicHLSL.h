@@ -16,6 +16,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
@@ -95,15 +96,18 @@ class BuiltinVaryingsD3D
 
     bool usesPointSize() const { return mBuiltinInfo[SHADER_VERTEX].glPointSize.enabled; }
 
-    const BuiltinInfo &operator[](ShaderType shaderType) const { return mBuiltinInfo[shaderType]; }
-    BuiltinInfo &operator[](ShaderType shaderType) { return mBuiltinInfo[shaderType]; }
+    const BuiltinInfo &operator[](gl::ShaderType shaderType) const
+    {
+        return mBuiltinInfo[shaderType];
+    }
+    BuiltinInfo &operator[](gl::ShaderType shaderType) { return mBuiltinInfo[shaderType]; }
 
   private:
-    void updateBuiltins(ShaderType shaderType,
+    void updateBuiltins(gl::ShaderType shaderType,
                         const ProgramD3DMetadata &metadata,
                         const gl::VaryingPacking &packing);
 
-    std::array<BuiltinInfo, SHADER_TYPE_MAX> mBuiltinInfo;
+    std::array<BuiltinInfo, gl::SHADER_TYPE_MAX> mBuiltinInfo;
 };
 
 class DynamicHLSL : angle::NonCopyable

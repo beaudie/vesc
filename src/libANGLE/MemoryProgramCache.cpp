@@ -16,6 +16,7 @@
 #include "common/version.h"
 #include "libANGLE/BinaryStream.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Program.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/ProgramImpl.h"
@@ -407,6 +408,9 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     unsigned int atomicCounterRangeHigh = stream.readInt<unsigned int>();
     state->mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
 
+    static_assert(SHADER_TYPE_MAX <= sizeof(unsigned long) * 8, "Too many shader types");
+    state->setLinkedShaderStages(stream.readInt<unsigned long>());
+
     return program->getImplementation()->load(context, infoLog, &stream);
 }
 
@@ -568,6 +572,8 @@ void MemoryProgramCache::Serialize(const Context *context,
 
     stream.writeInt(state.getAtomicCounterUniformRange().low());
     stream.writeInt(state.getAtomicCounterUniformRange().high());
+
+    stream.writeInt(state.mLinkedShaderStages.to_ulong());
 
     program->getImplementation()->save(context, &stream);
 
