@@ -2810,7 +2810,7 @@ gl::Error Renderer11::createRenderTargetCopy(RenderTargetD3D *source, RenderTarg
 
 gl::Error Renderer11::loadExecutable(const uint8_t *function,
                                      size_t length,
-                                     ShaderType type,
+                                     gl::ShaderType type,
                                      const std::vector<D3DVarying> &streamOutVaryings,
                                      bool separatedOutputBuffers,
                                      ShaderExecutableD3D **outExecutable)
@@ -2819,7 +2819,7 @@ gl::Error Renderer11::loadExecutable(const uint8_t *function,
 
     switch (type)
     {
-        case SHADER_VERTEX:
+        case gl::SHADER_VERTEX:
         {
             d3d11::VertexShader vertexShader;
             d3d11::GeometryShader streamOutShader;
@@ -2850,21 +2850,21 @@ gl::Error Renderer11::loadExecutable(const uint8_t *function,
                                                     std::move(streamOutShader));
         }
         break;
-        case SHADER_PIXEL:
+        case gl::SHADER_FRAGMENT:
         {
             d3d11::PixelShader pixelShader;
             ANGLE_TRY(allocateResource(shaderData, &pixelShader));
             *outExecutable = new ShaderExecutable11(function, length, std::move(pixelShader));
         }
         break;
-        case SHADER_GEOMETRY:
+        case gl::SHADER_GEOMETRY:
         {
             d3d11::GeometryShader geometryShader;
             ANGLE_TRY(allocateResource(shaderData, &geometryShader));
             *outExecutable = new ShaderExecutable11(function, length, std::move(geometryShader));
         }
         break;
-        case SHADER_COMPUTE:
+        case gl::SHADER_COMPUTE:
         {
             d3d11::ComputeShader computeShader;
             ANGLE_TRY(allocateResource(shaderData, &computeShader));
@@ -2881,7 +2881,7 @@ gl::Error Renderer11::loadExecutable(const uint8_t *function,
 
 gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
                                           const std::string &shaderHLSL,
-                                          ShaderType type,
+                                          gl::ShaderType type,
                                           const std::vector<D3DVarying> &streamOutVaryings,
                                           bool separatedOutputBuffers,
                                           const angle::CompilerWorkaroundsD3D &workarounds,
@@ -2891,16 +2891,16 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
 
     switch (type)
     {
-        case SHADER_VERTEX:
+        case gl::SHADER_VERTEX:
             profileStream << "vs";
             break;
-        case SHADER_PIXEL:
+        case gl::SHADER_FRAGMENT:
             profileStream << "ps";
             break;
-        case SHADER_GEOMETRY:
+        case gl::SHADER_GEOMETRY:
             profileStream << "gs";
             break;
-        case SHADER_COMPUTE:
+        case gl::SHADER_COMPUTE:
             profileStream << "cs";
             break;
         default:
