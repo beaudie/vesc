@@ -90,6 +90,10 @@ struct ShaderVariable
                               const ShaderVariable **leafVar,
                               std::string* originalFullName) const;
 
+    // Find the child field which matches 'fullName' == this.name + "." + field.name.
+    // Return nullptr if not found.
+    const ShaderVariable *findField(const std::string &fullName) const;
+
     bool isBuiltIn() const;
 
     GLenum type;

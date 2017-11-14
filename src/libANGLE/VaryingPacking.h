@@ -43,9 +43,14 @@ struct PackedVarying
 
     bool isArrayElement() const { return arrayIndex != GL_INVALID_INDEX; }
 
-    std::string nameWithArrayIndex() const
+    std::string fullName() const
     {
         std::stringstream fullNameStr;
+        if (isStructField())
+        {
+            fullNameStr << parentStructName << ".";
+        }
+
         fullNameStr << varying->name;
         if (arrayIndex != GL_INVALID_INDEX)
         {
@@ -93,7 +98,17 @@ struct PackedVaryingRegister final
         return registerRow * 4 + registerColumn;
     }
 
-    bool isStructField() const { return !structFieldName.empty(); }
+    std::string tfVaryingName() const
+    {
+        if (packedVarying->isArrayElement() || packedVarying->isStructField())
+        {
+            return packedVarying->fullName();
+        }
+        else
+        {
+            return packedVarying->varying->name;
+        }
+    }
 
     // Index to the array of varyings.
     const PackedVarying *packedVarying;
@@ -112,9 +127,6 @@ struct PackedVaryingRegister final
 
     // Assigned after packing
     unsigned int semanticIndex;
-
-    // Struct member this varying corresponds to.
-    std::string structFieldName;
 };
 
 // Supported packing modes:
