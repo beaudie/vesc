@@ -1008,7 +1008,7 @@ bool ValidateDispatchCompute(Context *context,
         return false;
     }
 
-    if (program->isLinked() == false || program->getAttachedComputeShader() == nullptr)
+    if (program->isLinked() == false || program->hasLinkedComputeShader() == false)
     {
         context->handleError(
             InvalidOperation()
