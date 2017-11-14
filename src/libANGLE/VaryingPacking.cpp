@@ -292,13 +292,13 @@ std::vector<PackedVarying> VaryingPacking::getPackedVaryings(
                 {
                     ASSERT(!field.isStruct() && !field.isArray());
                     packedVaryings.push_back(PackedVarying(field, interpolation, output->name));
-                    uniqueFullNames.insert(packedVaryings.back().nameWithArrayIndex());
+                    uniqueFullNames.insert(packedVaryings.back().fullName());
                 }
             }
             else
             {
                 packedVaryings.push_back(PackedVarying(*output, interpolation));
-                uniqueFullNames.insert(packedVaryings.back().nameWithArrayIndex());
+                uniqueFullNames.insert(packedVaryings.back().fullName());
             }
             continue;
         }
@@ -323,14 +323,25 @@ std::vector<PackedVarying> VaryingPacking::getPackedVaryings(
             {
                 continue;
             }
+            if (input->isStruct())
+            {
+                const sh::ShaderVariable *field = input->findField(tfVarying);
+                if (field != nullptr)
+                {
+                    ASSERT(!field->isStruct() && !field->isArray());
+                    packedVaryings.push_back(
+                        PackedVarying(*field, input->interpolation, input->name));
+                    packedVaryings.back().vertexOnly = true;
+                    packedVaryings.back().arrayIndex = GL_INVALID_INDEX;
+                    uniqueFullNames.insert(tfVarying);
+                }
+            }
             // Array as a whole and array element conflict has already been checked in
             // linkValidateTransformFeedback.
-            if (baseName == input->name)
+            else if (baseName == input->name)
             {
-                // Transform feedback for varying structs is underspecified.
-                // See Khronos bug 9856.
-                // TODO(jmadill): Figure out how to be spec-compliant here.
-                if (!input->isStruct() && tfVarying.compare(0, 3, "gl_") != 0)
+                // only pack varyings that are not builtins.
+                if (tfVarying.compare(0, 3, "gl_") != 0)
                 {
                     packedVaryings.push_back(PackedVarying(*input, input->interpolation));
                     packedVaryings.back().vertexOnly = true;
@@ -364,7 +375,7 @@ bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
     {
         if (!packVarying(packedVarying))
         {
-            infoLog << "Could not pack varying " << packedVarying.nameWithArrayIndex();
+            infoLog << "Could not pack varying " << packedVarying.fullName();
             return false;
         }
     }
