@@ -1884,6 +1884,25 @@ GLenum Program::getTransformFeedbackBufferMode() const
     return mState.mTransformFeedbackBufferMode;
 }
 
+GLuint Program::getTransformFeedbackVaryingResourceIndex(const GLchar *name) const
+{
+    for (GLuint tfIndex = 0; tfIndex < mState.mLinkedTransformFeedbackVaryings.size(); ++tfIndex)
+    {
+        const auto &tf = mState.mLinkedTransformFeedbackVaryings[tfIndex];
+        if (tf.nameWithArrayIndex() == name)
+        {
+            return tfIndex;
+        }
+    }
+    return GL_INVALID_INDEX;
+}
+
+const TransformFeedbackVarying &Program::getTransformFeedbackVaryingResource(GLuint index) const
+{
+    ASSERT(index < mState.mLinkedTransformFeedbackVaryings.size());
+    return mState.mLinkedTransformFeedbackVaryings[index];
+}
+
 bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
 {
     Shader *vertexShader   = mState.mAttachedVertexShader;
