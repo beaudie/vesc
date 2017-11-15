@@ -826,6 +826,8 @@
             'libGLESv2/entry_points_gles_3_0_autogen.h',
             'libGLESv2/entry_points_gles_3_1.cpp',
             'libGLESv2/entry_points_gles_3_1.h',
+            'libGLESv2/entry_points_gles_3_1_ext.cpp',
+            'libGLESv2/entry_points_gles_3_1_ext.h',
             'libGLESv2/global_state.cpp',
             'libGLESv2/global_state.h',
             'libGLESv2/libGLESv2.cpp',
