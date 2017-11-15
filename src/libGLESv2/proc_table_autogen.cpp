@@ -17,6 +17,7 @@
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_0_autogen.h"
 #include "libGLESv2/entry_points_gles_3_1.h"
+#include "libGLESv2/entry_points_gles_3_1_ext.h"
 #include "platform/Platform.h"
 
 #define P(FUNC) reinterpret_cast<__eglMustCastToProperFunctionPointerType>(FUNC)
@@ -213,6 +214,7 @@ ProcEntry g_procTable[] = {
     {"glFramebufferParameteri", P(gl::FramebufferParameteri)},
     {"glFramebufferRenderbuffer", P(gl::FramebufferRenderbuffer)},
     {"glFramebufferTexture2D", P(gl::FramebufferTexture2D)},
+    {"glFramebufferTextureEXT", P(gl::FramebufferTextureEXT)},
     {"glFramebufferTextureLayer", P(gl::FramebufferTextureLayer)},
     {"glFramebufferTextureMultiviewLayeredANGLE", P(gl::FramebufferTextureMultiviewLayeredANGLE)},
     {"glFramebufferTextureMultiviewSideBySideANGLE",
@@ -544,5 +546,5 @@ ProcEntry g_procTable[] = {
     {"glViewport", P(gl::Viewport)},
     {"glWaitSync", P(gl::WaitSync)}};
 
-size_t g_numProcs = 516;
+size_t g_numProcs = 517;
 }  // namespace egl
