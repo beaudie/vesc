@@ -529,6 +529,11 @@
         "glVertexAttribBinding",
         "glVertexBindingDivisor"
     ],
+		
+    "GL_EXT_geometry_shader": [
+        "glFramebufferTextureEXT"
+    ],
+
 
     "EGL 1.0": [
         "eglChooseConfig",
