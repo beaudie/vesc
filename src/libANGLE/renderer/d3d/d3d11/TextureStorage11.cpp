@@ -22,7 +22,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
-#include "libANGLE/renderer/d3d/d3d11/StreamProducerNV12.h"
+#include "libANGLE/renderer/d3d/d3d11/StreamProducerD3DTexture.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 #include "libANGLE/renderer/d3d/EGLImageD3D.h"
@@ -1291,8 +1291,8 @@ TextureStorage11_External::TextureStorage11_External(
     const egl::Stream::GLTextureDescription &glDesc)
     : TextureStorage11(renderer, D3D11_BIND_SHADER_RESOURCE, 0, glDesc.internalFormat)
 {
-    ASSERT(stream->getProducerType() == egl::Stream::ProducerType::D3D11TextureNV12);
-    StreamProducerNV12 *producer = static_cast<StreamProducerNV12 *>(stream->getImplementation());
+    ASSERT(stream->getProducerType() == egl::Stream::ProducerType::D3D11Texture);
+    auto *producer = static_cast<StreamProducerD3DTexture *>(stream->getImplementation());
     mTexture.set(producer->getD3DTexture(), mFormatInfo);
     mSubresourceIndex            = producer->getArraySlice();
     mTexture.get()->AddRef();

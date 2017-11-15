@@ -60,7 +60,7 @@ class DisplayVk : public DisplayImpl
 
     ContextImpl *createContext(const gl::ContextState &state) override;
 
-    StreamProducerImpl *createStreamProducerD3DTextureNV12(
+    StreamProducerImpl *createStreamProducerD3DTexture(
         egl::Stream::ConsumerType consumerType,
         const egl::AttributeMap &attribs) override;
     gl::Version getMaxSupportedESVersion() const override;

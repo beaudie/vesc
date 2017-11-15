@@ -318,7 +318,7 @@ class Renderer9 : public RendererD3D
     IndexBuffer *createIndexBuffer() override;
 
     // Stream Creation
-    StreamProducerImpl *createStreamProducerD3DTextureNV12(
+    StreamProducerImpl *createStreamProducerD3DTexture(
         egl::Stream::ConsumerType consumerType,
         const egl::AttributeMap &attribs) override;
 
