@@ -30,7 +30,7 @@ namespace
 
 bool CompareProc(const ProcEntry &a, const char *b)
 {
-    return strcmp(a.first, b) < 0;
+    return strcmp(a.name, b) < 0;
 }
 
 void ClipConfigs(const std::vector<const Config *> &filteredConfigs,
@@ -1171,16 +1171,19 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
     EVENT("(const char *procname = \"%s\")", procname);
     Thread *thread = GetCurrentThread();
 
-    ProcEntry *entry =
-        std::lower_bound(&g_procTable[0], &g_procTable[g_numProcs], procname, CompareProc);
+    const ProcEntry *procTable = GetProcTable();
+    size_t numProcs            = GetNumProcs();
+
+    const ProcEntry *entry =
+        std::lower_bound(&procTable[0], &procTable[numProcs], procname, CompareProc);
 
     thread->setError(NoError());
 
-    if (entry == &g_procTable[g_numProcs] || strcmp(entry->first, procname) != 0)
+    if (entry == &procTable[numProcs] || strcmp(entry->name, procname) != 0)
     {
         return nullptr;
     }
 
-    return entry->second;
+    return reinterpret_cast<__eglMustCastToProperFunctionPointerType>(entry->proc);
 }
 }

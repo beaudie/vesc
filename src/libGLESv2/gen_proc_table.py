@@ -35,15 +35,24 @@ template_cpp = """// GENERATED FILE - DO NOT EDIT.
 #include "libGLESv2/entry_points_gles_3_1.h"
 #include "platform/Platform.h"
 
-#define P(FUNC) reinterpret_cast<__eglMustCastToProperFunctionPointerType>(FUNC)
-
 namespace egl
 {{
-ProcEntry g_procTable[] = {{
+namespace
+{{
+constexpr ProcEntry kProcTable[] = {{
 {proc_data}
 }};
+}}  // anonymous namespace
 
-size_t g_numProcs = {num_procs};
+const ProcEntry *GetProcTable()
+{{
+    return kProcTable;
+}}
+
+size_t GetNumProcs()
+{{
+    return {num_procs};
+}}
 }}  // namespace egl
 """
 
@@ -63,7 +72,7 @@ for description, functions in json_data.iteritems():
         else:
             all_functions[function] = function
 
-proc_data = [('    {"%s", P(%s)}' % (func, angle_func)) for func, angle_func in sorted(all_functions.iteritems())]
+proc_data = [('    {"%s", %s}' % (func, angle_func)) for func, angle_func in sorted(all_functions.iteritems())]
 
 with open(out_file_name, 'wt') as out_file:
     output_cpp = template_cpp.format(
