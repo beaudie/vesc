@@ -3704,6 +3704,14 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             error(field->line(), reason.c_str(), fieldType->getBasicString());
         }
 
+        // GLSL ES 3.1.0 section4.3.7, last element of shader storage blocks may be an array that
+        // is not sized until after link time (dynamically sized), others are invalid.
+        if (memberIndex != fieldList->size() - 1 || typeQualifier.qualifier != EvqBuffer)
+        {
+            checkIsNotUnsizedArray(field->line(), "array members of structs must specify a size",
+                                   field->name().c_str(), field->type());
+        }
+
         const TQualifier qualifier = fieldType->getQualifier();
         switch (qualifier)
         {
@@ -4732,9 +4740,6 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
         {
             type->makeArray(arraySize);
         }
-        checkIsNotUnsizedArray(typeSpecifier.getLine(),
-                               "array members of structs must specify a size",
-                               declarator->name().c_str(), type);
 
         checkIsBelowStructNestingLimit(typeSpecifier.getLine(), *declarator);
     }
@@ -4765,7 +4770,7 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     // ensure we do not specify any storage qualifiers on the struct members
     for (unsigned int typeListIndex = 0; typeListIndex < fieldList->size(); typeListIndex++)
     {
-        const TField &field        = *(*fieldList)[typeListIndex];
+        TField &field              = *(*fieldList)[typeListIndex];
         const TQualifier qualifier = field.type()->getQualifier();
         switch (qualifier)
         {
@@ -4786,6 +4791,9 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
         {
             error(field.line(), "disallowed type in struct", field.type()->getBasicString());
         }
+
+        checkIsNotUnsizedArray(field.line(), "array members of structs must specify a size",
+                               field.name().c_str(), field.type());
 
         checkMemoryQualifierIsNotSpecified(field.type()->getMemoryQualifier(), field.line());
 

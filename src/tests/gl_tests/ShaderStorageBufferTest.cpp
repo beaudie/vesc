@@ -134,6 +134,56 @@ TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWrite)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferLastElementUnsized)
+{
+    const std::string &csSource =
+        R"(#version 310 es
+        layout(local_size_x=3, local_size_y=1, local_size_z=1) in;
+        layout(binding = 1) buffer Output {
+            uint result[];
+        } sb_out;
+        void main()
+        {
+            highp uint offset = gl_LocalInvocationID.x;
+            sb_out.result[gl_LocalInvocationIndex] = gl_LocalInvocationIndex + 1u;
+        })";
+
+    constexpr unsigned int numInvocations = 3;
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    unsigned int outVarIndex =
+        glGetProgramResourceIndex(program.get(), GL_BUFFER_VARIABLE, "Output.result");
+    int arrayStride = 0;
+    GLenum props[]  = {GL_ARRAY_STRIDE};
+    glGetProgramResourceiv(program.get(), GL_BUFFER_VARIABLE, outVarIndex, 1, props, 1, 0,
+                           &arrayStride);
+
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, numInvocations * arrayStride, nullptr, GL_STREAM_READ);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer);
+
+    // Dispath compute
+    glDispatchCompute(1, 1, 1);
+
+    const void *ptr =
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 3 * arrayStride, GL_MAP_READ_BIT);
+
+    for (unsigned int idx = 0; idx < numInvocations; idx++)
+    {
+        EXPECT_EQ(idx + 1, *((const GLuint *)((const GLbyte *)ptr + idx * arrayStride)));
+    }
+
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace

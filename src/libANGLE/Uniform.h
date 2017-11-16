@@ -76,6 +76,7 @@ struct BufferVariable : public sh::ShaderVariable, public StaticallyUsed
                    GLenum precision,
                    const std::string &name,
                    unsigned int arraySize,
+                   bool isUnsizedArray,
                    const int bufferIndex,
                    const sh::BlockMemberInfo &blockInfo);
     ~BufferVariable();
