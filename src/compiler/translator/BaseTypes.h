@@ -673,7 +673,7 @@ enum TQualifier
     EvqRestrict,
     EvqVolatile,
 
-    // GLSL ES 3.1 extension OES_geometry_shader qualifiers
+    // GLSL ES 3.1 extension EXT_geometry_shader qualifiers
     EvqGeometryIn,
     EvqGeometryOut,
     EvqPerVertexIn,    // gl_in
@@ -767,7 +767,7 @@ struct TLayoutQualifier
     // EXT_YUV_target yuv layout qualifier.
     bool yuv;
 
-    // OES_geometry_shader layout qualifiers.
+    // EXT_geometry_shader layout qualifiers.
     TLayoutPrimitiveType primitiveType;
     int invocations;
     int maxVertices;
