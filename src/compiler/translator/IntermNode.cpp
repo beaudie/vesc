@@ -1124,6 +1124,10 @@ void TIntermBinary::promote()
             const int i              = mRight->getAsConstantUnion()->getIConst(0);
             setType(*fields[i]->type());
             getTypePointer()->setQualifier(resultQualifier);
+            if (i == fields.size() - 1 && fields[i]->type()->isUnsizedArray())
+            {
+                getTypePointer()->makeArray(0);
+            }
             return;
         }
         default:
