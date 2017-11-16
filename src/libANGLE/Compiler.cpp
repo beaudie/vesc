@@ -132,7 +132,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     }
 
     // Geometry Shader constants
-    mResources.OES_geometry_shader = extensions.geometryShader;
+    mResources.EXT_geometry_shader = extensions.geometryShader;
     // TODO(jiawei.shao@intel.com): initialize all implementation dependent geometry shader limits.
     mResources.MaxGeometryOutputVertices    = extensions.maxGeometryOutputVertices;
     mResources.MaxGeometryShaderInvocations = extensions.maxGeometryShaderInvocations;

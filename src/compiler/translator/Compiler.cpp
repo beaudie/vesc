@@ -158,7 +158,7 @@ int GetMaxUniformVectorsForShaderType(GLenum shaderType, const ShBuiltInResource
         // TODO (jiawei.shao@intel.com): check if we need finer-grained component counting
         case GL_COMPUTE_SHADER:
             return resources.MaxComputeUniformComponents / 4;
-        case GL_GEOMETRY_SHADER_OES:
+        case GL_GEOMETRY_SHADER_EXT:
             return resources.MaxGeometryUniformComponents / 4;
         default:
             UNREACHABLE();
@@ -381,7 +381,7 @@ void TCompiler::setASTMetadata(const TParseContext &parseContext)
     // Highp might have been auto-enabled based on shader version
     fragmentPrecisionHigh = parseContext.getFragmentPrecisionHigh();
 
-    if (shaderType == GL_GEOMETRY_SHADER_OES)
+    if (shaderType == GL_GEOMETRY_SHADER_EXT)
     {
         mGeometryShaderInputPrimitiveType  = parseContext.getGeometryShaderInputPrimitiveType();
         mGeometryShaderOutputPrimitiveType = parseContext.getGeometryShaderOutputPrimitiveType();
@@ -705,7 +705,7 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
             break;
         case GL_VERTEX_SHADER:
         case GL_COMPUTE_SHADER:
-        case GL_GEOMETRY_SHADER_OES:
+        case GL_GEOMETRY_SHADER_EXT:
             symbolTable.setDefaultPrecision(EbtInt, EbpHigh);
             symbolTable.setDefaultPrecision(EbtFloat, EbpHigh);
             break;
@@ -770,7 +770,7 @@ void TCompiler::setResourceString()
         << ":ARM_shader_framebuffer_fetch:" << compileResources.ARM_shader_framebuffer_fetch
         << ":OVR_multiview:" << compileResources.OVR_multiview
         << ":EXT_YUV_target:" << compileResources.EXT_YUV_target
-        << ":OES_geometry_shader:" << compileResources.OES_geometry_shader
+        << ":EXT_geometry_shader:" << compileResources.EXT_geometry_shader
         << ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
         << ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
         << ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset
@@ -1082,7 +1082,7 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 void TCompiler::initializeOutputVariables(TIntermBlock *root)
 {
     InitVariableList list;
-    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_OES)
+    if (shaderType == GL_VERTEX_SHADER || shaderType == GL_GEOMETRY_SHADER_EXT)
     {
         for (auto var : outputVaryings)
         {

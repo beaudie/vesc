@@ -1262,14 +1262,6 @@ template bool TParseContext::checkCanUseOneOfExtensions(
 bool TParseContext::checkCanUseExtension(const TSourceLoc &line, TExtension extension)
 {
     ASSERT(extension != TExtension::UNDEFINED);
-    ASSERT(extension != TExtension::EXT_geometry_shader);
-    if (extension == TExtension::OES_geometry_shader)
-    {
-        // OES_geometry_shader and EXT_geometry_shader are always interchangeable.
-        constexpr std::array<TExtension, 2u> extensions{
-            {TExtension::EXT_geometry_shader, TExtension::OES_geometry_shader}};
-        return checkCanUseOneOfExtensions(line, extensions);
-    }
     return checkCanUseOneOfExtensions(line, std::array<TExtension, 1u>{{extension}});
 }
 
@@ -3621,7 +3613,7 @@ TIntermTyped *TParseContext::addConstructor(TIntermSequence *arguments,
 
 //
 // Interface/uniform blocks
-// TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
+// TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
 //
 TIntermDeclaration *TParseContext::addInterfaceBlock(
     const TTypeQualifierBuilder &typeQualifierBuilder,
@@ -3939,7 +3931,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
 
     if (baseExpression->getQualifier() == EvqPerVertexIn)
     {
-        ASSERT(mShaderType == GL_GEOMETRY_SHADER_OES);
+        ASSERT(mShaderType == GL_GEOMETRY_SHADER_EXT);
         if (mGeometryShaderInputPrimitiveType == EptUndefined)
         {
             error(location, "missing input primitive declaration before indexing gl_in.", "[");
@@ -3957,7 +3949,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
     {
         if (baseExpression->isInterfaceBlock())
         {
-            // TODO(jiawei.shao@intel.com): implement GL_OES_shader_io_blocks.
+            // TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
             switch (baseExpression->getQualifier())
             {
                 case EvqPerVertexIn:
@@ -4320,44 +4312,44 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.imageInternalFormat = EiifR32UI;
     }
-    else if (qualifierType == "points" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "points" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptPoints;
     }
-    else if (qualifierType == "lines" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "lines" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLines;
     }
-    else if (qualifierType == "lines_adjacency" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "lines_adjacency" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLinesAdjacency;
     }
-    else if (qualifierType == "triangles" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "triangles" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTriangles;
     }
-    else if (qualifierType == "triangles_adjacency" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "triangles_adjacency" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTrianglesAdjacency;
     }
-    else if (qualifierType == "line_strip" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "line_strip" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptLineStrip;
     }
-    else if (qualifierType == "triangle_strip" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "triangle_strip" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTriangleStrip;
@@ -4515,13 +4507,13 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             parseNumViews(intValue, intValueLine, intValueString, &qualifier.numViews);
         }
     }
-    else if (qualifierType == "invocations" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "invocations" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         parseInvocations(intValue, intValueLine, intValueString, &qualifier.invocations);
     }
-    else if (qualifierType == "max_vertices" && mShaderType == GL_GEOMETRY_SHADER_OES &&
-             checkCanUseExtension(qualifierTypeLine, TExtension::OES_geometry_shader))
+    else if (qualifierType == "max_vertices" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader))
     {
         parseMaxVertices(intValue, intValueLine, intValueString, &qualifier.maxVertices);
     }
@@ -4586,7 +4578,7 @@ TStorageQualifierWrapper *TParseContext::parseInQualifier(const TSourceLoc &loc)
         {
             return new TStorageQualifierWrapper(EvqComputeIn, loc);
         }
-        case GL_GEOMETRY_SHADER_OES:
+        case GL_GEOMETRY_SHADER_EXT:
         {
             return new TStorageQualifierWrapper(EvqGeometryIn, loc);
         }
@@ -4627,7 +4619,7 @@ TStorageQualifierWrapper *TParseContext::parseOutQualifier(const TSourceLoc &loc
             error(loc, "storage qualifier isn't supported in compute shaders", "out");
             return new TStorageQualifierWrapper(EvqLast, loc);
         }
-        case GL_GEOMETRY_SHADER_OES:
+        case GL_GEOMETRY_SHADER_EXT:
         {
             return new TStorageQualifierWrapper(EvqGeometryOut, loc);
         }
@@ -5792,7 +5784,7 @@ TIntermTyped *TParseContext::addMethod(TFunction *fnCall,
     else if (typedThis->getQualifier() == EvqPerVertexIn &&
              mGeometryShaderInputPrimitiveType == EptUndefined)
     {
-        ASSERT(mShaderType == GL_GEOMETRY_SHADER_OES);
+        ASSERT(mShaderType == GL_GEOMETRY_SHADER_EXT);
         error(loc, "missing input primitive declaration before calling length on gl_in", "length");
     }
     else
