@@ -174,6 +174,7 @@ class TIntermTyped : public TIntermNode
     bool isVector() const { return mType.isVector(); }
     bool isScalar() const { return mType.isScalar(); }
     bool isScalarInt() const { return mType.isScalarInt(); }
+    bool isUnsizedArray() const { return mType.isUnsizedArray(); }
     const char *getBasicString() const { return mType.getBasicString(); }
     TString getCompleteString() const { return mType.getCompleteString(); }
 

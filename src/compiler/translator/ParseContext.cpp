@@ -3730,6 +3730,14 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             error(field->line(), reason.c_str(), fieldType->getBasicString());
         }
 
+        // GLSL ES 3.1.0 section4.3.7, last element of shader storage blocks may be an array that
+        // is not sized until after link time (dynamically sized), others are invalid.
+        if (memberIndex != fieldList->size() - 1 || typeQualifier.qualifier != EvqBuffer)
+        {
+            checkIsNotUnsizedArray(field->line(), "array members of structs must specify a size",
+                                   field->name().c_str(), field->type());
+        }
+
         const TQualifier qualifier = fieldType->getQualifier();
         switch (qualifier)
         {
@@ -4019,12 +4027,20 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
                     safeIndex = 0;
                 }
             }
+
             // Only do generic out-of-range check if similar error hasn't already been reported.
             if (safeIndex < 0)
             {
                 safeIndex = checkIndexOutOfRange(outOfRangeIndexIsError, location, index,
                                                  baseExpression->getOutermostArraySize(),
                                                  "array index out of range");
+            }
+            if (safeIndex < 0)
+            {
+                if (baseExpression->isUnsizedArray())
+                {
+                    safeIndex = index;
+                }
             }
         }
         else if (baseExpression->isMatrix())
@@ -4758,9 +4774,6 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
         {
             type->makeArray(arraySize);
         }
-        checkIsNotUnsizedArray(typeSpecifier.getLine(),
-                               "array members of structs must specify a size",
-                               declarator->name().c_str(), type);
 
         checkIsBelowStructNestingLimit(typeSpecifier.getLine(), *declarator);
     }
@@ -4791,7 +4804,7 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     // ensure we do not specify any storage qualifiers on the struct members
     for (unsigned int typeListIndex = 0; typeListIndex < fieldList->size(); typeListIndex++)
     {
-        const TField &field        = *(*fieldList)[typeListIndex];
+        TField &field              = *(*fieldList)[typeListIndex];
         const TQualifier qualifier = field.type()->getQualifier();
         switch (qualifier)
         {
@@ -4812,6 +4825,9 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
         {
             error(field.line(), "disallowed type in struct", field.type()->getBasicString());
         }
+
+        checkIsNotUnsizedArray(field.line(), "array members of structs must specify a size",
+                               field.name().c_str(), field.type());
 
         checkMemoryQualifierIsNotSpecified(field.type()->getMemoryQualifier(), field.line());
 

@@ -846,7 +846,7 @@ void ShaderStorageBlockLinker::defineBlockMember(const sh::ShaderVariable &field
                                                  int topLevelArraySize) const
 {
     BufferVariable newBufferVariable(field.type, field.precision, fullName, field.arraySize,
-                                     blockIndex, memberInfo);
+                                     field.isUnsizedArray, blockIndex, memberInfo);
     newBufferVariable.mappedName = fullMappedName;
     // TODO(jiajia.qin@intel.com): update the block memeber static use.
 

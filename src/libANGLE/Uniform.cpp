@@ -153,6 +153,7 @@ BufferVariable::BufferVariable(GLenum typeIn,
                                GLenum precisionIn,
                                const std::string &nameIn,
                                unsigned int arraySizeIn,
+                               bool isUnsizedArrayIn,
                                const int bufferIndexIn,
                                const sh::BlockMemberInfo &blockInfoIn)
     : bufferIndex(bufferIndexIn), blockInfo(blockInfoIn), topLevelArraySize(-1)
@@ -161,6 +162,7 @@ BufferVariable::BufferVariable(GLenum typeIn,
     precision = precisionIn;
     name      = nameIn;
     arraySize = arraySizeIn;
+    isUnsizedArray = isUnsizedArrayIn;
 }
 
 BufferVariable::~BufferVariable()
