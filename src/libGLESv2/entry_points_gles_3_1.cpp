@@ -10,15 +10,8 @@
 #include "libGLESv2/global_state.h"
 
 #include "libANGLE/Context.h"
-#include "libANGLE/Error.h"
 
-#include "libANGLE/validationES.h"
 #include "libANGLE/validationES31.h"
-#include "libANGLE/queryconversions.h"
-#include "libANGLE/queryutils.h"
-
-#include "common/debug.h"
-#include "common/utilities.h"
 
 namespace gl
 {
@@ -97,7 +90,7 @@ void GL_APIENTRY FramebufferParameteri(GLenum target, GLenum pname, GLint param)
             return;
         }
 
-        context->setFramebufferParameteri(target, pname, param);
+        context->framebufferParameteri(target, pname, param);
     }
 }
 
@@ -353,75 +346,202 @@ void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *para
 
 void GL_APIENTRY ProgramUniform1i(GLuint program, GLint location, GLint v0)
 {
-    ProgramUniform1iv(program, location, 1, &v0);
+    EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d)", program, location, v0);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() || ValidateProgramUniform1i(context, program, location, v0))
+        {
+            context->programUniform1i(program, location, v0);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform2i(GLuint program, GLint location, GLint v0, GLint v1)
 {
-    GLint xy[2] = {v0, v1};
-    ProgramUniform2iv(program, location, 1, xy);
+    EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d, GLint v1 = %d)", program,
+          location, v0, v1);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform2i(context, program, location, v0, v1))
+        {
+            context->programUniform2i(program, location, v0, v1);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform3i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2)
 {
-    GLint xyz[3] = {v0, v1, v2};
-    ProgramUniform3iv(program, location, 1, xyz);
+    EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d, GLint v1 = %d, GLint v2 = %d)",
+          program, location, v0, v1, v2);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform3i(context, program, location, v0, v1, v2))
+        {
+            context->programUniform3i(program, location, v0, v1, v2);
+        }
+    }
 }
 
 void GL_APIENTRY
 ProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 {
-    GLint xyzw[4] = {v0, v1, v2, v3};
-    ProgramUniform4iv(program, location, 1, xyzw);
+    EVENT(
+        "(GLuint program = %u, GLint location = %d, GLint v0 = %d, GLint v1 = %d, GLint v2 = %d, "
+        "GLint v3 = %d)",
+        program, location, v0, v1, v2, v3);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform4i(context, program, location, v0, v1, v2, v3))
+        {
+            context->programUniform4i(program, location, v0, v1, v2, v3);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform1ui(GLuint program, GLint location, GLuint v0)
 {
-    ProgramUniform1uiv(program, location, 1, &v0);
+    EVENT("(GLuint program = %u, GLint location = %d, GLuint v0 = %u)", program, location, v0);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() || ValidateProgramUniform1ui(context, program, location, v0))
+        {
+            context->programUniform1ui(program, location, v0);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform2ui(GLuint program, GLint location, GLuint v0, GLuint v1)
 {
-    GLuint xy[2] = {v0, v1};
-    ProgramUniform2uiv(program, location, 1, xy);
+    EVENT("(GLuint program = %u, GLint location = %d, GLuint v0 = %u, GLuint v1 = %u)", program,
+          location, v0, v1);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform2ui(context, program, location, v0, v1))
+        {
+            context->programUniform2ui(program, location, v0, v1);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
 {
-    GLuint xyz[3] = {v0, v1, v2};
-    ProgramUniform3uiv(program, location, 1, xyz);
+    EVENT(
+        "(GLuint program = %u, GLint location = %d, GLuint v0 = %u, GLuint v1 = %u, GLuint v2 = "
+        "%u)",
+        program, location, v0, v1, v2);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform3ui(context, program, location, v0, v1, v2))
+        {
+            context->programUniform3ui(program, location, v0, v1, v2);
+        }
+    }
 }
 
 void GL_APIENTRY
 ProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 {
-    GLuint xyzw[4] = {v0, v1, v2, v3};
-    ProgramUniform4uiv(program, location, 1, xyzw);
+    EVENT(
+        "(GLuint program = %u, GLint location = %d, GLuint v0 = %u, GLuint v1 = %u, GLuint v2 = "
+        "%u, GLuint v3 = %u)",
+        program, location, v0, v1, v2, v3);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform4ui(context, program, location, v0, v1, v2, v3))
+        {
+            context->programUniform4ui(program, location, v0, v1, v2, v3);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform1f(GLuint program, GLint location, GLfloat v0)
 {
-    ProgramUniform1fv(program, location, 1, &v0);
+    EVENT("(GLuint program = %u, GLint location = %d, GLfloat v0 = %f)", program, location, v0);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() || ValidateProgramUniform1f(context, program, location, v0))
+        {
+            context->programUniform1f(program, location, v0);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform2f(GLuint program, GLint location, GLfloat v0, GLfloat v1)
 {
-    GLfloat xy[2] = {v0, v1};
-    ProgramUniform2fv(program, location, 1, xy);
+    EVENT("(GLuint program = %u, GLint location = %d, GLfloat v0 = %f, GLfloat v1 = %f)", program,
+          location, v0, v1);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform2f(context, program, location, v0, v1))
+        {
+            context->programUniform2f(program, location, v0, v1);
+        }
+    }
 }
 
 void GL_APIENTRY
 ProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
 {
-    GLfloat xyz[3] = {v0, v1, v2};
-    ProgramUniform3fv(program, location, 1, xyz);
+    EVENT(
+        "(GLuint program = %u, GLint location = %d, GLfloat v0 = %f, GLfloat v1 = %f, GLfloat v2 = "
+        "%f)",
+        program, location, v0, v1, v2);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform3f(context, program, location, v0, v1, v2))
+        {
+            context->programUniform3f(program, location, v0, v1, v2);
+        }
+    }
 }
 
 void GL_APIENTRY
 ProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
-    GLfloat xyzw[4] = {v0, v1, v2, v3};
-    ProgramUniform4fv(program, location, 1, xyzw);
+    EVENT(
+        "(GLuint program = %u, GLint location = %d, GLfloat v0 = %f, GLfloat v1 = %f, GLfloat v2 = "
+        "%f, GLfloat v3 = %f)",
+        program, location, v0, v1, v2, v3);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateProgramUniform4f(context, program, location, v0, v1, v2, v3))
+        {
+            context->programUniform4f(program, location, v0, v1, v2, v3);
+        }
+    }
 }
 
 void GL_APIENTRY ProgramUniform1iv(GLuint program,
@@ -457,14 +577,12 @@ void GL_APIENTRY ProgramUniform2iv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_INT_VEC2, program, location, count))
+        if (!ValidateProgramUniform2iv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform2iv(location, count, value);
+        context->programUniform2iv(program, location, count, value);
     }
 }
 
@@ -480,14 +598,12 @@ void GL_APIENTRY ProgramUniform3iv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_INT_VEC3, program, location, count))
+        if (!ValidateProgramUniform3iv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform3iv(location, count, value);
+        context->programUniform3iv(program, location, count, value);
     }
 }
 
@@ -503,14 +619,12 @@ void GL_APIENTRY ProgramUniform4iv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_INT_VEC4, program, location, count))
+        if (!ValidateProgramUniform4iv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform4iv(location, count, value);
+        context->programUniform4iv(program, location, count, value);
     }
 }
 
@@ -526,14 +640,12 @@ void GL_APIENTRY ProgramUniform1uiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_UNSIGNED_INT, program, location, count))
+        if (!ValidateProgramUniform1uiv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform1uiv(location, count, value);
+        context->programUniform1uiv(program, location, count, value);
     }
 }
 
@@ -549,14 +661,12 @@ void GL_APIENTRY ProgramUniform2uiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC2, program, location, count))
+        if (!ValidateProgramUniform2uiv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform2uiv(location, count, value);
+        context->programUniform2uiv(program, location, count, value);
     }
 }
 
@@ -572,14 +682,12 @@ void GL_APIENTRY ProgramUniform3uiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC3, program, location, count))
+        if (!ValidateProgramUniform3uiv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform3uiv(location, count, value);
+        context->programUniform3uiv(program, location, count, value);
     }
 }
 
@@ -595,14 +703,12 @@ void GL_APIENTRY ProgramUniform4uiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC4, program, location, count))
+        if (!ValidateProgramUniform4uiv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform4uiv(location, count, value);
+        context->programUniform4uiv(program, location, count, value);
     }
 }
 
@@ -618,14 +724,12 @@ void GL_APIENTRY ProgramUniform1fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_FLOAT, program, location, count))
+        if (!ValidateProgramUniform1fv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform1fv(location, count, value);
+        context->programUniform1fv(program, location, count, value);
     }
 }
 
@@ -641,14 +745,12 @@ void GL_APIENTRY ProgramUniform2fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_FLOAT_VEC2, program, location, count))
+        if (!ValidateProgramUniform2fv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform2fv(location, count, value);
+        context->programUniform2fv(program, location, count, value);
     }
 }
 
@@ -664,14 +766,12 @@ void GL_APIENTRY ProgramUniform3fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_FLOAT_VEC3, program, location, count))
+        if (!ValidateProgramUniform3fv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform3fv(location, count, value);
+        context->programUniform3fv(program, location, count, value);
     }
 }
 
@@ -687,14 +787,12 @@ void GL_APIENTRY ProgramUniform4fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniform(context, GL_FLOAT_VEC4, program, location, count))
+        if (!ValidateProgramUniform4fv(context, program, location, count, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniform4fv(location, count, value);
+        context->programUniform4fv(program, location, count, value);
     }
 }
 
@@ -711,15 +809,12 @@ void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix2fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix2fv(location, count, transpose, value);
+        context->programUniformMatrix2fv(program, location, count, transpose, value);
     }
 }
 
@@ -736,15 +831,12 @@ void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix3fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix3fv(location, count, transpose, value);
+        context->programUniformMatrix3fv(program, location, count, transpose, value);
     }
 }
 
@@ -761,15 +853,12 @@ void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix4fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix4fv(location, count, transpose, value);
+        context->programUniformMatrix4fv(program, location, count, transpose, value);
     }
 }
 
@@ -786,15 +875,12 @@ void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2x3, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix2x3fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix2x3fv(location, count, transpose, value);
+        context->programUniformMatrix2x3fv(program, location, count, transpose, value);
     }
 }
 
@@ -811,15 +897,12 @@ void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3x2, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix3x2fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix3x2fv(location, count, transpose, value);
+        context->programUniformMatrix3x2fv(program, location, count, transpose, value);
     }
 }
 
@@ -836,15 +919,12 @@ void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2x4, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix2x4fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix2x4fv(location, count, transpose, value);
+        context->programUniformMatrix2x4fv(program, location, count, transpose, value);
     }
 }
 
@@ -861,15 +941,12 @@ void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4x2, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix4x2fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix4x2fv(location, count, transpose, value);
+        context->programUniformMatrix4x2fv(program, location, count, transpose, value);
     }
 }
 
@@ -886,15 +963,12 @@ void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3x4, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix3x4fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix3x4fv(location, count, transpose, value);
+        context->programUniformMatrix3x4fv(program, location, count, transpose, value);
     }
 }
 
@@ -911,15 +985,12 @@ void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4x3, program, location, count,
-                                          transpose))
+        if (!ValidateProgramUniformMatrix4x3fv(context, program, location, count, transpose, value))
         {
             return;
         }
 
-        Program *programObject = context->getProgram(program);
-        ASSERT(programObject);
-        programObject->setUniformMatrix4x3fv(location, count, transpose, value);
+        context->programUniformMatrix4x3fv(program, location, count, transpose, value);
     }
 }
 
@@ -1095,9 +1166,7 @@ void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname
             return;
         }
 
-        Texture *texture = context->getTargetTexture(
-            IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
-        QueryTexLevelParameteriv(texture, target, level, pname, params);
+        context->getTexLevelParameteriv(target, level, pname, params);
     }
 }
 
@@ -1116,9 +1185,7 @@ void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname
             return;
         }
 
-        Texture *texture = context->getTargetTexture(
-            IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
-        QueryTexLevelParameterfv(texture, target, level, pname, params);
+        context->getTexLevelParameterfv(target, level, pname, params);
     }
 }
 
@@ -1216,7 +1283,7 @@ void GL_APIENTRY VertexBindingDivisor(GLuint bindingindex, GLuint divisor)
             return;
         }
 
-        context->setVertexBindingDivisor(bindingindex, divisor);
+        context->vertexBindingDivisor(bindingindex, divisor);
     }
 }
 }  // namespace gl

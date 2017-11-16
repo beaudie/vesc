@@ -283,6 +283,45 @@ bool ValidateProgramResourceIndex(const Program *programObject,
     }
 }
 
+bool ValidateProgramUniform(gl::Context *context,
+                            GLenum valueType,
+                            GLuint program,
+                            GLint location,
+                            GLsizei count)
+{
+    // Check for ES31 program uniform entry points
+    if (context->getClientVersion() < Version(3, 1))
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
+        return false;
+    }
+
+    const LinkedUniform *uniform = nullptr;
+    gl::Program *programObject   = GetValidProgram(context, program);
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniformValue(context, valueType, uniform->type);
+}
+
+bool ValidateProgramUniformMatrix(gl::Context *context,
+                                  GLenum valueType,
+                                  GLuint program,
+                                  GLint location,
+                                  GLsizei count,
+                                  GLboolean transpose)
+{
+    // Check for ES31 program uniform entry points
+    if (context->getClientVersion() < Version(3, 1))
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
+        return false;
+    }
+
+    const LinkedUniform *uniform = nullptr;
+    gl::Program *programObject   = GetValidProgram(context, program);
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniformMatrixValue(context, valueType, uniform->type);
+}
+
 }  // anonymous namespace
 
 bool ValidateGetBooleani_v(Context *context, GLenum target, GLuint index, GLboolean *data)
@@ -454,6 +493,327 @@ bool ValidateDrawElementsIndirect(Context *context, GLenum mode, GLenum type, co
     }
 
     return true;
+}
+
+bool ValidateProgramUniform1i(Context *context, GLuint program, GLint location, GLint v0)
+{
+    return ValidateProgramUniform1iv(context, program, location, 1, &v0);
+}
+
+bool ValidateProgramUniform2i(Context *context, GLuint program, GLint location, GLint v0, GLint v1)
+{
+    GLint xy[2] = {v0, v1};
+    return ValidateProgramUniform2iv(context, program, location, 1, xy);
+}
+bool ValidateProgramUniform3i(Context *context,
+                              GLuint program,
+                              GLint location,
+                              GLint v0,
+                              GLint v1,
+                              GLint v2)
+{
+    GLint xyz[3] = {v0, v1, v2};
+    return ValidateProgramUniform3iv(context, program, location, 1, xyz);
+}
+bool ValidateProgramUniform4i(Context *context,
+                              GLuint program,
+                              GLint location,
+                              GLint v0,
+                              GLint v1,
+                              GLint v2,
+                              GLint v3)
+{
+    GLint xyzw[4] = {v0, v1, v2, v3};
+    return ValidateProgramUniform4iv(context, program, location, 1, xyzw);
+}
+bool ValidateProgramUniform1ui(Context *context, GLuint program, GLint location, GLuint v0)
+{
+    return ValidateProgramUniform1uiv(context, program, location, 1, &v0);
+}
+bool ValidateProgramUniform2ui(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLuint v0,
+                               GLuint v1)
+{
+    GLuint xy[2] = {v0, v1};
+    return ValidateProgramUniform2uiv(context, program, location, 1, xy);
+}
+bool ValidateProgramUniform3ui(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLuint v0,
+                               GLuint v1,
+                               GLuint v2)
+{
+    GLuint xyz[3] = {v0, v1, v2};
+    return ValidateProgramUniform3uiv(context, program, location, 1, xyz);
+}
+bool ValidateProgramUniform4ui(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLuint v0,
+                               GLuint v1,
+                               GLuint v2,
+                               GLuint v3)
+{
+    GLuint xyzw[4] = {v0, v1, v2, v3};
+    return ValidateProgramUniform4uiv(context, program, location, 1, xyzw);
+}
+
+bool ValidateProgramUniform1f(Context *context, GLuint program, GLint location, GLfloat v0)
+{
+    return ValidateProgramUniform1fv(context, program, location, 1, &v0);
+}
+
+bool ValidateProgramUniform2f(Context *context,
+                              GLuint program,
+                              GLint location,
+                              GLfloat v0,
+                              GLfloat v1)
+{
+    GLfloat xy[2] = {v0, v1};
+    return ValidateProgramUniform2fv(context, program, location, 1, xy);
+}
+
+bool ValidateProgramUniform3f(Context *context,
+                              GLuint program,
+                              GLint location,
+                              GLfloat v0,
+                              GLfloat v1,
+                              GLfloat v2)
+{
+    GLfloat xyz[3] = {v0, v1, v2};
+    return ValidateProgramUniform3fv(context, program, location, 1, xyz);
+}
+
+bool ValidateProgramUniform4f(Context *context,
+                              GLuint program,
+                              GLint location,
+                              GLfloat v0,
+                              GLfloat v1,
+                              GLfloat v2,
+                              GLfloat v3)
+{
+    GLfloat xyzw[4] = {v0, v1, v2, v3};
+    return ValidateProgramUniform4fv(context, program, location, 1, xyzw);
+}
+
+bool ValidateProgramUniform1iv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLint *value)
+{
+    // Check for ES31 program uniform entry points
+    if (context->getClientVersion() < Version(3, 1))
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
+        return false;
+    }
+
+    const LinkedUniform *uniform = nullptr;
+    gl::Program *programObject   = GetValidProgram(context, program);
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniform1ivValue(context, uniform->type, count, value);
+}
+
+bool ValidateProgramUniform2iv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLint *value)
+{
+    return ValidateProgramUniform(context, GL_INT_VEC2, program, location, count);
+}
+
+bool ValidateProgramUniform3iv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLint *value)
+{
+    return ValidateProgramUniform(context, GL_INT_VEC3, program, location, count);
+}
+
+bool ValidateProgramUniform4iv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLint *value)
+{
+    return ValidateProgramUniform(context, GL_INT_VEC4, program, location, count);
+}
+
+bool ValidateProgramUniform1uiv(Context *context,
+                                GLuint program,
+                                GLint location,
+                                GLsizei count,
+                                const GLuint *value)
+{
+    return ValidateProgramUniform(context, GL_UNSIGNED_INT, program, location, count);
+}
+
+bool ValidateProgramUniform2uiv(Context *context,
+                                GLuint program,
+                                GLint location,
+                                GLsizei count,
+                                const GLuint *value)
+{
+    return ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC2, program, location, count);
+}
+
+bool ValidateProgramUniform3uiv(Context *context,
+                                GLuint program,
+                                GLint location,
+                                GLsizei count,
+                                const GLuint *value)
+{
+    return ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC3, program, location, count);
+}
+
+bool ValidateProgramUniform4uiv(Context *context,
+                                GLuint program,
+                                GLint location,
+                                GLsizei count,
+                                const GLuint *value)
+{
+    return ValidateProgramUniform(context, GL_UNSIGNED_INT_VEC4, program, location, count);
+}
+
+bool ValidateProgramUniform1fv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLfloat *value)
+{
+    return ValidateProgramUniform(context, GL_FLOAT, program, location, count);
+}
+
+bool ValidateProgramUniform2fv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLfloat *value)
+{
+    return ValidateProgramUniform(context, GL_FLOAT_VEC2, program, location, count);
+}
+
+bool ValidateProgramUniform3fv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLfloat *value)
+{
+    return ValidateProgramUniform(context, GL_FLOAT_VEC3, program, location, count);
+}
+
+bool ValidateProgramUniform4fv(Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLfloat *value)
+{
+    return ValidateProgramUniform(context, GL_FLOAT_VEC4, program, location, count);
+}
+
+bool ValidateProgramUniformMatrix2fv(Context *context,
+                                     GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     GLboolean transpose,
+                                     const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix3fv(Context *context,
+                                     GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     GLboolean transpose,
+                                     const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix4fv(Context *context,
+                                     GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     GLboolean transpose,
+                                     const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix2x3fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2x3, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix3x2fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3x2, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix2x4fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT2x4, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix4x2fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4x2, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix3x4fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT3x4, program, location, count,
+                                        transpose);
+}
+
+bool ValidateProgramUniformMatrix4x3fv(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       GLsizei count,
+                                       GLboolean transpose,
+                                       const GLfloat *value)
+{
+    return ValidateProgramUniformMatrix(context, GL_FLOAT_MAT4x3, program, location, count,
+                                        transpose);
 }
 
 bool ValidateGetTexLevelParameterBase(Context *context,
