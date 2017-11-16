@@ -10,15 +10,23 @@
 #ifndef LIBGLESV2_PROC_TABLE_H_
 #define LIBGLESV2_PROC_TABLE_H_
 
+#include "common/angleutils.h"
+
 #include <EGL/egl.h>
 #include <utility>
 
 namespace egl
 {
-using ProcEntry = std::pair<const char *, __eglMustCastToProperFunctionPointerType>;
+struct ProcEntry final : angle::NonCopyable
+{
+    constexpr ProcEntry(const char *nameIn, void *procIn) : name(nameIn), proc(procIn) {}
 
-extern ProcEntry g_procTable[];
-extern size_t g_numProcs;
+    const char *name;
+    void *proc;
+};
+
+const ProcEntry *GetProcTable();
+size_t GetNumProcs();
 }  // namespace egl
 
 #endif  // LIBGLESV2_PROC_TABLE_H_
