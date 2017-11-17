@@ -254,7 +254,10 @@ struct WorkGroupSize
 {
     // Must have a trivial default constructor since it is used in YYSTYPE.
     WorkGroupSize() = default;
-    WorkGroupSize(int initialSize) : localSizeQualifiers{initialSize, initialSize, initialSize} {}
+    constexpr WorkGroupSize(int initialSize)
+        : localSizeQualifiers{initialSize, initialSize, initialSize}
+    {
+    }
 
     void fill(int fillValue);
     void setLocalSize(int localSizeX, int localSizeY, int localSizeZ);
