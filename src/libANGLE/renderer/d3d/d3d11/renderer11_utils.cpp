@@ -124,11 +124,13 @@ gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
     {
         renderFormat = formatInfo.rtvFormat;
     }
+
+    // Assume 1x when MSAA render-target is optionally supported.
+    textureCaps.sampleCounts.insert(1);
+
     if (renderFormat != DXGI_FORMAT_UNKNOWN &&
         support.query(renderFormat, D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET))
     {
-        // Assume 1x
-        textureCaps.sampleCounts.insert(1);
 
         for (unsigned int sampleCount = 2; sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
              sampleCount *= 2)
