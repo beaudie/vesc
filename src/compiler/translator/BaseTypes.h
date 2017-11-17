@@ -750,7 +750,7 @@ struct TLayoutQualifier
     // Must have a trivial default constructor since it is used in YYSTYPE.
     TLayoutQualifier() = default;
 
-    static TLayoutQualifier Create() { return TLayoutQualifier(0); }
+    constexpr static TLayoutQualifier Create() { return TLayoutQualifier(0); }
 
     bool isEmpty() const
     {
@@ -808,7 +808,7 @@ struct TLayoutQualifier
     int maxVertices;
 
   private:
-    TLayoutQualifier(int /*placeholder*/)
+    constexpr TLayoutQualifier(int /*placeholder*/)
         : location(-1),
           locationsSpecified(0),
           matrixPacking(EmpUnspecified),
@@ -836,7 +836,7 @@ struct TMemoryQualifier
         return !readonly && !writeonly && !coherent && !restrictQualifier && !volatileQualifier;
     }
 
-    static TMemoryQualifier Create() { return TMemoryQualifier(0); }
+    constexpr static TMemoryQualifier Create() { return TMemoryQualifier(0); }
 
     // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
     // An image can be qualified as both readonly and writeonly. It still can be can be used with
@@ -850,7 +850,7 @@ struct TMemoryQualifier
     bool volatileQualifier;
 
   private:
-    TMemoryQualifier(int /*placeholder*/)
+    constexpr TMemoryQualifier(int /*placeholder*/)
         : readonly(false),
           writeonly(false),
           coherent(false),

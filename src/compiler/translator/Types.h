@@ -195,6 +195,28 @@ class TType
           TQualifier qualifierIn,
           TLayoutQualifier layoutQualifierIn);
 
+    constexpr TType(TBasicType t,
+                    TPrecision p,
+                    TQualifier q,
+                    unsigned char ps,
+                    unsigned char ss,
+                    const char *mangledName)
+        : type(t),
+          precision(p),
+          qualifier(q),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::Create()),
+          layoutQualifier(TLayoutQualifier::Create()),
+          primarySize(ps),
+          secondarySize(ss),
+          mArraySizes(nullptr),
+          mInterfaceBlock(0),
+          mStructure(0),
+          mIsStructSpecifier(false),
+          mMangledName(mangledName)
+    {
+    }
+
     TType(const TType &) = default;
     TType &operator=(const TType &) = default;
 
