@@ -364,7 +364,7 @@ TString TType::getCompleteString() const
         stream << getQualifierString() << " ";
     if (precision != EbpUndefined)
         stream << getPrecisionString() << " ";
-    for (auto arraySizeIter = mArraySizes.rbegin(); arraySizeIter != mArraySizes.rend();
+    for (auto arraySizeIter = mArraySizes->rbegin(); arraySizeIter != mArraySizes->rend();
          ++arraySizeIter)
     {
         stream << "array[" << (*arraySizeIter) << "] of ";
@@ -530,7 +530,7 @@ const char *TType::buildMangledName() const
         mangledName += static_cast<char>('0' + getNominalSize());
     }
 
-    for (unsigned int arraySize : mArraySizes)
+    for (unsigned int arraySize : *mArraySizes)
     {
         char buf[20];
         snprintf(buf, sizeof(buf), "%d", arraySize);
@@ -555,7 +555,7 @@ size_t TType::getObjectSize() const
     if (totalSize == 0)
         return 0;
 
-    for (size_t arraySize : mArraySizes)
+    for (size_t arraySize : *mArraySizes)
     {
         if (arraySize > INT_MAX / totalSize)
             totalSize = INT_MAX;
@@ -580,7 +580,7 @@ int TType::getLocationCount() const
         return 0;
     }
 
-    for (unsigned int arraySize : mArraySizes)
+    for (unsigned int arraySize : *mArraySizes)
     {
         if (arraySize > static_cast<unsigned int>(std::numeric_limits<int>::max() / count))
         {
@@ -597,8 +597,12 @@ int TType::getLocationCount() const
 
 unsigned int TType::getArraySizeProduct() const
 {
+    if (!mArraySizes)
+        return 1u;
+
     unsigned int product = 1u;
-    for (unsigned int arraySize : mArraySizes)
+
+    for (unsigned int arraySize : *mArraySizes)
     {
         product *= arraySize;
     }
@@ -607,7 +611,10 @@ unsigned int TType::getArraySizeProduct() const
 
 bool TType::isUnsizedArray() const
 {
-    for (unsigned int arraySize : mArraySizes)
+    if (!mArraySizes)
+        return false;
+
+    for (unsigned int arraySize : *mArraySizes)
     {
         if (arraySize == 0u)
         {
@@ -629,13 +636,14 @@ bool TType::isElementTypeOf(const TType &arrayType) const
     {
         return false;
     }
-    if (arrayType.mArraySizes.size() != mArraySizes.size() + 1u)
+    // FIXME
+    if (arrayType.mArraySizes->size() != mArraySizes->size() + 1u)
     {
         return false;
     }
-    for (size_t i = 0; i < mArraySizes.size(); ++i)
+    for (size_t i = 0; i < mArraySizes->size(); ++i)
     {
-        if (mArraySizes[i] != arrayType.mArraySizes[i])
+        if ((*mArraySizes)[i] != arrayType.mArraySizes[0][i])
         {
             return false;
         }
@@ -645,9 +653,9 @@ bool TType::isElementTypeOf(const TType &arrayType) const
 
 void TType::sizeUnsizedArrays(const TVector<unsigned int> &arraySizes)
 {
-    for (size_t i = 0u; i < mArraySizes.size(); ++i)
+    for (size_t i = 0u; i < mArraySizes->size(); ++i)
     {
-        if (mArraySizes[i] == 0)
+        if ((*mArraySizes)[i] == 0)
         {
             if (i < arraySizes.size())
             {
@@ -665,8 +673,8 @@ void TType::sizeUnsizedArrays(const TVector<unsigned int> &arraySizes)
 void TType::sizeOutermostUnsizedArray(unsigned int arraySize)
 {
     ASSERT(isArray());
-    ASSERT(mArraySizes.back() == 0u);
-    mArraySizes.back() = arraySize;
+    ASSERT(mArraySizes->back() == 0u);
+    mArraySizes->back() = arraySize;
 }
 
 void TType::setBasicType(TBasicType t)
@@ -700,14 +708,17 @@ void TType::setSecondarySize(unsigned char ss)
 
 void TType::makeArray(unsigned int s)
 {
-    mArraySizes.push_back(s);
+    if (!mArraySizes)
+        mArraySizes = new TVector<unsigned int>();
+
+    mArraySizes->push_back(s);
     invalidateMangledName();
 }
 
 void TType::setArraySize(size_t arrayDimension, unsigned int s)
 {
-    ASSERT(arrayDimension < mArraySizes.size());
-    if (mArraySizes.at(arrayDimension) != s)
+    ASSERT(arrayDimension < mArraySizes->size());
+    if (mArraySizes->at(arrayDimension) != s)
     {
         mArraySizes[arrayDimension] = s;
         invalidateMangledName();
@@ -716,9 +727,9 @@ void TType::setArraySize(size_t arrayDimension, unsigned int s)
 
 void TType::toArrayElementType()
 {
-    if (mArraySizes.size() > 0)
+    if (mArraySizes->size() > 0)
     {
-        mArraySizes.pop_back();
+        mArraySizes->pop_back();
         invalidateMangledName();
     }
 }
