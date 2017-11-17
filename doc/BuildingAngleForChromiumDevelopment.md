@@ -30,7 +30,7 @@ git checkout master
 
 ```bash
 cd src/third_party/angle
-GYP_GENERATORS=ninja gclient runhooks
+buildtools/linux64/gn gen out/Debug
 ```
 
   * To build
