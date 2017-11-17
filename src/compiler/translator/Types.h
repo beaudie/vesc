@@ -240,12 +240,12 @@ class TType
 
     bool isMatrix() const { return primarySize > 1 && secondarySize > 1; }
     bool isNonSquareMatrix() const { return isMatrix() && primarySize != secondarySize; }
-    bool isArray() const { return !mArraySizes.empty(); }
-    bool isArrayOfArrays() const { return mArraySizes.size() > 1u; }
-    const TVector<unsigned int> &getArraySizes() const { return mArraySizes; }
+    bool isArray() const { return mArraySizes != nullptr; }
+    bool isArrayOfArrays() const { return isArray() && mArraySizes->size() > 1u; }
+    const TVector<unsigned int> &getArraySizes() const { return *mArraySizes; }
     unsigned int getArraySizeProduct() const;
     bool isUnsizedArray() const;
-    unsigned int getOutermostArraySize() const { return mArraySizes.back(); }
+    unsigned int getOutermostArraySize() const { return mArraySizes->back(); }
     void makeArray(unsigned int s);
 
     // Here, the array dimension value 0 corresponds to the innermost array.
@@ -302,9 +302,9 @@ class TType
             return primarySize < right.primarySize;
         if (secondarySize != right.secondarySize)
             return secondarySize < right.secondarySize;
-        if (mArraySizes.size() != right.mArraySizes.size())
-            return mArraySizes.size() < right.mArraySizes.size();
-        for (size_t i = 0; i < mArraySizes.size(); ++i)
+        if (mArraySizes->size() != right.mArraySizes->size())
+            return mArraySizes->size() < right.mArraySizes->size();
+        for (size_t i = 0; i < mArraySizes->size(); ++i)
         {
             if (mArraySizes[i] != right.mArraySizes[i])
                 return mArraySizes[i] < right.mArraySizes[i];
@@ -381,7 +381,7 @@ class TType
 
     // Used to make an array type. Outermost array size is stored at the end of the vector. Having 0
     // in this vector means an unsized array.
-    TVector<unsigned int> mArraySizes;
+    TVector<unsigned int> *mArraySizes;
 
     // This is set only in the following two cases:
     // 1) Represents an interface block.
