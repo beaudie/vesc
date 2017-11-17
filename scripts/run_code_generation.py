@@ -55,15 +55,6 @@ generators = {
         ],
         'script': 'src/libANGLE/renderer/d3d/d3d11/gen_dxgi_support_tables.py',
     },
-    'GL copy conversion table': {
-        'inputs': [
-            'src/libANGLE/es3_copy_conversion_formats.json',
-        ],
-        'outputs': [
-            'src/libANGLE/es3_copy_conversion_table_autogen.cpp',
-        ],
-        'script': 'src/libANGLE/gen_copy_conversion_table.py',
-    },
     'GL entry point': {
         'inputs': [
             'scripts/entry_point_packed_gl_enums.json',
