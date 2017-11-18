@@ -195,6 +195,45 @@ class TType
           TQualifier qualifierIn,
           TLayoutQualifier layoutQualifierIn);
 
+    constexpr TType(TBasicType t,
+                    TPrecision p,
+                    TQualifier q,
+                    unsigned char ps,
+                    unsigned char ss,
+                    const char *mangledName)
+        : type(t),
+          precision(p),
+          qualifier(q),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::Create()),
+          layoutQualifier(TLayoutQualifier::Create()),
+          primarySize(ps),
+          secondarySize(ss),
+          mArraySizes(nullptr),
+          mInterfaceBlock(nullptr),
+          mStructure(nullptr),
+          mIsStructSpecifier(false),
+          mMangledName(mangledName)
+    {
+    }
+
+    constexpr TType(TType &&t)
+        : type(t.type),
+          precision(t.precision),
+          qualifier(t.qualifier),
+          invariant(t.invariant),
+          memoryQualifier(t.memoryQualifier),
+          layoutQualifier(t.layoutQualifier),
+          primarySize(t.primarySize),
+          secondarySize(t.secondarySize),
+          mArraySizes(t.mArraySizes),
+          mInterfaceBlock(t.mInterfaceBlock),
+          mStructure(t.mStructure),
+          mIsStructSpecifier(t.mIsStructSpecifier),
+          mMangledName(t.mMangledName)
+    {
+    }
+
     TType(const TType &t)
         : type(t.type),
           precision(t.precision),
