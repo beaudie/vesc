@@ -65,6 +65,7 @@
 1442 D3D11 : dEQP-GLES31.functional.state_query.internal_format.renderbuffer.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.program.compute_work_group_size_get_programiv = FAIL
 1442 D3D11 : dEQP-GLES31.functional.layout_binding.ssbo.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.empty = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_local_barrier_single_invocation = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_local_barrier_single_group = FAIL
@@ -544,7 +545,6 @@
 1442 OPENGL : dEQP-GLES31.functional.program_interface_query.uniform_block.resource_list.block_array = FAIL
 1442 OPENGL : dEQP-GLES31.functional.program_interface_query.uniform_block.resource_list.block_array_single_element = FAIL
 1442 OPENGL : dEQP-GLES31.functional.program_interface_query.uniform_block.referenced_by.* = FAIL
-1951 OPENGL : dEQP-GLES31.functional.ssbo.layout.* = FAIL
 
 // OpenGL and D3D11 Failing Tests
 1663 OPENGL D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
@@ -1199,10 +1199,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.copy_ssbo_to_image_large = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_single = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_single_invocation = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_single_group = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_multiple_invocations = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_multiple_groups = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.4 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.10 = FAIL
