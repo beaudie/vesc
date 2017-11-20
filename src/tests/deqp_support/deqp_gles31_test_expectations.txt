@@ -94,6 +94,7 @@
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.basic_type.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.work_group_size.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.atomic_counter.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.ssbo.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.texture.texparameter* = SKIP
@@ -115,6 +116,21 @@
 // OPENGL Failing Tests
 1665 WIN NVIDIA OPENGL : dEQP-GLES31.functional.draw_indirect.negative.command_offset_not_in_buffer_unsigned32_wrap = FAIL
 1442 NVIDIA OPENGL : dEQP-GLES31.functional.fbo.no_attachments.maximums.all = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.basic_unsized_array* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.2_level* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.3_level* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.single_struct* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.single_nested_struct* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.unsized* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.instance* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.multi* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.unsized* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.arrays_of_arrays* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.basic_instance_arrays* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.nested_structs* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.all* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.ssbo.array_length.unsized* = FAIL
+
 
 // OpenGL and D3D11 Failing Tests
 1663 OPENGL D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
@@ -1196,7 +1212,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_multiple_invocations = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.atomic_counter_multiple_groups = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.ssbo.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.2_level_array.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.3_level_array.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.2_level_struct_array.* = FAIL

@@ -817,7 +817,8 @@ Error Program::link(const gl::Context *context)
         ProgramLinkedResources resources = {
             {0, PackMode::ANGLE_RELAXED},
             {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables}};
+            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
+            {&mState.mAtomicCounterBuffers}};
 
         InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
         InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
@@ -887,7 +888,8 @@ Error Program::link(const gl::Context *context)
         ProgramLinkedResources resources = {
             {data.getCaps().maxVaryingVectors, packMode},
             {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables}};
+            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
+            {&mState.mAtomicCounterBuffers}};
 
         InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
         InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
@@ -912,7 +914,6 @@ Error Program::link(const gl::Context *context)
         gatherTransformFeedbackVaryings(mergedVaryings);
     }
 
-    gatherAtomicCounterBuffers();
     initInterfaceBlockBindings();
 
     setUniformValuesFromBindingQualifiers();
@@ -2080,6 +2081,11 @@ bool Program::linkAtomicCounterBuffers()
     for (unsigned int index : mState.mAtomicCounterUniformRange)
     {
         auto &uniform = mState.mUniforms[index];
+        uniform.blockInfo.offset           = uniform.offset;
+        uniform.blockInfo.arrayStride      = (uniform.isArray() ? 4 : 0);
+        uniform.blockInfo.matrixStride     = 0;
+        uniform.blockInfo.isRowMajorMatrix = false;
+
         bool found    = false;
         for (unsigned int bufferIndex = 0; bufferIndex < mState.mAtomicCounterBuffers.size();
              ++bufferIndex)
@@ -2840,20 +2846,6 @@ void Program::setUniformValuesFromBindingQualifiers()
                           boundTextureUnits.data());
         }
     }
-}
-
-void Program::gatherAtomicCounterBuffers()
-{
-    for (unsigned int index : mState.mAtomicCounterUniformRange)
-    {
-        auto &uniform                      = mState.mUniforms[index];
-        uniform.blockInfo.offset           = uniform.offset;
-        uniform.blockInfo.arrayStride      = (uniform.isArray() ? 4 : 0);
-        uniform.blockInfo.matrixStride     = 0;
-        uniform.blockInfo.isRowMajorMatrix = false;
-    }
-
-    // TODO(jie.a.chen@intel.com): Get the actual BUFFER_DATA_SIZE from backend for each buffer.
 }
 
 void Program::initInterfaceBlockBindings()

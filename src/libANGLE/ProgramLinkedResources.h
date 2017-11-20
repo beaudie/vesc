@@ -201,6 +201,20 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
     std::vector<BufferVariable> *mBufferVariablesOut;
 };
 
+class AtomicCounterBufferLinker : angle::NonCopyable
+{
+  public:
+    AtomicCounterBufferLinker(std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut);
+    ~AtomicCounterBufferLinker();
+
+    using GetBuffersSize = std::function<bool(AtomicCounterBufferSizeMap *sizeMapOut)>;
+
+    void link(const GetBuffersSize &getBuffersSize) const;
+
+  private:
+    std::vector<AtomicCounterBuffer> *mAtomicCounterBuffersOut;
+};
+
 // The link operation is responsible for finishing the link of uniform and interface blocks.
 // This way it can filter out unreferenced resources and still have access to the info.
 // TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
@@ -209,6 +223,7 @@ struct ProgramLinkedResources
     VaryingPacking varyingPacking;
     UniformBlockLinker uniformBlockLinker;
     ShaderStorageBlockLinker shaderStorageBlockLinker;
+    AtomicCounterBufferLinker atomicCounterBufferLinker;
 };
 
 }  // namespace gl
