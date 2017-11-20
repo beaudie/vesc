@@ -634,6 +634,25 @@ bool ProgramGL::getShaderStorageBlockSize(const std::string &name,
     return true;
 }
 
+bool ProgramGL::getAtomicCounterBuffersSize(GLuint maxIndex,
+                                            gl::AtomicCounterBufferSizeMap *sizeMap) const
+{
+    for (unsigned int index = 0; index < maxIndex; index++)
+    {
+        constexpr int kPropCount             = 2;
+        std::array<GLenum, kPropCount> props = {{GL_BUFFER_BINDING, GL_BUFFER_DATA_SIZE}};
+        std::array<GLint, kPropCount> params;
+        GLsizei length;
+        mFunctions->getProgramResourceiv(mProgramID, GL_ATOMIC_COUNTER_BUFFER, index, kPropCount,
+                                         props.data(), kPropCount, &length, params.data());
+        ASSERT(kPropCount == length);
+        int bufferBinding           = params[0];
+        unsigned int bufferDataSize = params[1];
+        sizeMap->insert(std::pair<int, unsigned int>(bufferBinding, bufferDataSize));
+    }
+    return true;
+}
+
 void ProgramGL::setPathFragmentInputGen(const std::string &inputName,
                                         GLenum genMode,
                                         GLint components,
@@ -888,6 +907,13 @@ void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
     };
     resources.shaderStorageBlockLinker.linkBlocks(getShaderStorageBlockSize,
                                                   getShaderStorageBlockMemberInfo);
+
+    // Gather atomic counter buffer info.
+    auto getAtomicCounterBuffersSize = [this](GLuint maxIndex,
+                                              gl::AtomicCounterBufferSizeMap *sizeMapOut) {
+        return this->getAtomicCounterBuffersSize(maxIndex, sizeMapOut);
+    };
+    resources.atomicCounterBufferLinker.link(getAtomicCounterBuffersSize);
 }
 
 }  // namespace rx

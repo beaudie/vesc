@@ -101,6 +101,8 @@ struct ShaderVariableBuffer : public StaticallyUsed
 
 using AtomicCounterBuffer = ShaderVariableBuffer;
 
+using AtomicCounterBufferSizeMap = std::map<int, unsigned int>;
+
 // Helper struct representing a single shader interface block
 struct InterfaceBlock : public ShaderVariableBuffer
 {
