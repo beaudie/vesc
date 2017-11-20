@@ -144,6 +144,7 @@ struct BlendState final
 {
     // This will zero-initialize the struct, including padding.
     BlendState();
+    BlendState(const BlendState &other);
 
     bool blend;
     GLenum sourceBlendRGB;
@@ -170,6 +171,7 @@ struct DepthStencilState final
 {
     // This will zero-initialize the struct, including padding.
     DepthStencilState();
+    DepthStencilState(const DepthStencilState &other);
 
     bool depthTest;
     GLenum depthFunc;
@@ -198,6 +200,7 @@ struct SamplerState final
 {
     // This will zero-initialize the struct, including padding.
     SamplerState();
+    SamplerState(const SamplerState &other);
 
     static SamplerState CreateDefaultForTarget(GLenum target);
 
@@ -246,10 +249,9 @@ static_assert(sizeof(DrawElementsIndirectCommand) == 20,
 
 struct ImageUnit
 {
-    ImageUnit()
-        : texture(), level(0), layered(false), layer(0), access(GL_READ_ONLY), format(GL_R32UI)
-    {
-    }
+    ImageUnit();
+    ImageUnit(const ImageUnit &other);
+    ~ImageUnit();
 
     BindingPointer<Texture> texture;
     GLint level;

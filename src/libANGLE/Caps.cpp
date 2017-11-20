@@ -35,6 +35,10 @@ TextureCaps::TextureCaps()
 {
 }
 
+TextureCaps::TextureCaps(const TextureCaps &other) = default;
+
+TextureCaps::~TextureCaps() = default;
+
 GLuint TextureCaps::getMaxSamples() const
 {
     return !sampleCounts.empty() ? *sampleCounts.rbegin() : 0;
@@ -704,6 +708,8 @@ TypePrecision::TypePrecision() : range({{0, 0}}), precision(0)
 {
 }
 
+TypePrecision::TypePrecision(const TypePrecision &other) = default;
+
 void TypePrecision::setIEEEFloat()
 {
     range     = {{127, 127}};
@@ -848,6 +854,9 @@ Caps::Caps()
         maxComputeWorkGroupSize[i]  = 0;
     }
 }
+
+Caps::Caps(const Caps &other) = default;
+Caps::~Caps()                 = default;
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions)
 {
@@ -1171,6 +1180,8 @@ ClientExtensions::ClientExtensions()
       clientGetAllProcAddresses(false)
 {
 }
+
+ClientExtensions::ClientExtensions(const ClientExtensions &other) = default;
 
 std::vector<std::string> ClientExtensions::getStrings() const
 {
