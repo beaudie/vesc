@@ -179,10 +179,9 @@ struct BindingInfo
 // This small structure encapsulates binding sampler uniforms to active GL textures.
 struct SamplerBinding
 {
-    SamplerBinding(GLenum textureTypeIn, size_t elementCount, bool unreferenced)
-        : textureType(textureTypeIn), boundTextureUnits(elementCount, 0), unreferenced(unreferenced)
-    {
-    }
+    SamplerBinding(GLenum textureTypeIn, size_t elementCount, bool unreferenced);
+    SamplerBinding(const SamplerBinding &other);
+    ~SamplerBinding();
 
     // Necessary for retrieving active textures from the GL state.
     GLenum textureType;
@@ -219,14 +218,10 @@ struct TransformFeedbackVarying : public sh::Varying
 
 struct ImageBinding
 {
-    ImageBinding(size_t count) : boundImageUnits(count, 0) {}
-    ImageBinding(GLuint imageUnit, size_t count)
-    {
-        for (size_t index = 0; index < count; ++index)
-        {
-            boundImageUnits.push_back(imageUnit + static_cast<GLuint>(index));
-        }
-    }
+    ImageBinding(size_t count);
+    ImageBinding(GLuint imageUnit, size_t count);
+    ImageBinding(const ImageBinding &other);
+    ~ImageBinding();
 
     std::vector<GLuint> boundImageUnits;
 };
@@ -586,6 +581,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     class Bindings final : angle::NonCopyable
     {
       public:
+        Bindings();
+        ~Bindings();
         void bindLocation(GLuint index, const std::string &name);
         int getBinding(const std::string &name) const;
 
@@ -605,7 +602,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool usesMultiview() const { return mState.usesMultiview(); }
 
   private:
-    ~Program();
+    ~Program() override;
 
     struct VaryingRef
     {

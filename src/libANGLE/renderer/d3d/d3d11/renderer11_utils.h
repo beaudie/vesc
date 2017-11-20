@@ -237,16 +237,12 @@ class LazyShader final : public LazyResource<GetResourceTypeFromD3D11<D3D11Shade
 class LazyInputLayout final : public LazyResource<ResourceType::InputLayout>
 {
   public:
-    constexpr LazyInputLayout(const D3D11_INPUT_ELEMENT_DESC *inputDesc,
-                              size_t inputDescLen,
-                              const BYTE *byteCode,
-                              size_t byteCodeLen,
-                              const char *debugName)
-        : mInputDesc(inputDesc, inputDescLen),
-          mByteCode(byteCode, byteCodeLen),
-          mDebugName(debugName)
-    {
-    }
+    LazyInputLayout(const D3D11_INPUT_ELEMENT_DESC *inputDesc,
+                    size_t inputDescLen,
+                    const BYTE *byteCode,
+                    size_t byteCodeLen,
+                    const char *debugName);
+    ~LazyInputLayout() override;
 
     gl::Error resolve(Renderer11 *renderer) override;
 
@@ -261,7 +257,7 @@ class LazyBlendState final : public LazyResource<ResourceType::BlendState>
   public:
     LazyBlendState(const D3D11_BLEND_DESC &desc, const char *debugName);
 
-    gl::Error resolve(Renderer11 *renderer);
+    gl::Error resolve(Renderer11 *renderer) override;
 
   private:
     D3D11_BLEND_DESC mDesc;
@@ -327,7 +323,7 @@ class TextureHelper11 : public Resource11Base<ID3D11Resource, std::shared_ptr, G
     TextureHelper11();
     TextureHelper11(TextureHelper11 &&other);
     TextureHelper11(const TextureHelper11 &other);
-    ~TextureHelper11();
+    ~TextureHelper11() override;
     TextureHelper11 &operator=(TextureHelper11 &&other);
     TextureHelper11 &operator=(const TextureHelper11 &other);
 
@@ -345,7 +341,7 @@ class TextureHelper11 : public Resource11Base<ID3D11Resource, std::shared_ptr, G
         std::swap(mData->manager, texture.mData->manager);
 
         // Can't use std::swap because texture is typed, and here we use ID3D11Resource.
-        auto temp             = mData->object;
+        ID3D11Resource *temp  = mData->object;
         mData->object         = texture.mData->object;
         texture.mData->object = static_cast<ResourceT *>(temp);
 
