@@ -102,6 +102,8 @@ class ProgramGL : public ProgramImpl
     bool getShaderStorageBlockSize(const std::string &blockName,
                                    const std::string &blockMappedName,
                                    size_t *sizeOut) const;
+    gl::AtomicCounterBufferSizeMap getAtomicCounterBufferSizeMap() const;
+
     void linkResources(const gl::ProgramLinkedResources &resources);
 
     // Helper function, makes it simpler to type.

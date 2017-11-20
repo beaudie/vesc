@@ -671,7 +671,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void setUniformValuesFromBindingQualifiers();
 
-    void gatherAtomicCounterBuffers();
     void initInterfaceBlockBindings();
 
     // Both these function update the cached uniform values and return a modified "count"
