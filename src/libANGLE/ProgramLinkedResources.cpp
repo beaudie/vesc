@@ -1037,4 +1037,33 @@ size_t ShaderStorageBlockLinker::getCurrentBlockMemberIndex() const
     return mBufferVariablesOut->size();
 }
 
+// AtomicCounterBufferLinker implementation.
+AtomicCounterBufferLinker::AtomicCounterBufferLinker(
+    std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut)
+    : mAtomicCounterBuffersOut(atomicCounterBuffersOut)
+{
+}
+
+AtomicCounterBufferLinker::~AtomicCounterBufferLinker()
+{
+}
+
+void AtomicCounterBufferLinker::link(const GetBuffersSize &getBuffersSize) const
+{
+    if (mAtomicCounterBuffersOut->size() == 0)
+    {
+        return;
+    }
+
+    AtomicCounterBufferSizeMap sizeMap;
+    getBuffersSize(&sizeMap);
+
+    for (auto &atomicCounterBuffer : *mAtomicCounterBuffersOut)
+    {
+        auto bufferSize = sizeMap.find(atomicCounterBuffer.binding);
+        ASSERT(bufferSize != sizeMap.end());
+        atomicCounterBuffer.dataSize = bufferSize->second;
+    }
+}
+
 }  // namespace gl
