@@ -64,9 +64,6 @@ TEST_P(ProgramParameterTestES31, ValidateParameters)
     glProgramParameteri(0, GL_PROGRAM_SEPARABLE, GL_TRUE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);
 
-    glProgramParameteri(program, GL_PROGRAM_SEPARABLE, 2);
-    ASSERT_GL_ERROR(GL_INVALID_VALUE);
-
     glDeleteProgram(program);
 }
 
