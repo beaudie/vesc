@@ -1655,12 +1655,6 @@ bool ValidateProgramParameteri(Context *context, GLuint program, GLenum pname, G
     switch (pname)
     {
         case GL_PROGRAM_BINARY_RETRIEVABLE_HINT:
-            if (value != GL_FALSE && value != GL_TRUE)
-            {
-                context->handleError(InvalidValue()
-                                     << "Invalid value, expected GL_FALSE or GL_TRUE: " << value);
-                return false;
-            }
             break;
 
         case GL_PROGRAM_SEPARABLE:
@@ -1668,13 +1662,6 @@ bool ValidateProgramParameteri(Context *context, GLuint program, GLenum pname, G
             {
                 context->handleError(InvalidEnum()
                                      << "PROGRAM_SEPARABLE is not supported before GLES 3.1");
-                return false;
-            }
-
-            if (value != GL_FALSE && value != GL_TRUE)
-            {
-                context->handleError(InvalidValue()
-                                     << "Invalid value, expected GL_FALSE or GL_TRUE: " << value);
                 return false;
             }
             break;
