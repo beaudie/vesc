@@ -49,6 +49,7 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 namespace rx
 {
 class DisplayVk;
+class RenderTargetVk;
 
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
@@ -64,25 +65,6 @@ enum class TextureDimension
     TEX_CUBE,
     TEX_3D,
     TEX_2D_ARRAY,
-};
-
-// This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
-// at command recording times indicating an order in the queue. We use Fences to detect when
-// commands finish, and then release any unreferenced and deleted resources based on the stored
-// queue serial in a special 'garbage' queue.
-class ResourceVk
-{
-  public:
-    void setQueueSerial(Serial queueSerial)
-    {
-        ASSERT(queueSerial >= mStoredQueueSerial);
-        mStoredQueueSerial = queueSerial;
-    }
-
-    Serial getQueueSerial() const { return mStoredQueueSerial; }
-
-  private:
-    Serial mStoredQueueSerial;
 };
 
 namespace vk
@@ -667,6 +649,41 @@ class CommandBufferAndState : public vk::CommandBuffer
 using CommandBufferAndSerial = ObjectAndSerial<CommandBufferAndState>;
 using FenceAndSerial         = ObjectAndSerial<Fence>;
 
+// TODO(jmadill): Replace ref counting with pool allocation.
+class SecondaryCommands final : public gl::RefCountObjectNoID
+{
+  public:
+    SecondaryCommands();
+    ~SecondaryCommands();
+
+    vk::CommandBufferAndState &getOutsideRenderPassCommands();
+    vk::CommandBufferAndState &getInsideRenderPassCommands();
+
+    bool usesRenderPass() const;
+
+    // RenderTargets must be added in order, with the depth/stencil being added last.
+    void addColorRenderTarget(RenderTargetVk *colorRenderTarget);
+    void addDepthStencilRenderTarget(RenderTargetVk *depthStencilRenderTarget);
+
+    void addBeforeDependency(SecondaryCommands *beforeCommands);
+    void setAfterDependency(SecondaryCommands *afterCommands);
+
+  private:
+    void addAttachmentDesc(VkFormat format,
+                           VkSampleCountFlagBits samples,
+                           VkImageLayout imageLayout);
+    void updateDependencies(ResourceVk *resource);
+
+    // The last element in the array is the depth/stencil description.
+    // TODO(jmadill): Could possibly use a more static structure.
+    std::vector<VkAttachmentDescription> mAttachmentDescs;
+    bool mUsesDepthStencilAttachment;
+    vk::CommandBufferAndState mOutsideRenderPassCommands;
+    vk::CommandBufferAndState mInsideRenderPassCommands;
+    std::vector<gl::BindingPointer<SecondaryCommands>> mBeforeDependencies;
+    gl::BindingPointer<SecondaryCommands> mAfterDependency;
+};
+
 }  // namespace vk
 
 namespace gl_vk
@@ -675,6 +692,27 @@ VkPrimitiveTopology GetPrimitiveTopology(GLenum mode);
 VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState);
 VkFrontFace GetFrontFace(GLenum frontFace);
 }  // namespace gl_vk
+
+// This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
+// at command recording times indicating an order in the queue. We use Fences to detect when
+// commands finish, and then release any unreferenced and deleted resources based on the stored
+// queue serial in a special 'garbage' queue.
+class ResourceVk
+{
+  public:
+    ResourceVk();
+    virtual ~ResourceVk();
+
+    void setQueueSerial(Serial queueSerial) Serial getQueueSerial() const;
+
+    bool isCurrentlyInUse() const;
+    vk::SecondaryCommands *getCurrentInUseCommands();
+    void setCurrentInUseCommands(vk::SecondaryCommands *secondaryCommands);
+
+  private:
+    Serial mStoredQueueSerial;
+    gl::BindingPointer<vk::SecondaryCommands> mCurrentInUseCommands;
+};
 
 }  // namespace rx
 

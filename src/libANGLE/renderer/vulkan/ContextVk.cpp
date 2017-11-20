@@ -293,7 +293,9 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
     return gl::NoError();
 }
 
-gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
+gl::Error ContextVk::setupDraw(const gl::Context *context,
+                               GLenum mode,
+                               vk::CommandBufferAndState **commandBuffer)
 {
     if (mode != mCurrentDrawMode)
     {
@@ -353,16 +355,21 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
                                           nullptr);
     }
 
+    vk::SecondaryCommands *secondaryCommands = vkFBO->getSecondaryCommandsForRender(context);
+    *commandBuffer                           = secondaryCommands->getInsideRenderPassCommands();
+
+    VkDevice device                    = contextVk->getDevice();
+    const vk::CommandPool &commandPool = mRenderer->getCommandPool();
+
+    ANGLE_TRY(commandBuffer->ensureStarted(device, commandPool, VK_COMMAND_BUFFER_LEVEL_SECONDARY));
+
     return gl::NoError();
 }
 
 gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_TRY(setupDraw(context, mode));
-
     vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
-
+    ANGLE_TRY(setupDraw(context, mode, &commandBuffer));
     commandBuffer->draw(count, 1, first, 0);
     return gl::NoError();
 }

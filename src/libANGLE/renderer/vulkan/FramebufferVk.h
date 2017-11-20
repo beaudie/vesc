@@ -90,6 +90,8 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
 
     gl::ErrorOrResult<vk::RenderPass *> getRenderPass(const gl::Context *context, VkDevice device);
 
+    vk::SecondaryCommands *getSecondaryCommandsForRender(const gl::Context *context);
+
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);

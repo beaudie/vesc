@@ -574,6 +574,11 @@ vk::Error RendererVk::getStartedCommandBuffer(vk::CommandBufferAndState **comman
     return vk::NoError();
 }
 
+const vk::CommandPool &RendererVk::getCommandPool() const
+{
+    return mCommandPool;
+}
+
 vk::Error RendererVk::submitCommandBuffer(vk::CommandBufferAndState *commandBuffer)
 {
     ANGLE_TRY(commandBuffer->ensureFinished());
@@ -830,6 +835,13 @@ bool RendererVk::isResourceInUse(const ResourceVk &resource)
 bool RendererVk::isSerialInUse(Serial serial)
 {
     return serial > mLastCompletedQueueSerial;
+}
+
+vk::SecondaryCommands *RendererVk::allocateSecondaryCommands()
+{
+    vk::SecondaryCommands *newCommands = new vk::SecondaryCommands();
+    mCurrentSecondaryCommands.emplace_back(newCommands);
+    return newCommands;
 }
 
 }  // namespace rx

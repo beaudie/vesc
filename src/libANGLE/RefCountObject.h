@@ -91,7 +91,7 @@ class BindingPointer
     {
     }
 
-    BindingPointer(ObjectType *object) : mObject(object) { mObject->addRef(); }
+    explicit BindingPointer(ObjectType *object) : mObject(object) { mObject->addRef(); }
 
     BindingPointer(const BindingPointer<ObjectType> &other) : mObject(other.mObject)
     {
@@ -130,6 +130,8 @@ class BindingPointer
     }
 
     bool operator!=(const BindingPointer<ObjectType> &other) const { return !(*this == other); }
+
+    bool valid() const { return mObject != nullptr; }
 
   private:
     ObjectType *mObject;

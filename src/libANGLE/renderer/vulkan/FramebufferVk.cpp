@@ -614,4 +614,47 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
     return gl::NoError();
 }
 
+vk::SecondaryCommands *FramebufferVk::getSecondaryCommandsForRender(const gl::Context *context)
+{
+    if (isCurrentlyInUse())
+    {
+        return getCurrentInUseCommands();
+    }
+
+    ContextVk *contextVk    = vk::GetImpl(context);
+    auto *secondaryCommands = contextVk->getRenderer()->allocateSecondaryCommands();
+
+    setCurrentInUseCommands(secondaryCommands);
+
+    // Initialize RenderPass info.
+    // TODO(jmadill): Could cache this info, would require dependent state change messaging.
+    const auto &colorAttachments = mState.getColorAttachments();
+    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    {
+        const auto &colorAttachment = colorAttachments[attachmentIndex];
+        if (colorAttachment.isAttached())
+        {
+            RenderTargetVk *renderTarget = nullptr;
+            ANGLE_SWALLOW_ERR(
+                colorAttachment.getRenderTarget<RenderTargetVk>(context, &renderTarget));
+
+            // TODO(jmadill): May need layout transition.
+            secondaryCommands->addColorRenderTarget(renderTarget);
+        }
+    }
+
+    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
+    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    {
+        RenderTargetVk *renderTarget = nullptr;
+        ANGLE_SWALLOW_ERR(
+            depthStencilAttachment->getRenderTarget<RenderTargetVk>(context, &renderTarget));
+
+        // TODO(jmadill): May need layout transition.
+        secondaryCommands->addDepthStencilRenderTarget(renderTarget);
+    }
+
+    return secondaryCommands;
+}
+
 }  // namespace rx

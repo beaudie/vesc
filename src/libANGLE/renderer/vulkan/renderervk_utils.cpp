@@ -10,6 +10,7 @@
 #include "renderervk_utils.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -281,6 +282,12 @@ Error CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
     ASSERT(valid());
     ANGLE_VK_TRY(vkBeginCommandBuffer(mHandle, &info));
     return NoError();
+}
+
+Error CommandBuffer::init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo)
+{
+    ASSERT(!valid());
+    return vkAllocateCommandBuffers(device, &createInfo, &mHandle);
 }
 
 Error CommandBuffer::end()
@@ -1253,6 +1260,92 @@ Error CommandBufferAndState::ensureFinished()
     return NoError();
 }
 
+// SecondaryCommands implementation.
+
+SecondaryCommands::SecondaryCommands() : mUsesDepthStencilAttachment(false)
+{
+}
+
+SecondaryCommands::~SecondaryCommands()
+{
+}
+
+vk::CommandBuffer &SecondaryCommands::getOutsideRenderPassCommands()
+{
+    if (!mOutsideRenderPassCommands.valid())
+    {
+    }
+
+    return mOutsideRenderPassCommands;
+}
+
+vk::CommandBuffer &SecondaryCommands::getInsideRenderPassCommands()
+{
+    if (!mInsideRenderPassCommands)
+    {
+    }
+
+    return mInsideRenderPassCommands;
+}
+
+bool SecondaryCommands::usesRenderPass() const
+{
+    return mInsideRenderPassCommands.valid();
+}
+
+void SecondaryCommands::addColorRenderTarget(RenderTargetVk *colorRenderTarget)
+{
+    // TODO(jmadill): Layout transition?
+    addAttachmentDesc(colorRenderTarget->format, colorRenderTarget->samples,
+                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+    updateDependencies(colorRenderTarget->resource);
+}
+
+void SecondaryCommands::addDepthStencilRenderTarget(RenderTargetVk *depthStencilRenderTarget)
+{
+    mUsesDepthStencilAttachment = true;
+    // TODO(jmadill): Layout transition?
+    addAttachmentDesc(depthStencilRenderTarget->format, depthStencilRenderTarget->samples,
+                      VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
+    updateDependencies(depthStencilRenderTarget->resource);
+}
+
+void SecondaryCommands::addAttachmentDesc(VkFormat format,
+                                          VkSampleCountFlagBits samples,
+                                          VkImageLayout imageLayout)
+{
+    VkAttachmentDescription desc;
+    desc.flags          = 0;
+    desc.format         = format;
+    desc.samples        = samples;
+    desc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    desc.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+    desc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    desc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    desc.initialLayout  = imageLayout;
+    desc.finalLayout    = imageLayout;
+    mAttachmentDescs.emplace_back(desc);
+}
+
+void SecondaryCommands::updateDependencies(ResourceVk *resource)
+{
+    if (resource->isCurrentlyInUse())
+    {
+        vk::SecondaryCommands *currentInUseCommands = resource->getCurrentInUseCommands();
+
+        // The current recording command happens-after the previous in-use commands.
+        currentInUseCommands->setAfterDependency(this);
+
+        // The previous in-use commands happens-before the current recording commands.
+        addBeforeDependency(currentInUseCommands);
+    }
+
+    // Update the resource's in-use commands to the current recording commands.
+    resource->setCurrentInUseCommands(this);
+}
+
 }  // namespace vk
 
 namespace gl_vk
@@ -1319,6 +1412,40 @@ VkFrontFace GetFrontFace(GLenum frontFace)
 }
 
 }  // namespace gl_vk
+
+ResourceVk::ResourceVk()
+{
+}
+
+ResourceVk::~ResourceVk()
+{
+}
+
+void ResourceVk::setQueueSerial(Serial queueSerial)
+{
+    ASSERT(queueSerial >= mStoredQueueSerial);
+    mStoredQueueSerial = queueSerial;
+}
+
+Serial ResourceVk::getQueueSerial() const
+{
+    return mStoredQueueSerial;
+}
+
+bool ResourceVk::isCurrentlyInUse() const
+{
+    return mSecondaryCommands.valid();
+}
+
+vk::SecondaryCommands *ResourceVk::getCurrentInUseCommands()
+{
+    return mSecondaryCommands.get();
+}
+
+void ResourceVk::setCurrentInUseCommands(vk::SecondaryCommands *secondaryCommands)
+{
+    mSecondaryCommands.set(secondaryCommands);
+}
 
 }  // namespace rx
 

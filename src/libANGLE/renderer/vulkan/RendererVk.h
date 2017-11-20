@@ -60,6 +60,8 @@ class RendererVk : angle::NonCopyable
                                      const vk::Semaphore &signalSemaphore);
     vk::Error finish();
 
+    const vk::CommandPool &getCommandPool() const;
+
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
@@ -115,6 +117,8 @@ class RendererVk : angle::NonCopyable
         return mFormatTable[internalFormat];
     }
 
+    vk::SecondaryCommands *allocateSecondaryCommands();
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -157,6 +161,8 @@ class RendererVk : angle::NonCopyable
 
     // TODO(jmadill): Don't keep a single renderpass in the Renderer.
     FramebufferVk *mCurrentRenderPassFramebuffer;
+
+    std::vector<gl::BindingPointer<vk::SecondaryCommands>> mCurrentSecondaryCommands;
 };
 
 }  // namespace rx
