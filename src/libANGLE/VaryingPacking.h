@@ -130,6 +130,7 @@ class VaryingPacking final : angle::NonCopyable
 {
   public:
     VaryingPacking(GLuint maxVaryingVectors, PackMode packMode);
+    ~VaryingPacking();
 
     bool packUserVaryings(gl::InfoLog &infoLog,
                           const std::vector<PackedVarying> &packedVaryings,

@@ -27,6 +27,8 @@ namespace egl
 struct Config
 {
     Config();
+    ~Config();
+    Config(const Config &other);
 
     GLenum renderTargetFormat;      // TODO(geofflang): remove this
     GLenum depthStencilFormat;      // TODO(geofflang): remove this
@@ -71,6 +73,10 @@ struct Config
 class ConfigSet
 {
   public:
+    ConfigSet();
+    ConfigSet(const ConfigSet &other);
+    ~ConfigSet();
+
     EGLint add(const Config &config);
     const Config &get(EGLint id) const;
 
