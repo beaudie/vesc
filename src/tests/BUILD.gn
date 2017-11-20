@@ -102,6 +102,10 @@ test("angle_unittests") {
     sources += [ "angle_unittests_main.cpp" ]
   }
 
+  configs += [
+    angle_root + ":extra_warnings",
+  ]
+
   deps = googletest_deps + [
            angle_root + ":libANGLE",
            angle_root + ":preprocessor",
@@ -149,6 +153,7 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
+      angle_root + ":extra_warnings",
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
     ]
@@ -204,6 +209,7 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
+      angle_root + ":extra_warnings",
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
     ]
@@ -253,6 +259,7 @@ if (is_win || is_linux || is_android || is_mac) {
     }
 
     configs += [
+      angle_root + ":extra_warnings",
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
     ]
