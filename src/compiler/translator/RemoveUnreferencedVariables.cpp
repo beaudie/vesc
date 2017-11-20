@@ -26,11 +26,24 @@ class CollectVariableRefCountsTraverser : public TIntermTraverser
 
     using RefCountMap = std::unordered_map<int, unsigned int>;
     RefCountMap &getSymbolIdRefCounts() { return mSymbolIdRefCounts; }
+    RefCountMap &getStructIdRefCounts() { return mStructIdRefCounts; }
 
     void visitSymbol(TIntermSymbol *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
+    bool visitFunctionPrototype(Visit visit, TIntermFunctionPrototype *node) override;
 
   private:
+    void incrementStructRefCount(const TType &type);
+
     RefCountMap mSymbolIdRefCounts;
+
+    // Structure reference counts are counted from symbols, constructors, function calls, function
+    // return values and from interface block and structure fields. We need to track both function
+    // calls and function return values since there's a compiler option not to prune unused
+    // functions. The type of a constant union may also be a struct, but statements that are just a
+    // constant union are always pruned, and if the constant union is used somehow it will get
+    // counted by something else.
+    RefCountMap mStructIdRefCounts;
 };
 
 CollectVariableRefCountsTraverser::CollectVariableRefCountsTraverser()
@@ -38,8 +51,41 @@ CollectVariableRefCountsTraverser::CollectVariableRefCountsTraverser()
 {
 }
 
+void CollectVariableRefCountsTraverser::incrementStructRefCount(const TType &type)
+{
+    if (type.isInterfaceBlock())
+    {
+        const auto *block = type.getInterfaceBlock();
+        ASSERT(block);
+        for (const auto &field : block->fields())
+        {
+            ASSERT(!field->type()->isInterfaceBlock());
+            incrementStructRefCount(*field->type());
+        }
+    }
+
+    const auto *structure = type.getStruct();
+    if (structure != nullptr)
+    {
+        for (const auto &field : structure->fields())
+        {
+            incrementStructRefCount(*field->type());
+        }
+
+        auto structIter = mStructIdRefCounts.find(structure->uniqueId());
+        if (structIter == mStructIdRefCounts.end())
+        {
+            mStructIdRefCounts[structure->uniqueId()] = 1u;
+            return;
+        }
+        ++(structIter->second);
+    }
+}
+
 void CollectVariableRefCountsTraverser::visitSymbol(TIntermSymbol *node)
 {
+    incrementStructRefCount(node->getType());
+
     auto iter = mSymbolIdRefCounts.find(node->getId());
     if (iter == mSymbolIdRefCounts.end())
     {
@@ -49,16 +95,32 @@ void CollectVariableRefCountsTraverser::visitSymbol(TIntermSymbol *node)
     ++(iter->second);
 }
 
+bool CollectVariableRefCountsTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
+{
+    // This tracks struct references in both function calls and constructors.
+    incrementStructRefCount(node->getType());
+    return true;
+}
+
+bool CollectVariableRefCountsTraverser::visitFunctionPrototype(Visit visit,
+                                                               TIntermFunctionPrototype *node)
+{
+    incrementStructRefCount(node->getType());
+    return true;
+}
+
 // Traverser that removes all unreferenced variables on one traversal.
 class RemoveUnreferencedVariablesTraverser : public TIntermTraverser
 {
   public:
     RemoveUnreferencedVariablesTraverser(
         CollectVariableRefCountsTraverser::RefCountMap *symbolIdRefCounts,
+        CollectVariableRefCountsTraverser::RefCountMap *structIdRefCounts,
         TSymbolTable *symbolTable);
 
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
     void visitSymbol(TIntermSymbol *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
     // Traverse loop and block nodes in reverse order. Note that this traverser does not track
     // parent block positions, so insertStatementInParentBlock is unusable!
@@ -67,28 +129,48 @@ class RemoveUnreferencedVariablesTraverser : public TIntermTraverser
 
   private:
     void removeDeclaration(TIntermDeclaration *node, TIntermTyped *declarator);
+    void removeStructTypeReference(const TType &type);
 
     CollectVariableRefCountsTraverser::RefCountMap *mSymbolIdRefCounts;
+    CollectVariableRefCountsTraverser::RefCountMap *mStructIdRefCounts;
     bool mRemoveReferences;
 };
 
 RemoveUnreferencedVariablesTraverser::RemoveUnreferencedVariablesTraverser(
     CollectVariableRefCountsTraverser::RefCountMap *symbolIdRefCounts,
+    CollectVariableRefCountsTraverser::RefCountMap *structIdRefCounts,
     TSymbolTable *symbolTable)
     : TIntermTraverser(true, false, true, symbolTable),
       mSymbolIdRefCounts(symbolIdRefCounts),
+      mStructIdRefCounts(structIdRefCounts),
       mRemoveReferences(false)
 {
+}
+
+void RemoveUnreferencedVariablesTraverser::removeStructTypeReference(const TType &type)
+{
+    auto *structure = type.getStruct();
+    if (structure != nullptr)
+    {
+        for (const auto &field : structure->fields())
+        {
+            removeStructTypeReference(*field->type());
+        }
+
+        ASSERT(mStructIdRefCounts->find(structure->uniqueId()) != mStructIdRefCounts->end());
+        --(*mStructIdRefCounts)[structure->uniqueId()];
+    }
 }
 
 void RemoveUnreferencedVariablesTraverser::removeDeclaration(TIntermDeclaration *node,
                                                              TIntermTyped *declarator)
 {
-    if (declarator->getType().isStructSpecifier() && !declarator->getType().isNamelessStruct())
+    if (declarator->getType().isStructSpecifier() && !declarator->getType().isNamelessStruct() &&
+        (*mStructIdRefCounts)[declarator->getType().getStruct()->uniqueId()] > 1u)
     {
-        // We don't count references to struct types, so if this declaration declares a named struct
-        // type, we'll keep it. We can still change the declarator though so that it doesn't declare
-        // a variable.
+        // If this declaration declares a named struct type that is used elsewhere, we'll keep it.
+        // We can still change the declarator though so that it doesn't declare an unreferenced
+        // variable.
         queueReplacementWithParent(
             node, declarator,
             new TIntermSymbol(mSymbolTable->getEmptySymbolId(), TString(""), declarator->getType()),
@@ -130,7 +212,8 @@ bool RemoveUnreferencedVariablesTraverser::visitDeclaration(Visit visit, TInterm
         TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
         if (symbolNode != nullptr)
         {
-            canRemove = (*mSymbolIdRefCounts)[symbolNode->getId()] == 1u;
+            canRemove =
+                (*mSymbolIdRefCounts)[symbolNode->getId()] == 1u || symbolNode->getSymbol() == "";
         }
         TIntermBinary *initNode = declarator->getAsBinaryNode();
         if (initNode != nullptr)
@@ -159,7 +242,18 @@ void RemoveUnreferencedVariablesTraverser::visitSymbol(TIntermSymbol *node)
     {
         ASSERT(mSymbolIdRefCounts->find(node->getId()) != mSymbolIdRefCounts->end());
         --(*mSymbolIdRefCounts)[node->getId()];
+
+        removeStructTypeReference(node->getType());
     }
+}
+
+bool RemoveUnreferencedVariablesTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
+{
+    if (mRemoveReferences)
+    {
+        removeStructTypeReference(node->getType());
+    }
+    return true;
 }
 
 void RemoveUnreferencedVariablesTraverser::traverseBlock(TIntermBlock *node)
@@ -233,7 +327,8 @@ void RemoveUnreferencedVariables(TIntermBlock *root, TSymbolTable *symbolTable)
 {
     CollectVariableRefCountsTraverser collector;
     root->traverse(&collector);
-    RemoveUnreferencedVariablesTraverser traverser(&collector.getSymbolIdRefCounts(), symbolTable);
+    RemoveUnreferencedVariablesTraverser traverser(&collector.getSymbolIdRefCounts(),
+                                                   &collector.getStructIdRefCounts(), symbolTable);
     root->traverse(&traverser);
     traverser.updateTree();
 }
