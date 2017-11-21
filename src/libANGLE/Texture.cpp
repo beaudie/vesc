@@ -122,7 +122,9 @@ TextureState::TextureState(GLenum target)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
-      mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) * (target == GL_TEXTURE_CUBE_MAP ? 6 : 1))
+      mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
+                  (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
+      mAllImagesInitialized(false)
 {
 }
 
@@ -465,6 +467,7 @@ void TextureState::setImageDesc(GLenum target, size_t level, const ImageDesc &de
     size_t descIndex = GetImageDescIndex(target, level);
     ASSERT(descIndex < mImageDescs.size());
     mImageDescs[descIndex] = desc;
+    mAllImagesInitialized  = mAllImagesInitialized && (desc.initState == InitState::Initialized);
 }
 
 const ImageDesc &TextureState::getImageDesc(const ImageIndex &imageIndex) const
@@ -1396,7 +1399,7 @@ void Texture::invalidateCompletenessCache() const
 
 Error Texture::ensureInitialized(const Context *context)
 {
-    if (!context->isRobustResourceInitEnabled())
+    if (!context->isRobustResourceInitEnabled() || mState.mAllImagesInitialized)
     {
         return NoError();
     }
@@ -1408,6 +1411,7 @@ Error Texture::ensureInitialized(const Context *context)
         auto &imageDesc = mState.mImageDescs[descIndex];
         if (imageDesc.initState == InitState::MayNeedInit)
         {
+            ASSERT(!mState.mAllImagesInitialized);
             const auto &imageIndex = GetImageIndexFromDescIndex(mState.mTarget, descIndex);
             ANGLE_TRY(initializeContents(context, imageIndex));
             imageDesc.initState = InitState::Initialized;
@@ -1418,6 +1422,8 @@ Error Texture::ensureInitialized(const Context *context)
     {
         signalDirty(InitState::Initialized);
     }
+    mState.mAllImagesInitialized = true;
+
     return NoError();
 }
 
@@ -1438,7 +1444,7 @@ Error Texture::ensureSubImageInitialized(const Context *context,
                                          size_t level,
                                          const gl::Box &area)
 {
-    if (!context->isRobustResourceInitEnabled())
+    if (!context->isRobustResourceInitEnabled() || mState.mAllImagesInitialized)
     {
         return NoError();
     }
@@ -1449,6 +1455,7 @@ Error Texture::ensureSubImageInitialized(const Context *context,
     const auto &desc       = mState.getImageDesc(imageIndex);
     if (desc.initState == InitState::MayNeedInit)
     {
+        ASSERT(!mState.mAllImagesInitialized);
         bool coversWholeImage = area.x == 0 && area.y == 0 && area.z == 0 &&
                                 area.width == desc.size.width && area.height == desc.size.height &&
                                 area.depth == desc.size.depth;
@@ -1460,6 +1467,11 @@ Error Texture::ensureSubImageInitialized(const Context *context,
     }
 
     return NoError();
+}
+
+bool Texture::allImagesInitialized() const
+{
+    return mState.mAllImagesInitialized;
 }
 
 }  // namespace gl
