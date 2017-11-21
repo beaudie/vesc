@@ -79,6 +79,11 @@ BlendState::BlendState()
     dither                = true;
 }
 
+BlendState::BlendState(const BlendState &other)
+{
+    memcpy(this, &other, sizeof(BlendState));
+}
+
 bool operator==(const BlendState &a, const BlendState &b)
 {
     return memcmp(&a, &b, sizeof(BlendState)) == 0;
@@ -111,6 +116,11 @@ DepthStencilState::DepthStencilState()
     stencilBackPassDepthPass = GL_KEEP;
 }
 
+DepthStencilState::DepthStencilState(const DepthStencilState &other)
+{
+    memcpy(this, &other, sizeof(DepthStencilState));
+}
+
 bool operator==(const DepthStencilState &a, const DepthStencilState &b)
 {
     return memcmp(&a, &b, sizeof(DepthStencilState)) == 0;
@@ -138,6 +148,8 @@ SamplerState::SamplerState()
     sRGBDecode    = GL_DECODE_EXT;
 }
 
+SamplerState::SamplerState(const SamplerState &other) = default;
+
 // static
 SamplerState SamplerState::CreateDefaultForTarget(GLenum target)
 {
@@ -154,6 +166,15 @@ SamplerState SamplerState::CreateDefaultForTarget(GLenum target)
 
     return state;
 }
+
+ImageUnit::ImageUnit()
+    : texture(), level(0), layered(false), layer(0), access(GL_READ_ONLY), format(GL_R32UI)
+{
+}
+
+ImageUnit::ImageUnit(const ImageUnit &other) = default;
+
+ImageUnit::~ImageUnit() = default;
 
 static void MinMax(int a, int b, int *minimum, int *maximum)
 {
