@@ -170,6 +170,7 @@ void State::initialize(const Context *context,
     }
     mCompleteTextureCache.resize(caps.maxCombinedTextureImageUnits, nullptr);
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
+    mAllCachedTexturesAreInitialized = false;
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
     {
@@ -2234,6 +2235,9 @@ void State::syncProgramTextures(const Context *context)
 
     ActiveTextureMask newActiveTextures;
 
+    // Initialize to true and set to false if any texture is not initialized.
+    mAllCachedTexturesAreInitialized = true;
+
     for (const SamplerBinding &samplerBinding : mProgram->getSamplerBindings())
     {
         if (samplerBinding.unreferenced)
@@ -2271,6 +2275,9 @@ void State::syncProgramTextures(const Context *context)
             {
                 sampler->syncState(context);
             }
+
+            mAllCachedTexturesAreInitialized =
+                mAllCachedTexturesAreInitialized && texture->allImagesInitialized();
         }
     }
 
@@ -2383,11 +2390,21 @@ void State::signal(size_t textureIndex, InitState initState)
     // Conservatively assume all textures are dirty.
     // TODO(jmadill): More fine-grained update.
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+
+    if (initState != InitState::Initialized)
+    {
+        mAllCachedTexturesAreInitialized = false;
+    }
 }
 
 Error State::clearUnclearedActiveTextures(const Context *context)
 {
     ASSERT(mRobustResourceInit);
+
+    if (mAllCachedTexturesAreInitialized)
+    {
+        return NoError();
+    }
 
     for (auto textureIndex : mActiveTexturesMask)
     {

@@ -160,7 +160,7 @@ struct TextureState final : private angle::NonCopyable
     GLenum mUsage;
 
     std::vector<ImageDesc> mImageDescs;
-
+    bool mAllImagesInitialized;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -366,6 +366,7 @@ class Texture final : public egl::ImageSibling,
     Error ensureInitialized(const Context *context);
     InitState initState(const ImageIndex &imageIndex) const override;
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
+    bool allImagesInitialized() const;
 
     enum DirtyBitType
     {
