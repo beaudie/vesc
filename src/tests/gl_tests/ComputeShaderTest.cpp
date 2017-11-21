@@ -27,6 +27,60 @@ class ComputeShaderTestES3 : public ANGLETest
     ComputeShaderTestES3() {}
 };
 
+// If we use a correct compute program to dispatch compute, then do some bad
+// change to the program to make relink fail. Then dispatch compute again.
+// It should be successful. But it would report error if we use the
+// program via UseProgram. However, to use the unsuccessfully linked program
+// will not replace the current program resided in pipeline.
+TEST_P(ComputeShaderTest, RelinkComputeProgramFailed)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=1) in;
+        void main()
+        {
+        })";
+
+    GLuint program = glCreateProgram();
+
+    GLuint cs = CompileShader(GL_COMPUTE_SHADER, csSource);
+    EXPECT_NE(0u, cs);
+
+    glAttachShader(program, cs);
+    glDeleteShader(cs);
+
+    glLinkProgram(program);
+    GLint linkStatus;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(GL_TRUE, linkStatus);
+
+    glDetachShader(program, cs);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
+
+    // No compute shader, comiple fails.
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(GL_FALSE, linkStatus);
+
+    // To dispatch compute should be successful.
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
+
+    // To use the unsuccessfully linked program, report error.
+    glUseProgram(program);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // To use the unsuccessfully linked program, that program
+    // should not replace the program binary resided in pipeline.
+    // To dispatch compute should be successful.
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
+}
+
 // link a simple compute program. It should be successful.
 TEST_P(ComputeShaderTest, LinkComputeProgram)
 {
