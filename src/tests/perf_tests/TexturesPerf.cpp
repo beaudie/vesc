@@ -33,6 +33,8 @@ struct TexturesParams final : public RenderTestParams
         textureRebindFrequency      = 5;
         textureStateUpdateFrequency = 3;
         textureMipCount             = 8;
+
+        robustResourceInit = false;
     }
 
     std::string suffix() const override;
@@ -40,6 +42,8 @@ struct TexturesParams final : public RenderTestParams
     size_t textureRebindFrequency;
     size_t textureStateUpdateFrequency;
     size_t textureMipCount;
+
+    bool robustResourceInit;
 
     // static parameters
     size_t iterations;
@@ -60,6 +64,11 @@ std::string TexturesParams::suffix() const
     strstr << "_" << textureRebindFrequency << "_rebind";
     strstr << "_" << textureStateUpdateFrequency << "_state";
     strstr << "_" << textureMipCount << "_mips";
+
+    if (robustResourceInit)
+    {
+        strstr << "_robust_init";
+    }
 
     return strstr.str();
 }
@@ -86,6 +95,7 @@ class TexturesBenchmark : public ANGLERenderTest,
 
 TexturesBenchmark::TexturesBenchmark() : ANGLERenderTest("Textures", GetParam()), mProgram(0u)
 {
+    setRobustResourceInit(GetParam().robustResourceInit);
 }
 
 void TexturesBenchmark::initializeBenchmark()
@@ -262,24 +272,27 @@ void TexturesBenchmark::drawBenchmark()
     ASSERT_GL_NO_ERROR();
 }
 
-TexturesParams D3D11Params()
+TexturesParams D3D11Params(bool robust)
 {
     TexturesParams params;
     params.eglParameters = egl_platform::D3D11_NULL();
+    params.robustResourceInit = robust;
     return params;
 }
 
-TexturesParams D3D9Params()
+TexturesParams D3D9Params(bool robust)
 {
     TexturesParams params;
     params.eglParameters = egl_platform::D3D9_NULL();
+    params.robustResourceInit = robust;
     return params;
 }
 
-TexturesParams OpenGLOrGLESParams()
+TexturesParams OpenGLOrGLESParams(bool robust)
 {
     TexturesParams params;
     params.eglParameters = egl_platform::OPENGL_OR_GLES(true);
+    params.robustResourceInit = robust;
     return params;
 }
 
@@ -288,6 +301,12 @@ TEST_P(TexturesBenchmark, Run)
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(TexturesBenchmark, D3D11Params(), D3D9Params(), OpenGLOrGLESParams());
+ANGLE_INSTANTIATE_TEST(TexturesBenchmark,
+                       D3D11Params(false),
+                       D3D11Params(true),
+                       D3D9Params(false),
+                       D3D9Params(true),
+                       OpenGLOrGLESParams(false),
+                       OpenGLOrGLESParams(true));
 
 }  // namespace angle
