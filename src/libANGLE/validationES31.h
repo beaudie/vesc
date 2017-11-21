@@ -286,6 +286,7 @@ bool ValidateDispatchCompute(Context *context,
                              GLuint numGroupsX,
                              GLuint numGroupsY,
                              GLuint numGroupsZ);
+bool ValidateDispatchComputeIndirect(Context *context, GLintptr indirect);
 
 bool ValidateBindImageTexture(Context *context,
                               GLuint unit,
@@ -300,6 +301,22 @@ bool ValidateGenProgramPipelines(Context *context, GLint n, GLuint *pipelines);
 bool ValidateDeleteProgramPipelines(Context *context, GLint n, const GLuint *pipelines);
 bool ValidateBindProgramPipeline(Context *context, GLuint pipeline);
 bool ValidateIsProgramPipeline(Context *context, GLuint pipeline);
+bool ValidateUseProgramStages(Context *context, GLuint pipeline, GLbitfield stages, GLuint program);
+bool ValidateActiveShaderProgram(Context *context, GLuint pipeline, GLuint program);
+bool ValidateCreateShaderProgramv(Context *context,
+                                  GLenum type,
+                                  GLsizei count,
+                                  const GLchar *const *strings);
+bool ValidateGetProgramPipelineiv(Context *context, GLuint pipeline, GLenum pname, GLint *params);
+bool ValidateValidateProgramPipeline(Context *context, GLuint pipeline);
+bool ValidateGetProgramPipelineInfoLog(Context *context,
+                                       GLuint pipeline,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLchar *infoLog);
+
+bool ValidateMemoryBarrier(Context *context, GLbitfield barriers);
+bool ValidateMemoryBarrierByRegion(Context *context, GLbitfield barriers);
 
 bool ValidateSampleMaski(Context *context, GLuint maskNumber, GLbitfield mask);
 

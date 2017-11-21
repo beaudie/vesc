@@ -87,6 +87,7 @@ class Context final : public ValidationContext
     GLuint createRenderbuffer();
     GLuint createPaths(GLsizei range);
     GLuint createProgramPipeline();
+    GLuint createShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings);
 
     void deleteBuffer(GLuint buffer);
     void deleteShader(GLuint shader);
@@ -134,6 +135,7 @@ class Context final : public ValidationContext
                           GLenum access,
                           GLenum format);
     void useProgram(GLuint program);
+    void useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program);
     void bindTransformFeedback(GLenum target, GLuint transformFeedbackHandle);
     void bindProgramPipeline(GLuint pipelineHandle);
 
@@ -241,6 +243,7 @@ class Context final : public ValidationContext
     void getIntegeri_v(GLenum target, GLuint index, GLint *data);
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
 
+    void activeShaderProgram(GLuint pipeline, GLuint program);
     void activeTexture(GLenum texture);
     void blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
     void blendEquation(GLenum mode);
@@ -703,7 +706,12 @@ class Context final : public ValidationContext
     void getAttachedShaders(GLuint program, GLsizei maxcount, GLsizei *count, GLuint *shaders);
     GLint getAttribLocation(GLuint program, const GLchar *name);
     void getProgramiv(GLuint program, GLenum pname, GLint *params);
+    void getProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params);
     void getProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei *length, GLchar *infolog);
+    void getProgramPipelineInfoLog(GLuint pipeline,
+                                   GLsizei bufSize,
+                                   GLsizei *length,
+                                   GLchar *infoLog);
     void getShaderiv(GLuint shader, GLenum pname, GLint *params);
     void getShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *infolog);
     void getShaderPrecisionFormat(GLenum shadertype,
@@ -755,6 +763,7 @@ class Context final : public ValidationContext
     void uniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
     void uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
     void validateProgram(GLuint program);
+    void validateProgramPipeline(GLuint pipeline);
 
     void genQueries(GLsizei n, GLuint *ids);
     void deleteQueries(GLsizei n, const GLuint *ids);
@@ -988,6 +997,7 @@ class Context final : public ValidationContext
     Error getZeroFilledBuffer(size_t requstedSizeBytes, angle::MemoryBuffer **zeroBufferOut) const;
 
     void dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
+    void dispatchComputeIndirect(GLintptr indirect);
 
     MemoryProgramCache *getMemoryProgramCache() const { return mMemoryProgramCache; }
 
@@ -1005,6 +1015,9 @@ class Context final : public ValidationContext
                       GLsizei width,
                       GLsizei height,
                       GLsizei depth);
+
+    void memoryBarrier(GLbitfield barriers);
+    void memoryBarrierByRegion(GLbitfield barriers);
 
     // Notification for a state change in a Texture.
     void onTextureChange(const Texture *texture);

@@ -1425,6 +1425,12 @@ bool ValidateDispatchCompute(Context *context,
     return true;
 }
 
+bool ValidateDispatchComputeIndirect(Context *context, GLintptr indirect)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateBindImageTexture(Context *context,
                               GLuint unit,
                               GLuint texture,
@@ -1703,6 +1709,61 @@ bool ValidateIsProgramPipeline(Context *context, GLuint pipeline)
     }
 
     return true;
+}
+
+bool ValidateUseProgramStages(Context *context, GLuint pipeline, GLbitfield stages, GLuint program)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateActiveShaderProgram(Context *context, GLuint pipeline, GLuint program)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateCreateShaderProgramv(Context *context,
+                                  GLenum type,
+                                  GLsizei count,
+                                  const GLchar *const *strings)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateGetProgramPipelineiv(Context *context, GLuint pipeline, GLenum pname, GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateValidateProgramPipeline(Context *context, GLuint pipeline)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateGetProgramPipelineInfoLog(Context *context,
+                                       GLuint pipeline,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLchar *infoLog)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateMemoryBarrier(Context *context, GLbitfield barriers)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateMemoryBarrierByRegion(Context *context, GLbitfield barriers)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateSampleMaski(Context *context, GLuint maskNumber, GLbitfield mask)

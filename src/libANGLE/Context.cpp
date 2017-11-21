@@ -634,6 +634,12 @@ GLuint Context::createProgramPipeline()
     return mState.mPipelines->createProgramPipeline();
 }
 
+GLuint Context::createShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
+{
+    UNIMPLEMENTED();
+    return 0u;
+}
+
 void Context::deleteBuffer(GLuint buffer)
 {
     if (mState.mBuffers->getBuffer(buffer))
@@ -999,6 +1005,11 @@ void Context::bindImageTexture(GLuint unit,
 void Context::useProgram(GLuint program)
 {
     mGLState.setProgram(this, getProgram(program));
+}
+
+void Context::useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::bindTransformFeedback(GLenum target, GLuint transformFeedbackHandle)
@@ -3464,6 +3475,11 @@ void Context::syncStateForBlit()
     syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
 }
 
+void Context::activeShaderProgram(GLuint pipeline, GLuint program)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::activeTexture(GLenum texture)
 {
     mGLState.setActiveSampler(texture - GL_TEXTURE0);
@@ -4135,6 +4151,11 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
     handleError(mImplementation->dispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ));
 }
 
+void Context::dispatchComputeIndirect(GLintptr indirect)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::texStorage2D(GLenum target,
                            GLsizei levels,
                            GLenum internalFormat,
@@ -4156,6 +4177,16 @@ void Context::texStorage3D(GLenum target,
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
     handleError(texture->setStorage(this, target, levels, internalFormat, size));
+}
+
+void Context::memoryBarrier(GLbitfield barriers)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::memoryBarrierByRegion(GLbitfield barriers)
+{
+    UNIMPLEMENTED();
 }
 
 GLenum Context::checkFramebufferStatus(GLenum target)
@@ -4352,11 +4383,24 @@ void Context::getProgramiv(GLuint program, GLenum pname, GLint *params)
     QueryProgramiv(this, programObject, pname, params);
 }
 
+void Context::getProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::getProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei *length, GLchar *infolog)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     programObject->getInfoLog(bufsize, length, infolog);
+}
+
+void Context::getProgramPipelineInfoLog(GLuint pipeline,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLchar *infoLog)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::getShaderiv(GLuint shader, GLenum pname, GLint *params)
@@ -4727,6 +4771,11 @@ void Context::validateProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     programObject->validate(mCaps);
+}
+
+void Context::validateProgramPipeline(GLuint pipeline)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::getProgramBinary(GLuint program,
