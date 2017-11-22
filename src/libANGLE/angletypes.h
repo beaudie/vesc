@@ -289,14 +289,36 @@ struct PixelPackState : PixelStoreStateBase
     bool reverseRowOrder = false;
 };
 
+constexpr int IMPLEMENTATION_MAX_DRAW_BUFFER_TYPE_MASK = 16;
+
+struct DrawBufferTypeMask final
+{
+    DrawBufferTypeMask();
+    DrawBufferTypeMask(const DrawBufferTypeMask &other) = default;
+    ~DrawBufferTypeMask()                               = default;
+    void reset();
+    bool none();
+    void setIndex(GLenum type, size_t index);
+    unsigned long to_ulong() const;
+    void from_ulong(unsigned long mask);
+
+  private:
+    angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFER_TYPE_MASK> typeMask;
+};
+
 // Used in Program and VertexArray.
 using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
 
 // Used in Program
 using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
 
-// Used in Framebuffer
+// Used in Framebuffer / Program
 using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
+
+bool ProgramOutputsMatchFramebuffer(DrawBufferTypeMask outputTypes,
+                                    DrawBufferTypeMask inputTypes,
+                                    DrawBufferMask outputMask,
+                                    DrawBufferMask inputMask);
 
 using ContextID = uintptr_t;
 
