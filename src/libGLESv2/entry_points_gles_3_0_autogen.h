@@ -14,6 +14,11 @@
 #include <GLES3/gl3.h>
 #include <export.h>
 
+#ifdef MemoryBarrier
+// we include the platform.h header since it undefines the conflicting MemoryBarrier macro
+#include "common/platform.h"
+#endif  // MemoryBarrier
+
 namespace gl
 {
 ANGLE_EXPORT void GL_APIENTRY ReadBuffer(GLenum src);
