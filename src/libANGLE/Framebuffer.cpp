@@ -19,6 +19,7 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
@@ -260,6 +261,7 @@ FramebufferState::FramebufferState()
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
       mReadBufferState(GL_BACK),
+      mDrawBufferTypeBits(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -275,6 +277,7 @@ FramebufferState::FramebufferState(const Caps &caps)
       mColorAttachments(caps.maxColorAttachments),
       mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDrawBufferTypeBits(0),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -621,6 +624,7 @@ Framebuffer::Framebuffer(const egl::Display *display, egl::Surface *surface)
                           FramebufferAttachment::kDefaultMultiviewLayout,
                           FramebufferAttachment::kDefaultViewportOffsets);
     }
+    setDrawBufferTypeBits(0);
 }
 
 Framebuffer::Framebuffer(rx::GLImplFactory *factory)
@@ -823,13 +827,25 @@ void Framebuffer::setDrawBuffers(size_t count, const GLenum *buffers)
     mDirtyBits.set(DIRTY_BIT_DRAW_BUFFERS);
 
     mState.mEnabledDrawBuffers.reset();
+    mState.mDrawBufferTypeBits.reset();
+
     for (size_t index = 0; index < count; ++index)
     {
+        setDrawBufferTypeBits(index);
+
         if (drawStates[index] != GL_NONE && mState.mColorAttachments[index].isAttached())
         {
             mState.mEnabledDrawBuffers.set(index);
         }
     }
+}
+
+void Framebuffer::setDrawBufferTypeBits(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    mState.mDrawBufferTypeBits |= angle::GetDrawBufferTypeBits(getDrawbufferWriteType(index))
+                                  << index;
 }
 
 const FramebufferAttachment *Framebuffer::getDrawBuffer(size_t drawBuffer) const
@@ -855,6 +871,16 @@ GLenum Framebuffer::getDrawbufferWriteType(size_t drawBuffer) const
         default:
             return GL_FLOAT;
     }
+}
+
+DrawBufferTypeBits Framebuffer::getDrawBufferTypeBits() const
+{
+    return mState.mDrawBufferTypeBits;
+}
+
+DrawBufferMask Framebuffer::getDrawBufferMask() const
+{
+    return mState.mEnabledDrawBuffers;
 }
 
 bool Framebuffer::hasEnabledDrawBuffer() const
@@ -1689,6 +1715,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             // formsRenderingFeedbackLoopWith
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
             mState.mEnabledDrawBuffers.set(colorIndex, enabled);
+            setDrawBufferTypeBits(colorIndex);
         }
         break;
     }

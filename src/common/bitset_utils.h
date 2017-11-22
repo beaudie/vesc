@@ -105,6 +105,7 @@ class BitSetT final
     BitSetT &flip(std::size_t pos);
 
     unsigned long to_ulong() const { return static_cast<unsigned long>(mBits); }
+    uint16_t to_uint16() const { return static_cast<uint16_t>(mBits); }
     BitsT bits() const { return mBits; }
 
     Iterator begin() const { return Iterator(*this); }
