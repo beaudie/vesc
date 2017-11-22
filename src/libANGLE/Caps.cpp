@@ -225,8 +225,26 @@ Extensions::Extensions()
       programCacheControl(false),
       textureRectangle(false),
       geometryShader(false),
+      // Table 20.40 (cont.) (OES_geometry_shader)
+      maxFramebufferLayers(0),
+
+      // Table 20.43gs (OES_geometry_shader)
+      layerProvokingVertex(GL_UNDEFINED_VERTEX_EXT),
+      maxGeometryUniformComponents(0),
+      maxGeometryUniformBlocks(0),
+      maxGeometryInputComponents(0),
+      maxGeometryOutputComponents(0),
       maxGeometryOutputVertices(0),
-      maxGeometryShaderInvocations(0)
+      maxGeometryTotalOutputComponents(0),
+      maxGeometryTextureImageUnits(0),
+      maxGeometryAtomicCounterBuffers(0),
+      maxGeometryAtomicCounters(0),
+      maxGeometryShaderStorageBlocks(0),
+      maxGeometryShaderInvocations(0),
+
+      // Table 20.46 (OES_geometry_shader)
+      maxGeometryImageUniforms(0),
+      maxCombinedGeometryUniformComponents(0)
 {
 }
 

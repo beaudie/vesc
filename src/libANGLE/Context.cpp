@@ -1497,6 +1497,53 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
         case GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT:
             *params = mCaps.shaderStorageBufferOffsetAlignment;
             break;
+
+        // GL_EXT_geometry_shader
+        case GL_MAX_FRAMEBUFFER_LAYERS_EXT:
+            *params = mExtensions.maxFramebufferLayers;
+            break;
+        case GL_LAYER_PROVOKING_VERTEX_EXT:
+            *params = mExtensions.layerProvokingVertex;
+            break;
+        case GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_EXT:
+            *params = mExtensions.maxGeometryUniformComponents;
+            break;
+        case GL_MAX_GEOMETRY_UNIFORM_BLOCKS_EXT:
+            *params = mExtensions.maxGeometryUniformBlocks;
+            break;
+        case GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_EXT:
+            *params = mExtensions.maxCombinedGeometryUniformComponents;
+            break;
+        case GL_MAX_GEOMETRY_INPUT_COMPONENTS_EXT:
+            *params = mExtensions.maxGeometryInputComponents;
+            break;
+        case GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_EXT:
+            *params = mExtensions.maxGeometryOutputComponents;
+            break;
+        case GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT:
+            *params = mExtensions.maxGeometryOutputVertices;
+            break;
+        case GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_EXT:
+            *params = mExtensions.maxGeometryTotalOutputComponents;
+            break;
+        case GL_MAX_GEOMETRY_SHADER_INVOCATIONS_EXT:
+            *params = mExtensions.maxGeometryShaderInvocations;
+            break;
+        case GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT:
+            *params = mExtensions.maxGeometryTextureImageUnits;
+            break;
+        case GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_EXT:
+            *params = mExtensions.maxGeometryAtomicCounterBuffers;
+            break;
+        case GL_MAX_GEOMETRY_ATOMIC_COUNTERS_EXT:
+            *params = mExtensions.maxGeometryAtomicCounters;
+            break;
+        case GL_MAX_GEOMETRY_IMAGE_UNIFORMS_EXT:
+            *params = mExtensions.maxGeometryImageUniforms;
+            break;
+        case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT:
+            *params = mExtensions.maxGeometryShaderStorageBlocks;
+            break;
         default:
             mGLState.getIntegerv(this, pname, params);
             break;
