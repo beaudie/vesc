@@ -173,6 +173,45 @@ class TType
     TType(const TType &t);
     TType &operator=(const TType &t);
 
+    constexpr TType(TBasicType t,
+                    TPrecision p,
+                    TQualifier q,
+                    unsigned char ps,
+                    unsigned char ss,
+                    const char *mangledName)
+        : type(t),
+          precision(p),
+          qualifier(q),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::Create()),
+          layoutQualifier(TLayoutQualifier::Create()),
+          primarySize(ps),
+          secondarySize(ss),
+          mArraySizes(nullptr),
+          mInterfaceBlock(nullptr),
+          mStructure(nullptr),
+          mIsStructSpecifier(false),
+          mMangledName(mangledName)
+    {
+    }
+
+    constexpr TType(TType &&t)
+        : type(t.type),
+          precision(t.precision),
+          qualifier(t.qualifier),
+          invariant(t.invariant),
+          memoryQualifier(t.memoryQualifier),
+          layoutQualifier(t.layoutQualifier),
+          primarySize(t.primarySize),
+          secondarySize(t.secondarySize),
+          mArraySizes(t.mArraySizes),
+          mInterfaceBlock(t.mInterfaceBlock),
+          mStructure(t.mStructure),
+          mIsStructSpecifier(t.mIsStructSpecifier),
+          mMangledName(t.mMangledName)
+    {
+    }
+
     TBasicType getBasicType() const { return type; }
     void setBasicType(TBasicType t);
 
@@ -343,6 +382,26 @@ class TType
     // Initializes all lazily-initialized members.
     void realize();
 
+    // Size of the maximum possible constexpr-generated mangled name.
+    // If this value is too small, the compiler will produce errors.
+    static const size_t kStaticMangledNameMaxLength = 10;
+
+    // Type which holds the mangled names for constexpr-generated TTypes.
+    // This simple struct is needed so that a char array can be returned by value.
+    struct StaticMangledName
+    {
+        // If this array is too small, the compiler will produce errors.
+        char name[kStaticMangledNameMaxLength + 1] = {};
+    };
+
+    // Generates a mangled name for a TType given its parameters.
+    static constexpr StaticMangledName BuildStaticMangledName(
+              TBasicType basicType,
+              TPrecision precision,
+              TQualifier qualifier,
+              unsigned char primarySize,
+              unsigned char secondarySize);
+
   private:
     void invalidateMangledName();
     const char *buildMangledName() const;
@@ -372,6 +431,51 @@ class TType
 
     mutable const char *mMangledName;
 };
+
+constexpr TType::StaticMangledName TType::BuildStaticMangledName(
+          TBasicType basicType,
+          TPrecision precision,
+          TQualifier qualifier,
+          unsigned char primarySize,
+          unsigned char secondarySize)
+{
+    StaticMangledName name = {};
+    // When this function is executed constexpr (should be always),
+    // name.name[at] is guaranteed by the compiler to never go out of bounds.
+    size_t at = 0;
+
+    bool isMatrix = primarySize > 1 && secondarySize > 1;
+    bool isVector = primarySize > 1 && secondarySize == 1;
+
+    if (isMatrix)
+    {
+        name.name[at++] = 'm';
+    }
+    else if (isVector)
+    {
+        name.name[at++] = 'v';
+    }
+
+    {
+        const char *basicMangledName = getBasicMangledName(basicType);
+        for (size_t i = 0; basicMangledName[i] != '\0'; ++i) {
+            name.name[at++] = basicMangledName[i];
+        }
+    }
+
+    name.name[at++] = '0' + primarySize;
+    if (isMatrix)
+    {
+        name.name[at++] = 'x';
+        name.name[at++] = '0' + secondarySize;
+    }
+
+    name.name[at++] = ';';
+
+    name.name[at] = '\0';
+    return name;
+#undef APPEND
+}
 
 // TTypeSpecifierNonArray stores all of the necessary fields for type_specifier_nonarray from the
 // grammar
