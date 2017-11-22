@@ -21,10 +21,13 @@ namespace rx
 
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
-      mCurrentVertexBufferHandlesCache(state.getMaxAttribs(), VK_NULL_HANDLE),
-      mCurrentVkBuffersCache(state.getMaxAttribs(), nullptr),
+      mCurrentArrayBufferHandles{},
+      mCurrentArrayBufferResources{},
+      mCurrentElementArrayBufferResource(nullptr),
       mCurrentVertexDescsValid(false)
 {
+    mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
+    mCurrentArrayBufferResources.fill(nullptr);
     mCurrentVertexBindingDescs.reserve(state.getMaxAttribs());
     mCurrentVertexAttribDescs.reserve(state.getMaxAttribs());
 }
@@ -58,7 +61,11 @@ void VertexArrayVk::syncState(const gl::Context *context,
     for (auto dirtyBit : dirtyBits)
     {
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        {
+            BufferVk *bufferVk                 = vk::GetImpl(mState.getElementArrayBuffer().get());
+            mCurrentElementArrayBufferResource = bufferVk;
             continue;
+        }
 
         size_t attribIndex = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
 
@@ -71,14 +78,14 @@ void VertexArrayVk::syncState(const gl::Context *context,
 
             if (bufferGL)
             {
-                BufferVk *bufferVk                            = vk::GetImpl(bufferGL);
-                mCurrentVkBuffersCache[attribIndex]           = bufferVk;
-                mCurrentVertexBufferHandlesCache[attribIndex] = bufferVk->getVkBuffer().getHandle();
+                BufferVk *bufferVk                        = vk::GetImpl(bufferGL);
+                mCurrentArrayBufferResources[attribIndex] = bufferVk;
+                mCurrentArrayBufferHandles[attribIndex]   = bufferVk->getVkBuffer().getHandle();
             }
             else
             {
-                mCurrentVkBuffersCache[attribIndex]           = nullptr;
-                mCurrentVertexBufferHandlesCache[attribIndex] = VK_NULL_HANDLE;
+                mCurrentArrayBufferResources[attribIndex] = nullptr;
+                mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
             }
         }
         else
@@ -88,9 +95,9 @@ void VertexArrayVk::syncState(const gl::Context *context,
     }
 }
 
-const std::vector<VkBuffer> &VertexArrayVk::getCurrentVertexBufferHandlesCache() const
+const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() const
 {
-    return mCurrentVertexBufferHandlesCache;
+    return mCurrentArrayBufferHandles;
 }
 
 void VertexArrayVk::updateCurrentBufferSerials(const gl::AttributesMask &activeAttribsMask,
@@ -98,7 +105,13 @@ void VertexArrayVk::updateCurrentBufferSerials(const gl::AttributesMask &activeA
 {
     for (auto attribIndex : activeAttribsMask)
     {
-        mCurrentVkBuffersCache[attribIndex]->setQueueSerial(serial);
+        mCurrentArrayBufferResources[attribIndex]->setQueueSerial(serial);
+    }
+
+    // Handle the bound element array buffer.
+    if (mCurrentElementArrayBufferResource)
+    {
+        mCurrentElementArrayBufferResource->setQueueSerial(serial);
     }
 }
 
