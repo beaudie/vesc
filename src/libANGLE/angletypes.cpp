@@ -256,4 +256,68 @@ bool operator!=(const Extents &lhs, const Extents &rhs)
 {
     return !(lhs == rhs);
 }
+
+DrawBufferTypeMask::DrawBufferTypeMask()
+{
+    typeMask.reset();
+}
+
+DrawBufferTypeMask::DrawBufferTypeMask(const DrawBufferTypeMask &other)
+{
+    memcpy(this, &other, sizeof(DrawBufferTypeMask));
+}
+
+void DrawBufferTypeMask::reset()
+{
+    typeMask.reset();
+}
+
+bool DrawBufferTypeMask::none()
+{
+    if (typeMask.none())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void DrawBufferTypeMask::setIndex(GLenum type, size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    typeMask &= ~(0x101 << index);
+
+    uint16_t m = 0;
+    switch (type)
+    {
+        case GL_INT:
+            m = 0x001;
+            break;
+        case GL_UNSIGNED_INT:
+            m = 0x100;
+            break;
+        case GL_FLOAT:
+            m = 0x101;
+            break;
+        case GL_NONE:
+            m = 0x000;
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    typeMask |= m << index;
+}
+
+unsigned long DrawBufferTypeMask::to_ulong() const
+{
+    return typeMask.to_ulong();
+}
+
+void DrawBufferTypeMask::from_ulong(unsigned long mask)
+{
+    typeMask = mask;
+}
+
 }  // namespace gl
