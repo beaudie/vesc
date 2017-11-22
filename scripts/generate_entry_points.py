@@ -24,7 +24,7 @@ template_entry_point_header = """// GENERATED FILE - DO NOT EDIT.
 #ifndef LIBGLESV2_ENTRYPOINTSGLES{major_version}{minor_version}_AUTOGEN_H_
 #define LIBGLESV2_ENTRYPOINTSGLES{major_version}{minor_version}_AUTOGEN_H_
 
-#include <GLES{major_version}/gl{major_version}.h>
+#include <GLES{major_version}/gl{version}.h>
 #include <export.h>
 
 namespace gl
@@ -46,7 +46,7 @@ template_entry_point_source = """// GENERATED FILE - DO NOT EDIT.
 //   Defines the GLES {major_version}.{minor_version} entry points.
 
 #include "libANGLE/Context.h"
-#include "libANGLE/validationES{major_version}.h"
+#include "libANGLE/validationES{version}.h"
 #include "libGLESv2/global_state.h"
 
 namespace gl
@@ -125,11 +125,17 @@ gles2_commands = [cmd.attrib['name'] for cmd in root.findall(gles2_xpath)]
 gles3_xpath = ".//feature[@name='GL_ES_VERSION_3_0']//command"
 gles3_commands = [cmd.attrib['name'] for cmd in root.findall(gles3_xpath)]
 
+gles31_xpath = ".//feature[@name='GL_ES_VERSION_3_1']//command"
+gles31_commands = [cmd.attrib['name'] for cmd in root.findall(gles31_xpath)]
+
 commands = root.find(".//commands[@namespace='GL']")
 entry_point_decls_gles_2_0 = []
 entry_point_defs_gles_2_0 = []
 entry_point_decls_gles_3_0 = []
 entry_point_defs_gles_3_0 = []
+entry_point_decls_gles_3_1 = []
+entry_point_defs_gles_3_1 = []
+
 cmd_names = []
 
 with open(script_relative('entry_point_packed_gl_enums.json')) as f:
@@ -262,12 +268,22 @@ for cmd_name in gles3_commands:
     entry_point_decls_gles_3_0 += [format_entry_point_decl(cmd_name, proto, params)]
     entry_point_defs_gles_3_0 += [format_entry_point_def(cmd_name, proto, params)]
 
+for cmd_name in gles31_commands:
+    command_xpath = "command/proto[name='" + cmd_name + "']/.."
+    command = commands.find(command_xpath)
+    params = ["".join(param.itertext()) for param in command.findall("./param")]
+    proto = "".join(command.find("./proto").itertext())
+    cmd_names += [cmd_name]
+    entry_point_decls_gles_3_1 += [format_entry_point_decl(cmd_name, proto, params)]
+    entry_point_defs_gles_3_1 += [format_entry_point_def_oldstyle(cmd_name, proto, params)]
+
 gles_2_0_header = template_entry_point_header.format(
     script_name = os.path.basename(sys.argv[0]),
     data_source_name = "gl.xml",
     year = date.today().year,
     major_version = 2,
     minor_version = 0,
+    version = 2,
     entry_points = "\n".join(entry_point_decls_gles_2_0))
 
 gles_2_0_source = template_entry_point_source.format(
@@ -276,6 +292,7 @@ gles_2_0_source = template_entry_point_source.format(
     year = date.today().year,
     major_version = 2,
     minor_version = 0,
+    version = 2,
     entry_points = "\n".join(entry_point_defs_gles_2_0))
 
 gles_3_0_header = template_entry_point_header.format(
@@ -284,6 +301,7 @@ gles_3_0_header = template_entry_point_header.format(
     year = date.today().year,
     major_version = 3,
     minor_version = 0,
+    version = 3,
     entry_points = "\n".join(entry_point_decls_gles_3_0))
 
 gles_3_0_source = template_entry_point_source.format(
@@ -292,7 +310,26 @@ gles_3_0_source = template_entry_point_source.format(
     year = date.today().year,
     major_version = 3,
     minor_version = 0,
+    version = 3,
     entry_points = "\n".join(entry_point_defs_gles_3_0))
+
+gles_3_1_header = template_entry_point_header.format(
+    script_name = os.path.basename(sys.argv[0]),
+    data_source_name = "gl.xml",
+    year = date.today().year,
+    major_version = 3,
+    minor_version = 1,
+    version = 31,
+    entry_points = "\n".join(entry_point_decls_gles_3_1))
+
+gles_3_1_source = template_entry_point_source.format(
+    script_name = os.path.basename(sys.argv[0]),
+    data_source_name = "gl.xml",
+    year = date.today().year,
+    major_version = 3,
+    minor_version = 1,
+    version = 31,
+    entry_points = "\n".join(entry_point_defs_gles_3_1))
 
 # TODO(jmadill): Remove manually added entry points once we auto-gen them.
 manual_cmd_names = ["Invalid"] + [cmd[2:] for cmd in cmd_names] + ["DrawElementsInstancedANGLE"]
@@ -309,6 +346,8 @@ gles_2_0_header_path = path_to("libGLESv2", "entry_points_gles_2_0_autogen.h")
 gles_2_0_source_path = path_to("libGLESv2", "entry_points_gles_2_0_autogen.cpp")
 gles_3_0_header_path = path_to("libGLESv2", "entry_points_gles_3_0_autogen.h")
 gles_3_0_source_path = path_to("libGLESv2", "entry_points_gles_3_0_autogen.cpp")
+gles_3_1_header_path = path_to("libGLESv2", "entry_points_gles_3_1_autogen.h")
+gles_3_1_source_path = path_to("libGLESv2", "entry_points_gles_3_1_autogen.cpp")
 entry_points_enum_header_path = path_to("libANGLE", "entry_points_enum_autogen.h")
 
 with open(gles_2_0_header_path, "w") as out:
@@ -325,6 +364,14 @@ with open(gles_3_0_header_path, "w") as out:
 
 with open(gles_3_0_source_path, "w") as out:
     out.write(gles_3_0_source)
+    out.close()
+
+with open(gles_3_1_header_path, "w") as out:
+    out.write(gles_3_1_header)
+    out.close()
+
+with open(gles_3_1_source_path, "w") as out:
+    out.write(gles_3_1_source)
     out.close()
 
 with open(entry_points_enum_header_path, "w") as out:
