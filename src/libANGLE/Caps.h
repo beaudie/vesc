@@ -371,11 +371,26 @@ struct Extensions
 
     // GL_EXT_geometry_shader
     bool geometryShader;
+    // GL_EXT_geometry_shader (May 31, 2016) Table 20.40: Implementation-Dependent Values (cont.)
+    GLuint maxFramebufferLayers;
     // GL_EXT_geometry_shader (May 31, 2016) Table 20.43gs: Implementation dependent geometry shader
     // limits
-    // TODO(jiawei.shao@intel.com): add all implementation dependent geometry shader limits.
+    GLuint layerProvokingVertex;
+    GLuint maxGeometryUniformComponents;
+    GLuint maxGeometryUniformBlocks;
+    GLuint maxGeometryInputComponents;
+    GLuint maxGeometryOutputComponents;
     GLuint maxGeometryOutputVertices;
+    GLuint maxGeometryTotalOutputComponents;
+    GLuint maxGeometryTextureImageUnits;
+    GLuint maxGeometryAtomicCounterBuffers;
+    GLuint maxGeometryAtomicCounters;
+    GLuint maxGeometryShaderStorageBlocks;
     GLuint maxGeometryShaderInvocations;
+    // GL_EXT_geometry_shader (May 31, 2016) Table 20.46: Implementation dependent aggregate shader
+    // limits
+    GLuint maxGeometryImageUniforms;
+    GLuint maxCombinedGeometryUniformComponents;
 };
 
 struct ExtensionInfo
