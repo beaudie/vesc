@@ -256,4 +256,34 @@ bool operator!=(const Extents &lhs, const Extents &rhs)
 {
     return !(lhs == rhs);
 }
+
+// GetDrawBufferTypeMask returns a split two bit type representation for draw buffer type
+// validation. The low bit is in the 0th bit location, and the high bit is in the 7th bit location.
+// The bits are shifted by index to create a mask that can be ORed with the Framebuffer/Program
+// DrawBufferTypeMask storage.
+DrawBufferTypeMask GetDrawBufferTypeMask(GLenum type, size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    DrawBufferTypeMask mask = 0;
+    switch (type)
+    {
+        case GL_INT:
+            mask = 0x001;
+            break;
+        case GL_UNSIGNED_INT:
+            mask = 0x100;
+            break;
+        case GL_FLOAT:
+            mask = 0x101;
+            break;
+        case GL_NONE:
+            mask = 0x000;
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    return mask << index;
+}
 }  // namespace gl
