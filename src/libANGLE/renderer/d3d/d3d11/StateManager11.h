@@ -276,7 +276,7 @@ class StateManager11 final : angle::NonCopyable
                                bool usePrimitiveRestartWorkaround,
                                TranslatedIndexData *indexInfo);
 
-    bool setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
+    void setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
     gl::Error updateVertexOffsetsForPointSpritesEmulation(GLint startVertex,
                                                           GLsizei emulatedInstanceId);
@@ -357,6 +357,8 @@ class StateManager11 final : angle::NonCopyable
 
     // Called by the Framebuffer11 directly.
     void processFramebufferInvalidation(const gl::Context *context);
+
+    bool syncIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
     enum DirtyBitType
     {
@@ -506,6 +508,7 @@ class StateManager11 final : angle::NonCopyable
     ID3D11Buffer *mAppliedIB;
     DXGI_FORMAT mAppliedIBFormat;
     unsigned int mAppliedIBOffset;
+    bool mIndexBufferIsDirty;
 
     // Vertex, index and input layouts
     VertexDataManager mVertexDataManager;
