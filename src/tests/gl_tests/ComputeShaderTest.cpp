@@ -284,6 +284,67 @@ TEST_P(ComputeShaderTest, DispatchComputeWithRenderingProgram)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+// Attach a vertex and fragment shader and link, do some bad change to make
+// relink fail, then render. It should be successful. Then use that
+// unsuccessfully linked program via UseProgram, it should report an error.
+// But that unsuccessfully link program should not replace the original
+// binary resided in pipeline. So, rendering again should success.
+TEST_P(ComputeShaderTest, RelinkRenderingProgram)
+{
+    const std::string vsSource =
+        R"(#version 310 es
+        void main()
+        {
+        })";
+
+    const std::string fsSource =
+        R"(#version 310 es
+        void main()
+        {
+        })";
+
+    GLuint program = glCreateProgram();
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
+
+    EXPECT_NE(0u, vs);
+    EXPECT_NE(0u, fs);
+
+    glAttachShader(program, vs);
+    glDeleteShader(vs);
+
+    glAttachShader(program, fs);
+    glDeleteShader(fs);
+
+    glLinkProgram(program);
+
+    GLint linkStatus;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(GL_TRUE, linkStatus);
+
+    glDetachShader(program, vs);
+
+	EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+	glLinkProgram(program);
+	glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+	EXPECT_EQ(GL_FALSE, linkStatus);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+	EXPECT_GL_NO_ERROR();
+
+	glUseProgram(program);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Access all compute shader special variables.
 TEST_P(ComputeShaderTest, AccessAllSpecialVariables)
 {
