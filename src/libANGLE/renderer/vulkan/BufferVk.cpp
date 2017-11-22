@@ -74,7 +74,7 @@ gl::Error BufferVk::setData(const gl::Context *context,
 
     if (data)
     {
-        ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0));
+        ANGLE_TRY(setDataImpl(context, static_cast<const uint8_t *>(data), size, 0));
     }
 
     return gl::NoError();
@@ -89,8 +89,7 @@ gl::Error BufferVk::setSubData(const gl::Context *context,
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
 
-    ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, offset));
+    ANGLE_TRY(setDataImpl(context, static_cast<const uint8_t *>(data), size, offset));
 
     return gl::NoError();
 }
@@ -168,11 +167,12 @@ gl::Error BufferVk::getIndexRange(const gl::Context *context,
     return gl::NoError();
 }
 
-vk::Error BufferVk::setDataImpl(ContextVk *contextVk,
+vk::Error BufferVk::setDataImpl(const gl::Context *context,
                                 const uint8_t *data,
                                 size_t size,
                                 size_t offset)
 {
+    ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = contextVk->getDevice();
 
@@ -191,11 +191,8 @@ vk::Error BufferVk::setDataImpl(ContextVk *contextVk,
         stagingBuffer.getDeviceMemory().unmap(device);
 
         // Enqueue a copy command on the GPU.
-        // TODO(jmadill): Command re-ordering for render passes.
-        renderer->endRenderPass();
-
         vk::CommandBufferAndState *commandBuffer = nullptr;
-        ANGLE_TRY(renderer->getStartedCommandBuffer(&commandBuffer));
+        ANGLE_TRY(sireRecordingCommandNode(context, &commandBuffer));
 
         // Insert a barrier to ensure reads from the buffer are complete.
         // TODO(jmadill): Insert minimal barriers.
@@ -216,7 +213,8 @@ vk::Error BufferVk::setDataImpl(ContextVk *contextVk,
         VkBufferCopy copyRegion = {offset, 0, size};
         commandBuffer->copyBuffer(stagingBuffer.getBuffer(), mBuffer, 1, &copyRegion);
 
-        setQueueSerial(renderer->getCurrentQueueSerial());
+        // Immediately release staging buffer.
+        // TODO(jmadill): Staging buffer re-use.
         renderer->releaseObject(getQueueSerial(), &stagingBuffer);
     }
     else

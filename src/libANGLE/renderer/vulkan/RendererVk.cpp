@@ -17,6 +17,7 @@
 #include "common/debug.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/driver_utils.h"
+#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
@@ -96,8 +97,7 @@ RendererVk::RendererVk()
       mGlslangWrapper(nullptr),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
-      mInFlightCommands(),
-      mCurrentRenderPassFramebuffer(nullptr)
+      mInFlightCommands()
 {
 }
 
@@ -105,7 +105,8 @@ RendererVk::~RendererVk()
 {
     if (!mInFlightCommands.empty() || !mInFlightFences.empty() || !mGarbage.empty())
     {
-        vk::Error error = finish();
+        // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
+        vk::Error error = finish(nullptr);
         if (error.isError())
         {
             ERR() << "Error during VK shutdown: " << error;
@@ -579,14 +580,15 @@ vk::Error RendererVk::getStartedCommandBuffer(vk::CommandBufferAndState **comman
     return vk::NoError();
 }
 
-vk::Error RendererVk::submitCommandBuffer(vk::CommandBufferAndState *commandBuffer)
+const vk::CommandPool &RendererVk::getCommandPool() const
+{
+    return mCommandPool;
+}
+
+vk::Error RendererVk::submitAndFinishCommandBuffer(const gl::Context *context,
+                                                   vk::CommandBufferAndState *commandBuffer)
 {
     ANGLE_TRY(commandBuffer->ensureFinished());
-
-    VkFenceCreateInfo fenceInfo;
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = nullptr;
-    fenceInfo.flags = 0;
 
     VkSubmitInfo submitInfo;
     submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -599,16 +601,8 @@ vk::Error RendererVk::submitCommandBuffer(vk::CommandBufferAndState *commandBuff
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores    = nullptr;
 
-    // TODO(jmadill): Investigate how to properly submit command buffers.
     ANGLE_TRY(submit(submitInfo));
-
-    return vk::NoError();
-}
-
-vk::Error RendererVk::submitAndFinishCommandBuffer(vk::CommandBufferAndState *commandBuffer)
-{
-    ANGLE_TRY(submitCommandBuffer(commandBuffer));
-    ANGLE_TRY(finish());
+    ANGLE_TRY(finish(context));
 
     return vk::NoError();
 }
@@ -638,8 +632,10 @@ vk::Error RendererVk::submitCommandsWithSync(vk::CommandBufferAndState *commandB
     return vk::NoError();
 }
 
-vk::Error RendererVk::finish()
+vk::Error RendererVk::finish(const gl::Context *context)
 {
+    ANGLE_TRY(flush(context));
+
     ASSERT(mQueue != VK_NULL_HANDLE);
     ANGLE_VK_TRY(vkQueueWaitIdle(mQueue));
     freeAllInFlightResources();
@@ -792,40 +788,6 @@ Serial RendererVk::getCurrentQueueSerial() const
     return mCurrentQueueSerial;
 }
 
-gl::Error RendererVk::ensureInRenderPass(const gl::Context *context, FramebufferVk *framebufferVk)
-{
-    if (mCurrentRenderPassFramebuffer == framebufferVk)
-    {
-        return gl::NoError();
-    }
-
-    if (mCurrentRenderPassFramebuffer)
-    {
-        endRenderPass();
-    }
-    ANGLE_TRY(framebufferVk->beginRenderPass(context, this, &mCommandBuffer, mCurrentQueueSerial));
-    mCurrentRenderPassFramebuffer = framebufferVk;
-    return gl::NoError();
-}
-
-void RendererVk::endRenderPass()
-{
-    if (mCurrentRenderPassFramebuffer)
-    {
-        ASSERT(mCommandBuffer.started());
-        mCommandBuffer.endRenderPass();
-        mCurrentRenderPassFramebuffer = nullptr;
-    }
-}
-
-void RendererVk::onReleaseRenderPass(const FramebufferVk *framebufferVk)
-{
-    if (mCurrentRenderPassFramebuffer == framebufferVk)
-    {
-        endRenderPass();
-    }
-}
-
 bool RendererVk::isResourceInUse(const ResourceVk &resource)
 {
     return isSerialInUse(resource.getQueueSerial());
@@ -858,6 +820,117 @@ vk::Error RendererVk::getRenderPass(const vk::RenderPassDesc &desc, vk::RenderPa
     *renderPassOut = &insertPos.first->second.get();
 
     // TODO(jmadill): Trim cache, and pre-populate with the most common RPs on startup.
+    return vk::NoError();
+}
+
+vk::CommandBufferNode *RendererVk::allocateCommandNode()
+{
+    // TODO(jmadill): Use a pool allocator for the CPU node allocations.
+    vk::CommandBufferNode *newCommands = new vk::CommandBufferNode();
+    mOpenCommandGraph.emplace_back(newCommands);
+    return newCommands;
+}
+
+vk::Error RendererVk::flush(const gl::Context *context)
+{
+    if (mOpenCommandGraph.empty())
+    {
+        return vk::NoError();
+    }
+
+    std::vector<vk::CommandBufferNode *> commandsStack;
+
+    VkCommandBufferAllocateInfo primaryInfo;
+    primaryInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    primaryInfo.pNext              = nullptr;
+    primaryInfo.commandPool        = mCommandPool.getHandle();
+    primaryInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    primaryInfo.commandBufferCount = 1;
+
+    vk::CommandBuffer primaryCommandBuffer;
+    ANGLE_TRY(primaryCommandBuffer.init(mDevice, primaryInfo));
+
+    VkCommandBufferBeginInfo beginInfo;
+    beginInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    beginInfo.pNext            = nullptr;
+    beginInfo.flags            = 0;
+    beginInfo.pInheritanceInfo = nullptr;
+
+    ANGLE_TRY(primaryCommandBuffer.begin(beginInfo));
+
+    for (auto &commandBinding : mOpenCommandGraph)
+    {
+        commandsStack.push_back(commandBinding.get());
+
+        while (!commandsStack.empty())
+        {
+            vk::CommandBufferNode *commands = commandsStack.back();
+            if (!commands->hasBeenFlushed())
+            {
+                if (!commands->addBeforeDependenciesToStack(&commandsStack))
+                {
+                    // Process this commands node.
+                    flushSecondaryCommands(&primaryCommandBuffer, commands);
+
+                    commands->markFlushedAndReleaseDependencies(context);
+                    commandsStack.pop_back();
+                }
+            }
+            else
+            {
+                commandsStack.pop_back();
+            }
+        }
+
+        commandBinding.set(context, nullptr);
+    }
+
+    ANGLE_TRY(primaryCommandBuffer.end());
+
+    VkSubmitInfo submitInfo;
+    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext                = nullptr;
+    submitInfo.waitSemaphoreCount   = 0;
+    submitInfo.pWaitSemaphores      = nullptr;
+    submitInfo.pWaitDstStageMask    = nullptr;
+    submitInfo.commandBufferCount   = 1;
+    submitInfo.pCommandBuffers      = primaryCommandBuffer.ptr();
+    submitInfo.signalSemaphoreCount = 0;
+    submitInfo.pSignalSemaphores    = nullptr;
+
+    ANGLE_TRY(submitFrame(submitInfo));
+
+    return vk::NoError();
+}
+
+vk::Error RendererVk::flushSecondaryCommands(vk::CommandBuffer *primaryCommandBuffer,
+                                             vk::CommandBufferNode *commands)
+{
+    const vk::CommandBufferAndState &outsideCommands = commands->getOutsideRenderPassCommands();
+
+    if (outsideCommands.valid())
+    {
+        ASSERT(outsideCommands.started());
+        primaryCommandBuffer->executeCommands(1, &outsideCommands);
+    }
+
+    const vk::CommandBufferAndState &insideCommands = commands->getInsideRenderPassCommands();
+
+    if (insideCommands.valid())
+    {
+        // Pull a compatible RenderPass from the cache.
+        const vk::RenderPassDesc &desc = commands->getRenderPassDesc();
+
+        vk::RenderPass *renderPass = nullptr;
+        ANGLE_TRY(getRenderPass(desc, &renderPass));
+
+        primaryCommandBuffer->beginRenderPass(
+            *renderPass, commands->getRenderPassFramebuffer(), commands->getRenderPassRenderArea(),
+            desc.attachmentCount(), commands->getRenderPassClearValues().data());
+        primaryCommandBuffer->executeCommands(1, &insideCommands);
+        primaryCommandBuffer->endRenderPass();
+    }
+
     return vk::NoError();
 }
 

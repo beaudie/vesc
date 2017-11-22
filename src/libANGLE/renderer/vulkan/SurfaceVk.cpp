@@ -192,7 +192,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkDevice device            = rendererVk->getDevice();
     VkInstance instance        = rendererVk->getInstance();
 
-    rendererVk->finish();
+    rendererVk->finish(display->getProxyContext());
 
     mAcquireNextImageSemaphore.destroy(device);
 
@@ -222,12 +222,14 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
 egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
 {
-    const DisplayVk *displayVk = vk::GetImpl(display);
-    return initializeImpl(displayVk->getRenderer()).toEGL(EGL_BAD_SURFACE);
+    return initializeImpl(display).toEGL(EGL_BAD_SURFACE);
 }
 
-vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
+vk::Error WindowSurfaceVk::initializeImpl(const egl::Display *display)
 {
+    const DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer       = displayVk->getRenderer();
+
     gl::Extents windowSize;
     ANGLE_TRY_RESULT(createSurfaceVk(renderer), windowSize);
 
@@ -409,7 +411,8 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
         ANGLE_TRY(member.commandsCompleteSemaphore.init(device));
     }
 
-    ANGLE_TRY(renderer->submitAndFinishCommandBuffer(commandBuffer));
+    // TODO(jmadill): Not nice to use the proxy context here.
+    ANGLE_TRY(renderer->submitAndFinishCommandBuffer(display->getProxyContext(), commandBuffer));
 
     // Get the first available swapchain iamge.
     ANGLE_TRY(nextSwapchainImage(renderer));
@@ -427,19 +430,18 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
     const DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
     RendererVk *renderer       = displayVk->getRenderer();
 
-    vk::CommandBufferAndState *currentCB = nullptr;
-    ANGLE_TRY(renderer->getStartedCommandBuffer(&currentCB));
-
-    // End render pass
-    renderer->endRenderPass();
+    vk::CommandBufferAndState *swapCommands = nullptr;
+    ANGLE_TRY(sireRecordingCommandNode(context, &swapCommands));
 
     auto &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
     image.image.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                       VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, currentCB);
+                                       VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(renderer->submitCommandsWithSync(currentCB, image.imageAcquiredSemaphore,
+    ANGLE_TRY(renderer->flush(context));
+
+    ANGLE_TRY(renderer->submitCommandsWithSync(swapCommands, image.imageAcquiredSemaphore,
                                                image.commandsCompleteSemaphore));
 
     VkPresentInfoKHR presentInfo;

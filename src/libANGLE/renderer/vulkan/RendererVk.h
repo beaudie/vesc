@@ -51,14 +51,17 @@ class RendererVk : angle::NonCopyable
 
     vk::ErrorOrResult<uint32_t> selectPresentQueueForSurface(VkSurfaceKHR surface);
 
-    // TODO(jmadill): Use ContextImpl for command buffers to enable threaded contexts.
     vk::Error getStartedCommandBuffer(vk::CommandBufferAndState **commandBufferOut);
     vk::Error submitCommandBuffer(vk::CommandBufferAndState *commandBuffer);
-    vk::Error submitAndFinishCommandBuffer(vk::CommandBufferAndState *commandBuffer);
+    vk::Error submitAndFinishCommandBuffer(const gl::Context *context,
+                                           vk::CommandBufferAndState *commandBuffer);
     vk::Error submitCommandsWithSync(vk::CommandBufferAndState *commandBuffer,
                                      const vk::Semaphore &waitSemaphore,
                                      const vk::Semaphore &signalSemaphore);
-    vk::Error finish();
+    vk::Error finish(const gl::Context *context);
+    vk::Error flush(const gl::Context *context);
+
+    const vk::CommandPool &getCommandPool() const;
 
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
@@ -102,13 +105,6 @@ class RendererVk : angle::NonCopyable
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }
 
-    // TODO(jmadill): Don't keep a single renderpass in the Renderer.
-    gl::Error ensureInRenderPass(const gl::Context *context, FramebufferVk *framebufferVk);
-    void endRenderPass();
-
-    // This is necessary to update the cached current RenderPass Framebuffer.
-    void onReleaseRenderPass(const FramebufferVk *framebufferVk);
-
     // TODO(jmadill): We could pass angle::Format::ID here.
     const vk::Format &getFormat(GLenum internalFormat) const
     {
@@ -117,7 +113,12 @@ class RendererVk : angle::NonCopyable
 
     vk::Error getRenderPass(const vk::RenderPassDesc &desc, vk::RenderPass **renderPassOut);
 
+    // This should only be called from ResourceVk.
+    // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
+    vk::CommandBufferNode *allocateCommandNode();
+
   private:
+    vk::Error initializeDevice(uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
                       gl::TextureCapsMap *outTextureCaps,
@@ -127,14 +128,14 @@ class RendererVk : angle::NonCopyable
     vk::Error submitFrame(const VkSubmitInfo &submitInfo);
     vk::Error checkInFlightCommands();
     void freeAllInFlightResources();
+    vk::Error flushSecondaryCommands(vk::CommandBuffer *primaryCommandBuffer,
+                                     vk::CommandBufferNode *commands);
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
     mutable gl::TextureCapsMap mNativeTextureCaps;
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
-
-    vk::Error initializeDevice(uint32_t queueFamilyIndex);
 
     VkInstance mInstance;
     bool mEnableValidationLayers;
@@ -156,11 +157,8 @@ class RendererVk : angle::NonCopyable
     std::vector<vk::GarbageObject> mGarbage;
     vk::MemoryProperties mMemoryProperties;
     vk::FormatTable mFormatTable;
-
-    // TODO(jmadill): Don't keep a single renderpass in the Renderer.
-    FramebufferVk *mCurrentRenderPassFramebuffer;
-
     std::unordered_map<vk::RenderPassDesc, vk::RenderPassAndSerial> mRenderPassCache;
+    std::vector<gl::BindingPointer<vk::CommandBufferNode>> mOpenCommandGraph;
 };
 
 }  // namespace rx

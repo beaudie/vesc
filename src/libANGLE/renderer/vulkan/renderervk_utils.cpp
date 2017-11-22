@@ -9,8 +9,11 @@
 
 #include "renderervk_utils.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/SizedMRUCache.h"
+#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -277,6 +280,13 @@ CommandBuffer::CommandBuffer()
 {
 }
 
+Error CommandBuffer::init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo)
+{
+    ASSERT(!valid());
+    ANGLE_VK_TRY(vkAllocateCommandBuffers(device, &createInfo, &mHandle));
+    return NoError();
+}
+
 Error CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
 {
     ASSERT(valid());
@@ -326,13 +336,6 @@ void CommandBuffer::destroy(VkDevice device, const vk::CommandPool &commandPool)
         vkFreeCommandBuffers(device, commandPool.getHandle(), 1, &mHandle);
         mHandle = VK_NULL_HANDLE;
     }
-}
-
-Error CommandBuffer::init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo)
-{
-    ASSERT(!valid());
-    ANGLE_VK_TRY(vkAllocateCommandBuffers(device, &createInfo, &mHandle));
-    return NoError();
 }
 
 void CommandBuffer::copyBuffer(const vk::Buffer &srcBuffer,
@@ -485,6 +488,13 @@ void CommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
     ASSERT(valid());
     vkCmdBindDescriptorSets(mHandle, bindPoint, layout.getHandle(), firstSet, descriptorSetCount,
                             descriptorSets, dynamicOffsetCount, dynamicOffsets);
+}
+
+void CommandBuffer::executeCommands(uint32_t commandBufferCount,
+                                    const vk::CommandBuffer *commandBuffers)
+{
+    ASSERT(valid());
+    vkCmdExecuteCommands(mHandle, commandBufferCount, commandBuffers[0].ptr());
 }
 
 // Image implementation.
@@ -664,6 +674,11 @@ Error Framebuffer::init(VkDevice device, const VkFramebufferCreateInfo &createIn
     ASSERT(!valid());
     ANGLE_VK_TRY(vkCreateFramebuffer(device, &createInfo, nullptr, &mHandle));
     return NoError();
+}
+
+void Framebuffer::setHandle(VkFramebuffer handle)
+{
+    mHandle = handle;
 }
 
 // DeviceMemory implementation.
@@ -1425,6 +1440,78 @@ VkFrontFace GetFrontFace(GLenum frontFace)
 }
 
 }  // namespace gl_vk
+
+ResourceVk::ResourceVk()
+{
+}
+
+ResourceVk::~ResourceVk()
+{
+}
+
+void ResourceVk::setQueueSerial(Serial queueSerial)
+{
+    ASSERT(queueSerial >= mStoredQueueSerial);
+    mStoredQueueSerial = queueSerial;
+}
+
+Serial ResourceVk::getQueueSerial() const
+{
+    return mStoredQueueSerial;
+}
+
+bool ResourceVk::isCurrentlyInUse() const
+{
+    return mCurrentInUseCommands.valid();
+}
+
+vk::CommandBufferNode *ResourceVk::getCurrentInUseCommands()
+{
+    return mCurrentInUseCommands.get();
+}
+
+vk::CommandBufferNode *ResourceVk::sireCommandNode(const gl::Context *context, RendererVk *renderer)
+{
+    vk::CommandBufferNode *newCommands = renderer->allocateCommandNode();
+
+    // TODO(jmadill): Where to best set the queue serial?
+    setQueueSerial(renderer->getCurrentQueueSerial());
+
+    if (mCurrentInUseCommands.valid())
+    {
+        mCurrentInUseCommands->setAfterDependency(context, newCommands);
+        newCommands->addBeforeDependency(context, mCurrentInUseCommands.get());
+    }
+
+    mCurrentInUseCommands.set(context, newCommands);
+    return newCommands;
+}
+
+vk::Error ResourceVk::sireRecordingCommandNode(const gl::Context *context,
+                                               vk::CommandBufferAndState **commandBufferOut)
+{
+    RendererVk *renderer            = vk::GetImpl(context)->getRenderer();
+    vk::CommandBufferNode *commands = sireCommandNode(context, renderer);
+
+    VkDevice device = renderer->getDevice();
+    ANGLE_TRY(commands->startRecording(device, renderer->getCommandPool(), commandBufferOut));
+    return vk::NoError();
+}
+
+void ResourceVk::chainNewCommands(const gl::Context *context, vk::CommandBufferNode *newCommands)
+{
+    if (mCurrentInUseCommands.valid())
+    {
+        // The current recording command happens-after the previous in-use commands.
+        mCurrentInUseCommands->setAfterDependency(context, newCommands);
+
+        // The previous in-use commands happens-before the current recording commands.
+        newCommands->addBeforeDependency(context, mCurrentInUseCommands.get());
+    }
+
+    // Update the resource's in-use commands to the current recording commands.
+    mCurrentInUseCommands.set(context, newCommands);
+}
 
 }  // namespace rx
 

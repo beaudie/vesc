@@ -49,6 +49,9 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 namespace rx
 {
 class DisplayVk;
+class RenderTargetVk;
+class RendererVk;
+class ResourceVk;
 
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
@@ -66,27 +69,10 @@ enum class TextureDimension
     TEX_2D_ARRAY,
 };
 
-// This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
-// at command recording times indicating an order in the queue. We use Fences to detect when
-// commands finish, and then release any unreferenced and deleted resources based on the stored
-// queue serial in a special 'garbage' queue.
-class ResourceVk
-{
-  public:
-    void setQueueSerial(Serial queueSerial)
-    {
-        ASSERT(queueSerial >= mStoredQueueSerial);
-        mStoredQueueSerial = queueSerial;
-    }
-
-    Serial getQueueSerial() const { return mStoredQueueSerial; }
-
-  private:
-    Serial mStoredQueueSerial;
-};
-
 namespace vk
 {
+class CommandBufferNode;
+
 template <typename T>
 struct ImplTypeHelper;
 
@@ -376,6 +362,8 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                             const VkDescriptorSet *descriptorSets,
                             uint32_t dynamicOffsetCount,
                             const uint32_t *dynamicOffsets);
+
+    void executeCommands(uint32_t commandBufferCount, const vk::CommandBuffer *commandBuffers);
 };
 
 class Image final : public WrappedObject<Image, VkImage>
@@ -437,6 +425,9 @@ class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
   public:
     Framebuffer();
     void destroy(VkDevice device);
+
+    // Use this method only in necessary cases. (RenderPass)
+    void setHandle(VkFramebuffer handle);
 
     Error init(VkDevice device, const VkFramebufferCreateInfo &createInfo);
 };
@@ -705,6 +696,36 @@ VkPrimitiveTopology GetPrimitiveTopology(GLenum mode);
 VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState);
 VkFrontFace GetFrontFace(GLenum frontFace);
 }  // namespace gl_vk
+
+// This is a small helper mixin for any GL object used in Vk command buffers. It records a serial
+// at command recording times indicating an order in the queue. We use Fences to detect when
+// commands finish, and then release any unreferenced and deleted resources based on the stored
+// queue serial in a special 'garbage' queue.
+class ResourceVk
+{
+  public:
+    ResourceVk();
+    virtual ~ResourceVk();
+
+    void setQueueSerial(Serial queueSerial);
+    Serial getQueueSerial() const;
+
+    bool isCurrentlyInUse() const;
+    vk::CommandBufferNode *getCurrentInUseCommands();
+    vk::CommandBufferNode *sireCommandNode(const gl::Context *context, RendererVk *renderer);
+
+    // Helper method: returns a started CommandBuffer that renders outside the RenderPass.
+    vk::Error sireRecordingCommandNode(const gl::Context *context,
+                                       vk::CommandBufferAndState **commandBufferOut);
+
+    // Replaces the currently-in-use commands with |newCommands| and updates dependencies.
+    // The current-in-use commands will be set to happen-before the new commands.
+    void chainNewCommands(const gl::Context *context, vk::CommandBufferNode *newCommands);
+
+  private:
+    Serial mStoredQueueSerial;
+    gl::BindingPointer<vk::CommandBufferNode> mCurrentInUseCommands;
+};
 
 }  // namespace rx
 
