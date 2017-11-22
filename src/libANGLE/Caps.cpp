@@ -229,8 +229,26 @@ Extensions::Extensions()
       programCacheControl(false),
       textureRectangle(false),
       geometryShader(false),
+      // Table 20.40 (cont.) (GL_EXT_geometry_shader)
+      maxFramebufferLayers(0),
+      layerProvokingVertex(GL_UNDEFINED_VERTEX_EXT),
+
+      // Table 20.43gs (GL_EXT_geometry_shader)
+      maxGeometryUniformComponents(0),
+      maxGeometryUniformBlocks(0),
+      maxGeometryInputComponents(0),
+      maxGeometryOutputComponents(0),
       maxGeometryOutputVertices(0),
-      maxGeometryShaderInvocations(0)
+      maxGeometryTotalOutputComponents(0),
+      maxGeometryTextureImageUnits(0),
+      maxGeometryAtomicCounterBuffers(0),
+      maxGeometryAtomicCounters(0),
+      maxGeometryShaderStorageBlocks(0),
+      maxGeometryShaderInvocations(0),
+
+      // Table 20.46 (GL_EXT_geometry_shader)
+      maxGeometryImageUniforms(0),
+      maxCombinedGeometryUniformComponents(0)
 {
 }
 
@@ -861,7 +879,7 @@ Caps::Caps()
 Caps::Caps(const Caps &other) = default;
 Caps::~Caps()                 = default;
 
-Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions)
+Caps GenerateMinimumCaps(const Version &clientVersion, Extensions &extensions)
 {
     Caps caps;
 
@@ -1051,6 +1069,33 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
     if (extensions.textureRectangle)
     {
         caps.maxRectangleTextureSize = 64;
+    }
+
+    if (extensions.geometryShader)
+    {
+        // Table 20.40 (GL_EXT_geometry_shader)
+        extensions.maxFramebufferLayers = 256;
+        extensions.layerProvokingVertex = GL_UNDEFINED_VERTEX_EXT;
+
+        // Table 20.43gs (GL_EXT_geometry_shader)
+        extensions.maxGeometryUniformComponents     = 1024;
+        extensions.maxGeometryUniformBlocks         = 12;
+        extensions.maxGeometryInputComponents       = 64;
+        extensions.maxGeometryOutputComponents      = 64;
+        extensions.maxGeometryOutputVertices        = 256;
+        extensions.maxGeometryTotalOutputComponents = 1024;
+        extensions.maxGeometryTextureImageUnits     = 16;
+        extensions.maxGeometryAtomicCounterBuffers  = 0;
+        extensions.maxGeometryAtomicCounters        = 0;
+        extensions.maxGeometryShaderStorageBlocks   = 0;
+        extensions.maxGeometryShaderInvocations     = 32;
+
+        // Table 20.46 (GL_EXT_geometry_shader)
+        extensions.maxGeometryImageUniforms = 0;
+        extensions.maxCombinedGeometryUniformComponents =
+            extensions.maxGeometryUniformBlocks *
+                static_cast<GLuint>(caps.maxUniformBlockSize / 4) +
+            extensions.maxGeometryUniformComponents;
     }
 
     return caps;
