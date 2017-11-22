@@ -473,6 +473,9 @@ gl::Error Buffer11::copySubData(const gl::Context *context,
     mSize = std::max<size_t>(mSize, destOffset + size);
     invalidateStaticData(context);
 
+    // Also notify that direct buffers are dirty.
+    mDirectBroadcastChannel.signal(context);
+
     return gl::NoError();
 }
 

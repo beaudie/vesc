@@ -562,6 +562,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mAppliedIB(nullptr),
       mAppliedIBFormat(DXGI_FORMAT_UNKNOWN),
       mAppliedIBOffset(0),
+      mIndexBufferIsDirty(false),
       mVertexDataManager(renderer),
       mIndexDataManager(renderer),
       mIsMultiviewEnabled(false),
@@ -2567,15 +2568,24 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
                                            bool usePrimitiveRestartWorkaround,
                                            TranslatedIndexData *indexInfo)
 {
-    const auto &glState            = context->getGLState();
-    gl::VertexArray *vao           = glState.getVertexArray();
-    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    const auto &glState  = context->getGLState();
+    gl::VertexArray *vao = glState.getVertexArray();
+    VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
 
-    GLenum dstType =
+    GLenum destElementType =
         GetIndexTranslationDestType(type, lazyIndexRange, usePrimitiveRestartWorkaround);
 
-    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, dstType, count, elementArrayBuffer,
-                                                 indices, indexInfo));
+    if (!vao11->updateElementArrayStorage(context, type, destElementType, indices) && !mIndexBufferIsDirty)
+    {
+        // No streaming or index buffer application necessary.
+        *indexInfo = vao11->getCachedTranslatedIndexData().value();
+        return gl::NoError();
+    }
+
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+
+    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, destElementType, count,
+                                                 elementArrayBuffer, indices, indexInfo));
 
     ID3D11Buffer *buffer = nullptr;
     DXGI_FORMAT bufferFormat =
@@ -2594,12 +2604,25 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
 
     // Track dirty indices in the index range cache.
     indexInfo->srcIndexData.srcIndicesChanged =
-        setIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
+        syncIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
 
+    mIndexBufferIsDirty = false;
+
+    vao11->getCachedTranslatedIndexData() = *indexInfo;
     return gl::NoError();
 }
 
-bool StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
+void StateManager11::setIndexBuffer(ID3D11Buffer *buffer,
+                                    DXGI_FORMAT indexFormat,
+                                    unsigned int offset)
+{
+    if (syncIndexBuffer(buffer, indexFormat, offset))
+    {
+        mIndexBufferIsDirty = true;
+    }
+}
+
+bool StateManager11::syncIndexBuffer(ID3D11Buffer *buffer,
                                     DXGI_FORMAT indexFormat,
                                     unsigned int offset)
 {
