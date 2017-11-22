@@ -11,7 +11,7 @@
 
 #include "common/mathutil.h"
 #include "compiler/preprocessor/SourceLocation.h"
-#include "compiler/translator/Cache.h"
+#include "compiler/translator/TypeStaticInstance.h"
 #include "compiler/translator/IntermNode_util.h"
 #include "compiler/translator/ValidateGlobalInitializer.h"
 #include "compiler/translator/ValidateSwitch.h"
@@ -3456,7 +3456,8 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
 
 TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSourceLoc &loc)
 {
-    const TType *returnType = TCache::getType(EbtVoid, EbpUndefined);
+    // XXX: Is this right? It was EvqTemporary in the original code, but that was due to a bug.
+    const TType *returnType = TTypeStaticInstance::Get2<EbtVoid, EvqTemporary>();
     return new TFunction(&symbolTable, name, returnType);
 }
 

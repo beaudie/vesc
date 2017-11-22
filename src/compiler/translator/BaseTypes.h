@@ -129,60 +129,6 @@ enum TBasicType
     EbtLast
 };
 
-inline TBasicType convertGImageToFloatImage(TBasicType type)
-{
-    switch (type)
-    {
-        case EbtGImage2D:
-            return EbtImage2D;
-        case EbtGImage3D:
-            return EbtImage3D;
-        case EbtGImage2DArray:
-            return EbtImage2DArray;
-        case EbtGImageCube:
-            return EbtImageCube;
-        default:
-            UNREACHABLE();
-    }
-    return EbtLast;
-}
-
-inline TBasicType convertGImageToIntImage(TBasicType type)
-{
-    switch (type)
-    {
-        case EbtGImage2D:
-            return EbtIImage2D;
-        case EbtGImage3D:
-            return EbtIImage3D;
-        case EbtGImage2DArray:
-            return EbtIImage2DArray;
-        case EbtGImageCube:
-            return EbtIImageCube;
-        default:
-            UNREACHABLE();
-    }
-    return EbtLast;
-}
-
-inline TBasicType convertGImageToUnsignedImage(TBasicType type)
-{
-    switch (type)
-    {
-        case EbtGImage2D:
-            return EbtUImage2D;
-        case EbtGImage3D:
-            return EbtUImage3D;
-        case EbtGImage2DArray:
-            return EbtUImage2DArray;
-        case EbtGImageCube:
-            return EbtUImageCube;
-        default:
-            UNREACHABLE();
-    }
-    return EbtLast;
-}
-
 const char *getBasicString(TBasicType t);
 
 inline bool IsSampler(TBasicType type)
