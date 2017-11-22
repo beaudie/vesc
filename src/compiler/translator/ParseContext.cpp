@@ -3456,7 +3456,7 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
 
 TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSourceLoc &loc)
 {
-    const TType *returnType = TCache::getType(EbtVoid, EbpUndefined);
+    const TType *returnType = TCache::getType1<EbtVoid>();
     return new TFunction(&symbolTable, name, returnType);
 }
 

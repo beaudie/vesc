@@ -11,7 +11,6 @@
 
 #include <stdint.h>
 #include <string.h>
-#include <map>
 
 #include "compiler/translator/Types.h"
 #include "compiler/translator/PoolAlloc.h"
@@ -19,65 +18,108 @@
 namespace sh
 {
 
-class TCache
+namespace TCache
 {
-  public:
-    static void initialize();
-    static void destroy();
+    // Implementation
 
-    static const TType *getType(TBasicType basicType, TPrecision precision)
+    template<TBasicType basicType,
+             TPrecision precision,
+             TQualifier qualifier,
+             unsigned char primarySize = 1,
+             unsigned char secondarySize = 1>
+    const TType *getType()
     {
-        return getType(basicType, precision, EvqTemporary, 1, 1);
+#ifdef __GNUC__
+        static const char *name = __PRETTY_FUNCTION__;
+#else
+        static const char *name = __FUNCTION__;
+#endif
+        static const TType t(basicType, precision, qualifier, primarySize, secondarySize, name);
+        return &t;
     }
-    static const TType *getType(TBasicType basicType,
-                                unsigned char primarySize   = 1,
-                                unsigned char secondarySize = 1)
+
+    // Overloads
+
+    template<TBasicType basicType,
+             unsigned char primarySize = 1,
+             unsigned char secondarySize = 1>
+    const TType *getType1()
     {
-        return getType(basicType, EbpUndefined, EvqGlobal, primarySize, secondarySize);
+        return getType<basicType, EbpUndefined, EvqGlobal, primarySize, secondarySize>();
     }
-    static const TType *getType(TBasicType basicType,
-                                TQualifier qualifier,
-                                unsigned char primarySize   = 1,
-                                unsigned char secondarySize = 1)
+
+    template<TBasicType basicType,
+             TQualifier qualifier,
+             unsigned char primarySize = 1,
+             unsigned char secondarySize = 1>
+    const TType *getType2()
     {
-        return getType(basicType, EbpUndefined, qualifier, primarySize, secondarySize);
+        return getType<basicType, EbpUndefined, qualifier, primarySize, secondarySize>();
     }
-    static const TType *getType(TBasicType basicType,
-                                TPrecision precision,
-                                TQualifier qualifier,
-                                unsigned char primarySize,
-                                unsigned char secondarySize);
 
-  private:
-    TCache();
-
-    union TypeKey {
-        TypeKey(TBasicType basicType,
-                TPrecision precision,
-                TQualifier qualifier,
-                unsigned char primarySize,
-                unsigned char secondarySize);
-
-        typedef uint8_t EnumComponentType;
-        struct
+    template<TBasicType basicType,
+             TPrecision precision,
+             TQualifier qualifier,
+             unsigned char secondarySize>
+    const TType *getTypeVecMatHelper(unsigned char primarySize)
+    {
+        static_assert(basicType == EbtFloat ||
+                      basicType == EbtInt ||
+                      basicType == EbtUInt ||
+                      basicType == EbtBool, "unsupported basicType");
+        switch (primarySize)
         {
-            EnumComponentType basicType;
-            EnumComponentType precision;
-            EnumComponentType qualifier;
-            unsigned char primarySize;
-            unsigned char secondarySize;
-        } components;
-        uint64_t value;
+            case 1: return getType<basicType, precision, qualifier, 1, secondarySize>();
+            case 2: return getType<basicType, precision, qualifier, 2, secondarySize>();
+            case 3: return getType<basicType, precision, qualifier, 3, secondarySize>();
+            case 4: return getType<basicType, precision, qualifier, 4, secondarySize>();
+            default: UNREACHABLE();
+        }
+    }
 
-        bool operator<(const TypeKey &other) const { return value < other.value; }
-    };
-    typedef std::map<TypeKey, const TType *> TypeMap;
+    template<TBasicType basicType,
+             TPrecision precision = EbpUndefined,
+             TQualifier qualifier = EvqGlobal>
+    const TType *getTypeVecMat(unsigned char primarySize, unsigned char secondarySize = 1)
+    {
+        static_assert(basicType == EbtFloat ||
+                      basicType == EbtInt ||
+                      basicType == EbtUInt ||
+                      basicType == EbtBool, "unsupported basicType");
+        switch (secondarySize)
+        {
+            case 1: return getTypeVecMatHelper<basicType, precision, qualifier, 1>(primarySize);
+            case 2: return getTypeVecMatHelper<basicType, precision, qualifier, 2>(primarySize);
+            case 3: return getTypeVecMatHelper<basicType, precision, qualifier, 3>(primarySize);
+            case 4: return getTypeVecMatHelper<basicType, precision, qualifier, 4>(primarySize);
+            default: UNREACHABLE();
+        }
+    }
 
-    TypeMap mTypes;
-    TPoolAllocator mAllocator;
+    template<TBasicType basicType,
+             TPrecision precision = EbpUndefined>
+    const TType *getTypeVecQualified(TQualifier qualifier, unsigned char size)
+    {
+        switch (qualifier) {
+#define OP(Q) case Q: return getTypeVecMatHelper<basicType, precision, Q, 1>(size);
+            TQUALIFIER(OP)
+#undef OP
+            default:
+                UNREACHABLE();
+        }
+    }
 
-    static TCache *sCache;
-};
+    inline const TType *getTypeSimple(TBasicType basicType)
+    {
+        switch (basicType) {
+#define OP(BT) case BT: return getType<BT, EbpUndefined, EvqGlobal, 1, 1>();
+            TBASICTYPE(OP)
+#undef OP
+            default:
+                UNREACHABLE();
+        }
+    }
+} // namespace TCache
 
 }  // namespace sh
 

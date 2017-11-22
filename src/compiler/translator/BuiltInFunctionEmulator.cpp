@@ -286,19 +286,19 @@ void BuiltInFunctionEmulator::WriteEmulatedFunctionName(TInfoSinkBase &out, cons
 
 FunctionId::FunctionId()
     : mOp(EOpNull),
-      mParam1(TCache::getType(EbtVoid)),
-      mParam2(TCache::getType(EbtVoid)),
-      mParam3(TCache::getType(EbtVoid)),
-      mParam4(TCache::getType(EbtVoid))
+      mParam1(TCache::getType1<EbtVoid>()),
+      mParam2(TCache::getType1<EbtVoid>()),
+      mParam3(TCache::getType1<EbtVoid>()),
+      mParam4(TCache::getType1<EbtVoid>())
 {
 }
 
 FunctionId::FunctionId(TOperator op, const TType *param)
     : mOp(op),
       mParam1(param),
-      mParam2(TCache::getType(EbtVoid)),
-      mParam3(TCache::getType(EbtVoid)),
-      mParam4(TCache::getType(EbtVoid))
+      mParam2(TCache::getType1<EbtVoid>()),
+      mParam3(TCache::getType1<EbtVoid>()),
+      mParam4(TCache::getType1<EbtVoid>())
 {
 }
 
@@ -306,13 +306,13 @@ FunctionId::FunctionId(TOperator op, const TType *param1, const TType *param2)
     : mOp(op),
       mParam1(param1),
       mParam2(param2),
-      mParam3(TCache::getType(EbtVoid)),
-      mParam4(TCache::getType(EbtVoid))
+      mParam3(TCache::getType1<EbtVoid>()),
+      mParam4(TCache::getType1<EbtVoid>())
 {
 }
 
 FunctionId::FunctionId(TOperator op, const TType *param1, const TType *param2, const TType *param3)
-    : mOp(op), mParam1(param1), mParam2(param2), mParam3(param3), mParam4(TCache::getType(EbtVoid))
+    : mOp(op), mParam1(param1), mParam2(param2), mParam3(param3), mParam4(TCache::getType1<EbtVoid>())
 {
 }
 

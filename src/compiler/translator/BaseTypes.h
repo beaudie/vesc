@@ -49,84 +49,89 @@ inline const char *getPrecisionString(TPrecision p)
 //
 // Basic type.  Arrays, vectors, etc., are orthogonal to this.
 //
+#define TBASICTYPE(OP)                                                                             \
+    OP(EbtVoid)                                                                                    \
+    OP(EbtFloat)                                                                                   \
+    OP(EbtInt)                                                                                     \
+    OP(EbtUInt)                                                                                    \
+    OP(EbtBool)                                                                                    \
+    OP(EbtGVec4)              /* non type: represents vec4, ivec4, and uvec4 */                    \
+    OP(EbtGenType)            /* non type: represents float, vec2, vec3, and vec4 */               \
+    OP(EbtGenIType)           /* non type: represents int, ivec2, ivec3, and ivec4 */              \
+    OP(EbtGenUType)           /* non type: represents uint, uvec2, uvec3, and uvec4 */             \
+    OP(EbtGenBType)           /* non type: represents bool, bvec2, bvec3, and bvec4 */             \
+    OP(EbtVec)                /* non type: represents vec2, vec3, and vec4 */                      \
+    OP(EbtIVec)               /* non type: represents ivec2, ivec3, and ivec4 */                   \
+    OP(EbtUVec)               /* non type: represents uvec2, uvec3, and uvec4 */                   \
+    OP(EbtBVec)               /* non type: represents bvec2, bvec3, and bvec4 */                   \
+    OP(EbtYuvCscStandardEXT)  /* Only valid if EXT_YUV_target exists. */                           \
+    OP(EbtGuardSamplerBegin)  /* non type: see implementation of IsSampler() */                    \
+    OP(EbtSampler2D)                                                                               \
+    OP(EbtSampler3D)                                                                               \
+    OP(EbtSamplerCube)                                                                             \
+    OP(EbtSampler2DArray)                                                                          \
+    OP(EbtSamplerExternalOES)       /* Only valid if OES_EGL_image_external exists. */             \
+    OP(EbtSamplerExternal2DY2YEXT)  /* Only valid if GL_EXT_YUV_target exists. */                  \
+    OP(EbtSampler2DRect)            /* Only valid if GL_ARB_texture_rectangle exists. */           \
+    OP(EbtSampler2DMS)                                                                             \
+    OP(EbtISampler2D)                                                                              \
+    OP(EbtISampler3D)                                                                              \
+    OP(EbtISamplerCube)                                                                            \
+    OP(EbtISampler2DArray)                                                                         \
+    OP(EbtISampler2DMS)                                                                            \
+    OP(EbtUSampler2D)                                                                              \
+    OP(EbtUSampler3D)                                                                              \
+    OP(EbtUSamplerCube)                                                                            \
+    OP(EbtUSampler2DArray)                                                                         \
+    OP(EbtUSampler2DMS)                                                                            \
+    OP(EbtSampler2DShadow)                                                                         \
+    OP(EbtSamplerCubeShadow)                                                                       \
+    OP(EbtSampler2DArrayShadow)                                                                    \
+    OP(EbtGuardSamplerEnd)  /* non type: see implementation of IsSampler() */                      \
+    OP(EbtGSampler2D)       /* non type: represents sampler2D, isampler2D, and usampler2D */       \
+    OP(EbtGSampler3D)       /* non type: represents sampler3D, isampler3D, and usampler3D */       \
+    OP(EbtGSamplerCube)     /* non type: represents samplerCube, isamplerCube, and usamplerCube */ \
+    OP(EbtGSampler2DArray)  /* non type: represents sampler2DArray, isampler2DArray, and */        \
+                         /* usampler2DArray */                                                     \
+    OP(EbtGSampler2DMS)     /* non type: represents sampler2DMS, isampler2DMS, and usampler2DMS */ \
+                                                                                                   \
+    /* images */                                                                                   \
+    OP(EbtGuardImageBegin)                                                                         \
+    OP(EbtImage2D)                                                                                 \
+    OP(EbtIImage2D)                                                                                \
+    OP(EbtUImage2D)                                                                                \
+    OP(EbtImage3D)                                                                                 \
+    OP(EbtIImage3D)                                                                                \
+    OP(EbtUImage3D)                                                                                \
+    OP(EbtImage2DArray)                                                                            \
+    OP(EbtIImage2DArray)                                                                           \
+    OP(EbtUImage2DArray)                                                                           \
+    OP(EbtImageCube)                                                                               \
+    OP(EbtIImageCube)                                                                              \
+    OP(EbtUImageCube)                                                                              \
+    OP(EbtGuardImageEnd)                                                                           \
+                                                                                                   \
+    OP(EbtGuardGImageBegin)                                                                        \
+    OP(EbtGImage2D)       /* non type: represents image2D, uimage2D, iimage2D */                   \
+    OP(EbtGImage3D)       /* non type: represents image3D, uimage3D, iimage3D */                   \
+    OP(EbtGImage2DArray)  /* non type: represents image2DArray, uimage2DArray, iimage2DArray */    \
+    OP(EbtGImageCube)     /* non type: represents imageCube, uimageCube, iimageCube */             \
+    OP(EbtGuardGImageEnd)                                                                          \
+                                                                                                   \
+    OP(EbtStruct)                                                                                  \
+    OP(EbtInterfaceBlock)                                                                          \
+    OP(EbtAddress)  /* should be deprecated?? */                                                   \
+                                                                                                   \
+    OP(EbtAtomicCounter)                                                                           \
+                                                                                                   \
+    /* end of list */                                                                              \
+    OP(EbtLast)
+
 enum TBasicType
 {
-    EbtVoid,
-    EbtFloat,
-    EbtInt,
-    EbtUInt,
-    EbtBool,
-    EbtGVec4,              // non type: represents vec4, ivec4, and uvec4
-    EbtGenType,            // non type: represents float, vec2, vec3, and vec4
-    EbtGenIType,           // non type: represents int, ivec2, ivec3, and ivec4
-    EbtGenUType,           // non type: represents uint, uvec2, uvec3, and uvec4
-    EbtGenBType,           // non type: represents bool, bvec2, bvec3, and bvec4
-    EbtVec,                // non type: represents vec2, vec3, and vec4
-    EbtIVec,               // non type: represents ivec2, ivec3, and ivec4
-    EbtUVec,               // non type: represents uvec2, uvec3, and uvec4
-    EbtBVec,               // non type: represents bvec2, bvec3, and bvec4
-    EbtYuvCscStandardEXT,  // Only valid if EXT_YUV_target exists.
-    EbtGuardSamplerBegin,  // non type: see implementation of IsSampler()
-    EbtSampler2D,
-    EbtSampler3D,
-    EbtSamplerCube,
-    EbtSampler2DArray,
-    EbtSamplerExternalOES,       // Only valid if OES_EGL_image_external exists.
-    EbtSamplerExternal2DY2YEXT,  // Only valid if GL_EXT_YUV_target exists.
-    EbtSampler2DRect,            // Only valid if GL_ARB_texture_rectangle exists.
-    EbtSampler2DMS,
-    EbtISampler2D,
-    EbtISampler3D,
-    EbtISamplerCube,
-    EbtISampler2DArray,
-    EbtISampler2DMS,
-    EbtUSampler2D,
-    EbtUSampler3D,
-    EbtUSamplerCube,
-    EbtUSampler2DArray,
-    EbtUSampler2DMS,
-    EbtSampler2DShadow,
-    EbtSamplerCubeShadow,
-    EbtSampler2DArrayShadow,
-    EbtGuardSamplerEnd,  // non type: see implementation of IsSampler()
-    EbtGSampler2D,       // non type: represents sampler2D, isampler2D, and usampler2D
-    EbtGSampler3D,       // non type: represents sampler3D, isampler3D, and usampler3D
-    EbtGSamplerCube,     // non type: represents samplerCube, isamplerCube, and usamplerCube
-    EbtGSampler2DArray,  // non type: represents sampler2DArray, isampler2DArray, and
-                         // usampler2DArray
-    EbtGSampler2DMS,     // non type: represents sampler2DMS, isampler2DMS, and usampler2DMS
-
-    // images
-    EbtGuardImageBegin,
-    EbtImage2D,
-    EbtIImage2D,
-    EbtUImage2D,
-    EbtImage3D,
-    EbtIImage3D,
-    EbtUImage3D,
-    EbtImage2DArray,
-    EbtIImage2DArray,
-    EbtUImage2DArray,
-    EbtImageCube,
-    EbtIImageCube,
-    EbtUImageCube,
-    EbtGuardImageEnd,
-
-    EbtGuardGImageBegin,
-    EbtGImage2D,       // non type: represents image2D, uimage2D, iimage2D
-    EbtGImage3D,       // non type: represents image3D, uimage3D, iimage3D
-    EbtGImage2DArray,  // non type: represents image2DArray, uimage2DArray, iimage2DArray
-    EbtGImageCube,     // non type: represents imageCube, uimageCube, iimageCube
-    EbtGuardGImageEnd,
-
-    EbtStruct,
-    EbtInterfaceBlock,
-    EbtAddress,  // should be deprecated??
-
-    EbtAtomicCounter,
-
-    // end of list
-    EbtLast
+#define OP(BT) BT,
+    TBASICTYPE(OP)
+#undef OP
 };
 
 inline TBasicType convertGImageToFloatImage(TBasicType type)
@@ -593,97 +598,102 @@ inline bool SupportsPrecision(TBasicType type)
 // to allocate variables in.  Since built-ins tend to go to different registers
 // than varying or uniform, it makes sense they are peers, not sub-classes.
 //
+#define TQUALIFIER(OP)                                                                             \
+    OP(EvqTemporary)   /* For temporaries (within a function), read/write */                       \
+    OP(EvqGlobal)      /* For globals read/write */                                                \
+    OP(EvqConst)       /* User defined constants and non-output parameters in functions */         \
+    OP(EvqAttribute)   /* Readonly */                                                              \
+    OP(EvqVaryingIn)   /* readonly, fragment shaders only */                                       \
+    OP(EvqVaryingOut)  /* vertex shaders only  read/write */                                       \
+    OP(EvqUniform)     /* Readonly, vertex and fragment */                                         \
+    OP(EvqBuffer)      /* read/write, vertex, fragment and compute shader */                       \
+                                                                                                   \
+    OP(EvqVertexIn)     /* Vertex shader input */                                                  \
+    OP(EvqFragmentOut)  /* Fragment shader output */                                               \
+    OP(EvqVertexOut)    /* Vertex shader output */                                                 \
+    OP(EvqFragmentIn)   /* Fragment shader input */                                                \
+                                                                                                   \
+    /* parameters */                                                                               \
+    OP(EvqIn)                                                                                      \
+    OP(EvqOut)                                                                                     \
+    OP(EvqInOut)                                                                                   \
+    OP(EvqConstReadOnly)                                                                           \
+                                                                                                   \
+    /* built-ins read by vertex shader */                                                          \
+    OP(EvqInstanceID)                                                                              \
+    OP(EvqVertexID)                                                                                \
+                                                                                                   \
+    /* built-ins written by vertex shader */                                                       \
+    OP(EvqPosition)                                                                                \
+    OP(EvqPointSize)                                                                               \
+                                                                                                   \
+    /* built-ins read by fragment shader */                                                        \
+    OP(EvqFragCoord)                                                                               \
+    OP(EvqFrontFacing)                                                                             \
+    OP(EvqPointCoord)                                                                              \
+                                                                                                   \
+    /* built-ins written by fragment shader */                                                     \
+    OP(EvqFragColor)                                                                               \
+    OP(EvqFragData)                                                                                \
+                                                                                                   \
+    OP(EvqFragDepth)     /* gl_FragDepth for ESSL300. */                                           \
+    OP(EvqFragDepthEXT)  /* gl_FragDepthEXT for ESSL100, EXT_frag_depth. */                        \
+                                                                                                   \
+    OP(EvqSecondaryFragColorEXT)  /* EXT_blend_func_extended */                                    \
+    OP(EvqSecondaryFragDataEXT)   /* EXT_blend_func_extended */                                    \
+                                                                                                   \
+    OP(EvqViewIDOVR)      /* OVR_multiview */                                                      \
+    OP(EvqViewportIndex)  /* gl_ViewportIndex */                                                   \
+                                                                                                   \
+    /* built-ins written by the shader_framebuffer_fetch extension(s) */                           \
+    OP(EvqLastFragColor)                                                                           \
+    OP(EvqLastFragData)                                                                            \
+                                                                                                   \
+    /* GLSL ES 3.0 vertex output and fragment input */                                             \
+    OP(EvqSmooth)    /* Incomplete qualifier, smooth is the default */                             \
+    OP(EvqFlat)      /* Incomplete qualifier */                                                    \
+    OP(EvqCentroid)  /* Incomplete qualifier */                                                    \
+    OP(EvqSmoothOut)                                                                               \
+    OP(EvqFlatOut)                                                                                 \
+    OP(EvqCentroidOut)  /* Implies smooth */                                                       \
+    OP(EvqSmoothIn)                                                                                \
+    OP(EvqFlatIn)                                                                                  \
+    OP(EvqCentroidIn)  /* Implies smooth */                                                        \
+                                                                                                   \
+    /* GLSL ES 3.1 compute shader special variables */                                             \
+    OP(EvqShared)                                                                                  \
+    OP(EvqComputeIn)                                                                               \
+    OP(EvqNumWorkGroups)                                                                           \
+    OP(EvqWorkGroupSize)                                                                           \
+    OP(EvqWorkGroupID)                                                                             \
+    OP(EvqLocalInvocationID)                                                                       \
+    OP(EvqGlobalInvocationID)                                                                      \
+    OP(EvqLocalInvocationIndex)                                                                    \
+                                                                                                   \
+    /* GLSL ES 3.1 memory qualifiers */                                                            \
+    OP(EvqReadOnly)                                                                                \
+    OP(EvqWriteOnly)                                                                               \
+    OP(EvqCoherent)                                                                                \
+    OP(EvqRestrict)                                                                                \
+    OP(EvqVolatile)                                                                                \
+                                                                                                   \
+    /* GLSL ES 3.1 extension OES_geometry_shader qualifiers */                                     \
+    OP(EvqGeometryIn)                                                                              \
+    OP(EvqGeometryOut)                                                                             \
+    OP(EvqPerVertexIn)    /* gl_in */                                                              \
+    OP(EvqPrimitiveIDIn)  /* gl_PrimitiveIDIn */                                                   \
+    OP(EvqInvocationID)   /* gl_InvocationID */                                                    \
+    OP(EvqPrimitiveID)    /* gl_PrimitiveID */                                                     \
+    OP(EvqLayer)          /* gl_Layer */                                                           \
+                                                                                                   \
+    /* end of list */                                                                              \
+    OP(EvqLast)
+
 enum TQualifier
 {
-    EvqTemporary,   // For temporaries (within a function), read/write
-    EvqGlobal,      // For globals read/write
-    EvqConst,       // User defined constants and non-output parameters in functions
-    EvqAttribute,   // Readonly
-    EvqVaryingIn,   // readonly, fragment shaders only
-    EvqVaryingOut,  // vertex shaders only  read/write
-    EvqUniform,     // Readonly, vertex and fragment
-    EvqBuffer,      // read/write, vertex, fragment and compute shader
-
-    EvqVertexIn,     // Vertex shader input
-    EvqFragmentOut,  // Fragment shader output
-    EvqVertexOut,    // Vertex shader output
-    EvqFragmentIn,   // Fragment shader input
-
-    // parameters
-    EvqIn,
-    EvqOut,
-    EvqInOut,
-    EvqConstReadOnly,
-
-    // built-ins read by vertex shader
-    EvqInstanceID,
-    EvqVertexID,
-
-    // built-ins written by vertex shader
-    EvqPosition,
-    EvqPointSize,
-
-    // built-ins read by fragment shader
-    EvqFragCoord,
-    EvqFrontFacing,
-    EvqPointCoord,
-
-    // built-ins written by fragment shader
-    EvqFragColor,
-    EvqFragData,
-
-    EvqFragDepth,     // gl_FragDepth for ESSL300.
-    EvqFragDepthEXT,  // gl_FragDepthEXT for ESSL100, EXT_frag_depth.
-
-    EvqSecondaryFragColorEXT,  // EXT_blend_func_extended
-    EvqSecondaryFragDataEXT,   // EXT_blend_func_extended
-
-    EvqViewIDOVR,      // OVR_multiview
-    EvqViewportIndex,  // gl_ViewportIndex
-
-    // built-ins written by the shader_framebuffer_fetch extension(s)
-    EvqLastFragColor,
-    EvqLastFragData,
-
-    // GLSL ES 3.0 vertex output and fragment input
-    EvqSmooth,    // Incomplete qualifier, smooth is the default
-    EvqFlat,      // Incomplete qualifier
-    EvqCentroid,  // Incomplete qualifier
-    EvqSmoothOut,
-    EvqFlatOut,
-    EvqCentroidOut,  // Implies smooth
-    EvqSmoothIn,
-    EvqFlatIn,
-    EvqCentroidIn,  // Implies smooth
-
-    // GLSL ES 3.1 compute shader special variables
-    EvqShared,
-    EvqComputeIn,
-    EvqNumWorkGroups,
-    EvqWorkGroupSize,
-    EvqWorkGroupID,
-    EvqLocalInvocationID,
-    EvqGlobalInvocationID,
-    EvqLocalInvocationIndex,
-
-    // GLSL ES 3.1 memory qualifiers
-    EvqReadOnly,
-    EvqWriteOnly,
-    EvqCoherent,
-    EvqRestrict,
-    EvqVolatile,
-
-    // GLSL ES 3.1 extension OES_geometry_shader qualifiers
-    EvqGeometryIn,
-    EvqGeometryOut,
-    EvqPerVertexIn,    // gl_in
-    EvqPrimitiveIDIn,  // gl_PrimitiveIDIn
-    EvqInvocationID,   // gl_InvocationID
-    EvqPrimitiveID,    // gl_PrimitiveID
-    EvqLayer,          // gl_Layer
-
-    // end of list
-    EvqLast
+#define OP(Q) Q,
+  TQUALIFIER(OP)
+#undef OP
 };
 
 inline bool IsQualifierUnspecified(TQualifier qualifier)

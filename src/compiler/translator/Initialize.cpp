@@ -24,20 +24,20 @@ void InsertBuiltInFunctions(sh::GLenum type,
                             const ShBuiltInResources &resources,
                             TSymbolTable &symbolTable)
 {
-    const TType *voidType = TCache::getType(EbtVoid);
-    const TType *float1   = TCache::getType(EbtFloat);
-    const TType *float2   = TCache::getType(EbtFloat, 2);
-    const TType *float3   = TCache::getType(EbtFloat, 3);
-    const TType *float4   = TCache::getType(EbtFloat, 4);
-    const TType *int1     = TCache::getType(EbtInt);
-    const TType *int2     = TCache::getType(EbtInt, 2);
-    const TType *int3     = TCache::getType(EbtInt, 3);
-    const TType *uint1    = TCache::getType(EbtUInt);
-    const TType *bool1    = TCache::getType(EbtBool);
-    const TType *genType  = TCache::getType(EbtGenType);
-    const TType *genIType = TCache::getType(EbtGenIType);
-    const TType *genUType = TCache::getType(EbtGenUType);
-    const TType *genBType = TCache::getType(EbtGenBType);
+    const TType *voidType = TCache::getType1<EbtVoid>();
+    const TType *float1   = TCache::getType1<EbtFloat>();
+    const TType *float2   = TCache::getType1<EbtFloat, 2>();
+    const TType *float3   = TCache::getType1<EbtFloat, 3>();
+    const TType *float4   = TCache::getType1<EbtFloat, 4>();
+    const TType *int1     = TCache::getType1<EbtInt>();
+    const TType *int2     = TCache::getType1<EbtInt, 2>();
+    const TType *int3     = TCache::getType1<EbtInt, 3>();
+    const TType *uint1    = TCache::getType1<EbtUInt>();
+    const TType *bool1    = TCache::getType1<EbtBool>();
+    const TType *genType  = TCache::getType1<EbtGenType>();
+    const TType *genIType = TCache::getType1<EbtGenIType>();
+    const TType *genUType = TCache::getType1<EbtGenUType>();
+    const TType *genBType = TCache::getType1<EbtGenBType>();
 
     //
     // Angle and Trigonometric Functions.
@@ -110,8 +110,8 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltInOp(COMMON_BUILTINS, EOpSmoothStep, genType, genType, genType, genType);
     symbolTable.insertBuiltInOp(COMMON_BUILTINS, EOpSmoothStep, genType, float1, float1, genType);
 
-    const TType *outGenType = TCache::getType(EbtGenType, EvqOut);
-    const TType *outGenIType = TCache::getType(EbtGenIType, EvqOut);
+    const TType *outGenType = TCache::getType2<EbtGenType, EvqOut>();
+    const TType *outGenIType = TCache::getType2<EbtGenIType, EvqOut>();
 
     symbolTable.insertBuiltInOp(ESSL3_BUILTINS, EOpModf, genType, genType, outGenType);
 
@@ -150,15 +150,15 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltInOp(COMMON_BUILTINS, EOpReflect, genType, genType, genType);
     symbolTable.insertBuiltInOp(COMMON_BUILTINS, EOpRefract, genType, genType, genType, float1);
 
-    const TType *mat2   = TCache::getType(EbtFloat, 2, 2);
-    const TType *mat3   = TCache::getType(EbtFloat, 3, 3);
-    const TType *mat4   = TCache::getType(EbtFloat, 4, 4);
-    const TType *mat2x3 = TCache::getType(EbtFloat, 2, 3);
-    const TType *mat3x2 = TCache::getType(EbtFloat, 3, 2);
-    const TType *mat2x4 = TCache::getType(EbtFloat, 2, 4);
-    const TType *mat4x2 = TCache::getType(EbtFloat, 4, 2);
-    const TType *mat3x4 = TCache::getType(EbtFloat, 3, 4);
-    const TType *mat4x3 = TCache::getType(EbtFloat, 4, 3);
+    const TType *mat2   = TCache::getType1<EbtFloat, 2, 2>();
+    const TType *mat3   = TCache::getType1<EbtFloat, 3, 3>();
+    const TType *mat4   = TCache::getType1<EbtFloat, 4, 4>();
+    const TType *mat2x3 = TCache::getType1<EbtFloat, 2, 3>();
+    const TType *mat3x2 = TCache::getType1<EbtFloat, 3, 2>();
+    const TType *mat2x4 = TCache::getType1<EbtFloat, 2, 4>();
+    const TType *mat4x2 = TCache::getType1<EbtFloat, 4, 2>();
+    const TType *mat3x4 = TCache::getType1<EbtFloat, 3, 4>();
+    const TType *mat4x3 = TCache::getType1<EbtFloat, 4, 3>();
 
     //
     // Matrix Functions.
@@ -201,10 +201,10 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltInOp(ESSL3_BUILTINS, EOpInverse, mat3, mat3);
     symbolTable.insertBuiltInOp(ESSL3_BUILTINS, EOpInverse, mat4, mat4);
 
-    const TType *vec  = TCache::getType(EbtVec);
-    const TType *ivec = TCache::getType(EbtIVec);
-    const TType *uvec = TCache::getType(EbtUVec);
-    const TType *bvec = TCache::getType(EbtBVec);
+    const TType *vec  = TCache::getType1<EbtVec>();
+    const TType *ivec = TCache::getType1<EbtIVec>();
+    const TType *uvec = TCache::getType1<EbtUVec>();
+    const TType *bvec = TCache::getType1<EbtBVec>();
 
     //
     // Vector relational functions.
@@ -237,7 +237,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
     //
     // Integer functions
     //
-    const TType *outGenUType = TCache::getType(EbtGenUType, EvqOut);
+    const TType *outGenUType = TCache::getType2<EbtGenUType, EvqOut>();
 
     symbolTable.insertBuiltInOp(ESSL3_1_BUILTINS, EOpBitfieldExtract, genIType, genIType, int1,
                                 int1);
@@ -264,8 +264,8 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltInOp(ESSL3_1_BUILTINS, EOpImulExtended, voidType, genIType, genIType,
                                 outGenIType, outGenIType);
 
-    const TType *sampler2D   = TCache::getType(EbtSampler2D);
-    const TType *samplerCube = TCache::getType(EbtSamplerCube);
+    const TType *sampler2D   = TCache::getType1<EbtSampler2D>();
+    const TType *samplerCube = TCache::getType1<EbtSamplerCube>();
 
     //
     // Texture Functions for GLSL ES 1.0
@@ -277,7 +277,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.OES_EGL_image_external || resources.NV_EGL_stream_consumer_external)
     {
-        const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+        const TType *samplerExternalOES = TCache::getType1<EbtSamplerExternalOES>();
 
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2D", samplerExternalOES, float2);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", samplerExternalOES,
@@ -288,7 +288,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.ARB_texture_rectangle)
     {
-        const TType *sampler2DRect = TCache::getType(EbtSampler2DRect);
+        const TType *sampler2DRect = TCache::getType1<EbtSampler2DRect>();
 
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DRect", sampler2DRect, float2);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DRectProj", sampler2DRect,
@@ -357,13 +357,13 @@ void InsertBuiltInFunctions(sh::GLenum type,
                                   float1);
     }
 
-    const TType *gvec4 = TCache::getType(EbtGVec4);
+    const TType *gvec4 = TCache::getType1<EbtGVec4>();
 
-    const TType *gsampler2D      = TCache::getType(EbtGSampler2D);
-    const TType *gsamplerCube    = TCache::getType(EbtGSamplerCube);
-    const TType *gsampler3D      = TCache::getType(EbtGSampler3D);
-    const TType *gsampler2DArray = TCache::getType(EbtGSampler2DArray);
-    const TType *gsampler2DMS    = TCache::getType(EbtGSampler2DMS);
+    const TType *gsampler2D      = TCache::getType1<EbtGSampler2D>();
+    const TType *gsamplerCube    = TCache::getType1<EbtGSamplerCube>();
+    const TType *gsampler3D      = TCache::getType1<EbtGSampler3D>();
+    const TType *gsampler2DArray = TCache::getType1<EbtGSampler2DArray>();
+    const TType *gsampler2DMS    = TCache::getType1<EbtGSampler2DMS>();
 
     //
     // Texture Functions for GLSL ES 3.0
@@ -382,7 +382,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.OES_EGL_image_external_essl3)
     {
-        const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+        const TType *samplerExternalOES = TCache::getType1<EbtSamplerExternalOES>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float4, "texture", samplerExternalOES, float2);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float4, "textureProj", samplerExternalOES,
@@ -393,7 +393,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.EXT_YUV_target)
     {
-        const TType *samplerExternal2DY2YEXT = TCache::getType(EbtSamplerExternal2DY2YEXT);
+        const TType *samplerExternal2DY2YEXT = TCache::getType1<EbtSamplerExternal2DY2YEXT>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, float4, "texture",
                                   samplerExternal2DY2YEXT, float2);
@@ -402,7 +402,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, float4, "textureProj",
                                   samplerExternal2DY2YEXT, float4);
 
-        const TType *yuvCscStandardEXT = TCache::getType(EbtYuvCscStandardEXT);
+        const TType *yuvCscStandardEXT = TCache::getType1<EbtYuvCscStandardEXT>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, float3, "rgb_2_yuv",
                                   float3, yuvCscStandardEXT);
@@ -423,7 +423,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
         if (resources.OES_EGL_image_external_essl3)
         {
-            const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+            const TType *samplerExternalOES = TCache::getType1<EbtSamplerExternalOES>();
 
             symbolTable.insertBuiltIn(ESSL3_BUILTINS, float4, "texture", samplerExternalOES, float2,
                                       float1);
@@ -435,7 +435,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
         if (resources.EXT_YUV_target)
         {
-            const TType *samplerExternal2DY2YEXT = TCache::getType(EbtSamplerExternal2DY2YEXT);
+            const TType *samplerExternal2DY2YEXT = TCache::getType1<EbtSamplerExternal2DY2YEXT>();
 
             symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, float4, "texture",
                                       samplerExternal2DY2YEXT, float2, float1);
@@ -446,9 +446,9 @@ void InsertBuiltInFunctions(sh::GLenum type,
         }
     }
 
-    const TType *sampler2DShadow      = TCache::getType(EbtSampler2DShadow);
-    const TType *samplerCubeShadow    = TCache::getType(EbtSamplerCubeShadow);
-    const TType *sampler2DArrayShadow = TCache::getType(EbtSampler2DArrayShadow);
+    const TType *sampler2DShadow      = TCache::getType1<EbtSampler2DShadow>();
+    const TType *samplerCubeShadow    = TCache::getType1<EbtSamplerCubeShadow>();
+    const TType *sampler2DArrayShadow = TCache::getType1<EbtSampler2DArrayShadow>();
 
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", sampler2DShadow, float3);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", samplerCubeShadow, float4);
@@ -478,14 +478,14 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.OES_EGL_image_external_essl3)
     {
-        const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+        const TType *samplerExternalOES = TCache::getType1<EbtSamplerExternalOES>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", samplerExternalOES, int1);
     }
 
     if (resources.EXT_YUV_target)
     {
-        const TType *samplerExternal2DY2YEXT = TCache::getType(EbtSamplerExternal2DY2YEXT);
+        const TType *samplerExternal2DY2YEXT = TCache::getType1<EbtSamplerExternal2DY2YEXT>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, int2, "textureSize",
                                   samplerExternal2DY2YEXT, int1);
@@ -565,7 +565,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.OES_EGL_image_external_essl3)
     {
-        const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+        const TType *samplerExternalOES = TCache::getType1<EbtSamplerExternalOES>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float4, "texelFetch", samplerExternalOES, int2,
                                   int1);
@@ -573,7 +573,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
 
     if (resources.EXT_YUV_target)
     {
-        const TType *samplerExternal2DY2YEXT = TCache::getType(EbtSamplerExternal2DY2YEXT);
+        const TType *samplerExternal2DY2YEXT = TCache::getType1<EbtSamplerExternal2DY2YEXT>();
 
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, TExtension::EXT_YUV_target, float4, "texelFetch",
                                   samplerExternal2DY2YEXT, int2, int1);
@@ -630,14 +630,14 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProjGradOffset", sampler2DShadow,
                               float4, float2, float2, int2);
 
-    const TType *atomicCounter = TCache::getType(EbtAtomicCounter);
+    const TType *atomicCounter = TCache::getType1<EbtAtomicCounter>();
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCounter", atomicCounter);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCounterIncrement", atomicCounter);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCounterDecrement", atomicCounter);
 
     // Insert all atomic memory functions
-    const TType *int1InOut  = TCache::getType(EbtInt, EvqInOut);
-    const TType *uint1InOut = TCache::getType(EbtUInt, EvqInOut);
+    const TType *int1InOut  = TCache::getType2<EbtInt, EvqInOut>();
+    const TType *uint1InOut = TCache::getType2<EbtUInt, EvqInOut>();
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicAdd", uint1InOut, uint1);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicAdd", int1InOut, int1);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicMin", uint1InOut, uint1);
@@ -655,10 +655,10 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, uint1, "atomicCompSwap", uint1InOut, uint1, uint1);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int1, "atomicCompSwap", int1InOut, int1, int1);
 
-    const TType *gimage2D      = TCache::getType(EbtGImage2D);
-    const TType *gimage3D      = TCache::getType(EbtGImage3D);
-    const TType *gimage2DArray = TCache::getType(EbtGImage2DArray);
-    const TType *gimageCube    = TCache::getType(EbtGImageCube);
+    const TType *gimage2D      = TCache::getType1<EbtGImage2D>();
+    const TType *gimage3D      = TCache::getType1<EbtGImage3D>();
+    const TType *gimage2DArray = TCache::getType1<EbtGImage2DArray>();
+    const TType *gimageCube    = TCache::getType1<EbtGImageCube>();
 
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, voidType, "imageStore", gimage2D, int2, gvec4);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, voidType, "imageStore", gimage3D, int3, gvec4);
