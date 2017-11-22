@@ -295,7 +295,8 @@ using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
 // Used in Program
 using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
 
-// Used in Framebuffer
+// Used in Framebuffer / Program
+using DrawBufferTypeMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS * 2>;
 using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
 using ContextID = uintptr_t;
@@ -400,6 +401,26 @@ inline GLenum FramebufferBindingToEnum(FramebufferBinding binding)
         default:
             UNREACHABLE();
             return GL_NONE;
+    }
+}
+
+// GetDrawBufferTypeMask returns a split two bit type representation for draw buffer type
+// validation. The low bit is in the 0th bit location, and the high bit is in the 7th bit location.
+inline gl::DrawBufferTypeMask GetDrawBufferTypeMask(GLenum type)
+{
+    switch (type)
+    {
+        case GL_INT:
+            return 0x000;
+        case GL_UNSIGNED_INT:
+            return 0x001;
+        case GL_FLOAT:
+            return 0x101;
+        case GL_NONE:
+            return 0x000;
+        default:
+            UNREACHABLE();
+            return 0x000;
     }
 }
 

@@ -1001,6 +1001,7 @@ void Program::unlink()
     mState.mOutputVariables.clear();
     mState.mOutputLocations.clear();
     mState.mOutputVariableTypes.clear();
+    mState.mDrawBufferTypeMask.reset();
     mState.mActiveOutputVariables.reset();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
@@ -2791,6 +2792,13 @@ Program::MergedVaryings Program::getMergedVaryings(const Context *context) const
     return merged;
 }
 
+void Program::setDrawBufferTypeMask(size_t index)
+{
+    ASSERT(index <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+    mState.mDrawBufferTypeMask |= angle::GetDrawBufferTypeMask(mState.mOutputVariableTypes[index])
+                                  << (index);
+}
 
 void Program::linkOutputVariables(const Context *context)
 {
@@ -2799,6 +2807,7 @@ void Program::linkOutputVariables(const Context *context)
 
     ASSERT(mState.mOutputVariableTypes.empty());
     ASSERT(mState.mActiveOutputVariables.none());
+    ASSERT(mState.mDrawBufferTypeMask.none());
 
     // Gather output variable types
     for (const auto &outputVariable : fragmentShader->getActiveOutputVariables(context))
@@ -2826,6 +2835,8 @@ void Program::linkOutputVariables(const Context *context)
             ASSERT(location < mState.mActiveOutputVariables.size());
             mState.mActiveOutputVariables.set(location);
             mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
+
+            setDrawBufferTypeMask(location);
         }
     }
 
