@@ -194,10 +194,8 @@ class TType
     TType(TInterfaceBlock *interfaceBlockIn,
           TQualifier qualifierIn,
           TLayoutQualifier layoutQualifierIn);
-    ~TType();
-
-    TType(const TType &);
-    TType &operator=(const TType &) = default;
+    TType(const TType &t);
+    TType &operator=(const TType &t);
 
     TBasicType getBasicType() const { return type; }
     void setBasicType(TBasicType t);
@@ -241,14 +239,15 @@ class TType
 
     bool isMatrix() const { return primarySize > 1 && secondarySize > 1; }
     bool isNonSquareMatrix() const { return isMatrix() && primarySize != secondarySize; }
-    bool isArray() const { return !mArraySizes.empty(); }
-    bool isArrayOfArrays() const { return mArraySizes.size() > 1u; }
-    const TVector<unsigned int> &getArraySizes() const { return mArraySizes; }
+    bool isArray() const { return mArraySizes != nullptr && !mArraySizes->empty(); }
+    bool isArrayOfArrays() const { return isArray() && mArraySizes->size() > 1u; }
+    size_t getNumArraySizes() const { return isArray() ? mArraySizes->size() : 0; }
+    const TVector<unsigned int> *getArraySizes() const { return mArraySizes; }
     unsigned int getArraySizeProduct() const;
     bool isUnsizedArray() const;
-    unsigned int getOutermostArraySize() const { return mArraySizes.back(); }
-
+    unsigned int getOutermostArraySize() const { return isArray() ? mArraySizes->back() : 0; }
     void makeArray(unsigned int s);
+
     // sizes contain new outermost array sizes.
     void makeArrays(const TVector<unsigned int> &sizes);
     // Here, the array dimension value 0 corresponds to the innermost array.
@@ -291,8 +290,13 @@ class TType
 
     bool operator==(const TType &right) const
     {
+        size_t numArraySizesL = getNumArraySizes();
+        size_t numArraySizesR = right.getNumArraySizes();
+        bool arraySizesEqual =
+            numArraySizesL == numArraySizesR &&
+            (numArraySizesL == 0 || *mArraySizes == *right.mArraySizes);
         return type == right.type && primarySize == right.primarySize &&
-               secondarySize == right.secondarySize && mArraySizes == right.mArraySizes &&
+               secondarySize == right.secondarySize && arraySizesEqual &&
                mStructure == right.mStructure;
         // don't check the qualifier, it's not ever what's being sought after
     }
@@ -305,12 +309,13 @@ class TType
             return primarySize < right.primarySize;
         if (secondarySize != right.secondarySize)
             return secondarySize < right.secondarySize;
-        if (mArraySizes.size() != right.mArraySizes.size())
-            return mArraySizes.size() < right.mArraySizes.size();
-        for (size_t i = 0; i < mArraySizes.size(); ++i)
-        {
-            if (mArraySizes[i] != right.mArraySizes[i])
-                return mArraySizes[i] < right.mArraySizes[i];
+        size_t numArraySizesL = getNumArraySizes();
+        size_t numArraySizesR = right.getNumArraySizes();
+        if (numArraySizesL != numArraySizesR)
+            return numArraySizesL < numArraySizesR;
+        for (size_t i = 0; i < numArraySizesL; ++i) {
+            if ((*mArraySizes)[i] != (*right.mArraySizes)[i])
+                return (*mArraySizes)[i] < (*right.mArraySizes)[i];
         }
         if (mStructure != right.mStructure)
             return mStructure < right.mStructure;
@@ -384,7 +389,7 @@ class TType
 
     // Used to make an array type. Outermost array size is stored at the end of the vector. Having 0
     // in this vector means an unsized array.
-    TVector<unsigned int> mArraySizes;
+    TVector<unsigned int> *mArraySizes;
 
     // This is set only in the following two cases:
     // 1) Represents an interface block.
