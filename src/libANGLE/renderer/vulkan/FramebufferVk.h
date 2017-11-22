@@ -91,6 +91,8 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
 
     gl::Error getRenderPassDesc(const gl::Context *context, const vk::RenderPassDesc **descOut);
 
+    gl::Error startRendering(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
+
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
@@ -102,6 +104,7 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
 
     Optional<vk::RenderPassDesc> mRenderPassDesc;
     vk::Framebuffer mFramebuffer;
+    bool mCommandNodeDirty;
 };
 
 }  // namespace rx

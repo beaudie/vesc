@@ -238,15 +238,14 @@ gl::Error ContextVk::initialize()
 
 gl::Error ContextVk::flush(const gl::Context *context)
 {
+    // TODO(jmadill): Flush will need to insert a semaphore for the next flush to wait on.
     UNIMPLEMENTED();
     return gl::InternalError();
 }
 
 gl::Error ContextVk::finish(const gl::Context *context)
 {
-    // TODO(jmadill): Implement finish.
-    // UNIMPLEMENTED();
-    return gl::NoError();
+    return mRenderer->finish(context);
 }
 
 gl::Error ContextVk::initPipeline(const gl::Context *context)
@@ -296,7 +295,9 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
     return gl::NoError();
 }
 
-gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
+gl::Error ContextVk::setupDraw(const gl::Context *context,
+                               GLenum mode,
+                               vk::CommandBuffer **commandBuffer)
 {
     if (mode != mCurrentDrawMode)
     {
@@ -326,13 +327,13 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
     angle::MemoryBuffer *zeroBuf               = nullptr;
     ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
-    vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
-    ANGLE_TRY(mRenderer->ensureInRenderPass(context, vkFBO));
+    // TODO(jmadill): Need to link up the TextureVk to the Secondary CB.
+    ANGLE_TRY(vkFBO->startRendering(context, commandBuffer));
 
-    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
-    commandBuffer->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
-                                     reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
+    (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+    (*commandBuffer)
+        ->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
+                            reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
 
     // TODO(jmadill): the queue serial should be bound to the pipeline.
     setQueueSerial(queueSerial);
@@ -351,9 +352,9 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
     if (!descriptorSets.empty() && ((setCount - firstSet) > 0))
     {
         const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
-        commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, firstSet,
-                                          setCount - firstSet, &descriptorSets[firstSet], 0,
-                                          nullptr);
+        (*commandBuffer)
+            ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, firstSet,
+                                 setCount - firstSet, &descriptorSets[firstSet], 0, nullptr);
     }
 
     return gl::NoError();
@@ -361,11 +362,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
 
 gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_TRY(setupDraw(context, mode));
-
-    vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
-
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(setupDraw(context, mode, &commandBuffer));
     commandBuffer->draw(count, 1, first, 0);
     return gl::NoError();
 }
@@ -386,7 +384,8 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    ANGLE_TRY(setupDraw(context, mode));
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(setupDraw(context, mode, &commandBuffer));
 
     if (indices)
     {
@@ -401,9 +400,6 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
         UNIMPLEMENTED();
         return gl::InternalError() << "Unsigned byte translation is not yet implemented.";
     }
-
-    vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
 
     const gl::Buffer *elementArrayBuffer =
         mState.getState().getVertexArray()->getElementArrayBuffer().get();
@@ -442,18 +438,6 @@ gl::Error ContextVk::drawRangeElements(const gl::Context *context,
 VkDevice ContextVk::getDevice() const
 {
     return mRenderer->getDevice();
-}
-
-vk::Error ContextVk::getStartedCommandBuffer(vk::CommandBufferAndState **commandBufferOut)
-{
-    return mRenderer->getStartedCommandBuffer(commandBufferOut);
-}
-
-vk::Error ContextVk::submitCommands(vk::CommandBufferAndState *commandBuffer)
-{
-    setQueueSerial(mRenderer->getCurrentQueueSerial());
-    ANGLE_TRY(mRenderer->submitCommandBuffer(commandBuffer));
-    return vk::NoError();
 }
 
 gl::Error ContextVk::drawArraysIndirect(const gl::Context *context,
