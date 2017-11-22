@@ -25,6 +25,7 @@
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 
+#include "common/bitset_utils.h"
 #include "common/mathutil.h"
 #include "common/utilities.h"
 
@@ -515,23 +516,38 @@ bool ValidateUniformMatrixValue(ValidationContext *context, GLenum valueType, GL
     return false;
 }
 
+bool isFragmentShaderColorBufferTypeMatch(const Program *program, const Framebuffer *framebuffer)
+{
+    // For performance reasons, draw buffer type validation is done using bit masks. We store two
+    // bits representing the type split, with the low bit in the lower 8 bits of the variable,
+    // and the high bit in the upper 8 bits of the variable. This is done so we can AND with the
+    // elswewhere used DrawBufferMask.
+    const uint16_t outputTypes = program->getDrawBufferTypeMask().to_uint16();
+    const uint16_t inputTypes  = framebuffer->getDrawBufferTypeMask().to_uint16();
+
+    uint16_t outputMask = program->getState().getActiveOutputVariables().to_uint16();
+    uint16_t inputMask  = framebuffer->getDrawBufferMask().to_uint16();
+
+    // OR the masks with themselves, shifted 8 bits. This is to match our split type bits.
+    outputMask |= (outputMask << 8);
+    inputMask |= (inputMask << 8);
+
+    // To validate:
+    // 1. Remove any indexes that are not enabled in the framebuffer (& inputMask)
+    // 2. Remove any indexes that exist in program, but not in framebuffer (& outputMask)
+    // 3. Use XOR to check for a match
+    return ((outputTypes & inputMask) ^ ((inputTypes & outputMask) & inputMask)) != 0;
+}
+
 bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
 {
     const Program *program         = context->getGLState().getProgram();
     const Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
 
-    const auto &programOutputTypes = program->getOutputVariableTypes();
-    for (size_t drawBufferIdx = 0; drawBufferIdx < programOutputTypes.size(); drawBufferIdx++)
+    if (isFragmentShaderColorBufferTypeMatch(program, framebuffer))
     {
-        GLenum outputType = programOutputTypes[drawBufferIdx];
-        GLenum inputType  = framebuffer->getDrawbufferWriteType(drawBufferIdx);
-        if (outputType != GL_NONE && inputType != GL_NONE && inputType != outputType)
-        {
-            context->handleError(InvalidOperation() << "Fragment shader output type does not "
-                                                       "match the bound framebuffer attachment "
-                                                       "type.");
-            return false;
-        }
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), DrawBufferTypeMismatch);
+        return false;
     }
 
     return true;
