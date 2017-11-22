@@ -18,6 +18,13 @@ namespace sh
 namespace
 {
 
+constexpr TType GetType(TBasicType basicType, const char *mangledName)
+{
+    return TType(basicType, EbpUndefined, EvqGlobal, 1, 1, mangledName);
+}
+
+constexpr std::array<TType, 1> kTypes = {{GetType(EbtVoid, "v")}};
+
 class TScopedAllocator : angle::NonCopyable
 {
   public:
@@ -81,6 +88,18 @@ const TType *TCache::getType(TBasicType basicType,
                              unsigned char secondarySize)
 {
     TypeKey key(basicType, precision, qualifier, primarySize, secondarySize);
+
+    // Scan the constexpr types.
+    for (const auto &type : kTypes)
+    {
+        TypeKey typeKey(type.getBasicType(), type.getPrecision(), type.getQualifier(),
+                        type.getNominalSize(), type.getSecondarySize());
+        if (typeKey == key)
+        {
+            return &type;
+        }
+    }
+
     auto it = sCache->mTypes.find(key);
     if (it != sCache->mTypes.end())
     {
