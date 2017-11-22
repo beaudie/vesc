@@ -1043,12 +1043,53 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         extensions->geometryShader = true;
 
-        // TODO(jiawei.shao@intel.com): initialize all implementation dependent geometry shader
-        // limits.
-        extensions->maxGeometryOutputVertices =
+        caps->maxFramebufferLayers = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_LAYERS_EXT);
+
+        // GL_PROVOKING_VERTEX isn't a valid return value of GL_LAYER_PROVOKING_VERTEX_EXT in
+        // GL_EXT_geometry_shader SPEC, however it is legal in desktop OpenGL, which means the value
+        // follows the one set by glProvokingVertex. We should use GL_LAST_VERTEX_CONVENTION_EXT
+        // instead because desktop OpenGL SPEC requires the initial value of provoking vertex mode
+        // is LAST_VERTEX_CONVENTION.
+        // [OpenGL 4.3] Chapter 11.3.4.6
+        // The vertex conventions followed for gl_Layer and gl_ViewportIndex may be determined by
+        // calling GetIntegerv with the symbolic constants LAYER_PROVOKING_VERTEX and
+        // VIEWPORT_INDEX_PROVOKING_VERTEX, respectively. For either query, if the value returned is
+        // PROVOKING_VERTEX, then vertex selection follows the convention specified by
+        // ProvokingVertex.
+        // [OpenGL 4.3] Chapter 13.4
+        // The initial value of the provoking vertex mode is LAST_VERTEX_CONVENTION.
+        caps->layerProvokingVertex = QuerySingleGLInt(functions, GL_LAYER_PROVOKING_VERTEX_EXT);
+        if (caps->layerProvokingVertex == GL_PROVOKING_VERTEX)
+        {
+            caps->layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
+        }
+
+        caps->maxGeometryUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_EXT);
+        caps->maxGeometryUniformBlocks =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_UNIFORM_BLOCKS_EXT);
+        caps->maxCombinedGeometryUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_EXT);
+        caps->maxGeometryInputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_INPUT_COMPONENTS_EXT);
+        caps->maxGeometryOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_COMPONENTS_EXT);
+        caps->maxGeometryOutputVertices =
             QuerySingleGLInt(functions, GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT);
-        extensions->maxGeometryShaderInvocations =
+        caps->maxGeometryTotalOutputComponents =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_EXT);
+        caps->maxGeometryShaderInvocations =
             QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_INVOCATIONS_EXT);
+        caps->maxGeometryTextureImageUnits =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT);
+        caps->maxGeometryAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_EXT);
+        caps->maxGeometryAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_ATOMIC_COUNTERS_EXT);
+        caps->maxGeometryImageUniforms =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_IMAGE_UNIFORMS_EXT);
+        caps->maxGeometryShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT);
     }
 }
 
