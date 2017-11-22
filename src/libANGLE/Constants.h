@@ -26,8 +26,9 @@ enum
     MAX_VERTEX_ATTRIB_BINDINGS = 16,
 
     // Implementation upper limits, real maximums depend on the hardware
-    IMPLEMENTATION_MAX_VARYING_VECTORS = 32,
-    IMPLEMENTATION_MAX_DRAW_BUFFERS    = 8,
+    IMPLEMENTATION_MAX_VARYING_VECTORS       = 32,
+    IMPLEMENTATION_MAX_DRAW_BUFFERS          = 8,
+    IMPLEMENTATION_MAX_DRAW_BUFFER_TYPE_MASK = 16,
     IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS =
         IMPLEMENTATION_MAX_DRAW_BUFFERS + 2,  // 2 extra for depth and/or stencil buffers
 
