@@ -1928,7 +1928,8 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         // will default to setting array sizes to 1. We have not checked yet whether the initializer
         // actually is an array or not. Having a non-array initializer for an unsized array will
         // result in an error later, so we don't generate an error message here.
-        type.sizeUnsizedArrays(initializer->getType().getArraySizes());
+        auto *arraySizes = initializer->getType().getArraySizes();
+        type.sizeUnsizedArrays(arraySizes ? *arraySizes : TVector<unsigned int>());
     }
     if (!declareVariable(line, identifier, type, &variable))
     {
@@ -3546,13 +3547,13 @@ bool TParseContext::checkUnsizedArrayConstructorArgumentDimensionality(TIntermSe
     {
         TIntermTyped *element = arg->getAsTyped();
         ASSERT(element);
-        size_t dimensionalityFromElement = element->getType().getArraySizes().size() + 1u;
-        if (dimensionalityFromElement > type.getArraySizes().size())
+        size_t dimensionalityFromElement = element->getType().getNumArraySizes() + 1u;
+        if (dimensionalityFromElement > type.getNumArraySizes())
         {
             error(line, "constructing from a non-dereferenced array", "constructor");
             return false;
         }
-        else if (dimensionalityFromElement < type.getArraySizes().size())
+        else if (dimensionalityFromElement < type.getNumArraySizes())
         {
             if (dimensionalityFromElement == 1u)
             {
@@ -3594,11 +3595,11 @@ TIntermTyped *TParseContext::addConstructor(TIntermSequence *arguments,
         {
             type.sizeOutermostUnsizedArray(static_cast<unsigned int>(arguments->size()));
         }
-        for (size_t i = 0; i < firstElement->getType().getArraySizes().size(); ++i)
+        for (size_t i = 0; i < firstElement->getType().getNumArraySizes(); ++i)
         {
-            if (type.getArraySizes()[i] == 0u)
+            if ((*type.getArraySizes())[i] == 0u)
             {
-                type.setArraySize(i, firstElement->getType().getArraySizes().at(i));
+                type.setArraySize(i, (*firstElement->getType().getArraySizes())[i]);
             }
         }
         ASSERT(!type.isUnsizedArray());
@@ -4746,18 +4747,21 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
 
     for (TField *declarator : *declaratorList)
     {
-        auto declaratorArraySizes = declarator->type()->getArraySizes();
+        auto *declaratorArraySizes = declarator->type()->getArraySizes();
         // Don't allow arrays of arrays in ESSL < 3.10.
-        if (!declaratorArraySizes.empty())
+        if (declaratorArraySizes != nullptr && !declaratorArraySizes->empty())
         {
             checkArrayElementIsNotArray(typeSpecifier.getLine(), typeSpecifier);
         }
 
         TType *type = declarator->type();
         *type       = TType(typeSpecifier);
-        for (unsigned int arraySize : declaratorArraySizes)
+        if (declaratorArraySizes != nullptr)
         {
-            type->makeArray(arraySize);
+            for (unsigned int arraySize : *declaratorArraySizes)
+            {
+                type->makeArray(arraySize);
+            }
         }
         checkIsNotUnsizedArray(typeSpecifier.getLine(),
                                "array members of structs must specify a size",
@@ -5050,17 +5054,18 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
         }
     }
 
-    if (left->isArray() || right->isArray())
+    if (left->isArray() != right->isArray())
     {
+        error(loc, "array / non-array mismatch", GetOperatorString(op));
+        return false;
+    }
+
+    if (left->isArray())
+    {
+        ASSERT(right->isArray());
         if (mShaderVersion < 300)
         {
             error(loc, "Invalid operation for arrays", GetOperatorString(op));
-            return false;
-        }
-
-        if (left->isArray() != right->isArray())
-        {
-            error(loc, "array / non-array mismatch", GetOperatorString(op));
             return false;
         }
 
@@ -5076,7 +5081,7 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 return false;
         }
         // At this point, size of implicitly sized arrays should be resolved.
-        if (left->getType().getArraySizes() != right->getType().getArraySizes())
+        if (*left->getType().getArraySizes() != *right->getType().getArraySizes())
         {
             error(loc, "array size mismatch", GetOperatorString(op));
             return false;
