@@ -89,8 +89,7 @@ class InputLayoutCache : angle::NonCopyable
     gl::Error applyVertexBuffers(const gl::Context *context,
                                  const std::vector<const TranslatedAttribute *> &currentAttributes,
                                  GLenum mode,
-                                 GLint start,
-                                 TranslatedIndexData *indexInfo);
+                                 GLint start, bool isIndexedRendering);
 
     gl::Error updateVertexOffsetsForPointSpritesEmulation(
         Renderer11 *renderer,
