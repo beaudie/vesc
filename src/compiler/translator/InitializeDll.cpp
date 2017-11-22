@@ -23,15 +23,12 @@ bool InitProcess()
         return false;
     }
 
-    TCache::initialize();
-
     return true;
 }
 
 void DetachProcess()
 {
     FreePoolIndex();
-    TCache::destroy();
 }
 
 }  // namespace sh

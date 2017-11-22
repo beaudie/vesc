@@ -3456,7 +3456,8 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
 
 TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSourceLoc &loc)
 {
-    const TType *returnType = TCache::getType(EbtVoid, EbpUndefined);
+    // XXX: Is this right? It was EvqTemporary in the original code, but that was due to a bug.
+    const TType *returnType = TCache::getType2<EbtVoid, EvqTemporary>();
     return new TFunction(&symbolTable, name, returnType);
 }
 
