@@ -70,6 +70,7 @@ class TCache
         uint64_t value;
 
         bool operator<(const TypeKey &other) const { return value < other.value; }
+        bool operator==(const TypeKey &other) const { return value == other.value; }
     };
     typedef std::map<TypeKey, const TType *> TypeMap;
 
