@@ -12,25 +12,15 @@
 
 namespace rx
 {
-
-DynamicLib::DynamicLib() : handle(nullptr)
+namespace
 {
-}
-
-DynamicLib::~DynamicLib()
-{
-    if (handle)
-    {
-        dlclose(handle);
-        handle = nullptr;
-    }
-}
-
 // Due to a bug in Mesa (or maybe libdl) it's not possible to close and re-open libEGL.so
 // an arbitrary number of times.  End2end tests would die after a couple hundred tests.
-// So we use a static object with a destructor to close the library when the program exits.
+// So we use a global object and leak it,
+// since we want to close the library only when the program exits anyway.
 // TODO(fjhenigman) File a bug and put a link here.
-DynamicLib FunctionsEGLDL::sNativeLib;
+void *nativeEGLHandle;
+}  // anonymous namespace
 
 FunctionsEGLDL::FunctionsEGLDL() : mGetProcAddressPtr(nullptr)
 {
@@ -42,17 +32,17 @@ FunctionsEGLDL::~FunctionsEGLDL()
 
 egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay, const char *libName)
 {
-    if (!sNativeLib.handle)
+    if (!nativeEGLHandle)
     {
-        sNativeLib.handle = dlopen(libName, RTLD_NOW);
-        if (!sNativeLib.handle)
+        nativeEGLHandle = dlopen(libName, RTLD_NOW);
+        if (!nativeEGLHandle)
         {
             return egl::EglNotInitialized() << "Could not dlopen native EGL: " << dlerror();
         }
     }
 
     mGetProcAddressPtr =
-        reinterpret_cast<PFNEGLGETPROCADDRESSPROC>(dlsym(sNativeLib.handle, "eglGetProcAddress"));
+        reinterpret_cast<PFNEGLGETPROCADDRESSPROC>(dlsym(nativeEGLHandle, "eglGetProcAddress"));
     if (!mGetProcAddressPtr)
     {
         return egl::EglNotInitialized() << "Could not find eglGetProcAddress";
@@ -68,7 +58,7 @@ void *FunctionsEGLDL::getProcAddress(const char *name) const
     {
         return f;
     }
-    return dlsym(sNativeLib.handle, name);
+    return dlsym(nativeEGLHandle, name);
 }
 
 }  // namespace rx
