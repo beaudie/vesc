@@ -94,6 +94,23 @@ class IndexDataManager : angle::NonCopyable
     std::unique_ptr<StreamingIndexBufferInterface> mStreamingBufferInt;
 };
 
+class LazyIndexDestType final : angle::NonCopyable
+{
+  public:
+    LazyIndexDestType(GLenum srcType,
+                      const gl::HasIndexRange &lazyIndexRange,
+                      bool usePrimitiveRestartWorkaround);
+    ~LazyIndexDestType();
+
+    GLenum resolve();
+
+  private:
+    GLenum mSrcType;
+    const gl::HasIndexRange &mLazyIndexRange;
+    bool mUsePrimitiveRestartWorkaround;
+    Optional<GLenum> mResolved;
+};
+
 GLenum GetIndexTranslationDestType(GLenum srcType,
                                    const gl::HasIndexRange &lazyIndexRange,
                                    bool usePrimitiveRestartWorkaround);

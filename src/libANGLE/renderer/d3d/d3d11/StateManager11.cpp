@@ -2573,12 +2573,16 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
     gl::VertexArray *vao = glState.getVertexArray();
     VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
 
-    GLenum destElementType =
-        GetIndexTranslationDestType(type, lazyIndexRange, usePrimitiveRestartWorkaround);
+    LazyIndexDestType lazyDestType(type, lazyIndexRange, usePrimitiveRestartWorkaround);
 
-    if (!vao11->updateElementArrayStorage(context, type, destElementType, indices) &&
+    if (!vao11->updateElementArrayStorage(context, type, &lazyDestType, indices) &&
         !mIndexBufferIsDirty)
     {
+        if (vao11->hasCachedIndexRange())
+        {
+            lazyIndexRange.update(vao11->getCachedIndexRange());
+        }
+
         // No streaming or index buffer application necessary.
         return gl::NoError();
     }
@@ -2586,7 +2590,7 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
 
     TranslatedIndexData *indexInfo = vao11->getCachedIndexInfo();
-    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, destElementType, count,
+    ANGLE_TRY(mIndexDataManager.prepareIndexData(context, type, lazyDestType.resolve(), count,
                                                  elementArrayBuffer, indices, indexInfo));
 
     ID3D11Buffer *buffer = nullptr;
@@ -2609,8 +2613,8 @@ gl::Error StateManager11::applyIndexBuffer(const gl::Context *context,
         syncIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
 
     mIndexBufferIsDirty = false;
+    vao11->updateCachedIndexInfo(lazyIndexRange);
 
-    vao11->setCachedIndexInfoValid();
     return gl::NoError();
 }
 

@@ -299,6 +299,30 @@ gl::Error IndexDataManager::getStreamingIndexBuffer(GLenum destinationIndexType,
     return gl::NoError();
 }
 
+LazyIndexDestType::LazyIndexDestType(GLenum srcType,
+                                     const gl::HasIndexRange &lazyIndexRange,
+                                     bool usePrimitiveRestartWorkaround)
+    : mSrcType(srcType),
+      mLazyIndexRange(lazyIndexRange),
+      mUsePrimitiveRestartWorkaround(usePrimitiveRestartWorkaround)
+{
+}
+
+LazyIndexDestType::~LazyIndexDestType()
+{
+}
+
+GLenum LazyIndexDestType::resolve()
+{
+    if (!mResolved.valid())
+    {
+        mResolved =
+            GetIndexTranslationDestType(mSrcType, mLazyIndexRange, mUsePrimitiveRestartWorkaround);
+    }
+
+    return mResolved.value();
+}
+
 GLenum GetIndexTranslationDestType(GLenum srcType,
                                    const gl::HasIndexRange &lazyIndexRange,
                                    bool usePrimitiveRestartWorkaround)

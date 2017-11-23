@@ -65,4 +65,9 @@ const Optional<IndexRange> &HasIndexRange::getIndexRange() const
     return mIndexRange;
 }
 
+void HasIndexRange::update(const IndexRange &newValue) const
+{
+    mIndexRange = newValue;
+}
+
 }  // namespace gl

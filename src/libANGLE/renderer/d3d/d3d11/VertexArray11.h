@@ -52,12 +52,15 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
     // Returns true if the element array buffer needs to be translated.
     bool updateElementArrayStorage(const gl::Context *context,
                                    GLenum elementType,
-                                   GLenum destElementType,
+                                   LazyIndexDestType *destElementType,
                                    const void *indices);
 
     TranslatedIndexData *getCachedIndexInfo();
-    void setCachedIndexInfoValid();
+    void updateCachedIndexInfo(const gl::HasIndexRange &indexRange);
     bool isCachedIndexInfoValid() const;
+
+    bool hasCachedIndexRange() const;
+    const gl::IndexRange &getCachedIndexRange() const;
 
   private:
     void updateVertexAttribStorage(const gl::Context *context, size_t attribIndex);
@@ -92,6 +95,7 @@ class VertexArray11 : public VertexArrayImpl, public OnBufferDataDirtyReceiver
     IndexStorageType mCurrentElementArrayStorage;
     TranslatedIndexData mCachedIndexInfo;
     bool mCachedIndexInfoValid;
+    Optional<gl::IndexRange> mCachedIndexRange;
 };
 
 }  // namespace rx

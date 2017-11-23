@@ -79,6 +79,7 @@ class HasIndexRange : public ParamsBase
     static void Factory(HasIndexRange *objBuffer, ArgsT... args);
 
     const Optional<IndexRange> &getIndexRange() const;
+    void update(const IndexRange &newValue) const;
 
     ANGLE_PARAM_TYPE_INFO(HasIndexRange, ParamsBase);
 

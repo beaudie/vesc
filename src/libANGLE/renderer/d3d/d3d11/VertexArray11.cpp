@@ -95,6 +95,7 @@ void VertexArray11::syncState(const gl::Context *context,
         {
             mCachedIndexInfoValid = false;
             mLastElementType      = GL_NONE;
+            mCachedIndexRange.reset();
         }
         else
         {
@@ -130,7 +131,7 @@ bool VertexArray11::flushAttribUpdates(const gl::Context *context)
 
 bool VertexArray11::updateElementArrayStorage(const gl::Context *context,
                                               GLenum elementType,
-                                              GLenum destElementType,
+                                              LazyIndexDestType *destElementType,
                                               const void *indices)
 {
     unsigned int offset = static_cast<unsigned int>(reinterpret_cast<uintptr_t>(indices));
@@ -145,8 +146,9 @@ bool VertexArray11::updateElementArrayStorage(const gl::Context *context,
     gl::Buffer *newBuffer           = mState.getElementArrayBuffer().get();
     gl::Buffer *oldBuffer           = mCurrentElementArrayBuffer.get();
     bool needsTranslation           = false;
-    IndexStorageType newStorageType = ClassifyIndexStorage(
-        context->getGLState(), newBuffer, elementType, destElementType, offset, &needsTranslation);
+    IndexStorageType newStorageType =
+        ClassifyIndexStorage(context->getGLState(), newBuffer, elementType,
+                             destElementType->resolve(), offset, &needsTranslation);
 
     if (newBuffer != oldBuffer)
     {
@@ -355,6 +357,7 @@ void VertexArray11::signal(size_t channelID, const gl::Context *context)
         mCachedIndexInfoValid   = false;
         mLastElementType        = GL_NONE;
         mLastDrawElementsOffset = 0;
+        mCachedIndexRange.reset();
     }
     else
     {
@@ -400,14 +403,29 @@ TranslatedIndexData *VertexArray11::getCachedIndexInfo()
     return &mCachedIndexInfo;
 }
 
-void VertexArray11::setCachedIndexInfoValid()
+void VertexArray11::updateCachedIndexInfo(const gl::HasIndexRange &indexRange)
 {
     mCachedIndexInfoValid = true;
+    if (indexRange.getIndexRange().valid())
+    {
+        mCachedIndexRange = indexRange.getIndexRange().value();
+    }
 }
 
 bool VertexArray11::isCachedIndexInfoValid() const
 {
     return mCachedIndexInfoValid;
+}
+
+bool VertexArray11::hasCachedIndexRange() const
+{
+    return mCachedIndexRange.valid();
+}
+
+const gl::IndexRange &VertexArray11::getCachedIndexRange() const
+{
+    ASSERT(mCachedIndexRange.valid());
+    return mCachedIndexRange.value();
 }
 
 }  // namespace rx
