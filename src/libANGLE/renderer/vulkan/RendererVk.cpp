@@ -112,6 +112,11 @@ RendererVk::~RendererVk()
         }
     }
 
+    for (auto &renderPassIt : mRenderPassCache)
+    {
+        renderPassIt.second.get().destroy(mDevice);
+    }
+
     if (mGlslangWrapper)
     {
         GlslangWrapper::ReleaseReference();
@@ -798,8 +803,7 @@ gl::Error RendererVk::ensureInRenderPass(const gl::Context *context, Framebuffer
     {
         endRenderPass();
     }
-    ANGLE_TRY(
-        framebufferVk->beginRenderPass(context, mDevice, &mCommandBuffer, mCurrentQueueSerial));
+    ANGLE_TRY(framebufferVk->beginRenderPass(context, this, &mCommandBuffer, mCurrentQueueSerial));
     mCurrentRenderPassFramebuffer = framebufferVk;
     return gl::NoError();
 }
@@ -830,6 +834,31 @@ bool RendererVk::isResourceInUse(const ResourceVk &resource)
 bool RendererVk::isSerialInUse(Serial serial)
 {
     return serial > mLastCompletedQueueSerial;
+}
+
+vk::Error RendererVk::getRenderPass(const vk::RenderPassDesc &desc, vk::RenderPass **renderPassOut)
+{
+    auto it = mRenderPassCache.find(desc);
+    if (it != mRenderPassCache.end())
+    {
+        // Update the serial before we return.
+        // TODO(jmadill): Could possibly use an MRU cache here.
+        it->second.updateSerial(mCurrentQueueSerial);
+
+        *renderPassOut = &it->second.get();
+        return vk::NoError();
+    }
+
+    vk::RenderPass newRenderPass;
+    ANGLE_TRY(vk::InitializeRenderPassFromDesc(mDevice, desc, &newRenderPass));
+
+    vk::RenderPassAndSerial withSerial(std::move(newRenderPass), mCurrentQueueSerial);
+
+    auto insertPos = mRenderPassCache.emplace(desc, std::move(withSerial));
+    *renderPassOut = &insertPos.first->second.get();
+
+    // TODO(jmadill): Trim cache, and pre-populate with the most common RPs on startup.
+    return vk::NoError();
 }
 
 }  // namespace rx
