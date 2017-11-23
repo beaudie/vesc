@@ -1856,6 +1856,9 @@ gl::Error Renderer11::drawLineLoop(const gl::Context *context,
                                    int baseVertex,
                                    int instances)
 {
+    if (type == GL_UNSIGNED_BYTE)
+        ASSERT(false);
+
     const gl::State &glState       = context->getGLState();
     gl::VertexArray *vao           = glState.getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
