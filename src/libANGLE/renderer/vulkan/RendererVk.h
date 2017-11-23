@@ -115,6 +115,8 @@ class RendererVk : angle::NonCopyable
         return mFormatTable[internalFormat];
     }
 
+    vk::Error getRenderPass(const vk::RenderPassDesc &desc, vk::RenderPass **renderPassOut);
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -157,6 +159,8 @@ class RendererVk : angle::NonCopyable
 
     // TODO(jmadill): Don't keep a single renderpass in the Renderer.
     FramebufferVk *mCurrentRenderPassFramebuffer;
+
+    std::unordered_map<vk::RenderPassDesc, vk::RenderPassAndSerial> mRenderPassCache;
 };
 
 }  // namespace rx
