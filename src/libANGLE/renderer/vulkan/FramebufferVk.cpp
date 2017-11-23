@@ -81,12 +81,12 @@ FramebufferVk *FramebufferVk::CreateDefaultFBO(const gl::FramebufferState &state
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
-    : FramebufferImpl(state), mBackbuffer(nullptr), mRenderPass(), mFramebuffer()
+    : FramebufferImpl(state), mBackbuffer(nullptr), mRenderPassDesc(), mFramebuffer()
 {
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer)
-    : FramebufferImpl(state), mBackbuffer(backbuffer), mRenderPass(), mFramebuffer()
+    : FramebufferImpl(state), mBackbuffer(backbuffer), mRenderPassDesc(), mFramebuffer()
 {
 }
 
@@ -98,7 +98,6 @@ void FramebufferVk::destroy(const gl::Context *context)
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
 
-    renderer->releaseResource(*this, &mRenderPass);
     renderer->releaseResource(*this, &mFramebuffer);
 }
 
@@ -106,7 +105,6 @@ void FramebufferVk::destroyDefault(const egl::Display *display)
 {
     VkDevice device = vk::GetImpl(display)->getRenderer()->getDevice();
 
-    mRenderPass.destroy(device);
     mFramebuffer.destroy(device);
 }
 
@@ -363,7 +361,7 @@ void FramebufferVk::syncState(const gl::Context *context,
     ASSERT(dirtyBits.any());
 
     // TODO(jmadill): Smarter update.
-    renderer->releaseResource(*this, &mRenderPass);
+    mRenderPassDesc.reset();
     renderer->releaseResource(*this, &mFramebuffer);
     renderer->onReleaseRenderPass(this);
 
@@ -371,12 +369,13 @@ void FramebufferVk::syncState(const gl::Context *context,
     contextVk->invalidateCurrentPipeline();
 }
 
-gl::ErrorOrResult<vk::RenderPass *> FramebufferVk::getRenderPass(const gl::Context *context,
-                                                                 VkDevice device)
+gl::Error FramebufferVk::getRenderPassDesc(const gl::Context *context,
+                                           const vk::RenderPassDesc **descOut)
 {
-    if (mRenderPass.valid())
+    if (mRenderPassDesc.valid())
     {
-        return &mRenderPass;
+        *descOut = &mRenderPassDesc.value();
+        return gl::NoError();
     }
 
     vk::RenderPassDesc desc;
@@ -430,13 +429,13 @@ gl::ErrorOrResult<vk::RenderPass *> FramebufferVk::getRenderPass(const gl::Conte
         depthStencilDesc->finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     }
 
-    ANGLE_TRY(vk::InitializeRenderPassFromDesc(device, desc, &mRenderPass));
-
-    return &mRenderPass;
+    mRenderPassDesc = desc;
+    *descOut        = &mRenderPassDesc.value();
+    return gl::NoError();
 }
 
 gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Context *context,
-                                                                   VkDevice device)
+                                                                   RendererVk *rendererVk)
 {
     // If we've already created our cached Framebuffer, return it.
     if (mFramebuffer.valid())
@@ -444,10 +443,14 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
         return &mFramebuffer;
     }
 
+    const vk::RenderPassDesc *desc = nullptr;
+    ANGLE_TRY(getRenderPassDesc(context, &desc));
+
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY_RESULT(getRenderPass(context, device), renderPass);
+    ANGLE_TRY(rendererVk->getRenderPass(*desc, &renderPass));
 
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
+    VkDevice device = rendererVk->getDevice();
     if (mBackbuffer)
     {
         return mBackbuffer->getCurrentFramebuffer(device, *renderPass);
@@ -490,7 +493,7 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext           = nullptr;
     framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = mRenderPass.getHandle();
+    framebufferInfo.renderPass      = renderPass->getHandle();
     framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
     framebufferInfo.pAttachments    = attachments.data();
     framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
@@ -509,7 +512,7 @@ gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
 }
 
 gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
-                                         VkDevice device,
+                                         RendererVk *rendererVk,
                                          vk::CommandBuffer *commandBuffer,
                                          Serial queueSerial)
 {
@@ -533,11 +536,14 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
     }
 
     vk::Framebuffer *framebuffer = nullptr;
-    ANGLE_TRY_RESULT(getFramebuffer(context, device), framebuffer);
+    ANGLE_TRY_RESULT(getFramebuffer(context, rendererVk), framebuffer);
     ASSERT(framebuffer && framebuffer->valid());
 
+    const vk::RenderPassDesc *desc = nullptr;
+    ANGLE_TRY(getRenderPassDesc(context, &desc));
+
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY_RESULT(getRenderPass(context, device), renderPass);
+    ANGLE_TRY(rendererVk->getRenderPass(*desc, &renderPass));
     ASSERT(renderPass && renderPass->valid());
 
     // TODO(jmadill): Proper clear value implementation.
