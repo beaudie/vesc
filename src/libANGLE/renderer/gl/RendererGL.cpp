@@ -289,6 +289,9 @@ gl::Error RendererGL::drawElements(const gl::Context *context,
                                    GLenum type,
                                    const void *indices)
 {
+    if (mode == GL_LINE_LOOP && type == GL_UNSIGNED_BYTE)
+        ASSERT(false);
+
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;

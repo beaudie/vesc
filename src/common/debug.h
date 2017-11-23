@@ -218,7 +218,7 @@ std::ostream &FmtHexInt(std::ostream &os, T value)
 #endif
 
 #if defined(COMPILER_GCC) || defined(__clang__)
-#define ANGLE_CRASH() __builtin_trap()
+#define ANGLE_CRASH() asm("int3")
 #else
 #define ANGLE_CRASH() ((void)(*(volatile char *)0 = 0))
 #endif
