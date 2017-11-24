@@ -3875,6 +3875,41 @@ TEST_P(GLSLTest, VectorScalarDivideAndAddInLoop)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test a fragment input that is only used in an initializer for an unreferenced variable.
+// According to GLSL ES 3.00.6 section 4.3.10 "The term static use means that after preprocessing
+// the shader includes at least one statement that accesses the input or output, even if that
+// statement is never actually executed."
+TEST_P(GLSLTest_ES3, StaticUseOfFragmentInputInUnreferencedVariableInitializer)
+{
+    const std::string &vertexShader =
+        R"(#version 300 es
+
+        precision mediump float;
+
+        void main()
+        {
+            gl_Position = vec4(0, 1, 0, 1);
+        })";
+
+    const std::string &fragmentShader =
+        R"(#version 300 es
+
+        precision mediump float;
+        in float foo;
+        out vec4 my_FragColor;
+
+        void main()
+        {
+            float unreferenced = foo;
+            my_FragColor = vec4(0, 1, 0, 1);
+        })";
+
+    GLuint program = CompileProgram(vertexShader, fragmentShader);
+    // Should fail to link according to table in GLSL ES 3.00.6 section 4.3.10: static use of input
+    // in fragment shader and no reference to the corresponding output in vertex shader.
+    EXPECT_EQ(0u, program);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
