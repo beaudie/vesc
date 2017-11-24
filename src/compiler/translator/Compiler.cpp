@@ -533,20 +533,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     RemoveArrayLengthMethod(root);
 
-    RemoveUnreferencedVariables(root, &symbolTable);
-
-    // Built-in function emulation needs to happen after validateLimitations pass.
-    // TODO(jmadill): Remove global pool allocator.
-    GetGlobalPoolAllocator()->lock();
-    initBuiltInFunctionEmulator(&builtInFunctionEmulator, compileOptions);
-    GetGlobalPoolAllocator()->unlock();
-    builtInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
-
-    if (compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS)
-    {
-        ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh, &symbolTable);
-    }
-
     if (shouldCollectVariables(compileOptions))
     {
         ASSERT(!variablesCollected);
@@ -573,6 +559,20 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         {
             initializeOutputVariables(root);
         }
+    }
+
+    RemoveUnreferencedVariables(root, &symbolTable);
+
+    // Built-in function emulation needs to happen after validateLimitations pass.
+    // TODO(jmadill): Remove global pool allocator.
+    GetGlobalPoolAllocator()->lock();
+    initBuiltInFunctionEmulator(&builtInFunctionEmulator, compileOptions);
+    GetGlobalPoolAllocator()->unlock();
+    builtInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
+
+    if (compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS)
+    {
+        ScalarizeVecAndMatConstructorArgs(root, shaderType, fragmentPrecisionHigh, &symbolTable);
     }
 
     // Removing invariant declarations must be done after collecting variables.
