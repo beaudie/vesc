@@ -38,7 +38,6 @@ vulkan_gen_json_files_outputs = [
   "$root_out_dir/$data_dir/VkLayer_core_validation.json",
   "$root_out_dir/$data_dir/VkLayer_object_tracker.json",
   "$root_out_dir/$data_dir/VkLayer_parameter_validation.json",
-  "$root_out_dir/$data_dir/VkLayer_swapchain.json",
   "$root_out_dir/$data_dir/VkLayer_threading.json",
   "$root_out_dir/$data_dir/VkLayer_unique_objects.json",
 ]
@@ -57,6 +56,16 @@ raw_vulkan_gen_dir = rebase_path(vulkan_gen_dir, root_build_dir)
 # Vulkan helper scripts
 # ---------------------
 
+# Copy vk_validation_error_messages.h from source to build dir for the scripts.
+copy("vulkan_validation_error_messages") {
+  sources = [
+    "$raw_vulkan_layers_dir/layers/vk_validation_error_messages.h",
+  ]
+  outputs = [
+    "$root_out_dir/vk_validation_error_messages.h",
+  ]
+}
+
 helper_script_and_deps = [
   [
     "vulkan_gen_dispatch_table_helper_h",
@@ -66,6 +75,11 @@ helper_script_and_deps = [
   [
     "vulkan_gen_enum_string_helper",
     "vk_enum_string_helper.h",
+    "helper_file_generator.py",
+  ],
+  [
+    "vulkan_gen_extension_helper",
+    "vk_extension_helper.h",
     "helper_file_generator.py",
   ],
   [
@@ -82,6 +96,11 @@ helper_script_and_deps = [
     "vulkan_gen_loader_extensions_h",
     "vk_loader_extensions.h",
     "loader_extension_generator.py",
+  ],
+  [
+    "vulkan_gen_object_types_h",
+    "vk_object_types.h",
+    "helper_file_generator.py",
   ],
   [
     "vulkan_gen_safe_struct_cpp",
@@ -109,8 +128,18 @@ helper_script_and_deps = [
     "threading_generator.py",
   ],
   [
-    "vulkan_gen_parameter_validation_helper",
-    "parameter_validation.h",
+    "vulkan_gen_typemap_helper",
+    "vk_typemap_helper.h",
+    "helper_file_generator.py",
+  ],
+  [
+    "vulkan_gen_object_tracker_cpp",
+    "object_tracker.cpp",
+    "object_tracker_generator.py",
+  ],
+  [
+    "vulkan_gen_parameter_validation_cpp",
+    "parameter_validation.cpp",
     "parameter_validation_generator.py",
   ],
   [
@@ -126,6 +155,9 @@ foreach(script_and_dep, helper_script_and_deps) {
   dep = script_and_dep[2]
   target("action", target_name) {
     script = "$vulkan_layers_dir/scripts/lvl_genvk.py"
+    deps = [
+      ":vulkan_validation_error_messages",
+    ]
     inputs = [
       "$vulkan_layers_dir/scripts/$dep",
       "$vulkan_layers_dir/scripts/generator.py",
@@ -243,43 +275,77 @@ raw_spirv_source_dir = rebase_path(spirv_source_dir, root_build_dir)
 raw_spirv_include_dir = rebase_path(spirv_include_dir, root_build_dir)
 raw_spirv_headers_dir = rebase_path(spirv_headers_dir, root_build_dir)
 
-action("spirv_tools_gen_tables_1_0") {
-  script = "$spirv_tools_dir/utils/generate_grammar_tables.py"
+grammar_processing_script = "$spirv_tools_dir/utils/generate_grammar_tables.py"
+
+action("spirv_tools_gen_enum_string_mapping") {
+  script = grammar_processing_script
+  sources = [
+    "$spirv_include_dir/1.0/spirv.core.grammar.json",
+  ]
+  outputs = [
+    "$vulkan_gen_dir/extension_enum.inc",
+    "$vulkan_gen_dir/enum_string_mapping.inc",
+  ]
+  args = [
+    "--spirv-core-grammar=$raw_spirv_include_dir/1.0/spirv.core.grammar.json",
+    "--extension-enum-output=$raw_vulkan_gen_dir/extension_enum.inc",
+    "--enum-string-mapping-output=$raw_vulkan_gen_dir/enum_string_mapping.inc",
+  ]
+}
+
+spvtools_core_tables = [
+  "1.0",
+  "1.1",
+  "1.2",
+]
+
+foreach(version, spvtools_core_tables) {
+  action("spirv_tools_gen_core_tables_" + version) {
+    script = grammar_processing_script
+    sources = [
+      "$spirv_include_dir/$version/spirv.core.grammar.json",
+    ]
+    outputs = [
+      "$vulkan_gen_dir/core.insts-$version.inc",
+      "$vulkan_gen_dir/operand.kinds-$version.inc",
+    ]
+    args = [
+      "--spirv-core-grammar=$raw_spirv_include_dir/$version/spirv.core.grammar.json",
+      "--core-insts-output=$raw_vulkan_gen_dir/core.insts-$version.inc",
+      "--operand-kinds-output=$raw_vulkan_gen_dir/operand.kinds-$version.inc",
+    ]
+  }
+}
+
+action("spirv_tools_gen_glsl_tables") {
+  script = grammar_processing_script
   sources = [
     "$spirv_include_dir/1.0/extinst.glsl.std.450.grammar.json",
     "$spirv_include_dir/1.0/spirv.core.grammar.json",
-    "$spirv_source_dir/extinst-1.0.opencl.std.grammar.json",
   ]
   outputs = [
-    "$vulkan_gen_dir/core.insts-1.0.inc",
     "$vulkan_gen_dir/glsl.std.450.insts-1.0.inc",
-    "$vulkan_gen_dir/opencl.std.insts-1.0.inc",
-    "$vulkan_gen_dir/operand.kinds-1.0.inc",
   ]
   args = [
     "--spirv-core-grammar=$raw_spirv_include_dir/1.0/spirv.core.grammar.json",
     "--extinst-glsl-grammar=$raw_spirv_include_dir/1.0/extinst.glsl.std.450.grammar.json",
-    "--extinst-opencl-grammar=$raw_spirv_source_dir/extinst-1.0.opencl.std.grammar.json",
-    "--core-insts-output=$raw_vulkan_gen_dir/core.insts-1.0.inc",
     "--glsl-insts-output=$raw_vulkan_gen_dir/glsl.std.450.insts-1.0.inc",
-    "--opencl-insts-output=$raw_vulkan_gen_dir/opencl.std.insts-1.0.inc",
-    "--operand-kinds-output=$raw_vulkan_gen_dir/operand.kinds-1.0.inc",
   ]
 }
 
-action("spirv_tools_gen_tables_1_1") {
-  script = "$spirv_tools_dir/utils/generate_grammar_tables.py"
+action("spirv_tools_gen_opencl_tables") {
+  script = grammar_processing_script
   sources = [
-    "$spirv_include_dir/1.1/spirv.core.grammar.json",
+    "$spirv_include_dir/1.0/extinst.opencl.std.100.grammar.json",
+    "$spirv_include_dir/1.0/spirv.core.grammar.json",
   ]
   outputs = [
-    "$vulkan_gen_dir/core.insts-1.1.inc",
-    "$vulkan_gen_dir/operand.kinds-1.1.inc",
+    "$vulkan_gen_dir/opencl.std.insts-1.0.inc",
   ]
   args = [
-    "--spirv-core-grammar=$raw_spirv_include_dir/1.1/spirv.core.grammar.json",
-    "--core-insts-output=$raw_vulkan_gen_dir/core.insts-1.1.inc",
-    "--operand-kinds-output=$raw_vulkan_gen_dir/operand.kinds-1.1.inc",
+    "--spirv-core-grammar=$raw_spirv_include_dir/1.0/spirv.core.grammar.json",
+    "--extinst-opencl-grammar=$raw_spirv_include_dir/1.0/extinst.opencl.std.100.grammar.json",
+    "--opencl-insts-output=$raw_vulkan_gen_dir/opencl.std.insts-1.0.inc",
   ]
 }
 
@@ -295,6 +361,35 @@ action("spirv_tools_gen_generators_inc") {
     "--xml=$raw_spirv_headers_dir/include/spirv/spir-v.xml",
     "--generator-output=$raw_vulkan_gen_dir/generators.inc",
   ]
+}
+
+spvtools_vendor_tables = [
+  "spv-amd-shader-explicit-vertex-parameter",
+  "spv-amd-shader-trinary-minmax",
+  "spv-amd-gcn-shader",
+  "spv-amd-shader-ballot",
+]
+
+foreach(target_name, spvtools_vendor_tables) {
+  insts_file = "$target_name.insts.inc"
+  grammar_file = "extinst.$target_name.grammar.json"
+
+  action(target_name) {
+    script = grammar_processing_script
+
+    sources = [
+      "$spirv_source_dir/$grammar_file",
+    ]
+
+    outputs = [
+      "$vulkan_gen_dir/$insts_file",
+    ]
+
+    args = [
+      "--extinst-vendor-grammar=$raw_spirv_source_dir/$grammar_file",
+      "--vendor-insts-output=$raw_vulkan_gen_dir/$insts_file",
+    ]
+  }
 }
 
 config("spirv_tools_config") {
@@ -313,9 +408,13 @@ config("spirv_tools_config") {
 
 static_library("spirv_tools") {
   deps = [
+    ":spirv_tools_gen_core_tables_1.0",
+    ":spirv_tools_gen_core_tables_1.1",
+    ":spirv_tools_gen_core_tables_1.2",
+    ":spirv_tools_gen_enum_string_mapping",
     ":spirv_tools_gen_generators_inc",
-    ":spirv_tools_gen_tables_1_0",
-    ":spirv_tools_gen_tables_1_1",
+    ":spirv_tools_gen_glsl_tables",
+    ":spirv_tools_gen_opencl_tables",
   ]
   include_dirs = [
     vulkan_gen_dir,
@@ -324,6 +423,10 @@ static_library("spirv_tools") {
   ]
   sources = rebase_path(vulkan_gypi.spirv_tools_sources, ".", "src")
   public_configs = [ ":spirv_tools_config" ]
+
+  foreach(target_name, spvtools_vendor_tables) {
+    deps += [ ":$target_name" ]
+  }
 }
 
 # glslang
@@ -401,7 +504,7 @@ layers = [
   [
     "object_tracker",
     vulkan_gypi.VkLayer_object_tracker_sources,
-    "",
+    ":vulkan_gen_object_tracker_cpp",
   ],
   [
     "unique_objects",
@@ -411,12 +514,7 @@ layers = [
   [
     "parameter_validation",
     vulkan_gypi.VkLayer_parameter_validation_sources,
-    ":vulkan_gen_parameter_validation_helper",
-  ],
-  [
-    "swapchain",
-    vulkan_gypi.VkLayer_swapchain_sources,
-    "",
+    ":vulkan_gen_parameter_validation_cpp",
   ],
   [
     "threading",
@@ -453,6 +551,9 @@ source_set("vulkan_layer_utils") {
   ]
   public_deps = [
     ":vulkan_generate_helper_files",
+  ]
+  deps = [
+    ":vulkan_validation_error_messages",
   ]
   configs -= vulkan_undefine_configs
 }
