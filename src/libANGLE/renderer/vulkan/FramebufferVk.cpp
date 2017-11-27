@@ -18,6 +18,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -81,12 +82,20 @@ FramebufferVk *FramebufferVk::CreateDefaultFBO(const gl::FramebufferState &state
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
-    : FramebufferImpl(state), mBackbuffer(nullptr), mRenderPassDesc(), mFramebuffer()
+    : FramebufferImpl(state),
+      mBackbuffer(nullptr),
+      mRenderPassDesc(),
+      mFramebuffer(),
+      mCommandNodeDirty(false)
 {
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer)
-    : FramebufferImpl(state), mBackbuffer(backbuffer), mRenderPassDesc(), mFramebuffer()
+    : FramebufferImpl(state),
+      mBackbuffer(backbuffer),
+      mRenderPassDesc(),
+      mFramebuffer(),
+      mCommandNodeDirty(false)
 {
 }
 
@@ -135,8 +144,6 @@ gl::Error FramebufferVk::invalidateSub(const gl::Context *context,
 
 gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-
     if (mState.getDepthAttachment() && (mask & GL_DEPTH_BUFFER_BIT) != 0)
     {
         // TODO(jmadill): Depth clear
@@ -168,8 +175,10 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     const auto &size = attachment->getSize();
     const gl::Rectangle renderArea(0, 0, size.width, size.height);
 
-    vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->getStartedCommandBuffer(&commandBuffer));
+    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(recordChildCommands(renderer, &commandBuffer));
 
     for (const auto &colorAttachment : mState.getColorAttachments())
     {
@@ -274,11 +283,8 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                            renderTarget->extents, vk::StagingUsage::Read,
                                            &stagingImage));
 
-    vk::CommandBufferAndState *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->getStartedCommandBuffer(&commandBuffer));
-
-    // End render pass if we're in one.
-    renderer->endRenderPass();
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(recordChildCommands(renderer, &commandBuffer));
 
     stagingImage.getImage().changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
                                             commandBuffer);
@@ -308,7 +314,9 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
 
     commandBuffer->copyImage(*readImage, stagingImage.getImage(), 1, &region);
 
-    ANGLE_TRY(renderer->submitAndFinishCommandBuffer(commandBuffer));
+    // Triggers a full finish.
+    // TODO(jmadill): Don't block on asynchronous readback.
+    ANGLE_TRY(renderer->finish(context));
 
     // TODO(jmadill): parameters
     uint8_t *mapPointer = nullptr;
@@ -363,7 +371,9 @@ void FramebufferVk::syncState(const gl::Context *context,
     // TODO(jmadill): Smarter update.
     mRenderPassDesc.reset();
     renderer->releaseResource(*this, &mFramebuffer);
-    renderer->onReleaseRenderPass(this);
+
+    // Trigger a new set of secondary commands next time we render to this FBO,.
+    mCommandNodeDirty = true;
 
     // TODO(jmadill): Use pipeline cache.
     contextVk->invalidateCurrentPipeline();
@@ -575,6 +585,79 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
     }
 
     return gl::NoError();
+}
+
+gl::Error FramebufferVk::startRendering(const gl::Context *context,
+                                        vk::CommandBuffer **commandBufferOut)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (isCurrentlyInUse() && !mCommandNodeDirty)
+    {
+        *commandBufferOut = getCurrentInUseCommands()->getInsideRenderPassCommands();
+        ASSERT((*commandBufferOut)->valid());
+        return gl::NoError();
+    }
+
+    vk::CommandBufferNode *node = sireCommandNode(renderer);
+
+    vk::Framebuffer *framebuffer = nullptr;
+    ANGLE_TRY_RESULT(getFramebuffer(context, renderer), framebuffer);
+
+    const gl::State &glState = context->getGLState();
+    node->storeRenderPassFramebuffer(*framebuffer, glState.getViewport());
+
+    // Hard-code RenderPass to clear the first render target to the current clear value.
+    // TODO(jmadill): Proper clear value implementation.
+    VkClearColorValue colorClear;
+    memset(&colorClear, 0, sizeof(VkClearColorValue));
+    colorClear.float32[0] = glState.getColorClearValue().red;
+    colorClear.float32[1] = glState.getColorClearValue().green;
+    colorClear.float32[2] = glState.getColorClearValue().blue;
+    colorClear.float32[3] = glState.getColorClearValue().alpha;
+
+    std::vector<VkClearValue> attachmentClearValues;
+    attachmentClearValues.push_back({colorClear});
+
+    node->storeRenderPassClearValues(attachmentClearValues);
+
+    // Initialize RenderPass info.
+    // TODO(jmadill): Could cache this info, would require dependent state change messaging.
+    const auto &colorAttachments = mState.getColorAttachments();
+    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    {
+        const auto &colorAttachment = colorAttachments[attachmentIndex];
+        if (colorAttachment.isAttached())
+        {
+            RenderTargetVk *renderTarget = nullptr;
+            ANGLE_SWALLOW_ERR(
+                colorAttachment.getRenderTarget<RenderTargetVk>(context, &renderTarget));
+
+            // TODO(jmadill): May need layout transition.
+            node->appendColorRenderTarget(renderTarget);
+        }
+    }
+
+    const gl::FramebufferAttachment *depthStencilAttachment = mState.getDepthOrStencilAttachment();
+    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    {
+        RenderTargetVk *renderTarget = nullptr;
+        ANGLE_SWALLOW_ERR(
+            depthStencilAttachment->getRenderTarget<RenderTargetVk>(context, &renderTarget));
+
+        // TODO(jmadill): May need layout transition.
+        node->appendDepthStencilRenderTarget(renderTarget);
+    }
+
+    // Get a compatible RenderPass from the cache so we can initialize the inheritance info.
+    // TODO(jmadill): Use different query method for compatible vs conformant render pass.
+    vk::RenderPass *compatibleRenderPass;
+    ANGLE_TRY(renderer->getRenderPass(node->getRenderPassDesc(), &compatibleRenderPass));
+
+    mCommandNodeDirty = false;
+    return node->startRenderPassRecording(renderer->getDevice(), renderer->getCommandPool(),
+                                          *compatibleRenderPass, commandBufferOut);
 }
 
 }  // namespace rx
