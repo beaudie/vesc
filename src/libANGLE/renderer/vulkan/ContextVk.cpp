@@ -278,8 +278,11 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
 
     mCurrentInputAssemblyState.topology = gl_vk::GetPrimitiveTopology(mCurrentDrawMode);
 
+    const vk::RenderPassDesc *desc = nullptr;
+    ANGLE_TRY(vkFBO->getRenderPassDesc(context, &desc));
+
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY_RESULT(vkFBO->getRenderPass(context, device), renderPass);
+    ANGLE_TRY(mRenderer->getRenderPass(*desc, &renderPass));
     ASSERT(renderPass && renderPass->valid());
 
     const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
