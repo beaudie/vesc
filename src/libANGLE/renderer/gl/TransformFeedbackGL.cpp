@@ -38,22 +38,22 @@ TransformFeedbackGL::~TransformFeedbackGL()
 
 void TransformFeedbackGL::begin(GLenum primitiveMode)
 {
-    // Do not begin directly, StateManagerGL will handle beginning and resuming transform feedback.
+    mStateManager->onTransformFeedbackStateChange();
 }
 
 void TransformFeedbackGL::end()
 {
-    syncActiveState(false, GL_NONE);
+    mStateManager->onTransformFeedbackStateChange();
 }
 
 void TransformFeedbackGL::pause()
 {
-    syncPausedState(true);
+    mStateManager->onTransformFeedbackStateChange();
 }
 
 void TransformFeedbackGL::resume()
 {
-    // Do not resume directly, StateManagerGL will handle beginning and resuming transform feedback.
+    mStateManager->onTransformFeedbackStateChange();
 }
 
 void TransformFeedbackGL::bindGenericBuffer(const gl::BindingPointer<gl::Buffer> &binding)
