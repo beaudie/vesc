@@ -411,6 +411,12 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
 
+    mComputeDirtyBits.set(State::DIRTY_BIT_STORAGE_BUFFER_BINDING);
+    mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_BINDING);
+    mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_EXECUTABLE);
+    mComputeDirtyBits.set(State::DIRTY_BIT_TEXTURE_BINDINGS);
+    mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
+
     handleError(mImplementation->initialize());
 }
 
@@ -2813,8 +2819,8 @@ void Context::syncRendererState()
     mGLState.clearDirtyBits();
 }
 
-void Context::syncRendererState(const State::DirtyBits &bitMask,
-                                const State::DirtyObjects &objectMask)
+void Context::syncStateOnDirtyBitsAndDirtyObjects(const State::DirtyBits &bitMask,
+                                                  const State::DirtyObjects &objectMask)
 {
     mGLState.syncDirtyObjects(this, objectMask);
     const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
@@ -3510,22 +3516,22 @@ void Context::flushMappedBufferRange(BufferBinding /*target*/,
 
 void Context::syncStateForReadPixels()
 {
-    syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
+    syncStateOnDirtyBitsAndDirtyObjects(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
 }
 
 void Context::syncStateForTexImage()
 {
-    syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
+    syncStateOnDirtyBitsAndDirtyObjects(mTexImageDirtyBits, mTexImageDirtyObjects);
 }
 
 void Context::syncStateForClear()
 {
-    syncRendererState(mClearDirtyBits, mClearDirtyObjects);
+    syncStateOnDirtyBitsAndDirtyObjects(mClearDirtyBits, mClearDirtyObjects);
 }
 
 void Context::syncStateForBlit()
 {
-    syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
+    syncStateOnDirtyBitsAndDirtyObjects(mBlitDirtyBits, mBlitDirtyObjects);
 }
 
 void Context::activeShaderProgram(GLuint pipeline, GLuint program)
@@ -4190,6 +4196,18 @@ Error Context::getZeroFilledBuffer(size_t requstedSizeBytes,
     return NoError();
 }
 
+Error Context::prepareForCompute()
+{
+    syncStateOnDirtyBitsAndDirtyObjects(mComputeDirtyBits, mComputeDirtyObjects);
+
+    if (isRobustResourceInitEnabled())
+    {
+        ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
+    }
+
+    return NoError();
+}
+
 void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
 {
     if (numGroupsX == 0u || numGroupsY == 0u || numGroupsZ == 0u)
@@ -4197,12 +4215,7 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
         return;
     }
 
-    // TODO(jmadill): Dirty bits for compute.
-    if (isRobustResourceInitEnabled())
-    {
-        ANGLE_CONTEXT_TRY(mGLState.clearUnclearedActiveTextures(this));
-    }
-
+    ANGLE_CONTEXT_TRY(prepareForCompute());
     handleError(mImplementation->dispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ));
 }
 

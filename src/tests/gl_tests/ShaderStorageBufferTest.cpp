@@ -189,6 +189,94 @@ TEST_P(ShaderStorageBufferTest31, AtomicMemoryFunctions)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test multiple storage buffers work correctly when program switching. In angle, storage buffer
+// bindings are updated accord to current program. If switch program, need to update storage buffer
+// bindings again.
+TEST_P(ShaderStorageBufferTest31, MultiStorageBuffersForMultiPrograms)
+{
+    const std::string &csSource_1 =
+        R"(#version 310 es
+        layout(local_size_x=3, local_size_y=1, local_size_z=1) in;
+        layout(binding = 1) buffer Output {
+            uint result_1[];
+        } sb_out_1;
+        void main()
+        {
+            highp uint offset = gl_LocalInvocationID.x;
+            sb_out_1.result_1[gl_LocalInvocationIndex] = gl_LocalInvocationIndex + 1u;
+        })";
+
+    const std::string &csSource_2 =
+        R"(#version 310 es
+        layout(local_size_x=3, local_size_y=1, local_size_z=1) in;
+        layout(binding = 2) buffer Output {
+            uint result_2[];
+        } sb_out_2;
+        void main()
+        {
+            highp uint offset = gl_LocalInvocationID.x;
+            sb_out_2.result_2[gl_LocalInvocationIndex] = gl_LocalInvocationIndex + 1u;
+        })";
+
+    constexpr unsigned int numInvocations = 3;
+    int arrayStride_1 = 0, arrayStride_2 = 0;
+    GLenum props[] = {GL_ARRAY_STRIDE};
+    GLBuffer shaderStorageBuffer_1, shaderStorageBuffer_2;
+
+    ANGLE_GL_COMPUTE_PROGRAM(program_1, csSource_1);
+    ANGLE_GL_COMPUTE_PROGRAM(program_2, csSource_2);
+    EXPECT_GL_NO_ERROR();
+
+    unsigned int outVarIndex_1 =
+        glGetProgramResourceIndex(program_1.get(), GL_BUFFER_VARIABLE, "Output.result_1");
+    glGetProgramResourceiv(program_1.get(), GL_BUFFER_VARIABLE, outVarIndex_1, 1, props, 1, 0,
+                           &arrayStride_1);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer_1);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, numInvocations * arrayStride_1, nullptr, GL_STREAM_READ);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer_1);
+    EXPECT_GL_NO_ERROR();
+
+    unsigned int outVarIndex_2 =
+        glGetProgramResourceIndex(program_2.get(), GL_BUFFER_VARIABLE, "Output.result_2");
+    glGetProgramResourceiv(program_2.get(), GL_BUFFER_VARIABLE, outVarIndex_2, 1, props, 1, 0,
+                           &arrayStride_2);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer_2);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, numInvocations * arrayStride_2, nullptr, GL_STREAM_READ);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, shaderStorageBuffer_2);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program_1.get());
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+    glUseProgram(program_2.get());
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer_1);
+    const void *ptr_1 =
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 3 * arrayStride_1, GL_MAP_READ_BIT);
+    for (unsigned int idx = 0; idx < numInvocations; idx++)
+    {
+        EXPECT_EQ(idx + 1, *((const GLuint *)((const GLbyte *)ptr_1 + idx * arrayStride_1)));
+    }
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer_2);
+    const void *ptr_2 =
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 3 * arrayStride_2, GL_MAP_READ_BIT);
+    EXPECT_GL_NO_ERROR();
+    for (unsigned int idx = 0; idx < numInvocations; idx++)
+    {
+        EXPECT_EQ(idx + 1, *((const GLuint *)((const GLbyte *)ptr_2 + idx * arrayStride_2)));
+    }
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace
