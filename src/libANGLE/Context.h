@@ -996,6 +996,8 @@ class Context final : public ValidationContext
     Error getScratchBuffer(size_t requestedSizeBytes, angle::MemoryBuffer **scratchBufferOut) const;
     Error getZeroFilledBuffer(size_t requstedSizeBytes, angle::MemoryBuffer **zeroBufferOut) const;
 
+    Error prepareForCompute();
+    void syncComputeState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
     void dispatchComputeIndirect(GLintptr indirect);
 
@@ -1031,7 +1033,8 @@ class Context final : public ValidationContext
   private:
     Error prepareForDraw();
     void syncRendererState();
-    void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
+    void syncStateOnDirtyBitsAndDirtyObjects(const State::DirtyBits &bitMask,
+                                             const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();
     void syncStateForTexImage();
     void syncStateForClear();
@@ -1122,6 +1125,8 @@ class Context final : public ValidationContext
     State::DirtyObjects mClearDirtyObjects;
     State::DirtyBits mBlitDirtyBits;
     State::DirtyObjects mBlitDirtyObjects;
+    State::DirtyBits mComputeDirtyBits;
+    State::DirtyObjects mComputeDirtyObjects;
 
     Workarounds mWorkarounds;
 
