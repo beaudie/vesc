@@ -30,8 +30,28 @@ static const char kFunctionMangledNameSeparator = '(';
 }  // anonymous namespace
 
 TSymbol::TSymbol(TSymbolTable *symbolTable, const TString *name)
-    : mUniqueId(symbolTable->nextUniqueId()), mName(name), mExtension(TExtension::UNDEFINED)
+    : mName(name), mUniqueId(symbolTable->nextUniqueId()), mExtension(TExtension::UNDEFINED)
 {
+}
+
+void TStructure::createSamplerSymbols(const TString &namePrefix,
+                                      const TString &apiNamePrefix,
+                                      TVector<TIntermSymbol *> *outputSymbols,
+                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
+                                      TSymbolTable *symbolTable) const
+{
+    ASSERT(containsSamplers());
+    for (auto &field : *mFields)
+    {
+        const TType *fieldType = field->type();
+        if (IsSampler(fieldType->getBasicType()) || fieldType->isStructureContainingSamplers())
+        {
+            TString fieldName    = namePrefix + "_" + field->name();
+            TString fieldApiName = apiNamePrefix + "." + field->name();
+            fieldType->createSamplerSymbols(fieldName, fieldApiName, outputSymbols,
+                                            outputSymbolsToAPINames, symbolTable);
+        }
+    }
 }
 
 //
@@ -271,7 +291,7 @@ TVariable *TSymbolTable::declareVariable(const TString *name, const TType &type)
     return insertVariable(currentLevel(), name, type);
 }
 
-TVariable *TSymbolTable::declareStructType(TStructure *str)
+bool TSymbolTable::declareStructType(TStructure *str)
 {
     return insertStructType(currentLevel(), str);
 }
@@ -335,15 +355,14 @@ TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
     return nullptr;
 }
 
-TVariable *TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)
+bool TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)
 {
-    TVariable *var = new TVariable(this, &str->name(), TType(str), true);
-    if (insert(level, var))
+    ASSERT(str);
+    if (insert(level, str))
     {
-        var->getType().realize();
-        return var;
+        return true;
     }
-    return nullptr;
+    return false;
 }
 
 void TSymbolTable::insertBuiltIn(ESymbolLevel level,
