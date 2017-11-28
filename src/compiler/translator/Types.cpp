@@ -384,6 +384,31 @@ TString TType::getCompleteString() const
     return stream.str();
 }
 
+int TType::getDeepestStructNesting() const
+{
+    return mStructure ? mStructure->deepestNesting() : 0;
+}
+
+bool TType::isNamelessStruct() const
+{
+    return mStructure && mStructure->name() == "";
+}
+
+bool TType::isStructureContainingArrays() const
+{
+    return mStructure ? mStructure->containsArrays() : false;
+}
+
+bool TType::isStructureContainingType(TBasicType t) const
+{
+    return mStructure ? mStructure->containsType(t) : false;
+}
+
+bool TType::isStructureContainingSamplers() const
+{
+    return mStructure ? mStructure->containsSamplers() : false;
+}
+
 //
 // Recursively generate mangled names.
 //
@@ -515,10 +540,14 @@ const char *TType::buildMangledName() const
             mangledName += "ac";
             break;
         case EbtStruct:
-            mangledName += mStructure->mangledName();
+            mangledName += "struct-";
+            mangledName += mStructure->name();
+            mangledName += mStructure->mangledFieldList();
             break;
         case EbtInterfaceBlock:
-            mangledName += mInterfaceBlock->mangledName();
+            mangledName += "iblock-";
+            mangledName += mInterfaceBlock->name();
+            mangledName += mInterfaceBlock->mangledFieldList();
             break;
         default:
             // EbtVoid, EbtAddress and non types
@@ -781,18 +810,12 @@ void TType::invalidateMangledName()
 // TStructure implementation.
 TStructure::TStructure(TSymbolTable *symbolTable, const TString *name, TFieldList *fields)
     : TFieldListCollection(name, fields),
-      mDeepestNesting(0),
       mUniqueId(symbolTable->nextUniqueId()),
       mAtGlobalScope(false)
 {
 }
 
-bool TStructure::equals(const TStructure &other) const
-{
-    return (uniqueId() == other.uniqueId());
-}
-
-bool TStructure::containsArrays() const
+bool TFieldListCollection::containsArrays() const
 {
     for (size_t i = 0; i < mFields->size(); ++i)
     {
@@ -803,7 +826,7 @@ bool TStructure::containsArrays() const
     return false;
 }
 
-bool TStructure::containsType(TBasicType type) const
+bool TFieldListCollection::containsType(TBasicType type) const
 {
     for (size_t i = 0; i < mFields->size(); ++i)
     {
@@ -814,7 +837,7 @@ bool TStructure::containsType(TBasicType type) const
     return false;
 }
 
-bool TStructure::containsSamplers() const
+bool TFieldListCollection::containsSamplers() const
 {
     for (size_t i = 0; i < mFields->size(); ++i)
     {
@@ -885,10 +908,9 @@ void TStructure::createSamplerSymbols(const TString &namePrefix,
     }
 }
 
-TString TFieldListCollection::buildMangledName(const TString &mangledNamePrefix) const
+TString TFieldListCollection::buildMangledFieldList() const
 {
-    TString mangledName(mangledNamePrefix);
-    mangledName += *mName;
+    TString mangledName;
     for (size_t i = 0; i < mFields->size(); ++i)
     {
         mangledName += '-';
@@ -911,6 +933,13 @@ size_t TFieldListCollection::calculateObjectSize() const
     return size;
 }
 
+size_t TFieldListCollection::objectSize() const
+{
+    if (mObjectSize == 0)
+        mObjectSize = calculateObjectSize();
+    return mObjectSize;
+}
+
 int TFieldListCollection::getLocationCount() const
 {
     int count = 0;
@@ -929,7 +958,21 @@ int TFieldListCollection::getLocationCount() const
     return count;
 }
 
-int TStructure::calculateDeepestNesting() const
+int TFieldListCollection::deepestNesting() const
+{
+    if (mDeepestNesting == 0)
+        mDeepestNesting = calculateDeepestNesting();
+    return mDeepestNesting;
+}
+
+const TString &TFieldListCollection::mangledFieldList() const
+{
+    if (mMangledFieldList.empty())
+        mMangledFieldList = buildMangledFieldList();
+    return mMangledFieldList;
+}
+
+int TFieldListCollection::calculateDeepestNesting() const
 {
     int maxNesting = 0;
     for (size_t i = 0; i < mFields->size(); ++i)
