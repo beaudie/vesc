@@ -198,6 +198,7 @@ class StateManagerGL final : angle::NonCopyable
     void propagateNumViewsToVAO(const gl::Program *program, VertexArrayGL *vao);
 
     void updateProgramTextureAndSamplerBindings(const gl::Context *context);
+    void updateProgramStorageBufferBindings(const gl::Context *context);
 
     enum MultiviewDirtyBitType
     {
@@ -354,6 +355,7 @@ class StateManagerGL final : angle::NonCopyable
     angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
 
     bool mProgramTexturesAndSamplersDirty;
+    bool mProgramStorageBuffersDirty;
 };
 }
 

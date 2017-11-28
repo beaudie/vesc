@@ -548,12 +548,12 @@
 
 // OpenGL and D3D11 Failing Tests
 1663 OPENGL D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.num_work_groups = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.work_group_size = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.work_group_id = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.local_invocation_id = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.global_invocation_id = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.local_invocation_index = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.num_work_groups = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.work_group_size = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.work_group_id = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.local_invocation_id = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.global_invocation_id = FAIL
+1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_var.compute.local_invocation_index = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.precision.add.lowp_compute.scalar = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.precision.add.lowp_compute.vec2 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.precision.add.lowp_compute.vec3 = FAIL
