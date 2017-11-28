@@ -442,11 +442,9 @@ int check_type(yyscan_t yyscanner) {
     
     int token = IDENTIFIER;
     TSymbol* symbol = yyextra->symbolTable.find(yytext, yyextra->getShaderVersion());
-    if (symbol && symbol->isVariable()) {
-        TVariable* variable = static_cast<TVariable*>(symbol);
-        if (variable->isUserType()) {
-            token = TYPE_NAME;
-        }
+    if (symbol && symbol->isStruct())
+    {
+        token = TYPE_NAME;
     }
     yylval->lex.symbol = symbol;
     return token;
