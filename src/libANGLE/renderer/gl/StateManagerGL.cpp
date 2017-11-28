@@ -85,8 +85,9 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mSamplers(rendererCaps.maxCombinedTextureImageUnits, 0),
       mImages(rendererCaps.maxImageUnits, ImageUnitBinding()),
       mTransformFeedback(0),
+      mCurrentTransformFeedback(nullptr),
+      mTransformFeedbackStateDirty(false),
       mQueries(),
-      mPrevDrawTransformFeedback(nullptr),
       mCurrentQueries(),
       mPrevDrawContext(0),
       mUnpackAlignment(4),
@@ -353,10 +354,10 @@ void StateManagerGL::deleteTransformFeedback(GLuint transformFeedback)
             bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
         }
 
-        if (mPrevDrawTransformFeedback != nullptr &&
-            mPrevDrawTransformFeedback->getTransformFeedbackID() == transformFeedback)
+        if (mCurrentTransformFeedback != nullptr &&
+            mCurrentTransformFeedback->getTransformFeedbackID() == transformFeedback)
         {
-            mPrevDrawTransformFeedback = nullptr;
+            mCurrentTransformFeedback = nullptr;
         }
 
         mFunctions->deleteTransformFeedbacks(1, &transformFeedback);
@@ -645,16 +646,23 @@ void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback
         // Pause the current transform feedback if one is active.
         // To handle virtualized contexts, StateManagerGL needs to be able to bind a new transform
         // feedback at any time, even if there is one active.
-        if (mPrevDrawTransformFeedback != nullptr &&
-            mPrevDrawTransformFeedback->getTransformFeedbackID() != transformFeedback)
+        if (mCurrentTransformFeedback != nullptr &&
+            mCurrentTransformFeedback->getTransformFeedbackID() != transformFeedback)
         {
-            mPrevDrawTransformFeedback->syncPausedState(true);
-            mPrevDrawTransformFeedback = nullptr;
+            mCurrentTransformFeedback->syncPausedState(true);
+            mCurrentTransformFeedback = nullptr;
         }
 
         mTransformFeedback = transformFeedback;
         mFunctions->bindTransformFeedback(type, mTransformFeedback);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
+        onTransformFeedbackStateChange();
     }
+}
+
+void StateManagerGL::onTransformFeedbackStateChange()
+{
+    mTransformFeedbackStateDirty = true;
 }
 
 void StateManagerGL::beginQuery(GLenum type, GLuint query)
@@ -761,9 +769,10 @@ gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context)
 
 void StateManagerGL::pauseTransformFeedback()
 {
-    if (mPrevDrawTransformFeedback != nullptr)
+    if (mCurrentTransformFeedback != nullptr)
     {
-        mPrevDrawTransformFeedback->syncPausedState(true);
+        mCurrentTransformFeedback->syncPausedState(true);
+        mTransformFeedbackStateDirty = true;
     }
 }
 
@@ -820,7 +829,7 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
         ANGLE_TRY(pauseAllQueries());
     }
     mCurrentQueries.clear();
-    mPrevDrawTransformFeedback = nullptr;
+    mTransformFeedbackStateDirty = true;
     mPrevDrawContext           = contextID;
 
     // Set the current query state
@@ -878,6 +887,12 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
     {
         updateProgramTextureAndSamplerBindings(context);
         mProgramTexturesAndSamplersDirty = false;
+    }
+
+    if (mTransformFeedbackStateDirty)
+    {
+        updateTransformFeedbackState(context);
+        mTransformFeedbackStateDirty = false;
     }
 
     // TODO(xinghua.cao@intel.com): Track image units state with dirty bits to
@@ -1008,24 +1023,6 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Context *context)
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
-
-    // Set the current transform feedback state
-    gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
-    if (transformFeedback)
-    {
-        TransformFeedbackGL *transformFeedbackGL =
-            GetImplAs<TransformFeedbackGL>(transformFeedback);
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
-        transformFeedbackGL->syncActiveState(transformFeedback->isActive(),
-                                             transformFeedback->getPrimitiveMode());
-        transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
-        mPrevDrawTransformFeedback = transformFeedbackGL;
-    }
-    else
-    {
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
-        mPrevDrawTransformFeedback = nullptr;
-    }
 
     if (context->getExtensions().webglCompatibility)
     {
@@ -1941,6 +1938,9 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 mProgramTexturesAndSamplersDirty = true;
                 break;
+            case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
+                mTransformFeedbackStateDirty = true;
+                break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 mProgramTexturesAndSamplersDirty = true;
                 propagateNumViewsToVAO(state.getProgram(),
@@ -2228,6 +2228,34 @@ void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
             default:
                 break;
         }
+    }
+}
+
+void StateManagerGL::updateTransformFeedbackState(const gl::Context *context)
+{
+    // Pause the previous transform feedback if one exists
+    if (mCurrentTransformFeedback)
+    {
+        mCurrentTransformFeedback->syncPausedState(true);
+        mCurrentTransformFeedback = nullptr;
+    }
+
+    // Set the current transform feedback state
+    gl::TransformFeedback *transformFeedback = context->getGLState().getCurrentTransformFeedback();
+    if (transformFeedback)
+    {
+        TransformFeedbackGL *transformFeedbackGL =
+            GetImplAs<TransformFeedbackGL>(transformFeedback);
+        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
+        transformFeedbackGL->syncActiveState(transformFeedback->isActive(),
+                                             transformFeedback->getPrimitiveMode());
+        transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
+        mCurrentTransformFeedback = transformFeedbackGL;
+    }
+    else
+    {
+        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        mCurrentTransformFeedback = nullptr;
     }
 }
 }
