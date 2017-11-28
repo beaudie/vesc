@@ -874,14 +874,6 @@ void TType::invalidateMangledName()
     mMangledName = nullptr;
 }
 
-// TStructure implementation.
-TStructure::TStructure(TSymbolTable *symbolTable, const TString *name, TFieldList *fields)
-    : TFieldListCollection(name, fields),
-      mUniqueId(symbolTable->nextUniqueId()),
-      mAtGlobalScope(false)
-{
-}
-
 bool TFieldListCollection::containsArrays() const
 {
     for (size_t i = 0; i < mFields->size(); ++i)
@@ -952,26 +944,6 @@ void TType::createSamplerSymbols(const TString &namePrefix,
     if (outputSymbolsToAPINames)
     {
         (*outputSymbolsToAPINames)[symbol] = apiNamePrefix;
-    }
-}
-
-void TStructure::createSamplerSymbols(const TString &namePrefix,
-                                      const TString &apiNamePrefix,
-                                      TVector<TIntermSymbol *> *outputSymbols,
-                                      TMap<TIntermSymbol *, TString> *outputSymbolsToAPINames,
-                                      TSymbolTable *symbolTable) const
-{
-    ASSERT(containsSamplers());
-    for (auto &field : *mFields)
-    {
-        const TType *fieldType = field->type();
-        if (IsSampler(fieldType->getBasicType()) || fieldType->isStructureContainingSamplers())
-        {
-            TString fieldName    = namePrefix + "_" + field->name();
-            TString fieldApiName = apiNamePrefix + "." + field->name();
-            fieldType->createSamplerSymbols(fieldName, fieldApiName, outputSymbols,
-                                            outputSymbolsToAPINames, symbolTable);
-        }
     }
 }
 
