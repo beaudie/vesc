@@ -125,7 +125,8 @@ class FramebufferState final : angle::NonCopyable
     bool mWebGLDepthStencilConsistent;
 
     // Tracks if we need to initialize the resources for each attachment.
-    angle::BitSet<IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 2> mResourceNeedsInit;
+    using ResourceNeedsInit = angle::BitSet<IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 2>;
+    ResourceNeedsInit mResourceNeedsInit;
 };
 
 class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
@@ -295,7 +296,7 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
         DIRTY_BIT_MAX = DIRTY_BIT_UNKNOWN
     };
 
-    typedef angle::BitSet<DIRTY_BIT_MAX> DirtyBits;
+    using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
     void syncState(const Context *context);
