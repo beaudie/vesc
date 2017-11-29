@@ -24,35 +24,64 @@ class TSymbol;
 class TIntermSymbol;
 class TSymbolTable;
 
+// Declarator like "a[2][4]". Only used for parsing structure field declarators.
+class TDeclarator : angle::NonCopyable
+{
+  public:
+    POOL_ALLOCATOR_NEW_DELETE();
+    TDeclarator(const TString *name, const TSourceLoc &line)
+        : mName(name), mArraySizes(nullptr), mLine(line)
+    {
+        ASSERT(mName);
+    }
+    TDeclarator(const TString *name,
+                const TVector<unsigned int> *arraySizes,
+                const TSourceLoc &line)
+        : mName(name), mArraySizes(arraySizes), mLine(line)
+    {
+        ASSERT(mName);
+        ASSERT(mArraySizes);
+    }
+
+    const TString *name() const { return mName; }
+
+    const bool isArray() const { return mArraySizes != nullptr && mArraySizes->size() > 0; }
+    const TVector<unsigned int> *arraySizes() const { return mArraySizes; }
+
+    const TSourceLoc &line() const { return mLine; }
+
+  private:
+    const TVector<unsigned int> *const mArraySizes;  // Outermost array sizes are in the back.
+    const TString *const mName;
+    const TSourceLoc mLine;
+};
+
+typedef TVector<TDeclarator *> TDeclaratorList;
+
 class TField : angle::NonCopyable
 {
   public:
     POOL_ALLOCATOR_NEW_DELETE();
-    TField(TType *type, TString *name, const TSourceLoc &line)
+    TField(TType *type, const TString *name, const TSourceLoc &line)
         : mType(type), mName(name), mLine(line)
     {
+        ASSERT(mName);
     }
 
     // TODO(alokp): We should only return const type.
     // Fix it by tweaking grammar.
     TType *type() { return mType; }
     const TType *type() const { return mType; }
-
     const TString &name() const { return *mName; }
     const TSourceLoc &line() const { return mLine; }
 
   private:
     TType *mType;
-    TString *mName;
-    TSourceLoc mLine;
+    const TString *mName;
+    const TSourceLoc mLine;
 };
 
 typedef TVector<TField *> TFieldList;
-inline TFieldList *NewPoolTFieldList()
-{
-    void *memory = GetGlobalPoolAllocator()->allocate(sizeof(TFieldList));
-    return new (memory) TFieldList;
-}
 
 class TFieldListCollection : angle::NonCopyable
 {
