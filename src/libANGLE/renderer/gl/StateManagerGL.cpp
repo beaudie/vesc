@@ -167,7 +167,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mIsMultiviewEnabled(extensions.multiview),
       mLocalDirtyBits(),
       mMultiviewDirtyBits(),
-      mProgramTexturesAndSamplersDirty(true)
+      mProgramTexturesDirty(true),
+      mProgramSamplersDirty(true)
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -871,10 +872,12 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
         }
     }
 
-    if (mProgramTexturesAndSamplersDirty)
+    if (mProgramTexturesDirty || mProgramSamplersDirty)
     {
-        updateProgramTextureAndSamplerBindings(context);
-        mProgramTexturesAndSamplersDirty = false;
+        updateProgramTextureAndSamplerBindings(context, mProgramTexturesDirty,
+                                               mProgramSamplersDirty);
+        mProgramTexturesDirty = false;
+        mProgramSamplersDirty = false;
     }
 
     // TODO(xinghua.cao@intel.com): Track image units state with dirty bits to
@@ -922,7 +925,9 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
     }
 }
 
-void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *context)
+void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *context,
+                                                            bool syncTextures,
+                                                            bool syncSamplers)
 {
     const gl::State &glState   = context->getGLState();
     const gl::Program *program = glState.getProgram();
@@ -936,39 +941,48 @@ void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *c
         GLenum textureType = samplerBinding.textureType;
         for (GLuint textureUnitIndex : samplerBinding.boundTextureUnits)
         {
-            gl::Texture *texture = completeTextures[textureUnitIndex];
-
-            // A nullptr texture indicates incomplete.
-            if (texture != nullptr)
+            if (syncTextures)
             {
-                const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
-                ASSERT(!texture->hasAnyDirtyBit());
-                ASSERT(!textureGL->hasAnyDirtyBit());
+                gl::Texture *texture = completeTextures[textureUnitIndex];
 
-                if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID())
+                // A nullptr texture indicates incomplete.
+                if (texture != nullptr)
                 {
-                    activeTexture(textureUnitIndex);
-                    bindTexture(textureType, textureGL->getTextureID());
+                    const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
+                    ASSERT(!texture->hasAnyDirtyBit());
+                    ASSERT(!textureGL->hasAnyDirtyBit());
+
+                    if (mTextures.at(textureType)[textureUnitIndex] != textureGL->getTextureID())
+                    {
+                        activeTexture(textureUnitIndex);
+                        bindTexture(textureType, textureGL->getTextureID());
+                    }
+                }
+                else
+                {
+                    if (mTextures.at(textureType)[textureUnitIndex] != 0)
+                    {
+                        activeTexture(textureUnitIndex);
+                        bindTexture(textureType, 0);
+                    }
                 }
             }
-            else
-            {
-                if (mTextures.at(textureType)[textureUnitIndex] != 0)
-                {
-                    activeTexture(textureUnitIndex);
-                    bindTexture(textureType, 0);
-                }
-            }
 
-            const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
-            if (sampler != nullptr)
+            // TODO(geofflang): Several things could potentially be faster:
+            // 1. Split this into a separate loop.
+            // 2. Get a set of unique texture units instead of iterating over every sampler
+            if (syncSamplers)
             {
-                SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
-                bindSampler(textureUnitIndex, samplerGL->getSamplerID());
-            }
-            else
-            {
-                bindSampler(textureUnitIndex, 0);
+                const gl::Sampler *sampler = glState.getSampler(textureUnitIndex);
+                if (sampler != nullptr)
+                {
+                    SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
+                    bindSampler(textureUnitIndex, samplerGL->getSamplerID());
+                }
+                else
+                {
+                    bindSampler(textureUnitIndex, 0);
+                }
             }
         }
     }
@@ -1931,7 +1945,8 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
             {
-                mProgramTexturesAndSamplersDirty = true;
+                mProgramTexturesDirty = true;
+                mProgramSamplersDirty = true;
 
                 gl::Program *program = state.getProgram();
                 if (program != nullptr)
@@ -1941,13 +1956,14 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             }
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
-                mProgramTexturesAndSamplersDirty = true;
+                mProgramTexturesDirty = true;
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
-                mProgramTexturesAndSamplersDirty = true;
+                mProgramSamplersDirty = true;
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
-                mProgramTexturesAndSamplersDirty = true;
+                mProgramTexturesDirty = true;
+                mProgramSamplersDirty = true;
                 propagateNumViewsToVAO(state.getProgram(),
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 updateMultiviewBaseViewLayerIndexUniform(
