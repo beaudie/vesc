@@ -623,6 +623,7 @@ class ObjectAndSerial final : angle::NonCopyable
     }
 
     Serial queueSerial() const { return mQueueSerial; }
+    void updateSerial(Serial newSerial) { mQueueSerial = newSerial; }
 
     const ObjT &get() const { return mObject; }
     ObjT &get() { return mObject; }
@@ -666,6 +667,7 @@ class CommandBufferAndState : public vk::CommandBuffer
 
 using CommandBufferAndSerial = ObjectAndSerial<CommandBufferAndState>;
 using FenceAndSerial         = ObjectAndSerial<Fence>;
+using RenderPassAndSerial    = ObjectAndSerial<RenderPass>;
 
 struct RenderPassDesc final
 {
@@ -678,6 +680,9 @@ struct RenderPassDesc final
     VkAttachmentDescription *nextColorAttachment();
     VkAttachmentDescription *nextDepthStencilAttachment();
     uint32_t attachmentCount() const;
+
+    size_t hash() const;
+    bool operator==(const RenderPassDesc &other) const;
 
     // Fully padded out, with no bools, to avoid any undefined behaviour.
     uint32_t colorAttachmentCount;
@@ -715,5 +720,15 @@ VkFrontFace GetFrontFace(GLenum frontFace);
 #define ANGLE_VK_CHECK(test, error) ANGLE_VK_TRY(test ? VK_SUCCESS : error)
 
 std::ostream &operator<<(std::ostream &stream, const rx::vk::Error &error);
+
+// Introduce a std::hash for a RenderPassDesc
+namespace std
+{
+template <>
+struct hash<rx::vk::RenderPassDesc>
+{
+    size_t operator()(const rx::vk::RenderPassDesc &key) const { return key.hash(); }
+};
+}  // namespace std
 
 #endif  // LIBANGLE_RENDERER_VULKAN_RENDERERVK_UTILS_H_
