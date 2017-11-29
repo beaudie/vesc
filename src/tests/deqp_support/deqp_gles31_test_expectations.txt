@@ -70,6 +70,10 @@
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_local_barrier_single_invocation = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_local_barrier_single_group = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_local_barrier_multiple_groups = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_single = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_single = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_multiple = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_rw_single_invocation = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_rw_multiple_groups = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.basic.copy_image_to_ssbo_small = FAIL
@@ -1235,12 +1239,8 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_unsized_arr_multiple_groups = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_single = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_multiple = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.copy_image_to_ssbo_large = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.copy_ssbo_to_image_large = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_single = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.4 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.10 = FAIL
