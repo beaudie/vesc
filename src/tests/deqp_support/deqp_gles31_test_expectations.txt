@@ -93,6 +93,10 @@
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.atomic.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.basic_type.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.work_group_size.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_unsized_arr_single_invocation = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_unsized_arr_multiple_groups = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
 1442 D3D11 : dEQP-GLES31.functional.atomic_counter.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texparameter* = SKIP
@@ -1189,10 +1193,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_compute_work_group_count = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_compute_work_group_size = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.helper_invocation.* = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_unsized_arr_single_invocation = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_unsized_arr_multiple_groups = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_single = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_multiple = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.copy_image_to_ssbo_large = FAIL
