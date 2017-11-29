@@ -111,7 +111,7 @@ class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
 
   private:
     virtual vk::ErrorOrResult<gl::Extents> createSurfaceVk(RendererVk *renderer) = 0;
-    vk::Error initializeImpl(RendererVk *renderer);
+    vk::Error initializeImpl(const egl::Display *display);
     vk::Error nextSwapchainImage(RendererVk *renderer);
 
     VkSwapchainKHR mSwapchain;
