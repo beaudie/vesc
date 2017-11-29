@@ -102,8 +102,7 @@ struct TexFormat final
 template <const uint8_t bits>
 constexpr uint32_t EncodeNormUint(const float val)
 {
-    constexpr auto max = UINT32_MAX >> (32 - bits);
-    return static_cast<uint32_t>(val * max + 0.5);  // round-half-up
+    return static_cast<uint32_t>(val * (UINT32_MAX >> (32 - bits)) + 0.5);  // round-half-up
 }
 
 template <const int signBit, const int eBits, const int mBits>
@@ -315,7 +314,7 @@ TEST_P(TextureUploadFormatTest, All)
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     const bool hasSubrectUploads = !glGetError();
 
-    constexpr uint8_t srcIntVals[4] = {1u, 2u, 5u, 3u};
+    constexpr uint8_t srcIntVals[4] = {1u, 2u, 5u, 1u};
     constexpr float srcVals[4] = {srcIntVals[0] / 8.0f, srcIntVals[1] / 8.0f, srcIntVals[2] / 8.0f,
                                   srcIntVals[3] / 8.0f};
     constexpr uint8_t refVals[4] = {static_cast<uint8_t>(EncodeNormUint<8>(srcVals[0])),
