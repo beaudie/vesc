@@ -32,8 +32,26 @@ class ComputeShaderTestES3 : public ANGLETest
 // It should be successful. But it would report error if we use the
 // program via UseProgram. However, to use the unsuccessfully linked program
 // will not replace the current program resided in pipeline.
-TEST_P(ComputeShaderTest, RelinkComputeProgramFailed)
+TEST_P(ComputeShaderTest, LinkAndRelinkComputeProgramFailed)
 {
+    // Link failure. No valid program installed in the pipeline.
+    // It should report error for UseProgram and DispatchCompute.
+    glUseProgram(0);
+    GLuint program = glCreateProgram();
+
+    glLinkProgram(program);
+    GLint linkStatus;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(GL_TRUE, linkStatus);
+
+    glUseProgram(program);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_NO_ERROR();
+
+    // Install a valid compute program in the pipeline via UseProgram.
+    // It should success.
     const std::string csSource =
         R"(#version 310 es
         layout(local_size_x=1) in;
@@ -41,32 +59,34 @@ TEST_P(ComputeShaderTest, RelinkComputeProgramFailed)
         {
         })";
 
-    GLuint program = glCreateProgram();
-
     GLuint cs = CompileShader(GL_COMPUTE_SHADER, csSource);
     EXPECT_NE(0u, cs);
 
     glAttachShader(program, cs);
-    glDeleteShader(cs);
 
     glLinkProgram(program);
     GLint linkStatus;
     glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
     EXPECT_EQ(GL_TRUE, linkStatus);
 
-    glDetachShader(program, cs);
     EXPECT_GL_NO_ERROR();
 
     glUseProgram(program);
+    EXPECT_GL_NO_ERROR();
     glDispatchCompute(8, 4, 2);
     EXPECT_GL_NO_ERROR();
 
-    // No compute shader, comiple fails.
+    // Relink failure. A valid program has been installed in the pipeline.
+
+    // No compute shader, relink fails.
+    glDetachShader(program, cs);
+    glDeleteShader(cs);
+
     glLinkProgram(program);
     glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
     EXPECT_EQ(GL_FALSE, linkStatus);
 
-    // To dispatch compute should be successful.
+    // To dispatch compute should success.
     glDispatchCompute(8, 4, 2);
     EXPECT_GL_NO_ERROR();
 
@@ -74,9 +94,10 @@ TEST_P(ComputeShaderTest, RelinkComputeProgramFailed)
     glUseProgram(program);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
-    // To use the unsuccessfully linked program, that program
-    // should not replace the program binary resided in pipeline.
-    // To dispatch compute should be successful.
+    // To use the unsuccessfully linked program, that program should not
+    // replace the program binary resided in pipeline. It will not make the
+    // installed program invalid, like what UseProgram(0) can do.
+    // So, to dispatch compute should success.
     glDispatchCompute(8, 4, 2);
     EXPECT_GL_NO_ERROR();
 }
