@@ -30,7 +30,9 @@ class VertexArrayVk : public VertexArrayImpl
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const;
 
-    void updateCurrentBufferSerials(const gl::AttributesMask &activeAttribsMask, Serial serial);
+    void onRender(vk::CommandBufferNode *renderNode,
+                  const gl::AttributesMask &activeAttribsMask,
+                  Serial serial);
 
     void invalidateVertexDescriptions();
     void updateVertexDescriptions(const gl::Context *context);
