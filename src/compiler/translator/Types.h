@@ -60,6 +60,7 @@ class TFieldListCollection : angle::NonCopyable
     const TFieldList &fields() const { return *mFields; }
 
     bool containsArrays() const;
+    bool containsMatrices() const;
     bool containsType(TBasicType t) const;
     bool containsSamplers() const;
 
@@ -133,7 +134,6 @@ class TInterfaceBlock : public TFieldListCollection
         : TFieldListCollection(name, fields),
           mInstanceName(instanceName),
           mBlockStorage(layoutQualifier.blockStorage),
-          mMatrixPacking(layoutQualifier.matrixPacking),
           mBinding(layoutQualifier.binding)
     {
     }
@@ -141,14 +141,14 @@ class TInterfaceBlock : public TFieldListCollection
     const TString &instanceName() const { return *mInstanceName; }
     bool hasInstanceName() const { return mInstanceName != nullptr; }
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
-    TLayoutMatrixPacking matrixPacking() const { return mMatrixPacking; }
     int blockBinding() const { return mBinding; }
 
   private:
     const TString *mInstanceName;  // for interface block instance names
     TLayoutBlockStorage mBlockStorage;
-    TLayoutMatrixPacking mMatrixPacking;
     int mBinding;
+
+    // Note that we only record matrix packing on a per-field granularity.
 };
 
 //
@@ -329,6 +329,7 @@ class TType
     bool isNamelessStruct() const;
 
     bool isStructureContainingArrays() const;
+    bool isStructureContainingMatrices() const;
     bool isStructureContainingType(TBasicType t) const;
     bool isStructureContainingSamplers() const;
 

@@ -1221,30 +1221,13 @@ void TOutputGLSLBase::declareInterfaceBlockLayout(const TInterfaceBlock *interfa
             break;
     }
 
-    out << ", ";
-
     if (interfaceBlock->blockBinding() > 0)
     {
-        out << "binding = " << interfaceBlock->blockBinding();
         out << ", ";
+        out << "binding = " << interfaceBlock->blockBinding();
     }
 
-    switch (interfaceBlock->matrixPacking())
-    {
-        case EmpUnspecified:
-        case EmpColumnMajor:
-            // Default matrix packing is column major.
-            out << "column_major";
-            break;
-
-        case EmpRowMajor:
-            out << "row_major";
-            break;
-
-        default:
-            UNREACHABLE();
-            break;
-    }
+    // Matrix packing order is only declared per-member.
 
     out << ") ";
 }
@@ -1258,6 +1241,29 @@ void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBloc
     for (size_t i = 0; i < fields.size(); ++i)
     {
         const TField *field = fields[i];
+
+        if (field->type()->isMatrix() || field->type()->isStructureContainingMatrices())
+        {
+            out << "layout(";
+            switch (field->type()->getLayoutQualifier().matrixPacking)
+            {
+                case EmpUnspecified:
+                case EmpColumnMajor:
+                    // Default matrix packing is column major.
+                    out << "column_major";
+                    break;
+
+                case EmpRowMajor:
+                    out << "row_major";
+                    break;
+
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+            out << ") ";
+        }
+
         if (writeVariablePrecision(field->type()->getPrecision()))
             out << " ";
         out << getTypeName(*field->type()) << " " << hashName(TName(field->name()));
