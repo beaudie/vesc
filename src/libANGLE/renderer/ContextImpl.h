@@ -162,6 +162,8 @@ class ContextImpl : public GLImplFactory
                                       GLuint numGroupsY,
                                       GLuint numGroupsZ) = 0;
 
+    virtual gl::Error dispatchComputeIndirect(const gl::Context *context, GLintptr indirect) = 0;
+
     const gl::ContextState &getContextState() { return mState; }
     int getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     int getClientMinorVersion() const { return mState.getClientMinorVersion(); }
