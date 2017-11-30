@@ -153,6 +153,7 @@ class ContextVk : public ContextImpl, public ResourceVk
                               GLuint numGroupsX,
                               GLuint numGroupsY,
                               GLuint numGroupsZ) override;
+    gl::Error dispatchComputeIndirect(const gl::Context *context, GLintptr indirect) override;
 
     vk::DescriptorPool *getDescriptorPool();
 

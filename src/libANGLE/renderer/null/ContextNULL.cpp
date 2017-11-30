@@ -414,4 +414,9 @@ gl::Error ContextNULL::dispatchCompute(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error ContextNULL::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
+{
+    return gl::NoError();
+}
+
 }  // namespace rx

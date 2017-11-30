@@ -753,9 +753,18 @@ gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context, GLenu
     return setGenericDrawState(context);
 }
 
-gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context)
+gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context, bool isIndirect)
 {
     setGenericShaderState(context);
+    if (isIndirect)
+    {
+        gl::Buffer *dispatchIndirectBuffer =
+            context->getGLState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
+        ASSERT(dispatchIndirectBuffer);
+        const BufferGL *bufferGL = GetImplAs<BufferGL>(dispatchIndirectBuffer);
+        bindBuffer(gl::BufferBinding::DispatchIndirect, bufferGL->getBufferID());
+    }
+
     return gl::NoError();
 }
 

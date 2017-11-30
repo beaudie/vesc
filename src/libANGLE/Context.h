@@ -1030,6 +1030,7 @@ class Context final : public ValidationContext
 
   private:
     Error prepareForDraw();
+    Error prepareForCompute();
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     void syncStateForReadPixels();

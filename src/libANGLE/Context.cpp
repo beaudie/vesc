@@ -2758,6 +2758,17 @@ Error Context::prepareForDraw()
     return NoError();
 }
 
+Error Context::prepareForCompute()
+{
+    // TODO(jmadill): Dirty bits for compute.
+    if (isRobustResourceInitEnabled())
+    {
+        ANGLE_CONTEXT_TRY(mGLState.clearUnclearedActiveTextures(this));
+    }
+
+    return NoError();
+}
+
 void Context::syncRendererState()
 {
     mGLState.syncDirtyObjects(this);
@@ -4149,19 +4160,14 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
     {
         return;
     }
-
-    // TODO(jmadill): Dirty bits for compute.
-    if (isRobustResourceInitEnabled())
-    {
-        ANGLE_CONTEXT_TRY(mGLState.clearUnclearedActiveTextures(this));
-    }
-
+    ANGLE_CONTEXT_TRY(prepareForCompute());
     handleError(mImplementation->dispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ));
 }
 
 void Context::dispatchComputeIndirect(GLintptr indirect)
 {
-    UNIMPLEMENTED();
+    ANGLE_CONTEXT_TRY(prepareForCompute());
+    handleError(mImplementation->dispatchComputeIndirect(this, indirect));
 }
 
 void Context::texStorage2D(GLenum target,

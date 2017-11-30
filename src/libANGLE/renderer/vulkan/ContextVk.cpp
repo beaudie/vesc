@@ -872,6 +872,12 @@ gl::Error ContextVk::dispatchCompute(const gl::Context *context,
     return gl::InternalError();
 }
 
+gl::Error ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError();
+}
+
 vk::DescriptorPool *ContextVk::getDescriptorPool()
 {
     return &mDescriptorPool;
