@@ -1425,8 +1425,51 @@ bool ValidateDispatchCompute(Context *context,
 
 bool ValidateDispatchComputeIndirect(Context *context, GLintptr indirect)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_1)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
+        return false;
+    }
+
+    const State &state = context->getGLState();
+    Program *program   = state.getProgram();
+
+    if (program == nullptr || !program->hasLinkedComputeShader())
+    {
+        context->handleError(InvalidOperation()
+                             << "No active program for the compute shader stage.");
+        return false;
+    }
+
+    gl::Buffer *dispatchIndirectBuffer = state.getTargetBuffer(BufferBinding::DispatchIndirect);
+    if (!dispatchIndirectBuffer)
+    {
+        context->handleError(InvalidOperation() << "Zero is bound to DISPATCH_INDIRECT_BUFFER");
+        return false;
+    }
+
+    if (indirect < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeOffset);
+        return false;
+    }
+
+    if ((indirect & (sizeof(GLuint) - 1)) != 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), OffsetMustBeMultipleOfUint);
+        return false;
+    }
+
+    CheckedNumeric<GLuint64> checkedOffset(static_cast<GLuint64>(indirect));
+    auto checkedSum = checkedOffset + static_cast<GLuint64>(3 * sizeof(GLuint));
+    if (!checkedSum.IsValid() ||
+        checkedSum.ValueOrDie() > static_cast<GLuint64>(dispatchIndirectBuffer->getSize()))
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateBindImageTexture(Context *context,

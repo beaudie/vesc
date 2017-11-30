@@ -177,6 +177,7 @@ class RendererGL : angle::NonCopyable
                               GLuint numGroupsX,
                               GLuint numGroupsY,
                               GLuint numGroupsZ);
+    gl::Error dispatchComputeIndirect(const gl::Context *context, GLintptr indirect);
 
   private:
     void ensureCapsInitialized() const;

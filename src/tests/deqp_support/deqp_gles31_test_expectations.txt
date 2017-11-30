@@ -1130,7 +1130,6 @@
 2280 OPENGL : dEQP-GLES31.functional.compute.basic.ssbo_cmd_barrier_multiple = FAIL
 2280 OPENGL : dEQP-GLES31.functional.compute.basic.image_barrier_single = FAIL
 2280 OPENGL : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = FAIL
-2270 OPENGL : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.2_level_unsized* = FAIL
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.3_level_unsized* = FAIL
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.random.arrays_of_arrays* = FAIL

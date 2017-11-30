@@ -420,4 +420,9 @@ gl::Error ContextGL::dispatchCompute(const gl::Context *context,
     return mRenderer->dispatchCompute(context, numGroupsX, numGroupsY, numGroupsZ);
 }
 
+gl::Error ContextGL::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
+{
+    return mRenderer->dispatchComputeIndirect(context, indirect);
+}
+
 }  // namespace rx
