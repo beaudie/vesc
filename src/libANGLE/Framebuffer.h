@@ -70,6 +70,7 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDepthAttachment() const;
     const FramebufferAttachment *getStencilAttachment() const;
     const FramebufferAttachment *getDepthStencilAttachment() const;
+    const FramebufferAttachment *getWebGLDepthStencilAttachment() const;
 
     const std::vector<GLenum> &getDrawBufferStates() const { return mDrawBufferStates; }
     DrawBufferMask getEnabledDrawBuffers() const { return mEnabledDrawBuffers; }
@@ -180,6 +181,7 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     const FramebufferAttachment *getDepthOrStencilbuffer() const;
     const FramebufferAttachment *getStencilOrDepthStencilAttachment() const;
     const FramebufferAttachment *getReadColorbuffer() const;
+    const FramebufferAttachment *getWebGLDepthStencilBuffer() const;
     GLenum getReadColorbufferType() const;
     const FramebufferAttachment *getFirstColorbuffer() const;
     const FramebufferAttachment *getFirstNonNullAttachment() const;

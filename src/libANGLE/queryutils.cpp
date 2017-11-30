@@ -778,7 +778,8 @@ void GetAtomicCounterBufferResourceProperty(const Program *program,
 
 }  // anonymous namespace
 
-void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
+void QueryFramebufferAttachmentParameteriv(const Context *context,
+                                           const Framebuffer *framebuffer,
                                            GLenum attachment,
                                            GLenum pname,
                                            GLint *params)
@@ -786,6 +787,16 @@ void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
     ASSERT(framebuffer);
 
     const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(attachment);
+
+    // In WebG1, DEPTH_STENCIL_ATTACHMENT is an alternative attachment point and even when
+    // inconsistant (i.e. multiple conflicting attachment points), it is still permitted to query
+    // the attachment parameters.
+    if (attachmentObject == nullptr && context->isWebGL1() &&
+        attachment == GL_DEPTH_STENCIL_ATTACHMENT)
+    {
+        attachmentObject = framebuffer->getWebGLDepthStencilBuffer();
+    }
+
     if (attachmentObject == nullptr)
     {
         // ES 2.0.25 spec pg 127 states that if the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
