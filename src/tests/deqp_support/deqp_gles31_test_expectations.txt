@@ -94,6 +94,7 @@
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.atomic.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.basic_type.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute.shared_var.work_group_size.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.atomic_counter.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.texture.texparameter* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texparameter* = SKIP
@@ -589,6 +590,8 @@
 1729 OPENGL : dEQP-GLES31.functional.ssbo.layout.random.all* = FAIL
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.3_level_unsized* = FAIL
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.random.arrays_of_arrays* = FAIL
+2270 OPENGL : dEQP-GLES31.functional.compute.indirect_dispatch.upload_buffer.multi_dispatch*
+2270 OPENGL : dEQP-GLES31.functional.compute.indirect_dispatch.gen_in_compute* = FAIL
 
 // OpenGL and D3D11 Failing Tests
 1663 OPENGL D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
@@ -1243,7 +1246,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.copy_ssbo_to_image_large = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_single = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.compute.indirect_dispatch.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.4 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.basic_type_arrays.10 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.ubo.random.all_per_block_buffers.1 = FAIL

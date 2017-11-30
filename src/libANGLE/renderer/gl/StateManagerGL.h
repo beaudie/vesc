@@ -167,7 +167,7 @@ class StateManagerGL final : angle::NonCopyable
                                    const void **outIndices);
     gl::Error setDrawIndirectState(const gl::Context *context, GLenum type);
 
-    gl::Error setDispatchComputeState(const gl::Context *context);
+    gl::Error setDispatchComputeState(const gl::Context *context, bool isIndirect);
 
     void pauseTransformFeedback();
     gl::Error pauseAllQueries();
@@ -198,6 +198,7 @@ class StateManagerGL final : angle::NonCopyable
     void propagateNumViewsToVAO(const gl::Program *program, VertexArrayGL *vao);
 
     void updateProgramTextureAndSamplerBindings(const gl::Context *context);
+    void updateProgramIndirectBufferBindings(const gl::Context *context);
 
     enum MultiviewDirtyBitType
     {
@@ -354,6 +355,7 @@ class StateManagerGL final : angle::NonCopyable
     angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
 
     bool mProgramTexturesAndSamplersDirty;
+    bool mProgramIndirectBufferDirty;
 };
 }
 

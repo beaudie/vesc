@@ -167,7 +167,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mIsMultiviewEnabled(extensions.multiview),
       mLocalDirtyBits(),
       mMultiviewDirtyBits(),
-      mProgramTexturesAndSamplersDirty(true)
+      mProgramTexturesAndSamplersDirty(true),
+      mProgramIndirectBufferDirty(true)
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -753,9 +754,25 @@ gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context, GLenu
     return setGenericDrawState(context);
 }
 
-gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context)
+void StateManagerGL::updateProgramIndirectBufferBindings(const gl::Context *context)
+{
+    gl::Buffer *dispatchIndirectBuffer =
+        context->getGLState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
+    ASSERT(dispatchIndirectBuffer);
+    const BufferGL *bufferGL = GetImplAs<BufferGL>(dispatchIndirectBuffer);
+    bindBuffer(gl::BufferBinding::DispatchIndirect, bufferGL->getBufferID());
+}
+
+gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context, bool isIndirect)
 {
     setGenericShaderState(context);
+
+    if (isIndirect && mProgramIndirectBufferDirty)
+    {
+        updateProgramIndirectBufferBindings(context);
+        mProgramIndirectBufferDirty = false;
+    }
+
     return gl::NoError();
 }
 
@@ -1933,10 +1950,11 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 // TODO: implement this
                 break;
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
-                // TODO(jiajia.qin@intel.com): implement this
+                mProgramIndirectBufferDirty = true;
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 mProgramTexturesAndSamplersDirty = true;
+                mProgramIndirectBufferDirty      = true;
                 break;
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
                 mProgramTexturesAndSamplersDirty = true;
@@ -1946,6 +1964,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 mProgramTexturesAndSamplersDirty = true;
+                mProgramIndirectBufferDirty      = true;
                 propagateNumViewsToVAO(state.getProgram(),
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 updateMultiviewBaseViewLayerIndexUniform(

@@ -139,6 +139,7 @@ class Context9 : public ContextImpl
                               GLuint numGroupsX,
                               GLuint numGroupsY,
                               GLuint numGroupsZ) override;
+    gl::Error dispatchComputeIndirect(const gl::Context *context, GLintptr indirect) override;
 
     Renderer9 *getRenderer() const { return mRenderer; }
 
