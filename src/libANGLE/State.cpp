@@ -1255,6 +1255,10 @@ void State::setBufferBinding(const Context *context, BufferBinding target, Buffe
             mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING);
             break;
+        case BufferBinding::DispatchIndirect:
+            mBoundBuffers[target].set(context, buffer);
+            mDirtyBits.set(DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
+            break;
         case BufferBinding::TransformFeedback:
             if (mTransformFeedback.get() != nullptr)
             {
@@ -2040,6 +2044,9 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
           break;
       case GL_SHADER_STORAGE_BUFFER_BINDING:
           *params = mBoundBuffers[BufferBinding::ShaderStorage].id();
+          break;
+      case GL_DISPATCH_INDIRECT_BUFFER_BINDING:
+          *params = mBoundBuffers[BufferBinding::DispatchIndirect].id();
           break;
       default:
         UNREACHABLE();
