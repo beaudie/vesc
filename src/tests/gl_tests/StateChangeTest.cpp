@@ -950,6 +950,44 @@ TEST_P(SimpleStateChangeTest, RedefineTextureInUse)
     EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::white);
 }
 
+// Tests updating a Texture's contents while in use, without redefining it.
+TEST_P(SimpleStateChangeTest, UpdateTextureInUse)
+{
+    std::array<GLColor, 4> rgby = {{GLColor::red, GLColor::green, GLColor::blue, GLColor::yellow}};
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgby.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Draw RGBY to the Framebuffer.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+
+    // Update texture to be YBGR.
+    std::array<GLColor, 4> ybgr = {{GLColor::yellow, GLColor::blue, GLColor::green, GLColor::red}};
+
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2, 2, GL_RGBA, GL_UNSIGNED_BYTE, ybgr.data());
+    ASSERT_GL_NO_ERROR();
+
+    int w = getWindowWidth() - 2;
+    int h = getWindowHeight() - 2;
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+
+    // Draw RGBY to the Framebuffer.
+    draw2DTexturedQuad(0.5f, 1.0f, true);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::red);
+    ASSERT_GL_NO_ERROR();
+}
+
 const char kSolidColorVertexShader[] = R"(attribute vec2 position;
 void main()
 {
