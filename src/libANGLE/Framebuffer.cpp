@@ -399,6 +399,11 @@ const FramebufferAttachment *FramebufferState::getDepthAttachment() const
     return mDepthAttachment.isAttached() ? &mDepthAttachment : nullptr;
 }
 
+const FramebufferAttachment *FramebufferState::getWebGLDepthStencilAttachment() const
+{
+    return mWebGLDepthStencilAttachment.isAttached() ? &mWebGLDepthStencilAttachment : nullptr;
+}
+
 const FramebufferAttachment *FramebufferState::getStencilAttachment() const
 {
     return mStencilAttachment.isAttached() ? &mStencilAttachment : nullptr;
@@ -759,6 +764,11 @@ const FramebufferAttachment *Framebuffer::getStencilbuffer() const
 const FramebufferAttachment *Framebuffer::getDepthStencilBuffer() const
 {
     return mState.getDepthStencilAttachment();
+}
+
+const FramebufferAttachment *Framebuffer::getWebGLDepthStencilBuffer() const
+{
+    return mState.getWebGLDepthStencilAttachment();
 }
 
 const FramebufferAttachment *Framebuffer::getDepthOrStencilbuffer() const
