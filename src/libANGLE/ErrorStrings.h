@@ -132,6 +132,8 @@ ERRMSG(NoTransformFeedbackOutputVariables,
 ERRMSG(NoZeroDivisor, "At least one enabled attribute must have a divisor of zero.");
 ERRMSG(ObjectNotGenerated, "Object cannot be used because it has not been generated.");
 ERRMSG(OffsetMustBeMultipleOfType, "Offset must be a multiple of the passed in datatype.");
+ERRMSG(OffsetMustBeMultipleOfUint,
+       "Offset must be a multiple of the size, in basic machine units, of uint");
 ERRMSG(OutsideOfBounds, "Parameter outside of bounds.");
 ERRMSG(ParamOverflow, "The provided parameters overflow with the provided buffer.");
 ERRMSG(PixelDataNotNull, "Pixel data must be null.");
