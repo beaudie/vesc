@@ -437,6 +437,11 @@ bool TType::isStructureContainingArrays() const
     return mStructure ? mStructure->containsArrays() : false;
 }
 
+bool TType::isStructureContainingMatrices() const
+{
+    return mStructure ? mStructure->containsMatrices() : false;
+}
+
 bool TType::isStructureContainingType(TBasicType t) const
 {
     return mStructure ? mStructure->containsType(t) : false;
@@ -888,6 +893,17 @@ bool TFieldListCollection::containsArrays() const
     {
         const TType *fieldType = field->type();
         if (fieldType->isArray() || fieldType->isStructureContainingArrays())
+            return true;
+    }
+    return false;
+}
+
+bool TFieldListCollection::containsMatrices() const
+{
+    for (auto *field : *mFields)
+    {
+        const TType *fieldType = field->type();
+        if (fieldType->isMatrix() || fieldType->isStructureContainingArrays())
             return true;
     }
     return false;
