@@ -4249,7 +4249,8 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
 
 void Context::dispatchComputeIndirect(GLintptr indirect)
 {
-    UNIMPLEMENTED();
+    ANGLE_CONTEXT_TRY(prepareForDispatch());
+    handleError(mImplementation->dispatchComputeIndirect(this, indirect));
 }
 
 void Context::texStorage2D(GLenum target,
