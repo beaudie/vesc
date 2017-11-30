@@ -2952,6 +2952,40 @@ TEST_P(WebGLCompatibilityTest, DepthStencilAttachment)
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
 
+// Verify framebuffer attachments return expected types when in an inconsistant state.
+TEST_P(WebGLCompatibilityTest, FramebufferAttachmentConsistancy)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() > 2);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rb1;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb1);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rb1);
+
+    GLint attachmentType;
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                          GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE,
+                                          /*param*/ &attachmentType);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GLENUM_EQ(GL_RENDERBUFFER, attachmentType);
+
+    GLRenderbuffer rb2;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb2);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rb2);
+
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                          GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE,
+                                          /*param*/ &attachmentType);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GLENUM_EQ(GL_RENDERBUFFER, attachmentType);
+}
+
 // This tests that rendering feedback loops works as expected with WebGL 2.
 // Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
