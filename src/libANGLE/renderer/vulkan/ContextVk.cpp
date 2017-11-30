@@ -322,8 +322,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode)
 
     // Process vertex attributes. Assume zero offsets for now.
     // TODO(jmadill): Offset handling.
-    const std::vector<VkBuffer> &vertexHandles = vkVAO->getCurrentVertexBufferHandlesCache();
-    angle::MemoryBuffer *zeroBuf               = nullptr;
+    const auto &vertexHandles    = vkVAO->getCurrentArrayBufferHandles();
+    angle::MemoryBuffer *zeroBuf = nullptr;
     ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
     vk::CommandBufferAndState *commandBuffer = nullptr;
