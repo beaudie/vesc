@@ -1221,29 +1221,31 @@ void TOutputGLSLBase::declareInterfaceBlockLayout(const TInterfaceBlock *interfa
             break;
     }
 
-    out << ", ";
-
     if (interfaceBlock->blockBinding() > 0)
     {
-        out << "binding = " << interfaceBlock->blockBinding();
         out << ", ";
+        out << "binding = " << interfaceBlock->blockBinding();
     }
 
-    switch (interfaceBlock->matrixPacking())
+    bool hasMatrixFields = false;
+    bool allMatrixFieldsRowMajor = true;
+    // If all matrix members are row-major, declare row-major layout per block. This attempts to work around bug on AMD GL drivers - they don't seem to take matrix layout of individual member fields into account. Otherwise it should not be needed as we always declare matrix layout for individual members.
+    const TFieldList &fields = interfaceBlock->fields();
+    for (const TField *field : fields)
     {
-        case EmpUnspecified:
-        case EmpColumnMajor:
-            // Default matrix packing is column major.
-            out << "column_major";
-            break;
-
-        case EmpRowMajor:
-            out << "row_major";
-            break;
-
-        default:
-            UNREACHABLE();
-            break;
+        if (field->type()->isMatrix() || field->type()->isStructureContainingMatrices())
+        {
+            hasMatrixFields = true;
+            if (field->type()->getLayoutQualifier().matrixPacking != EmpRowMajor)
+            {
+                allMatrixFieldsRowMajor = false;
+                break;
+            }
+        }
+    }
+    if (hasMatrixFields && allMatrixFieldsRowMajor)
+    {
+        out << ", row_major";
     }
 
     out << ") ";
@@ -1255,9 +1257,30 @@ void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBloc
 
     out << hashName(TName(interfaceBlock->name())) << "{\n";
     const TFieldList &fields = interfaceBlock->fields();
-    for (size_t i = 0; i < fields.size(); ++i)
+    for (const TField *field : fields)
     {
-        const TField *field = fields[i];
+        if (field->type()->isMatrix() || field->type()->isStructureContainingMatrices())
+        {
+            out << "layout(";
+            switch (field->type()->getLayoutQualifier().matrixPacking)
+            {
+                case EmpUnspecified:
+                case EmpColumnMajor:
+                    // Default matrix packing is column major.
+                    out << "column_major";
+                    break;
+
+                case EmpRowMajor:
+                    out << "row_major";
+                    break;
+
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+            out << ") ";
+        }
+
         if (writeVariablePrecision(field->type()->getPrecision()))
             out << " ";
         out << getTypeName(*field->type()) << " " << hashName(TName(field->name()));

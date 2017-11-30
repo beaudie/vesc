@@ -131,13 +131,12 @@ class Std140BlockEncoder : public BlockLayoutEncoder
 
 using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
 
-// Only valid to call with ShaderVariable, InterfaceBlockField and Uniform.
+// Only valid to call with InterfaceBlockField and Uniform.
 template <typename VarT>
 void GetUniformBlockInfo(const std::vector<VarT> &fields,
                          const std::string &prefix,
                          sh::BlockLayoutEncoder *encoder,
-                         bool inRowMajorLayout,
-                         BlockLayoutMap *blockLayoutMap);
+                         BlockLayoutMap *blockInfoOut);
 
 }  // namespace sh
 
