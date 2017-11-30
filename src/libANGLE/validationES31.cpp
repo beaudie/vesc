@@ -1767,11 +1767,11 @@ bool ValidateMemoryBarrier(Context *context, GLbitfield barriers)
         GL_PIXEL_BUFFER_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT |
         GL_FRAMEBUFFER_BARRIER_BIT | GL_TRANSFORM_FEEDBACK_BARRIER_BIT |
         GL_ATOMIC_COUNTER_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT;
-    if (barriers & ~supported_barrier_bits) != 0)
-        {
-            context->handleError(InvalidValue() << "Unsupported barrier bit.");
-            return false;
-        }
+    if ((barriers & ~supported_barrier_bits) != 0)
+    {
+        context->handleError(InvalidValue() << "Unsupported barrier bit.");
+        return false;
+    }
 
     return true;
 }
@@ -1787,11 +1787,11 @@ bool ValidateMemoryBarrierByRegion(Context *context, GLbitfield barriers)
                                         GL_SHADER_IMAGE_ACCESS_BARRIER_BIT |
                                         GL_SHADER_STORAGE_BARRIER_BIT |
                                         GL_TEXTURE_FETCH_BARRIER_BIT | GL_UNIFORM_BARRIER_BIT;
-    if (barriers & ~supported_barrier_bits) != 0)
-        {
-            context->handleError(InvalidValue() << "Unsupported barrier bit.");
-            return false;
-        }
+    if ((barriers & ~supported_barrier_bits) != 0)
+    {
+        context->handleError(InvalidValue() << "Unsupported barrier bit.");
+        return false;
+    }
 
     return true;
 }
