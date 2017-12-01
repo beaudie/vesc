@@ -12,10 +12,17 @@
 #include "libANGLE/PackedGLEnums_autogen.h"
 
 #include <array>
+#include <bitset>
 #include <cstddef>
 
 namespace angle
 {
+
+// Implementation of AllEnums which allows iterating over all the possible values for a packed enums
+// like so:
+//     for (auto value : AllEnums<MyPackedEnum>()) {
+//         // Do something with the enum.
+//     }
 
 template <typename E>
 class EnumIterator final
@@ -45,6 +52,8 @@ struct AllEnums
     EnumIterator<E> end() const { return {E::InvalidEnum}; }
 };
 
+// PackedEnumMap<E, T> is like an std::array<T, E::EnumCount> but is indexed with enum values. It
+// implements all of the std::array interface except with enum values instead of indices.
 template <typename E, typename T>
 class PackedEnumMap
 {
@@ -105,6 +114,105 @@ class PackedEnumMap
     T *data() noexcept { return mData.data(); }
     const T *data() const noexcept { return mData.data(); }
 };
+
+// PackedEnumBitSetE> is like an std::bitset<E::EnumCount> but is indexed with enum values. It
+// implements parts of the std::bitset interface except with enum values instead of indices. Some of
+// the std::bitset interface with shifts and casts to/from integer isn't present because it doesn't
+// make sense for enum bitsets.
+template <typename E>
+class PackedEnumBitSet
+{
+  private:
+    using UnderlyingType          = typename std::underlying_type<E>::type;
+    static constexpr size_t kSize = static_cast<UnderlyingType>(E::EnumCount);
+    using Storage                 = std::bitset<kSize>;
+
+    Storage mData;
+
+  public:
+    PackedEnumBitSet() = default;
+    explicit PackedEnumBitSet(Storage data) : mData(data) {}
+
+    // Non-operatior modifiers
+    PackedEnumBitSet &set() noexcept
+    {
+        mData.set();
+        return *this;
+    }
+    PackedEnumBitSet &set(E pos, bool val = true)
+    {
+        mData.set(static_cast<UnderlyingType>(pos), val);
+        return *this;
+    };
+    PackedEnumBitSet &reset() noexcept
+    {
+        mData.reset();
+        return *this;
+    }
+    PackedEnumBitSet &reset(E pos)
+    {
+        mData.reset(static_cast<UnderlyingType>(pos));
+        return *this;
+    }
+    PackedEnumBitSet &flip() noexcept
+    {
+        mData.flip();
+        return *this;
+    }
+    PackedEnumBitSet &flip(E pos)
+    {
+        mData.flip(static_cast<UnderlyingType>(pos));
+        return *this;
+    }
+
+    // Operator overloads
+    bool operator[](E pos) const { return mData[static_cast<UnderlyingType>(pos)]; }
+    PackedEnumBitSet &operator&=(const PackedEnumBitSet &rhs) noexcept
+    {
+        mData = mData & rhs.mData;
+        return *this;
+    }
+    PackedEnumBitSet &operator|=(const PackedEnumBitSet &rhs) noexcept
+    {
+        mData = mData | rhs.mData;
+        return *this;
+    }
+    PackedEnumBitSet &operator^=(const PackedEnumBitSet &rhs) noexcept
+    {
+        mData = mData ^ rhs.mData;
+        return *this;
+    }
+    bool operator==(const PackedEnumBitSet &rhs) const noexcept { return mData == rhs.mData; }
+    bool operator!=(const PackedEnumBitSet &rhs) const noexcept { return mData != rhs.mData; }
+    PackedEnumBitSet operator~() const noexcept {}
+
+    // Queries
+    size_t count() const noexcept { return mData.count(); }
+    constexpr size_t size() const noexcept { return kSize; }
+    bool test(E pos) const { return mData.test(static_cast<UnderlyingType>(pos)); }
+    bool all() const noexcept { return mData.all(); }
+    bool any() const noexcept { return mData.any(); }
+    bool none() const noexcept { return mData.none(); }
+
+    const Storage &getData() const noexcept { return mData; }
+};
+
+// Operator overloads for PackedEnumBitSet
+template <typename E>
+PackedEnumBitSet<E> operator&(const PackedEnumBitSet<E> &a, const PackedEnumBitSet<E> &b) noexcept
+{
+    return {a.getData() & b.getData()};
+}
+template <typename E>
+PackedEnumBitSet<E> operator|(const PackedEnumBitSet<E> &a, const PackedEnumBitSet<E> &b) noexcept
+{
+    return {a.getData() | b.getData()};
+}
+template <typename E>
+PackedEnumBitSet<E> operator^(const PackedEnumBitSet<E> &a, const PackedEnumBitSet<E> &b) noexcept
+{
+    return {a.getData() ^ b.getData()};
+}
 
 }  // namespace angle
 
