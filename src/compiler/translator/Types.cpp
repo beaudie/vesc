@@ -1042,11 +1042,9 @@ int TFieldListCollection::calculateDeepestNesting() const
 
 TInterfaceBlock::TInterfaceBlock(const TString *name,
                                  const TFieldList *fields,
-                                 const TString *instanceName,
                                  const TLayoutQualifier &layoutQualifier)
     : TFieldListCollection(fields),
       mName(name),
-      mInstanceName(instanceName),
       mBlockStorage(layoutQualifier.blockStorage),
       mBinding(layoutQualifier.binding)
 {
