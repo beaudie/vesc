@@ -155,7 +155,10 @@ class OutputHLSL : public TIntermTraverser
     std::stack<TInfoSinkBase *> mInfoSinkStack;
 
     ReferencedSymbols mReferencedUniforms;
-    ReferencedSymbols mReferencedUniformBlocks;
+    ReferencedSymbols mReferencedUniformBlocks;  // Indexed by block name, not instance name. Stored
+                                                 // nodes point to either the block instance in the
+                                                 // case of an instanced block, or a member uniform
+                                                 // in the case of a non-instanced block.
     ReferencedSymbols mReferencedAttributes;
     ReferencedSymbols mReferencedVaryings;
     ReferencedSymbols mReferencedOutputVariables;
