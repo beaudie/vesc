@@ -3699,4 +3699,29 @@ bool ValidateGetInternalformativ(Context *context,
                                            nullptr);
 }
 
+bool ValidateTexStorage2DMultisampleANGLE(Context *context,
+                                          GLenum target,
+                                          GLsizei samples,
+                                          GLint internalFormat,
+                                          GLsizei width,
+                                          GLsizei height,
+                                          GLboolean fixedSampleLocations)
+{
+    if (context->getClientVersion() < ES_3_0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
+        return false;
+    }
+
+    if (!context->getExtensions().textureMultisample)
+    {
+        context->handleError(InvalidOperation()
+                             << "GL_ANGLE_texture_multisample is not supported.");
+        return false;
+    }
+
+    return ValidateTexStorage2DMultisampleBase(context, target, samples, internalFormat, width,
+                                               height, fixedSampleLocations);
+}
+
 }  // namespace gl

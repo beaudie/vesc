@@ -15,5 +15,6 @@
 #include "GLES3/gl3.h"
 #include "GLES3/gl31.h"
 #include "GLES3/gl32.h"
+#include "GLES3/gl3ext_angle.h"
 
 #endif // ANGLEGL_H_
