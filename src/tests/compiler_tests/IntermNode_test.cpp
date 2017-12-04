@@ -38,16 +38,16 @@ class IntermNodeTest : public testing::Test
     {
         TInfoSinkBase symbolNameOut;
         symbolNameOut << "test" << mUniqueIndex;
-        TString symbolName = symbolNameOut.c_str();
+        TString *symbolName = NewPoolTString(symbolNameOut.c_str());
         ++mUniqueIndex;
 
         // We're using a dummy symbol table here, don't need to assign proper symbol ids to these
         // nodes.
         TSymbolTable symbolTable;
-
-        TIntermSymbol *node = new TIntermSymbol(symbolTable.nextUniqueId(), symbolName, type);
+        TVariable *variable =
+            new TVariable(&symbolTable, symbolName, type, SymbolType::ANGLE_INTERNAL);
+        TIntermSymbol *node = new TIntermSymbol(variable);
         node->setLine(createUniqueSourceLoc());
-        node->setInternal(true);
         node->getTypePointer()->setQualifier(EvqTemporary);
         return node;
     }
@@ -126,9 +126,10 @@ TEST_F(IntermNodeTest, DeepCopySymbolNode)
     // We're using a dummy symbol table here, don't need to assign proper symbol ids to these nodes.
     TSymbolTable symbolTable;
 
-    TIntermSymbol *original = new TIntermSymbol(symbolTable.nextUniqueId(), TString("name"), type);
+    TVariable *variable =
+        new TVariable(&symbolTable, NewPoolTString("name"), type, SymbolType::ANGLE_INTERNAL);
+    TIntermSymbol *original = new TIntermSymbol(variable);
     original->setLine(getTestSourceLoc());
-    original->setInternal(true);
     TIntermTyped *copy = original->deepCopy();
     checkSymbolCopy(original, copy);
     checkTestSourceLoc(copy->getLine());
