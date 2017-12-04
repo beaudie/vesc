@@ -13,6 +13,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/State.h"
+#include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -987,9 +988,18 @@ gl::Error TextureGL::setStorageMultisample(const gl::Context *context,
 
     ASSERT(size.depth == 1);
 
-    mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
-                                        size.width, size.height,
-                                        gl::ConvertToGLBoolean(fixedSampleLocations));
+    if (context->getClientVersion() >= gl::Version(3, 1))
+    {
+        mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                            size.width, size.height,
+                                            gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
+    else if (context->getExtensions().textureMultisample)
+    {
+        mFunctions->texImage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                          size.width, size.height,
+                                          gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
 
     setLevelInfo(target, 0, 1, GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
 
