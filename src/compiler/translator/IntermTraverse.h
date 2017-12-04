@@ -179,22 +179,6 @@ class TIntermTraverser : angle::NonCopyable
     // Helper to insert a single statement.
     void insertStatementInParentBlock(TIntermNode *statement);
 
-    // Helper to create a temporary symbol node with the given qualifier.
-    TIntermSymbol *createTempSymbol(const TType &type, TQualifier qualifier);
-    // Helper to create a temporary symbol node.
-    TIntermSymbol *createTempSymbol(const TType &type);
-    // Create a node that declares but doesn't initialize a temporary symbol.
-    TIntermDeclaration *createTempDeclaration(const TType &type);
-    // Create a node that initializes the current temporary symbol with initializer. The symbol will
-    // have the given qualifier.
-    TIntermDeclaration *createTempInitDeclaration(TIntermTyped *initializer, TQualifier qualifier);
-    // Create a node that initializes the current temporary symbol with initializer.
-    TIntermDeclaration *createTempInitDeclaration(TIntermTyped *initializer);
-    // Create a node that assigns rightNode to the current temporary symbol.
-    TIntermBinary *createTempAssignment(TIntermTyped *rightNode);
-    // Increment temporary symbol index.
-    void nextTemporaryId();
-
     enum class OriginalNode
     {
         BECOMES_CHILD,
