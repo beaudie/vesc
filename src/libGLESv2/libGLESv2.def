@@ -234,6 +234,9 @@ EXPORTS
     glFramebufferTextureMultiviewLayeredANGLE @413
     glFramebufferTextureMultiviewSideBySideANGLE @414
     glRequestExtensionANGLE         @415
+    glTexStorage2DMultisampleANGLE  @416
+    glGetMultisamplefvANGLE         @417
+    glSampleMaskiANGLE              @418
 
     ; GLES 3.0 Functions
     glReadBuffer                    @180
