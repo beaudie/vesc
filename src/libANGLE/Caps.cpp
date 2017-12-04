@@ -228,7 +228,8 @@ Extensions::Extensions()
       robustResourceInitialization(false),
       programCacheControl(false),
       textureRectangle(false),
-      geometryShader(false)
+      geometryShader(false),
+      textureMultisample(false)
 {
 }
 
@@ -697,6 +698,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControl);
         map["GL_ANGLE_texture_rectangle"] = enableableExtension(&Extensions::textureRectangle);
         map["GL_EXT_geometry_shader"] = enableableExtension(&Extensions::geometryShader);
+        map["GL_ANGLE_texture_multisample"] = enableableExtension(&Extensions::textureMultisample);
         // clang-format on
 
         return map;

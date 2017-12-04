@@ -460,7 +460,8 @@ bool ValidTextureTarget(const ValidationContext *context, GLenum target)
             return (context->getClientMajorVersion() >= 3);
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            return (context->getClientVersion() >= Version(3, 1));
+            return (context->getClientVersion() >= Version(3, 1) ||
+                    context->getExtensions().textureMultisample);
 
         default:
             return false;
@@ -5775,10 +5776,12 @@ bool ValidateGetInternalFormativBase(Context *context,
             break;
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            if (context->getClientVersion() < ES_3_1)
+            if (!(context->getClientVersion() >= ES_3_1 ||
+                  context->getExtensions().textureMultisample))
             {
-                context->handleError(InvalidOperation()
-                                     << "Texture target requires at least OpenGL ES 3.1.");
+                context->handleError(InvalidOperation() << "Texture target requires at least "
+                                                           "OpenGL ES 3.1 or multisample extension "
+                                                           "is supported.");
                 return false;
             }
             break;

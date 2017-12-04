@@ -325,7 +325,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
         Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_ARRAY);
         mZeroTextures[GL_TEXTURE_2D_ARRAY].set(this, zeroTexture2DArray);
     }
-    if (getClientVersion() >= Version(3, 1))
+    if (getClientVersion() >= Version(3, 1) || getExtensions().textureMultisample)
     {
         Texture *zeroTexture2DMultisample =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_MULTISAMPLE);
