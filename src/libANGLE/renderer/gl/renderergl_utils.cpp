@@ -667,8 +667,10 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     if (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
-        functions->hasGLExtension("GL_ARB_texture_multisample"))
+        (functions->hasGLExtension("GL_ARB_texture_multisample") && functions->hasExtension("GL_ARB_texture_storage_multisample")))
     {
+        extensions->textureMultisample = true;
+
         caps->maxSampleMaskWords     = QuerySingleGLInt(functions, GL_MAX_SAMPLE_MASK_WORDS);
         caps->maxColorTextureSamples = QuerySingleGLInt(functions, GL_MAX_COLOR_TEXTURE_SAMPLES);
         caps->maxDepthTextureSamples = QuerySingleGLInt(functions, GL_MAX_DEPTH_TEXTURE_SAMPLES);

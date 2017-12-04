@@ -656,6 +656,20 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         }
     }
 
+    if (getExtensions().textureMultisample)
+    {
+        switch (pname)
+        {
+            case GL_MAX_COLOR_TEXTURE_SAMPLES_ANGLE:
+            case GL_MAX_INTEGER_SAMPLES_ANGLE:
+            case GL_MAX_DEPTH_TEXTURE_SAMPLES_ANGLE:
+            case GL_TEXTURE_BINDING_2D_MULTISAMPLE_ANGLE:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
     if (getClientVersion() < Version(3, 1))
     {
         return false;

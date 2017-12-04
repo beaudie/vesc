@@ -170,6 +170,158 @@ TEST_P(TextureMultisampleTestES31, MaxDepthTextureSamples)
     EXPECT_NE(std::numeric_limits<GLint>::max(), maxDepthTextureSamples);
 }
 
+class TextureMultisampleTestES3ANGLE : public TextureMultisampleTest
+{
+  protected:
+    TextureMultisampleTestES3ANGLE() : TextureMultisampleTest() {}
+};
+
+// Tests that if es version < 3.0 or multisample extension is unsupported,
+// GL_TEXTURE_2D_MULTISAMPLE_ANGLE is not supported in GetInternalformativ.
+TEST_P(TextureMultisampleTestES3ANGLE, MultisampleTargetGetInternalFormativBase)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    GLint maxSamples = 0;
+    glGetInternalformativ(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, GL_R8, GL_SAMPLES, 1, &maxSamples);
+    if (getClientMajorVersion() < 3 || !extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+    }
+    else
+    {
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Tests that if es version < 3.0 or multisample extension is unsupported,
+// GL_TEXTURE_2D_MULTISAMPLE_ANGLE is not supported in FramebufferTexture2D.
+TEST_P(TextureMultisampleTestES3ANGLE, MultisampleTargetFramebufferTexture2D)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    GLint samples = 1;
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, mTexture);
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, samples, GL_RGBA8, 64, 64,
+                                   GL_FALSE);
+    if (getClientMajorVersion() < 3 || !extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        ASSERT_GL_ERROR(GL_INVALID_ENUM);
+    }
+    else
+    {
+        ASSERT_GL_NO_ERROR();
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE_ANGLE,
+                           mTexture, 0);
+    if (getClientMajorVersion() < 3 || !extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+    }
+    else
+    {
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Tests basic functionality of glTexStorage2DMultisample.
+TEST_P(TextureMultisampleTestES3ANGLE, ValidateTextureStorageMultisampleParameters)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, mTexture);
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    ASSERT_GL_NO_ERROR();
+
+    GLint params = 0;
+    glGetTexParameteriv(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, GL_TEXTURE_IMMUTABLE_FORMAT, &params);
+    EXPECT_EQ(1, params);
+
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_ENUM);
+
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 1, GL_RGBA8, 0, 0, GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_VALUE);
+
+    GLint maxSize = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 1, GL_RGBA8, maxSize + 1, 1,
+                                   GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_VALUE);
+
+    GLint maxSamples = 0;
+    glGetInternalformativ(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, GL_R8, GL_SAMPLES, 1, &maxSamples);
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, maxSamples + 1, GL_RGBA8, 1, 1,
+                                   GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 0, GL_RGBA8, 1, 1, GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_VALUE);
+
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 1, GL_RGBA, 0, 0, GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_VALUE);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 0);
+    glTexStorage2DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Tests the value of MAX_INTEGER_SAMPLES is no less than 1.
+// [OpenGL SPEC ARB_texture_multisample.txt]
+TEST_P(TextureMultisampleTestES3ANGLE, MaxIntegerSamples)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    GLint maxIntegerSamples;
+    glGetIntegerv(GL_MAX_INTEGER_SAMPLES_ANGLE, &maxIntegerSamples);
+    EXPECT_GE(maxIntegerSamples, 1);
+    EXPECT_NE(std::numeric_limits<GLint>::max(), maxIntegerSamples);
+}
+
+// Tests the value of MAX_COLOR_TEXTURE_SAMPLES is no less than 1.
+// [OpenGL SPEC ARB_texture_multisample.txt]
+TEST_P(TextureMultisampleTestES3ANGLE, MaxColorTextureSamples)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    GLint maxColorTextureSamples;
+    glGetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES_ANGLE, &maxColorTextureSamples);
+    EXPECT_GE(maxColorTextureSamples, 1);
+    EXPECT_NE(std::numeric_limits<GLint>::max(), maxColorTextureSamples);
+}
+
+// Tests the value of MAX_DEPTH_TEXTURE_SAMPLES is no less than 1.
+// [OpenGL SPEC ARB_texture_multisample.txt]
+TEST_P(TextureMultisampleTestES3ANGLE, MaxDepthTextureSamples)
+{
+    if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        return;
+    }
+
+    GLint maxDepthTextureSamples;
+    glGetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES_ANGLE, &maxDepthTextureSamples);
+    EXPECT_GE(maxDepthTextureSamples, 1);
+    EXPECT_NE(std::numeric_limits<GLint>::max(), maxDepthTextureSamples);
+}
+
 ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES31_D3D11(),
                        ES3_OPENGL(),
@@ -177,4 +329,10 @@ ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES31_OPENGL(),
                        ES31_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureMultisampleTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST(TextureMultisampleTestES3ANGLE,
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES31_D3D11(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES());
 }

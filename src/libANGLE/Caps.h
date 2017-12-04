@@ -378,6 +378,8 @@ struct Extensions
     // TODO(jiawei.shao@intel.com): add all implementation dependent geometry shader limits.
     GLuint maxGeometryOutputVertices;
     GLuint maxGeometryShaderInvocations;
+
+    bool textureMultisample;
 };
 
 struct ExtensionInfo
