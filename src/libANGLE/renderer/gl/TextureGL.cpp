@@ -987,9 +987,22 @@ gl::Error TextureGL::setStorageMultisample(const gl::Context *context,
 
     ASSERT(size.depth == 1);
 
-    mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
-                                        size.width, size.height,
-                                        gl::ConvertToGLBoolean(fixedSampleLocations));
+    if (mFunctions->isAtLeastGLES(gl::Version(3, 1)) ||
+        mFunctions->isAtLeastGL(gl::Version(4, 3)) ||
+        mFunctions->hasGLExtension("GL_ARB_texture_storage_multisample"))
+    {
+        mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                            size.width, size.height,
+                                            gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
+    else
+    {
+        // ARB_texture_multisample is supported on Mac OpenGLES 3.0. And texImage2DMultisample
+        // is supported by the extension.
+        mFunctions->texImage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                          size.width, size.height,
+                                          gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
 
     setLevelInfo(target, 0, 1, GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
 

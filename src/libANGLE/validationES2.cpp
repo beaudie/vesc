@@ -2972,7 +2972,8 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
             break;
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            if (context->getClientVersion() < Version(3, 1))
+            if (context->getClientVersion() < Version(3, 1) &&
+                !context->getExtensions().textureMultisample)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), ES31Required);
                 return false;
@@ -6050,7 +6051,8 @@ bool ValidateFramebufferTexture2D(Context *context,
 
             case GL_TEXTURE_2D_MULTISAMPLE:
             {
-                if (context->getClientVersion() < ES_3_1)
+                if (context->getClientVersion() < ES_3_1 &&
+                    !context->getExtensions().textureMultisample)
                 {
                     ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES31Required);
                     return false;
