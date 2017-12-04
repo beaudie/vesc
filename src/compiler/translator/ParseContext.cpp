@@ -2451,7 +2451,8 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         // But if the empty declaration is declaring a struct type, the symbol node will store that.
         if (type.getBasicType() == EbtStruct)
         {
-            symbol = new TIntermSymbol(symbolTable.getEmptySymbolId(), "", type);
+            TSymbolUniqueId emptyUniqueId(&symbolTable);
+            symbol = new TIntermSymbol(emptyUniqueId, "", type);
         }
         else if (IsAtomicCounter(publicType.getBasicType()))
         {
@@ -3215,7 +3216,8 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
         {
             // The parameter had no name or declaring the symbol failed - either way, add a nameless
             // symbol.
-            symbol = new TIntermSymbol(symbolTable.getEmptySymbolId(), "", *param.type);
+            TSymbolUniqueId emptyUniqueId(&symbolTable);
+            symbol = new TIntermSymbol(emptyUniqueId, "", *param.type);
         }
         symbol->setLine(location);
         prototype->appendParameter(symbol);
@@ -3847,7 +3849,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                       field->name().c_str());
             }
         }
-        symbolId = &symbolTable.getEmptySymbolId();
+
+        symbolId = new TSymbolUniqueId(&symbolTable);
     }
     else
     {

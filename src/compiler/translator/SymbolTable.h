@@ -313,7 +313,7 @@ const int GLOBAL_LEVEL       = 5;
 class TSymbolTable : angle::NonCopyable
 {
   public:
-    TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1), mEmptySymbolId(this)
+    TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1)
     {
         // The symbol table cannot be used until push() is called, but
         // the lack of an initial call to push() can be used to detect
@@ -525,11 +525,6 @@ class TSymbolTable : angle::NonCopyable
 
     const TSymbolUniqueId nextUniqueId() { return TSymbolUniqueId(this); }
 
-    // The empty symbol id is shared between all empty string ("") symbols. They are used in the
-    // AST for unused function parameters and struct type declarations that don't declare a
-    // variable, for example.
-    const TSymbolUniqueId &getEmptySymbolId() { return mEmptySymbolId; }
-
     // Checks whether there is a built-in accessible by a shader with the specified version.
     bool hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion);
 
@@ -566,8 +561,6 @@ class TSymbolTable : angle::NonCopyable
     // TODO(oetuaho): Make this a compile-time constant once the symbol table is initialized at
     // compile time. http://anglebug.com/1432
     int mUserDefinedUniqueIdsStart;
-
-    const TSymbolUniqueId mEmptySymbolId;
 };
 
 }  // namespace sh
