@@ -987,9 +987,20 @@ gl::Error TextureGL::setStorageMultisample(const gl::Context *context,
 
     ASSERT(size.depth == 1);
 
-    mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
-                                        size.width, size.height,
-                                        gl::ConvertToGLBoolean(fixedSampleLocations));
+    if (mFunctions->isAtLeastGLES(gl::Version(3, 1)) ||
+        mFunctions->isAtLeastGL(gl::Version(4, 3)) ||
+        mFunctions->hasGLExtension("GL_ARB_texture_storage_multisample"))
+    {
+        mFunctions->texStorage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                            size.width, size.height,
+                                            gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
+    else  // texImage2DMultisample is supported by ARB_texture_multisample
+    {
+        mFunctions->texImage2DMultisample(target, samples, texStorageFormat.internalFormat,
+                                          size.width, size.height,
+                                          gl::ConvertToGLBoolean(fixedSampleLocations));
+    }
 
     setLevelInfo(target, 0, 1, GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
 
