@@ -667,7 +667,7 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     if (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
-        functions->hasGLExtension("GL_ARB_texture_multisample"))
+        (functions->hasGLExtension("GL_ARB_texture_multisample")))
     {
         caps->maxSampleMaskWords     = QuerySingleGLInt(functions, GL_MAX_SAMPLE_MASK_WORDS);
         caps->maxColorTextureSamples = QuerySingleGLInt(functions, GL_MAX_COLOR_TEXTURE_SAMPLES);
@@ -972,6 +972,11 @@ void GenerateCaps(const FunctionsGL *functions,
 
     extensions->textureSRGBDecode = functions->hasGLExtension("GL_EXT_texture_sRGB_decode") ||
                                     functions->hasGLESExtension("GL_EXT_texture_sRGB_decode");
+
+    extensions->textureMultisample =
+        functions->isAtLeastGL(gl::Version(4, 3)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
+        (functions->hasGLExtension("GL_ARB_texture_multisample") &&
+         functions->hasExtension("GL_ARB_texture_storage_multisample"));
 
 #if defined(ANGLE_PLATFORM_APPLE)
     VendorID vendor = GetVendorID(functions);

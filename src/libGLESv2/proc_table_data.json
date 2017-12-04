@@ -530,6 +530,12 @@
         "glVertexBindingDivisor"
     ],
 
+    "GL_ANGLE_texture_multisample": [
+        "glTexStorage2DMultisampleANGLE",
+        "glGetMultisamplefvANGLE",
+        "glSampleMaskiANGLE"
+    ],
+
     "EGL 1.0": [
         "eglChooseConfig",
         "eglCopyBuffers",
@@ -659,4 +665,5 @@
         "ANGLEGetDisplayPlatform",
         "ANGLEResetDisplayPlatform"
     ]
+
 }
