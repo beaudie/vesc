@@ -12,10 +12,19 @@
 #include "libANGLE/PackedGLEnums_autogen.h"
 
 #include <array>
+#include <bitset>
 #include <cstddef>
+
+#include "common/bitset_utils.h"
 
 namespace angle
 {
+
+// Implementation of AllEnums which allows iterating over all the possible values for a packed enums
+// like so:
+//     for (auto value : AllEnums<MyPackedEnum>()) {
+//         // Do something with the enum.
+//     }
 
 template <typename E>
 class EnumIterator final
@@ -45,6 +54,8 @@ struct AllEnums
     EnumIterator<E> end() const { return {E::InvalidEnum}; }
 };
 
+// PackedEnumMap<E, T> is like an std::array<T, E::EnumCount> but is indexed with enum values. It
+// implements all of the std::array interface except with enum values instead of indices.
 template <typename E, typename T>
 class PackedEnumMap
 {
@@ -105,6 +116,21 @@ class PackedEnumMap
     T *data() noexcept { return mData.data(); }
     const T *data() const noexcept { return mData.data(); }
 };
+
+// PackedEnumBitSetE> is like an std::bitset<E::EnumCount> but is indexed with enum values. It
+// implements parts of the std::bitset interface except with enum values instead of indices. Some of
+// the std::bitset interface with shifts and casts to/from integer isn't present because it doesn't
+// make sense for enum bitsets.
+
+template <typename E>
+constexpr size_t EnumSize()
+{
+    using UnderlyingType = typename std::underlying_type<E>::type;
+    return static_cast<UnderlyingType>(E::EnumCount);
+}
+
+template <typename E>
+using PackedEnumBitSet = BitSetT<EnumSize<E>(), uint32_t, E>;
 
 }  // namespace angle
 
