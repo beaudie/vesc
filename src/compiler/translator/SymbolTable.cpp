@@ -33,12 +33,24 @@ TSymbol::TSymbol(TSymbolTable *symbolTable,
                  const TString *name,
                  SymbolType symbolType,
                  TExtension extension)
-    : mName(name),
-      mUniqueId(symbolTable->nextUniqueId()),
+    : mUniqueId(symbolTable->nextUniqueId()),
+      mName(name),
       mSymbolType(symbolType),
       mExtension(extension)
 {
     ASSERT(mSymbolType == SymbolType::BUILT_IN || mExtension == TExtension::UNDEFINED);
+}
+
+const TString &TSymbol::name() const
+{
+    if (mName != nullptr)
+    {
+        return *mName;
+    }
+    ASSERT(mSymbolType == SymbolType::ANGLE_INTERNAL);
+    TInfoSinkBase symbolNameOut;
+    symbolNameOut << "s" << mUniqueId.get();
+    return *NewPoolTString(symbolNameOut.c_str());
 }
 
 TVariable::TVariable(TSymbolTable *symbolTable,
@@ -332,9 +344,10 @@ constexpr const TType *VectorType(const TType *type, int size)
     }
 }
 
-TVariable *TSymbolTable::declareVariable(const TString *name, const TType &type)
+bool TSymbolTable::declareVariable(TVariable *variable)
 {
-    return insertVariable(currentLevel(), name, type, SymbolType::USER_DEFINED);
+    ASSERT(variable->symbolType() == SymbolType::USER_DEFINED);
+    return insertVariable(currentLevel(), variable);
 }
 
 bool TSymbolTable::declareStructType(TStructure *str)
@@ -386,6 +399,12 @@ TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
         return var;
     }
     return nullptr;
+}
+
+bool TSymbolTable::insertVariable(ESymbolLevel level, TVariable *variable)
+{
+    ASSERT(variable);
+    return insert(level, variable);
 }
 
 bool TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)

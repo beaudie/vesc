@@ -803,7 +803,10 @@ void TType::createSamplerSymbols(const TString &namePrefix,
     }
 
     ASSERT(IsSampler(type));
-    TIntermSymbol *symbol = new TIntermSymbol(symbolTable->nextUniqueId(), namePrefix, *this);
+    // TODO: Make sure if this should be ANGLE_INTERNAL or not.
+    TVariable *variable   = new TVariable(symbolTable, NewPoolTString(namePrefix.c_str()), *this,
+                                        SymbolType::ANGLE_INTERNAL);
+    TIntermSymbol *symbol = new TIntermSymbol(variable);
     outputSymbols->push_back(symbol);
     if (outputSymbolsToAPINames)
     {

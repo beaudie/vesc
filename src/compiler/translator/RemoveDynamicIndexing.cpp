@@ -60,25 +60,29 @@ std::string GetIndexFunctionName(const TType &type, bool write)
 
 TIntermSymbol *CreateBaseSymbol(const TType &type, TQualifier qualifier, TSymbolTable *symbolTable)
 {
-    TIntermSymbol *symbol = new TIntermSymbol(symbolTable->nextUniqueId(), "base", type);
-    symbol->setInternal(true);
+    TString *baseString = NewPoolTString("base");
+    TVariable *baseVariable =
+        new TVariable(symbolTable, baseString, type, SymbolType::ANGLE_INTERNAL);
+    TIntermSymbol *symbol = new TIntermSymbol(baseVariable);
     symbol->getTypePointer()->setQualifier(qualifier);
     return symbol;
 }
 
 TIntermSymbol *CreateIndexSymbol(TSymbolTable *symbolTable)
 {
-    TIntermSymbol *symbol =
-        new TIntermSymbol(symbolTable->nextUniqueId(), "index", TType(EbtInt, EbpHigh));
-    symbol->setInternal(true);
-    symbol->getTypePointer()->setQualifier(EvqIn);
+    TString *indexString     = NewPoolTString("index");
+    TVariable *indexVariable = new TVariable(
+        symbolTable, indexString, TType(EbtInt, EbpHigh, EvqIn), SymbolType::ANGLE_INTERNAL);
+    TIntermSymbol *symbol = new TIntermSymbol(indexVariable);
     return symbol;
 }
 
 TIntermSymbol *CreateValueSymbol(const TType &type, TSymbolTable *symbolTable)
 {
-    TIntermSymbol *symbol = new TIntermSymbol(symbolTable->nextUniqueId(), "value", type);
-    symbol->setInternal(true);
+    TString *valueString = NewPoolTString("value");
+    TVariable *valueVariable =
+        new TVariable(symbolTable, valueString, type, SymbolType::ANGLE_INTERNAL);
+    TIntermSymbol *symbol = new TIntermSymbol(valueVariable);
     symbol->getTypePointer()->setQualifier(EvqIn);
     return symbol;
 }

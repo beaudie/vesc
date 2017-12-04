@@ -14,6 +14,9 @@
 namespace sh
 {
 
+class TSymbolTable;
+class TVariable;
+
 TIntermFunctionPrototype *CreateInternalFunctionPrototypeNode(const TType &returnType,
                                                               const char *name,
                                                               const TSymbolUniqueId &functionId);
@@ -30,12 +33,10 @@ TIntermTyped *CreateZeroNode(const TType &type);
 TIntermConstantUnion *CreateIndexNode(int index);
 TIntermConstantUnion *CreateBoolNode(bool value);
 
-TIntermSymbol *CreateTempSymbolNode(const TSymbolUniqueId &id,
-                                    const TType &type,
-                                    TQualifier qualifier);
-TIntermDeclaration *CreateTempInitDeclarationNode(const TSymbolUniqueId &id,
-                                                  TIntermTyped *initializer,
-                                                  TQualifier qualifier);
+TVariable *CreateTempVariable(TSymbolTable *symbolTable, const TType &type);
+TIntermSymbol *CreateTempSymbolNode(const TVariable *tempVariable);
+TIntermDeclaration *CreateTempInitDeclarationNode(const TVariable *tempVariable,
+                                                  TIntermTyped *initializer);
 
 // If the input node is nullptr, return nullptr.
 // If the input node is a block node, return it.

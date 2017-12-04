@@ -47,6 +47,8 @@ enum class SymbolType
 {
     BUILT_IN,
     USER_DEFINED,
+    ANGLE_INTERNAL,
+    EMPTY,
     NOT_RESOLVED
 };
 
@@ -65,19 +67,21 @@ class TSymbol : angle::NonCopyable
         // don't delete name, it's from the pool
     }
 
-    const TString &name() const { return *mName; }
+    const TString &name() const;
     virtual const TString &getMangledName() const { return name(); }
     virtual bool isFunction() const { return false; }
     virtual bool isVariable() const { return false; }
     virtual bool isStruct() const { return false; }
     const TSymbolUniqueId &uniqueId() const { return mUniqueId; }
     TExtension extension() const { return mExtension; }
+    SymbolType symbolType() const { return mSymbolType; }
+
+    const TSymbolUniqueId mUniqueId;
 
   protected:
     const TString *const mName;
 
   private:
-    const TSymbolUniqueId mUniqueId;
     const SymbolType mSymbolType;
     const TExtension mExtension;
 };
@@ -87,6 +91,12 @@ class TSymbol : angle::NonCopyable
 class TVariable : public TSymbol
 {
   public:
+    TVariable(TSymbolTable *symbolTable,
+              const TString *name,
+              const TType &t,
+              SymbolType symbolType,
+              TExtension ext = TExtension::UNDEFINED);
+
     ~TVariable() override {}
     bool isVariable() const override { return true; }
     TType &getType() { return type; }
@@ -98,13 +108,6 @@ class TVariable : public TSymbol
     void shareConstPointer(const TConstantUnion *constArray) { unionArray = constArray; }
 
   private:
-    friend class TSymbolTable;
-    TVariable(TSymbolTable *symbolTable,
-              const TString *name,
-              const TType &t,
-              SymbolType symbolType,
-              TExtension ext = TExtension::UNDEFINED);
-
     TType type;
     const TConstantUnion *unionArray;
 };
@@ -328,7 +331,7 @@ const int GLOBAL_LEVEL       = 5;
 class TSymbolTable : angle::NonCopyable
 {
   public:
-    TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1), mEmptySymbolId(this)
+    TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1)
     {
         // The symbol table cannot be used until push() is called, but
         // the lack of an initial call to push() can be used to detect
@@ -361,7 +364,7 @@ class TSymbolTable : angle::NonCopyable
     // The declare* entry points are used when parsing and declare symbols at the current scope.
     // They return the created symbol / true in case the declaration was successful, and nullptr /
     // false if the declaration failed due to redefinition.
-    TVariable *declareVariable(const TString *name, const TType &type);
+    bool declareVariable(TVariable *variable);
     bool declareStructType(TStructure *str);
     bool declareInterfaceBlock(TInterfaceBlock *interfaceBlock);
 
@@ -373,6 +376,7 @@ class TSymbolTable : angle::NonCopyable
                                  TExtension ext,
                                  const char *name,
                                  const TType &type);
+    bool insertVariable(ESymbolLevel level, TVariable *variable);
     bool insertStructType(ESymbolLevel level, TStructure *str);
     bool insertInterfaceBlock(ESymbolLevel level, TInterfaceBlock *interfaceBlock);
 
@@ -543,11 +547,6 @@ class TSymbolTable : angle::NonCopyable
 
     const TSymbolUniqueId nextUniqueId() { return TSymbolUniqueId(this); }
 
-    // The empty symbol id is shared between all empty string ("") symbols. They are used in the
-    // AST for unused function parameters and struct type declarations that don't declare a
-    // variable, for example.
-    const TSymbolUniqueId &getEmptySymbolId() { return mEmptySymbolId; }
-
     // Checks whether there is a built-in accessible by a shader with the specified version.
     bool hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion);
 
@@ -587,8 +586,6 @@ class TSymbolTable : angle::NonCopyable
     // TODO(oetuaho): Make this a compile-time constant once the symbol table is initialized at
     // compile time. http://anglebug.com/1432
     int mUserDefinedUniqueIdsStart;
-
-    const TSymbolUniqueId mEmptySymbolId;
 };
 
 }  // namespace sh
