@@ -10,6 +10,7 @@
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_2_0_ext_autogen.h"
 #include "libGLESv2/entry_points_gles_3_0_autogen.h"
+#include "libGLESv2/entry_points_gles_3_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_1_autogen.h"
 
 #include "common/event_tracer.h"
@@ -2571,6 +2572,27 @@ void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum target,
 void GL_APIENTRY glRequestExtensionANGLE(const GLchar *name)
 {
     gl::RequestExtensionANGLE(name);
+}
+
+void GL_APIENTRY glTexStorage2DMultisampleANGLE(GLenum target,
+                                                GLsizei samples,
+                                                GLenum internalformat,
+                                                GLsizei width,
+                                                GLsizei height,
+                                                GLboolean fixedsamplelocations)
+{
+    gl::TexStorage2DMultisampleANGLE(target, samples, internalformat, width, height,
+                                     fixedsamplelocations);
+}
+
+void GL_APIENTRY glGetMultisamplefvANGLE(GLenum pname, GLuint index, GLfloat *val)
+{
+    gl::GetMultisamplefvANGLE(pname, index, val);
+}
+
+void GL_APIENTRY glSampleMaskiANGLE(GLuint maskNumber, GLbitfield mask)
+{
+    gl::SampleMaskiANGLE(maskNumber, mask);
 }
 
 }  // extern "C"

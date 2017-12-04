@@ -158,10 +158,12 @@ void State::initialize(const Context *context,
         mSamplerTextures[GL_TEXTURE_2D_ARRAY].resize(caps.maxCombinedTextureImageUnits);
         mSamplerTextures[GL_TEXTURE_3D].resize(caps.maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 1))
+    if (clientVersion >= Version(3, 1) || context->getExtensions().textureMultisample)
     {
         mSamplerTextures[GL_TEXTURE_2D_MULTISAMPLE].resize(caps.maxCombinedTextureImageUnits);
-
+    }
+    if (clientVersion >= Version(3, 1))
+    {
         mAtomicCounterBuffers.resize(caps.maxAtomicCounterBufferBindings);
         mShaderStorageBuffers.resize(caps.maxShaderStorageBufferBindings);
         mImageUnits.resize(caps.maxImageUnits);

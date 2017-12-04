@@ -17,6 +17,7 @@
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_2_0_ext_autogen.h"
 #include "libGLESv2/entry_points_gles_3_0_autogen.h"
+#include "libGLESv2/entry_points_gles_3_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_1_autogen.h"
 #include "platform/Platform.h"
 
@@ -274,6 +275,7 @@ ProcEntry g_procTable[] = {
     {"glGetInternalformativ", P(gl::GetInternalformativ)},
     {"glGetInternalformativRobustANGLE", P(gl::GetInternalformativRobustANGLE)},
     {"glGetMultisamplefv", P(gl::GetMultisamplefv)},
+    {"glGetMultisamplefvANGLE", P(gl::GetMultisamplefvANGLE)},
     {"glGetMultisamplefvRobustANGLE", P(gl::GetMultisamplefvRobustANGLE)},
     {"glGetObjectLabelKHR", P(gl::GetObjectLabelKHR)},
     {"glGetObjectPtrLabelKHR", P(gl::GetObjectPtrLabelKHR)},
@@ -442,6 +444,7 @@ ProcEntry g_procTable[] = {
     {"glResumeTransformFeedback", P(gl::ResumeTransformFeedback)},
     {"glSampleCoverage", P(gl::SampleCoverage)},
     {"glSampleMaski", P(gl::SampleMaski)},
+    {"glSampleMaskiANGLE", P(gl::SampleMaskiANGLE)},
     {"glSamplerParameterIivRobustANGLE", P(gl::SamplerParameterIivRobustANGLE)},
     {"glSamplerParameterIuivRobustANGLE", P(gl::SamplerParameterIuivRobustANGLE)},
     {"glSamplerParameterf", P(gl::SamplerParameterf)},
@@ -476,6 +479,7 @@ ProcEntry g_procTable[] = {
     {"glTexStorage2D", P(gl::TexStorage2D)},
     {"glTexStorage2DEXT", P(gl::TexStorage2DEXT)},
     {"glTexStorage2DMultisample", P(gl::TexStorage2DMultisample)},
+    {"glTexStorage2DMultisampleANGLE", P(gl::TexStorage2DMultisampleANGLE)},
     {"glTexStorage3D", P(gl::TexStorage3D)},
     {"glTexSubImage2D", P(gl::TexSubImage2D)},
     {"glTexSubImage2DRobustANGLE", P(gl::TexSubImage2DRobustANGLE)},
@@ -545,5 +549,5 @@ ProcEntry g_procTable[] = {
     {"glViewport", P(gl::Viewport)},
     {"glWaitSync", P(gl::WaitSync)}};
 
-size_t g_numProcs = 516;
+size_t g_numProcs = 519;
 }  // namespace egl

@@ -373,6 +373,9 @@ struct Extensions
 
     // GL_EXT_geometry_shader
     bool geometryShader;
+
+    // GL_ANGLE_texture_multisample
+    bool textureMultisample;
 };
 
 struct ExtensionInfo
