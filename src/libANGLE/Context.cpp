@@ -342,15 +342,14 @@ Context::Context(rx::EGLImplFactory *implFactory,
         }
     }
 
-    const Extensions &nativeExtensions = mImplementation->getNativeExtensions();
-    if (nativeExtensions.textureRectangle)
+    if (mNativeExtensions.textureRectangle)
     {
         Texture *zeroTextureRectangle =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_RECTANGLE_ANGLE);
         mZeroTextures[GL_TEXTURE_RECTANGLE_ANGLE].set(this, zeroTextureRectangle);
     }
 
-    if (nativeExtensions.eglImageExternal || nativeExtensions.eglStreamConsumerExternal)
+    if (mNativeExtensions.eglImageExternal || mNativeExtensions.eglStreamConsumerExternal)
     {
         Texture *zeroTextureExternal =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_EXTERNAL_OES);
@@ -2465,14 +2464,12 @@ void Context::initExtensionStrings()
     }
     mExtensionString = mergeExtensionStrings(mExtensionStrings);
 
-    const gl::Extensions &nativeExtensions = mImplementation->getNativeExtensions();
-
     mRequestableExtensionStrings.clear();
     for (const auto &extensionInfo : GetExtensionInfoMap())
     {
         if (extensionInfo.second.Requestable &&
             !(mExtensions.*(extensionInfo.second.ExtensionsMember)) &&
-            nativeExtensions.*(extensionInfo.second.ExtensionsMember))
+            mNativeExtensions.*(extensionInfo.second.ExtensionsMember))
         {
             mRequestableExtensionStrings.push_back(MakeStaticString(extensionInfo.first));
         }
@@ -2534,9 +2531,8 @@ bool Context::isExtensionRequestable(const char *name)
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     auto extension                         = extensionInfos.find(name);
 
-    const Extensions &nativeExtensions = mImplementation->getNativeExtensions();
     return extension != extensionInfos.end() && extension->second.Requestable &&
-           nativeExtensions.*(extension->second.ExtensionsMember);
+           mNativeExtensions.*(extension->second.ExtensionsMember);
 }
 
 void Context::requestExtension(const char *name)
@@ -2545,7 +2541,7 @@ void Context::requestExtension(const char *name)
     ASSERT(extensionInfos.find(name) != extensionInfos.end());
     const auto &extension = extensionInfos.at(name);
     ASSERT(extension.Requestable);
-    ASSERT(mImplementation->getNativeExtensions().*(extension.ExtensionsMember));
+    ASSERT(isExtensionRequestable(name));
 
     if (mExtensions.*(extension.ExtensionsMember))
     {
@@ -2597,11 +2593,54 @@ bool Context::hasActiveTransformFeedback(GLuint program) const
     return false;
 }
 
+Extensions Context::generateNativeExtensions(const egl::DisplayExtensions &displayExtensions,
+                                             bool robustResourceInit) const
+{
+    Extensions nativeExtensions = mImplementation->getNativeExtensions();
+
+    // Some extensions are always available because they are implemented in the GL layer.
+    nativeExtensions.bindUniformLocation   = true;
+    nativeExtensions.vertexArrayObject     = true;
+    nativeExtensions.bindGeneratesResource = true;
+    nativeExtensions.clientArrays          = true;
+    nativeExtensions.requestExtension      = true;
+
+    // Enable the no error extension if the context was created with the flag.
+    nativeExtensions.noError = mSkipValidation;
+
+    // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
+    nativeExtensions.surfacelessContext = displayExtensions.surfacelessContext;
+
+    // Explicitly enable GL_KHR_debug
+    nativeExtensions.debug                   = true;
+    nativeExtensions.maxDebugMessageLength   = 1024;
+    nativeExtensions.maxDebugLoggedMessages  = 1024;
+    nativeExtensions.maxDebugGroupStackDepth = 1024;
+    nativeExtensions.maxLabelLength          = 1024;
+
+    // Explicitly enable GL_ANGLE_robust_client_memory
+    nativeExtensions.robustClientMemory = true;
+
+    // Determine robust resource init availability from EGL.
+    nativeExtensions.robustResourceInitialization = robustResourceInit;
+
+    // mExtensions.robustBufferAccessBehavior is true only if robust access is true and the backend
+    // supports it.
+    nativeExtensions.robustBufferAccessBehavior =
+        mRobustAccess && nativeExtensions.robustBufferAccessBehavior;
+
+    // Enable the cache control query unconditionally.
+    nativeExtensions.programCacheControl = true;
+
+    return nativeExtensions;
+}
+
 void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit)
 {
     mCaps = mImplementation->getNativeCaps();
 
-    mExtensions = mImplementation->getNativeExtensions();
+    mNativeExtensions = generateNativeExtensions(displayExtensions, robustResourceInit);
+    mExtensions       = mNativeExtensions;
 
     mLimitations = mImplementation->getNativeLimitations();
 
@@ -2626,40 +2665,6 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
         // FIXME(geofflang): Don't support EXT_sRGB in non-ES2 contexts
         // mExtensions.sRGB = false;
     }
-
-    // Some extensions are always available because they are implemented in the GL layer.
-    mExtensions.bindUniformLocation   = true;
-    mExtensions.vertexArrayObject     = true;
-    mExtensions.bindGeneratesResource = true;
-    mExtensions.clientArrays          = true;
-    mExtensions.requestExtension      = true;
-
-    // Enable the no error extension if the context was created with the flag.
-    mExtensions.noError = mSkipValidation;
-
-    // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
-    mExtensions.surfacelessContext = displayExtensions.surfacelessContext;
-
-    // Explicitly enable GL_KHR_debug
-    mExtensions.debug                   = true;
-    mExtensions.maxDebugMessageLength   = 1024;
-    mExtensions.maxDebugLoggedMessages  = 1024;
-    mExtensions.maxDebugGroupStackDepth = 1024;
-    mExtensions.maxLabelLength          = 1024;
-
-    // Explicitly enable GL_ANGLE_robust_client_memory
-    mExtensions.robustClientMemory = true;
-
-    // Determine robust resource init availability from EGL.
-    mExtensions.robustResourceInitialization = robustResourceInit;
-
-    // mExtensions.robustBufferAccessBehavior is true only if robust access is true and the backend
-    // supports it.
-    mExtensions.robustBufferAccessBehavior =
-        mRobustAccess && mExtensions.robustBufferAccessBehavior;
-
-    // Enable the cache control query unconditionally.
-    mExtensions.programCacheControl = true;
 
     // Apply implementation limits
     LimitCap(&mCaps.maxVertexAttributes, MAX_VERTEX_ATTRIBS);
@@ -2783,7 +2788,7 @@ void Context::updateCaps()
     }
 
     // If program binary is disabled, blank out the memory cache pointer.
-    if (!mImplementation->getNativeExtensions().getProgramBinary)
+    if (!mNativeExtensions.getProgramBinary)
     {
         mMemoryProgramCache = nullptr;
     }
