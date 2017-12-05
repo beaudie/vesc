@@ -1234,6 +1234,8 @@ class Context final : angle::NonCopyable
     void initVersionStrings();
     void initExtensionStrings();
 
+    Extensions generateNativeExtensions(const egl::DisplayExtensions &displayExtensions,
+                                        bool robustResourceInit) const;
     void initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit);
     void updateCaps();
     void initWorkarounds();
@@ -1260,6 +1262,10 @@ class Context final : angle::NonCopyable
     TextureCapsMap mTextureCaps;
     Extensions mExtensions;
     Limitations mLimitations;
+
+    // Extensions supported by the implementation plus extensions that are implemented entirely
+    // within the frontend.
+    Extensions mNativeExtensions;
 
     // Shader compiler. Lazily initialized hence the mutable value.
     mutable BindingPointer<Compiler> mCompiler;
