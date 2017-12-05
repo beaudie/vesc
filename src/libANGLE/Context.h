@@ -1054,6 +1054,8 @@ class Context final : public ValidationContext
     void initVersionStrings();
     void initExtensionStrings();
 
+    void initializeNativeExtensions(const egl::DisplayExtensions &displayExtensions,
+                                    bool robustResourceInit);
     void initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit);
     void updateCaps();
     void initWorkarounds();
@@ -1068,6 +1070,10 @@ class Context final : public ValidationContext
     TextureCapsMap mTextureCaps;
     Extensions mExtensions;
     Limitations mLimitations;
+
+    // Extensions supported by the implementation plus extensions that are implemented entirely
+    // within the frontend.
+    Extensions mNativeExtensions;
 
     // Shader compiler. Lazily initialized hence the mutable value.
     mutable BindingPointer<Compiler> mCompiler;
