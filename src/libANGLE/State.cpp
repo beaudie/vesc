@@ -195,6 +195,9 @@ void State::initialize(const Context *context,
     mDebug.setOutputEnabled(debug);
     mDebug.setMaxLoggedMessages(extensions.maxDebugLoggedMessages);
 
+    mErrorCallback          = nullptr;
+    mErrorCallbackUserParam = nullptr;
+
     mMultiSampling    = true;
     mSampleAlphaToOne = false;
 
@@ -1568,6 +1571,22 @@ Debug &State::getDebug()
     return mDebug;
 }
 
+void State::setErrorCallback(GLERRORCALLBACKPROCANGLE callback, const void *userParam)
+{
+    mErrorCallback          = callback;
+    mErrorCallbackUserParam = userParam;
+}
+
+GLERRORCALLBACKPROCANGLE State::getErrorCallback() const
+{
+    return mErrorCallback;
+}
+
+const void *State::getErrorCallbackUserParam() const
+{
+    return mErrorCallbackUserParam;
+}
+
 void State::setCoverageModulation(GLenum components)
 {
     mCoverageModulation = components;
@@ -2057,6 +2076,12 @@ void State::getPointerv(GLenum pname, void **params) const
             break;
         case GL_DEBUG_CALLBACK_USER_PARAM:
             *params = const_cast<void *>(mDebug.getUserParam());
+            break;
+        case GL_ERROR_CALLBACK_FUNCTION_ANGLE:
+            *params = reinterpret_cast<void *>(mErrorCallback);
+            break;
+        case GL_ERROR_CALLBACK_USER_PARAM_ANGLE:
+            *params = const_cast<void *>(mErrorCallbackUserParam);
             break;
         default:
             UNREACHABLE();

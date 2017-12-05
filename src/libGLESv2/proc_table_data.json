@@ -237,6 +237,11 @@
         "glPopGroupMarkerEXT"
     ],
 
+    "GL_ANGLE_error_callback": [
+        "glErrorCallbackANGLE",
+        "glGetPointervANGLE"
+    ],
+
     "GL_OES_EGL_image": [
         "glEGLImageTargetTexture2DOES",
         "glEGLImageTargetRenderbufferStorageOES"

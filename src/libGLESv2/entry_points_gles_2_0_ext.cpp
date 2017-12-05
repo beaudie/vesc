@@ -3555,4 +3555,38 @@ GL_APICALL void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum ta
     }
 }
 
+GL_APICALL void GL_APIENTRY ErrorCallbackANGLE(GLERRORCALLBACKPROCANGLE callback,
+                                               const void *userParam)
+{
+    EVENT("(GLERRORCALLBACKPROCANGLE callback = 0x%0.8p, const void *userParam = 0x%0.8p)",
+          callback, userParam);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateErrorCallbackANGLE(context, callback, userParam))
+        {
+            return;
+        }
+
+        context->errorCallback(callback, userParam);
+    }
+}
+
+GL_APICALL void GL_APIENTRY GetPointervANGLE(GLenum pname, void **params)
+{
+    EVENT("(GLenum pname = 0x%X, void **params = 0x%0.8p)", pname, params);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateGetPointervANGLE(context, pname, params))
+        {
+            return;
+        }
+
+        context->getPointerv(pname, params);
+    }
+}
+
 }  // gl

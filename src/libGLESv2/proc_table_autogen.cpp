@@ -204,6 +204,7 @@ ProcEntry g_procTable[] = {
     {"glEndQuery", P(gl::EndQuery)},
     {"glEndQueryEXT", P(gl::EndQueryEXT)},
     {"glEndTransformFeedback", P(gl::EndTransformFeedback)},
+    {"glErrorCallbackANGLE", P(gl::ErrorCallbackANGLE)},
     {"glFenceSync", P(gl::FenceSync)},
     {"glFinish", P(gl::Finish)},
     {"glFinishFenceNV", P(gl::FinishFenceNV)},
@@ -276,6 +277,7 @@ ProcEntry g_procTable[] = {
     {"glGetMultisamplefvRobustANGLE", P(gl::GetMultisamplefvRobustANGLE)},
     {"glGetObjectLabelKHR", P(gl::GetObjectLabelKHR)},
     {"glGetObjectPtrLabelKHR", P(gl::GetObjectPtrLabelKHR)},
+    {"glGetPointervANGLE", P(gl::GetPointervANGLE)},
     {"glGetPointervKHR", P(gl::GetPointervKHR)},
     {"glGetPointervRobustANGLERobustANGLE", P(gl::GetPointervRobustANGLERobustANGLE)},
     {"glGetProgramBinary", P(gl::GetProgramBinary)},
@@ -544,5 +546,5 @@ ProcEntry g_procTable[] = {
     {"glViewport", P(gl::Viewport)},
     {"glWaitSync", P(gl::WaitSync)}};
 
-size_t g_numProcs = 516;
+size_t g_numProcs = 518;
 }  // namespace egl

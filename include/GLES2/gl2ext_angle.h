@@ -546,6 +546,17 @@ GL_APICALL void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum 
 #define GL_SAMPLER_2D_RECT_ANGLE 0x8B63
 #endif /* GL_ANGLE_texture_rectangle */
 
+#ifndef GL_ANGLE_error_callback
+typedef void (GL_APIENTRY  *GLERRORCALLBACKPROCANGLE)(GLenum error, GLsizei length, const GLchar *message, const void *userParam);
+#define GL_ERROR_CALLBACK_FUNCTION_ANGLE    0x345A
+#define GL_ERROR_CALLBACK_USER_PARAM_ANGLE  0x345B
+typedef void (GL_APIENTRYP PFNGLERRORCALLBACKANGLEPROC) (GLERRORCALLBACKPROCANGLE callback, const void *userParam);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glErrorCallbackANGLE(GLERRORCALLBACKPROCANGLE callback, const void *userParam);
+GL_APICALL void GL_APIENTRY glGetPointervANGLE(GLenum pname, void **params);
+#endif
+#endif /* GL_ANGLE_error_callback */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_

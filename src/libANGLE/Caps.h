@@ -295,6 +295,9 @@ struct Extensions
     GLuint maxDebugGroupStackDepth;
     GLuint maxLabelLength;
 
+    // GL_ANGLE_error_callback
+    bool errorCallback;
+
     // KHR_no_error
     bool noError;
 
