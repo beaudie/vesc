@@ -46,6 +46,7 @@ class ContextState final : angle::NonCopyable
                  const Caps &caps,
                  const TextureCapsMap &textureCaps,
                  const Extensions &extensions,
+                 const Extensions &nativeExtensions,
                  const Limitations &limitations);
     ~ContextState();
 
@@ -57,6 +58,7 @@ class ContextState final : angle::NonCopyable
     const Caps &getCaps() const { return mCaps; }
     const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
     const Extensions &getExtensions() const { return mExtensions; }
+    const Extensions &getNativeExtensions() const { return mNativeExtensions; }
     const Limitations &getLimitations() const { return mLimitations; }
 
     const TextureCaps &getTextureCap(GLenum internalFormat) const;
@@ -76,6 +78,7 @@ class ContextState final : angle::NonCopyable
     const Caps &mCaps;
     const TextureCapsMap &mTextureCaps;
     const Extensions &mExtensions;
+    const Extensions &mNativeExtensions;
     const Limitations &mLimitations;
 
     BufferManager *mBuffers;
@@ -99,6 +102,7 @@ class ValidationContext : angle::NonCopyable
                       const Caps &caps,
                       const TextureCapsMap &textureCaps,
                       const Extensions &extensions,
+                      const Extensions &nativeExtensions,
                       const Limitations &limitations,
                       bool skipValidation);
     virtual ~ValidationContext();
@@ -113,6 +117,7 @@ class ValidationContext : angle::NonCopyable
     const Caps &getCaps() const { return mState.getCaps(); }
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
+    const Extensions &getNativeExtensions() const { return mState.getNativeExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool skipValidation() const { return mSkipValidation; }
 
