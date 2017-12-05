@@ -38,6 +38,7 @@ class MockValidationContext : public ValidationContext
                           const Caps &caps,
                           const TextureCapsMap &textureCaps,
                           const Extensions &extensions,
+                          const Extensions &nativeExtensions,
                           const Limitations &limitations,
                           bool skipValidation)
         : ValidationContext(shareContext,
@@ -47,6 +48,7 @@ class MockValidationContext : public ValidationContext
                             caps,
                             textureCaps,
                             extensions,
+                            nativeExtensions,
                             limitations,
                             skipValidation)
     {
@@ -105,7 +107,8 @@ TEST(ValidationESTest, DISABLED_DrawElementsWithMaxIndexGivesError)
     state.setProgram(nullptr, program);
 
     NiceMock<MockValidationContext> testContext(nullptr, nullptr, Version(3, 0), &state, caps,
-                                                textureCaps, extensions, limitations, false);
+                                                textureCaps, extensions, extensions, limitations,
+                                                false);
 
     // Set the expectation for the validation error here.
 
