@@ -335,6 +335,8 @@ class Context final : public ValidationContext
     void pushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message);
     void popDebugGroup();
 
+    void errorCallback(GLERRORCALLBACKPROCANGLE callback, const void *userParam);
+
     void clear(GLbitfield mask);
     void clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values);
     void clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values);

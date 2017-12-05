@@ -712,6 +712,12 @@ FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
                                            GLint level,
                                            GLsizei numViews,
                                            const GLint *viewportOffsets);
+
+// GL_ANGLE_error_callback
+ANGLE_EXPORT void GL_APIENTRY ErrorCallbackANGLE(GLERRORCALLBACKPROCANGLE callback,
+                                                 const void *userParam);
+ANGLE_EXPORT void GL_APIENTRY GetPointervANGLE(GLenum pname, void **params);
+
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

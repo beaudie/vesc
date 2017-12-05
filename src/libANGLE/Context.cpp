@@ -2118,9 +2118,18 @@ void Context::handleError(const Error &error)
             markContextLost();
         }
 
-        ASSERT(!error.getMessage().empty());
+        const std::string &message = error.getMessage();
+        ASSERT(!message.empty());
+
         mGLState.getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, error.getID(),
                                           GL_DEBUG_SEVERITY_HIGH, error.getMessage());
+
+        GLERRORCALLBACKPROCANGLE errorCallback = mGLState.getErrorCallback();
+        if (errorCallback)
+        {
+            errorCallback(code, static_cast<GLsizei>(message.length()), message.c_str(),
+                          mGLState.getErrorCallbackUserParam());
+        }
     }
 }
 
@@ -4017,6 +4026,11 @@ void Context::popDebugGroup()
 {
     mGLState.getDebug().popGroup();
     mImplementation->popDebugGroup();
+}
+
+void Context::errorCallback(GLERRORCALLBACKPROCANGLE callback, const void *userParam)
+{
+    mGLState.setErrorCallback(callback, userParam);
 }
 
 void Context::bufferData(BufferBinding target, GLsizeiptr size, const void *data, BufferUsage usage)

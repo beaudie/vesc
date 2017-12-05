@@ -313,6 +313,11 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     const Debug &getDebug() const;
     Debug &getDebug();
 
+    // Error callback state
+    void setErrorCallback(GLERRORCALLBACKPROCANGLE( callback, const void *userParam);
+    GLERRORCALLBACKPROCANGLE getErrorCallback() const;
+    const void *getErrorCallbackUserParam() const;
+
     // CHROMIUM_framebuffer_mixed_samples coverage modulation
     void setCoverageModulation(GLenum components);
     GLenum getCoverageModulation() const;
@@ -571,6 +576,9 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     bool mPrimitiveRestart;
 
     Debug mDebug;
+
+    GLERRORCALLBACKPROCANGLE mErrorCallback;
+    const void *mErrorCallbackUserParam;
 
     bool mMultiSampling;
     bool mSampleAlphaToOne;

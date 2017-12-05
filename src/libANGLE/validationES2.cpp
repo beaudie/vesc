@@ -1001,6 +1001,37 @@ bool ValidateWebGLNameLength(ValidationContext *context, size_t length)
     return true;
 }
 
+bool ValidateGetPointervBase(Context *context, GLenum pname, void **params)
+{
+    // TODO: represent this in Context::getQueryParameterInfo.
+    switch (pname)
+    {
+        case GL_DEBUG_CALLBACK_FUNCTION:
+        case GL_DEBUG_CALLBACK_USER_PARAM:
+            if (!context->getExtensions().debug)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
+        case GL_ERROR_CALLBACK_FUNCTION_ANGLE:
+        case GL_ERROR_CALLBACK_USER_PARAM_ANGLE:
+            if (!context->getExtensions().errorCallback)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
+        default:
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
+            return false;
+    }
+
+    return true;
+}
+
 }  // anonymous namespace
 
 bool ValidateES2TexImageParameters(Context *context,
@@ -2386,25 +2417,25 @@ bool ValidateGetObjectPtrLabelKHR(Context *context,
 
 bool ValidateGetPointervKHR(Context *context, GLenum pname, void **params)
 {
-    if (!context->getExtensions().debug)
+    return ValidateGetPointervBase(context, pname, params);
+}
+
+bool ValidateErrorCallbackANGLE(Context *context,
+                                GLERRORCALLBACKPROCANGLE callback,
+                                const void *userParam)
+{
+    if (!context->getExtensions().errorCallback)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
         return false;
     }
 
-    // TODO: represent this in Context::getQueryParameterInfo.
-    switch (pname)
-    {
-        case GL_DEBUG_CALLBACK_FUNCTION:
-        case GL_DEBUG_CALLBACK_USER_PARAM:
-            break;
-
-        default:
-            ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
-            return false;
-    }
-
     return true;
+}
+
+bool ValidateGetPointervANGLE(Context *context, GLenum pname, void **params)
+{
+    return ValidateGetPointervBase(context, pname, params);
 }
 
 bool ValidateBlitFramebufferANGLE(Context *context,
