@@ -203,29 +203,35 @@ class InterfaceBlockLinker : angle::NonCopyable
                               GLenum shaderType) const;
 
     template <typename VarT>
-    void defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
+    void updateBlockMembers(const GetBlockMemberInfo &getMemberInfo,
                             const std::vector<VarT> &fields,
                             const std::string &prefix,
                             const std::string &mappedPrefix,
                             int blockIndex,
                             bool singleEntryForTopLevelArray,
-                            int topLevelArraySize) const;
+                            int topLevelArraySize,
+                            GLenum shaderType) const;
     template <typename VarT>
-    void defineBlockMember(const GetBlockMemberInfo &getMemberInfo,
+    void updateBlockMember(const GetBlockMemberInfo &getMemberInfo,
                            const VarT &field,
                            const std::string &fullName,
                            const std::string &fullMappedName,
                            int blockIndex,
                            bool singleEntryForTopLevelArray,
-                           int topLevelArraySize) const;
+                           int topLevelArraySize,
+                           GLenum shaderType) const;
 
     virtual void defineBlockMemberImpl(const sh::ShaderVariable &field,
                                        const std::string &fullName,
                                        const std::string &fullMappedName,
                                        int blockIndex,
                                        const sh::BlockMemberInfo &memberInfo,
-                                       int topLevelArraySize) const             = 0;
+                                       int topLevelArraySize,
+                                       GLenum shaderType) const                 = 0;
     virtual size_t getCurrentBlockMemberIndex() const                           = 0;
+    virtual void updateBlockMemberStaticUsedImpl(const std::string &fullName,
+                                                 GLenum shaderType,
+                                                 bool staticUse) const          = 0;
 
     using ShaderBlocks = std::pair<GLenum, const std::vector<sh::InterfaceBlock> *>;
     std::vector<ShaderBlocks> mShaderBlocks;
@@ -234,14 +240,15 @@ class InterfaceBlockLinker : angle::NonCopyable
 
   private:
     template <typename VarT>
-    void defineArrayOfStructsBlockMembers(const GetBlockMemberInfo &getMemberInfo,
+    void updateArrayOfStructsBlockMembers(const GetBlockMemberInfo &getMemberInfo,
                                           const VarT &field,
                                           unsigned int arrayNestingIndex,
                                           const std::string &prefix,
                                           const std::string &mappedPrefix,
                                           int blockIndex,
                                           bool singleEntryForTopLevelArray,
-                                          int topLevelArraySize) const;
+                                          int topLevelArraySize,
+                                          GLenum shaderType) const;
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
@@ -257,8 +264,12 @@ class UniformBlockLinker final : public InterfaceBlockLinker
                                const std::string &fullMappedName,
                                int blockIndex,
                                const sh::BlockMemberInfo &memberInfo,
-                               int topLevelArraySize) const override;
+                               int topLevelArraySize,
+                               GLenum shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
+    void updateBlockMemberStaticUsedImpl(const std::string &fullName,
+                                         GLenum shaderType,
+                                         bool staticUse) const override;
     std::vector<LinkedUniform> *mUniformsOut;
 };
 
@@ -275,8 +286,12 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
                                const std::string &fullMappedName,
                                int blockIndex,
                                const sh::BlockMemberInfo &memberInfo,
-                               int topLevelArraySize) const override;
+                               int topLevelArraySize,
+                               GLenum shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
+    void updateBlockMemberStaticUsedImpl(const std::string &fullName,
+                                         GLenum shaderType,
+                                         bool staticUse) const override;
     std::vector<BufferVariable> *mBufferVariablesOut;
 };
 
