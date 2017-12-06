@@ -997,6 +997,7 @@ void Program::updateLinkedShaderStages()
 void Program::unlink()
 {
     mState.mAttributes.clear();
+    mState.mAttributesTypeMask.reset();
     mState.mActiveAttribLocationsMask.reset();
     mState.mMaxActiveAttribLocation = 0;
     mState.mLinkedTransformFeedbackVaryings.clear();
@@ -2302,6 +2303,12 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
             mState.mActiveAttribLocationsMask.set(location);
             mState.mMaxActiveAttribLocation =
                 std::max(mState.mMaxActiveAttribLocation, location + 1);
+
+            if (!attribute.isBuiltIn())
+            {
+                mState.mAttributesTypeMask.setIndex(VariableComponentType(attribute.type), location,
+                                                    true);
+            }
         }
     }
 
