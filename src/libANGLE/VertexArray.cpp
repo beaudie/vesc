@@ -175,6 +175,9 @@ void VertexArray::setVertexAttribFormatImpl(size_t attribIndex,
     attrib->normalized     = normalized;
     attrib->pureInteger    = pureInteger;
     attrib->relativeOffset = relativeOffset;
+    mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(*attrib), attribIndex,
+                                              true);
+    mState.mVertexAttributesMask.set(attribIndex);
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -202,9 +205,22 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     ASSERT(attribIndex < getMaxAttribs());
 
     mState.mVertexAttributes[attribIndex].enabled = enabledState;
+    mState.mVertexAttributesTypeMask.setIndex(
+        GetVertexAttributeBaseType(mState.mVertexAttributes[attribIndex]), attribIndex,
+        enabledState);
+
+    if (enabledState)
+    {
+        mState.mVertexAttributesMask.set(attribIndex);
+    }
+    else
+    {
+        mState.mVertexAttributesMask.reset(attribIndex);
+    }
 
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_ENABLED + attribIndex);
 
+    // TODO: Replace mMaxEnabledAttribute with mVertexAttributesMask
     // Update state cache
     if (enabledState)
     {
