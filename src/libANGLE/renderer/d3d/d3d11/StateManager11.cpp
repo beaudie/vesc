@@ -1158,6 +1158,14 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
         modifiedGLState.stencilTest          = false;
     }
 
+    if (mRenderer->getWorkarounds().enableDepthBufferWhenStencilBufferEnabled &&
+        !modifiedGLState.depthTest && modifiedGLState.stencilTest)
+    {
+        modifiedGLState.depthTest = true;
+        modifiedGLState.depthMask = true;
+        modifiedGLState.depthFunc = GL_ALWAYS;
+    }
+
     const d3d11::DepthStencilState *d3dState = nullptr;
     ANGLE_TRY(mRenderer->getDepthStencilState(modifiedGLState, &d3dState));
     ASSERT(d3dState);

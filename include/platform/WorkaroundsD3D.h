@@ -128,6 +128,11 @@ struct WorkaroundsD3D
     // work around a bug in NVIDIA D3D driver version 388.59 where in very specific cases the driver
     // would not handle constant register zero correctly.
     bool skipConstantRegisterZero = false;
+
+    // Rendering with depth buffer disabled and stencil buffer enabled leads to memory leak if we
+    // set viewport a large size on Intel windows platforms. So we enable depth buffer if stencil
+    // buffer is enabled to workaround this issue. See http://crbug.com/782317
+    bool enableDepthBufferWhenStencilBufferEnabled = false;
 };
 
 }  // namespace angle
