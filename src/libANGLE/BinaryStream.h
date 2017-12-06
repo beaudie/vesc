@@ -190,6 +190,7 @@ class BinaryOutputStream : angle::NonCopyable
         ASSERT(angle::IsValueInRangeForNumericType<int>(param));
         int intValue = static_cast<int>(param);
         write(&intValue, 1);
+        printf("intValue=%d\n", intValue);
     }
 
     // Specialized writeInt for values that can also be exactly -1.
