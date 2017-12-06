@@ -343,6 +343,7 @@ class ProgramState final : angle::NonCopyable
     std::vector<sh::Attribute> mAttributes;
     angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
     unsigned int mMaxActiveAttribLocation;
+    AttributesTypeMask mAttributesTypeMask;
 
     // Uniforms are sorted in order:
     //  1. Non-opaque uniforms
@@ -640,6 +641,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool usesMultiview() const { return mState.usesMultiview(); }
 
     DrawBufferTypeMask getDrawBufferTypeMask() const { return mState.mDrawBufferTypeMask; }
+    AttributesTypeMask getAttributesTypeMask() const { return mState.mAttributesTypeMask; }
 
   private:
     ~Program() override;
