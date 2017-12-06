@@ -180,7 +180,7 @@ class BinaryInputStream : angle::NonCopyable
 class BinaryOutputStream : angle::NonCopyable
 {
   public:
-    BinaryOutputStream();
+	  BinaryOutputStream();
     ~BinaryOutputStream();
 
     // writeInt also handles bool types
@@ -252,6 +252,7 @@ class BinaryOutputStream : angle::NonCopyable
 
 inline BinaryOutputStream::BinaryOutputStream()
 {
+	mData.clear();
 }
 
 inline BinaryOutputStream::~BinaryOutputStream() = default;
