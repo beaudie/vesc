@@ -234,6 +234,8 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
 
     static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
                   "Too many vertex attribs for mask");
+    state->mAttributesTypeMask.types_from_ulong(stream.readInt<uint32_t>());
+    state->mAttributesTypeMask.mask_from_ulong(stream.readInt<uint32_t>());
     state->mActiveAttribLocationsMask = stream.readInt<unsigned long>();
 
     unsigned int attribCount = stream.readInt<unsigned int>();
@@ -450,6 +452,10 @@ void MemoryProgramCache::Serialize(const Context *context,
 
     stream.writeInt(state.mNumViews);
 
+    static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
+                  "Too many vertex attribs for mask");
+    stream.writeInt(state.mAttributesTypeMask.types_to_ulong());
+    stream.writeInt(state.mAttributesTypeMask.mask_to_ulong());
     stream.writeInt(state.getActiveAttribLocationsMask().to_ulong());
 
     stream.writeInt(state.getAttributes().size());
