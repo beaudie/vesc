@@ -142,6 +142,12 @@ void State::initialize(const Context *context,
 
     mVertexAttribCurrentValues.resize(caps.maxVertexAttributes);
 
+    // Set all indexes in state attributes type mask to float (default)
+    for (int i = 0; i < MAX_VERTEX_ATTRIBS; i++)
+    {
+        mCurrentValuesTypeMask.setIndex(GL_FLOAT, i, true);
+    }
+
     mUniformBuffers.resize(caps.maxUniformBufferBindings);
 
     mSamplerTextures[GL_TEXTURE_2D].resize(caps.maxCombinedTextureImageUnits);
@@ -1370,6 +1376,7 @@ void State::setVertexAttribf(GLuint index, const GLfloat values[4])
     mVertexAttribCurrentValues[index].setFloatValues(values);
     mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
+    mCurrentValuesTypeMask.setIndex(GL_FLOAT, index, true);
 }
 
 void State::setVertexAttribu(GLuint index, const GLuint values[4])
@@ -1378,6 +1385,7 @@ void State::setVertexAttribu(GLuint index, const GLuint values[4])
     mVertexAttribCurrentValues[index].setUnsignedIntValues(values);
     mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
+    mCurrentValuesTypeMask.setIndex(GL_UNSIGNED_INT, index, true);
 }
 
 void State::setVertexAttribi(GLuint index, const GLint values[4])
@@ -1386,6 +1394,7 @@ void State::setVertexAttribi(GLuint index, const GLint values[4])
     mVertexAttribCurrentValues[index].setIntValues(values);
     mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
+    mCurrentValuesTypeMask.setIndex(GL_INT, index, true);
 }
 
 void State::setVertexAttribPointer(const Context *context,
