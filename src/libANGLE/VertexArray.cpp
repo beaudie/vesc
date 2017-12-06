@@ -24,6 +24,8 @@ VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
     {
         mVertexAttributes.emplace_back(static_cast<GLuint>(i));
     }
+
+    mVertexAttributesTypeMask.reset();
 }
 
 VertexArrayState::~VertexArrayState()
@@ -175,6 +177,9 @@ void VertexArray::setVertexAttribFormatImpl(size_t attribIndex,
     attrib->normalized     = normalized;
     attrib->pureInteger    = pureInteger;
     attrib->relativeOffset = relativeOffset;
+
+    mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(*attrib), attribIndex,
+                                              true);
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -202,6 +207,9 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     ASSERT(attribIndex < getMaxAttribs());
 
     mState.mVertexAttributes[attribIndex].enabled = enabledState;
+    mState.mVertexAttributesTypeMask.setIndex(
+        GetVertexAttributeBaseType(mState.mVertexAttributes[attribIndex]), attribIndex,
+        enabledState);
 
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_ENABLED + attribIndex);
 
