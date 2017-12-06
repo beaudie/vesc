@@ -1106,6 +1106,8 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
 {
     ASSERT((*variable) == nullptr);
 
+    (*variable) = new TVariable(&symbolTable, &identifier, type);
+
     checkBindingIsValid(line, type);
 
     bool needsReservedCheck = true;
@@ -1140,8 +1142,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     if (needsReservedCheck && !checkIsNotReserved(line, identifier))
         return false;
 
-    (*variable) = symbolTable.declareVariable(&identifier, type);
-    if (!(*variable))
+    if (!symbolTable.declareVariable(*variable))
     {
         error(line, "redefinition", identifier.c_str());
         return false;
@@ -1897,12 +1898,12 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
     {
         ASSERT(mGeometryShaderInputArraySize > 0u);
 
-        node = new TIntermSymbol(variable->uniqueId(), variable->name(), variableType);
+        node = new TIntermSymbol(variable);
         node->getTypePointer()->sizeOutermostUnsizedArray(mGeometryShaderInputArraySize);
     }
     else
     {
-        node = new TIntermSymbol(variable->uniqueId(), variable->name(), variableType);
+        node = new TIntermSymbol(variable);
     }
     ASSERT(node != nullptr);
     node->setLine(location);
@@ -1922,7 +1923,6 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
     ASSERT(initNode != nullptr);
     ASSERT(*initNode == nullptr);
 
-    TVariable *variable = nullptr;
     if (type.isUnsizedArray())
     {
         // In case initializer is not an array or type has more dimensions than initializer, this
@@ -1932,6 +1932,8 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         auto *arraySizes = initializer->getType().getArraySizes();
         type.sizeUnsizedArrays(arraySizes);
     }
+
+    TVariable *variable = nullptr;
     if (!declareVariable(line, identifier, type, &variable))
     {
         return false;
@@ -2016,8 +2018,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         }
     }
 
-    TIntermSymbol *intermSymbol =
-        new TIntermSymbol(variable->uniqueId(), variable->name(), variable->getType());
+    TIntermSymbol *intermSymbol = new TIntermSymbol(variable);
     intermSymbol->setLine(line);
     *initNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
     if (*initNode == nullptr)
@@ -2468,11 +2469,9 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         checkAtomicCounterOffsetDoesNotOverlap(false, identifierOrTypeLocation, &type);
 
         TVariable *variable = nullptr;
-        declareVariable(identifierOrTypeLocation, identifier, type, &variable);
-
-        if (variable)
+        if (declareVariable(identifierOrTypeLocation, identifier, type, &variable))
         {
-            symbol = new TIntermSymbol(variable->uniqueId(), identifier, type);
+            symbol = new TIntermSymbol(variable);
         }
     }
 
@@ -2511,15 +2510,13 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(
 
     checkAtomicCounterOffsetDoesNotOverlap(false, identifierLocation, &arrayType);
 
-    TVariable *variable = nullptr;
-    declareVariable(identifierLocation, identifier, arrayType, &variable);
-
     TIntermDeclaration *declaration = new TIntermDeclaration();
     declaration->setLine(identifierLocation);
 
-    if (variable)
+    TVariable *variable = nullptr;
+    if (declareVariable(identifierLocation, identifier, arrayType, &variable))
     {
-        TIntermSymbol *symbol = new TIntermSymbol(variable->uniqueId(), identifier, arrayType);
+        TIntermSymbol *symbol = new TIntermSymbol(variable);
         symbol->setLine(identifierLocation);
         declaration->appendDeclarator(symbol);
     }
@@ -2642,7 +2639,7 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
 
     symbolTable.addInvariantVarying(std::string(identifier->c_str()));
 
-    TIntermSymbol *intermSymbol = new TIntermSymbol(variable->uniqueId(), *identifier, type);
+    TIntermSymbol *intermSymbol = new TIntermSymbol(variable);
     intermSymbol->setLine(identifierLoc);
 
     return new TIntermInvariantDeclaration(intermSymbol, identifierLoc);
@@ -2663,7 +2660,6 @@ void TParseContext::parseDeclarator(TPublicType &publicType,
 
     checkDeclaratorLocationIsNotSpecified(identifierLocation, publicType);
 
-    TVariable *variable = nullptr;
     TType type(publicType);
 
     checkGeometryShaderInputAndSetArraySize(identifierLocation, identifier.c_str(), &type);
@@ -2672,11 +2668,10 @@ void TParseContext::parseDeclarator(TPublicType &publicType,
 
     checkAtomicCounterOffsetDoesNotOverlap(true, identifierLocation, &type);
 
-    declareVariable(identifierLocation, identifier, type, &variable);
-
-    if (variable)
+    TVariable *variable = nullptr;
+    if (declareVariable(identifierLocation, identifier, type, &variable))
     {
-        TIntermSymbol *symbol = new TIntermSymbol(variable->uniqueId(), identifier, type);
+        TIntermSymbol *symbol = new TIntermSymbol(variable);
         symbol->setLine(identifierLocation);
         declarationOut->appendDeclarator(symbol);
     }
@@ -2711,11 +2706,9 @@ void TParseContext::parseArrayDeclarator(TPublicType &elementType,
         checkAtomicCounterOffsetDoesNotOverlap(true, identifierLocation, &arrayType);
 
         TVariable *variable = nullptr;
-        declareVariable(identifierLocation, identifier, arrayType, &variable);
-
-        if (variable)
+        if (declareVariable(identifierLocation, identifier, arrayType, &variable))
         {
-            TIntermSymbol *symbol = new TIntermSymbol(variable->uniqueId(), identifier, arrayType);
+            TIntermSymbol *symbol = new TIntermSymbol(variable);
             symbol->setLine(identifierLocation);
             declarationOut->appendDeclarator(symbol);
         }
@@ -3189,11 +3182,10 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
             // Insert the parameter in the symbol table.
             if (insertParametersToSymbolTable)
             {
-                TVariable *variable = symbolTable.declareVariable(param.name, *param.type);
-                if (variable)
+                TVariable *variable = new TVariable(&symbolTable, param.name, *param.type);
+                if (symbolTable.declareVariable(variable))
                 {
-                    symbol = new TIntermSymbol(variable->uniqueId(), variable->name(),
-                                               variable->getType());
+                    symbol = new TIntermSymbol(variable);
                 }
                 else
                 {
@@ -3823,10 +3815,16 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         interfaceBlockType.makeArray(arraySize);
     }
 
-    TString symbolName = "";
-    const TSymbolUniqueId *symbolId = nullptr;
-
+    // The instance variable gets created to refer to the interface block type from the AST
+    // regardless of if there's an instance name. It just has an empty name if there's no instance
+    // name.
     if (!instanceName)
+    {
+        instanceName = new TString("");  // TODO: Reuse the same empty TString pointer.
+    }
+    TVariable *instanceVariable = new TVariable(&symbolTable, instanceName, interfaceBlockType);
+
+    if (instanceName->empty())
     {
         // define symbols for the members of the interface block
         for (size_t memberIndex = 0; memberIndex < fieldList->size(); ++memberIndex)
@@ -3837,9 +3835,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             // set parent pointer of the field variable
             fieldType->setInterfaceBlock(interfaceBlock);
 
-            TVariable *fieldVariable = symbolTable.declareVariable(&field->name(), *fieldType);
-
-            if (fieldVariable)
+            TVariable *fieldVariable = new TVariable(&symbolTable, &field->name(), *fieldType);
+            if (symbolTable.declareVariable(fieldVariable))
             {
                 fieldVariable->setQualifier(typeQualifier.qualifier);
             }
@@ -3849,38 +3846,24 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                       field->name().c_str());
             }
         }
-
-        symbolId = new TSymbolUniqueId(&symbolTable);
     }
     else
     {
         checkIsNotReserved(instanceLine, *instanceName);
 
         // add a symbol for this interface block
-        TVariable *instanceTypeDef = symbolTable.declareVariable(instanceName, interfaceBlockType);
-        if (instanceTypeDef)
-        {
-            instanceTypeDef->setQualifier(typeQualifier.qualifier);
-            symbolId = &instanceTypeDef->uniqueId();
-        }
-        else
+        if (!symbolTable.declareVariable(instanceVariable))
         {
             error(instanceLine, "redefinition of an interface block instance name",
                   instanceName->c_str());
         }
-        symbolName = *instanceName;
     }
 
-    TIntermDeclaration *declaration = nullptr;
-
-    if (symbolId)
-    {
-        TIntermSymbol *blockSymbol = new TIntermSymbol(*symbolId, symbolName, interfaceBlockType);
-        blockSymbol->setLine(typeQualifier.line);
-        declaration = new TIntermDeclaration();
-        declaration->appendDeclarator(blockSymbol);
-        declaration->setLine(nameLine);
-    }
+    TIntermSymbol *blockSymbol = new TIntermSymbol(instanceVariable);
+    blockSymbol->setLine(typeQualifier.line);
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->appendDeclarator(blockSymbol);
+    declaration->setLine(nameLine);
 
     exitStructDeclaration();
     return declaration;

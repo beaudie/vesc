@@ -168,8 +168,10 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
     ASSERT(shaderType == GL_VERTEX_SHADER || shaderType == GL_FRAGMENT_SHADER);
 
     TQualifier viewIDQualifier  = (shaderType == GL_VERTEX_SHADER) ? EvqFlatOut : EvqFlatIn;
-    TIntermSymbol *viewIDSymbol = new TIntermSymbol(symbolTable->nextUniqueId(), "ViewID_OVR",
-                                                    TType(EbtUInt, EbpHigh, viewIDQualifier));
+    const TString *viewIDVariableName = new TString("ViewID_OVR");
+    const TVariable *viewIDVariable =
+        new TVariable(symbolTable, viewIDVariableName, TType(EbtUInt, EbpHigh, viewIDQualifier));
+    TIntermSymbol *viewIDSymbol = new TIntermSymbol(viewIDVariable);
     viewIDSymbol->setInternal(true);
 
     DeclareGlobalVariable(root, viewIDSymbol);
@@ -178,8 +180,10 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
     {
         // Replacing gl_InstanceID with InstanceID should happen before adding the initializers of
         // InstanceID and ViewID.
-        TIntermSymbol *instanceIDSymbol = new TIntermSymbol(
-            symbolTable->nextUniqueId(), "InstanceID", TType(EbtInt, EbpHigh, EvqGlobal));
+        const TString *instanceIDVariableName = new TString("InstanceID");
+        const TVariable *instanceIDVariable =
+            new TVariable(symbolTable, instanceIDVariableName, TType(EbtInt, EbpHigh, EvqGlobal));
+        TIntermSymbol *instanceIDSymbol = new TIntermSymbol(instanceIDVariable);
         instanceIDSymbol->setInternal(true);
         DeclareGlobalVariable(root, instanceIDSymbol);
         ReplaceSymbol(root, "gl_InstanceID", instanceIDSymbol);
@@ -197,9 +201,13 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
         if (selectView)
         {
             // Add a uniform to switch between side-by-side and layered rendering.
+            const TString *multiviewBaseViewLayerIndexVariableName =
+                new TString("multiviewBaseViewLayerIndex");
+            const TVariable *multiviewBaseViewLayerIndexVariable =
+                new TVariable(symbolTable, multiviewBaseViewLayerIndexVariableName,
+                              TType(EbtInt, EbpHigh, EvqUniform));
             TIntermSymbol *multiviewBaseViewLayerIndexSymbol =
-                new TIntermSymbol(symbolTable->nextUniqueId(), "multiviewBaseViewLayerIndex",
-                                  TType(EbtInt, EbpHigh, EvqUniform));
+                new TIntermSymbol(multiviewBaseViewLayerIndexVariable);
             multiviewBaseViewLayerIndexSymbol->setInternal(true);
             DeclareGlobalVariable(root, multiviewBaseViewLayerIndexSymbol);
 
