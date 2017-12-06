@@ -284,6 +284,28 @@ struct PixelPackState : PixelStoreStateBase
 
 // Used in Program and VertexArray.
 using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
+constexpr int IMPLEMENTATION_MAX_VERTEX_ATTRIBS_TYPE_MASK_LENGTH = 32;
+struct AttributesTypeMask final
+{
+    AttributesTypeMask();
+    AttributesTypeMask(const AttributesTypeMask &other);
+    ~AttributesTypeMask();
+    void reset();
+    bool none();
+    void setIndex(GLenum type, size_t index);
+    unsigned long toUnsignedLong() const;
+    void fromUnsignedLong(unsigned long types);
+    static bool ProgramAttribsMatch(AttributesTypeMask programTypes,
+                                    AttributesTypeMask vaoTypes,
+                                    AttributesTypeMask stateTypes,
+                                    AttributesMask programMask,
+                                    AttributesMask vaoMask);
+
+  private:
+    void setIndexOfActiveAttribType(GLenum type, size_t index);
+    void resetIndex(size_t index);
+    angle::BitSet<IMPLEMENTATION_MAX_VERTEX_ATTRIBS_TYPE_MASK_LENGTH> mTypeMask;
+};
 
 // Used in Program
 using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
