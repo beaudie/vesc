@@ -232,8 +232,12 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
 
     state->mNumViews = stream.readInt<int>();
 
+    state->mAttributesTypeMask.types_from_ulong(stream.readInt<unsigned long>());
+    state->mAttributesTypeMask.mask_from_ulong(stream.readInt<unsigned long>());
+
     static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
                   "Too many vertex attribs for mask");
+
     state->mActiveAttribLocationsMask = stream.readInt<unsigned long>();
 
     unsigned int attribCount = stream.readInt<unsigned int>();
@@ -423,10 +427,14 @@ void MemoryProgramCache::Serialize(const Context *context,
                                    const gl::Program *program,
                                    angle::MemoryBuffer *binaryOut)
 {
+    printf("*****************************\n");
+    printf("SerializeStart\n");
+    printf("*****************************\n");
     BinaryOutputStream stream;
 
     stream.writeBytes(reinterpret_cast<const unsigned char *>(ANGLE_COMMIT_HASH),
                       ANGLE_COMMIT_HASH_SIZE);
+    printf("WriteHash\n");
 
     // nullptr context is supported when computing binary length.
     if (context)
@@ -439,7 +447,8 @@ void MemoryProgramCache::Serialize(const Context *context,
         stream.writeInt(2);
         stream.writeInt(0);
     }
-
+            printf("WriteInt\n");
+        printf("WriteInt\n");
     const auto &state = program->getState();
 
     const auto &computeLocalSize = state.getComputeShaderLocalSize();
@@ -447,16 +456,32 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(computeLocalSize[0]);
     stream.writeInt(computeLocalSize[1]);
     stream.writeInt(computeLocalSize[2]);
+    printf("WriteInt\n");
+    printf("WriteInt\n");
+    printf("WriteInt\n");
 
     stream.writeInt(state.mNumViews);
+    printf("WriteInt\n");
 
+    stream.writeInt(state.mAttributesTypeMask.types_to_ulong());
+    stream.writeInt(state.mAttributesTypeMask.mask_to_ulong());
+    printf("WriteInt ************ATTRIB TYPE MASK*****\n");
+        printf("WriteInt ************ATTRIB TYPE MASK*****\n");
+
+
+    static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
+                  "Too many vertex attribs for mask");
     stream.writeInt(state.getActiveAttribLocationsMask().to_ulong());
+    printf("WriteInt\n");
+   
 
     stream.writeInt(state.getAttributes().size());
+    printf("WriteInt\n");
     for (const sh::Attribute &attrib : state.getAttributes())
     {
         WriteShaderVar(&stream, attrib);
         stream.writeInt(attrib.location);
+        printf("WriteInt\n");
     }
 
     stream.writeInt(state.getUniforms().size());
@@ -471,38 +496,57 @@ void MemoryProgramCache::Serialize(const Context *context,
         stream.writeInt(uniform.blockInfo.arrayStride);
         stream.writeInt(uniform.blockInfo.matrixStride);
         stream.writeInt(uniform.blockInfo.isRowMajorMatrix);
+        printf("WriteInt\n");
+        printf("WriteInt\n");
+        printf("WriteInt\n");
+        printf("WriteInt\n");
+        printf("WriteInt\n");
     }
 
     stream.writeInt(state.getUniformLocations().size());
     for (const auto &variable : state.getUniformLocations())
     {
         stream.writeInt(variable.arrayIndex);
+        printf("WriteInt\n");
         stream.writeIntOrNegOne(variable.index);
+        printf("WriteIntOrNegOne\n");
         stream.writeInt(variable.ignored);
+        printf("WriteInt\n");
     }
 
     stream.writeInt(state.getUniformBlocks().size());
+    printf("WriteInt\n");
     for (const InterfaceBlock &uniformBlock : state.getUniformBlocks())
     {
         WriteInterfaceBlock(&stream, uniformBlock);
+        printf("WriteBlock\n");
     }
 
     stream.writeInt(state.getBufferVariables().size());
+    printf("WriteInt\n");
     for (const BufferVariable &bufferVariable : state.getBufferVariables())
     {
         WriteBufferVariable(&stream, bufferVariable);
+        printf("WriteBufferVar\n");
     }
 
     stream.writeInt(state.getShaderStorageBlocks().size());
+    printf("WriteInt\n");
+
     for (const InterfaceBlock &shaderStorageBlock : state.getShaderStorageBlocks())
     {
         WriteInterfaceBlock(&stream, shaderStorageBlock);
+        printf("WriteInterfaceBlock\n");
     }
 
     stream.writeInt(state.mAtomicCounterBuffers.size());
+      printf("WriteInt\n");
+
     for (const auto &atomicCounterBuffer : state.mAtomicCounterBuffers)
     {
         WriteShaderVariableBuffer(&stream, atomicCounterBuffer);
+          printf("WriteShaderVariableBuffer\n");
+
     }
 
     // Warn the app layer if saving a binary with unsupported transform feedback.
@@ -514,18 +558,25 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.getLinkedTransformFeedbackVaryings().size());
+     printf("WriteInt\n");
     for (const auto &var : state.getLinkedTransformFeedbackVaryings())
     {
         stream.writeIntVector(var.arraySizes);
+         printf("WriteIntVec\n");
         stream.writeInt(var.type);
+         printf("WriteInt\n");
         stream.writeString(var.name);
+         printf("WriteString\n");
 
         stream.writeIntOrNegOne(var.arrayIndex);
+         printf("WriteIntOrnegOne\n");
     }
 
     stream.writeInt(state.getTransformFeedbackBufferMode());
+     printf("WriteInt\n");
 
     stream.writeInt(state.getOutputVariables().size());
+     printf("WriteInt\n");
     for (const sh::OutputVariable &output : state.getOutputVariables())
     {
         WriteShaderVar(&stream, output);
@@ -533,6 +584,7 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.getOutputLocations().size());
+     printf("WriteInt\n");
     for (const auto &outputVar : state.getOutputLocations())
     {
         stream.writeInt(outputVar.arrayIndex);
@@ -541,25 +593,31 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.mOutputVariableTypes.size());
+         printf("WriteInt\n");
     for (const auto &outputVariableType : state.mOutputVariableTypes)
     {
-        stream.writeInt(outputVariableType);
+        stream.writeInt(outputVariableType); 
+        printf("WriteInt (outputvartype)\n");
     }
 
+    printf("WriteInt\n");
     static_assert(IMPLEMENTATION_MAX_DRAW_BUFFER_TYPE_MASK == 8 * sizeof(uint16_t),
                   "All bits of DrawBufferTypeMask can be contained in an uint16_t");
     stream.writeInt(static_cast<uint32_t>(state.mDrawBufferTypeMask.to_ulong()));
 
+    printf("WriteInt\n");
     static_assert(IMPLEMENTATION_MAX_DRAW_BUFFERS < 8 * sizeof(uint32_t),
                   "All bits of DrawBufferMask can be contained in an uint32_t");
     stream.writeInt(static_cast<uint32_t>(state.mActiveOutputVariables.to_ulong()));
 
+    printf("WriteInt\n");printf("WriteInt\n");
     stream.writeInt(state.getSamplerUniformRange().low());
     stream.writeInt(state.getSamplerUniformRange().high());
-
+    printf("WriteInt\n");
+ 
     stream.writeInt(state.getSamplerBindings().size());
     for (const auto &samplerBinding : state.getSamplerBindings())
-    {
+    {printf("WriteInt\n");printf("WriteInt\n");printf("WriteInt\n");
         stream.writeInt(samplerBinding.textureType);
         stream.writeInt(samplerBinding.boundTextureUnits.size());
         stream.writeInt(samplerBinding.unreferenced);
@@ -567,27 +625,36 @@ void MemoryProgramCache::Serialize(const Context *context,
 
     stream.writeInt(state.getImageUniformRange().low());
     stream.writeInt(state.getImageUniformRange().high());
-
+    printf("WriteInt\n");printf("WriteInt\n");
     stream.writeInt(state.getImageBindings().size());
+    printf("WriteInt\n");
     for (const auto &imageBinding : state.getImageBindings())
     {
         stream.writeInt(imageBinding.boundImageUnits.size());
+        printf("WriteInt ImageBinding\n");
         for (size_t i = 0; i < imageBinding.boundImageUnits.size(); ++i)
         {
             stream.writeInt(imageBinding.boundImageUnits[i]);
+             printf("WriteInt ImageBindingBound\n");
+           
         }
     }
-
+    printf("WriteInt\n");printf("WriteInt\n");
     stream.writeInt(state.getAtomicCounterUniformRange().low());
     stream.writeInt(state.getAtomicCounterUniformRange().high());
-
+    printf("WriteInt\n");
     stream.writeInt(state.getLinkedShaderStages().to_ulong());
 
     program->getImplementation()->save(context, &stream);
 
     ASSERT(binaryOut);
     binaryOut->resize(stream.length());
-    memcpy(binaryOut->data(), stream.data(), stream.length());
+    size_t len = stream.length();
+    memcpy(binaryOut->data(), stream.data(), len);
+    printf("memcpy: %d\n", (int)len);
+    printf("*************************\n");
+    printf("Serialize End\n");
+    printf("*************************\n");
 }
 
 // static
