@@ -69,6 +69,8 @@ class VertexArrayState final : angle::NonCopyable
     BindingPointer<Buffer> mElementArrayBuffer;
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
+    size_t mMaxEnabledAttribute;
+    ComponentTypeMask mVertexAttributesTypeMask;
 };
 
 class VertexArray final : public LabeledObject
@@ -191,6 +193,9 @@ class VertexArray final : public LabeledObject
 
     void syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+
+    ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
+    AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
   private:
     ~VertexArray() override;
