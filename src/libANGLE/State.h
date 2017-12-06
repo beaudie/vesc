@@ -457,6 +457,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     const ImageUnit &getImageUnit(GLuint unit) const;
     const std::vector<Texture *> &getCompleteTextureCache() const { return mCompleteTextureCache; }
+    AttributesTypeMask getAttributesTypeMask() const { return mAttributesTypeMask; }
 
     // Handle a dirty texture event.
     void signal(size_t textureIndex, InitState initState) override;
@@ -512,6 +513,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     typedef std::vector<VertexAttribCurrentValueData> VertexAttribVector;
     VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib
     VertexArray *mVertexArray;
+    AttributesTypeMask mAttributesTypeMask;
 
     // Texture and sampler bindings
     size_t mActiveSampler;  // Active texture unit selector - GL_TEXTURE0
