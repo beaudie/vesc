@@ -74,6 +74,7 @@
             '<(angle_path)/src/tests/gl_tests/ReadPixelsTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RenderbufferMultisampleTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RendererTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/RenderStencilBufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RobustClientMemoryTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RobustResourceInitTest.cpp',
