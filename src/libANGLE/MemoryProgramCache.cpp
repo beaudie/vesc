@@ -232,8 +232,12 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
 
     state->mNumViews = stream.readInt<int>();
 
+    state->mAttributesTypeMask.types_from_ulong(stream.readInt<unsigned long>());
+    state->mAttributesTypeMask.mask_from_ulong(stream.readInt<unsigned long>());
+
     static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
                   "Too many vertex attribs for mask");
+
     state->mActiveAttribLocationsMask = stream.readInt<unsigned long>();
 
     unsigned int attribCount = stream.readInt<unsigned int>();
@@ -450,8 +454,13 @@ void MemoryProgramCache::Serialize(const Context *context,
 
     stream.writeInt(state.mNumViews);
 
-    stream.writeInt(state.getActiveAttribLocationsMask().to_ulong());
+    stream.writeInt(static_cast<int>(state.mAttributesTypeMask.types_to_ulong()));
+    stream.writeInt(static_cast<int>(state.mAttributesTypeMask.mask_to_ulong()));
 
+    static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
+                  "Too many vertex attribs for mask");
+    stream.writeInt(state.getActiveAttribLocationsMask().to_ulong());
+   
     stream.writeInt(state.getAttributes().size());
     for (const sh::Attribute &attrib : state.getAttributes())
     {
@@ -494,12 +503,14 @@ void MemoryProgramCache::Serialize(const Context *context,
     }
 
     stream.writeInt(state.getShaderStorageBlocks().size());
+
     for (const InterfaceBlock &shaderStorageBlock : state.getShaderStorageBlocks())
     {
         WriteInterfaceBlock(&stream, shaderStorageBlock);
     }
 
     stream.writeInt(state.mAtomicCounterBuffers.size());
+
     for (const auto &atomicCounterBuffer : state.mAtomicCounterBuffers)
     {
         WriteShaderVariableBuffer(&stream, atomicCounterBuffer);
@@ -543,7 +554,7 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(state.mOutputVariableTypes.size());
     for (const auto &outputVariableType : state.mOutputVariableTypes)
     {
-        stream.writeInt(outputVariableType);
+        stream.writeInt(outputVariableType); 
     }
 
     static_assert(IMPLEMENTATION_MAX_DRAW_BUFFER_TYPE_MASK == 8 * sizeof(uint16_t),
@@ -557,6 +568,7 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(state.getSamplerUniformRange().low());
     stream.writeInt(state.getSamplerUniformRange().high());
 
+ 
     stream.writeInt(state.getSamplerBindings().size());
     for (const auto &samplerBinding : state.getSamplerBindings())
     {
@@ -575,19 +587,19 @@ void MemoryProgramCache::Serialize(const Context *context,
         for (size_t i = 0; i < imageBinding.boundImageUnits.size(); ++i)
         {
             stream.writeInt(imageBinding.boundImageUnits[i]);
+           
         }
     }
-
     stream.writeInt(state.getAtomicCounterUniformRange().low());
     stream.writeInt(state.getAtomicCounterUniformRange().high());
-
     stream.writeInt(state.getLinkedShaderStages().to_ulong());
 
     program->getImplementation()->save(context, &stream);
 
     ASSERT(binaryOut);
     binaryOut->resize(stream.length());
-    memcpy(binaryOut->data(), stream.data(), stream.length());
+    size_t len = stream.length();
+    memcpy(binaryOut->data(), stream.data(), len);
 }
 
 // static

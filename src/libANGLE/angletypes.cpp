@@ -350,4 +350,135 @@ bool DrawBufferTypeMask::ProgramOutputsMatchFramebuffer(DrawBufferTypeMask outpu
     return (outputTypeBits & inputMaskBits) == ((inputTypeBits & outputMaskBits) & inputMaskBits);
 }
 
+AttributesTypeMask::AttributesTypeMask()
+{
+}
+
+AttributesTypeMask::AttributesTypeMask(const AttributesTypeMask &other) = default;
+AttributesTypeMask::~AttributesTypeMask()                               = default;
+
+void AttributesTypeMask::reset()
+{
+    mTypes.reset();
+    mTypeMask.reset();
+}
+
+bool AttributesTypeMask::none()
+{
+    return mTypes.none();
+}
+
+void AttributesTypeMask::resetIndex(size_t index)
+{
+    ASSERT(index <= MAX_VERTEX_ATTRIBS);
+
+    mTypes &= ~(0x3 << (index * 2));
+}
+
+void AttributesTypeMask::setIndex(GLenum type, size_t index, bool enabled)
+{
+    ASSERT(index <= MAX_VERTEX_ATTRIBS);
+
+    resetIndex(index);
+
+    setIndexOfActiveAttribType(type, index);
+
+    setMaskIndex(index, enabled);
+}
+
+void AttributesTypeMask::setIndexOfActiveAttribType(GLenum type, size_t index)
+{
+    uint32_t m = 0;
+
+    switch (type)
+    {
+        case GL_INT:
+            m = 0x1;
+            break;
+        case GL_UNSIGNED_INT:
+            m = 0x2;
+            break;
+        case GL_FLOAT:
+            m = 0x3;
+            break;
+        case GL_NONE:
+        default:
+            UNREACHABLE();
+            m = 0x0;
+            break;
+    }
+
+    mTypes |= m << (index * 2);
+}
+
+void AttributesTypeMask::setMaskIndex(size_t index, bool enabled)
+{
+    if (enabled)
+    {
+        mTypeMask |= 0x3 << (index * 2);
+    }
+    else
+    {
+        mTypeMask &= ~(0x3 << (index * 2));
+    }
+}
+
+unsigned long AttributesTypeMask::types_to_ulong() const
+{
+    return mTypes.to_ulong();
+}
+
+unsigned long AttributesTypeMask::mask_to_ulong() const
+{
+    return mTypeMask.to_ulong();
+}
+
+int AttributesTypeMask::types_to_int() const
+{
+    return (int)mTypes.to_ulong();
+}
+
+int AttributesTypeMask::mask_to_int() const
+{
+    return (int)mTypeMask.to_ulong();
+}
+
+void AttributesTypeMask::types_from_ulong(unsigned long types)
+{
+    mTypes = types;
+}
+
+void AttributesTypeMask::mask_from_ulong(unsigned long mask)
+{
+    mTypeMask = mask;
+}
+
+bool AttributesTypeMask::ProgramAttribsMatch(AttributesTypeMask programTypes,
+                                             AttributesTypeMask vaoTypes,
+                                             AttributesTypeMask stateTypes)
+{
+    static_assert(IMPLEMENTATION_MAX_VERTEX_ATTRIBS_TYPE_MASK_LENGTH == 32,
+                  "Vertex attrib types and masks should fit into 32 bits - 2 bits per attrib");
+
+    // For performance reasons, vertex attrib type validation is done using bit masks. We store two
+    // bits representing each index, shifted left (index*2) bits.
+    unsigned long programTypeBits = programTypes.types_to_ulong();
+    unsigned long vaoTypeBits     = vaoTypes.types_to_ulong();
+    unsigned long stateTypeBits   = stateTypes.types_to_ulong();
+    unsigned long programMaskBits = programTypes.mask_to_ulong();
+    unsigned long vaoMaskBits     = vaoTypes.mask_to_ulong();
+
+    // Use vaoMaskBits to fill any enabled indexes from the vao
+    vaoTypeBits = (vaoMaskBits & vaoTypeBits);
+
+    // Use inverse of vaoMaskBits to fill any indexes disabled by the vao
+    vaoTypeBits |= (~vaoMaskBits & stateTypeBits);
+
+    // Remove any indexes that do not exist in the program
+    vaoTypeBits &= programMaskBits;
+
+    // Return true if vertex and program attrib types match
+    return vaoTypeBits == programTypeBits;
+}
+
 }  // namespace gl
