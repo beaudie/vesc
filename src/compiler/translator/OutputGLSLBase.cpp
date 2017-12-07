@@ -310,7 +310,7 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
 
         declareStruct(structure);
 
-        if (!structure->name().empty())
+        if (structure->symbolType() != SymbolType::EMPTY)
         {
             mDeclaredStructs.insert(structure->uniqueId().get());
         }
@@ -583,7 +583,8 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                 const TField *field               = structure->fields()[index->getIConst(0)];
 
                 TString fieldName = field->name();
-                if (!mSymbolTable->findBuiltIn(structure->name(), mShaderVersion))
+                if (structure->symbolType() == SymbolType::USER_DEFINED ||
+                    structure->symbolType() == SymbolType::EMPTY)
                     fieldName = hashName(TName(fieldName));
 
                 out << fieldName;
@@ -600,7 +601,8 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                 const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
 
                 TString fieldName = field->name();
-                if (!mSymbolTable->findBuiltIn(interfaceBlock->name(), mShaderVersion))
+                ASSERT(interfaceBlock->symbolType() != SymbolType::EMPTY);
+                if (interfaceBlock->symbolType() == SymbolType::USER_DEFINED)
                 {
                     fieldName = hashName(TName(fieldName));
                 }
@@ -1156,7 +1158,7 @@ TString TOutputGLSLBase::hashFunctionNameIfNeeded(const TFunctionSymbolInfo &inf
 bool TOutputGLSLBase::structDeclared(const TStructure *structure) const
 {
     ASSERT(structure);
-    if (structure->name().empty())
+    if (structure->symbolType() == SymbolType::EMPTY)
     {
         return false;
     }
