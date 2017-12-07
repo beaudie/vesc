@@ -89,7 +89,7 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
                               vk::CommandBuffer *commandBuffer,
                               Serial queueSerial);
 
-    const vk::RenderPassDesc &getRenderPassDesc(const gl::Context *context);
+    const vk::PackedRenderPassDesc &getRenderPassDesc(const gl::Context *context);
 
   private:
     FramebufferVk(const gl::FramebufferState &state);
@@ -100,7 +100,7 @@ class FramebufferVk : public FramebufferImpl, public ResourceVk
 
     WindowSurfaceVk *mBackbuffer;
 
-    Optional<vk::RenderPassDesc> mRenderPassDesc;
+    Optional<vk::PackedRenderPassDesc> mRenderPassDesc;
     vk::Framebuffer mFramebuffer;
 };
 
