@@ -278,7 +278,7 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
 
     mCurrentInputAssemblyState.topology = gl_vk::GetPrimitiveTopology(mCurrentDrawMode);
 
-    const vk::RenderPassDesc &desc = vkFBO->getRenderPassDesc(context);
+    const vk::PackedRenderPassDesc &desc = vkFBO->getRenderPassDesc(context);
 
     vk::RenderPass *renderPass = nullptr;
     ANGLE_TRY(mRenderer->getCompatibleRenderPass(desc, &renderPass));
