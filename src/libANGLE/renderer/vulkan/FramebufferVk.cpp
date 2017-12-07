@@ -30,7 +30,6 @@ namespace rx
 
 namespace
 {
-
 gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
     const gl::Context *context,
     const gl::FramebufferAttachment *readAttachment)
@@ -41,30 +40,6 @@ gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
     GLenum implFormat = renderTarget->format->textureFormat().fboImplementationInternalFormat;
     return &gl::GetSizedInternalFormatInfo(implFormat);
 }
-
-VkSampleCountFlagBits ConvertSamples(GLint sampleCount)
-{
-    switch (sampleCount)
-    {
-        case 0:
-        case 1:
-            return VK_SAMPLE_COUNT_1_BIT;
-        case 2:
-            return VK_SAMPLE_COUNT_2_BIT;
-        case 4:
-            return VK_SAMPLE_COUNT_4_BIT;
-        case 8:
-            return VK_SAMPLE_COUNT_8_BIT;
-        case 16:
-            return VK_SAMPLE_COUNT_16_BIT;
-        case 32:
-            return VK_SAMPLE_COUNT_32_BIT;
-        default:
-            UNREACHABLE();
-            return VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
-    }
-}
-
 }  // anonymous namespace
 
 // static
@@ -369,14 +344,14 @@ void FramebufferVk::syncState(const gl::Context *context,
     contextVk->invalidateCurrentPipeline();
 }
 
-const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc(const gl::Context *context)
+const vk::PackedRenderPassDesc &FramebufferVk::getRenderPassDesc(const gl::Context *context)
 {
     if (mRenderPassDesc.valid())
     {
         return mRenderPassDesc.value();
     }
 
-    vk::RenderPassDesc desc;
+    vk::PackedRenderPassDesc desc;
 
     const auto &colorAttachments = mState.getColorAttachments();
     for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
@@ -386,24 +361,7 @@ const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc(const gl::Context *co
         {
             RenderTargetVk *renderTarget = nullptr;
             ANGLE_SWALLOW_ERR(colorAttachment.getRenderTarget(context, &renderTarget));
-
-            VkAttachmentDescription *colorDesc = desc.nextColorAttachment();
-
-            // TODO(jmadill): We would only need this flag for duplicated attachments.
-            colorDesc->flags   = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
-            colorDesc->format  = renderTarget->format->vkTextureFormat;
-            colorDesc->samples = ConvertSamples(colorAttachment.getSamples());
-
-            // The load op controls the prior existing depth/color attachment data.
-            // TODO(jmadill): Proper load ops. Should not be hard coded to clear.
-            colorDesc->loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorDesc->storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-            colorDesc->stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            colorDesc->stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            colorDesc->initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
-
-            // We might want to transition directly to PRESENT_SRC for Surface attachments.
-            colorDesc->finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            vk::PackColorAttachmentDesc(&desc, *renderTarget->format, colorAttachment.getSamples());
         }
     }
 
@@ -413,18 +371,8 @@ const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc(const gl::Context *co
     {
         RenderTargetVk *renderTarget = nullptr;
         ANGLE_SWALLOW_ERR(depthStencilAttachment->getRenderTarget(context, &renderTarget));
-
-        VkAttachmentDescription *depthStencilDesc = desc.nextDepthStencilAttachment();
-
-        depthStencilDesc->flags          = 0;
-        depthStencilDesc->format         = renderTarget->format->vkTextureFormat;
-        depthStencilDesc->samples        = ConvertSamples(depthStencilAttachment->getSamples());
-        depthStencilDesc->loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        depthStencilDesc->storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-        depthStencilDesc->stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        depthStencilDesc->stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthStencilDesc->initialLayout  = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-        depthStencilDesc->finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        vk::PackDepthStencilAttachmentDesc(&desc, *renderTarget->format,
+                                           depthStencilAttachment->getSamples());
     }
 
     mRenderPassDesc = desc;
@@ -440,7 +388,7 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
         return &mFramebuffer;
     }
 
-    const vk::RenderPassDesc &desc = getRenderPassDesc(context);
+    const vk::PackedRenderPassDesc &desc = getRenderPassDesc(context);
 
     vk::RenderPass *renderPass = nullptr;
     ANGLE_TRY(rendererVk->getCompatibleRenderPass(desc, &renderPass));
@@ -512,6 +460,10 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
                                          vk::CommandBuffer *commandBuffer,
                                          Serial queueSerial)
 {
+    uint32_t attachmentIndex = 0;
+    vk::AttachmentOpsArray attachmentOps;
+    memset(&attachmentOps, 0, sizeof(vk::AttachmentOpsArray));
+
     // TODO(jmadill): Cache render targets.
     for (const auto &colorAttachment : mState.getColorAttachments())
     {
@@ -520,6 +472,10 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
             RenderTargetVk *renderTarget = nullptr;
             ANGLE_TRY(colorAttachment.getRenderTarget<RenderTargetVk>(context, &renderTarget));
             renderTarget->resource->setQueueSerial(queueSerial);
+
+            // Fill in some default load and store ops.
+            vk::InitDummyAttachmentOp(&attachmentOps[attachmentIndex++],
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         }
     }
 
@@ -529,16 +485,20 @@ gl::Error FramebufferVk::beginRenderPass(const gl::Context *context,
         RenderTargetVk *renderTarget = nullptr;
         ANGLE_TRY(depthStencilAttachment->getRenderTarget<RenderTargetVk>(context, &renderTarget));
         renderTarget->resource->setQueueSerial(queueSerial);
+
+        // Fill in some default load and store ops.
+        vk::InitDummyAttachmentOp(&attachmentOps[attachmentIndex++],
+                                  VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     }
 
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY_RESULT(getFramebuffer(context, rendererVk), framebuffer);
     ASSERT(framebuffer && framebuffer->valid());
 
-    const vk::RenderPassDesc &desc = getRenderPassDesc(context);
+    const vk::PackedRenderPassDesc &desc = getRenderPassDesc(context);
 
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(rendererVk->getMatchingRenderPass(desc, &renderPass));
+    ANGLE_TRY(rendererVk->getRenderPassWithOps(desc, attachmentOps, &renderPass));
     ASSERT(renderPass && renderPass->valid());
 
     // TODO(jmadill): Proper clear value implementation.
