@@ -866,7 +866,7 @@ TString QualifiedStructNameString(const TStructure &structure,
                                   bool useHLSLRowMajorPacking,
                                   bool useStd140Packing)
 {
-    if (structure.name() == "")
+    if (structure.symbolType() == SymbolType::EMPTY)
     {
         return "";
     }
