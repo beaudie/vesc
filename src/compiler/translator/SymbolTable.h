@@ -43,6 +43,13 @@
 namespace sh
 {
 
+enum class SymbolType
+{
+    BUILT_IN,
+    USER_DEFINED,
+    NOT_RESOLVED
+};
+
 // Symbol base class. (Can build functions or variables out of these...)
 class TSymbol : angle::NonCopyable
 {
@@ -50,6 +57,7 @@ class TSymbol : angle::NonCopyable
     POOL_ALLOCATOR_NEW_DELETE();
     TSymbol(TSymbolTable *symbolTable,
             const TString *name,
+            SymbolType symbolType,
             TExtension extension = TExtension::UNDEFINED);
 
     virtual ~TSymbol()
@@ -70,6 +78,7 @@ class TSymbol : angle::NonCopyable
 
   private:
     const TSymbolUniqueId mUniqueId;
+    const SymbolType mSymbolType;
     const TExtension mExtension;
 };
 
@@ -93,6 +102,7 @@ class TVariable : public TSymbol
     TVariable(TSymbolTable *symbolTable,
               const TString *name,
               const TType &t,
+              SymbolType symbolType,
               TExtension ext = TExtension::UNDEFINED);
 
     TType type;
@@ -103,7 +113,10 @@ class TVariable : public TSymbol
 class TStructure : public TSymbol, public TFieldListCollection
 {
   public:
-    TStructure(TSymbolTable *symbolTable, const TString *name, const TFieldList *fields);
+    TStructure(TSymbolTable *symbolTable,
+               const TString *name,
+               const TFieldList *fields,
+               SymbolType symbolType);
 
     bool isStruct() const override { return true; }
 
@@ -135,6 +148,7 @@ class TInterfaceBlock : public TSymbol, public TFieldListCollection
                     const TString *name,
                     const TFieldList *fields,
                     const TLayoutQualifier &layoutQualifier,
+                    SymbolType symbolType,
                     TExtension extension = TExtension::UNDEFINED);
 
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
@@ -191,9 +205,10 @@ class TFunction : public TSymbol
     TFunction(TSymbolTable *symbolTable,
               const TString *name,
               const TType *retType,
+              SymbolType symbolType,
               TOperator tOp        = EOpNull,
               TExtension extension = TExtension::UNDEFINED)
-        : TSymbol(symbolTable, name, extension),
+        : TSymbol(symbolTable, name, symbolType, extension),
           returnType(retType),
           mangledName(nullptr),
           op(tOp),
@@ -364,7 +379,8 @@ class TSymbolTable : angle::NonCopyable
     bool insertConstInt(ESymbolLevel level, const char *name, int value, TPrecision precision)
     {
         TVariable *constant =
-            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1));
+            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1),
+                          SymbolType::BUILT_IN);
         TConstantUnion *unionArray = new TConstantUnion[1];
         unionArray[0].setIConst(value);
         constant->shareConstPointer(unionArray);
@@ -378,7 +394,8 @@ class TSymbolTable : angle::NonCopyable
                            TPrecision precision)
     {
         TVariable *constant =
-            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1), ext);
+            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1),
+                          SymbolType::BUILT_IN, ext);
         TConstantUnion *unionArray = new TConstantUnion[1];
         unionArray[0].setIConst(value);
         constant->shareConstPointer(unionArray);
@@ -391,7 +408,8 @@ class TSymbolTable : angle::NonCopyable
                           TPrecision precision)
     {
         TVariable *constantIvec3 =
-            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 3));
+            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 3),
+                          SymbolType::BUILT_IN);
 
         TConstantUnion *unionArray = new TConstantUnion[3];
         for (size_t index = 0u; index < 3u; ++index)
@@ -542,7 +560,10 @@ class TSymbolTable : angle::NonCopyable
 
     ESymbolLevel currentLevel() const { return static_cast<ESymbolLevel>(table.size() - 1); }
 
-    TVariable *insertVariable(ESymbolLevel level, const TString *name, const TType &type);
+    TVariable *insertVariable(ESymbolLevel level,
+                              const TString *name,
+                              const TType &type,
+                              SymbolType symbolType);
 
     bool insert(ESymbolLevel level, TSymbol *symbol)
     {
