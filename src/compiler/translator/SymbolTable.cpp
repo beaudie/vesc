@@ -40,19 +40,25 @@ TSymbol::TSymbol(TSymbolTable *symbolTable,
 {
     ASSERT(mSymbolType == SymbolType::BUILT_IN || mExtension == TExtension::UNDEFINED);
     ASSERT(mName != nullptr || mSymbolType == SymbolType::ANGLE_INTERNAL ||
-           mSymbolType == SymbolType::NOT_RESOLVED);
+           mSymbolType == SymbolType::NOT_RESOLVED || mSymbolType == SymbolType::EMPTY);
 }
 
-const TString &TSymbol::name() const
+const TString *TSymbol::name() const
 {
-    if (mName != nullptr)
+    if (mName != nullptr || mSymbolType == SymbolType::EMPTY)
     {
-        return *mName;
+        return mName;
     }
     ASSERT(mSymbolType == SymbolType::ANGLE_INTERNAL);
     TInfoSinkBase symbolNameOut;
     symbolNameOut << "s" << mUniqueId.get();
-    return *NewPoolTString(symbolNameOut.c_str());
+    return NewPoolTString(symbolNameOut.c_str());
+}
+
+const TString &TSymbol::getMangledName() const
+{
+    ASSERT(mSymbolType != SymbolType::EMPTY);
+    return *name();
 }
 
 TVariable::TVariable(TSymbolTable *symbolTable,
@@ -109,6 +115,7 @@ TInterfaceBlock::TInterfaceBlock(TSymbolTable *symbolTable,
       mBlockStorage(layoutQualifier.blockStorage),
       mBinding(layoutQualifier.binding)
 {
+    ASSERT(name != nullptr);
 }
 
 //
@@ -138,7 +145,7 @@ void TFunction::swapParameters(const TFunction &parametersSource)
 
 const TString *TFunction::buildMangledName() const
 {
-    std::string newName = name().c_str();
+    std::string newName = name()->c_str();
     newName += kFunctionMangledNameSeparator;
 
     for (const auto &p : parameters)
@@ -181,7 +188,8 @@ bool TSymbolTableLevel::insert(TSymbol *symbol)
 bool TSymbolTableLevel::insertUnmangled(TFunction *function)
 {
     // returning true means symbol was added to the table
-    tInsertResult result = level.insert(tLevelPair(function->name(), function));
+    ASSERT(function->name() != nullptr);
+    tInsertResult result = level.insert(tLevelPair(*function->name(), function));
 
     return result.second;
 }
