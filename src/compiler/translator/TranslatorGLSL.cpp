@@ -216,7 +216,7 @@ void TranslatorGLSL::translate(TIntermBlock *root,
 
     if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {
-        TName uniformName(TString("ViewID_OVR"));
+        TName uniformName(&TString("ViewID_OVR"));
         uniformName.setInternal(true);
         sink << "uniform int " << outputGLSL.hashName(uniformName) << ";\n";
     }

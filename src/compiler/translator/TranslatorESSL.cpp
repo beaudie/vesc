@@ -106,7 +106,7 @@ void TranslatorESSL::translate(TIntermBlock *root,
 
     if (compileOptions & SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM)
     {
-        TName uniformName(TString("ViewID_OVR"));
+        TName uniformName(&TString("ViewID_OVR"));
         uniformName.setInternal(true);
         sink << "highp uniform int " << outputESSL.hashName(uniformName) << ";\n";
     }
