@@ -25,6 +25,8 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol *symbol)
         return;
     }
 
+    ASSERT(userType->name() != nullptr);
+
     int uniqueId = userType->uniqueId().get();
 
     ASSERT(mScopeDepth > 0);
@@ -50,14 +52,14 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol *symbol)
         return;
     // Map {name} to _webgl_struct_{uniqueId}_{name}.
     const char kPrefix[] = "_webgl_struct_";
-    if (userType->name().find(kPrefix) == 0)
+    if (userType->name()->find(kPrefix) == 0)
     {
         // The name has already been regenerated.
         return;
     }
     std::string id = Str(uniqueId);
     TString tmp    = kPrefix + TString(id.c_str());
-    tmp += "_" + userType->name();
+    tmp += "_" + *userType->name();
     userType->setName(tmp);
 }
 
