@@ -102,6 +102,9 @@ extern long TexCombineExec(void);
 // GL_OES_matrix_palette
 extern long MatrixPaletteExec(void);
 
+// Test driver setup
+extern void ExtTestDriverSetup(void);
+
 #define CONFORMANCE_TEST_ERROR (-1)
 
 #ifdef __cplusplus
@@ -123,391 +126,469 @@ class GLES1ConformanceTest : public ANGLETest
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
         setConfigStencilBits(8);
+        ExtTestDriverSetup();
     }
 };
 
 TEST_P(GLES1ConformanceTest, AmbLight)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbLightExec());
 }
 
 TEST_P(GLES1ConformanceTest, AmbMat)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbMatExec());
 }
 
 TEST_P(GLES1ConformanceTest, AmbScene)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbSceneExec());
 }
 
 TEST_P(GLES1ConformanceTest, APFunc)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, APFuncExec());
 }
 
 TEST_P(GLES1ConformanceTest, AtnConst)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnConstExec());
 }
 
 TEST_P(GLES1ConformanceTest, AtnPos)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnPosExec());
 }
 
 TEST_P(GLES1ConformanceTest, BClear)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BClearExec());
 }
 
 TEST_P(GLES1ConformanceTest, BColor)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BColorExec());
 }
 
 TEST_P(GLES1ConformanceTest, BCorner)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BCornerExec());
 }
 
 TEST_P(GLES1ConformanceTest, Blend)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BlendExec());
 }
 
 TEST_P(GLES1ConformanceTest, Clip)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ClipExec());
 }
 
 TEST_P(GLES1ConformanceTest, ColRamp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ColRampExec());
 }
 
 TEST_P(GLES1ConformanceTest, CopyTex)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, CopyTexExec());
 }
 
 TEST_P(GLES1ConformanceTest, DifLight)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DifLightExec());
 }
 
 TEST_P(GLES1ConformanceTest, DifMat)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DifMatExec());
 }
 
 TEST_P(GLES1ConformanceTest, DifMatNorm)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DifMatNormExec());
 }
 
 TEST_P(GLES1ConformanceTest, DifMatPos)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DifMatPosExec());
 }
 
 TEST_P(GLES1ConformanceTest, Dither)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DitherExec());
 }
 
 TEST_P(GLES1ConformanceTest, DivZero)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DivZeroExec());
 }
 
 TEST_P(GLES1ConformanceTest, EmitMat)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, EmitMatExec());
 }
 
 TEST_P(GLES1ConformanceTest, FogExp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, FogExpExec());
 }
 
 TEST_P(GLES1ConformanceTest, FogLin)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, FogLinExec());
 }
 
 TEST_P(GLES1ConformanceTest, LineAntiAlias)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineAntiAliasExec());
 }
 
 TEST_P(GLES1ConformanceTest, LineHV)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineHVExec());
 }
 
 TEST_P(GLES1ConformanceTest, LineRaster)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineRasterExec());
 }
 
 TEST_P(GLES1ConformanceTest, LogicOp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LogicOpExec());
 }
 
 TEST_P(GLES1ConformanceTest, Mip)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MipExec());
 }
 
 TEST_P(GLES1ConformanceTest, MipLevels)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MipLevelsExec());
 }
 
 TEST_P(GLES1ConformanceTest, MipLin)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MipLinExec());
 }
 
 TEST_P(GLES1ConformanceTest, MipSelect)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MipSelectExec());
 }
 
 TEST_P(GLES1ConformanceTest, Mask)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MaskExec());
 }
 
 TEST_P(GLES1ConformanceTest, MatrixStack)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixStackExec());
 }
 
 TEST_P(GLES1ConformanceTest, MultiTex)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MultiTexExec());
 }
 
 TEST_P(GLES1ConformanceTest, MustPass)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MustPassExec());
 }
 
 TEST_P(GLES1ConformanceTest, PackedPixels)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PackedPixelsExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointAntiAlias)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointAntiAliasExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointRaster)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointRasterExec());
 }
 
 TEST_P(GLES1ConformanceTest, PolyCull)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PolyCullExec());
 }
 
 TEST_P(GLES1ConformanceTest, ReadFormat)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ReadFormatExec());
 }
 
 TEST_P(GLES1ConformanceTest, RescaleNormal)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, RescaleNormalExec());
 }
 
 TEST_P(GLES1ConformanceTest, Scissor)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ScissorExec());
 }
 
 TEST_P(GLES1ConformanceTest, SPClear)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPClearExec());
 }
 
 TEST_P(GLES1ConformanceTest, SPCorner)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPCornerExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpecExp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpecExpExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpecExpNorm)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpecExpNormExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpecLight)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpecLightExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpecMat)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpecMatExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpecNorm)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpecNormExec());
 }
 
 TEST_P(GLES1ConformanceTest, SPFunc)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPFuncExec());
 }
 
 TEST_P(GLES1ConformanceTest, SPOp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPOpExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpotPos)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpotPosExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpotExpPos)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpotExpPosExec());
 }
 
 TEST_P(GLES1ConformanceTest, SpotExpDir)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SpotExpDirExec());
 }
 
 TEST_P(GLES1ConformanceTest, TexDecal)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexDecalExec());
 }
 
 TEST_P(GLES1ConformanceTest, TexPalet)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexPaletExec());
 }
 
 TEST_P(GLES1ConformanceTest, TextureEdgeClamp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TextureEdgeClampExec());
 }
 
 TEST_P(GLES1ConformanceTest, TriRaster)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TriRasterExec());
 }
 
 TEST_P(GLES1ConformanceTest, TriTile)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TriTileExec());
 }
 
 TEST_P(GLES1ConformanceTest, VertexOrder)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, VertexOrderExec());
 }
 
 TEST_P(GLES1ConformanceTest, ViewportClamp)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ViewportClampExec());
 }
 
 TEST_P(GLES1ConformanceTest, XForm)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, XFormExec());
 }
 
 TEST_P(GLES1ConformanceTest, XFormMix)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, XFormMixExec());
 }
 
 TEST_P(GLES1ConformanceTest, XFormNormal)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, XFormNormalExec());
 }
 
 TEST_P(GLES1ConformanceTest, XFormViewport)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, XFormViewportExec());
 }
 
 TEST_P(GLES1ConformanceTest, XFormHomogenous)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, XFormHomogenousExec());
 }
 
 TEST_P(GLES1ConformanceTest, ZBClear)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ZBClearExec());
 }
 
 TEST_P(GLES1ConformanceTest, ZBFunc)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ZBFuncExec());
 }
 
 TEST_P(GLES1ConformanceTest, DrawTex)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DrawTexExec());
 }
 
 TEST_P(GLES1ConformanceTest, MatrixQuery)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixQueryExec());
 }
 
 TEST_P(GLES1ConformanceTest, BufferObject)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BufferObjectExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSizeArray)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSizeArrayExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSprite)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSpriteExec());
 }
 
 TEST_P(GLES1ConformanceTest, UserClip)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, UserClipExec());
 }
 
 TEST_P(GLES1ConformanceTest, MatrixGetTest)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixGetTestExec());
 }
 
 TEST_P(GLES1ConformanceTest, Gets)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, GetsExec());
 }
 
 TEST_P(GLES1ConformanceTest, TexCombine)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexCombineExec());
 }
 
 TEST_P(GLES1ConformanceTest, MatrixPalette)
 {
+    ExtTestDriverSetup();
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixPaletteExec());
 }
 
