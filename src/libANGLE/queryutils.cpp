@@ -25,6 +25,9 @@
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/queryconversions.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
 namespace gl
 {
 
@@ -116,6 +119,15 @@ void QueryTexLevelParameterBase(const Texture *texture,
     }
 }
 
+// Somehow this needs to be defined again here or a link error occurs.
+template <typename NativeT, typename QueryT>
+void CastQueryValuesTo(GLenum pname, const QueryT* values, int count, NativeT* out)
+{
+    for (int i = 0; i < count; i++) {
+        out[i] = CastQueryValueTo<NativeT, QueryT>(pname, values[i]);
+    }
+}
+
 template <typename ParamType>
 void QueryTexParameterBase(const Texture *texture, GLenum pname, ParamType *params)
 {
@@ -182,6 +194,19 @@ void QueryTexParameterBase(const Texture *texture, GLenum pname, ParamType *para
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             *params = CastFromGLintStateValue<ParamType>(pname, texture->getSRGBDecode());
+            break;
+        // GLES1
+        case GL_TEXTURE_CROP_RECT_OES:
+            GLint crop[4];
+            texture->getCrop(crop);
+            for (int i = 0; i < 4; i++) {
+                params[i] = (ParamType)crop[i];
+            }
+            break;
+        case GL_GENERATE_MIPMAP:
+            bool generate;
+            texture->getGenerateMipmapHint(&generate);
+            *params = (ParamType)generate;
             break;
         default:
             UNREACHABLE();
@@ -255,6 +280,16 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             texture->setSRGBDecode(ConvertToGLenum(pname, params[0]));
+            break;
+        case GL_TEXTURE_CROP_RECT_OES:
+        {
+            GLint crop[4];
+            CastQueryValuesTo<GLint>(pname, params, 4, crop);
+            texture->setCrop(crop);
+            break;
+        }
+        case GL_GENERATE_MIPMAP:
+            texture->setGenerateMipmapHint(ConvertToBool(params[0]));
             break;
         default:
             UNREACHABLE();
