@@ -25,6 +25,13 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
+#define GLES1LOG(...)
+
+// #define GLES1LOG(fmt,...) fprintf(stderr, "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__);
+
 namespace
 {
 
@@ -214,6 +221,199 @@ void State::initialize(const Context *context,
 
     mRobustResourceInit = robustResourceInit;
     mProgramBinaryCacheEnabled = programBinaryCacheEnabled;
+
+    // GLES1.1 state initialization
+    if (clientVersion <= Version(1, 1))
+    {
+
+        mLineSmoothEnabled = GL_FALSE;
+        mPointSmoothEnabled = GL_FALSE;
+        mPointSpriteEnabled = GL_FALSE;
+        mLogicOpEnabled = GL_FALSE;
+        mAlphaTestEnabled = GL_FALSE;
+        mLightingEnabled = GL_FALSE;
+        mFogEnabled = GL_FALSE;
+        mRescaleNormalEnabled = GL_FALSE;
+        mNormalizeEnabled = GL_FALSE;
+        mColorMaterialEnabled = GL_FALSE;
+        mReflecitonMapEnabled = GL_FALSE;
+
+        // Default to 4 multitexture units and 8 lights max,
+        // with 16 matrices max depth (Approx. spec minimums)
+        mMaxMultitextureUnits = 4;
+        mMaxLights = 8;
+        mMaxMatrixStackDepth = 16;
+        mMaxClipPlanes = 6;
+
+        mShadeModel = GL_SMOOTH;
+        mCurrMatrixMode = GL_MODELVIEW;
+        mActiveSampler = 0;
+
+        mColor[0] = 1.0f;
+        mColor[1] = 1.0f;
+        mColor[2] = 1.0f;
+        mColor[3] = 1.0f;
+
+        mNormal[0] = 0.0f;
+        mNormal[1] = 0.0f;
+        mNormal[2] = 1.0f;
+
+        mMultiTexCoords.resize(mMaxMultitextureUnits);
+        for (auto& texcoord : mMultiTexCoords) {
+            memset(&texcoord, 0, sizeof(texcoord));
+        }
+
+        mTexUnitEnables.resize(mMaxMultitextureUnits, {});
+        mTexUnitEnvs.resize(mMaxMultitextureUnits, {});
+        for (int i = 0; i < mMaxMultitextureUnits; i++) {
+            auto& env = mTexUnitEnvs[i];
+
+            env.envMode = GL_MODULATE;
+            env.combineRgb = GL_MODULATE;
+            env.combineAlpha = GL_MODULATE;
+
+            env.src0rgb = GL_TEXTURE;
+            env.src0alpha = GL_TEXTURE;
+
+            env.src1rgb = GL_PREVIOUS;
+            env.src1alpha = GL_PREVIOUS;
+
+            env.src2rgb = GL_CONSTANT;
+            env.src2alpha = GL_CONSTANT;
+
+            env.op0rgb = GL_SRC_COLOR;
+            env.op0alpha = GL_SRC_ALPHA;
+
+            env.op1rgb = GL_SRC_COLOR;
+            env.op1alpha = GL_SRC_ALPHA;
+
+            env.op2rgb = GL_SRC_ALPHA;
+            env.op2alpha = GL_SRC_ALPHA;
+
+            env.envColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+            env.rgbScale = 1.0;
+            env.alphaScale = 1.0;
+
+            env.pointSpriteCoordReplace = false;
+        }
+
+        mTexGens.resize(mMaxMultitextureUnits, {});
+
+        mProjMatrices.resize(1, {});
+        mModelviewMatrices.resize(1, {});
+        mTextureMatrices.resize(mMaxMultitextureUnits, {});
+        for (int i = 0; i < mMaxMultitextureUnits; i++) {
+            mTextureMatrices[i].resize(1, {});
+        }
+
+        mMaterial.ambient[0] = 0.2f;
+        mMaterial.ambient[1] = 0.2f;
+        mMaterial.ambient[2] = 0.2f;
+        mMaterial.ambient[3] = 1.0f;
+
+        mMaterial.diffuse[0] = 0.8f;
+        mMaterial.diffuse[1] = 0.8f;
+        mMaterial.diffuse[2] = 0.8f;
+        mMaterial.diffuse[3] = 1.0f;
+
+        mMaterial.specular[0] = 0.0f;
+        mMaterial.specular[1] = 0.0f;
+        mMaterial.specular[2] = 0.0f;
+        mMaterial.specular[3] = 1.0f;
+
+        mMaterial.emissive[0] = 0.0f;
+        mMaterial.emissive[1] = 0.0f;
+        mMaterial.emissive[2] = 0.0f;
+        mMaterial.emissive[3] = 1.0f;
+
+        mMaterial.specularExponent = 0.0f;
+
+        mLightModel.color[0] = 0.2f;
+        mLightModel.color[1] = 0.2f;
+        mLightModel.color[2] = 0.2f;
+        mLightModel.color[3] = 1.0f;
+        mLightModel.twoSided = false;
+
+        mLights.resize(mMaxLights, {});
+        for (auto& light : mLights) {
+            light.enabled = false;
+
+            light.ambient[0] = 0.0f;
+            light.ambient[1] = 0.0f;
+            light.ambient[2] = 0.0f;
+            light.ambient[3] = 1.0f;
+
+            light.diffuse[0] = 0.0f;
+            light.diffuse[1] = 0.0f;
+            light.diffuse[2] = 0.0f;
+            light.diffuse[3] = 1.0f;
+
+            light.specular[0] = 0.0f;
+            light.specular[1] = 0.0f;
+            light.specular[2] = 0.0f;
+            light.specular[3] = 1.0f;
+
+            light.position[0] = 0.0f;
+            light.position[1] = 0.0f;
+            light.position[2] = 1.0f;
+            light.position[3] = 0.0f;
+
+            light.direction[0] = 0.0f;
+            light.direction[1] = 0.0f;
+            light.direction[2] = -1.0f;
+
+            light.spotlightExponent = 0.0f;
+            light.spotlightCutoffAngle = 180.0f;
+            light.attenuationConst = 1.0f;
+            light.attenuationLinear = 0.0f;
+            light.attenuationQuadratic = 0.0f;
+        }
+
+        mFog.mode = GL_EXP;
+        mFog.density = 1.0f;
+        mFog.start = 0.0f;
+        mFog.end = 1.0f;
+        mFog.color[0] = 0.0f;
+        mFog.color[1] = 0.0f;
+        mFog.color[2] = 0.0f;
+        mFog.color[3] = 0.0f;
+
+        mAlphaFunc = GL_ALWAYS;
+        mAlphaTestRef = 0.0f;
+
+        mClipPlaneEnabled.resize(mMaxClipPlanes, {});
+        for (int i = 0; i < mMaxClipPlanes; i++) {
+            mClipPlaneEnabled[i] = false;
+        }
+
+        mClipPlanes.resize(mMaxClipPlanes, {});
+        for (auto& plane : mClipPlanes) {
+            for (int i = 0; i < 4; i++) {
+                plane[i] = 0.0f;
+            }
+        }
+
+        mPointSizeMin = 0.1f;
+        mPointSizeMax = 100.0f;
+        mPointFadeThresholdSize = 0.1f;
+        mPointDistanceAttenuation[0] = 1.0f;
+        mPointDistanceAttenuation[1] = 0.0f;
+        mPointDistanceAttenuation[2] = 0.0f;
+
+        mPointSize = 1.0f;
+
+        mLogicOp = GL_COPY;
+
+        mVertexArrayStride = 0;
+        mNormalArrayStride = 0;
+        mColorArrayStride = 0;
+        mTextureCoordArrayStride = 0;
+
+        mLineSmoothHint = GL_DONT_CARE;
+        mPointSmoothHint = GL_DONT_CARE;
+        mPerspectiveCorrectionHint = GL_DONT_CARE;
+        mFogHint = GL_DONT_CARE;
+    }
 }
 
 void State::reset(const Context *context)
@@ -699,7 +899,70 @@ void State::setEnableFeature(GLenum feature, bool enabled)
       case GL_FRAMEBUFFER_SRGB_EXT:
           setFramebufferSRGB(enabled);
           break;
-      default:                               UNREACHABLE();
+      case GL_TEXTURE_2D:
+      case GL_TEXTURE_CUBE_MAP:
+          setTextureTargetEnabled(feature, enabled);
+          break;
+      case GL_ALPHA_TEST:
+          GLES1LOG("GLES1 TODO: feature: GL_ALPHA_TEST");
+          mAlphaTestEnabled = enabled;
+          break;
+      case GL_FOG:
+          mFogEnabled = enabled;
+          break;
+      case GL_LIGHTING:
+          mLightingEnabled = enabled;
+          break;
+      case GL_LIGHT0:
+      case GL_LIGHT1:
+      case GL_LIGHT2:
+      case GL_LIGHT3:
+      case GL_LIGHT4:
+      case GL_LIGHT5:
+      case GL_LIGHT6:
+      case GL_LIGHT7:
+          mLights[feature - GL_LIGHT0].enabled = enabled;
+          break;
+      case GL_COLOR_LOGIC_OP:
+          mLogicOpEnabled = enabled;
+          break;
+      case GL_NORMALIZE:
+          mNormalizeEnabled = enabled;
+          break;
+      case GL_RESCALE_NORMAL:
+          mRescaleNormalEnabled = enabled;
+          break;
+      case GL_CLIP_PLANE0:
+      case GL_CLIP_PLANE1:
+      case GL_CLIP_PLANE2:
+      case GL_CLIP_PLANE3:
+      case GL_CLIP_PLANE4:
+      case GL_CLIP_PLANE5:
+          GLES1LOG("GLES1 TODO: feature: GL_CLIP_PLANEn");
+          mClipPlaneEnabled[feature - GL_CLIP_PLANE0] = enabled;
+          break;
+      case GL_COLOR_MATERIAL:
+          GLES1LOG("GLES1 TODO: feature: GL_COLOR_MATERIAL");
+          mColorMaterialEnabled = enabled;
+          break;
+      case GL_LINE_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_LINE_SMOOTH");
+          mLineSmoothEnabled = enabled;
+          break;
+      case GL_POINT_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SMOOTH");
+          mPointSmoothEnabled = enabled;
+          break;
+      case GL_POINT_SPRITE_OES:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SPRITE_OES");
+          mPointSpriteEnabled = enabled;
+          break;
+      case GL_REFLECTION_MAP_OES:
+          mReflecitonMapEnabled = enabled;
+      default: {
+                   GLES1LOG("New: 0x%x", feature);
+                   UNREACHABLE();
+               }
     }
 }
 
@@ -737,7 +1000,71 @@ bool State::getEnableFeature(GLenum feature) const
       case GL_PROGRAM_CACHE_ENABLED_ANGLE:
           return mProgramBinaryCacheEnabled;
 
+      case GL_TEXTURE_2D:
+      case GL_TEXTURE_CUBE_MAP:
+          return isTextureTargetEnabled((GLenum)(mActiveSampler + GL_TEXTURE0), feature);
+
+      case GL_ALPHA_TEST:
+          GLES1LOG("GLES1 TODO: feature: GL_ALPHA_TEST");
+          return mAlphaTestEnabled;
+          break;
+      case GL_FOG:
+          GLES1LOG("GLES1 TODO: feature: GL_FOG");
+          return mFogEnabled;
+          break;
+      case GL_LIGHTING:
+          GLES1LOG("GLES1 TODO: feature: GL_LIGHTING");
+          return mLightingEnabled;
+          break;
+      case GL_LIGHT0:
+      case GL_LIGHT1:
+      case GL_LIGHT2:
+      case GL_LIGHT3:
+      case GL_LIGHT4:
+      case GL_LIGHT5:
+      case GL_LIGHT6:
+      case GL_LIGHT7:
+          GLES1LOG("GLES1 TODO: feature: GL_LIGHTn");
+          return mLights[feature - GL_LIGHT0].enabled;
+      case GL_COLOR_LOGIC_OP:
+          GLES1LOG("GLES1 TODO: feature: GL_COLOR_LOGIC_OP");
+          return mLogicOpEnabled;
+      case GL_NORMALIZE:
+          GLES1LOG("GLES1 TODO: feature: GL_NORMALIZE");
+          return mNormalizeEnabled;
+      case GL_RESCALE_NORMAL:
+          GLES1LOG("GLES1 TODO: feature: GL_RESCALE_NORMAL");
+          return mRescaleNormalEnabled;
+      case GL_CLIP_PLANE0:
+      case GL_CLIP_PLANE1:
+      case GL_CLIP_PLANE2:
+      case GL_CLIP_PLANE3:
+      case GL_CLIP_PLANE4:
+      case GL_CLIP_PLANE5:
+          GLES1LOG("GLES1 TODO: feature: GL_CLIP_PLANEn");
+          return mClipPlaneEnabled[feature - GL_CLIP_PLANE0];
+      case GL_COLOR_MATERIAL:
+          GLES1LOG("GLES1 TODO: feature: GL_COLOR_MATERIAL");
+          return mColorMaterialEnabled;
+      case GL_LINE_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_LINE_SMOOTH");
+          return mLineSmoothEnabled;
+      case GL_POINT_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SMOOTH");
+          return mPointSmoothEnabled;
+      case GL_POINT_SPRITE_OES:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SPRITE_OES");
+          return mPointSpriteEnabled;
+      case GL_REFLECTION_MAP_OES:
+          return mReflecitonMapEnabled;
+      case GL_VERTEX_ARRAY:
+      case GL_COLOR_ARRAY:
+      case GL_NORMAL_ARRAY:
+      case GL_POINT_SIZE_ARRAY_OES:
+      case GL_TEXTURE_COORD_ARRAY:
+          return isClientStateEnabled(feature);
       default:
+          fprintf(stderr, "%s: feature 0x%x not found\n", __func__, feature);
           UNREACHABLE();
           return false;
     }
@@ -767,6 +1094,26 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
     // TODO: Propagate the hint to shader translator so we can write
     // ddx, ddx_coarse, or ddx_fine depending on the hint.
     // Ignore for now. It is valid for implementations to ignore hint.
+}
+
+void State::setLineSmoothHint(GLenum hint)
+{
+    mLineSmoothHint = hint;
+}
+
+void State::setPointSmoothHint(GLenum hint)
+{
+    mPointSmoothHint = hint;
+}
+
+void State::setPerspectiveCorrectionHint(GLenum hint)
+{
+    mPerspectiveCorrectionHint = hint;
+}
+
+void State::setFogHint(GLenum hint)
+{
+    mFogHint = hint;
 }
 
 bool State::isBindGeneratesResourceEnabled() const
@@ -898,6 +1245,45 @@ void State::initializeZeroTextures(const Context *context, const TextureMap &zer
         for (size_t textureUnit = 0; textureUnit < samplerTextureArray.size(); ++textureUnit)
         {
             samplerTextureArray[textureUnit].set(context, zeroTexture.second.get());
+        }
+    }
+}
+
+void State::setTextureTargetEnabled(GLenum target, bool enabled) {
+    switch (target) {
+    case GL_TEXTURE_2D:
+    case GL_TEXTURE_CUBE_MAP_OES:
+    case GL_TEXTURE_3D:
+    case GL_TEXTURE_2D_ARRAY:
+    case GL_TEXTURE_2D_MULTISAMPLE:
+        if (enabled) {
+            mTexUnitEnables[mActiveSampler].insert(target);
+        } else {
+            mTexUnitEnables[mActiveSampler].erase(target);
+        }
+        break;
+    default:
+        UNREACHABLE();
+    }
+}
+
+bool State::isTextureTargetEnabled(GLenum unit, GLenum textureTarget) const {
+    const auto& findIn = mTexUnitEnables[unit - GL_TEXTURE0];
+    return findIn.find(textureTarget) != findIn.end();
+}
+
+void State::getUnitForEnabledTarget(GLenum textureTarget,
+                                    bool* everEnabled,
+                                    GLenum* whichUnit) {
+    *everEnabled = false;
+    *whichUnit = GL_TEXTURE0;
+
+    for (size_t i = 0; i < mTexUnitEnables.size(); i++) {
+        const auto& enabled = mTexUnitEnables[i];
+        if (enabled.find(textureTarget) !=
+            enabled.end()) {
+            *everEnabled = true;
+			*whichUnit = (GLenum)(GL_TEXTURE0 + i);
         }
     }
 }
@@ -1725,7 +2111,9 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
       case GL_PROGRAM_CACHE_ENABLED_ANGLE:
           *params = mProgramBinaryCacheEnabled ? GL_TRUE : GL_FALSE;
           break;
-
+      case GL_LIGHT_MODEL_TWO_SIDE:
+          *params = mLightModel.twoSided;
+          break;
       default:
         UNREACHABLE();
         break;
@@ -1768,6 +2156,118 @@ void State::getFloatv(GLenum pname, GLfloat *params)
         *params = static_cast<GLfloat>(mSampleAlphaToOne);
       case GL_COVERAGE_MODULATION_CHROMIUM:
           params[0] = static_cast<GLfloat>(mCoverageModulation);
+          break;
+      case GL_CURRENT_COLOR:
+          params[0] = mColor[0];
+          params[1] = mColor[1];
+          params[2] = mColor[2];
+          params[3] = mColor[3];
+          break;
+      case GL_CURRENT_TEXTURE_COORDS:
+          params[0] = mMultiTexCoords[mActiveSampler][0];
+          params[1] = mMultiTexCoords[mActiveSampler][1];
+          params[2] = mMultiTexCoords[mActiveSampler][2];
+          params[3] = mMultiTexCoords[mActiveSampler][3];
+          break;
+      case GL_CURRENT_NORMAL:
+          params[0] = mNormal[0];
+          params[1] = mNormal[1];
+          params[2] = mNormal[2];
+          break;
+      case GL_PROJECTION_MATRIX: {
+          float* mat = projMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                                 }
+      case GL_MODELVIEW_MATRIX: {
+          float* mat = modelviewMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                                }
+      case GL_TEXTURE_MATRIX: {
+          float* mat = textureMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                              }
+      case GL_FOG_COLOR:
+          params[0] = mFog.color[0];
+          params[1] = mFog.color[1];
+          params[2] = mFog.color[2];
+          params[3] = mFog.color[3];
+          break;
+      case GL_FOG_DENSITY:
+          *params = mFog.density;
+          break;
+      case GL_FOG_START:
+          *params = mFog.start;
+          break;
+      case GL_FOG_END:
+          *params = mFog.end;
+          break;
+      case GL_FOG_MODE:
+          *params = (float)mFog.mode;
+          break;
+      case GL_SHADE_MODEL:
+          *params = (float)mShadeModel;
+          break;
+      case GL_LIGHT_MODEL_TWO_SIDE:
+          *params = (float)mLightModel.twoSided;
+          break;
+      case GL_LIGHT_MODEL_AMBIENT:
+          params[0] = mLightModel.color[0];
+          params[1] = mLightModel.color[1];
+          params[2] = mLightModel.color[2];
+          params[3] = mLightModel.color[3];
+          break;
+      case GL_POINT_SIZE:
+          params[0] = mPointSize;
+          break;
+      case GL_POINT_SIZE_MIN:
+          params[0] = mPointSizeMin;
+          break;
+      case GL_POINT_SIZE_MAX:
+          params[0] = mPointSizeMax;
+          break;
+      case GL_POINT_FADE_THRESHOLD_SIZE:
+          params[0] = mPointFadeThresholdSize;
+          break;
+      case GL_POINT_DISTANCE_ATTENUATION:
+          params[0] = mPointDistanceAttenuation[0];
+          params[1] = mPointDistanceAttenuation[1];
+          params[2] = mPointDistanceAttenuation[2];
+          break;
+      case GL_ALPHA_TEST_FUNC:
+          params[0] = (GLfloat)mAlphaFunc;
+          break;
+      case GL_ALPHA_TEST_REF:
+          params[0] = (float)mAlphaTestRef;
+          break;
+      case GL_LOGIC_OP_MODE:
+          params[0] = (float)mLogicOp;
+          break;
+      case GL_LINE_SMOOTH_HINT:
+          params[0] = (float)mLineSmoothHint;
+          break;
+      case GL_POINT_SMOOTH_HINT:
+          params[0] = (float)mPointSmoothHint;
+          break;
+      case GL_PERSPECTIVE_CORRECTION_HINT:
+          params[0] = (float)mPerspectiveCorrectionHint;
+          break;
+      case GL_FOG_HINT:
+          params[0] = (float)mFogHint;
+          break;
+      case GL_BLEND_SRC:
+          params[0] = (float)mBlend.sourceBlendRGB;
+          break;
+      case GL_BLEND_DST:
+          params[0] = (float)mBlend.destBlendRGB;
           break;
       default:
         UNREACHABLE();
@@ -2063,9 +2563,141 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
       case GL_DISPATCH_INDIRECT_BUFFER_BINDING:
           *params = mBoundBuffers[BufferBinding::DispatchIndirect].id();
           break;
-      default:
+      // GLES1-specific
+      case GL_SMOOTH_LINE_WIDTH_RANGE:
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_SMOOTH_POINT_SIZE_RANGE:
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_ALIASED_LINE_WIDTH_RANGE:
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_ALIASED_POINT_SIZE_RANGE:
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_MAX_LIGHTS:
+          *params = mMaxLights;
+          break;
+      case GL_MAX_MODELVIEW_STACK_DEPTH:
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_PROJECTION_STACK_DEPTH:
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_TEXTURE_STACK_DEPTH:
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_TEXTURE_UNITS:
+          *params = mMaxMultitextureUnits;
+          break;
+      case GL_MAX_CLIP_PLANES:
+          *params = mMaxClipPlanes;
+          break;
+      case GL_CURRENT_COLOR:
+          params[0] = (int)mColor[0];
+          params[1] = (int)mColor[1];
+          params[2] = (int)mColor[2];
+          params[3] = (int)mColor[3];
+          break;
+      case GL_CLIENT_ACTIVE_TEXTURE:
+		  params[0] = (GLenum)(GL_TEXTURE0 + mActiveSampler);
+          break;
+      case GL_MATRIX_MODE:
+          params[0] = mCurrMatrixMode;
+          break;
+      case GL_MODELVIEW_STACK_DEPTH:
+		  params[0] = (GLint)(mModelviewMatrices.size());
+          break;
+      case GL_PROJECTION_STACK_DEPTH:
+		  params[0] = (GLint)(mProjMatrices.size());
+          break;
+      case GL_TEXTURE_STACK_DEPTH:
+		  params[0] = (GLint)(mTextureMatrices[mActiveSampler].size());
+          break;
+      case GL_FOG_COLOR:
+          params[0] = (int)mFog.color[0];
+          params[1] = (int)mFog.color[1];
+          params[2] = (int)mFog.color[2];
+          params[3] = (int)mFog.color[3];
+          break;
+      case GL_FOG_DENSITY:
+          *params = (int)mFog.density;
+          break;
+      case GL_FOG_START:
+          *params = (int)mFog.start;
+          break;
+      case GL_FOG_END:
+          *params = (int)mFog.end;
+          break;
+      case GL_FOG_MODE:
+          *params = mFog.mode;
+          break;
+      case GL_SHADE_MODEL:
+          *params = mShadeModel;
+          break;
+      case GL_LIGHT_MODEL_TWO_SIDE:
+          *params = mLightModel.twoSided;
+          break;
+      case GL_LIGHT_MODEL_AMBIENT:
+          params[0] = (int)mLightModel.color[0];
+          params[1] = (int)mLightModel.color[1];
+          params[2] = (int)mLightModel.color[2];
+          params[3] = (int)mLightModel.color[3];
+          break;
+      case GL_POINT_SIZE:
+          params[0] = (int)mPointSize;
+          break;
+      case GL_POINT_SIZE_MIN:
+          params[0] = (int)mPointSizeMin;
+          break;
+      case GL_POINT_SIZE_MAX:
+          params[0] = (int)mPointSizeMax;
+          break;
+      case GL_POINT_FADE_THRESHOLD_SIZE:
+          params[0] = (int)mPointFadeThresholdSize;
+          break;
+      case GL_POINT_DISTANCE_ATTENUATION:
+          params[0] = (int)mPointDistanceAttenuation[0];
+          params[1] = (int)mPointDistanceAttenuation[1];
+          params[2] = (int)mPointDistanceAttenuation[2];
+          break;
+      case GL_ALPHA_TEST_FUNC:
+          params[0] = (int)mAlphaFunc;
+          break;
+      case GL_ALPHA_TEST_REF:
+          params[0] = (int)mAlphaTestRef;
+          break;
+      case GL_LOGIC_OP_MODE:
+          params[0] = mLogicOp;
+          break;
+      case GL_LINE_SMOOTH_HINT:
+          params[0] = mLineSmoothHint;
+          break;
+      case GL_POINT_SMOOTH_HINT:
+          params[0] = mPointSmoothHint;
+          break;
+      case GL_PERSPECTIVE_CORRECTION_HINT:
+          params[0] = mPerspectiveCorrectionHint;
+          break;
+      case GL_FOG_HINT:
+          params[0] = mFogHint;
+          break;
+      case GL_BLEND_SRC:
+          params[0] = mBlend.sourceBlendRGB;
+          break;
+      case GL_BLEND_DST:
+          params[0] = mBlend.destBlendRGB;
+          break;
+      default: {
+                   fprintf(stderr, "%s: unknown: 0x%x\n", __func__, pname);
         UNREACHABLE();
         break;
+               }
     }
 }
 
@@ -2205,6 +2837,998 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
             UNREACHABLE();
             break;
     }
+}
+
+void State::shadeModel(GLenum mode)
+{
+    mShadeModel = mode;
+}
+
+GLenum State::getShadeModel() const
+{
+    return mShadeModel;
+}
+
+void State::matrixMode(GLenum mode)
+{
+    mCurrMatrixMode = mode;
+}
+
+void State::loadIdentity()
+{
+    currMatrix() = angle::Mat4();
+}
+
+void State::loadMatrixf(const GLfloat* m)
+{
+    currMatrix() = angle::Mat4(m);
+}
+
+void State::pushMatrix()
+{
+    // GLES1 TODO: Restrict to mMaxMatrixStackDepth
+    currMatrixStack().emplace_back(currMatrixStack().back());
+}
+
+void State::popMatrix()
+{
+    if (currMatrixStack().size() > 1) {
+        // GLES1 TODO: Signal on underflow
+        currMatrixStack().pop_back();
+    } else {
+        GLES1LOG("Should issue: GL_STACK_UNDERFLOW");
+    }
+}
+
+void State::multMatrixf(const GLfloat* m)
+{
+    currMatrix() = currMatrix().product(m);
+}
+
+void State::orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::ortho(left, right, bottom, top, zNear, zFar));
+}
+
+void State::frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::frustum(left, right, bottom, top, zNear, zFar));
+}
+
+void State::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV) {
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            env.envMode = (GLenum)param;
+            break;
+        case GL_COMBINE_RGB:
+            env.combineRgb = (GLenum)param;
+            break;
+        case GL_COMBINE_ALPHA:
+            env.combineAlpha = (GLenum)param;
+            break;
+
+        case GL_SRC0_RGB:
+            env.src0rgb = (GLenum)param;
+            break;
+        case GL_SRC0_ALPHA:
+            env.src0alpha = (GLenum)param;
+            break;
+        case GL_SRC1_RGB:
+            env.src1rgb = (GLenum)param;
+            break;
+        case GL_SRC1_ALPHA:
+            env.src1alpha = (GLenum)param;
+            break;
+        case GL_SRC2_RGB:
+            env.src2rgb = (GLenum)param;
+            break;
+        case GL_SRC2_ALPHA:
+            env.src2alpha = (GLenum)param;
+            break;
+
+        case GL_OPERAND0_RGB:
+            env.op0rgb = (GLenum)param;
+            break;
+        case GL_OPERAND0_ALPHA:
+            env.op0alpha = (GLenum)param;
+            break;
+        case GL_OPERAND1_RGB:
+            env.op1rgb = (GLenum)param;
+            break;
+        case GL_OPERAND1_ALPHA:
+            env.op1alpha = (GLenum)param;
+            break;
+        case GL_OPERAND2_RGB:
+            env.op2rgb = (GLenum)param;
+            break;
+        case GL_OPERAND2_ALPHA:
+            env.op2alpha = (GLenum)param;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            fprintf(stderr, "%s: TODO: gles1 validation for GL_TEXTURE_ENV_COLOR\n", __func__);
+            break;
+        case GL_RGB_SCALE:
+            env.rgbScale = param;
+            break;
+        case GL_ALPHA_SCALE:
+            env.alphaScale = param;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            env.pointSpriteCoordReplace = param == GL_TRUE;
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+    GLfloat param = params[0];
+
+    if (target == GL_TEXTURE_ENV) {
+
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            env.envMode = (GLenum)param;
+            break;
+        case GL_COMBINE_RGB:
+            env.combineRgb = (GLenum)param;
+            break;
+        case GL_COMBINE_ALPHA:
+            env.combineAlpha = (GLenum)param;
+            break;
+
+        case GL_SRC0_RGB:
+            env.src0rgb = (GLenum)param;
+            break;
+        case GL_SRC0_ALPHA:
+            env.src0alpha = (GLenum)param;
+            break;
+        case GL_SRC1_RGB:
+            env.src1rgb = (GLenum)param;
+            break;
+        case GL_SRC1_ALPHA:
+            env.src1alpha = (GLenum)param;
+            break;
+        case GL_SRC2_RGB:
+            env.src2rgb = (GLenum)param;
+            break;
+        case GL_SRC2_ALPHA:
+            env.src2alpha = (GLenum)param;
+            break;
+
+        case GL_OPERAND0_RGB:
+            env.op0rgb = (GLenum)param;
+            break;
+        case GL_OPERAND0_ALPHA:
+            env.op0alpha = (GLenum)param;
+            break;
+        case GL_OPERAND1_RGB:
+            env.op1rgb = (GLenum)param;
+            break;
+        case GL_OPERAND1_ALPHA:
+            env.op1alpha = (GLenum)param;
+            break;
+        case GL_OPERAND2_RGB:
+            env.op2rgb = (GLenum)param;
+            break;
+        case GL_OPERAND2_ALPHA:
+            env.op2alpha = (GLenum)param;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            memcpy(env.envColor.data(), params, 4 * sizeof(GLfloat));
+            break;
+        case GL_RGB_SCALE:
+            env.rgbScale = param;
+            break;
+        case GL_ALPHA_SCALE:
+            env.alphaScale = param;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV) {
+
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            env.envMode = (GLenum)param;
+            break;
+        case GL_COMBINE_RGB:
+            env.combineRgb = (GLenum)param;
+            break;
+        case GL_COMBINE_ALPHA:
+            env.combineAlpha = (GLenum)param;
+            break;
+
+        case GL_SRC0_RGB:
+            env.src0rgb = (GLenum)param;
+            break;
+        case GL_SRC0_ALPHA:
+            env.src0alpha = (GLenum)param;
+            break;
+        case GL_SRC1_RGB:
+            env.src1rgb = (GLenum)param;
+            break;
+        case GL_SRC1_ALPHA:
+            env.src1alpha = (GLenum)param;
+            break;
+        case GL_SRC2_RGB:
+            env.src2rgb = (GLenum)param;
+            break;
+        case GL_SRC2_ALPHA:
+            env.src2alpha = (GLenum)param;
+            break;
+
+        case GL_OPERAND0_RGB:
+            env.op0rgb = (GLenum)param;
+            break;
+        case GL_OPERAND0_ALPHA:
+            env.op0alpha = (GLenum)param;
+            break;
+        case GL_OPERAND1_RGB:
+            env.op1rgb = (GLenum)param;
+            break;
+        case GL_OPERAND1_ALPHA:
+            env.op1alpha = (GLenum)param;
+            break;
+        case GL_OPERAND2_RGB:
+            env.op2rgb = (GLenum)param;
+            break;
+        case GL_OPERAND2_ALPHA:
+            env.op2alpha = (GLenum)param;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            fprintf(stderr, "%s: TODO: gles1 validation for GL_TEXTURE_ENV_COLOR\n", __func__);
+            break;
+        case GL_RGB_SCALE:
+            env.rgbScale = (GLfloat)param;
+            break;
+        case GL_ALPHA_SCALE:
+            env.alphaScale = (GLfloat)param;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnviv(GLenum target, GLenum pname, const GLint* params)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+    GLint param = params[0];
+
+    if (target == GL_TEXTURE_ENV) {
+
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            env.envMode = (GLenum)param;
+            break;
+        case GL_COMBINE_RGB:
+            env.combineRgb = (GLenum)param;
+            break;
+        case GL_COMBINE_ALPHA:
+            env.combineAlpha = (GLenum)param;
+            break;
+
+        case GL_SRC0_RGB:
+            env.src0rgb = (GLenum)param;
+            break;
+        case GL_SRC0_ALPHA:
+            env.src0alpha = (GLenum)param;
+            break;
+        case GL_SRC1_RGB:
+            env.src1rgb = (GLenum)param;
+            break;
+        case GL_SRC1_ALPHA:
+            env.src1alpha = (GLenum)param;
+            break;
+        case GL_SRC2_RGB:
+            env.src2rgb = (GLenum)param;
+            break;
+        case GL_SRC2_ALPHA:
+            env.src2alpha = (GLenum)param;
+            break;
+
+        case GL_OPERAND0_RGB:
+            env.op0rgb = (GLenum)param;
+            break;
+        case GL_OPERAND0_ALPHA:
+            env.op0alpha = (GLenum)param;
+            break;
+        case GL_OPERAND1_RGB:
+            env.op1rgb = (GLenum)param;
+            break;
+        case GL_OPERAND1_ALPHA:
+            env.op1alpha = (GLenum)param;
+            break;
+        case GL_OPERAND2_RGB:
+            env.op2rgb = (GLenum)param;
+            break;
+        case GL_OPERAND2_ALPHA:
+            env.op2alpha = (GLenum)param;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            env.envColor[0] = params[0] / 255.0f;
+            env.envColor[1] = params[1] / 255.0f;
+            env.envColor[2] = params[2] / 255.0f;
+            env.envColor[3] = params[3] / 255.0f;
+            break;
+
+        case GL_RGB_SCALE:
+            env.rgbScale = (GLfloat)param;
+            break;
+        case GL_ALPHA_SCALE:
+            env.alphaScale = (GLfloat)param;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::getTexEnvfv(GLenum target, GLenum pname, GLfloat* params)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV) {
+
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            params[0] = (GLfloat)env.envMode;
+            break;
+        case GL_COMBINE_RGB:
+            params[0] = (GLfloat)env.combineRgb;
+            break;
+        case GL_COMBINE_ALPHA:
+            params[0] = (GLfloat)env.combineAlpha;
+            break;
+
+        case GL_SRC0_RGB:
+            params[0] = (GLfloat)env.src0rgb;
+            break;
+        case GL_SRC0_ALPHA:
+            params[0] = (GLfloat)env.src0alpha;
+            break;
+        case GL_SRC1_RGB:
+            params[0] = (GLfloat)env.src1rgb;
+            break;
+        case GL_SRC1_ALPHA:
+            params[0] = (GLfloat)env.src1alpha;
+            break;
+        case GL_SRC2_RGB:
+            params[0] = (GLfloat)env.src2rgb;
+            break;
+        case GL_SRC2_ALPHA:
+            params[0] = (GLfloat)env.src2alpha;
+            break;
+
+        case GL_OPERAND0_RGB:
+            params[0] = (GLfloat)env.op0rgb;
+            break;
+        case GL_OPERAND0_ALPHA:
+            params[0] = (GLfloat)env.op0alpha;
+            break;
+        case GL_OPERAND1_RGB:
+            params[0] = (GLfloat)env.op1rgb;
+            break;
+        case GL_OPERAND1_ALPHA:
+            params[0] = (GLfloat)env.op1alpha;
+            break;
+        case GL_OPERAND2_RGB:
+            params[0] = (GLfloat)env.op2rgb;
+            break;
+        case GL_OPERAND2_ALPHA:
+            params[0] = (GLfloat)env.op2alpha;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            memcpy(params, env.envColor.data(), 4 * sizeof(GLfloat));
+            break;
+        case GL_RGB_SCALE:
+            params[0] = env.rgbScale;
+            break;
+        case GL_ALPHA_SCALE:
+            params[0] = env.alphaScale;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            params[0] = (GLfloat)(env.pointSpriteCoordReplace ? GL_TRUE : GL_FALSE);
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::getTexEnviv(GLenum target, GLenum pname, GLint* params)
+{
+    auto& env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV) {
+
+        switch(pname) {
+        case GL_TEXTURE_ENV_MODE:
+            params[0] = (GLint)env.envMode;
+            break;
+        case GL_COMBINE_RGB:
+            params[0] = (GLint)env.combineRgb;
+            break;
+        case GL_COMBINE_ALPHA:
+            params[0] = (GLint)env.combineAlpha;
+            break;
+
+        case GL_SRC0_RGB:
+            params[0] = (GLint)env.src0rgb;
+            break;
+        case GL_SRC0_ALPHA:
+            params[0] = (GLint)env.src0alpha;
+            break;
+        case GL_SRC1_RGB:
+            params[0] = (GLint)env.src1rgb;
+            break;
+        case GL_SRC1_ALPHA:
+            params[0] = (GLint)env.src1alpha;
+            break;
+        case GL_SRC2_RGB:
+            params[0] = (GLint)env.src2rgb;
+            break;
+        case GL_SRC2_ALPHA:
+            params[0] = (GLint)env.src2alpha;
+            break;
+
+        case GL_OPERAND0_RGB:
+            params[0] = (GLint)env.op0rgb;
+            break;
+        case GL_OPERAND0_ALPHA:
+            params[0] = (GLint)env.op0alpha;
+            break;
+        case GL_OPERAND1_RGB:
+            params[0] = (GLint)env.op1rgb;
+            break;
+        case GL_OPERAND1_ALPHA:
+            params[0] = (GLint)env.op1alpha;
+            break;
+        case GL_OPERAND2_RGB:
+            params[0] = (GLint)env.op2rgb;
+            break;
+        case GL_OPERAND2_ALPHA:
+            params[0] = (GLint)env.op2alpha;
+            break;
+
+        case GL_TEXTURE_ENV_COLOR:
+            params[0] = (GLint)(env.envColor[0] * 255.0f);
+            params[1] = (GLint)(env.envColor[1] * 255.0f);
+            params[2] = (GLint)(env.envColor[2] * 255.0f);
+            params[3] = (GLint)(env.envColor[3] * 255.0f);
+            break;
+        case GL_RGB_SCALE:
+            params[0] = (GLint)env.rgbScale;
+            break;
+        case GL_ALPHA_SCALE:
+            params[0] = (GLint)env.alphaScale;
+            break;
+        }
+    } else if (target == GL_POINT_SPRITE_OES) {
+        switch (pname) {
+        case GL_COORD_REPLACE_OES:
+            params[0] = (GLint)(env.pointSpriteCoordReplace ? GL_TRUE : GL_FALSE);
+            break;
+        default:
+            break;
+        }
+    } else {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = param;
+    mTexGens[mActiveSampler][pname].type = GL_FLOAT;
+}
+
+void State::texGenfv(GLenum coord, GLenum pname, const GLfloat* params)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type = GL_FLOAT;
+}
+
+void State::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = param;
+    mTexGens[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::texGeniv(GLenum coord, GLenum pname, const GLint* params)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::getTexGeniv(GLenum coord, GLenum pname, GLint* params)
+{
+    *params = mTexGens[mActiveSampler][pname].val.intVal[0];
+}
+
+void State::getTexGenfv(GLenum coord, GLenum pname, GLfloat* params)
+{
+    params[0] = mTexGens[mActiveSampler][pname].val.floatVal[0];
+    params[1] = mTexGens[mActiveSampler][pname].val.floatVal[1];
+    params[2] = mTexGens[mActiveSampler][pname].val.floatVal[2];
+    params[3] = mTexGens[mActiveSampler][pname].val.floatVal[3];
+}
+
+void State::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    switch (pname) {
+    case GL_SHININESS:
+        mMaterial.specularExponent = param;
+        break;
+    default:
+        break;
+    }
+}
+
+void State::materialfv(GLenum face, GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+    case GL_AMBIENT:
+        memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_DIFFUSE:
+        memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_AMBIENT_AND_DIFFUSE:
+        memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+        memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_SPECULAR:
+        memcpy(&mMaterial.specular, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_EMISSION:
+        memcpy(&mMaterial.emissive, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_SHININESS:
+        mMaterial.specularExponent = *params;
+        break;
+    default:
+        return;
+    }
+}
+
+void State::getMaterialfv(GLenum face, GLenum pname, GLfloat* params)
+{
+    switch (pname) {
+    case GL_AMBIENT:
+        if (mColorMaterialEnabled) {
+            memcpy(params, mColor.data(), 4 * sizeof(GLfloat));
+        } else {
+            memcpy(params, &mMaterial.ambient, 4 * sizeof(GLfloat));
+        }
+        break;
+    case GL_DIFFUSE:
+        if (mColorMaterialEnabled) {
+            memcpy(params, mColor.data(), 4 * sizeof(GLfloat));
+        } else {
+            memcpy(params, &mMaterial.diffuse, 4 * sizeof(GLfloat));
+        }
+        break;
+    case GL_SPECULAR:
+        memcpy(params, &mMaterial.specular, 4 * sizeof(GLfloat));
+        break;
+    case GL_EMISSION:
+        memcpy(params, &mMaterial.emissive, 4 * sizeof(GLfloat));
+        break;
+    case GL_SHININESS:
+        *params = mMaterial.specularExponent;
+        break;
+    default:
+        return;
+    }
+}
+
+void State::lightModelf(GLenum pname, GLfloat param)
+{
+    switch (pname) {
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = param == 1.0f ? true : false;
+            break;
+        default:
+            break;;
+    }
+}
+
+void State::lightModelfv(GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+        case GL_LIGHT_MODEL_AMBIENT:
+            memcpy(&mLightModel.color, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = *params == 1.0f ? true : false;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    switch (pname) {
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = param;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = param;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = param;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = param;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = param;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightfv(GLenum light, GLenum pname, const GLfloat* params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    angle::Vector4 transformedPos;
+
+    switch (pname) {
+        case GL_AMBIENT:
+            memcpy(&mLights[lightIndex].ambient, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(&mLights[lightIndex].diffuse, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(&mLights[lightIndex].specular, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+            transformedPos =
+                modelviewMatrix() *
+                    angle::Vector4(params[0],
+                                   params[1],
+                                   params[2],
+                                   params[3]);
+            mLights[lightIndex].position[0] = transformedPos[0];
+            mLights[lightIndex].position[1] = transformedPos[1];
+            mLights[lightIndex].position[2] = transformedPos[2];
+            mLights[lightIndex].position[3] = transformedPos[3];
+            break;
+        case GL_SPOT_DIRECTION:
+            transformedPos =
+                modelviewMatrix() *
+                    angle::Vector4(params[0],
+                                   params[1],
+                                   params[2],
+                                   0.0f);
+            mLights[lightIndex].direction[0] = transformedPos[0];
+            mLights[lightIndex].direction[1] = transformedPos[1];
+            mLights[lightIndex].direction[2] = transformedPos[2];
+            break;
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = *params;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = *params;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = *params;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = *params;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = *params;
+            break;
+        default:
+            return;
+    }
+}
+
+void State::getLightfv(GLenum light, GLenum pname, GLfloat* params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+    switch (pname) {
+        case GL_AMBIENT:
+            memcpy(params, &mLights[lightIndex].ambient, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(params, &mLights[lightIndex].diffuse, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(params, &mLights[lightIndex].specular, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+
+            memcpy(params, &mLights[lightIndex].position, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_DIRECTION:
+            memcpy(params, &mLights[lightIndex].direction, 3 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_EXPONENT:
+            *params = mLights[lightIndex].spotlightExponent;
+            break;
+        case GL_SPOT_CUTOFF:
+            *params = mLights[lightIndex].spotlightCutoffAngle;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            *params = mLights[lightIndex].attenuationConst;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            *params = mLights[lightIndex].attenuationLinear;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            *params = mLights[lightIndex].attenuationQuadratic;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mMultiTexCoords[target - GL_TEXTURE0][0] = s;
+    mMultiTexCoords[target - GL_TEXTURE0][1] = t;
+    mMultiTexCoords[target - GL_TEXTURE0][2] = r;
+    mMultiTexCoords[target - GL_TEXTURE0][3] = q;
+}
+
+void State::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mNormal[0] = nx;
+    mNormal[1] = ny;
+    mNormal[2] = nz;
+}
+
+void State::fogf(GLenum pname, GLfloat param)
+{
+    switch (pname) {
+        case GL_FOG_MODE: {
+            GLenum mode = (GLenum)param;
+            switch (mode) {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = param;
+            break;
+        case GL_FOG_START:
+            mFog.start = param;
+            break;
+        case GL_FOG_END:
+            mFog.end = param;
+            break;
+        case GL_FOG_COLOR:
+            break;
+        default:
+            break;
+    }
+}
+
+void State::fogfv(GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+        case GL_FOG_MODE: {
+            GLenum mode = (GLenum)params[0];
+            switch (mode) {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = params[0];
+            break;
+        case GL_FOG_START:
+            mFog.start = params[0];
+            break;
+        case GL_FOG_END:
+            mFog.end = params[0];
+            break;
+        case GL_FOG_COLOR:
+            memcpy(&mFog.color, params, 4 * sizeof(GLfloat));
+            break;
+        default:
+            return;
+    }
+}
+
+void State::enableClientState(GLenum clientState)
+{
+    if (clientState == GL_TEXTURE_COORD_ARRAY) {
+		clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    mEnabledClientStates.insert(clientState);
+}
+
+void State::disableClientState(GLenum clientState)
+{
+    if (clientState == GL_TEXTURE_COORD_ARRAY) {
+		clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    mEnabledClientStates.erase(clientState);
+}
+
+bool State::isClientStateEnabled(GLenum clientState) const {
+    if (clientState == GL_TEXTURE_COORD_ARRAY) {
+		clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    return mEnabledClientStates.find(clientState) !=
+               mEnabledClientStates.end();
+}
+
+void State::drawTexOES(float x, float y, float z, float width, float height)
+{
+}
+
+void State::rotatef(float deg, float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::rotate(deg, angle::Vector3(x, y, z)));
+}
+
+void State::scalef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::scale(angle::Vector3(x, y, z)));
+}
+
+void State::translatef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::translate(angle::Vector3(x, y, z)));
+}
+
+void State::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mColor[0] = red;
+    mColor[1] = green;
+    mColor[2] = blue;
+    mColor[3] = alpha;
+}
+
+void State::clientActiveTexture(GLenum texture)
+{
+    mActiveSampler = texture - GL_TEXTURE0;
+}
+
+void State::alphaFunc(GLenum func, GLfloat ref) {
+    mAlphaFunc = func;
+    mAlphaTestRef = ref;
+}
+
+void State::clipPlanef(GLenum p, const GLfloat* eqn) {
+    auto& plane = mClipPlanes[p - GL_CLIP_PLANE0];
+    plane[0] = eqn[0];
+    plane[1] = eqn[1];
+    plane[2] = eqn[2];
+    plane[3] = eqn[3];
+}
+
+void State::getClipPlanef(GLenum plane, GLfloat* equation) {
+    const auto& clipPlane = mClipPlanes[plane - GL_CLIP_PLANE0];
+    equation[0] = clipPlane[0];
+    equation[1] = clipPlane[1];
+    equation[2] = clipPlane[2];
+    equation[3] = clipPlane[3];
+}
+
+void State::pointParameterf(GLenum pname, GLfloat param) {
+    switch (pname) {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = param;
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = param;
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = param;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            fprintf(stderr, "%s: todo: validation for GL_POINT_DISTANCE_ATTENUATION\n", __func__);
+            break;
+        default:
+            break;
+    }
+}
+
+void State::pointParameterfv(GLenum pname, const GLfloat* params) {
+    switch (pname) {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = params[0];
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = params[0];
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = params[0];
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            mPointDistanceAttenuation[0] = params[0];
+            mPointDistanceAttenuation[1] = params[1];
+            mPointDistanceAttenuation[2] = params[2];
+            break;
+        default:
+            break;
+    }
+}
+
+void State::pointSize(GLfloat size) {
+    mPointSize = size;
+}
+
+void State::logicOp(GLenum opcode) {
+    mLogicOp = opcode;
 }
 
 bool State::hasMappedBuffer(BufferBinding target) const
@@ -2479,5 +4103,30 @@ AttributesMask State::getAndResetDirtyCurrentValues() const
     mDirtyCurrentValues.reset();
     return retVal;
 }
+
+// Matrix stack utility functions
+angle::Mat4& State::currMatrix() {
+    return currMatrixStack().back();
+}
+
+State::MatrixStack& State::currMatrixStack() {
+    switch (mCurrMatrixMode) {
+    case GL_TEXTURE:
+        return mTextureMatrices[mActiveSampler];
+    case GL_PROJECTION:
+        return mProjMatrices;
+    case GL_MODELVIEW:
+        return mModelviewMatrices;
+    default:
+        fprintf(
+            stderr,
+            "error: matrix mode set to 0x%x!\n",
+            mCurrMatrixMode);
+    }
+
+    // Make compiler happy
+    return mModelviewMatrices;
+}
+
 
 }  // namespace gl
