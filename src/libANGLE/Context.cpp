@@ -297,6 +297,10 @@ Context::Context(rx::EGLImplFactory *implFactory,
     bool robustResourceInit = GetRobustResourceInit(attribs);
     initCaps(displayExtensions, robustResourceInit);
     initWorkarounds();
+    if (getClientVersion() <= Version(1, 1))
+    {
+        initGles1();
+    }
 
     mGLState.initialize(this, GetDebug(attribs), GetBindGeneratesResource(attribs),
                         GetClientArraysEnabled(attribs), robustResourceInit,
@@ -2824,6 +2828,76 @@ void Context::initWorkarounds()
     // Lose the context upon out of memory error if the application is
     // expecting to watch for those events.
     mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
+}
+
+#include "GLES1Shaders.h"
+
+void Context::initGles1()
+{
+
+    {
+        GLuint drawTexVShader = createShader(GL_VERTEX_SHADER);
+        GLint drawTexVShaderLen = sizeof(kGLES1DrawTexVShader);
+        shaderSource(drawTexVShader, 1, (const GLchar *const *)&kGLES1DrawTexVShader, &drawTexVShaderLen);
+
+        GLuint drawTexFShader = createShader(GL_FRAGMENT_SHADER);
+        GLint drawTexFShaderLen = sizeof(kGLES1DrawTexFShader);
+        shaderSource(drawTexFShader, 1, (const GLchar *const *)&kGLES1DrawTexFShader, &drawTexFShaderLen);
+
+        mGlesEmu.drawTex.program = createProgram();
+        attachShader(mGlesEmu.drawTex.program, drawTexVShader);
+        attachShader(mGlesEmu.drawTex.program, drawTexFShader);
+        linkProgram(mGlesEmu.drawTex.program);
+
+        {
+            mGlesEmu.drawTex.samplerLoc = getUniformLocation(mGlesEmu.drawTex.program, "tex_sampler");
+
+            genVertexArrays(1, &mGlesEmu.drawTex.vao);
+            genBuffers(1, &mGlesEmu.drawTex.ibo);
+            genBuffers(1, &mGlesEmu.drawTex.vbo);
+
+            static const uint32_t sDrawTexIbo[] = {
+                0, 1, 2, 0, 2, 3,
+            };
+
+            bindVertexArray(mGlesEmu.drawTex.vao);
+
+            bindBuffer(BufferBinding::ElementArray, mGlesEmu.drawTex.ibo);
+            bufferData(BufferBinding::ElementArray, sizeof(sDrawTexIbo), sDrawTexIbo, BufferUsage::StaticDraw);
+
+            bindBuffer(BufferBinding::Array, mGlesEmu.drawTex.vbo);
+
+            enableVertexAttribArray(0); // pos
+            enableVertexAttribArray(1); // texcoord
+
+            vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (GLvoid*)0);
+            vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                    (GLvoid*)(uintptr_t)(3 * sizeof(float)));
+
+            bindVertexArray(0);
+            bindBuffer(BufferBinding::Array, 0);
+            bindBuffer(BufferBinding::ElementArray, 0);
+        }
+    }
+
+    {
+        GLuint drawVShader = createShader(GL_VERTEX_SHADER);
+        GLint drawVShaderLen = sizeof(kGLES1DrawVShader);
+        shaderSource(drawVShader, 1, (const GLchar *const *)&kGLES1DrawVShader, &drawVShaderLen);
+
+        GLuint drawFShader = createShader(GL_FRAGMENT_SHADER);
+        GLint drawFShaderLen = sizeof(kGLES1DrawFShader);
+        shaderSource(drawFShader, 1, (const GLchar *const *)&kGLES1DrawFShader, &drawFShaderLen);
+
+        mGlesEmu.draw.program = createProgram();
+        attachShader(mGlesEmu.draw.program, drawVShader);
+        attachShader(mGlesEmu.draw.program, drawFShader);
+        linkProgram(mGlesEmu.draw.program);
+
+        {
+            genVertexArrays(1, &mGlesEmu.draw.vao);
+        }
+    }
 }
 
 Error Context::prepareForDraw()
@@ -5641,6 +5715,290 @@ GLboolean Context::isProgramPipeline(GLuint pipeline)
     }
 
     return (getProgramPipeline(pipeline) ? GL_TRUE : GL_FALSE);
+}
+
+void Context::shadeModel(GLenum mode)
+{
+    mGLState.shadeModel(mode);
+}
+
+void Context::matrixMode(GLenum mode)
+{
+    mGLState.matrixMode(mode);
+}
+
+void Context::loadIdentity()
+{
+    mGLState.loadIdentity();
+}
+
+void Context::loadMatrixf(const GLfloat* m)
+{
+    mGLState.loadMatrixf(m);
+}
+
+void Context::pushMatrix()
+{
+    mGLState.pushMatrix();
+}
+
+void Context::popMatrix()
+{
+    mGLState.popMatrix();
+}
+
+void Context::multMatrixf(const GLfloat* m)
+{
+    mGLState.multMatrixf(m);
+}
+
+void Context::orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    mGLState.orthof(left, right, bottom, top, zNear, zFar);
+}
+
+void Context::frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    mGLState.frustumf(left, right, bottom, top, zNear, zFar);
+}
+
+void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    mGLState.texEnvf(target, pname, param);
+}
+
+void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+{
+    mGLState.texEnvfv(target, pname, params);
+}
+
+void Context::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    mGLState.texEnvi(target, pname, param);
+}
+
+void Context::texEnviv(GLenum target, GLenum pname, const GLint* params)
+{
+    mGLState.texEnviv(target, pname, params);
+}
+
+void Context::getTexEnvfv(GLenum env, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexEnvfv(env, pname, params);
+}
+
+void Context::getTexEnviv(GLenum env, GLenum pname, GLint* params)
+{
+    mGLState.getTexEnviv(env, pname, params);
+}
+
+void Context::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mGLState.texGenf(coord, pname, param);
+}
+
+void Context::texGenfv(GLenum coord, GLenum pname, const GLfloat* params)
+{
+    mGLState.texGenfv(coord, pname, params);
+}
+
+void Context::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mGLState.texGeni(coord, pname, param);
+}
+
+void Context::texGeniv(GLenum coord, GLenum pname, const GLint* params)
+{
+    mGLState.texGeniv(coord, pname, params);
+}
+
+void Context::getTexGeniv(GLenum coord, GLenum pname, GLint* params)
+{
+    mGLState.getTexGeniv(coord, pname, params);
+}
+
+void Context::getTexGenfv(GLenum coord, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexGenfv(coord, pname, params);
+}
+
+void Context::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    mGLState.materialf(face, pname, param);
+}
+
+void Context::materialfv(GLenum face, GLenum pname, const GLfloat* params)
+{
+    mGLState.materialfv(face, pname, params);
+}
+
+void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat* params)
+{
+    mGLState.getMaterialfv(face, pname, params);
+}
+
+void Context::lightModelf(GLenum pname, GLfloat param)
+{
+    mGLState.lightModelf(pname, param);
+}
+
+void Context::lightModelfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.lightModelfv(pname, params);
+}
+
+void Context::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    mGLState.lightf(light, pname, param);
+}
+
+void Context::lightfv(GLenum light, GLenum pname, const GLfloat* params)
+{
+    mGLState.lightfv(light, pname, params);
+}
+
+void Context::getLightfv(GLenum light, GLenum pname, GLfloat* params)
+{
+    mGLState.getLightfv(light, pname, params);
+}
+
+void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mGLState.multiTexCoord4f(target, s, t, r, q);
+}
+
+void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mGLState.normal3f(nx, ny, nz);
+}
+
+void Context::fogf(GLenum pname, GLfloat param)
+{
+    mGLState.fogf(pname, param);
+}
+
+void Context::fogfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.fogfv(pname, params);
+}
+
+void Context::enableClientState(GLenum clientState)
+{
+    mGLState.enableClientState(clientState);
+}
+
+void Context::disableClientState(GLenum clientState)
+{
+    mGLState.disableClientState(clientState);
+}
+
+void Context::drawTexOES(float x, float y, float z, float width, float height)
+{
+    mGLState.drawTexOES(x, y, z, width, height);
+
+    // get viewport
+    GLint viewport[4] = {};
+    getIntegerv(GL_VIEWPORT,viewport);
+
+    // track previous vbo/ibo
+    GLuint prev_vbo;
+    GLuint prev_ibo;
+    getIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&prev_vbo);
+    getIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint*)&prev_ibo);
+
+    GLuint prog = mGlesEmu.drawTex.program;
+    GLuint vbo = mGlesEmu.drawTex.vbo;
+    GLuint vao = mGlesEmu.drawTex.vao;
+
+    useProgram(prog);
+    bindVertexArray(vao);
+
+    // This is not strictly needed, but Swiftshader indirect VAO
+    // can forget its ELEMENT_ARRAY_BUFFER binding.
+    // bindBuffer(BufferBinding::ElementArray, m_drawTexOESCoreState.ibo);
+
+    // Compute screen coordinates for our texture.
+    // Recenter, rescale. (e.g., [0, 0, 1080, 1920] -> [-1, -1, 1, 1])
+    float xNdc = 2.0f * (float)(x - viewport[0] - viewport[2] / 2) / (float)viewport[2];
+    float yNdc = 2.0f * (float)(y - viewport[1] - viewport[3] / 2) / (float)viewport[3];
+    float wNdc = 2.0f * (float)width / (float)viewport[2];
+    float hNdc = 2.0f * (float)height / (float)viewport[3];
+    z = z >= 1.0f ? 1.0f : z;
+    z = z <= 0.0f ? 0.0f : z;
+    float zNdc = z * 2.0f - 1.0f;
+
+    for (int i = 0; i < 4; i++) {
+        if (mGLState.isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_2D)) {
+            Texture* toDraw = mGLState.getSamplerTexture(i, GL_TEXTURE_2D);
+            if (toDraw) {
+                int cropRect[4] = {};
+                toDraw->getCrop(cropRect);
+
+                float texCropU = (float)cropRect[0];
+                float texCropV = (float)cropRect[1];
+                float texCropW = (float)cropRect[2];
+                float texCropH = (float)cropRect[3];
+
+                float texW = (float)(toDraw->getWidth(GL_TEXTURE_2D, 0));
+                float texH = (float)(toDraw->getHeight(GL_TEXTURE_2D, 0));
+
+                // Now we know the vertex attributes (pos, texcoord).
+                // Our vertex attributes are formatted with interleaved
+                // position and texture coordinate:
+                float vertexAttrs[] = {
+                    xNdc, yNdc, zNdc,
+                    texCropU / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc, zNdc,
+                    (texCropU + texCropW) / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc + hNdc, zNdc,
+                    (texCropU + texCropW) / texW, (texCropV + texCropH) / texH,
+
+                    xNdc, yNdc + hNdc, zNdc,
+                    texCropU / texW, (texCropV + texCropH) / texH,
+                };
+
+                bindBuffer(BufferBinding::Array, vbo);
+                bufferData(BufferBinding::Array, sizeof(vertexAttrs),
+                                vertexAttrs, BufferUsage::StreamDraw);
+            }
+
+            activeTexture(GL_TEXTURE0 + i);
+            uniform1i(mGlesEmu.drawTex.samplerLoc, i);
+            drawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+    }
+
+    bindVertexArray(0);
+    useProgram(0);
+    bindBuffer(BufferBinding::Array, prev_vbo);
+    bindBuffer(BufferBinding::ElementArray, prev_ibo);
+}
+
+void Context::rotatef(float angle, float x, float y, float z)
+{
+    mGLState.rotatef(angle, x, y, z);
+}
+
+void Context::scalef(float x, float y, float z)
+{
+    mGLState.scalef(x, y, z);
+}
+
+void Context::translatef(float x, float y, float z)
+{
+    mGLState.translatef(x, y, z);
+}
+
+void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mGLState.color4f(red, green, blue, alpha);
+}
+
+void Context::clientActiveTexture(GLenum texture)
+{
+    mGLState.clientActiveTexture(texture);
 }
 
 }  // namespace gl
