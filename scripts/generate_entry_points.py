@@ -140,6 +140,23 @@ template_entry_point_def = """{return_type}GL_APIENTRY {name}({params})
 {default_return_if_needed}}}
 """
 
+template_entry_point_gles1_def = """{return_type}GL_APIENTRY {name}({params})
+{{
+    {event_comment}EVENT("({format_params})"{comma_if_needed}{pass_params});
+
+    Context *context = {context_getter}();
+    if (context)
+    {{{packed_gl_enum_conversions}
+        context->gatherParams<EntryPoint::{name}>({internal_params});
+
+        if (context->skipValidation() || Validate{name}({validate_params}))
+        {{
+            {return_if_needed}context->gles1Emu->{name_lower_no_suffix}({internal_params});
+        }}
+    }}
+{default_return_if_needed}}}
+"""
+
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
 
@@ -220,7 +237,7 @@ template_event_comment = """// Don't run an EVENT() macro on the EXT_debug_marke
     // It can interfere with the debug events being set by the caller.
     // """
 
-def format_entry_point_def(cmd_name, proto, params):
+def format_entry_point_def(cmd_name, proto, params, isGles1):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
     internal_params = [just_the_name_packed(param, packed_gl_enums) for param in params]
     packed_gl_enum_conversions = []
@@ -243,7 +260,11 @@ def format_entry_point_def(cmd_name, proto, params):
         if name_lower_no_suffix.endswith(suffix):
             name_lower_no_suffix = name_lower_no_suffix[0:-len(suffix)]
 
-    return template_entry_point_def.format(
+    template = template_entry_point_def
+    if isGles1:
+        template = template_entry_point_gles1_def
+
+    return template.format(
         name = cmd_name[2:],
         name_lower_no_suffix = name_lower_no_suffix,
         return_type = return_type,
@@ -262,7 +283,7 @@ def format_entry_point_def(cmd_name, proto, params):
 def path_to(folder, file):
     return os.path.join(script_relative(".."), "src", folder, file)
 
-def get_entry_points(all_commands, gles_commands):
+def get_entry_points(all_commands, gles_commands, isGles1 = False):
     decls = []
     defs = []
     for command in all_commands:
@@ -275,7 +296,7 @@ def get_entry_points(all_commands, gles_commands):
         param_text = ["".join(param.itertext()) for param in command.findall('param')]
         proto_text = "".join(proto.itertext())
         decls.append(format_entry_point_decl(cmd_name, proto_text, param_text))
-        defs.append(format_entry_point_def(cmd_name, proto_text, param_text))
+        defs.append(format_entry_point_def(cmd_name, proto_text, param_text, isGles1))
 
     return decls, defs
 
@@ -315,8 +336,12 @@ template_sources_includes = """#include "libGLESv2/entry_points_gles_{}_autogen.
 for major_version, minor_version in [[1, 0], [2, 0], [3, 0], [3, 1]]:
     annotation = "{}_{}".format(major_version, minor_version)
     name_prefix = "GL_ES_VERSION_"
+
+    isGles1 = False
     if major_version == 1:
         name_prefix = "GL_VERSION_ES_CM_"
+        isGles1 = True
+
     comment = annotation.replace("_", ".")
     gles_xpath = ".//feature[@name='{}{}']//command".format(name_prefix, annotation)
     gles_commands = [cmd.attrib['name'] for cmd in root.findall(gles_xpath)]
@@ -326,7 +351,7 @@ for major_version, minor_version in [[1, 0], [2, 0], [3, 0], [3, 1]]:
 
     all_cmd_names += gles_commands
 
-    decls, defs = get_entry_points(all_commands, gles_commands)
+    decls, defs = get_entry_points(all_commands, gles_commands, isGles1)
 
     major_if_not_one = major_version if major_version != 1 else ""
     minor_if_not_zero = minor_version if minor_version != 0 else ""
@@ -392,7 +417,8 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
 
     all_cmd_names += ext_cmd_names
 
-    decls, defs = get_entry_points(all_commands, ext_cmd_names)
+    decls, defs = get_entry_points(all_commands, ext_cmd_names,
+                                   extension_name in gles1_extensions)
 
     # Avoid writing out entry points defined by a prior extension.
     for dupe in dupes:

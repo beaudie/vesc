@@ -1034,7 +1034,7 @@ void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageO
         if (context->skipValidation() ||
             ValidateEGLImageTargetRenderbufferStorageOES(context, target, image))
         {
-            context->eGLImageTargetRenderbufferStorage(target, image);
+            context->gles1Emu->eGLImageTargetRenderbufferStorage(target, image);
         }
     }
 }
@@ -1050,7 +1050,7 @@ void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
 
         if (context->skipValidation() || ValidateEGLImageTargetTexture2DOES(context, target, image))
         {
-            context->eGLImageTargetTexture2D(target, image);
+            context->gles1Emu->eGLImageTargetTexture2D(target, image);
         }
     }
 }
@@ -1069,7 +1069,7 @@ void GL_APIENTRY DrawTexfOES(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLf
 
         if (context->skipValidation() || ValidateDrawTexfOES(context, x, y, z, width, height))
         {
-            context->drawTexf(x, y, z, width, height);
+            context->gles1Emu->drawTexf(x, y, z, width, height);
         }
     }
 }
@@ -1085,7 +1085,7 @@ void GL_APIENTRY DrawTexfvOES(const GLfloat *coords)
 
         if (context->skipValidation() || ValidateDrawTexfvOES(context, coords))
         {
-            context->drawTexfv(coords);
+            context->gles1Emu->drawTexfv(coords);
         }
     }
 }
@@ -1102,7 +1102,7 @@ void GL_APIENTRY DrawTexiOES(GLint x, GLint y, GLint z, GLint width, GLint heigh
 
         if (context->skipValidation() || ValidateDrawTexiOES(context, x, y, z, width, height))
         {
-            context->drawTexi(x, y, z, width, height);
+            context->gles1Emu->drawTexi(x, y, z, width, height);
         }
     }
 }
@@ -1118,7 +1118,7 @@ void GL_APIENTRY DrawTexivOES(const GLint *coords)
 
         if (context->skipValidation() || ValidateDrawTexivOES(context, coords))
         {
-            context->drawTexiv(coords);
+            context->gles1Emu->drawTexiv(coords);
         }
     }
 }
@@ -1136,7 +1136,7 @@ void GL_APIENTRY DrawTexsOES(GLshort x, GLshort y, GLshort z, GLshort width, GLs
 
         if (context->skipValidation() || ValidateDrawTexsOES(context, x, y, z, width, height))
         {
-            context->drawTexs(x, y, z, width, height);
+            context->gles1Emu->drawTexs(x, y, z, width, height);
         }
     }
 }
@@ -1152,7 +1152,7 @@ void GL_APIENTRY DrawTexsvOES(const GLshort *coords)
 
         if (context->skipValidation() || ValidateDrawTexsvOES(context, coords))
         {
-            context->drawTexsv(coords);
+            context->gles1Emu->drawTexsv(coords);
         }
     }
 }
@@ -1171,7 +1171,7 @@ void GL_APIENTRY DrawTexxOES(GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLf
 
         if (context->skipValidation() || ValidateDrawTexxOES(context, x, y, z, width, height))
         {
-            context->drawTexx(x, y, z, width, height);
+            context->gles1Emu->drawTexx(x, y, z, width, height);
         }
     }
 }
@@ -1187,7 +1187,7 @@ void GL_APIENTRY DrawTexxvOES(const GLfixed *coords)
 
         if (context->skipValidation() || ValidateDrawTexxvOES(context, coords))
         {
-            context->drawTexxv(coords);
+            context->gles1Emu->drawTexxv(coords);
         }
     }
 }
@@ -1204,7 +1204,7 @@ void GL_APIENTRY BindFramebufferOES(GLenum target, GLuint framebuffer)
 
         if (context->skipValidation() || ValidateBindFramebufferOES(context, target, framebuffer))
         {
-            context->bindFramebuffer(target, framebuffer);
+            context->gles1Emu->bindFramebuffer(target, framebuffer);
         }
     }
 }
@@ -1220,7 +1220,7 @@ void GL_APIENTRY BindRenderbufferOES(GLenum target, GLuint renderbuffer)
 
         if (context->skipValidation() || ValidateBindRenderbufferOES(context, target, renderbuffer))
         {
-            context->bindRenderbuffer(target, renderbuffer);
+            context->gles1Emu->bindRenderbuffer(target, renderbuffer);
         }
     }
 }
@@ -1236,7 +1236,7 @@ GLenum GL_APIENTRY CheckFramebufferStatusOES(GLenum target)
 
         if (context->skipValidation() || ValidateCheckFramebufferStatusOES(context, target))
         {
-            return context->checkFramebufferStatus(target);
+            return context->gles1Emu->checkFramebufferStatus(target);
         }
     }
 
@@ -1254,7 +1254,7 @@ void GL_APIENTRY DeleteFramebuffersOES(GLsizei n, const GLuint *framebuffers)
 
         if (context->skipValidation() || ValidateDeleteFramebuffersOES(context, n, framebuffers))
         {
-            context->deleteFramebuffers(n, framebuffers);
+            context->gles1Emu->deleteFramebuffers(n, framebuffers);
         }
     }
 }
@@ -1270,7 +1270,7 @@ void GL_APIENTRY DeleteRenderbuffersOES(GLsizei n, const GLuint *renderbuffers)
 
         if (context->skipValidation() || ValidateDeleteRenderbuffersOES(context, n, renderbuffers))
         {
-            context->deleteRenderbuffers(n, renderbuffers);
+            context->gles1Emu->deleteRenderbuffers(n, renderbuffers);
         }
     }
 }
@@ -1295,7 +1295,8 @@ void GL_APIENTRY FramebufferRenderbufferOES(GLenum target,
             ValidateFramebufferRenderbufferOES(context, target, attachment, renderbuffertarget,
                                                renderbuffer))
         {
-            context->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+            context->gles1Emu->framebufferRenderbuffer(target, attachment, renderbuffertarget,
+                                                       renderbuffer);
         }
     }
 }
@@ -1320,7 +1321,7 @@ void GL_APIENTRY FramebufferTexture2DOES(GLenum target,
         if (context->skipValidation() ||
             ValidateFramebufferTexture2DOES(context, target, attachment, textarget, texture, level))
         {
-            context->framebufferTexture2D(target, attachment, textarget, texture, level);
+            context->gles1Emu->framebufferTexture2D(target, attachment, textarget, texture, level);
         }
     }
 }
@@ -1336,7 +1337,7 @@ void GL_APIENTRY GenFramebuffersOES(GLsizei n, GLuint *framebuffers)
 
         if (context->skipValidation() || ValidateGenFramebuffersOES(context, n, framebuffers))
         {
-            context->genFramebuffers(n, framebuffers);
+            context->gles1Emu->genFramebuffers(n, framebuffers);
         }
     }
 }
@@ -1352,7 +1353,7 @@ void GL_APIENTRY GenRenderbuffersOES(GLsizei n, GLuint *renderbuffers)
 
         if (context->skipValidation() || ValidateGenRenderbuffersOES(context, n, renderbuffers))
         {
-            context->genRenderbuffers(n, renderbuffers);
+            context->gles1Emu->genRenderbuffers(n, renderbuffers);
         }
     }
 }
@@ -1368,7 +1369,7 @@ void GL_APIENTRY GenerateMipmapOES(GLenum target)
 
         if (context->skipValidation() || ValidateGenerateMipmapOES(context, target))
         {
-            context->generateMipmap(target);
+            context->gles1Emu->generateMipmap(target);
         }
     }
 }
@@ -1392,7 +1393,8 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivOES(GLenum target,
         if (context->skipValidation() || ValidateGetFramebufferAttachmentParameterivOES(
                                              context, target, attachment, pname, params))
         {
-            context->getFramebufferAttachmentParameteriv(target, attachment, pname, params);
+            context->gles1Emu->getFramebufferAttachmentParameteriv(target, attachment, pname,
+                                                                   params);
         }
     }
 }
@@ -1410,7 +1412,7 @@ void GL_APIENTRY GetRenderbufferParameterivOES(GLenum target, GLenum pname, GLin
         if (context->skipValidation() ||
             ValidateGetRenderbufferParameterivOES(context, target, pname, params))
         {
-            context->getRenderbufferParameteriv(target, pname, params);
+            context->gles1Emu->getRenderbufferParameteriv(target, pname, params);
         }
     }
 }
@@ -1426,7 +1428,7 @@ GLboolean GL_APIENTRY IsFramebufferOES(GLuint framebuffer)
 
         if (context->skipValidation() || ValidateIsFramebufferOES(context, framebuffer))
         {
-            return context->isFramebuffer(framebuffer);
+            return context->gles1Emu->isFramebuffer(framebuffer);
         }
     }
 
@@ -1444,7 +1446,7 @@ GLboolean GL_APIENTRY IsRenderbufferOES(GLuint renderbuffer)
 
         if (context->skipValidation() || ValidateIsRenderbufferOES(context, renderbuffer))
         {
-            return context->isRenderbuffer(renderbuffer);
+            return context->gles1Emu->isRenderbuffer(renderbuffer);
         }
     }
 
@@ -1470,7 +1472,7 @@ void GL_APIENTRY RenderbufferStorageOES(GLenum target,
         if (context->skipValidation() ||
             ValidateRenderbufferStorageOES(context, target, internalformat, width, height))
         {
-            context->renderbufferStorage(target, internalformat, width, height);
+            context->gles1Emu->renderbufferStorage(target, internalformat, width, height);
         }
     }
 }
@@ -1595,7 +1597,7 @@ void GL_APIENTRY CurrentPaletteMatrixOES(GLuint matrixpaletteindex)
         if (context->skipValidation() ||
             ValidateCurrentPaletteMatrixOES(context, matrixpaletteindex))
         {
-            context->currentPaletteMatrix(matrixpaletteindex);
+            context->gles1Emu->currentPaletteMatrix(matrixpaletteindex);
         }
     }
 }
@@ -1611,7 +1613,7 @@ void GL_APIENTRY LoadPaletteFromModelViewMatrixOES()
 
         if (context->skipValidation() || ValidateLoadPaletteFromModelViewMatrixOES(context))
         {
-            context->loadPaletteFromModelViewMatrix();
+            context->gles1Emu->loadPaletteFromModelViewMatrix();
         }
     }
 }
@@ -1630,7 +1632,7 @@ void GL_APIENTRY MatrixIndexPointerOES(GLint size, GLenum type, GLsizei stride, 
         if (context->skipValidation() ||
             ValidateMatrixIndexPointerOES(context, size, type, stride, pointer))
         {
-            context->matrixIndexPointer(size, type, stride, pointer);
+            context->gles1Emu->matrixIndexPointer(size, type, stride, pointer);
         }
     }
 }
@@ -1649,7 +1651,7 @@ void GL_APIENTRY WeightPointerOES(GLint size, GLenum type, GLsizei stride, const
         if (context->skipValidation() ||
             ValidateWeightPointerOES(context, size, type, stride, pointer))
         {
-            context->weightPointer(size, type, stride, pointer);
+            context->gles1Emu->weightPointer(size, type, stride, pointer);
         }
     }
 }
@@ -1668,7 +1670,7 @@ void GL_APIENTRY PointSizePointerOES(GLenum type, GLsizei stride, const void *po
         if (context->skipValidation() ||
             ValidatePointSizePointerOES(context, type, stride, pointer))
         {
-            context->pointSizePointer(type, stride, pointer);
+            context->gles1Emu->pointSizePointer(type, stride, pointer);
         }
     }
 }
@@ -1685,7 +1687,7 @@ GLbitfield GL_APIENTRY QueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
 
         if (context->skipValidation() || ValidateQueryMatrixxOES(context, mantissa, exponent))
         {
-            return context->queryMatrixx(mantissa, exponent);
+            return context->gles1Emu->queryMatrixx(mantissa, exponent);
         }
     }
 
@@ -1705,7 +1707,7 @@ void GL_APIENTRY GetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params)
 
         if (context->skipValidation() || ValidateGetTexGenfvOES(context, coord, pname, params))
         {
-            context->getTexGenfv(coord, pname, params);
+            context->gles1Emu->getTexGenfv(coord, pname, params);
         }
     }
 }
@@ -1722,7 +1724,7 @@ void GL_APIENTRY GetTexGenivOES(GLenum coord, GLenum pname, GLint *params)
 
         if (context->skipValidation() || ValidateGetTexGenivOES(context, coord, pname, params))
         {
-            context->getTexGeniv(coord, pname, params);
+            context->gles1Emu->getTexGeniv(coord, pname, params);
         }
     }
 }
@@ -1739,7 +1741,7 @@ void GL_APIENTRY GetTexGenxvOES(GLenum coord, GLenum pname, GLfixed *params)
 
         if (context->skipValidation() || ValidateGetTexGenxvOES(context, coord, pname, params))
         {
-            context->getTexGenxv(coord, pname, params);
+            context->gles1Emu->getTexGenxv(coord, pname, params);
         }
     }
 }
@@ -1755,7 +1757,7 @@ void GL_APIENTRY TexGenfOES(GLenum coord, GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateTexGenfOES(context, coord, pname, param))
         {
-            context->texGenf(coord, pname, param);
+            context->gles1Emu->texGenf(coord, pname, param);
         }
     }
 }
@@ -1772,7 +1774,7 @@ void GL_APIENTRY TexGenfvOES(GLenum coord, GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateTexGenfvOES(context, coord, pname, params))
         {
-            context->texGenfv(coord, pname, params);
+            context->gles1Emu->texGenfv(coord, pname, params);
         }
     }
 }
@@ -1788,7 +1790,7 @@ void GL_APIENTRY TexGeniOES(GLenum coord, GLenum pname, GLint param)
 
         if (context->skipValidation() || ValidateTexGeniOES(context, coord, pname, param))
         {
-            context->texGeni(coord, pname, param);
+            context->gles1Emu->texGeni(coord, pname, param);
         }
     }
 }
@@ -1805,7 +1807,7 @@ void GL_APIENTRY TexGenivOES(GLenum coord, GLenum pname, const GLint *params)
 
         if (context->skipValidation() || ValidateTexGenivOES(context, coord, pname, params))
         {
-            context->texGeniv(coord, pname, params);
+            context->gles1Emu->texGeniv(coord, pname, params);
         }
     }
 }
@@ -1821,7 +1823,7 @@ void GL_APIENTRY TexGenxOES(GLenum coord, GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateTexGenxOES(context, coord, pname, param))
         {
-            context->texGenx(coord, pname, param);
+            context->gles1Emu->texGenx(coord, pname, param);
         }
     }
 }
@@ -1838,7 +1840,7 @@ void GL_APIENTRY TexGenxvOES(GLenum coord, GLenum pname, const GLfixed *params)
 
         if (context->skipValidation() || ValidateTexGenxvOES(context, coord, pname, params))
         {
-            context->texGenxv(coord, pname, params);
+            context->gles1Emu->texGenxv(coord, pname, params);
         }
     }
 }
