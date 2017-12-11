@@ -114,6 +114,20 @@ struct TextureState final : private angle::NonCopyable
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
 
+    void setCrop(const int* vals) {
+        mCropU = vals[0];
+        mCropV = vals[1];
+        mCropW = vals[2];
+        mCropH = vals[3];
+    }
+
+    void getCrop(int* vals) {
+        vals[0] = mCropU;
+        vals[1] = mCropV;
+        vals[2] = mCropW;
+        vals[3] = mCropH;
+    }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -161,6 +175,14 @@ struct TextureState final : private angle::NonCopyable
     GLenum mUsage;
 
     std::vector<ImageDesc> mImageDescs;
+
+    // Texture crop rect (GLES1 only)
+    // Screen space, so not part of ImageDesc
+    int mCropU;
+    int mCropV;
+    int mCropW;
+    int mCropH;
+
     InitState mInitState;
 };
 
@@ -358,6 +380,10 @@ class Texture final : public egl::ImageSibling,
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     const Format &getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
+
+    // GLES1
+    void setCrop(const int* cropVals);
+    void getCrop(int* cropVals);
 
     void onAttach(const Context *context) override;
     void onDetach(const Context *context) override;
