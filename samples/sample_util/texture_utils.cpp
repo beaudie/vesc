@@ -38,6 +38,68 @@ GLuint CreateSimpleTexture2D()
     return texture;
 }
 
+GLuint CreateSimpleTexture2DAlpha1()
+{
+    // Use tightly packed data
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // Generate a texture object
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    // Bind the texture object
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Load the texture: 2x2 Image, 4 bytes per pixel (R, G, B, A)
+    const size_t width = 2;
+    const size_t height = 2;
+    GLubyte pixels[width * height * 4] =
+    {
+        255,   0,   0, 255, // Red
+          0, 255,   0, 255, // Green
+          0,   0, 255, 255, // Blue
+        255, 255,   0, 255, // Yellow
+    };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    // Set the filtering mode
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return texture;
+}
+
+GLuint CreateSimpleTexture2DAlphaHalf()
+{
+    // Use tightly packed data
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // Generate a texture object
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    // Bind the texture object
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Load the texture: 2x2 Image, 4 bytes per pixel (R, G, B, A)
+    const size_t width = 2;
+    const size_t height = 2;
+    GLubyte pixels[width * height * 4] =
+    {
+        255,   0,   0, 127, // Red
+          0, 255,   0, 127, // Green
+          0,   0, 255, 127, // Blue
+        255, 255,   0, 127, // Yellow
+    };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    // Set the filtering mode
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return texture;
+}
+
 GLuint CreateSimpleTextureCubemap()
 {
     // Generate a texture object
