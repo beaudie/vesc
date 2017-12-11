@@ -594,6 +594,84 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
 
+    // GLES1 state
+    union GLVal {
+        GLfloat floatVal[4];
+        GLint intVal[4];
+        GLubyte ubyteVal[4];
+        GLenum enumVal[4];
+    };
+
+    struct GLValTyped {
+        GLenum type;
+        GLVal val;
+    };
+
+    using Mat4 = std::array<float, 16>;
+    using TexEnv = std::unordered_map<GLenum, GLValTyped>;
+    using TexUnitEnvs = std::vector<TexEnv>;
+    using TexGens = std::vector<TexEnv>;
+    using MatrixStack = std::vector<Mat4>;
+
+    struct Material {
+        GLfloat ambient[4];
+        GLfloat diffuse[4];
+        GLfloat specular[4];
+        GLfloat emissive[4];
+        GLfloat specularExponent;
+    };
+
+    struct LightModel {
+        GLfloat color[4];
+        bool twoSided;
+    };
+
+    struct Light {
+        GLfloat ambient[4];
+        GLfloat diffuse[4];
+        GLfloat specular[4];
+        GLfloat position[4];
+        GLfloat direction[3];
+        GLfloat spotlightExponent;
+        GLfloat spotlightCutoffAngle;
+        GLfloat attenuationConst;
+        GLfloat attenuationLinear;
+        GLfloat attenuationQuadratic;
+    };
+
+    struct Fog {
+        GLenum mode;
+        float density;
+        float start;
+        float end;
+        GLfloat color[4];
+    };
+
+    int mMaxMultitextureUnits;
+    int mMaxLights;
+
+    GLenum mShadeModel;
+    GLenum mCurrMatrixMode;
+
+    GLValTyped mColor;
+    GLValTyped mNormal;
+    std::vector<GLVal> mMultiTexCoord;
+
+    TexUnitEnvs mTexUnitEnvs;
+    TexGens mTexGens;
+
+    MatrixStack mProjMatrices;
+    MatrixStack mModelviewMatrices;
+    std::vector<MatrixStack> mTextureMatrices;
+    Mat4& currMatrix();
+    MatrixStack& currMatrixStack();
+    void restoreMatrixStack(const MatrixStack& matrices);
+
+    Material mMaterial;
+    LightModel mLightModel;
+    std::vector<Light> mLights;
+    Fog mFog = {};
+
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;

@@ -25,6 +25,9 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
 namespace
 {
 
