@@ -12,6 +12,7 @@
 
 #include <set>
 #include <string>
+#include <unordered_map>
 
 #include "angle_gl.h"
 #include "common/MemoryBuffer.h"
@@ -61,7 +62,7 @@ class VertexArray;
 struct VertexAttribute;
 class ProgramPipeline;
 
-class Context final : public ValidationContext
+class Context : public ValidationContext
 {
   public:
     Context(rx::EGLImplFactory *implFactory,
@@ -130,61 +131,33 @@ class Context final : public ValidationContext
     void alphaFuncx(GLenum func, GLfixed ref);
     void clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
     void clearDepthx(GLfixed depth);
-    void clientActiveTexture(GLenum texture);
     void clipPlanef(GLenum p, const GLfloat *eqn);
     void clipPlanex(GLenum plane, const GLfixed *equation);
-    void color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
     void color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha);
     void color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
-    void colorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
-    void cullFace(GLenum mode);
     void depthRangex(GLfixed n, GLfixed f);
-    void disableClientState(GLenum array);
-    void enableClientState(GLenum array);
-    void fogf(GLenum pname, GLfloat param);
-    void fogfv(GLenum pname, const GLfloat *params);
     void fogx(GLenum pname, GLfixed param);
     void fogxv(GLenum pname, const GLfixed *param);
-    void frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
     void frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
-    void getBufferParameteriv(GLenum target, GLenum pname, GLint *params);
     void getClipPlanef(GLenum plane, GLfloat *equation);
     void getClipPlanex(GLenum plane, GLfixed *equation);
     void getFixedv(GLenum pname, GLfixed *params);
-    void getLightfv(GLenum light, GLenum pname, GLfloat *params);
     void getLightxv(GLenum light, GLenum pname, GLfixed *params);
-    void getMaterialfv(GLenum face, GLenum pname, GLfloat *params);
     void getMaterialxv(GLenum face, GLenum pname, GLfixed *params);
-    void getTexEnvfv(GLenum target, GLenum pname, GLfloat *params);
-    void getTexEnviv(GLenum target, GLenum pname, GLint *params);
     void getTexEnvxv(GLenum target, GLenum pname, GLfixed *params);
     void getTexParameterxv(GLenum target, GLenum pname, GLfixed *params);
-    void lightModelf(GLenum pname, GLfloat param);
-    void lightModelfv(GLenum pname, const GLfloat *params);
     void lightModelx(GLenum pname, GLfixed param);
     void lightModelxv(GLenum pname, const GLfixed *param);
-    void lightf(GLenum light, GLenum pname, GLfloat param);
-    void lightfv(GLenum light, GLenum pname, const GLfloat *params);
     void lightx(GLenum light, GLenum pname, GLfixed param);
     void lightxv(GLenum light, GLenum pname, const GLfixed *params);
     void lineWidthx(GLfixed width);
-    void loadIdentity();
-    void loadMatrixf(const GLfloat *m);
     void loadMatrixx(const GLfixed *m);
     void logicOp(GLenum opcode);
-    void materialf(GLenum face, GLenum pname, GLfloat param);
-    void materialfv(GLenum face, GLenum pname, const GLfloat *params);
     void materialx(GLenum face, GLenum pname, GLfixed param);
     void materialxv(GLenum face, GLenum pname, const GLfixed *param);
-    void matrixMode(GLenum mode);
-    void multMatrixf(const GLfloat *m);
     void multMatrixx(const GLfixed *m);
-    void multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
     void multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q);
-    void normal3f(GLfloat nx, GLfloat ny, GLfloat nz);
     void normal3x(GLfixed nx, GLfixed ny, GLfixed nz);
-    void normalPointer(GLenum type, GLsizei stride, const void *pointer);
-    void orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
     void orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
     void pointParameterf(GLenum pname, GLfloat param);
     void pointParameterfv(GLenum pname, const GLfloat *params);
@@ -193,29 +166,16 @@ class Context final : public ValidationContext
     void pointSize(GLfloat size);
     void pointSizex(GLfixed size);
     void polygonOffsetx(GLfixed factor, GLfixed units);
-    void popMatrix();
-    void pushMatrix();
-    void rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
     void rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z);
     void sampleCoveragex(GLclampx value, GLboolean invert);
-    void scalef(GLfloat x, GLfloat y, GLfloat z);
     void scalex(GLfixed x, GLfixed y, GLfixed z);
-    void shadeModel(GLenum mode);
-    void texCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
-    void texEnvf(GLenum target, GLenum pname, GLfloat param);
-    void texEnvfv(GLenum target, GLenum pname, const GLfloat *params);
-    void texEnvi(GLenum target, GLenum pname, GLint param);
-    void texEnviv(GLenum target, GLenum pname, const GLint *params);
     void texEnvx(GLenum target, GLenum pname, GLfixed param);
     void texEnvxv(GLenum target, GLenum pname, const GLfixed *params);
     void texParameterx(GLenum target, GLenum pname, GLfixed param);
     void texParameterxv(GLenum target, GLenum pname, const GLfixed *params);
-    void translatef(GLfloat x, GLfloat y, GLfloat z);
     void translatex(GLfixed x, GLfixed y, GLfixed z);
-    void vertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
 
     // GL_OES_draw_texture
-    void drawTexf(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height);
     void drawTexfv(const GLfloat *coords);
     void drawTexi(GLint x, GLint y, GLint z, GLint width, GLint height);
     void drawTexiv(const GLint *coords);
@@ -231,7 +191,6 @@ class Context final : public ValidationContext
     void weightPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
 
     // GL_OES_point_size_array
-    void pointSizePointer(GLenum type, GLsizei stride, const void *pointer);
 
     // GL_OES_query_matrix
     GLbitfield queryMatrixx(GLfixed *mantissa, GLint *exponent);
@@ -350,20 +309,20 @@ class Context final : public ValidationContext
     bool isVertexArrayGenerated(GLuint vertexArray);
     bool isTransformFeedbackGenerated(GLuint vertexArray);
 
-    void getBooleanv(GLenum pname, GLboolean *params);
-    void getBooleanvImpl(GLenum pname, GLboolean *params);
-    void getFloatv(GLenum pname, GLfloat *params);
-    void getFloatvImpl(GLenum pname, GLfloat *params);
-    void getIntegerv(GLenum pname, GLint *params);
-    void getIntegervImpl(GLenum pname, GLint *params);
+    virtual void getBooleanv(GLenum pname, GLboolean *params);
+    virtual void getBooleanvImpl(GLenum pname, GLboolean *params);
+    virtual void getFloatv(GLenum pname, GLfloat *params);
+    virtual void getFloatvImpl(GLenum pname, GLfloat *params);
+    virtual void getIntegerv(GLenum pname, GLint *params);
+    virtual void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
-    void getPointerv(GLenum pname, void **params) const;
+    void getPointerv(GLenum pname, void **params);
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
     void getIntegeri_v(GLenum target, GLuint index, GLint *data);
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
 
     void activeShaderProgram(GLuint pipeline, GLuint program);
-    void activeTexture(GLenum texture);
+    virtual void activeTexture(GLenum texture);
     void blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
     void blendEquation(GLenum mode);
     void blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
@@ -377,9 +336,9 @@ class Context final : public ValidationContext
     void depthFunc(GLenum func);
     void depthMask(GLboolean flag);
     void depthRangef(GLfloat zNear, GLfloat zFar);
-    void disable(GLenum cap);
+    virtual void disable(GLenum cap);
     void disableVertexAttribArray(GLuint index);
-    void enable(GLenum cap);
+    virtual void enable(GLenum cap);
     void enableVertexAttribArray(GLuint index);
     void frontFace(GLenum mode);
     void hint(GLenum target, GLenum mode);
@@ -1164,6 +1123,68 @@ class Context final : public ValidationContext
 
     bool isRobustResourceInitEnabled() const { return mGLState.isRobustResourceInitEnabled(); }
 
+    // GLES1 API
+    void shadeModel(GLenum mode);
+
+    void matrixMode(GLenum mode);
+    void loadIdentity();
+    void loadMatrixf(const GLfloat* m);
+    void pushMatrix();
+    void popMatrix();
+    void multMatrixf(const GLfloat* m);
+
+    void orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
+    void frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
+
+    void texEnvf(GLenum target, GLenum pname, GLfloat param);
+    void texEnvfv(GLenum target, GLenum pname, const GLfloat* params);
+    void texEnvi(GLenum target, GLenum pname, GLint param);
+    void texEnviv(GLenum target, GLenum pname, const GLint* params);
+    void getTexEnvfv(GLenum env, GLenum pname, GLfloat* params);
+    void getTexEnviv(GLenum env, GLenum pname, GLint* params);
+
+    void texGenf(GLenum coord, GLenum pname, GLfloat param);
+    void texGenfv(GLenum coord, GLenum pname, const GLfloat* params);
+    void texGeni(GLenum coord, GLenum pname, GLint param);
+    void texGeniv(GLenum coord, GLenum pname, const GLint* params);
+    void getTexGeniv(GLenum coord, GLenum pname, GLint* params);
+    void getTexGenfv(GLenum coord, GLenum pname, GLfloat* params);
+
+    void materialf(GLenum face, GLenum pname, GLfloat param);
+    void materialfv(GLenum face, GLenum pname, const GLfloat* params);
+    void getMaterialfv(GLenum face, GLenum pname, GLfloat* params);
+
+    void lightModelf(GLenum pname, GLfloat param);
+    void lightModelfv(GLenum pname, const GLfloat* params);
+    void lightf(GLenum light, GLenum pname, GLfloat param);
+    void lightfv(GLenum light, GLenum pname, const GLfloat* params);
+    void getLightfv(GLenum light, GLenum pname, GLfloat* params);
+
+    void multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
+    void normal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+
+    void fogf(GLenum pname, GLfloat param);
+    void fogfv(GLenum pname, const GLfloat* params);
+
+    void enableClientState(GLenum clientState);
+    void disableClientState(GLenum clientState);
+
+    void drawTexf(float x, float y, float z, float width, float height);
+
+    void rotatef(float angle, float x, float y, float z);
+    void scalef(float x, float y, float z);
+    void translatef(float x, float y, float z);
+
+    void color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+
+    void clientActiveTexture(GLenum texture);
+
+    void vertexPointer(GLint size, GLenum type, GLsizei stride, const void* ptr);
+    void normalPointer(GLenum type, GLsizei stride, const void* ptr);
+    void colorPointer(GLint size, GLenum type, GLsizei stride, const void* ptr);
+    void pointSizePointer(GLenum type, GLsizei stride, const void* ptr);
+    void texCoordPointer(GLint size, GLenum type, GLsizei stride, const void* ptr);
+
   private:
     Error prepareForDraw();
     void syncRendererState();
@@ -1191,6 +1212,12 @@ class Context final : public ValidationContext
     void initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit);
     void updateCaps();
     void initWorkarounds();
+
+    void initGles1();
+    GLuint calcNextUnusedBufferObject();
+    void bindBufferPrivate(BufferBinding target, GLuint buffer);
+    GLint vertexArrayIndex(GLenum type) const;
+    void gles1_draw(bool indexed, GLenum mode, GLint first, GLsizei count, GLenum indexType, const GLvoid* indices);
 
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
@@ -1266,6 +1293,111 @@ class Context final : public ValidationContext
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable angle::ScratchBuffer mScratchBuffer;
     mutable angle::ScratchBuffer mZeroFilledBuffer;
+
+    // GLES1 emulation state
+    struct GLES1DrawTexState {
+        GLuint program;
+        GLuint vao;
+        GLuint ibo;
+        GLuint vbo;
+
+        GLint samplerLoc;
+    };
+
+    struct LightingBuffer {
+        GLint lightEnables[8];
+        GLfloat lightAmbients[4 * 8];
+        GLfloat lightDiffuses[4 * 8];
+        GLfloat lightSpeculars[4 * 8];
+        GLfloat lightPositions[4 * 8];
+        GLfloat lightDirections[3 * 8];
+        GLfloat spotlightExponents[8];
+        GLfloat spotlightCutoffAngles[8];
+        GLfloat attenuationConsts[8];
+        GLfloat attenuationLinears[8];
+        GLfloat attenuationQuadratics[8];
+    };
+    
+    struct GLES1DrawState {
+        GLuint program;
+
+        GLint projMatrixLoc;
+        GLint modelviewMatrixLoc;
+        GLint textureMatrixLoc;
+        GLint modelviewInvTrLoc;
+        GLint textureSamplerLoc;
+        GLint textureCubeSamplerLoc;
+
+        GLint shadeModelFlatLoc;
+
+        GLint enableTexture2DLoc;
+        GLint enableTextureCubeMapLoc;
+        GLint enableLightingLoc;
+        GLint enableRescaleNormalLoc;
+        GLint enableNormalizeLoc;
+        GLint enableColorMaterialLoc;
+        GLint enableFogLoc;
+        GLint enableReflectionMapLoc;
+        GLint enableAlphaTestLoc;
+        GLint enableLogicOpLoc;
+
+        GLint alphaFuncLoc;
+        GLint alphaTestRefLoc;
+
+        GLint logicOpLoc;
+
+        GLint textureEnvModeLoc;
+        GLint textureFormatLoc;
+
+        GLint materialAmbientLoc;
+        GLint materialDiffuseLoc;
+        GLint materialSpecularLoc;
+        GLint materialEmissiveLoc;
+        GLint materialSpecularExponentLoc;
+
+        GLint lightModelSceneAmbientLoc;
+        GLint lightModelTwoSidedLoc;
+
+        GLint lightEnablesLoc;
+        GLint lightAmbientsLoc;
+        GLint lightDiffusesLoc;
+        GLint lightSpecularsLoc;
+        GLint lightPositionsLoc;
+        GLint lightDirectionsLoc;
+        GLint lightSpotlightExponentsLoc;
+        GLint lightSpotlightCutoffAnglesLoc;
+        GLint lightAttenuationConstsLoc;
+        GLint lightAttenuationLinearsLoc;
+        GLint lightAttenuationQuadraticsLoc;
+
+        GLint fogModeLoc;
+        GLint fogDensityLoc;
+        GLint fogStartLoc;
+        GLint fogEndLoc;
+        GLint fogColorLoc;
+
+        // For fixed/float conversion, which happens a lot.
+        GLuint vao;
+        GLuint posVbo;
+        GLuint normalVbo;
+        GLuint colorVbo;
+        GLuint pointsizeVbo;
+        GLuint texcoordVbo;
+        GLuint ibo;
+
+        LightingBuffer lightingBuffer;
+    };
+
+    struct GLES1EmulationState {
+        GLES1DrawTexState drawTex;
+        GLES1DrawState draw;
+        std::unordered_map<GLuint, GLuint> userBufferMap;
+        std::unordered_map<GLuint, GLuint> userBufferMapReverse;
+        GLuint nextUnusedBufferObject;
+    };
+
+    GLES1EmulationState mGlesEmu;
+    bool mIsGles1;
 };
 
 template <EntryPoint EP, typename... ArgsT>
