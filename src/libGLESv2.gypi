@@ -235,6 +235,7 @@
             'libANGLE/queryconversions.h',
             'libANGLE/queryutils.cpp',
             'libANGLE/queryutils.h',
+            'libANGLE/gles1/ContextES1.cpp',
             'libANGLE/renderer/BufferImpl.h',
             'libANGLE/renderer/CompilerImpl.h',
             'libANGLE/renderer/ContextImpl.cpp',
