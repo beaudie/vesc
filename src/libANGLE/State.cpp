@@ -25,6 +25,9 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
 namespace
 {
 
@@ -208,6 +211,108 @@ void State::initialize(const Context *context,
 
     mRobustResourceInit = robustResourceInit;
     mProgramBinaryCacheEnabled = programBinaryCacheEnabled;
+
+    // GLES1.1 state initialization
+    if (clientVersion <= Version(1, 1))
+    {
+        // Default to 4 multitexture units and 8 lights max
+        mMaxMultitextureUnits = 4;
+        mMaxLights = 8;
+
+        mShadeModel = GL_SMOOTH;
+        mCurrMatrixMode = GL_PROJECTION;
+
+        mColor[0] = 1.0f;
+        mColor[1] = 1.0f;
+        mColor[2] = 1.0f;
+        mColor[3] = 1.0f;
+
+        mNormal[0] = 0.0f;
+        mNormal[1] = 0.0f;
+        mNormal[2] = 1.0f;
+
+        mMultiTexCoords.resize(mMaxMultitextureUnits);
+        for (auto& texcoord : mMultiTexCoords) {
+            memset(&texcoord, 0, sizeof(texcoord));
+        }
+
+        mTexUnitEnvs.resize(mMaxMultitextureUnits, {});
+        mTexGens.resize(mMaxMultitextureUnits, {});
+
+        mProjMatrices.resize(1, {});
+        mModelviewMatrices.resize(1, {});
+        mTextureMatrices.resize(mMaxMultitextureUnits, {});
+
+        mMaterial.ambient[0] = 0.2f;
+        mMaterial.ambient[1] = 0.2f;
+        mMaterial.ambient[2] = 0.2f;
+        mMaterial.ambient[3] = 1.0f;
+
+        mMaterial.diffuse[0] = 0.8f;
+        mMaterial.diffuse[1] = 0.8f;
+        mMaterial.diffuse[2] = 0.8f;
+        mMaterial.diffuse[3] = 1.0f;
+
+        mMaterial.specular[0] = 0.0f;
+        mMaterial.specular[1] = 0.0f;
+        mMaterial.specular[2] = 0.0f;
+        mMaterial.specular[3] = 1.0f;
+
+        mMaterial.emissive[0] = 0.0f;
+        mMaterial.emissive[1] = 0.0f;
+        mMaterial.emissive[2] = 0.0f;
+        mMaterial.emissive[3] = 1.0f;
+
+        mMaterial.specularExponent = 0.0f;
+
+        mLightModel.color[0] = 0.2f;
+        mLightModel.color[1] = 0.2f;
+        mLightModel.color[2] = 0.2f;
+        mLightModel.color[3] = 1.0f;
+        mLightModel.twoSided = false;
+
+        mLights.resize(mMaxLights, {});
+        for (auto& light : mLights) {
+            light.ambient[0] = 0.0f;
+            light.ambient[1] = 0.0f;
+            light.ambient[2] = 0.0f;
+            light.ambient[3] = 1.0f;
+
+            light.diffuse[0] = 0.0f;
+            light.diffuse[1] = 0.0f;
+            light.diffuse[2] = 0.0f;
+            light.diffuse[3] = 1.0f;
+
+            light.specular[0] = 0.0f;
+            light.specular[1] = 0.0f;
+            light.specular[2] = 0.0f;
+            light.specular[3] = 1.0f;
+
+            light.position[0] = 0.0f;
+            light.position[1] = 0.0f;
+            light.position[2] = 1.0f;
+            light.position[3] = 0.0f;
+
+            light.direction[0] = 0.0f;
+            light.direction[1] = 0.0f;
+            light.direction[2] = -1.0f;
+
+            light.spotlightExponent = 0.0f;
+            light.spotlightCutoffAngle = 180.0f;
+            light.attenuationConst = 1.0f;
+            light.attenuationLinear = 0.0f;
+            light.attenuationQuadratic = 0.0f;
+        }
+
+        mFog.mode = GL_EXP;
+        mFog.density = 1.0f;
+        mFog.start = 0.0f;
+        mFog.end = 1.0f;
+        mFog.color[0] = 0.0f;
+        mFog.color[1] = 0.0f;
+        mFog.color[2] = 0.0f;
+        mFog.color[3] = 0.0f;
+    }
 }
 
 void State::reset(const Context *context)

@@ -594,6 +594,88 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
 
+    // GLES1 state
+    using IVec4 = std::array<GLint, 4>;
+    using UIVec4 = std::array<GLuint, 4>;
+    using UBVec4 = std::array<GLubyte, 4>;
+    using Vec3 = std::array<GLfloat, 3>;
+    using Vec4 = std::array<GLfloat, 4>;
+    using Mat4 = std::array<GLfloat, 16>;
+    union GLVal {
+        Vec4 floatVal;
+        IVec4 intVal;
+        UBVec4 ubyteVal;
+        UIVec4 enumVal;
+    };
+
+    struct GLValTyped {
+        GLenum type;
+        GLVal val;
+    };
+
+    using TexEnv = std::unordered_map<GLenum, GLValTyped>;
+    using TexUnitEnvs = std::vector<TexEnv>;
+    using TexGens = std::vector<TexEnv>;
+    using MatrixStack = std::vector<Mat4>;
+
+    struct Material {
+        Vec4 ambient;
+        Vec4 diffuse;
+        Vec4 specular;
+        Vec4 emissive;
+        GLfloat specularExponent;
+    };
+
+    struct LightModel {
+        Vec4 color;
+        bool twoSided;
+    };
+
+    struct Light {
+        Vec4 ambient;
+        Vec4 diffuse;
+        Vec4 specular;
+        Vec4 position;
+        Vec3 direction;
+        GLfloat spotlightExponent;
+        GLfloat spotlightCutoffAngle;
+        GLfloat attenuationConst;
+        GLfloat attenuationLinear;
+        GLfloat attenuationQuadratic;
+    };
+
+    struct Fog {
+        GLenum mode;
+        float density;
+        float start;
+        float end;
+        Vec4 color;
+    };
+
+    int mMaxMultitextureUnits;
+    int mMaxLights;
+
+    GLenum mShadeModel;
+    GLenum mCurrMatrixMode;
+
+    Vec4 mColor;
+    Vec3 mNormal;
+    std::vector<Vec4> mMultiTexCoords;
+
+    TexUnitEnvs mTexUnitEnvs;
+    TexGens mTexGens;
+
+    MatrixStack mProjMatrices;
+    MatrixStack mModelviewMatrices;
+    std::vector<MatrixStack> mTextureMatrices;
+    Mat4& currMatrix();
+    MatrixStack& currMatrixStack();
+
+    Material mMaterial;
+    LightModel mLightModel;
+    std::vector<Light> mLights;
+    Fog mFog = {};
+
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
