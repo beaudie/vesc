@@ -10,6 +10,8 @@
 #include <GLES2/gl2.h>
 
 GLuint CreateSimpleTexture2D();
+GLuint CreateSimpleTexture2DAlpha1();
+GLuint CreateSimpleTexture2DAlphaHalf();
 GLuint CreateSimpleTextureCubemap();
 
 GLuint CreateMipMappedTexture2D();
