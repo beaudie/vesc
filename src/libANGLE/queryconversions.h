@@ -69,6 +69,9 @@ QueryT CastFromStateValue(GLenum pname, NativeT value);
 template <typename NativeT, typename QueryT>
 NativeT CastQueryValueTo(GLenum pname, QueryT value);
 
+template <typename NativeT, typename QueryT>
+NativeT CastQueryValuesTo(GLenum pname, const QueryT* values, int count, NativeT* out);
+
 template <typename ParamType>
 GLenum ConvertToGLenum(GLenum pname, ParamType param)
 {
