@@ -61,7 +61,7 @@ class VertexArray;
 struct VertexAttribute;
 class ProgramPipeline;
 
-class Context final : public ValidationContext
+class Context : public ValidationContext
 {
   public:
     Context(rx::EGLImplFactory *implFactory,
@@ -231,12 +231,12 @@ class Context final : public ValidationContext
     bool isVertexArrayGenerated(GLuint vertexArray);
     bool isTransformFeedbackGenerated(GLuint vertexArray);
 
-    void getBooleanv(GLenum pname, GLboolean *params);
-    void getBooleanvImpl(GLenum pname, GLboolean *params);
-    void getFloatv(GLenum pname, GLfloat *params);
-    void getFloatvImpl(GLenum pname, GLfloat *params);
-    void getIntegerv(GLenum pname, GLint *params);
-    void getIntegervImpl(GLenum pname, GLint *params);
+    virtual void getBooleanv(GLenum pname, GLboolean *params);
+    virtual void getBooleanvImpl(GLenum pname, GLboolean *params);
+    virtual void getFloatv(GLenum pname, GLfloat *params);
+    virtual void getFloatvImpl(GLenum pname, GLfloat *params);
+    virtual void getIntegerv(GLenum pname, GLint *params);
+    virtual void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
     void getPointerv(GLenum pname, void **params) const;
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
@@ -244,7 +244,7 @@ class Context final : public ValidationContext
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
 
     void activeShaderProgram(GLuint pipeline, GLuint program);
-    void activeTexture(GLenum texture);
+    virtual void activeTexture(GLenum texture);
     void blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
     void blendEquation(GLenum mode);
     void blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
@@ -258,9 +258,9 @@ class Context final : public ValidationContext
     void depthFunc(GLenum func);
     void depthMask(GLboolean flag);
     void depthRangef(GLfloat zNear, GLfloat zFar);
-    void disable(GLenum cap);
+    virtual void disable(GLenum cap);
     void disableVertexAttribArray(GLuint index);
-    void enable(GLenum cap);
+    virtual void enable(GLenum cap);
     void enableVertexAttribArray(GLuint index);
     void frontFace(GLenum mode);
     void hint(GLenum target, GLenum mode);

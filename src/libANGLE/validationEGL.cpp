@@ -731,6 +731,12 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
 
     switch (clientMajorVersion)
     {
+        case 1:
+            if (clientMinorVersion > 1)
+            {
+                return EglBadConfig();
+            }
+            break;
         case 2:
             if (clientMinorVersion != 0)
             {
@@ -779,7 +785,8 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
             return EglBadMatch();
         }
 
-        if (shareContext->getClientMajorVersion() != clientMajorVersion ||
+        if (clientMajorVersion != 1 &&
+            shareContext->getClientMajorVersion() != clientMajorVersion ||
             shareContext->getClientMinorVersion() != clientMinorVersion)
         {
             return EglBadContext();

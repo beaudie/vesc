@@ -19,7 +19,6 @@
         [
             '-Wall',
             '-Wchar-subscripts',
-            '-Werror',
             '-Wextra',
             '-Wformat=2',
             '-Winit-self',
@@ -142,7 +141,7 @@
                 },
                 'xcode_settings':
                 {
-                    'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
+                    'CLANG_CXX_LANGUAGE_STANDARD': 'c++14',
                 },
             },    # Common_Base
 
@@ -375,7 +374,7 @@
                 ],
                 'cflags_cc':
                 [
-                    '-std=c++0x',
+                    '-std=c++14',
                 ],
             },
         }],
