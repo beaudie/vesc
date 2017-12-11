@@ -142,6 +142,14 @@ NativeT CastQueryValueTo(GLenum pname, QueryT value)
     }
 }
 
+template <typename NativeT, typename QueryT>
+void CastQueryValuesTo(GLenum pname, const QueryT* values, int count, NativeT* out)
+{
+    for (int i = 0; i < count; i++) {
+        out[i] = CastQueryValueTo<NativeT, QueryT>(pname, values[i]);
+    }
+}
+
 template GLint CastQueryValueTo<GLint, GLfloat>(GLenum pname, GLfloat value);
 template GLboolean CastQueryValueTo<GLboolean, GLint>(GLenum pname, GLint value);
 template GLint CastQueryValueTo<GLint, GLint>(GLenum pname, GLint value);
@@ -149,6 +157,14 @@ template GLfloat CastQueryValueTo<GLfloat, GLint>(GLenum pname, GLint value);
 template GLfloat CastQueryValueTo<GLfloat, GLfloat>(GLenum pname, GLfloat value);
 template GLuint CastQueryValueTo<GLuint, GLint>(GLenum pname, GLint value);
 template GLuint CastQueryValueTo<GLuint, GLfloat>(GLenum pname, GLfloat value);
+
+template void CastQueryValuesTo<GLint, GLfloat>(GLenum pname, const GLfloat* values, int count, GLint* out);
+template void CastQueryValuesTo<GLboolean, GLint>(GLenum pname, const GLint* values, int count, GLboolean* out);
+template void CastQueryValuesTo<GLint, GLint>(GLenum pname, const GLint* values, int count, GLint* out);
+template void CastQueryValuesTo<GLfloat, GLint>(GLenum pname, const GLint* values, int count, GLfloat* out);
+template void CastQueryValuesTo<GLfloat, GLfloat>(GLenum pname, const GLfloat* values, int count, GLfloat* out);
+template void CastQueryValuesTo<GLuint, GLint>(GLenum pname, const GLint* values, int count, GLuint* out);
+template void CastQueryValuesTo<GLuint, GLfloat>(GLenum pname, const GLfloat* values, int count, GLuint* out);
 
 template <typename QueryT>
 void CastStateValues(Context *context, GLenum nativeType, GLenum pname,
@@ -194,7 +210,10 @@ void CastStateValues(Context *context, GLenum nativeType, GLenum pname,
             outParams[i] = CastFromStateValue<QueryT>(pname, int64Params[i]);
         }
     }
-    else UNREACHABLE();
+    else {
+        fprintf(stderr, "%s: Lol, you're cooked. nativeType? 0x%x pname 0x%x\n", __func__, nativeType, pname);
+        UNREACHABLE();
+    }
 }
 
 // Explicit template instantiation (how we export template functions in different files)
