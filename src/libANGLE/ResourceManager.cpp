@@ -130,7 +130,9 @@ GLuint BufferManager::createBuffer()
 
 Buffer *BufferManager::getBuffer(GLuint handle) const
 {
-    return mObjectMap.query(handle);
+    Buffer* res = mObjectMap.query(handle);
+    if (res) { fprintf(stderr, "%s: found buf for %u\n", __func__, handle); }
+    return res;
 }
 
 // ShaderProgramManager Implementation.
