@@ -25,6 +25,13 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/ContextImpl.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
+#define GLES1LOG(...)
+
+// #define GLES1LOG(fmt,...) fprintf(stderr, "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__);
+
 namespace
 {
 
@@ -214,6 +221,137 @@ void State::initialize(const Context *context,
 
     mRobustResourceInit = robustResourceInit;
     mProgramBinaryCacheEnabled = programBinaryCacheEnabled;
+
+        fprintf(stderr, "%s: Trying gles1 state init\n", __func__);
+    // GLES1.1 state initialization
+    if (clientVersion <= Version(1, 1))
+    {
+        fprintf(stderr, "%s: gles1 state init\n", __func__);
+        // Default to 4 multitexture units and 8 lights max,
+        // with 16 matrices max depth (Approx. spec minimums)
+        mMaxMultitextureUnits = 4;
+        mMaxLights = 8;
+        mMaxMatrixStackDepth = 16;
+        mMaxClipPlanes = 6;
+
+        mShadeModel = GL_SMOOTH;
+        mCurrMatrixMode = GL_MODELVIEW;
+        mActiveSampler = 0;
+
+        mColor[0] = 1.0f;
+        mColor[1] = 1.0f;
+        mColor[2] = 1.0f;
+        mColor[3] = 1.0f;
+
+        mNormal[0] = 0.0f;
+        mNormal[1] = 0.0f;
+        mNormal[2] = 1.0f;
+
+        mMultiTexCoords.resize(mMaxMultitextureUnits);
+        for (auto& texcoord : mMultiTexCoords) {
+            memset(&texcoord, 0, sizeof(texcoord));
+        }
+
+        mTexUnitEnables.resize(mMaxMultitextureUnits, {});
+        mTexUnitEnvs.resize(mMaxMultitextureUnits, {});
+        mTexGens.resize(mMaxMultitextureUnits, {});
+
+        mProjMatrices.resize(1, {});
+        mModelviewMatrices.resize(1, {});
+        mTextureMatrices.resize(mMaxMultitextureUnits, {});
+        for (int i = 0; i < mMaxMultitextureUnits; i++) {
+            mTextureMatrices[i].resize(1, {});
+        }
+
+        mMaterial.ambient[0] = 0.2f;
+        mMaterial.ambient[1] = 0.2f;
+        mMaterial.ambient[2] = 0.2f;
+        mMaterial.ambient[3] = 1.0f;
+
+        mMaterial.diffuse[0] = 0.8f;
+        mMaterial.diffuse[1] = 0.8f;
+        mMaterial.diffuse[2] = 0.8f;
+        mMaterial.diffuse[3] = 1.0f;
+
+        mMaterial.specular[0] = 0.0f;
+        mMaterial.specular[1] = 0.0f;
+        mMaterial.specular[2] = 0.0f;
+        mMaterial.specular[3] = 1.0f;
+
+        mMaterial.emissive[0] = 0.0f;
+        mMaterial.emissive[1] = 0.0f;
+        mMaterial.emissive[2] = 0.0f;
+        mMaterial.emissive[3] = 1.0f;
+
+        mMaterial.specularExponent = 0.0f;
+
+        mLightModel.color[0] = 0.2f;
+        mLightModel.color[1] = 0.2f;
+        mLightModel.color[2] = 0.2f;
+        mLightModel.color[3] = 1.0f;
+        mLightModel.twoSided = false;
+
+        mLights.resize(mMaxLights, {});
+        for (auto& light : mLights) {
+            light.ambient[0] = 0.0f;
+            light.ambient[1] = 0.0f;
+            light.ambient[2] = 0.0f;
+            light.ambient[3] = 1.0f;
+
+            light.diffuse[0] = 0.0f;
+            light.diffuse[1] = 0.0f;
+            light.diffuse[2] = 0.0f;
+            light.diffuse[3] = 1.0f;
+
+            light.specular[0] = 0.0f;
+            light.specular[1] = 0.0f;
+            light.specular[2] = 0.0f;
+            light.specular[3] = 1.0f;
+
+            light.position[0] = 0.0f;
+            light.position[1] = 0.0f;
+            light.position[2] = 1.0f;
+            light.position[3] = 0.0f;
+
+            light.direction[0] = 0.0f;
+            light.direction[1] = 0.0f;
+            light.direction[2] = -1.0f;
+
+            light.spotlightExponent = 0.0f;
+            light.spotlightCutoffAngle = 180.0f;
+            light.attenuationConst = 1.0f;
+            light.attenuationLinear = 0.0f;
+            light.attenuationQuadratic = 0.0f;
+        }
+
+        mFog.mode = GL_EXP;
+        mFog.density = 1.0f;
+        mFog.start = 0.0f;
+        mFog.end = 1.0f;
+        mFog.color[0] = 0.0f;
+        mFog.color[1] = 0.0f;
+        mFog.color[2] = 0.0f;
+        mFog.color[3] = 0.0f;
+
+        mAlphaFunc = GL_ALWAYS;
+        mAlphaFuncRef = 0.0f;
+
+        mClipPlanes.resize(mMaxClipPlanes, {});
+        for (auto& plane : mClipPlanes) {
+            for (int i = 0; i < 4; i++) {
+                plane[i] = 0.0f;
+            }
+        }
+
+        mPointSizeMin = 0.1f;
+        mPointSizeMax = 100.0f;
+        mPointFadeThresholdSize = 0.1f;
+        mPointDistanceAttenuation[0] = 0.0f;
+        mPointDistanceAttenuation[1] = 0.0f;
+        mPointDistanceAttenuation[2] = 0.0f;
+
+        mPointSize = 1.0f;
+    }
 }
 
 void State::reset(const Context *context)
@@ -699,7 +837,62 @@ void State::setEnableFeature(GLenum feature, bool enabled)
       case GL_FRAMEBUFFER_SRGB_EXT:
           setFramebufferSRGB(enabled);
           break;
-      default:                               UNREACHABLE();
+      case GL_TEXTURE_2D:
+      case GL_TEXTURE_CUBE_MAP:
+          setTextureTargetEnabled(feature, enabled);
+          break;
+      case GL_ALPHA_TEST:
+          GLES1LOG("GLES1 TODO: feature: GL_ALPHA_TEST");
+          break;
+      case GL_FOG:
+          GLES1LOG("GLES1 TODO: feature: GL_FOG");
+          break;
+      case GL_LIGHTING:
+          GLES1LOG("GLES1 TODO: feature: GL_LIGHTING");
+          break;
+      case GL_LIGHT0:
+      case GL_LIGHT1:
+      case GL_LIGHT2:
+      case GL_LIGHT3:
+      case GL_LIGHT4:
+      case GL_LIGHT5:
+      case GL_LIGHT6:
+      case GL_LIGHT7:
+          GLES1LOG("GLES1 TODO: feature: GL_LIGHTn");
+          break;
+      case GL_COLOR_LOGIC_OP:
+          GLES1LOG("GLES1 TODO: feature: GL_COLOR_LOGIC_OP");
+          break;
+      case GL_NORMALIZE:
+          GLES1LOG("GLES1 TODO: feature: GL_NORMALIZE");
+          break;
+      case GL_RESCALE_NORMAL:
+          GLES1LOG("GLES1 TODO: feature: GL_RESCALE_NORMAL");
+          break;
+      case GL_CLIP_PLANE0:
+      case GL_CLIP_PLANE1:
+      case GL_CLIP_PLANE2:
+      case GL_CLIP_PLANE3:
+      case GL_CLIP_PLANE4:
+      case GL_CLIP_PLANE5:
+          GLES1LOG("GLES1 TODO: feature: GL_CLIP_PLANEn");
+          break;
+      case GL_COLOR_MATERIAL:
+          GLES1LOG("GLES1 TODO: feature: GL_COLOR_MATERIAL");
+          break;
+      case GL_LINE_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_LINE_SMOOTH");
+          break;
+      case GL_POINT_SMOOTH:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SMOOTH");
+          break;
+      case GL_POINT_SPRITE_OES:
+          GLES1LOG("GLES1 TODO: feature: GL_POINT_SPRITE_OES");
+          break;
+      default: {
+                   GLES1LOG("New: 0x%x", feature);
+                   UNREACHABLE();
+               }
     }
 }
 
@@ -898,6 +1091,45 @@ void State::initializeZeroTextures(const Context *context, const TextureMap &zer
         for (size_t textureUnit = 0; textureUnit < samplerTextureArray.size(); ++textureUnit)
         {
             samplerTextureArray[textureUnit].set(context, zeroTexture.second.get());
+        }
+    }
+}
+
+void State::setTextureTargetEnabled(GLenum target, bool enabled) {
+    switch (target) {
+    case GL_TEXTURE_2D:
+    case GL_TEXTURE_CUBE_MAP_OES:
+    case GL_TEXTURE_3D:
+    case GL_TEXTURE_2D_ARRAY:
+    case GL_TEXTURE_2D_MULTISAMPLE:
+        if (enabled) {
+            mTexUnitEnables[mActiveSampler].insert(target);
+        } else {
+            mTexUnitEnables[mActiveSampler].erase(target);
+        }
+        break;
+    default:
+        UNREACHABLE();
+    }
+}
+
+bool State::isTextureTargetEnabled(GLenum unit, GLenum textureTarget) {
+    const auto& findIn = mTexUnitEnables[unit - GL_TEXTURE0];
+    return findIn.find(textureTarget) != findIn.end();
+}
+
+void State::getUnitForEnabledTarget(GLenum textureTarget,
+                                    bool* everEnabled,
+                                    GLenum* whichUnit) {
+    *everEnabled = false;
+    *whichUnit = GL_TEXTURE0;
+
+    for (size_t i = 0; i < mTexUnitEnables.size(); i++) {
+        const auto& enabled = mTexUnitEnables[i];
+        if (enabled.find(textureTarget) !=
+            enabled.end()) {
+            *everEnabled = true;
+            *whichUnit = GL_TEXTURE0 + i;
         }
     }
 }
@@ -1769,6 +2001,44 @@ void State::getFloatv(GLenum pname, GLfloat *params)
       case GL_COVERAGE_MODULATION_CHROMIUM:
           params[0] = static_cast<GLfloat>(mCoverageModulation);
           break;
+      case GL_CURRENT_COLOR:
+          GLES1LOG("GL_CURRENT_COLOR");
+          params[0] = mColor[0];
+          params[1] = mColor[1];
+          params[2] = mColor[2];
+          params[3] = mColor[3];
+          break;
+      case GL_CURRENT_TEXTURE_COORDS:
+          GLES1LOG("GL_CURRENT_TEXTURE_COORDS");
+          params[0] = mMultiTexCoords[mActiveSampler][0];
+          params[1] = mMultiTexCoords[mActiveSampler][1];
+          params[2] = mMultiTexCoords[mActiveSampler][2];
+          params[3] = mMultiTexCoords[mActiveSampler][3];
+          break;
+      case GL_PROJECTION_MATRIX: {
+          GLES1LOG("GL_PROJECTION_MATRIX");
+          float* mat = projMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                                 }
+      case GL_MODELVIEW_MATRIX: {
+          GLES1LOG("GL_MODELVIEW_MATRIX");
+          float* mat = modelviewMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                                }
+      case GL_TEXTURE_MATRIX: {
+          GLES1LOG("GL_TEXTURE_MATRIX");
+          float* mat = textureMatrix().data();
+          for (int i = 0; i < 16; i++) {
+              params[i] = mat[i];
+          }
+          break;
+                              }
       default:
         UNREACHABLE();
         break;
@@ -2063,9 +2333,63 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
       case GL_DISPATCH_INDIRECT_BUFFER_BINDING:
           *params = mBoundBuffers[BufferBinding::DispatchIndirect].id();
           break;
-      default:
+      // GLES1-specific
+      case GL_SMOOTH_LINE_WIDTH_RANGE:
+          GLES1LOG("GL_SMOOTH_LINE_WIDTH_RANGE");
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_SMOOTH_POINT_SIZE_RANGE:
+          GLES1LOG("GL_SMOOTH_POINT_SIZE_RANGE");
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_ALIASED_LINE_WIDTH_RANGE:
+          GLES1LOG("GL_ALIASED_LINE_WIDTH_RANGE");
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_ALIASED_POINT_SIZE_RANGE:
+          GLES1LOG("GL_ALIASED_POINT_SIZE_RANGE");
+          params[0] = 1;
+          params[1] = 1;
+          break;
+      case GL_MAX_LIGHTS:
+          GLES1LOG("GL_MAX_LIGHTS");
+          *params = mMaxLights;
+          break;
+      case GL_MAX_MODELVIEW_STACK_DEPTH:
+          GLES1LOG("GL_MAX_MODELVIEW_STACK_DEPTH");
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_PROJECTION_STACK_DEPTH:
+          GLES1LOG("GL_MAX_PROJECTION_STACK_DEPTH");
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_TEXTURE_STACK_DEPTH:
+          GLES1LOG("GL_MAX_TEXTURE_STACK_DEPTH");
+          *params = mMaxMatrixStackDepth;
+          break;
+      case GL_MAX_TEXTURE_UNITS:
+          GLES1LOG("GL_MAX_TEXTURE_UNITS");
+          *params = mMaxMultitextureUnits;
+          break;
+      case GL_MAX_CLIP_PLANES:
+          GLES1LOG("GL_MAX_CLIP_PLANES");
+          *params = mMaxClipPlanes;
+          break;
+      case GL_CURRENT_COLOR:
+          GLES1LOG("GL_CURRENT_COLOR");
+          params[0] = (int)mColor[0];
+          params[1] = (int)mColor[1];
+          params[2] = (int)mColor[2];
+          params[3] = (int)mColor[3];
+          break;
+      default: {
+                   fprintf(stderr, "%s: unknown: 0x%x\n", __func__, pname);
         UNREACHABLE();
         break;
+               }
     }
 }
 
@@ -2205,6 +2529,522 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
             UNREACHABLE();
             break;
     }
+}
+
+void State::shadeModel(GLenum mode)
+{
+    mShadeModel = mode;
+}
+
+void State::matrixMode(GLenum mode)
+{
+    mCurrMatrixMode = mode;
+}
+
+void State::loadIdentity()
+{
+    currMatrix() = angle::Mat4();
+}
+
+void State::loadMatrixf(const GLfloat* m)
+{
+    currMatrix() = angle::Mat4(m);
+}
+
+void State::pushMatrix()
+{
+    // GLES1 TODO: Restrict to mMaxMatrixStackDepth
+    currMatrixStack().emplace_back(currMatrixStack().back());
+}
+
+void State::popMatrix()
+{
+    if (currMatrixStack().size() > 1) {
+        // GLES1 TODO: Signal on underflow
+        currMatrixStack().pop_back();
+    } else {
+        GLES1LOG("Should issue: GL_STACK_UNDERFLOW");
+    }
+}
+
+void State::multMatrixf(const GLfloat* m)
+{
+    currMatrix() = currMatrix().product(m);
+}
+
+void State::orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::ortho(left, right, bottom, top, zNear, zFar));
+}
+
+void State::frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::frustum(left, right, bottom, top, zNear, zFar));
+}
+
+void State::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    // Assume |target| is GL_TEXTURE_ENV
+    if (pname == GL_TEXTURE_ENV_MODE) {
+        texEnvi(target, pname, (GLint)param);
+    } else {
+        mTexUnitEnvs[mActiveSampler][pname].val.floatVal[0] = param;
+        mTexUnitEnvs[mActiveSampler][pname].type = GL_FLOAT;
+    }
+}
+
+void State::texEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+{
+    if (pname == GL_TEXTURE_ENV_COLOR) {
+        for (int i = 0; i < 4; i++) {
+            mTexUnitEnvs[mActiveSampler][pname].val.floatVal[i] = params[i];
+            mTexUnitEnvs[mActiveSampler][pname].type = GL_FLOAT;
+        }
+    } else {
+        texEnvf(target, pname, params[0]);
+    }
+}
+
+void State::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    mTexUnitEnvs[mActiveSampler][pname].val.intVal[0] = param;
+    mTexUnitEnvs[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::texEnviv(GLenum target, GLenum pname, const GLint* params)
+{
+    mTexUnitEnvs[mActiveSampler][pname].val.intVal[0] = params[0];
+    mTexUnitEnvs[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::getTexEnvfv(GLenum env, GLenum pname, GLfloat* params)
+{
+    *params = mTexUnitEnvs[mActiveSampler][pname].val.floatVal[0];
+}
+
+void State::getTexEnviv(GLenum env, GLenum pname, GLint* params)
+{
+    *params = mTexUnitEnvs[mActiveSampler][pname].val.intVal[0];
+}
+
+void State::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = param;
+    mTexGens[mActiveSampler][pname].type = GL_FLOAT;
+}
+
+void State::texGenfv(GLenum coord, GLenum pname, const GLfloat* params)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type = GL_FLOAT;
+}
+
+void State::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = param;
+    mTexGens[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::texGeniv(GLenum coord, GLenum pname, const GLint* params)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type = GL_INT;
+}
+
+void State::getTexGeniv(GLenum coord, GLenum pname, GLint* params)
+{
+    *params = mTexGens[mActiveSampler][pname].val.intVal[0];
+}
+
+void State::getTexGenfv(GLenum coord, GLenum pname, GLfloat* params)
+{
+    params[0] = mTexGens[mActiveSampler][pname].val.floatVal[0];
+    params[1] = mTexGens[mActiveSampler][pname].val.floatVal[1];
+    params[2] = mTexGens[mActiveSampler][pname].val.floatVal[2];
+    params[3] = mTexGens[mActiveSampler][pname].val.floatVal[3];
+}
+
+void State::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    switch (pname) {
+    case GL_SHININESS:
+        mMaterial.specularExponent = param;
+        break;
+    default:
+        break;
+    }
+}
+
+void State::materialfv(GLenum face, GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+    case GL_AMBIENT:
+        memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_DIFFUSE:
+        memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_AMBIENT_AND_DIFFUSE:
+        memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+        memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_SPECULAR:
+        memcpy(&mMaterial.specular, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_EMISSION:
+        memcpy(&mMaterial.emissive, params, 4 * sizeof(GLfloat));
+        break;
+    case GL_SHININESS:
+        mMaterial.specularExponent = *params;
+        break;
+    default:
+        return;
+    }
+}
+
+void State::getMaterialfv(GLenum face, GLenum pname, GLfloat* params)
+{
+    switch (pname) {
+    case GL_AMBIENT:
+        memcpy(params, &mMaterial.ambient, 4 * sizeof(GLfloat));
+        break;
+    case GL_DIFFUSE:
+        memcpy(params, &mMaterial.diffuse, 4 * sizeof(GLfloat));
+        break;
+    case GL_SPECULAR:
+        memcpy(params, &mMaterial.specular, 4 * sizeof(GLfloat));
+        break;
+    case GL_EMISSION:
+        memcpy(params, &mMaterial.emissive, 4 * sizeof(GLfloat));
+        break;
+    case GL_SHININESS:
+        *params = mMaterial.specularExponent;
+        break;
+    default:
+        return;
+    }
+}
+
+void State::lightModelf(GLenum pname, GLfloat param)
+{
+    switch (pname) {
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = param == 1.0f ? true : false;
+            break;
+        default:
+            break;;
+    }
+}
+
+void State::lightModelfv(GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+        case GL_LIGHT_MODEL_AMBIENT:
+            memcpy(&mLightModel.color, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = *params == 1.0f ? true : false;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    switch (pname) {
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = param;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = param;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = param;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = param;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = param;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightfv(GLenum light, GLenum pname, const GLfloat* params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    switch (pname) {
+        case GL_AMBIENT:
+            memcpy(&mLights[lightIndex].ambient, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(&mLights[lightIndex].diffuse, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(&mLights[lightIndex].specular, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+            memcpy(&mLights[lightIndex].position, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_DIRECTION:
+            memcpy(&mLights[lightIndex].direction, params, 3 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = *params;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = *params;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = *params;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = *params;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = *params;
+            break;
+        default:
+            return;
+    }
+}
+
+void State::getLightfv(GLenum light, GLenum pname, GLfloat* params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+    switch (pname) {
+        case GL_AMBIENT:
+            memcpy(params, &mLights[lightIndex].ambient, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(params, &mLights[lightIndex].diffuse, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(params, &mLights[lightIndex].specular, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+            memcpy(params, &mLights[lightIndex].position, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_DIRECTION:
+            memcpy(params, &mLights[lightIndex].direction, 3 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_EXPONENT:
+            *params = mLights[lightIndex].spotlightExponent;
+            break;
+        case GL_SPOT_CUTOFF:
+            *params = mLights[lightIndex].spotlightCutoffAngle;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            *params = mLights[lightIndex].attenuationConst;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            *params = mLights[lightIndex].attenuationLinear;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            *params = mLights[lightIndex].attenuationQuadratic;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mMultiTexCoords[target - GL_TEXTURE0][0] = s;
+    mMultiTexCoords[target - GL_TEXTURE0][1] = t;
+    mMultiTexCoords[target - GL_TEXTURE0][2] = q;
+    mMultiTexCoords[target - GL_TEXTURE0][3] = r;
+}
+
+void State::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mNormal[0] = nx;
+    mNormal[1] = ny;
+    mNormal[2] = nz;
+}
+
+void State::fogf(GLenum pname, GLfloat param)
+{
+    switch (pname) {
+        case GL_FOG_MODE: {
+            GLenum mode = (GLenum)param;
+            switch (mode) {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = param;
+            break;
+        case GL_FOG_START:
+            mFog.start = param;
+            break;
+        case GL_FOG_END:
+            mFog.end = param;
+            break;
+        case GL_FOG_COLOR:
+            break;
+        default:
+            break;
+    }
+}
+
+void State::fogfv(GLenum pname, const GLfloat* params)
+{
+    switch (pname) {
+        case GL_FOG_MODE: {
+            GLenum mode = (GLenum)params[0];
+            switch (mode) {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = params[0];
+            break;
+        case GL_FOG_START:
+            mFog.start = params[0];
+            break;
+        case GL_FOG_END:
+            mFog.end = params[0];
+            break;
+        case GL_FOG_COLOR:
+            memcpy(&mFog.color, params, 4 * sizeof(GLfloat));
+            break;
+        default:
+            return;
+    }
+}
+
+void State::enableClientState(GLenum clientState)
+{
+    mEnabledClientStates.insert(clientState);
+}
+
+void State::disableClientState(GLenum clientState)
+{
+    mEnabledClientStates.erase(clientState);
+}
+
+bool State::isClientStateEnabled(GLenum clientState) {
+    return mEnabledClientStates.find(clientState) !=
+               mEnabledClientStates.end();
+}
+
+void State::drawTexOES(float x, float y, float z, float width, float height)
+{
+}
+
+void State::rotatef(float deg, float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::rotate(deg, angle::Vector3(x, y, z)));
+}
+
+void State::scalef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::scale(angle::Vector3(x, y, z)));
+}
+
+void State::translatef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::translate(angle::Vector3(x, y, z)));
+}
+
+void State::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mColor[0] = red;
+    mColor[1] = green;
+    mColor[2] = blue;
+    mColor[3] = alpha;
+}
+
+void State::clientActiveTexture(GLenum texture)
+{
+}
+
+void State::alphaFunc(GLenum func, GLfloat ref) {
+    mAlphaFunc = GL_ALWAYS;
+    mAlphaFuncRef = ref;
+}
+
+void State::clipPlanef(GLenum p, const GLfloat* eqn) {
+    auto& plane = mClipPlanes[p - GL_CLIP_PLANE0];
+    plane[0] = eqn[0];
+    plane[1] = eqn[1];
+    plane[2] = eqn[2];
+    plane[3] = eqn[3];
+}
+
+void State::getClipPlanef(GLenum plane, GLfloat* equation) {
+    const auto& clipPlane = mClipPlanes[plane - GL_CLIP_PLANE0];
+    equation[0] = clipPlane[0];
+    equation[1] = clipPlane[1];
+    equation[2] = clipPlane[2];
+    equation[3] = clipPlane[3];
+}
+
+void State::pointParameterf(GLenum pname, GLfloat param) {
+    switch (pname) {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = param;
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = param;
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = param;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+        default:
+            break;
+    }
+}
+
+void State::pointParameterfv(GLenum pname, const GLfloat* params) {
+    switch (pname) {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = params[0];
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = params[0];
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = params[0];
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            mPointDistanceAttenuation[0] = params[0];
+            mPointDistanceAttenuation[1] = params[1];
+            mPointDistanceAttenuation[2] = params[2];
+            break;
+        default:
+            break;
+    }
+}
+
+void State::pointSize(GLfloat size) {
+    mPointSize = size;
+}
+
+void State::logicOp(GLenum opcode) {
+    mLogicOp = opcode;
 }
 
 bool State::hasMappedBuffer(BufferBinding target) const
@@ -2479,5 +3319,30 @@ AttributesMask State::getAndResetDirtyCurrentValues() const
     mDirtyCurrentValues.reset();
     return retVal;
 }
+
+// Matrix stack utility functions
+angle::Mat4& State::currMatrix() {
+    return currMatrixStack().back();
+}
+
+State::MatrixStack& State::currMatrixStack() {
+    switch (mCurrMatrixMode) {
+    case GL_TEXTURE:
+        return mTextureMatrices[mActiveSampler];
+    case GL_PROJECTION:
+        return mProjMatrices;
+    case GL_MODELVIEW:
+        return mModelviewMatrices;
+    default:
+        fprintf(
+            stderr,
+            "error: matrix mode set to 0x%x!\n",
+            mCurrMatrixMode);
+    }
+
+    // Make compiler happy
+    return mModelviewMatrices;
+}
+
 
 }  // namespace gl
