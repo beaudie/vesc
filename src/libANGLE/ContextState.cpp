@@ -569,6 +569,170 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         return true;
     }
 
+    // GLES1-only parameters
+    switch (pname) {
+        case GL_SMOOTH_LINE_WIDTH_RANGE:
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_SMOOTH_POINT_SIZE_RANGE:
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_ALIASED_LINE_WIDTH_RANGE:
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_ALIASED_POINT_SIZE_RANGE:
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_MAX_LIGHTS:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_MODELVIEW_STACK_DEPTH:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_PROJECTION_STACK_DEPTH:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_TEXTURE_STACK_DEPTH:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_TEXTURE_UNITS:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_CLIP_PLANES:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_CURRENT_COLOR:
+            *type = GL_FLOAT;
+            *numParams = 4;
+            return true;
+        case GL_CURRENT_TEXTURE_COORDS:
+            *type = GL_FLOAT;
+            *numParams = 4;
+            return true;
+        case GL_CURRENT_NORMAL:
+            *type = GL_FLOAT;
+            *numParams = 3;
+            return true;
+        case GL_PROJECTION_MATRIX:
+        case GL_MODELVIEW_MATRIX:
+        case GL_TEXTURE_MATRIX:
+            *type = GL_FLOAT;
+            *numParams = 16;
+            return true;
+        case GL_VERTEX_ARRAY_STRIDE:
+        case GL_NORMAL_ARRAY_STRIDE:
+        case GL_COLOR_ARRAY_STRIDE:
+        case GL_TEXTURE_COORD_ARRAY_STRIDE:
+
+        case GL_VERTEX_ARRAY_SIZE:
+        case GL_COLOR_ARRAY_SIZE:
+        case GL_TEXTURE_COORD_ARRAY_SIZE:
+
+        case GL_VERTEX_ARRAY_TYPE:
+        case GL_NORMAL_ARRAY_TYPE:
+        case GL_COLOR_ARRAY_TYPE:
+        case GL_TEXTURE_COORD_ARRAY_TYPE:
+
+        case GL_VERTEX_ARRAY_BUFFER_BINDING:
+        case GL_NORMAL_ARRAY_BUFFER_BINDING:
+        case GL_COLOR_ARRAY_BUFFER_BINDING:
+        case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+
+        case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+        case GL_POINT_SIZE_ARRAY_TYPE_OES:
+        case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_CLIENT_ACTIVE_TEXTURE:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MATRIX_MODE:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MODELVIEW_STACK_DEPTH:
+        case GL_PROJECTION_STACK_DEPTH:
+        case GL_TEXTURE_STACK_DEPTH:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_FOG_COLOR:
+            *type = GL_FLOAT;
+            *numParams = 4;
+            return true;
+        case GL_FOG_DENSITY:
+        case GL_FOG_START:
+        case GL_FOG_END:
+            *type = GL_FLOAT;
+            *numParams = 1;
+            return true;
+        case GL_FOG_MODE:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_SHADE_MODEL:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_LIGHT_MODEL_AMBIENT:
+            *type = GL_FLOAT;
+            *numParams = 4;
+            return true;
+        case GL_POINT_SIZE:
+        case GL_POINT_SIZE_MIN:
+        case GL_POINT_SIZE_MAX:
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            *type = GL_FLOAT;
+            *numParams = 1;
+            return true;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            *type = GL_FLOAT;
+            *numParams = 3;
+            return true;
+        case GL_ALPHA_TEST_FUNC:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_ALPHA_TEST_REF:
+            *type = GL_FLOAT;
+            *numParams = 1;
+            return true;
+        case GL_LOGIC_OP_MODE:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+        case GL_POINT_SMOOTH_HINT:
+        case GL_LINE_SMOOTH_HINT:
+        case GL_FOG_HINT:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_BLEND_SRC:
+        case GL_BLEND_DST:
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        default:
+            fprintf(stderr, "%s: possibly unknown param 0x%x\n", __func__, pname);
+    }
+
     if (getClientVersion() < Version(3, 0))
     {
         return false;
@@ -658,6 +822,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
 
     if (getClientVersion() < Version(3, 1))
     {
+        fprintf(stderr, "%s: not 3.1. bail. pname 0x%x\n", __func__, pname);
         return false;
     }
 
@@ -747,6 +912,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         }
     }
 
+    fprintf(stderr, "%s: unknown: 0x%x\n", __func__, pname);
     return false;
 }
 

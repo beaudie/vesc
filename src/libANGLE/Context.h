@@ -12,6 +12,7 @@
 
 #include <set>
 #include <string>
+#include <unordered_map>
 
 #include "angle_gl.h"
 #include "common/MemoryBuffer.h"
@@ -61,7 +62,7 @@ class VertexArray;
 struct VertexAttribute;
 class ProgramPipeline;
 
-class Context final : public ValidationContext
+class Context : public ValidationContext
 {
   public:
     Context(rx::EGLImplFactory *implFactory,
@@ -232,10 +233,18 @@ class Context final : public ValidationContext
 
     // GL_OES_point_size_array
     void pointSizePointer(GLenum type, GLsizei stride, const void *pointer);
-
+ 
     // GL_OES_query_matrix
     GLbitfield queryMatrixx(GLfixed *mantissa, GLint *exponent);
 
+    // Coordinate generation
+    void texGenf(GLenum coord, GLenum pname, GLfloat param);
+    void texGenfv(GLenum coord, GLenum pname, const GLfloat* params);
+    void texGeni(GLenum coord, GLenum pname, GLint param);
+    void texGeniv(GLenum coord, GLenum pname, const GLint* params);
+    void getTexGeniv(GLenum coord, GLenum pname, GLint* params);
+    void getTexGenfv(GLenum coord, GLenum pname, GLfloat* params);
+    
     // OpenGL ES 2+
     void bindTexture(GLenum target, GLuint handle);
     void bindReadFramebuffer(GLuint framebufferHandle);
@@ -357,7 +366,7 @@ class Context final : public ValidationContext
     void getIntegerv(GLenum pname, GLint *params);
     void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
-    void getPointerv(GLenum pname, void **params) const;
+    void getPointerv(GLenum pname, void **params);
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
     void getIntegeri_v(GLenum target, GLuint index, GLint *data);
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
@@ -1192,6 +1201,12 @@ class Context final : public ValidationContext
     void updateCaps();
     void initWorkarounds();
 
+    void initGles1();
+    GLuint calcNextUnusedBufferObject();
+    void bindBufferPrivate(BufferBinding target, GLuint buffer);
+    GLint vertexArrayIndex(GLenum type) const;
+    void gles1_draw(bool indexed, GLenum mode, GLint first, GLsizei count, GLenum indexType, const GLvoid* indices);
+
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
 
@@ -1266,6 +1281,166 @@ class Context final : public ValidationContext
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable angle::ScratchBuffer mScratchBuffer;
     mutable angle::ScratchBuffer mZeroFilledBuffer;
+
+    // GLES1 emulation state
+    struct GLES1DrawTexState {
+        GLuint program;
+        GLuint vao;
+        GLuint ibo;
+        GLuint vbo;
+
+        GLint samplerLoc;
+    };
+
+    struct LightingBuffer {
+        GLint lightEnables[8];
+        GLfloat lightAmbients[4 * 8];
+        GLfloat lightDiffuses[4 * 8];
+        GLfloat lightSpeculars[4 * 8];
+        GLfloat lightPositions[4 * 8];
+        GLfloat lightDirections[3 * 8];
+        GLfloat spotlightExponents[8];
+        GLfloat spotlightCutoffAngles[8];
+        GLfloat attenuationConsts[8];
+        GLfloat attenuationLinears[8];
+        GLfloat attenuationQuadratics[8];
+    };
+
+    struct TexEnvBuffer {
+        GLfloat textureMatrices[16 * 4];
+
+        GLint modes[4];
+        GLint combineRgbs[4];
+        GLint combineAlphas[4];
+        GLint src0rgbs[4];
+        GLint src0alphas[4];
+        GLint src1rgbs[4];
+        GLint src1alphas[4];
+        GLint src2rgbs[4];
+        GLint src2alphas[4];
+        GLint op0rgbs[4];
+        GLint op0alphas[4];
+        GLint op1rgbs[4];
+        GLint op1alphas[4];
+        GLint op2rgbs[4];
+        GLint op2alphas[4];
+        GLfloat envColors[4 * 4];
+        GLfloat rgbScales[4];
+        GLfloat alphaScales[4];
+        GLint pointSpriteCoordReplaces[4];
+    };
+    
+    struct AttribPointer {
+        bool needsSaving;
+        GLint size;
+        GLenum type;
+        GLsizei stride;
+        const void* ptr;
+    };
+
+    struct GLES1DrawState {
+        GLuint program;
+
+        GLint projMatrixLoc;
+        GLint modelviewMatrixLoc;
+        GLint textureMatrixLoc;
+        GLint modelviewInvTrLoc;
+
+        GLint textureSampler0Loc;
+        GLint textureCubeSampler0Loc;
+        GLint textureSampler1Loc;
+        GLint textureCubeSampler1Loc;
+        GLint textureSampler2Loc;
+        GLint textureCubeSampler2Loc;
+        GLint textureSampler3Loc;
+        GLint textureCubeSampler3Loc;
+
+        GLint shadeModelFlatLoc;
+
+        GLint enableTexture2DLoc;
+        GLint enableTextureCubeMapLoc;
+        GLint enableLightingLoc;
+        GLint enableRescaleNormalLoc;
+        GLint enableNormalizeLoc;
+        GLint enableColorMaterialLoc;
+        GLint enableFogLoc;
+        GLint enableReflectionMapLoc;
+        GLint enableAlphaTestLoc;
+        GLint enableLogicOpLoc;
+
+        GLint alphaFuncLoc;
+        GLint alphaTestRefLoc;
+
+        GLint logicOpLoc;
+
+        GLint textureFormatLoc;
+        GLint textureEnvModeLoc;
+        GLint combineRgbLoc;
+        GLint combineAlphaLoc;
+        GLint src0rgbLoc;
+        GLint src0alphaLoc;
+        GLint src1rgbLoc;
+        GLint src1alphaLoc;
+        GLint src2rgbLoc;
+        GLint src2alphaLoc;
+        GLint op0rgbLoc;
+        GLint op0alphaLoc;
+        GLint op1rgbLoc;
+        GLint op1alphaLoc;
+        GLint op2rgbLoc;
+        GLint op2alphaLoc;
+        GLint textureEnvColorLoc;
+        GLint rgbScaleLoc;
+        GLint alphaScaleLoc;
+        GLint pointSpriteCoordReplaceLoc;
+
+        GLint materialAmbientLoc;
+        GLint materialDiffuseLoc;
+        GLint materialSpecularLoc;
+        GLint materialEmissiveLoc;
+        GLint materialSpecularExponentLoc;
+
+        GLint lightModelSceneAmbientLoc;
+        GLint lightModelTwoSidedLoc;
+
+        GLint lightEnablesLoc;
+        GLint lightAmbientsLoc;
+        GLint lightDiffusesLoc;
+        GLint lightSpecularsLoc;
+        GLint lightPositionsLoc;
+        GLint lightDirectionsLoc;
+        GLint lightSpotlightExponentsLoc;
+        GLint lightSpotlightCutoffAnglesLoc;
+        GLint lightAttenuationConstsLoc;
+        GLint lightAttenuationLinearsLoc;
+        GLint lightAttenuationQuadraticsLoc;
+
+        GLint fogModeLoc;
+        GLint fogDensityLoc;
+        GLint fogStartLoc;
+        GLint fogEndLoc;
+        GLint fogColorLoc;
+
+        GLint pointRasterizationLoc;
+        GLint pointSpriteEnabledLoc;
+        GLint pointSmoothEnabledLoc;
+        GLint pointSizeMinLoc;
+        GLint pointSizeMaxLoc;
+        GLint pointDistanceAttenuationLoc;
+
+        LightingBuffer lightingBuffer;
+        TexEnvBuffer texEnvBuffer;
+    };
+
+    struct GLES1EmulationState {
+        GLES1DrawTexState drawTex;
+        GLES1DrawState draw;
+        std::unordered_map<GLuint, GLuint> userBufferMap;
+        std::unordered_map<GLuint, GLuint> userBufferMapReverse;
+        GLuint nextUnusedBufferObject;
+    };
+
+    GLES1EmulationState mGlesEmu;
 };
 
 template <EntryPoint EP, typename... ArgsT>
