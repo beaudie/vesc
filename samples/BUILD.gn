@@ -26,6 +26,7 @@ static_library("sample_util") {
     "../:angle_common",
     "../:angle_util",
     "../:libEGL",
+    "../:libGLESv1_CM",
     "../:libGLESv2",
   ]
   public_configs = [ ":sample_util_config" ]
@@ -167,6 +168,36 @@ angle_sample("window_test") {
   ]
 }
 
+angle_sample("gles1_triangle") {
+  sources = [
+    "gles1/Triangle.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_2d") {
+  sources = [
+    "gles1/SimpleTexture2D.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_environment") {
+  sources = [
+    "gles1/SimpleTextureEnvironment.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_combine") {
+  sources = [
+    "gles1/SimpleTextureCombine.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_point_rasterization") {
+  sources = [
+    "gles1/SimplePointRasterization.cpp",
+  ]
+}
+
 group("all") {
   testonly = true
   deps = [
@@ -188,5 +219,6 @@ group("all") {
     ":texture_wrap",
     ":tri_fan_microbench",
     ":window_test",
+    ":gles1_triangle",
   ]
 }
