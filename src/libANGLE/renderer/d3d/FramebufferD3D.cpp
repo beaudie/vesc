@@ -322,6 +322,10 @@ bool FramebufferD3D::checkStatus(const gl::Context *context) const
 void FramebufferD3D::syncState(const gl::Context *context,
                                const gl::Framebuffer::DirtyBits &dirtyBits)
 {
+    // Generate a state serial. This serial is used in the program class to validate the cached
+    // output layout, and skip recomputation in the fast path.
+    mCurrentStateSerial = mRenderer->generateSerial();
+
     if (!mColorAttachmentsForRender.valid())
     {
         return;

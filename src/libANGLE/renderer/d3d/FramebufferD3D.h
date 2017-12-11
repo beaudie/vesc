@@ -16,6 +16,7 @@
 #include "common/Optional.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
+#include "libANGLE/renderer/renderer_utils.h"
 
 namespace gl
 {
@@ -102,6 +103,8 @@ class FramebufferD3D : public FramebufferImpl
 
     const gl::AttachmentList &getColorAttachmentsForRender(const gl::Context *context);
 
+    const Serial &getCurrentStateSerial() const { return mCurrentStateSerial; };
+
   private:
     virtual gl::Error clearImpl(const gl::Context *context, const ClearParameters &clearParams) = 0;
 
@@ -128,6 +131,8 @@ class FramebufferD3D : public FramebufferImpl
     RendererD3D *mRenderer;
     Optional<gl::AttachmentList> mColorAttachmentsForRender;
     gl::DrawBufferMask mCurrentActiveProgramOutputs;
+
+    Serial mCurrentStateSerial;
 };
 }
 

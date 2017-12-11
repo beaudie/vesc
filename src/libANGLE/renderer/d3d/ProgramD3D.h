@@ -517,6 +517,7 @@ class ProgramD3D : public ProgramImpl
     static unsigned int mCurrentSerial;
 
     Serial mCurrentVertexArrayStateSerial;
+    Serial mCurrentFramebufferStateSerial;
 };
 }  // namespace rx
 
