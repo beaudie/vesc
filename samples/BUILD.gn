@@ -14,20 +14,31 @@ config("sample_util_config") {
 
 
 static_library("sample_util") {
+
   sources = [
     "sample_util/SampleApplication.cpp",
     "sample_util/SampleApplication.h",
+    "sample_util/obj_utils.cpp",
+    "sample_util/obj_utils.h",
     "sample_util/texture_utils.cpp",
     "sample_util/texture_utils.h",
     "sample_util/tga_utils.cpp",
     "sample_util/tga_utils.h",
   ]
+
   deps = [
     "../:angle_common",
     "../:angle_util",
     "../:libEGL",
+    "../:libGLESv1_CM",
     "../:libGLESv2",
+    "//third_party/libpng:libpng",
   ]
+
+  include_dirs = [
+    "//third_party/libpng/src",
+  ]
+
   public_configs = [ ":sample_util_config" ]
 }
 
@@ -167,6 +178,58 @@ angle_sample("window_test") {
   ]
 }
 
+angle_sample("gles1_triangle") {
+  sources = [
+    "gles1/Triangle.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_2d") {
+  sources = [
+    "gles1/SimpleTexture2D.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_environment") {
+  sources = [
+    "gles1/SimpleTextureEnvironment.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_texture_combine") {
+  sources = [
+    "gles1/SimpleTextureCombine.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_point_rasterization") {
+  sources = [
+    "gles1/SimplePointRasterization.cpp",
+  ]
+}
+
+angle_sample("gles1_simple_point_sprite") {
+  sources = [
+    "gles1/SimplePointSprite.cpp",
+  ]
+}
+
+angle_sample("gles1_model") {
+  sources = [
+    "gles1/Model.cpp",
+  ]
+  data = [
+    "gles1/colored_cube_diffuse.png",
+    "gles1/colored_cube.obj",
+  ]
+}
+
+angle_sample("gles1_lighting") {
+  sources = [
+    "gles1/SimpleLighting.cpp",
+  ]
+}
+
 group("all") {
   testonly = true
   deps = [
@@ -188,5 +251,6 @@ group("all") {
     ":texture_wrap",
     ":tri_fan_microbench",
     ":window_test",
+    ":gles1_triangle",
   ]
 }
