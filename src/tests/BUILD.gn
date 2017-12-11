@@ -17,7 +17,7 @@ unittests_gypi = exec_script("//build/gypi_to_gn.py",
 declare_args() {
   # Don't build dEQP by default.
   build_angle_deqp_tests = false
-  build_angle_gles1_conform_tests = false
+  build_angle_gles1_conform_tests = true
 }
 
 if (build_with_chromium) {
