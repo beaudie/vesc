@@ -108,9 +108,10 @@ Matrix4 Matrix4::scale(const Vector3 &s)
 
 Matrix4 Matrix4::frustum(float l, float r, float b, float t, float n, float f)
 {
-    return Matrix4((2.0f * n) / (r - l), 0.0f, (r + l) / (r - l), 0.0f, 0.0f, (2.0f * n) / (t - b),
-                   (t + b) / (t - b), 0.0f, 0.0f, 0.0f, -(f + n) / (f - n),
-                   -(2.0f * f * n) / (f - n), 0.0f, 0.0f, -1.0f, 0.0f);
+    return Matrix4((2.0f * n) / (r - l), 0.0f, (r + l) / (r - l), 0.0f,
+                   0.0f, (2.0f * n) / (t - b), (t + b) / (t - b), 0.0f,
+                   0.0f, 0.0f, -(f + n) / (f - n), -(2.0f * f * n) / (f - n),
+                   0.0f, 0.0f, -1.0f, 0.0f);
 }
 
 Matrix4 Matrix4::perspective(float fovY, float aspectRatio, float nearZ, float farZ)
@@ -122,9 +123,10 @@ Matrix4 Matrix4::perspective(float fovY, float aspectRatio, float nearZ, float f
 
 Matrix4 Matrix4::ortho(float l, float r, float b, float t, float n, float f)
 {
-    return Matrix4(2.0f / (r - l), 0.0f, 0.0f, -(r + l) / (r - l), 0.0f, 2.0f / (t - b), 0.0f,
-                   -(t + b) / (t - b), 0.0f, 0.0f, -2.0f / (f - n), -(f + n) / (f - n), 0.0f, 0.0f,
-                   0.0f, 1.0f);
+    return Matrix4(2.0f / (r - l), 0.0f, 0.0f, -(r + l) / (r - l),
+                   0.0f, 2.0f / (t - b), 0.0f, -(t + b) / (t - b),
+                   0.0f, 0.0f, -2.0f / (f - n), -(f + n) / (f - n),
+                   0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Matrix4 Matrix4::rollPitchYaw(float roll, float pitch, float yaw)
