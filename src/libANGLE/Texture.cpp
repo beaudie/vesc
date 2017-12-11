@@ -124,6 +124,8 @@ TextureState::TextureState(GLenum target)
       mUsage(GL_NONE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
+      mCropU(0), mCropV(0), mCropW(0), mCropH(0),
+      mGenerateMipmapHint(false),
       mInitState(InitState::MayNeedInit)
 {
 }
@@ -1348,6 +1350,22 @@ const Format &Texture::getAttachmentFormat(GLenum /*binding*/, const ImageIndex 
 GLsizei Texture::getAttachmentSamples(const ImageIndex &imageIndex) const
 {
     return getSamples(imageIndex.type, 0);
+}
+
+void Texture::setCrop(const int* cropVals) {
+    mState.setCrop(cropVals);
+}
+
+void Texture::getCrop(int* cropVals) const {
+    mState.getCrop(cropVals);
+}
+
+void Texture::setGenerateMipmapHint(bool generate) {
+    mState.setGenerateMipmapHint(generate);
+}
+
+void Texture::getGenerateMipmapHint(bool* generate) const {
+    mState.getGenerateMipmapHint(generate);
 }
 
 void Texture::onAttach(const Context *context)
