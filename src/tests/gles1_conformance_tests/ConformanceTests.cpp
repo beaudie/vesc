@@ -102,6 +102,9 @@ extern long TexCombineExec(void);
 // GL_OES_matrix_palette
 extern long MatrixPaletteExec(void);
 
+// Test driver setup
+extern void ExtTestDriverSetup(void);
+
 #define CONFORMANCE_TEST_ERROR (-1)
 
 #ifdef __cplusplus
@@ -123,6 +126,7 @@ class GLES1ConformanceTest : public ANGLETest
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
         setConfigStencilBits(8);
+        ExtTestDriverSetup();
     }
 };
 
