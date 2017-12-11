@@ -31,6 +31,7 @@ SampleApplication::SampleApplication(const std::string &name,
                                      EGLint requestedRenderer)
     : mName(name), mWidth(width), mHeight(height), mRunning(false)
 {
+    fprintf(stderr, "%s: maj min %d %d\n", __func__, glesMajorVersion, glesMinorVersion);
     mEGLWindow.reset(new EGLWindow(glesMajorVersion, glesMinorVersion,
                                    EGLPlatformParameters(requestedRenderer)));
     mTimer.reset(CreateTimer());

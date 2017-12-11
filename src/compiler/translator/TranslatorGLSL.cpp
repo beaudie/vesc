@@ -222,6 +222,9 @@ void TranslatorGLSL::translate(TIntermBlock *root,
     }
 
     root->traverse(&outputGLSL);
+
+    fprintf(stderr, "%s: shader: %s\n", __func__, sink.c_str());
+
 }
 
 bool TranslatorGLSL::shouldFlattenPragmaStdglInvariantAll()

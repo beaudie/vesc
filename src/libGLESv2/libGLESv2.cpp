@@ -5,13 +5,18 @@
 //
 
 // libGLESv2.cpp: Implements the exported OpenGL ES 2.0 functions.
+// Also includes OpenGL ES 1.1 emulation.
 
 #include "libGLESv2/entry_points_gles_2_0_autogen.h"
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_0_autogen.h"
 #include "libGLESv2/entry_points_gles_3_1_autogen.h"
+#include "libGLESv2/entry_points_gles_1_1.h"
 
 #include "common/event_tracer.h"
+
+#include <GLES/gl.h>
+#include <GLES/glext.h>
 
 extern "C" {
 
@@ -2570,6 +2575,194 @@ void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum target,
 void GL_APIENTRY glRequestExtensionANGLE(const GLchar *name)
 {
     gl::RequestExtensionANGLE(name);
+}
+
+// GLES1
+
+#define GLES1_APIENTRY __attribute__((visibility("default")))
+
+void GLES1_APIENTRY glShadeModel(GLenum mode) {
+    gl::ShadeModel(mode);
+}
+
+void GLES1_APIENTRY glMatrixMode(GLenum mode) {
+    gl::MatrixMode(mode);
+}
+
+void GLES1_APIENTRY glLoadIdentity(void) {
+    gl::LoadIdentity();
+}
+
+void GLES1_APIENTRY glLoadMatrixf(const GLfloat* m) {
+    gl::LoadMatrixf(m);
+}
+
+void GLES1_APIENTRY glPushMatrix(void) {
+    gl::PushMatrix();
+}
+
+void GLES1_APIENTRY glPopMatrix(void) {
+    gl::PopMatrix();
+}
+
+void GLES1_APIENTRY glMultMatrixf(const GLfloat* m) {
+    gl::MultMatrixf(m);
+}
+
+void GLES1_APIENTRY glOrthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar) {
+    gl::Orthof(left, right, bottom, top, zNear, zFar);
+}
+
+void GLES1_APIENTRY glFrustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar) {
+    gl::Frustumf(left, right, bottom, top, zNear, zFar);
+}
+
+void GLES1_APIENTRY glTexEnvf(GLenum target, GLenum pname, GLfloat param) {
+    gl::TexEnvf(target, pname, param);
+}
+
+void GLES1_APIENTRY glTexEnvfv(GLenum target, GLenum pname, const GLfloat* params) {
+    gl::TexEnvfv(target, pname, params);
+}
+
+void GLES1_APIENTRY glTexEnvi(GLenum target, GLenum pname, GLint param) {
+    gl::TexEnvi(target, pname, param);
+}
+
+void GLES1_APIENTRY glTexEnviv(GLenum target, GLenum pname, const GLint* params) {
+    gl::TexEnviv(target, pname, params);
+}
+
+void GLES1_APIENTRY glGetTexEnvfv(GLenum env, GLenum pname, GLfloat* params) {
+    gl::GetTexEnvfv(env, pname, params);
+}
+
+void GLES1_APIENTRY glGetTexEnviv(GLenum env, GLenum pname, GLint* params) {
+    gl::GetTexEnviv(env, pname, params);
+}
+
+void GLES1_APIENTRY glTexGenf(GLenum coord, GLenum pname, GLfloat param) {
+    gl::TexGenf(coord, pname, param);
+}
+
+void GLES1_APIENTRY glTexGenfv(GLenum coord, GLenum pname, const GLfloat* params) {
+    gl::TexGenfv(coord, pname, params);
+}
+
+void GLES1_APIENTRY glTexGeni(GLenum coord, GLenum pname, GLint param) {
+    gl::TexGeni(coord, pname, param);
+}
+
+void GLES1_APIENTRY glTexGeniv(GLenum coord, GLenum pname, const GLint* params) {
+    gl::TexGeniv(coord, pname, params);
+}
+
+void GLES1_APIENTRY glGetTexGeniv(GLenum coord, GLenum pname, GLint* params) {
+    gl::GetTexGeniv(coord, pname, params);
+}
+
+void GLES1_APIENTRY glGetTexGenfv(GLenum coord, GLenum pname, GLfloat* params) {
+    gl::GetTexGenfv(coord, pname, params);
+}
+
+void GLES1_APIENTRY glMaterialf(GLenum face, GLenum pname, GLfloat param) {
+    gl::Materialf(face, pname, param);
+}
+
+void GLES1_APIENTRY glMaterialfv(GLenum face, GLenum pname, const GLfloat* params) {
+    gl::Materialfv(face, pname, params);
+}
+
+void GLES1_APIENTRY glGetMaterialfv(GLenum face, GLenum pname, GLfloat* params) {
+    gl::GetMaterialfv(face, pname, params);
+}
+
+void GLES1_APIENTRY glLightModelf(GLenum pname, GLfloat param) {
+    gl::LightModelf(pname, param);
+}
+
+void GLES1_APIENTRY glLightModelfv(GLenum pname, const GLfloat* params) {
+    gl::LightModelfv(pname, params);
+}
+
+void GLES1_APIENTRY glLightf(GLenum light, GLenum pname, GLfloat param) {
+    gl::Lightf(light, pname, param);
+}
+
+void GLES1_APIENTRY glLightfv(GLenum light, GLenum pname, const GLfloat* params) {
+    gl::Lightfv(light, pname, params);
+}
+
+void GLES1_APIENTRY glGetLightfv(GLenum light, GLenum pname, GLfloat* params) {
+    gl::GetLightfv(light, pname, params);
+}
+
+void GLES1_APIENTRY glMultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q) {
+    gl::MultiTexCoord4f(target, s, t, r, q);
+}
+
+void GLES1_APIENTRY glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz) {
+    gl::Normal3f(nx, ny, nz);
+}
+
+void GLES1_APIENTRY glFogf(GLenum pname, GLfloat param) {
+    gl::Fogf(pname, param);
+}
+
+void GLES1_APIENTRY glFogfv(GLenum pname, const GLfloat* params) {
+    gl::Fogfv(pname, params);
+}
+
+void GLES1_APIENTRY glEnableClientState(GLenum clientState) {
+    gl::EnableClientState(clientState);
+}
+
+void GLES1_APIENTRY glDisableClientState(GLenum clientState) {
+    gl::DisableClientState(clientState);
+}
+
+void GLES1_APIENTRY glDrawTexOES(float x, float y, float z, float width, float height) {
+    gl::DrawTexOES(x, y, z, width, height);
+}
+
+void GLES1_APIENTRY glRotatef(float angle, float x, float y, float z) {
+    gl::Rotatef(angle, x, y, z);
+}
+
+void GLES1_APIENTRY glScalef(float x, float y, float z) {
+    gl::Scalef(x, y, z);
+}
+
+void GLES1_APIENTRY glTranslatef(float x, float y, float z) {
+    gl::Translatef(x, y, z);
+}
+
+void GLES1_APIENTRY glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+    gl::Color4f(red, green, blue, alpha);
+}
+
+void GLES1_APIENTRY glClientActiveTexture(GLenum texture) {
+    gl::ClientActiveTexture(texture);
+}
+
+void GLES1_APIENTRY glVertexPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    gl::VertexPointer(size, type, stride, ptr);
+}
+
+void GLES1_APIENTRY glNormalPointer(GLenum type, GLsizei stride, const void* ptr) {
+    gl::NormalPointer(type, stride, ptr);
+}
+
+void GLES1_APIENTRY glColorPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    gl::ColorPointer(size, type, stride, ptr);
+}
+
+void GLES1_APIENTRY glPointSizePointerOES(GLenum type, GLsizei stride, const void* ptr) {
+    gl::PointSizePointerOES(type, stride, ptr);
+}
+
+void GLES1_APIENTRY glTexCoordPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    gl::TexCoordPointer(size, type, stride, ptr);
 }
 
 }  // extern "C"
