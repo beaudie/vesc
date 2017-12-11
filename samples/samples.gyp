@@ -228,5 +228,13 @@
             'includes': [ '../gyp/common_defines.gypi', ],
             'sources': [ 'WindowTest/WindowTest.cpp', ],
         },
+
+        {
+            'target_name': 'gles1_triangle',
+            'type': 'executable',
+            'dependencies': [ 'sample_util' ],
+            'includes': [ '../gyp/common_defines.gypi', ],
+            'sources': [ 'gles1/Triangle.cpp', ],
+        },
     ],
 }

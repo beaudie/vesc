@@ -753,6 +753,10 @@ void GL_APIENTRY DrawArrays(GLenum mode, GLint first, GLsizei count)
         if (context->skipValidation() || ValidateDrawArrays(context, mode, first, count))
         {
             context->drawArrays(mode, first, count);
+        } else {
+            fprintf(stderr, "%s: skipvalidation %d validation %d\n", __func__,
+                    context->skipValidation(),
+                    ValidateDrawArrays(context, mode, first, count));
         }
     }
 }
