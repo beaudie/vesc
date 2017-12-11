@@ -24,6 +24,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/GLES1Shaders.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
@@ -43,6 +44,12 @@
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
+
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
+#define GLES1LOG(fmt,...) \
+    fprintf(stderr, "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__); \
 
 namespace
 {
@@ -273,7 +280,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mTextureCaps,
                         mExtensions,
                         mLimitations,
-                        GetNoError(attribs)),
+                        GetClientVersion(attribs) <= Version(1, 1) ?
+                        true : GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
       mCompiler(),
       mConfig(config),
@@ -301,6 +309,17 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mGLState.initialize(this, GetDebug(attribs), GetBindGeneratesResource(attribs),
                         GetClientArraysEnabled(attribs), robustResourceInit,
                         mMemoryProgramCache != nullptr);
+
+    fprintf(stderr, "%s: client ver: %d %d\n", __func__,
+            getClientVersion().major,
+            getClientVersion().minor);
+
+    if (getClientVersion() <= Version(1, 1))
+    {
+        mState.setClientVersion(Version(3, 0));
+        mIsGles1 = true;
+        initGles1();
+    }
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -1781,9 +1800,13 @@ void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw());
-    ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
-    MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
+    if (mIsGles1) {
+        gles1_draw(false /* not indexed */, mode, first, count, 0, 0);
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
+        MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
+    }
 }
 
 void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount)
@@ -1796,8 +1819,12 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
 
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw());
-    ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+    if (mIsGles1) {
+        gles1_draw(true /* indexed */, mode, 0, count, type, indices);
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+    }
 }
 
 void Context::drawElementsInstanced(GLenum mode,
@@ -2859,6 +2886,187 @@ void Context::initWorkarounds()
     mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
 }
 
+void Context::initGles1()
+{
+
+    std::vector<const char*> srcs(1);
+    { // drawTexOES state
+        GLuint drawTexVShader = createShader(GL_VERTEX_SHADER);
+        srcs[0] = kGLES1DrawTexVShader;
+        shaderSource(drawTexVShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawTexVShader);
+
+        GLuint drawTexFShader = createShader(GL_FRAGMENT_SHADER);
+        srcs[0] = kGLES1DrawTexFShader;
+        shaderSource(drawTexFShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawTexFShader);
+
+        mGlesEmu.drawTex.program = createProgram();
+        attachShader(mGlesEmu.drawTex.program, drawTexVShader);
+        attachShader(mGlesEmu.drawTex.program, drawTexFShader);
+        linkProgram(mGlesEmu.drawTex.program);
+
+        {
+            mGlesEmu.drawTex.samplerLoc = getUniformLocation(mGlesEmu.drawTex.program, "tex_sampler");
+
+            genVertexArrays(1, &mGlesEmu.drawTex.vao);
+            genBuffers(1, &mGlesEmu.drawTex.ibo);
+            genBuffers(1, &mGlesEmu.drawTex.vbo);
+
+            static const uint32_t sDrawTexIbo[] = {
+                0, 1, 2, 0, 2, 3,
+            };
+
+            bindVertexArray(mGlesEmu.drawTex.vao);
+
+            bindBuffer(BufferBinding::ElementArray, mGlesEmu.drawTex.ibo);
+            bufferData(BufferBinding::ElementArray, sizeof(sDrawTexIbo), sDrawTexIbo, BufferUsage::StaticDraw);
+
+            bindBuffer(BufferBinding::Array, mGlesEmu.drawTex.vbo);
+
+            enableVertexAttribArray(0); // pos
+            enableVertexAttribArray(1); // texcoord
+
+            vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (GLvoid*)0);
+            vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                    (GLvoid*)(uintptr_t)(3 * sizeof(float)));
+
+            bindVertexArray(0);
+            bindBuffer(BufferBinding::Array, 0);
+            bindBuffer(BufferBinding::ElementArray, 0);
+        }
+    }
+
+    { // regular draw state
+        GLuint drawVShader = createShader(GL_VERTEX_SHADER);
+        srcs[0] = kGLES1DrawVShader;
+        shaderSource(drawVShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawVShader);
+        GLint stat;
+        std::string buf(4096, 0);
+        getShaderiv(drawVShader, GL_COMPILE_STATUS, &stat);
+        if (!stat) {
+            fprintf(stderr, "%s: vertex shader compile failed.\n", __func__);
+            getShaderInfoLog(drawVShader, 4095, nullptr, &buf[0]);
+            fprintf(stderr, "%s: info log: %s\n", __func__, buf.c_str());
+        }
+
+        GLuint drawFShader = createShader(GL_FRAGMENT_SHADER);
+        srcs[0] = kGLES1DrawFShader;
+        shaderSource(drawFShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawFShader);
+        getShaderiv(drawFShader, GL_COMPILE_STATUS, &stat);
+        if (!stat) {
+            fprintf(stderr, "%s: fragment shader compile failed.\n", __func__);
+            getShaderInfoLog(drawFShader, 4095, nullptr, &buf[0]);
+            fprintf(stderr, "%s: info log: %s\n", __func__, buf.c_str());
+        }
+
+        mGlesEmu.draw.program = createProgram();
+        attachShader(mGlesEmu.draw.program, drawVShader);
+        attachShader(mGlesEmu.draw.program, drawFShader);
+        linkProgram(mGlesEmu.draw.program);
+
+        {
+            GLES1DrawState& drawState = mGlesEmu.draw;
+            GLuint drawProg = drawState.program;
+
+            drawState.projMatrixLoc =
+                getUniformLocation(drawProg, "projection");
+            drawState.modelviewMatrixLoc =
+                getUniformLocation(drawProg, "modelview");
+            drawState.textureMatrixLoc =
+                getUniformLocation(drawProg, "texture_matrix");
+            drawState.modelviewInvTrLoc =
+                getUniformLocation(drawProg, "modelview_invtr");
+            drawState.textureSamplerLoc =
+                getUniformLocation(drawProg, "tex_sampler");
+            drawState.textureCubeSamplerLoc =
+                getUniformLocation(drawProg, "tex_cube_sampler");
+
+            drawState.enableTexture2DLoc =
+                getUniformLocation(drawProg, "enable_texture_2d");
+            drawState.enableTextureCubeMapLoc =
+                getUniformLocation(drawProg, "enable_texture_cube_map");
+            drawState.enableLightingLoc =
+                getUniformLocation(drawProg, "enable_lighting");
+            drawState.enableRescaleNormalLoc =
+                getUniformLocation(drawProg, "enable_rescale_normal");
+            drawState.enableNormalizeLoc =
+                getUniformLocation(drawProg, "enable_normalize");
+            drawState.enableColorMaterialLoc =
+                getUniformLocation(drawProg, "enable_color_material");
+            drawState.enableFogLoc =
+                getUniformLocation(drawProg, "enable_fog");
+            drawState.enableReflectionMapLoc =
+                getUniformLocation(drawProg, "enable_reflection_map");
+
+            drawState.textureEnvModeLoc =
+                getUniformLocation(drawProg, "texture_env_mode");
+            drawState.textureFormatLoc =
+                getUniformLocation(drawProg, "texture_format");
+
+            drawState.materialAmbientLoc =
+                getUniformLocation(drawProg, "material_ambient");
+            drawState.materialDiffuseLoc =
+                getUniformLocation(drawProg, "material_diffuse");
+            drawState.materialSpecularLoc =
+                getUniformLocation(drawProg, "material_specular");
+            drawState.materialEmissiveLoc =
+                getUniformLocation(drawProg, "material_emissive");
+            drawState.materialSpecularExponentLoc =
+                getUniformLocation(drawProg, "material_specular_exponent");
+
+            drawState.lightModelSceneAmbientLoc =
+                getUniformLocation(drawProg, "light_model_scene_ambient");
+            drawState.lightModelTwoSidedLoc =
+                getUniformLocation(drawProg, "light_model_two_sided");
+
+            drawState.lightEnablesLoc =
+                getUniformLocation(drawProg, "light_enables");
+            drawState.lightAmbientsLoc =
+                getUniformLocation(drawProg, "light_ambients");
+            drawState.lightDiffusesLoc =
+                getUniformLocation(drawProg, "light_diffuses");
+            drawState.lightSpecularsLoc =
+                getUniformLocation(drawProg, "light_speculars");
+            drawState.lightPositionsLoc =
+                getUniformLocation(drawProg, "light_positions");
+            drawState.lightDirectionsLoc =
+                getUniformLocation(drawProg, "light_directions");
+            drawState.lightSpotlightExponentsLoc =
+                getUniformLocation(drawProg, "light_spotlight_exponents");
+            drawState.lightSpotlightCutoffAnglesLoc =
+                getUniformLocation(drawProg, "light_spotlight_cutoff_angles");
+            drawState.lightAttenuationConstsLoc =
+                getUniformLocation(drawProg, "light_attenuation_consts");
+            drawState.lightAttenuationLinearsLoc =
+                getUniformLocation(drawProg, "light_attenuation_linears");
+            drawState.lightAttenuationQuadraticsLoc =
+                getUniformLocation(drawProg, "light_attenuation_quadratics");
+
+            drawState.fogModeLoc =
+                getUniformLocation(drawProg, "fog_mode");
+            drawState.fogDensityLoc =
+                getUniformLocation(drawProg, "fog_density");
+            drawState.fogStartLoc =
+                getUniformLocation(drawProg, "fog_start");
+            drawState.fogEndLoc =
+                getUniformLocation(drawProg, "fog_end");
+            drawState.fogColorLoc =
+                getUniformLocation(drawProg, "fog_color");
+
+            genVertexArrays(1, &drawState.vao);
+            genBuffers(1, &drawState.posVbo);
+            genBuffers(1, &drawState.normalVbo);
+            genBuffers(1, &drawState.colorVbo);
+            genBuffers(1, &drawState.pointsizeVbo);
+            genBuffers(1, &drawState.texcoordVbo);
+            genBuffers(1, &drawState.ibo);
+        }
+    }
+}
+
 Error Context::prepareForDraw()
 {
     syncRendererState();
@@ -3708,7 +3916,20 @@ void Context::hint(GLenum target, GLenum mode)
             mGLState.setFragmentShaderDerivativeHint(mode);
             break;
 
+        case GL_LINE_SMOOTH_HINT:
+            GLES1LOG("GLES1 TODO: GL_LINE_SMOOTH_HINT mode 0x%x", mode);
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            GLES1LOG("GLES1 TODO: GL_POINT_SMOOTH_HINT mode 0x%x", mode);
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            GLES1LOG("GLES1 TODO: GL_PERSPECTIVE_CORRECTION_HINT mode 0x%x", mode);
+            break;
+        case GL_FOG_HINT:
+            GLES1LOG("GLES1 TODO: GL_FOG_HINT mode 0x%x", mode);
+            break;
         default:
+            GLES1LOG("GLES1 TODO: Hint: 0x%x", target);
             UNREACHABLE();
             return;
     }
@@ -4062,8 +4283,11 @@ void Context::popDebugGroup()
 void Context::bufferData(BufferBinding target, GLsizeiptr size, const void *data, BufferUsage usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
-    ASSERT(buffer);
-    handleError(buffer->bufferData(this, target, data, size, usage));
+    if (!buffer) {
+        GLES1LOG("GLES1 TODO: Validate bindbuffer/bufferdata");
+    } else {
+        handleError(buffer->bufferData(this, target, data, size, usage));
+    }
 }
 
 void Context::bufferSubData(BufferBinding target,
@@ -5838,37 +6062,12 @@ void Context::clearDepthx(GLfixed depth)
     UNIMPLEMENTED();
 }
 
-void Context::clientActiveTexture(GLenum texture)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::clipPlanef(GLenum p, const GLfloat *eqn)
 {
     UNIMPLEMENTED();
 }
 
 void Context::clipPlanex(GLenum plane, const GLfixed *equation)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::colorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
     UNIMPLEMENTED();
 }
@@ -5883,37 +6082,12 @@ void Context::depthRangex(GLfixed n, GLfixed f)
     UNIMPLEMENTED();
 }
 
-void Context::disableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::enableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::fogx(GLenum pname, GLfixed param)
 {
     UNIMPLEMENTED();
 }
 
 void Context::fogxv(GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
     UNIMPLEMENTED();
 }
@@ -5943,32 +6117,12 @@ void Context::getFixedv(GLenum pname, GLfixed *params)
     UNIMPLEMENTED();
 }
 
-void Context::getLightfv(GLenum light, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::getLightxv(GLenum light, GLenum pname, GLfixed *params)
 {
     UNIMPLEMENTED();
 }
 
-void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::getMaterialxv(GLenum face, GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexEnviv(GLenum target, GLenum pname, GLint *params)
 {
     UNIMPLEMENTED();
 }
@@ -5983,14 +6137,139 @@ void Context::getTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
     UNIMPLEMENTED();
 }
 
-void Context::lightModelf(GLenum pname, GLfloat param)
+void Context::shadeModel(GLenum mode)
+{
+    mGLState.shadeModel(mode);
+}
+
+void Context::matrixMode(GLenum mode)
+{
+    mGLState.matrixMode(mode);
+}
+
+void Context::loadIdentity()
+{
+    mGLState.loadIdentity();
+}
+
+void Context::loadMatrixf(const GLfloat* m)
+{
+    mGLState.loadMatrixf(m);
+}
+
+void Context::loadMatrixx(const GLfixed *m)
 {
     UNIMPLEMENTED();
 }
 
-void Context::lightModelfv(GLenum pname, const GLfloat *params)
+void Context::pushMatrix()
 {
-    UNIMPLEMENTED();
+    mGLState.pushMatrix();
+}
+
+void Context::popMatrix()
+{
+    mGLState.popMatrix();
+}
+
+void Context::multMatrixf(const GLfloat* m)
+{
+    mGLState.multMatrixf(m);
+}
+
+void Context::orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    mGLState.orthof(left, right, bottom, top, zNear, zFar);
+}
+
+void Context::frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+    mGLState.frustumf(left, right, bottom, top, zNear, zFar);
+}
+
+void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    mGLState.texEnvf(target, pname, param);
+}
+
+void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+{
+    mGLState.texEnvfv(target, pname, params);
+}
+
+void Context::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    mGLState.texEnvi(target, pname, param);
+}
+
+void Context::texEnviv(GLenum target, GLenum pname, const GLint* params)
+{
+    mGLState.texEnviv(target, pname, params);
+}
+
+void Context::getTexEnvfv(GLenum env, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexEnvfv(env, pname, params);
+}
+
+void Context::getTexEnviv(GLenum env, GLenum pname, GLint* params)
+{
+    mGLState.getTexEnviv(env, pname, params);
+}
+
+void Context::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mGLState.texGenf(coord, pname, param);
+}
+
+void Context::texGenfv(GLenum coord, GLenum pname, const GLfloat* params)
+{
+    mGLState.texGenfv(coord, pname, params);
+}
+
+void Context::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mGLState.texGeni(coord, pname, param);
+}
+
+void Context::texGeniv(GLenum coord, GLenum pname, const GLint* params)
+{
+    mGLState.texGeniv(coord, pname, params);
+}
+
+void Context::getTexGeniv(GLenum coord, GLenum pname, GLint* params)
+{
+    mGLState.getTexGeniv(coord, pname, params);
+}
+
+void Context::getTexGenfv(GLenum coord, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexGenfv(coord, pname, params);
+}
+
+void Context::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    mGLState.materialf(face, pname, param);
+}
+
+void Context::materialfv(GLenum face, GLenum pname, const GLfloat* params)
+{
+    mGLState.materialfv(face, pname, params);
+}
+
+void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat* params)
+{
+    mGLState.getMaterialfv(face, pname, params);
+}
+
+void Context::lightModelf(GLenum pname, GLfloat param)
+{
+    mGLState.lightModelf(pname, param);
+}
+
+void Context::lightModelfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.lightModelfv(pname, params);
 }
 
 void Context::lightModelx(GLenum pname, GLfixed param)
@@ -6005,12 +6284,17 @@ void Context::lightModelxv(GLenum pname, const GLfixed *param)
 
 void Context::lightf(GLenum light, GLenum pname, GLfloat param)
 {
-    UNIMPLEMENTED();
+    mGLState.lightf(light, pname, param);
 }
 
 void Context::lightfv(GLenum light, GLenum pname, const GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.lightfv(light, pname, params);
+}
+
+void Context::getLightfv(GLenum light, GLenum pname, GLfloat* params)
+{
+    mGLState.getLightfv(light, pname, params);
 }
 
 void Context::lightx(GLenum light, GLenum pname, GLfixed param)
@@ -6028,32 +6312,7 @@ void Context::lineWidthx(GLfixed width)
     UNIMPLEMENTED();
 }
 
-void Context::loadIdentity()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadMatrixf(const GLfloat *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadMatrixx(const GLfixed *m)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::logicOp(GLenum opcode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialf(GLenum face, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialfv(GLenum face, GLenum pname, const GLfloat *params)
 {
     UNIMPLEMENTED();
 }
@@ -6068,16 +6327,6 @@ void Context::materialxv(GLenum face, GLenum pname, const GLfixed *param)
     UNIMPLEMENTED();
 }
 
-void Context::matrixMode(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multMatrixf(const GLfloat *m)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::multMatrixx(const GLfixed *m)
 {
     UNIMPLEMENTED();
@@ -6085,7 +6334,7 @@ void Context::multMatrixx(const GLfixed *m)
 
 void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 {
-    UNIMPLEMENTED();
+    mGLState.multiTexCoord4f(target, s, t, r, q);
 }
 
 void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
@@ -6095,20 +6344,10 @@ void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, G
 
 void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
 {
-    UNIMPLEMENTED();
+    mGLState.normal3f(nx, ny, nz);
 }
 
 void Context::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normalPointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
     UNIMPLEMENTED();
 }
@@ -6153,21 +6392,6 @@ void Context::polygonOffsetx(GLfixed factor, GLfixed units)
     UNIMPLEMENTED();
 }
 
-void Context::popMatrix()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pushMatrix()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
 {
     UNIMPLEMENTED();
@@ -6178,42 +6402,7 @@ void Context::sampleCoveragex(GLclampx value, GLboolean invert)
     UNIMPLEMENTED();
 }
 
-void Context::scalef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::scalex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::shadeModel(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvi(GLenum target, GLenum pname, GLint param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnviv(GLenum target, GLenum pname, const GLint *params)
 {
     UNIMPLEMENTED();
 }
@@ -6238,22 +6427,7 @@ void Context::texParameterxv(GLenum target, GLenum pname, const GLfixed *params)
     UNIMPLEMENTED();
 }
 
-void Context::translatef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::translatex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::vertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexf(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
 {
     UNIMPLEMENTED();
 }
@@ -6313,15 +6487,328 @@ void Context::weightPointer(GLint size, GLenum type, GLsizei stride, const void 
     UNIMPLEMENTED();
 }
 
-void Context::pointSizePointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
 GLbitfield Context::queryMatrixx(GLfixed *mantissa, GLint *exponent)
 {
     UNIMPLEMENTED();
     return 0;
+}
+
+void Context::fogf(GLenum pname, GLfloat param)
+{
+    mGLState.fogf(pname, param);
+}
+
+void Context::fogfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.fogfv(pname, params);
+}
+
+void Context::enableClientState(GLenum clientState)
+{
+    switch (clientState) {
+        case GL_VERTEX_ARRAY:
+            enableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            enableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            enableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            enableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            enableVertexAttribArray(4);
+            break;
+        default:
+            break;
+    }
+    mGLState.enableClientState(clientState);
+}
+
+void Context::disableClientState(GLenum clientState)
+{
+    switch (clientState) {
+        case GL_VERTEX_ARRAY:
+            disableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            disableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            disableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            disableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            disableVertexAttribArray(4);
+            break;
+        default:
+            break;
+    }
+    mGLState.disableClientState(clientState);
+}
+
+void Context::drawTexf(float x, float y, float z, float width, float height)
+{
+    mGLState.drawTexOES(x, y, z, width, height);
+
+    // get viewport
+    GLint viewport[4] = {};
+    getIntegerv(GL_VIEWPORT,viewport);
+
+    // track previous vbo/ibo
+    GLuint prev_vbo;
+    GLuint prev_ibo;
+    getIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&prev_vbo);
+    getIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint*)&prev_ibo);
+
+    GLuint prog = mGlesEmu.drawTex.program;
+    GLuint vbo = mGlesEmu.drawTex.vbo;
+    GLuint vao = mGlesEmu.drawTex.vao;
+
+    useProgram(prog);
+    bindVertexArray(vao);
+
+    // This is not strictly needed, but Swiftshader indirect VAO
+    // can forget its ELEMENT_ARRAY_BUFFER binding.
+    // bindBuffer(BufferBinding::ElementArray, m_drawTexOESCoreState.ibo);
+
+    // Compute screen coordinates for our texture.
+    // Recenter, rescale. (e.g., [0, 0, 1080, 1920] -> [-1, -1, 1, 1])
+    float xNdc = 2.0f * (float)(x - viewport[0] - viewport[2] / 2) / (float)viewport[2];
+    float yNdc = 2.0f * (float)(y - viewport[1] - viewport[3] / 2) / (float)viewport[3];
+    float wNdc = 2.0f * (float)width / (float)viewport[2];
+    float hNdc = 2.0f * (float)height / (float)viewport[3];
+    z = z >= 1.0f ? 1.0f : z;
+    z = z <= 0.0f ? 0.0f : z;
+    float zNdc = z * 2.0f - 1.0f;
+
+    for (int i = 0; i < 4; i++) {
+        if (mGLState.isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_2D)) {
+            Texture* toDraw = mGLState.getSamplerTexture(i, GL_TEXTURE_2D);
+            if (toDraw) {
+                int cropRect[4] = {};
+                toDraw->getCrop(cropRect);
+
+                float texCropU = (float)cropRect[0];
+                float texCropV = (float)cropRect[1];
+                float texCropW = (float)cropRect[2];
+                float texCropH = (float)cropRect[3];
+
+                float texW = (float)(toDraw->getWidth(GL_TEXTURE_2D, 0));
+                float texH = (float)(toDraw->getHeight(GL_TEXTURE_2D, 0));
+
+                // Now we know the vertex attributes (pos, texcoord).
+                // Our vertex attributes are formatted with interleaved
+                // position and texture coordinate:
+                float vertexAttrs[] = {
+                    xNdc, yNdc, zNdc,
+                    texCropU / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc, zNdc,
+                    (texCropU + texCropW) / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc + hNdc, zNdc,
+                    (texCropU + texCropW) / texW, (texCropV + texCropH) / texH,
+
+                    xNdc, yNdc + hNdc, zNdc,
+                    texCropU / texW, (texCropV + texCropH) / texH,
+                };
+
+                bindBuffer(BufferBinding::Array, vbo);
+                bufferData(BufferBinding::Array, sizeof(vertexAttrs),
+                                vertexAttrs, BufferUsage::StreamDraw);
+            }
+
+            activeTexture(GL_TEXTURE0 + i);
+            uniform1i(mGlesEmu.drawTex.samplerLoc, i);
+            drawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+    }
+
+    bindVertexArray(0);
+    useProgram(0);
+    bindBuffer(BufferBinding::Array, prev_vbo);
+    bindBuffer(BufferBinding::ElementArray, prev_ibo);
+}
+
+void Context::rotatef(float angle, float x, float y, float z)
+{
+    mGLState.rotatef(angle, x, y, z);
+}
+
+void Context::scalef(float x, float y, float z)
+{
+    mGLState.scalef(x, y, z);
+}
+
+void Context::translatef(float x, float y, float z)
+{
+    mGLState.translatef(x, y, z);
+}
+
+void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mGLState.color4f(red, green, blue, alpha);
+}
+
+void Context::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::clientActiveTexture(GLenum texture)
+{
+    mGLState.clientActiveTexture(texture);
+}
+
+void Context::vertexPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(0, size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::normalPointer(GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(1, 3, type, GL_FALSE, stride, ptr);
+}
+
+void Context::colorPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(2, size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::pointSizePointer(GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(3, 1, type, GL_FALSE, stride, ptr);
+}
+
+void Context::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(4, size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::gles1_draw(bool indexed, GLenum mode, GLint first, GLsizei count, GLenum indexType, const GLvoid* indices) {
+    const auto& drawState = mGlesEmu.draw;
+
+    useProgram(mGlesEmu.draw.program);
+
+    if (!mGLState.isClientStateEnabled(GL_NORMAL_ARRAY)) {
+        vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, mGLState.getNormal());
+        vertexAttribDivisor(1, 1);
+        enableVertexAttribArray(1);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        vertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, mGLState.getColor());
+        vertexAttribDivisor(2, 1);
+        enableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_TEXTURE_COORD_ARRAY)) {
+        vertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, mGLState.getMultiTexCoord());
+        vertexAttribDivisor(4, 1);
+        enableVertexAttribArray(4);
+    }
+
+    {
+        uniformMatrix4fv(drawState.projMatrixLoc, 1, GL_FALSE, mGLState.projMatrix().data());
+        uniformMatrix4fv(drawState.modelviewMatrixLoc, 1, GL_FALSE, mGLState.modelviewMatrix().data());
+        uniformMatrix4fv(drawState.modelviewInvTrLoc, 1, GL_FALSE, mGLState.modelviewMatrix().transpose().inverse().data());
+        uniformMatrix4fv(drawState.textureMatrixLoc, 1, GL_FALSE, mGLState.textureMatrix().data());
+    }
+
+    {
+
+        bool texture2D_enabled;
+        GLenum texture2D_enabled_unit;
+        mGLState.getUnitForEnabledTarget(
+            GL_TEXTURE_2D,
+            &texture2D_enabled,
+            &texture2D_enabled_unit);
+
+        bool textureCubeMap_enabled;
+        GLenum textureCubeMap_enabled_unit;
+        mGLState.getUnitForEnabledTarget(
+            GL_TEXTURE_CUBE_MAP,
+            &textureCubeMap_enabled,
+            &textureCubeMap_enabled_unit);
+
+        if (textureCubeMap_enabled) {
+
+            /* OES_texture_cube_map.txt
+             Texturing is enabled or disabled using the generic Enable and
+             Disable commands, respectively, with the symbolic constants
+             TEXTURE_2D or TEXTURE_CUBE_MAP_OES to enable the two-dimensional
+             or cube map texturing respectively.  If the cube map texture and
+             the two- dimensional texture are enabled, then cube map texturing
+             is used.*
+             * */
+
+            texture2D_enabled = false;
+        }
+
+        // Assumptions / constraints:
+        // 1. Only expose 4 texture units to GLES1 user.
+        // 2. No texture unit has more than one texture target bound.
+        uint32_t disabledImageUnit = 7;
+
+        if (!texture2D_enabled) {
+            uniform1i(drawState.textureSamplerLoc, disabledImageUnit);
+            disabledImageUnit--;
+        } else {
+            uniform1i(drawState.textureSamplerLoc, texture2D_enabled_unit - GL_TEXTURE0);
+        }
+
+        if (!textureCubeMap_enabled) {
+            uniform1i(drawState.textureCubeSamplerLoc, disabledImageUnit);
+            disabledImageUnit--;
+        } else {
+            uniform1i(drawState.textureCubeSamplerLoc, textureCubeMap_enabled_unit - GL_TEXTURE0);
+        }
+
+        uniform1i(drawState.enableTexture2DLoc, texture2D_enabled);
+        uniform1i(drawState.enableTextureCubeMapLoc, textureCubeMap_enabled);
+
+        // TODO: Lighting / fog
+        uniform1i(drawState.enableLightingLoc, 0);
+        uniform1i(drawState.enableRescaleNormalLoc, 0);
+        uniform1i(drawState.enableNormalizeLoc, 0);
+        uniform1i(drawState.enableColorMaterialLoc, 0);
+        uniform1i(drawState.enableFogLoc, 0);
+        uniform1i(drawState.enableReflectionMapLoc, 0);
+    }
+
+    if (indexed) {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, indexType, indices));
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        disableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_NORMAL_ARRAY)) {
+        vertexAttribDivisor(1, 0);
+        disableVertexAttribArray(1);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        vertexAttribDivisor(2, 0);
+        disableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_TEXTURE_COORD_ARRAY)) {
+        vertexAttribDivisor(4, 0);
+        disableVertexAttribArray(4);
+    }
+
+    useProgram(0);
 }
 
 }  // namespace gl

@@ -11,6 +11,9 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/ResourceManager.h"
 
+#define GLES1LOG(fmt,...) \
+    fprintf(stderr, "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__); \
+
 namespace gl
 {
 
@@ -569,6 +572,73 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         return true;
     }
 
+    // GLES1-only parameters
+    switch (pname) {
+        case GL_SMOOTH_LINE_WIDTH_RANGE:
+            GLES1LOG("GL_SMOOTH_LINE_WIDTH_RANGE");
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_SMOOTH_POINT_SIZE_RANGE:
+            GLES1LOG("GL_SMOOTH_POINT_SIZE_RANGE");
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_ALIASED_LINE_WIDTH_RANGE:
+            GLES1LOG("GL_ALIASED_LINE_WIDTH_RANGE");
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_ALIASED_POINT_SIZE_RANGE:
+            GLES1LOG("GL_ALIASED_POINT_SIZE_RANGE");
+            *type = GL_INT;
+            *numParams = 2;
+            return true;
+        case GL_MAX_LIGHTS:
+            GLES1LOG("GL_MAX_LIGHTS");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_MODELVIEW_STACK_DEPTH:
+            GLES1LOG("GL_MAX_MODELVIEW_STACK_DEPTH");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_PROJECTION_STACK_DEPTH:
+            GLES1LOG("GL_MAX_PROJECTION_STACK_DEPTH");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_TEXTURE_STACK_DEPTH:
+            GLES1LOG("GL_MAX_TEXTURE_STACK_DEPTH");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_TEXTURE_UNITS:
+            GLES1LOG("GL_MAX_TEXTURE_UNITS");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_MAX_CLIP_PLANES:
+            GLES1LOG("GL_MAX_CLIP_PLANES");
+            *type = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_CURRENT_COLOR:
+            GLES1LOG("GL_CURRENT_COLOR");
+            *type = GL_FLOAT;
+            *numParams = 4;
+            return true;
+        case GL_PROJECTION_MATRIX:
+        case GL_MODELVIEW_MATRIX:
+        case GL_TEXTURE_MATRIX:
+            *type = GL_FLOAT;
+            *numParams = 16;
+            return true;
+        default:
+            fprintf(stderr, "%s: possibly unknown param 0x%x\n", __func__, pname);
+    }
+
     if (getClientVersion() < Version(3, 0))
     {
         return false;
@@ -658,6 +728,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
 
     if (getClientVersion() < Version(3, 1))
     {
+        fprintf(stderr, "%s: not 3.1. bail. pname 0x%x\n", __func__, pname);
         return false;
     }
 
@@ -747,6 +818,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         }
     }
 
+    fprintf(stderr, "%s: unknown: 0x%x\n", __func__, pname);
     return false;
 }
 
