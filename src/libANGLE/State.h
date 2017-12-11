@@ -11,10 +11,12 @@
 
 #include <bitset>
 #include <memory>
+#include <unordered_set>
 
 #include "common/Color.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
+#include "common/matrix_utils.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
@@ -27,12 +29,53 @@
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/angletypes.h"
 
+using IVec4 = std::array<GLint, 4>;
+using UIVec4 = std::array<GLuint, 4>;
+using UBVec4 = std::array<GLubyte, 4>;
+using Vec3 = std::array<GLfloat, 3>;
+using Vec4 = std::array<GLfloat, 4>;
+
 namespace gl
 {
 class Query;
 class VertexArray;
 class Context;
 struct Caps;
+
+struct Material {
+    Vec4 ambient;
+    Vec4 diffuse;
+    Vec4 specular;
+    Vec4 emissive;
+    GLfloat specularExponent;
+};
+
+struct LightModel {
+    Vec4 color;
+    bool twoSided;
+};
+
+struct Light {
+    bool enabled;
+    Vec4 ambient;
+    Vec4 diffuse;
+    Vec4 specular;
+    Vec4 position;
+    Vec3 direction;
+    GLfloat spotlightExponent;
+    GLfloat spotlightCutoffAngle;
+    GLfloat attenuationConst;
+    GLfloat attenuationLinear;
+    GLfloat attenuationQuadratic;
+};
+
+struct Fog {
+    GLenum mode;
+    float density;
+    float start;
+    float end;
+    Vec4 color;
+};
 
 class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 {
@@ -180,6 +223,9 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     GLuint getSamplerTextureId(unsigned int sampler, GLenum type) const;
     void detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture);
     void initializeZeroTextures(const Context *context, const TextureMap &zeroTextures);
+    void setTextureTargetEnabled(GLenum target, bool enabled);
+    bool isTextureTargetEnabled(GLenum unit, GLenum textureTarget) const;
+    void getUnitForEnabledTarget(GLenum textureTarget, bool* everEnabled, GLenum* whichUnit);
 
     // Sampler object binding manipulation
     void setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler);
@@ -341,6 +387,89 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     bool hasMappedBuffer(BufferBinding target) const;
     bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
+
+    // GLES1-specific set/get
+    void shadeModel(GLenum mode);
+    GLenum getShadeModel() const;
+
+    void matrixMode(GLenum mode);
+    void loadIdentity();
+    void loadMatrixf(const GLfloat* m);
+    void pushMatrix();
+    void popMatrix();
+    void multMatrixf(const GLfloat* m);
+
+    void orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
+    void frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
+
+    void texEnvf(GLenum target, GLenum pname, GLfloat param);
+    void texEnvfv(GLenum target, GLenum pname, const GLfloat* params);
+    void texEnvi(GLenum target, GLenum pname, GLint param);
+    void texEnviv(GLenum target, GLenum pname, const GLint* params);
+    void getTexEnvfv(GLenum env, GLenum pname, GLfloat* params);
+    void getTexEnviv(GLenum env, GLenum pname, GLint* params);
+
+    void texGenf(GLenum coord, GLenum pname, GLfloat param);
+    void texGenfv(GLenum coord, GLenum pname, const GLfloat* params);
+    void texGeni(GLenum coord, GLenum pname, GLint param);
+    void texGeniv(GLenum coord, GLenum pname, const GLint* params);
+    void getTexGeniv(GLenum coord, GLenum pname, GLint* params);
+    void getTexGenfv(GLenum coord, GLenum pname, GLfloat* params);
+
+    void materialf(GLenum face, GLenum pname, GLfloat param);
+    void materialfv(GLenum face, GLenum pname, const GLfloat* params);
+    void getMaterialfv(GLenum face, GLenum pname, GLfloat* params);
+
+    void lightModelf(GLenum pname, GLfloat param);
+    void lightModelfv(GLenum pname, const GLfloat* params);
+    void lightf(GLenum light, GLenum pname, GLfloat param);
+    void lightfv(GLenum light, GLenum pname, const GLfloat* params);
+    void getLightfv(GLenum light, GLenum pname, GLfloat* params);
+
+    void multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
+    void normal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+
+    void fogf(GLenum pname, GLfloat param);
+    void fogfv(GLenum pname, const GLfloat* params);
+
+    void enableClientState(GLenum clientState);
+    void disableClientState(GLenum clientState);
+    bool isClientStateEnabled(GLenum clientState);
+    float* getColor() { return mColor.data(); }
+    float* getNormal() { return mNormal.data(); }
+    float* getMultiTexCoord() { return mMultiTexCoords[mActiveSampler].data(); }
+
+    void drawTexOES(float x, float y, float z, float width, float height);
+
+    void rotatef(float deg, float x, float y, float z);
+    void scalef(float x, float y, float z);
+    void translatef(float x, float y, float z);
+
+    void color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+    void color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha);
+
+    void clientActiveTexture(GLenum texture);
+
+    // GLES1 TODO: Other API calls
+    void alphaFunc(GLenum func, GLfloat ref);
+    void clipPlanef(GLenum p, const GLfloat* eqn);
+    void getClipPlanef(GLenum plane, GLfloat* equation);
+    void pointParameterf(GLenum pname, GLfloat param);
+    void pointParameterfv(GLenum pname, const GLfloat* param);
+    void pointSize(GLfloat size);
+    void logicOp(GLenum opcode);
+
+    // Getters for GLES1 state
+    angle::Mat4 projMatrix() { return mProjMatrices.back(); }
+    angle::Mat4 modelviewMatrix() { return mModelviewMatrices.back(); }
+    angle::Mat4 textureMatrix() { return mTextureMatrices[mActiveSampler].back(); }
+
+    const Material& getMaterialInfo() const { return mMaterial; }
+    const LightModel& getLightModelInfo() const { return mLightModel; }
+    const Light& getLightInfo(unsigned int i) const { return mLights[i]; }
+    const Fog& getFogInfo() const { return mFog; }
+
+    GLenum getTextureEnvMode() { return mTexUnitEnvs[mActiveSampler][GL_TEXTURE_ENV_MODE].val.intVal[0]; }
 
     // Sets the dirty bit for the program executable.
     void onProgramExecutableChange(Program *program);
@@ -598,6 +727,78 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
+
+    // GLES1 state
+    union GLVal {
+        Vec4 floatVal;
+        IVec4 intVal;
+        UBVec4 ubyteVal;
+        UIVec4 enumVal;
+    };
+
+    struct GLValTyped {
+        GLenum type;
+        GLVal val;
+    };
+
+    using TexEnv = std::unordered_map<GLenum, GLValTyped>;
+    using TexUnitEnvs = std::vector<TexEnv>;
+    using TexGens = std::vector<TexEnv>;
+    using MatrixStack = std::vector<angle::Mat4>;
+
+    int mMaxMultitextureUnits;
+    int mMaxLights;
+    int mMaxMatrixStackDepth;
+    int mMaxClipPlanes;
+
+    GLenum mShadeModel;
+    GLenum mCurrMatrixMode;
+
+    Vec4 mColor;
+    Vec3 mNormal;
+    std::vector<Vec4> mMultiTexCoords;
+
+    std::vector<std::unordered_set<GLenum> > mTexUnitEnables;
+    TexUnitEnvs mTexUnitEnvs;
+    TexGens mTexGens;
+
+    MatrixStack mProjMatrices;
+    MatrixStack mModelviewMatrices;
+    std::vector<MatrixStack> mTextureMatrices;
+    angle::Mat4& currMatrix();
+    MatrixStack& currMatrixStack();
+
+    bool mLineSmoothEnabled;
+    bool mPointSmoothEnabled;
+    bool mPointSpriteEnabled;
+    bool mAlphaTestEnabled;
+    bool mLogicOpEnabled;
+    bool mLightingEnabled;
+    bool mFogEnabled;
+    bool mRescaleNormalEnabled;
+    bool mNormalizeEnabled;
+    bool mColorMaterialEnabled;
+    bool mReflecitonMapEnabled;
+
+    Material mMaterial;
+    LightModel mLightModel;
+    std::vector<Light> mLights;
+    Fog mFog = {};
+
+    std::unordered_set<GLenum> mEnabledClientStates;
+
+    GLenum mAlphaFunc;
+    GLfloat mAlphaFuncRef;
+    std::vector<bool> mClipPlaneEnabled;
+    std::vector<Vec4> mClipPlanes;
+
+    GLfloat mPointSizeMin;
+    GLfloat mPointSizeMax;
+    GLfloat mPointFadeThresholdSize;
+    Vec3 mPointDistanceAttenuation;
+    GLfloat mPointSize;
+
+    GLenum mLogicOp;
 
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
