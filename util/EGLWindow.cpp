@@ -305,6 +305,7 @@ bool EGLWindow::initializeContext()
 
     // EGL_KHR_create_context is required to request a ES3+ context.
     bool hasKHRCreateContext = strstr(displayExtensions, "EGL_KHR_create_context") != nullptr;
+    fprintf(stderr, "%s: client maj %d\n", __func__, mClientMajorVersion);
     if (mClientMajorVersion > 2 && !(mEGLMajorVersion > 1 || mEGLMinorVersion >= 5) &&
         !hasKHRCreateContext)
     {

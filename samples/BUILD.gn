@@ -167,6 +167,12 @@ angle_sample("window_test") {
   ]
 }
 
+angle_sample("gles1_triangle") {
+  sources = [
+    "gles1/Triangle.cpp",
+  ]
+}
+
 group("all") {
   testonly = true
   deps = [
@@ -188,5 +194,6 @@ group("all") {
     ":texture_wrap",
     ":tri_fan_microbench",
     ":window_test",
+    ":gles1_triangle",
   ]
 }
