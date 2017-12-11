@@ -31,6 +31,7 @@ script_dir = os.path.dirname(sys.argv[0])
 chrome_folder = os.path.join(os.environ['LOCALAPPDATA'], 'Google', 'Chrome SxS', 'Application')
 
 # Find the most recent ANGLE DLLs
+# TODO: GLES1: Just skip, Chrome doesn't use GLES1?
 binary_name = 'libGLESv2.dll'
 newest_folder = None
 newest_mtime = None
