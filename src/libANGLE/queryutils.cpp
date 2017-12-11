@@ -25,6 +25,9 @@
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/queryconversions.h"
 
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
 namespace gl
 {
 
@@ -189,6 +192,15 @@ void QueryTexParameterBase(const Texture *texture, GLenum pname, ParamType *para
     }
 }
 
+// Somehow this needs to be defined again here or a link error occurs.
+template <typename NativeT, typename QueryT>
+void CastQueryValuesTo(GLenum pname, const QueryT* values, int count, NativeT* out)
+{
+    for (int i = 0; i < count; i++) {
+        out[i] = CastQueryValueTo<NativeT, QueryT>(pname, values[i]);
+    }
+}
+
 template <typename ParamType>
 void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const ParamType *params)
 {
@@ -256,6 +268,13 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
         case GL_TEXTURE_SRGB_DECODE_EXT:
             texture->setSRGBDecode(ConvertToGLenum(pname, params[0]));
             break;
+        case GL_TEXTURE_CROP_RECT_OES:
+        {
+            GLint crop[4];
+            CastQueryValuesTo<GLint>(pname, params, 4, crop);
+            texture->setCrop(crop);
+            break;
+        }
         default:
             UNREACHABLE();
             break;

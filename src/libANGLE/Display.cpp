@@ -774,6 +774,7 @@ Error Display::createContext(const Config *configuration,
         cachePointer = nullptr;
     }
 
+    fprintf(stderr, "%s: req context %d\n", __func__, (int)attribs.get(EGL_CONTEXT_CLIENT_VERSION, -1));
     gl::Context *context =
         new gl::Context(mImplementation, configuration, shareContext, shareTextures, cachePointer,
                         attribs, mDisplayExtensions);
