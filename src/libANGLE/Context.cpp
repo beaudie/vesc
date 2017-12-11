@@ -24,6 +24,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/GLES1Shaders.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
@@ -43,6 +44,13 @@
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
+
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
+#define GLES1LOG(...)
+
+// #define GLES1LOG(fmt,...) fprintf(stderr, "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__);
 
 namespace
 {
@@ -273,7 +281,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mTextureCaps,
                         mExtensions,
                         mLimitations,
-                        GetNoError(attribs)),
+                        GetClientVersion(attribs) <= Version(1, 1) ?
+                        true : GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
       mCompiler(),
       mConfig(config),
@@ -301,6 +310,15 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mGLState.initialize(this, GetDebug(attribs), GetBindGeneratesResource(attribs),
                         GetClientArraysEnabled(attribs), robustResourceInit,
                         mMemoryProgramCache != nullptr);
+
+    mIsGles1 = false;
+
+    if (getClientVersion() <= Version(1, 1))
+    {
+        mState.setClientVersion(Version(3, 0));
+        mIsGles1 = true;
+        initGles1();
+    }
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -653,6 +671,16 @@ GLuint Context::createShaderProgramv(GLenum type, GLsizei count, const GLchar *c
 
 void Context::deleteBuffer(GLuint buffer)
 {
+    if (mIsGles1) {
+        if (mGlesEmu.userBufferMap.find(buffer) !=
+            mGlesEmu.userBufferMap.end()) {
+            GLuint actualBuffer = mGlesEmu.userBufferMap[buffer];
+            mGlesEmu.userBufferMap.erase(buffer);
+            mGlesEmu.userBufferMapReverse.erase(actualBuffer);
+            buffer = actualBuffer;
+        }
+    }
+
     if (mState.mBuffers->getBuffer(buffer))
     {
         detachBuffer(buffer);
@@ -1208,6 +1236,24 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
 
 void Context::getFloatvImpl(GLenum pname, GLfloat *params)
 {
+
+    // These end up sharing enums with GLES1, so we should query
+    // those first, and go to the GLES1 path with mGLState
+    // if they are not found.
+    if (!mIsGles1) {
+        switch (pname) {
+        case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+        case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+        {
+            ASSERT(mExtensions.pathRendering);
+            const GLfloat *m = mGLState.getPathRenderingMatrix(pname);
+            memcpy(params, m, 16 * sizeof(GLfloat));
+            return;
+        }
+        break;
+        }
+    }
+
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
     switch (pname)
@@ -1228,15 +1274,6 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params)
             *params = mCaps.maxLODBias;
             break;
 
-        case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
-        case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
-        {
-            ASSERT(mExtensions.pathRendering);
-            const GLfloat *m = mGLState.getPathRenderingMatrix(pname);
-            memcpy(params, m, 16 * sizeof(GLfloat));
-        }
-        break;
-
         default:
             mGLState.getFloatv(pname, params);
             break;
@@ -1247,6 +1284,68 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
 {
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
+
+    if (mIsGles1) {
+        // All buffer binding related queries must be translated to 'user'
+        // space in GLES1 mode. That's because we generate our own GL buffers
+        // and the user can generate a buffer out of nowhere with glBindBuffer.
+        GLint underlyingBufferBinding;
+        switch (pname) {
+            case GL_ELEMENT_ARRAY_BUFFER_BINDING:
+            case GL_ARRAY_BUFFER_BINDING:
+                mGLState.getIntegerv(this, pname, &underlyingBufferBinding);
+                if (mGlesEmu.userBufferMapReverse.find(underlyingBufferBinding) !=
+                    mGlesEmu.userBufferMapReverse.end()) {
+                    *params = mGlesEmu.userBufferMapReverse[underlyingBufferBinding];
+                } else {
+                    *params = underlyingBufferBinding;
+                }
+                return;
+            case GL_VERTEX_ARRAY_BUFFER_BINDING:
+            case GL_NORMAL_ARRAY_BUFFER_BINDING:
+            case GL_COLOR_ARRAY_BUFFER_BINDING:
+            case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
+            case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+                getVertexAttribiv((GLuint)vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
+                                  &underlyingBufferBinding);
+                if (mGlesEmu.userBufferMapReverse.find(underlyingBufferBinding) !=
+                    mGlesEmu.userBufferMapReverse.end()) {
+                    *params = mGlesEmu.userBufferMapReverse[underlyingBufferBinding];
+                } else {
+                    *params = underlyingBufferBinding;
+                }
+                return;
+            // And more stuff that really uses vertex attrib pointers underneath
+            case GL_VERTEX_ARRAY_STRIDE:
+            case GL_NORMAL_ARRAY_STRIDE:
+            case GL_COLOR_ARRAY_STRIDE:
+            case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+            case GL_TEXTURE_COORD_ARRAY_STRIDE:
+                getVertexAttribiv((GLuint)vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_STRIDE,
+                                  params);
+                return;
+            case GL_VERTEX_ARRAY_SIZE:
+            case GL_COLOR_ARRAY_SIZE:
+            case GL_TEXTURE_COORD_ARRAY_SIZE:
+                getVertexAttribiv((GLuint)vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_SIZE,
+                                  params);
+                return;
+            case GL_VERTEX_ARRAY_TYPE:
+            case GL_COLOR_ARRAY_TYPE:
+            case GL_NORMAL_ARRAY_TYPE:
+            case GL_POINT_SIZE_ARRAY_TYPE_OES:
+            case GL_TEXTURE_COORD_ARRAY_TYPE:
+                getVertexAttribiv((GLuint)vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_TYPE,
+                                  params);
+                return;
+            default:
+                break;
+        }
+    }
 
     switch (pname)
     {
@@ -1627,8 +1726,24 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getPointerv(GLenum pname, void **params) const
+void Context::getPointerv(GLenum pname, void **params)
 {
+    if (mIsGles1)
+    {
+        switch (pname)
+        {
+        case GL_VERTEX_ARRAY_POINTER:
+        case GL_NORMAL_ARRAY_POINTER:
+        case GL_COLOR_ARRAY_POINTER:
+        case GL_TEXTURE_COORD_ARRAY_POINTER:
+        case GL_POINT_SIZE_ARRAY_POINTER_OES:
+            getVertexAttribPointerv((GLuint)vertexArrayIndex(pname),
+                                    GL_VERTEX_ATTRIB_ARRAY_POINTER,
+                                    params);
+            return;
+        }
+    }
+
     mGLState.getPointerv(pname, params);
 }
 
@@ -1781,9 +1896,13 @@ void Context::texParameteriv(GLenum target, GLenum pname, const GLint *params)
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw());
-    ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
-    MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
+    if (mIsGles1) {
+        gles1_draw(false /* not indexed */, mode, first, count, 0, 0);
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
+        MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
+    }
 }
 
 void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount)
@@ -1796,8 +1915,12 @@ void Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsiz
 
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw());
-    ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+    if (mIsGles1) {
+        gles1_draw(true /* indexed */, mode, 0, count, type, indices);
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+    }
 }
 
 void Context::drawElementsInstanced(GLenum mode,
@@ -2859,6 +2982,274 @@ void Context::initWorkarounds()
     mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
 }
 
+void Context::initGles1()
+{
+
+    std::vector<const char*> srcs(1);
+    { // drawTexOES state
+        GLuint drawTexVShader = createShader(GL_VERTEX_SHADER);
+        srcs[0] = kGLES1DrawTexVShader;
+        shaderSource(drawTexVShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawTexVShader);
+
+        GLuint drawTexFShader = createShader(GL_FRAGMENT_SHADER);
+        srcs[0] = kGLES1DrawTexFShader;
+        shaderSource(drawTexFShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawTexFShader);
+
+        mGlesEmu.drawTex.program = createProgram();
+        attachShader(mGlesEmu.drawTex.program, drawTexVShader);
+        attachShader(mGlesEmu.drawTex.program, drawTexFShader);
+        linkProgram(mGlesEmu.drawTex.program);
+
+        {
+            mGlesEmu.drawTex.samplerLoc = getUniformLocation(mGlesEmu.drawTex.program, "tex_sampler");
+
+            genVertexArrays(1, &mGlesEmu.drawTex.vao);
+            genBuffers(1, &mGlesEmu.drawTex.ibo);
+            genBuffers(1, &mGlesEmu.drawTex.vbo);
+
+            static const uint32_t sDrawTexIbo[] = {
+                0, 1, 2, 0, 2, 3,
+            };
+
+            bindVertexArray(mGlesEmu.drawTex.vao);
+
+            bindBufferPrivate(BufferBinding::ElementArray, mGlesEmu.drawTex.ibo);
+            bufferData(BufferBinding::ElementArray, sizeof(sDrawTexIbo), sDrawTexIbo, BufferUsage::StaticDraw);
+
+            bindBufferPrivate(BufferBinding::Array, mGlesEmu.drawTex.vbo);
+
+            enableVertexAttribArray(0); // pos
+            enableVertexAttribArray(1); // texcoord
+
+            vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (GLvoid*)0);
+            vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                    (GLvoid*)(uintptr_t)(3 * sizeof(float)));
+
+            bindVertexArray(0);
+            bindBufferPrivate(BufferBinding::Array, 0);
+            bindBufferPrivate(BufferBinding::ElementArray, 0);
+        }
+    }
+
+    { // regular draw state
+        GLuint drawVShader = createShader(GL_VERTEX_SHADER);
+        srcs[0] = kGLES1DrawVShader;
+        shaderSource(drawVShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawVShader);
+        GLint stat;
+        std::string buf(4096, 0);
+        getShaderiv(drawVShader, GL_COMPILE_STATUS, &stat);
+        if (!stat) {
+            fprintf(stderr, "%s: vertex shader compile failed.\n", __func__);
+            getShaderInfoLog(drawVShader, 4095, nullptr, &buf[0]);
+            fprintf(stderr, "%s: info log: %s\n", __func__, buf.c_str());
+        }
+
+        GLuint drawFShader = createShader(GL_FRAGMENT_SHADER);
+        srcs[0] = kGLES1DrawFShader;
+        shaderSource(drawFShader, 1, (const GLchar *const *)(srcs.data()), nullptr);
+        compileShader(drawFShader);
+        getShaderiv(drawFShader, GL_COMPILE_STATUS, &stat);
+        if (!stat) {
+            fprintf(stderr, "%s: fragment shader compile failed.\n", __func__);
+            getShaderInfoLog(drawFShader, 4095, nullptr, &buf[0]);
+            fprintf(stderr, "%s: info log: %s\n", __func__, buf.c_str());
+        }
+
+        mGlesEmu.draw.program = createProgram();
+        attachShader(mGlesEmu.draw.program, drawVShader);
+        attachShader(mGlesEmu.draw.program, drawFShader);
+        linkProgram(mGlesEmu.draw.program);
+
+        getProgramiv(mGlesEmu.draw.program, GL_LINK_STATUS, &stat);
+        if (!stat) {
+            fprintf(stderr, "%s: fragment shader link failed.\n", __func__);
+            getProgramInfoLog(mGlesEmu.draw.program, 4095, nullptr, &buf[0]);
+            fprintf(stderr, "%s: info log: %s\n", __func__, buf.c_str());
+        }
+
+        {
+            GLES1DrawState& drawState = mGlesEmu.draw;
+            GLuint drawProg = drawState.program;
+
+            drawState.projMatrixLoc =
+                getUniformLocation(drawProg, "projection");
+            drawState.modelviewMatrixLoc =
+                getUniformLocation(drawProg, "modelview");
+            drawState.textureMatrixLoc =
+                getUniformLocation(drawProg, "texture_matrix");
+            drawState.modelviewInvTrLoc =
+                getUniformLocation(drawProg, "modelview_invtr");
+            drawState.textureSampler0Loc =
+                getUniformLocation(drawProg, "tex_sampler0");
+            drawState.textureCubeSampler0Loc =
+                getUniformLocation(drawProg, "tex_cube_sampler0");
+            drawState.textureSampler1Loc =
+                getUniformLocation(drawProg, "tex_sampler1");
+            drawState.textureCubeSampler1Loc =
+                getUniformLocation(drawProg, "tex_cube_sampler1");
+            drawState.textureSampler2Loc =
+                getUniformLocation(drawProg, "tex_sampler2");
+            drawState.textureCubeSampler2Loc =
+                getUniformLocation(drawProg, "tex_cube_sampler2");
+            drawState.textureSampler3Loc =
+                getUniformLocation(drawProg, "tex_sampler3");
+            drawState.textureCubeSampler3Loc =
+                getUniformLocation(drawProg, "tex_cube_sampler3");
+
+            drawState.shadeModelFlatLoc =
+                getUniformLocation(drawProg, "shade_model_flat");
+
+            drawState.enableTexture2DLoc =
+                getUniformLocation(drawProg, "enable_texture_2d");
+            drawState.enableTextureCubeMapLoc =
+                getUniformLocation(drawProg, "enable_texture_cube_map");
+            drawState.enableLightingLoc =
+                getUniformLocation(drawProg, "enable_lighting");
+            drawState.enableRescaleNormalLoc =
+                getUniformLocation(drawProg, "enable_rescale_normal");
+            drawState.enableNormalizeLoc =
+                getUniformLocation(drawProg, "enable_normalize");
+            drawState.enableColorMaterialLoc =
+                getUniformLocation(drawProg, "enable_color_material");
+            drawState.enableFogLoc =
+                getUniformLocation(drawProg, "enable_fog");
+            drawState.enableReflectionMapLoc =
+                getUniformLocation(drawProg, "enable_reflection_map");
+            drawState.enableAlphaTestLoc =
+                getUniformLocation(drawProg, "enable_alpha_test");
+            drawState.enableLogicOpLoc =
+                getUniformLocation(drawProg, "enable_logic_op");
+            drawState.logicOpLoc =
+                getUniformLocation(drawProg, "logic_op");
+
+            drawState.alphaFuncLoc =
+                getUniformLocation(drawProg, "alpha_func");
+            drawState.alphaTestRefLoc =
+                getUniformLocation(drawProg, "alpha_test_ref");
+
+            drawState.textureFormatLoc =
+                getUniformLocation(drawProg, "texture_format");
+
+            drawState.textureEnvModeLoc =
+                getUniformLocation(drawProg, "texture_env_mode");
+            drawState.combineRgbLoc =
+                getUniformLocation(drawProg, "combine_rgb");
+            drawState.combineAlphaLoc =
+                getUniformLocation(drawProg, "combine_alpha");
+            drawState.src0rgbLoc =
+                getUniformLocation(drawProg, "src0_rgb");
+            drawState.src0alphaLoc =
+                getUniformLocation(drawProg, "src0_alpha");
+            drawState.src1rgbLoc =
+                getUniformLocation(drawProg, "src1_rgb");
+            drawState.src1alphaLoc =
+                getUniformLocation(drawProg, "src1_alpha");
+            drawState.src2rgbLoc =
+                getUniformLocation(drawProg, "src2_rgb");
+            drawState.src2alphaLoc =
+                getUniformLocation(drawProg, "src2_alpha");
+            drawState.op0rgbLoc =
+                getUniformLocation(drawProg, "op0_rgb");
+            drawState.op0alphaLoc =
+                getUniformLocation(drawProg, "op0_alpha");
+            drawState.op1rgbLoc =
+                getUniformLocation(drawProg, "op1_rgb");
+            drawState.op1alphaLoc =
+                getUniformLocation(drawProg, "op1_alpha");
+            drawState.op2rgbLoc =
+                getUniformLocation(drawProg, "op2_rgb");
+            drawState.op2alphaLoc =
+                getUniformLocation(drawProg, "op2_alpha");
+            drawState.textureEnvColorLoc =
+                getUniformLocation(drawProg, "texture_env_color");
+            drawState.rgbScaleLoc =
+                getUniformLocation(drawProg, "texture_env_rgb_scale");
+            drawState.alphaScaleLoc =
+                getUniformLocation(drawProg, "texture_env_alpha_scale");
+            drawState.pointSpriteCoordReplaceLoc =
+                getUniformLocation(drawProg, "texture_env_point_sprite_coord_replace");
+
+            drawState.materialAmbientLoc =
+                getUniformLocation(drawProg, "material_ambient");
+            drawState.materialDiffuseLoc =
+                getUniformLocation(drawProg, "material_diffuse");
+            drawState.materialSpecularLoc =
+                getUniformLocation(drawProg, "material_specular");
+            drawState.materialEmissiveLoc =
+                getUniformLocation(drawProg, "material_emissive");
+            drawState.materialSpecularExponentLoc =
+                getUniformLocation(drawProg, "material_specular_exponent");
+
+            drawState.lightModelSceneAmbientLoc =
+                getUniformLocation(drawProg, "light_model_scene_ambient");
+            drawState.lightModelTwoSidedLoc =
+                getUniformLocation(drawProg, "light_model_two_sided");
+
+            drawState.lightEnablesLoc =
+                getUniformLocation(drawProg, "light_enables");
+            drawState.lightAmbientsLoc =
+                getUniformLocation(drawProg, "light_ambients");
+            drawState.lightDiffusesLoc =
+                getUniformLocation(drawProg, "light_diffuses");
+            drawState.lightSpecularsLoc =
+                getUniformLocation(drawProg, "light_speculars");
+            drawState.lightPositionsLoc =
+                getUniformLocation(drawProg, "light_positions");
+            drawState.lightDirectionsLoc =
+                getUniformLocation(drawProg, "light_directions");
+            drawState.lightSpotlightExponentsLoc =
+                getUniformLocation(drawProg, "light_spotlight_exponents");
+            drawState.lightSpotlightCutoffAnglesLoc =
+                getUniformLocation(drawProg, "light_spotlight_cutoff_angles");
+            drawState.lightAttenuationConstsLoc =
+                getUniformLocation(drawProg, "light_attenuation_consts");
+            drawState.lightAttenuationLinearsLoc =
+                getUniformLocation(drawProg, "light_attenuation_linears");
+            drawState.lightAttenuationQuadraticsLoc =
+                getUniformLocation(drawProg, "light_attenuation_quadratics");
+
+            drawState.fogModeLoc =
+                getUniformLocation(drawProg, "fog_mode");
+            drawState.fogDensityLoc =
+                getUniformLocation(drawProg, "fog_density");
+            drawState.fogStartLoc =
+                getUniformLocation(drawProg, "fog_start");
+            drawState.fogEndLoc =
+                getUniformLocation(drawProg, "fog_end");
+            drawState.fogColorLoc =
+                getUniformLocation(drawProg, "fog_color");
+
+            genVertexArrays(1, &drawState.vao);
+            genBuffers(1, &drawState.posVbo);
+            genBuffers(1, &drawState.normalVbo);
+            genBuffers(1, &drawState.colorVbo);
+            genBuffers(1, &drawState.pointsizeVbo);
+            genBuffers(1, &drawState.texcoordVbo);
+            genBuffers(1, &drawState.ibo);
+        }
+    }
+
+    mGlesEmu.nextUnusedBufferObject = 0;
+    std::vector<GLuint> currPrivateBufs = {
+            mGlesEmu.drawTex.ibo,
+            mGlesEmu.drawTex.vbo,
+            mGlesEmu.draw.posVbo,
+            mGlesEmu.draw.normalVbo,
+            mGlesEmu.draw.colorVbo,
+            mGlesEmu.draw.pointsizeVbo,
+            mGlesEmu.draw.texcoordVbo,
+            mGlesEmu.draw.ibo };
+    for (const auto buf : currPrivateBufs) {
+        if (buf >= mGlesEmu.nextUnusedBufferObject) {
+            mGlesEmu.nextUnusedBufferObject = buf + 1;
+        }
+    }
+
+}
+
 Error Context::prepareForDraw()
 {
     syncRendererState();
@@ -3708,6 +4099,18 @@ void Context::hint(GLenum target, GLenum mode)
             mGLState.setFragmentShaderDerivativeHint(mode);
             break;
 
+        case GL_LINE_SMOOTH_HINT:
+            mGLState.setLineSmoothHint(mode);
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            mGLState.setPointSmoothHint(mode);
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            mGLState.setPerspectiveCorrectionHint(mode);
+            break;
+        case GL_FOG_HINT:
+            mGLState.setFogHint(mode);
+            break;
         default:
             UNREACHABLE();
             return;
@@ -4062,8 +4465,11 @@ void Context::popDebugGroup()
 void Context::bufferData(BufferBinding target, GLsizeiptr size, const void *data, BufferUsage usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
-    ASSERT(buffer);
-    handleError(buffer->bufferData(this, target, data, size, usage));
+    if (!buffer) {
+        GLES1LOG("GLES1 TODO: Validate bindbuffer/bufferdata");
+    } else {
+        handleError(buffer->bufferData(this, target, data, size, usage));
+    }
 }
 
 void Context::bufferSubData(BufferBinding target,
@@ -4121,8 +4527,33 @@ void Context::bindAttribLocation(GLuint program, GLuint index, const GLchar *nam
     programObject->bindAttributeLocation(index, name);
 }
 
+GLuint Context::calcNextUnusedBufferObject() {
+    GLuint res = mGlesEmu.nextUnusedBufferObject;
+    while (isBuffer(res)) {
+        res++;
+    }
+    mGlesEmu.nextUnusedBufferObject = res + 1;
+    return res;
+}
+
 void Context::bindBuffer(BufferBinding target, GLuint buffer)
 {
+    if (mIsGles1) {
+        // If it's not a buffer the user knows about, we want to
+        // generate a new buffer.
+        if (buffer != 0 && !isBuffer(buffer)) {
+            GLuint actualBuf = calcNextUnusedBufferObject();
+            mGlesEmu.userBufferMap[buffer] = actualBuf;
+            mGlesEmu.userBufferMapReverse[actualBuf] = buffer;
+            buffer = actualBuf;
+        }
+
+        if (mGlesEmu.userBufferMap.find(buffer) !=
+            mGlesEmu.userBufferMap.end()) {
+            buffer = mGlesEmu.userBufferMap[buffer];
+        }
+    }
+
     Buffer *bufferObject = mState.mBuffers->checkBufferAllocation(mImplementation.get(), buffer);
     mGLState.setBufferBinding(this, target, bufferObject);
 }
@@ -4502,7 +4933,27 @@ void Context::getIntegerv(GLenum pname, GLint *params)
     }
     else
     {
-        CastStateValues(this, nativeType, pname, numParams, params);
+        bool floatRescale = false;
+        switch (pname) {
+        case GL_CURRENT_COLOR:
+        case GL_CURRENT_NORMAL:
+        case GL_CURRENT_TEXTURE_COORDS:
+        case GL_ALPHA_TEST_REF:
+            floatRescale = true;
+            break;
+        default:
+            break;
+        }
+
+        if (mIsGles1 && floatRescale) {
+            GLfloat floatParams[4];
+            getFloatvImpl(pname, floatParams);
+            for (unsigned int i = 0; i < numParams; i++) {
+                params[i] = 0.5f * ((floatParams[i] * (pow(2.0f, 32.0f) - 1.0f)) - 1.0f);
+            }
+        } else {
+            CastStateValues(this, nativeType, pname, numParams, params);
+        }
     }
 }
 
@@ -4653,6 +5104,30 @@ GLboolean Context::isBuffer(GLuint buffer)
     if (buffer == 0)
     {
         return GL_FALSE;
+    }
+
+    if (mIsGles1) {
+
+        if (mGlesEmu.userBufferMap.find(buffer) !=
+            mGlesEmu.userBufferMap.end()) {
+            return GL_TRUE;
+        }
+
+        if (mGlesEmu.userBufferMapReverse.find(buffer) !=
+            mGlesEmu.userBufferMapReverse.end()) {
+            return GL_FALSE;
+        }
+
+        if (buffer == mGlesEmu.drawTex.vbo ||
+            buffer == mGlesEmu.drawTex.ibo ||
+            buffer == mGlesEmu.draw.posVbo ||
+            buffer == mGlesEmu.draw.normalVbo ||
+            buffer == mGlesEmu.draw.colorVbo ||
+            buffer == mGlesEmu.draw.pointsizeVbo ||
+            buffer == mGlesEmu.draw.texcoordVbo ||
+            buffer == mGlesEmu.draw.ibo) {
+            return GL_FALSE;
+        }
     }
 
     return (getBuffer(buffer) ? GL_TRUE : GL_FALSE);
@@ -5813,6 +6288,19 @@ void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES ima
     handleError(renderbuffer->setStorageEGLImageTarget(this, imageObject));
 }
 
+// GLES 1
+
+#define X2F(x)        (((float)(x))/65536.0f)
+#define X2D(x)        (((double)(x))/65536.0)
+#define X2I(x)        ((x) /65536)
+#define B2S(x)        ((short)x)
+
+#define F2X(d) ((d) > 32767.65535 ? 32767 * 65536 + 65535 :  \
+               (d) < -32768.65535 ? -32768 * 65536 + 65535 : \
+               ((GLfixed) ((d) * 65536)))
+
+#define I2X(d) ((d)*65536)
+
 void Context::texStorage1D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width)
 {
     UNIMPLEMENTED();
@@ -5820,222 +6308,293 @@ void Context::texStorage1D(GLenum target, GLsizei levels, GLenum internalformat,
 
 void Context::alphaFunc(GLenum func, GLfloat ref)
 {
-    UNIMPLEMENTED();
+    mGLState.alphaFunc(func, ref);
 }
 
 void Context::alphaFuncx(GLenum func, GLfixed ref)
 {
-    UNIMPLEMENTED();
+    alphaFunc(func, X2F(ref));
 }
 
 void Context::clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    UNIMPLEMENTED();
+    clearColor(X2F(red), X2F(green), X2F(blue), X2F(alpha));
 }
 
 void Context::clearDepthx(GLfixed depth)
 {
-    UNIMPLEMENTED();
-}
-
-void Context::clientActiveTexture(GLenum texture)
-{
-    UNIMPLEMENTED();
+    clearDepthf(X2F(depth));
 }
 
 void Context::clipPlanef(GLenum p, const GLfloat *eqn)
 {
-    UNIMPLEMENTED();
+    mGLState.clipPlanef(p, eqn);
 }
 
 void Context::clipPlanex(GLenum plane, const GLfixed *equation)
 {
-    UNIMPLEMENTED();
-}
+    float equationf[4];
 
-void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-    UNIMPLEMENTED();
-}
+    for (int i = 0; i < 4; i++) {
+        equationf[i] = X2F(equation[i]);
+    }
 
-void Context::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::colorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::cullFace(GLenum mode)
-{
-    UNIMPLEMENTED();
+    clipPlanef(plane, equationf);
 }
 
 void Context::depthRangex(GLfixed n, GLfixed f)
 {
-    UNIMPLEMENTED();
-}
-
-void Context::disableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::enableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
+    mGLState.setDepthRange(X2F(n), X2F(f));
 }
 
 void Context::fogx(GLenum pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    fogf(pname, X2F(param));
 }
 
 void Context::fogxv(GLenum pname, const GLfixed *param)
 {
-    UNIMPLEMENTED();
-}
-
-void Context::frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
-{
-    UNIMPLEMENTED();
+    GLfloat paramf[4];
+    switch (pname) {
+        case GL_FOG_MODE:
+            fogf(pname, (GLenum)param[0]);
+            break;
+        case GL_FOG_DENSITY:
+        case GL_FOG_START:
+        case GL_FOG_END:
+            paramf[0] = X2F(param[0]);
+            fogf(pname, paramf[0]);
+            break;
+        case GL_FOG_COLOR:
+            for (int i = 0; i < 4; i++) {
+                paramf[i] = X2F(param[i]);
+            }
+            fogfv(pname, paramf);
+            break;
+        default:
+            return;
+    }
 }
 
 void Context::frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
 {
-    UNIMPLEMENTED();
-}
-
-void Context::getBufferParameteriv(GLenum target, GLenum pname, GLint *params)
-{
-    UNIMPLEMENTED();
+    frustumf(X2F(l), X2F(r), X2F(b), X2F(t), X2F(n), X2F(f));
 }
 
 void Context::getClipPlanef(GLenum plane, GLfloat *equation)
 {
-    UNIMPLEMENTED();
+    mGLState.getClipPlanef(plane, equation);
 }
 
 void Context::getClipPlanex(GLenum plane, GLfixed *equation)
 {
-    UNIMPLEMENTED();
+    GLfloat equationf[4];
+    getClipPlanef(plane, equationf);
+
+    for (int i = 0; i < 4; i++) {
+        equation[i] = F2X(equationf[i]);
+    }
 }
 
 void Context::getFixedv(GLenum pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
-}
+    GLfloat floatBuf[16];
+    GLint intBuf[16];
 
-void Context::getLightfv(GLenum light, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
+    GLenum nativeType;
+    unsigned int numParams;
+    getQueryParameterInfo(pname, &nativeType, &numParams);
+
+    switch (nativeType) {
+        case GL_INT:
+        case GL_BOOL:
+            getIntegerv(pname, intBuf);
+            for (unsigned int i = 0; i < numParams; i++) {
+                // GLES1 TODO: Only if rescale applies to this pname
+                params[i] = I2X(intBuf[i]);
+            }
+            break;
+        case GL_FLOAT:
+            getFloatv(pname, floatBuf);
+            for (unsigned int i = 0; i < numParams; i++) {
+                // GLES1 TODO: Only if rescale applies to this pname
+                params[i] = F2X(intBuf[i]);
+            }
+            break;
+        default:
+            UNIMPLEMENTED();
+    }
 }
 
 void Context::getLightxv(GLenum light, GLenum pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
-}
+    GLfloat paramsf[4];
+    getLightfv(light, pname, paramsf);
 
-void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
+    unsigned int numParams = 4;
+    switch (pname) {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_POSITION:
+            numParams = 4;
+            break;
+        case GL_SPOT_DIRECTION:
+            numParams = 3;
+            break;
+        case GL_SPOT_EXPONENT:
+        case GL_SPOT_CUTOFF:
+        case GL_CONSTANT_ATTENUATION:
+        case GL_LINEAR_ATTENUATION:
+        case GL_QUADRATIC_ATTENUATION:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        params[i] = F2X(paramsf[i]);
+    }
 }
 
 void Context::getMaterialxv(GLenum face, GLenum pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
-}
+    GLfloat paramsf[4];
+    getMaterialfv(face, pname, paramsf);
 
-void Context::getTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
+    unsigned int numParams = 4;
 
-void Context::getTexEnviv(GLenum target, GLenum pname, GLint *params)
-{
-    UNIMPLEMENTED();
+    switch (pname) {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_EMISSION:
+            numParams = 4;
+            break;
+        case GL_SHININESS:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        params[i] = F2X(paramsf[i]);
+    }
 }
 
 void Context::getTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+    getTexEnvfv(target, pname, paramsf);
+
+    unsigned int numParams = 1;
+    bool rescale = true;
+    switch (pname) {
+        case GL_TEXTURE_ENV_MODE:
+            numParams = 1;
+            rescale = false;
+            break;
+        case GL_TEXTURE_ENV_COLOR:
+            numParams = 4;
+            break;
+        case GL_COMBINE_RGB:
+            numParams = 3;
+            break;
+        case GL_COMBINE_ALPHA:
+        case GL_RGB_SCALE:
+        case GL_ALPHA_SCALE:
+            numParams = 1;
+            break;
+    }
+
+    if (rescale) {
+        for (unsigned int i = 0; i < numParams; i++) {
+            params[i] = F2X(paramsf[i]);
+        }
+    } else {
+        for (unsigned int i = 0; i < numParams; i++) {
+            params[i] = (GLfixed)params[i];
+        }
+    }
 }
 
 void Context::getTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+
+    getTexParameterfv(target, pname, paramsf);
+
+    unsigned int numParams = 1;
+    bool rescale = true;
+
+    switch (pname) {
+        case GL_TEXTURE_MAG_FILTER:
+        case GL_TEXTURE_MIN_FILTER:
+        case GL_TEXTURE_WRAP_S:
+        case GL_TEXTURE_WRAP_T:
+        case GL_TEXTURE_WRAP_R:
+        case GL_TEXTURE_IMMUTABLE_FORMAT:
+        case GL_TEXTURE_USAGE_ANGLE:
+        case GL_TEXTURE_SWIZZLE_R:
+        case GL_TEXTURE_SWIZZLE_G:
+        case GL_TEXTURE_SWIZZLE_B:
+        case GL_TEXTURE_SWIZZLE_A:
+        case GL_TEXTURE_COMPARE_MODE:
+        case GL_TEXTURE_COMPARE_FUNC:
+            numParams = 1;
+            rescale = false;
+            break;
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+        case GL_TEXTURE_IMMUTABLE_LEVELS:
+        case GL_TEXTURE_BASE_LEVEL:
+        case GL_TEXTURE_MAX_LEVEL:
+        case GL_TEXTURE_MIN_LOD:
+        case GL_TEXTURE_MAX_LOD:
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_SRGB_DECODE_EXT:
+            numParams = 1;
+            rescale = true;
+            break;
+        case GL_TEXTURE_CROP_RECT_OES:
+            numParams = 4;
+            rescale = true;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
+    if (rescale) {
+        for (unsigned int i = 0; i < numParams; i++) {
+            params[i] = F2X(paramsf[i]);
+        }
+    } else {
+        for (unsigned int i = 0; i < numParams; i++) {
+            params[i] = (GLfixed)params[i];
+        }
+    }
 }
 
-void Context::lightModelf(GLenum pname, GLfloat param)
+void Context::shadeModel(GLenum mode)
 {
-    UNIMPLEMENTED();
+    mGLState.shadeModel(mode);
 }
 
-void Context::lightModelfv(GLenum pname, const GLfloat *params)
+void Context::matrixMode(GLenum mode)
 {
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelx(GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelxv(GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightf(GLenum light, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightfv(GLenum light, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightx(GLenum light, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightxv(GLenum light, GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lineWidthx(GLfixed width)
-{
-    UNIMPLEMENTED();
+    mGLState.matrixMode(mode);
 }
 
 void Context::loadIdentity()
 {
-    UNIMPLEMENTED();
+    mGLState.loadIdentity();
 }
 
-void Context::loadMatrixf(const GLfloat *m)
+void Context::loadMatrixf(const GLfloat* m)
 {
-    UNIMPLEMENTED();
+    mGLState.loadMatrixf(m);
 }
 
 void Context::loadMatrixx(const GLfixed *m)
@@ -6043,134 +6602,324 @@ void Context::loadMatrixx(const GLfixed *m)
     UNIMPLEMENTED();
 }
 
-void Context::logicOp(GLenum opcode)
+void Context::pushMatrix()
 {
-    UNIMPLEMENTED();
-}
-
-void Context::materialf(GLenum face, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialfv(GLenum face, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialx(GLenum face, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialxv(GLenum face, GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::matrixMode(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multMatrixf(const GLfloat *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multMatrixx(const GLfixed *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normalPointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterx(GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterxv(GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointSize(GLfloat size)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointSizex(GLfixed size)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::polygonOffsetx(GLfixed factor, GLfixed units)
-{
-    UNIMPLEMENTED();
+    mGLState.pushMatrix();
 }
 
 void Context::popMatrix()
 {
-    UNIMPLEMENTED();
+    mGLState.popMatrix();
 }
 
-void Context::pushMatrix()
+void Context::multMatrixf(const GLfloat* m)
 {
-    UNIMPLEMENTED();
+    mGLState.multMatrixf(m);
 }
 
-void Context::rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
+void Context::orthof(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
 {
-    UNIMPLEMENTED();
+    mGLState.orthof(left, right, bottom, top, zNear, zFar);
 }
 
-void Context::rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
+void Context::frustumf(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar)
 {
-    UNIMPLEMENTED();
+    mGLState.frustumf(left, right, bottom, top, zNear, zFar);
+}
+
+void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    mGLState.texEnvf(target, pname, param);
+}
+
+void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+{
+    mGLState.texEnvfv(target, pname, params);
+}
+
+void Context::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    mGLState.texEnvi(target, pname, param);
+}
+
+void Context::texEnviv(GLenum target, GLenum pname, const GLint* params)
+{
+    mGLState.texEnviv(target, pname, params);
+}
+
+void Context::getTexEnvfv(GLenum env, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexEnvfv(env, pname, params);
+}
+
+void Context::getTexEnviv(GLenum env, GLenum pname, GLint* params)
+{
+    mGLState.getTexEnviv(env, pname, params);
+}
+
+void Context::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mGLState.texGenf(coord, pname, param);
+}
+
+void Context::texGenfv(GLenum coord, GLenum pname, const GLfloat* params)
+{
+    mGLState.texGenfv(coord, pname, params);
+}
+
+void Context::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mGLState.texGeni(coord, pname, param);
+}
+
+void Context::texGeniv(GLenum coord, GLenum pname, const GLint* params)
+{
+    mGLState.texGeniv(coord, pname, params);
+}
+
+void Context::getTexGeniv(GLenum coord, GLenum pname, GLint* params)
+{
+    mGLState.getTexGeniv(coord, pname, params);
+}
+
+void Context::getTexGenfv(GLenum coord, GLenum pname, GLfloat* params)
+{
+    mGLState.getTexGenfv(coord, pname, params);
+}
+
+void Context::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    mGLState.materialf(face, pname, param);
+}
+
+void Context::materialfv(GLenum face, GLenum pname, const GLfloat* params)
+{
+    mGLState.materialfv(face, pname, params);
+}
+
+void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat* params)
+{
+    mGLState.getMaterialfv(face, pname, params);
+}
+
+void Context::lightModelf(GLenum pname, GLfloat param)
+{
+    mGLState.lightModelf(pname, param);
+}
+
+void Context::lightModelfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.lightModelfv(pname, params);
+}
+
+void Context::lightModelx(GLenum pname, GLfixed param)
+{
+    lightModelf(pname, X2F(param));
+}
+
+void Context::lightModelxv(GLenum pname, const GLfixed *param)
+{
+    GLfloat paramsf[4];
+
+    unsigned int numParams = 1;
+    switch (pname) {
+        case GL_LIGHT_MODEL_AMBIENT:
+            numParams = 4;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            numParams = 1;
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        paramsf[i] = X2F(param[i]);
+    }
+
+    lightModelfv(pname, paramsf);
+}
+
+void Context::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    mGLState.lightf(light, pname, param);
+}
+
+void Context::lightfv(GLenum light, GLenum pname, const GLfloat *params)
+{
+    mGLState.lightfv(light, pname, params);
+}
+
+void Context::getLightfv(GLenum light, GLenum pname, GLfloat* params)
+{
+    mGLState.getLightfv(light, pname, params);
+}
+
+void Context::lightx(GLenum light, GLenum pname, GLfixed param)
+{
+    lightf(light, pname, X2F(param));
+}
+
+void Context::lightxv(GLenum light, GLenum pname, const GLfixed *params)
+{
+    GLfloat paramsf[4];
+
+    unsigned int numParams = 4;
+    switch (pname) {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_POSITION:
+            numParams = 4;
+            break;
+        case GL_SPOT_DIRECTION:
+            numParams = 3;
+            break;
+        case GL_SPOT_EXPONENT:
+        case GL_SPOT_CUTOFF:
+        case GL_CONSTANT_ATTENUATION:
+        case GL_LINEAR_ATTENUATION:
+        case GL_QUADRATIC_ATTENUATION:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        paramsf[i] = X2F(params[i]);
+    }
+
+    lightfv(light, pname, paramsf);
+}
+
+void Context::lineWidthx(GLfixed width)
+{
+    lineWidth(X2F(width));
+}
+
+void Context::logicOp(GLenum opcode)
+{
+    mGLState.logicOp(opcode);
+}
+
+void Context::materialx(GLenum face, GLenum pname, GLfixed param)
+{
+    materialf(face, pname, X2F(param));
+}
+
+void Context::materialxv(GLenum face, GLenum pname, const GLfixed *param)
+{
+    GLfloat paramsf[4];
+    unsigned int numParams = 4;
+
+    switch (pname) {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_EMISSION:
+            numParams = 4;
+            break;
+        case GL_SHININESS:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        paramsf[i] = X2F(param[i]);
+    }
+
+    materialfv(face, pname, paramsf);
+}
+
+void Context::multMatrixx(const GLfixed *m)
+{
+    GLfloat mf[16];
+    for (int i = 0; i < 16; i++) {
+        mf[i] = X2F(m[i]);
+    }
+
+    multMatrixf(mf);
+}
+
+void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mGLState.multiTexCoord4f(target, s, t, r, q);
+}
+
+void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
+{
+    multiTexCoord4f(texture, X2F(s), X2F(t), X2F(r), X2F(q));
+}
+
+void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mGLState.normal3f(nx, ny, nz);
+}
+
+void Context::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
+{
+    normal3f(X2F(nx), X2F(ny), X2F(nz));
+}
+
+void Context::orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
+{
+    orthof(X2F(l), X2F(r), X2F(b), X2F(t), X2F(n), X2F(f));
+}
+
+void Context::pointParameterf(GLenum pname, GLfloat param)
+{
+    mGLState.pointParameterf(pname, param);
+}
+
+void Context::pointParameterfv(GLenum pname, const GLfloat *params)
+{
+    mGLState.pointParameterfv(pname, params);
+}
+
+void Context::pointParameterx(GLenum pname, GLfixed param)
+{
+    mGLState.pointParameterf(pname, X2F(param));
+}
+
+void Context::pointParameterxv(GLenum pname, const GLfixed *params)
+{
+    GLfloat paramsf[4];
+    unsigned int numParams = 4;
+
+    switch (pname) {
+        case GL_POINT_SIZE_MIN:
+        case GL_POINT_SIZE_MAX:
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            numParams = 1;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            numParams = 3;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++) {
+        paramsf[i] = X2F(params[i]);
+    }
+
+    pointParameterfv(pname, paramsf);
+}
+
+void Context::pointSize(GLfloat size)
+{
+    mGLState.pointSize(size);
+}
+
+void Context::pointSizex(GLfixed size)
+{
+    mGLState.pointSize(X2F(size));
+}
+
+void Context::polygonOffsetx(GLfixed factor, GLfixed units)
+{
+    polygonOffset(X2F(factor), X2F(units));
 }
 
 void Context::sampleCoveragex(GLclampx value, GLboolean invert)
@@ -6178,84 +6927,45 @@ void Context::sampleCoveragex(GLclampx value, GLboolean invert)
     UNIMPLEMENTED();
 }
 
-void Context::scalef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::scalex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::shadeModel(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvi(GLenum target, GLenum pname, GLint param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnviv(GLenum target, GLenum pname, const GLint *params)
-{
-    UNIMPLEMENTED();
-}
-
 void Context::texEnvx(GLenum target, GLenum pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    GLfloat tmpParam = (GLfloat)param;
+    texEnvf(target, pname, tmpParam);
 }
 
 void Context::texEnvxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat tmpParams[4];
+
+    if (pname == GL_TEXTURE_ENV_COLOR) {
+        for (int i =0;i<4;i++) {
+            tmpParams[i] = X2F(params[i]);
+        }
+    } else {
+        tmpParams[0] = (GLfloat)params[0];
+    }
+
+    texEnvfv(target, pname, tmpParams);
 }
 
 void Context::texParameterx(GLenum target, GLenum pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    texParameterf(target, pname, (GLfloat)param);
 }
 
 void Context::texParameterxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    UNIMPLEMENTED();
-}
+    GLfloat tmpParams[4];
 
-void Context::translatef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
+    if (pname == GL_TEXTURE_CROP_RECT_OES) {
+        for (int i = 0; i < 4; ++i) {
+            tmpParams[i] = X2F(params[i]);
+        }
+    } else {
+        tmpParams[0] = (GLfloat)params[0];
+    }
 
-void Context::translatex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::vertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexf(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
-{
-    UNIMPLEMENTED();
+    texParameterfv(target, pname, tmpParams);
 }
 
 void Context::drawTexfv(const GLfloat *coords)
@@ -6313,15 +7023,501 @@ void Context::weightPointer(GLint size, GLenum type, GLsizei stride, const void 
     UNIMPLEMENTED();
 }
 
-void Context::pointSizePointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
 GLbitfield Context::queryMatrixx(GLfixed *mantissa, GLint *exponent)
 {
     UNIMPLEMENTED();
     return 0;
+}
+
+void Context::fogf(GLenum pname, GLfloat param)
+{
+    mGLState.fogf(pname, param);
+}
+
+void Context::fogfv(GLenum pname, const GLfloat* params)
+{
+    mGLState.fogfv(pname, params);
+}
+
+void Context::enableClientState(GLenum clientState)
+{
+    switch (clientState) {
+        case GL_VERTEX_ARRAY:
+            enableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            enableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            enableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            enableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            enableVertexAttribArray(4 + mGLState.getActiveSampler());
+            break;
+        default:
+            break;
+    }
+    mGLState.enableClientState(clientState);
+}
+
+void Context::disableClientState(GLenum clientState)
+{
+    switch (clientState) {
+        case GL_VERTEX_ARRAY:
+            disableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            disableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            disableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            disableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            disableVertexAttribArray(4);
+            break;
+        default:
+            break;
+    }
+    mGLState.disableClientState(clientState);
+}
+
+void Context::drawTexf(float x, float y, float z, float width, float height)
+{
+    mGLState.drawTexOES(x, y, z, width, height);
+
+    // get viewport
+    GLint viewport[4] = {};
+    getIntegerv(GL_VIEWPORT,viewport);
+
+    // track previous vbo/ibo
+    GLuint prev_vbo;
+    GLuint prev_ibo;
+    getIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&prev_vbo);
+    getIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint*)&prev_ibo);
+
+    GLuint prog = mGlesEmu.drawTex.program;
+    GLuint vbo = mGlesEmu.drawTex.vbo;
+    GLuint vao = mGlesEmu.drawTex.vao;
+
+    useProgram(prog);
+    bindVertexArray(vao);
+
+    // This is not strictly needed, but Swiftshader indirect VAO
+    // can forget its ELEMENT_ARRAY_BUFFER binding.
+    // bindBuffer(BufferBinding::ElementArray, m_drawTexOESCoreState.ibo);
+
+    // Compute screen coordinates for our texture.
+    // Recenter, rescale. (e.g., [0, 0, 1080, 1920] -> [-1, -1, 1, 1])
+    float xNdc = 2.0f * (float)(x - viewport[0] - viewport[2] / 2) / (float)viewport[2];
+    float yNdc = 2.0f * (float)(y - viewport[1] - viewport[3] / 2) / (float)viewport[3];
+    float wNdc = 2.0f * (float)width / (float)viewport[2];
+    float hNdc = 2.0f * (float)height / (float)viewport[3];
+    z = z >= 1.0f ? 1.0f : z;
+    z = z <= 0.0f ? 0.0f : z;
+    float zNdc = z * 2.0f - 1.0f;
+
+    for (int i = 0; i < 4; i++) {
+        if (mGLState.isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_2D)) {
+            Texture* toDraw = mGLState.getSamplerTexture(i, GL_TEXTURE_2D);
+            if (toDraw) {
+                int cropRect[4] = {};
+                toDraw->getCrop(cropRect);
+
+                float texCropU = (float)cropRect[0];
+                float texCropV = (float)cropRect[1];
+                float texCropW = (float)cropRect[2];
+                float texCropH = (float)cropRect[3];
+
+                float texW = (float)(toDraw->getWidth(GL_TEXTURE_2D, 0));
+                float texH = (float)(toDraw->getHeight(GL_TEXTURE_2D, 0));
+
+                // Now we know the vertex attributes (pos, texcoord).
+                // Our vertex attributes are formatted with interleaved
+                // position and texture coordinate:
+                float vertexAttrs[] = {
+                    xNdc, yNdc, zNdc,
+                    texCropU / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc, zNdc,
+                    (texCropU + texCropW) / texW, texCropV / texH,
+
+                    xNdc + wNdc, yNdc + hNdc, zNdc,
+                    (texCropU + texCropW) / texW, (texCropV + texCropH) / texH,
+
+                    xNdc, yNdc + hNdc, zNdc,
+                    texCropU / texW, (texCropV + texCropH) / texH,
+                };
+
+                bindBufferPrivate(BufferBinding::Array, vbo);
+                bufferData(BufferBinding::Array, sizeof(vertexAttrs),
+                                vertexAttrs, BufferUsage::StreamDraw);
+            }
+
+            activeTexture(GL_TEXTURE0 + i);
+            uniform1i(mGlesEmu.drawTex.samplerLoc, i);
+            drawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+    }
+
+    bindVertexArray(0);
+    useProgram(0);
+    bindBufferPrivate(BufferBinding::Array, prev_vbo);
+    bindBufferPrivate(BufferBinding::ElementArray, prev_ibo);
+}
+
+void Context::rotatef(float angle, float x, float y, float z)
+{
+    mGLState.rotatef(angle, x, y, z);
+}
+
+void Context::rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
+{
+    rotatef(X2F(angle), X2F(x), X2F(y), X2F(z));
+}
+
+void Context::scalef(float x, float y, float z)
+{
+    mGLState.scalef(x, y, z);
+}
+
+void Context::scalex(GLfixed x, GLfixed y, GLfixed z)
+{
+    scalef(X2F(x), X2F(y), X2F(z));
+}
+
+void Context::translatef(float x, float y, float z)
+{
+    mGLState.translatef(x, y, z);
+}
+
+void Context::translatex(GLfixed x, GLfixed y, GLfixed z)
+{
+    translatef(X2F(x), X2F(y), X2F(z));
+}
+
+void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mGLState.color4f(red, green, blue, alpha);
+}
+
+void Context::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
+{
+    mGLState.color4f(((float)red) / 255.0f , ((float)green) / 255.0f, ((float)blue) / 255.0f, ((float)alpha) / 255.0f);
+}
+
+void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
+{
+    mGLState.color4f(X2F(red), X2F(green), X2F(blue), X2F(alpha));
+}
+
+void Context::clientActiveTexture(GLenum texture)
+{
+    activeTexture(texture);
+}
+
+void Context::vertexPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(0, size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::normalPointer(GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(1, 3, type, GL_FALSE, stride, ptr);
+}
+
+void Context::colorPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(2, size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::pointSizePointer(GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(3, 1, type, GL_FALSE, stride, ptr);
+}
+
+void Context::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void* ptr) {
+    vertexAttribPointer(4 + mGLState.getActiveSampler(), size, type, GL_FALSE, stride, ptr);
+}
+
+void Context::bindBufferPrivate(BufferBinding target, GLuint buffer) {
+    Buffer *bufferObject = mState.mBuffers->checkBufferAllocation(mImplementation.get(), buffer);
+    mGLState.setBufferBinding(this, target, bufferObject);
+}
+
+GLint Context::vertexArrayIndex(GLenum type) const {
+    switch (type) {
+    case GL_VERTEX_ARRAY:
+    case GL_VERTEX_ARRAY_BUFFER_BINDING:
+    case GL_VERTEX_ARRAY_STRIDE:
+    case GL_VERTEX_ARRAY_SIZE:
+    case GL_VERTEX_ARRAY_TYPE:
+    case GL_VERTEX_ARRAY_POINTER:
+        return 0;
+    case GL_NORMAL_ARRAY:
+    case GL_NORMAL_ARRAY_BUFFER_BINDING:
+    case GL_NORMAL_ARRAY_STRIDE:
+    case GL_NORMAL_ARRAY_TYPE:
+    case GL_NORMAL_ARRAY_POINTER:
+        return 1;
+    case GL_COLOR_ARRAY:
+    case GL_COLOR_ARRAY_BUFFER_BINDING:
+    case GL_COLOR_ARRAY_STRIDE:
+    case GL_COLOR_ARRAY_SIZE:
+    case GL_COLOR_ARRAY_TYPE:
+    case GL_COLOR_ARRAY_POINTER:
+        return 2;
+    case GL_POINT_SIZE_ARRAY_OES:
+    case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
+    case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+    case GL_POINT_SIZE_ARRAY_TYPE_OES:
+    case GL_POINT_SIZE_ARRAY_POINTER_OES:
+        return 3;
+    case GL_TEXTURE_COORD_ARRAY:
+    case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+    case GL_TEXTURE_COORD_ARRAY_STRIDE:
+    case GL_TEXTURE_COORD_ARRAY_SIZE:
+    case GL_TEXTURE_COORD_ARRAY_TYPE:
+    case GL_TEXTURE_COORD_ARRAY_POINTER:
+        return 4 + mGLState.getActiveSampler();
+    }
+    return 0;
+}
+
+void Context::gles1_draw(bool indexed, GLenum mode, GLint first, GLsizei count, GLenum indexType, const GLvoid* indices) {
+
+    bool logicOpEnabled = mGLState.getEnableFeature(GL_COLOR_LOGIC_OP);
+    bool restoreReadBuffer = false;
+    GLint drawBuf;
+    GLint readBuf;
+
+    if (logicOpEnabled) {
+        getIntegerv(GL_DRAW_BUFFER0_EXT, &drawBuf);
+        getIntegerv(GL_READ_BUFFER, &readBuf);
+        fprintf(stderr, "%s: logic op enabled (warning: NYI). 0x%x 0x%x\n", __func__, drawBuf, readBuf);
+    }
+
+
+    auto& drawState = mGlesEmu.draw;
+
+    useProgram(mGlesEmu.draw.program);
+
+    if (!mGLState.isClientStateEnabled(GL_NORMAL_ARRAY)) {
+        vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, mGLState.getNormal());
+        vertexAttribDivisor(1, 1);
+        enableVertexAttribArray(1);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        vertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, mGLState.getColor());
+        vertexAttribDivisor(2, 1);
+        enableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_TEXTURE_COORD_ARRAY)) {
+        vertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, mGLState.getMultiTexCoord());
+        vertexAttribDivisor(4, 1);
+        enableVertexAttribArray(4);
+    }
+
+    {
+        uniformMatrix4fv(drawState.projMatrixLoc, 1, GL_FALSE, mGLState.projMatrix().data());
+        uniformMatrix4fv(drawState.modelviewMatrixLoc, 1, GL_FALSE, mGLState.modelviewMatrix().data());
+        uniformMatrix4fv(drawState.modelviewInvTrLoc, 1, GL_FALSE, mGLState.modelviewMatrix().transpose().inverse().data());
+
+        for (int i = 0; i < 4; i++) {
+            memcpy(drawState.texEnvBuffer.textureMatrices + i * 16,
+                   mGLState.textureMatrix(i).data(),
+                   16 * sizeof(float));
+        }
+        uniformMatrix4fv(drawState.textureMatrixLoc, 4, GL_FALSE, drawState.texEnvBuffer.textureMatrices);
+    }
+
+    {
+        std::vector<int> tex2Denables = { 0, 0, 0, 0 };
+        std::vector<int> texCubeenables = { 0, 0, 0, 0 };
+        std::vector<int> tex2DFormats = { GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA };
+
+        for (int i = 0; i < 4; i++) {
+            tex2Denables[i] = mGLState.isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_2D);
+            texCubeenables[i] = mGLState.isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_CUBE_MAP);
+            Texture* curr2DTexture = mGLState.getSamplerTexture(i, GL_TEXTURE_2D);
+            if (curr2DTexture) {
+                tex2DFormats[i] =
+                    gl::GetUnsizedFormat(curr2DTexture->getFormat(GL_TEXTURE_2D, 0).info->internalFormat);
+            }
+            // TODO: Cube map formats
+        }
+
+        uniform1iv(drawState.enableTexture2DLoc, 4, tex2Denables.data());
+        uniform1iv(drawState.enableTextureCubeMapLoc, 4, texCubeenables.data());
+        uniform1iv(drawState.enableTextureCubeMapLoc, 4, texCubeenables.data());
+        uniform1iv(drawState.textureFormatLoc, 4, tex2DFormats.data());
+
+        // Fixed sampler locations
+        uniform1i(drawState.textureSampler0Loc, 0);
+        uniform1i(drawState.textureSampler1Loc, 1);
+        uniform1i(drawState.textureSampler2Loc, 2);
+        uniform1i(drawState.textureSampler3Loc, 3);
+        uniform1i(drawState.textureCubeSampler0Loc, 4);
+        uniform1i(drawState.textureCubeSampler1Loc, 5);
+        uniform1i(drawState.textureCubeSampler2Loc, 6);
+        uniform1i(drawState.textureCubeSampler3Loc, 7);
+
+        for (int i = 0; i < 4; i++) {
+            const auto& texEnv = mGLState.getTexEnv(i);
+
+            drawState.texEnvBuffer.modes[i] = texEnv.envMode;
+            drawState.texEnvBuffer.combineRgbs[i] = texEnv.combineRgb;
+            drawState.texEnvBuffer.combineAlphas[i] = texEnv.combineAlpha;
+
+            drawState.texEnvBuffer.src0rgbs[i] = texEnv.src0rgb;
+            drawState.texEnvBuffer.src0alphas[i] = texEnv.src0alpha;
+            drawState.texEnvBuffer.src1rgbs[i] = texEnv.src1rgb;
+            drawState.texEnvBuffer.src1alphas[i] = texEnv.src1alpha;
+            drawState.texEnvBuffer.src2rgbs[i] = texEnv.src2rgb;
+            drawState.texEnvBuffer.src2alphas[i] = texEnv.src2alpha;
+
+            drawState.texEnvBuffer.op0rgbs[i] = texEnv.op0rgb;
+            drawState.texEnvBuffer.op0alphas[i] = texEnv.op0alpha;
+            drawState.texEnvBuffer.op1rgbs[i] = texEnv.op1rgb;
+            drawState.texEnvBuffer.op1alphas[i] = texEnv.op1alpha;
+            drawState.texEnvBuffer.op2rgbs[i] = texEnv.op2rgb;
+            drawState.texEnvBuffer.op2alphas[i] = texEnv.op2alpha;
+
+            drawState.texEnvBuffer.envColors[4 * i + 0] = texEnv.envColor[0];
+            drawState.texEnvBuffer.envColors[4 * i + 1] = texEnv.envColor[1];
+            drawState.texEnvBuffer.envColors[4 * i + 2] = texEnv.envColor[2];
+            drawState.texEnvBuffer.envColors[4 * i + 3] = texEnv.envColor[3];
+
+            drawState.texEnvBuffer.rgbScales[i] = texEnv.rgbScale;
+            drawState.texEnvBuffer.alphaScales[i] = texEnv.alphaScale;
+            drawState.texEnvBuffer.pointSpriteCoordReplaces[i] = texEnv.pointSpriteCoordReplace;
+        }
+
+        uniform1iv(drawState.textureEnvModeLoc, 4, drawState.texEnvBuffer.modes);
+        // TODO: when they are not -1
+        uniform1iv(drawState.combineRgbLoc, 4, drawState.texEnvBuffer.combineRgbs);
+        uniform1iv(drawState.combineAlphaLoc, 4, drawState.texEnvBuffer.combineAlphas);
+
+        uniform1iv(drawState.src0rgbLoc, 4, drawState.texEnvBuffer.src0rgbs);
+        uniform1iv(drawState.src0alphaLoc, 4, drawState.texEnvBuffer.src0alphas);
+        uniform1iv(drawState.src1rgbLoc, 4, drawState.texEnvBuffer.src1rgbs);
+        uniform1iv(drawState.src1alphaLoc, 4, drawState.texEnvBuffer.src1alphas);
+        uniform1iv(drawState.src2rgbLoc, 4, drawState.texEnvBuffer.src2rgbs);
+        uniform1iv(drawState.src2alphaLoc, 4, drawState.texEnvBuffer.src2alphas);
+
+        uniform1iv(drawState.op0rgbLoc, 4, drawState.texEnvBuffer.op0rgbs);
+        uniform1iv(drawState.op0alphaLoc, 4, drawState.texEnvBuffer.op0alphas);
+        uniform1iv(drawState.op1rgbLoc, 4, drawState.texEnvBuffer.op1rgbs);
+        uniform1iv(drawState.op1alphaLoc, 4, drawState.texEnvBuffer.op1alphas);
+        uniform1iv(drawState.op2rgbLoc, 4, drawState.texEnvBuffer.op2rgbs);
+        uniform1iv(drawState.op2alphaLoc, 4, drawState.texEnvBuffer.op2alphas);
+
+        uniform4fv(drawState.textureEnvColorLoc, 4, drawState.texEnvBuffer.envColors);
+        uniform1fv(drawState.rgbScaleLoc, 4, drawState.texEnvBuffer.rgbScales);
+        uniform1fv(drawState.alphaScaleLoc, 4, drawState.texEnvBuffer.alphaScales);
+        // uniform1iv(drawState.pointSpriteCoordReplaceLoc, 4, drawState.texEnvBuffer.pointSpriteCoordReplaces);
+
+        uniform1i(drawState.shadeModelFlatLoc, mGLState.getShadeModel() == GL_FLAT);
+        uniform1i(drawState.enableLightingLoc, mGLState.getEnableFeature(GL_LIGHTING));
+        uniform1i(drawState.enableRescaleNormalLoc, mGLState.getEnableFeature(GL_RESCALE_NORMAL));
+        uniform1i(drawState.enableNormalizeLoc, mGLState.getEnableFeature(GL_NORMALIZE));
+        uniform1i(drawState.enableColorMaterialLoc, mGLState.getEnableFeature(GL_COLOR_MATERIAL));
+
+        uniform1i(drawState.enableFogLoc, mGLState.getEnableFeature(GL_FOG));
+        uniform1i(drawState.enableReflectionMapLoc, mGLState.getEnableFeature(GL_REFLECTION_MAP_OES));
+        uniform1i(drawState.enableAlphaTestLoc, mGLState.getEnableFeature(GL_ALPHA_TEST));
+        uniform1i(drawState.enableLogicOpLoc, mGLState.getEnableFeature(GL_COLOR_LOGIC_OP));
+
+        uniform1i(drawState.alphaFuncLoc, mGLState.getAlphaFunc());
+        uniform1f(drawState.alphaTestRefLoc, mGLState.getAlphaTestRef());
+
+        uniform1i(drawState.logicOpLoc, mGLState.getLogicOp());
+
+        const auto& material = mGLState.getMaterialInfo();
+
+        uniform4fv(drawState.materialAmbientLoc, 1, material.ambient.data());
+        uniform4fv(drawState.materialDiffuseLoc, 1, material.diffuse.data());
+        uniform4fv(drawState.materialSpecularLoc, 1, material.specular.data());
+        uniform4fv(drawState.materialEmissiveLoc, 1, material.emissive.data());
+        uniform1f(drawState.materialSpecularExponentLoc, material.specularExponent);
+
+        const auto& lightModel = mGLState.getLightModelInfo();
+
+        uniform4fv(drawState.lightModelSceneAmbientLoc, 1, lightModel.color.data());
+        uniform1i(drawState.lightModelTwoSidedLoc, lightModel.twoSided);
+
+        for (int i = 0; i < 8; i++) {
+            const auto& light = mGLState.getLightInfo(i);
+            drawState.lightingBuffer.lightEnables[i] = light.enabled;
+            memcpy(drawState.lightingBuffer.lightAmbients + 4 * i, light.ambient.data(), 4 * sizeof(GLfloat));
+            memcpy(drawState.lightingBuffer.lightDiffuses + 4 * i, light.diffuse.data(), 4 * sizeof(GLfloat));
+            memcpy(drawState.lightingBuffer.lightSpeculars + 4 * i, light.specular.data(), 4 * sizeof(GLfloat));
+            memcpy(drawState.lightingBuffer.lightPositions + 4 * i, light.position.data(), 4 * sizeof(GLfloat));
+            memcpy(drawState.lightingBuffer.lightDirections + 3 * i, light.direction.data(), 3 * sizeof(GLfloat));
+            drawState.lightingBuffer.spotlightExponents[i] = light.spotlightExponent;
+            drawState.lightingBuffer.spotlightCutoffAngles[i] = light.spotlightCutoffAngle;
+            drawState.lightingBuffer.attenuationConsts[i] = light.attenuationConst;
+            drawState.lightingBuffer.attenuationLinears[i] = light.attenuationLinear;
+            drawState.lightingBuffer.attenuationQuadratics[i] = light.attenuationQuadratic;
+        }
+
+        uniform1iv(drawState.lightEnablesLoc, 8, drawState.lightingBuffer.lightEnables);
+        uniform4fv(drawState.lightAmbientsLoc, 8, drawState.lightingBuffer.lightAmbients);
+        uniform4fv(drawState.lightDiffusesLoc, 8, drawState.lightingBuffer.lightDiffuses);
+        uniform4fv(drawState.lightSpecularsLoc, 8, drawState.lightingBuffer.lightSpeculars);
+        uniform4fv(drawState.lightPositionsLoc, 8, drawState.lightingBuffer.lightPositions);
+        uniform3fv(drawState.lightDirectionsLoc, 8, drawState.lightingBuffer.lightDirections);
+        uniform1fv(drawState.lightSpotlightExponentsLoc, 8, drawState.lightingBuffer.spotlightExponents);
+        uniform1fv(drawState.lightSpotlightCutoffAnglesLoc, 8, drawState.lightingBuffer.spotlightCutoffAngles);
+        uniform1fv(drawState.lightAttenuationConstsLoc, 8, drawState.lightingBuffer.attenuationConsts);
+        uniform1fv(drawState.lightAttenuationLinearsLoc, 8, drawState.lightingBuffer.attenuationLinears);
+        uniform1fv(drawState.lightAttenuationQuadraticsLoc, 8, drawState.lightingBuffer.attenuationQuadratics);
+
+        const auto& fogInfo = mGLState.getFogInfo();
+
+        uniform1i(drawState.fogModeLoc, fogInfo.mode);
+        uniform1f(drawState.fogDensityLoc, fogInfo.density);
+        uniform1f(drawState.fogStartLoc, fogInfo.start);
+        uniform1f(drawState.fogEndLoc, fogInfo.end);
+
+        uniform4fv(drawState.fogColorLoc, 1, fogInfo.color.data());
+    }
+
+    if (indexed) {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, indexType, indices));
+    } else {
+        ANGLE_CONTEXT_TRY(prepareForDraw());
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        disableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_NORMAL_ARRAY)) {
+        vertexAttribDivisor(1, 0);
+        disableVertexAttribArray(1);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_COLOR_ARRAY)) {
+        vertexAttribDivisor(2, 0);
+        disableVertexAttribArray(2);
+    }
+
+    if (!mGLState.isClientStateEnabled(GL_TEXTURE_COORD_ARRAY)) {
+        vertexAttribDivisor(4, 0);
+        disableVertexAttribArray(4);
+    }
+
+    useProgram(0);
+
+    if (restoreReadBuffer) {
+        readBuffer(readBuf);
+    }
 }
 
 }  // namespace gl
