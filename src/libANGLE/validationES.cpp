@@ -4987,6 +4987,10 @@ bool ValidateGetTexParameterBase(Context *context, GLenum target, GLenum pname, 
             }
             break;
 
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            return context->isGles1();
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -5540,6 +5544,10 @@ bool ValidateTexParameterBase(Context *context,
                 return false;
             }
             break;
+
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            return context->isGles1();
 
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
