@@ -44,15 +44,21 @@ class RenderPassCache
 
     vk::Error getCompatibleRenderPass(VkDevice device,
                                       Serial serial,
-                                      const vk::RenderPassDesc &desc,
+                                      const vk::PackedRenderPassDesc &desc,
                                       vk::RenderPass **renderPassOut);
-    vk::Error getMatchingRenderPass(VkDevice device,
-                                    Serial serial,
-                                    const vk::RenderPassDesc &desc,
-                                    vk::RenderPass **renderPassOut);
+    vk::Error getRenderPassWithOps(VkDevice device,
+                                   Serial serial,
+                                   const vk::PackedRenderPassDesc &desc,
+                                   const vk::AttachmentOpsArray &attachmentOps,
+                                   vk::RenderPass **renderPassOut);
 
   private:
-    std::unordered_map<vk::RenderPassDesc, vk::RenderPassAndSerial> mPayload;
+    // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
+    // The second layer caches the attachment load/store ops and initial/final layout.
+    using InnerCache = std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassAndSerial>;
+    using OuterCache = std::unordered_map<vk::PackedRenderPassDesc, InnerCache>;
+
+    OuterCache mPayload;
 };
 
 class RendererVk : angle::NonCopyable
@@ -137,9 +143,11 @@ class RendererVk : angle::NonCopyable
         return mFormatTable[internalFormat];
     }
 
-    vk::Error getCompatibleRenderPass(const vk::RenderPassDesc &desc,
+    vk::Error getCompatibleRenderPass(const vk::PackedRenderPassDesc &desc,
                                       vk::RenderPass **renderPassOut);
-    vk::Error getMatchingRenderPass(const vk::RenderPassDesc &desc, vk::RenderPass **renderPassOut);
+    vk::Error getRenderPassWithOps(const vk::PackedRenderPassDesc &desc,
+                                   const vk::AttachmentOpsArray &ops,
+                                   vk::RenderPass **renderPassOut);
 
   private:
     void ensureCapsInitialized() const;
