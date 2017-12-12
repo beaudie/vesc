@@ -215,6 +215,9 @@ class StateManager11 final : angle::NonCopyable
     // Called by VertexArray11 to trigger attribute translation.
     void invalidateVertexAttributeTranslation();
 
+    // Called by the Program on Uniform Buffer change. Also called internally.
+    void invalidateProgramUniformBuffers();
+
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
 
@@ -352,7 +355,6 @@ class StateManager11 final : angle::NonCopyable
     void invalidateTexturesAndSamplers();
     void invalidateDriverUniforms();
     void invalidateProgramUniforms();
-    void invalidateProgramUniformBuffers();
     void invalidateConstantBuffer(unsigned int slot);
 
     // Called by the Framebuffer11 directly.
