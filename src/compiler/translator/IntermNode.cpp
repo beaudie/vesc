@@ -283,29 +283,20 @@ TIntermSymbol::TIntermSymbol(const TVariable *variable)
 TIntermAggregate *TIntermAggregate::CreateFunctionCall(const TFunction &func,
                                                        TIntermSequence *arguments)
 {
-    TIntermAggregate *callNode =
-        new TIntermAggregate(func.getReturnType(), EOpCallFunctionInAST, arguments);
-    callNode->getFunctionSymbolInfo()->setFromFunction(func);
-    return callNode;
+    return new TIntermAggregate(&func, func.getReturnType(), EOpCallFunctionInAST, arguments);
 }
 
-TIntermAggregate *TIntermAggregate::CreateFunctionCall(const TType &type,
-                                                       const TSymbolUniqueId &id,
-                                                       const TName &name,
-                                                       TIntermSequence *arguments)
+TIntermAggregate *TIntermAggregate::CreateRawFunctionCall(const TFunction &func,
+                                                          TIntermSequence *arguments)
 {
-    TIntermAggregate *callNode = new TIntermAggregate(type, EOpCallFunctionInAST, arguments);
-    callNode->getFunctionSymbolInfo()->setId(id);
-    callNode->getFunctionSymbolInfo()->setNameObj(name);
-    return callNode;
+    return new TIntermAggregate(&func, func.getReturnType(), EOpCallInternalRawFunction, arguments);
 }
 
 TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TFunction &func,
                                                               TIntermSequence *arguments)
 {
     TIntermAggregate *callNode =
-        new TIntermAggregate(func.getReturnType(), EOpCallBuiltInFunction, arguments);
-    callNode->getFunctionSymbolInfo()->setFromFunction(func);
+        new TIntermAggregate(&func, func.getReturnType(), EOpCallBuiltInFunction, arguments);
     // Note that name needs to be set before texture function type is determined.
     callNode->setBuiltInFunctionPrecision();
     return callNode;
@@ -314,26 +305,37 @@ TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TFunction &f
 TIntermAggregate *TIntermAggregate::CreateConstructor(const TType &type,
                                                       TIntermSequence *arguments)
 {
-    return new TIntermAggregate(type, EOpConstruct, arguments);
+    return new TIntermAggregate(nullptr, type, EOpConstruct, arguments);
 }
 
 TIntermAggregate *TIntermAggregate::Create(const TType &type,
                                            TOperator op,
                                            TIntermSequence *arguments)
 {
-    TIntermAggregate *node = new TIntermAggregate(type, op, arguments);
+    TIntermAggregate *node = new TIntermAggregate(nullptr, type, op, arguments);
     ASSERT(op != EOpCallFunctionInAST);    // Should use CreateFunctionCall
+    ASSERT(op != EOpCallInternalRawFunction);  // Should use CreateRawFunctionCall
     ASSERT(op != EOpCallBuiltInFunction);  // Should use CreateBuiltInFunctionCall
     ASSERT(!node->isConstructor());        // Should use CreateConstructor
     return node;
 }
 
-TIntermAggregate::TIntermAggregate(const TType &type, TOperator op, TIntermSequence *arguments)
-    : TIntermOperator(op), mUseEmulatedFunction(false), mGotPrecisionFromChildren(false)
+TIntermAggregate::TIntermAggregate(const TFunction *func,
+                                   const TType &type,
+                                   TOperator op,
+                                   TIntermSequence *arguments)
+    : TIntermOperator(op),
+      mUseEmulatedFunction(false),
+      mGotPrecisionFromChildren(false),
+      mFunction(func)
 {
     if (arguments != nullptr)
     {
         mArguments.swap(*arguments);
+    }
+    if (mFunction)
+    {
+        mFunctionInfo.setFromFunction(*mFunction);
     }
     setTypePrecisionAndQualifier(type);
 }
@@ -472,7 +474,7 @@ TString TIntermAggregate::getSymbolTableMangledName() const
 
 bool TIntermAggregate::hasSideEffects() const
 {
-    if (isFunctionCall() && mFunctionInfo.isKnownToNotHaveSideEffects())
+    if (isFunctionCall() && mFunction != nullptr && mFunction->isKnownToNotHaveSideEffects())
     {
         for (TIntermNode *arg : mArguments)
         {
@@ -576,17 +578,17 @@ TIntermConstantUnion::TIntermConstantUnion(const TIntermConstantUnion &node) : T
 
 void TFunctionSymbolInfo::setFromFunction(const TFunction &function)
 {
-    setName(*function.name());
+    mName.setString(*function.name());
+    mName.setInternal(function.symbolType() == SymbolType::AngleInternal);
     setId(TSymbolUniqueId(function));
 }
 
-TFunctionSymbolInfo::TFunctionSymbolInfo(const TSymbolUniqueId &id)
-    : mId(new TSymbolUniqueId(id)), mKnownToNotHaveSideEffects(false)
+TFunctionSymbolInfo::TFunctionSymbolInfo(const TSymbolUniqueId &id) : mId(new TSymbolUniqueId(id))
 {
 }
 
 TFunctionSymbolInfo::TFunctionSymbolInfo(const TFunctionSymbolInfo &info)
-    : mName(info.mName), mId(nullptr), mKnownToNotHaveSideEffects(info.mKnownToNotHaveSideEffects)
+    : mName(info.mName), mId(nullptr)
 {
     if (info.mId)
     {
@@ -623,7 +625,8 @@ TIntermAggregate::TIntermAggregate(const TIntermAggregate &node)
     : TIntermOperator(node),
       mUseEmulatedFunction(node.mUseEmulatedFunction),
       mGotPrecisionFromChildren(node.mGotPrecisionFromChildren),
-      mFunctionInfo(node.mFunctionInfo)
+      mFunctionInfo(node.mFunctionInfo),
+      mFunction(node.mFunction)
 {
     for (TIntermNode *arg : node.mArguments)
     {
@@ -638,8 +641,8 @@ TIntermAggregate *TIntermAggregate::shallowCopy() const
 {
     TIntermSequence *copySeq = new TIntermSequence();
     copySeq->insert(copySeq->begin(), getSequence()->begin(), getSequence()->end());
-    TIntermAggregate *copyNode         = new TIntermAggregate(mType, mOp, copySeq);
-    *copyNode->getFunctionSymbolInfo() = mFunctionInfo;
+    TIntermAggregate *copyNode = new TIntermAggregate(mFunction, mType, mOp, copySeq);
+    copyNode->mFunctionInfo    = mFunctionInfo;
     copyNode->setLine(mLine);
     return copyNode;
 }
