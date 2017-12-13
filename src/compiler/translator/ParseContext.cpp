@@ -1054,8 +1054,11 @@ bool TParseContext::checkIsValidTypeAndQualifierForArray(const TSourceLoc &index
     // In ESSL1.00 shaders, structs cannot be varying (section 4.3.5). This is checked elsewhere.
     // In ESSL3.00 shaders, struct inputs/outputs are allowed but not arrays of structs (section
     // 4.3.4).
+    // Geometry shader requires that each user-defined input needs to be declared as arrays or
+    // inside input blocks declared as arrays.(GL_EXT_geometry_shader section 11.1gs.4.3).
     if (mShaderVersion >= 300 && elementType.getBasicType() == EbtStruct &&
-        sh::IsVarying(elementType.qualifier))
+        sh::IsVarying(elementType.qualifier) &&
+        !IsGeometryShaderInput(mShaderType, elementType.qualifier))
     {
         error(indexLocation, "cannot declare arrays of structs of this qualifier",
               TType(elementType).getCompleteString().c_str());
