@@ -537,7 +537,6 @@ class TFunctionSymbolInfo
     const TName &getNameObj() const { return mName; }
 
     const TString &getName() const { return mName.getString(); }
-    void setName(const TString &name) { mName.setString(name); }
     bool isMain() const { return mName.getString() == "main"; }
 
     void setKnownToNotHaveSideEffects(bool knownToNotHaveSideEffects)
@@ -598,13 +597,6 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
   public:
     static TIntermAggregate *CreateFunctionCall(const TFunction &func, TIntermSequence *arguments);
 
-    // If using this, ensure that there's a consistent function definition with the same symbol id
-    // added to the AST.
-    static TIntermAggregate *CreateFunctionCall(const TType &type,
-                                                const TSymbolUniqueId &id,
-                                                const TName &name,
-                                                TIntermSequence *arguments);
-
     static TIntermAggregate *CreateBuiltInFunctionCall(const TFunction &func,
                                                        TIntermSequence *arguments);
     static TIntermAggregate *CreateConstructor(const TType &type,
@@ -640,6 +632,8 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     TFunctionSymbolInfo *getFunctionSymbolInfo() { return &mFunctionInfo; }
     const TFunctionSymbolInfo *getFunctionSymbolInfo() const { return &mFunctionInfo; }
 
+    const TFunction *getFunction() const { return mFunction; }
+
   protected:
     TIntermSequence mArguments;
 
@@ -649,10 +643,16 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
 
     bool mGotPrecisionFromChildren;
 
+    // TODO(oetuaho): Get rid of mFunctionInfo and just keep mFunction.
     TFunctionSymbolInfo mFunctionInfo;
 
+    const TFunction *mFunction;
+
   private:
-    TIntermAggregate(const TType &type, TOperator op, TIntermSequence *arguments);
+    TIntermAggregate(const TFunction *func,
+                     const TType &type,
+                     TOperator op,
+                     TIntermSequence *arguments);
 
     TIntermAggregate(const TIntermAggregate &node);  // note: not deleted, just private!
 
