@@ -184,6 +184,7 @@ class TFunction : public TSymbol
               const TString *name,
               const TType *retType,
               SymbolType symbolType,
+              bool knownToNotHaveSideEffects,
               TOperator tOp        = EOpNull,
               TExtension extension = TExtension::UNDEFINED);
 
@@ -222,6 +223,8 @@ class TFunction : public TSymbol
     size_t getParamCount() const { return parameters.size(); }
     const TConstParameter &getParam(size_t i) const { return parameters[i]; }
 
+    bool isKnownToNotHaveSideEffects() const { return mKnownToNotHaveSideEffects; }
+
   private:
     void clearParameters();
 
@@ -234,6 +237,7 @@ class TFunction : public TSymbol
     TOperator op;
     bool defined;
     bool mHasPrototypeDeclaration;
+    bool mKnownToNotHaveSideEffects;
 };
 
 }  // namespace sh

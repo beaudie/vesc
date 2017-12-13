@@ -3450,7 +3450,7 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     }
 
     // Add the function as a prototype after parsing it (we do not support recursion)
-    return new TFunction(&symbolTable, name, new TType(type), SymbolType::UserDefined);
+    return new TFunction(&symbolTable, name, new TType(type), SymbolType::UserDefined, false);
 }
 
 TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSourceLoc &loc)
@@ -3462,7 +3462,7 @@ TFunction *TParseContext::addNonConstructorFunc(const TString *name, const TSour
     // would be enough, but TFunction carries a lot of extra information in addition to that.
     // Besides function calls we do have to store constructor calls in the same data structure, for
     // them we need to store a TType.
-    return new TFunction(&symbolTable, name, returnType, SymbolType::NotResolved);
+    return new TFunction(&symbolTable, name, returnType, SymbolType::NotResolved, false);
 }
 
 TFunction *TParseContext::addConstructorFunc(const TPublicType &publicType)
@@ -3486,7 +3486,7 @@ TFunction *TParseContext::addConstructorFunc(const TPublicType &publicType)
         type->setBasicType(EbtFloat);
     }
 
-    return new TFunction(&symbolTable, nullptr, type, SymbolType::NotResolved, EOpConstruct);
+    return new TFunction(&symbolTable, nullptr, type, SymbolType::NotResolved, true, EOpConstruct);
 }
 
 void TParseContext::checkIsNotUnsizedArray(const TSourceLoc &line,

@@ -117,6 +117,7 @@ TFunction::TFunction(TSymbolTable *symbolTable,
                      const TString *name,
                      const TType *retType,
                      SymbolType symbolType,
+                     bool knownToNotHaveSideEffects,
                      TOperator tOp,
                      TExtension extension)
     : TSymbol(symbolTable, name, symbolType, extension),
@@ -124,7 +125,8 @@ TFunction::TFunction(TSymbolTable *symbolTable,
       mangledName(nullptr),
       op(tOp),
       defined(false),
-      mHasPrototypeDeclaration(false)
+      mHasPrototypeDeclaration(false),
+      mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
 {
 }
 
