@@ -1725,7 +1725,7 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
 
     ASSERT(mCurrentFunctionMetadata == nullptr);
 
-    size_t index = mCallDag.findIndex(node->getFunctionSymbolInfo()->getId());
+    size_t index = mCallDag.findIndex(node->getFunction()->uniqueId());
     ASSERT(index != CallDAG::InvalidIndex);
     mCurrentFunctionMetadata = &mASTMetadataList[index];
 
@@ -1733,14 +1733,14 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
 
     TIntermSequence *parameters = node->getFunctionPrototype()->getSequence();
 
-    if (node->getFunctionSymbolInfo()->isMain())
+    if (node->getFunction()->isMain())
     {
         out << "gl_main(";
     }
     else
     {
-        out << DecorateFunctionIfNeeded(node->getFunctionSymbolInfo()->getNameObj())
-            << DisambiguateFunctionName(parameters) << (mOutputLod0Function ? "Lod0(" : "(");
+        out << DecorateFunctionIfNeeded(node->getFunction()) << DisambiguateFunctionName(parameters)
+            << (mOutputLod0Function ? "Lod0(" : "(");
     }
 
     for (unsigned int i = 0; i < parameters->size(); i++)
@@ -1774,7 +1774,7 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
     bool needsLod0 = mASTMetadataList[index].mNeedsLod0;
     if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
     {
-        ASSERT(!node->getFunctionSymbolInfo()->isMain());
+        ASSERT(!node->getFunction()->isMain());
         mOutputLod0Function = true;
         node->traverse(this);
         mOutputLod0Function = false;
@@ -1853,7 +1853,7 @@ bool OutputHLSL::visitFunctionPrototype(Visit visit, TIntermFunctionPrototype *n
     TInfoSinkBase &out = getInfoSink();
 
     ASSERT(visit == PreVisit);
-    size_t index = mCallDag.findIndex(node->getFunctionSymbolInfo()->getId());
+    size_t index = mCallDag.findIndex(node->getFunction()->uniqueId());
     // Skip the prototype if it is not implemented (and thus not used)
     if (index == CallDAG::InvalidIndex)
     {
@@ -1862,7 +1862,7 @@ bool OutputHLSL::visitFunctionPrototype(Visit visit, TIntermFunctionPrototype *n
 
     TIntermSequence *arguments = node->getSequence();
 
-    TString name = DecorateFunctionIfNeeded(node->getFunctionSymbolInfo()->getNameObj());
+    TString name = DecorateFunctionIfNeeded(node->getFunction());
     out << TypeString(node->getType()) << " " << name << DisambiguateFunctionName(arguments)
         << (mOutputLod0Function ? "Lod0(" : "(");
 
@@ -1916,7 +1916,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 ASSERT(index != CallDAG::InvalidIndex);
                 lod0 &= mASTMetadataList[index].mNeedsLod0;
 
-                out << DecorateFunctionIfNeeded(TName(node->getFunction()));
+                out << DecorateFunctionIfNeeded(node->getFunction());
                 out << DisambiguateFunctionName(node->getSequence());
                 out << (lod0 ? "Lod0(" : "(");
             }
@@ -1924,7 +1924,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             {
                 // This path is used for internal functions that don't have their definitions in the
                 // AST, such as precision emulation functions.
-                out << DecorateFunctionIfNeeded(TName(node->getFunction())) << "(";
+                out << DecorateFunctionIfNeeded(node->getFunction()) << "(";
             }
             else if (node->getFunction()->isImageFunction())
             {
