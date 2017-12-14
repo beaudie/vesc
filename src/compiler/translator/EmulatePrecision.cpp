@@ -713,8 +713,9 @@ TFunction *EmulatePrecision::getInternalFunction(TString *functionName,
     TString mangledName = TFunction::GetMangledNameFromCall(*functionName, *arguments);
     if (mInternalFunctions.find(mangledName) == mInternalFunctions.end())
     {
-        mInternalFunctions[mangledName] = new TFunction(
-            mSymbolTable, functionName, new TType(returnType), SymbolType::AngleInternal, knownToNotHaveSideEffects);
+        mInternalFunctions[mangledName] =
+            new TFunction(mSymbolTable, functionName, new TType(returnType),
+                          SymbolType::AngleInternal, knownToNotHaveSideEffects);
     }
     return mInternalFunctions[mangledName];
 }

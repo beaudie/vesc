@@ -225,6 +225,14 @@ class TFunction : public TSymbol
 
     bool isKnownToNotHaveSideEffects() const { return mKnownToNotHaveSideEffects; }
 
+    bool isMain() const { return symbolType() == SymbolType::UserDefined && *name() == "main"; }
+
+    bool isImageFunction() const
+    {
+        return symbolType() == SymbolType::BuiltIn &&
+               (*name() == "imageSize" || *name() == "imageLoad" || *name() == "imageStore");
+    }
+
   private:
     void clearParameters();
 
