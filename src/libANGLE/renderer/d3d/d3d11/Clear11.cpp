@@ -745,7 +745,12 @@ gl::Error Clear11::clearFramebuffer(const gl::Context *context,
                                             &mappedResource);
         if (FAILED(result))
         {
-            return gl::OutOfMemory() << "Clear11: Failed to map CB, " << gl::FmtHR(result);
+            if (d3d11::isDeviceLostError(result))
+            {
+                mRenderer->notifyDeviceLost();
+            }
+
+            return d3d11::CreateGLError(result, "Clear11: Failed to map CB");
         }
 
         memcpy(mappedResource.pData, &mShaderData, g_ConstantBufferSize);

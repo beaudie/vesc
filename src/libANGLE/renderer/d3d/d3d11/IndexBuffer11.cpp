@@ -78,7 +78,12 @@ gl::Error IndexBuffer11::mapBuffer(unsigned int offset, unsigned int size, void*
         dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal index buffer, " << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Failed to map internal index buffer");
     }
 
     *outMappedMemory = reinterpret_cast<char*>(mappedResource.pData) + offset;
@@ -132,7 +137,12 @@ gl::Error IndexBuffer11::discard()
     HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal index buffer, " << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Failed to map internal index buffer");
     }
 
     dxContext->Unmap(mBuffer.get(), 0);

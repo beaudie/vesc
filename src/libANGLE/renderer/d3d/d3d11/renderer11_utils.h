@@ -183,6 +183,17 @@ inline bool isDeviceLostError(HRESULT errorCode)
     }
 }
 
+inline gl::Error CreateGLError(HRESULT errorCode, const std::string &message)
+{
+    switch (errorCode)
+    {
+        case E_OUTOFMEMORY:
+            return gl::OutOfMemory() << message << ", " << gl::FmtHR(errorCode);
+        default:
+            return gl::InternalError() << message << ", " << gl::FmtHR(errorCode);
+    }
+}
+
 template <ResourceType ResourceT>
 class LazyResource : angle::NonCopyable
 {

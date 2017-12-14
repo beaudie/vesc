@@ -3301,8 +3301,12 @@ gl::Error Renderer11::packPixels(const TextureHelper11 &textureHelper,
     HRESULT hr = mDeviceContext->Map(readResource, 0, D3D11_MAP_READ, 0, &mapping);
     if (FAILED(hr))
     {
-        ASSERT(hr == E_OUTOFMEMORY);
-        return gl::OutOfMemory() << "Failed to map internal texture for reading, " << gl::FmtHR(hr);
+        if (d3d11::isDeviceLostError(hr))
+        {
+            this->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(hr, "Failed to map internal texture for reading");
     }
 
     uint8_t *source = static_cast<uint8_t *>(mapping.pData);

@@ -78,8 +78,12 @@ gl::Error VertexBuffer11::mapResource()
             dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
         if (FAILED(result))
         {
-            return gl::OutOfMemory()
-                   << "Failed to map internal vertex buffer, " << gl::FmtHR(result);
+            if (d3d11::isDeviceLostError(result))
+            {
+                mRenderer->notifyDeviceLost();
+            }
+
+            return d3d11::CreateGLError(result, "Failed to map internal vertex buffer");
         }
 
         mMappedResourceData = reinterpret_cast<uint8_t *>(mappedResource.pData);
@@ -167,8 +171,12 @@ gl::Error VertexBuffer11::discard()
     HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal buffer for discarding, "
-                                 << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Failed to map internal buffer for discarding");
     }
 
     dxContext->Unmap(mBuffer.get(), 0);

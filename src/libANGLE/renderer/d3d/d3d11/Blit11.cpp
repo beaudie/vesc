@@ -1054,8 +1054,12 @@ gl::Error Blit11::swizzleTexture(const gl::Context *context,
         deviceContext->Map(mVertexBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal vertex buffer for swizzle, "
-                                 << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Failed to map internal vertex buffer for swizzle");
     }
 
     ShaderSupport support;
@@ -1075,8 +1079,12 @@ gl::Error Blit11::swizzleTexture(const gl::Context *context,
     result = deviceContext->Map(mSwizzleCB.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal constant buffer for swizzle, "
-                                 << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Failed to map internal constant buffer for swizzle");
     }
 
     unsigned int *swizzleIndices = reinterpret_cast<unsigned int *>(mappedResource.pData);
@@ -1169,8 +1177,13 @@ gl::Error Blit11::copyTexture(const gl::Context *context,
         deviceContext->Map(mVertexBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal vertex buffer for texture copy, "
-                                 << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result,
+                                    "Failed to map internal vertex buffer for texture copy");
     }
 
     UINT stride    = 0;
@@ -1278,8 +1291,13 @@ gl::Error Blit11::copyDepth(const gl::Context *context,
         deviceContext->Map(mVertexBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map internal vertex buffer for texture copy, "
-                                 << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result,
+                                    "Failed to map internal vertex buffer for texture copy");
     }
 
     UINT stride    = 0;
@@ -1440,9 +1458,13 @@ gl::Error Blit11::copyAndConvertImpl(const TextureHelper11 &source,
     HRESULT result = deviceContext->Map(sourceStaging.get(), 0, D3D11_MAP_READ, 0, &sourceMapping);
     if (FAILED(result))
     {
-        return gl::OutOfMemory()
-               << "Failed to map internal source staging texture for depth stencil blit, "
-               << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(
+            result, "Failed to map internal source staging texture for depth stencil blit");
     }
 
     D3D11_MAPPED_SUBRESOURCE destMapping;
@@ -1450,9 +1472,14 @@ gl::Error Blit11::copyAndConvertImpl(const TextureHelper11 &source,
     if (FAILED(result))
     {
         deviceContext->Unmap(sourceStaging.get(), 0);
-        return gl::OutOfMemory()
-               << "Failed to map internal destination staging texture for depth stencil blit, "
-               << gl::FmtHR(result);
+
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(
+            result, "Failed to map internal destination staging texture for depth stencil blit");
     }
 
     // Clip dest area to the destination size

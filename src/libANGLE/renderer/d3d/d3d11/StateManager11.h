@@ -50,7 +50,8 @@ class ShaderConstants11 : angle::NonCopyable
     gl::Error updateBuffer(ID3D11DeviceContext *deviceContext,
                            gl::ShaderType shaderType,
                            const ProgramD3D &programD3D,
-                           const d3d11::Buffer &driverConstantBuffer);
+                           const d3d11::Buffer &driverConstantBuffer,
+                           Renderer11 *renderer);
 
   private:
     struct Vertex

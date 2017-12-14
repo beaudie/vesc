@@ -637,7 +637,8 @@ gl::Error Image11::map(const gl::Context *context, D3D11_MAP mapType, D3D11_MAPP
         {
             mRenderer->notifyDeviceLost();
         }
-        return gl::OutOfMemory() << "Failed to map staging texture, " << gl::FmtHR(result);
+
+        return d3d11::CreateGLError(result, "Failed to map staging texture");
     }
 
     mDirty = true;

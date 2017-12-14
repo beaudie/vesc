@@ -1203,7 +1203,13 @@ gl::Error Buffer11::NativeStorage::map(size_t offset,
     ASSERT(SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Failed to map native storage in Buffer11::NativeStorage::map";
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result,
+                                    "Failed to map native storage in Buffer11::NativeStorage::map");
     }
     ASSERT(mappedResource.pData);
     *mapPointerOut = static_cast<uint8_t *>(mappedResource.pData) + offset;

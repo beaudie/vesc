@@ -465,7 +465,8 @@ void ShaderConstants11::onSamplerChange(gl::ShaderType shaderType,
 gl::Error ShaderConstants11::updateBuffer(ID3D11DeviceContext *deviceContext,
                                           gl::ShaderType shaderType,
                                           const ProgramD3D &programD3D,
-                                          const d3d11::Buffer &driverConstantBuffer)
+                                          const d3d11::Buffer &driverConstantBuffer,
+                                          Renderer11 *renderer)
 {
     bool dirty                 = false;
     size_t dataSize            = 0;
@@ -517,7 +518,12 @@ gl::Error ShaderConstants11::updateBuffer(ID3D11DeviceContext *deviceContext,
 
     if (FAILED(result))
     {
-        return gl::OutOfMemory() << "Internal error mapping constant buffer: " << gl::FmtHR(result);
+        if (d3d11::isDeviceLostError(result))
+        {
+            renderer->notifyDeviceLost();
+        }
+
+        return d3d11::CreateGLError(result, "Internal error mapping constant buffer");
     }
 
     size_t samplerDataBytes = sizeof(SamplerMetadata) * programD3D.getUsedSamplerRange(shaderType);
@@ -2789,9 +2795,9 @@ gl::Error StateManager11::applyDriverUniforms(const ProgramD3D &programD3D)
     // Sampler metadata and driver constants need to coexist in the same constant buffer to conserve
     // constant buffer slots. We update both in the constant buffer if needed.
     ANGLE_TRY(mShaderConstants.updateBuffer(deviceContext, gl::SHADER_VERTEX, programD3D,
-                                            mDriverConstantBufferVS));
+                                            mDriverConstantBufferVS, mRenderer));
     ANGLE_TRY(mShaderConstants.updateBuffer(deviceContext, gl::SHADER_FRAGMENT, programD3D,
-                                            mDriverConstantBufferPS));
+                                            mDriverConstantBufferPS, mRenderer));
 
     // needed for the point sprite geometry shader
     // GSSetConstantBuffers triggers device removal on 9_3, so we should only call it for ES3.
@@ -2846,7 +2852,7 @@ gl::Error StateManager11::applyComputeUniforms(ProgramD3D *programD3D)
     }
 
     ANGLE_TRY(mShaderConstants.updateBuffer(deviceContext, gl::SHADER_COMPUTE, *programD3D,
-                                            mDriverConstantBufferCS));
+                                            mDriverConstantBufferCS, mRenderer));
 
     return gl::NoError();
 }
