@@ -67,6 +67,7 @@ class TName
   public:
     POOL_ALLOCATOR_NEW_DELETE();
     explicit TName(const TString *name) : mName(name ? (*name) : ""), mIsInternal(false) {}
+    explicit TName(const TSymbol *symbol);
     TName() : mName(), mIsInternal(false) {}
     TName(const TName &) = default;
     TName &operator=(const TName &) = default;
@@ -542,11 +543,6 @@ class TFunctionSymbolInfo
     void setId(const TSymbolUniqueId &functionId);
     const TSymbolUniqueId &getId() const;
 
-    bool isImageFunction() const
-    {
-        return getName() == "imageSize" || getName() == "imageLoad" || getName() == "imageStore";
-    }
-
   private:
     TName mName;
     TSymbolUniqueId *mId;
@@ -625,8 +621,6 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     // Returns true if changing parameter precision may affect the return value.
     bool gotPrecisionFromChildren() const { return mGotPrecisionFromChildren; }
 
-    const TFunctionSymbolInfo *getFunctionSymbolInfo() const { return &mFunctionInfo; }
-
     const TFunction *getFunction() const { return mFunction; }
 
   protected:
@@ -637,9 +631,6 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     bool mUseEmulatedFunction;
 
     bool mGotPrecisionFromChildren;
-
-    // TODO(oetuaho): Get rid of mFunctionInfo and just keep mFunction.
-    TFunctionSymbolInfo mFunctionInfo;
 
     const TFunction *const mFunction;
 
