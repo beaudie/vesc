@@ -1690,7 +1690,7 @@ void TParseContext::functionCallRValueLValueErrorCheck(const TFunction *fnCandid
             {
                 error(argument->getLine(),
                       "Writeonly value cannot be passed for 'in' or 'inout' parameters.",
-                      fnCall->getFunctionSymbolInfo()->getName().c_str());
+                      fnCall->getFunction()->name()->c_str());
                 return;
             }
         }
@@ -1700,7 +1700,7 @@ void TParseContext::functionCallRValueLValueErrorCheck(const TFunction *fnCandid
             {
                 error(argument->getLine(),
                       "Constant value cannot be passed for 'out' or 'inout' parameters.",
-                      fnCall->getFunctionSymbolInfo()->getName().c_str());
+                      fnCall->getFunction()->name()->c_str());
                 return;
             }
         }
@@ -5494,7 +5494,7 @@ TIntermBranch *TParseContext::addBranch(TOperator op,
 void TParseContext::checkTextureGather(TIntermAggregate *functionCall)
 {
     ASSERT(functionCall->getOp() == EOpCallBuiltInFunction);
-    const TString &name        = functionCall->getFunctionSymbolInfo()->getName();
+    const TString &name        = *functionCall->getFunction()->name();
     bool isTextureGather       = (name == "textureGather");
     bool isTextureGatherOffset = (name == "textureGatherOffset");
     if (isTextureGather || isTextureGatherOffset)
@@ -5560,7 +5560,7 @@ void TParseContext::checkTextureGather(TIntermAggregate *functionCall)
 void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
 {
     ASSERT(functionCall->getOp() == EOpCallBuiltInFunction);
-    const TString &name        = functionCall->getFunctionSymbolInfo()->getName();
+    const TString &name                    = *functionCall->getFunction()->name();
     TIntermNode *offset        = nullptr;
     TIntermSequence *arguments = functionCall->getSequence();
     bool useTextureGatherOffsetConstraints = false;
@@ -5636,7 +5636,8 @@ void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
 
 void TParseContext::checkAtomicMemoryBuiltinFunctions(TIntermAggregate *functionCall)
 {
-    const TString &name = functionCall->getFunctionSymbolInfo()->getName();
+    ASSERT(functionCall->getOp() == EOpCallBuiltInFunction);
+    const TString &name = *functionCall->getFunction()->name();
     if (IsAtomicBuiltin(name))
     {
         TIntermSequence *arguments = functionCall->getSequence();
@@ -5659,7 +5660,7 @@ void TParseContext::checkAtomicMemoryBuiltinFunctions(TIntermAggregate *function
         error(memNode->getLine(),
               "The value passed to the mem argument of an atomic memory function does not "
               "correspond to a buffer or shared variable.",
-              functionCall->getFunctionSymbolInfo()->getName().c_str());
+              functionCall->getFunction()->name()->c_str());
     }
 }
 
@@ -5667,7 +5668,7 @@ void TParseContext::checkAtomicMemoryBuiltinFunctions(TIntermAggregate *function
 void TParseContext::checkImageMemoryAccessForBuiltinFunctions(TIntermAggregate *functionCall)
 {
     ASSERT(functionCall->getOp() == EOpCallBuiltInFunction);
-    const TString &name = functionCall->getFunctionSymbolInfo()->getName();
+    const TString &name = *functionCall->getFunction()->name();
 
     if (name.compare(0, 5, "image") == 0)
     {

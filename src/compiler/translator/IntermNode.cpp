@@ -144,6 +144,11 @@ void SetUnionArrayFromMatrix(const angle::Matrix<float> &m, TConstantUnion *resu
 
 }  // namespace anonymous
 
+TName::TName(const TSymbol *symbol)
+    : mName(*symbol->name()), mIsInternal(symbol->symbolType() == SymbolType::AngleInternal)
+{
+}
+
 ////////////////////////////////////////////////////////////////
 //
 // Member functions of the nodes used for building the tree.
@@ -333,10 +338,7 @@ TIntermAggregate::TIntermAggregate(const TFunction *func,
     {
         mArguments.swap(*arguments);
     }
-    if (mFunction)
-    {
-        mFunctionInfo.setFromFunction(*mFunction);
-    }
+    ASSERT(mFunction == nullptr || mFunction->name() != nullptr);
     setTypePrecisionAndQualifier(type);
 }
 
@@ -451,7 +453,7 @@ void TIntermAggregate::setBuiltInFunctionPrecision()
     }
     // ESSL 3.0 spec section 8: textureSize always gets highp precision.
     // All other functions that take a sampler are assumed to be texture functions.
-    if (mFunctionInfo.getName().find("textureSize") == 0)
+    if (mFunction->name()->find("textureSize") == 0)
         mType.setPrecision(EbpHigh);
     else
         mType.setPrecision(precision);
@@ -465,7 +467,7 @@ TString TIntermAggregate::getSymbolTableMangledName() const
         case EOpCallInternalRawFunction:
         case EOpCallBuiltInFunction:
         case EOpCallFunctionInAST:
-            return TFunction::GetMangledNameFromCall(mFunctionInfo.getName(), mArguments);
+            return TFunction::GetMangledNameFromCall(*mFunction->name(), mArguments);
         default:
             TString opString = GetOperatorString(mOp);
             return TFunction::GetMangledNameFromCall(opString, mArguments);
@@ -625,7 +627,6 @@ TIntermAggregate::TIntermAggregate(const TIntermAggregate &node)
     : TIntermOperator(node),
       mUseEmulatedFunction(node.mUseEmulatedFunction),
       mGotPrecisionFromChildren(node.mGotPrecisionFromChildren),
-      mFunctionInfo(node.mFunctionInfo),
       mFunction(node.mFunction)
 {
     for (TIntermNode *arg : node.mArguments)
@@ -642,7 +643,6 @@ TIntermAggregate *TIntermAggregate::shallowCopy() const
     TIntermSequence *copySeq = new TIntermSequence();
     copySeq->insert(copySeq->begin(), getSequence()->begin(), getSequence()->end());
     TIntermAggregate *copyNode = new TIntermAggregate(mFunction, mType, mOp, copySeq);
-    copyNode->mFunctionInfo    = mFunctionInfo;
     copyNode->setLine(mLine);
     return copyNode;
 }
