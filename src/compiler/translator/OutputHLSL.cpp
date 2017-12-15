@@ -341,7 +341,6 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
     {
         TInterfaceBlock *interfaceBlock =
             mappedStruct.blockDeclarator->getType().getInterfaceBlock();
-        const TName &instanceName         = mappedStruct.blockDeclarator->getName();
         if (mReferencedUniformBlocks.count(interfaceBlock->uniqueId().get()) == 0)
         {
             continue;
@@ -360,13 +359,14 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
             TString originalName;
             TString mappedName("map");
 
-            if (instanceName.getString() != "")
+            if (mappedStruct.blockDeclarator->variable().symbolType() != SymbolType::Empty)
             {
+                const TString &instanceName = mappedStruct.blockDeclarator->variable().name();
                 unsigned int instanceStringArrayIndex = GL_INVALID_INDEX;
                 if (isInstanceArray)
                     instanceStringArrayIndex = instanceArrayIndex;
                 TString instanceString = mUniformHLSL->UniformBlockInstanceString(
-                    instanceName.getString(), instanceStringArrayIndex);
+                    instanceName, instanceStringArrayIndex);
                 originalName += instanceString;
                 mappedName += instanceString;
                 originalName += ".";
@@ -859,13 +859,21 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = getInfoSink();
 
+    if (node->variable().symbolType() == SymbolType::Empty)
+    {
+        // Empty symbols can only appear in declarations and function arguments, and in either of
+        // those cases the symbol nodes are not visited.
+        UNREACHABLE();
+        return;
+    }
+
     // Handle accessing std140 structs by value
     if (IsInStd140InterfaceBlock(node) && node->getBasicType() == EbtStruct)
     {
         out << "map";
     }
 
-    TString name = node->getSymbol();
+    const TString &name = node->getSymbol();
 
     const TSymbolUniqueId &uniqueId = node->uniqueId();
 
@@ -894,7 +902,7 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
                 mReferencedUniforms[uniqueId.get()] = node;
             }
 
-            out << DecorateVariableIfNeeded(node->getName());
+            out << DecorateVariableIfNeeded(node->variable());
         }
         else if (qualifier == EvqAttribute || qualifier == EvqVertexIn)
         {
@@ -987,7 +995,7 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         }
         else
         {
-            out << DecorateVariableIfNeeded(node->getName());
+            out << DecorateVariableIfNeeded(node->variable());
         }
     }
 }
@@ -1637,6 +1645,7 @@ TString OutputHLSL::samplerNamePrefixFromStruct(TIntermTyped *node)
 {
     if (node->getAsSymbolNode())
     {
+        ASSERT(node->getAsSymbolNode()->variable().symbolType() != SymbolType::Empty);
         return node->getAsSymbolNode()->getSymbol();
     }
     TIntermBinary *nodeBinary = node->getAsBinaryNode();
@@ -1784,26 +1793,27 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
     if (visit == PreVisit)
     {
         TIntermSequence *sequence = node->getSequence();
-        TIntermTyped *variable    = (*sequence)[0]->getAsTyped();
+        TIntermTyped *declarator  = (*sequence)[0]->getAsTyped();
         ASSERT(sequence->size() == 1);
-        ASSERT(variable);
+        ASSERT(declarator);
 
         if (IsDeclarationWrittenOut(node))
         {
             TInfoSinkBase &out = getInfoSink();
-            ensureStructDefined(variable->getType());
+            ensureStructDefined(declarator->getType());
 
-            if (!variable->getAsSymbolNode() ||
-                variable->getAsSymbolNode()->getSymbol() != "")  // Variable declaration
+            if (!declarator->getAsSymbolNode() ||
+                declarator->getAsSymbolNode()->variable().symbolType() !=
+                    SymbolType::Empty)  // Variable declaration
             {
                 if (!mInsideFunction)
                 {
                     out << "static ";
                 }
 
-                out << TypeString(variable->getType()) + " ";
+                out << TypeString(declarator->getType()) + " ";
 
-                TIntermSymbol *symbol = variable->getAsSymbolNode();
+                TIntermSymbol *symbol = declarator->getAsSymbolNode();
 
                 if (symbol)
                 {
@@ -1813,21 +1823,13 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 }
                 else
                 {
-                    variable->traverse(this);
+                    declarator->traverse(this);
                 }
             }
-            else if (variable->getAsSymbolNode() &&
-                     variable->getAsSymbolNode()->getSymbol() == "")  // Type (struct) declaration
-            {
-                ASSERT(variable->getBasicType() == EbtStruct);
-                // ensureStructDefined has already been called.
-            }
-            else
-                UNREACHABLE();
         }
-        else if (IsVaryingOut(variable->getQualifier()))
+        else if (IsVaryingOut(declarator->getQualifier()))
         {
-            TIntermSymbol *symbol = variable->getAsSymbolNode();
+            TIntermSymbol *symbol = declarator->getAsSymbolNode();
             ASSERT(symbol);  // Varying declarations can't have initializers.
 
             if (symbol->variable().symbolType() != SymbolType::Empty)
@@ -2619,16 +2621,17 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
 {
     TQualifier qualifier = symbol->getQualifier();
     const TType &type    = symbol->getType();
-    const TName &name    = symbol->getName();
+    const TVariable &variable = symbol->variable();
     TString nameStr;
 
-    if (name.getString().empty())  // HLSL demands named arguments, also for prototypes
+    if (variable.symbolType() ==
+        SymbolType::Empty)  // HLSL demands named arguments, also for prototypes
     {
         nameStr = "x" + str(mUniqueIndex++);
     }
     else
     {
-        nameStr = DecorateVariableIfNeeded(name);
+        nameStr = DecorateVariableIfNeeded(variable);
     }
 
     if (IsSampler(type.getBasicType()))
@@ -2798,6 +2801,7 @@ bool OutputHLSL::writeSameSymbolInitializer(TInfoSinkBase &out,
                                             TIntermSymbol *symbolNode,
                                             TIntermTyped *expression)
 {
+    ASSERT(symbolNode->variable().symbolType() != SymbolType::Empty);
     const TIntermSymbol *symbolInInitializer = FindSymbolNode(expression, symbolNode->getSymbol());
 
     if (symbolInInitializer)
