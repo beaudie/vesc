@@ -171,6 +171,8 @@ void ProgramVk::reset(VkDevice device)
 
     mLinkedFragmentModule.destroy(device);
     mLinkedVertexModule.destroy(device);
+    mVertexModuleSerial   = Serial();
+    mFragmentModuleSerial = Serial();
     mPipelineLayout.destroy(device);
 
     // Descriptor Sets are pool allocated, so do not need to be explicitly freed.
@@ -233,6 +235,7 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         vertexShaderInfo.pCode    = vertexCode.data();
 
         ANGLE_TRY(mLinkedVertexModule.init(device, vertexShaderInfo));
+        mVertexModuleSerial = renderer->issueProgramSerial();
     }
 
     {
@@ -244,6 +247,7 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         fragmentShaderInfo.pCode    = fragmentCode.data();
 
         ANGLE_TRY(mLinkedFragmentModule.init(device, fragmentShaderInfo));
+        mFragmentModuleSerial = renderer->issueProgramSerial();
     }
 
     ANGLE_TRY(initPipelineLayout(contextVk));
@@ -547,10 +551,20 @@ const vk::ShaderModule &ProgramVk::getLinkedVertexModule() const
     return mLinkedVertexModule;
 }
 
+Serial ProgramVk::getVertexModuleSerial() const
+{
+    return mVertexModuleSerial;
+}
+
 const vk::ShaderModule &ProgramVk::getLinkedFragmentModule() const
 {
     ASSERT(mLinkedFragmentModule.getHandle() != VK_NULL_HANDLE);
     return mLinkedFragmentModule;
+}
+
+Serial ProgramVk::getFragmentModuleSerial() const
+{
+    return mFragmentModuleSerial;
 }
 
 const vk::PipelineLayout &ProgramVk::getPipelineLayout() const
