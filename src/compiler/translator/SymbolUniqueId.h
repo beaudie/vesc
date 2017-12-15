@@ -24,6 +24,7 @@ class TSymbolUniqueId
     explicit TSymbolUniqueId(const TSymbol &symbol);
     TSymbolUniqueId(const TSymbolUniqueId &) = default;
     TSymbolUniqueId &operator=(const TSymbolUniqueId &) = default;
+    bool operator==(const TSymbolUniqueId &) const;
 
     int get() const;
 
