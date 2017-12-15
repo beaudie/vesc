@@ -183,6 +183,11 @@ inline bool isDeviceLostError(HRESULT errorCode)
     }
 }
 
+inline gl::Error AppendMsgToError(const gl::Error &error, const std::string &message)
+{
+    return gl::Error(error.getCode(), error.getID(), error.getMessage() + message);
+}
+
 template <ResourceType ResourceT>
 class LazyResource : angle::NonCopyable
 {

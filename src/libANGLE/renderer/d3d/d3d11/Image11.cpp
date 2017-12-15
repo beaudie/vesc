@@ -625,19 +625,13 @@ gl::Error Image11::map(const gl::Context *context, D3D11_MAP mapType, D3D11_MAPP
     unsigned int subresourceIndex  = 0;
     ANGLE_TRY(getStagingTexture(&stagingTexture, &subresourceIndex));
 
-    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-
     ASSERT(stagingTexture && stagingTexture->valid());
-    HRESULT result = deviceContext->Map(stagingTexture->get(), subresourceIndex, mapType, 0, map);
 
-    if (FAILED(result))
+    const gl::Error error =
+        mRenderer->mapResource(stagingTexture->get(), subresourceIndex, mapType, 0, map);
+    if (error.isError())
     {
-        // this can fail if the device is removed (from TDR)
-        if (d3d11::isDeviceLostError(result))
-        {
-            mRenderer->notifyDeviceLost();
-        }
-        return gl::OutOfMemory() << "Failed to map staging texture, " << gl::FmtHR(result);
+        return d3d11::AppendMsgToError(error, "Failed to map staging texture.");
     }
 
     mDirty = true;

@@ -70,16 +70,13 @@ gl::Error VertexBuffer11::mapResource()
 {
     if (mMappedResourceData == nullptr)
     {
-        ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
-
         D3D11_MAPPED_SUBRESOURCE mappedResource;
 
-        HRESULT result =
-            dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
-        if (FAILED(result))
+        const gl::Error error = mRenderer->mapResource(
+            mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
+        if (error.isError())
         {
-            return gl::OutOfMemory()
-                   << "Failed to map internal vertex buffer, " << gl::FmtHR(result);
+            return d3d11::AppendMsgToError(error, "Failed to map internal vertex buffer");
         }
 
         mMappedResourceData = reinterpret_cast<uint8_t *>(mappedResource.pData);
@@ -161,17 +158,15 @@ gl::Error VertexBuffer11::discard()
         return gl::OutOfMemory() << "Internal vertex buffer is not initialized.";
     }
 
-    ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
-
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-    if (FAILED(result))
+    const gl::Error error =
+        mRenderer->mapResource(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    if (error.isError())
     {
-        return gl::OutOfMemory() << "Failed to map internal buffer for discarding, "
-                                 << gl::FmtHR(result);
+        return d3d11::AppendMsgToError(error, "Failed to map internal buffer for discarding");
     }
 
-    dxContext->Unmap(mBuffer.get(), 0);
+    mRenderer->getDeviceContext()->Unmap(mBuffer.get(), 0);
 
     return gl::NoError();
 }
