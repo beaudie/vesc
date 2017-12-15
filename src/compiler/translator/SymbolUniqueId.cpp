@@ -25,4 +25,9 @@ int TSymbolUniqueId::get() const
     return mId;
 }
 
+bool TSymbolUniqueId::operator==(const TSymbolUniqueId &other) const
+{
+    return mId == other.mId;
+}
+
 }  // namespace sh
