@@ -15,7 +15,7 @@ class TParseContext;
 
 // Returns true if the initializer is valid.
 bool ValidateGlobalInitializer(TIntermTyped *initializer,
-                               const TParseContext *context,
+                               int shaderVersion,
                                bool *warning);
 
 }  // namespace sh

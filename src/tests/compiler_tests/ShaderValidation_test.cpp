@@ -5572,3 +5572,25 @@ TEST_F(FragmentShaderValidationTest, MatrixNegativeIndex)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+// Global variable initializers need to be constant expressions. Test with assigning a ternary expression that ANGLE can fold.
+TEST_F(FragmentShaderValidationTest, AssignFoldableTernaryToGlobal)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision mediump float;
+
+        uniform float u;
+        float c = true ? 1.0 : u;
+
+        out vec4 my_FragColor;
+
+        void main()
+        {
+           my_FragColor = vec4(c);
+        })";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
