@@ -230,14 +230,14 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
 
         if (type.isArray())
         {
-            out << "static const uint " << DecorateVariableIfNeeded(uniform->getName())
+            out << "static const uint " << DecorateVariableIfNeeded(uniform->variable())
                 << ArrayString(type) << " = ";
             OutputSamplerIndexArrayInitializer(out, type, samplerArrayIndex);
             out << ";\n";
         }
         else
         {
-            out << "static const uint " << DecorateVariableIfNeeded(uniform->getName()) << " = "
+            out << "static const uint " << DecorateVariableIfNeeded(uniform->variable()) << " = "
                 << samplerArrayIndex << ";\n";
         }
     }
@@ -261,20 +261,20 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
 
 void UniformHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
                                              const TType &type,
-                                             const TName &name,
+                                             const TVariable &variable,
                                              const unsigned int registerIndex)
 {
     out << "uniform " << SamplerString(type.getBasicType()) << " sampler_"
-        << DecorateVariableIfNeeded(name) << ArrayString(type) << " : register(s"
+        << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(s"
         << str(registerIndex) << ");\n";
     out << "uniform " << TextureString(type.getBasicType()) << " texture_"
-        << DecorateVariableIfNeeded(name) << ArrayString(type) << " : register(t"
+        << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(t"
         << str(registerIndex) << ");\n";
 }
 
 void UniformHLSL::outputHLSL4_1_FL11Texture(TInfoSinkBase &out,
                                             const TType &type,
-                                            const TName &name,
+                                            const TVariable &variable,
                                             const unsigned int registerIndex)
 {
     // TODO(xinghua.cao@intel.com): if image2D variable is bound on one layer of Texture3D or
@@ -283,14 +283,14 @@ void UniformHLSL::outputHLSL4_1_FL11Texture(TInfoSinkBase &out,
     // temporary Texture2D to image2D variable.
     out << "uniform "
         << TextureString(type.getBasicType(), type.getLayoutQualifier().imageInternalFormat) << " "
-        << DecorateVariableIfNeeded(name) << ArrayString(type) << " : register(t"
+        << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(t"
         << str(registerIndex) << ");\n";
     return;
 }
 
 void UniformHLSL::outputHLSL4_1_FL11RWTexture(TInfoSinkBase &out,
                                               const TType &type,
-                                              const TName &name,
+                                              const TVariable &variable,
                                               const unsigned int registerIndex)
 {
     // TODO(xinghua.cao@intel.com): if image2D variable is bound on one layer of Texture3D or
@@ -301,7 +301,7 @@ void UniformHLSL::outputHLSL4_1_FL11RWTexture(TInfoSinkBase &out,
     {
         out << "uniform "
             << RWTextureString(type.getBasicType(), type.getLayoutQualifier().imageInternalFormat)
-            << " " << DecorateVariableIfNeeded(name) << ArrayString(type) << " : register(u"
+            << " " << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(u"
             << str(registerIndex) << ");\n";
     }
     else
@@ -314,7 +314,7 @@ void UniformHLSL::outputHLSL4_1_FL11RWTexture(TInfoSinkBase &out,
 
 void UniformHLSL::outputUniform(TInfoSinkBase &out,
                                 const TType &type,
-                                const TName &name,
+                                const TVariable &variable,
                                 const unsigned int registerIndex)
 {
     const TStructure *structure = type.getStruct();
@@ -332,7 +332,7 @@ void UniformHLSL::outputUniform(TInfoSinkBase &out,
 
     out << "uniform " << typeName << " ";
 
-    out << DecorateVariableIfNeeded(name);
+    out << DecorateVariableIfNeeded(variable);
 
     out << ArrayString(type) << " : " << registerString << ";\n";
 }
@@ -357,7 +357,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         // Output regular uniforms. Group sampler uniforms by type.
         const TIntermSymbol &uniform = *uniformIt.second;
         const TType &type            = uniform.getType();
-        const TName &name            = uniform.getName();
+        const TVariable &variable    = uniform.variable();
 
         if (outputType == SH_HLSL_4_1_OUTPUT && IsSampler(type.getBasicType()))
         {
@@ -366,8 +366,8 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         }
         else if (outputType == SH_HLSL_4_0_FL9_3_OUTPUT && IsSampler(type.getBasicType()))
         {
-            unsigned int registerIndex = assignUniformRegister(type, name.getString(), nullptr);
-            outputHLSL4_0_FL9_3Sampler(out, type, name, registerIndex);
+            unsigned int registerIndex = assignUniformRegister(type, variable.name(), nullptr);
+            outputHLSL4_0_FL9_3Sampler(out, type, variable, registerIndex);
         }
         else if (outputType == SH_HLSL_4_1_OUTPUT && IsImage(type.getBasicType()))
         {
@@ -379,12 +379,12 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             {
                 TVector<TIntermSymbol *> samplerSymbols;
                 TMap<TIntermSymbol *, TString> symbolsToAPINames;
-                type.createSamplerSymbols("angle_" + name.getString(), name.getString(),
+                type.createSamplerSymbols("angle_" + uniform.getSymbol(), uniform.getSymbol(),
                                           &samplerSymbols, &symbolsToAPINames, symbolTable);
                 for (TIntermSymbol *sampler : samplerSymbols)
                 {
                     const TType &samplerType = sampler->getType();
-                    const TName &samplerName = sampler->getName();
+                    const TVariable &samplerVariable = sampler->variable();
 
                     if (outputType == SH_HLSL_4_1_OUTPUT)
                     {
@@ -396,19 +396,20 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                     {
                         unsigned int registerIndex = assignSamplerInStructUniformRegister(
                             samplerType, symbolsToAPINames[sampler], nullptr);
-                        outputHLSL4_0_FL9_3Sampler(out, samplerType, samplerName, registerIndex);
+                        outputHLSL4_0_FL9_3Sampler(out, samplerType, samplerVariable,
+                                                   registerIndex);
                     }
                     else
                     {
                         ASSERT(outputType == SH_HLSL_3_0_OUTPUT);
                         unsigned int registerIndex = assignSamplerInStructUniformRegister(
                             samplerType, symbolsToAPINames[sampler], nullptr);
-                        outputUniform(out, samplerType, samplerName, registerIndex);
+                        outputUniform(out, samplerType, samplerVariable, registerIndex);
                     }
                 }
             }
-            unsigned int registerIndex = assignUniformRegister(type, name.getString(), nullptr);
-            outputUniform(out, type, name, registerIndex);
+            unsigned int registerIndex = assignUniformRegister(type, uniform.getSymbol(), nullptr);
+            outputUniform(out, type, variable, registerIndex);
         }
     }
 
@@ -428,15 +429,15 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         for (const TIntermSymbol *image : imageUniformsHLSL41Output)
         {
             const TType &type          = image->getType();
-            const TName &name          = image->getName();
-            unsigned int registerIndex = assignUniformRegister(type, name.getString(), nullptr);
+            const TVariable &variable  = image->variable();
+            unsigned int registerIndex = assignUniformRegister(type, image->getSymbol(), nullptr);
             if (type.getMemoryQualifier().readonly)
             {
-                outputHLSL4_1_FL11Texture(out, type, name, registerIndex);
+                outputHLSL4_1_FL11Texture(out, type, variable, registerIndex);
             }
             else
             {
-                outputHLSL4_1_FL11RWTexture(out, type, name, registerIndex);
+                outputHLSL4_1_FL11RWTexture(out, type, variable, registerIndex);
             }
         }
     }
