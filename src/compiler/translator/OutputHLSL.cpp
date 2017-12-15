@@ -342,7 +342,7 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
         TInterfaceBlock *interfaceBlock =
             mappedStruct.blockDeclarator->getType().getInterfaceBlock();
         const TString &interfaceBlockName = *interfaceBlock->name();
-        const TName &instanceName         = mappedStruct.blockDeclarator->getName();
+        const TString &instanceName       = mappedStruct.blockDeclarator->getSymbol();
         if (mReferencedUniformBlocks.count(interfaceBlockName) == 0)
         {
             continue;
@@ -361,13 +361,13 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
             TString originalName;
             TString mappedName("map");
 
-            if (instanceName.getString() != "")
+            if (instanceName != "")
             {
                 unsigned int instanceStringArrayIndex = GL_INVALID_INDEX;
                 if (isInstanceArray)
                     instanceStringArrayIndex = instanceArrayIndex;
                 TString instanceString = mUniformHLSL->UniformBlockInstanceString(
-                    instanceName.getString(), instanceStringArrayIndex);
+                    instanceName, instanceStringArrayIndex);
                 originalName += instanceString;
                 mappedName += instanceString;
                 originalName += ".";
@@ -897,7 +897,7 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
                 mReferencedUniforms[name] = node;
             }
 
-            out << DecorateVariableIfNeeded(node->getName());
+            out << DecorateVariableIfNeeded(node->variable());
         }
         else if (qualifier == EvqAttribute || qualifier == EvqVertexIn)
         {
@@ -990,7 +990,7 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         }
         else
         {
-            out << DecorateVariableIfNeeded(node->getName());
+            out << DecorateVariableIfNeeded(node->variable());
         }
     }
 }
@@ -2620,16 +2620,17 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
 {
     TQualifier qualifier = symbol->getQualifier();
     const TType &type    = symbol->getType();
-    const TName &name    = symbol->getName();
+    const TVariable &variable = symbol->variable();
     TString nameStr;
 
-    if (name.getString().empty())  // HLSL demands named arguments, also for prototypes
+    if (variable.symbolType() ==
+        SymbolType::Empty)  // HLSL demands named arguments, also for prototypes
     {
         nameStr = "x" + str(mUniqueIndex++);
     }
     else
     {
-        nameStr = DecorateVariableIfNeeded(name);
+        nameStr = DecorateVariableIfNeeded(variable);
     }
 
     if (IsSampler(type.getBasicType()))
