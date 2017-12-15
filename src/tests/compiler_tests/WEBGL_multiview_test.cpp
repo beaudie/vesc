@@ -62,7 +62,8 @@ class SymbolOccurrenceCounterByName : public SymbolOccurrenceCounter
 
     bool shouldCountSymbol(const TIntermSymbol *node) const override
     {
-        return node->getName().getString() == mSymbolName;
+        return node->variable().symbolType() != SymbolType::Empty &&
+               node->getSymbol() == mSymbolName;
     }
 
   private:
@@ -79,8 +80,8 @@ class SymbolOccurrenceCounterByNameAndQualifier : public SymbolOccurrenceCounter
 
     bool shouldCountSymbol(const TIntermSymbol *node) const override
     {
-        return node->getName().getString() == mSymbolName &&
-               node->getQualifier() == mSymbolQualifier;
+        return node->variable().symbolType() != SymbolType::Empty &&
+               node->getSymbol() == mSymbolName && node->getQualifier() == mSymbolQualifier;
     }
 
   private:
