@@ -25,7 +25,7 @@ int GetLoopSymbolId(TIntermLoop *loop)
     TIntermBinary *declInit  = (*declSeq)[0]->getAsBinaryNode();
     TIntermSymbol *symbol    = declInit->getLeft()->getAsSymbolNode();
 
-    return symbol->getId();
+    return symbol->uniqueId().get();
 }
 
 // Traverses a node to check if it represents a constant index expression.
@@ -55,7 +55,7 @@ class ValidateConstIndexExpr : public TIntermTraverser
         if (mValid)
         {
             bool isLoopSymbol = std::find(mLoopSymbolIds.begin(), mLoopSymbolIds.end(),
-                                          symbol->getId()) != mLoopSymbolIds.end();
+                                          symbol->uniqueId().get()) != mLoopSymbolIds.end();
             mValid = (symbol->getQualifier() == EvqConst) || isLoopSymbol;
         }
     }
@@ -171,7 +171,7 @@ bool ValidateLimitationsTraverser::withinLoopBody() const
 
 bool ValidateLimitationsTraverser::isLoopIndex(TIntermSymbol *symbol)
 {
-    return std::find(mLoopSymbolIds.begin(), mLoopSymbolIds.end(), symbol->getId()) !=
+    return std::find(mLoopSymbolIds.begin(), mLoopSymbolIds.end(), symbol->uniqueId().get()) !=
            mLoopSymbolIds.end();
 }
 
@@ -258,7 +258,7 @@ int ValidateLimitationsTraverser::validateForLoopInit(TIntermLoop *node)
         return -1;
     }
 
-    return symbol->getId();
+    return symbol->uniqueId().get();
 }
 
 bool ValidateLimitationsTraverser::validateForLoopCond(TIntermLoop *node, int indexSymbolId)
@@ -286,7 +286,7 @@ bool ValidateLimitationsTraverser::validateForLoopCond(TIntermLoop *node, int in
         error(binOp->getLine(), "Invalid condition", "for");
         return false;
     }
-    if (symbol->getId() != indexSymbolId)
+    if (symbol->uniqueId().get() != indexSymbolId)
     {
         error(symbol->getLine(), "Expected loop index", symbol->getSymbol().c_str());
         return false;
@@ -357,7 +357,7 @@ bool ValidateLimitationsTraverser::validateForLoopExpr(TIntermLoop *node, int in
         error(expr->getLine(), "Invalid expression", "for");
         return false;
     }
-    if (symbol->getId() != indexSymbolId)
+    if (symbol->uniqueId().get() != indexSymbolId)
     {
         error(symbol->getLine(), "Expected loop index", symbol->getSymbol().c_str());
         return false;
