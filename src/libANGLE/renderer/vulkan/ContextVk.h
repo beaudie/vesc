@@ -140,25 +140,26 @@ class ContextVk : public ContextImpl, public ResourceVk
     // Path object creation
     std::vector<PathImpl *> createPaths(GLsizei) override;
 
-    VkDevice getDevice() const;
-    vk::Error getStartedCommandBuffer(vk::CommandBufferAndState **commandBufferOut);
-    vk::Error submitCommands(vk::CommandBufferAndState *commandBuffer);
-
-    RendererVk *getRenderer() { return mRenderer; }
-
-    // TODO(jmadill): Use pipeline cache.
-    void invalidateCurrentPipeline();
-
     gl::Error dispatchCompute(const gl::Context *context,
                               GLuint numGroupsX,
                               GLuint numGroupsY,
                               GLuint numGroupsZ) override;
 
+    VkDevice getDevice() const;
+    RendererVk *getRenderer() { return mRenderer; }
+
+    // TODO(jmadill): Use pipeline cache.
+    void invalidateCurrentPipeline();
+    void onVertexArrayChange();
+
     vk::DescriptorPool *getDescriptorPool();
 
   private:
     gl::Error initPipeline(const gl::Context *context);
-    gl::Error setupDraw(const gl::Context *context, GLenum mode, DrawType drawType);
+    gl::Error setupDraw(const gl::Context *context,
+                        GLenum mode,
+                        DrawType drawType,
+                        vk::CommandBuffer **commandBuffer);
 
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
@@ -183,6 +184,10 @@ class ContextVk : public ContextImpl, public ResourceVk
     // The descriptor pool is externally sychronized, so cannot be accessed from different threads
     // simulataneously. Hence, we keep it in the ContextVk instead of the RendererVk.
     vk::DescriptorPool mDescriptorPool;
+
+    // Triggers adding dependencies to the command graph.
+    bool mVertexArrayDirty;
+    bool mTexturesDirty;
 };
 
 }  // namespace rx
