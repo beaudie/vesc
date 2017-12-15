@@ -128,6 +128,11 @@ bool ValidateVaryingLocationsTraverser::visitDeclaration(Visit visit, TIntermDec
         return false;
     }
 
+    if (symbol->variable().symbolType() == SymbolType::Empty)
+    {
+        return false;
+    }
+
     // Collect varyings that have explicit 'location' qualifiers.
     const TQualifier qualifier = symbol->getQualifier();
     if (symbol->getType().getLayoutQualifier().location != -1)
