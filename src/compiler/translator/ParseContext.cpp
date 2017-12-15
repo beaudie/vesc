@@ -606,6 +606,8 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
     //
     if (symNode)
     {
+        ASSERT(symNode->variable().symbolType() !=
+               SymbolType::Empty);  // Symbol inside an expression can't be nameless.
         const char *symbol = symNode->getSymbol().c_str();
         std::stringstream reasonStream;
         reasonStream << "l-value required (" << message << " \"" << symbol << "\")";
