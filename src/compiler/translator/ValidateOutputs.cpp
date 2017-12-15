@@ -20,6 +20,7 @@ namespace sh
 
 namespace
 {
+
 void error(const TIntermSymbol &symbol, const char *reason, TDiagnostics *diagnostics)
 {
     diagnostics->error(symbol.getLine(), reason, symbol.getSymbol().c_str());
