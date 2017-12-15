@@ -78,12 +78,12 @@ class UniformLinker final : angle::NonCopyable
         unsigned int atomicCounterCount;
     };
 
-    bool validateVertexAndFragmentUniforms(const Context *context, InfoLog &infoLog) const;
+    bool validateUniformsForDraw(const Context *context, InfoLog &infoLog) const;
 
-    static bool linkValidateUniforms(InfoLog &infoLog,
-                                     const std::string &uniformName,
-                                     const sh::Uniform &vertexUniform,
-                                     const sh::Uniform &fragmentUniform);
+    static bool linkValidateUniforms(const sh::Uniform &uniform1,
+                                     const sh::Uniform &uniform2,
+                                     std::string *mismatchItem,
+                                     std::string *fieldName);
 
     bool flattenUniformsAndCheckCapsForShader(const Context *context,
                                               Shader *shader,

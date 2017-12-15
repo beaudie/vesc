@@ -119,6 +119,43 @@ class InfoLog : angle::NonCopyable
 
     std::string str() const { return mLazyStream ? mLazyStream->str() : ""; }
 
+    // TODO(jiawei.shao@intel.com): support linking program with geometry shader.
+    void logLinkMismatch(const std::string &variableName,
+                         const std::string &typeName,
+                         std::string &mismatchItem,
+                         const std::string &fieldName)
+    {
+        if (!fieldName.empty())
+        {
+            *this << mismatchItem << " of " << typeName << " '" << variableName << "' member '"
+                  << variableName << "." << fieldName
+                  << "' differ between vertex and fragment shaders.";
+        }
+        else
+        {
+            *this << mismatchItem << " of " << typeName << " '" << variableName
+                  << "' differ between vertex and fragment shaders.";
+        }
+    }
+
+    static std::string GetFieldNameMismatchItem(GLuint memberIndex,
+                                                const std::string &name1,
+                                                const std::string &name2)
+    {
+        std::ostringstream stream;
+        stream << "Names for field '" << memberIndex << "' ('" << name1 << "' vs '" << name2
+               << "')";
+        return stream.str();
+    }
+
+    static std::string GetFieldInStructOrBlockString(const std::string &structName,
+                                                     const std::string &fieldName)
+    {
+        std::ostringstream stream;
+        stream << structName << "." << fieldName;
+        return stream.str();
+    }
+
   private:
     void ensureInitialized()
     {
@@ -579,11 +616,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLsizei getTransformFeedbackVaryingMaxLength() const;
     GLenum getTransformFeedbackBufferMode() const;
 
-    static bool linkValidateInterfaceBlockFields(InfoLog &infoLog,
-                                                 const std::string &uniformName,
-                                                 const sh::InterfaceBlockField &vertexUniform,
+    static bool LinkValidateInterfaceBlockFields(const sh::InterfaceBlockField &vertexUniform,
                                                  const sh::InterfaceBlockField &fragmentUniform,
-                                                 bool webglCompatibility);
+                                                 bool webglCompatibility,
+                                                 std::string *mismatchItem,
+                                                 std::string *fieldName);
 
     void addRef();
     void release(const Context *context);
@@ -614,11 +651,11 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramState &getState() const { return mState; }
 
-    static bool linkValidateVariablesBase(InfoLog &infoLog,
-                                          const std::string &variableName,
-                                          const sh::ShaderVariable &vertexVariable,
+    static bool LinkValidateVariablesBase(const sh::ShaderVariable &vertexVariable,
                                           const sh::ShaderVariable &fragmentVariable,
-                                          bool validatePrecision);
+                                          bool validatePrecision,
+                                          std::string *mismatchItem,
+                                          std::string *fieldName);
 
     GLuint getInputResourceIndex(const GLchar *name) const;
     GLuint getOutputResourceIndex(const GLchar *name) const;
@@ -646,8 +683,17 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void unlink();
 
+    bool linkValidateShaders(const Context *context, InfoLog &infoLog);
+    bool linkValidateShaderInputOutputMatching(const Context *context,
+                                               InfoLog &infoLog,
+                                               Shader *generatorShader,
+                                               Shader *consumerShader) const;
+    bool linkValidateFragmentInputBindings(
+        const sh::Varying &fragmentShaderInputVarying,
+        std::map<GLuint, std::string> *staticFragmentInputLocations,
+        InfoLog &infoLog) const;
     bool linkAttributes(const Context *context, InfoLog &infoLog);
-    bool validateVertexAndFragmentInterfaceBlocks(
+    bool validateInterfaceBlocksForDraw(
         const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
         InfoLog &infoLog,
@@ -663,16 +709,17 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void updateLinkedShaderStages();
 
-    bool areMatchingInterfaceBlocks(InfoLog &infoLog,
-                                    const sh::InterfaceBlock &vertexInterfaceBlock,
-                                    const sh::InterfaceBlock &fragmentInterfaceBlock,
-                                    bool webglCompatibility) const;
+    static bool AreMatchingInterfaceBlocks(const sh::InterfaceBlock &interfaceBlock1,
+                                           const sh::InterfaceBlock &interfaceBlock2,
+                                           bool webglCompatibility,
+                                           std::string *mismatchItem,
+                                           std::string *fieldName);
 
-    static bool linkValidateVaryings(InfoLog &infoLog,
-                                     const std::string &varyingName,
-                                     const sh::Varying &vertexVarying,
-                                     const sh::Varying &fragmentVarying,
-                                     int shaderVersion);
+    static bool LinkValidateVaryings(const sh::Varying &generatorVarying,
+                                     const sh::Varying &consumerVarying,
+                                     int shaderVersion,
+                                     std::string *mismatchItem,
+                                     std::string *fieldName);
     bool linkValidateBuiltInVaryings(const Context *context, InfoLog &infoLog) const;
     bool linkValidateTransformFeedback(const gl::Context *context,
                                        InfoLog &infoLog,
