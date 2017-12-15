@@ -16,6 +16,9 @@
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
+// FIXME: remove if split file
+#include "libANGLE/renderer/vulkan/ProgramVk.h"
+
 namespace rx
 {
 
@@ -1442,6 +1445,305 @@ Error InitializeRenderPassFromDesc(VkDevice device,
 
     ANGLE_TRY(renderPass->init(device, createInfo));
     return vk::NoError();
+}
+
+// PipelineDesc implementation.
+PipelineDesc::PipelineDesc()
+{
+    memset(this, 0, sizeof(PipelineDesc));
+}
+
+PipelineDesc::~PipelineDesc()
+{
+}
+
+PipelineDesc::PipelineDesc(const PipelineDesc &other)
+{
+    memcpy(this, &other, sizeof(PipelineDesc));
+}
+
+PipelineDesc &PipelineDesc::operator=(const PipelineDesc &other)
+{
+    memcpy(this, &other, sizeof(PipelineDesc));
+    return *this;
+}
+
+size_t PipelineDesc::hash() const
+{
+    return angle::ComputeGenericHash(*this);
+}
+
+bool PipelineDesc::operator==(const PipelineDesc &other) const
+{
+    return (memcmp(this, &other, sizeof(PipelineDesc)) == 0);
+}
+
+void PipelineDesc::initDefaults()
+{
+    mInputAssemblyInfo.topology = static_cast<uint32_t>(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+    mInputAssemblyInfo.primitiveRestartEnable = 0;
+
+    mRasterizationStateInfo.depthClampEnable           = 0;
+    mRasterizationStateInfo.rasterizationDiscardEnable = 0;
+    mRasterizationStateInfo.polygonMode     = static_cast<uint16_t>(VK_POLYGON_MODE_FILL);
+    mRasterizationStateInfo.cullMode        = static_cast<uint16_t>(VK_CULL_MODE_NONE);
+    mRasterizationStateInfo.frontFace       = static_cast<uint16_t>(VK_FRONT_FACE_CLOCKWISE);
+    mRasterizationStateInfo.depthBiasEnable = 0;
+    mRasterizationStateInfo.depthBiasConstantFactor = 0.0f;
+    mRasterizationStateInfo.depthBiasClamp          = 0.0f;
+    mRasterizationStateInfo.depthBiasSlopeFactor    = 0.0f;
+    mRasterizationStateInfo.lineWidth               = 1.0f;
+
+    mMultisampleStateInfo.rasterizationSamples = 1;
+    mMultisampleStateInfo.sampleShadingEnable  = 0;
+    mMultisampleStateInfo.minSampleShading     = 0.0f;
+    for (int maskIndex; maskIndex < gl::MAX_SAMPLE_MASK_WORDS; ++maskIndex)
+    {
+        mMultisampleStateInfo.sampleMask[maskIndex] = 0;
+    }
+    mMultisampleStateInfo.alphaToCoverageEnable = 0;
+    mMultisampleStateInfo.alphaToOneEnable      = 0;
+
+    mDepthStencilStateInfo.depthTestEnable       = 0;
+    mDepthStencilStateInfo.depthWriteEnable      = 1;
+    mDepthStencilStateInfo.depthCompareOp        = static_cast<uint8_t>(VK_COMPARE_OP_LESS);
+    mDepthStencilStateInfo.depthBoundsTestEnable = 0;
+    mDepthStencilStateInfo.stencilTestEnable     = 0;
+    mDepthStencilStateInfo.minDepthBounds        = 0.0f;
+    mDepthStencilStateInfo.maxDepthBounds        = 0.0f;
+    mDepthStencilStateInfo.front.failOp          = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.passOp          = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.depthFailOp     = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.compareOp       = static_cast<uint8_t>(VK_COMPARE_OP_ALWAYS);
+    mDepthStencilStateInfo.front.compareMask     = static_cast<uint32_t>(-1);
+    mDepthStencilStateInfo.front.writeMask       = static_cast<uint32_t>(-1);
+    mDepthStencilStateInfo.front.reference       = 0;
+    mDepthStencilStateInfo.back.failOp           = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.passOp           = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.depthFailOp      = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.compareOp        = static_cast<uint8_t>(VK_COMPARE_OP_ALWAYS);
+    mDepthStencilStateInfo.back.compareMask      = static_cast<uint32_t>(-1);
+    mDepthStencilStateInfo.back.writeMask        = static_cast<uint32_t>(-1);
+    mDepthStencilStateInfo.back.reference        = 0;
+}
+
+Error PipelineDesc::initializePipeline(VkDevice device, ProgramVk *programVk, Pipeline *pipelineOut)
+{
+    VkPipelineShaderStageCreateInfo shaderStages[2];
+    VkPipelineVertexInputStateCreateInfo vertexInputState;
+    VkPipelineInputAssemblyStateCreateInfo inputAssemblyState;
+    VkPipelineViewportStateCreateInfo viewportState;
+    VkPipelineRasterizationStateCreateInfo rasterState;
+    VkPipelineMultisampleStateCreateInfo multisampleState;
+    VkPipelineDepthStencilStateCreateInfo depthStencilState;
+    VkPipelineColorBlendAttachmentState blendAttachmentState;
+    VkPipelineColorBlendStateCreateInfo blendState;
+    VkGraphicsPipelineCreateInfo createInfo;
+
+    ASSERT(programVk->getVertexModuleSerial() == mShaderStageInfo[0].moduleSerial);
+    shaderStages[0].sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    shaderStages[0].pNext               = nullptr;
+    shaderStages[0].flags               = 0;
+    shaderStages[0].stage               = VK_SHADER_STAGE_VERTEX_BIT;
+    shaderStages[0].module              = programVk->getLinkedVertexModule().getHandle();
+    shaderStages[0].pName               = "main";
+    shaderStages[0].pSpecializationInfo = nullptr;
+
+    ASSERT(programVk->getFragmentModuleSerial() == mShaderStageInfo[1].moduleSerial);
+    shaderStages[1].sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    shaderStages[1].pNext               = nullptr;
+    shaderStages[1].flags               = 0;
+    shaderStages[1].stage               = VK_SHADER_STAGE_FRAGMENT_BIT;
+    shaderStages[1].module              = programVk->getLinkedFragmentModule().getHandle();
+    shaderStages[1].pName               = "main";
+    shaderStages[1].pSpecializationInfo = nullptr;
+
+    // TODO(jmadill): Possibly use different path for ES 3.1 split bindings/attribs.
+    gl::AttribArray<VkVertexInputBindingDescription> bindingDescs;
+    gl::AttribArray<VkVertexInputAttributeDescription> attributeDescs;
+
+    uint32_t vertexAttribCount = 0;
+
+    for (uint32_t attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        VkVertexInputBindingDescription &bindingDesc       = bindingDescs[attribIndex];
+        VkVertexInputAttributeDescription &attribDesc      = attributeDescs[attribIndex];
+        const PackedVertexInputBindingDesc &packedBinding  = mVertexInputBindings[attribIndex];
+        const PackedVertexInputAttributeDesc &packedAttrib = mVertexInputAttribs[attribIndex];
+
+        // TODO(jmadill): Support for gaps in vertex attribute specification.
+        if (packedAttrib.format == 0)
+            continue;
+
+        vertexAttribCount = attribIndex + 1;
+
+        bindingDesc.binding   = attribIndex;
+        bindingDesc.inputRate = static_cast<VkVertexInputRate>(packedBinding.inputRate);
+        bindingDesc.stride    = static_cast<uint32_t>(packedBinding.stride);
+
+        attribDesc.binding  = attribIndex;
+        attribDesc.format   = static_cast<VkFormat>(packedAttrib.format);
+        attribDesc.location = static_cast<uint32_t>(packedAttrib.location);
+        attribDesc.offset   = packedAttrib.offset;
+    }
+
+    // The binding descriptions are filled in at draw time.
+    vertexInputState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    vertexInputState.pNext = nullptr;
+    vertexInputState.flags = 0;
+    vertexInputState.vertexBindingDescriptionCount   = vertexAttribCount;
+    vertexInputState.pVertexBindingDescriptions      = bindingDescs.data();
+    vertexInputState.vertexAttributeDescriptionCount = vertexAttribCount;
+    vertexInputState.pVertexAttributeDescriptions    = attributeDescs.data();
+
+    // Primitive topology is filled in at draw time.
+    inputAssemblyState.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    inputAssemblyState.pNext    = nullptr;
+    inputAssemblyState.flags    = 0;
+    inputAssemblyState.topology = static_cast<VkPrimitiveTopology>(mInputAssemblyInfo.topology);
+    inputAssemblyState.primitiveRestartEnable =
+        static_cast<VkBool32>(mInputAssemblyInfo.primitiveRestartEnable);
+
+    // Set initial viewport and scissor state.
+
+    viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    viewportState.pNext         = nullptr;
+    viewportState.flags         = 0;
+    viewportState.viewportCount = 1;
+    viewportState.pViewports    = &mViewport;
+    viewportState.scissorCount  = 1;
+    viewportState.pScissors     = &mScissor;
+
+    // Rasterizer state.
+    rasterState.sType            = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    rasterState.pNext            = nullptr;
+    rasterState.flags            = 0;
+    rasterState.depthClampEnable = static_cast<VkBool32>(mRasterizationStateInfo.depthClampEnable);
+    rasterState.rasterizerDiscardEnable =
+        static_cast<VkBool32>(mRasterizationStateInfo.rasterizationDiscardEnable);
+    rasterState.polygonMode     = static_cast<VkPolygonMode>(mRasterizationStateInfo.polygonMode);
+    rasterState.cullMode        = static_cast<VkCullModeFlags>(mRasterizationStateInfo.cullMode);
+    rasterState.frontFace       = static_cast<VkFrontFace>(mRasterizationStateInfo.frontFace);
+    rasterState.depthBiasEnable = static_cast<VkBool32>(mRasterizationStateInfo.depthBiasEnable);
+    rasterState.depthBiasConstantFactor = mRasterizationStateInfo.depthBiasConstantFactor;
+    rasterState.depthBiasClamp          = mRasterizationStateInfo.depthBiasClamp;
+    rasterState.depthBiasSlopeFactor    = mRasterizationStateInfo.depthBiasSlopeFactor;
+    rasterState.lineWidth               = mRasterizationStateInfo.lineWidth;
+
+    // Multisample state.
+    multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+    multisampleState.pNext = nullptr;
+    multisampleState.flags = 0;
+    multisampleState.rasterizationSamples =
+        static_cast<VkSampleCountFlagBits>(1 << mMultisampleStateInfo.rasterizationSamples);
+    multisampleState.sampleShadingEnable =
+        static_cast<VkBool32>(mMultisampleStateInfo.sampleShadingEnable);
+    multisampleState.minSampleShading = mMultisampleStateInfo.minSampleShading;
+    // TODO(jmadill): sample masks
+    multisampleState.pSampleMask = nullptr;
+    multisampleState.alphaToCoverageEnable =
+        static_cast<VkBool32>(mMultisampleStateInfo.alphaToCoverageEnable);
+    multisampleState.alphaToOneEnable =
+        static_cast<VkBool32>(mMultisampleStateInfo.alphaToOneEnable);
+
+    // Depth/stencil state.
+    depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencilState.pNext = nullptr;
+    depthStencilState.flags = 0;
+
+    // Initialize a dummy MRT blend state.
+    // TODO(jmadill): Blend state/MRT.
+    blendAttachmentState.blendEnable         = VK_FALSE;
+    blendAttachmentState.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+    blendAttachmentState.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+    blendAttachmentState.colorBlendOp        = VK_BLEND_OP_ADD;
+    blendAttachmentState.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    blendAttachmentState.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    blendAttachmentState.alphaBlendOp        = VK_BLEND_OP_ADD;
+    blendAttachmentState.colorWriteMask = (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+
+    blendState.sType             = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    blendState.pNext             = 0;
+    blendState.flags             = 0;
+    blendState.logicOpEnable     = VK_FALSE;
+    blendState.logicOp           = VK_LOGIC_OP_CLEAR;
+    blendState.attachmentCount   = 1;
+    blendState.pAttachments      = &blendAttachmentState;
+    blendState.blendConstants[0] = 0.0f;
+    blendState.blendConstants[1] = 0.0f;
+    blendState.blendConstants[2] = 0.0f;
+    blendState.blendConstants[3] = 0.0f;
+
+    // TODO(jmadill): Dynamic state.
+
+    // The layout and renderpass are filled out at draw time.
+    createInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    createInfo.pNext               = nullptr;
+    createInfo.flags               = 0;
+    createInfo.stageCount          = 2;
+    createInfo.pStages             = shaderStages;
+    createInfo.pVertexInputState   = &vertexInputState;
+    createInfo.pInputAssemblyState = &inputAssemblyState;
+    createInfo.pTessellationState  = nullptr;
+    createInfo.pViewportState      = &viewportState;
+    createInfo.pRasterizationState = &rasterState;
+    createInfo.pMultisampleState   = &multisampleState;
+    createInfo.pDepthStencilState  = nullptr;
+    createInfo.pColorBlendState    = &blendState;
+    createInfo.pDynamicState       = nullptr;
+    createInfo.layout              = VK_NULL_HANDLE;
+    createInfo.renderPass          = VK_NULL_HANDLE;
+    createInfo.subpass             = 0;
+    createInfo.basePipelineHandle  = VK_NULL_HANDLE;
+    createInfo.basePipelineIndex   = 0;
+}
+
+void PipelineDesc::updateShaders(ProgramVk *programVk)
+{
+    ASSERT(programVk->getVertexModuleSerial() < std::numeric_limits<uint32_t>::max());
+    mShaderStageInfo[0].moduleSerial =
+        static_cast<uint32_t>(programVk->getVertexModuleSerial().getValue());
+    ASSERT(programVk->getFragmentModuleSerial() < std::numeric_limits<uint32_t>::max());
+    mShaderStageInfo[1].moduleSerial =
+        static_cast<uint32_t>(programVk->getFragmentModuleSerial().getValue());
+}
+
+void PipelineDesc::updateViewport(const gl::Rectangle &viewport, float nearPlane, float farPlane)
+{
+    mViewport.x        = static_cast<float>(viewport.x);
+    mViewport.y        = static_cast<float>(viewport.y);
+    mViewport.width    = static_cast<float>(viewport.width);
+    mViewport.height   = static_cast<float>(viewport.height);
+    mViewport.minDepth = nearPlane;
+    mViewport.maxDepth = farPlane;
+
+    // TODO(jmadill): Scissor.
+    mScissor.offset.x      = viewport.x;
+    mScissor.offset.y      = viewport.y;
+    mScissor.extent.width  = viewport.width;
+    mScissor.extent.height = viewport.height;
+}
+
+void PipelineDesc::updateTopology(GLenum drawMode)
+{
+    mInputAssemblyInfo.topology = static_cast<uint32_t>(gl_vk::GetPrimitiveTopology(drawMode));
+}
+
+void PipelineDesc::updateCullMode(const gl::RasterizerState &rasterState)
+{
+    mRasterizationStateInfo.cullMode = static_cast<uint16_t>(gl_vk::GetCullMode(rasterState));
+}
+
+void PipelineDesc::updateFrontFace(const gl::RasterizerState &rasterState)
+{
+    mRasterizationStateInfo.frontFace =
+        static_cast<uint16_t>(gl_vk::GetFrontFace(rasterState.frontFace));
+}
+
+void PipelineDesc::updateLineWidth(float lineWidth)
+{
+    mRasterizationStateInfo.lineWidth = lineWidth;
 }
 
 }  // namespace vk

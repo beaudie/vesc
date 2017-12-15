@@ -144,6 +144,9 @@ class RendererVk : angle::NonCopyable
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
     vk::CommandBufferNode *allocateCommandNode();
 
+    // Issues a new serial for linked shader modules. Used in the pipeline cache.
+    Serial issueProgramSerial();
+
   private:
     vk::Error initializeDevice(uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -177,6 +180,7 @@ class RendererVk : angle::NonCopyable
     vk::CommandPool mCommandPool;
     GlslangWrapper *mGlslangWrapper;
     SerialFactory mQueueSerialFactory;
+    SerialFactory mProgramSerialFactory;
     Serial mLastCompletedQueueSerial;
     Serial mCurrentQueueSerial;
 

@@ -961,4 +961,9 @@ vk::Error RendererVk::flush(const gl::Context *context,
     return vk::NoError();
 }
 
+Serial RendererVk::issueProgramSerial()
+{
+    mProgramSerialFactory.generate();
+}
+
 }  // namespace rx
