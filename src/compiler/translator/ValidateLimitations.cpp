@@ -119,7 +119,7 @@ void ValidateLimitationsTraverser::visitSymbol(TIntermSymbol *node)
     {
         error(node->getLine(),
               "Loop index cannot be statically assigned to within the body of the loop",
-              node->getSymbol().c_str());
+              node->getSymbol()->c_str());
     }
 }
 
@@ -237,6 +237,7 @@ int ValidateLimitationsTraverser::validateForLoopInit(TIntermLoop *node)
         error(declInit->getLine(), "Invalid init declaration", "for");
         return -1;
     }
+    ASSERT(symbol->getSymbol() != nullptr);
     // The loop index has type int or float.
     TBasicType type = symbol->getBasicType();
     if ((type != EbtInt) && (type != EbtUInt) && (type != EbtFloat))
@@ -248,7 +249,7 @@ int ValidateLimitationsTraverser::validateForLoopInit(TIntermLoop *node)
     if (!isConstExpr(declInit->getRight()))
     {
         error(declInit->getLine(), "Loop index cannot be initialized with non-constant expression",
-              symbol->getSymbol().c_str());
+              symbol->getSymbol()->c_str());
         return -1;
     }
 
@@ -282,7 +283,8 @@ bool ValidateLimitationsTraverser::validateForLoopCond(TIntermLoop *node, int in
     }
     if (symbol->uniqueId().get() != indexSymbolId)
     {
-        error(symbol->getLine(), "Expected loop index", symbol->getSymbol().c_str());
+        ASSERT(symbol->getSymbol());  // Symbol inside an expression is guaranteed to have a name.
+        error(symbol->getLine(), "Expected loop index", symbol->getSymbol()->c_str());
         return false;
     }
     // Relational operator is one of: > >= < <= == or !=.
@@ -304,7 +306,7 @@ bool ValidateLimitationsTraverser::validateForLoopCond(TIntermLoop *node, int in
     if (!isConstExpr(binOp->getRight()))
     {
         error(binOp->getLine(), "Loop index cannot be compared with non-constant expression",
-              symbol->getSymbol().c_str());
+              symbol->getSymbol()->c_str());
         return false;
     }
 
@@ -353,7 +355,8 @@ bool ValidateLimitationsTraverser::validateForLoopExpr(TIntermLoop *node, int in
     }
     if (symbol->uniqueId().get() != indexSymbolId)
     {
-        error(symbol->getLine(), "Expected loop index", symbol->getSymbol().c_str());
+        ASSERT(symbol->getSymbol());  // Symbol inside an expression is guaranteed to have a name.
+        error(symbol->getLine(), "Expected loop index", symbol->getSymbol()->c_str());
         return false;
     }
 
@@ -380,8 +383,10 @@ bool ValidateLimitationsTraverser::validateForLoopExpr(TIntermLoop *node, int in
     {
         if (!isConstExpr(binOp->getRight()))
         {
+            ASSERT(
+                symbol->getSymbol());  // Symbol inside an expression is guaranteed to have a name.
             error(binOp->getLine(), "Loop index cannot be modified by non-constant expression",
-                  symbol->getSymbol().c_str());
+                  symbol->getSymbol()->c_str());
             return false;
         }
     }

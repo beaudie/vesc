@@ -210,7 +210,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     for (const TIntermSymbol *uniform : group)
     {
         const TType &type   = uniform->getType();
-        const TString &name = uniform->getSymbol();
+        const TString &name = *uniform->getSymbol();
         unsigned int registerCount;
 
         // The uniform might be just a regular sampler or one extracted from a struct.
@@ -380,7 +380,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             {
                 TVector<TIntermSymbol *> samplerSymbols;
                 TMap<TIntermSymbol *, TString> symbolsToAPINames;
-                type.createSamplerSymbols("angle_" + uniform.getSymbol(), uniform.getSymbol(),
+                type.createSamplerSymbols("angle_" + *uniform.getSymbol(), *uniform.getSymbol(),
                                           &samplerSymbols, &symbolsToAPINames, symbolTable);
                 for (TIntermSymbol *sampler : samplerSymbols)
                 {
@@ -409,7 +409,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                     }
                 }
             }
-            unsigned int registerIndex = assignUniformRegister(type, uniform.getSymbol(), nullptr);
+            unsigned int registerIndex = assignUniformRegister(type, *uniform.getSymbol(), nullptr);
             outputUniform(out, type, variable, registerIndex);
         }
     }
@@ -431,7 +431,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         {
             const TType &type          = image->getType();
             const TVariable &variable  = image->variable();
-            unsigned int registerIndex = assignUniformRegister(type, image->getSymbol(), nullptr);
+            unsigned int registerIndex = assignUniformRegister(type, *image->getSymbol(), nullptr);
             if (type.getMemoryQualifier().readonly)
             {
                 outputHLSL4_1_FL11Texture(out, type, variable, registerIndex);
@@ -473,7 +473,7 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedSymbols &referencedInte
         // nodeType.isInterfaceBlock() == false means the node is a field of a uniform block which
         // doesn't have instance name.
         const TString &instanceName =
-            nodeType.isInterfaceBlock() ? interfaceBlockReference.second->getSymbol() : "";
+            nodeType.isInterfaceBlock() ? *interfaceBlockReference.second->getSymbol() : "";
 
         if (instanceName != "")
         {

@@ -137,7 +137,7 @@ class CollectVariablesTraverser : public TIntermTraverser
     Attribute recordAttribute(const TIntermSymbol &variable) const;
     OutputVariable recordOutputVariable(const TIntermSymbol &variable) const;
     Varying recordVarying(const TIntermSymbol &variable) const;
-    void recordInterfaceBlock(const TString &instanceName,
+    void recordInterfaceBlock(const TString *instanceName,
                               const TType &interfaceBlockType,
                               InterfaceBlock *interfaceBlock) const;
     Uniform recordUniform(const TIntermSymbol &variable) const;
@@ -322,7 +322,7 @@ InterfaceBlock *CollectVariablesTraverser::recordGLInUsed(const TType &glInType)
     {
         ASSERT(glInType.getQualifier() == EvqPerVertexIn);
         InterfaceBlock info;
-        recordInterfaceBlock("gl_in", glInType, &info);
+        recordInterfaceBlock(NewPoolTString("gl_in"), glInType, &info);
         info.staticUse = true;
 
         mPerVertexInAdded = true;
@@ -344,14 +344,18 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
 {
     ASSERT(symbol != nullptr);
 
-    if (symbol->variable().symbolType() == SymbolType::AngleInternal)
+    if (symbol->variable().symbolType() == SymbolType::AngleInternal ||
+        symbol->variable().symbolType() == SymbolType::Empty)
     {
-        // Internal variables are not collected.
+        // Internal variables or nameless variables are not collected.
         return;
     }
 
     ShaderVariable *var       = nullptr;
-    const TString &symbolName = symbol->getSymbol();
+
+    // Since we don't process nameless variables, the name is guaranteed not to be nullptr.
+    ASSERT(symbol->getSymbol() != nullptr);
+    const TString &symbolName = *symbol->getSymbol();
 
     if (IsVaryingIn(symbol->getQualifier()))
     {
@@ -655,7 +659,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
         case EvqFlatOut:
         case EvqCentroidOut:
         case EvqGeometryOut:
-            if (mSymbolTable->isVaryingInvariant(std::string(variable.getSymbol().c_str())) ||
+            if (mSymbolTable->isVaryingInvariant(std::string(variable.getSymbol()->c_str())) ||
                 type.isInvariant())
             {
                 varying.isInvariant = true;
@@ -670,7 +674,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
 }
 
 // TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
-void CollectVariablesTraverser::recordInterfaceBlock(const TString &instanceName,
+void CollectVariablesTraverser::recordInterfaceBlock(const TString *instanceName,
                                                      const TType &interfaceBlockType,
                                                      InterfaceBlock *interfaceBlock) const
 {
@@ -682,7 +686,10 @@ void CollectVariablesTraverser::recordInterfaceBlock(const TString &instanceName
 
     interfaceBlock->name         = blockType->name()->c_str();
     interfaceBlock->mappedName   = getMappedName(blockType);
-    interfaceBlock->instanceName = instanceName.c_str();
+    if (instanceName != nullptr)
+    {
+        interfaceBlock->instanceName = instanceName->c_str();
+    }
     ASSERT(!interfaceBlockType.isArrayOfArrays());  // Disallowed by GLSL ES 3.10 section 4.3.9
     interfaceBlock->arraySize = interfaceBlockType.isArray() ? interfaceBlockType.getOutermostArraySize() : 0;
 

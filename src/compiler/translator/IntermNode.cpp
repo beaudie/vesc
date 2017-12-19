@@ -272,15 +272,18 @@ bool TIntermAggregateBase::insertChildNodes(TIntermSequence::size_type position,
 }
 
 TIntermSymbol::TIntermSymbol(const TVariable *variable)
-    : TIntermTyped(variable->getType()),
-      mVariable(variable),
-      mSymbol(variable->symbolType() == SymbolType::Empty ? "" : variable->name()->c_str())
+    : TIntermTyped(variable->getType()), mVariable(variable)
 {
 }
 
 const TSymbolUniqueId &TIntermSymbol::uniqueId() const
 {
     return mVariable->uniqueId();
+}
+
+const TString *TIntermSymbol::getSymbol() const
+{
+    return mVariable->name();
 }
 
 TIntermAggregate *TIntermAggregate::CreateFunctionCall(const TFunction &func,

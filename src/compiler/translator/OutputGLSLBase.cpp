@@ -339,7 +339,7 @@ void TOutputGLSLBase::writeFunctionParameters(const TIntermSequence &args)
         const TType &type = arg->getType();
         writeVariableType(type);
 
-        if (!arg->getSymbol().empty())
+        if (arg->variable().symbolType() != SymbolType::Empty)
             out << " " << hashName(&arg->variable());
         if (type.isArray())
             out << ArrayString(type);
@@ -1000,7 +1000,7 @@ bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
         writeLayoutQualifier(variable);
         writeVariableType(variable->getType());
         if (variable->getAsSymbolNode() == nullptr ||
-            !variable->getAsSymbolNode()->getSymbol().empty())
+            variable->getAsSymbolNode()->variable().symbolType() != SymbolType::Empty)
         {
             out << " ";
         }

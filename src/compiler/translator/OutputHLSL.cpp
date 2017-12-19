@@ -15,11 +15,11 @@
 #include "common/utilities.h"
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
+#include "compiler/translator/FindSymbolNode.h"
 #include "compiler/translator/ImageFunctionHLSL.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/NodeSearch.h"
 #include "compiler/translator/RemoveSwitchFallThrough.h"
-#include "compiler/translator/SearchSymbol.h"
 #include "compiler/translator/StructureHLSL.h"
 #include "compiler/translator/TextureFunctionHLSL.h"
 #include "compiler/translator/TranslatorHLSL.h"
@@ -1821,7 +1821,8 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 }
             }
             else if (variable->getAsSymbolNode() &&
-                     variable->getAsSymbolNode()->getSymbol() == "")  // Type (struct) declaration
+                     variable->getAsSymbolNode()->variable().symbolType() ==
+                         SymbolType::Empty)  // Type (struct) declaration
             {
                 ASSERT(variable->getBasicType() == EbtStruct);
                 // ensureStructDefined has already been called.
@@ -2800,10 +2801,9 @@ bool OutputHLSL::writeSameSymbolInitializer(TInfoSinkBase &out,
                                             TIntermSymbol *symbolNode,
                                             TIntermTyped *expression)
 {
-    sh::SearchSymbol searchSymbol(symbolNode->getSymbol());
-    expression->traverse(&searchSymbol);
+    sameSymbol = FindSymbolNode(expression, *symbolNode->getSymbol());
 
-    if (searchSymbol.foundMatch())
+    if (sameSymbol != nullptr)
     {
         // Type already printed
         out << "t" + str(mUniqueIndex) + " = ";

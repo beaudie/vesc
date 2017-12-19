@@ -41,7 +41,15 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
 
-    const TString &symbol = node->getSymbol();
+    if (node->variable().symbolType() != SymbolType::BuiltIn)
+    {
+        TOutputGLSLBase::visitSymbol(node);
+        return;
+    }
+
+    // Some built-ins get a special translation. Built-ins are guaranteed to have a name.
+    ASSERT(node->getSymbol());
+    const TString &symbol = *node->getSymbol();
     if (symbol == "gl_FragDepthEXT")
     {
         out << "gl_FragDepth";
