@@ -2493,15 +2493,21 @@ bool Program::ValidateGraphicsInterfaceBlocks(
     const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
     const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
     InfoLog &infoLog,
-    bool webglCompatibility)
+    bool webglCompatibility,
+    GLuint maxCombinedInterfaceBlocks)
 {
     // Check that interface blocks defined in the vertex and fragment shaders are identical
     typedef std::map<std::string, const sh::InterfaceBlock *> InterfaceBlockMap;
     InterfaceBlockMap linkedInterfaceBlocks;
+    GLuint blockCount = 0;
 
     for (const sh::InterfaceBlock &vertexInterfaceBlock : vertexInterfaceBlocks)
     {
         linkedInterfaceBlocks[vertexInterfaceBlock.name] = &vertexInterfaceBlock;
+        if (vertexInterfaceBlock.staticUse || vertexInterfaceBlock.layout != sh::BLOCKLAYOUT_PACKED)
+        {
+            blockCount += (vertexInterfaceBlock.arraySize ? vertexInterfaceBlock.arraySize : 1);
+        }
     }
 
     for (const sh::InterfaceBlock &fragmentInterfaceBlock : fragmentInterfaceBlocks)
@@ -2521,8 +2527,35 @@ bool Program::ValidateGraphicsInterfaceBlocks(
                 return false;
             }
         }
-        // TODO(jiajia.qin@intel.com): Add
-        // MAX_COMBINED_UNIFORM_BLOCKS/MAX_COMBINED_SHADER_STORAGE_BLOCKS validation.
+        else
+        {
+            if (fragmentInterfaceBlock.staticUse ||
+                fragmentInterfaceBlock.layout != sh::BLOCKLAYOUT_PACKED)
+            {
+                blockCount +=
+                    (fragmentInterfaceBlock.arraySize ? fragmentInterfaceBlock.arraySize : 1);
+                if (blockCount > maxCombinedInterfaceBlocks)
+                {
+                    switch (fragmentInterfaceBlock.blockType)
+                    {
+                        case sh::BlockType::BLOCK_UNIFORM:
+                            infoLog << "The sum of the number of active uniform blocks exceeds "
+                                       "MAX_COMBINED_UNIFORM_BLOCKS("
+                                    << maxCombinedInterfaceBlocks << ").";
+                            break;
+                        case sh::BlockType::BLOCK_BUFFER:
+                            infoLog
+                                << "The sum of the number of active shader storage blocks exceeds "
+                                   "MAX_COMBINED_SHADER_STORAGE_BLOCKS("
+                                << maxCombinedInterfaceBlocks << ").";
+                            break;
+                        default:
+                            UNREACHABLE();
+                    }
+                    return false;
+                }
+            }
+        }
     }
     return true;
 }
@@ -2579,7 +2612,7 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
 
     bool webglCompatibility = context->getExtensions().webglCompatibility;
     if (!ValidateGraphicsInterfaceBlocks(vertexUniformBlocks, fragmentUniformBlocks, infoLog,
-                                         webglCompatibility))
+                                         webglCompatibility, caps.maxCombinedUniformBlocks))
     {
         return false;
     }
@@ -2608,7 +2641,8 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
         }
 
         if (!ValidateGraphicsInterfaceBlocks(vertexShaderStorageBlocks, fragmentShaderStorageBlocks,
-                                             infoLog, webglCompatibility))
+                                             infoLog, webglCompatibility,
+                                             caps.maxCombinedShaderStorageBlocks))
         {
             return false;
         }
