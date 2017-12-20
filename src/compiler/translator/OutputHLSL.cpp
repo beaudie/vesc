@@ -404,7 +404,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
     for (const auto &varying : mReferencedVaryings)
     {
-        const TType &type   = varying.second->getType();
+        const TType &type   = varying.second->variable().getType();
         const TString &name = varying.second->getSymbol();
 
         // Program linking depends on this exact format
@@ -877,7 +877,7 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
     else
     {
         const TType &nodeType = node->getType();
-        TQualifier qualifier = node->getQualifier();
+        TQualifier qualifier  = node->variable().getType().getQualifier();
 
         ensureStructDefined(nodeType);
 
