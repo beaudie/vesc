@@ -28,7 +28,8 @@ class ImageFunctionHLSL;
 class UnfoldShortCircuit;
 class UniformHLSL;
 
-typedef std::map<TString, TIntermSymbol *> ReferencedSymbols;
+// Map from uniqueId to a symbol node.
+typedef std::map<int, TIntermSymbol *> ReferencedSymbols;
 
 class OutputHLSL : public TIntermTraverser
 {
