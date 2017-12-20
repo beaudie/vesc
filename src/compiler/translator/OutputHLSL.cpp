@@ -379,7 +379,7 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
 
             TType *structType = mappedStruct.field->type();
             mappedStructs +=
-                "static " + Decorate(*structType->getStruct()->name()) + " " + mappedName;
+                "static " + Decorate(structType->getStruct()->name()) + " " + mappedName;
 
             if (structType->isArray())
             {
@@ -1927,16 +1927,16 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             }
             else if (node->getFunction()->isImageFunction())
             {
-                const TString *name       = node->getFunction()->name();
+                const TString &name       = node->getFunction()->name();
                 TType type                = (*arguments)[0]->getAsTyped()->getType();
                 TString imageFunctionName = mImageFunctionHLSL->useImageFunction(
-                    *name, type.getBasicType(), type.getLayoutQualifier().imageInternalFormat,
+                    name, type.getBasicType(), type.getLayoutQualifier().imageInternalFormat,
                     type.getMemoryQualifier().readonly);
                 out << imageFunctionName << "(";
             }
             else
             {
-                const TString *name    = node->getFunction()->name();
+                const TString &name    = node->getFunction()->name();
                 TBasicType samplerType = (*arguments)[0]->getAsTyped()->getType().getBasicType();
                 int coords = 0;  // textureSize(gsampler2DMS) doesn't have a second argument.
                 if (arguments->size() > 1)
@@ -1944,7 +1944,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     coords = (*arguments)[1]->getAsTyped()->getNominalSize();
                 }
                 TString textureFunctionName = mTextureFunctionHLSL->useTextureFunction(
-                    *name, samplerType, coords, arguments->size(), lod0, mShaderType);
+                    name, samplerType, coords, arguments->size(), lod0, mShaderType);
                 out << textureFunctionName << "(";
             }
 
