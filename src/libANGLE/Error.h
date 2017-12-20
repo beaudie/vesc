@@ -137,6 +137,7 @@ using StackOverflow               = priv::ErrorStream<GL_STACK_OVERFLOW>;
 using StackUnderflow              = priv::ErrorStream<GL_STACK_UNDERFLOW>;
 using OutOfMemory                 = priv::ErrorStream<GL_OUT_OF_MEMORY>;
 using InvalidFramebufferOperation = priv::ErrorStream<GL_INVALID_FRAMEBUFFER_OPERATION>;
+using ContextLoss                 = priv::ErrorStream<GL_CONTEXT_LOST>;
 
 inline Error NoError()
 {

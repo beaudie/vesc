@@ -4036,18 +4036,20 @@ gl::Error Renderer11::mapResource(ID3D11Resource *resource,
     HRESULT hr = mDeviceContext->Map(resource, subResource, mapType, mapFlags, mappedResource);
     if (FAILED(hr))
     {
+        gl::Error glError = gl::InternalError() << "Failed to map D3D11 resource." << gl::FmtHR(hr);
+
         if (d3d11::isDeviceLostError(hr))
         {
             this->notifyDeviceLost();
+
+            glError = gl::ContextLoss()
+                      << "Failed to map D3D11 resource due to device loss error." << gl::FmtHR(hr);
         }
-
-        const std::string genericFailureMessage = "Failed to map D3D11 resource.";
-
-        gl::Error glError = gl::InternalError() << genericFailureMessage << gl::FmtHR(hr);
-
-        if (E_OUTOFMEMORY)
+        else if (hr == E_OUTOFMEMORY)
         {
-            glError = gl::OutOfMemory() << genericFailureMessage << gl::FmtHR(hr);
+            glError = gl::OutOfMemory()
+                      << "Failed to map D3D11 resource due to out-of-memory error."
+                      << gl::FmtHR(hr);
         }
 
         return glError;
