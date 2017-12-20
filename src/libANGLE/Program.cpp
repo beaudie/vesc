@@ -827,42 +827,13 @@ Error Program::link(const gl::Context *context)
     unlink();
     mInfoLog.reset();
 
-    const Caps &caps = data.getCaps();
-
-    Shader *vertexShader   = mState.mAttachedVertexShader;
-    Shader *fragmentShader = mState.mAttachedFragmentShader;
-    Shader *computeShader  = mState.mAttachedComputeShader;
-
-    bool isComputeShaderAttached   = (computeShader != nullptr);
-    bool nonComputeShadersAttached = (vertexShader != nullptr || fragmentShader != nullptr);
-    // Check whether we both have a compute and non-compute shaders attached.
-    // If there are of both types attached, then linking should fail.
-    // OpenGL ES 3.10, 7.3 Program Objects, under LinkProgram
-    if (isComputeShaderAttached == true && nonComputeShadersAttached == true)
+    if (!linkValidateShaders(context, mInfoLog))
     {
-        mInfoLog << "Both a compute and non-compute shaders are attached to the same program.";
         return NoError();
     }
 
-    if (computeShader)
+    if (mState.mAttachedComputeShader)
     {
-        if (!computeShader->isCompiled(context))
-        {
-            mInfoLog << "Attached compute shader is not compiled.";
-            return NoError();
-        }
-        ASSERT(computeShader->getType() == GL_COMPUTE_SHADER);
-
-        mState.mComputeShaderLocalSize = computeShader->getWorkGroupSize(context);
-
-        // GLSL ES 3.10, 4.4.1.1 Compute Shader Inputs
-        // If the work group size is not specified, a link time error should occur.
-        if (!mState.mComputeShaderLocalSize.isDeclared())
-        {
-            mInfoLog << "Work group size is not specified.";
-            return NoError();
-        }
-
         if (!linkUniforms(context, mInfoLog, mUniformLocationBindings))
         {
             return NoError();
@@ -890,24 +861,6 @@ Error Program::link(const gl::Context *context)
     }
     else
     {
-        if (!fragmentShader || !fragmentShader->isCompiled(context))
-        {
-            return NoError();
-        }
-        ASSERT(fragmentShader->getType() == GL_FRAGMENT_SHADER);
-
-        if (!vertexShader || !vertexShader->isCompiled(context))
-        {
-            return NoError();
-        }
-        ASSERT(vertexShader->getType() == GL_VERTEX_SHADER);
-
-        if (fragmentShader->getShaderVersion(context) != vertexShader->getShaderVersion(context))
-        {
-            mInfoLog << "Fragment shader version does not match vertex shader version.";
-            return NoError();
-        }
-
         if (!linkAttributes(context, mInfoLog))
         {
             return NoError();
@@ -935,7 +888,8 @@ Error Program::link(const gl::Context *context)
 
         const auto &mergedVaryings = getMergedVaryings(context);
 
-        mState.mNumViews = vertexShader->getNumViews(context);
+        ASSERT(mState.mAttachedVertexShader);
+        mState.mNumViews = mState.mAttachedVertexShader->getNumViews(context);
 
         linkOutputVariables(context);
 
@@ -953,7 +907,7 @@ Error Program::link(const gl::Context *context)
         InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
         InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
 
-        if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, caps))
+        if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, context->getCaps()))
         {
             return NoError();
         }
@@ -1998,13 +1952,88 @@ GLenum Program::getTransformFeedbackBufferMode() const
     return mState.mTransformFeedbackBufferMode;
 }
 
+bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
+{
+    Shader *vertexShader   = mState.mAttachedVertexShader;
+    Shader *fragmentShader = mState.mAttachedFragmentShader;
+    Shader *computeShader  = mState.mAttachedComputeShader;
+
+    bool isComputeShaderAttached   = (computeShader != nullptr);
+    bool nonComputeShadersAttached = (vertexShader != nullptr || fragmentShader != nullptr);
+    // Check whether we both have a compute and non-compute shaders attached.
+    // If there are of both types attached, then linking should fail.
+    // OpenGL ES 3.10, 7.3 Program Objects, under LinkProgram
+    if (isComputeShaderAttached == true && nonComputeShadersAttached == true)
+    {
+        mInfoLog << "Both a compute and non-compute shaders are attached to the same program.";
+        return false;
+    }
+
+    if (computeShader)
+    {
+        if (!computeShader->isCompiled(context))
+        {
+            mInfoLog << "Attached compute shader is not compiled.";
+            return false;
+        }
+        ASSERT(computeShader->getType() == GL_COMPUTE_SHADER);
+
+        mState.mComputeShaderLocalSize = computeShader->getWorkGroupSize(context);
+
+        // GLSL ES 3.10, 4.4.1.1 Compute Shader Inputs
+        // If the work group size is not specified, a link time error should occur.
+        if (!mState.mComputeShaderLocalSize.isDeclared())
+        {
+            mInfoLog << "Work group size is not specified.";
+            return false;
+        }
+    }
+    else
+    {
+        if (!fragmentShader || !fragmentShader->isCompiled(context))
+        {
+            return false;
+        }
+        ASSERT(fragmentShader->getType() == GL_FRAGMENT_SHADER);
+
+        if (!vertexShader || !vertexShader->isCompiled(context))
+        {
+            return false;
+        }
+        ASSERT(vertexShader->getType() == GL_VERTEX_SHADER);
+
+        if (fragmentShader->getShaderVersion(context) != vertexShader->getShaderVersion(context))
+        {
+            mInfoLog << "Fragment shader version does not match vertex shader version.";
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
 {
     Shader *vertexShader   = mState.mAttachedVertexShader;
     Shader *fragmentShader = mState.mAttachedFragmentShader;
 
-    ASSERT(vertexShader->getShaderVersion(context) == fragmentShader->getShaderVersion(context));
+    int vertexShaderVersion = vertexShader->getShaderVersion(context);
+    ASSERT(vertexShaderVersion == fragmentShader->getShaderVersion(context));
 
+    // Only ESSL 1.0 has restrictions on matching input and output invariance
+    if (vertexShaderVersion == 100 && !linkValidateBuiltInVaryings(context, infoLog))
+    {
+        return false;
+    }
+
+    return linkValidateShaderInputOutputMatching(context, infoLog, vertexShader, fragmentShader);
+}
+
+bool Program::linkValidateShaderInputOutputMatching(const Context *context,
+                                                    InfoLog &infoLog,
+                                                    Shader *vertexShader,
+                                                    Shader *fragmentShader) const
+{
     const std::vector<sh::Varying> &vertexVaryings   = vertexShader->getOutputVaryings(context);
     const std::vector<sh::Varying> &fragmentVaryings = fragmentShader->getInputVaryings(context);
 
@@ -2025,7 +2054,7 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
             if (output.name == input.name)
             {
                 ASSERT(!input.isBuiltIn());
-                if (!linkValidateVaryings(infoLog, output.name, input, output,
+                if (!LinkValidateVaryings(infoLog, output.name, input, output,
                                           vertexShader->getShaderVersion(context)))
                 {
                     return false;
@@ -2065,11 +2094,6 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
                     << it->second;
             return false;
         }
-    }
-
-    if (!linkValidateBuiltInVaryings(context, infoLog))
-    {
-        return false;
     }
 
     // TODO(jmadill): verify no unmatched vertex varyings?
@@ -2202,14 +2226,14 @@ bool Program::linkAtomicCounterBuffers()
     return true;
 }
 
-bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog,
+bool Program::LinkValidateInterfaceBlockFields(InfoLog &infoLog,
                                                const std::string &uniformName,
                                                const sh::InterfaceBlockField &vertexUniform,
                                                const sh::InterfaceBlockField &fragmentUniform,
                                                bool webglCompatibility)
 {
     // If webgl, validate precision of UBO fields, otherwise don't.  See Khronos bug 10287.
-    if (!linkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
+    if (!LinkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
                                    webglCompatibility))
     {
         return false;
@@ -2333,7 +2357,7 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
     return true;
 }
 
-bool Program::validateVertexAndFragmentInterfaceBlocks(
+bool Program::validateInterfaceBlocksForDraw(
     const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
     const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
     InfoLog &infoLog,
@@ -2354,7 +2378,7 @@ bool Program::validateVertexAndFragmentInterfaceBlocks(
         if (entry != linkedInterfaceBlocks.end())
         {
             const sh::InterfaceBlock &vertexInterfaceBlock = *entry->second;
-            if (!areMatchingInterfaceBlocks(infoLog, vertexInterfaceBlock, fragmentInterfaceBlock,
+            if (!AreMatchingInterfaceBlocks(infoLog, vertexInterfaceBlock, fragmentInterfaceBlock,
                                             webglCompatibility))
             {
                 return false;
@@ -2417,8 +2441,8 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
     }
 
     bool webglCompatibility = context->getExtensions().webglCompatibility;
-    if (!validateVertexAndFragmentInterfaceBlocks(vertexUniformBlocks, fragmentUniformBlocks,
-                                                  infoLog, webglCompatibility))
+    if (!validateInterfaceBlocksForDraw(vertexUniformBlocks, fragmentUniformBlocks, infoLog,
+                                        webglCompatibility))
     {
         return false;
     }
@@ -2446,9 +2470,8 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
             return false;
         }
 
-        if (!validateVertexAndFragmentInterfaceBlocks(vertexShaderStorageBlocks,
-                                                      fragmentShaderStorageBlocks, infoLog,
-                                                      webglCompatibility))
+        if (!validateInterfaceBlocksForDraw(vertexShaderStorageBlocks, fragmentShaderStorageBlocks,
+                                            infoLog, webglCompatibility))
         {
             return false;
         }
@@ -2456,12 +2479,12 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
     return true;
 }
 
-bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
+bool Program::AreMatchingInterfaceBlocks(InfoLog &infoLog,
                                          const sh::InterfaceBlock &vertexInterfaceBlock,
                                          const sh::InterfaceBlock &fragmentInterfaceBlock,
-                                         bool webglCompatibility) const
+                                         bool webglCompatibility)
 {
-    const char* blockName = vertexInterfaceBlock.name.c_str();
+    const char *blockName = vertexInterfaceBlock.name.c_str();
     // validate blocks for the same member types
     if (vertexInterfaceBlock.fields.size() != fragmentInterfaceBlock.fields.size())
     {
@@ -2497,7 +2520,7 @@ bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
             return false;
         }
         std::string memberName = "interface block '" + vertexInterfaceBlock.name + "' member '" + vertexMember.name + "'";
-        if (!linkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember,
+        if (!LinkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember,
                                               webglCompatibility))
         {
             return false;
@@ -2506,8 +2529,11 @@ bool Program::areMatchingInterfaceBlocks(InfoLog &infoLog,
     return true;
 }
 
-bool Program::linkValidateVariablesBase(InfoLog &infoLog, const std::string &variableName, const sh::ShaderVariable &vertexVariable,
-                                              const sh::ShaderVariable &fragmentVariable, bool validatePrecision)
+bool Program::LinkValidateVariablesBase(InfoLog &infoLog,
+                                        const std::string &variableName,
+                                        const sh::ShaderVariable &vertexVariable,
+                                        const sh::ShaderVariable &fragmentVariable,
+                                        bool validatePrecision)
 {
     if (vertexVariable.type != fragmentVariable.type)
     {
@@ -2554,7 +2580,8 @@ bool Program::linkValidateVariablesBase(InfoLog &infoLog, const std::string &var
         const std::string memberName = variableName.substr(0, variableName.length() - 1) + "." +
                                        vertexMember.name + "'";
 
-        if (!linkValidateVariablesBase(infoLog, vertexMember.name, vertexMember, fragmentMember, validatePrecision))
+        if (!LinkValidateVariablesBase(infoLog, vertexMember.name, vertexMember, fragmentMember,
+                                       validatePrecision))
         {
             return false;
         }
@@ -2563,13 +2590,13 @@ bool Program::linkValidateVariablesBase(InfoLog &infoLog, const std::string &var
     return true;
 }
 
-bool Program::linkValidateVaryings(InfoLog &infoLog,
+bool Program::LinkValidateVaryings(InfoLog &infoLog,
                                    const std::string &varyingName,
                                    const sh::Varying &vertexVarying,
                                    const sh::Varying &fragmentVarying,
                                    int shaderVersion)
 {
-    if (!linkValidateVariablesBase(infoLog, varyingName, vertexVarying, fragmentVarying, false))
+    if (!LinkValidateVariablesBase(infoLog, varyingName, vertexVarying, fragmentVarying, false))
     {
         return false;
     }
@@ -2595,15 +2622,11 @@ bool Program::linkValidateBuiltInVaryings(const Context *context, InfoLog &infoL
 {
     Shader *vertexShader         = mState.mAttachedVertexShader;
     Shader *fragmentShader       = mState.mAttachedFragmentShader;
+
+    ASSERT(vertexShader->getShaderVersion(context) == 100);
+
     const auto &vertexVaryings   = vertexShader->getOutputVaryings(context);
     const auto &fragmentVaryings = fragmentShader->getInputVaryings(context);
-    int shaderVersion            = vertexShader->getShaderVersion(context);
-
-    if (shaderVersion != 100)
-    {
-        // Only ESSL 1.0 has restrictions on matching input and output invariance
-        return true;
-    }
 
     bool glPositionIsInvariant   = false;
     bool glPointSizeIsInvariant  = false;
