@@ -1157,6 +1157,8 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->rewriteVectorScalarArithmetic = IsNvidia(vendor);
 
+    workarounds->clampFragDepth = IsNvidia(vendor);
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;
