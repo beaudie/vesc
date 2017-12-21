@@ -25,7 +25,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 194
+#define ANGLE_SH_VERSION 195
 
 enum ShShaderSpec
 {
@@ -252,6 +252,9 @@ const ShCompileOptions SH_REWRITE_VECTOR_SCALAR_ARITHMETIC = UINT64_C(1) << 35;
 // Don't use loops to initialize uninitialized variables. Only has an effect if some kind of
 // variable initialization is turned on.
 const ShCompileOptions SH_DONT_USE_LOOPS_TO_INITIALIZE_VARIABLES = UINT64_C(1) << 36;
+
+// Clamp gl_FragDepth to the range [0.0, 1.0] in case it is statically used.
+const ShCompileOptions SH_CLAMP_FRAG_DEPTH = UINT64_C(1) << 37;
 
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
