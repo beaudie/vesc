@@ -11,11 +11,19 @@ You should have dEQP as a target if you followed the [DevSetup](DevSetup.md)
 instructions. Current targets:
 
   * `angle_deqp_gles2_tests` for GLES 2.0 tests
+  * `angle_deqp_gles2_no_gtest` for GLES 2.0 tests without google test suite
   * `angle_deqp_gles3_tests` for GLES 3.0 tests
+  * `angle_deqp_gles3_no_gtest` for GLES 3.0 tests without google test suite
   * `angle_deqp_egl_tests` for EGL 1.x tests
+  * `angle_deqp_egl_no_gtest` for EGL 1.x tests without google test suite
   * `angle_deqp_gles31_tests` for GLES 3.1 tests (currently very experimental)
+  * `angle_deqp_gles31_no_gtest` for GLES 3.1 tests (currently very experimental) without google test suite
 
 ## How to use dEQP
+
+Note:
+Use *_no_gtest targets for running individual tests,
+*_tests targets do not accepts these Wildcards
 
 The `--deqp-case` flag allows you to run individual tests, with simple
 wildcard support. For example: `--deqp-case=dEQP-
