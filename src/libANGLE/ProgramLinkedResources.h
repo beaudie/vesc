@@ -32,6 +32,7 @@ struct Caps;
 class Context;
 class InfoLog;
 struct InterfaceBlock;
+enum class LinkMismatchError;
 struct LinkedUniform;
 class ProgramState;
 class ProgramBindings;
@@ -80,10 +81,9 @@ class UniformLinker final : angle::NonCopyable
 
     bool validateGraphicsUniforms(const Context *context, InfoLog &infoLog) const;
 
-    static bool LinkValidateUniforms(InfoLog &infoLog,
-                                     const std::string &uniformName,
-                                     const sh::Uniform &vertexUniform,
-                                     const sh::Uniform &fragmentUniform);
+    static LinkMismatchError LinkValidateUniforms(const sh::Uniform &uniform1,
+                                                  const sh::Uniform &uniform2,
+                                                  std::string *mismatchedStructFieldName);
 
     bool flattenUniformsAndCheckCapsForShader(const Context *context,
                                               Shader *shader,
