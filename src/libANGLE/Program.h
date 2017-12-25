@@ -119,6 +119,50 @@ class InfoLog : angle::NonCopyable
 
     std::string str() const { return mLazyStream ? mLazyStream->str() : ""; }
 
+    void recordMismatchItem(const char *mismatchItem)
+    {
+        // We can only specify mismatchItem once before outputing the complete error message.
+        ASSERT(!mLazyMismatchItem);
+
+        mLazyMismatchItem.reset(new std::string(mismatchItem));
+    }
+
+    void recordFieldNameMismatch(unsigned int memberIndex,
+                                 const std::string &fieldName1,
+                                 const std::string &fieldName2)
+    {
+        // We can only specify mismatchItem and its additional information once before outputing the
+        // complete error message.
+        ASSERT(!mLazyMismatchItem && !mLazyAdditionalInfo);
+
+        std::ostringstream stream;
+        stream << "Names of field '" << memberIndex << "'";
+        mLazyMismatchItem.reset(new std::string(stream.str()));
+
+        stream.str("");
+        stream << "('" << fieldName1 << "' vs '" << fieldName2 << "')";
+        mLazyAdditionalInfo.reset(new std::string(stream.str()));
+    }
+
+    void appendSubFieldName(const std::string &fieldName)
+    {
+        if (!mLazySubFieldNames)
+        {
+            mLazySubFieldNames.reset(new std::string(fieldName));
+        }
+        else
+        {
+            std::ostringstream stream;
+            stream << fieldName << "." << *mLazySubFieldNames;
+            *mLazySubFieldNames = stream.str();
+        }
+    }
+
+    void logLinkMismatch(const std::string &variableType,
+                         const std::string &variableName,
+                         GLenum shaderType1,
+                         GLenum shaderType2);
+
   private:
     void ensureInitialized()
     {
@@ -129,6 +173,10 @@ class InfoLog : angle::NonCopyable
     }
 
     std::unique_ptr<std::stringstream> mLazyStream;
+
+    std::unique_ptr<std::string> mLazyMismatchItem;
+    std::unique_ptr<std::string> mLazyAdditionalInfo;
+    std::unique_ptr<std::string> mLazySubFieldNames;
 };
 
 // Struct used for correlating uniforms/elements of uniform arrays to handles
@@ -580,7 +628,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLenum getTransformFeedbackBufferMode() const;
 
     static bool LinkValidateInterfaceBlockFields(InfoLog &infoLog,
-                                                 const std::string &uniformName,
                                                  const sh::InterfaceBlockField &vertexUniform,
                                                  const sh::InterfaceBlockField &fragmentUniform,
                                                  bool webglCompatibility);
@@ -615,7 +662,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     const ProgramState &getState() const { return mState; }
 
     static bool LinkValidateVariablesBase(InfoLog &infoLog,
-                                          const std::string &variableName,
                                           const sh::ShaderVariable &vertexVariable,
                                           const sh::ShaderVariable &fragmentVariable,
                                           bool validatePrecision);
@@ -670,7 +716,6 @@ class Program final : angle::NonCopyable, public LabeledObject
                                            bool webglCompatibility);
 
     static bool LinkValidateVaryings(InfoLog &infoLog,
-                                     const std::string &varyingName,
                                      const sh::Varying &vertexVarying,
                                      const sh::Varying &fragmentVarying,
                                      int shaderVersion);

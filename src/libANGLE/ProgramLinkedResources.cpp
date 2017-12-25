@@ -115,10 +115,10 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
         auto entry = linkedUniforms.find(fragmentUniform.name);
         if (entry != linkedUniforms.end())
         {
-            const sh::Uniform &linkedUniform = *(entry->second);
-            const std::string &uniformName   = "uniform '" + linkedUniform.name + "'";
-            if (!LinkValidateUniforms(infoLog, uniformName, linkedUniform, fragmentUniform))
+            if (!LinkValidateUniforms(infoLog, *(entry->second), fragmentUniform))
             {
+                infoLog.logLinkMismatch("uniform", fragmentUniform.name, GL_VERTEX_SHADER,
+                                        GL_FRAGMENT_SHADER);
                 return false;
             }
         }
@@ -128,7 +128,6 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
 
 // GLSL ES Spec 3.00.3, section 4.3.5.
 bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
-                                         const std::string &uniformName,
                                          const sh::Uniform &vertexUniform,
                                          const sh::Uniform &fragmentUniform)
 {
@@ -138,7 +137,7 @@ bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
     const bool validatePrecision = false;
 #endif
 
-    if (!Program::LinkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
+    if (!Program::LinkValidateVariablesBase(infoLog, vertexUniform, fragmentUniform,
                                             validatePrecision))
     {
         return false;
@@ -148,8 +147,7 @@ bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
     if (vertexUniform.binding != -1 && fragmentUniform.binding != -1 &&
         vertexUniform.binding != fragmentUniform.binding)
     {
-        infoLog << "Binding layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
+        infoLog.recordMismatchItem("Binding layout qualifiers");
         return false;
     }
 
@@ -157,14 +155,12 @@ bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
     if (vertexUniform.location != -1 && fragmentUniform.location != -1 &&
         vertexUniform.location != fragmentUniform.location)
     {
-        infoLog << "Location layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
+        infoLog.recordMismatchItem("Location layout qualifiers");
         return false;
     }
     if (vertexUniform.offset != fragmentUniform.offset)
     {
-        infoLog << "Offset layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
+        infoLog.recordMismatchItem("Offset layout qualifiers");
         return false;
     }
 
