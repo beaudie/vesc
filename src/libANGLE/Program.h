@@ -146,6 +146,36 @@ class InfoLog : angle::NonCopyable
 
     bool empty() const;
 
+    template <class T>
+    static GLenum GetShaderTypeFromUniformName(const std::string &uniformName,
+                                               const std::vector<T> &vertexUniforms,
+                                               const std::vector<T> &fragmentUniforms)
+    {
+        const std::vector<T> *testUniforms = nullptr;
+        GLenum testShaderType;
+
+        if (vertexUniforms.size() > fragmentUniforms.size())
+        {
+            testShaderType = GL_VERTEX_SHADER;
+            testUniforms   = &vertexUniforms;
+        }
+        else
+        {
+            testShaderType = GL_FRAGMENT_SHADER;
+            testUniforms   = &fragmentUniforms;
+        }
+
+        for (const T &uniform : *testUniforms)
+        {
+            if (uniform.name == uniformName)
+            {
+                return testShaderType;
+            }
+        }
+
+        return (testShaderType == GL_VERTEX_SHADER) ? GL_FRAGMENT_SHADER : GL_VERTEX_SHADER;
+    }
+
   private:
     void ensureInitialized()
     {
@@ -665,6 +695,7 @@ class Program final : angle::NonCopyable, public LabeledObject
         const sh::ShaderVariable &variable1,
         const sh::ShaderVariable &variable2,
         bool validatePrecision,
+        bool validateGeometryShaderInput,
         std::string *mismatchedStructOrBlockMemberName);
 
     GLuint getInputResourceIndex(const GLchar *name) const;
@@ -700,6 +731,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     static bool ValidateGraphicsInterfaceBlocks(
         const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
         const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
+        const std::vector<sh::InterfaceBlock> *geometryInterfaceBlocks,
         InfoLog &infoLog,
         bool webglCompatibility);
     bool linkInterfaceBlocks(const Context *context, InfoLog &infoLog);
@@ -721,7 +753,19 @@ class Program final : angle::NonCopyable, public LabeledObject
     static LinkMismatchError LinkValidateVaryings(const sh::Varying &generatorVarying,
                                                   const sh::Varying &consumerVarying,
                                                   int shaderVersion,
+                                                  bool validateGeometryShaderInputs,
                                                   std::string *mismatchedStructFieldName);
+
+    bool linkValidateUserDefinedVaryingsMatch(const Context *context,
+                                              Shader *generatorShader,
+                                              Shader *consumerShader,
+                                              InfoLog &infoLog) const;
+
+    bool linkValidateFragmentInputBindings(
+        const sh::Varying &fragmentShaderInputVarying,
+        std::unique_ptr<std::map<GLuint, std::string>> &staticFragmentInputLocations,
+        InfoLog &infoLog) const;
+
     bool linkValidateBuiltInVaryings(const Context *context, InfoLog &infoLog) const;
     bool linkValidateTransformFeedback(const gl::Context *context,
                                        InfoLog &infoLog,
