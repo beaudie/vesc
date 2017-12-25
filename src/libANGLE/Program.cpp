@@ -416,6 +416,27 @@ void InfoLog::reset()
 {
 }
 
+void InfoLog::logLinkMismatch(const std::string &variableName,
+                              const std::string &variableType,
+                              const std::string *mismatchedItem,
+                              const std::string *mismatchedFields,
+                              GLenum shaderType1,
+                              GLenum shaderType2)
+{
+    ASSERT(mismatchedItem);
+    ensureInitialized();
+
+    *mLazyStream << *mismatchedItem << " of " << variableType << " '" << variableName;
+
+    if (mismatchedFields)
+    {
+        *mLazyStream << "' field '" << variableName << "." << *mismatchedFields;
+    }
+
+    *mLazyStream << "' differ between " << GetShaderTypeString(shaderType1) << " and "
+                 << GetShaderTypeString(shaderType2) << " shaders." << std::endl;
+}
+
 // VariableLocation implementation.
 VariableLocation::VariableLocation() : arrayIndex(0), index(kUnused), ignored(false)
 {
@@ -2027,6 +2048,8 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
 
     std::map<GLuint, std::string> staticFragmentInputLocations;
 
+    std::unique_ptr<std::string> mismatchedItem;
+    std::unique_ptr<std::string> mismatchedFields;
     for (const sh::Varying &output : fragmentVaryings)
     {
         bool matched = false;
@@ -2042,9 +2065,12 @@ bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
             if (output.name == input.name)
             {
                 ASSERT(!input.isBuiltIn());
-                if (!LinkValidateVaryings(infoLog, output.name, input, output,
-                                          vertexShader->getShaderVersion(context)))
+                if (!LinkValidateVaryings(input, output, vertexShader->getShaderVersion(context),
+                                          mismatchedItem, mismatchedFields))
                 {
+                    infoLog.logLinkMismatch(output.name, "varying", mismatchedItem.get(),
+                                            mismatchedFields.get(), vertexShader->getType(),
+                                            fragmentShader->getType());
                     return false;
                 }
 
@@ -2219,22 +2245,22 @@ bool Program::linkAtomicCounterBuffers()
     return true;
 }
 
-bool Program::LinkValidateInterfaceBlockFields(InfoLog &infoLog,
-                                               const std::string &uniformName,
-                                               const sh::InterfaceBlockField &vertexUniform,
-                                               const sh::InterfaceBlockField &fragmentUniform,
-                                               bool webglCompatibility)
+bool Program::LinkValidateInterfaceBlockFields(const sh::InterfaceBlockField &blockField1,
+                                               const sh::InterfaceBlockField &blockField2,
+                                               bool webglCompatibility,
+                                               std::unique_ptr<std::string> &mismatchedItem,
+                                               std::unique_ptr<std::string> &mismatchedFields)
 {
     // If webgl, validate precision of UBO fields, otherwise don't.  See Khronos bug 10287.
-    if (!LinkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
-                                   webglCompatibility))
+    if (!LinkValidateVariablesBase(blockField1, blockField2, webglCompatibility, mismatchedItem,
+                                   mismatchedFields))
     {
         return false;
     }
 
-    if (vertexUniform.isRowMajorLayout != fragmentUniform.isRowMajorLayout)
+    if (blockField1.isRowMajorLayout != blockField2.isRowMajorLayout)
     {
-        infoLog << "Matrix packings for " << uniformName << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Matrix packings"));
         return false;
     }
 
@@ -2365,15 +2391,20 @@ bool Program::ValidateGraphicsInterfaceBlocks(
         linkedInterfaceBlocks[vertexInterfaceBlock.name] = &vertexInterfaceBlock;
     }
 
+    std::unique_ptr<std::string> mismatchedItem;
+    std::unique_ptr<std::string> mismatchedFields;
     for (const sh::InterfaceBlock &fragmentInterfaceBlock : fragmentInterfaceBlocks)
     {
         auto entry = linkedInterfaceBlocks.find(fragmentInterfaceBlock.name);
         if (entry != linkedInterfaceBlocks.end())
         {
             const sh::InterfaceBlock &vertexInterfaceBlock = *entry->second;
-            if (!AreMatchingInterfaceBlocks(infoLog, vertexInterfaceBlock, fragmentInterfaceBlock,
-                                            webglCompatibility))
+            if (!AreMatchingInterfaceBlocks(vertexInterfaceBlock, fragmentInterfaceBlock,
+                                            webglCompatibility, mismatchedItem, mismatchedFields))
             {
+                infoLog.logLinkMismatch(fragmentInterfaceBlock.name, "interface block",
+                                        mismatchedItem.get(), mismatchedFields.get(),
+                                        GL_VERTEX_SHADER, GL_FRAGMENT_SHADER);
                 return false;
             }
         }
@@ -2472,110 +2503,122 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
     return true;
 }
 
-bool Program::AreMatchingInterfaceBlocks(InfoLog &infoLog,
-                                         const sh::InterfaceBlock &vertexInterfaceBlock,
-                                         const sh::InterfaceBlock &fragmentInterfaceBlock,
-                                         bool webglCompatibility)
+bool Program::AreMatchingInterfaceBlocks(const sh::InterfaceBlock &interfaceBlock1,
+                                         const sh::InterfaceBlock &interfaceBlock2,
+                                         bool webglCompatibility,
+                                         std::unique_ptr<std::string> &mismatchedItem,
+                                         std::unique_ptr<std::string> &mismatchedFields)
 {
-    const char *blockName = vertexInterfaceBlock.name.c_str();
     // validate blocks for the same member types
-    if (vertexInterfaceBlock.fields.size() != fragmentInterfaceBlock.fields.size())
+    if (interfaceBlock1.fields.size() != interfaceBlock2.fields.size())
     {
-        infoLog << "Types for interface block '" << blockName
-                << "' differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Types"));
         return false;
     }
-    if (vertexInterfaceBlock.arraySize != fragmentInterfaceBlock.arraySize)
+    if (interfaceBlock1.arraySize != interfaceBlock2.arraySize)
     {
-        infoLog << "Array sizes differ for interface block '" << blockName
-                << "' between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Array sizes"));
         return false;
     }
-    if (vertexInterfaceBlock.layout != fragmentInterfaceBlock.layout ||
-        vertexInterfaceBlock.binding != fragmentInterfaceBlock.binding)
+    if (interfaceBlock1.layout != interfaceBlock2.layout ||
+        interfaceBlock1.binding != interfaceBlock2.binding)
     {
-        infoLog << "Layout qualifiers differ for interface block '" << blockName
-                << "' between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Layout qualifiers"));
         return false;
     }
-    const unsigned int numBlockMembers =
-        static_cast<unsigned int>(vertexInterfaceBlock.fields.size());
+    const unsigned int numBlockMembers = static_cast<unsigned int>(interfaceBlock1.fields.size());
     for (unsigned int blockMemberIndex = 0; blockMemberIndex < numBlockMembers; blockMemberIndex++)
     {
-        const sh::InterfaceBlockField &vertexMember = vertexInterfaceBlock.fields[blockMemberIndex];
-        const sh::InterfaceBlockField &fragmentMember = fragmentInterfaceBlock.fields[blockMemberIndex];
-        if (vertexMember.name != fragmentMember.name)
+        const sh::InterfaceBlockField &member1 = interfaceBlock1.fields[blockMemberIndex];
+        const sh::InterfaceBlockField &member2 = interfaceBlock2.fields[blockMemberIndex];
+        if (member1.name != member2.name)
         {
-            infoLog << "Name mismatch for field " << blockMemberIndex
-                    << " of interface block '" << blockName
-                    << "': (in vertex: '" << vertexMember.name
-                    << "', in fragment: '" << fragmentMember.name << "')";
+            std::ostringstream stream;
+            stream << "Names of field '" << blockMemberIndex << "' ('" << member1.name << "' vs '"
+                   << member2.name << "')";
+            mismatchedItem.reset(new std::string(stream.str()));
             return false;
         }
-        std::string memberName = "interface block '" + vertexInterfaceBlock.name + "' member '" + vertexMember.name + "'";
-        if (!LinkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember,
-                                              webglCompatibility))
+
+        if (!LinkValidateInterfaceBlockFields(member1, member2, webglCompatibility, mismatchedItem,
+                                              mismatchedFields))
         {
+            if (!mismatchedFields)
+            {
+                mismatchedFields.reset(new std::string(member1.name));
+            }
+            else
+            {
+                std::ostringstream stream;
+                stream << member1.name << "." << *mismatchedFields;
+                *mismatchedFields = stream.str();
+            }
             return false;
         }
     }
     return true;
 }
 
-bool Program::LinkValidateVariablesBase(InfoLog &infoLog,
-                                        const std::string &variableName,
-                                        const sh::ShaderVariable &vertexVariable,
-                                        const sh::ShaderVariable &fragmentVariable,
-                                        bool validatePrecision)
+bool Program::LinkValidateVariablesBase(const sh::ShaderVariable &variable1,
+                                        const sh::ShaderVariable &variable2,
+                                        bool validatePrecision,
+                                        std::unique_ptr<std::string> &mismatchedItem,
+                                        std::unique_ptr<std::string> &mismatchedFields)
 {
-    if (vertexVariable.type != fragmentVariable.type)
+    if (variable1.type != variable2.type)
     {
-        infoLog << "Types for " << variableName << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Types"));
         return false;
     }
-    if (vertexVariable.arraySizes != fragmentVariable.arraySizes)
+    if (variable1.arraySizes != variable2.arraySizes)
     {
-        infoLog << "Array sizes for " << variableName << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Array sizes"));
         return false;
     }
-    if (validatePrecision && vertexVariable.precision != fragmentVariable.precision)
+    if (validatePrecision && variable1.precision != variable2.precision)
     {
-        infoLog << "Precisions for " << variableName << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Precisions"));
         return false;
     }
-    if (vertexVariable.structName != fragmentVariable.structName)
+    if (variable1.structName != variable2.structName)
     {
-        infoLog << "Structure names for " << variableName
-                << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Structure names"));
         return false;
     }
 
-    if (vertexVariable.fields.size() != fragmentVariable.fields.size())
+    if (variable1.fields.size() != variable2.fields.size())
     {
-        infoLog << "Structure lengths for " << variableName << " differ between vertex and fragment shaders";
+        mismatchedItem.reset(new std::string("Structure lengths"));
         return false;
     }
-    const unsigned int numMembers = static_cast<unsigned int>(vertexVariable.fields.size());
+    const unsigned int numMembers = static_cast<unsigned int>(variable1.fields.size());
     for (unsigned int memberIndex = 0; memberIndex < numMembers; memberIndex++)
     {
-        const sh::ShaderVariable &vertexMember = vertexVariable.fields[memberIndex];
-        const sh::ShaderVariable &fragmentMember = fragmentVariable.fields[memberIndex];
+        const sh::ShaderVariable &member1 = variable1.fields[memberIndex];
+        const sh::ShaderVariable &member2 = variable2.fields[memberIndex];
 
-        if (vertexMember.name != fragmentMember.name)
+        if (member1.name != member2.name)
         {
-            infoLog << "Name mismatch for field '" << memberIndex
-                    << "' of " << variableName
-                    << ": (in vertex: '" << vertexMember.name
-                    << "', in fragment: '" << fragmentMember.name << "')";
+            std::ostringstream stream;
+            stream << "Names of field '" << memberIndex << "' ('" << member1.name << "' vs '"
+                   << member2.name << "')";
+            mismatchedItem.reset(new std::string(stream.str()));
             return false;
         }
 
-        const std::string memberName = variableName.substr(0, variableName.length() - 1) + "." +
-                                       vertexMember.name + "'";
-
-        if (!LinkValidateVariablesBase(infoLog, vertexMember.name, vertexMember, fragmentMember,
-                                       validatePrecision))
+        if (!LinkValidateVariablesBase(member1, member2, validatePrecision, mismatchedItem,
+                                       mismatchedFields))
         {
+            if (!mismatchedFields)
+            {
+                mismatchedFields.reset(new std::string(member1.name));
+            }
+            else
+            {
+                std::ostringstream stream;
+                stream << member1.name << "." << *mismatchedFields;
+                *mismatchedFields = stream.str();
+            }
             return false;
         }
     }
@@ -2583,28 +2626,27 @@ bool Program::LinkValidateVariablesBase(InfoLog &infoLog,
     return true;
 }
 
-bool Program::LinkValidateVaryings(InfoLog &infoLog,
-                                   const std::string &varyingName,
-                                   const sh::Varying &vertexVarying,
-                                   const sh::Varying &fragmentVarying,
-                                   int shaderVersion)
+bool Program::LinkValidateVaryings(const sh::Varying &generatorVarying,
+                                   const sh::Varying &consumerVarying,
+                                   int shaderVersion,
+                                   std::unique_ptr<std::string> &mismatchedItem,
+                                   std::unique_ptr<std::string> &mismatchedFields)
 {
-    if (!LinkValidateVariablesBase(infoLog, varyingName, vertexVarying, fragmentVarying, false))
+    if (!LinkValidateVariablesBase(generatorVarying, consumerVarying, false, mismatchedItem,
+                                   mismatchedFields))
     {
         return false;
     }
 
-    if (!sh::InterpolationTypesMatch(vertexVarying.interpolation, fragmentVarying.interpolation))
+    if (!sh::InterpolationTypesMatch(generatorVarying.interpolation, consumerVarying.interpolation))
     {
-        infoLog << "Interpolation types for " << varyingName
-                << " differ between vertex and fragment shaders.";
+        mismatchedItem.reset(new std::string("Interpolation types"));
         return false;
     }
 
-    if (shaderVersion == 100 && vertexVarying.isInvariant != fragmentVarying.isInvariant)
+    if (shaderVersion == 100 && generatorVarying.isInvariant != consumerVarying.isInvariant)
     {
-        infoLog << "Invariance for " << varyingName
-                << " differs between vertex and fragment shaders.";
+        mismatchedItem.reset(new std::string("Invariances"));
         return false;
     }
 
