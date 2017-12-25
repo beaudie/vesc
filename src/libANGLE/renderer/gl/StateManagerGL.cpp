@@ -169,7 +169,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mMultiviewDirtyBits(),
       mProgramTexturesAndSamplersDirty(true),
       mProgramStorageBuffersDirty(true),
-      mProgramDispatchIndirectBufferDirty(false)
+      mDispatchIndirectBufferDirty(false),
+      mDrawIndirectBufferDirty(false)
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -753,15 +754,17 @@ gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context, GLenu
     }
     bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
-    gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
-    ASSERT(drawIndirectBuffer);
-    const BufferGL *bufferGL = GetImplAs<BufferGL>(drawIndirectBuffer);
-    bindBuffer(gl::BufferBinding::DrawIndirect, bufferGL->getBufferID());
-
+    if (mDrawIndirectBufferDirty)
+    {
+        gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+        ASSERT(drawIndirectBuffer);
+        const BufferGL *bufferGL = GetImplAs<BufferGL>(drawIndirectBuffer);
+        bindBuffer(gl::BufferBinding::DrawIndirect, bufferGL->getBufferID());
+    }
     return setGenericDrawState(context);
 }
 
-void StateManagerGL::updateProgramDispatchIndirectBufferBinding(const gl::Context *context)
+void StateManagerGL::updateDispatchIndirectBufferBinding(const gl::Context *context)
 {
     gl::Buffer *dispatchIndirectBuffer =
         context->getGLState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
@@ -774,10 +777,10 @@ gl::Error StateManagerGL::setDispatchComputeState(const gl::Context *context, bo
 {
     setGenericShaderState(context);
 
-    if (isIndirect && mProgramDispatchIndirectBufferDirty)
+    if (isIndirect && mDispatchIndirectBufferDirty)
     {
-        updateProgramDispatchIndirectBufferBinding(context);
-        mProgramDispatchIndirectBufferDirty = false;
+        updateDispatchIndirectBufferBinding(context);
+        mDispatchIndirectBufferDirty = false;
     }
 
     return gl::NoError();
@@ -1946,10 +1949,10 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
-                // TODO: implement this
+                mDrawIndirectBufferDirty = true;
                 break;
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
-                mProgramDispatchIndirectBufferDirty = true;
+                mDispatchIndirectBufferDirty = true;
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
             {
