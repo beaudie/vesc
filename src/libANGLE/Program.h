@@ -403,6 +403,12 @@ class ProgramState final : angle::NonCopyable
 
     // ANGLE_multiview.
     int mNumViews;
+
+    // GL_EXT_geometry_shader.
+    GLenum mGeometryShaderInputPrimitiveType;
+    GLenum mGeometryShaderOutputPrimitiveType;
+    int mGeometryShaderInvocations;
+    int mGeometryShaderMaxVertices;
 };
 
 class ProgramBindings final : angle::NonCopyable
@@ -472,6 +478,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool hasLinkedVertexShader() const { return mState.mLinkedShaderStages[SHADER_VERTEX]; }
     bool hasLinkedFragmentShader() const { return mState.mLinkedShaderStages[SHADER_FRAGMENT]; }
     bool hasLinkedComputeShader() const { return mState.mLinkedShaderStages[SHADER_COMPUTE]; }
+    bool hasLinkedGeometryShader() const { return mState.mLinkedShaderStages[SHADER_GEOMETRY]; }
 
     Error loadBinary(const Context *context,
                      GLenum binaryFormat,
