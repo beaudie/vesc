@@ -294,6 +294,12 @@ void InitUniformBlockLinker(const gl::Context *context,
         blockLinker->addShaderBlocks(GL_COMPUTE_SHADER,
                                      &state.getAttachedComputeShader()->getUniformBlocks(context));
     }
+
+    if (state.getAttachedGeometryShader())
+    {
+        blockLinker->addShaderBlocks(GL_GEOMETRY_SHADER_EXT,
+                                     &state.getAttachedGeometryShader()->getUniformBlocks(context));
+    }
 }
 
 void InitShaderStorageBlockLinker(const gl::Context *context,
@@ -317,6 +323,13 @@ void InitShaderStorageBlockLinker(const gl::Context *context,
     {
         blockLinker->addShaderBlocks(
             GL_COMPUTE_SHADER, &state.getAttachedComputeShader()->getShaderStorageBlocks(context));
+    }
+
+    if (state.getAttachedGeometryShader())
+    {
+        blockLinker->addShaderBlocks(
+            GL_GEOMETRY_SHADER_EXT,
+            &state.getAttachedGeometryShader()->getShaderStorageBlocks(context));
     }
 }
 
@@ -517,7 +530,11 @@ ProgramState::ProgramState()
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
       mBinaryRetrieveableHint(false),
-      mNumViews(-1)
+      mNumViews(-1),
+      mGeometryShaderInputPrimitiveType(GL_TRIANGLES),
+      mGeometryShaderOutputPrimitiveType(GL_TRIANGLE_STRIP),
+      mGeometryShaderInvocations(1),
+      mGeometryShaderMaxVertices(0)
 {
     mComputeShaderLocalSize.fill(1);
 }
@@ -887,26 +904,31 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
+        // TODO
         if (!linkVaryings(context, mInfoLog))
         {
             return NoError();
         }
 
+        // TODO
         if (!linkUniforms(context, mInfoLog, mUniformLocationBindings))
         {
             return NoError();
         }
 
+        // TODO
         if (!linkInterfaceBlocks(context, mInfoLog))
         {
             return NoError();
         }
 
+        // TODO
         if (!linkValidateGlobalNames(context, mInfoLog))
         {
             return NoError();
         }
 
+        // TODO(jiawei.shao@intel.com): merge geometry shader varyings.
         const auto &mergedVaryings = getMergedVaryings(context);
 
         ASSERT(mState.mAttachedVertexShader);
@@ -928,11 +950,13 @@ Error Program::link(const gl::Context *context)
         InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
         InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
 
+        // TODO(jiawei.shao@intel.com): support transform feedback with geometry shader.
         if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, context->getCaps()))
         {
             return NoError();
         }
 
+        // TODO(jiawei.shao@intel.com): collect and pack geometry shader varyings.
         if (!resources.varyingPacking.collectAndPackUserVaryings(
                 mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames()))
         {
@@ -945,6 +969,7 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
+        // TODO(jiawei.shao@intel.com): gather geometry shader varyings.
         gatherTransformFeedbackVaryings(mergedVaryings);
     }
 
@@ -992,6 +1017,11 @@ void Program::updateLinkedShaderStages()
     {
         mState.mLinkedShaderStages.set(SHADER_COMPUTE);
     }
+
+    if (mState.mAttachedGeometryShader)
+    {
+        mState.mLinkedShaderStages.set(SHADER_GEOMETRY);
+    }
 }
 
 // Returns the program object to an unlinked state, before re-linking, or at destruction
@@ -1015,6 +1045,10 @@ void Program::unlink()
     mState.mSamplerBindings.clear();
     mState.mImageBindings.clear();
     mState.mNumViews = -1;
+    mState.mGeometryShaderInputPrimitiveType  = GL_TRIANGLES;
+    mState.mGeometryShaderOutputPrimitiveType = GL_TRIANGLE_STRIP;
+    mState.mGeometryShaderInvocations         = 1;
+    mState.mGeometryShaderMaxVertices         = 0;
 
     mValidated = false;
 
@@ -1978,9 +2012,11 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
     Shader *vertexShader   = mState.mAttachedVertexShader;
     Shader *fragmentShader = mState.mAttachedFragmentShader;
     Shader *computeShader  = mState.mAttachedComputeShader;
+    Shader *geometryShader = mState.mAttachedGeometryShader;
 
-    bool isComputeShaderAttached  = (computeShader != nullptr);
-    bool isGraphicsShaderAttached = (vertexShader != nullptr || fragmentShader != nullptr);
+    bool isComputeShaderAttached = (computeShader != nullptr);
+    bool isGraphicsShaderAttached =
+        (vertexShader != nullptr || fragmentShader != nullptr || geometryShader != nullptr);
     // Check whether we both have a compute and non-compute shaders attached.
     // If there are of both types attached, then linking should fail.
     // OpenGL ES 3.10, 7.3 Program Objects, under LinkProgram
@@ -2026,10 +2062,48 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
         }
         ASSERT(vertexShader->getType() == GL_VERTEX_SHADER);
 
-        if (fragmentShader->getShaderVersion(context) != vertexShader->getShaderVersion(context))
+        int vertexShaderVersion = vertexShader->getShaderVersion(context);
+        if (vertexShaderVersion != fragmentShader->getShaderVersion(context))
         {
             mInfoLog << "Fragment shader version does not match vertex shader version.";
             return false;
+        }
+
+        if (geometryShader)
+        {
+            if (vertexShaderVersion != geometryShader->getShaderVersion(context))
+            {
+                mInfoLog << "Geometry shader version does not match vertex shader version.";
+                return false;
+            }
+            ASSERT(geometryShader->getType() == GL_GEOMETRY_SHADER_EXT);
+
+            GLenum inputPrimitive = geometryShader->getGeometryShaderInputPrimitiveType(context);
+            if (inputPrimitive == GL_INVALID_VALUE)
+            {
+                mInfoLog << "Geometry shader input primitive type is not specified.";
+                return false;
+            }
+
+            GLenum outputPrimitive = geometryShader->getGeometryShaderOutputPrimitiveType(context);
+            if (outputPrimitive == GL_INVALID_VALUE)
+            {
+                mInfoLog << "Geometry shader output primitive type is not specified.";
+                return false;
+            }
+
+            int maxVertices = geometryShader->getGeometryShaderMaxVertices(context);
+            if (maxVertices < 0)
+            {
+                mInfoLog << "'max_vertices' is not specified in the geometry shader .";
+                return false;
+            }
+
+            mState.mGeometryShaderInputPrimitiveType  = inputPrimitive;
+            mState.mGeometryShaderOutputPrimitiveType = outputPrimitive;
+            mState.mGeometryShaderMaxVertices         = maxVertices;
+            mState.mGeometryShaderInvocations =
+                geometryShader->getGeometryShaderInvocations(context);
         }
     }
 
