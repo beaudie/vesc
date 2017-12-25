@@ -177,6 +177,11 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     int getNumViews(const Context *context);
 
+    GLenum getGeometryShaderInputPrimitiveType(const Context *context);
+    GLenum getGeometryShaderOutputPrimitiveType(const Context *context);
+    int getGeometryShaderInvocations(const Context *context);
+    int getGeometryShaderMaxVertices(const Context *context);
+
     const std::string &getCompilerResourcesString() const;
 
   private:
