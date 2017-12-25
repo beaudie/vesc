@@ -67,6 +67,7 @@ void WriteShaderVariableBuffer(BinaryOutputStream *stream, const ShaderVariableB
     stream->writeInt(var.vertexStaticUse);
     stream->writeInt(var.fragmentStaticUse);
     stream->writeInt(var.computeStaticUse);
+    stream->writeInt(var.geometryStaticUse);
 
     stream->writeInt(var.memberIndexes.size());
     for (unsigned int memberCounterIndex : var.memberIndexes)
@@ -82,6 +83,7 @@ void LoadShaderVariableBuffer(BinaryInputStream *stream, ShaderVariableBuffer *v
     var->vertexStaticUse   = stream->readBool();
     var->fragmentStaticUse = stream->readBool();
     var->computeStaticUse  = stream->readBool();
+    var->geometryStaticUse = stream->readBool();
 
     unsigned int numMembers = stream->readInt<unsigned int>();
     for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
@@ -104,6 +106,7 @@ void WriteBufferVariable(BinaryOutputStream *stream, const BufferVariable &var)
     stream->writeInt(var.vertexStaticUse);
     stream->writeInt(var.fragmentStaticUse);
     stream->writeInt(var.computeStaticUse);
+    stream->writeInt(var.geometryStaticUse);
 }
 
 void LoadBufferVariable(BinaryInputStream *stream, BufferVariable *var)
@@ -120,6 +123,7 @@ void LoadBufferVariable(BinaryInputStream *stream, BufferVariable *var)
     var->vertexStaticUse               = stream->readBool();
     var->fragmentStaticUse             = stream->readBool();
     var->computeStaticUse              = stream->readBool();
+    var->geometryStaticUse             = stream->readBool();
 }
 
 void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block)
@@ -229,6 +233,11 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     state->mComputeShaderLocalSize[0] = stream.readInt<int>();
     state->mComputeShaderLocalSize[1] = stream.readInt<int>();
     state->mComputeShaderLocalSize[2] = stream.readInt<int>();
+
+    state->mGeometryShaderInputPrimitiveType  = stream.readInt<int>();
+    state->mGeometryShaderOutputPrimitiveType = stream.readInt<int>();
+    state->mGeometryShaderInvocations         = stream.readInt<int>();
+    state->mGeometryShaderMaxVertices         = stream.readInt<int>();
 
     state->mNumViews = stream.readInt<int>();
 
@@ -451,6 +460,11 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(computeLocalSize[1]);
     stream.writeInt(computeLocalSize[2]);
 
+    stream.writeInt(state.mGeometryShaderInputPrimitiveType);
+    stream.writeInt(state.mGeometryShaderOutputPrimitiveType);
+    stream.writeInt(state.mGeometryShaderInvocations);
+    stream.writeInt(state.mGeometryShaderMaxVertices);
+
     stream.writeInt(state.mNumViews);
 
     static_assert(MAX_VERTEX_ATTRIBS * 2 <= sizeof(uint32_t) * 8,
@@ -604,10 +618,11 @@ void MemoryProgramCache::ComputeHash(const Context *context,
     const Shader *vertexShader   = program->getAttachedVertexShader();
     const Shader *fragmentShader = program->getAttachedFragmentShader();
     const Shader *computeShader  = program->getAttachedComputeShader();
+    const Shader *geometryShader = program->getAttachedGeometryShader();
 
     // Compute the program hash. Start with the shader hashes and resource strings.
     HashStream hashStream;
-    hashStream << vertexShader << fragmentShader << computeShader;
+    hashStream << vertexShader << fragmentShader << computeShader << geometryShader;
 
     // Add some ANGLE metadata and Context properties, such as version and back-end.
     hashStream << ANGLE_COMMIT_HASH << context->getClientMajorVersion()
