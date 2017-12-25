@@ -121,6 +121,11 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
     const std::vector<sh::Uniform> &fragmentUniforms =
         mState.getAttachedFragmentShader()->getUniforms(context);
 
+    const std::vector<sh::Uniform> *geometryUniforms =
+        (mState.getAttachedGeometryShader())
+            ? (&mState.getAttachedGeometryShader()->getUniforms(context))
+            : nullptr;
+
     for (const sh::Uniform &vertexUniform : vertexUniforms)
     {
         linkedUniforms[vertexUniform.name] = &vertexUniform;
@@ -142,7 +147,39 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
                 return false;
             }
         }
+
+        else if (geometryUniforms)
+        {
+            linkedUniforms[fragmentUniform.name] = &fragmentUniform;
+        }
     }
+
+    if (!geometryUniforms)
+    {
+        return true;
+    }
+
+    for (const sh::Uniform &geometryUniform : *geometryUniforms)
+    {
+        auto entry = linkedUniforms.find(geometryUniform.name);
+        if (entry != linkedUniforms.end())
+        {
+            std::string mismatchedStructFieldName;
+            LinkMismatchError linkError =
+                LinkValidateUniforms(*(entry->second), geometryUniform, &mismatchedStructFieldName);
+            if (linkError != LinkMismatchError::NO_MISMATCH)
+            {
+                // Find out where the mismatched uniform is defined.
+                GLenum mismatchedShaderType = InfoLog::GetShaderTypeFromUniformName(
+                    geometryUniform.name, vertexUniforms, fragmentUniforms);
+                LogLinkMismatch(infoLog, geometryUniform.name, "uniform", linkError,
+                                mismatchedStructFieldName, mismatchedShaderType,
+                                GL_GEOMETRY_SHADER_EXT);
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 
@@ -158,7 +195,7 @@ LinkMismatchError UniformLinker::LinkValidateUniforms(const sh::Uniform &uniform
 #endif
 
     LinkMismatchError linkError = Program::LinkValidateVariablesBase(
-        uniform1, uniform2, validatePrecision, mismatchedStructFieldName);
+        uniform1, uniform2, validatePrecision, true, mismatchedStructFieldName);
     if (linkError != LinkMismatchError::NO_MISMATCH)
     {
         return linkError;
@@ -463,6 +500,22 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
                 "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
                 "Fragment shader image count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
                 "Fragment shader atomic counter count exceeds MAX_FRAGMENT_ATOMIC_COUNTERS (",
+                samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
+        {
+            return false;
+        }
+
+        Shader *geometryShader = mState.getAttachedGeometryShader();
+        // TODO (jiawei.shao@intel.com): check whether we need finer-grained component counting
+        if (geometryShader &&
+            !flattenUniformsAndCheckCapsForShader(
+                context, geometryShader, caps.maxGeometryUniformComponents / 4,
+                caps.maxGeometryTextureImageUnits, caps.maxGeometryImageUniforms,
+                caps.maxGeometryAtomicCounters,
+                "Geometry shader active uniforms exceed MAX_GEOMETRY_UNIFORM_VECTORS (",
+                "Geometry shader sampler count exceeds MAX_GEOMETRY_TEXTURE_IMAGE_UNITS (",
+                "Geometry shader image count exceeds MAX_GEOMETRY_IMAGE_UNIFORMS (",
+                "Geometry shader atomic counter count exceeds MAX_GEOMETRY_ATOMIC_COUNTERS (",
                 samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
         {
             return false;
