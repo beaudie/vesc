@@ -105,6 +105,11 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
     const std::vector<sh::Uniform> &fragmentUniforms =
         mState.getAttachedFragmentShader()->getUniforms(context);
 
+    const std::vector<sh::Uniform> *geometryUniforms =
+        (mState.getAttachedGeometryShader())
+            ? (&mState.getAttachedGeometryShader()->getUniforms(context))
+            : nullptr;
+
     for (const sh::Uniform &vertexUniform : vertexUniforms)
     {
         linkedUniforms[vertexUniform.name] = &vertexUniform;
@@ -122,14 +127,42 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
                 return false;
             }
         }
+
+        else if (geometryUniforms)
+        {
+            linkedUniforms[fragmentUniform.name] = &fragmentUniform;
+        }
     }
+
+    if (!geometryUniforms)
+    {
+        return true;
+    }
+
+    for (const sh::Uniform &geometryUniform : *geometryUniforms)
+    {
+        auto entry = linkedUniforms.find(geometryUniform.name);
+        if (entry != linkedUniforms.end())
+        {
+            if (!LinkValidateUniforms(infoLog, *(entry->second), geometryUniform))
+            {
+                // Find out where the mismatched uniform is defined.
+                GLenum mismatchedShaderType = InfoLog::GetShaderTypeFromUniformName(
+                    geometryUniform.name, vertexUniforms, fragmentUniforms);
+                infoLog.logLinkMismatch("uniform", geometryUniform.name, mismatchedShaderType,
+                                        GL_GEOMETRY_SHADER_EXT);
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 
 // GLSL ES Spec 3.00.3, section 4.3.5.
 bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
-                                         const sh::Uniform &vertexUniform,
-                                         const sh::Uniform &fragmentUniform)
+                                         const sh::Uniform &uniform1,
+                                         const sh::Uniform &uniform2)
 {
 #if ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION == ANGLE_ENABLED
     const bool validatePrecision = true;
@@ -137,28 +170,26 @@ bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
     const bool validatePrecision = false;
 #endif
 
-    if (!Program::LinkValidateVariablesBase(infoLog, vertexUniform, fragmentUniform,
-                                            validatePrecision))
+    if (!Program::LinkValidateVariablesBase(infoLog, uniform1, uniform2, validatePrecision, false))
     {
         return false;
     }
 
     // GLSL ES Spec 3.10.4, section 4.4.5.
-    if (vertexUniform.binding != -1 && fragmentUniform.binding != -1 &&
-        vertexUniform.binding != fragmentUniform.binding)
+    if (uniform1.binding != -1 && uniform2.binding != -1 && uniform1.binding != uniform2.binding)
     {
         infoLog.recordMismatchItem("Binding layout qualifiers");
         return false;
     }
 
     // GLSL ES Spec 3.10.4, section 9.2.1.
-    if (vertexUniform.location != -1 && fragmentUniform.location != -1 &&
-        vertexUniform.location != fragmentUniform.location)
+    if (uniform1.location != -1 && uniform2.location != -1 &&
+        uniform1.location != uniform2.location)
     {
         infoLog.recordMismatchItem("Location layout qualifiers");
         return false;
     }
-    if (vertexUniform.offset != fragmentUniform.offset)
+    if (uniform1.offset != uniform2.offset)
     {
         infoLog.recordMismatchItem("Offset layout qualifiers");
         return false;
@@ -446,6 +477,22 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
                 "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
                 "Fragment shader image count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
                 "Fragment shader atomic counter count exceeds MAX_FRAGMENT_ATOMIC_COUNTERS (",
+                samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
+        {
+            return false;
+        }
+
+        Shader *geometryShader = mState.getAttachedGeometryShader();
+        // TODO (jiawei.shao@intel.com): check whether we need finer-grained component counting
+        if (geometryShader &&
+            !flattenUniformsAndCheckCapsForShader(
+                context, geometryShader, caps.maxGeometryUniformComponents / 4,
+                caps.maxGeometryTextureImageUnits, caps.maxGeometryImageUniforms,
+                caps.maxGeometryAtomicCounters,
+                "Geometry shader active uniforms exceed MAX_GEOMETRY_UNIFORM_VECTORS (",
+                "Geometry shader sampler count exceeds MAX_GEOMETRY_TEXTURE_IMAGE_UNITS (",
+                "Geometry shader image count exceeds MAX_GEOMETRY_IMAGE_UNIFORMS (",
+                "Geometry shader atomic counter count exceeds MAX_GEOMETRY_ATOMIC_COUNTERS (",
                 samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
         {
             return false;
