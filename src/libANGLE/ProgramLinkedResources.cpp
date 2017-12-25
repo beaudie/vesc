@@ -131,10 +131,14 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
         auto entry = linkedUniforms.find(fragmentUniform.name);
         if (entry != linkedUniforms.end())
         {
-            const sh::Uniform &linkedUniform = *(entry->second);
-            const std::string &uniformName   = "uniform '" + linkedUniform.name + "'";
-            if (!LinkValidateUniforms(infoLog, uniformName, linkedUniform, fragmentUniform))
+            const sh::Uniform &vertexUniform = *(entry->second);
+            std::string mismatchedStructFieldName;
+            LinkMismatchError linkError =
+                LinkValidateUniforms(vertexUniform, fragmentUniform, &mismatchedStructFieldName);
+            if (linkError != LinkMismatchError::LINK_NO_ERROR)
             {
+                LogLinkMismatch(infoLog, fragmentUniform.name, "uniform", linkError,
+                                mismatchedStructFieldName, GL_VERTEX_SHADER, GL_FRAGMENT_SHADER);
                 return false;
             }
         }
@@ -143,10 +147,9 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
 }
 
 // GLSL ES Spec 3.00.3, section 4.3.5.
-bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
-                                         const std::string &uniformName,
-                                         const sh::Uniform &vertexUniform,
-                                         const sh::Uniform &fragmentUniform)
+LinkMismatchError UniformLinker::LinkValidateUniforms(const sh::Uniform &uniform1,
+                                                      const sh::Uniform &uniform2,
+                                                      std::string *mismatchedStructFieldName)
 {
 #if ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION == ANGLE_ENABLED
     const bool validatePrecision = true;
@@ -154,37 +157,31 @@ bool UniformLinker::LinkValidateUniforms(InfoLog &infoLog,
     const bool validatePrecision = false;
 #endif
 
-    if (!Program::LinkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform,
-                                            validatePrecision))
+    LinkMismatchError linkError = Program::LinkValidateVariablesBase(
+        uniform1, uniform2, validatePrecision, mismatchedStructFieldName);
+    if (linkError != LinkMismatchError::LINK_NO_ERROR)
     {
-        return false;
+        return linkError;
     }
 
     // GLSL ES Spec 3.10.4, section 4.4.5.
-    if (vertexUniform.binding != -1 && fragmentUniform.binding != -1 &&
-        vertexUniform.binding != fragmentUniform.binding)
+    if (uniform1.binding != -1 && uniform2.binding != -1 && uniform1.binding != uniform2.binding)
     {
-        infoLog << "Binding layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
-        return false;
+        return LinkMismatchError::LINK_BINDING_MISMATCH;
     }
 
     // GLSL ES Spec 3.10.4, section 9.2.1.
-    if (vertexUniform.location != -1 && fragmentUniform.location != -1 &&
-        vertexUniform.location != fragmentUniform.location)
+    if (uniform1.location != -1 && uniform2.location != -1 &&
+        uniform1.location != uniform2.location)
     {
-        infoLog << "Location layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
-        return false;
+        return LinkMismatchError::LINK_LOCATION_MISMATCH;
     }
-    if (vertexUniform.offset != fragmentUniform.offset)
+    if (uniform1.offset != uniform2.offset)
     {
-        infoLog << "Offset layout qualifiers for " << uniformName
-                << " differ between vertex and fragment shaders.";
-        return false;
+        return LinkMismatchError::LINK_OFFSET_MISMATCH;
     }
 
-    return true;
+    return LinkMismatchError::LINK_NO_ERROR;
 }
 
 bool UniformLinker::indexUniforms(InfoLog &infoLog, const ProgramBindings &uniformLocationBindings)
