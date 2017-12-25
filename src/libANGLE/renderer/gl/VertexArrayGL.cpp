@@ -131,7 +131,7 @@ gl::Error VertexArrayGL::syncDrawElementsState(const gl::Context *context,
                          primitiveRestartEnabled, outIndices);
 }
 
-gl::Error VertexArrayGL::syncElementArrayState(const gl::Context *context) const
+void VertexArrayGL::updateElementArrayBufferBinding(const gl::Context *context) const
 {
     gl::Buffer *elementArrayBuffer = mState.getElementArrayBuffer().get();
     ASSERT(elementArrayBuffer);
@@ -141,8 +141,6 @@ gl::Error VertexArrayGL::syncElementArrayState(const gl::Context *context) const
         mStateManager->bindBuffer(gl::BufferBinding::ElementArray, bufferGL->getBufferID());
         mAppliedElementArrayBuffer.set(context, elementArrayBuffer);
     }
-
-    return gl::NoError();
 }
 
 gl::Error VertexArrayGL::syncDrawState(const gl::Context *context,
@@ -200,26 +198,6 @@ gl::Error VertexArrayGL::syncIndexData(const gl::Context *context,
     // Need to check the range of indices if attributes need to be streamed
     if (elementArrayBuffer != nullptr)
     {
-        if (elementArrayBuffer != mAppliedElementArrayBuffer.get())
-        {
-            const BufferGL *bufferGL = GetImplAs<BufferGL>(elementArrayBuffer);
-            mStateManager->bindBuffer(gl::BufferBinding::ElementArray, bufferGL->getBufferID());
-            mAppliedElementArrayBuffer.set(context, elementArrayBuffer);
-        }
-
-        // Only compute the index range if the attributes also need to be streamed
-        if (attributesNeedStreaming)
-        {
-            ptrdiff_t elementArrayBufferOffset = reinterpret_cast<ptrdiff_t>(indices);
-            Error error                        = mState.getElementArrayBuffer()->getIndexRange(
-                context, type, elementArrayBufferOffset, count, primitiveRestartEnabled,
-                outIndexRange);
-            if (error.isError())
-            {
-                return error;
-            }
-        }
-
         // Indices serves as an offset into the index buffer in this case, use the same value for
         // the draw call
         *outIndices = indices;
@@ -655,7 +633,7 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
     {
         if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
         {
-            // TODO(jmadill): Element array buffer bindings
+            updateElementArrayBufferBinding(context);
             continue;
         }
 
