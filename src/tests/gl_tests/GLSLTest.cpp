@@ -470,6 +470,45 @@ class GLSLTest_ES31 : public GLSLTest
                 gl_Position = inputAttribute;
             })";
     }
+
+  public:
+    void validateErrorMessage(const std::string &vertexShader,
+                              const std::string &fragmentShader,
+                              const char *expectedErrorMessage)
+    {
+        GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+        GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+        GLuint program = glCreateProgram();
+        glAttachShader(program, vs);
+        glAttachShader(program, fs);
+        glLinkProgram(program);
+
+        glDetachShader(program, vs);
+        glDetachShader(program, fs);
+        glDeleteShader(vs);
+        glDeleteShader(fs);
+
+        GLint linkStatus;
+        glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+        ASSERT_FALSE(linkStatus);
+
+        GLint infoLogLength;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+        if (infoLogLength >= 1)
+        {
+            std::vector<GLchar> infoLog(infoLogLength);
+            glGetProgramInfoLog(program, static_cast<GLsizei>(infoLog.size()), nullptr,
+                                infoLog.data());
+
+            std::cerr << "program link failed: " << infoLog.data();
+
+            EXPECT_EQ(0, std::strncmp(expectedErrorMessage, infoLog.data(), infoLog.size()));
+        }
+
+        ASSERT_GL_NO_ERROR();
+    }
 };
 
 TEST_P(GLSLTest, NamelessScopedStructs)
@@ -3885,8 +3924,8 @@ TEST_P(GLSLTest, VectorScalarDivideAndAddInLoop)
 // is handled correctly.
 TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
 {
-    const std::string &vertexShader =
-        R"(#version 300 es
+	const std::string &vertexShader =
+		R"(#version 300 es
 
         in vec4 inputAttribute;
 
@@ -3898,8 +3937,8 @@ TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
             gl_Position = inputAttribute;
         })";
 
-    const std::string &fragmentShader =
-        R"(#version 300 es
+	const std::string &fragmentShader =
+		R"(#version 300 es
 
         precision highp float;
         out vec4 my_FragColor;
@@ -3911,9 +3950,215 @@ TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
             my_FragColor = vec4(0, (true ? v : 0), 0, 1);
         })";
 
-    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-    drawQuad(program.get(), "inputAttribute", 0.5f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+	ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+	drawQuad(program.get(), "inputAttribute", 0.5f);
+	EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Validate error messages when the link mismatch occurs on the type of a non-struct varying.
+TEST_P(GLSLTest_ES31, ErrorMessageOfLinkVaryingFailure)
+{
+    const std::string &vertexShader =
+        R"(#version 310 es
+           in vec4 inputAttribute;
+           out vec4 vertex_out;
+            void main()
+            {
+                vertex_out = inputAttribute;
+                gl_Position = inputAttribute;
+            })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+           precision mediump float;
+           in float vertex_out;
+           layout (location = 0) out vec4 frag_out;
+           void main()
+           {
+               frag_out = vec4(vertex_out, 0.0, 0.0, 1.0);
+           }
+         )";
+
+    const char *kErrorMessage =
+        "Types of varying 'vertex_out' differ between VERTEX and FRAGMENT shaders.\n";
+    validateErrorMessage(vertexShader, fragmentShader, kErrorMessage);
+}
+
+// Validate error messages when the link mismatch occurs on the name of a varying field.
+TEST_P(GLSLTest_ES31, ErrorMessageOfLinkVaryingStructFieldNameFailure)
+{
+    const std::string &vertexShader =
+        R"(#version 310 es
+           in vec4 inputAttribute;
+           struct S {
+               float val1;
+               vec4 val2;
+           };
+           out S vertex_out;
+            void main()
+            {
+                vertex_out.val2 = inputAttribute;
+                vertex_out.val1 = inputAttribute[0];
+                gl_Position = inputAttribute;
+            })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+           precision mediump float;
+           struct S {
+               float val1;
+               vec4 val3;
+           };
+           in S vertex_out;
+           layout (location = 0) out vec4 frag_out;
+           void main()
+           {
+               frag_out = vec4(vertex_out.val1, 0.0, 0.0, 1.0);
+           }
+         )";
+
+    const char *kErrorMessage =
+        "Field names of varying 'vertex_out' differ between VERTEX and FRAGMENT shaders.\n";
+    validateErrorMessage(vertexShader, fragmentShader, kErrorMessage);
+}
+
+// Validate error messages when the link mismatch occurs on the type of a varying field.
+TEST_P(GLSLTest_ES31, ErrorMessageOfLinkVaryingStructFieldFailure)
+{
+    const std::string &vertexShader =
+        R"(#version 310 es
+           in vec4 inputAttribute;
+           struct S {
+               float val1;
+               vec4 val2;
+           };
+           out S vertex_out;
+            void main()
+            {
+                vertex_out.val2 = inputAttribute;
+                vertex_out.val1 = inputAttribute[0];
+                gl_Position = inputAttribute;
+            })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+           precision mediump float;
+           struct S {
+               float val1;
+               vec3 val2;
+           };
+           in S vertex_out;
+           layout (location = 0) out vec4 frag_out;
+           void main()
+           {
+               frag_out = vec4(vertex_out.val1, 0.0, 0.0, 1.0);
+           }
+         )";
+
+    const char *kErrorMessage =
+        "Types of varying 'vertex_out' member 'vertex_out.val2' differ between VERTEX and FRAGMENT "
+        "shaders.\n";
+    validateErrorMessage(vertexShader, fragmentShader, kErrorMessage);
+}
+
+// Validate error messages when the link mismatch occurs on the name of a struct member of a uniform
+// field.
+TEST_P(GLSLTest_ES31, ErrorMessageOfLinkUniformStructFieldFailure)
+{
+    const std::string &vertexShader =
+        R"(#version 310 es
+           in vec4 inputAttribute;
+           struct T
+           {
+               vec2 t1;
+               vec3 t2;
+           };
+           struct S {
+               T val1;
+               vec4 val2;
+           };
+           uniform S uni;
+           out vec4 vertex_out;
+            void main()
+            {
+                vertex_out = uni.val2;
+                gl_Position = inputAttribute;
+            })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+           precision highp float;
+           struct T
+           {
+               vec2 t1;
+               vec3 t3;
+           };
+           struct S {
+               T val1;
+               vec2 val3;
+           };
+           uniform S uni;
+           in vec4 vertex_out;
+           layout (location = 0) out vec4 frag_out;
+           void main()
+           {
+               frag_out = vec4(uni.val1.t1[0], 0.0, 0.0, 1.0);
+           }
+         )";
+
+    const char *kErrorMessage =
+        "Field names of uniform 'uni' member 'uni.val1' differ between VERTEX and FRAGMENT "
+        "shaders.\n";
+    validateErrorMessage(vertexShader, fragmentShader, kErrorMessage);
+}
+
+// Validate error messages  when the link mismatch occurs on the type of a struct member of a
+// uniform block field.
+TEST_P(GLSLTest_ES31, ErrorMessageOfLinkInterfaceBlockFieldFailure)
+{
+    const std::string &vertexShader =
+        R"(#version 310 es
+           in vec4 inputAttribute;
+           struct T
+           {
+               vec2 t1;
+               vec3 t2;
+           };
+           uniform S {
+               T val1;
+               vec4 val2;
+           } uni;
+           out vec4 vertex_out;
+            void main()
+            {
+                vertex_out = uni.val2;
+                gl_Position = inputAttribute;
+            })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+           precision highp float;
+           struct T
+           {
+               vec2 t1;
+               vec4 t2;
+           };
+           uniform S {
+               T val1;
+               vec2 val2;
+           } uni;
+           in vec4 vertex_out;
+           layout (location = 0) out vec4 frag_out;
+           void main()
+           {
+               frag_out = vec4(uni.val1.t1[0], 0.0, 0.0, 1.0);
+           }
+         )";
+
+    const char *kErrorMessage =
+        "Types of interface block 'S' member 'S.val1.t2' differ between VERTEX and FRAGMENT "
+        "shaders.\n";
+    validateErrorMessage(vertexShader, fragmentShader, kErrorMessage);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
