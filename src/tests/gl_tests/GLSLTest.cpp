@@ -3924,8 +3924,8 @@ TEST_P(GLSLTest, VectorScalarDivideAndAddInLoop)
 // is handled correctly.
 TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
 {
-	const std::string &vertexShader =
-		R"(#version 300 es
+    const std::string &vertexShader =
+        R"(#version 300 es
 
         in vec4 inputAttribute;
 
@@ -3937,8 +3937,8 @@ TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
             gl_Position = inputAttribute;
         })";
 
-	const std::string &fragmentShader =
-		R"(#version 300 es
+    const std::string &fragmentShader =
+        R"(#version 300 es
 
         precision highp float;
         out vec4 my_FragColor;
@@ -3950,9 +3950,9 @@ TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
             my_FragColor = vec4(0, (true ? v : 0), 0, 1);
         })";
 
-	ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
-	drawQuad(program.get(), "inputAttribute", 0.5f);
-	EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
 // Validate error messages when the link mismatch occurs on the type of a non-struct varying.
