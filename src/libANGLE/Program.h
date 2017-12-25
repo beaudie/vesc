@@ -119,6 +119,16 @@ class InfoLog : angle::NonCopyable
 
     std::string str() const { return mLazyStream ? mLazyStream->str() : ""; }
 
+    void logLinkMismatch(const std::string &variableName,
+                         const char *variableType,
+                         const std::string &mismatchedItem,
+                         const std::string &mismatchedFieldName,
+                         GLenum shaderType1,
+                         GLenum shaderType2);
+
+    static void UpdateMismatchedVariableFieldName(const std::string &parentName,
+                                                  std::string *mismatchedFieldName);
+
   private:
     void ensureInitialized()
     {
@@ -579,11 +589,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLsizei getTransformFeedbackVaryingMaxLength() const;
     GLenum getTransformFeedbackBufferMode() const;
 
-    static bool LinkValidateInterfaceBlockFields(InfoLog &infoLog,
-                                                 const std::string &uniformName,
-                                                 const sh::InterfaceBlockField &vertexUniform,
-                                                 const sh::InterfaceBlockField &fragmentUniform,
-                                                 bool webglCompatibility);
+    static bool LinkValidateInterfaceBlockFields(const sh::InterfaceBlockField &blockField1,
+                                                 const sh::InterfaceBlockField &blockField2,
+                                                 bool webglCompatibility,
+                                                 std::string *mismatchedItem,
+                                                 std::string *mismatchedFieldName);
 
     void addRef();
     void release(const Context *context);
@@ -614,11 +624,11 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramState &getState() const { return mState; }
 
-    static bool LinkValidateVariablesBase(InfoLog &infoLog,
-                                          const std::string &variableName,
-                                          const sh::ShaderVariable &vertexVariable,
-                                          const sh::ShaderVariable &fragmentVariable,
-                                          bool validatePrecision);
+    static bool LinkValidateVariablesBase(const sh::ShaderVariable &variable1,
+                                          const sh::ShaderVariable &variable2,
+                                          bool validatePrecision,
+                                          std::string *mismatchedItem,
+                                          std::string *mismatchedFieldName);
 
     GLuint getInputResourceIndex(const GLchar *name) const;
     GLuint getOutputResourceIndex(const GLchar *name) const;
@@ -664,16 +674,17 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void updateLinkedShaderStages();
 
-    static bool AreMatchingInterfaceBlocks(InfoLog &infoLog,
-                                           const sh::InterfaceBlock &vertexInterfaceBlock,
-                                           const sh::InterfaceBlock &fragmentInterfaceBlock,
-                                           bool webglCompatibility);
+    static bool AreMatchingInterfaceBlocks(const sh::InterfaceBlock &interfaceBlock1,
+                                           const sh::InterfaceBlock &interfaceBlock2,
+                                           bool webglCompatibility,
+                                           std::string *mismatchedItem,
+                                           std::string *mismatchedFieldName);
 
-    static bool LinkValidateVaryings(InfoLog &infoLog,
-                                     const std::string &varyingName,
-                                     const sh::Varying &vertexVarying,
-                                     const sh::Varying &fragmentVarying,
-                                     int shaderVersion);
+    static bool LinkValidateVaryings(const sh::Varying &generatorVarying,
+                                     const sh::Varying &consumerVarying,
+                                     int shaderVersion,
+                                     std::string *mismatchedItem,
+                                     std::string *mismatchedFieldName);
     bool linkValidateBuiltInVaryings(const Context *context, InfoLog &infoLog) const;
     bool linkValidateTransformFeedback(const gl::Context *context,
                                        InfoLog &infoLog,
