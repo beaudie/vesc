@@ -431,6 +431,21 @@ class GLSLTest : public ANGLETest
         }
     }
 
+    void QueryErrorMessage(GLuint program, std::string *errorMessage)
+    {
+        ASSERT_TRUE(errorMessage);
+
+        GLint infoLogLength;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+        ASSERT_GE(infoLogLength, 1);
+
+        std::vector<GLchar> infoLog(infoLogLength);
+        glGetProgramInfoLog(program, static_cast<GLsizei>(infoLog.size()), nullptr, infoLog.data());
+        *errorMessage = infoLog.data();
+
+        ASSERT_GL_NO_ERROR();
+    }
+
     std::string mSimpleVSSource;
 };
 
@@ -3914,6 +3929,67 @@ TEST_P(GLSLTest_ES3, FlatVaryingUsedInFoldedTernary)
     ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
     drawQuad(program.get(), "inputAttribute", 0.5f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Verify that the link error message from last link failure is cleared when the new link is
+// finished.
+TEST_P(GLSLTest, ClearLinkErrorLog)
+{
+    const std::string &vertexShader =
+        R"(
+
+        attribute vec4 vert_in;
+        varying vec4 vert_out;
+        void main()
+        {
+            gl_Position = vert_in;
+            vert_out = vert_in;
+        })";
+
+    const std::string &fragmentShader =
+        R"(
+
+        precision mediump float;
+        varying vec4 frag_in;
+        void main()
+        {
+            gl_FragColor = frag_in;
+        })";
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+    GLuint program = glCreateProgram();
+
+    // The first time the program link fails because of lack of fragment shader.
+    glAttachShader(program, vs);
+    glLinkProgram(program);
+    GLint linkStatus = GL_TRUE;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    ASSERT_FALSE(linkStatus);
+
+    std::string lackOfFragmentShader;
+    QueryErrorMessage(program, &lackOfFragmentShader);
+
+    // The second time the program link fails because of the mismatch of the varying types.
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    linkStatus = GL_TRUE;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    ASSERT_FALSE(linkStatus);
+
+    std::string varyingTypeMismatch;
+    QueryErrorMessage(program, &varyingTypeMismatch);
+
+    EXPECT_EQ(std::string::npos, varyingTypeMismatch.find(lackOfFragmentShader));
+
+    glDetachShader(program, vs);
+    glDetachShader(program, fs);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    glDeleteProgram(program);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.

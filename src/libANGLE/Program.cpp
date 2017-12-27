@@ -414,6 +414,10 @@ void InfoLog::appendSanitized(const char *message)
 
 void InfoLog::reset()
 {
+    if (mLazyStream)
+    {
+        mLazyStream.reset(nullptr);
+    }
 }
 
 // VariableLocation implementation.
