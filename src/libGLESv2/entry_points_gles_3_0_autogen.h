@@ -8,8 +8,8 @@
 // entry_points_gles_3_0_autogen.h:
 //   Defines the GLES 3.0 entry points.
 
-#ifndef LIBGLESV2_ENTRYPOINTSGLES30_AUTOGEN_H_
-#define LIBGLESV2_ENTRYPOINTSGLES30_AUTOGEN_H_
+#ifndef LIBGLESV2_ENTRY_POINTS_GLES_3_0_AUTOGEN_H_
+#define LIBGLESV2_ENTRY_POINTS_GLES_3_0_AUTOGEN_H_
 
 #include <GLES3/gl3.h>
 #include <export.h>
@@ -281,4 +281,4 @@ VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, cons
 ANGLE_EXPORT void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout);
 }  // namespace gl
 
-#endif  // LIBGLESV2_ENTRYPOINTSGLES30_AUTOGEN_H_
+#endif  // LIBGLESV2_ENTRY_POINTS_GLES_3_0_AUTOGEN_H_

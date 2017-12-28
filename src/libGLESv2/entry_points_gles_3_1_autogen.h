@@ -8,12 +8,11 @@
 // entry_points_gles_3_1_autogen.h:
 //   Defines the GLES 3.1 entry points.
 
-#ifndef LIBGLESV2_ENTRYPOINTSGLES31_AUTOGEN_H_
-#define LIBGLESV2_ENTRYPOINTSGLES31_AUTOGEN_H_
+#ifndef LIBGLESV2_ENTRY_POINTS_GLES_3_1_AUTOGEN_H_
+#define LIBGLESV2_ENTRY_POINTS_GLES_3_1_AUTOGEN_H_
 
 #include <GLES3/gl31.h>
 #include <export.h>
-
 #include "common/platform.h"
 
 namespace gl
@@ -225,4 +224,4 @@ ANGLE_EXPORT void GL_APIENTRY VertexAttribIFormat(GLuint attribindex,
 ANGLE_EXPORT void GL_APIENTRY VertexBindingDivisor(GLuint bindingindex, GLuint divisor);
 }  // namespace gl
 
-#endif  // LIBGLESV2_ENTRYPOINTSGLES31_AUTOGEN_H_
+#endif  // LIBGLESV2_ENTRY_POINTS_GLES_3_1_AUTOGEN_H_

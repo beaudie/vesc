@@ -8,8 +8,8 @@
 // entry_points_gles_2_0_autogen.h:
 //   Defines the GLES 2.0 entry points.
 
-#ifndef LIBGLESV2_ENTRYPOINTSGLES20_AUTOGEN_H_
-#define LIBGLESV2_ENTRYPOINTSGLES20_AUTOGEN_H_
+#ifndef LIBGLESV2_ENTRY_POINTS_GLES_2_0_AUTOGEN_H_
+#define LIBGLESV2_ENTRY_POINTS_GLES_2_0_AUTOGEN_H_
 
 #include <GLES2/gl2.h>
 #include <export.h>
@@ -294,4 +294,4 @@ ANGLE_EXPORT void GL_APIENTRY VertexAttribPointer(GLuint index,
 ANGLE_EXPORT void GL_APIENTRY Viewport(GLint x, GLint y, GLsizei width, GLsizei height);
 }  // namespace gl
 
-#endif  // LIBGLESV2_ENTRYPOINTSGLES20_AUTOGEN_H_
+#endif  // LIBGLESV2_ENTRY_POINTS_GLES_2_0_AUTOGEN_H_
