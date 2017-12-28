@@ -161,6 +161,7 @@ class OutputHLSL : public TIntermTraverser
     // TODO(oetuaho): Consider a different type of data structure for storing referenced interface
     // blocks. It needs to know the instance name if any and link to the TInterfaceBlock object.
     ReferencedSymbols mReferencedUniformBlocks;
+    ReferencedSymbols mReferencedShaderStorageBlocks;
 
     ReferencedSymbols mReferencedAttributes;
     ReferencedSymbols mReferencedVaryings;

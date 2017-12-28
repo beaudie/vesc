@@ -99,7 +99,7 @@ UniformHLSL::UniformHLSL(sh::GLenum shaderType,
     : mUniformRegister(0),
       mUniformBlockRegister(0),
       mTextureRegister(0),
-      mRWTextureRegister(0),
+      mURegister(0),
       mSamplerCount(0),
       mShaderType(shaderType),
       mStructureHLSL(structureHLSL),
@@ -146,7 +146,7 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
     }
     else if (IsImage(type.getBasicType()))
     {
-        registerIndex = mRWTextureRegister;
+        registerIndex = mURegister;
     }
     else
     {
@@ -164,7 +164,7 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
     }
     else if (IsImage(type.getBasicType()))
     {
-        mRWTextureRegister += registerCount;
+        mURegister += registerCount;
     }
     else
     {
@@ -475,7 +475,7 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedSymbols &referencedInte
 
         if (instanceName != "")
         {
-            interfaceBlocks += uniformBlockStructString(interfaceBlock);
+            interfaceBlocks += interfaceBlockStructString(interfaceBlock);
         }
 
         unsigned int activeRegister                             = mUniformBlockRegister;
@@ -503,6 +503,42 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedSymbols &referencedInte
     return (interfaceBlocks.empty() ? "" : ("// Uniform Blocks\n\n" + interfaceBlocks));
 }
 
+TString UniformHLSL::shaderStorageBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks)
+{
+    TString interfaceBlocks;
+
+    for (const auto &interfaceBlockReference : referencedInterfaceBlocks)
+    {
+        const TType &nodeType                 = interfaceBlockReference.second->getType();
+        const TInterfaceBlock &interfaceBlock = *nodeType.getInterfaceBlock();
+
+        // nodeType.isInterfaceBlock() == false means the node is a field of a shader storage block
+        // which doesn't have an instance name.
+        const TString &instanceName =
+            nodeType.isInterfaceBlock() ? interfaceBlockReference.second->getSymbol() : "";
+
+        interfaceBlocks += interfaceBlockStructString(interfaceBlock);
+
+        unsigned int activeRegister                                   = mURegister;
+        mShaderStorageBlockRegisterMap[interfaceBlock.name().c_str()] = activeRegister;
+
+        if (instanceName.empty())
+        {
+            interfaceBlocks += shaderStorageBlockString(interfaceBlock, interfaceBlock.name(),
+                                                        activeRegister, GL_INVALID_INDEX);
+        }
+        else
+        {
+            interfaceBlocks += shaderStorageBlockString(interfaceBlock, instanceName,
+                                                        activeRegister, GL_INVALID_INDEX);
+        }
+
+        mURegister += 1u;
+    }
+
+    return (interfaceBlocks.empty() ? "" : ("// Shader Storage Blocks\n\n" + interfaceBlocks));
+}
+
 TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
                                         const TString &instanceName,
                                         unsigned int registerIndex,
@@ -525,10 +561,24 @@ TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
     else
     {
         const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
-        hlsl += uniformBlockMembersString(interfaceBlock, blockStorage);
+        hlsl += interfaceBlockMembersString(interfaceBlock, blockStorage);
     }
 
     hlsl += "};\n\n";
+
+    return hlsl;
+}
+
+TString UniformHLSL::shaderStorageBlockString(const TInterfaceBlock &interfaceBlock,
+                                              const TString &instanceName,
+                                              unsigned int registerIndex,
+                                              unsigned int arrayIndex)
+{
+    TString hlsl;
+
+    hlsl += "RWStructuredBuffer<" + InterfaceBlockStructName(interfaceBlock) + "> " +
+            ShaderStorageBlockInstanceString(instanceName, arrayIndex) + ": register(u" +
+            str(registerIndex) + ");\n";
 
     return hlsl;
 }
@@ -546,8 +596,21 @@ TString UniformHLSL::UniformBlockInstanceString(const TString &instanceName,
     }
 }
 
-TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
-                                               TLayoutBlockStorage blockStorage)
+TString UniformHLSL::ShaderStorageBlockInstanceString(const TString &instanceName,
+                                                      unsigned int arrayIndex)
+{
+    if (arrayIndex != GL_INVALID_INDEX)
+    {
+        return Decorate(instanceName) + "[" + str(arrayIndex) + "]";
+    }
+    else
+    {
+        return Decorate(instanceName);
+    }
+}
+
+TString UniformHLSL::interfaceBlockMembersString(const TInterfaceBlock &interfaceBlock,
+                                                 TLayoutBlockStorage blockStorage)
 {
     TString hlsl;
 
@@ -580,13 +643,13 @@ TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceB
     return hlsl;
 }
 
-TString UniformHLSL::uniformBlockStructString(const TInterfaceBlock &interfaceBlock)
+TString UniformHLSL::interfaceBlockStructString(const TInterfaceBlock &interfaceBlock)
 {
     const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
 
     return "struct " + InterfaceBlockStructName(interfaceBlock) +
            "\n"
            "{\n" +
-           uniformBlockMembersString(interfaceBlock, blockStorage) + "};\n\n";
+           interfaceBlockMembersString(interfaceBlock, blockStorage) + "};\n\n";
 }
 }

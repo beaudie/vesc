@@ -930,6 +930,20 @@ size_t GetMaximumComputeTextureUnits(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+GLuint GetMaximumComputeShaderStorageBlocks(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+            return static_cast<GLuint>(D3D11_1_UAV_SLOT_COUNT);
+        case D3D_FEATURE_LEVEL_11_0:
+            return static_cast<GLuint>(D3D11_PS_CS_UAV_REGISTER_COUNT);
+
+        default:
+            return 0;
+    }
+}
+
 size_t GetMaximumImageUnits(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -1389,6 +1403,9 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     caps->maxImageUnits = static_cast<GLuint>(GetMaximumImageUnits(featureLevel));
     caps->maxComputeImageUniforms =
         static_cast<GLuint>(GetMaximumComputeImageUniforms(featureLevel));
+
+    caps->maxComputeShaderStorageBlocks  = GetMaximumComputeShaderStorageBlocks(featureLevel);
+    caps->maxShaderStorageBufferBindings = caps->maxComputeShaderStorageBlocks;
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
