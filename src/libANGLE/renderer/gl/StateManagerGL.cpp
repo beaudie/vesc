@@ -746,10 +746,6 @@ gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context, GLenu
     const gl::VertexArray *vao = glState.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-    if (type != GL_NONE)
-    {
-        ANGLE_TRY(vaoGL->syncElementArrayState(context));
-    }
     bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(context);
