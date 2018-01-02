@@ -983,8 +983,8 @@ class Context final : public ValidationContext
                      GLenum type,
                      GLsizei bufSize,
                      void *data);
-    void eGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image);
-    void eGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image);
+    void eGLImageTargetTexture2D(GLenum target, GLeglImageOES image);
+    void eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image);
 
     // Consumes the error.
     void handleError(const Error &error) override;
