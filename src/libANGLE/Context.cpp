@@ -5799,14 +5799,14 @@ GLboolean Context::testFenceNV(GLuint fence)
     return result;
 }
 
-void Context::eGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
+void Context::eGLImageTargetTexture2D(GLenum target, GLeglImageOES image)
 {
     Texture *texture        = getTargetTexture(target);
     egl::Image *imageObject = reinterpret_cast<egl::Image *>(image);
     handleError(texture->setEGLImageTarget(this, target, imageObject));
 }
 
-void Context::eGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
+void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image)
 {
     Renderbuffer *renderbuffer = mGLState.getCurrentRenderbuffer();
     egl::Image *imageObject    = reinterpret_cast<egl::Image *>(image);
