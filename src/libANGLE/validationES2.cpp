@@ -6646,4 +6646,28 @@ bool ValidatePopGroupMarkerEXT(Context *context)
     return true;
 }
 
+bool ValidateTexStorage1DEXT(Context *context,
+                             GLenum target,
+                             GLsizei levels,
+                             GLenum internalformat,
+                             GLsizei width)
+{
+    UNIMPLEMENTED();
+    ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+    return false;
+}
+
+bool ValidateTexStorage3DEXT(Context *context,
+                             GLenum target,
+                             GLsizei levels,
+                             GLenum internalformat,
+                             GLsizei width,
+                             GLsizei height,
+                             GLsizei depth)
+{
+    UNIMPLEMENTED();
+    ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+    return false;
+}
+
 }  // namespace gl
