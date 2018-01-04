@@ -368,13 +368,23 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                     switch (value)
                     {
                         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE:
-                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE:
-                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE:
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE:
                             deviceTypeSpecified = true;
                             break;
 
-                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE:
-                            // This is a hidden option, accepted by the OpenGL back-end.
+                        // TODO(jmadill): Remove this once Chrome is updated.
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLEX:
+                            deviceTypeSpecified = true;
+                            break;
+
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE:
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_REFERENCE_ANGLE:
+                            if (!clientExtensions.platformANGLED3D)
+                            {
+                                return EglBadAttribute()
+                                       << "EGL_ANGLE_platform_angle_d3d is not supported";
+                            }
+                            deviceTypeSpecified = true;
                             break;
 
                         default:
@@ -409,7 +419,7 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                    << "Must specify major version if you specify a minor version.";
         }
 
-        if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE &&
+        if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE &&
             platformType != EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
         {
             return EglBadAttribute() << "EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE requires a "
