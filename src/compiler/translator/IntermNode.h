@@ -129,6 +129,9 @@ class TIntermTyped : public TIntermNode
 
     TIntermTyped *getAsTyped() override { return this; }
 
+    bool canGetConstArray();
+    const TConstantUnion *getConstArray();
+
     // True if executing the expression represented by this node affects state, like values of
     // variables. False if the executing the expression only computes its return value without
     // affecting state. May return true conservatively.
@@ -336,10 +339,12 @@ class TIntermConstantUnion : public TIntermTyped
                                TIntermConstantUnion *rightNode,
                                TDiagnostics *diagnostics,
                                const TSourceLoc &line);
-    const TConstantUnion *foldIndexing(int index);
     TConstantUnion *foldUnaryNonComponentWise(TOperator op);
     TConstantUnion *foldUnaryComponentWise(TOperator op, TDiagnostics *diagnostics);
 
+    static const TConstantUnion *FoldIndexing(const TType &type,
+                                              const TConstantUnion *constArray,
+                                              int index);
     static TConstantUnion *FoldAggregateConstructor(TIntermAggregate *aggregate);
     static TConstantUnion *FoldAggregateBuiltIn(TIntermAggregate *aggregate,
                                                 TDiagnostics *diagnostics);

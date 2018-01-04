@@ -1451,3 +1451,24 @@ TEST_F(ConstantFoldingTest, FoldTernaryInsideExpression)
     ASSERT_TRUE(constantFoundInAST(3));
     ASSERT_FALSE(symbolFoundInMain("u"));
 }
+
+// Fold indexing into an array constructor.
+TEST_F(ConstantFoldingExpressionTest, FoldArrayConstructorIndexing)
+{
+    const std::string &floatString = "(float[3](-1.0, 1.0, 2.0))[2]";
+    evaluateFloat(floatString);
+    ASSERT_FALSE(constantFoundInAST(-1.0f));
+    ASSERT_FALSE(constantFoundInAST(1.0f));
+    ASSERT_TRUE(constantFoundInAST(2.0f));
+}
+
+// Fold indexing into an array of arrays constructor.
+TEST_F(ConstantFoldingExpressionTest, FoldArrayOfArraysConstructorIndexing)
+{
+    const std::string &floatString = "(float[2][2](float[2](-1.0, 1.0), float[2](2.0, 3.0)))[1][0]";
+    evaluateFloat(floatString);
+    ASSERT_FALSE(constantFoundInAST(-1.0f));
+    ASSERT_FALSE(constantFoundInAST(1.0f));
+    ASSERT_FALSE(constantFoundInAST(3.0f));
+    ASSERT_TRUE(constantFoundInAST(2.0f));
+}

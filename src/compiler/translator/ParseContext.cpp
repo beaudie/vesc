@@ -1870,7 +1870,7 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
     const TType &variableType = variable->getType();
     TIntermTyped *node = nullptr;
 
-    if (variable->getConstPointer())
+    if (variable->getConstPointer() && !variableType.isArray())
     {
         const TConstantUnion *constArray = variable->getConstPointer();
         node                             = new TIntermConstantUnion(constArray, variableType);
@@ -1991,24 +1991,13 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
             return false;
         }
 
-        // Save the constant folded value to the variable if possible. For example array
-        // initializers are not folded, since that way copying the array literal to multiple places
-        // in the shader is avoided.
-        // TODO(oetuaho@nvidia.com): Consider constant folding array initialization in cases where
-        // it would be beneficial.
-        if (initializer->getAsConstantUnion())
+        // Save the constant folded value to the variable if possible.
+        const TConstantUnion *constArray = initializer->getConstArray();
+        if (constArray)
         {
-            variable->shareConstPointer(initializer->getAsConstantUnion()->getUnionArrayPointer());
-            ASSERT(*initNode == nullptr);
-            return true;
-        }
-        else if (initializer->getAsSymbolNode())
-        {
-            const TVariable &var             = initializer->getAsSymbolNode()->variable();
-            const TConstantUnion *constArray = var.getConstPointer();
-            if (constArray)
+            variable->shareConstPointer(constArray);
+            if (!initializer->isArray())
             {
-                variable->shareConstPointer(constArray);
                 ASSERT(*initNode == nullptr);
                 return true;
             }

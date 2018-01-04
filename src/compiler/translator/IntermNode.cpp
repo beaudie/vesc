@@ -619,6 +619,73 @@ bool TIntermTyped::isConstructorWithOnlyConstantUnionParameters()
     return true;
 }
 
+bool TIntermTyped::canGetConstArray()
+{
+    if (getAsConstantUnion())
+    {
+        return true;
+    }
+    if (getAsSymbolNode())
+    {
+        return getAsSymbolNode()->variable().getConstPointer() != nullptr;
+    }
+    TIntermAggregate *asAggregate = getAsAggregate();
+    if (asAggregate && asAggregate->isConstructor() && isArray())
+    {
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            if (!constructorArg->getAsTyped()->canGetConstArray())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+const TConstantUnion *TIntermTyped::getConstArray()
+{
+    if (getAsConstantUnion())
+    {
+        return getAsConstantUnion()->getUnionArrayPointer();
+    }
+    if (getAsSymbolNode())
+    {
+        return getAsSymbolNode()->variable().getConstPointer();
+    }
+    TIntermAggregate *asAggregate = getAsAggregate();
+    if (asAggregate && asAggregate->isConstructor() && isArray())
+    {
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            if (!constructorArg->getAsTyped()->canGetConstArray())
+            {
+                return nullptr;
+            }
+        }
+
+        TType elementType(getType());
+        elementType.toArrayElementType();
+        size_t elementSize         = elementType.getObjectSize();
+        TConstantUnion *constArray = new TConstantUnion[elementSize * getOutermostArraySize()];
+
+        size_t elementOffset = 0u;
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            const TConstantUnion *elementConstArray = constructorArg->getAsTyped()->getConstArray();
+            ASSERT(elementConstArray);
+            for (size_t i = 0u; i < elementSize; ++i)
+            {
+                constArray[elementOffset + i] = elementConstArray[i];
+            }
+            elementOffset += elementSize;
+        }
+        return constArray;
+    }
+    return nullptr;
+}
+
 TIntermConstantUnion::TIntermConstantUnion(const TIntermConstantUnion &node) : TIntermTyped(node)
 {
     mUnionArrayPointer = node.mUnionArrayPointer;
@@ -1286,26 +1353,28 @@ void TIntermBinary::promote()
     }
 }
 
-const TConstantUnion *TIntermConstantUnion::foldIndexing(int index)
+const TConstantUnion *TIntermConstantUnion::FoldIndexing(const TType &type,
+                                                         const TConstantUnion *constArray,
+                                                         int index)
 {
-    if (isArray())
+    if (type.isArray())
     {
-        ASSERT(index < static_cast<int>(getType().getOutermostArraySize()));
-        TType arrayElementType = getType();
+        ASSERT(index < static_cast<int>(type.getOutermostArraySize()));
+        TType arrayElementType(type);
         arrayElementType.toArrayElementType();
         size_t arrayElementSize = arrayElementType.getObjectSize();
-        return &mUnionArrayPointer[arrayElementSize * index];
+        return &constArray[arrayElementSize * index];
     }
-    else if (isMatrix())
+    else if (type.isMatrix())
     {
-        ASSERT(index < getType().getCols());
-        int size = getType().getRows();
-        return &mUnionArrayPointer[size * index];
+        ASSERT(index < type.getCols());
+        int size = type.getRows();
+        return &constArray[size * index];
     }
-    else if (isVector())
+    else if (type.isVector())
     {
-        ASSERT(index < getType().getNominalSize());
-        return &mUnionArrayPointer[index];
+        ASSERT(index < type.getNominalSize());
+        return &constArray[index];
     }
     else
     {
@@ -1325,7 +1394,9 @@ TIntermTyped *TIntermSwizzle::fold()
     TConstantUnion *constArray = new TConstantUnion[mSwizzleOffsets.size()];
     for (size_t i = 0; i < mSwizzleOffsets.size(); ++i)
     {
-        constArray[i] = *operandConstant->foldIndexing(mSwizzleOffsets.at(i));
+        constArray[i] = *TIntermConstantUnion::FoldIndexing(operandConstant->getType(),
+                                                            operandConstant->getUnionArrayPointer(),
+                                                            mSwizzleOffsets.at(i));
     }
     return CreateFoldedNode(constArray, this);
 }
@@ -1346,13 +1417,28 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
         }
         case EOpIndexDirect:
         {
-            if (leftConstant == nullptr || rightConstant == nullptr)
+            if (rightConstant == nullptr)
             {
                 return this;
             }
+            const TConstantUnion *constArray = nullptr;
             int index = rightConstant->getIConst(0);
-
-            const TConstantUnion *constArray = leftConstant->foldIndexing(index);
+            TIntermAggregate *leftAggregate  = mLeft->getAsAggregate();
+            if (leftAggregate && leftAggregate->isConstructor() && leftAggregate->isArray())
+            {
+                ASSERT(index < static_cast<int>(leftAggregate->getSequence()->size()));
+                constArray = leftAggregate->getSequence()->at(index)->getAsTyped()->getConstArray();
+            }
+            else
+            {
+                const TConstantUnion *sourceConstArray = mLeft->getConstArray();
+                if (sourceConstArray == nullptr)
+                {
+                    return this;
+                }
+                constArray =
+                    TIntermConstantUnion::FoldIndexing(mLeft->getType(), sourceConstArray, index);
+            }
             if (!constArray)
             {
                 return this;
