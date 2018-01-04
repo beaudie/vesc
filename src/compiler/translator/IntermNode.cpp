@@ -138,6 +138,42 @@ void SetUnionArrayFromMatrix(const angle::Matrix<float> &m, TConstantUnion *resu
         resultArray[i].setFConst(resultElements[i]);
 }
 
+bool CanFoldAggregateBuiltInOp(TOperator op)
+{
+    switch (op)
+    {
+        case EOpAtan:
+        case EOpPow:
+        case EOpMod:
+        case EOpMin:
+        case EOpMax:
+        case EOpClamp:
+        case EOpMix:
+        case EOpStep:
+        case EOpSmoothStep:
+        case EOpLdexp:
+        case EOpMulMatrixComponentWise:
+        case EOpOuterProduct:
+        case EOpEqualComponentWise:
+        case EOpNotEqualComponentWise:
+        case EOpLessThanComponentWise:
+        case EOpLessThanEqualComponentWise:
+        case EOpGreaterThanComponentWise:
+        case EOpGreaterThanEqualComponentWise:
+        case EOpDistance:
+        case EOpDot:
+        case EOpCross:
+        case EOpFaceforward:
+        case EOpReflect:
+        case EOpRefract:
+        case EOpBitfieldExtract:
+        case EOpBitfieldInsert:
+            return true;
+        default:
+            return false;
+    }
+}
+
 }  // namespace anonymous
 
 ////////////////////////////////////////////////////////////////
@@ -964,12 +1000,10 @@ TIntermTyped *TIntermTernary::fold()
     {
         if (mCondition->getAsConstantUnion()->getBConst(0))
         {
-            mTrueExpression->getTypePointer()->setQualifier(mType.getQualifier());
             return mTrueExpression;
         }
         else
         {
-            mFalseExpression->getTypePointer()->setQualifier(mType.getQualifier());
             return mFalseExpression;
         }
     }
@@ -1308,7 +1342,6 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
             {
                 return this;
             }
-            mRight->getTypePointer()->setQualifier(mType.getQualifier());
             return mRight;
         }
         case EOpIndexDirect:
@@ -1434,10 +1467,13 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
     {
         constArray = TIntermConstantUnion::FoldAggregateConstructor(this);
     }
+    else if (CanFoldAggregateBuiltInOp(mOp))
+    {
+        constArray = TIntermConstantUnion::FoldAggregateBuiltIn(this, diagnostics);
+    }
     else
     {
-        ASSERT(CanFoldAggregateBuiltInOp(mOp));
-        constArray = TIntermConstantUnion::FoldAggregateBuiltIn(this, diagnostics);
+        return this;
     }
     return CreateFoldedNode(constArray, this);
 }
@@ -2583,42 +2619,6 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateConstructor(TIntermAggregate 
     }
     ASSERT(resultIndex == resultSize);
     return resultArray;
-}
-
-bool TIntermAggregate::CanFoldAggregateBuiltInOp(TOperator op)
-{
-    switch (op)
-    {
-        case EOpAtan:
-        case EOpPow:
-        case EOpMod:
-        case EOpMin:
-        case EOpMax:
-        case EOpClamp:
-        case EOpMix:
-        case EOpStep:
-        case EOpSmoothStep:
-        case EOpLdexp:
-        case EOpMulMatrixComponentWise:
-        case EOpOuterProduct:
-        case EOpEqualComponentWise:
-        case EOpNotEqualComponentWise:
-        case EOpLessThanComponentWise:
-        case EOpLessThanEqualComponentWise:
-        case EOpGreaterThanComponentWise:
-        case EOpGreaterThanEqualComponentWise:
-        case EOpDistance:
-        case EOpDot:
-        case EOpCross:
-        case EOpFaceforward:
-        case EOpReflect:
-        case EOpRefract:
-        case EOpBitfieldExtract:
-        case EOpBitfieldInsert:
-            return true;
-        default:
-            return false;
-    }
 }
 
 // static
