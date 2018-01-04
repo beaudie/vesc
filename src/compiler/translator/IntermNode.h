@@ -131,6 +131,9 @@ class TIntermTyped : public TIntermNode
 
     virtual TIntermTyped *fold(TDiagnostics *diagnostics) { return this; }
 
+    bool hasConstantValue();
+    const TConstantUnion *getConstantValue();
+
     // True if executing the expression represented by this node affects state, like values of
     // variables. False if the executing the expression only computes its return value without
     // affecting state. May return true conservatively.
@@ -334,14 +337,20 @@ class TIntermConstantUnion : public TIntermTyped
     void traverse(TIntermTraverser *it) override;
     bool replaceChildNode(TIntermNode *, TIntermNode *) override { return false; }
 
-    TConstantUnion *foldBinary(TOperator op,
-                               TIntermConstantUnion *rightNode,
-                               TDiagnostics *diagnostics,
-                               const TSourceLoc &line);
-    const TConstantUnion *foldIndexing(int index);
     TConstantUnion *foldUnaryNonComponentWise(TOperator op);
     TConstantUnion *foldUnaryComponentWise(TOperator op, TDiagnostics *diagnostics);
 
+    static const TConstantUnion *FoldBinary(TOperator op,
+                                            const TConstantUnion *leftArray,
+                                            const TType &leftType,
+                                            const TConstantUnion *rightArray,
+                                            const TType &rightType,
+                                            TDiagnostics *diagnostics,
+                                            const TSourceLoc &line);
+
+    static const TConstantUnion *FoldIndexing(const TType &type,
+                                              const TConstantUnion *constArray,
+                                              int index);
     static TConstantUnion *FoldAggregateConstructor(TIntermAggregate *aggregate);
     static TConstantUnion *FoldAggregateBuiltIn(TIntermAggregate *aggregate,
                                                 TDiagnostics *diagnostics);

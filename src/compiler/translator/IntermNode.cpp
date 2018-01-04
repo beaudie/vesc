@@ -522,7 +522,13 @@ const char *TIntermAggregate::functionName() const
 
 bool TIntermAggregate::hasSideEffects() const
 {
-    if (isFunctionCall() && mFunction != nullptr && mFunction->isKnownToNotHaveSideEffects())
+    if (getQualifier() == EvqConst)
+    {
+        return false;
+    }
+    bool calledFunctionHasNoSideEffects =
+        isFunctionCall() && mFunction != nullptr && mFunction->isKnownToNotHaveSideEffects();
+    if (calledFunctionHasNoSideEffects || isConstructor())
     {
         for (TIntermNode *arg : mArguments)
         {
@@ -617,6 +623,74 @@ bool TIntermTyped::isConstructorWithOnlyConstantUnionParameters()
             return false;
     }
     return true;
+}
+
+bool TIntermTyped::hasConstantValue()
+{
+    if (getAsConstantUnion())
+    {
+        return true;
+    }
+    if (getAsSymbolNode())
+    {
+        return getAsSymbolNode()->variable().getConstPointer() != nullptr;
+    }
+    TIntermAggregate *asAggregate = getAsAggregate();
+    if (asAggregate && asAggregate->isConstructor() && isArray())
+    {
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            if (!constructorArg->getAsTyped()->hasConstantValue())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+const TConstantUnion *TIntermTyped::getConstantValue()
+{
+    if (getAsConstantUnion())
+    {
+        return getAsConstantUnion()->getUnionArrayPointer();
+    }
+    if (getAsSymbolNode())
+    {
+        return getAsSymbolNode()->variable().getConstPointer();
+    }
+    TIntermAggregate *asAggregate = getAsAggregate();
+    if (asAggregate && asAggregate->isConstructor() && isArray())
+    {
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            if (!constructorArg->getAsTyped()->hasConstantValue())
+            {
+                return nullptr;
+            }
+        }
+
+        TType elementType(getType());
+        elementType.toArrayElementType();
+        size_t elementSize         = elementType.getObjectSize();
+        TConstantUnion *constArray = new TConstantUnion[elementSize * getOutermostArraySize()];
+
+        size_t elementOffset = 0u;
+        for (TIntermNode *constructorArg : *asAggregate->getSequence())
+        {
+            const TConstantUnion *elementConstArray =
+                constructorArg->getAsTyped()->getConstantValue();
+            ASSERT(elementConstArray);
+            for (size_t i = 0u; i < elementSize; ++i)
+            {
+                constArray[elementOffset + i] = elementConstArray[i];
+            }
+            elementOffset += elementSize;
+        }
+        return constArray;
+    }
+    return nullptr;
 }
 
 TIntermConstantUnion::TIntermConstantUnion(const TIntermConstantUnion &node) : TIntermTyped(node)
@@ -1286,26 +1360,28 @@ void TIntermBinary::promote()
     }
 }
 
-const TConstantUnion *TIntermConstantUnion::foldIndexing(int index)
+const TConstantUnion *TIntermConstantUnion::FoldIndexing(const TType &type,
+                                                         const TConstantUnion *constArray,
+                                                         int index)
 {
-    if (isArray())
+    if (type.isArray())
     {
-        ASSERT(index < static_cast<int>(getType().getOutermostArraySize()));
-        TType arrayElementType = getType();
+        ASSERT(index < static_cast<int>(type.getOutermostArraySize()));
+        TType arrayElementType(type);
         arrayElementType.toArrayElementType();
         size_t arrayElementSize = arrayElementType.getObjectSize();
-        return &mUnionArrayPointer[arrayElementSize * index];
+        return &constArray[arrayElementSize * index];
     }
-    else if (isMatrix())
+    else if (type.isMatrix())
     {
-        ASSERT(index < getType().getCols());
-        int size = getType().getRows();
-        return &mUnionArrayPointer[size * index];
+        ASSERT(index < type.getCols());
+        int size = type.getRows();
+        return &constArray[size * index];
     }
-    else if (isVector())
+    else if (type.isVector())
     {
-        ASSERT(index < getType().getNominalSize());
-        return &mUnionArrayPointer[index];
+        ASSERT(index < type.getNominalSize());
+        return &constArray[index];
     }
     else
     {
@@ -1325,15 +1401,16 @@ TIntermTyped *TIntermSwizzle::fold(TDiagnostics * /* diagnostics */)
     TConstantUnion *constArray = new TConstantUnion[mSwizzleOffsets.size()];
     for (size_t i = 0; i < mSwizzleOffsets.size(); ++i)
     {
-        constArray[i] = *operandConstant->foldIndexing(mSwizzleOffsets.at(i));
+        constArray[i] = *TIntermConstantUnion::FoldIndexing(operandConstant->getType(),
+                                                            operandConstant->getUnionArrayPointer(),
+                                                            mSwizzleOffsets.at(i));
     }
     return CreateFoldedNode(constArray, this);
 }
 
 TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
 {
-    TIntermConstantUnion *leftConstant  = mLeft->getAsConstantUnion();
-    TIntermConstantUnion *rightConstant = mRight->getAsConstantUnion();
+    const TConstantUnion *rightConstant = mRight->getConstantValue();
     switch (mOp)
     {
         case EOpComma:
@@ -1345,50 +1422,66 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
             return mRight;
         }
         case EOpIndexDirect:
-        {
-            if (leftConstant == nullptr || rightConstant == nullptr)
-            {
-                return this;
-            }
-            int index = rightConstant->getIConst(0);
-
-            const TConstantUnion *constArray = leftConstant->foldIndexing(index);
-            if (!constArray)
-            {
-                return this;
-            }
-            return CreateFoldedNode(constArray, this);
-        }
         case EOpIndexDirectStruct:
         {
-            if (leftConstant == nullptr || rightConstant == nullptr)
+            if (rightConstant == nullptr)
             {
                 return this;
             }
-            const TFieldList &fields = mLeft->getType().getStruct()->fields();
-            size_t index             = static_cast<size_t>(rightConstant->getIConst(0));
-
-            size_t previousFieldsSize = 0;
-            for (size_t i = 0; i < index; ++i)
+            size_t index                    = static_cast<size_t>(rightConstant->getIConst());
+            TIntermAggregate *leftAggregate = mLeft->getAsAggregate();
+            if (leftAggregate && leftAggregate->isConstructor() && leftAggregate->isArray() &&
+                !leftAggregate->hasSideEffects())
             {
-                previousFieldsSize += fields[i]->type()->getObjectSize();
+                ASSERT(index < leftAggregate->getSequence()->size());
+                return leftAggregate->getSequence()->at(index)->getAsTyped();
             }
 
-            const TConstantUnion *constArray = leftConstant->getUnionArrayPointer();
-            return CreateFoldedNode(constArray + previousFieldsSize, this);
+            const TConstantUnion *leftConstantValue = mLeft->getConstantValue();
+            if (leftConstantValue == nullptr)
+            {
+                return this;
+            }
+
+            const TConstantUnion *constIndexingResult = nullptr;
+            if (mOp == EOpIndexDirect)
+            {
+                constIndexingResult =
+                    TIntermConstantUnion::FoldIndexing(mLeft->getType(), leftConstantValue, index);
+            }
+            else
+            {
+                ASSERT(mOp == EOpIndexDirectStruct);
+                const TFieldList &fields = mLeft->getType().getStruct()->fields();
+
+                size_t previousFieldsSize = 0;
+                for (size_t i = 0; i < index; ++i)
+                {
+                    previousFieldsSize += fields[i]->type()->getObjectSize();
+                }
+                constIndexingResult = leftConstantValue + previousFieldsSize;
+            }
+            return CreateFoldedNode(constIndexingResult, this);
         }
         case EOpIndexIndirect:
         case EOpIndexDirectInterfaceBlock:
+        case EOpInitialize:
             // Can never be constant folded.
             return this;
         default:
         {
-            if (leftConstant == nullptr || rightConstant == nullptr)
+            if (rightConstant == nullptr)
             {
                 return this;
             }
-            TConstantUnion *constArray =
-                leftConstant->foldBinary(mOp, rightConstant, diagnostics, mLeft->getLine());
+            const TConstantUnion *leftConstant = mLeft->getConstantValue();
+            if (leftConstant == nullptr)
+            {
+                return this;
+            }
+            const TConstantUnion *constArray =
+                TIntermConstantUnion::FoldBinary(mOp, leftConstant, mLeft->getType(), rightConstant,
+                                                 mRight->getType(), diagnostics, mLeft->getLine());
             if (!constArray)
             {
                 return this;
@@ -1488,28 +1581,28 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
 //
 // Returns the constant value to keep using or nullptr.
 //
-TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
-                                                 TIntermConstantUnion *rightNode,
-                                                 TDiagnostics *diagnostics,
-                                                 const TSourceLoc &line)
+const TConstantUnion *TIntermConstantUnion::FoldBinary(TOperator op,
+                                                       const TConstantUnion *leftArray,
+                                                       const TType &leftType,
+                                                       const TConstantUnion *rightArray,
+                                                       const TType &rightType,
+                                                       TDiagnostics *diagnostics,
+                                                       const TSourceLoc &line)
 {
-    const TConstantUnion *leftArray  = getUnionArrayPointer();
-    const TConstantUnion *rightArray = rightNode->getUnionArrayPointer();
-
     ASSERT(leftArray && rightArray);
 
-    size_t objectSize = getType().getObjectSize();
+    size_t objectSize = leftType.getObjectSize();
 
     // for a case like float f = vec4(2, 3, 4, 5) + 1.2;
-    if (rightNode->getType().getObjectSize() == 1 && objectSize > 1)
+    if (rightType.getObjectSize() == 1 && objectSize > 1)
     {
-        rightArray = Vectorize(*rightNode->getUnionArrayPointer(), objectSize);
+        rightArray = Vectorize(*rightArray, objectSize);
     }
-    else if (rightNode->getType().getObjectSize() > 1 && objectSize == 1)
+    else if (rightType.getObjectSize() > 1 && objectSize == 1)
     {
         // for a case like float f = 1.2 + vec4(2, 3, 4, 5);
-        leftArray  = Vectorize(*getUnionArrayPointer(), rightNode->getType().getObjectSize());
-        objectSize = rightNode->getType().getObjectSize();
+        leftArray  = Vectorize(*leftArray, rightType.getObjectSize());
+        objectSize = rightType.getObjectSize();
     }
 
     TConstantUnion *resultArray = nullptr;
@@ -1541,12 +1634,12 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
         case EOpMatrixTimesMatrix:
         {
             // TODO(jmadll): This code should check for overflows.
-            ASSERT(getType().getBasicType() == EbtFloat && rightNode->getBasicType() == EbtFloat);
+            ASSERT(leftType.getBasicType() == EbtFloat && rightType.getBasicType() == EbtFloat);
 
-            const int leftCols   = getCols();
-            const int leftRows   = getRows();
-            const int rightCols  = rightNode->getType().getCols();
-            const int rightRows  = rightNode->getType().getRows();
+            const int leftCols   = leftType.getCols();
+            const int leftRows   = leftType.getRows();
+            const int rightCols  = rightType.getCols();
+            const int rightRows  = rightType.getRows();
             const int resultCols = rightCols;
             const int resultRows = leftRows;
 
@@ -1574,7 +1667,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
             resultArray = new TConstantUnion[objectSize];
             for (size_t i = 0; i < objectSize; i++)
             {
-                switch (getType().getBasicType())
+                switch (leftType.getBasicType())
                 {
                     case EbtFloat:
                     {
@@ -1586,15 +1679,15 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                             if (dividend == 0.0f)
                             {
                                 diagnostics->warning(
-                                    getLine(),
+                                    line,
                                     "Zero divided by zero during constant folding generated NaN",
                                     "/");
                                 resultArray[i].setFConst(std::numeric_limits<float>::quiet_NaN());
                             }
                             else
                             {
-                                diagnostics->warning(getLine(),
-                                                     "Divide by zero during constant folding", "/");
+                                diagnostics->warning(line, "Divide by zero during constant folding",
+                                                     "/");
                                 bool negativeResult =
                                     std::signbit(dividend) != std::signbit(divisor);
                                 resultArray[i].setFConst(
@@ -1604,7 +1697,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                         }
                         else if (gl::isInf(dividend) && gl::isInf(divisor))
                         {
-                            diagnostics->warning(getLine(),
+                            diagnostics->warning(line,
                                                  "Infinity divided by infinity during constant "
                                                  "folding generated NaN",
                                                  "/");
@@ -1616,8 +1709,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                             if (!gl::isInf(dividend) && gl::isInf(result))
                             {
                                 diagnostics->warning(
-                                    getLine(), "Constant folded division overflowed to infinity",
-                                    "/");
+                                    line, "Constant folded division overflowed to infinity", "/");
                             }
                             resultArray[i].setFConst(result);
                         }
@@ -1627,7 +1719,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                         if (rightArray[i] == 0)
                         {
                             diagnostics->warning(
-                                getLine(), "Divide by zero error during constant folding", "/");
+                                line, "Divide by zero error during constant folding", "/");
                             resultArray[i].setIConst(INT_MAX);
                         }
                         else
@@ -1661,7 +1753,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                                     // ESSL 3.00.6 section 5.9: Results of modulus are undefined
                                     // when
                                     // either one of the operands is negative.
-                                    diagnostics->warning(getLine(),
+                                    diagnostics->warning(line,
                                                          "Negative modulus operator operand "
                                                          "encountered during constant folding",
                                                          "%");
@@ -1679,7 +1771,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                         if (rightArray[i] == 0)
                         {
                             diagnostics->warning(
-                                getLine(), "Divide by zero error during constant folding", "/");
+                                line, "Divide by zero error during constant folding", "/");
                             resultArray[i].setUConst(UINT_MAX);
                         }
                         else
@@ -1709,10 +1801,10 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
         case EOpMatrixTimesVector:
         {
             // TODO(jmadll): This code should check for overflows.
-            ASSERT(rightNode->getBasicType() == EbtFloat);
+            ASSERT(rightType.getBasicType() == EbtFloat);
 
-            const int matrixCols = getCols();
-            const int matrixRows = getRows();
+            const int matrixCols = leftType.getCols();
+            const int matrixRows = leftType.getRows();
 
             resultArray = new TConstantUnion[matrixRows];
 
@@ -1733,10 +1825,10 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
         case EOpVectorTimesMatrix:
         {
             // TODO(jmadll): This code should check for overflows.
-            ASSERT(getType().getBasicType() == EbtFloat);
+            ASSERT(leftType.getBasicType() == EbtFloat);
 
-            const int matrixCols = rightNode->getType().getCols();
-            const int matrixRows = rightNode->getType().getRows();
+            const int matrixCols = rightType.getCols();
+            const int matrixRows = rightType.getRows();
 
             resultArray = new TConstantUnion[matrixCols];
 
@@ -1776,7 +1868,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
 
         case EOpLogicalXor:
         {
-            ASSERT(getType().getBasicType() == EbtBool);
+            ASSERT(leftType.getBasicType() == EbtBool);
             resultArray = new TConstantUnion[objectSize];
             for (size_t i = 0; i < objectSize; i++)
             {
