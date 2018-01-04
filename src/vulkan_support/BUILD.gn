@@ -117,6 +117,16 @@ helper_script_and_deps = [
     "unique_objects_wrappers.h",
     "unique_objects_generator.py",
   ],
+  [
+    "vulkan_mock_icd_cpp",
+    "mock_icd.cpp",
+    "mock_icd_generator.py",
+  ],
+  [
+    "vulkan_mock_icd_h",
+    "mock_icd.h",
+    "mock_icd_generator.py",
+  ],
 ]
 
 foreach(script_and_dep, helper_script_and_deps) {
@@ -178,6 +188,14 @@ group("vulkan_generate_helper_files") {
     target_name = script_and_dep[0]
     public_deps += [ ":$target_name" ]
   }
+}
+
+group("vulkan_generate_mock_icd_files") {
+  public_configs = [ ":vulkan_generate_helper_files_config" ]
+  public_deps = [
+    ":vulkan_mock_icd_cpp",
+    ":vulkan_mock_icd_h",
+  ]
 }
 
 config("vulkan_config") {
@@ -745,7 +763,7 @@ layers = [
   ],
 ]
 
-vulkan_gen_json_files_outputs = [
+vulkan_gen_layer_json_files_outputs = [
   "$root_out_dir/$data_dir/VkLayer_core_validation.json",
   "$root_out_dir/$data_dir/VkLayer_object_tracker.json",
   "$root_out_dir/$data_dir/VkLayer_parameter_validation.json",
@@ -753,7 +771,7 @@ vulkan_gen_json_files_outputs = [
   "$root_out_dir/$data_dir/VkLayer_unique_objects.json",
 ]
 
-action("vulkan_gen_json_files") {
+action("vulkan_gen_layer_json_files") {
   script = "$angle_root/scripts/generate_vulkan_layers_json.py"
   if (is_win) {
     sources = [
@@ -777,8 +795,69 @@ action("vulkan_gen_json_files") {
   }
 
   # The layer JSON files are part of the necessary data deps.
-  outputs = vulkan_gen_json_files_outputs
-  data = vulkan_gen_json_files_outputs
+  outputs = vulkan_gen_layer_json_files_outputs
+  data = vulkan_gen_layer_json_files_outputs
+  args += [ rebase_path("$root_out_dir/$data_dir", root_build_dir) ]
+}
+
+# Vulkan Mock ICD
+# ---------------
+
+config("vulkan_icd_config") {
+  include_dirs = [ "$vulkan_layers_dir/icd" ]
+}
+
+copy("vulkan_mock_icd_file_copies") {
+  if (is_win) {
+    sources = [
+      "$vulkan_layers_dir/icd/windows/VkICD_mock_icd.json",
+    ]
+  }
+  if (is_linux) {
+    sources = [
+      "$vulkan_layers_dir/icd/linux/VkICD_mock_icd.json",
+    ]
+  }
+  outputs = [
+    "$root_out_dir/{{source_file_part}}",
+  ]
+}
+
+mock_icd_sources = [
+  "$vulkan_gen_dir/mock_icd.cpp",
+  "$vulkan_gen_dir/mock_icd.h",
+]
+
+shared_library("VkICD_mock_icd") {
+  configs -= vulkan_undefine_configs
+  deps = [
+    "//build/config:exe_and_shlib_deps",
+  ]
+  deps += [ ":vulkan_generate_mock_icd_files" ]
+  sources = mock_icd_sources
+  if (is_win) {
+    sources += [ "$vulkan_layers_dir/icd/VkICD_mock_icd.def" ]
+  }
+}
+
+action("vulkan_gen_icd_json_file") {
+  script = "$angle_root/scripts/generate_vulkan_layers_json.py"
+  if (is_win) {
+    sources = [
+      "$vulkan_layers_dir/icd/windows/VkICD_mock_icd.json",
+    ]
+    args = [ "$raw_vulkan_layers_dir/icd/windows" ]
+  }
+  if (is_linux) {
+    sources = [
+      "$vulkan_layers_dir/icd/linux/VkICD_mock_icd.json",
+    ]
+    args = [ "$raw_vulkan_layers_dir/icd/linux" ]
+  }
+
+  # The layer JSON files are part of the necessary data deps.
+  outputs = [ "$root_out_dir/$data_dir/VkICD_mock_icd.json", ]
+  data = [ "$root_out_dir/$data_dir/VkICD_mock_icd.json", ]
   args += [ rebase_path("$root_out_dir/$data_dir", root_build_dir) ]
 }
 
@@ -873,7 +952,9 @@ group("angle_vulkan") {
     ":vulkan_loader",
   ]
   data_deps = [
-    ":vulkan_gen_json_files",
+    ":vulkan_gen_layer_json_files",
+    ":vulkan_gen_icd_json_file",
+    ":VkICD_mock_icd",
   ]
   foreach(layer_info, layers) {
     name = layer_info[0]
