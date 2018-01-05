@@ -22,18 +22,17 @@ TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
       mPrimitiveMode(GL_NONE),
       mPaused(false),
       mProgram(nullptr),
-      mGenericBuffer(),
-      mIndexedBuffers(maxIndexedBuffers)
+      mIndexedBuffers()
 {
+    mIndexedBuffers.reserve(maxIndexedBuffers);
+    for (std::size_t i = 0; i < maxIndexedBuffers; ++i)
+    {
+        mIndexedBuffers.emplace_back(false);
+    }
 }
 
 TransformFeedbackState::~TransformFeedbackState()
 {
-}
-
-const BindingPointer<Buffer> &TransformFeedbackState::getGenericBuffer() const
-{
-    return mGenericBuffer;
 }
 
 const OffsetBindingPointer<Buffer> &TransformFeedbackState::getIndexedBuffer(size_t idx) const
@@ -41,7 +40,8 @@ const OffsetBindingPointer<Buffer> &TransformFeedbackState::getIndexedBuffer(siz
     return mIndexedBuffers[idx];
 }
 
-const std::vector<OffsetBindingPointer<Buffer>> &TransformFeedbackState::getIndexedBuffers() const
+const std::vector<BufferTargetBinding<IsTransformFeedback::Yes>>
+    &TransformFeedbackState::getIndexedBuffers() const
 {
     return mIndexedBuffers;
 }
@@ -63,7 +63,6 @@ Error TransformFeedback::onDestroy(const Context *context)
     }
 
     ASSERT(!mState.mProgram);
-    mState.mGenericBuffer.set(context, nullptr);
     for (size_t i = 0; i < mState.mIndexedBuffers.size(); i++)
     {
         mState.mIndexedBuffers[i].set(context, nullptr);
@@ -157,12 +156,6 @@ bool TransformFeedback::hasBoundProgram(GLuint program) const
     return mState.mProgram != nullptr && mState.mProgram->id() == program;
 }
 
-void TransformFeedback::bindGenericBuffer(const Context *context, Buffer *buffer)
-{
-    mState.mGenericBuffer.set(context, buffer);
-    mImplementation->bindGenericBuffer(mState.mGenericBuffer);
-}
-
 void TransformFeedback::detachBuffer(const Context *context, GLuint bufferName)
 {
     for (size_t index = 0; index < mState.mIndexedBuffers.size(); index++)
@@ -173,17 +166,6 @@ void TransformFeedback::detachBuffer(const Context *context, GLuint bufferName)
             mImplementation->bindIndexedBuffer(index, mState.mIndexedBuffers[index]);
         }
     }
-
-    if (mState.mGenericBuffer.id() == bufferName)
-    {
-        mState.mGenericBuffer.set(context, nullptr);
-        mImplementation->bindGenericBuffer(mState.mGenericBuffer);
-    }
-}
-
-const BindingPointer<Buffer> &TransformFeedback::getGenericBuffer() const
-{
-    return mState.mGenericBuffer;
 }
 
 void TransformFeedback::bindIndexedBuffer(const Context *context,
@@ -208,6 +190,18 @@ size_t TransformFeedback::getIndexedBufferCount() const
     return mState.mIndexedBuffers.size();
 }
 
+bool TransformFeedback::buffersBoundForOtherUse() const
+{
+    for (auto &buffer : mState.mIndexedBuffers)
+    {
+        if (buffer.get() && buffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 rx::TransformFeedbackImpl *TransformFeedback::getImplementation()
 {
     return mImplementation;
@@ -218,4 +212,11 @@ const rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
     return mImplementation;
 }
 
+void TransformFeedback::onBindingChange()
+{
+    for (auto &binding : mState.mIndexedBuffers)
+    {
+        binding.setContainerIsBound(mIsBound);
+    }
+}
 }
