@@ -7,7 +7,9 @@
 #ifndef LIBANGLE_TRANSFORM_FEEDBACK_H_
 #define LIBANGLE_TRANSFORM_FEEDBACK_H_
 
+#include "libANGLE/Buffer.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/SingleBindingObject.h"
 
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
@@ -22,7 +24,6 @@ class TransformFeedbackImpl;
 
 namespace gl
 {
-class Buffer;
 struct Caps;
 class Context;
 class Program;
@@ -35,7 +36,7 @@ class TransformFeedbackState final : angle::NonCopyable
 
     const BindingPointer<Buffer> &getGenericBuffer() const;
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t idx) const;
-    const std::vector<OffsetBindingPointer<Buffer>> &getIndexedBuffers() const;
+    const std::vector<BufferTargetBinding<true>> &getIndexedBuffers() const;
 
   private:
     friend class TransformFeedback;
@@ -48,11 +49,13 @@ class TransformFeedbackState final : angle::NonCopyable
 
     Program *mProgram;
 
-    BindingPointer<Buffer> mGenericBuffer;
-    std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
+    BufferTargetBinding<true> mGenericBuffer;
+    std::vector<BufferTargetBinding<true>> mIndexedBuffers;
 };
 
-class TransformFeedback final : public RefCountObject, public LabeledObject
+class TransformFeedback final : public RefCountObject,
+                                public LabeledObject,
+                                public SingleBindingObject
 {
   public:
     TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, const Caps &caps);
@@ -88,6 +91,9 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
     rx::TransformFeedbackImpl *getImplementation();
     const rx::TransformFeedbackImpl *getImplementation() const;
+
+  protected:
+    void onBindingChange() override;
 
   private:
     void bindProgram(const Context *context, Program *program);

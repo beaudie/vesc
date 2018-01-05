@@ -26,7 +26,9 @@ BufferState::BufferState()
       mMapped(GL_FALSE),
       mMapPointer(nullptr),
       mMapOffset(0),
-      mMapLength(0)
+      mMapLength(0),
+      mBindingCount(0),
+      mTransformFeedbackBindingCount(0)
 {
 }
 
