@@ -178,6 +178,13 @@ bool ValidateDrawAttribs(ValidationContext *context,
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientVertexBufferSize);
             return false;
         }
+
+        if (webglCompatibility && buffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                 VertexBufferBoundForTransformFeedback);
+            return false;
+        }
     }
 
     return true;
@@ -923,6 +930,13 @@ bool ValidImageDataSize(ValidationContext *context,
         {
             // Overflow past the end of the buffer
             context->handleError(InvalidOperation());
+            return false;
+        }
+        if (context->getExtensions().webglCompatibility &&
+            pixelUnpackBuffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                 PixelUnpackBufferBoundForTransformFeedback);
             return false;
         }
     }
@@ -2629,11 +2643,26 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
                 << "It is undefined behaviour to use a uniform buffer that is too small.");
             return false;
         }
+
+        if (extensions.webglCompatibility &&
+            uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                 UniformBufferBoundForTransformFeedback);
+            return false;
+        }
     }
 
     // Do some additonal WebGL-specific validation
     if (extensions.webglCompatibility)
     {
+        const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
+        if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
+            transformFeedbackObject->buffersBoundForOtherUse())
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), TransformFeedbackBufferDoubleBound);
+            return false;
+        }
         // Detect rendering feedback loops for WebGL.
         if (framebuffer->formsRenderingFeedbackLoopWith(state))
         {
@@ -2872,6 +2901,13 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
             if ((elementArrayBuffer->getSize() & (typeSize - 1)) != 0)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), MismatchedByteCountType);
+                return false;
+            }
+            if (context->getExtensions().webglCompatibility &&
+                elementArrayBuffer->isBoundForTransformFeedbackAndOtherUse())
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                     ElementArrayBufferBoundForTransformFeedback);
                 return false;
             }
         }
@@ -5215,6 +5251,12 @@ bool ValidateReadPixelsBase(Context *context,
     {
         // ...the buffer object's data store is currently mapped.
         context->handleError(InvalidOperation() << "Pixel pack buffer is mapped.");
+        return false;
+    }
+    if (context->getExtensions().webglCompatibility && pixelPackBuffer != nullptr &&
+        pixelPackBuffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), PixelPackBufferBoundForTransformFeedback);
         return false;
     }
 
