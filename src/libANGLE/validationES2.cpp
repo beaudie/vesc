@@ -2914,20 +2914,10 @@ bool ValidateMapBufferBase(Context *context, BufferBinding target)
     Buffer *buffer = context->getGLState().getTargetBuffer(target);
     ASSERT(buffer != nullptr);
 
-    // Check if this buffer is currently being used as a transform feedback output buffer
-    TransformFeedback *transformFeedback = context->getGLState().getCurrentTransformFeedback();
-    if (transformFeedback != nullptr && transformFeedback->isActive())
+    if (buffer->isBoundForTransformFeedbackAndOtherUse())
     {
-        for (size_t i = 0; i < transformFeedback->getIndexedBufferCount(); i++)
-        {
-            const auto &transformFeedbackBuffer = transformFeedback->getIndexedBuffer(i);
-            if (transformFeedbackBuffer.get() == buffer)
-            {
-                context->handleError(InvalidOperation()
-                                     << "Buffer is currently bound for transform feedback.");
-                return false;
-            }
-        }
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
+        return false;
     }
 
     return true;
@@ -4235,6 +4225,12 @@ bool ValidateBufferData(ValidationContext *context,
         return false;
     }
 
+    if (buffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
+        return false;
+    }
+
     return true;
 }
 
@@ -4273,6 +4269,12 @@ bool ValidateBufferSubData(ValidationContext *context,
     if (buffer->isMapped())
     {
         context->handleError(InvalidOperation());
+        return false;
+    }
+
+    if (buffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
         return false;
     }
 

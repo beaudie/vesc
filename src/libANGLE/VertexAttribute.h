@@ -37,7 +37,20 @@ class VertexBinding final : angle::NonCopyable
     void setOffset(GLintptr offsetIn) { mOffset = offsetIn; }
 
     const BindingPointer<Buffer> &getBuffer() const { return mBuffer; }
-    void setBuffer(const gl::Context *context, Buffer *bufferIn) { mBuffer.set(context, bufferIn); }
+    void setBuffer(const gl::Context *context, Buffer *bufferIn, bool containerIsBound)
+    {
+        if (mBuffer.get() && containerIsBound)
+            mBuffer->onBindingChanged(false, BufferBinding::Array);
+        mBuffer.set(context, bufferIn);
+        if (mBuffer.get() && containerIsBound)
+            mBuffer->onBindingChanged(true, BufferBinding::Array);
+    }
+
+    void onContainerBindingChanged(bool bound)
+    {
+        if (mBuffer.get())
+            mBuffer->onBindingChanged(bound, BufferBinding::Array);
+    }
 
   private:
     GLuint mStride;
