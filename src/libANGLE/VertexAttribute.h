@@ -39,12 +39,14 @@ class VertexBinding final : angle::NonCopyable
     const BindingPointer<Buffer> &getBuffer() const { return mBuffer; }
     void setBuffer(const gl::Context *context, Buffer *bufferIn) { mBuffer.set(context, bufferIn); }
 
+    void setContainerIsBound(bool isBound) { mBuffer.setContainerIsBound(isBound); }
+
   private:
     GLuint mStride;
     GLuint mDivisor;
     GLintptr mOffset;
 
-    BindingPointer<Buffer> mBuffer;
+    BufferTargetBinding<> mBuffer;
 };
 
 //

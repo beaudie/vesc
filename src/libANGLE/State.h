@@ -21,6 +21,7 @@
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
+#include "libANGLE/SingleBindingObject.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/Version.h"
@@ -203,10 +204,10 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     bool removeDrawFramebufferBinding(GLuint framebuffer);
 
     // Vertex array object binding manipulation
-    void setVertexArrayBinding(VertexArray *vertexArray);
+    void setVertexArrayBinding(const Context *context, VertexArray *vertexArray);
     GLuint getVertexArrayId() const;
     VertexArray *getVertexArray() const;
-    bool removeVertexArrayBinding(GLuint vertexArray);
+    bool removeVertexArrayBinding(const Context *context, GLuint vertexArray);
 
     // Program binding manipulation
     void setProgram(const Context *context, Program *newProgram);
@@ -515,7 +516,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     typedef std::vector<VertexAttribCurrentValueData> VertexAttribVector;
     VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib
-    VertexArray *mVertexArray;
+    SingleBindingPointer<VertexArray> mVertexArray;
     ComponentTypeMask mCurrentValuesTypeMask;
 
     // Texture and sampler bindings
@@ -557,17 +558,18 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     // Stores the currently bound buffer for each binding point. It has entries for the element
     // array buffer and the transform feedback buffer but these should not be used. Instead these
-    // bind points are respectively owned by current the vertex array object and the current
-    // transform feedback object.
-    using BoundBufferMap = angle::PackedEnumMap<BufferBinding, BindingPointer<Buffer>>;
+    // bind points are respectively owned by current the vertex array object and the
+    // BufferTargetBinding below.
+    using BoundBufferMap = angle::PackedEnumMap<BufferBinding, BufferTargetBinding<>>;
     BoundBufferMap mBoundBuffers;
+    BufferTargetBinding<IsTransformFeedback::Yes> mTransformFeedbackBuffer;
 
-    using BufferVector = std::vector<OffsetBindingPointer<Buffer>>;
+    using BufferVector = std::vector<BufferTargetBinding<>>;
     BufferVector mUniformBuffers;
     BufferVector mAtomicCounterBuffers;
     BufferVector mShaderStorageBuffers;
 
-    BindingPointer<TransformFeedback> mTransformFeedback;
+    SingleBindingPointer<TransformFeedback> mTransformFeedback;
 
     BindingPointer<Buffer> mPixelUnpackBuffer;
     PixelUnpackState mUnpack;
