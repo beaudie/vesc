@@ -2519,6 +2519,13 @@ bool ValidateCopyBufferSubData(ValidationContext *context,
         return false;
     }
 
+    if (readBuffer->isBoundForTransformFeedbackAndOtherUse() ||
+        writeBuffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
+        return false;
+    }
+
     CheckedNumeric<GLintptr> checkedReadOffset(readOffset);
     CheckedNumeric<GLintptr> checkedWriteOffset(writeOffset);
     CheckedNumeric<GLintptr> checkedSize(size);

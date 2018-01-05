@@ -27,6 +27,13 @@ class GLImplFactory;
 namespace gl
 {
 class Buffer;
+enum class IsTransformFeedback
+{
+    Yes,
+    No
+};
+template <enum IsTransformFeedback>
+class BufferTargetBinding;
 class Context;
 
 class BufferState final : angle::NonCopyable
@@ -48,6 +55,8 @@ class BufferState final : angle::NonCopyable
 
   private:
     friend class Buffer;
+    template <enum IsTransformFeedback>
+    friend class BufferTargetBinding;
 
     std::string mLabel;
 
@@ -59,6 +68,8 @@ class BufferState final : angle::NonCopyable
     void *mMapPointer;
     GLint64 mMapOffset;
     GLint64 mMapLength;
+    std::size_t mBindingCount;
+    std::size_t mTransformFeedbackBindingCount;
 };
 
 class Buffer final : public RefCountObject, public LabeledObject
@@ -111,11 +122,100 @@ class Buffer final : public RefCountObject, public LabeledObject
 
     rx::BufferImpl *getImplementation() const { return mImpl; }
 
+    bool isBoundForTransformFeedbackAndOtherUse() const
+    {
+        return mState.mTransformFeedbackBindingCount > 0 &&
+               mState.mTransformFeedbackBindingCount != mState.mBindingCount;
+    }
+
   private:
+    template <enum IsTransformFeedback>
+    friend class BufferTargetBinding;
+
     BufferState mState;
     rx::BufferImpl *mImpl;
 
     mutable IndexRangeCache mIndexRangeCache;
+};
+
+// Represents an OpenGL buffer binding point, for example GL_ARRAY_BUFFER. Does reference counting
+// so that we can tell whether a buffer is simultaneously bound to a transform feedback binding
+// point and a non-transform-feedback binding point, or not (because if it is, then reading or
+// writing to the buffer is undefined behavior).
+template <enum IsTransformFeedback isTransformFeedback = IsTransformFeedback::No>
+class BufferTargetBinding : public OffsetBindingPointer<Buffer>
+{
+  public:
+    BufferTargetBinding() : mContainerIsBound(true) {}
+
+    explicit BufferTargetBinding(bool initiallyBound) : mContainerIsBound(initiallyBound) {}
+
+    void set(const Context *context, Buffer *newObject) override { set(context, newObject, 0, 0); }
+
+    void set(const Context *context, Buffer *newObject, GLintptr offset, GLsizeiptr size) override
+    {
+        adjustBindingCountIfBound(false);
+        OffsetBindingPointer<Buffer>::set(context, newObject, offset, size);
+        if (newObject)
+        {
+            adjustBindingCountIfBound(true);
+        }
+    }
+
+    void setContainerIsBound(bool isBound)
+    {
+        if (mContainerIsBound == isBound)
+        {
+            return;
+        }
+        mContainerIsBound = isBound;
+        adjustBindingCount(isBound);
+    }
+
+  private:
+    bool mContainerIsBound;
+
+    void adjustBindingCountIfBound(bool up)
+    {
+        if (mContainerIsBound)
+        {
+            adjustBindingCount(up);
+        }
+    }
+
+    void adjustBindingCount(bool up)
+    {
+        if (!get())
+        {
+            return;
+        }
+        if (up)
+        {
+            ASSERT(get()->mState.mBindingCount !=
+                   std::numeric_limits<decltype(get()->mState.mBindingCount)>::max());
+            ++get()->mState.mBindingCount;
+        }
+        else
+        {
+            ASSERT(get()->mState.mBindingCount > 0);
+            --get()->mState.mBindingCount;
+        }
+        if (isTransformFeedback == IsTransformFeedback::Yes)
+        {
+            if (up)
+            {
+                ASSERT(get()->mState.mTransformFeedbackBindingCount !=
+                       std::numeric_limits<decltype(
+                           get()->mState.mTransformFeedbackBindingCount)>::max());
+                ++get()->mState.mTransformFeedbackBindingCount;
+            }
+            else
+            {
+                ASSERT(get()->mState.mTransformFeedbackBindingCount > 0);
+                --get()->mState.mTransformFeedbackBindingCount;
+            }
+        }
+    }
 };
 
 }  // namespace gl

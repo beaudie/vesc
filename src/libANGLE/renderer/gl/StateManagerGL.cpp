@@ -639,6 +639,11 @@ void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback
 
         mTransformFeedback = transformFeedback;
         mFunctions->bindTransformFeedback(type, mTransformFeedback);
+        // GL drivers differ on whether glBindTransformFeedback changes the
+        // GL_TRANSFORM_FEEDBACK_BUFFER binding or not. To make our behavior consistent we always
+        // bind the correct buffer here.
+        mFunctions->bindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER,
+                               mBuffers[gl::BufferBinding::TransformFeedback]);
         onTransformFeedbackStateChange();
     }
 }
