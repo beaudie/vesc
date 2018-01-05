@@ -424,6 +424,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
 egl::Error Context::onDestroy(const egl::Display *display)
 {
+    mGLState.reset(this);
+
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
@@ -468,8 +470,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     ANGLE_TRY(releaseSurface(display));
     releaseShaderCompiler();
-
-    mGLState.reset(this);
 
     mState.mBuffers->release(this);
     mState.mShaderPrograms->release(this);
@@ -1000,7 +1000,7 @@ void Context::bindDrawFramebuffer(GLuint framebufferHandle)
 void Context::bindVertexArray(GLuint vertexArrayHandle)
 {
     VertexArray *vertexArray = checkVertexArrayAllocation(vertexArrayHandle);
-    mGLState.setVertexArrayBinding(vertexArray);
+    mGLState.setVertexArrayBinding(this, vertexArray);
 }
 
 void Context::bindVertexBuffer(GLuint bindingIndex,
@@ -2365,7 +2365,7 @@ void Context::detachVertexArray(GLuint vertexArray)
     // [OpenGL ES 3.0.2] section 2.10 page 43:
     // If a vertex array object that is currently bound is deleted, the binding
     // for that object reverts to zero and the default vertex array becomes current.
-    if (mGLState.removeVertexArrayBinding(vertexArray))
+    if (mGLState.removeVertexArrayBinding(this, vertexArray))
     {
         bindVertexArray(0);
     }

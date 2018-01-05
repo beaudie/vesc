@@ -7,7 +7,9 @@
 #ifndef LIBANGLE_TRANSFORM_FEEDBACK_H_
 #define LIBANGLE_TRANSFORM_FEEDBACK_H_
 
+#include "libANGLE/Buffer.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/SingleBindingObject.h"
 
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
@@ -22,7 +24,6 @@ class TransformFeedbackImpl;
 
 namespace gl
 {
-class Buffer;
 struct Caps;
 class Context;
 class Program;
@@ -33,9 +34,8 @@ class TransformFeedbackState final : angle::NonCopyable
     TransformFeedbackState(size_t maxIndexedBuffers);
     ~TransformFeedbackState();
 
-    const BindingPointer<Buffer> &getGenericBuffer() const;
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t idx) const;
-    const std::vector<OffsetBindingPointer<Buffer>> &getIndexedBuffers() const;
+    const std::vector<BufferTargetBinding<IsTransformFeedback::Yes>> &getIndexedBuffers() const;
 
   private:
     friend class TransformFeedback;
@@ -48,11 +48,12 @@ class TransformFeedbackState final : angle::NonCopyable
 
     Program *mProgram;
 
-    BindingPointer<Buffer> mGenericBuffer;
-    std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
+    std::vector<BufferTargetBinding<IsTransformFeedback::Yes>> mIndexedBuffers;
 };
 
-class TransformFeedback final : public RefCountObject, public LabeledObject
+class TransformFeedback final : public RefCountObject,
+                                public LabeledObject,
+                                public SingleBindingObject
 {
   public:
     TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, const Caps &caps);
@@ -73,9 +74,6 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
     bool hasBoundProgram(GLuint program) const;
 
-    void bindGenericBuffer(const Context *context, Buffer *buffer);
-    const BindingPointer<Buffer> &getGenericBuffer() const;
-
     void bindIndexedBuffer(const Context *context,
                            size_t index,
                            Buffer *buffer,
@@ -84,10 +82,17 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t index) const;
     size_t getIndexedBufferCount() const;
 
+    // Returns true if any buffer bound to this object is also bound to another
+    // target.
+    bool buffersBoundForOtherUse() const;
+
     void detachBuffer(const Context *context, GLuint bufferName);
 
     rx::TransformFeedbackImpl *getImplementation();
     const rx::TransformFeedbackImpl *getImplementation() const;
+
+  protected:
+    void onBindingChange() override;
 
   private:
     void bindProgram(const Context *context, Program *program);

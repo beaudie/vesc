@@ -17,6 +17,7 @@
 namespace gl
 {
 ERRMSG(BufferNotBound, "A buffer must be bound.");
+ERRMSG(BufferBoundForTransformFeedback, "Buffer is bound for transform feedback.");
 ERRMSG(CompressedTextureDimensionsMustMatchData,
        "Compressed texture dimensions must exactly match the dimensions of the data passed in.");
 ERRMSG(CompressedTexturesNotAttachable, "Compressed textures cannot be attached to a framebuffer.");

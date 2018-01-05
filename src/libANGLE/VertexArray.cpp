@@ -16,7 +16,7 @@ namespace gl
 {
 
 VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
-    : mLabel(), mVertexBindings(maxAttribBindings)
+    : mLabel(), mElementArrayBuffer(false), mVertexBindings(maxAttribBindings)
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
@@ -254,6 +254,15 @@ void VertexArray::syncState(const Context *context)
     {
         mVertexArray->syncState(context, mDirtyBits);
         mDirtyBits.reset();
+    }
+}
+
+void VertexArray::onBindingChange()
+{
+    mState.mElementArrayBuffer.setContainerIsBound(mIsBound);
+    for (auto &binding : mState.mVertexBindings)
+    {
+        binding.setContainerIsBound(mIsBound);
     }
 }
 
