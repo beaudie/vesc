@@ -13,9 +13,9 @@
 #ifndef LIBANGLE_VERTEXARRAY_H_
 #define LIBANGLE_VERTEXARRAY_H_
 
-#include "libANGLE/RefCountObject.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/RefCountObject.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
 
@@ -196,9 +196,12 @@ class VertexArray final : public LabeledObject
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
+    void setIsBound(bool bound);
+
   private:
     ~VertexArray() override;
 
+    bool mIsBound;
     GLuint mId;
 
     VertexArrayState mState;

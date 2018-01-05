@@ -245,6 +245,8 @@ void State::reset(const Context *context)
 
     for (auto type : angle::AllEnums<BufferBinding>())
     {
+        if (mBoundBuffers[type].get())
+            mBoundBuffers[type]->onBindingChanged(false, type);
         mBoundBuffers[type].set(context, nullptr);
     }
 
@@ -256,6 +258,8 @@ void State::reset(const Context *context)
 
     mProgramPipeline.set(context, nullptr);
 
+    if (mTransformFeedback.get())
+        mTransformFeedback->setIsBound(false);
     mTransformFeedback.set(context, nullptr);
 
     for (State::ActiveQueryMap::iterator i = mActiveQueries.begin(); i != mActiveQueries.end(); i++)
@@ -265,16 +269,22 @@ void State::reset(const Context *context)
 
     for (auto &buf : mUniformBuffers)
     {
+        if (buf.get())
+            buf->onBindingChanged(false, BufferBinding::Uniform);
         buf.set(context, nullptr);
     }
 
     for (auto &buf : mAtomicCounterBuffers)
     {
+        if (buf.get())
+            buf->onBindingChanged(false, BufferBinding::AtomicCounter);
         buf.set(context, nullptr);
     }
 
     for (auto &buf : mShaderStorageBuffers)
     {
+        if (buf.get())
+            buf->onBindingChanged(false, BufferBinding::ShaderStorage);
         buf.set(context, nullptr);
     }
 
@@ -1065,7 +1075,13 @@ bool State::removeDrawFramebufferBinding(GLuint framebuffer)
 
 void State::setVertexArrayBinding(VertexArray *vertexArray)
 {
+    if (mVertexArray == vertexArray)
+        return;
+    if (mVertexArray)
+        mVertexArray->setIsBound(false);
     mVertexArray = vertexArray;
+    if (vertexArray)
+        vertexArray->setIsBound(true);
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
 
     if (mVertexArray && mVertexArray->hasAnyDirtyBit())
@@ -1088,8 +1104,9 @@ VertexArray *State::getVertexArray() const
 
 bool State::removeVertexArrayBinding(GLuint vertexArray)
 {
-    if (mVertexArray->id() == vertexArray)
+    if (mVertexArray && mVertexArray->id() == vertexArray)
     {
+        mVertexArray->setIsBound(false);
         mVertexArray = nullptr;
         mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
         mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
@@ -1162,7 +1179,13 @@ Program *State::getProgram() const
 void State::setTransformFeedbackBinding(const Context *context,
                                         TransformFeedback *transformFeedback)
 {
+    if (transformFeedback == mTransformFeedback.get())
+        return;
+    if (mTransformFeedback.get())
+        mTransformFeedback->setIsBound(false);
     mTransformFeedback.set(context, transformFeedback);
+    if (mTransformFeedback.get())
+        mTransformFeedback->setIsBound(true);
     mDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
 }
 
@@ -1181,6 +1204,8 @@ bool State::removeTransformFeedbackBinding(const Context *context, GLuint transf
 {
     if (mTransformFeedback.id() == transformFeedback)
     {
+        if (mTransformFeedback.get())
+            mTransformFeedback->setIsBound(false);
         mTransformFeedback.set(context, nullptr);
         return true;
     }
@@ -1248,43 +1273,43 @@ Query *State::getActiveQuery(GLenum target) const
 
 void State::setBufferBinding(const Context *context, BufferBinding target, Buffer *buffer)
 {
+    if (target == BufferBinding::ElementArray)
+    {
+        getVertexArray()->setElementArrayBuffer(context, buffer);
+    }
+    else
+    {
+        if (mBoundBuffers[target].get())
+            mBoundBuffers[target]->onBindingChanged(false, target);
+        mBoundBuffers[target].set(context, buffer);
+        if (mBoundBuffers[target].get())
+            mBoundBuffers[target]->onBindingChanged(true, target);
+    }
     switch (target)
     {
         case BufferBinding::PixelPack:
-            mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_PACK_BUFFER_BINDING);
             break;
         case BufferBinding::PixelUnpack:
-            mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_UNPACK_BUFFER_BINDING);
             break;
         case BufferBinding::DrawIndirect:
-            mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING);
             break;
         case BufferBinding::DispatchIndirect:
-            mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
             break;
-        case BufferBinding::TransformFeedback:
-            if (mTransformFeedback.get() != nullptr)
-            {
-                mTransformFeedback->bindGenericBuffer(context, buffer);
-            }
-            break;
         case BufferBinding::ElementArray:
-            getVertexArray()->setElementArrayBuffer(context, buffer);
             mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case BufferBinding::ShaderStorage:
-            mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
             break;
         default:
-            mBoundBuffers[target].set(context, buffer);
             break;
     }
 }
+
 void State::setIndexedBufferBinding(const Context *context,
                                     BufferBinding target,
                                     GLuint index,
@@ -1298,16 +1323,29 @@ void State::setIndexedBufferBinding(const Context *context,
     {
         case BufferBinding::TransformFeedback:
             mTransformFeedback->bindIndexedBuffer(context, index, buffer, offset, size);
+            setBufferBinding(context, target, buffer);
             break;
         case BufferBinding::Uniform:
+            if (mUniformBuffers[index].get())
+                mUniformBuffers[index]->onBindingChanged(false, target);
             mUniformBuffers[index].set(context, buffer, offset, size);
+            if (mUniformBuffers[index].get())
+                mUniformBuffers[index]->onBindingChanged(true, target);
             mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
             break;
         case BufferBinding::AtomicCounter:
+            if (mAtomicCounterBuffers[index].get())
+                mAtomicCounterBuffers[index]->onBindingChanged(false, target);
             mAtomicCounterBuffers[index].set(context, buffer, offset, size);
+            if (mAtomicCounterBuffers[index].get())
+                mAtomicCounterBuffers[index]->onBindingChanged(true, target);
             break;
         case BufferBinding::ShaderStorage:
+            if (mShaderStorageBuffers[index].get())
+                mShaderStorageBuffers[index]->onBindingChanged(false, target);
             mShaderStorageBuffers[index].set(context, buffer, offset, size);
+            if (mShaderStorageBuffers[index].get())
+                mShaderStorageBuffers[index]->onBindingChanged(true, target);
             break;
         default:
             UNREACHABLE();
@@ -1339,8 +1377,6 @@ Buffer *State::getTargetBuffer(BufferBinding target) const
     {
         case BufferBinding::ElementArray:
             return getVertexArray()->getElementArrayBuffer().get();
-        case BufferBinding::TransformFeedback:
-            return mTransformFeedback->getGenericBuffer().get();
         default:
             return mBoundBuffers[target].get();
     }
@@ -1348,11 +1384,13 @@ Buffer *State::getTargetBuffer(BufferBinding target) const
 
 void State::detachBuffer(const Context *context, GLuint bufferName)
 {
-    for (auto &buffer : mBoundBuffers)
+    for (auto target : angle::AllEnums<BufferBinding>())
     {
-        if (buffer.id() == bufferName)
+        if (mBoundBuffers[target].id() == bufferName)
         {
-            buffer.set(context, nullptr);
+            if (mBoundBuffers[target].get())
+                mBoundBuffers[target]->onBindingChanged(false, target);
+            mBoundBuffers[target].set(context, nullptr);
         }
     }
 
@@ -1363,6 +1401,36 @@ void State::detachBuffer(const Context *context, GLuint bufferName)
     }
 
     getVertexArray()->detachBuffer(context, bufferName);
+
+    for (auto &buf : mUniformBuffers)
+    {
+        if (buf.id() == bufferName)
+        {
+            if (buf.get())
+                buf->onBindingChanged(false, BufferBinding::Uniform);
+            buf.set(context, nullptr);
+        }
+    }
+
+    for (auto &buf : mAtomicCounterBuffers)
+    {
+        if (buf.id() == bufferName)
+        {
+            if (buf.get())
+                buf->onBindingChanged(false, BufferBinding::AtomicCounter);
+            buf.set(context, nullptr);
+        }
+    }
+
+    for (auto &buf : mShaderStorageBuffers)
+    {
+        if (buf.id() == bufferName)
+        {
+            if (buf.get())
+                buf->onBindingChanged(false, BufferBinding::ShaderStorage);
+            buf.set(context, nullptr);
+        }
+    }
 }
 
 void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
@@ -2013,11 +2081,10 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
           *params = mBoundBuffers[BufferBinding::Uniform].id();
           break;
       case GL_TRANSFORM_FEEDBACK_BINDING:
-        *params = mTransformFeedback.id();
-        break;
+          *params = mTransformFeedback.id();
+          break;
       case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-          ASSERT(mTransformFeedback.get() != nullptr);
-          *params = mTransformFeedback->getGenericBuffer().id();
+          *params = mBoundBuffers[BufferBinding::TransformFeedback].id();
           break;
       case GL_COPY_READ_BUFFER_BINDING:
           *params = mBoundBuffers[BufferBinding::CopyRead].id();

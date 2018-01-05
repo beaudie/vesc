@@ -2930,6 +2930,13 @@ bool ValidateMapBufferBase(Context *context, BufferBinding target)
         }
     }
 
+    if (context->getExtensions().webglCompatibility &&
+        buffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
+        return false;
+    }
+
     return true;
 }
 
@@ -4235,6 +4242,13 @@ bool ValidateBufferData(ValidationContext *context,
         return false;
     }
 
+    if (context->getExtensions().webglCompatibility &&
+        buffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
+        return false;
+    }
+
     return true;
 }
 
@@ -4273,6 +4287,13 @@ bool ValidateBufferSubData(ValidationContext *context,
     if (buffer->isMapped())
     {
         context->handleError(InvalidOperation());
+        return false;
+    }
+
+    if (context->getExtensions().webglCompatibility &&
+        buffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), BufferBoundForTransformFeedback);
         return false;
     }
 
