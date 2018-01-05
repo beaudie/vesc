@@ -13,7 +13,7 @@ namespace gl
 
 // [OpenGL ES 3.1] (November 3, 2016) Section 20 Page 361
 // Table 20.2: Vertex Array Object State
-VertexBinding::VertexBinding() : mStride(16u), mDivisor(0), mOffset(0)
+VertexBinding::VertexBinding() : mStride(16u), mDivisor(0), mOffset(0), mBuffer(false)
 {
 }
 
