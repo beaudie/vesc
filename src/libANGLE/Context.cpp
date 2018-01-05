@@ -424,6 +424,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
 egl::Error Context::onDestroy(const egl::Display *display)
 {
+    mGLState.reset(this);
+
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
@@ -468,8 +470,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     ANGLE_TRY(releaseSurface(display));
     releaseShaderCompiler();
-
-    mGLState.reset(this);
 
     mState.mBuffers->release(this);
     mState.mShaderPrograms->release(this);
