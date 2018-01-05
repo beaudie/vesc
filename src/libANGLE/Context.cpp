@@ -423,6 +423,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
 egl::Error Context::onDestroy(const egl::Display *display)
 {
+    mGLState.reset(this);
+
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
@@ -469,8 +471,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     ANGLE_TRY(releaseSurface(display));
     releaseShaderCompiler();
-
-    mGLState.reset(this);
 
     mState.mBuffers->release(this);
     mState.mShaderPrograms->release(this);
@@ -5696,6 +5696,15 @@ void Context::onTextureChange(const Texture *texture)
     // Conservatively assume all textures are dirty.
     // TODO(jmadill): More fine-grained update.
     mGLState.setObjectDirty(GL_TEXTURE);
+}
+
+bool Context::isCurrentTransformFeedback(const TransformFeedback *tf) const
+{
+    return mGLState.isCurrentTransformFeedback(tf);
+}
+bool Context::isCurrentVertexArray(const VertexArray *va) const
+{
+    return mGLState.isCurrentVertexArray(va);
 }
 
 void Context::genProgramPipelines(GLsizei count, GLuint *pipelines)
