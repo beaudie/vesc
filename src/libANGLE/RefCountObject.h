@@ -158,7 +158,10 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
         mSize = 0;
     }
 
-    void set(const Context *context, ObjectType *newObject, GLintptr offset, GLsizeiptr size)
+    virtual void set(const Context *context,
+                     ObjectType *newObject,
+                     GLintptr offset,
+                     GLsizeiptr size)
     {
         BindingPointer<ObjectType>::set(context, newObject);
         mOffset = offset;

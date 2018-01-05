@@ -21,6 +21,7 @@
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
+#include "libANGLE/SingleBindingObject.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/Version.h"
@@ -559,7 +560,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // array buffer and the transform feedback buffer but these should not be used. Instead these
     // bind points are respectively owned by current the vertex array object and the current
     // transform feedback object.
-    using BoundBufferMap = angle::PackedEnumMap<BufferBinding, BindingPointer<Buffer>>;
+    using BoundBufferMap = angle::PackedEnumMap<BufferBinding, BufferTargetBinding<>>;
     BoundBufferMap mBoundBuffers;
 
     using BufferVector = std::vector<OffsetBindingPointer<Buffer>>;
@@ -567,7 +568,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     BufferVector mAtomicCounterBuffers;
     BufferVector mShaderStorageBuffers;
 
-    BindingPointer<TransformFeedback> mTransformFeedback;
+    SingleBindingPointer<TransformFeedback> mTransformFeedback;
 
     BindingPointer<Buffer> mPixelUnpackBuffer;
     PixelUnpackState mUnpack;

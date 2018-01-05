@@ -22,9 +22,14 @@ TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
       mPrimitiveMode(GL_NONE),
       mPaused(false),
       mProgram(nullptr),
-      mGenericBuffer(),
-      mIndexedBuffers(maxIndexedBuffers)
+      mGenericBuffer(false),
+      mIndexedBuffers()
 {
+    mIndexedBuffers.reserve(maxIndexedBuffers);
+    for (std::size_t i = 0; i < maxIndexedBuffers; ++i)
+    {
+        mIndexedBuffers.emplace_back(false);
+    }
 }
 
 TransformFeedbackState::~TransformFeedbackState()
@@ -41,7 +46,8 @@ const OffsetBindingPointer<Buffer> &TransformFeedbackState::getIndexedBuffer(siz
     return mIndexedBuffers[idx];
 }
 
-const std::vector<OffsetBindingPointer<Buffer>> &TransformFeedbackState::getIndexedBuffers() const
+const std::vector<BufferTargetBinding<GL_TRANSFORM_FEEDBACK_BUFFER>>
+    &TransformFeedbackState::getIndexedBuffers() const
 {
     return mIndexedBuffers;
 }
@@ -218,4 +224,13 @@ const rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
     return mImplementation;
 }
 
+void TransformFeedback::onBindingChange()
+{
+    // ERR() << mIsBound;
+    mState.mGenericBuffer.setContainerIsBound(mIsBound);
+    for (auto &binding : mState.mIndexedBuffers)
+    {
+        binding.setContainerIsBound(mIsBound);
+    }
+}
 }

@@ -13,9 +13,10 @@
 #ifndef LIBANGLE_VERTEXARRAY_H_
 #define LIBANGLE_VERTEXARRAY_H_
 
-#include "libANGLE/RefCountObject.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/RefCountObject.h"
+#include "libANGLE/SingleBindingObject.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
 
@@ -66,13 +67,13 @@ class VertexArrayState final : angle::NonCopyable
     friend class VertexArray;
     std::string mLabel;
     std::vector<VertexAttribute> mVertexAttributes;
-    BindingPointer<Buffer> mElementArrayBuffer;
+    BufferTargetBinding<> mElementArrayBuffer;
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
     ComponentTypeMask mVertexAttributesTypeMask;
 };
 
-class VertexArray final : public LabeledObject
+class VertexArray final : public LabeledObject, public SingleBindingObject
 {
   public:
     VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
@@ -195,6 +196,9 @@ class VertexArray final : public LabeledObject
 
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
+
+  protected:
+    void onBindingChange() override;
 
   private:
     ~VertexArray() override;
