@@ -268,7 +268,7 @@ class D3DTextureTest : public ANGLETest
 
 // Test creating pbuffer from textures with several
 // different DXGI formats.
-TEST_P(D3DTextureTest, TestD3D11SupportedFormats)
+TEST_P(D3DTextureTest, TestD3D11SupportedFormatsSurface)
 {
     ANGLE_SKIP_TEST_IF(!valid() || !IsD3D11());
 
@@ -285,8 +285,82 @@ TEST_P(D3DTextureTest, TestD3D11SupportedFormats)
         EGLDisplay display = window->getDisplay();
         eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
         ASSERT_EGL_SUCCESS();
-
         window->makeCurrent();
+        eglDestroySurface(display, pbuffer);
+    }
+}
+
+TEST_P(D3DTextureTest, TestD3D11SupportedFormatsTexture)
+{
+    bool srgbSupported = extensionEnabled("GL_EXT_sRGB") || getClientMajorVersion() == 3;
+    ANGLE_SKIP_TEST_IF(!valid() || !IsD3D11() || !srgbSupported);
+
+    bool srgbWriteControlSupported = extensionEnabled("GL_EXT_sRGB_write_control");
+
+    const DXGI_FORMAT formats[] = {DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM,
+                                   DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                   DXGI_FORMAT_B8G8R8A8_UNORM_SRGB};
+    for (size_t i = 0; i < 4; ++i)
+    {
+        SCOPED_TRACE(std::string("Test case:") + std::to_string(i));
+        EGLWindow *window  = getEGLWindow();
+        EGLDisplay display = window->getDisplay();
+
+        EGLSurface pbuffer =
+            createD3D11PBuffer(32, 32, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 1, 0,
+                               D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, formats[i]);
+        ASSERT_EGL_SUCCESS();
+        ASSERT_NE(pbuffer, EGL_NO_SURFACE);
+
+        GLuint texture = 0u;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        EGLBoolean result = eglBindTexImage(display, pbuffer, EGL_BACK_BUFFER);
+        ASSERT_EGL_SUCCESS();
+        ASSERT(result == EGL_TRUE);
+
+        GLuint fbo = 0u;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        glClearColor(0.0f, 0.5f, 0.0f, 1.0f);
+
+        GLint colorEncoding = 0;
+        glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                              GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT,
+                                              &colorEncoding);
+
+        if (formats[i] == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB ||
+            formats[i] == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB)
+        {
+            EXPECT_EQ(GL_SRGB_EXT, colorEncoding);
+        }
+        else
+        {
+            EXPECT_EQ(GL_LINEAR, colorEncoding);
+        }
+
+        if (colorEncoding == GL_SRGB_EXT)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0u, 188u, 0u, 255u));
+            // Disable SRGB and run the non-sRGB test case.
+            if (srgbWriteControlSupported)
+                glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+        }
+
+        if (colorEncoding == GL_LINEAR || srgbWriteControlSupported)
+        {
+            glClearColor(0.0f, 0.5f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0u, 127u, 0u, 255u));
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0u);
+        glBindTexture(GL_TEXTURE_2D, 0u);
+        glDeleteTextures(1, &texture);
+        glDeleteFramebuffers(1, &fbo);
         eglDestroySurface(display, pbuffer);
     }
 }
