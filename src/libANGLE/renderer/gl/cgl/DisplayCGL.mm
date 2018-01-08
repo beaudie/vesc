@@ -145,10 +145,10 @@ SurfaceImpl *DisplayCGL::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
-egl::Error DisplayCGL::getDevice(DeviceImpl **device)
+DeviceImpl *DisplayCGL::createDevice() override
 {
     UNIMPLEMENTED();
-    return egl::EglBadDisplay();
+    return nullptr;
 }
 
 egl::ConfigSet DisplayCGL::generateConfigs()
