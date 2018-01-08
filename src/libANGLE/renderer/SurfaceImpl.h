@@ -17,6 +17,11 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/FramebufferAttachmentObjectImpl.h"
 
+namespace angle
+{
+struct Format;
+}
+
 namespace gl
 {
 class FramebufferState;
@@ -62,6 +67,8 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
 
     virtual EGLint isPostSubBufferSupported() const = 0;
     virtual EGLint getSwapBehavior() const = 0;
+
+    virtual const angle::Format *getColorFormat() const { return nullptr; }
 
   protected:
     const egl::SurfaceState &mState;

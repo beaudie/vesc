@@ -53,7 +53,7 @@ class Surface : public gl::FramebufferAttachmentObject
 
     EGLint getType() const;
 
-    Error initialize(const Display *display);
+    virtual Error initialize(const Display *display);
     Error swap(const gl::Context *context);
     Error swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects);
     Error postSubBuffer(const gl::Context *context,
@@ -206,8 +206,13 @@ class PbufferSurface final : public Surface
                    EGLClientBuffer clientBuffer,
                    const AttributeMap &attribs);
 
+    Error initialize(const Display *display) override;
+
   protected:
     ~PbufferSurface() override;
+
+  private:
+    EGLenum mBuftype;
 };
 
 class PixmapSurface final : public Surface
