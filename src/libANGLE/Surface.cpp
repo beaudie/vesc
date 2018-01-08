@@ -431,7 +431,7 @@ WindowSurface::~WindowSurface()
 PbufferSurface::PbufferSurface(rx::EGLImplFactory *implFactory,
                                const Config *config,
                                const AttributeMap &attribs)
-    : Surface(EGL_PBUFFER_BIT, config, attribs)
+    : Surface(EGL_PBUFFER_BIT, config, attribs), mBuftype(EGL_NONE)
 {
     mImplementation = implFactory->createPbufferSurface(mState, attribs);
 }
@@ -441,7 +441,7 @@ PbufferSurface::PbufferSurface(rx::EGLImplFactory *implFactory,
                                EGLenum buftype,
                                EGLClientBuffer clientBuffer,
                                const AttributeMap &attribs)
-    : Surface(EGL_PBUFFER_BIT, config, attribs)
+    : Surface(EGL_PBUFFER_BIT, config, attribs), mBuftype(buftype)
 {
     mImplementation =
         implFactory->createPbufferFromClientBuffer(mState, buftype, clientBuffer, attribs);
@@ -452,6 +452,27 @@ PbufferSurface::PbufferSurface(rx::EGLImplFactory *implFactory,
         GLenum type           = static_cast<GLenum>(attribs.get(EGL_TEXTURE_TYPE_ANGLE));
         mColorFormat          = gl::Format(internalFormat, type);
     }
+}
+
+Error PbufferSurface::initialize(const Display *display)
+{
+    ANGLE_TRY(Surface::initialize(display));
+    if (mBuftype == EGL_D3D_TEXTURE_ANGLE)
+    {
+        if (mImplementation->getColorFormat())
+        {
+            GLenum internalFormat =
+                mImplementation->getColorFormat()->fboImplementationInternalFormat;
+            mColorFormat =
+                gl::Format(internalFormat, mImplementation->getColorFormat()->componentType);
+            mGLColorspace = EGL_GL_COLORSPACE_LINEAR;
+            if (mColorFormat.info->colorEncoding == GL_SRGB)
+            {
+                mGLColorspace = EGL_GL_COLORSPACE_SRGB;
+            }
+        }
+    }
+    return NoError();
 }
 
 PbufferSurface::~PbufferSurface()
