@@ -272,10 +272,12 @@ TEST_P(D3DTextureTest, TestD3D11SupportedFormats)
 {
     ANGLE_SKIP_TEST_IF(!valid() || !IsD3D11());
 
-    const DXGI_FORMAT formats[] = {DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-                                   DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB};
+    const DXGI_FORMAT formats[] = {DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM,
+                                   DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                   DXGI_FORMAT_B8G8R8A8_UNORM_SRGB};
     for (size_t i = 0; i < 4; ++i)
     {
+        SCOPED_TRACE(std::string("iteration:") + std::to_string(i));
         EGLSurface pbuffer = createD3D11PBuffer(32, 32, EGL_TEXTURE_RGBA, EGL_TEXTURE_2D, 1, 0,
                                                 D3D11_BIND_RENDER_TARGET, formats[i]);
         ASSERT_EGL_SUCCESS();
@@ -286,6 +288,9 @@ TEST_P(D3DTextureTest, TestD3D11SupportedFormats)
         eglMakeCurrent(display, pbuffer, pbuffer, window->getContext());
         ASSERT_EGL_SUCCESS();
 
+        glClearColor(0.0f, 0.5f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0u, 127u, 0u, 255u));
         window->makeCurrent();
         eglDestroySurface(display, pbuffer);
     }
