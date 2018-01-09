@@ -13,9 +13,8 @@ namespace sh
 void RegenerateStructNames::visitSymbol(TIntermSymbol *symbol)
 {
     ASSERT(symbol);
-    TType *type = symbol->getTypePointer();
-    ASSERT(type);
-    TStructure *userType = type->getStruct();
+    const TType &type    = symbol->getType();
+    TStructure *userType = const_cast<TStructure *>(type.getStruct());
     if (!userType)
         return;
 

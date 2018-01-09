@@ -167,7 +167,7 @@ class FindStructByName final : public TIntermTraverser
             return;
         }
 
-        TStructure *structure = symbol->getTypePointer()->getStruct();
+        const TStructure *structure = symbol->getType().getStruct();
 
         if (structure != nullptr && structure->symbolType() != SymbolType::Empty &&
             structure->name() == mStructName)
@@ -177,11 +177,11 @@ class FindStructByName final : public TIntermTraverser
     }
 
     bool isStructureFound() const { return mStructure != nullptr; };
-    TStructure *getStructure() const { return mStructure; }
+    const TStructure *getStructure() const { return mStructure; }
 
   private:
     TString mStructName;
-    TStructure *mStructure;
+    const TStructure *mStructure;
 };
 
 }  // namespace
