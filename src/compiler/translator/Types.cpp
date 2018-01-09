@@ -193,7 +193,7 @@ TType::TType(const TPublicType &p)
     }
 }
 
-TType::TType(TStructure *userDef)
+TType::TType(const TStructure *userDef)
     : type(EbtStruct),
       precision(EbpUndefined),
       qualifier(EvqTemporary),
@@ -741,15 +741,6 @@ void TType::setInterfaceBlock(TInterfaceBlock *interfaceBlockIn)
     if (mInterfaceBlock != interfaceBlockIn)
     {
         mInterfaceBlock = interfaceBlockIn;
-        invalidateMangledName();
-    }
-}
-
-void TType::setStruct(TStructure *s)
-{
-    if (mStructure != s)
-    {
-        mStructure = s;
         invalidateMangledName();
     }
 }
