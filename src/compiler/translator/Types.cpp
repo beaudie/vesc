@@ -745,7 +745,7 @@ void TType::setInterfaceBlock(TInterfaceBlock *interfaceBlockIn)
     }
 }
 
-void TType::setStruct(TStructure *s)
+void TType::setStruct(const TStructure *s)
 {
     if (mStructure != s)
     {
