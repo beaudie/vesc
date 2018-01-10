@@ -65,14 +65,44 @@ bool TSymbolTableLevel::hasUnmangledBuiltIn(const char *name) const
     return mUnmangledBuiltInNames.count(name) > 0;
 }
 
-TSymbol *TSymbolTable::find(const TString &name,
-                            int shaderVersion,
-                            bool *builtIn,
-                            bool *sameScope) const
+const TFunction *TSymbolTable::markUserDefinedFunctionHasPrototypeDeclaration(
+    const TString &mangledName,
+    bool *hadPrototypeDeclarationOut)
 {
-    int level = currentLevel();
-    TSymbol *symbol;
+    TFunction *function         = findUserDefinedFunction(mangledName);
+    *hadPrototypeDeclarationOut = function->hasPrototypeDeclaration();
+    function->setHasPrototypeDeclaration();
+    return function;
+}
 
+const TFunction *TSymbolTable::setUserDefinedFunctionParameterNamesFromDefinition(
+    const TFunction *function,
+    bool *wasDefinedOut)
+{
+    TFunction *firstDeclaration = findUserDefinedFunction(function->getMangledName());
+    ASSERT(firstDeclaration);
+    // Note: 'firstDeclaration' could be 'function' if this is the first time we've seen function as
+    // it would have just been put in the symbol table. Otherwise, we're looking up an earlier
+    // occurance.
+    if (function != firstDeclaration)
+    {
+        // Swap the parameters of the previous declaration to the parameters of the function
+        // definition (parameter names may differ).
+        firstDeclaration->swapParameters(*function);
+    }
+
+    *wasDefinedOut = firstDeclaration->isDefined();
+    firstDeclaration->setDefined();
+    return firstDeclaration;
+}
+
+const TSymbol *TSymbolTable::find(const TString &name,
+                                  int shaderVersion,
+                                  bool *builtIn,
+                                  bool *sameScope) const
+{
+    int level       = currentLevel();
+    TSymbol *symbol = nullptr;
     do
     {
         if (level == GLSL_BUILTINS)
@@ -85,7 +115,7 @@ TSymbol *TSymbolTable::find(const TString &name,
             level--;
 
         symbol = table[level]->find(name);
-    } while (symbol == 0 && --level >= 0);
+    } while (symbol == nullptr && --level >= 0);
 
     if (builtIn)
         *builtIn = (level <= LAST_BUILTIN_LEVEL);
@@ -95,20 +125,27 @@ TSymbol *TSymbolTable::find(const TString &name,
     return symbol;
 }
 
-TSymbol *TSymbolTable::findGlobal(const TString &name) const
+TFunction *TSymbolTable::findUserDefinedFunction(const TString &name) const
+{
+    // User-defined functions are always declared at the global level.
+    ASSERT(currentLevel() >= GLOBAL_LEVEL);
+    return static_cast<TFunction *>(table[GLOBAL_LEVEL]->find(name));
+}
+
+const TSymbol *TSymbolTable::findGlobal(const TString &name) const
 {
     ASSERT(table.size() > GLOBAL_LEVEL);
     return table[GLOBAL_LEVEL]->find(name);
 }
 
-TSymbol *TSymbolTable::findBuiltIn(const TString &name, int shaderVersion) const
+const TSymbol *TSymbolTable::findBuiltIn(const TString &name, int shaderVersion) const
 {
     return findBuiltIn(name, shaderVersion, false);
 }
 
-TSymbol *TSymbolTable::findBuiltIn(const TString &name,
-                                   int shaderVersion,
-                                   bool includeGLSLBuiltins) const
+const TSymbol *TSymbolTable::findBuiltIn(const TString &name,
+                                         int shaderVersion,
+                                         bool includeGLSLBuiltins) const
 {
     for (int level = LAST_BUILTIN_LEVEL; level >= 0; level--)
     {
@@ -230,6 +267,17 @@ bool TSymbolTable::declareStructType(TStructure *str)
 bool TSymbolTable::declareInterfaceBlock(TInterfaceBlock *interfaceBlock)
 {
     return insert(currentLevel(), interfaceBlock);
+}
+
+void TSymbolTable::declareUserDefinedFunction(TFunction *function, bool insertUnmangledName)
+{
+    ASSERT(currentLevel() >= GLOBAL_LEVEL);
+    if (insertUnmangledName)
+    {
+        // Insert the unmangled name to detect potential future redefinition as a variable.
+        table[GLOBAL_LEVEL]->insertUnmangled(function);
+    }
+    table[GLOBAL_LEVEL]->insert(function);
 }
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, const TType *type)
