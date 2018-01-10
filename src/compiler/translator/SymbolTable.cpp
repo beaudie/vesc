@@ -66,14 +66,43 @@ bool TSymbolTableLevel::hasUnmangledBuiltIn(const char *name) const
     return mUnmangledBuiltInNames.count(name) > 0;
 }
 
-TSymbol *TSymbolTable::find(const TString &name,
-                            int shaderVersion,
-                            bool *builtIn,
-                            bool *sameScope) const
+const TFunction *TSymbolTable::addUserDefinedFunctionDefinition(const TFunction *function,
+                                                                bool *wasDefinedOut)
 {
-    int level = currentLevel();
-    TSymbol *symbol;
+    TFunction *prevDec = static_cast<TFunction *>(findUserDefined(function->getMangledName()));
+    ASSERT(prevDec);
+    // Note: 'prevDec' could be 'function' if this is the first time we've seen function as it
+    // would have just been put in the s ymbol table. Otherwise, we're looking up an earlier
+    // occurance.
+    if (function != prevDec)
+    {
+        // Swap the parameters of the previous declaration to the parameters of the function
+        // definition (parameter names may differ).
+        prevDec->swapParameters(*function);
+    }
 
+    *wasDefinedOut = prevDec->isDefined();
+    prevDec->setDefined();
+    return prevDec;
+}
+
+const TFunction *TSymbolTable::addUserDefinedFunctionPrototypeDeclaration(
+    const TString &mangledName,
+    bool *hadPrototypeDeclarationOut)
+{
+    TFunction *function         = static_cast<TFunction *>(findUserDefined(mangledName));
+    *hadPrototypeDeclarationOut = function->hasPrototypeDeclaration();
+    function->setHasPrototypeDeclaration();
+    return function;
+}
+
+const TSymbol *TSymbolTable::find(const TString &name,
+                                  int shaderVersion,
+                                  bool *builtIn,
+                                  bool *sameScope) const
+{
+    int level       = currentLevel();
+    TSymbol *symbol = nullptr;
     do
     {
         if (level == GLSL_BUILTINS)
@@ -86,7 +115,7 @@ TSymbol *TSymbolTable::find(const TString &name,
             level--;
 
         symbol = table[level]->find(name);
-    } while (symbol == 0 && --level >= 0);
+    } while (symbol == nullptr && --level >= 0);
 
     if (builtIn)
         *builtIn = (level <= LAST_BUILTIN_LEVEL);
@@ -96,20 +125,32 @@ TSymbol *TSymbolTable::find(const TString &name,
     return symbol;
 }
 
-TSymbol *TSymbolTable::findGlobal(const TString &name) const
+TSymbol *TSymbolTable::findUserDefined(const TString &name) const
+{
+    int level       = currentLevel();
+    TSymbol *symbol = nullptr;
+    while (symbol == nullptr && level > LAST_BUILTIN_LEVEL)
+    {
+        symbol = table[level]->find(name);
+        --level;
+    }
+    return symbol;
+}
+
+const TSymbol *TSymbolTable::findGlobal(const TString &name) const
 {
     ASSERT(table.size() > GLOBAL_LEVEL);
     return table[GLOBAL_LEVEL]->find(name);
 }
 
-TSymbol *TSymbolTable::findBuiltIn(const TString &name, int shaderVersion) const
+const TSymbol *TSymbolTable::findBuiltIn(const TString &name, int shaderVersion) const
 {
     return findBuiltIn(name, shaderVersion, false);
 }
 
-TSymbol *TSymbolTable::findBuiltIn(const TString &name,
-                                   int shaderVersion,
-                                   bool includeGLSLBuiltins) const
+const TSymbol *TSymbolTable::findBuiltIn(const TString &name,
+                                         int shaderVersion,
+                                         bool includeGLSLBuiltins) const
 {
     for (int level = LAST_BUILTIN_LEVEL; level >= 0; level--)
     {

@@ -266,16 +266,23 @@ class TSymbolTable : angle::NonCopyable
                                               const TType *rvalue,
                                               const char *name);
 
-    TSymbol *find(const TString &name,
-                  int shaderVersion,
-                  bool *builtIn   = nullptr,
-                  bool *sameScope = nullptr) const;
+    const TFunction *addUserDefinedFunctionPrototypeDeclaration(const TString &mangledName,
+                                                                bool *hadPrototypeDeclarationOut);
+    const TFunction *addUserDefinedFunctionDefinition(const TFunction *function,
+                                                      bool *wasDefinedOut);
 
-    TSymbol *findGlobal(const TString &name) const;
+    const TSymbol *find(const TString &name,
+                        int shaderVersion,
+                        bool *builtIn   = nullptr,
+                        bool *sameScope = nullptr) const;
 
-    TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
+    const TSymbol *findGlobal(const TString &name) const;
 
-    TSymbol *findBuiltIn(const TString &name, int shaderVersion, bool includeGLSLBuiltins) const;
+    const TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
+
+    const TSymbol *findBuiltIn(const TString &name,
+                               int shaderVersion,
+                               bool includeGLSLBuiltins) const;
 
     TSymbolTableLevel *getOuterLevel()
     {
@@ -341,6 +348,8 @@ class TSymbolTable : angle::NonCopyable
         ASSERT(level > LAST_BUILTIN_LEVEL || mUserDefinedUniqueIdsStart == -1);
         return table[level]->insert(symbol);
     }
+
+    TSymbol *findUserDefined(const TString &name) const;
 
     // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00 and
     // above.

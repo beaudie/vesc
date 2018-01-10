@@ -210,7 +210,7 @@ TType::TType(const TStructure *userDef)
 {
 }
 
-TType::TType(TInterfaceBlock *interfaceBlockIn,
+TType::TType(const TInterfaceBlock *interfaceBlockIn,
              TQualifier qualifierIn,
              TLayoutQualifier layoutQualifierIn)
     : type(EbtInterfaceBlock),
@@ -736,7 +736,7 @@ void TType::toArrayElementType()
     }
 }
 
-void TType::setInterfaceBlock(TInterfaceBlock *interfaceBlockIn)
+void TType::setInterfaceBlock(const TInterfaceBlock *interfaceBlockIn)
 {
     if (mInterfaceBlock != interfaceBlockIn)
     {
