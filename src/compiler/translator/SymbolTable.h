@@ -134,11 +134,13 @@ class TSymbolTable : angle::NonCopyable
     }
 
     // The declare* entry points are used when parsing and declare symbols at the current scope.
-    // They return the created symbol / true in case the declaration was successful, and nullptr /
-    // false if the declaration failed due to redefinition.
+    // They return the created true in case the declaration was successful, and false if the
+    // declaration failed due to redefinition.
     bool declareVariable(TVariable *variable);
     bool declareStructType(TStructure *str);
     bool declareInterfaceBlock(TInterfaceBlock *interfaceBlock);
+    // Functions are always declared at global scope.
+    void declareUserDefinedFunction(TFunction *function, bool insertUnmangledName);
 
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol / true in case the declaration was successful, and nullptr /
@@ -232,22 +234,25 @@ class TSymbolTable : angle::NonCopyable
                                               const TType *rvalue,
                                               const char *name);
 
-    TSymbol *find(const TString &name,
-                  int shaderVersion,
-                  bool *builtIn   = nullptr,
-                  bool *sameScope = nullptr) const;
+    // These return the TFunction pointer to keep using to refer to this function.
+    const TFunction *markUserDefinedFunctionHasPrototypeDeclaration(
+        const TString &mangledName,
+        bool *hadPrototypeDeclarationOut);
+    const TFunction *setUserDefinedFunctionParameterNamesFromDefinition(const TFunction *function,
+                                                                        bool *wasDefinedOut);
 
-    TSymbol *findGlobal(const TString &name) const;
+    const TSymbol *find(const TString &name,
+                        int shaderVersion,
+                        bool *builtIn   = nullptr,
+                        bool *sameScope = nullptr) const;
 
-    TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
+    const TSymbol *findGlobal(const TString &name) const;
 
-    TSymbol *findBuiltIn(const TString &name, int shaderVersion, bool includeGLSLBuiltins) const;
+    const TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
 
-    TSymbolTableLevel *getOuterLevel()
-    {
-        assert(currentLevel() >= 1);
-        return table[currentLevel() - 1];
-    }
+    const TSymbol *findBuiltIn(const TString &name,
+                               int shaderVersion,
+                               bool includeGLSLBuiltins) const;
 
     void setDefaultPrecision(TBasicType type, TPrecision prec)
     {
@@ -307,6 +312,8 @@ class TSymbolTable : angle::NonCopyable
         ASSERT(level > LAST_BUILTIN_LEVEL || mUserDefinedUniqueIdsStart == -1);
         return table[level]->insert(symbol);
     }
+
+    TFunction *findUserDefinedFunction(const TString &name) const;
 
     // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00 and
     // above.
