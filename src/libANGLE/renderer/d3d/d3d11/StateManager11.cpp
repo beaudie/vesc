@@ -749,6 +749,38 @@ gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
     return gl::NoError();
 }
 
+gl::Error StateManager11::updateTexturesForCompute(const gl::Context *context)
+{
+    const auto &glState    = context->getGLState();
+    const auto &caps       = context->getCaps();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+
+    unsigned int imageRange = programD3D->getUsedImageRange(gl::SHADER_COMPUTE, false);
+    for (unsigned int imageIndex = 0; imageIndex < imageRange; imageIndex++)
+    {
+        GLint imageUnitIndex =
+            programD3D->getImageMapping(gl::SHADER_COMPUTE, imageIndex, false, caps);
+        ASSERT(imageUnitIndex != -1);
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        if (!imageUnit.texture.get())
+        {
+            return gl::NoError();
+        }
+
+        TextureD3D *textureImpl    = nullptr;
+        textureImpl                = GetImplAs<TextureD3D>(imageUnit.texture.get());
+        TextureStorage *texStorage = nullptr;
+        ANGLE_TRY(textureImpl->getNativeTexture(context, &texStorage));
+
+        // Texture should be complete and have a storage
+        ASSERT(texStorage);
+        TextureStorage11 *storage11 = GetAs<TextureStorage11>(texStorage);
+        ANGLE_TRY(storage11->updateSubresourceLayer());
+    }
+
+    return gl::NoError();
+}
+
 void StateManager11::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
 {
     if (!dirtyBits.any())

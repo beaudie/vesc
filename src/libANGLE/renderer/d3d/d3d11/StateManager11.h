@@ -185,6 +185,7 @@ class StateManager11 final : angle::NonCopyable
                                     GLuint numGroupsX,
                                     GLuint numGroupsY,
                                     GLuint numGroupsZ);
+    gl::Error updateTexturesForCompute(const gl::Context *context);
 
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 

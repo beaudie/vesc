@@ -3884,6 +3884,8 @@ gl::Error Renderer11::dispatchCompute(const gl::Context *context,
 
     mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
 
+    ANGLE_TRY(mStateManager.updateTexturesForCompute(context));
+
     return gl::NoError();
 }
 
