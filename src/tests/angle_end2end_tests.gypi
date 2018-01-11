@@ -76,6 +76,7 @@
             '<(angle_path)/src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RobustClientMemoryTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RobustResourceInitTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/SanityTest.cpp',
             '<(angle_path)/src/tests/gl_tests/ShaderStorageBufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SimpleOperationTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SixteenBppTextureTest.cpp',
