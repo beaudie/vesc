@@ -2694,7 +2694,7 @@ TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
         "out vec4 my_FragColor;\n"
         "uniform int u_zero;\n"
         "void main() {\n"
-        "    if (findLSB(u_zero) == -1 && findMSB(u_zero) == -1 && findMSB(u_zero - 1) == -1)\n"
+        "    if (findLSB(0) == -1 && findMSB(0) == -1 && findMSB(u_zero - 1) == -1)\n"
         "    {\n"
         "        my_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
         "    }\n"
