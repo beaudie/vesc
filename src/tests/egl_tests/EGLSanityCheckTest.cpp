@@ -35,3 +35,57 @@ TEST(EGLSanityCheckTest, GetProcAddressNegativeTest)
     auto check = eglGetProcAddress("WigglyWombats");
     EXPECT_EQ(nullptr, check);
 }
+
+#if defined(ANGLE_PLATFORM_WINDOWS) || defined(ANGLE_PLATFORM_LINUX) || \
+    defined(ANGLE_PLATFORM_APPLE)
+
+#include "gpu_info_util/SystemInfo.h"
+
+using namespace angle;
+
+// Check basic assumptions about platform availability.
+TEST(EGLSanityCheckTest, PlatformAvailabilityTest)
+{
+    SystemInfo info;
+    GetSystemInfo(&info);
+
+    if (IsLinux())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_VULKAN()));
+
+        if (IsIntel(info.gpus[0].vendorId))
+        {
+            EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGLES()));
+        }
+    }
+
+    if (IsOSX())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_OPENGL()));
+    }
+
+    if (IsWindows())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_D3D9()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_D3D11()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_D3D11()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_VULKAN()));
+
+        if (IsNvidia(info.gpus[0].vendorId))
+        {
+            EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGLES()));
+        }
+    }
+
+    if (IsAndroid())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGLES()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_OPENGLES()));
+        EXPECT_TRUE(IsPlatformAvailable(ES31_OPENGLES()));
+    }
+}
+#endif
