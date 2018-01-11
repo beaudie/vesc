@@ -174,6 +174,7 @@ if (is_win || is_linux || is_mac || is_android) {
              angle_root + ":libGLESv2",
              angle_root + ":preprocessor",
              angle_root + ":translator",
+             angle_root + ":angle_gpu_info_util",
            ]
   }
 
