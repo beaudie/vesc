@@ -9,6 +9,7 @@
 
 #include <gtest/gtest.h>
 
+#include "gpu_info_util/SystemInfo.h"
 #include "test_utils/ANGLETest.h"
 
 // Checks the tests are running against ANGLE
@@ -34,4 +35,45 @@ TEST(EGLSanityCheckTest, GetProcAddressNegativeTest)
 {
     auto check = eglGetProcAddress("WigglyWombats");
     EXPECT_EQ(nullptr, check);
+}
+
+using namespace angle;
+
+// Check basic assumptions about platform availability.
+TEST(EGLSanityCheckTest, PlatformAvailabilityTest)
+{
+    SystemInfo info;
+    GetSystemInfo(&info);
+
+    if (IsLinux())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_VULKAN()));
+
+        if (IsIntel(info.gpus[0].vendorId))
+        {
+            EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGLES()));
+        }
+    }
+
+    if (IsOSX())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_OPENGL()));
+    }
+
+    if (IsWindows())
+    {
+        EXPECT_TRUE(IsPlatformAvailable(ES2_D3D9()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_D3D11()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_D3D11()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES3_OPENGL()));
+        EXPECT_TRUE(IsPlatformAvailable(ES2_VULKAN()));
+
+        if (IsNvidia(info.gpus[0].vendorId))
+        {
+            EXPECT_TRUE(IsPlatformAvailable(ES2_OPENGLES()));
+        }
+    }
 }
