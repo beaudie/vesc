@@ -8,6 +8,8 @@
 // entry_points_gles_2_0_ext_autogen.cpp:
 //   Defines the GLES extension entry points.
 
+#include "libGLESv2/entry_points_gles_2_0_ext_autogen.h"
+
 #include "libANGLE/Context.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES2.h"

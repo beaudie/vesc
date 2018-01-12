@@ -165,13 +165,16 @@ def just_the_name_packed(param, reserved_set):
 format_dict = {
     "GLbitfield": "0x%X",
     "GLboolean": "%u",
+    "GLclampx": "0x%X",
     "GLenum": "0x%X",
+    "GLfixed": "0x%X",
     "GLfloat": "%f",
     "GLint": "%d",
     "GLintptr": "%d",
     "GLsizei": "%d",
     "GLsizeiptr": "%d",
     "GLsync": "0x%0.8p",
+    "GLubyte": "%d",
     "GLuint": "%u",
     "GLuint64": "%llu",
     "GLDEBUGPROC": "0x%0.8p",
@@ -285,34 +288,46 @@ def write_file(annotation, comment, template, entry_points, suffix, includes):
 all_commands = root.findall('commands/command')
 all_cmd_names = []
 
-template_header_includes = """#include <GLES{}/gl{}{}.h>
+template_header_includes = """#include <GLES{major}/gl{major}{minor}.h>
+{extra_includes}
 #include <export.h>"""
 
-template_sources_includes = """#include "libANGLE/Context.h"
+template_sources_includes = """#include "libGLESv2/entry_points_gles_{}_autogen.h"
+
+#include "libANGLE/Context.h"
 #include "libANGLE/validationES{}{}.h"
 #include "libGLESv2/global_state.h"
 """
 
 # First run through the main GLES entry points.
-for major_version, minor_version in [[2, 0], [3, 0], [3, 1]]:
+for major_version, minor_version in [[1, 0], [2, 0], [3, 0], [3, 1]]:
     annotation = "{}_{}".format(major_version, minor_version)
+    name_prefix = "GL_ES_VERSION_"
+    if major_version == 1:
+        name_prefix = "GL_VERSION_ES_CM_"
     comment = annotation.replace("_", ".")
-    gles_xpath = ".//feature[@name='GL_ES_VERSION_{}']//command".format(annotation)
+    gles_xpath = ".//feature[@name='{}{}']//command".format(name_prefix, annotation)
     gles_commands = [cmd.attrib['name'] for cmd in root.findall(gles_xpath)]
+
+    # Remove commands that have already been processed
+    gles_commands = [cmd for cmd in gles_commands if cmd not in all_cmd_names]
+
     all_cmd_names += gles_commands
 
     decls, defs = get_entry_points(all_commands, gles_commands)
 
+    major_if_not_one = major_version if major_version != 1 else ""
     minor_if_not_zero = minor_version if minor_version != 0 else ""
 
     header_includes = template_header_includes.format(
-        major_version, major_version, minor_if_not_zero)
+        major=major_if_not_one, minor=minor_if_not_zero, extra_includes="")
 
     # We include the platform.h header since it undefines the conflicting MemoryBarrier macro.
     if major_version == 3 and minor_version == 1:
         header_includes += "\n#include \"common/platform.h\"\n"
 
-    source_includes = template_sources_includes.format(major_version, minor_if_not_zero)
+    source_includes = template_sources_includes.format(
+        annotation.lower(), major_version,minor_if_not_zero)
 
     write_file(annotation, comment, template_entry_point_header,
                "\n".join(decls), "h", header_includes)
@@ -380,8 +395,9 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
     extension_defs += defs
     extension_decls += decls
 
-header_includes = template_header_includes.format(2, 2, "")
-source_includes = template_sources_includes.format(2, "")
+header_includes = template_header_includes.format(
+    major="2", minor="", extra_includes="#include <GLES2/gl2ext.h>")
+source_includes = template_sources_includes.format("2_0_ext", 2, "")
 
 source_includes += """#include "libANGLE/validationES.h"
 #include "libANGLE/validationES3.h"

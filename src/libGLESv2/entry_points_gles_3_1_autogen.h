@@ -12,6 +12,7 @@
 #define LIBGLESV2_ENTRY_POINTS_GLES_3_1_AUTOGEN_H_
 
 #include <GLES3/gl31.h>
+
 #include <export.h>
 #include "common/platform.h"
 

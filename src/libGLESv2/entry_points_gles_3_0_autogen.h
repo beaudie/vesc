@@ -12,6 +12,7 @@
 #define LIBGLESV2_ENTRY_POINTS_GLES_3_0_AUTOGEN_H_
 
 #include <GLES3/gl3.h>
+
 #include <export.h>
 
 namespace gl
