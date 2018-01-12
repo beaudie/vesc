@@ -165,13 +165,16 @@ def just_the_name_packed(param, reserved_set):
 format_dict = {
     "GLbitfield": "0x%X",
     "GLboolean": "%u",
+    "GLclampx": "0x%X",
     "GLenum": "0x%X",
+    "GLfixed": "0x%X",
     "GLfloat": "%f",
     "GLint": "%d",
     "GLintptr": "%d",
     "GLsizei": "%d",
     "GLsizeiptr": "%d",
     "GLsync": "0x%0.8p",
+    "GLubyte": "%d",
     "GLuint": "%u",
     "GLuint64": "%llu",
     "GLDEBUGPROC": "0x%0.8p",
@@ -294,19 +297,27 @@ template_sources_includes = """#include "libANGLE/Context.h"
 """
 
 # First run through the main GLES entry points.
-for major_version, minor_version in [[2, 0], [3, 0], [3, 1]]:
+for major_version, minor_version in [[1, 0], [2, 0], [3, 0], [3, 1]]:
     annotation = "{}_{}".format(major_version, minor_version)
+    name_prefix = "GL_ES_VERSION_"
+    if major_version == 1:
+        name_prefix = "GL_VERSION_ES_CM_"
     comment = annotation.replace("_", ".")
-    gles_xpath = ".//feature[@name='GL_ES_VERSION_{}']//command".format(annotation)
+    gles_xpath = ".//feature[@name='{}{}']//command".format(name_prefix, annotation)
     gles_commands = [cmd.attrib['name'] for cmd in root.findall(gles_xpath)]
+
+    # Remove commands that have already been processed
+    gles_commands = [cmd for cmd in gles_commands if cmd not in all_cmd_names]
+
     all_cmd_names += gles_commands
 
     decls, defs = get_entry_points(all_commands, gles_commands)
 
+    major_if_not_one = major_version if major_version != 1 else ""
     minor_if_not_zero = minor_version if minor_version != 0 else ""
 
     header_includes = template_header_includes.format(
-        major_version, major_version, minor_if_not_zero)
+        major_if_not_one, major_if_not_one, minor_if_not_zero)
 
     # We include the platform.h header since it undefines the conflicting MemoryBarrier macro.
     if major_version == 3 and minor_version == 1:
