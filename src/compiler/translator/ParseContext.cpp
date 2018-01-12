@@ -4034,8 +4034,9 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             {
                 TConstantUnion *safeConstantUnion = new TConstantUnion();
                 safeConstantUnion->setIConst(safeIndex);
-                indexConstantUnion->replaceConstantUnion(safeConstantUnion);
-                indexConstantUnion->getTypePointer()->setBasicType(EbtInt);
+                indexExpression = new TIntermConstantUnion(
+                    safeConstantUnion, TType(EbtInt, indexExpression->getPrecision(),
+                                             indexExpression->getQualifier()));
             }
 
             TIntermBinary *node =
@@ -5415,9 +5416,7 @@ TIntermTyped *TParseContext::addComma(TIntermTyped *left,
               ",");
     }
 
-    TIntermBinary *commaNode   = new TIntermBinary(EOpComma, left, right);
-    TQualifier resultQualifier = TIntermBinary::GetCommaQualifier(mShaderVersion, left, right);
-    commaNode->getTypePointer()->setQualifier(resultQualifier);
+    TIntermBinary *commaNode = TIntermBinary::CreateComma(left, right, mShaderVersion);
 
     return expressionOrFoldedResult(commaNode);
 }
