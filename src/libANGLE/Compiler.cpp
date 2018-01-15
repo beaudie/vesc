@@ -145,6 +145,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxGeometryShaderStorageBlocks   = caps.maxGeometryShaderStorageBlocks;
     mResources.MaxGeometryShaderInvocations     = caps.maxGeometryShaderInvocations;
     mResources.MaxGeometryImageUniforms         = caps.maxGeometryImageUniforms;
+
+    // multisampled texture
+    mResources.ARB_texture_multisample = extensions.textureMultisample;
 }
 
 Compiler::~Compiler()

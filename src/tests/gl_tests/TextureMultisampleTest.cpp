@@ -259,6 +259,109 @@ TEST_P(TextureMultisampleTestES31, CheckSamplePositions)
     ASSERT_GL_NO_ERROR();
 }
 
+// Check pixels of multisampled texture on es 3.0 when ANGLE_texture_multisample is enabled
+TEST_P(TextureMultisampleTestES31, CheckPixelColor)
+{
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+    ANGLE_SKIP_TEST_IF((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+                       !extensionEnabled("GL_ANGLE_texture_multisample"));
+
+    const std::string vertexShaderSource1 =
+        R"(#version 300 es
+        in highp vec4 position;
+        void main(void)
+        {
+            gl_Position = position;
+        })";
+
+    const std::string fragmentShaderSource1 =
+        R"(#version 300 es
+		layout(location = 0) out highp vec4 fragColor;
+        void main(void)
+        {
+            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        })";
+
+    const std::string vertexShaderSource2 =
+        R"(#version 300 es
+		in highp vec4 position;
+		void main (void)
+		{
+			gl_Position = position;
+		})";
+    const std::string fragmentShaderSource2 =
+        R"(#version 300 es
+        #extension GL_ARB_texture_multisample : require
+		layout(location = 0) out highp vec4 fragColor;
+		uniform highp sampler2DMS u_sampler;
+		void main (void)
+		{
+			fragColor = texelFetch(u_sampler, ivec2(int(floor(gl_FragCoord.x)), int(floor(gl_FragCoord.y))), 0);
+		})";
+
+    GLuint program1 = CompileProgram(vertexShaderSource1, fragmentShaderSource1);
+    ASSERT_NE(0u, program1);
+
+    GLuint program2 = CompileProgram(vertexShaderSource2, fragmentShaderSource2);
+    ASSERT_NE(0u, program2);
+
+    glUseProgram(program1);
+
+    GLint positionLoc = glGetAttribLocation(program1, "position");
+    ASSERT_NE(-1, positionLoc);
+
+    setupQuadVertexBuffer(1.0f, 1.0f);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Create offscreen fbo and multisample texture as color attachment.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE_ANGLE, 2, GL_RGBA8, 1, 1, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE_ANGLE,
+                           texture, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUseProgram(0);
+
+    glUseProgram(program2);
+
+    positionLoc = glGetAttribLocation(program2, "position");
+    ASSERT_NE(-1, positionLoc);
+
+    setupQuadVertexBuffer(1.0f, 1.0f);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture);
+    GLint m_sampler = glGetUniformLocation(program2, "u_sampler");
+    glUniform1i(m_sampler, 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    ASSERT_GL_NO_ERROR();
+
+    if (program1 != 0)
+        glDeleteProgram(program1);
+    if (program2 != 0)
+        glDeleteProgram(program2);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES31_D3D11(),
                        ES3_OPENGL(),

@@ -28,17 +28,17 @@ class SamplerMultisampleTest : public ShaderCompileTreeTest
 TEST_F(SamplerMultisampleTest, TexelFetchSampler2DMSQualifier)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "uniform highp sampler2DMS s;\n"
-        "uniform highp isampler2DMS is;\n"
-        "uniform highp usampler2DMS us;\n"
-        ""
-        "void main() {\n"
-        "    vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);\n"
-        "    ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);\n"
-        "    uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);\n"
-        "}\n";
+        R"(#version 310 es
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);
+            ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);
+            uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);
+        })";
 
     if (!compile(shaderString))
     {
@@ -50,17 +50,17 @@ TEST_F(SamplerMultisampleTest, TexelFetchSampler2DMSQualifier)
 TEST_F(SamplerMultisampleTest, TextureSizeSampler2DMSQualifier)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "uniform highp sampler2DMS s;\n"
-        "uniform highp isampler2DMS is;\n"
-        "uniform highp usampler2DMS us;\n"
-        ""
-        "void main() {\n"
-        "    ivec2 size = textureSize(s);\n"
-        "    size = textureSize(is);\n"
-        "    size = textureSize(us);\n"
-        "}\n";
+        R"(#version 310 es
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            ivec2 size = textureSize(s);
+            size = textureSize(is);
+            size = textureSize(us);
+        })";
 
     if (!compile(shaderString))
     {
@@ -72,16 +72,81 @@ TEST_F(SamplerMultisampleTest, TextureSizeSampler2DMSQualifier)
 TEST_F(SamplerMultisampleTest, NoPrecisionSampler2DMS)
 {
     const std::string &shaderString =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "uniform sampler2DMS s;\n"
-        "uniform isampler2DMS is;\n"
-        "uniform usampler2DMS us;\n"
-        ""
-        "void main() {}\n";
+        R"(#version 310 es
+        precision highp float;
+        uniform sampler2DMS s;
+        uniform isampler2DMS is;
+        uniform usampler2DMS us;
+
+        void main() {})";
 
     if (compile(shaderString))
     {
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
+class SamplerMultisampleEXTTest : public SamplerMultisampleTest
+{
+  public:
+    SamplerMultisampleEXTTest() {}
+
+  protected:
+    void initResources(ShBuiltInResources *resources) override
+    {
+        resources->ARB_texture_multisample = 1;
+    }
+
+    ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_SPEC; }
+};
+
+// checks ARB_texture_multisample is supported in es 3.0
+TEST_F(SamplerMultisampleEXTTest, TextureMultisampleEXTEnabled)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        #extension GL_ARB_texture_multisample : require
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            ivec2 size = textureSize(s);
+            size = textureSize(is);
+            size = textureSize(us);
+            vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);
+            ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);
+            uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);
+        })";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failure, expecting success:\n" << mInfoLog;
+    }
+}
+
+TEST_F(SamplerMultisampleEXTTest, TextureMultisampleEXTDisabled)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            ivec2 size = textureSize(s);
+            size = textureSize(is);
+            size = textureSize(us);
+            vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);
+            ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);
+            uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);
+        })";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation success, expecting failure:\n" << mInfoLog;
     }
 }

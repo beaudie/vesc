@@ -64,6 +64,7 @@ void GenerateResources(ShBuiltInResources *resources)
     resources->OES_standard_derivatives = 0;
     resources->OES_EGL_image_external = 0;
     resources->EXT_geometry_shader      = 1;
+    resources->ARB_texture_multisample  = 1;
 }
 
 int main(int argc, char *argv[])
