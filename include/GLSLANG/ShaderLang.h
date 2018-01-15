@@ -309,6 +309,7 @@ struct ShBuiltInResources
     int OVR_multiview;
     int EXT_YUV_target;
     int EXT_geometry_shader;
+    int ARB_texture_multisample;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate

@@ -85,3 +85,44 @@ TEST_F(SamplerMultisampleTest, NoPrecisionSampler2DMS)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+class SamplerMultisampleEXTTest : public SamplerMultisampleTest
+{
+  public:
+    SamplerMultisampleEXTTest() {}
+
+  protected:
+    void initResources(ShBuiltInResources *resources) override
+    {
+        resources->ARB_texture_multisample = 1;
+    }
+
+    ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_SPEC; }
+};
+
+// checks ARB_texture_multisample is supported in es 3.0
+TEST_F(SamplerMultisampleEXTTest, TextureMultisampleEXTEnabled)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_ARB_texture_multisample : require\n"
+        "precision highp float;\n"
+        "uniform highp sampler2DMS s;\n"
+        "uniform highp isampler2DMS is;\n"
+        "uniform highp usampler2DMS us;\n"
+        ""
+        "void main() {\n"
+        "    ivec2 size = textureSize(s);\n"
+        "    size = textureSize(is);\n"
+        "    size = textureSize(us);\n"
+        "    vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);\n"
+        "    ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);\n"
+        "    uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failure, expecting success:\n" << mInfoLog;
+    }
+}

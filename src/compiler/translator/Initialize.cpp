@@ -866,6 +866,12 @@ void InsertBuiltInFunctions(sh::GLenum type,
         symbolTable.insertConstIntExt(ESSL3_1_BUILTINS, ext, "gl_MaxGeometryAtomicCounterBuffers",
                                       resources.MaxGeometryAtomicCounterBuffers, EbpMedium);
     }
+
+    if (resources.ARB_texture_multisample)
+    {
+        symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", gsampler2DMS);
+        symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texelFetch", gsampler2DMS, int2, int1);
+    }
 }
 
 void IdentifyBuiltIns(sh::GLenum type,
@@ -1120,6 +1126,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     if (resources.EXT_geometry_shader)
     {
         extBehavior[TExtension::EXT_geometry_shader] = EBhUndefined;
+    }
+    if (resources.ARB_texture_multisample)
+    {
+        extBehavior[TExtension::ARB_texture_multisample] = EBhUndefined;
     }
 }
 
