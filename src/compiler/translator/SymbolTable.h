@@ -146,60 +146,23 @@ class TSymbolTable : angle::NonCopyable
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol / true in case the declaration was successful, and nullptr /
     // false if the declaration failed due to redefinition.
-    TVariable *insertVariable(ESymbolLevel level, const char *name, const TType &type);
+    TVariable *insertVariable(ESymbolLevel level, const char *name, const TType *type);
     TVariable *insertVariableExt(ESymbolLevel level,
                                  TExtension ext,
                                  const char *name,
-                                 const TType &type);
+                                 const TType *type);
     bool insertVariable(ESymbolLevel level, TVariable *variable);
     bool insertStructType(ESymbolLevel level, TStructure *str);
     bool insertInterfaceBlock(ESymbolLevel level, TInterfaceBlock *interfaceBlock);
 
-    bool insertConstInt(ESymbolLevel level, const char *name, int value, TPrecision precision)
-    {
-        TVariable *constant = new TVariable(
-            this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1), SymbolType::BuiltIn);
-        constant->getType().realize();
-        TConstantUnion *unionArray = new TConstantUnion[1];
-        unionArray[0].setIConst(value);
-        constant->shareConstPointer(unionArray);
-        return insert(level, constant);
-    }
+    template <TPrecision precision>
+    bool insertConstInt(ESymbolLevel level, const char *name, int value);
 
-    bool insertConstIntExt(ESymbolLevel level,
-                           TExtension ext,
-                           const char *name,
-                           int value,
-                           TPrecision precision)
-    {
-        TVariable *constant =
-            new TVariable(this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1),
-                          SymbolType::BuiltIn, ext);
-        constant->getType().realize();
-        TConstantUnion *unionArray = new TConstantUnion[1];
-        unionArray[0].setIConst(value);
-        constant->shareConstPointer(unionArray);
-        return insert(level, constant);
-    }
+    template <TPrecision precision>
+    bool insertConstIntExt(ESymbolLevel level, TExtension ext, const char *name, int value);
 
-    bool insertConstIvec3(ESymbolLevel level,
-                          const char *name,
-                          const std::array<int, 3> &values,
-                          TPrecision precision)
-    {
-        TVariable *constantIvec3 = new TVariable(
-            this, NewPoolTString(name), TType(EbtInt, precision, EvqConst, 3), SymbolType::BuiltIn);
-        constantIvec3->getType().realize();
-
-        TConstantUnion *unionArray = new TConstantUnion[3];
-        for (size_t index = 0u; index < 3u; ++index)
-        {
-            unionArray[index].setIConst(values[index]);
-        }
-        constantIvec3->shareConstPointer(unionArray);
-
-        return insert(level, constantIvec3);
-    }
+    template <TPrecision precision>
+    bool insertConstIvec3(ESymbolLevel level, const char *name, const std::array<int, 3> &values);
 
     void insertBuiltIn(ESymbolLevel level,
                        TOperator op,
@@ -337,7 +300,7 @@ class TSymbolTable : angle::NonCopyable
 
     TVariable *insertVariable(ESymbolLevel level,
                               const TString *name,
-                              const TType &type,
+                              const TType *type,
                               SymbolType symbolType);
 
     bool insert(ESymbolLevel level, TSymbol *symbol)
