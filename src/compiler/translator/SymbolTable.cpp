@@ -223,24 +223,22 @@ bool TSymbolTable::declareInterfaceBlock(TInterfaceBlock *interfaceBlock)
     return insert(currentLevel(), interfaceBlock);
 }
 
-TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, const TType &type)
+TVariable *TSymbolTable::insertVariable(ESymbolLevel level, const char *name, const TType *type)
 {
     ASSERT(level <= LAST_BUILTIN_LEVEL);
+    ASSERT(type->isRealized());
     return insertVariable(level, NewPoolTString(name), type, SymbolType::BuiltIn);
 }
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
                                         const TString *name,
-                                        const TType &type,
+                                        const TType *type,
                                         SymbolType symbolType)
 {
+    ASSERT(level > LAST_BUILTIN_LEVEL || type->isRealized());
     TVariable *var = new TVariable(this, name, type, symbolType);
     if (insert(level, var))
     {
-        if (level <= LAST_BUILTIN_LEVEL)
-        {
-            var->getType().realize();
-        }
         return var;
     }
     return nullptr;
@@ -249,15 +247,13 @@ TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
 TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
                                            TExtension ext,
                                            const char *name,
-                                           const TType &type)
+                                           const TType *type)
 {
+    ASSERT(level <= LAST_BUILTIN_LEVEL);
+    ASSERT(type->isRealized());
     TVariable *var = new TVariable(this, NewPoolTString(name), type, SymbolType::BuiltIn, ext);
     if (insert(level, var))
     {
-        if (level <= LAST_BUILTIN_LEVEL)
-        {
-            var->getType().realize();
-        }
         return var;
     }
     return nullptr;
@@ -266,6 +262,7 @@ TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
 bool TSymbolTable::insertVariable(ESymbolLevel level, TVariable *variable)
 {
     ASSERT(variable);
+    ASSERT(level > LAST_BUILTIN_LEVEL || variable->getType().isRealized());
     return insert(level, variable);
 }
 
