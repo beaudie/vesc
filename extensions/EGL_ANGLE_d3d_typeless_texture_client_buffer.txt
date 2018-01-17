@@ -1,0 +1,82 @@
+Name
+
+    ANGLE_d3d_typeless_texture_client_buffer
+
+Name Strings
+
+    EGL_ANGLE_d3d_typeless_texture_client_buffer
+
+Contributors
+
+    Olli Etuaho
+
+Contacts
+
+    Olli Etuaho, NVIDIA (oetuaho 'at' nvidia.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Jan 18, 2018
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    This extension is written against the wording of the EGL 1.5
+    Specification.
+
+    EGL_ANGLE_d3d_texture_client_buffer is required.
+
+Overview
+
+    This extension allows creating EGL surfaces from D3D typeless texture
+    objects.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    None
+
+Additions to Chapter 3 of the EGL 1.5 Specification (EGL Functions and Errors)
+
+    Append the following formats to the allowed formats in table
+    egl.restrictions (from EGL_ANGLE_d3d_texture_client_buffer):
+
+    DXGI_FORMAT_R8G8B8A8_TYPELESS
+    DXGI_FORMAT_B8G8R8A8_TYPELESS
+
+    Append to the fifth paragraph of Section 3.5.3:
+    "In addition, in case buftype is EGL_D3D_TEXTURE_ANGLE and the D3D resource
+    has a typeless DXGI format, attrib_list may contain the attribute
+    EGL_GL_COLORSPACE."
+
+    Replace the last paragraph of Section 3.5.3
+    (from EGL_ANGLE_d3d_texture_client_buffer):
+    "When a pbuffer is created with type EGL_D3D_TEXTURE_ANGLE, and the
+    EGL_GL_COLORSPACE attribute is not specified in attrib_list, the
+    EGL_GL_COLORSPACE attribute of the surface is determined by the DXGI format
+    of the Direct3D texture. For *_SRGB DXGI formats, the value of
+    EGL_GL_COLORSPACE is EGL_GL_COLORSPACE_SRGB. For other formats including
+    *_TYPELESS DXGI formats, the value of EGL_GL_COLORSPACE defaults to
+    EGL_GL_COLORSPACE_LINEAR."
+
+Issues
+
+    None
+
+Revision History
+
+    Version 1, 2018/01/18 - first draft.

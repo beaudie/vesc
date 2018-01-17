@@ -612,6 +612,9 @@ struct DisplayExtensions
     // EGL_ANGLE_d3d_texture_client_buffer
     bool d3dTextureClientBuffer;
 
+    // EGL_ANGLE_d3d_typeless_texture_client_buffer
+    bool d3dTypelessTextureClientBuffer;
+
     // EGL_ANGLE_surface_d3d_texture_2d_share_handle
     bool surfaceD3DTexture2DShareHandle;
 

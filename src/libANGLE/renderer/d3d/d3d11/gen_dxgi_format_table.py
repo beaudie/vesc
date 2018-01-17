@@ -117,7 +117,10 @@ for dxgi_format, angle_format in sorted(dxgi_map.iteritems()):
     if angle_format == "":
         angle_format = dxgi_format
 
-    if angle_format in all_angle:
+    if angle_format == "R8G8B8A8_TYPELESS" or angle_format == "B8G8R8A8_TYPELESS":
+        angle_format = "Format::Get(Format::ID::" + angle_format + ")"
+        format_cases += format_case(dxgi_format, angle_format)
+    elif angle_format in all_angle:
         angle_format = "Format::Get(Format::ID::" + angle_format + ")"
         format_cases += format_case(dxgi_format, angle_format)
     else:

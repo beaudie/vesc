@@ -122,9 +122,10 @@ def gen_format_case(angle, internal_format, vk_map):
 input_file_name = 'vk_format_map.json'
 out_file_name = 'vk_format_table'
 
+all_angle = angle_format.get_all_angle_formats()
 angle_to_gl = angle_format.load_inverse_table(os.path.join('..', 'angle_format_map.json'))
 vk_map = angle_format.load_json(input_file_name)
-vk_cases = [gen_format_case(angle, gl, vk_map) for angle, gl in sorted(angle_to_gl.iteritems())]
+vk_cases = [gen_format_case(angle, angle_to_gl.get(angle, 'GL_NONE'), vk_map) for angle in sorted(all_angle)]
 
 output_cpp = template_table_autogen_cpp.format(
     copyright_year = date.today().year,

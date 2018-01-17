@@ -10,6 +10,9 @@ import json
 import os
 import re
 
+def get_angle_format_map_abs_path():
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)), 'angle_format_map.json')
+
 def reject_duplicate_keys(pairs):
     found_keys = {}
     for key, value in pairs:
@@ -34,7 +37,7 @@ def load_inverse_table(path):
     return { angle: gl for gl, angle in pairs }
 
 def load_without_override():
-    map_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'angle_format_map.json')
+    map_path = get_angle_format_map_abs_path()
     return load_forward_table(map_path)
 
 def load_with_override(override_path):
@@ -45,6 +48,18 @@ def load_with_override(override_path):
         results[k] = v
 
     return results
+
+def get_all_angle_formats():
+    map_path = get_angle_format_map_abs_path()
+    all_angle = load_inverse_table(map_path).keys()
+    # Typeless textures are a special case: they can only be created through the
+    # EGL_ANGLE_d3d_typeless_texture_client_buffer extension for accessing D3D
+    # textures. They are not mapped to a particular GL format.
+    all_angle.append("R8G8B8A8_TYPELESS")
+    all_angle.append("R8G8B8A8_TYPELESS_SRGB")
+    all_angle.append("B8G8R8A8_TYPELESS")
+    all_angle.append("B8G8R8A8_TYPELESS_SRGB")
+    return all_angle
 
 def get_component_type(format_id):
     if "SNORM" in format_id:
@@ -60,6 +75,8 @@ def get_component_type(format_id):
     elif format_id == "NONE":
         return "none"
     elif "SRGB" in format_id:
+        return "unorm"
+    elif "TYPELESS" in format_id:
         return "unorm"
     elif format_id == "R9G9B9E5_SHAREDEXP":
         return "float"

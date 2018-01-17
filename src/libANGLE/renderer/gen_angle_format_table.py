@@ -240,7 +240,7 @@ gl_to_angle = angle_format.load_forward_table('angle_format_map.json')
 angle_to_gl = angle_format.load_inverse_table('angle_format_map.json')
 data_source_name = 'angle_format_data.json'
 json_data = angle_format.load_json(data_source_name)
-all_angle = angle_to_gl.keys()
+all_angle = angle_format.get_all_angle_formats()
 
 angle_format_cases = parse_angle_format_table(
     all_angle, json_data, angle_to_gl)
