@@ -1183,6 +1183,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
         outExtensions->surfaceD3DTexture2DShareHandle = true;
     }
     outExtensions->d3dTextureClientBuffer = true;
+    outExtensions->d3dTypelessTextureClientBuffer = true;
 
     outExtensions->keyedMutex          = true;
     outExtensions->querySurfacePointer = true;
@@ -1339,13 +1340,16 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
             return egl::EglBadParameter() << "Texture's sample count does not match.";
         }
     }
-    // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer.
+    // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer and
+    // EGL_ANGLE_d3d_typeless_texture_client_buffer.
     switch (desc.Format)
     {
         case DXGI_FORMAT_R8G8B8A8_UNORM:
         case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+        case DXGI_FORMAT_R8G8B8A8_TYPELESS:
         case DXGI_FORMAT_B8G8R8A8_UNORM:
         case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+        case DXGI_FORMAT_B8G8R8A8_TYPELESS:
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
         case DXGI_FORMAT_R32G32B32A32_FLOAT:
             break;
