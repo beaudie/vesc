@@ -45,6 +45,21 @@
 // TODO(jiawei.shao@intel.com): Implement validations on transform feedback required in OpenGL ES 3.1 extension GL_EXT_geometry_shader
 1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.vertex_transform_feedback.* = SKIP
 
+// Crashing Tests on Linux on Intel HD 630.
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.in_invocation.image_write_read = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.in_invocation.image_read_write = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.in_invocation.image_overwrite = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.in_invocation.image_alias_write = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.in_invocation.image_alias_overwrite = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.inter_invocation.image_write_read = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.inter_invocation.image_read_write = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.inter_invocation.image_overwrite = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.inter_invocation.image_alias_write = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.synchronization.inter_invocation.image_alias_overwrite = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.compute.basic.copy_image_to_ssbo_small = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.compute.basic.copy_ssbo_to_image_small = SKIP
+1442 LINUX INTEL OPENGL : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = SKIP
+
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counter_buffers_* = FAIL
