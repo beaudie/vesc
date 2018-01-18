@@ -135,6 +135,8 @@
             'compiler/translator/RunAtTheEndOfShader.h',
             'compiler/translator/ScalarizeVecAndMatConstructorArgs.cpp',
             'compiler/translator/ScalarizeVecAndMatConstructorArgs.h',
+            'compiler/translator/SeparateArrayConstructorStatements.cpp',
+            'compiler/translator/SeparateArrayConstructorStatements.h',
             'compiler/translator/SeparateDeclarations.cpp',
             'compiler/translator/SeparateDeclarations.h',
             'compiler/translator/Severity.h',
