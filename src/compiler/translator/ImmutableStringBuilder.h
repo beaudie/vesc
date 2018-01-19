@@ -50,6 +50,28 @@ class ImmutableStringBuilder
         return *this;
     }
 
+    template <typename T>
+    void appendHex(T number)
+    {
+        ASSERT(mData != nullptr);
+        ASSERT(mPos + sizeof(T) * 2 <= mMaxLength);
+        int index = static_cast<int>(sizeof(T)) * 2 - 1;
+        // Loop through leading zeroes.
+        while (((number >> (index * 4)) & 0xf) == 0 && index > 0)
+        {
+            --index;
+        }
+        // Write the rest of the hex digits.
+        while (index >= 0)
+        {
+            T digit        = (number >> (index * 4)) & 0xf;
+            char digitChar = digit < 10 ? digit + '0' : digit + 'a';
+            mData[mPos++]  = digitChar;
+            --index;
+        }
+        return;
+    }
+
     operator ImmutableString()
     {
         mData[mPos] = '\0';
