@@ -652,8 +652,6 @@ struct BufferAndMemory final : private angle::NonCopyable
     vk::DeviceMemory memory;
 };
 
-using RenderPassAndSerial = ObjectAndSerial<RenderPass>;
-
 }  // namespace vk
 
 namespace gl_vk
