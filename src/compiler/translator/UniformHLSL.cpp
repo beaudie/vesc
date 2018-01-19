@@ -119,11 +119,11 @@ void UniformHLSL::reserveUniformBlockRegisters(unsigned int registerCount)
     mUniformBlockRegister = registerCount;
 }
 
-const Uniform *UniformHLSL::findUniformByName(const TString &name) const
+const Uniform *UniformHLSL::findUniformByName(const ImmutableString &name) const
 {
     for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); ++uniformIndex)
     {
-        if (mUniforms[uniformIndex].name == name.c_str())
+        if (name == mUniforms[uniformIndex].name)
         {
             return &mUniforms[uniformIndex];
         }
@@ -133,7 +133,7 @@ const Uniform *UniformHLSL::findUniformByName(const TString &name) const
 }
 
 unsigned int UniformHLSL::assignUniformRegister(const TType &type,
-                                                const TString &name,
+                                                const ImmutableString &name,
                                                 unsigned int *outRegisterCount)
 {
     unsigned int registerIndex;
@@ -210,7 +210,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     for (const TVariable *uniform : group)
     {
         const TType &type   = uniform->getType();
-        const TString &name = uniform->name();
+        const ImmutableString &name = uniform->name();
         unsigned int registerCount;
 
         // The uniform might be just a regular sampler or one extracted from a struct.
@@ -379,8 +379,11 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             {
                 TVector<const TVariable *> samplerSymbols;
                 TMap<const TVariable *, TString> symbolsToAPINames;
-                type.createSamplerSymbols("angle_" + variable.name(), variable.name(),
-                                          &samplerSymbols, &symbolsToAPINames, symbolTable);
+                std::string namePrefix = "angle_";
+                namePrefix += variable.name();
+                type.createSamplerSymbols(ImmutableString(namePrefix),
+                                          TString(variable.name().data()), &samplerSymbols,
+                                          &symbolsToAPINames, symbolTable);
                 for (const TVariable *sampler : samplerSymbols)
                 {
                     const TType &samplerType = sampler->getType();
@@ -471,7 +474,7 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &refere
         }
 
         unsigned int activeRegister                             = mUniformBlockRegister;
-        mUniformBlockRegisterMap[interfaceBlock.name().c_str()] = activeRegister;
+        mUniformBlockRegisterMap[interfaceBlock.name().data()]  = activeRegister;
 
         if (instanceVariable != nullptr && instanceVariable->getType().isArray())
         {
@@ -499,9 +502,8 @@ TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
                                         unsigned int registerIndex,
                                         unsigned int arrayIndex)
 {
-    const TString &arrayIndexString =
-        (arrayIndex != GL_INVALID_INDEX ? Decorate(str(arrayIndex)) : "");
-    const TString &blockName = interfaceBlock.name() + arrayIndexString;
+    const TString &arrayIndexString = (arrayIndex != GL_INVALID_INDEX ? str(arrayIndex) : "");
+    const TString &blockName        = TString(interfaceBlock.name().data()) + arrayIndexString;
     TString hlsl;
 
     hlsl += "cbuffer " + blockName + " : register(b" + str(registerIndex) +
@@ -524,7 +526,7 @@ TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
     return hlsl;
 }
 
-TString UniformHLSL::UniformBlockInstanceString(const TString &instanceName,
+TString UniformHLSL::UniformBlockInstanceString(const ImmutableString &instanceName,
                                                 unsigned int arrayIndex)
 {
     if (arrayIndex != GL_INVALID_INDEX)

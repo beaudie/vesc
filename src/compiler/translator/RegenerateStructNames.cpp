@@ -50,18 +50,19 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol *symbol)
         return;
     // Map {name} to _webgl_struct_{uniqueId}_{name}.
     const char kPrefix[] = "_webgl_struct_";
-    if (userType->name().find(kPrefix) == 0)
+    const size_t kPrefixLength = strlen(kPrefix);
+    if (strncmp(userType->name(), kPrefix, kPrefixLength) == 0)
     {
         // The name has already been regenerated.
         return;
     }
-    std::string id = Str(uniqueId);
-    TString tmp    = kPrefix + TString(id.c_str());
-    tmp += "_" + userType->name();
+    std::string tmp = kPrefix + Str(uniqueId);
+    tmp += "_";
+    tmp += userType->name();
 
     // TODO(oetuaho): Add another mechanism to change symbol names so that the const_cast is not
     // needed.
-    const_cast<TStructure *>(userType)->setName(tmp);
+    const_cast<TStructure *>(userType)->setName(ImmutableString(tmp));
 }
 
 bool RegenerateStructNames::visitBlock(Visit, TIntermBlock *block)
