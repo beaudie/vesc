@@ -54,7 +54,7 @@ class GLFragColorBroadcastTraverser : public TIntermTraverser
 TIntermBinary *GLFragColorBroadcastTraverser::constructGLFragDataNode(int index) const
 {
     TIntermSymbol *symbol =
-        ReferenceBuiltInVariable(TString("gl_FragData"), *mSymbolTable, mShaderVersion);
+        ReferenceBuiltInVariable(ImmutableString("gl_FragData"), *mSymbolTable, mShaderVersion);
     TIntermTyped *indexNode = CreateIndexNode(index);
 
     TIntermBinary *binary = new TIntermBinary(EOpIndexDirect, symbol, indexNode);
