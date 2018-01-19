@@ -13,3 +13,20 @@ std::ostream &operator<<(std::ostream &os, const sh::ImmutableString &str)
 {
     return os.write(str.data(), str.length());
 }
+
+namespace sh
+{
+
+template <>
+const size_t ImmutableString::FowlerNollVoHash<4>::kFnvPrime = 16777619u;
+
+template <>
+const size_t ImmutableString::FowlerNollVoHash<4>::kFnvOffsetBasis = 0x811c9dc5u;
+
+template <>
+const size_t ImmutableString::FowlerNollVoHash<8>::kFnvPrime = 1099511628211ull;
+
+template <>
+const size_t ImmutableString::FowlerNollVoHash<8>::kFnvOffsetBasis = 0xcbf29ce484222325ull;
+
+}  // namespace sh
