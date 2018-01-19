@@ -14,6 +14,9 @@ namespace sh
 namespace
 {
 
+const ImmutableString kParamXName("x");
+const ImmutableString kParamYName("y");
+
 class RoundingHelperWriter : angle::NonCopyable
 {
   public:
@@ -471,10 +474,7 @@ bool ParentConstructorTakesCareOfRounding(TIntermNode *parent, TIntermTyped *nod
 }  // namespace anonymous
 
 EmulatePrecision::EmulatePrecision(TSymbolTable *symbolTable)
-    : TLValueTrackingTraverser(true, true, true, symbolTable),
-      mDeclaringVariables(false),
-      mParamXName(NewPoolTString("x")),
-      mParamYName(NewPoolTString("y"))
+    : TLValueTrackingTraverser(true, true, true, symbolTable), mDeclaringVariables(false)
 {
 }
 
@@ -707,13 +707,13 @@ bool EmulatePrecision::SupportedInLanguage(const ShShaderOutput outputLanguage)
     }
 }
 
-const TFunction *EmulatePrecision::getInternalFunction(TString *functionName,
+const TFunction *EmulatePrecision::getInternalFunction(const ImmutableString &functionName,
                                                        const TType &returnType,
                                                        TIntermSequence *arguments,
                                                        const TVector<TConstParameter> &parameters,
                                                        bool knownToNotHaveSideEffects)
 {
-    TString mangledName = TFunction::GetMangledNameFromCall(*functionName, *arguments);
+    ImmutableString mangledName = TFunction::GetMangledNameFromCall(functionName, *arguments);
     if (mInternalFunctions.find(mangledName) == mInternalFunctions.end())
     {
         TFunction *func = new TFunction(mSymbolTable, functionName, new TType(returnType),
@@ -735,7 +735,6 @@ TIntermAggregate *EmulatePrecision::createRoundingFunctionCallNode(TIntermTyped 
         roundFunctionName = "angle_frm";
     else
         roundFunctionName = "angle_frl";
-    TString *functionName      = NewPoolTString(roundFunctionName);
     TIntermSequence *arguments = new TIntermSequence();
     arguments->push_back(roundedChild);
 
@@ -743,10 +742,11 @@ TIntermAggregate *EmulatePrecision::createRoundingFunctionCallNode(TIntermTyped 
     TType *paramType = new TType(roundedChild->getType());
     paramType->setPrecision(EbpHigh);
     paramType->setQualifier(EvqIn);
-    parameters.push_back(TConstParameter(mParamXName, static_cast<const TType *>(paramType)));
+    parameters.push_back(TConstParameter(kParamXName, static_cast<const TType *>(paramType)));
 
     return TIntermAggregate::CreateRawFunctionCall(
-        *getInternalFunction(functionName, roundedChild->getType(), arguments, parameters, true),
+        *getInternalFunction(ImmutableString(roundFunctionName, 9u), roundedChild->getType(),
+                             arguments, parameters, true),
         arguments);
 }
 
@@ -759,7 +759,7 @@ TIntermAggregate *EmulatePrecision::createCompoundAssignmentFunctionCallNode(TIn
         strstr << "angle_compound_" << opNameStr << "_frm";
     else
         strstr << "angle_compound_" << opNameStr << "_frl";
-    TString *functionName      = NewPoolTString(strstr.str().c_str());
+    ImmutableString functionName = ImmutableString(strstr.str());
     TIntermSequence *arguments = new TIntermSequence();
     arguments->push_back(left);
     arguments->push_back(right);
@@ -768,11 +768,11 @@ TIntermAggregate *EmulatePrecision::createCompoundAssignmentFunctionCallNode(TIn
     TType *leftParamType = new TType(left->getType());
     leftParamType->setPrecision(EbpHigh);
     leftParamType->setQualifier(EvqOut);
-    parameters.push_back(TConstParameter(mParamXName, static_cast<const TType *>(leftParamType)));
+    parameters.push_back(TConstParameter(kParamXName, static_cast<const TType *>(leftParamType)));
     TType *rightParamType = new TType(right->getType());
     rightParamType->setPrecision(EbpHigh);
     rightParamType->setQualifier(EvqIn);
-    parameters.push_back(TConstParameter(mParamYName, static_cast<const TType *>(rightParamType)));
+    parameters.push_back(TConstParameter(kParamYName, static_cast<const TType *>(rightParamType)));
 
     return TIntermAggregate::CreateRawFunctionCall(
         *getInternalFunction(functionName, left->getType(), arguments, parameters, false),
