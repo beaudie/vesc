@@ -705,12 +705,12 @@ bool EmulatePrecision::SupportedInLanguage(const ShShaderOutput outputLanguage)
     }
 }
 
-TFunction *EmulatePrecision::getInternalFunction(TString *functionName,
+TFunction *EmulatePrecision::getInternalFunction(const ImmutableString &functionName,
                                                  const TType &returnType,
                                                  TIntermSequence *arguments,
                                                  bool knownToNotHaveSideEffects)
 {
-    TString mangledName = TFunction::GetMangledNameFromCall(*functionName, *arguments);
+    ImmutableString mangledName = TFunction::GetMangledNameFromCall(functionName, *arguments);
     if (mInternalFunctions.find(mangledName) == mInternalFunctions.end())
     {
         mInternalFunctions[mangledName] =
@@ -727,11 +727,12 @@ TIntermAggregate *EmulatePrecision::createRoundingFunctionCallNode(TIntermTyped 
         roundFunctionName = "angle_frm";
     else
         roundFunctionName = "angle_frl";
-    TString *functionName      = NewPoolTString(roundFunctionName);
     TIntermSequence *arguments = new TIntermSequence();
     arguments->push_back(roundedChild);
     return TIntermAggregate::CreateRawFunctionCall(
-        *getInternalFunction(functionName, roundedChild->getType(), arguments, true), arguments);
+        *getInternalFunction(ImmutableString(roundFunctionName, 9u), roundedChild->getType(),
+                             arguments, true),
+        arguments);
 }
 
 TIntermAggregate *EmulatePrecision::createCompoundAssignmentFunctionCallNode(TIntermTyped *left,
@@ -743,7 +744,7 @@ TIntermAggregate *EmulatePrecision::createCompoundAssignmentFunctionCallNode(TIn
         strstr << "angle_compound_" << opNameStr << "_frm";
     else
         strstr << "angle_compound_" << opNameStr << "_frl";
-    TString *functionName      = NewPoolTString(strstr.str().c_str());
+    ImmutableString functionName = ImmutableString(strstr.str());
     TIntermSequence *arguments = new TIntermSequence();
     arguments->push_back(left);
     arguments->push_back(right);

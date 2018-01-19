@@ -5,6 +5,7 @@
 //
 
 #include "compiler/translator/InfoSink.h"
+#include "compiler/translator/ImmutableString.h"
 
 namespace sh
 {
@@ -23,6 +24,12 @@ void TInfoSinkBase::prefix(Severity severity)
             sink.append("UNKOWN ERROR: ");
             break;
     }
+}
+
+TInfoSinkBase &TInfoSinkBase::operator<<(const ImmutableString &str)
+{
+    sink.append(str.data());
+    return *this;
 }
 
 void TInfoSinkBase::location(int file, int line)

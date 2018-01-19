@@ -59,7 +59,7 @@ class EmulatePrecision : public TLValueTrackingTraverser
         }
     };
 
-    TFunction *getInternalFunction(TString *functionName,
+    TFunction *getInternalFunction(const ImmutableString &functionName,
                                    const TType &returnType,
                                    TIntermSequence *arguments,
                                    bool knownToNotHaveSideEffects);
@@ -75,7 +75,7 @@ class EmulatePrecision : public TLValueTrackingTraverser
     EmulationSet mEmulateCompoundDiv;
 
     // Map from mangled name to function.
-    TMap<TString, TFunction *> mInternalFunctions;
+    TMap<ImmutableString, TFunction *> mInternalFunctions;
 
     bool mDeclaringVariables;
 };

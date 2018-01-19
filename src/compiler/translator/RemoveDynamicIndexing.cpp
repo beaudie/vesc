@@ -61,7 +61,7 @@ std::string GetIndexFunctionName(const TType &type, bool write)
 
 TIntermSymbol *CreateBaseSymbol(const TType *type, TSymbolTable *symbolTable)
 {
-    TString *baseString = NewPoolTString("base");
+    const ImmutableString baseString("base");
     TVariable *baseVariable =
         new TVariable(symbolTable, baseString, type, SymbolType::AngleInternal);
     return new TIntermSymbol(baseVariable);
@@ -69,7 +69,7 @@ TIntermSymbol *CreateBaseSymbol(const TType *type, TSymbolTable *symbolTable)
 
 TIntermSymbol *CreateIndexSymbol(TSymbolTable *symbolTable)
 {
-    TString *indexString     = NewPoolTString("index");
+    const ImmutableString indexString("index");
     TVariable *indexVariable =
         new TVariable(symbolTable, indexString, StaticType::Get<EbtInt, EbpHigh, EvqIn, 1, 1>(),
                       SymbolType::AngleInternal);
@@ -78,7 +78,7 @@ TIntermSymbol *CreateIndexSymbol(TSymbolTable *symbolTable)
 
 TIntermSymbol *CreateValueSymbol(const TType &type, TSymbolTable *symbolTable)
 {
-    TString *valueString = NewPoolTString("value");
+    const ImmutableString valueString("value");
     TType *valueType     = new TType(type);
     valueType->setQualifier(EvqIn);
     TVariable *valueVariable =
@@ -414,8 +414,7 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
 #endif
 
             const TType &type = node->getLeft()->getType();
-            TString *indexingFunctionName =
-                NewPoolTString(GetIndexFunctionName(type, false).c_str());
+            ImmutableString indexingFunctionName(GetIndexFunctionName(type, false));
             TFunction *indexingFunction = nullptr;
             if (mIndexedVecAndMatrixTypes.find(type) == mIndexedVecAndMatrixTypes.end())
             {
@@ -464,8 +463,8 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
                 TFunction *indexedWriteFunction = nullptr;
                 if (mWrittenVecAndMatrixTypes.find(type) == mWrittenVecAndMatrixTypes.end())
                 {
-                    TString *functionName = NewPoolTString(
-                        GetIndexFunctionName(node->getLeft()->getType(), true).c_str());
+                    ImmutableString functionName(
+                        GetIndexFunctionName(node->getLeft()->getType(), true));
                     indexedWriteFunction =
                         new TFunction(mSymbolTable, functionName, new TType(EbtVoid),
                                       SymbolType::AngleInternal, false);
