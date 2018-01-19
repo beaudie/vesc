@@ -77,7 +77,8 @@ TVersionGLSL::TVersionGLSL(sh::GLenum type, const TPragma &pragma, ShShaderOutpu
 
 void TVersionGLSL::visitSymbol(TIntermSymbol *node)
 {
-    if (node->variable().symbolType() == SymbolType::BuiltIn && node->getName() == "gl_PointCoord")
+    if (node->variable().symbolType() == SymbolType::BuiltIn &&
+        strcmp(node->getName(), "gl_PointCoord") == 0)
     {
         ensureVersionIsAtLeast(GLSL_VERSION_120);
     }
