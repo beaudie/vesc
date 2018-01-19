@@ -18,6 +18,7 @@
 #include "common/mathutil.h"
 #include "common/matrix_utils.h"
 #include "compiler/translator/Diagnostics.h"
+#include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/util.h"
@@ -326,7 +327,7 @@ const TSymbolUniqueId &TIntermSymbol::uniqueId() const
     return mVariable->uniqueId();
 }
 
-const TString &TIntermSymbol::getName() const
+ImmutableString TIntermSymbol::getName() const
 {
     return mVariable->name();
 }
@@ -503,13 +504,13 @@ void TIntermAggregate::setBuiltInFunctionPrecision()
     }
     // ESSL 3.0 spec section 8: textureSize always gets highp precision.
     // All other functions that take a sampler are assumed to be texture functions.
-    if (mFunction->name().find("textureSize") == 0)
+    if (strncmp(mFunction->name(), "textureSize", 11) == 0)
         mType.setPrecision(EbpHigh);
     else
         mType.setPrecision(precision);
 }
 
-TString TIntermAggregate::getSymbolTableMangledName() const
+ImmutableString TIntermAggregate::getSymbolTableMangledName() const
 {
     ASSERT(!isConstructor());
     switch (mOp)
@@ -519,8 +520,7 @@ TString TIntermAggregate::getSymbolTableMangledName() const
         case EOpCallFunctionInAST:
             return TFunction::GetMangledNameFromCall(mFunction->name(), mArguments);
         default:
-            TString opString = GetOperatorString(mOp);
-            return TFunction::GetMangledNameFromCall(opString, mArguments);
+            return TFunction::GetMangledNameFromCall(GetOperatorString(mOp), mArguments);
     }
 }
 
@@ -532,7 +532,7 @@ const char *TIntermAggregate::functionName() const
         case EOpCallInternalRawFunction:
         case EOpCallBuiltInFunction:
         case EOpCallFunctionInAST:
-            return mFunction->name().c_str();
+            return mFunction->name();
         default:
             return GetOperatorString(mOp);
     }

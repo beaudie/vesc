@@ -6,6 +6,7 @@
 
 #include "compiler/translator/HashNames.h"
 
+#include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/Symbol.h"
 
@@ -19,6 +20,7 @@ namespace
 static const unsigned int kESSLMaxIdentifierLength = 1024u;
 
 static const char *kHashedNamePrefix = "webgl_";
+static const unsigned int kHashedNamePrefixLength = 6u;
 
 // Can't prefix with just _ because then we might introduce a double underscore, which is not safe
 // in GLSL (ESSL 3.00.6 section 3.8: All identifiers containing a double underscore are reserved for
@@ -26,20 +28,38 @@ static const char *kHashedNamePrefix = "webgl_";
 static const char *kUnhashedNamePrefix              = "_u";
 static const unsigned int kUnhashedNamePrefixLength = 2u;
 
-TString HashName(const TString &name, ShHashFunction64 hashFunction)
+ImmutableString HashName(const ImmutableString &name, ShHashFunction64 hashFunction)
 {
     ASSERT(!name.empty());
     ASSERT(hashFunction);
-    khronos_uint64_t number = (*hashFunction)(name.c_str(), name.length());
-    TStringStream stream;
-    stream << kHashedNamePrefix << std::hex << number;
-    TString hashedName = stream.str();
-    return hashedName;
+    khronos_uint64_t number = (*hashFunction)(name, name.length());
+
+    // Build the hashed name in place.
+    static const unsigned int kHexStrMaxLength = 16;
+    static const size_t kHashedNameMaxLength   = kHashedNamePrefixLength + kHexStrMaxLength;
+
+    char *hashedName = AllocateEmptyPoolCharArray(kHashedNameMaxLength);
+    memcpy(hashedName, kHashedNamePrefix, kHashedNamePrefixLength);
+
+    char *digitWritePtr = hashedName + kHashedNamePrefixLength;
+    while (number != 0)
+    {
+        khronos_uint64_t digit = number & 0xf;
+        char digitChar         = digit < 10 ? digit + '0' : digit + 'a';
+        *(digitWritePtr)       = digitChar;
+        number                 = number >> 4;
+        ++digitWritePtr;
+    }
+    ASSERT(digitWritePtr <= hashedName + kHashedNameMaxLength);
+    *(digitWritePtr) = '\0';
+    return ImmutableString(hashedName, digitWritePtr - hashedName);
 }
 
 }  // anonymous namespace
 
-TString HashName(const TString &name, ShHashFunction64 hashFunction, NameMap *nameMap)
+ImmutableString HashName(const ImmutableString &name,
+                         ShHashFunction64 hashFunction,
+                         NameMap *nameMap)
 {
     if (hashFunction == nullptr)
     {
@@ -50,27 +70,33 @@ TString HashName(const TString &name, ShHashFunction64 hashFunction, NameMap *na
             // have as long names and could conflict.
             return name;
         }
-        return kUnhashedNamePrefix + name;
+        char *prefixedName = AllocateEmptyPoolCharArray(kUnhashedNamePrefixLength + name.length());
+        memcpy(prefixedName, kUnhashedNamePrefix, kUnhashedNamePrefixLength);
+        memcpy(prefixedName + kUnhashedNamePrefixLength, name.data(), name.length());
+        return ImmutableString(prefixedName, kUnhashedNamePrefixLength + name.length());
     }
     if (nameMap)
     {
-        NameMap::const_iterator it = nameMap->find(name.c_str());
+        NameMap::const_iterator it = nameMap->find(name.data());
         if (it != nameMap->end())
-            return it->second.c_str();
+        {
+            // TODO: Don't allocate string here.
+            return ImmutableString(it->second);
+        }
     }
-    TString hashedName = HashName(name, hashFunction);
+    ImmutableString hashedName = HashName(name, hashFunction);
     if (nameMap)
     {
-        (*nameMap)[name.c_str()] = hashedName.c_str();
+        (*nameMap)[name.data()] = hashedName.data();
     }
     return hashedName;
 }
 
-TString HashName(const TSymbol *symbol, ShHashFunction64 hashFunction, NameMap *nameMap)
+ImmutableString HashName(const TSymbol *symbol, ShHashFunction64 hashFunction, NameMap *nameMap)
 {
     if (symbol->symbolType() == SymbolType::Empty)
     {
-        return TString();
+        return ImmutableString("");
     }
     if (symbol->symbolType() == SymbolType::AngleInternal ||
         symbol->symbolType() == SymbolType::BuiltIn)

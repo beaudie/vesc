@@ -12,6 +12,7 @@
 
 #include <string>
 
+#include "common/string_utils.h"
 #include "compiler/translator/Common.h"
 
 namespace sh
@@ -40,17 +41,60 @@ class ImmutableString
     // The data pointer passed in must be one of:
     //  1. nullptr (only valid with length 0).
     //  2. a null-terminated static char array like a string literal.
-    //  3. a null-terminated pool allocated char array.
+    //  3. a null-terminated pool allocated char array. This can't be c_str() of a local TString,
+    //     since when a TString goes out of scope it clears its first character.
     explicit constexpr ImmutableString(const char *data) : mData(data), mLength(constStrlen(data))
     {
+    }
+
+    constexpr ImmutableString(const char *data, size_t length) : mData(data), mLength(length) {}
+
+    ImmutableString(const std::string &str)
+        : mData(AllocatePoolCharArray(str.c_str(), str.size())), mLength(str.size())
+    {
+    }
+
+    static ImmutableString PoolAllocate(const char *data, size_t length)
+    {
+        ASSERT(data != nullptr);
+        return ImmutableString(AllocatePoolCharArray(data, length), length);
     }
 
     ImmutableString(const ImmutableString &) = default;
     ImmutableString &operator=(const ImmutableString &) = default;
 
+    size_t length() const { return mLength; }
+    const char *data() const { return mData ? mData : ""; }
+
+    bool empty() const { return mLength == 0; }
+    bool beginsWith(const char *prefix) const { return angle::BeginsWith(data(), prefix); }
+    bool contains(const char *substr) const { return strstr(data(), substr) != nullptr; }
+
+    operator const char *const() const { return data(); }
+
+    bool operator==(const ImmutableString &b) const
+    {
+        if (mLength != b.mLength)
+        {
+            return false;
+        }
+        return strcmp(data(), b.data()) == 0;
+    }
+    bool operator!=(const ImmutableString &b) const { return !(*this == b); }
+    bool operator==(const char *b) const
+    {
+        if (b == nullptr)
+        {
+            return empty();
+        }
+        return strcmp(data(), b) == 0;
+    }
+    bool operator!=(const char *b) const { return !(*this == b); }
+    bool operator==(const std::string &b) const { return *this == ImmutableString(b); }
+    bool operator!=(const std::string &b) const { return !(*this == b); }
+
     bool operator<(const ImmutableString &b) const
     {
-        // We need to do all the length checks since the strings may be nullptr.
         if (mLength < b.mLength)
         {
             return true;
@@ -59,16 +103,34 @@ class ImmutableString
         {
             return false;
         }
-        if (mLength == 0)
-        {
-            return false;
-        }
-        return (strcmp(mData, b.mData) < 0);
+        return (strcmp(data(), b.data()) < 0);
     }
 
+    struct FowlerNollVoHash
+    {
+        size_t operator()(const ImmutableString &a) const
+        {
+            if (a.empty())
+            {
+                return 0u;
+            }
+            const char *data             = a.mData;
+            const size_t kFnvOffsetBasis = 0xcbf29ce484222325ull;
+            const size_t kFnvPrime       = 1099511628211ull;
+            size_t hash                  = kFnvOffsetBasis;
+            while ((*data) != '\0')
+            {
+                hash = hash ^ (*a);
+                hash = hash * kFnvPrime;
+                ++data;
+            }
+            return hash;
+        }
+    };
+
   private:
-    const char *const mData;
-    const size_t mLength;
+    const char *mData;
+    size_t mLength;
 };
 
 }  // namespace sh
