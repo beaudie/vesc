@@ -50,11 +50,6 @@ struct TSourceLoc
 typedef pool_allocator<char> TStringAllocator;
 typedef std::basic_string<char, std::char_traits<char>, TStringAllocator> TString;
 typedef std::basic_ostringstream<char, std::char_traits<char>, TStringAllocator> TStringStream;
-inline TString *NewPoolTString(const char *s)
-{
-    void *memory = GetGlobalPoolAllocator()->allocate(sizeof(TString));
-    return new (memory) TString(s);
-}
 
 //
 // Persistent string memory.  Should only be used for strings that survive
@@ -121,6 +116,14 @@ inline TString str(T i)
     return buffer;
 }
 
+inline char *AllocateEmptyPoolCharArray(size_t strLength)
+{
+    size_t requiredSize = strLength + 1;
+    char *buffer      = reinterpret_cast<char *>(GetGlobalPoolAllocator()->allocate(requiredSize));
+    buffer[strLength] = '\0';
+    return buffer;
+}
+
 // Allocate a char array in the global memory pool. str must be a null terminated string. strLength
 // is the length without the null terminator.
 inline const char *AllocatePoolCharArray(const char *str, size_t strLength)
@@ -128,7 +131,7 @@ inline const char *AllocatePoolCharArray(const char *str, size_t strLength)
     size_t requiredSize = strLength + 1;
     char *buffer = reinterpret_cast<char *>(GetGlobalPoolAllocator()->allocate(requiredSize));
     memcpy(buffer, str, requiredSize);
-    ASSERT(buffer[strLength] == 0);
+    ASSERT(buffer[strLength] == '\0');
     return buffer;
 }
 
