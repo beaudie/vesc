@@ -31,6 +31,8 @@
 namespace sh
 {
 
+class ImmutableString;
+
 class TDiagnostics;
 
 class TIntermTraverser;
@@ -248,7 +250,7 @@ class TIntermSymbol : public TIntermTyped
     const TType &getType() const override;
 
     const TSymbolUniqueId &uniqueId() const;
-    const TString &getName() const;
+    ImmutableString getName() const;
     const TVariable &variable() const { return *mVariable; }
 
     void traverse(TIntermTraverser *it) override;
@@ -599,7 +601,7 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     TIntermSequence *getSequence() override { return &mArguments; }
     const TIntermSequence *getSequence() const override { return &mArguments; }
 
-    TString getSymbolTableMangledName() const;
+    ImmutableString getSymbolTableMangledName() const;
 
     void setUseEmulatedFunction() { mUseEmulatedFunction = true; }
     bool getUseEmulatedFunction() { return mUseEmulatedFunction; }
