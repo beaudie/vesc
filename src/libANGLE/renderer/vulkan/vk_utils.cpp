@@ -112,6 +112,12 @@ VkImageUsageFlags GetStagingBufferUsageFlags(vk::StagingUsage usage)
 // Mirrors std_validation_str in loader.h
 // TODO(jmadill): Possibly wrap the loader into a safe source file. Can't be included trivially.
 const char *g_VkStdValidationLayerName = "VK_LAYER_LUNARG_standard_validation";
+const char *g_VkValidationLayerNames[] = {
+    "VK_LAYER_GOOGLE_threading", "VK_LAYER_LUNARG_parameter_validation",
+    "VK_LAYER_LUNARG_object_tracker", "VK_LAYER_LUNARG_core_validation",
+    "VK_LAYER_GOOGLE_unique_objects"};
+const size_t g_VkNumValidationLayerNames =
+    sizeof(g_VkValidationLayerNames) / sizeof(g_VkValidationLayerNames[0]);
 const char *g_VkLoaderLayersPathEnv    = "VK_LAYER_PATH";
 
 const char *VulkanResultString(VkResult result)
@@ -186,6 +192,27 @@ bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps
     }
 
     return false;
+}
+
+bool HasValidationLayers(const std::vector<VkLayerProperties> &layerProps)
+{
+    for (const auto &layerName : g_VkValidationLayerNames)
+    {
+        bool found = false;
+        for (const auto &layerProp : layerProps)
+        {
+            if (std::string(layerProp.layerName) == layerName)
+            {
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 namespace vk

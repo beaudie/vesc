@@ -66,8 +66,11 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
 const char *VulkanResultString(VkResult result);
 bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps);
+bool HasValidationLayers(const std::vector<VkLayerProperties> &layerProps);
 
 extern const char *g_VkStdValidationLayerName;
+extern const char *g_VkValidationLayerNames[];
+extern const size_t g_VkNumValidationLayerNames;
 extern const char *g_VkLoaderLayersPathEnv;
 
 enum class TextureDimension

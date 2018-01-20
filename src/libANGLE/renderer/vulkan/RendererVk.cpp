@@ -186,6 +186,7 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
 {
     mEnableValidationLayers = ShouldUseDebugLayers(attribs);
 
+#if !defined(ANGLE_PLATFORM_ANDROID)
     // If we're loading the validation layers, we could be running from any random directory.
     // Change to the executable directory so we can find the layers, then change back to the
     // previous directory to be safe we don't disrupt the application.
@@ -220,6 +221,7 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
             mEnableValidationLayers = false;
         }
     }
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
@@ -242,20 +244,33 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
                                                             instanceExtensionProps.data()));
     }
 
+    const char *const *ppEnabledLayerNames = nullptr;
+    uint32_t enabledLayerCount             = 0;
+
     if (mEnableValidationLayers)
     {
         // Verify the standard validation layers are available.
-        if (!HasStandardValidationLayer(instanceLayerProps))
+        if (HasStandardValidationLayer(instanceLayerProps))
+        {
+            ppEnabledLayerNames = &g_VkStdValidationLayerName;
+            enabledLayerCount   = 1;
+        }
+        else if (HasValidationLayers(instanceLayerProps))
+        {
+            ppEnabledLayerNames = g_VkValidationLayerNames;
+            enabledLayerCount   = g_VkNumValidationLayerNames;
+        }
+        else
         {
             // Generate an error if the attribute was requested, warning otherwise.
             if (attribs.get(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE, EGL_DONT_CARE) ==
                 EGL_TRUE)
             {
-                ERR() << "Vulkan standard validation layers are missing.";
+                ERR() << "Vulkan validation layers are missing.";
             }
             else
             {
-                WARN() << "Vulkan standard validation layers are missing.";
+                WARN() << "Vulkan validation layers are missing.";
             }
             mEnableValidationLayers = false;
         }
@@ -293,17 +308,18 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     instanceInfo.enabledExtensionCount = static_cast<uint32_t>(enabledInstanceExtensions.size());
     instanceInfo.ppEnabledExtensionNames =
         enabledInstanceExtensions.empty() ? nullptr : enabledInstanceExtensions.data();
-    instanceInfo.enabledLayerCount = mEnableValidationLayers ? 1u : 0u;
-    instanceInfo.ppEnabledLayerNames =
-        mEnableValidationLayers ? &g_VkStdValidationLayerName : nullptr;
+    instanceInfo.enabledLayerCount   = enabledLayerCount;
+    instanceInfo.ppEnabledLayerNames = ppEnabledLayerNames;
 
     ANGLE_VK_TRY(vkCreateInstance(&instanceInfo, nullptr, &mInstance));
 
     if (mEnableValidationLayers)
     {
+#if !defined(ANGLE_PLATFORM_ANDROID)
         // Change back to the previous working directory now that we've loaded the instance -
         // the validation layers should be loaded at this point.
         angle::SetCWD(previousCWD.c_str());
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
 
         VkDebugReportCallbackCreateInfoEXT debugReportInfo;
 
@@ -405,9 +421,22 @@ vk::Error RendererVk::initializeDevice(uint32_t queueFamilyIndex)
             mPhysicalDevice, nullptr, &deviceExtensionCount, deviceExtensionProps.data()));
     }
 
+    const char *const *ppEnabledLayerNames = nullptr;
+    uint32_t enabledLayerCount             = 0;
+
     if (mEnableValidationLayers)
     {
-        if (!HasStandardValidationLayer(deviceLayerProps))
+        if (HasStandardValidationLayer(deviceLayerProps))
+        {
+            ppEnabledLayerNames = &g_VkStdValidationLayerName;
+            enabledLayerCount   = 1;
+        }
+        else if (HasValidationLayers(deviceLayerProps))
+        {
+            ppEnabledLayerNames = g_VkValidationLayerNames;
+            enabledLayerCount   = g_VkNumValidationLayerNames;
+        }
+        else
         {
             WARN() << "Vulkan standard validation layer is missing.";
             mEnableValidationLayers = false;
@@ -438,9 +467,8 @@ vk::Error RendererVk::initializeDevice(uint32_t queueFamilyIndex)
     createInfo.flags                = 0;
     createInfo.queueCreateInfoCount = 1;
     createInfo.pQueueCreateInfos    = &queueCreateInfo;
-    createInfo.enabledLayerCount    = mEnableValidationLayers ? 1u : 0u;
-    createInfo.ppEnabledLayerNames =
-        mEnableValidationLayers ? &g_VkStdValidationLayerName : nullptr;
+    createInfo.enabledLayerCount     = enabledLayerCount;
+    createInfo.ppEnabledLayerNames   = ppEnabledLayerNames;
     createInfo.enabledExtensionCount = static_cast<uint32_t>(enabledDeviceExtensions.size());
     createInfo.ppEnabledExtensionNames =
         enabledDeviceExtensions.empty() ? nullptr : enabledDeviceExtensions.data();
