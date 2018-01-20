@@ -65,9 +65,12 @@ enum class DrawType
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
 const char *VulkanResultString(VkResult result);
-bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps);
+// Verify that validation layers are available.
+bool GetValidationLayers(const std::vector<VkLayerProperties> &layerProps,
+                         bool mustHaveLayers,
+                         const char *const **pppEnabledLayerNames,
+                         uint32_t *pEnabledLayerCount);
 
-extern const char *g_VkStdValidationLayerName;
 extern const char *g_VkLoaderLayersPathEnv;
 
 enum class TextureDimension
