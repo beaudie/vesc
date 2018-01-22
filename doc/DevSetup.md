@@ -48,7 +48,7 @@ gclient sync
 git checkout master
 ```
 
-You might want to validate you have all the necessary dependencies before going further by running this command:
+You might want to validate that you have all the necessary dependencies before going further by running this command:
 ```
 ./build/install-build-deps.sh
 ```
