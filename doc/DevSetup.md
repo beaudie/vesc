@@ -53,7 +53,7 @@ You might want to validate you have all the necessary dependencies before going 
 ./build/install-build-deps.sh
 ```
 
-After this completes successfuly, you are ready to generate the ninja files:
+After this completes successfully, you are ready to generate the ninja files:
 ```
 gn gen out/Debug
 ```
