@@ -13,6 +13,7 @@
 
 #include "compiler/translator/SymbolTable.h"
 
+#include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 
 #include <stdio.h>
@@ -55,11 +56,7 @@ class TSymbolTable::TSymbolTableLevel
     std::set<std::string> mInvariantVaryings;
     bool mGlobalInvariant;
 
-    struct CharArrayComparator
-    {
-        bool operator()(const char *a, const char *b) const { return strcmp(a, b) < 0; }
-    };
-    std::set<const char *, CharArrayComparator> mUnmangledBuiltInNames;
+    std::set<ImmutableString> mUnmangledBuiltInNames;
 };
 
 //
@@ -98,12 +95,12 @@ TSymbol *TSymbolTable::TSymbolTableLevel::find(const TString &name) const
 
 void TSymbolTable::TSymbolTableLevel::insertUnmangledBuiltInName(const char *name)
 {
-    mUnmangledBuiltInNames.insert(name);
+    mUnmangledBuiltInNames.insert(ImmutableString(name));
 }
 
 bool TSymbolTable::TSymbolTableLevel::hasUnmangledBuiltIn(const char *name) const
 {
-    return mUnmangledBuiltInNames.count(name) > 0;
+    return mUnmangledBuiltInNames.count(ImmutableString(name)) > 0;
 }
 
 void TSymbolTable::push()
