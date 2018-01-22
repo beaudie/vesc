@@ -2622,7 +2622,7 @@ bool ValidateRenderbufferStorageMultisample(ValidationContext *context,
     // format if samples is greater than zero.
     const gl::InternalFormat &formatInfo = gl::GetSizedInternalFormatInfo(internalformat);
     if ((formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) &&
-        samples > 0)
+        samples > 0 && context->getClientVersion() == ES_3_0)
     {
         context->handleError(InvalidOperation());
         return false;
