@@ -127,7 +127,7 @@ gl::Error ContextVk::finish(const gl::Context *context)
 
 gl::Error ContextVk::initPipeline(const gl::Context *context)
 {
-    ASSERT(!mCurrentPipeline.valid());
+    ASSERT(!mCurrentPipeline->valid());
 
     const gl::State &state       = mState.getState();
     VertexArrayVk *vertexArrayVk = vk::GetImpl(state.getVertexArray());
@@ -144,7 +144,7 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
     mPipelineDesc->updateRenderPassDesc(framebufferVk->getRenderPassDesc(context));
 
     // TODO(jmadill): Validate with ASSERT against physical device limits/caps?
-    ANGLE_TRY(mPipelineDesc->initializePipeline(mRenderer, programVk, &mCurrentPipeline));
+    ANGLE_TRY(mRenderer->getPipeline(programVk, *mPipelineDesc, &mCurrentPipeline));
 
     return gl::NoError();
 }
@@ -160,10 +160,9 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         mCurrentDrawMode = mode;
     }
 
-    if (!mCurrentPipeline.valid())
+    if (!mCurrentPipeline->valid())
     {
         ANGLE_TRY(initPipeline(context));
-        ASSERT(mCurrentPipeline.valid());
     }
 
     const auto &state     = mState.getState();
@@ -229,14 +228,14 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         }
     }
 
-    (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+    (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
     (*commandBuffer)
         ->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
                             reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
 
     // Update the queue serial for the pipeline object.
-    // TODO(jmadill): the queue serial should be bound to the pipeline.
-    updateQueueSerial(queueSerial);
+    ASSERT(mCurrentPipeline->valid());
+    mCurrentPipeline->updateSerial(queueSerial);
 
     // TODO(jmadill): Can probably use more dirty bits here.
     ANGLE_TRY(programVk->updateUniforms(this));
@@ -731,10 +730,9 @@ std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
     return std::vector<PathImpl *>();
 }
 
-// TODO(jmadill): Use pipeline cache.
 void ContextVk::invalidateCurrentPipeline()
 {
-    mRenderer->releaseResource(*this, &mCurrentPipeline);
+    mCurrentPipeline = nullptr;
 }
 
 void ContextVk::onVertexArrayChange()
