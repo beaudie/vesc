@@ -328,6 +328,14 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
         ANGLE_VK_CHECK(foundFormat, VK_ERROR_INITIALIZATION_FAILED);
     }
 
+    VkCompositeAlphaFlagBitsKHR compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    if ((surfaceCaps.supportedCompositeAlpha & compositeAlpha) == 0)
+    {
+        compositeAlpha = VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+    }
+    ANGLE_VK_CHECK((surfaceCaps.supportedCompositeAlpha & compositeAlpha) != 0,
+                   VK_ERROR_INITIALIZATION_FAILED);
+
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType              = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainInfo.pNext              = nullptr;
@@ -345,7 +353,7 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
     swapchainInfo.queueFamilyIndexCount = 0;
     swapchainInfo.pQueueFamilyIndices   = nullptr;
     swapchainInfo.preTransform          = preTransform;
-    swapchainInfo.compositeAlpha        = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapchainInfo.compositeAlpha        = compositeAlpha;
     swapchainInfo.presentMode           = swapchainPresentMode;
     swapchainInfo.clipped               = VK_TRUE;
     swapchainInfo.oldSwapchain          = VK_NULL_HANDLE;
