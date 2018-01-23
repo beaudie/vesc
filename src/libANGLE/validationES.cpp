@@ -391,6 +391,46 @@ bool ValidateTextureSRGBDecodeValue(Context *context, ParamType *params)
     return true;
 }
 
+bool ValidateTextureMaxAnisotropyExtensionEnabled(Context *context)
+{
+    if (!context->getExtensions().textureFilterAnisotropic)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateTextureMaxAnisotropyValueBounds(Context *context, GLfloat paramValue)
+{
+    GLfloat largest;
+    context->getFloatvImpl(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest);
+
+    if (paramValue < 1 || paramValue > largest)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), OutsideOfBounds);
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateTextureMaxAnisotropyValue(Context *context, GLfloat paramValue)
+{
+    if (!ValidateTextureMaxAnisotropyExtensionEnabled(context))
+    {
+        return false;
+    }
+
+    if (!ValidateTextureMaxAnisotropyValueBounds(context, paramValue))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
 {
     const Program *program         = context->getGLState().getProgram();
@@ -4890,9 +4930,8 @@ bool ValidateGetTexParameterBase(Context *context, GLenum target, GLenum pname, 
             break;
 
         case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-            if (!context->getExtensions().textureFilterAnisotropic)
+            if (!ValidateTextureMaxAnisotropyExtensionEnabled(context))
             {
-                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
                 return false;
             }
             break;
@@ -5378,17 +5417,12 @@ bool ValidateTexParameterBase(Context *context,
             break;
 
         case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-            if (!context->getExtensions().textureFilterAnisotropic)
             {
-                context->handleError(InvalidEnum() << "GL_EXT_texture_anisotropic is not enabled.");
-                return false;
-            }
-
-            // we assume the parameter passed to this validation method is truncated, not rounded
-            if (params[0] < 1)
-            {
-                context->handleError(InvalidValue() << "Max anisotropy must be at least 1.");
-                return false;
+                GLfloat paramValue = static_cast<GLfloat>(params[0]);
+                if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
+                {
+                    return false;
+                }
             }
             break;
 
@@ -5652,6 +5686,16 @@ bool ValidateSamplerParameterBase(Context *context,
             }
             break;
 
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+        {
+            GLfloat paramValue = static_cast<GLfloat>(params[0]);
+            if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
+            {
+                return false;
+            }
+        }
+        break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -5696,6 +5740,7 @@ bool ValidateGetSamplerParameterBase(Context *context,
         case GL_TEXTURE_MAX_LOD:
         case GL_TEXTURE_COMPARE_MODE:
         case GL_TEXTURE_COMPARE_FUNC:
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
             break;
 
         case GL_TEXTURE_SRGB_DECODE_EXT:
