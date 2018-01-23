@@ -135,18 +135,8 @@ TFunction::TFunction(TSymbolTable *symbolTable,
     ASSERT(name != nullptr || symbolType == SymbolType::AngleInternal || tOp != EOpNull);
 }
 
-//
-// Functions have buried pointers to delete.
-//
-TFunction::~TFunction()
-{
-    clearParameters();
-}
-
 void TFunction::clearParameters()
 {
-    for (TParamList::iterator i = parameters.begin(); i != parameters.end(); ++i)
-        delete (*i).type;
     parameters.clear();
     mangledName = nullptr;
 }

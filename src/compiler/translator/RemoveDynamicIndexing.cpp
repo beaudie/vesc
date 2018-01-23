@@ -280,7 +280,6 @@ class RemoveDynamicIndexingTraverser : public TLValueTrackingTraverser
 {
   public:
     RemoveDynamicIndexingTraverser(TSymbolTable *symbolTable,
-                                   int shaderVersion,
                                    PerformanceDiagnostics *perfDiagnostics);
 
     bool visitBinary(Visit visit, TIntermBinary *node) override;
@@ -311,9 +310,8 @@ class RemoveDynamicIndexingTraverser : public TLValueTrackingTraverser
 
 RemoveDynamicIndexingTraverser::RemoveDynamicIndexingTraverser(
     TSymbolTable *symbolTable,
-    int shaderVersion,
     PerformanceDiagnostics *perfDiagnostics)
-    : TLValueTrackingTraverser(true, false, false, symbolTable, shaderVersion),
+    : TLValueTrackingTraverser(true, false, false, symbolTable),
       mUsedTreeInsertion(false),
       mRemoveIndexSideEffectsInSubtree(false),
       mPerfDiagnostics(perfDiagnostics)
@@ -532,10 +530,9 @@ void RemoveDynamicIndexingTraverser::nextIteration()
 
 void RemoveDynamicIndexing(TIntermNode *root,
                            TSymbolTable *symbolTable,
-                           int shaderVersion,
                            PerformanceDiagnostics *perfDiagnostics)
 {
-    RemoveDynamicIndexingTraverser traverser(symbolTable, shaderVersion, perfDiagnostics);
+    RemoveDynamicIndexingTraverser traverser(symbolTable, perfDiagnostics);
     do
     {
         traverser.nextIteration();
