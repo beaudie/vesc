@@ -26,8 +26,7 @@ namespace
 
 const vk::Format &GetVkFormatFromConfig(RendererVk *renderer, const egl::Config &config)
 {
-    // TODO(jmadill): Properly handle format interpretation.
-    return renderer->getFormat(GL_BGRA8_EXT);
+    return renderer->getFormat(config.renderTargetFormat);
 }
 
 VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &presentModes,
