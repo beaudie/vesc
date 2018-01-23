@@ -189,7 +189,6 @@ class TFunction : public TSymbol
               TOperator tOp        = EOpNull,
               TExtension extension = TExtension::UNDEFINED);
 
-    ~TFunction() override;
     bool isFunction() const override { return true; }
 
     void addParameter(const TConstParameter &p)

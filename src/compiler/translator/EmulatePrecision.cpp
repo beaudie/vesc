@@ -470,9 +470,8 @@ bool ParentConstructorTakesCareOfRounding(TIntermNode *parent, TIntermTyped *nod
 
 }  // namespace anonymous
 
-EmulatePrecision::EmulatePrecision(TSymbolTable *symbolTable, int shaderVersion)
-    : TLValueTrackingTraverser(true, true, true, symbolTable, shaderVersion),
-      mDeclaringVariables(false)
+EmulatePrecision::EmulatePrecision(TSymbolTable *symbolTable)
+    : TLValueTrackingTraverser(true, true, true, symbolTable), mDeclaringVariables(false)
 {
 }
 
