@@ -72,6 +72,7 @@
             'compiler/translator/HashNames.cpp',
             'compiler/translator/HashNames.h',
             'compiler/translator/ImmutableString.h',
+            'compiler/translator/ImmutableStringBuilder.h',
             'compiler/translator/InfoSink.cpp',
             'compiler/translator/InfoSink.h',
             'compiler/translator/Initialize.cpp',
