@@ -50,6 +50,8 @@ class ImmutableString
 
     const char *data() const { return mData ? mData : ""; }
 
+    operator const char *const() const { return data(); }
+
     bool operator<(const ImmutableString &b) const
     {
         if (mLength < b.mLength)

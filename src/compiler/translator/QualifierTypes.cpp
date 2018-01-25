@@ -142,7 +142,7 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
                         TQualifier previousQualifier = previousQualifierWrapper->getQualifier();
                         if (currentQualifier == previousQualifier)
                         {
-                            *errorMessage = previousQualifierWrapper->getQualifierString().c_str();
+                            *errorMessage = previousQualifierWrapper->getQualifierString();
                             *errorMessage += " specified multiple times";
                             return true;
                         }
@@ -167,7 +167,7 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
                         TQualifier previousQualifier = previousQualifierWrapper->getQualifier();
                         if (currentQualifier == previousQualifier)
                         {
-                            *errorMessage = previousQualifierWrapper->getQualifierString().c_str();
+                            *errorMessage = previousQualifierWrapper->getQualifierString();
                             *errorMessage += " specified multiple times";
                             return true;
                         }
@@ -480,9 +480,9 @@ TTypeQualifier GetVariableTypeQualifierFromSortedSequence(
         }
         if (!isQualifierValid)
         {
-            const TString &qualifierString = qualifier->getQualifierString();
+            ImmutableString qualifierString = qualifier->getQualifierString();
             diagnostics->error(qualifier->getLine(), "invalid qualifier combination",
-                               qualifierString.c_str());
+                               qualifierString);
             break;
         }
     }
@@ -525,9 +525,9 @@ TTypeQualifier GetParameterTypeQualifierFromSortedSequence(
         }
         if (!isQualifierValid)
         {
-            const TString &qualifierString = qualifier->getQualifierString();
+            ImmutableString qualifierString = qualifier->getQualifierString();
             diagnostics->error(qualifier->getLine(), "invalid parameter qualifier",
-                               qualifierString.c_str());
+                               qualifierString);
             break;
         }
     }
