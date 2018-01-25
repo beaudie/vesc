@@ -1,6 +1,7 @@
 vars = {
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
+  'chrome_git': 'https://chrome-internal.googlesource.com',
 }
 
 deps = {
@@ -47,6 +48,11 @@ deps = {
 
   'tools/gyp':
     Var('chromium_git') + '/external/gyp' + '@' + '5e2b3ddde7cda5eb6bc09a5546a76b00e49d888f',
+
+  # OpenGL ES 1.0 Conformance tests ('ES1-ANGLE' branch)
+  'third_party/gles1_conform':
+      Var('chrome_git') + '/angle/es-cts.git' + '@' +
+      '3f1ab5e8ecf56766524b6f0f8210a5de02468b84',
 }
 
 hooks = [
