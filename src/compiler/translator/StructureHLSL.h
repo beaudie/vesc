@@ -26,7 +26,7 @@ namespace sh
 class Std140PaddingHelper
 {
   public:
-    explicit Std140PaddingHelper(const std::map<TString, int> &structElementIndexes,
+    explicit Std140PaddingHelper(const std::map<ImmutableString, int> &structElementIndexes,
                                  unsigned int *uniqueCounter);
     Std140PaddingHelper(const Std140PaddingHelper &other);
     Std140PaddingHelper &operator=(const Std140PaddingHelper &other);
@@ -41,7 +41,7 @@ class Std140PaddingHelper
 
     unsigned *mPaddingCounter;
     int mElementIndex;
-    const std::map<TString, int> *mStructElementIndexes;
+    const std::map<ImmutableString, int> *mStructElementIndexes;
 };
 
 class StructureHLSL : angle::NonCopyable
@@ -56,14 +56,14 @@ class StructureHLSL : angle::NonCopyable
     static TString defineNameless(const TStructure &structure);
     void ensureStructDefined(const TStructure &structure);
 
-    std::string structsHeader() const;
+    void structsHeader(TInfoSinkBase &out) const;
 
     Std140PaddingHelper getPaddingHelper();
 
   private:
     unsigned mUniquePaddingCounter;
 
-    std::map<TString, int> mStd140StructElementIndexes;
+    std::map<ImmutableString, int> mStd140StructElementIndexes;
 
     struct TStructProperties : public angle::NonCopyable
     {
@@ -76,7 +76,7 @@ class StructureHLSL : angle::NonCopyable
     };
 
     // Map from struct name to struct properties.
-    typedef std::map<TString, TStructProperties *> DefinedStructs;
+    typedef std::map<ImmutableString, TStructProperties *> DefinedStructs;
     DefinedStructs mDefinedStructs;
 
     // Struct declarations need to be kept in a vector instead of having them inside mDefinedStructs
@@ -91,7 +91,8 @@ class StructureHLSL : angle::NonCopyable
     TString defineQualified(const TStructure &structure,
                             bool useHLSLRowMajorPacking,
                             bool useStd140Packing);
-    DefinedStructs::iterator defineVariants(const TStructure &structure, const TString &name);
+    DefinedStructs::iterator defineVariants(const TStructure &structure,
+                                            const ImmutableString &name);
 };
 }
 

@@ -8,6 +8,7 @@
 //
 
 #include "compiler/translator/UtilsHLSL.h"
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/StructureHLSL.h"
 #include "compiler/translator/SymbolTable.h"
@@ -18,8 +19,21 @@ namespace sh
 namespace
 {
 
+constexpr const ImmutableString kFloatTypeNames[5] = {
+    ImmutableString(""), ImmutableString("float"), ImmutableString("float2"),
+    ImmutableString("float3"), ImmutableString("float4")};
+constexpr const ImmutableString kIntTypeNames[5] = {
+    ImmutableString(""), ImmutableString("int"), ImmutableString("int2"), ImmutableString("int3"),
+    ImmutableString("int4")};
+constexpr const ImmutableString kUIntTypeNames[5] = {
+    ImmutableString(""), ImmutableString("uint"), ImmutableString("uint2"),
+    ImmutableString("uint3"), ImmutableString("uint4")};
+constexpr const ImmutableString kBoolTypeNames[5] = {
+    ImmutableString(""), ImmutableString("bool"), ImmutableString("bool2"),
+    ImmutableString("bool3"), ImmutableString("bool4")};
+
 void DisambiguateFunctionNameForParameterType(const TType &paramType,
-                                              TString *disambiguatingStringOut)
+                                              TStringStream *disambiguatingStringOut)
 {
     // Parameter types are only added to function names if they are ambiguous according to the
     // native HLSL compiler. Other parameter types are not added to function names to avoid
@@ -29,14 +43,14 @@ void DisambiguateFunctionNameForParameterType(const TType &paramType,
         // Disambiguation is needed for float2x2 and float4 parameters. These are the only
         // built-in types that HLSL thinks are identical. float2x3 and float3x2 are different
         // types, for example.
-        *disambiguatingStringOut += "_" + TypeString(paramType);
+        *disambiguatingStringOut << "_" << TypeString(paramType);
     }
     else if (paramType.getBasicType() == EbtStruct)
     {
         // Disambiguation is needed for struct parameters, since HLSL thinks that structs with
         // the same fields but a different name are identical.
         ASSERT(paramType.getStruct()->symbolType() != SymbolType::Empty);
-        *disambiguatingStringOut += "_" + TypeString(paramType);
+        *disambiguatingStringOut << "_" << TypeString(paramType);
     }
 }
 
@@ -802,32 +816,29 @@ const char *RWTextureTypeSuffix(const TBasicType type,
 #endif
 }
 
-TString DecorateField(const ImmutableString &string, const TStructure &structure)
+ImmutableString DecorateField(const ImmutableString &string, const TStructure &structure)
 {
     if (structure.symbolType() != SymbolType::BuiltIn)
     {
         return Decorate(string);
     }
 
-    return TString(string.data());
+    return string;
 }
 
-TString DecoratePrivate(const ImmutableString &privateText)
-{
-    return "dx_" + TString(privateText.data());
-}
-
-TString Decorate(const ImmutableString &string)
+ImmutableString Decorate(const ImmutableString &string)
 {
     if (!string.beginsWith("gl_"))
     {
-        return "_" + TString(string.data());
+        ImmutableStringBuilder decorated(1u + string.length());
+        decorated << "_" << string;
+        return decorated;
     }
 
-    return TString(string.data());
+    return string;
 }
 
-TString DecorateVariableIfNeeded(const TVariable &variable)
+ImmutableString DecorateVariableIfNeeded(const TVariable &variable)
 {
     if (variable.symbolType() == SymbolType::AngleInternal ||
         variable.symbolType() == SymbolType::Empty)
@@ -837,7 +848,7 @@ TString DecorateVariableIfNeeded(const TVariable &variable)
         // The name should not have a prefix reserved for user-defined variables or functions.
         ASSERT(!name.beginsWith("f_"));
         ASSERT(!name.beginsWith("_"));
-        return TString(name.data());
+        return name;
     }
     else
     {
@@ -845,23 +856,25 @@ TString DecorateVariableIfNeeded(const TVariable &variable)
     }
 }
 
-TString DecorateFunctionIfNeeded(const TFunction *func)
+ImmutableString DecorateFunctionIfNeeded(const TFunction *func)
 {
     if (func->symbolType() == SymbolType::AngleInternal)
     {
         // The name should not have a prefix reserved for user-defined variables or functions.
         ASSERT(!func->name().beginsWith("f_"));
         ASSERT(!func->name().beginsWith("_"));
-        return TString(func->name().data());
+        return func->name();
     }
     ASSERT(!func->name().beginsWith("gl_"));
     // Add an additional f prefix to functions so that they're always disambiguated from variables.
     // This is necessary in the corner case where a variable declaration hides a function that it
     // uses in its initializer.
-    return "f_" + TString(func->name().data());
+    ImmutableStringBuilder decorated(2u + func->name().length());
+    decorated << "f_" << func->name();
+    return decorated;
 }
 
-TString TypeString(const TType &type)
+ImmutableString TypeString(const TType &type)
 {
     const TStructure *structure = type.getStruct();
     if (structure)
@@ -870,100 +883,101 @@ TString TypeString(const TType &type)
         {
             return StructNameString(*structure);
         }
-        else  // Nameless structure, define in place
-        {
-            return StructureHLSL::defineNameless(*structure);
-        }
+        // Nameless structure, define in place
+        TString namelessDef = StructureHLSL::defineNameless(*structure);
+        return ImmutableString(AllocatePoolCharArray(namelessDef.c_str(), namelessDef.length()),
+                               namelessDef.length());
     }
-    else if (type.isMatrix())
+    if (type.isMatrix())
     {
-        int cols = type.getCols();
-        int rows = type.getRows();
-        return "float" + str(cols) + "x" + str(rows);
+        switch (type.getCols())
+        {
+            case 2:
+                switch (type.getRows())
+                {
+                    case 2:
+                        return ImmutableString("float2x2");
+                    case 3:
+                        return ImmutableString("float2x3");
+                    case 4:
+                        return ImmutableString("float2x4");
+                    default:
+                        break;
+                }
+                break;
+            case 3:
+                switch (type.getRows())
+                {
+                    case 2:
+                        return ImmutableString("float3x2");
+                    case 3:
+                        return ImmutableString("float3x3");
+                    case 4:
+                        return ImmutableString("float3x4");
+                    default:
+                        break;
+                }
+                break;
+            case 4:
+                switch (type.getRows())
+                {
+                    case 2:
+                        return ImmutableString("float4x2");
+                    case 3:
+                        return ImmutableString("float4x3");
+                    case 4:
+                        return ImmutableString("float4x4");
+                    default:
+                        break;
+                }
+                break;
+        }
+        UNREACHABLE();
+        return ImmutableString("float4x4");
     }
     else
     {
         switch (type.getBasicType())
         {
             case EbtFloat:
-                switch (type.getNominalSize())
-                {
-                    case 1:
-                        return "float";
-                    case 2:
-                        return "float2";
-                    case 3:
-                        return "float3";
-                    case 4:
-                        return "float4";
-                }
+                return kFloatTypeNames[type.getNominalSize()];
             case EbtInt:
-                switch (type.getNominalSize())
-                {
-                    case 1:
-                        return "int";
-                    case 2:
-                        return "int2";
-                    case 3:
-                        return "int3";
-                    case 4:
-                        return "int4";
-                }
+                return kIntTypeNames[type.getNominalSize()];
             case EbtUInt:
-                switch (type.getNominalSize())
-                {
-                    case 1:
-                        return "uint";
-                    case 2:
-                        return "uint2";
-                    case 3:
-                        return "uint3";
-                    case 4:
-                        return "uint4";
-                }
+                return kUIntTypeNames[type.getNominalSize()];
             case EbtBool:
-                switch (type.getNominalSize())
-                {
-                    case 1:
-                        return "bool";
-                    case 2:
-                        return "bool2";
-                    case 3:
-                        return "bool3";
-                    case 4:
-                        return "bool4";
-                }
+                return kBoolTypeNames[type.getNominalSize()];
             case EbtVoid:
-                return "void";
+                return ImmutableString("void");
             case EbtSampler2D:
             case EbtISampler2D:
             case EbtUSampler2D:
             case EbtSampler2DArray:
             case EbtISampler2DArray:
             case EbtUSampler2DArray:
-                return "sampler2D";
+                return ImmutableString("sampler2D");
             case EbtSamplerCube:
             case EbtISamplerCube:
             case EbtUSamplerCube:
-                return "samplerCUBE";
+                return ImmutableString("samplerCUBE");
             case EbtSamplerExternalOES:
-                return "sampler2D";
+                return ImmutableString("sampler2D");
             case EbtAtomicCounter:
-                return "atomic_uint";
+                return ImmutableString("atomic_uint");
             default:
                 break;
         }
     }
 
     UNREACHABLE();
-    return "<unknown type>";
+    return ImmutableString("<unknown type>");
 }
 
-TString StructNameString(const TStructure &structure)
+ImmutableString StructNameString(const TStructure &structure)
 {
     if (structure.symbolType() == SymbolType::Empty)
     {
-        return "";
+        return ImmutableString("");
     }
 
     // For structures at global scope we use a consistent
@@ -973,34 +987,44 @@ TString StructNameString(const TStructure &structure)
         return Decorate(structure.name());
     }
 
-    return "ss" + str(structure.uniqueId().get()) + "_" + TString(structure.name().data());
+    const ImmutableString &originalName = structure.name();
+
+    ImmutableStringBuilder structName(11u + originalName.length());
+    structName << "ss";
+    structName.appendHex(structure.uniqueId().get());
+    structName << "_" << originalName;
+
+    return structName;
 }
 
-TString QualifiedStructNameString(const TStructure &structure,
-                                  bool useHLSLRowMajorPacking,
-                                  bool useStd140Packing)
+ImmutableString QualifiedStructNameString(const TStructure &structure,
+                                          bool useHLSLRowMajorPacking,
+                                          bool useStd140Packing)
 {
     if (structure.symbolType() == SymbolType::Empty)
     {
-        return "";
+        return ImmutableString("");
     }
 
-    TString prefix = "";
+    const ImmutableString &structName = StructNameString(structure);
+
+    ImmutableStringBuilder qualifiedStructName(structName.length() + 7u);
 
     // Structs packed with row-major matrices in HLSL are prefixed with "rm"
     // GLSL column-major maps to HLSL row-major, and the converse is true
 
     if (useStd140Packing)
     {
-        prefix += "std_";
+        qualifiedStructName << "std_";
     }
-
     if (useHLSLRowMajorPacking)
     {
-        prefix += "rm_";
+        qualifiedStructName << "rm_";
     }
 
-    return prefix + StructNameString(structure);
+    qualifiedStructName << structName;
+
+    return qualifiedStructName;
 }
 
 const char *InterpolationString(TQualifier qualifier)
@@ -1056,26 +1080,26 @@ const char *QualifierString(TQualifier qualifier)
 
 TString DisambiguateFunctionName(const TFunction *func)
 {
-    TString disambiguatingString;
+    TStringStream disambiguatingString;
     size_t paramCount = func->getParamCount();
     for (size_t i = 0; i < paramCount; ++i)
     {
         DisambiguateFunctionNameForParameterType(func->getParam(i)->getType(),
                                                  &disambiguatingString);
     }
-    return disambiguatingString;
+    return disambiguatingString.str();
 }
 
 TString DisambiguateFunctionName(const TIntermSequence *args)
 {
-    TString disambiguatingString;
+    TStringStream disambiguatingString;
     for (TIntermNode *arg : *args)
     {
         ASSERT(arg->getAsTyped());
         DisambiguateFunctionNameForParameterType(arg->getAsTyped()->getType(),
                                                  &disambiguatingString);
     }
-    return disambiguatingString;
+    return disambiguatingString.str();
 }
 
 }  // namespace sh

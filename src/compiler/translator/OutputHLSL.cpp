@@ -16,6 +16,7 @@
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "compiler/translator/ImageFunctionHLSL.h"
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/StructureHLSL.h"
 #include "compiler/translator/TextureFunctionHLSL.h"
@@ -356,7 +357,7 @@ TString OutputHLSL::structInitializerString(int indent,
         for (unsigned int fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
         {
             const TField &field      = *fields[fieldIndex];
-            const TString &fieldName = name + "." + Decorate(field.name());
+            const TString &fieldName = name + "." + Decorate(field.name()).data();
             const TType &fieldType   = *field.type();
 
             init += structInitializerString(indent + 1, fieldType, fieldName);
@@ -409,21 +410,21 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
                 unsigned int instanceStringArrayIndex = GL_INVALID_INDEX;
                 if (isInstanceArray)
                     instanceStringArrayIndex = instanceArrayIndex;
-                TString instanceString = mUniformHLSL->UniformBlockInstanceString(
+                const ImmutableString &instanceString = mUniformHLSL->UniformBlockInstanceString(
                     instanceName, instanceStringArrayIndex);
-                originalName += instanceString;
-                mappedName += instanceString;
+                originalName += instanceString.data();
+                mappedName += instanceString.data();
                 originalName += ".";
                 mappedName += "_";
             }
 
-            TString fieldName = Decorate(mappedStruct.field->name());
-            originalName += fieldName;
-            mappedName += fieldName;
+            const ImmutableString &fieldName = Decorate(mappedStruct.field->name());
+            originalName += fieldName.data();
+            mappedName += fieldName.data();
 
             TType *structType = mappedStruct.field->type();
-            mappedStructs +=
-                "static " + Decorate(structType->getStruct()->name()) + " " + mappedName;
+            mappedStructs += TString("static ") + Decorate(structType->getStruct()->name()).data() +
+                             " " + mappedName;
 
             if (structType->isArray())
             {
@@ -469,7 +470,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 {
     TString mappedStructs = generateStructMapping(std140Structs);
 
-    out << mStructureHLSL->structsHeader();
+    mStructureHLSL->structsHeader(out);
 
     mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms, mSymbolTable);
     out << mUniformHLSL->uniformBlocksHeader(mReferencedUniformBlocks);
@@ -1918,7 +1919,7 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                     out << "static ";
                 }
 
-                out << TypeString(declarator->getType()) + " ";
+                out << TypeString(declarator->getType()) << " ";
 
                 TIntermSymbol *symbol = declarator->getAsSymbolNode();
 
@@ -1979,7 +1980,7 @@ void OutputHLSL::visitFunctionPrototype(TIntermFunctionPrototype *node)
 
     const TFunction *func = node->getFunction();
 
-    TString name = DecorateFunctionIfNeeded(func);
+    const ImmutableString &name = DecorateFunctionIfNeeded(func);
     out << TypeString(node->getType()) << " " << name << DisambiguateFunctionName(func)
         << (mOutputLod0Function ? "Lod0(" : "(");
 
@@ -2786,7 +2787,7 @@ void OutputHLSL::writeParameter(const TVariable *param, TInfoSinkBase &out)
     const TType &type    = param->getType();
     TQualifier qualifier = type.getQualifier();
 
-    TString nameStr = DecorateVariableIfNeeded(*param);
+    const ImmutableString &nameStr = DecorateVariableIfNeeded(*param);
     ASSERT(nameStr != "");  // HLSL demands named arguments, also for prototypes
 
     if (IsSampler(type.getBasicType()))
@@ -2817,10 +2818,9 @@ void OutputHLSL::writeParameter(const TVariable *param, TInfoSinkBase &out)
     {
         ASSERT(qualifier != EvqOut && qualifier != EvqInOut);
         TVector<const TVariable *> samplerSymbols;
-        std::string namePrefix = "angle";
-        namePrefix += nameStr.c_str();
-        type.createSamplerSymbols(ImmutableString(namePrefix), "", &samplerSymbols, nullptr,
-                                  mSymbolTable);
+        ImmutableStringBuilder namePrefix(nameStr.length() + 5u);
+        namePrefix << "angle" << nameStr;
+        type.createSamplerSymbols(namePrefix, "", &samplerSymbols, nullptr, mSymbolTable);
         for (const TVariable *sampler : samplerSymbols)
         {
             const TType &samplerType = sampler->getType();
@@ -3007,16 +3007,16 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
         }
     }
 
-    const TString &structNameString = StructNameString(structure);
+    const ImmutableString &structNameString = StructNameString(structure);
 
     StructEqualityFunction *function = new StructEqualityFunction();
     function->structure              = &structure;
-    function->functionName           = "angle_eq_" + structNameString;
+    function->functionName           = TString("angle_eq_") + structNameString.data();
 
     TInfoSinkBase fnOut;
 
     fnOut << "bool " << function->functionName << "(" << structNameString << " a, "
-          << structNameString + " b)\n"
+          << structNameString << " b)\n"
           << "{\n"
              "    return ";
 
@@ -3025,9 +3025,6 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
         const TField *field    = fields[i];
         const TType *fieldType = field->type();
 
-        const TString &fieldNameA = "a." + Decorate(field->name());
-        const TString &fieldNameB = "b." + Decorate(field->name());
-
         if (i > 0)
         {
             fnOut << " && ";
@@ -3035,9 +3032,9 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
 
         fnOut << "(";
         outputEqual(PreVisit, *fieldType, EOpEqual, fnOut);
-        fnOut << fieldNameA;
+        fnOut << "a." << Decorate(field->name());
         outputEqual(InVisit, *fieldType, EOpEqual, fnOut);
-        fnOut << fieldNameB;
+        fnOut << "b." << Decorate(field->name());
         outputEqual(PostVisit, *fieldType, EOpEqual, fnOut);
         fnOut << ")";
     }
@@ -3073,7 +3070,7 @@ TString OutputHLSL::addArrayEqualityFunction(const TType &type)
 
     TInfoSinkBase fnOut;
 
-    const TString &typeName = TypeString(type);
+    const ImmutableString &typeName = TypeString(type);
     fnOut << "bool " << function->functionName << "(" << typeName << " a" << ArrayString(type)
           << ", " << typeName << " b" << ArrayString(type) << ")\n"
           << "{\n"
@@ -3122,7 +3119,7 @@ TString OutputHLSL::addArrayAssignmentFunction(const TType &type)
 
     TInfoSinkBase fnOut;
 
-    const TString &typeName = TypeString(type);
+    const ImmutableString &typeName = TypeString(type);
     fnOut << "void " << function.functionName << "(out " << typeName << " a" << ArrayString(type)
           << ", " << typeName << " b" << ArrayString(type) << ")\n"
           << "{\n"
@@ -3169,7 +3166,7 @@ TString OutputHLSL::addArrayConstructIntoFunction(const TType &type)
 
     TInfoSinkBase fnOut;
 
-    const TString &typeName = TypeString(type);
+    const ImmutableString &typeName = TypeString(type);
     fnOut << "void " << function.functionName << "(out " << typeName << " a" << ArrayString(type);
     for (unsigned int i = 0u; i < type.getOutermostArraySize(); ++i)
     {

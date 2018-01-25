@@ -27,13 +27,14 @@ TString Define(const TStructure &structure,
 {
     const TFieldList &fields = structure.fields();
     const bool isNameless    = (structure.symbolType() == SymbolType::Empty);
-    const TString &structName =
-        QualifiedStructNameString(structure, useHLSLRowMajorPacking, useStd140Packing);
-    const TString declareString = (isNameless ? "struct" : "struct " + structName);
-
-    TString string;
-    string += declareString +
-              "\n"
+    TStringStream string;
+    string << "struct";
+    if (!isNameless)
+    {
+        string << " "
+               << QualifiedStructNameString(structure, useHLSLRowMajorPacking, useStd140Packing);
+    }
+    string << "\n"
               "{\n";
 
     for (const TField *field : fields)
@@ -42,54 +43,53 @@ TString Define(const TStructure &structure,
         if (!IsSampler(fieldType.getBasicType()))
         {
             const TStructure *fieldStruct = fieldType.getStruct();
-            const TString &fieldTypeString =
+            const ImmutableString &fieldTypeString =
                 fieldStruct ? QualifiedStructNameString(*fieldStruct, useHLSLRowMajorPacking,
                                                         useStd140Packing)
                             : TypeString(fieldType);
 
             if (padHelper)
             {
-                string += padHelper->prePaddingString(fieldType);
+                string << padHelper->prePaddingString(fieldType);
             }
 
-            string += "    " + fieldTypeString + " " + DecorateField(field->name(), structure) +
-                      ArrayString(fieldType).data() + ";\n";
+            string << "    " << fieldTypeString << " " << DecorateField(field->name(), structure)
+                   << ArrayString(fieldType) << ";\n";
 
             if (padHelper)
             {
-                string += padHelper->postPaddingString(fieldType, useHLSLRowMajorPacking);
+                string << padHelper->postPaddingString(fieldType, useHLSLRowMajorPacking);
             }
         }
     }
 
     // Nameless structs do not finish with a semicolon and newline, to leave room for an instance
     // variable
-    string += (isNameless ? "} " : "};\n");
+    string << (isNameless ? "} " : "};\n");
 
-    return string;
+    return string.str();
 }
 
 TString WriteParameterList(const std::vector<TType> &parameters)
 {
-    TString parameterList;
+    TStringStream parameterList;
     for (size_t parameter = 0u; parameter < parameters.size(); parameter++)
     {
         const TType &paramType = parameters[parameter];
 
-        parameterList +=
-            TypeString(paramType) + " x" + str(parameter) + ArrayString(paramType).data();
+        parameterList << TypeString(paramType) << " x" << parameter << ArrayString(paramType);
 
         if (parameter < parameters.size() - 1u)
         {
-            parameterList += ", ";
+            parameterList << ", ";
         }
     }
-    return parameterList;
+    return parameterList.str();
 }
 
 }  // anonymous namespace
 
-Std140PaddingHelper::Std140PaddingHelper(const std::map<TString, int> &structElementIndexes,
+Std140PaddingHelper::Std140PaddingHelper(const std::map<ImmutableString, int> &structElementIndexes,
                                          unsigned *uniqueCounter)
     : mPaddingCounter(uniqueCounter), mElementIndex(0), mStructElementIndexes(&structElementIndexes)
 {
@@ -192,7 +192,7 @@ TString Std140PaddingHelper::postPaddingString(const TType &type, bool useHLSLRo
     }
     else if (structure)
     {
-        const TString &structName =
+        const ImmutableString &structName =
             QualifiedStructNameString(*structure, useHLSLRowMajorPacking, true);
         numComponents = mStructElementIndexes->find(structName)->second;
 
@@ -245,7 +245,7 @@ TString StructureHLSL::defineNameless(const TStructure &structure)
 }
 
 StructureHLSL::DefinedStructs::iterator StructureHLSL::defineVariants(const TStructure &structure,
-                                                                      const TString &name)
+                                                                      const ImmutableString &name)
 {
     ASSERT(mDefinedStructs.find(name) == mDefinedStructs.end());
 
@@ -287,7 +287,7 @@ StructureHLSL::DefinedStructs::iterator StructureHLSL::defineVariants(const TStr
 
 void StructureHLSL::ensureStructDefined(const TStructure &structure)
 {
-    const TString name = StructNameString(structure);
+    const ImmutableString name = StructNameString(structure);
     if (name == "")
     {
         return;  // Nameless structures are not defined
@@ -300,7 +300,7 @@ void StructureHLSL::ensureStructDefined(const TStructure &structure)
 
 TString StructureHLSL::addStructConstructor(const TStructure &structure)
 {
-    const TString name = StructNameString(structure);
+    const ImmutableString &name = StructNameString(structure);
 
     if (name == "")
     {
@@ -312,13 +312,14 @@ TString StructureHLSL::addStructConstructor(const TStructure &structure)
     {
         definedStruct = defineVariants(structure, name);
     }
-    const TString constructorFunctionName = TString(name) + "_ctor";
-    TString *constructor                  = &definedStruct->second->constructor;
-    if (!constructor->empty())
+    const TString constructorFunctionName = TString(name.data()) + "_ctor";
+    if (!definedStruct->second->constructor.empty())
     {
         return constructorFunctionName;  // Already added
     }
-    *constructor += name + " " + constructorFunctionName + "(";
+
+    TStringStream constructor;
+    constructor << name << " " + constructorFunctionName << "(";
 
     std::vector<TType> ctorParameters;
     const TFieldList &fields = structure.fields();
@@ -335,26 +336,26 @@ TString StructureHLSL::addStructConstructor(const TStructure &structure)
     // either.
     ASSERT(!ctorParameters.empty());
 
-    *constructor += WriteParameterList(ctorParameters);
+    constructor << WriteParameterList(ctorParameters);
 
-    *constructor +=
-        ")\n"
-        "{\n"
-        "    " +
-        name + " structure = { ";
+    constructor << ")\n"
+                   "{\n"
+                   "    "
+                << name << " structure = { ";
 
     for (size_t parameterIndex = 0u; parameterIndex < ctorParameters.size(); ++parameterIndex)
     {
-        *constructor += "x" + str(parameterIndex);
+        constructor << "x" << parameterIndex;
         if (parameterIndex < ctorParameters.size() - 1u)
         {
-            *constructor += ", ";
+            constructor << ", ";
         }
     }
-    *constructor +=
-        "};\n"
-        "    return structure;\n"
-        "}\n";
+    constructor << "};\n"
+                   "    return structure;\n"
+                   "}\n";
+
+    definedStruct->second->constructor = constructor.str();
 
     return constructorFunctionName;
 }
@@ -371,7 +372,8 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
 
     const TString constructorFunctionName =
         TString(type.getBuiltInTypeNameString()) + "_ctor" + DisambiguateFunctionName(parameters);
-    TString constructor = TypeString(ctorType) + " " + constructorFunctionName + "(";
+    TStringStream constructor;
+    constructor << TypeString(ctorType) << " " << constructorFunctionName << "(";
 
     std::vector<TType> ctorParameters;
     for (auto parameter : *parameters)
@@ -380,13 +382,12 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
         ASSERT(!paramType.isArray());
         ctorParameters.push_back(paramType);
     }
-    constructor += WriteParameterList(ctorParameters);
+    constructor << WriteParameterList(ctorParameters);
 
-    constructor +=
-        ")\n"
-        "{\n"
-        "    return " +
-        TypeString(ctorType) + "(";
+    constructor << ")\n"
+                   "{\n"
+                   "    return "
+                << TypeString(ctorType) << "(";
 
     if (ctorType.isMatrix() && ctorParameters.size() == 1)
     {
@@ -400,11 +401,11 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
             {
                 for (int row = 0; row < rows; row++)
                 {
-                    constructor += TString((row == col) ? "x0" : "0.0");
+                    constructor << ((row == col) ? "x0" : "0.0");
 
                     if (row < rows - 1 || col < cols - 1)
                     {
-                        constructor += ", ";
+                        constructor << ", ";
                     }
                 }
             }
@@ -417,16 +418,17 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
                 {
                     if (row < parameter.getRows() && col < parameter.getCols())
                     {
-                        constructor += TString("x0") + "[" + str(col) + "][" + str(row) + "]";
+                        constructor << "x0"
+                                    << "[" << col << "][" << row << "]";
                     }
                     else
                     {
-                        constructor += TString((row == col) ? "1.0" : "0.0");
+                        constructor << ((row == col) ? "1.0" : "0.0");
                     }
 
                     if (row < rows - 1 || col < cols - 1)
                     {
-                        constructor += ", ";
+                        constructor << ", ";
                     }
                 }
             }
@@ -436,7 +438,7 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
             ASSERT(rows == 2 && cols == 2 && parameter.isVector() &&
                    parameter.getNominalSize() == 4);
 
-            constructor += "x0";
+            constructor << "x0";
         }
     }
     else
@@ -450,7 +452,7 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
             const size_t parameterSize = parameter.getObjectSize();
             bool moreParameters        = parameterIndex + 1 < ctorParameters.size();
 
-            constructor += "x" + str(parameterIndex);
+            constructor << "x" << parameterIndex;
 
             if (parameter.isScalar())
             {
@@ -468,16 +470,16 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
                     switch (remainingComponents)
                     {
                         case 1:
-                            constructor += ".x";
+                            constructor << ".x";
                             break;
                         case 2:
-                            constructor += ".xy";
+                            constructor << ".xy";
                             break;
                         case 3:
-                            constructor += ".xyz";
+                            constructor << ".xyz";
                             break;
                         case 4:
-                            constructor += ".xyzw";
+                            constructor << ".xyzw";
                             break;
                         default:
                             UNREACHABLE();
@@ -493,20 +495,20 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
                 int column = 0;
                 while (remainingComponents > 0 && column < parameter.getCols())
                 {
-                    constructor += "[" + str(column) + "]";
+                    constructor << "[" << column << "]";
 
                     if (remainingComponents < static_cast<size_t>(parameter.getRows()))
                     {
                         switch (remainingComponents)
                         {
                             case 1:
-                                constructor += ".x";
+                                constructor << ".x";
                                 break;
                             case 2:
-                                constructor += ".xy";
+                                constructor << ".xy";
                                 break;
                             case 3:
-                                constructor += ".xyz";
+                                constructor << ".xyz";
                                 break;
                             default:
                                 UNREACHABLE();
@@ -520,7 +522,7 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
 
                         if (remainingComponents > 0)
                         {
-                            constructor += ", x" + str(parameterIndex);
+                            constructor << ", x" << parameterIndex;
                         }
                     }
 
@@ -539,24 +541,21 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
 
             if (remainingComponents)
             {
-                constructor += ", ";
+                constructor << ", ";
             }
         }
     }
 
-    constructor +=
-        ");\n"
-        "}\n";
+    constructor << ");\n"
+                   "}\n";
 
-    mBuiltInConstructors.insert(constructor);
+    mBuiltInConstructors.insert(constructor.str());
 
     return constructorFunctionName;
 }
 
-std::string StructureHLSL::structsHeader() const
+void StructureHLSL::structsHeader(TInfoSinkBase &out) const
 {
-    TInfoSinkBase out;
-
     for (auto &declaration : mStructDeclarations)
     {
         out << declaration;
@@ -571,8 +570,6 @@ std::string StructureHLSL::structsHeader() const
     {
         out << constructor;
     }
-
-    return out.str();
 }
 
 void StructureHLSL::storeStd140ElementIndex(const TStructure &structure,
@@ -588,7 +585,8 @@ void StructureHLSL::storeStd140ElementIndex(const TStructure &structure,
 
     // Add remaining element index to the global map, for use with nested structs in standard
     // layouts
-    const TString &structName = QualifiedStructNameString(structure, useHLSLRowMajorPacking, true);
+    const ImmutableString &structName =
+        QualifiedStructNameString(structure, useHLSLRowMajorPacking, true);
     mStd140StructElementIndexes[structName] = padHelper.elementIndex();
 }
 
