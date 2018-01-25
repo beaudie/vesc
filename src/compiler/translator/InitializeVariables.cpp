@@ -168,18 +168,21 @@ void InsertInitCode(TIntermSequence *mainBody,
 {
     for (const auto &var : variables)
     {
-        TString name = TString(var.name.c_str());
-        size_t pos   = name.find_last_of('[');
-        if (pos != TString::npos)
+        size_t pos = var.name.find_last_of('[');
+        ImmutableString name("");
+        if (pos != std::string::npos)
         {
-            name = name.substr(0, pos);
+            name = ImmutableString(var.name, 0, pos);
+        }
+        else
+        {
+            name = ImmutableString(var.name);
         }
 
         TIntermTyped *initializedSymbol = nullptr;
         if (var.isBuiltIn())
         {
-            initializedSymbol = ReferenceBuiltInVariable(ImmutableString(name.c_str()),
-                                                         *symbolTable, shaderVersion);
+            initializedSymbol = ReferenceBuiltInVariable(name, *symbolTable, shaderVersion);
             if (initializedSymbol->getQualifier() == EvqFragData &&
                 !IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
             {
@@ -195,8 +198,7 @@ void InsertInitCode(TIntermSequence *mainBody,
         }
         else
         {
-            initializedSymbol =
-                ReferenceGlobalVariable(ImmutableString(name.c_str()), *symbolTable);
+            initializedSymbol = ReferenceGlobalVariable(name, *symbolTable);
         }
         ASSERT(initializedSymbol != nullptr);
 
