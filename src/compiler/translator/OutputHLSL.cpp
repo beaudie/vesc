@@ -1967,7 +1967,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 {
                     coords = (*arguments)[1]->getAsTyped()->getNominalSize();
                 }
-                TString textureFunctionName = mTextureFunctionHLSL->useTextureFunction(
+                ImmutableString textureFunctionName = mTextureFunctionHLSL->useTextureFunction(
                     name, samplerType, coords, arguments->size(), lod0, mShaderType);
                 out << textureFunctionName << "(";
             }
