@@ -54,6 +54,11 @@ class ImmutableString
     {
     }
 
+    ImmutableString(const std::string &str, size_t begin, size_t length)
+        : mData(AllocatePoolCharArray(str.c_str() + begin, length)), mLength(length)
+    {
+    }
+
     ImmutableString(const ImmutableString &) = default;
     ImmutableString &operator=(const ImmutableString &) = default;
 
