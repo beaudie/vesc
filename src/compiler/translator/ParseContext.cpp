@@ -32,29 +32,21 @@ namespace
 
 const int kWebGLMaxStructNesting = 4;
 
-bool ContainsSampler(const TStructure *structType);
-
 bool ContainsSampler(const TType &type)
 {
     if (IsSampler(type.getBasicType()))
-    {
         return true;
-    }
+
     if (type.getBasicType() == EbtStruct)
     {
-        return ContainsSampler(type.getStruct());
+        const TFieldList &fields = type.getStruct()->fields();
+        for (unsigned int i = 0; i < fields.size(); ++i)
+        {
+            if (ContainsSampler(*fields[i]->type()))
+                return true;
+        }
     }
 
-    return false;
-}
-
-bool ContainsSampler(const TStructure *structType)
-{
-    for (const auto &field : structType->fields())
-    {
-        if (ContainsSampler(*field->type()))
-            return true;
-    }
     return false;
 }
 
@@ -810,7 +802,7 @@ bool TParseContext::checkIsNotOpaqueType(const TSourceLoc &line,
 {
     if (pType.type == EbtStruct)
     {
-        if (ContainsSampler(pType.userDef))
+        if (ContainsSampler(*pType.userDef))
         {
             std::stringstream reasonStream;
             reasonStream << reason << " (structure contains a sampler)";
@@ -1044,10 +1036,11 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     if (needsReservedCheck && !checkIsNotReserved(line, identifier))
         return false;
 
-    (*variable) = symbolTable.declareVariable(&identifier, type);
-    if (!(*variable))
+    (*variable) = new TVariable(&identifier, type);
+    if (!symbolTable.declare(*variable))
     {
         error(line, "redefinition", identifier.c_str());
+        *variable = nullptr;
         return false;
     }
 
@@ -1633,65 +1626,75 @@ const TVariable *TParseContext::getNamedVariable(const TSourceLoc &location,
                                                  const TString *name,
                                                  const TSymbol *symbol)
 {
+    const TVariable *variable = nullptr;
+
     if (!symbol)
     {
         error(location, "undeclared identifier", name->c_str());
-        return nullptr;
     }
-
-    if (!symbol->isVariable())
+    else if (!symbol->isVariable())
     {
         error(location, "variable expected", name->c_str());
-        return nullptr;
     }
+    else
+    {
+        variable = static_cast<const TVariable *>(symbol);
 
-    const TVariable *variable = static_cast<const TVariable *>(symbol);
-
-    if (symbolTable.findBuiltIn(variable->getName(), mShaderVersion) &&
-        !variable->getExtension().empty())
-    {
-        checkCanUseExtension(location, variable->getExtension());
-    }
-
-    // Reject shaders using both gl_FragData and gl_FragColor
-    TQualifier qualifier = variable->getType().getQualifier();
-    if (qualifier == EvqFragData || qualifier == EvqSecondaryFragDataEXT)
-    {
-        mUsesFragData = true;
-    }
-    else if (qualifier == EvqFragColor || qualifier == EvqSecondaryFragColorEXT)
-    {
-        mUsesFragColor = true;
-    }
-    if (qualifier == EvqSecondaryFragDataEXT || qualifier == EvqSecondaryFragColorEXT)
-    {
-        mUsesSecondaryOutputs = true;
-    }
-
-    // This validation is not quite correct - it's only an error to write to
-    // both FragData and FragColor. For simplicity, and because users shouldn't
-    // be rewarded for reading from undefined varaibles, return an error
-    // if they are both referenced, rather than assigned.
-    if (mUsesFragData && mUsesFragColor)
-    {
-        const char *errorMessage = "cannot use both gl_FragData and gl_FragColor";
-        if (mUsesSecondaryOutputs)
+        if (symbolTable.findBuiltIn(variable->getName(), mShaderVersion) &&
+            !variable->getExtension().empty())
         {
-            errorMessage =
-                "cannot use both output variable sets (gl_FragData, gl_SecondaryFragDataEXT)"
-                " and (gl_FragColor, gl_SecondaryFragColorEXT)";
+            checkCanUseExtension(location, variable->getExtension());
         }
-        error(location, errorMessage, name->c_str());
+
+        // Reject shaders using both gl_FragData and gl_FragColor
+        TQualifier qualifier = variable->getType().getQualifier();
+        if (qualifier == EvqFragData || qualifier == EvqSecondaryFragDataEXT)
+        {
+            mUsesFragData = true;
+        }
+        else if (qualifier == EvqFragColor || qualifier == EvqSecondaryFragColorEXT)
+        {
+            mUsesFragColor = true;
+        }
+        if (qualifier == EvqSecondaryFragDataEXT || qualifier == EvqSecondaryFragColorEXT)
+        {
+            mUsesSecondaryOutputs = true;
+        }
+
+        // This validation is not quite correct - it's only an error to write to
+        // both FragData and FragColor. For simplicity, and because users shouldn't
+        // be rewarded for reading from undefined varaibles, return an error
+        // if they are both referenced, rather than assigned.
+        if (mUsesFragData && mUsesFragColor)
+        {
+            const char *errorMessage = "cannot use both gl_FragData and gl_FragColor";
+            if (mUsesSecondaryOutputs)
+            {
+                errorMessage =
+                    "cannot use both output variable sets (gl_FragData, gl_SecondaryFragDataEXT)"
+                    " and (gl_FragColor, gl_SecondaryFragColorEXT)";
+            }
+            error(location, errorMessage, name->c_str());
+        }
+
+        // GLSL ES 3.1 Revision 4, 7.1.3 Compute Shader Special Variables
+        if (getShaderType() == GL_COMPUTE_SHADER && !mComputeShaderLocalSizeDeclared &&
+            qualifier == EvqWorkGroupSize)
+        {
+            error(location,
+                  "It is an error to use gl_WorkGroupSize before declaring the local group size",
+                  "gl_WorkGroupSize");
+        }
     }
 
-    // GLSL ES 3.1 Revision 4, 7.1.3 Compute Shader Special Variables
-    if (getShaderType() == GL_COMPUTE_SHADER && !mComputeShaderLocalSizeDeclared &&
-        qualifier == EvqWorkGroupSize)
+    if (!variable)
     {
-        error(location,
-              "It is an error to use gl_WorkGroupSize before declaring the local group size",
-              "gl_WorkGroupSize");
+        TType type(EbtFloat, EbpUndefined);
+        TVariable *fakeVariable = new TVariable(name, type);
+        symbolTable.declare(fakeVariable);
+        variable = fakeVariable;
     }
+
     return variable;
 }
 
@@ -1700,13 +1703,6 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
                                                      const TSymbol *symbol)
 {
     const TVariable *variable = getNamedVariable(location, name, symbol);
-
-    if (!variable)
-    {
-        TIntermTyped *node = CreateZeroNode(TType(EbtFloat, EbpHigh, EvqConst));
-        node->setLine(location);
-        return node;
-    }
 
     if (variable->getType().getQualifier() == EvqViewIDOVR && IsWebGLBasedSpec(mShaderSpec) &&
         mShaderType == GL_FRAGMENT_SHADER && !isExtensionEnabled("GL_OVR_multiview2"))
@@ -2451,10 +2447,7 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
     }
 
     const TVariable *variable = getNamedVariable(identifierLoc, identifier, symbol);
-    if (!variable)
-    {
-        return nullptr;
-    }
+    ASSERT(variable);
     const TType &type = variable->getType();
 
     checkInvariantVariableQualifier(typeQualifier.invariant, type.getQualifier(),
@@ -2834,11 +2827,12 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
         // be used for unused args).
         if (param.name != nullptr)
         {
+            TVariable *variable = new TVariable(param.name, *param.type);
+
             // Insert the parameter in the symbol table.
             if (insertParametersToSymbolTable)
             {
-                TVariable *variable = symbolTable.declareVariable(param.name, *param.type);
-                if (variable)
+                if (symbolTable.declare(variable))
                 {
                     symbol = new TIntermSymbol(variable->getUniqueId(), variable->getName(),
                                                variable->getType());
@@ -3265,7 +3259,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     checkInternalFormatIsNotSpecified(nameLine, blockLayoutQualifier.imageInternalFormat);
 
-    if (!symbolTable.declareInterfaceBlockName(&blockName))
+    TSymbol *blockNameSymbol = new TInterfaceBlockName(&blockName);
+    if (!symbolTable.declare(blockNameSymbol))
     {
         error(nameLine, "redefinition of an interface block name", blockName.c_str());
     }
@@ -3375,13 +3370,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             // set parent pointer of the field variable
             fieldType->setInterfaceBlock(interfaceBlock);
 
-            TVariable *fieldVariable = symbolTable.declareVariable(&field->name(), *fieldType);
+            TVariable *fieldVariable = new TVariable(&field->name(), *fieldType);
+            fieldVariable->setQualifier(typeQualifier.qualifier);
 
-            if (fieldVariable)
-            {
-                fieldVariable->setQualifier(typeQualifier.qualifier);
-            }
-            else
+            if (!symbolTable.declare(fieldVariable))
             {
                 error(field->line(), "redefinition of an interface block member name",
                       field->name().c_str());
@@ -3393,18 +3385,17 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         checkIsNotReserved(instanceLine, *instanceName);
 
         // add a symbol for this interface block
-        TVariable *instanceTypeDef = symbolTable.declareVariable(instanceName, interfaceBlockType);
-        if (instanceTypeDef)
-        {
-            instanceTypeDef->setQualifier(typeQualifier.qualifier);
-            symbolId = instanceTypeDef->getUniqueId();
-        }
-        else
+        TVariable *instanceTypeDef = new TVariable(instanceName, interfaceBlockType, false);
+        instanceTypeDef->setQualifier(typeQualifier.qualifier);
+
+        if (!symbolTable.declare(instanceTypeDef))
         {
             error(instanceLine, "redefinition of an interface block instance name",
                   instanceName->c_str());
         }
-        symbolName = *instanceName;
+
+        symbolId   = instanceTypeDef->getUniqueId();
+        symbolName = instanceTypeDef->getName();
     }
 
     TIntermSymbol *blockSymbol = new TIntermSymbol(symbolId, symbolName, interfaceBlockType);
@@ -4129,7 +4120,7 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
             type->setArraySize(static_cast<unsigned int>(typeSpecifier.arraySize));
         if (typeSpecifier.getUserDef())
         {
-            type->setStruct(typeSpecifier.getUserDef());
+            type->setStruct(typeSpecifier.getUserDef()->getStruct());
         }
 
         checkIsBelowStructNestingLimit(typeSpecifier.getLine(), *(*fieldList)[i]);
@@ -4144,6 +4135,7 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
                                                    TFieldList *fieldList)
 {
     TStructure *structure = new TStructure(structName, fieldList);
+    TType *structureType  = new TType(structure);
 
     // Store a bool in the struct if we're at global scope, to allow us to
     // skip the local struct scoping workaround in HLSL.
@@ -4152,7 +4144,8 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     if (!structName->empty())
     {
         checkIsNotReserved(nameLine, *structName);
-        if (!symbolTable.declareStructType(structure))
+        TVariable *userTypeDef = new TVariable(structName, *structureType, true);
+        if (!symbolTable.declare(userTypeDef))
         {
             error(nameLine, "redefinition of a struct", structName->c_str());
         }
@@ -4191,7 +4184,7 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     }
 
     TTypeSpecifierNonArray typeSpecifierNonArray;
-    typeSpecifierNonArray.initializeStruct(structure, true, structLine);
+    typeSpecifierNonArray.initializeStruct(structureType, true, structLine);
     exitStructDeclaration();
 
     return typeSpecifierNonArray;

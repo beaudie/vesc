@@ -130,7 +130,7 @@ TType::TType(const TPublicType &p)
     ASSERT(primarySize <= 4);
     ASSERT(secondarySize <= 4);
     if (p.getUserDef())
-        structure = p.getUserDef();
+        structure = p.getUserDef()->getStruct();
 }
 
 bool TStructure::equals(const TStructure &other) const
