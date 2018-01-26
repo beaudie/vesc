@@ -267,6 +267,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
 
     virtual RendererClass getRendererClass() const = 0;
     virtual void *getD3DDevice() = 0;
+    virtual unsigned int getReservedVaryingVectors() const = 0;
 
     void setGPUDisjoint();
 

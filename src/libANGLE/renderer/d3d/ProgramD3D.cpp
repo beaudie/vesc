@@ -1732,8 +1732,8 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         // TODO(jmadill): Implement more sophisticated component packing in D3D9.
         // We can fail here because we use one semantic per GLSL varying. D3D11 can pack varyings
         // intelligently, but D3D9 assumes one semantic per register.
-        if (mRenderer->getRendererClass() == RENDERER_D3D9 &&
-            resources.varyingPacking.getMaxSemanticIndex() > data.getCaps().maxVaryingVectors)
+        if (resources.varyingPacking.getMaxSemanticIndex() >
+            (data.getCaps().maxVaryingVectors - mRenderer->getReservedVaryingVectors()))
         {
             infoLog << "Cannot pack these varyings on D3D9.";
             return false;

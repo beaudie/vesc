@@ -4053,4 +4053,9 @@ void Renderer11::onDirtyUniformBlockBinding(GLuint /*uniformBlockIndex*/)
     mStateManager.invalidateProgramUniformBuffers();
 }
 
+unsigned int Renderer11::getReservedVaryingVectors() const
+{
+    return 0;
+}
+
 }  // namespace rx

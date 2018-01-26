@@ -3290,4 +3290,9 @@ gl::Error Renderer9::applyTextures(const gl::Context *context)
     return gl::NoError();
 }
 
+unsigned int Renderer9::getReservedVaryingVectors() const
+{
+    return d3d9_gl::GetReservedVaryingVectors();
+}
+
 }  // namespace rx

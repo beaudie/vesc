@@ -176,6 +176,7 @@ class Renderer9 : public RendererD3D
     IDirect3DDevice9 *getDevice() { return mDevice; }
     void *getD3DDevice() override;
 
+    unsigned int getReservedVaryingVectors() const override;
     unsigned int getReservedVertexUniformVectors() const;
     unsigned int getReservedFragmentUniformVectors() const;
 

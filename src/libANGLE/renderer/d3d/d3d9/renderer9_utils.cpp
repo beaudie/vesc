@@ -292,6 +292,12 @@ D3DMULTISAMPLE_TYPE GetMultisampleType(GLuint samples)
 namespace d3d9_gl
 {
 
+unsigned int GetReservedVaryingVectors()
+{
+    // We reserve two registes for "dx_Position" and similar friends.
+    return 2;
+}
+
 unsigned int GetReservedVertexUniformVectors()
 {
     return 3;  // dx_ViewCoords, dx_ViewAdjust and dx_DepthRange.
@@ -473,8 +479,9 @@ void GenerateCaps(IDirect3D9 *d3d9,
     caps->maxVertexUniformBlocks = 0;
 
     // SM3 only supports 11 output variables, with a special 12th register for PSIZE.
-    const size_t MAX_VERTEX_OUTPUT_VECTORS_SM3 = 9;
-    const size_t MAX_VERTEX_OUTPUT_VECTORS_SM2 = 7;
+    // We reserve two registers for internal use, for internal varyings not mentioned in the spec.
+    const unsigned int MAX_VERTEX_OUTPUT_VECTORS_SM3 = 11 - GetReservedVaryingVectors();
+    const unsigned int MAX_VERTEX_OUTPUT_VECTORS_SM2 = 9 - GetReservedVaryingVectors();
     caps->maxVertexOutputComponents = ((deviceCaps.VertexShaderVersion >= D3DVS_VERSION(3, 0)) ? MAX_VERTEX_OUTPUT_VECTORS_SM3
                                                                                                : MAX_VERTEX_OUTPUT_VECTORS_SM2) * 4;
 

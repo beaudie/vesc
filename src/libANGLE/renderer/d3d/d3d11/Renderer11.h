@@ -157,6 +157,7 @@ class Renderer11 : public RendererD3D
     std::string getRendererDescription() const;
     DeviceIdentifier getAdapterIdentifier() const override;
 
+    unsigned int getReservedVaryingVectors() const override;
     unsigned int getReservedVertexUniformVectors() const;
     unsigned int getReservedFragmentUniformVectors() const;
     unsigned int getReservedVertexUniformBuffers() const;
