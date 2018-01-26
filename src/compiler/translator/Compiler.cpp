@@ -745,11 +745,7 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
 
     symbolTable.setDefaultPrecision(EbtAtomicCounter, EbpHigh);
 
-    InsertBuiltInFunctions(shaderType, shaderSpec, resources, symbolTable);
-
-    IdentifyBuiltIns(shaderType, shaderSpec, resources, symbolTable);
-
-    symbolTable.markBuiltInInitializationFinished();
+    symbolTable.initializeBuiltIns(shaderType, shaderSpec, resources);
 
     return true;
 }

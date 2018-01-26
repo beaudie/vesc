@@ -237,7 +237,9 @@ class TSymbolTable : angle::NonCopyable
     // Checks whether there is a built-in accessible by a shader with the specified version.
     bool hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion);
 
-    void markBuiltInInitializationFinished();
+    void initializeBuiltIns(sh::GLenum type,
+                            ShShaderSpec spec,
+                            const ShBuiltInResources &resources);
     void clearCompilationResults();
 
   private:
@@ -262,6 +264,14 @@ class TSymbolTable : angle::NonCopyable
     void insertUnmangledBuiltInName(const char *name, ESymbolLevel level);
 
     bool hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level);
+
+    void initializeBuiltInFunctions(sh::GLenum type,
+                                    ShShaderSpec spec,
+                                    const ShBuiltInResources &resources);
+    void initializeBuiltInVariables(sh::GLenum type,
+                                    ShShaderSpec spec,
+                                    const ShBuiltInResources &resources);
+    void markBuiltInInitializationFinished();
 
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
