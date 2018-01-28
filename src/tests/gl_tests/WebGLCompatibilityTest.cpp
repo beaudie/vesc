@@ -1182,61 +1182,73 @@ TEST_P(WebGLCompatibilityTest, NullPixelDataForSubImage)
 // Tests the WebGL requirement of having the same stencil mask, writemask and ref for fron and back
 TEST_P(WebGLCompatibilityTest, RequiresSameStencilMaskAndRef)
 {
-    // Run the test in an FBO to make sure we have some stencil bits.
-    GLRenderbuffer renderbuffer;
-    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.get());
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 32, 32);
+    for (int i = 0; i < 2; ++i) {
+        GLenum errIfMismatch;
+        if (i == 0) {
+            glEnable(GL_STENCIL_TEST);
+            // The restrictions only apply when the stencil test is enabled.
+            errIfMismatch = GL_INVALID_OPERATION;
+        } else {
+            glDisable(GL_STENCIL_TEST);
+            errIfMismatch = GL_NO_ERROR;
+        }
 
-    GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                              renderbuffer.get());
+        // Run the test in an FBO to make sure we have some stencil bits.
+        GLRenderbuffer renderbuffer;
+        glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.get());
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 32, 32);
 
-    ANGLE_GL_PROGRAM(program, "void main() { gl_Position = vec4(0, 0, 0, 1); }",
-                     "void main() { gl_FragColor = vec4(0, 1, 0, 1); }")
-    glUseProgram(program.get());
-    ASSERT_GL_NO_ERROR();
+        GLFramebuffer framebuffer;
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                  renderbuffer.get());
 
-    // Having ref and mask the same for front and back is valid.
-    glStencilMask(255);
-    glStencilFunc(GL_ALWAYS, 0, 255);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    ASSERT_GL_NO_ERROR();
+        ANGLE_GL_PROGRAM(program, "void main() { gl_Position = vec4(0, 0, 0, 1); }",
+                         "void main() { gl_FragColor = vec4(0, 1, 0, 1); }")
+        glUseProgram(program.get());
+        ASSERT_GL_NO_ERROR();
 
-    // Having a different front - back write mask generates an error.
-    glStencilMaskSeparate(GL_FRONT, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        // Having ref and mask the same for front and back is valid.
+        glStencilMask(255);
+        glStencilFunc(GL_ALWAYS, 0, 255);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
 
-    // Setting both write masks separately to the same value is valid.
-    glStencilMaskSeparate(GL_BACK, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    ASSERT_GL_NO_ERROR();
+        // Having a different front - back write mask generates an error.
+        glStencilMaskSeparate(GL_FRONT, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        EXPECT_GL_ERROR(errIfMismatch);
 
-    // Having a different stencil front - back mask generates an error
-    glStencilFuncSeparate(GL_FRONT, GL_ALWAYS, 0, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        // Setting both write masks separately to the same value is valid.
+        glStencilMaskSeparate(GL_BACK, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
 
-    // Setting both masks separately to the same value is valid.
-    glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 0, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    ASSERT_GL_NO_ERROR();
+        // Having a different stencil front - back mask generates an error
+        glStencilFuncSeparate(GL_FRONT, GL_ALWAYS, 0, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        EXPECT_GL_ERROR(errIfMismatch);
 
-    // Having a different stencil front - back reference generates an error
-    glStencilFuncSeparate(GL_FRONT, GL_ALWAYS, 255, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        // Setting both masks separately to the same value is valid.
+        glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 0, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
 
-    // Setting both references separately to the same value is valid.
-    glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 255, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    ASSERT_GL_NO_ERROR();
+        // Having a different stencil front - back reference generates an error
+        glStencilFuncSeparate(GL_FRONT, GL_ALWAYS, 255, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        EXPECT_GL_ERROR(errIfMismatch);
 
-    // Using different stencil funcs, everything being equal is valid.
-    glStencilFuncSeparate(GL_BACK, GL_NEVER, 255, 1);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    ASSERT_GL_NO_ERROR();
+        // Setting both references separately to the same value is valid.
+        glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 255, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+
+        // Using different stencil funcs, everything being equal is valid.
+        glStencilFuncSeparate(GL_BACK, GL_NEVER, 255, 1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+    }
 }
 
 // Test that GL_FIXED is forbidden
