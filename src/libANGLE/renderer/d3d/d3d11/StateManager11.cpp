@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
 
 #include "common/bitset_utils.h"
+#include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Query.h"
@@ -1137,7 +1138,8 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
     }
     ASSERT((mCurDepthStencilState.stencilWritemask & maxStencil) ==
            (mCurDepthStencilState.stencilBackWritemask & maxStencil));
-    ASSERT(mCurStencilRef == mCurStencilBackRef);
+    ASSERT(gl::clamp(mCurStencilRef, 0, static_cast<int>(maxStencil)) ==
+           gl::clamp(mCurStencilBackRef, 0, static_cast<int>(maxStencil)));
     ASSERT((mCurDepthStencilState.stencilMask & maxStencil) ==
            (mCurDepthStencilState.stencilBackMask & maxStencil));
 
@@ -1170,7 +1172,7 @@ gl::Error StateManager11::syncDepthStencilState(const gl::State &glState)
                   "Unexpected value of D3D11_DEFAULT_STENCIL_READ_MASK");
     static_assert(D3D11_DEFAULT_STENCIL_WRITE_MASK == 0xFF,
                   "Unexpected value of D3D11_DEFAULT_STENCIL_WRITE_MASK");
-    UINT dxStencilRef = std::min<UINT>(mCurStencilRef, 0xFFu);
+    UINT dxStencilRef = static_cast<UINT>(gl::clamp(mCurStencilRef, 0, 0xFF));
 
     mRenderer->getDeviceContext()->OMSetDepthStencilState(d3dState->get(), dxStencilRef);
 

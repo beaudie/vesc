@@ -2487,7 +2487,9 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         GLuint minimumRequiredStencilMask = (1 << stencilBits) - 1;
         const DepthStencilState &depthStencilState = state.getDepthStencilState();
 
-        bool differentRefs = state.getStencilRef() != state.getStencilBackRef();
+        bool differentRefs =
+            clamp(state.getStencilRef(), 0, static_cast<GLint>(minimumRequiredStencilMask)) !=
+            clamp(state.getStencilBackRef(), 0, static_cast<GLint>(minimumRequiredStencilMask));
         bool differentWritemasks =
             (depthStencilState.stencilWritemask & minimumRequiredStencilMask) !=
             (depthStencilState.stencilBackWritemask & minimumRequiredStencilMask);
