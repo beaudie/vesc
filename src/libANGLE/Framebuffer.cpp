@@ -1887,7 +1887,7 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
 
     // Note: we assume the front and back masks are the same for WebGL.
     const FramebufferAttachment *stencil = getStencilbuffer();
-    ASSERT(dsState.stencilBackWritemask == dsState.stencilWritemask);
+    ASSERT(!dsState.stencilTest || dsState.stencilBackWritemask == dsState.stencilWritemask);
     if (stencil && stencil->type() == GL_TEXTURE && dsState.stencilTest &&
         dsState.stencilWritemask != 0)
     {
