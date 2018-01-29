@@ -49,12 +49,14 @@ class GPU_EXPORT GPUTestConfig {
     kBuildTypeDebug = 1 << 1,
   };
 
-  enum API {
-    kAPIUnknown = 0,
-    kAPID3D9 = 1 << 0,
-    kAPID3D11 = 1 << 1,
-    kAPIGLDesktop = 1 << 2,
-    kAPIGLES = 1 << 3,
+  enum API
+  {
+      kAPIUnknown   = 0,
+      kAPID3D9      = 1 << 0,
+      kAPID3D11     = 1 << 1,
+      kAPIGLDesktop = 1 << 2,
+      kAPIGLES      = 1 << 3,
+      kAPIVulkan    = 1 << 4,
   };
 
   GPUTestConfig();
