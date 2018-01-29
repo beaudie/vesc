@@ -22,6 +22,7 @@
             '<(angle_path)/src/tests/gl_tests/BlendMinMaxTest.cpp',
             '<(angle_path)/src/tests/gl_tests/BlitFramebufferANGLETest.cpp',
             '<(angle_path)/src/tests/gl_tests/BufferDataTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/BufferSubDataTest.cpp',
             '<(angle_path)/src/tests/gl_tests/BuiltinVariableTest.cpp',
             '<(angle_path)/src/tests/gl_tests/ClearTest.cpp',
             '<(angle_path)/src/tests/gl_tests/ClientArraysTest.cpp',
