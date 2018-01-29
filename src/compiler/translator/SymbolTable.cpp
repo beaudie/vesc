@@ -44,9 +44,6 @@ class TSymbolTable::TSymbolTableLevel
 
     void setGlobalInvariant(bool invariant) { mGlobalInvariant = invariant; }
 
-    void insertUnmangledBuiltInName(const char *name);
-    bool hasUnmangledBuiltIn(const char *name) const;
-
   private:
     using tLevel        = TUnorderedMap<ImmutableString,
                                  TSymbol *,
@@ -55,8 +52,34 @@ class TSymbolTable::TSymbolTableLevel
     using tInsertResult = std::pair<tLevel::iterator, bool>;
 
     tLevel level;
+
     std::set<std::string> mInvariantVaryings;
     bool mGlobalInvariant;
+};
+
+class TSymbolTable::TSymbolTableBuiltInLevel
+{
+  public:
+    TSymbolTableBuiltInLevel() = default;
+
+    bool insert(const TSymbol *symbol);
+
+    // Insert a function using its unmangled name as the key.
+    bool insertUnmangled(const TFunction *function);
+
+    const TSymbol *find(const ImmutableString &name) const;
+
+    void insertUnmangledBuiltInName(const char *name);
+    bool hasUnmangledBuiltIn(const char *name) const;
+
+  private:
+    using tLevel        = TUnorderedMap<ImmutableString,
+                                 const TSymbol *,
+                                 ImmutableString::FowlerNollVoHash<sizeof(size_t)>>;
+    using tLevelPair    = const tLevel::value_type;
+    using tInsertResult = std::pair<tLevel::iterator, bool>;
+
+    tLevel mLevel;
 
     std::set<ImmutableString> mUnmangledBuiltInNames;
 };
@@ -65,7 +88,6 @@ bool TSymbolTable::TSymbolTableLevel::insert(TSymbol *symbol)
 {
     // returning true means symbol was added to the table
     tInsertResult result = level.insert(tLevelPair(symbol->getMangledName(), symbol));
-
     return result.second;
 }
 
@@ -73,7 +95,6 @@ bool TSymbolTable::TSymbolTableLevel::insertUnmangled(TFunction *function)
 {
     // returning true means symbol was added to the table
     tInsertResult result = level.insert(tLevelPair(function->name(), function));
-
     return result.second;
 }
 
@@ -81,19 +102,47 @@ TSymbol *TSymbolTable::TSymbolTableLevel::find(const ImmutableString &name) cons
 {
     tLevel::const_iterator it = level.find(name);
     if (it == level.end())
-        return 0;
+        return nullptr;
     else
         return (*it).second;
 }
 
-void TSymbolTable::TSymbolTableLevel::insertUnmangledBuiltInName(const char *name)
+bool TSymbolTable::TSymbolTableBuiltInLevel::insert(const TSymbol *symbol)
+{
+    // returning true means symbol was added to the table
+    tInsertResult result = mLevel.insert(tLevelPair(symbol->getMangledName(), symbol));
+    return result.second;
+}
+
+bool TSymbolTable::TSymbolTableBuiltInLevel::insertUnmangled(const TFunction *function)
+{
+    // returning true means symbol was added to the table
+    tInsertResult result = mLevel.insert(tLevelPair(function->name(), function));
+    return result.second;
+}
+
+const TSymbol *TSymbolTable::TSymbolTableBuiltInLevel::find(const ImmutableString &name) const
+{
+    tLevel::const_iterator it = mLevel.find(name);
+    if (it == mLevel.end())
+        return nullptr;
+    else
+        return (*it).second;
+}
+
+void TSymbolTable::TSymbolTableBuiltInLevel::insertUnmangledBuiltInName(const char *name)
 {
     mUnmangledBuiltInNames.insert(ImmutableString(name));
 }
 
-bool TSymbolTable::TSymbolTableLevel::hasUnmangledBuiltIn(const char *name) const
+bool TSymbolTable::TSymbolTableBuiltInLevel::hasUnmangledBuiltIn(const char *name) const
 {
     return mUnmangledBuiltInNames.count(ImmutableString(name)) > 0;
+}
+
+void TSymbolTable::pushBuiltInLevel()
+{
+    mBuiltInTable.push_back(new TSymbolTableBuiltInLevel);
 }
 
 void TSymbolTable::push()
@@ -144,37 +193,31 @@ const TFunction *TSymbolTable::setUserDefinedFunctionParameterNamesFromDefinitio
 
 const TSymbol *TSymbolTable::find(const ImmutableString &name, int shaderVersion) const
 {
-    int level       = currentLevel();
-    TSymbol *symbol = nullptr;
-    do
+    int userDefinedLevel = static_cast<int>(table.size()) - 1;
+    while (userDefinedLevel >= 0)
     {
-        if (level == GLSL_BUILTINS)
-            level--;
-        if (level == ESSL3_1_BUILTINS && shaderVersion != 310)
-            level--;
-        if (level == ESSL3_BUILTINS && shaderVersion < 300)
-            level--;
-        if (level == ESSL1_BUILTINS && shaderVersion != 100)
-            level--;
+        const TSymbol *symbol = table[userDefinedLevel]->find(name);
+        if (symbol)
+        {
+            return symbol;
+        }
+        userDefinedLevel--;
+    }
 
-        symbol = table[level]->find(name);
-        level--;
-    } while (symbol == nullptr && level >= 0);
-
-    return symbol;
+    return findBuiltIn(name, shaderVersion, false);
 }
 
 TFunction *TSymbolTable::findUserDefinedFunction(const ImmutableString &name) const
 {
     // User-defined functions are always declared at the global level.
-    ASSERT(currentLevel() >= GLOBAL_LEVEL);
-    return static_cast<TFunction *>(table[GLOBAL_LEVEL]->find(name));
+    ASSERT(!table.empty());
+    return static_cast<TFunction *>(table[0]->find(name));
 }
 
 const TSymbol *TSymbolTable::findGlobal(const ImmutableString &name) const
 {
-    ASSERT(table.size() > GLOBAL_LEVEL);
-    return table[GLOBAL_LEVEL]->find(name);
+    ASSERT(!table.empty());
+    return table[0]->find(name);
 }
 
 const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shaderVersion) const
@@ -197,7 +240,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
         if (level == ESSL1_BUILTINS && shaderVersion != 100)
             level--;
 
-        TSymbol *symbol = table[level]->find(name);
+        const TSymbol *symbol = mBuiltInTable[level]->find(name);
 
         if (symbol)
             return symbol;
@@ -208,8 +251,20 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
 
 TSymbolTable::~TSymbolTable()
 {
-    while (table.size() > 0)
+    while (!table.empty())
+    {
         pop();
+    }
+    while (!mBuiltInTable.empty())
+    {
+        delete mBuiltInTable.back();
+        mBuiltInTable.pop_back();
+    }
+    while (!precisionStack.empty())
+    {
+        delete precisionStack.back();
+        precisionStack.pop_back();
+    }
 }
 
 constexpr bool IsGenType(const TType *type)
@@ -314,9 +369,9 @@ void TSymbolTable::declareUserDefinedFunction(TFunction *function, bool insertUn
     if (insertUnmangledName)
     {
         // Insert the unmangled name to detect potential future redefinition as a variable.
-        table[GLOBAL_LEVEL]->insertUnmangled(function);
+        table[0]->insertUnmangled(function);
     }
-    table[GLOBAL_LEVEL]->insert(function);
+    table[0]->insert(function);
 }
 
 TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
@@ -342,19 +397,17 @@ TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
     return nullptr;
 }
 
-TVariable *TSymbolTable::insertVariableExt(ESymbolLevel level,
-                                           TExtension ext,
-                                           const ImmutableString &name,
-                                           const TType *type)
+void TSymbolTable::insertVariableExt(ESymbolLevel level,
+                                     TExtension ext,
+                                     const ImmutableString &name,
+                                     const TType *type)
 {
     ASSERT(level <= LAST_BUILTIN_LEVEL);
     ASSERT(type->isRealized());
     TVariable *var = new TVariable(this, name, type, SymbolType::BuiltIn, ext);
-    if (insert(level, var))
-    {
-        return var;
-    }
-    return nullptr;
+    bool inserted  = insert(level, var);
+    UNUSED_VARIABLE(inserted);
+    ASSERT(inserted);
 }
 
 bool TSymbolTable::insertVariable(ESymbolLevel level, TVariable *variable)
@@ -367,7 +420,14 @@ bool TSymbolTable::insertVariable(ESymbolLevel level, TVariable *variable)
 bool TSymbolTable::insert(ESymbolLevel level, TSymbol *symbol)
 {
     ASSERT(level > LAST_BUILTIN_LEVEL || mUserDefinedUniqueIdsStart == -1);
-    return table[level]->insert(symbol);
+    if (level <= LAST_BUILTIN_LEVEL)
+    {
+        return mBuiltInTable[level]->insert(symbol);
+    }
+    else
+    {
+        return table[level - LAST_BUILTIN_LEVEL - 1]->insert(symbol);
+    }
 }
 
 bool TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)
@@ -666,38 +726,36 @@ TPrecision TSymbolTable::getDefaultPrecision(TBasicType type) const
 void TSymbolTable::addInvariantVarying(const std::string &originalName)
 {
     ASSERT(atGlobalLevel());
-    table[currentLevel()]->addInvariantVarying(originalName);
+    table.back()->addInvariantVarying(originalName);
 }
 
 bool TSymbolTable::isVaryingInvariant(const std::string &originalName) const
 {
     ASSERT(atGlobalLevel());
-    return table[currentLevel()]->isVaryingInvariant(originalName);
+    return table.back()->isVaryingInvariant(originalName);
 }
 
 void TSymbolTable::setGlobalInvariant(bool invariant)
 {
     ASSERT(atGlobalLevel());
-    table[currentLevel()]->setGlobalInvariant(invariant);
+    table.back()->setGlobalInvariant(invariant);
 }
 
 void TSymbolTable::insertUnmangledBuiltInName(const char *name, ESymbolLevel level)
 {
-    ASSERT(level >= 0 && level < static_cast<ESymbolLevel>(table.size()));
+    ASSERT(level >= 0 && level <= LAST_BUILTIN_LEVEL);
     ASSERT(mUserDefinedUniqueIdsStart == -1);
-    table[level]->insertUnmangledBuiltInName(name);
+    mBuiltInTable[level]->insertUnmangledBuiltInName(name);
 }
 
 bool TSymbolTable::hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level)
 {
-    ASSERT(level >= 0 && level < static_cast<ESymbolLevel>(table.size()));
-    return table[level]->hasUnmangledBuiltIn(name);
+    ASSERT(level >= 0 && level <= LAST_BUILTIN_LEVEL);
+    return mBuiltInTable[level]->hasUnmangledBuiltIn(name);
 }
 
 bool TSymbolTable::hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion)
 {
-    ASSERT(static_cast<ESymbolLevel>(table.size()) > LAST_BUILTIN_LEVEL);
-
     for (int level = LAST_BUILTIN_LEVEL; level >= 0; --level)
     {
         if (level == ESSL3_1_BUILTINS && shaderVersion != 310)
@@ -713,7 +771,7 @@ bool TSymbolTable::hasUnmangledBuiltInForShaderVersion(const char *name, int sha
             --level;
         }
 
-        if (table[level]->hasUnmangledBuiltIn(name))
+        if (mBuiltInTable[level]->hasUnmangledBuiltIn(name))
         {
             return true;
         }
@@ -731,7 +789,7 @@ void TSymbolTable::clearCompilationResults()
     mUniqueIdCounter = mUserDefinedUniqueIdsStart;
 
     // User-defined scopes should have already been cleared when the compilation finished.
-    ASSERT(table.size() == LAST_BUILTIN_LEVEL + 1u);
+    ASSERT(table.size() == 0u);
 }
 
 int TSymbolTable::nextUniqueIdValue()
@@ -745,11 +803,14 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
                                       const ShBuiltInResources &resources)
 {
     ASSERT(isEmpty());
-    push();  // COMMON_BUILTINS
-    push();  // ESSL1_BUILTINS
-    push();  // ESSL3_BUILTINS
-    push();  // ESSL3_1_BUILTINS
-    push();  // GLSL_BUILTINS
+    pushBuiltInLevel();  // COMMON_BUILTINS
+    pushBuiltInLevel();  // ESSL1_BUILTINS
+    pushBuiltInLevel();  // ESSL3_BUILTINS
+    pushBuiltInLevel();  // ESSL3_1_BUILTINS
+    pushBuiltInLevel();  // GLSL_BUILTINS
+
+    // We need just one precision stack level for predefined precisions.
+    precisionStack.push_back(new PrecisionStackLevel);
 
     switch (type)
     {
