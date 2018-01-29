@@ -58,56 +58,58 @@ enum LineParserStage {
   kLineParserExpectations,
 };
 
-enum Token {
-  // os
-  kConfigWinXP = 0,
-  kConfigWinVista,
-  kConfigWin7,
-  kConfigWin8,
-  kConfigWin10,
-  kConfigWin,
-  kConfigMacLeopard,
-  kConfigMacSnowLeopard,
-  kConfigMacLion,
-  kConfigMacMountainLion,
-  kConfigMacMavericks,
-  kConfigMacYosemite,
-  kConfigMacElCapitan,
-  kConfigMacSierra,
-  kConfigMacHighSierra,
-  kConfigMac,
-  kConfigLinux,
-  kConfigChromeOS,
-  kConfigAndroid,
-  // gpu vendor
-  kConfigNVidia,
-  kConfigAMD,
-  kConfigIntel,
-  kConfigVMWare,
-  // build type
-  kConfigRelease,
-  kConfigDebug,
-  // ANGLE renderer
-  kConfigD3D9,
-  kConfigD3D11,
-  kConfigGLDesktop,
-  kConfigGLES,
-  // expectation
-  kExpectationPass,
-  kExpectationFail,
-  kExpectationFlaky,
-  kExpectationTimeout,
-  kExpectationSkip,
-  // separator
-  kSeparatorColon,
-  kSeparatorEqual,
+enum Token
+{
+    // os
+    kConfigWinXP = 0,
+    kConfigWinVista,
+    kConfigWin7,
+    kConfigWin8,
+    kConfigWin10,
+    kConfigWin,
+    kConfigMacLeopard,
+    kConfigMacSnowLeopard,
+    kConfigMacLion,
+    kConfigMacMountainLion,
+    kConfigMacMavericks,
+    kConfigMacYosemite,
+    kConfigMacElCapitan,
+    kConfigMacSierra,
+    kConfigMacHighSierra,
+    kConfigMac,
+    kConfigLinux,
+    kConfigChromeOS,
+    kConfigAndroid,
+    // gpu vendor
+    kConfigNVidia,
+    kConfigAMD,
+    kConfigIntel,
+    kConfigVMWare,
+    // build type
+    kConfigRelease,
+    kConfigDebug,
+    // ANGLE renderer
+    kConfigD3D9,
+    kConfigD3D11,
+    kConfigGLDesktop,
+    kConfigGLES,
+    kConfigVulkan,
+    // expectation
+    kExpectationPass,
+    kExpectationFail,
+    kExpectationFlaky,
+    kExpectationTimeout,
+    kExpectationSkip,
+    // separator
+    kSeparatorColon,
+    kSeparatorEqual,
 
-  kNumberOfExactMatchTokens,
+    kNumberOfExactMatchTokens,
 
-  // others
-  kConfigGPUDeviceID,
-  kTokenComment,
-  kTokenWord,
+    // others
+    kConfigGPUDeviceID,
+    kTokenComment,
+    kTokenWord,
 };
 
 struct TokenInfo {
@@ -145,6 +147,7 @@ const TokenInfo kTokenData[] = {
     {"d3d11", GPUTestConfig::kAPID3D11},
     {"opengl", GPUTestConfig::kAPIGLDesktop},
     {"gles", GPUTestConfig::kAPIGLES},
+    {"vulkan", GPUTestConfig::kAPIVulkan},
     {"pass", GPUTestExpectationsParser::kGpuTestPass},
     {"fail", GPUTestExpectationsParser::kGpuTestFail},
     {"flaky", GPUTestExpectationsParser::kGpuTestFlaky},
@@ -309,6 +312,7 @@ bool GPUTestExpectationsParser::ParseConfig(
       case kConfigD3D11:
       case kConfigGLDesktop:
       case kConfigGLES:
+      case kConfigVulkan:
       case kConfigGPUDeviceID:
         if (token == kConfigGPUDeviceID) {
           if (!UpdateTestConfig(config, tokens[i], 0))
@@ -370,6 +374,7 @@ bool GPUTestExpectationsParser::ParseLine(
       case kConfigD3D11:
       case kConfigGLDesktop:
       case kConfigGLES:
+      case kConfigVulkan:
       case kConfigGPUDeviceID:
         // MODIFIERS, could be in any order, need at least one.
         if (stage != kLineParserConfigs && stage != kLineParserBugID) {
@@ -523,13 +528,14 @@ bool GPUTestExpectationsParser::UpdateTestConfig(GPUTestConfig* config,
     case kConfigD3D11:
     case kConfigGLDesktop:
     case kConfigGLES:
-      if ((config->api() & kTokenData[token].flag) != 0) {
-        PushErrorMessage(kErrorMessage[kErrorEntryWithAPIConflicts],
-                         line_number);
-        return false;
-      }
-      config->set_api(config->api() | kTokenData[token].flag);
-      break;
+    case kConfigVulkan:
+        if ((config->api() & kTokenData[token].flag) != 0)
+        {
+            PushErrorMessage(kErrorMessage[kErrorEntryWithAPIConflicts], line_number);
+            return false;
+        }
+        config->set_api(config->api() | kTokenData[token].flag);
+        break;
     default:
       DCHECK(false);
       break;
