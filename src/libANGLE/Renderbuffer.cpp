@@ -25,7 +25,7 @@ Renderbuffer::Renderbuffer(rx::RenderbufferImpl *impl, GLuint id)
       mLabel(),
       mWidth(0),
       mHeight(0),
-      mFormat(GL_RGBA4),
+      mFormat(GL_NONE),
       mSamples(0),
       mInitState(InitState::MayNeedInit)
 {
