@@ -105,6 +105,17 @@ ANGLEPlatform::ANGLEPlatform()
     }
 
     {
+        std::vector<eglw::EGLAttrib> vkAttribs;
+        vkAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+        vkAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE);
+        vkAttribs.push_back(EGL_NONE);
+
+        auto *vkFactory =
+            new ANGLENativeDisplayFactory("angle-vk", "ANGLE Vulkan Display", vkAttribs, &mEvents);
+        m_nativeDisplayFactoryRegistry.registerFactory(vkFactory);
+    }
+
+    {
         std::vector<eglw::EGLAttrib> nullAttribs;
         nullAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
         nullAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE);
