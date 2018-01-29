@@ -64,9 +64,9 @@ class TSymbolTable : angle::NonCopyable
   public:
     TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1)
     {
-        // The symbol table cannot be used until push() is called, but
-        // the lack of an initial call to push() can be used to detect
-        // that the symbol table has not been preloaded with built-ins.
+        // To start using the symbol table after construction:
+        // * initializeBuiltIns() needs to be called.
+        // * push() needs to be called to push the global level.
     }
 
     ~TSymbolTable();
@@ -146,18 +146,24 @@ class TSymbolTable : angle::NonCopyable
     friend class TSymbolUniqueId;
     int nextUniqueIdValue();
 
+    class TSymbolTableBuiltInLevel;
     class TSymbolTableLevel;
 
-    ESymbolLevel currentLevel() const { return static_cast<ESymbolLevel>(table.size() - 1); }
+    void pushBuiltInLevel();
+
+    ESymbolLevel currentLevel() const
+    {
+        return static_cast<ESymbolLevel>(table.size() + LAST_BUILTIN_LEVEL);
+    }
 
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol / true in case the declaration was successful, and nullptr /
     // false if the declaration failed due to redefinition.
     TVariable *insertVariable(ESymbolLevel level, const ImmutableString &name, const TType *type);
-    TVariable *insertVariableExt(ESymbolLevel level,
-                                 TExtension ext,
-                                 const ImmutableString &name,
-                                 const TType *type);
+    void insertVariableExt(ESymbolLevel level,
+                           TExtension ext,
+                           const ImmutableString &name,
+                           const TType *type);
     bool insertVariable(ESymbolLevel level, TVariable *variable);
     bool insertStructType(ESymbolLevel level, TStructure *str);
     bool insertInterfaceBlock(ESymbolLevel level, TInterfaceBlock *interfaceBlock);
@@ -272,7 +278,11 @@ class TSymbolTable : angle::NonCopyable
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
 
+    std::vector<TSymbolTableBuiltInLevel *> mBuiltInTable;
     std::vector<TSymbolTableLevel *> table;
+
+    // There's one precision stack level for predefined precisions and then one level for each scope
+    // in table.
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
     std::vector<PrecisionStackLevel *> precisionStack;
 
