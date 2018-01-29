@@ -598,9 +598,8 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
             break;
 
         case GL_UNIFORM_BLOCK:
-            maxNameLength =
-                FindMaxSize(program->getState().getUniformBlocks(), &InterfaceBlock::name);
-            break;
+            maxNameLength = program->getActiveUniformBlockMaxNameLength();
+            return maxNameLength;
 
         case GL_BUFFER_VARIABLE:
             maxNameLength =
@@ -608,13 +607,12 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
             break;
 
         case GL_SHADER_STORAGE_BLOCK:
-            maxNameLength =
-                FindMaxSize(program->getState().getShaderStorageBlocks(), &InterfaceBlock::name);
-            break;
+            maxNameLength = program->getActiveShaderStorageBlockMaxNameLength();
+            return maxNameLength;
 
         case GL_TRANSFORM_FEEDBACK_VARYING:
-            maxNameLength = clampCast<GLint>(program->getTransformFeedbackVaryingMaxLength() - 1);
-            break;
+            maxNameLength = clampCast<GLint>(program->getTransformFeedbackVaryingMaxLength());
+            return maxNameLength;
 
         default:
             UNREACHABLE();
@@ -981,7 +979,7 @@ void QueryProgramiv(const Context *context, const Program *program, GLenum pname
             *params = program->getActiveUniformBlockCount();
             return;
         case GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH:
-            *params = program->getActiveUniformBlockMaxLength();
+            *params = program->getActiveUniformBlockMaxNameLength();
             break;
         case GL_TRANSFORM_FEEDBACK_BUFFER_MODE:
             *params = program->getTransformFeedbackBufferMode();
