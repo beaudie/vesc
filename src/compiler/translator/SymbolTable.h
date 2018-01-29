@@ -146,18 +146,26 @@ class TSymbolTable : angle::NonCopyable
     friend class TSymbolUniqueId;
     int nextUniqueIdValue();
 
+    class TSymbolTableLevelBase;
+    class TSymbolTableBuiltInLevel;
     class TSymbolTableLevel;
 
-    ESymbolLevel currentLevel() const { return static_cast<ESymbolLevel>(table.size() - 1); }
+    void pushBuiltInLevel();
+
+    ESymbolLevel currentLevel() const
+    {
+        return static_cast<ESymbolLevel>(table.size() + LAST_BUILTIN_LEVEL);
+    }
+    TSymbolTableLevelBase *getCurrentLevel() const;
 
     // The insert* entry points are used when initializing the symbol table with built-ins.
     // They return the created symbol / true in case the declaration was successful, and nullptr /
     // false if the declaration failed due to redefinition.
     TVariable *insertVariable(ESymbolLevel level, const ImmutableString &name, const TType *type);
-    TVariable *insertVariableExt(ESymbolLevel level,
-                                 TExtension ext,
-                                 const ImmutableString &name,
-                                 const TType *type);
+    void insertVariableExt(ESymbolLevel level,
+                           TExtension ext,
+                           const ImmutableString &name,
+                           const TType *type);
     bool insertVariable(ESymbolLevel level, TVariable *variable);
     bool insertStructType(ESymbolLevel level, TStructure *str);
     bool insertInterfaceBlock(ESymbolLevel level, TInterfaceBlock *interfaceBlock);
@@ -272,6 +280,7 @@ class TSymbolTable : angle::NonCopyable
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
 
+    std::vector<TSymbolTableBuiltInLevel *> mBuiltInTable;
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
     std::vector<PrecisionStackLevel *> precisionStack;
