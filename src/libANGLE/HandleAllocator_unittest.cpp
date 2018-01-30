@@ -170,4 +170,24 @@ TEST(HandleAllocatorTest, ReserveAndAllocateIterated)
     }
 }
 
+// This test reproduces invalid heap bug when running deqp cases.
+// If build a nonsequential heap, and then erase one of the node,
+// the heap become invalid.
+TEST(HandleAllocatorTest, InvalidHeapBug)
+{
+    gl::HandleAllocator allocator;
+
+    allocator.release(15);
+    allocator.release(16);
+
+    for (int iteration = 1; iteration <= 14; ++iteration)
+    {
+        allocator.release(iteration);
+    }
+
+    allocator.reserve(1);
+
+    allocator.allocate();
+}
+
 }  // anonymous namespace
