@@ -162,6 +162,10 @@
 // Windows Linux and Mac failures
 1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.color0.srgb8 = FAIL
 1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.stencil.srgb8 = FAIL
-1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = FAIL
-1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
 1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.depth.srgb8 = FAIL
+2329 WIN LINUX MAC : dEQP-EGL.functional.choose_config.simple.selection_only.renderable_type = FAIL
+2329 WIN LINUX MAC : dEQP-EGL.functional.choose_config.simple.selection_and_sort.renderable_type = FAIL
+2330 WIN LINUX MAC : dEQP-EGL.functional.robustness.create_context.no_reset_notification = SKIP
+2330 WIN LINUX MAC : dEQP-EGL.functional.robustness.create_context.lose_context_on_reset = SKIP
+2330 WIN LINUX MAC : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.index_buffer_out_of_bounds = SKIP
+2330 WIN LINUX MAC : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.vertex_buffer_out_of_bounds = SKIP
