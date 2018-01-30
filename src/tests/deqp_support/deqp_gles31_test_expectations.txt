@@ -34,9 +34,6 @@
 2349 LINUX INTEL : dEQP-GLES31.functional.compute.basic.copy_ssbo_to_image_small = SKIP
 2349 LINUX INTEL : dEQP-GLES31.functional.compute.basic.image_barrier_multiple = SKIP
 
-// Failing Tests on Linux on Intel HD 630.
-2349 LINUX INTEL : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader.program_binary = FAIL
-
 1442 OPENGL D3D11 : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.resource_list.vertex_fragment.default_block_struct_member = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.array_size.vertex_fragment.default_block_struct_member = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.name_length.vertex_fragment.default_block_struct_member = SKIP
@@ -1181,35 +1178,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.separate_shader.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.error_filters.case_11 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.error_groups.case_11 = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.buffer.bind_buffer_range = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader.compile_compute_shader = SKIP
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.tessellation_shader = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.buffer.bind_buffer_range = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader.compile_compute_shader = SKIP
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.tessellation_shader = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.bind_buffer_range = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.read_pixels_format_mismatch = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.framebuffer_texture2d = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.invalidate_sub_framebuffer = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copyteximage2d_invalid_format = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copyteximage2d_inequal_width_height_cube = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copyteximage2d_max_width_height = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copytexsubimage2d_invalid_offset = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copytexsubimage2d_texture_internalformat = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage2d = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage2d_invalid_size = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texsubimage3d_neg_level = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.texsubimage3d_neg_offset = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copytexsubimage3d_invalid_offset = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage3d = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage3d_invalid_buffer_target = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader.compile_compute_shader = SKIP
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.primitive_bounding_box = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.object_labels.program_pipeline = FAIL
 
 1941 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.common.abs.float_lowp_geometry = FAIL
@@ -1644,10 +1612,3 @@
 1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.instanced.draw_* = FAIL
 1941 OPENGL D3D11 : dEQP-GLES31.functional.geometry_shading.negative.* = FAIL
 1941 OPENGL D3D11 : dEQP-GLES31.functional.shaders.linkage.es31.geometry.uniform.* = FAIL
-
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = FAIL
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.log.compute.program_not_active = FAIL
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.program_not_active = FAIL
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_storage.block_number_limits = FAIL
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.log.shader_storage.block_number_limits = FAIL
-2324 DEBUG RELEASE : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_storage.block_number_limits = FAIL
