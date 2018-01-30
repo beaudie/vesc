@@ -176,7 +176,7 @@ class VaryingPacking final : angle::NonCopyable
         return static_cast<unsigned int>(mRegisterList.size());
     }
     unsigned int getRegisterCount() const;
-    size_t getRegisterMapSize() const { return mRegisterMap.size(); }
+    size_t getPackedVaryingCount() const { return mPackedVaryings.size(); }
 
   private:
     bool packVarying(const PackedVarying &packedVarying);

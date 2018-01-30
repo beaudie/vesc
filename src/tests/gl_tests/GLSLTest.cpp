@@ -1322,6 +1322,40 @@ TEST_P(GLSLTest, MaxMinusTwoVaryingVec4PlusThreeSpecialVariables)
     VaryingTestBase(0, 0, 0, 0, 0, 0, maxVaryings - 2, 0, true, true, true, true);
 }
 
+// This covers a problematic case in D3D9 - we are limited by the number of available semantics,
+// rather than total register use.
+TEST_P(GLSLTest, MaxMinusTwoVaryingVec2PlusThreeSpecialVariables)
+{
+    GLint maxVaryings = 0;
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
+
+    // Generate shader code that uses gl_FragCoord, gl_PointCoord and gl_PointSize.
+    // gl_PointSize is "free" in D3D9.
+    VaryingTestBase(0, 0, maxVaryings - 1, 0, 0, 0, 0, 0, true, true, true, !IsD3D9());
+}
+
+// This covers a problematic case in D3D9 - we are limited by the number of available semantics,
+// rather than total register use.
+TEST_P(GLSLTest, MaxMinusTwoVaryingVec2PlusTwoSpecialVariables)
+{
+    GLint maxVaryings = 0;
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
+
+    // Generate shader code that uses gl_FragCoord and gl_PointCoord.
+    VaryingTestBase(0, 0, maxVaryings - 1, 0, 0, 0, 0, 0, true, true, false, !IsD3D9());
+}
+
+// This covers a problematic case in D3D9 - we are limited by the number of available semantics,
+// rather than total register use.
+TEST_P(GLSLTest, MaxMinusTwoVaryingVec2PlusOneSpecialVariable)
+{
+    GLint maxVaryings = 0;
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
+
+    // Generate shader code that uses gl_FragCoord.
+    VaryingTestBase(0, 0, maxVaryings, 0, 0, 0, 0, 0, true, false, false, !IsD3D9());
+}
+
 TEST_P(GLSLTest, MaxVaryingVec3)
 {
     GLint maxVaryings = 0;
