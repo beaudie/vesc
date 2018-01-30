@@ -1136,7 +1136,6 @@
 2272 WIN NVIDIA OPENGL : dEQP-GLES31.functional.ssbo.layout.random.all* = FAIL
 
 // OpenGL and D3D11 Failing Tests
-1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_vertex_attribs = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_vertex_uniform_vectors = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_vertex_output_vectors = FAIL
