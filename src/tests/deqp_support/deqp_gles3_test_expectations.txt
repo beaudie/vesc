@@ -36,10 +36,6 @@
 // We can't support distinct texture sizes in D3D11.
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.size.distinct = FAIL
 
-// Fail because we support these formats through the ANGLE_depth_texture extension instead of OES_depth_texture
-605754 MAC WIN LINUX ANDROID : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = FAIL
-605754 MAC WIN LINUX ANDROID : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
-
 // Tests that we fail because they're not in line with the WebGL spec
 1335 MAC WIN LINUX : dEQP-GLES3.functional.shaders.preprocessor.conditional_inclusion.basic_2* = FAIL
 1335 MAC WIN LINUX : dEQP-GLES3.functional.shaders.preprocessor.conditional_inclusion.defined_macro_defined_test* = FAIL
@@ -96,6 +92,7 @@
 1101 DEBUG RELEASE : dEQP-GLES3.functional.negative_api.texture.compressedtexsubimage2d = FAIL
 1101 DEBUG RELEASE : dEQP-GLES3.functional.negative_api.texture.compressedtexsubimage3d = FAIL
 1101 DEBUG RELEASE : dEQP-GLES3.functional.negative_api.texture.compressedtexsubimage3d_invalid_buffer_target = FAIL
+2322 DEBUG RELEASE : dEQP-GLES3.functional.shaders.metamorphic.* = FAIL
 
 // Windows and Linux failures
 
@@ -172,6 +169,9 @@
 1101 WIN : dEQP-GLES3.functional.polygon_offset.fixed24_render_with_units = FAIL
 1101 WIN : dEQP-GLES3.functional.lifetime.attach.deleted_input.buffer_vertex_array = FAIL
 
+// Very small threshold issue. Could upstream a higher tolerance to dEQP.
+2323 WIN : dEQP-GLES3.functional.texture.units.2_units.only_cube.7 = FAIL
+
 // Windows AMD specific failures
 1633 WIN AMD : dEQP-GLES3.functional.fbo.blit.depth_stencil.depth24_stencil8_scale = FAIL
 1633 WIN AMD : dEQP-GLES3.functional.fbo.blit.depth_stencil.depth24_stencil8_stencil_only = FAIL
@@ -221,7 +221,6 @@
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.only_cube.0 = FAIL
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.only_cube.2 = FAIL
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.only_cube.4 = FAIL
-1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.only_cube.7 = FAIL
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.only_cube.8 = FAIL
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.2_units.mixed.4 = FAIL
 1349 WIN INTEL : dEQP-GLES3.functional.texture.units.4_units.only_cube.0 = FAIL
