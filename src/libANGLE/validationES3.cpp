@@ -529,6 +529,14 @@ bool ValidateES3TexImage3DParameters(Context *context,
         return false;
     }
 
+    if (IsEtc2EacFormat(format) && target != GL_TEXTURE_2D_ARRAY)
+    {
+        // Ref: https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf
+        // Section 8.7, page 169.
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InternalFormatRequiresTexture2DArray);
+        return false;
+    }
+
     return ValidateES3TexImageParametersBase(context, target, level, internalformat, isCompressed,
                                              isSubImage, xoffset, yoffset, zoffset, width, height,
                                              depth, border, format, type, bufSize, pixels);
@@ -2026,16 +2034,22 @@ bool ValidateCompressedTexSubImage3D(Context *context,
         return false;
     }
 
+    if (!ValidateES3TexImage3DParameters(context, target, level, GL_NONE, true, true, xoffset,
+                                         yoffset, zoffset, width, height, depth, 0, format, GL_NONE,
+                                         -1, data))
+    {
+        return false;
+    }
+
     if (!data)
     {
         context->handleError(InvalidValue());
         return false;
     }
 
-    return ValidateES3TexImage3DParameters(context, target, level, GL_NONE, true, true, xoffset,
-                                           yoffset, zoffset, width, height, depth, 0, format,
-                                           GL_NONE, -1, data);
+    return true;
 }
+
 bool ValidateCompressedTexSubImage3DRobustANGLE(Context *context,
                                                 GLenum target,
                                                 GLint level,
