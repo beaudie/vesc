@@ -337,6 +337,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
     const gl::InternalFormat &actualFormatInfo = isSubImage
                                                      ? *texture->getFormat(target, level).info
                                                      : GetInternalFormatInfo(internalformat, type);
+
     if (isCompressed)
     {
         if (!actualFormatInfo.compressed)
@@ -526,6 +527,16 @@ bool ValidateES3TexImage3DParameters(Context *context,
     if (!ValidTexture3DDestinationTarget(context, target))
     {
         context->handleError(InvalidEnum());
+        return false;
+    }
+
+    if (IsEtc2EacFormat(format) && target != GL_TEXTURE_2D_ARRAY)
+    {
+        // Ref: https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf
+        // Section 8.7, page 169.
+        context->handleError(
+            InvalidOperation()
+            << "internalformat is an ETC2/EAC format and target is not GL_TEXTURE_2D_ARRAY.");
         return false;
     }
 
@@ -2026,16 +2037,22 @@ bool ValidateCompressedTexSubImage3D(Context *context,
         return false;
     }
 
+    if (!ValidateES3TexImage3DParameters(context, target, level, GL_NONE, true, true, xoffset,
+                                         yoffset, zoffset, width, height, depth, 0, format, GL_NONE,
+                                         -1, data))
+    {
+        return false;
+    }
+
     if (!data)
     {
         context->handleError(InvalidValue());
         return false;
     }
 
-    return ValidateES3TexImage3DParameters(context, target, level, GL_NONE, true, true, xoffset,
-                                           yoffset, zoffset, width, height, depth, 0, format,
-                                           GL_NONE, -1, data);
+    return true;
 }
+
 bool ValidateCompressedTexSubImage3DRobustANGLE(Context *context,
                                                 GLenum target,
                                                 GLint level,
