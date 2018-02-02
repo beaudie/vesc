@@ -442,6 +442,82 @@ void ANGLETestBase::drawQuadInstanced(GLuint program,
              true, numInstances);
 }
 
+void ANGLETestBase::drawLine(GLuint program,
+                             const std::string &positionAttribName,
+                             angle::Vector3 p1,
+                             angle::Vector3 p2)
+{
+    GLint previousProgram = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
+    if (previousProgram != static_cast<GLint>(program))
+    {
+        glUseProgram(program);
+    }
+
+    const GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+
+    auto lineVertices = std::array<angle::Vector3, 2>();
+    lineVertices[0]   = p1;
+    lineVertices[1]   = p2;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(angle::Vector3) * 2, lineVertices.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glEnableVertexAttribArray(positionLocation);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_LINES, 0, 2);
+
+    glDisableVertexAttribArray(positionLocation);
+
+    if (previousProgram != static_cast<GLint>(program))
+    {
+        glUseProgram(previousProgram);
+    }
+
+    glDeleteBuffers(1, &vertexBuffer);
+}
+
+void ANGLETestBase::drawLineStrip(GLuint program,
+                                  const std::string &positionAttribName,
+                                  std::vector<angle::Vector3> &points)
+{
+    GLint previousProgram = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
+    if (previousProgram != static_cast<GLint>(program))
+    {
+        glUseProgram(program);
+    }
+
+    const GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(angle::Vector3) * points.size(), points.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glEnableVertexAttribArray(positionLocation);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_LINE_STRIP, 0, static_cast<GLsizei>(points.size()));
+
+    glDisableVertexAttribArray(positionLocation);
+
+    if (previousProgram != static_cast<GLint>(program))
+    {
+        glUseProgram(previousProgram);
+    }
+
+    glDeleteBuffers(1, &vertexBuffer);
+}
+
 void ANGLETestBase::drawQuad(GLuint program,
                              const std::string &positionAttribName,
                              GLfloat positionAttribZ,
