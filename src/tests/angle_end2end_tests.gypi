@@ -97,6 +97,7 @@
             '<(angle_path)/src/tests/gl_tests/UnpackAlignmentTest.cpp',
             '<(angle_path)/src/tests/gl_tests/UnpackRowLength.cpp',
             '<(angle_path)/src/tests/gl_tests/VertexAttributeTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/VertexAttributeTest2.cpp',
             '<(angle_path)/src/tests/gl_tests/ViewportTest.cpp',
             '<(angle_path)/src/tests/gl_tests/WebGLCompatibilityTest.cpp',
             '<(angle_path)/src/tests/gl_tests/WebGLFramebufferTest.cpp',
