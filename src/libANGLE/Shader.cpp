@@ -580,6 +580,30 @@ int Shader::getNumViews(const Context *context)
     return mState.mNumViews;
 }
 
+GLenum Shader::getGeometryShaderInputPrimitiveType(const Context *context)
+{
+    resolveCompile(context);
+    return mState.mGeometryShaderInputPrimitiveType;
+}
+
+GLenum Shader::getGeometryShaderOutputPrimitiveType(const Context *context)
+{
+    resolveCompile(context);
+    return mState.mGeometryShaderOutputPrimitiveType;
+}
+
+int Shader::getGeometryShaderInvocations(const Context *context)
+{
+    resolveCompile(context);
+    return mState.mGeometryShaderInvocations;
+}
+
+int Shader::getGeometryShaderMaxVertices(const Context *context)
+{
+    resolveCompile(context);
+    return mState.mGeometryShaderMaxVertices;
+}
+
 const std::string &Shader::getCompilerResourcesString() const
 {
     ASSERT(mBoundCompiler.get());
