@@ -742,6 +742,92 @@ TEST_P(CopyTextureTest, CopyToMipmap)
     }
 }
 
+// Test that copying from an RGBA8 texture to RGBA4 results in exactly 4-bit precision in the result
+TEST_P(CopyTextureTest, DownsampleRGBA4444)
+{
+    // Downsampling on copy is only guarenteed on D3D11
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
+
+    GLTexture textures[2];
+
+    GLColor pixels[] = {GLColor(0, 5, 7, 14), GLColor(17, 22, 30, 30), GLColor(32, 33, 36, 46),
+                        GLColor(48, 50, 55, 60)};
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glCopyTextureCHROMIUM(textures[0], 0, GL_TEXTURE_2D, textures[1], 0, GL_RGBA,
+                          GL_UNSIGNED_SHORT_4_4_4_4, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1], 0);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 0, 0, 0), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 0, GLColor(16, 16, 16, 16), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(0, 1, GLColor(32, 32, 32, 32), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 1, GLColor(48, 48, 48, 48), 1.0);
+}
+
+// Test that copying from an RGBA8 texture to RGB565 results in exactly 4-bit precision in the
+// result
+TEST_P(CopyTextureTest, DownsampleRGB565)
+{
+    // Downsampling on copy is only guarenteed on D3D11
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
+
+    GLTexture textures[2];
+
+    GLColor pixels[] = {GLColor(0, 5, 7, 14), GLColor(17, 22, 30, 30), GLColor(32, 33, 36, 46),
+                        GLColor(48, 50, 55, 60)};
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glCopyTextureCHROMIUM(textures[0], 0, GL_TEXTURE_2D, textures[1], 0, GL_RGB,
+                          GL_UNSIGNED_SHORT_5_6_5, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1], 0);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 4, 0, 255), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 0, GLColor(16, 20, 25, 255), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(0, 1, GLColor(33, 32, 33, 255), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 1, GLColor(49, 49, 49, 255), 1.0);
+}
+
+// Test that copying from an RGBA8 texture to RGBA5551 results in exactly 4-bit precision in the
+// result
+TEST_P(CopyTextureTest, DownsampleRGBA5551)
+{
+    // Downsampling on copy is only guarenteed on D3D11
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
+
+    GLTexture textures[2];
+
+    GLColor pixels[] = {GLColor(0, 5, 7, 14), GLColor(17, 22, 30, 30), GLColor(32, 33, 36, 46),
+                        GLColor(48, 50, 55, 255)};
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glCopyTextureCHROMIUM(textures[0], 0, GL_TEXTURE_2D, textures[1], 0, GL_RGBA,
+                          GL_UNSIGNED_SHORT_5_5_5_1, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1], 0);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 0, 0, 0), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 0, GLColor(16, 16, 25, 0), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(0, 1, GLColor(33, 33, 33, 0), 1.0);
+    EXPECT_PIXEL_COLOR_NEAR(1, 1, GLColor(49, 49, 49, 255), 1.0);
+}
+
 // Test to ensure that CopyTexture works with LUMINANCE texture as a destination
 TEST_P(CopyTextureTestDest, Luminance)
 {
