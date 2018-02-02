@@ -598,6 +598,7 @@ config("glslang_internal_config") {
     cflags = [
       "-Wno-ignored-qualifiers",
       "-Wno-reorder",
+      "-Wno-unused-function",
     ]
   }
   if (is_clang) {
