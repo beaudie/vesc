@@ -310,6 +310,59 @@ TEST_P(SimpleOperationTest, DrawLineStrip)
     }
 }
 
+// Simple triangle fans test.
+TEST_P(SimpleOperationTest, DrawTriangleFan)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    auto vertices = std::vector<Vector3>{
+        {-1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertices.size()));
+
+    glDisableVertexAttribArray(positionLocation);
+
+    EXPECT_GL_NO_ERROR();
+
+    // We assume in the test the width and height are equal and we are tracing
+    // 2 triangles to cover half the surface like this:
+    ASSERT_EQ(getWindowWidth(), getWindowHeight());
+
+    // Check 4 lines accross de triangles to make sure we filled it.
+    // Don't check every pixel as it would slow down our tests.
+    for (auto x = 0; x < getWindowWidth(); x++)
+    {
+        EXPECT_PIXEL_COLOR_EQ(x, x, GLColor::green);
+    }
+
+    for (auto x = getWindowWidth() / 3, y = 0; x < getWindowWidth(); x++, y++)
+    {
+        EXPECT_PIXEL_COLOR_EQ(x, y, GLColor::green);
+    }
+
+    for (auto x = getWindowWidth() / 2, y = 0; x < getWindowWidth(); x++, y++)
+    {
+        EXPECT_PIXEL_COLOR_EQ(x, y, GLColor::green);
+    }
+
+    for (auto x = (getWindowWidth() / 4) * 3, y = 0; x < getWindowWidth(); x++, y++)
+    {
+        EXPECT_PIXEL_COLOR_EQ(x, y, GLColor::green);
+    }
+}
+
 // Simple repeated draw and swap test.
 TEST_P(SimpleOperationTest, DrawQuadAndSwap)
 {
