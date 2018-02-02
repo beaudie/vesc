@@ -120,3 +120,13 @@ float4 PS_PassthroughLumAlpha2D(in float4 inPosition : SV_POSITION, in float2 in
 {
     return TextureF.Sample(Sampler, inTexCoord).rrra;
 }
+
+float4 PS_PassthroughRGBA2D_4444(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    return round(TextureF.Sample(Sampler, inTexCoord) * float4(15, 15, 15, 15)) / float4(15, 15, 15, 15);
+}
+
+float4 PS_PassthroughRGBA2D_5551(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    return round(TextureF.Sample(Sampler, inTexCoord) * float4(31, 31, 31, 1)) / float4(31, 31, 31, 1);
+}
