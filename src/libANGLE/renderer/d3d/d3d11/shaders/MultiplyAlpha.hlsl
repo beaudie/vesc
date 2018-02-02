@@ -82,6 +82,65 @@ float4 PS_FtoF_UM_RGB(in float4 inPosition : SV_POSITION, in float2 inTexCoord :
     return color;
 }
 
+float4 PS_FtoF_PM_RGBA_4444(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    color.rgb *= color.a;
+    color = floor(color * float4(16, 16, 16, 16)) / float4(16, 16, 16, 16);
+    return color;
+}
+
+float4 PS_FtoF_UM_RGBA_4444(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    if (color.a > 0.0f)
+    {
+        color.rgb /= color.a;
+    }
+    color = floor(color * float4(16, 16, 16, 16)) / float4(16, 16, 16, 16);
+    return color;
+}
+
+float4 PS_FtoF_PM_RGB_565(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    color.rgb *= color.a;
+    color.rgb = floor(color.rgb * float3(32, 64, 32)) / float3(32, 64, 32);
+    color.a = 1.0f;
+    return color;
+}
+
+float4 PS_FtoF_UM_RGB_565(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    if (color.a > 0.0f)
+    {
+        color.rgb /= color.a;
+    }
+    color.rgb = floor(color.rgb * float3(32, 64, 32)) / float3(32, 64, 32);
+    color.a = 1.0f;
+    return color;
+}
+
+float4 PS_FtoF_PM_RGBA_5551(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    color.rgb *= color.a;
+    color = floor(color * float4(32, 32, 32, 1)) / float4(32, 32, 32, 1);
+    return color;
+}
+
+float4 PS_FtoF_UM_RGBA_5551(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
+{
+    float4 color = TextureF.Sample(Sampler, inTexCoord).rgba;
+    if (color.a > 0.0f)
+    {
+        color.rgb /= color.a;
+    }
+    color = floor(color * float4(32, 32, 32, 1)) / float4(32, 32, 32, 1);
+    return color;
+}
+
 // Float to uint RGBA
 uint4 PS_FtoU_PT_RGBA(in float4 inPosition : SV_POSITION, in float2 inTexCoord : TEXCOORD0) : SV_TARGET0
 {
