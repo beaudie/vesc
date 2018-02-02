@@ -33,6 +33,7 @@ class Blit11 : angle::NonCopyable
                              const gl::Extents &size,
                              const gl::SwizzleState &swizzleTarget);
 
+    // Set destTypeForDownsampling to GL_NONE to skip downsampling
     gl::Error copyTexture(const gl::Context *context,
                           const d3d11::SharedSRV &source,
                           const gl::Box &sourceArea,
@@ -43,6 +44,7 @@ class Blit11 : angle::NonCopyable
                           const gl::Extents &destSize,
                           const gl::Rectangle *scissor,
                           GLenum destFormat,
+                          GLenum destTypeForDownsampling,
                           GLenum filter,
                           bool maskOffAlpha,
                           bool unpackPremultiplyAlpha,
@@ -157,7 +159,16 @@ class Blit11 : angle::NonCopyable
         BLITSHADER_2D_LUMAF_UNMULTIPLY,
 
         BLITSHADER_2D_LUMAALPHAF_PREMULTIPLY,
-        BLITSHADER_2D_LUMAALPHAF_UNMULTIPLY
+        BLITSHADER_2D_LUMAALPHAF_UNMULTIPLY,
+
+        // Downsample 16-bit shaders
+        BLITSHADER_2D_RGBAF_4444,
+        BLITSHADER_2D_RGBAF_4444_PREMULTIPLY,
+        BLITSHADER_2D_RGBAF_4444_UNMULTIPLY,
+
+        BLITSHADER_2D_RGBAF_5551,
+        BLITSHADER_2D_RGBAF_5551_PREMULTIPLY,
+        BLITSHADER_2D_RGBAF_5551_UNMULTIPLY,
     };
 
     enum SwizzleShaderType
@@ -220,6 +231,7 @@ class Blit11 : angle::NonCopyable
                                             bool isSigned,
                                             bool unpackPremultiplyAlpha,
                                             bool unpackUnmultiplyAlpha,
+                                            GLenum destTypeForDownsampling,
                                             ShaderDimension dimension);
     static SwizzleShaderType GetSwizzleShaderType(GLenum type, D3D11_SRV_DIMENSION dimensionality);
 
@@ -275,6 +287,7 @@ class Blit11 : angle::NonCopyable
                             bool isSigned,
                             bool unpackPremultiplyAlpha,
                             bool unpackUnmultiplyAlpha,
+                            GLenum destTypeForDownsampling,
                             ShaderDimension dimension,
                             const Shader **shaderOut);
     gl::Error getSwizzleShader(GLenum type,
