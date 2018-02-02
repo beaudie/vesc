@@ -50,7 +50,7 @@ exec_script_whitelist = [
   "//build/util/version.gni",
   "//BUILD.gn",
   "//src/tests/BUILD.gn",
-  "//src/vulkan_support/BUILD.gn",
+  "//third_party/vulkan-validation-layers/BUILD.gn",
 ]
 
 default_args = {
