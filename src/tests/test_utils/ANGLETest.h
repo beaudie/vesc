@@ -256,6 +256,15 @@ class ANGLETestBase
     void setupIndexedQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXYScale);
     void setupIndexedQuadIndexBuffer();
 
+    static void drawLine(GLuint program,
+                         const std::string &positionAttribName,
+                         angle::Vector3 p1,
+                         angle::Vector3 p2);
+
+    static void drawLineStrip(GLuint program,
+                              const std::string &positionAttribName,
+                              std::vector<angle::Vector3> &points);
+
     void drawQuad(GLuint program, const std::string &positionAttribName, GLfloat positionAttribZ);
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
