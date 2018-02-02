@@ -43,6 +43,7 @@ class Blit11 : angle::NonCopyable
                           const gl::Extents &destSize,
                           const gl::Rectangle *scissor,
                           GLenum destFormat,
+                          GLenum destType,
                           GLenum filter,
                           bool maskOffAlpha,
                           bool unpackPremultiplyAlpha,

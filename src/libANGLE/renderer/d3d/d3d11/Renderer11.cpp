@@ -2401,9 +2401,10 @@ gl::Error Renderer11::copyImageInternal(const gl::Context *context,
     // Use nearest filtering because source and destination are the same size for the direct copy.
     // Convert to the unsized format before calling copyTexture.
     GLenum sourceFormat = colorAttachment->getFormat().info->format;
+    const gl::InternalFormat &destFormatInfo = gl::GetSizedInternalFormatInfo(destFormat);
     ANGLE_TRY(mBlit->copyTexture(context, source, sourceArea, sourceSize, sourceFormat, dest,
-                                 destArea, destSize, nullptr, gl::GetUnsizedFormat(destFormat),
-                                 GL_NEAREST, false, false, false));
+                                 destArea, destSize, nullptr, destFormatInfo.format,
+                                 destFormatInfo.type, GL_NEAREST, false, false, false));
 
     return gl::NoError();
 }
@@ -2509,6 +2510,7 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
                                   GLint sourceLevel,
                                   const gl::Rectangle &sourceRect,
                                   GLenum destFormat,
+                                  GLenum destType,
                                   const gl::Offset &destOffset,
                                   TextureStorage *storage,
                                   GLenum destTarget,
@@ -2589,8 +2591,9 @@ gl::Error Renderer11::copyTexture(const gl::Context *context,
         // copy
         GLenum sourceFormat = source->getFormat(GL_TEXTURE_2D, sourceLevel).info->format;
         ANGLE_TRY(mBlit->copyTexture(context, *sourceSRV, sourceArea, sourceSize, sourceFormat,
-                                     destRTV, destArea, destSize, nullptr, destFormat, GL_NEAREST,
-                                     false, unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
+                                     destRTV, destArea, destSize, nullptr, destFormat, destType,
+                                     GL_NEAREST, false, unpackPremultiplyAlpha,
+                                     unpackUnmultiplyAlpha));
     }
 
     destStorage11->markLevelDirty(destLevel);
@@ -3606,9 +3609,10 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
             ASSERT(readSRV.valid());
-            ANGLE_TRY(mBlit->copyTexture(
-                context, readSRV, readArea, readSize, srcFormatInfo.format, drawRTV, drawArea,
-                drawSize, scissor, destFormatInfo.format, filter, maskOffAlpha, false, false));
+            ANGLE_TRY(mBlit->copyTexture(context, readSRV, readArea, readSize, srcFormatInfo.format,
+                                         drawRTV, drawArea, drawSize, scissor,
+                                         destFormatInfo.format, destFormatInfo.type, filter,
+                                         maskOffAlpha, false, false));
         }
     }
 
