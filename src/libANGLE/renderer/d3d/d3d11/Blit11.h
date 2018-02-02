@@ -33,6 +33,7 @@ class Blit11 : angle::NonCopyable
                              const gl::Extents &size,
                              const gl::SwizzleState &swizzleTarget);
 
+    // Set destTypeForDownsampling to GL_NONE to skip downsampling
     gl::Error copyTexture(const gl::Context *context,
                           const d3d11::SharedSRV &source,
                           const gl::Box &sourceArea,
@@ -43,6 +44,7 @@ class Blit11 : angle::NonCopyable
                           const gl::Extents &destSize,
                           const gl::Rectangle *scissor,
                           GLenum destFormat,
+                          GLenum destTypeForDownsampling,
                           GLenum filter,
                           bool maskOffAlpha,
                           bool unpackPremultiplyAlpha,

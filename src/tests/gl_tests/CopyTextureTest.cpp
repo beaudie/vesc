@@ -742,6 +742,31 @@ TEST_P(CopyTextureTest, CopyToMipmap)
     }
 }
 
+// Test that copying from an RGBA8 texture to RGBA4 results in exactly 4-bit precision in the result
+TEST_P(CopyTextureTest, DownsampleRGBA4)
+{
+    GLTexture textures[2];
+
+    GLColor pixels[] = {GLColor(0, 1, 2, 3), GLColor(4, 5, 6, 7), GLColor(8, 9, 10, 11),
+                        GLColor(12, 13, 14, 15)};
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glCopyTextureCHROMIUM(textures[0], 0, GL_TEXTURE_2D, textures[1], 0, GL_RGBA,
+                          GL_UNSIGNED_SHORT_4_4_4_4, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1], 0);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0, 0, 0, 0));
+    EXPECT_PIXEL_COLOR_EQ(1, 0, GLColor(0, 0, 0, 0));
+    EXPECT_PIXEL_COLOR_EQ(0, 1, GLColor(0, 0, 0, 0));
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor(0, 0, 0, 0));
+}
+
 // Test to ensure that CopyTexture works with LUMINANCE texture as a destination
 TEST_P(CopyTextureTestDest, Luminance)
 {
