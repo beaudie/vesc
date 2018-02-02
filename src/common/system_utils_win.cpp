@@ -71,9 +71,26 @@ bool SetCWD(const char *dirName)
     return (SetCurrentDirectoryA(dirName) == TRUE);
 }
 
-bool SetEnvironmentVar(const char *variableName, const char *value)
+bool AppendPathToEnvironmentVar(const char *variableName, const char *path)
 {
-    return (SetEnvironmentVariableA(variableName, value) == TRUE);
+    std::array<char, MAX_PATH> oldValue;
+    DWORD result =
+        GetEnvironmentVariableA(variableName, oldValue.data(), static_cast<DWORD>(oldValue.size()));
+
+    const char *newValue = nullptr;
+    std::string buf;
+    if (result == 0)
+    {
+        newValue = path;
+    }
+    else
+    {
+        buf = std::string(oldValue.data());
+        buf += ";";
+        buf += path;
+        newValue = buf.c_str();
+    }
+    return (SetEnvironmentVariableA(variableName, newValue) == TRUE);
 }
 
 }  // namespace angle

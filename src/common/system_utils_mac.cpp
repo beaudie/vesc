@@ -86,9 +86,23 @@ bool SetCWD(const char *dirName)
     return (chdir(dirName) == 0);
 }
 
-bool SetEnvironmentVar(const char *variableName, const char *value)
+bool AppendPathToEnvironmentVar(const char *variableName, const char *path)
 {
-    return (setenv(variableName, value, 1) == 0);
+    char *oldValue       = getenv(variableName);
+    const char *newValue = nullptr;
+    std::string buf;
+    if (oldValue == nullptr)
+    {
+        newValue = path;
+    }
+    else
+    {
+        buf = oldValue;
+        buf += ":";
+        buf += path;
+        newValue = buf.c_str();
+    }
+    return (setenv(variableName, newValue, 1) == 0);
 }
 
 }  // namespace angle
