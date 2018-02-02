@@ -486,6 +486,21 @@ void ANGLETestBase::drawLineStrip(GLuint program,
                                   const std::string &positionAttribName,
                                   std::vector<angle::Vector3> &points)
 {
+    drawArrays(program, GL_LINE_STRIP, positionAttribName, points);
+}
+
+void ANGLETestBase::drawTriangleFan(GLuint program,
+                                    const std::string &positionAttribName,
+                                    std::vector<angle::Vector3> &vertices)
+{
+    drawArrays(program, GL_TRIANGLE_FAN, positionAttribName, vertices);
+}
+
+void ANGLETestBase::drawArrays(GLuint program,
+                               GLenum mode,
+                               const std::string &positionAttribName,
+                               std::vector<angle::Vector3> &vertices)
+{
     GLint previousProgram = 0;
     glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
     if (previousProgram != static_cast<GLint>(program))
@@ -499,14 +514,14 @@ void ANGLETestBase::drawLineStrip(GLuint program,
     glGenBuffers(1, &vertexBuffer);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(angle::Vector3) * points.size(), points.data(),
+    glBufferData(GL_ARRAY_BUFFER, sizeof(angle::Vector3) * vertices.size(), vertices.data(),
                  GL_STATIC_DRAW);
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glEnableVertexAttribArray(positionLocation);
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_LINE_STRIP, 0, static_cast<GLsizei>(points.size()));
+    glDrawArrays(mode, 0, static_cast<GLsizei>(vertices.size()));
 
     glDisableVertexAttribArray(positionLocation);
 

@@ -265,6 +265,15 @@ class ANGLETestBase
                               const std::string &positionAttribName,
                               std::vector<angle::Vector3> &points);
 
+    static void drawTriangleFan(GLuint program,
+                                const std::string &positionAttribName,
+                                std::vector<angle::Vector3> &vertices);
+
+    static void drawArrays(GLuint program,
+                           GLenum mode,
+                           const std::string &positionAttribName,
+                           std::vector<angle::Vector3> &vertices);
+
     void drawQuad(GLuint program, const std::string &positionAttribName, GLfloat positionAttribZ);
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
