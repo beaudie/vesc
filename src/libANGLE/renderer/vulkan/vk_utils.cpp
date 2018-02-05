@@ -147,6 +147,25 @@ bool HasValidationLayers(const std::vector<VkLayerProperties> &layerProps)
     return true;
 }
 
+vk::Error FindAndAllocateCompatibleMemory(VkDevice device,
+                                          const vk::MemoryProperties &memoryProperties,
+                                          VkMemoryPropertyFlags memoryPropertyFlags,
+                                          const VkMemoryRequirements &memoryRequirements,
+                                          vk::DeviceMemory *deviceMemoryOut)
+{
+    uint32_t memoryTypeIndex = 0;
+    ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(memoryRequirements, memoryPropertyFlags,
+                                                         &memoryTypeIndex));
+
+    VkMemoryAllocateInfo allocInfo;
+    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext           = nullptr;
+    allocInfo.memoryTypeIndex = memoryTypeIndex;
+    allocInfo.allocationSize  = memoryRequirements.size;
+
+    ANGLE_TRY(deviceMemoryOut->allocate(device, allocInfo));
+    return vk::NoError();
+}
 }  // anonymous namespace
 
 const char *g_VkLoaderLayersPathEnv    = "VK_LAYER_PATH";
@@ -851,17 +870,12 @@ Error StagingImage::init(VkDevice device,
     // and call vkInvalidateMappedMemoryRanges if the allocated memory is not coherent.
     // This would solve potential issues of:
     // 1) not having (enough) coherent memory and 2) coherent memory being slower
-    uint32_t memoryIndex = memoryProperties.findCompatibleMemoryIndex(
-        memoryRequirements.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-    VkMemoryAllocateInfo allocateInfo;
-    allocateInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocateInfo.pNext           = nullptr;
-    allocateInfo.allocationSize  = memoryRequirements.size;
-    allocateInfo.memoryTypeIndex = memoryIndex;
+    VkMemoryPropertyFlags memoryPropertyFlags =
+        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-    ANGLE_TRY(mDeviceMemory.allocate(device, allocateInfo));
+    ANGLE_TRY(FindAndAllocateCompatibleMemory(device, memoryProperties, memoryPropertyFlags,
+                                              memoryRequirements, &mDeviceMemory));
     ANGLE_TRY(mImage.bindMemory(device, mDeviceMemory));
 
     mSize = memoryRequirements.size;
@@ -1077,24 +1091,27 @@ void MemoryProperties::init(VkPhysicalDevice physicalDevice)
     ASSERT(mMemoryProperties.memoryTypeCount > 0);
 }
 
-uint32_t MemoryProperties::findCompatibleMemoryIndex(uint32_t bitMask, uint32_t propertyFlags) const
+Error MemoryProperties::findCompatibleMemoryIndex(const VkMemoryRequirements &memoryRequirements,
+                                                  VkMemoryPropertyFlags memoryPropertyFlags,
+                                                  uint32_t *typeIndexOut) const
 {
-    ASSERT(mMemoryProperties.memoryTypeCount > 0);
+    ASSERT(mMemoryProperties.memoryTypeCount > 0 && mMemoryProperties.memoryTypeCount <= 32);
 
     // TODO(jmadill): Cache compatible memory indexes after finding them once.
-    for (size_t memoryIndex : angle::BitSet32<32>(bitMask))
+    for (size_t memoryIndex : angle::BitSet32<32>(memoryRequirements.memoryTypeBits))
     {
         ASSERT(memoryIndex < mMemoryProperties.memoryTypeCount);
 
-        if ((mMemoryProperties.memoryTypes[memoryIndex].propertyFlags & propertyFlags) ==
-            propertyFlags)
+        if ((mMemoryProperties.memoryTypes[memoryIndex].propertyFlags & memoryPropertyFlags) ==
+            memoryPropertyFlags)
         {
-            return static_cast<uint32_t>(memoryIndex);
+            *typeIndexOut = memoryIndex;
+            return NoError();
         }
     }
 
-    UNREACHABLE();
-    return std::numeric_limits<uint32_t>::max();
+    // TODO(jmadill): Add error message to error.
+    return vk::Error(VK_ERROR_INCOMPATIBLE_DRIVER);
 }
 
 // StagingBuffer implementation.
@@ -1134,23 +1151,6 @@ void StagingBuffer::dumpResources(Serial serial, std::vector<vk::GarbageObject> 
     mDeviceMemory.dumpResources(serial, garbageQueue);
 }
 
-Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
-                                  const VkMemoryRequirements &requirements,
-                                  uint32_t propertyFlagMask)
-{
-    for (uint32_t typeIndex = 0; typeIndex < memoryProps.memoryTypeCount; ++typeIndex)
-    {
-        if ((requirements.memoryTypeBits & (1u << typeIndex)) != 0 &&
-            ((memoryProps.memoryTypes[typeIndex].propertyFlags & propertyFlagMask) ==
-             propertyFlagMask))
-        {
-            return typeIndex;
-        }
-    }
-
-    return Optional<uint32_t>::Invalid();
-}
-
 Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
@@ -1158,6 +1158,7 @@ Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t *requiredSizeOut)
 {
     VkDevice device = contextVk->getDevice();
+    const vk::MemoryProperties &memoryProperties = contextVk->getRenderer()->getMemoryProperties();
 
     // Find a compatible memory pool index. If the index doesn't change, we could cache it.
     // Not finding a valid memory pool means an out-of-spec driver, or internal error.
@@ -1169,25 +1170,21 @@ Error AllocateBufferMemory(ContextVk *contextVk,
     ASSERT(memoryRequirements.size >= size);
     *requiredSizeOut = static_cast<size_t>(memoryRequirements.size);
 
-    VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(contextVk->getRenderer()->getPhysicalDevice(),
-                                        &memoryProperties);
-
-    auto memoryTypeIndex =
-        FindMemoryType(memoryProperties, memoryRequirements,
-                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-    ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
-
-    VkMemoryAllocateInfo allocInfo;
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.pNext           = nullptr;
-    allocInfo.memoryTypeIndex = memoryTypeIndex.value();
-    allocInfo.allocationSize  = memoryRequirements.size;
-
-    ANGLE_TRY(deviceMemoryOut->allocate(device, allocInfo));
+    VkMemoryPropertyFlags flags =
+        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    ANGLE_TRY(FindAndAllocateCompatibleMemory(device, memoryProperties, flags, memoryRequirements,
+                                              deviceMemoryOut));
     ANGLE_TRY(buffer->bindMemory(device, *deviceMemoryOut));
 
     return NoError();
+}
+
+Error AllocateImageMemory(ContextVk *contextVk,
+                          size_t size,
+                          Image *image,
+                          DeviceMemory *deviceMemoryOut,
+                          size_t *requiredSizeOut)
+{
 }
 
 // GarbageObject implementation.

@@ -121,7 +121,9 @@ class MemoryProperties final : angle::NonCopyable
     MemoryProperties();
 
     void init(VkPhysicalDevice physicalDevice);
-    uint32_t findCompatibleMemoryIndex(uint32_t bitMask, uint32_t propertyFlags) const;
+    Error findCompatibleMemoryIndex(const VkMemoryRequirements &memoryRequirements,
+                                    VkMemoryPropertyFlags memoryPropertyFlags,
+                                    uint32_t *indexOut) const;
 
   private:
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
@@ -641,10 +643,6 @@ class ObjectAndSerial final : angle::NonCopyable
     Serial mQueueSerial;
 };
 
-Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
-                                  const VkMemoryRequirements &requirements,
-                                  uint32_t propertyFlagMask);
-
 Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
@@ -656,6 +654,12 @@ struct BufferAndMemory final : private angle::NonCopyable
     vk::Buffer buffer;
     vk::DeviceMemory memory;
 };
+
+Error AllocateImageMemory(ContextVk *contextVk,
+                          size_t size,
+                          Image *image,
+                          DeviceMemory *deviceMemoryOut,
+                          size_t *requiredSizeOut);
 
 }  // namespace vk
 
