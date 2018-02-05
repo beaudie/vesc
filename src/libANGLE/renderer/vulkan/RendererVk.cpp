@@ -979,7 +979,8 @@ Serial RendererVk::issueProgramSerial()
 
 vk::Error RendererVk::getPipeline(const ProgramVk *programVk,
                                   const vk::PipelineDesc &desc,
-                                  vk::PipelineAndSerial **pipelineOut)
+                                  vk::PipelineAndSerial **pipelineOut,
+                                  gl::AttributesMask &activeAttribLocationsMask)
 {
     ASSERT(programVk->getVertexModuleSerial() == desc.getShaderStageInfo()[0].moduleSerial);
     ASSERT(programVk->getFragmentModuleSerial() == desc.getShaderStageInfo()[1].moduleSerial);
@@ -987,8 +988,9 @@ vk::Error RendererVk::getPipeline(const ProgramVk *programVk,
     // Pull in a compatible RenderPass.
     vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(getCompatibleRenderPass(desc.getRenderPassDesc(), &compatibleRenderPass));
-
+    
     return mPipelineCache.getPipeline(mDevice, *compatibleRenderPass, mGraphicsPipelineLayout,
+                                      activeAttribLocationsMask,
                                       programVk->getLinkedVertexModule(),
                                       programVk->getLinkedFragmentModule(), desc, pipelineOut);
 }

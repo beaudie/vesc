@@ -114,7 +114,8 @@ class RendererVk : angle::NonCopyable
 
     vk::Error getPipeline(const ProgramVk *programVk,
                           const vk::PipelineDesc &desc,
-                          vk::PipelineAndSerial **pipelineOut);
+                          vk::PipelineAndSerial **pipelineOut,
+                          gl::AttributesMask &activeAttribLocationsMask);
 
     // This should only be called from ResourceVk.
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
