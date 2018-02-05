@@ -699,10 +699,10 @@ TEST_P(VertexAttributeTestES3, VertexArrayObjectRendering)
 // Validate that we can support GL_MAX_ATTRIBS attribs
 TEST_P(VertexAttributeTest, MaxAttribs)
 {
-    // TODO(jmadill): Figure out why we get this error on AMD/OpenGL and Intel.
-    if ((IsIntel() || IsAMD()) && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    // TODO(jmadill): Figure out why we get this error on AMD/OpenGL.
+    if (IsAMD() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
     {
-        std::cout << "Test skipped on Intel and AMD." << std::endl;
+        std::cout << "Test skipped on AMD." << std::endl;
         return;
     }
 
@@ -747,13 +747,6 @@ TEST_P(VertexAttributeTest, MaxAttribsPlusOne)
 // Simple test for when we use glBindAttribLocation
 TEST_P(VertexAttributeTest, SimpleBindAttribLocation)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     // Re-use the multi-attrib program, binding attribute 0
     GLuint program = compileMultiAttribProgram(1);
     glBindAttribLocation(program, 2, "position");
