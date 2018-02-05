@@ -2080,13 +2080,6 @@ TEST_P(Texture2DArrayTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensio
 // GLES 3.0.4 section 3.8.13 Texture completeness
 TEST_P(Texture2DTestES3, TextureCompletenessChangesWithMaxLevel)
 {
-    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Intel was observed having wrong behavior after the texture is made incomplete by changing
-        // the base level.
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
     if (IsOSX())
     {
         // Observed incorrect rendering on OSX.
@@ -2133,13 +2126,6 @@ TEST_P(Texture2DTestES3, TextureCompletenessChangesWithMaxLevel)
 // GLES 3.0.4 section 3.8.13 Texture completeness
 TEST_P(Texture3DTestES3, Texture3DCompletenessChangesWithMaxLevel)
 {
-    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Intel was observed having wrong behavior after the texture is made incomplete by changing
-        // the base level.
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
     if (IsOSX())
     {
         // Observed incorrect rendering on OSX.
@@ -2186,14 +2172,6 @@ TEST_P(Texture3DTestES3, Texture3DCompletenessChangesWithMaxLevel)
 // GLES 3.0.4 section 3.8.13 Texture completeness
 TEST_P(Texture2DTestES3, TextureCompletenessChangesWithBaseLevel)
 {
-    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Intel was observed having wrong behavior after the texture is made incomplete by changing
-        // the base level.
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     std::vector<GLColor> texDataGreen(8u * 8u, GLColor::green);
@@ -2235,14 +2213,6 @@ TEST_P(Texture2DTestES3, TextureCompletenessChangesWithBaseLevel)
 // GLES 3.0.4 section 3.8.13 Texture completeness
 TEST_P(Texture2DTestES3, TextureBaseLevelGreaterThanMaxLevel)
 {
-    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Intel Windows OpenGL driver crashes if the base level of a non-immutable texture is out
-        // of range.
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
@@ -2300,7 +2270,7 @@ TEST_P(Texture2DTestES3, TextureFormatChangesWithBaseLevel)
         std::cout << "Test skipped on NVIDIA OpenGL." << std::endl;
         return;
     }
-    if (IsIntel() && IsDesktopOpenGL())
+    if (IsIntel() && IsWindows() && IsDesktopOpenGL())
     {
         // Observed incorrect rendering on Intel OpenGL.
         std::cout << "Test skipped on Intel OpenGL." << std::endl;
@@ -2639,11 +2609,6 @@ TEST_P(Texture2DTestES3, TextureLuminance16ImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB8UIImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_BYTE, nullptr);
@@ -2660,11 +2625,6 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB8UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
@@ -2682,11 +2642,6 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB16UIImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_SHORT, nullptr);
@@ -2703,11 +2658,6 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB16UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB16IImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16I, 1, 1, 0, GL_RGB_INTEGER, GL_SHORT, nullptr);
@@ -2724,11 +2674,6 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB16IImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB32UIImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_INT, nullptr);
@@ -2745,11 +2690,6 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB32UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB32IImplicitAlpha1)
 {
-    if (IsIntel())
-    {
-        std::cout << "Test disabled on Intel." << std::endl;
-        return;
-    }
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32I, 1, 1, 0, GL_RGB_INTEGER, GL_INT, nullptr);
@@ -3105,13 +3045,6 @@ class TextureLimitsTest : public ANGLETest
 // Test rendering with the maximum vertex texture units.
 TEST_P(TextureLimitsTest, MaxVertexTextures)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     compileProgramWithTextureCounts("tex", mMaxVertexTextures, mMaxVertexTextures, "tex", 0, 0);
     ASSERT_NE(0u, mProgram);
     ASSERT_GL_NO_ERROR();
@@ -3122,13 +3055,6 @@ TEST_P(TextureLimitsTest, MaxVertexTextures)
 // Test rendering with the maximum fragment texture units.
 TEST_P(TextureLimitsTest, MaxFragmentTextures)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     compileProgramWithTextureCounts("tex", 0, 0, "tex", mMaxFragmentTextures, mMaxFragmentTextures);
     ASSERT_NE(0u, mProgram);
     ASSERT_GL_NO_ERROR();
@@ -3139,13 +3065,6 @@ TEST_P(TextureLimitsTest, MaxFragmentTextures)
 // Test rendering with maximum combined texture units.
 TEST_P(TextureLimitsTest, MaxCombinedTextures)
 {
-    // TODO(jmadill): Investigate workaround.
-    if (IsIntel() && GetParam() == ES2_OPENGL())
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     GLint vertexTextures = mMaxVertexTextures;
 
     if (vertexTextures + mMaxFragmentTextures > mMaxCombinedTextures)
@@ -3180,13 +3099,6 @@ TEST_P(TextureLimitsTest, ExcessiveFragmentTextures)
 // Test active vertex textures under the limit, but excessive textures specified.
 TEST_P(TextureLimitsTest, MaxActiveVertexTextures)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     compileProgramWithTextureCounts("tex", mMaxVertexTextures + 4, mMaxVertexTextures, "tex", 0, 0);
     ASSERT_NE(0u, mProgram);
     ASSERT_GL_NO_ERROR();
@@ -3197,13 +3109,6 @@ TEST_P(TextureLimitsTest, MaxActiveVertexTextures)
 // Test active fragment textures under the limit, but excessive textures specified.
 TEST_P(TextureLimitsTest, MaxActiveFragmentTextures)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     compileProgramWithTextureCounts("tex", 0, 0, "tex", mMaxFragmentTextures + 4,
                                     mMaxFragmentTextures);
     ASSERT_NE(0u, mProgram);
@@ -3396,7 +3301,7 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
 // GLES 3.0.4 section 3.8.3.
 TEST_P(Texture2DTestES3, UnpackSkipImages2D)
 {
-    if (IsIntel() && IsDesktopOpenGL())
+    if (IsIntel() && IsWindows() && IsDesktopOpenGL())
     {
         std::cout << "Test skipped on Intel OpenGL." << std::endl;
         return;

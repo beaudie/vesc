@@ -221,13 +221,6 @@ TEST_P(UniformBufferTest, UnboundUniformBuffer)
 // https://code.google.com/p/angleproject/issues/detail?id=965
 TEST_P(UniformBufferTest, UniformBufferManyUpdates)
 {
-    // TODO(jmadill): Figure out why this fails on Intel OpenGL.
-    if (IsIntel() && IsOpenGL())
-    {
-        std::cout << "Test skipped on Intel OpenGL." << std::endl;
-        return;
-    }
-
     int px = getWindowWidth() / 2;
     int py = getWindowHeight() / 2;
 
