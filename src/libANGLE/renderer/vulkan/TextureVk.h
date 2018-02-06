@@ -127,6 +127,7 @@ class TextureVk : public TextureImpl, public ResourceVk
     vk::DeviceMemory mDeviceMemory;
     vk::ImageView mImageView;
     vk::Sampler mSampler;
+    size_t mRequiredSize;
 
     RenderTargetVk mRenderTarget;
 };
