@@ -11,6 +11,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 
+#include "common/Color.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -286,6 +287,12 @@ class PipelineDesc final
     // RenderPass description.
     const RenderPassDesc &getRenderPassDesc() const;
     void updateRenderPassDesc(const RenderPassDesc &renderPassDesc);
+
+    // Blend states
+    void updateBlendEnabled(bool isBlendEnabled);
+    void updateBlendColor(const gl::ColorF &color);
+    void updateBlendFuncs(const gl::BlendState &blend_state);
+    void updateBlendEquations(const gl::BlendState &blend_state);
 
   private:
     // TODO(jmadill): Handle Geometry/Compute shaders when necessary.

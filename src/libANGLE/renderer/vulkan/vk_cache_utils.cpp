@@ -24,6 +24,12 @@ namespace vk
 
 namespace
 {
+
+std::map<GLenum, uint8_t> kGlBlendOpToVkBlendOp = {
+    {GL_FUNC_ADD, static_cast<uint8_t>(VK_BLEND_OP_ADD)},
+    {GL_FUNC_SUBTRACT, static_cast<uint8_t>(VK_BLEND_OP_SUBTRACT)},
+    {GL_FUNC_REVERSE_SUBTRACT, static_cast<uint8_t>(VK_BLEND_OP_REVERSE_SUBTRACT)}};
+
 VkSampleCountFlagBits ConvertSamples(GLint sampleCount)
 {
     switch (sampleCount)
@@ -600,6 +606,51 @@ void PipelineDesc::updateLineWidth(float lineWidth)
 const RenderPassDesc &PipelineDesc::getRenderPassDesc() const
 {
     return mRenderPassDesc;
+}
+
+void PipelineDesc::updateBlendColor(const gl::ColorF &color)
+{
+    mColorBlendStateInfo.blendConstants[0] = color.red;
+    mColorBlendStateInfo.blendConstants[1] = color.green;
+    mColorBlendStateInfo.blendConstants[2] = color.blue;
+    mColorBlendStateInfo.blendConstants[3] = color.alpha;
+}
+
+void PipelineDesc::updateBlendEnabled(bool isBlendEnabled)
+{
+    PackedColorBlendAttachmentState blendAttachmentState = mColorBlendStateInfo.attachments[0];
+
+    blendAttachmentState.blendEnable = isBlendEnabled;
+
+    std::fill(&mColorBlendStateInfo.attachments[0],
+              &mColorBlendStateInfo.attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS],
+              blendAttachmentState);
+}
+
+void PipelineDesc::updateBlendEquations(const gl::BlendState &blendState)
+{
+    PackedColorBlendAttachmentState blendAttachmentState = mColorBlendStateInfo.attachments[0];
+
+    blendAttachmentState.colorBlendOp = kGlBlendOpToVkBlendOp[blendState.blendEquationRGB];
+    blendAttachmentState.alphaBlendOp = kGlBlendOpToVkBlendOp[blendState.blendEquationAlpha];
+
+    std::fill(&mColorBlendStateInfo.attachments[0],
+              &mColorBlendStateInfo.attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS],
+              blendAttachmentState);
+}
+
+void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
+{
+    PackedColorBlendAttachmentState blendAttachmentState = mColorBlendStateInfo.attachments[0];
+
+    blendAttachmentState.srcColorBlendFactor = static_cast<uint8_t>(blendState.sourceBlendRGB);
+    blendAttachmentState.dstColorBlendFactor = static_cast<uint8_t>(blendState.destBlendRGB);
+    blendAttachmentState.srcAlphaBlendFactor = static_cast<uint8_t>(blendState.sourceBlendAlpha);
+    blendAttachmentState.dstAlphaBlendFactor = static_cast<uint8_t>(blendState.destBlendAlpha);
+
+    std::fill(&mColorBlendStateInfo.attachments[0],
+              &mColorBlendStateInfo.attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS],
+              blendAttachmentState);
 }
 
 void PipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPassDesc)
