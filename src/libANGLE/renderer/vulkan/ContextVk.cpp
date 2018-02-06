@@ -413,10 +413,25 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
         switch (dirtyBit)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
-                WARN() << "DIRTY_BIT_SCISSOR_TEST_ENABLED unimplemented";
+            {
+                if (glState.isScissorTestEnabled())
+                {
+                    mPipelineDesc->updateScissor(glState.getScissor());
+                }
+                else
+                {
+                    // set it back to the viewport size.
+                    mPipelineDesc->updateScissor(glState.getViewport());
+                }
                 break;
+            }
             case gl::State::DIRTY_BIT_SCISSOR:
-                WARN() << "DIRTY_BIT_SCISSOR unimplemented";
+                // Only modify the scissor region if the test is enabled, otherwise we want to keep
+                // the viewport size as the scissor region.
+                if (dirtyBits.test(gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED))
+                {
+                    mPipelineDesc->updateScissor(glState.getScissor());
+                }
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
                 mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
