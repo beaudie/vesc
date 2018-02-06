@@ -104,6 +104,30 @@ TEST_P(SimpleOperationTest, ClearAndSwap)
     EXPECT_EGL_SUCCESS();
 }
 
+// Simple case of using a scissor test for drawing.
+TEST_P(SimpleOperationTest, ScissorTest)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+
+    // Fill the whole screen with a quad. We'll use the scissor test to reduce it.
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(getWindowWidth() / 4, getWindowHeight() / 4, getWindowWidth() / 2,
+              getWindowHeight() / 2);
+    drawQuad(program.get(), "position", 0.0f, 1.0f, true);
+
+    glDisable(GL_SCISSOR_TEST);
+
+    ASSERT_GL_NO_ERROR();
+
+    // Test outside the scissor test, pitch black.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0u, 0u, 0u, 0u));
+
+    // Test inside the scissor test, green of the fragment shader.
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+}
+
 TEST_P(SimpleOperationTest, LinkProgramShadersNoInputs)
 {
     const std::string vsSource =
@@ -625,7 +649,8 @@ TEST_P(SimpleOperationTest, RenderToTexture)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
+// Use this to select which configurations (e.g. which renderer, which GLES major version) these
+// tests should be run against.
 ANGLE_INSTANTIATE_TEST(SimpleOperationTest,
                        ES2_D3D9(),
                        ES2_D3D11(EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE),
