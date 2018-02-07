@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/Caps.h"
+#include "vk_format_utils.h"
 
 namespace
 {
@@ -19,13 +20,66 @@ namespace rx
 {
 namespace vk
 {
+bool HasFormatFeatureBits(const VkFormatFeatureFlags featureBits,
+                          const VkFormatProperties &formatProperties)
+{
+    return (formatProperties.linearTilingFeatures & formatProperties.optimalTilingFeatures &
+            featureBits) == featureBits;
+}
 
-void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+gl::TextureCaps GenerateTextureFormatCaps(const VkPhysicalDevice &physicalDevice,
+                                          const Format &vkFormat)
+{
+    VkFormatProperties formatProperties;
+    vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat.vkTextureFormat,
+                                        &formatProperties);
+
+    gl::TextureCaps textureCaps;
+
+    textureCaps.texturable =
+        !HasFormatFeatureBits(VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT, formatProperties);
+    textureCaps.filterable =
+        HasFormatFeatureBits(VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT, formatProperties);
+    textureCaps.renderable = HasFormatFeatureBits(
+        VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT,
+        formatProperties);
+    return textureCaps;
+}
+
+void FillTextureCapsMap(const VkPhysicalDevice &physicalDevice,
+                        const FormatTable &formatTable,
+                        gl::Caps *outCaps,
+                        gl::TextureCapsMap *textureCapsMap)
+{
+    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
+    for (GLenum internalFormat : allFormats)
+    {
+        const Format &vkFormat = formatTable[internalFormat];
+        if (!vkFormat.isDefined())
+        {
+            continue;
+        }
+
+        const gl::TextureCaps textureCaps = GenerateTextureFormatCaps(physicalDevice, vkFormat);
+        textureCapsMap->insert(internalFormat, textureCaps);
+
+        if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
+        {
+            outCaps->compressedTextureFormats.push_back(internalFormat);
+        }
+    }
+}
+
+void GenerateCaps(const VkPhysicalDevice &physicalDevice,
+                  const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                  const vk::FormatTable &formatTable,
                   gl::Caps *outCaps,
-                  gl::TextureCapsMap * /*outTextureCaps*/,
+                  gl::TextureCapsMap *outTextureCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */)
 {
+    FillTextureCapsMap(physicalDevice, formatTable, outCaps, outTextureCaps);
+
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.
     outExtensions->mapBuffer      = true;
