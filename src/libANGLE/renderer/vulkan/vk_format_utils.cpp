@@ -10,6 +10,7 @@
 
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/load_functions_table.h"
+#include "vk_caps_utils.h"
 
 namespace rx
 {
@@ -46,16 +47,35 @@ FormatTable::~FormatTable()
 {
 }
 
-void FormatTable::initialize(VkPhysicalDevice physicalDevice, gl::TextureCapsMap *textureCapsMap)
+void FormatTable::initialize(VkPhysicalDevice physicalDevice,
+                             gl::TextureCapsMap *outTextureCapsMap,
+                             gl::Caps *outCaps)
 {
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
     {
-        angle::Format::ID formatID       = static_cast<angle::Format::ID>(formatIndex);
+        const angle::Format::ID formatID = static_cast<angle::Format::ID>(formatIndex);
         const angle::Format &angleFormat = angle::Format::Get(formatID);
         mFormatData[formatIndex].initialize(physicalDevice, angleFormat);
+        const GLenum internalFormat = mFormatData[formatIndex].internalFormat;
+        mFormatData[formatIndex].loadFunctions =
+            GetLoadFunctionsMap(internalFormat, mFormatData[formatIndex].textureFormatID);
 
-        mFormatData[formatIndex].loadFunctions = GetLoadFunctionsMap(
-            mFormatData[formatIndex].internalFormat, mFormatData[formatIndex].textureFormatID);
+        if (!mFormatData[formatIndex].valid())
+        {
+            // TODO(2358): Every angle format should be mapped to a vkFormat.
+            continue;
+        }
+        VkFormatProperties formatProperties;
+        vkGetPhysicalDeviceFormatProperties(
+            physicalDevice, mFormatData[formatIndex].vkTextureFormat, &formatProperties);
+
+        const gl::TextureCaps textureCaps = GenerateTextureFormatCaps(formatProperties);
+        outTextureCapsMap->insert(internalFormat, textureCaps);
+
+        if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
+        {
+            outCaps->compressedTextureFormats.push_back(internalFormat);
+        }
     }
 }
 
