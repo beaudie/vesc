@@ -23,6 +23,7 @@
             '<(angle_path)/src/tests/test_utils/ANGLETest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.h',
             '<(angle_path)/src/tests/test_utils/gl_raii.h',
+            '<(angle_path)/src/tests/gl_tests/VulkanFormatTablesTest.cpp',
         ],
         'angle_white_box_tests_win_sources':
         [
