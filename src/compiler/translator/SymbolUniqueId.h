@@ -29,8 +29,8 @@ class TSymbolUniqueId
     int get() const;
 
   private:
-    friend class TSymbolTable;
-    constexpr TSymbolUniqueId(int id) : mId(id) {}
+    friend class BuiltInId;
+    constexpr TSymbolUniqueId(int staticId) : mId(staticId) {}
 
     int mId;
 };

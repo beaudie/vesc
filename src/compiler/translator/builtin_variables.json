@@ -1,0 +1,205 @@
+{
+    "FragShader":
+    {
+        "condition": "shaderType == GL_FRAGMENT_SHADER",
+        "variables":
+        {
+            "gl_FragCoord":
+            {
+                "level": "COMMON_BUILTINS",
+                "type": {"basic": "Float", "precision": "Medium", "qualifier": "FragCoord", "vecSize": 4}
+            },
+            "gl_FrontFacing":
+            {
+                "level": "COMMON_BUILTINS",
+                "type": {"basic": "Bool", "qualifier": "FrontFacing"}
+            },
+            "gl_PointCoord":
+            {
+                "level": "COMMON_BUILTINS",
+                "type": {"basic": "Float", "precision": "Medium", "qualifier": "PointCoord", "vecSize": 2}
+            },
+            "gl_FragColor":
+            {
+                "level": "ESSL1_BUILTINS",
+                "type": {"basic": "Float", "precision": "Medium", "qualifier": "FragColor", "vecSize": 4}
+            },
+            "gl_FragDepth":
+            {
+                "level": "ESSL3_BUILTINS",
+                "type": {"basic": "Float", "precision": "High", "qualifier": "FragDepth"}
+            }
+        },
+        "subgroups":
+        {
+            "BlendFuncExtended":
+            {
+                "condition": "resources.EXT_blend_func_extended",
+                "variables":
+                {
+                    "gl_SecondaryFragColorEXT":
+                    {
+                        "level": "ESSL1_BUILTINS",
+                        "extension": "EXT_blend_func_extended",
+                        "type": {"basic": "Float", "precision": "Medium", "qualifier": "SecondaryFragColorEXT", "vecSize": 4}
+                    }
+                }
+            },
+            "NVShaderFramebufferFetch":
+            {
+                "condition": "resources.NV_shader_framebuffer_fetch",
+                "variables":
+                {
+                    "gl_LastFragColor":
+                    {
+                        "level": "ESSL1_BUILTINS",
+                        "extension": "NV_shader_framebuffer_fetch",
+                        "type": {"basic": "Float", "precision": "Medium", "qualifier": "LastFragColor", "vecSize": 4}
+                    }
+                }
+            },
+            "ARMShaderFramebufferFetch":
+            {
+                "condition": "!resources.EXT_shader_framebuffer_fetch && !resources.NV_shader_framebuffer_fetch && resources.ARM_shader_framebuffer_fetch",
+                "variables":
+                {
+                    "gl_LastFragColorARM":
+                    {
+                        "level": "ESSL1_BUILTINS",
+                        "extension": "ARM_shader_framebuffer_fetch",
+                        "type": {"basic": "Float", "precision": "Medium", "qualifier": "LastFragColor", "vecSize": 4}
+                    }
+                }
+            },
+            "GeometryShaderSupported":
+            {
+                "condition": "resources.EXT_geometry_shader",
+                "variables":
+                {
+                    "gl_PrimitiveID":
+                    {
+                        "level": "ESSL3_1_BUILTINS",
+                        "extension": "EXT_geometry_shader",
+                        "type": {"basic": "Int", "precision": "High", "qualifier": "PrimitiveID"}
+                    },
+                    "gl_Layer":
+                    {
+                        "level": "ESSL3_1_BUILTINS",
+                        "extension": "EXT_geometry_shader",
+                        "type": {"basic": "Int", "precision": "High", "qualifier": "Layer"}
+                    }
+                }
+            }
+        }
+    },
+    "VertexShader":
+    {
+        "variables":
+        {
+            "gl_Position":
+            {
+                "level": "COMMON_BUILTINS",
+                "type": {"basic": "Float", "precision": "High", "qualifier": "Position", "vecSize": 4}
+            },
+            "gl_PointSize":
+            {
+                "level": "COMMON_BUILTINS",
+                "type": {"basic": "Float", "precision": "Medium", "qualifier": "PointSize"}
+            },
+            "gl_InstanceID":
+            {
+                "level": "ESSL3_BUILTINS",
+                "type": {"basic": "Int", "precision": "High", "qualifier": "InstanceID"}
+            },
+            "gl_VertexID":
+            {
+                "level": "ESSL3_BUILTINS",
+                "type": {"basic": "Int", "precision": "High", "qualifier": "VertexID"}
+            },
+            "gl_ViewportIndex":
+            {
+                "comment": "For internal use by ANGLE - not exposed to the parser.",
+                "level": "GLSL_BUILTINS",
+                "type": {"basic": "Int", "precision": "High", "qualifier": "ViewportIndex"}
+            },
+            "gl_Layer":
+            {
+                "suffix": "VS",
+                "comment": "gl_Layer exists in other shader stages in ESSL, but not in vertex shader so far.",
+                "level": "GLSL_BUILTINS",
+                "type": {"basic": "Int", "precision": "High", "qualifier": "Layer"}
+            }
+        }
+    },
+    "ComputeShader":
+    {
+        "variables":
+        {
+            "gl_NumWorkGroups":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "NumWorkGroups", "vecSize": 3}
+            },
+            "gl_WorkGroupSize":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "WorkGroupSize", "vecSize": 3}
+            },
+            "gl_WorkGroupID":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "WorkGroupID", "vecSize": 3}
+            },
+            "gl_LocalInvocationID":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "LocalInvocationID", "vecSize": 3}
+            },
+            "gl_GlobalInvocationID":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "GlobalInvocationID", "vecSize": 3}
+            },
+            "gl_LocalInvocationIndex":
+            {
+                "level": "ESSL3_1_BUILTINS",
+                "type": {"basic": "UInt", "precision": "Undefined", "qualifier": "LocalInvocationIndex"}
+            }
+        }
+    },
+    "GeometryShader":
+    {
+    },
+    "Multiview":
+    {
+        "condition": "resources.OVR_multiview && shaderType != GL_COMPUTE_SHADER",
+        "subgroups":
+        {
+            "ESSL3":
+            {
+                "variables":
+                {
+                    "gl_ViewID_OVR":
+                    {
+                        "level": "ESSL3_BUILTINS",
+                        "extension": "OVR_multiview",
+                        "type": {"basic": "UInt", "precision": "High", "qualifier": "ViewIDOVR"}
+                    }
+                }
+            },
+            "ESSL1":
+            {
+                "variables":
+                {
+                    "gl_ViewID_OVR":
+                    {
+                        "suffix": "ESSL1",
+                        "level": "ESSL1_BUILTINS",
+                        "extension": "OVR_multiview",
+                        "type": {"basic": "Int", "precision": "High", "qualifier": "ViewIDOVR"}
+                    }
+                }
+            }
+        }
+    }
+}

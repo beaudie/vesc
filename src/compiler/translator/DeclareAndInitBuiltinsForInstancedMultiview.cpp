@@ -9,6 +9,7 @@
 
 #include "compiler/translator/DeclareAndInitBuiltinsForInstancedMultiview.h"
 
+#include "compiler/translator/BuiltIn_autogen.h"
 #include "compiler/translator/FindMain.h"
 #include "compiler/translator/InitializeVariables.h"
 #include "compiler/translator/IntermNode_util.h"
@@ -24,8 +25,6 @@ namespace sh
 namespace
 {
 
-constexpr const ImmutableString kGlLayerString("gl_Layer");
-constexpr const ImmutableString kGlViewportIndexString("gl_ViewportIndex");
 constexpr const ImmutableString kGlViewIdOVRString("gl_ViewID_OVR");
 constexpr const ImmutableString kGlInstanceIdString("gl_InstanceID");
 constexpr const ImmutableString kViewIDVariableName("ViewID_OVR");
@@ -105,8 +104,7 @@ void SelectViewIndexInVertexShader(const TVariable *viewID,
         TType(EbtInt, EbpHigh, EvqTemporary), viewIDSymbolCastArguments);
 
     // Create a gl_ViewportIndex node.
-    TIntermSymbol *viewportIndexSymbol =
-        ReferenceBuiltInVariable(kGlViewportIndexString, symbolTable, 0);
+    TIntermSymbol *viewportIndexSymbol = new TIntermSymbol(&BuiltInVariable::gl_ViewportIndex);
 
     // Create a { gl_ViewportIndex = int(ViewID_OVR) } node.
     TIntermBlock *viewportIndexInitializerInBlock = new TIntermBlock();
@@ -114,7 +112,7 @@ void SelectViewIndexInVertexShader(const TVariable *viewID,
         new TIntermBinary(EOpAssign, viewportIndexSymbol, viewIDAsInt));
 
     // Create a gl_Layer node.
-    TIntermSymbol *layerSymbol = ReferenceBuiltInVariable(kGlLayerString, symbolTable, 0);
+    TIntermSymbol *layerSymbol = new TIntermSymbol(&BuiltInVariable::gl_LayerVS);
 
     // Create an int(ViewID_OVR) + multiviewBaseViewLayerIndex node
     TIntermBinary *sumOfViewIDAndBaseViewIndex = new TIntermBinary(
