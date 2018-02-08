@@ -8,8 +8,8 @@
 
 #include "libANGLE/State.h"
 
-#include <limits>
 #include <string.h>
+#include <limits>
 
 #include "common/bitset_utils.h"
 #include "common/mathutil.h"
@@ -83,42 +83,42 @@ void State::initialize(const Context *context,
                        bool robustResourceInit,
                        bool programBinaryCacheEnabled)
 {
-    const Caps &caps             = context->getCaps();
-    const Extensions &extensions = context->getExtensions();
+    const Caps &caps                   = context->getCaps();
+    const Extensions &extensions       = context->getExtensions();
     const Extensions &nativeExtensions = context->getImplementation()->getNativeExtensions();
-    const Version &clientVersion = context->getClientVersion();
+    const Version &clientVersion       = context->getClientVersion();
 
-    mMaxDrawBuffers = caps.maxDrawBuffers;
+    mMaxDrawBuffers               = caps.maxDrawBuffers;
     mMaxCombinedTextureImageUnits = caps.maxCombinedTextureImageUnits;
 
     setColorClearValue(0.0f, 0.0f, 0.0f, 0.0f);
 
-    mDepthClearValue = 1.0f;
+    mDepthClearValue   = 1.0f;
     mStencilClearValue = 0;
 
-    mScissorTest = false;
-    mScissor.x = 0;
-    mScissor.y = 0;
-    mScissor.width = 0;
+    mScissorTest    = false;
+    mScissor.x      = 0;
+    mScissor.y      = 0;
+    mScissor.width  = 0;
     mScissor.height = 0;
 
-    mBlendColor.red = 0;
+    mBlendColor.red   = 0;
     mBlendColor.green = 0;
-    mBlendColor.blue = 0;
+    mBlendColor.blue  = 0;
     mBlendColor.alpha = 0;
 
-    mStencilRef = 0;
+    mStencilRef     = 0;
     mStencilBackRef = 0;
 
-    mSampleCoverage = false;
-    mSampleCoverageValue = 1.0f;
+    mSampleCoverage       = false;
+    mSampleCoverageValue  = 1.0f;
     mSampleCoverageInvert = false;
 
     mMaxSampleMaskWords = caps.maxSampleMaskWords;
     mSampleMask         = false;
     mSampleMaskValues.fill(~GLbitfield(0));
 
-    mGenerateMipmapHint = GL_DONT_CARE;
+    mGenerateMipmapHint           = GL_DONT_CARE;
     mFragmentShaderDerivativeHint = GL_DONT_CARE;
 
     mBindGeneratesResource = bindGeneratesResource;
@@ -126,16 +126,16 @@ void State::initialize(const Context *context,
 
     mLineWidth = 1.0f;
 
-    mViewport.x = 0;
-    mViewport.y = 0;
-    mViewport.width = 0;
+    mViewport.x      = 0;
+    mViewport.y      = 0;
+    mViewport.width  = 0;
     mViewport.height = 0;
-    mNearZ = 0.0f;
-    mFarZ = 1.0f;
+    mNearZ           = 0.0f;
+    mFarZ            = 1.0f;
 
-    mBlend.colorMaskRed = true;
+    mBlend.colorMaskRed   = true;
     mBlend.colorMaskGreen = true;
-    mBlend.colorMaskBlue = true;
+    mBlend.colorMaskBlue  = true;
     mBlend.colorMaskAlpha = true;
 
     mActiveSampler = 0;
@@ -212,8 +212,219 @@ void State::initialize(const Context *context,
     mPathStencilRef  = 0;
     mPathStencilMask = std::numeric_limits<GLuint>::max();
 
-    mRobustResourceInit = robustResourceInit;
+    mRobustResourceInit        = robustResourceInit;
     mProgramBinaryCacheEnabled = programBinaryCacheEnabled;
+
+    // GLES1.1 state initialization
+    if (clientVersion <= Version(1, 1))
+    {
+
+        mLineSmoothEnabled    = GL_FALSE;
+        mPointSmoothEnabled   = GL_FALSE;
+        mPointSpriteEnabled   = GL_FALSE;
+        mLogicOpEnabled       = GL_FALSE;
+        mAlphaTestEnabled     = GL_FALSE;
+        mLightingEnabled      = GL_FALSE;
+        mFogEnabled           = GL_FALSE;
+        mRescaleNormalEnabled = GL_FALSE;
+        mNormalizeEnabled     = GL_FALSE;
+        mColorMaterialEnabled = GL_FALSE;
+        mReflecitonMapEnabled = GL_FALSE;
+
+        // Default to 4 multitexture units and 8 lights max,
+        // with 16 matrices max depth (Approx. spec minimums)
+        mMaxMultitextureUnits = 4;
+        mMaxLights            = 8;
+        mMaxMatrixStackDepth  = 16;
+        mMaxClipPlanes        = 6;
+
+        mShadeModel     = GL_SMOOTH;
+        mCurrMatrixMode = GL_MODELVIEW;
+        mActiveSampler  = 0;
+
+        mColor[0] = 1.0f;
+        mColor[1] = 1.0f;
+        mColor[2] = 1.0f;
+        mColor[3] = 1.0f;
+
+        mNormal[0] = 0.0f;
+        mNormal[1] = 0.0f;
+        mNormal[2] = 1.0f;
+
+        mMultiTexCoords.resize(mMaxMultitextureUnits);
+        for (auto &texcoord : mMultiTexCoords)
+        {
+            memset(&texcoord, 0, sizeof(texcoord));
+        }
+
+        mTexUnitEnables.resize(mMaxMultitextureUnits);
+        mTexUnitEnvs.resize(mMaxMultitextureUnits);
+        for (int i = 0; i < mMaxMultitextureUnits; i++)
+        {
+            auto &env = mTexUnitEnvs[i];
+
+            env.envMode      = GL_MODULATE;
+            env.combineRgb   = GL_MODULATE;
+            env.combineAlpha = GL_MODULATE;
+
+            env.src0rgb   = GL_TEXTURE;
+            env.src0alpha = GL_TEXTURE;
+
+            env.src1rgb   = GL_PREVIOUS;
+            env.src1alpha = GL_PREVIOUS;
+
+            env.src2rgb   = GL_CONSTANT;
+            env.src2alpha = GL_CONSTANT;
+
+            env.op0rgb   = GL_SRC_COLOR;
+            env.op0alpha = GL_SRC_ALPHA;
+
+            env.op1rgb   = GL_SRC_COLOR;
+            env.op1alpha = GL_SRC_ALPHA;
+
+            env.op2rgb   = GL_SRC_ALPHA;
+            env.op2alpha = GL_SRC_ALPHA;
+
+            env.envColor   = {0.0f, 0.0f, 0.0f, 0.0f};
+            env.rgbScale   = 1.0;
+            env.alphaScale = 1.0;
+
+            env.pointSpriteCoordReplace = false;
+        }
+
+        mTexGens.resize(mMaxMultitextureUnits);
+
+        mProjMatrices.resize(1, {});
+        mModelviewMatrices.resize(1, {});
+        mTextureMatrices.resize(mMaxMultitextureUnits);
+        for (int i = 0; i < mMaxMultitextureUnits; i++)
+        {
+            mTextureMatrices[i].resize(1, {});
+        }
+
+        mMaterial.ambient[0] = 0.2f;
+        mMaterial.ambient[1] = 0.2f;
+        mMaterial.ambient[2] = 0.2f;
+        mMaterial.ambient[3] = 1.0f;
+
+        mMaterial.diffuse[0] = 0.8f;
+        mMaterial.diffuse[1] = 0.8f;
+        mMaterial.diffuse[2] = 0.8f;
+        mMaterial.diffuse[3] = 1.0f;
+
+        mMaterial.specular[0] = 0.0f;
+        mMaterial.specular[1] = 0.0f;
+        mMaterial.specular[2] = 0.0f;
+        mMaterial.specular[3] = 1.0f;
+
+        mMaterial.emissive[0] = 0.0f;
+        mMaterial.emissive[1] = 0.0f;
+        mMaterial.emissive[2] = 0.0f;
+        mMaterial.emissive[3] = 1.0f;
+
+        mMaterial.specularExponent = 0.0f;
+
+        mLightModel.color[0] = 0.2f;
+        mLightModel.color[1] = 0.2f;
+        mLightModel.color[2] = 0.2f;
+        mLightModel.color[3] = 1.0f;
+        mLightModel.twoSided = false;
+
+        mLights.resize(mMaxLights, {});
+        for (auto &light : mLights)
+        {
+            light.enabled = false;
+
+            light.ambient[0] = 0.0f;
+            light.ambient[1] = 0.0f;
+            light.ambient[2] = 0.0f;
+            light.ambient[3] = 1.0f;
+
+            light.diffuse[0] = 0.0f;
+            light.diffuse[1] = 0.0f;
+            light.diffuse[2] = 0.0f;
+            light.diffuse[3] = 1.0f;
+
+            light.specular[0] = 0.0f;
+            light.specular[1] = 0.0f;
+            light.specular[2] = 0.0f;
+            light.specular[3] = 1.0f;
+
+            light.position[0] = 0.0f;
+            light.position[1] = 0.0f;
+            light.position[2] = 1.0f;
+            light.position[3] = 0.0f;
+
+            light.direction[0] = 0.0f;
+            light.direction[1] = 0.0f;
+            light.direction[2] = -1.0f;
+
+            light.spotlightExponent    = 0.0f;
+            light.spotlightCutoffAngle = 180.0f;
+            light.attenuationConst     = 1.0f;
+            light.attenuationLinear    = 0.0f;
+            light.attenuationQuadratic = 0.0f;
+        }
+
+        // light 0 is a bit different initially
+        mLights[0].diffuse[0] = 1.0f;
+        mLights[0].diffuse[1] = 1.0f;
+        mLights[0].diffuse[2] = 1.0f;
+        mLights[0].diffuse[3] = 1.0f;
+
+        mLights[0].specular[0] = 1.0f;
+        mLights[0].specular[1] = 1.0f;
+        mLights[0].specular[2] = 1.0f;
+        mLights[0].specular[3] = 1.0f;
+
+        mFog.mode     = GL_EXP;
+        mFog.density  = 1.0f;
+        mFog.start    = 0.0f;
+        mFog.end      = 1.0f;
+        mFog.color[0] = 0.0f;
+        mFog.color[1] = 0.0f;
+        mFog.color[2] = 0.0f;
+        mFog.color[3] = 0.0f;
+
+        mAlphaFunc    = GL_ALWAYS;
+        mAlphaTestRef = 0.0f;
+
+        mClipPlaneEnabled.resize(mMaxClipPlanes, {});
+        for (int i = 0; i < mMaxClipPlanes; i++)
+        {
+            mClipPlaneEnabled[i] = false;
+        }
+
+        mClipPlanes.resize(mMaxClipPlanes, {});
+        for (auto &plane : mClipPlanes)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                plane[i] = 0.0f;
+            }
+        }
+
+        mPointSizeMin                = 0.1f;
+        mPointSizeMax                = 100.0f;
+        mPointFadeThresholdSize      = 0.1f;
+        mPointDistanceAttenuation[0] = 1.0f;
+        mPointDistanceAttenuation[1] = 0.0f;
+        mPointDistanceAttenuation[2] = 0.0f;
+
+        mPointSize = 1.0f;
+
+        mLogicOp = GL_COPY;
+
+        mVertexArrayStride       = 0;
+        mNormalArrayStride       = 0;
+        mColorArrayStride        = 0;
+        mTextureCoordArrayStride = 0;
+
+        mLineSmoothHint            = GL_DONT_CARE;
+        mPointSmoothHint           = GL_DONT_CARE;
+        mPerspectiveCorrectionHint = GL_DONT_CARE;
+        mFogHint                   = GL_DONT_CARE;
+    }
 }
 
 void State::reset(const Context *context)
@@ -305,9 +516,9 @@ const DepthStencilState &State::getDepthStencilState() const
 
 void State::setColorClearValue(float red, float green, float blue, float alpha)
 {
-    mColorClearValue.red = red;
+    mColorClearValue.red   = red;
     mColorClearValue.green = green;
-    mColorClearValue.blue = blue;
+    mColorClearValue.blue  = blue;
     mColorClearValue.alpha = alpha;
     mDirtyBits.set(DIRTY_BIT_CLEAR_COLOR);
 }
@@ -326,9 +537,9 @@ void State::setStencilClearValue(int stencil)
 
 void State::setColorMask(bool red, bool green, bool blue, bool alpha)
 {
-    mBlend.colorMaskRed = red;
+    mBlend.colorMaskRed   = red;
     mBlend.colorMaskGreen = green;
-    mBlend.colorMaskBlue = blue;
+    mBlend.colorMaskBlue  = blue;
     mBlend.colorMaskAlpha = alpha;
     mDirtyBits.set(DIRTY_BIT_COLOR_MASK);
 }
@@ -386,14 +597,14 @@ void State::setDepthTest(bool enabled)
 
 void State::setDepthFunc(GLenum depthFunc)
 {
-     mDepthStencil.depthFunc = depthFunc;
-     mDirtyBits.set(DIRTY_BIT_DEPTH_FUNC);
+    mDepthStencil.depthFunc = depthFunc;
+    mDirtyBits.set(DIRTY_BIT_DEPTH_FUNC);
 }
 
 void State::setDepthRange(float zNear, float zFar)
 {
     mNearZ = zNear;
-    mFarZ = zFar;
+    mFarZ  = zFar;
     mDirtyBits.set(DIRTY_BIT_DEPTH_RANGE);
 }
 
@@ -420,25 +631,25 @@ void State::setBlend(bool enabled)
 
 void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha)
 {
-    mBlend.sourceBlendRGB = sourceRGB;
-    mBlend.destBlendRGB = destRGB;
+    mBlend.sourceBlendRGB   = sourceRGB;
+    mBlend.destBlendRGB     = destRGB;
     mBlend.sourceBlendAlpha = sourceAlpha;
-    mBlend.destBlendAlpha = destAlpha;
+    mBlend.destBlendAlpha   = destAlpha;
     mDirtyBits.set(DIRTY_BIT_BLEND_FUNCS);
 }
 
 void State::setBlendColor(float red, float green, float blue, float alpha)
 {
-    mBlendColor.red = red;
+    mBlendColor.red   = red;
     mBlendColor.green = green;
-    mBlendColor.blue = blue;
+    mBlendColor.blue  = blue;
     mBlendColor.alpha = alpha;
     mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
 }
 
 void State::setBlendEquation(GLenum rgbEquation, GLenum alphaEquation)
 {
-    mBlend.blendEquationRGB = rgbEquation;
+    mBlend.blendEquationRGB   = rgbEquation;
     mBlend.blendEquationAlpha = alphaEquation;
     mDirtyBits.set(DIRTY_BIT_BLEND_EQUATIONS);
 }
@@ -462,15 +673,17 @@ void State::setStencilTest(bool enabled)
 void State::setStencilParams(GLenum stencilFunc, GLint stencilRef, GLuint stencilMask)
 {
     mDepthStencil.stencilFunc = stencilFunc;
-    mStencilRef = (stencilRef > 0) ? stencilRef : 0;
+    mStencilRef               = (stencilRef > 0) ? stencilRef : 0;
     mDepthStencil.stencilMask = stencilMask;
     mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_FRONT);
 }
 
-void State::setStencilBackParams(GLenum stencilBackFunc, GLint stencilBackRef, GLuint stencilBackMask)
+void State::setStencilBackParams(GLenum stencilBackFunc,
+                                 GLint stencilBackRef,
+                                 GLuint stencilBackMask)
 {
     mDepthStencil.stencilBackFunc = stencilBackFunc;
-    mStencilBackRef = (stencilBackRef > 0) ? stencilBackRef : 0;
+    mStencilBackRef               = (stencilBackRef > 0) ? stencilBackRef : 0;
     mDepthStencil.stencilBackMask = stencilBackMask;
     mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_BACK);
 }
@@ -487,17 +700,21 @@ void State::setStencilBackWritemask(GLuint stencilBackWritemask)
     mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_BACK);
 }
 
-void State::setStencilOperations(GLenum stencilFail, GLenum stencilPassDepthFail, GLenum stencilPassDepthPass)
+void State::setStencilOperations(GLenum stencilFail,
+                                 GLenum stencilPassDepthFail,
+                                 GLenum stencilPassDepthPass)
 {
-    mDepthStencil.stencilFail = stencilFail;
+    mDepthStencil.stencilFail          = stencilFail;
     mDepthStencil.stencilPassDepthFail = stencilPassDepthFail;
     mDepthStencil.stencilPassDepthPass = stencilPassDepthPass;
     mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_FRONT);
 }
 
-void State::setStencilBackOperations(GLenum stencilBackFail, GLenum stencilBackPassDepthFail, GLenum stencilBackPassDepthPass)
+void State::setStencilBackOperations(GLenum stencilBackFail,
+                                     GLenum stencilBackPassDepthFail,
+                                     GLenum stencilBackPassDepthPass)
 {
-    mDepthStencil.stencilBackFail = stencilBackFail;
+    mDepthStencil.stencilBackFail          = stencilBackFail;
     mDepthStencil.stencilBackPassDepthFail = stencilBackPassDepthFail;
     mDepthStencil.stencilBackPassDepthPass = stencilBackPassDepthPass;
     mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_BACK);
@@ -528,7 +745,7 @@ void State::setPolygonOffsetParams(GLfloat factor, GLfloat units)
 {
     // An application can pass NaN values here, so handle this gracefully
     mRasterizer.polygonOffsetFactor = factor != factor ? 0.0f : factor;
-    mRasterizer.polygonOffsetUnits = units != units ? 0.0f : units;
+    mRasterizer.polygonOffsetUnits  = units != units ? 0.0f : units;
     mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET);
 }
 
@@ -556,7 +773,7 @@ void State::setSampleCoverage(bool enabled)
 
 void State::setSampleCoverageParams(GLclampf value, bool invert)
 {
-    mSampleCoverageValue = value;
+    mSampleCoverageValue  = value;
     mSampleCoverageInvert = invert;
     mDirtyBits.set(DIRTY_BIT_SAMPLE_COVERAGE);
 }
@@ -636,9 +853,9 @@ void State::setScissorTest(bool enabled)
 
 void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    mScissor.x = x;
-    mScissor.y = y;
-    mScissor.width = width;
+    mScissor.x      = x;
+    mScissor.y      = y;
+    mScissor.width  = width;
     mScissor.height = height;
     mDirtyBits.set(DIRTY_BIT_SCISSOR);
 }
@@ -674,32 +891,115 @@ void State::setEnableFeature(GLenum feature, bool enabled)
 {
     switch (feature)
     {
-      case GL_MULTISAMPLE_EXT:               setMultisampling(enabled);         break;
-      case GL_SAMPLE_ALPHA_TO_ONE_EXT:       setSampleAlphaToOne(enabled);      break;
-      case GL_CULL_FACE:                     setCullFace(enabled);              break;
-      case GL_POLYGON_OFFSET_FILL:           setPolygonOffsetFill(enabled);     break;
-      case GL_SAMPLE_ALPHA_TO_COVERAGE:      setSampleAlphaToCoverage(enabled); break;
-      case GL_SAMPLE_COVERAGE:               setSampleCoverage(enabled);        break;
-      case GL_SCISSOR_TEST:                  setScissorTest(enabled);           break;
-      case GL_STENCIL_TEST:                  setStencilTest(enabled);           break;
-      case GL_DEPTH_TEST:                    setDepthTest(enabled);             break;
-      case GL_BLEND:                         setBlend(enabled);                 break;
-      case GL_DITHER:                        setDither(enabled);                break;
-      case GL_PRIMITIVE_RESTART_FIXED_INDEX: setPrimitiveRestart(enabled);      break;
-      case GL_RASTERIZER_DISCARD:            setRasterizerDiscard(enabled);     break;
-      case GL_SAMPLE_MASK:
-          setSampleMaskEnabled(enabled);
-          break;
-      case GL_DEBUG_OUTPUT_SYNCHRONOUS:
-          mDebug.setOutputSynchronous(enabled);
-          break;
-      case GL_DEBUG_OUTPUT:
-          mDebug.setOutputEnabled(enabled);
-          break;
-      case GL_FRAMEBUFFER_SRGB_EXT:
-          setFramebufferSRGB(enabled);
-          break;
-      default:                               UNREACHABLE();
+        case GL_MULTISAMPLE_EXT:
+            setMultisampling(enabled);
+            break;
+        case GL_SAMPLE_ALPHA_TO_ONE_EXT:
+            setSampleAlphaToOne(enabled);
+            break;
+        case GL_CULL_FACE:
+            setCullFace(enabled);
+            break;
+        case GL_POLYGON_OFFSET_FILL:
+            setPolygonOffsetFill(enabled);
+            break;
+        case GL_SAMPLE_ALPHA_TO_COVERAGE:
+            setSampleAlphaToCoverage(enabled);
+            break;
+        case GL_SAMPLE_COVERAGE:
+            setSampleCoverage(enabled);
+            break;
+        case GL_SCISSOR_TEST:
+            setScissorTest(enabled);
+            break;
+        case GL_STENCIL_TEST:
+            setStencilTest(enabled);
+            break;
+        case GL_DEPTH_TEST:
+            setDepthTest(enabled);
+            break;
+        case GL_BLEND:
+            setBlend(enabled);
+            break;
+        case GL_DITHER:
+            setDither(enabled);
+            break;
+        case GL_PRIMITIVE_RESTART_FIXED_INDEX:
+            setPrimitiveRestart(enabled);
+            break;
+        case GL_RASTERIZER_DISCARD:
+            setRasterizerDiscard(enabled);
+            break;
+        case GL_SAMPLE_MASK:
+            setSampleMaskEnabled(enabled);
+            break;
+        case GL_DEBUG_OUTPUT_SYNCHRONOUS:
+            mDebug.setOutputSynchronous(enabled);
+            break;
+        case GL_DEBUG_OUTPUT:
+            mDebug.setOutputEnabled(enabled);
+            break;
+        case GL_FRAMEBUFFER_SRGB_EXT:
+            setFramebufferSRGB(enabled);
+            break;
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP:
+            setTextureTargetEnabled(feature, enabled);
+            break;
+        case GL_ALPHA_TEST:
+            mAlphaTestEnabled = enabled;
+            break;
+        case GL_FOG:
+            mFogEnabled = enabled;
+            break;
+        case GL_LIGHTING:
+            mLightingEnabled = enabled;
+            break;
+        case GL_LIGHT0:
+        case GL_LIGHT1:
+        case GL_LIGHT2:
+        case GL_LIGHT3:
+        case GL_LIGHT4:
+        case GL_LIGHT5:
+        case GL_LIGHT6:
+        case GL_LIGHT7:
+            mLights[feature - GL_LIGHT0].enabled = enabled;
+            break;
+        case GL_COLOR_LOGIC_OP:
+            mLogicOpEnabled = enabled;
+            break;
+        case GL_NORMALIZE:
+            mNormalizeEnabled = enabled;
+            break;
+        case GL_RESCALE_NORMAL:
+            mRescaleNormalEnabled = enabled;
+            break;
+        case GL_CLIP_PLANE0:
+        case GL_CLIP_PLANE1:
+        case GL_CLIP_PLANE2:
+        case GL_CLIP_PLANE3:
+        case GL_CLIP_PLANE4:
+        case GL_CLIP_PLANE5:
+            mClipPlaneEnabled[feature - GL_CLIP_PLANE0] = enabled;
+            break;
+        case GL_COLOR_MATERIAL:
+            mColorMaterialEnabled = enabled;
+            break;
+        case GL_LINE_SMOOTH:
+            mLineSmoothEnabled = enabled;
+            break;
+        case GL_POINT_SMOOTH:
+            mPointSmoothEnabled = enabled;
+            break;
+        case GL_POINT_SPRITE_OES:
+            mPointSpriteEnabled = enabled;
+            break;
+        case GL_REFLECTION_MAP_OES:
+            mReflecitonMapEnabled = enabled;
+        default:
+        {
+            UNREACHABLE();
+        }
     }
 }
 
@@ -707,39 +1007,104 @@ bool State::getEnableFeature(GLenum feature) const
 {
     switch (feature)
     {
-      case GL_MULTISAMPLE_EXT:               return isMultisamplingEnabled();
-      case GL_SAMPLE_ALPHA_TO_ONE_EXT:       return isSampleAlphaToOneEnabled();
-      case GL_CULL_FACE:                     return isCullFaceEnabled();
-      case GL_POLYGON_OFFSET_FILL:           return isPolygonOffsetFillEnabled();
-      case GL_SAMPLE_ALPHA_TO_COVERAGE:      return isSampleAlphaToCoverageEnabled();
-      case GL_SAMPLE_COVERAGE:               return isSampleCoverageEnabled();
-      case GL_SCISSOR_TEST:                  return isScissorTestEnabled();
-      case GL_STENCIL_TEST:                  return isStencilTestEnabled();
-      case GL_DEPTH_TEST:                    return isDepthTestEnabled();
-      case GL_BLEND:                         return isBlendEnabled();
-      case GL_DITHER:                        return isDitherEnabled();
-      case GL_PRIMITIVE_RESTART_FIXED_INDEX: return isPrimitiveRestartEnabled();
-      case GL_RASTERIZER_DISCARD:            return isRasterizerDiscardEnabled();
-      case GL_SAMPLE_MASK:
-          return isSampleMaskEnabled();
-      case GL_DEBUG_OUTPUT_SYNCHRONOUS:
-          return mDebug.isOutputSynchronous();
-      case GL_DEBUG_OUTPUT:
-          return mDebug.isOutputEnabled();
-      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
-          return isBindGeneratesResourceEnabled();
-      case GL_CLIENT_ARRAYS_ANGLE:
-          return areClientArraysEnabled();
-      case GL_FRAMEBUFFER_SRGB_EXT:
-          return getFramebufferSRGB();
-      case GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
-          return mRobustResourceInit;
-      case GL_PROGRAM_CACHE_ENABLED_ANGLE:
-          return mProgramBinaryCacheEnabled;
+        case GL_MULTISAMPLE_EXT:
+            return isMultisamplingEnabled();
+        case GL_SAMPLE_ALPHA_TO_ONE_EXT:
+            return isSampleAlphaToOneEnabled();
+        case GL_CULL_FACE:
+            return isCullFaceEnabled();
+        case GL_POLYGON_OFFSET_FILL:
+            return isPolygonOffsetFillEnabled();
+        case GL_SAMPLE_ALPHA_TO_COVERAGE:
+            return isSampleAlphaToCoverageEnabled();
+        case GL_SAMPLE_COVERAGE:
+            return isSampleCoverageEnabled();
+        case GL_SCISSOR_TEST:
+            return isScissorTestEnabled();
+        case GL_STENCIL_TEST:
+            return isStencilTestEnabled();
+        case GL_DEPTH_TEST:
+            return isDepthTestEnabled();
+        case GL_BLEND:
+            return isBlendEnabled();
+        case GL_DITHER:
+            return isDitherEnabled();
+        case GL_PRIMITIVE_RESTART_FIXED_INDEX:
+            return isPrimitiveRestartEnabled();
+        case GL_RASTERIZER_DISCARD:
+            return isRasterizerDiscardEnabled();
+        case GL_SAMPLE_MASK:
+            return isSampleMaskEnabled();
+        case GL_DEBUG_OUTPUT_SYNCHRONOUS:
+            return mDebug.isOutputSynchronous();
+        case GL_DEBUG_OUTPUT:
+            return mDebug.isOutputEnabled();
+        case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+            return isBindGeneratesResourceEnabled();
+        case GL_CLIENT_ARRAYS_ANGLE:
+            return areClientArraysEnabled();
+        case GL_FRAMEBUFFER_SRGB_EXT:
+            return getFramebufferSRGB();
+        case GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
+            return mRobustResourceInit;
+        case GL_PROGRAM_CACHE_ENABLED_ANGLE:
+            return mProgramBinaryCacheEnabled;
 
-      default:
-          UNREACHABLE();
-          return false;
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP:
+            return isTextureTargetEnabled((GLenum)(mActiveSampler + GL_TEXTURE0), feature);
+
+        case GL_ALPHA_TEST:
+            return mAlphaTestEnabled;
+            break;
+        case GL_FOG:
+            return mFogEnabled;
+            break;
+        case GL_LIGHTING:
+            return mLightingEnabled;
+            break;
+        case GL_LIGHT0:
+        case GL_LIGHT1:
+        case GL_LIGHT2:
+        case GL_LIGHT3:
+        case GL_LIGHT4:
+        case GL_LIGHT5:
+        case GL_LIGHT6:
+        case GL_LIGHT7:
+            return mLights[feature - GL_LIGHT0].enabled;
+        case GL_COLOR_LOGIC_OP:
+            return mLogicOpEnabled;
+        case GL_NORMALIZE:
+            return mNormalizeEnabled;
+        case GL_RESCALE_NORMAL:
+            return mRescaleNormalEnabled;
+        case GL_CLIP_PLANE0:
+        case GL_CLIP_PLANE1:
+        case GL_CLIP_PLANE2:
+        case GL_CLIP_PLANE3:
+        case GL_CLIP_PLANE4:
+        case GL_CLIP_PLANE5:
+            return mClipPlaneEnabled[feature - GL_CLIP_PLANE0];
+        case GL_COLOR_MATERIAL:
+            return mColorMaterialEnabled;
+        case GL_LINE_SMOOTH:
+            return mLineSmoothEnabled;
+        case GL_POINT_SMOOTH:
+            return mPointSmoothEnabled;
+        case GL_POINT_SPRITE_OES:
+            return mPointSpriteEnabled;
+        case GL_REFLECTION_MAP_OES:
+            return mReflecitonMapEnabled;
+        case GL_VERTEX_ARRAY:
+        case GL_COLOR_ARRAY:
+        case GL_NORMAL_ARRAY:
+        case GL_POINT_SIZE_ARRAY_OES:
+        case GL_TEXTURE_COORD_ARRAY:
+            return isClientStateEnabled(feature);
+        default:
+            fprintf(stderr, "%s: feature 0x%x not found\n", __func__, feature);
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -769,6 +1134,26 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
     // Ignore for now. It is valid for implementations to ignore hint.
 }
 
+void State::setLineSmoothHint(GLenum hint)
+{
+    mLineSmoothHint = hint;
+}
+
+void State::setPointSmoothHint(GLenum hint)
+{
+    mPointSmoothHint = hint;
+}
+
+void State::setPerspectiveCorrectionHint(GLenum hint)
+{
+    mPerspectiveCorrectionHint = hint;
+}
+
+void State::setFogHint(GLenum hint)
+{
+    mFogHint = hint;
+}
+
 bool State::isBindGeneratesResourceEnabled() const
 {
     return mBindGeneratesResource;
@@ -781,9 +1166,9 @@ bool State::areClientArraysEnabled() const
 
 void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    mViewport.x = x;
-    mViewport.y = y;
-    mViewport.width = width;
+    mViewport.x      = x;
+    mViewport.y      = y;
+    mViewport.width  = width;
     mViewport.height = height;
     mDirtyBits.set(DIRTY_BIT_VIEWPORT);
 }
@@ -839,12 +1224,12 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
     // the ResourceManager.
 
     // [OpenGL ES 2.0.24] section 3.8 page 84:
-    // If a texture object is deleted, it is as if all texture units which are bound to that texture object are
-    // rebound to texture object zero
+    // If a texture object is deleted, it is as if all texture units which are bound to that texture
+    // object are rebound to texture object zero
 
     for (auto &bindingVec : mSamplerTextures)
     {
-        GLenum textureType = bindingVec.first;
+        GLenum textureType                  = bindingVec.first;
         TextureBindingVector &textureVector = bindingVec.second;
         for (BindingPointer<Texture> &binding : textureVector)
         {
@@ -874,9 +1259,9 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
     }
 
     // [OpenGL ES 2.0.24] section 4.4 page 112:
-    // If a texture object is deleted while its image is attached to the currently bound framebuffer, then it is
-    // as if Texture2DAttachment had been called, with a texture of 0, for each attachment point to which this
-    // image was attached in the currently bound framebuffer.
+    // If a texture object is deleted while its image is attached to the currently bound
+    // framebuffer, then it is as if Texture2DAttachment had been called, with a texture of 0, for
+    // each attachment point to which this image was attached in the currently bound framebuffer.
 
     if (mReadFramebuffer && mReadFramebuffer->detachTexture(context, texture))
     {
@@ -898,6 +1283,51 @@ void State::initializeZeroTextures(const Context *context, const TextureMap &zer
         for (size_t textureUnit = 0; textureUnit < samplerTextureArray.size(); ++textureUnit)
         {
             samplerTextureArray[textureUnit].set(context, zeroTexture.second.get());
+        }
+    }
+}
+
+void State::setTextureTargetEnabled(GLenum target, bool enabled)
+{
+    switch (target)
+    {
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP_OES:
+        case GL_TEXTURE_3D:
+        case GL_TEXTURE_2D_ARRAY:
+        case GL_TEXTURE_2D_MULTISAMPLE:
+            if (enabled)
+            {
+                mTexUnitEnables[mActiveSampler].insert(target);
+            }
+            else
+            {
+                mTexUnitEnables[mActiveSampler].erase(target);
+            }
+            break;
+        default:
+            UNREACHABLE();
+    }
+}
+
+bool State::isTextureTargetEnabled(GLenum unit, GLenum textureTarget) const
+{
+    const auto &findIn = mTexUnitEnables[unit - GL_TEXTURE0];
+    return findIn.find(textureTarget) != findIn.end();
+}
+
+void State::getUnitForEnabledTarget(GLenum textureTarget, bool *everEnabled, GLenum *whichUnit)
+{
+    *everEnabled = false;
+    *whichUnit   = GL_TEXTURE0;
+
+    for (size_t i = 0; i < mTexUnitEnables.size(); i++)
+    {
+        const auto &enabled = mTexUnitEnables[i];
+        if (enabled.find(textureTarget) != enabled.end())
+        {
+            *everEnabled = true;
+            *whichUnit   = (GLenum)(GL_TEXTURE0 + i);
         }
     }
 }
@@ -955,8 +1385,8 @@ Renderbuffer *State::getCurrentRenderbuffer() const
 void State::detachRenderbuffer(const Context *context, GLuint renderbuffer)
 {
     // [OpenGL ES 2.0.24] section 4.4 page 109:
-    // If a renderbuffer that is currently bound to RENDERBUFFER is deleted, it is as though BindRenderbuffer
-    // had been executed with the target RENDERBUFFER and name of zero.
+    // If a renderbuffer that is currently bound to RENDERBUFFER is deleted, it is as though
+    // BindRenderbuffer had been executed with the target RENDERBUFFER and name of zero.
 
     if (mRenderbuffer.id() == renderbuffer)
     {
@@ -964,9 +1394,10 @@ void State::detachRenderbuffer(const Context *context, GLuint renderbuffer)
     }
 
     // [OpenGL ES 2.0.24] section 4.4 page 111:
-    // If a renderbuffer object is deleted while its image is attached to the currently bound framebuffer,
-    // then it is as if FramebufferRenderbuffer had been called, with a renderbuffer of 0, for each attachment
-    // point to which this image was attached in the currently bound framebuffer.
+    // If a renderbuffer object is deleted while its image is attached to the currently bound
+    // framebuffer, then it is as if FramebufferRenderbuffer had been called, with a renderbuffer of
+    // 0, for each attachment point to which this image was attached in the currently bound
+    // framebuffer.
 
     Framebuffer *readFramebuffer = mReadFramebuffer;
     Framebuffer *drawFramebuffer = mDrawFramebuffer;
@@ -983,7 +1414,6 @@ void State::detachRenderbuffer(const Context *context, GLuint renderbuffer)
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
         }
     }
-
 }
 
 void State::setReadFramebufferBinding(Framebuffer *framebuffer)
@@ -1041,8 +1471,7 @@ Framebuffer *State::getDrawFramebuffer() const
 
 bool State::removeReadFramebufferBinding(GLuint framebuffer)
 {
-    if (mReadFramebuffer != nullptr &&
-        mReadFramebuffer->id() == framebuffer)
+    if (mReadFramebuffer != nullptr && mReadFramebuffer->id() == framebuffer)
     {
         setReadFramebufferBinding(nullptr);
         return true;
@@ -1053,8 +1482,7 @@ bool State::removeReadFramebufferBinding(GLuint framebuffer)
 
 bool State::removeDrawFramebufferBinding(GLuint framebuffer)
 {
-    if (mReadFramebuffer != nullptr &&
-        mDrawFramebuffer->id() == framebuffer)
+    if (mReadFramebuffer != nullptr && mDrawFramebuffer->id() == framebuffer)
     {
         setDrawFramebufferBinding(nullptr);
         return true;
@@ -1174,7 +1602,8 @@ TransformFeedback *State::getCurrentTransformFeedback() const
 bool State::isTransformFeedbackActiveUnpaused() const
 {
     TransformFeedback *curTransformFeedback = getCurrentTransformFeedback();
-    return curTransformFeedback && curTransformFeedback->isActive() && !curTransformFeedback->isPaused();
+    return curTransformFeedback && curTransformFeedback->isActive() &&
+           !curTransformFeedback->isPaused();
 }
 
 bool State::removeTransformFeedbackBinding(const Context *context, GLuint transformFeedback)
@@ -1668,67 +2097,93 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
 {
     switch (pname)
     {
-      case GL_SAMPLE_COVERAGE_INVERT:    *params = mSampleCoverageInvert;         break;
-      case GL_DEPTH_WRITEMASK:           *params = mDepthStencil.depthMask;       break;
-      case GL_COLOR_WRITEMASK:
-        params[0] = mBlend.colorMaskRed;
-        params[1] = mBlend.colorMaskGreen;
-        params[2] = mBlend.colorMaskBlue;
-        params[3] = mBlend.colorMaskAlpha;
-        break;
-      case GL_CULL_FACE:
-          *params = mRasterizer.cullFace;
-          break;
-      case GL_POLYGON_OFFSET_FILL:       *params = mRasterizer.polygonOffsetFill; break;
-      case GL_SAMPLE_ALPHA_TO_COVERAGE:  *params = mBlend.sampleAlphaToCoverage;  break;
-      case GL_SAMPLE_COVERAGE:           *params = mSampleCoverage;               break;
-      case GL_SAMPLE_MASK:
-          *params = mSampleMask;
-          break;
-      case GL_SCISSOR_TEST:              *params = mScissorTest;                  break;
-      case GL_STENCIL_TEST:              *params = mDepthStencil.stencilTest;     break;
-      case GL_DEPTH_TEST:                *params = mDepthStencil.depthTest;       break;
-      case GL_BLEND:                     *params = mBlend.blend;                  break;
-      case GL_DITHER:                    *params = mBlend.dither;                 break;
-      case GL_TRANSFORM_FEEDBACK_ACTIVE: *params = getCurrentTransformFeedback()->isActive() ? GL_TRUE : GL_FALSE; break;
-      case GL_TRANSFORM_FEEDBACK_PAUSED: *params = getCurrentTransformFeedback()->isPaused() ? GL_TRUE : GL_FALSE; break;
-      case GL_PRIMITIVE_RESTART_FIXED_INDEX:
-          *params = mPrimitiveRestart;
-          break;
-      case GL_RASTERIZER_DISCARD:
-          *params = isRasterizerDiscardEnabled() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_DEBUG_OUTPUT_SYNCHRONOUS:
-          *params = mDebug.isOutputSynchronous() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_DEBUG_OUTPUT:
-          *params = mDebug.isOutputEnabled() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_MULTISAMPLE_EXT:
-          *params = mMultiSampling;
-          break;
-      case GL_SAMPLE_ALPHA_TO_ONE_EXT:
-          *params = mSampleAlphaToOne;
-          break;
-      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
-          *params = isBindGeneratesResourceEnabled() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_CLIENT_ARRAYS_ANGLE:
-          *params = areClientArraysEnabled() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_FRAMEBUFFER_SRGB_EXT:
-          *params = getFramebufferSRGB() ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
-          *params = mRobustResourceInit ? GL_TRUE : GL_FALSE;
-          break;
-      case GL_PROGRAM_CACHE_ENABLED_ANGLE:
-          *params = mProgramBinaryCacheEnabled ? GL_TRUE : GL_FALSE;
-          break;
-
-      default:
-        UNREACHABLE();
-        break;
+        case GL_SAMPLE_COVERAGE_INVERT:
+            *params = mSampleCoverageInvert;
+            break;
+        case GL_DEPTH_WRITEMASK:
+            *params = mDepthStencil.depthMask;
+            break;
+        case GL_COLOR_WRITEMASK:
+            params[0] = mBlend.colorMaskRed;
+            params[1] = mBlend.colorMaskGreen;
+            params[2] = mBlend.colorMaskBlue;
+            params[3] = mBlend.colorMaskAlpha;
+            break;
+        case GL_CULL_FACE:
+            *params = mRasterizer.cullFace;
+            break;
+        case GL_POLYGON_OFFSET_FILL:
+            *params = mRasterizer.polygonOffsetFill;
+            break;
+        case GL_SAMPLE_ALPHA_TO_COVERAGE:
+            *params = mBlend.sampleAlphaToCoverage;
+            break;
+        case GL_SAMPLE_COVERAGE:
+            *params = mSampleCoverage;
+            break;
+        case GL_SAMPLE_MASK:
+            *params = mSampleMask;
+            break;
+        case GL_SCISSOR_TEST:
+            *params = mScissorTest;
+            break;
+        case GL_STENCIL_TEST:
+            *params = mDepthStencil.stencilTest;
+            break;
+        case GL_DEPTH_TEST:
+            *params = mDepthStencil.depthTest;
+            break;
+        case GL_BLEND:
+            *params = mBlend.blend;
+            break;
+        case GL_DITHER:
+            *params = mBlend.dither;
+            break;
+        case GL_TRANSFORM_FEEDBACK_ACTIVE:
+            *params = getCurrentTransformFeedback()->isActive() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_TRANSFORM_FEEDBACK_PAUSED:
+            *params = getCurrentTransformFeedback()->isPaused() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_PRIMITIVE_RESTART_FIXED_INDEX:
+            *params = mPrimitiveRestart;
+            break;
+        case GL_RASTERIZER_DISCARD:
+            *params = isRasterizerDiscardEnabled() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_DEBUG_OUTPUT_SYNCHRONOUS:
+            *params = mDebug.isOutputSynchronous() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_DEBUG_OUTPUT:
+            *params = mDebug.isOutputEnabled() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_MULTISAMPLE_EXT:
+            *params = mMultiSampling;
+            break;
+        case GL_SAMPLE_ALPHA_TO_ONE_EXT:
+            *params = mSampleAlphaToOne;
+            break;
+        case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+            *params = isBindGeneratesResourceEnabled() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_CLIENT_ARRAYS_ANGLE:
+            *params = areClientArraysEnabled() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_FRAMEBUFFER_SRGB_EXT:
+            *params = getFramebufferSRGB() ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
+            *params = mRobustResourceInit ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_PROGRAM_CACHE_ENABLED_ANGLE:
+            *params = mProgramBinaryCacheEnabled ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            *params = mLightModel.twoSided;
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 }
 
@@ -1740,39 +2195,170 @@ void State::getFloatv(GLenum pname, GLfloat *params)
     // case, this should make no difference to the calling application.
     switch (pname)
     {
-      case GL_LINE_WIDTH:               *params = mLineWidth;                         break;
-      case GL_SAMPLE_COVERAGE_VALUE:    *params = mSampleCoverageValue;               break;
-      case GL_DEPTH_CLEAR_VALUE:        *params = mDepthClearValue;                   break;
-      case GL_POLYGON_OFFSET_FACTOR:    *params = mRasterizer.polygonOffsetFactor;    break;
-      case GL_POLYGON_OFFSET_UNITS:     *params = mRasterizer.polygonOffsetUnits;     break;
-      case GL_DEPTH_RANGE:
-        params[0] = mNearZ;
-        params[1] = mFarZ;
-        break;
-      case GL_COLOR_CLEAR_VALUE:
-        params[0] = mColorClearValue.red;
-        params[1] = mColorClearValue.green;
-        params[2] = mColorClearValue.blue;
-        params[3] = mColorClearValue.alpha;
-        break;
-      case GL_BLEND_COLOR:
-        params[0] = mBlendColor.red;
-        params[1] = mBlendColor.green;
-        params[2] = mBlendColor.blue;
-        params[3] = mBlendColor.alpha;
-        break;
-      case GL_MULTISAMPLE_EXT:
-        *params = static_cast<GLfloat>(mMultiSampling);
-        break;
-      case GL_SAMPLE_ALPHA_TO_ONE_EXT:
-        *params = static_cast<GLfloat>(mSampleAlphaToOne);
-        break;
-      case GL_COVERAGE_MODULATION_CHROMIUM:
-        params[0] = static_cast<GLfloat>(mCoverageModulation);
-        break;
-      default:
-        UNREACHABLE();
-        break;
+        case GL_LINE_WIDTH:
+            *params = mLineWidth;
+            break;
+        case GL_SAMPLE_COVERAGE_VALUE:
+            *params = mSampleCoverageValue;
+            break;
+        case GL_DEPTH_CLEAR_VALUE:
+            *params = mDepthClearValue;
+            break;
+        case GL_POLYGON_OFFSET_FACTOR:
+            *params = mRasterizer.polygonOffsetFactor;
+            break;
+        case GL_POLYGON_OFFSET_UNITS:
+            *params = mRasterizer.polygonOffsetUnits;
+            break;
+        case GL_DEPTH_RANGE:
+            params[0] = mNearZ;
+            params[1] = mFarZ;
+            break;
+        case GL_COLOR_CLEAR_VALUE:
+            params[0] = mColorClearValue.red;
+            params[1] = mColorClearValue.green;
+            params[2] = mColorClearValue.blue;
+            params[3] = mColorClearValue.alpha;
+            break;
+        case GL_BLEND_COLOR:
+            params[0] = mBlendColor.red;
+            params[1] = mBlendColor.green;
+            params[2] = mBlendColor.blue;
+            params[3] = mBlendColor.alpha;
+            break;
+        case GL_MULTISAMPLE_EXT:
+            *params = static_cast<GLfloat>(mMultiSampling);
+            break;
+        case GL_SAMPLE_ALPHA_TO_ONE_EXT:
+            *params = static_cast<GLfloat>(mSampleAlphaToOne);
+            break;
+        case GL_COVERAGE_MODULATION_CHROMIUM:
+            params[0] = static_cast<GLfloat>(mCoverageModulation);
+            break;
+        case GL_CURRENT_COLOR:
+            params[0] = mColor[0];
+            params[1] = mColor[1];
+            params[2] = mColor[2];
+            params[3] = mColor[3];
+            break;
+        case GL_CURRENT_TEXTURE_COORDS:
+            params[0] = mMultiTexCoords[mActiveSampler][0];
+            params[1] = mMultiTexCoords[mActiveSampler][1];
+            params[2] = mMultiTexCoords[mActiveSampler][2];
+            params[3] = mMultiTexCoords[mActiveSampler][3];
+            break;
+        case GL_CURRENT_NORMAL:
+            params[0] = mNormal[0];
+            params[1] = mNormal[1];
+            params[2] = mNormal[2];
+            break;
+        case GL_PROJECTION_MATRIX:
+        {
+            auto mat = projMatrix();
+            float *m = mat.data();
+            for (int i = 0; i < 16; i++)
+            {
+                params[i] = m[i];
+            }
+            break;
+        }
+        case GL_MODELVIEW_MATRIX:
+        {
+            auto mat = modelviewMatrix();
+            float *m = mat.data();
+            for (int i = 0; i < 16; i++)
+            {
+                params[i] = m[i];
+            }
+            break;
+        }
+        case GL_TEXTURE_MATRIX:
+        {
+            auto mat = textureMatrix();
+            float *m = mat.data();
+            for (int i = 0; i < 16; i++)
+            {
+                params[i] = m[i];
+            }
+            break;
+        }
+        case GL_FOG_COLOR:
+            params[0] = mFog.color[0];
+            params[1] = mFog.color[1];
+            params[2] = mFog.color[2];
+            params[3] = mFog.color[3];
+            break;
+        case GL_FOG_DENSITY:
+            *params = mFog.density;
+            break;
+        case GL_FOG_START:
+            *params = mFog.start;
+            break;
+        case GL_FOG_END:
+            *params = mFog.end;
+            break;
+        case GL_FOG_MODE:
+            *params = (float)mFog.mode;
+            break;
+        case GL_SHADE_MODEL:
+            *params = (float)mShadeModel;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            *params = (float)mLightModel.twoSided;
+            break;
+        case GL_LIGHT_MODEL_AMBIENT:
+            params[0] = mLightModel.color[0];
+            params[1] = mLightModel.color[1];
+            params[2] = mLightModel.color[2];
+            params[3] = mLightModel.color[3];
+            break;
+        case GL_POINT_SIZE:
+            params[0] = mPointSize;
+            break;
+        case GL_POINT_SIZE_MIN:
+            params[0] = mPointSizeMin;
+            break;
+        case GL_POINT_SIZE_MAX:
+            params[0] = mPointSizeMax;
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            params[0] = mPointFadeThresholdSize;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            params[0] = mPointDistanceAttenuation[0];
+            params[1] = mPointDistanceAttenuation[1];
+            params[2] = mPointDistanceAttenuation[2];
+            break;
+        case GL_ALPHA_TEST_FUNC:
+            params[0] = (GLfloat)mAlphaFunc;
+            break;
+        case GL_ALPHA_TEST_REF:
+            params[0] = (float)mAlphaTestRef;
+            break;
+        case GL_LOGIC_OP_MODE:
+            params[0] = (float)mLogicOp;
+            break;
+        case GL_LINE_SMOOTH_HINT:
+            params[0] = (float)mLineSmoothHint;
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            params[0] = (float)mPointSmoothHint;
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            params[0] = (float)mPerspectiveCorrectionHint;
+            break;
+        case GL_FOG_HINT:
+            params[0] = (float)mFogHint;
+            break;
+        case GL_BLEND_SRC:
+            params[0] = (float)mBlend.sourceBlendRGB;
+            break;
+        case GL_BLEND_DST:
+            params[0] = (float)mBlend.destBlendRGB;
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 }
 
@@ -1783,7 +2369,7 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         unsigned int colorAttachment = (pname - GL_DRAW_BUFFER0_EXT);
         ASSERT(colorAttachment < mMaxDrawBuffers);
         Framebuffer *framebuffer = mDrawFramebuffer;
-        *params = framebuffer->getDrawBufferState(colorAttachment);
+        *params                  = framebuffer->getDrawBufferState(colorAttachment);
         return;
     }
 
@@ -1803,80 +2389,139 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         case GL_ELEMENT_ARRAY_BUFFER_BINDING:
             *params = getVertexArray()->getElementArrayBuffer().id();
             break;
-        //case GL_FRAMEBUFFER_BINDING:                    // now equivalent to GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
-      case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:           *params = mDrawFramebuffer->id();                         break;
-      case GL_READ_FRAMEBUFFER_BINDING_ANGLE:           *params = mReadFramebuffer->id();                         break;
-      case GL_RENDERBUFFER_BINDING:                     *params = mRenderbuffer.id();                             break;
-      case GL_VERTEX_ARRAY_BINDING:                     *params = mVertexArray->id();                             break;
-      case GL_CURRENT_PROGRAM:                          *params = mProgram ? mProgram->id() : 0;                  break;
-      case GL_PACK_ALIGNMENT:                           *params = mPack.alignment;                                break;
-      case GL_PACK_REVERSE_ROW_ORDER_ANGLE:             *params = mPack.reverseRowOrder;                          break;
-      case GL_PACK_ROW_LENGTH:
-          *params = mPack.rowLength;
-          break;
-      case GL_PACK_SKIP_ROWS:
-          *params = mPack.skipRows;
-          break;
-      case GL_PACK_SKIP_PIXELS:
-          *params = mPack.skipPixels;
-          break;
-      case GL_UNPACK_ALIGNMENT:                         *params = mUnpack.alignment;                              break;
-      case GL_UNPACK_ROW_LENGTH:                        *params = mUnpack.rowLength;                              break;
-      case GL_UNPACK_IMAGE_HEIGHT:
-          *params = mUnpack.imageHeight;
-          break;
-      case GL_UNPACK_SKIP_IMAGES:
-          *params = mUnpack.skipImages;
-          break;
-      case GL_UNPACK_SKIP_ROWS:
-          *params = mUnpack.skipRows;
-          break;
-      case GL_UNPACK_SKIP_PIXELS:
-          *params = mUnpack.skipPixels;
-          break;
-      case GL_GENERATE_MIPMAP_HINT:                     *params = mGenerateMipmapHint;                            break;
-      case GL_FRAGMENT_SHADER_DERIVATIVE_HINT_OES:      *params = mFragmentShaderDerivativeHint;                  break;
-      case GL_ACTIVE_TEXTURE:
-          *params = (static_cast<GLint>(mActiveSampler) + GL_TEXTURE0);
-          break;
-      case GL_STENCIL_FUNC:                             *params = mDepthStencil.stencilFunc;                      break;
-      case GL_STENCIL_REF:                              *params = mStencilRef;                                    break;
-      case GL_STENCIL_VALUE_MASK:
-          *params = CastMaskValue(context, mDepthStencil.stencilMask);
-          break;
-      case GL_STENCIL_BACK_FUNC:                        *params = mDepthStencil.stencilBackFunc;                  break;
-      case GL_STENCIL_BACK_REF:                         *params = mStencilBackRef;                                break;
-      case GL_STENCIL_BACK_VALUE_MASK:
-          *params = CastMaskValue(context, mDepthStencil.stencilBackMask);
-          break;
-      case GL_STENCIL_FAIL:                             *params = mDepthStencil.stencilFail;                      break;
-      case GL_STENCIL_PASS_DEPTH_FAIL:                  *params = mDepthStencil.stencilPassDepthFail;             break;
-      case GL_STENCIL_PASS_DEPTH_PASS:                  *params = mDepthStencil.stencilPassDepthPass;             break;
-      case GL_STENCIL_BACK_FAIL:                        *params = mDepthStencil.stencilBackFail;                  break;
-      case GL_STENCIL_BACK_PASS_DEPTH_FAIL:             *params = mDepthStencil.stencilBackPassDepthFail;         break;
-      case GL_STENCIL_BACK_PASS_DEPTH_PASS:             *params = mDepthStencil.stencilBackPassDepthPass;         break;
-      case GL_DEPTH_FUNC:                               *params = mDepthStencil.depthFunc;                        break;
-      case GL_BLEND_SRC_RGB:                            *params = mBlend.sourceBlendRGB;                          break;
-      case GL_BLEND_SRC_ALPHA:                          *params = mBlend.sourceBlendAlpha;                        break;
-      case GL_BLEND_DST_RGB:                            *params = mBlend.destBlendRGB;                            break;
-      case GL_BLEND_DST_ALPHA:                          *params = mBlend.destBlendAlpha;                          break;
-      case GL_BLEND_EQUATION_RGB:                       *params = mBlend.blendEquationRGB;                        break;
-      case GL_BLEND_EQUATION_ALPHA:                     *params = mBlend.blendEquationAlpha;                      break;
-      case GL_STENCIL_WRITEMASK:
-          *params = CastMaskValue(context, mDepthStencil.stencilWritemask);
-          break;
-      case GL_STENCIL_BACK_WRITEMASK:
-          *params = CastMaskValue(context, mDepthStencil.stencilBackWritemask);
-          break;
-      case GL_STENCIL_CLEAR_VALUE:                      *params = mStencilClearValue;                             break;
-      case GL_IMPLEMENTATION_COLOR_READ_TYPE:
-          *params = mReadFramebuffer->getImplementationColorReadType(context);
-          break;
-      case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
-          *params = mReadFramebuffer->getImplementationColorReadFormat(context);
-          break;
-      case GL_SAMPLE_BUFFERS:
-      case GL_SAMPLES:
+        // case GL_FRAMEBUFFER_BINDING:                    // now equivalent to
+        // GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
+        case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:
+            *params = mDrawFramebuffer->id();
+            break;
+        case GL_READ_FRAMEBUFFER_BINDING_ANGLE:
+            *params = mReadFramebuffer->id();
+            break;
+        case GL_RENDERBUFFER_BINDING:
+            *params = mRenderbuffer.id();
+            break;
+        case GL_VERTEX_ARRAY_BINDING:
+            *params = mVertexArray->id();
+            break;
+        case GL_CURRENT_PROGRAM:
+            *params = mProgram ? mProgram->id() : 0;
+            break;
+        case GL_PACK_ALIGNMENT:
+            *params = mPack.alignment;
+            break;
+        case GL_PACK_REVERSE_ROW_ORDER_ANGLE:
+            *params = mPack.reverseRowOrder;
+            break;
+        case GL_PACK_ROW_LENGTH:
+            *params = mPack.rowLength;
+            break;
+        case GL_PACK_SKIP_ROWS:
+            *params = mPack.skipRows;
+            break;
+        case GL_PACK_SKIP_PIXELS:
+            *params = mPack.skipPixels;
+            break;
+        case GL_UNPACK_ALIGNMENT:
+            *params = mUnpack.alignment;
+            break;
+        case GL_UNPACK_ROW_LENGTH:
+            *params = mUnpack.rowLength;
+            break;
+        case GL_UNPACK_IMAGE_HEIGHT:
+            *params = mUnpack.imageHeight;
+            break;
+        case GL_UNPACK_SKIP_IMAGES:
+            *params = mUnpack.skipImages;
+            break;
+        case GL_UNPACK_SKIP_ROWS:
+            *params = mUnpack.skipRows;
+            break;
+        case GL_UNPACK_SKIP_PIXELS:
+            *params = mUnpack.skipPixels;
+            break;
+        case GL_GENERATE_MIPMAP_HINT:
+            *params = mGenerateMipmapHint;
+            break;
+        case GL_FRAGMENT_SHADER_DERIVATIVE_HINT_OES:
+            *params = mFragmentShaderDerivativeHint;
+            break;
+        case GL_ACTIVE_TEXTURE:
+            *params = (static_cast<GLint>(mActiveSampler) + GL_TEXTURE0);
+            break;
+        case GL_STENCIL_FUNC:
+            *params = mDepthStencil.stencilFunc;
+            break;
+        case GL_STENCIL_REF:
+            *params = mStencilRef;
+            break;
+        case GL_STENCIL_VALUE_MASK:
+            *params = CastMaskValue(context, mDepthStencil.stencilMask);
+            break;
+        case GL_STENCIL_BACK_FUNC:
+            *params = mDepthStencil.stencilBackFunc;
+            break;
+        case GL_STENCIL_BACK_REF:
+            *params = mStencilBackRef;
+            break;
+        case GL_STENCIL_BACK_VALUE_MASK:
+            *params = CastMaskValue(context, mDepthStencil.stencilBackMask);
+            break;
+        case GL_STENCIL_FAIL:
+            *params = mDepthStencil.stencilFail;
+            break;
+        case GL_STENCIL_PASS_DEPTH_FAIL:
+            *params = mDepthStencil.stencilPassDepthFail;
+            break;
+        case GL_STENCIL_PASS_DEPTH_PASS:
+            *params = mDepthStencil.stencilPassDepthPass;
+            break;
+        case GL_STENCIL_BACK_FAIL:
+            *params = mDepthStencil.stencilBackFail;
+            break;
+        case GL_STENCIL_BACK_PASS_DEPTH_FAIL:
+            *params = mDepthStencil.stencilBackPassDepthFail;
+            break;
+        case GL_STENCIL_BACK_PASS_DEPTH_PASS:
+            *params = mDepthStencil.stencilBackPassDepthPass;
+            break;
+        case GL_DEPTH_FUNC:
+            *params = mDepthStencil.depthFunc;
+            break;
+        case GL_BLEND_SRC_RGB:
+            *params = mBlend.sourceBlendRGB;
+            break;
+        case GL_BLEND_SRC_ALPHA:
+            *params = mBlend.sourceBlendAlpha;
+            break;
+        case GL_BLEND_DST_RGB:
+            *params = mBlend.destBlendRGB;
+            break;
+        case GL_BLEND_DST_ALPHA:
+            *params = mBlend.destBlendAlpha;
+            break;
+        case GL_BLEND_EQUATION_RGB:
+            *params = mBlend.blendEquationRGB;
+            break;
+        case GL_BLEND_EQUATION_ALPHA:
+            *params = mBlend.blendEquationAlpha;
+            break;
+        case GL_STENCIL_WRITEMASK:
+            *params = CastMaskValue(context, mDepthStencil.stencilWritemask);
+            break;
+        case GL_STENCIL_BACK_WRITEMASK:
+            *params = CastMaskValue(context, mDepthStencil.stencilBackWritemask);
+            break;
+        case GL_STENCIL_CLEAR_VALUE:
+            *params = mStencilClearValue;
+            break;
+        case GL_IMPLEMENTATION_COLOR_READ_TYPE:
+            *params = mReadFramebuffer->getImplementationColorReadType(context);
+            break;
+        case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
+            *params = mReadFramebuffer->getImplementationColorReadFormat(context);
+            break;
+        case GL_SAMPLE_BUFFERS:
+        case GL_SAMPLES:
         {
             Framebuffer *framebuffer = mDrawFramebuffer;
             if (framebuffer->checkStatus(context) == GL_FRAMEBUFFER_COMPLETE)
@@ -1904,28 +2549,28 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             }
         }
         break;
-      case GL_VIEWPORT:
-        params[0] = mViewport.x;
-        params[1] = mViewport.y;
-        params[2] = mViewport.width;
-        params[3] = mViewport.height;
-        break;
-      case GL_SCISSOR_BOX:
-        params[0] = mScissor.x;
-        params[1] = mScissor.y;
-        params[2] = mScissor.width;
-        params[3] = mScissor.height;
-        break;
-      case GL_CULL_FACE_MODE:
-          *params = ToGLenum(mRasterizer.cullMode);
-          break;
-      case GL_FRONT_FACE:
-          *params = mRasterizer.frontFace;
-          break;
-      case GL_RED_BITS:
-      case GL_GREEN_BITS:
-      case GL_BLUE_BITS:
-      case GL_ALPHA_BITS:
+        case GL_VIEWPORT:
+            params[0] = mViewport.x;
+            params[1] = mViewport.y;
+            params[2] = mViewport.width;
+            params[3] = mViewport.height;
+            break;
+        case GL_SCISSOR_BOX:
+            params[0] = mScissor.x;
+            params[1] = mScissor.y;
+            params[2] = mScissor.width;
+            params[3] = mScissor.height;
+            break;
+        case GL_CULL_FACE_MODE:
+            *params = ToGLenum(mRasterizer.cullMode);
+            break;
+        case GL_FRONT_FACE:
+            *params = mRasterizer.frontFace;
+            break;
+        case GL_RED_BITS:
+        case GL_GREEN_BITS:
+        case GL_BLUE_BITS:
+        case GL_ALPHA_BITS:
         {
             Framebuffer *framebuffer                 = getDrawFramebuffer();
             const FramebufferAttachment *colorbuffer = framebuffer->getFirstColorbuffer();
@@ -1934,10 +2579,18 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             {
                 switch (pname)
                 {
-                case GL_RED_BITS:   *params = colorbuffer->getRedSize();      break;
-                case GL_GREEN_BITS: *params = colorbuffer->getGreenSize();    break;
-                case GL_BLUE_BITS:  *params = colorbuffer->getBlueSize();     break;
-                case GL_ALPHA_BITS: *params = colorbuffer->getAlphaSize();    break;
+                    case GL_RED_BITS:
+                        *params = colorbuffer->getRedSize();
+                        break;
+                    case GL_GREEN_BITS:
+                        *params = colorbuffer->getGreenSize();
+                        break;
+                    case GL_BLUE_BITS:
+                        *params = colorbuffer->getBlueSize();
+                        break;
+                    case GL_ALPHA_BITS:
+                        *params = colorbuffer->getAlphaSize();
+                        break;
                 }
             }
             else
@@ -1946,7 +2599,7 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             }
         }
         break;
-      case GL_DEPTH_BITS:
+        case GL_DEPTH_BITS:
         {
             const Framebuffer *framebuffer           = getDrawFramebuffer();
             const FramebufferAttachment *depthbuffer = framebuffer->getDepthbuffer();
@@ -1961,7 +2614,7 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             }
         }
         break;
-      case GL_STENCIL_BITS:
+        case GL_STENCIL_BITS:
         {
             const Framebuffer *framebuffer             = getDrawFramebuffer();
             const FramebufferAttachment *stencilbuffer = framebuffer->getStencilbuffer();
@@ -1976,98 +2629,231 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             }
         }
         break;
-      case GL_TEXTURE_BINDING_2D:
-        ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-        *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D);
-        break;
-      case GL_TEXTURE_BINDING_RECTANGLE_ANGLE:
-          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-          *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
-                                        GL_TEXTURE_RECTANGLE_ANGLE);
-          break;
-      case GL_TEXTURE_BINDING_CUBE_MAP:
-        ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-        *params =
-            getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_CUBE_MAP);
-        break;
-      case GL_TEXTURE_BINDING_3D:
-        ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-        *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_3D);
-        break;
-      case GL_TEXTURE_BINDING_2D_ARRAY:
-        ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-        *params =
-            getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D_ARRAY);
-        break;
-      case GL_TEXTURE_BINDING_2D_MULTISAMPLE:
-          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-          *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
-                                        GL_TEXTURE_2D_MULTISAMPLE);
-          break;
-      case GL_TEXTURE_BINDING_EXTERNAL_OES:
-          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-          *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
-                                        GL_TEXTURE_EXTERNAL_OES);
-          break;
-      case GL_UNIFORM_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::Uniform].id();
-          break;
-      case GL_TRANSFORM_FEEDBACK_BINDING:
-        *params = mTransformFeedback.id();
-        break;
-      case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-          ASSERT(mTransformFeedback.get() != nullptr);
-          *params = mTransformFeedback->getGenericBuffer().id();
-          break;
-      case GL_COPY_READ_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::CopyRead].id();
-          break;
-      case GL_COPY_WRITE_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::CopyWrite].id();
-          break;
-      case GL_PIXEL_PACK_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::PixelPack].id();
-          break;
-      case GL_PIXEL_UNPACK_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::PixelUnpack].id();
-          break;
-      case GL_READ_BUFFER:
-          *params = mReadFramebuffer->getReadBufferState();
-          break;
-      case GL_SAMPLER_BINDING:
-          ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
-          *params = getSamplerId(static_cast<GLuint>(mActiveSampler));
-          break;
-      case GL_DEBUG_LOGGED_MESSAGES:
-          *params = static_cast<GLint>(mDebug.getMessageCount());
-          break;
-      case GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH:
-          *params = static_cast<GLint>(mDebug.getNextMessageLength());
-          break;
-      case GL_DEBUG_GROUP_STACK_DEPTH:
-          *params = static_cast<GLint>(mDebug.getGroupStackDepth());
-          break;
-      case GL_MULTISAMPLE_EXT:
-          *params = static_cast<GLint>(mMultiSampling);
-          break;
-      case GL_SAMPLE_ALPHA_TO_ONE_EXT:
-          *params = static_cast<GLint>(mSampleAlphaToOne);
-          break;
-      case GL_COVERAGE_MODULATION_CHROMIUM:
-          *params = static_cast<GLint>(mCoverageModulation);
-          break;
-      case GL_ATOMIC_COUNTER_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::AtomicCounter].id();
-          break;
-      case GL_SHADER_STORAGE_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::ShaderStorage].id();
-          break;
-      case GL_DISPATCH_INDIRECT_BUFFER_BINDING:
-          *params = mBoundBuffers[BufferBinding::DispatchIndirect].id();
-          break;
-      default:
-        UNREACHABLE();
-        break;
+        case GL_TEXTURE_BINDING_2D:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D);
+            break;
+        case GL_TEXTURE_BINDING_RECTANGLE_ANGLE:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
+                                          GL_TEXTURE_RECTANGLE_ANGLE);
+            break;
+        case GL_TEXTURE_BINDING_CUBE_MAP:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params =
+                getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_CUBE_MAP);
+            break;
+        case GL_TEXTURE_BINDING_3D:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_3D);
+            break;
+        case GL_TEXTURE_BINDING_2D_ARRAY:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params =
+                getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), GL_TEXTURE_2D_ARRAY);
+            break;
+        case GL_TEXTURE_BINDING_2D_MULTISAMPLE:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
+                                          GL_TEXTURE_2D_MULTISAMPLE);
+            break;
+        case GL_TEXTURE_BINDING_EXTERNAL_OES:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
+                                          GL_TEXTURE_EXTERNAL_OES);
+            break;
+        case GL_UNIFORM_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::Uniform].id();
+            break;
+        case GL_TRANSFORM_FEEDBACK_BINDING:
+            *params = mTransformFeedback.id();
+            break;
+        case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
+            ASSERT(mTransformFeedback.get() != nullptr);
+            *params = mTransformFeedback->getGenericBuffer().id();
+            break;
+        case GL_COPY_READ_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::CopyRead].id();
+            break;
+        case GL_COPY_WRITE_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::CopyWrite].id();
+            break;
+        case GL_PIXEL_PACK_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::PixelPack].id();
+            break;
+        case GL_PIXEL_UNPACK_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::PixelUnpack].id();
+            break;
+        case GL_READ_BUFFER:
+            *params = mReadFramebuffer->getReadBufferState();
+            break;
+        case GL_SAMPLER_BINDING:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerId(static_cast<GLuint>(mActiveSampler));
+            break;
+        case GL_DEBUG_LOGGED_MESSAGES:
+            *params = static_cast<GLint>(mDebug.getMessageCount());
+            break;
+        case GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH:
+            *params = static_cast<GLint>(mDebug.getNextMessageLength());
+            break;
+        case GL_DEBUG_GROUP_STACK_DEPTH:
+            *params = static_cast<GLint>(mDebug.getGroupStackDepth());
+            break;
+        case GL_MULTISAMPLE_EXT:
+            *params = static_cast<GLint>(mMultiSampling);
+            break;
+        case GL_SAMPLE_ALPHA_TO_ONE_EXT:
+            *params = static_cast<GLint>(mSampleAlphaToOne);
+            break;
+        case GL_COVERAGE_MODULATION_CHROMIUM:
+            *params = static_cast<GLint>(mCoverageModulation);
+            break;
+        case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::AtomicCounter].id();
+            break;
+        case GL_SHADER_STORAGE_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::ShaderStorage].id();
+            break;
+        case GL_DISPATCH_INDIRECT_BUFFER_BINDING:
+            *params = mBoundBuffers[BufferBinding::DispatchIndirect].id();
+            break;
+        // GLES1-specific
+        case GL_SMOOTH_LINE_WIDTH_RANGE:
+            params[0] = 1;
+            params[1] = 1;
+            break;
+        case GL_SMOOTH_POINT_SIZE_RANGE:
+            params[0] = 1;
+            params[1] = 1;
+            break;
+        case GL_ALIASED_LINE_WIDTH_RANGE:
+            params[0] = 1;
+            params[1] = 1;
+            break;
+        case GL_ALIASED_POINT_SIZE_RANGE:
+            params[0] = 1;
+            params[1] = 1;
+            break;
+        case GL_MAX_LIGHTS:
+            *params = mMaxLights;
+            break;
+        case GL_MAX_MODELVIEW_STACK_DEPTH:
+            *params = mMaxMatrixStackDepth;
+            break;
+        case GL_MAX_PROJECTION_STACK_DEPTH:
+            *params = mMaxMatrixStackDepth;
+            break;
+        case GL_MAX_TEXTURE_STACK_DEPTH:
+            *params = mMaxMatrixStackDepth;
+            break;
+        case GL_MAX_TEXTURE_UNITS:
+            *params = mMaxMultitextureUnits;
+            break;
+        case GL_MAX_CLIP_PLANES:
+            *params = mMaxClipPlanes;
+            break;
+        case GL_CURRENT_COLOR:
+            params[0] = (int)mColor[0];
+            params[1] = (int)mColor[1];
+            params[2] = (int)mColor[2];
+            params[3] = (int)mColor[3];
+            break;
+        case GL_CLIENT_ACTIVE_TEXTURE:
+            params[0] = (GLenum)(GL_TEXTURE0 + mActiveSampler);
+            break;
+        case GL_MATRIX_MODE:
+            params[0] = mCurrMatrixMode;
+            break;
+        case GL_MODELVIEW_STACK_DEPTH:
+            params[0] = (GLint)(mModelviewMatrices.size());
+            break;
+        case GL_PROJECTION_STACK_DEPTH:
+            params[0] = (GLint)(mProjMatrices.size());
+            break;
+        case GL_TEXTURE_STACK_DEPTH:
+            params[0] = (GLint)(mTextureMatrices[mActiveSampler].size());
+            break;
+        case GL_FOG_COLOR:
+            params[0] = (int)mFog.color[0];
+            params[1] = (int)mFog.color[1];
+            params[2] = (int)mFog.color[2];
+            params[3] = (int)mFog.color[3];
+            break;
+        case GL_FOG_DENSITY:
+            *params = (int)mFog.density;
+            break;
+        case GL_FOG_START:
+            *params = (int)mFog.start;
+            break;
+        case GL_FOG_END:
+            *params = (int)mFog.end;
+            break;
+        case GL_FOG_MODE:
+            *params = mFog.mode;
+            break;
+        case GL_SHADE_MODEL:
+            *params = mShadeModel;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            *params = mLightModel.twoSided;
+            break;
+        case GL_LIGHT_MODEL_AMBIENT:
+            params[0] = (int)mLightModel.color[0];
+            params[1] = (int)mLightModel.color[1];
+            params[2] = (int)mLightModel.color[2];
+            params[3] = (int)mLightModel.color[3];
+            break;
+        case GL_POINT_SIZE:
+            params[0] = (int)mPointSize;
+            break;
+        case GL_POINT_SIZE_MIN:
+            params[0] = (int)mPointSizeMin;
+            break;
+        case GL_POINT_SIZE_MAX:
+            params[0] = (int)mPointSizeMax;
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            params[0] = (int)mPointFadeThresholdSize;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            params[0] = (int)mPointDistanceAttenuation[0];
+            params[1] = (int)mPointDistanceAttenuation[1];
+            params[2] = (int)mPointDistanceAttenuation[2];
+            break;
+        case GL_ALPHA_TEST_FUNC:
+            params[0] = (int)mAlphaFunc;
+            break;
+        case GL_ALPHA_TEST_REF:
+            params[0] = (int)mAlphaTestRef;
+            break;
+        case GL_LOGIC_OP_MODE:
+            params[0] = mLogicOp;
+            break;
+        case GL_LINE_SMOOTH_HINT:
+            params[0] = mLineSmoothHint;
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            params[0] = mPointSmoothHint;
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            params[0] = mPerspectiveCorrectionHint;
+            break;
+        case GL_FOG_HINT:
+            params[0] = mFogHint;
+            break;
+        case GL_BLEND_SRC:
+            params[0] = mBlend.sourceBlendRGB;
+            break;
+        case GL_BLEND_DST:
+            params[0] = mBlend.destBlendRGB;
+            break;
+        default:
+        {
+            fprintf(stderr, "%s: unknown: 0x%x\n", __func__, pname);
+            UNREACHABLE();
+            break;
+        }
     }
 }
 
@@ -2091,65 +2877,65 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
 {
     switch (target)
     {
-      case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-          ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
-          *data = mTransformFeedback->getIndexedBuffer(index).id();
-          break;
-      case GL_UNIFORM_BUFFER_BINDING:
-          ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
-          *data = mUniformBuffers[index].id();
-          break;
-      case GL_ATOMIC_COUNTER_BUFFER_BINDING:
-          ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
-          *data = mAtomicCounterBuffers[index].id();
-          break;
-      case GL_SHADER_STORAGE_BUFFER_BINDING:
-          ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
-          *data = mShaderStorageBuffers[index].id();
-          break;
-      case GL_VERTEX_BINDING_BUFFER:
-          ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
-          *data = mVertexArray->getVertexBinding(index).getBuffer().id();
-          break;
-      case GL_VERTEX_BINDING_DIVISOR:
-          ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
-          *data = mVertexArray->getVertexBinding(index).getDivisor();
-          break;
-      case GL_VERTEX_BINDING_OFFSET:
-          ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
-          *data = static_cast<GLuint>(mVertexArray->getVertexBinding(index).getOffset());
-          break;
-      case GL_VERTEX_BINDING_STRIDE:
-          ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
-          *data = mVertexArray->getVertexBinding(index).getStride();
-          break;
-      case GL_SAMPLE_MASK_VALUE:
-          ASSERT(static_cast<size_t>(index) < mSampleMaskValues.size());
-          *data = mSampleMaskValues[index];
-          break;
-      case GL_IMAGE_BINDING_NAME:
-          ASSERT(static_cast<size_t>(index) < mImageUnits.size());
-          *data = mImageUnits[index].texture.id();
-          break;
-      case GL_IMAGE_BINDING_LEVEL:
-          ASSERT(static_cast<size_t>(index) < mImageUnits.size());
-          *data = mImageUnits[index].level;
-          break;
-      case GL_IMAGE_BINDING_LAYER:
-          ASSERT(static_cast<size_t>(index) < mImageUnits.size());
-          *data = mImageUnits[index].layer;
-          break;
-      case GL_IMAGE_BINDING_ACCESS:
-          ASSERT(static_cast<size_t>(index) < mImageUnits.size());
-          *data = mImageUnits[index].access;
-          break;
-      case GL_IMAGE_BINDING_FORMAT:
-          ASSERT(static_cast<size_t>(index) < mImageUnits.size());
-          *data = mImageUnits[index].format;
-          break;
-      default:
-          UNREACHABLE();
-          break;
+        case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
+            ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
+            *data = mTransformFeedback->getIndexedBuffer(index).id();
+            break;
+        case GL_UNIFORM_BUFFER_BINDING:
+            ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
+            *data = mUniformBuffers[index].id();
+            break;
+        case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+            ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
+            *data = mAtomicCounterBuffers[index].id();
+            break;
+        case GL_SHADER_STORAGE_BUFFER_BINDING:
+            ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
+            *data = mShaderStorageBuffers[index].id();
+            break;
+        case GL_VERTEX_BINDING_BUFFER:
+            ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
+            *data = mVertexArray->getVertexBinding(index).getBuffer().id();
+            break;
+        case GL_VERTEX_BINDING_DIVISOR:
+            ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
+            *data = mVertexArray->getVertexBinding(index).getDivisor();
+            break;
+        case GL_VERTEX_BINDING_OFFSET:
+            ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
+            *data = static_cast<GLuint>(mVertexArray->getVertexBinding(index).getOffset());
+            break;
+        case GL_VERTEX_BINDING_STRIDE:
+            ASSERT(static_cast<size_t>(index) < mVertexArray->getMaxBindings());
+            *data = mVertexArray->getVertexBinding(index).getStride();
+            break;
+        case GL_SAMPLE_MASK_VALUE:
+            ASSERT(static_cast<size_t>(index) < mSampleMaskValues.size());
+            *data = mSampleMaskValues[index];
+            break;
+        case GL_IMAGE_BINDING_NAME:
+            ASSERT(static_cast<size_t>(index) < mImageUnits.size());
+            *data = mImageUnits[index].texture.id();
+            break;
+        case GL_IMAGE_BINDING_LEVEL:
+            ASSERT(static_cast<size_t>(index) < mImageUnits.size());
+            *data = mImageUnits[index].level;
+            break;
+        case GL_IMAGE_BINDING_LAYER:
+            ASSERT(static_cast<size_t>(index) < mImageUnits.size());
+            *data = mImageUnits[index].layer;
+            break;
+        case GL_IMAGE_BINDING_ACCESS:
+            ASSERT(static_cast<size_t>(index) < mImageUnits.size());
+            *data = mImageUnits[index].access;
+            break;
+        case GL_IMAGE_BINDING_FORMAT:
+            ASSERT(static_cast<size_t>(index) < mImageUnits.size());
+            *data = mImageUnits[index].format;
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 }
 
@@ -2157,41 +2943,41 @@ void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 {
     switch (target)
     {
-      case GL_TRANSFORM_FEEDBACK_BUFFER_START:
-          ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
-          *data = mTransformFeedback->getIndexedBuffer(index).getOffset();
-          break;
-      case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
-          ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
-          *data = mTransformFeedback->getIndexedBuffer(index).getSize();
-          break;
-      case GL_UNIFORM_BUFFER_START:
-          ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
-          *data = mUniformBuffers[index].getOffset();
-          break;
-      case GL_UNIFORM_BUFFER_SIZE:
-          ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
-          *data = mUniformBuffers[index].getSize();
-          break;
-      case GL_ATOMIC_COUNTER_BUFFER_START:
-          ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
-          *data = mAtomicCounterBuffers[index].getOffset();
-          break;
-      case GL_ATOMIC_COUNTER_BUFFER_SIZE:
-          ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
-          *data = mAtomicCounterBuffers[index].getSize();
-          break;
-      case GL_SHADER_STORAGE_BUFFER_START:
-          ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
-          *data = mShaderStorageBuffers[index].getOffset();
-          break;
-      case GL_SHADER_STORAGE_BUFFER_SIZE:
-          ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
-          *data = mShaderStorageBuffers[index].getSize();
-          break;
-      default:
-          UNREACHABLE();
-          break;
+        case GL_TRANSFORM_FEEDBACK_BUFFER_START:
+            ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
+            *data = mTransformFeedback->getIndexedBuffer(index).getOffset();
+            break;
+        case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
+            ASSERT(static_cast<size_t>(index) < mTransformFeedback->getIndexedBufferCount());
+            *data = mTransformFeedback->getIndexedBuffer(index).getSize();
+            break;
+        case GL_UNIFORM_BUFFER_START:
+            ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
+            *data = mUniformBuffers[index].getOffset();
+            break;
+        case GL_UNIFORM_BUFFER_SIZE:
+            ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
+            *data = mUniformBuffers[index].getSize();
+            break;
+        case GL_ATOMIC_COUNTER_BUFFER_START:
+            ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
+            *data = mAtomicCounterBuffers[index].getOffset();
+            break;
+        case GL_ATOMIC_COUNTER_BUFFER_SIZE:
+            ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
+            *data = mAtomicCounterBuffers[index].getSize();
+            break;
+        case GL_SHADER_STORAGE_BUFFER_START:
+            ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
+            *data = mShaderStorageBuffers[index].getOffset();
+            break;
+        case GL_SHADER_STORAGE_BUFFER_SIZE:
+            ASSERT(static_cast<size_t>(index) < mShaderStorageBuffers.size());
+            *data = mShaderStorageBuffers[index].getSize();
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 }
 
@@ -2209,12 +2995,1084 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
+void State::shadeModel(GLenum mode)
+{
+    mShadeModel = mode;
+}
+
+GLenum State::getShadeModel() const
+{
+    return mShadeModel;
+}
+
+void State::matrixMode(GLenum mode)
+{
+    mCurrMatrixMode = mode;
+}
+
+void State::loadIdentity()
+{
+    currMatrix() = angle::Mat4();
+}
+
+void State::loadMatrixf(const GLfloat *m)
+{
+    currMatrix() = angle::Mat4(m);
+}
+
+void State::pushMatrix()
+{
+    // GLES1 TODO: Restrict to mMaxMatrixStackDepth
+    currMatrixStack().emplace_back(currMatrixStack().back());
+}
+
+void State::popMatrix()
+{
+    if (currMatrixStack().size() > 1)
+    {
+        // GLES1 TODO: Signal on underflow
+        currMatrixStack().pop_back();
+    }
+    else
+    {
+        // TODO: issue stack underflow
+    }
+}
+
+void State::multMatrixf(const GLfloat *m)
+{
+    currMatrix() = currMatrix().product(m);
+}
+
+void State::orthof(GLfloat left,
+                   GLfloat right,
+                   GLfloat bottom,
+                   GLfloat top,
+                   GLfloat zNear,
+                   GLfloat zFar)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::ortho(left, right, bottom, top, zNear, zFar));
+}
+
+void State::frustumf(GLfloat left,
+                     GLfloat right,
+                     GLfloat bottom,
+                     GLfloat top,
+                     GLfloat zNear,
+                     GLfloat zFar)
+{
+    currMatrix() =
+        currMatrix().product(angle::Mat4::frustum(left, right, bottom, top, zNear, zFar));
+}
+
+void State::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    auto &env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                env.envMode = (GLenum)param;
+                break;
+            case GL_COMBINE_RGB:
+                env.combineRgb = (GLenum)param;
+                break;
+            case GL_COMBINE_ALPHA:
+                env.combineAlpha = (GLenum)param;
+                break;
+
+            case GL_SRC0_RGB:
+                env.src0rgb = (GLenum)param;
+                break;
+            case GL_SRC0_ALPHA:
+                env.src0alpha = (GLenum)param;
+                break;
+            case GL_SRC1_RGB:
+                env.src1rgb = (GLenum)param;
+                break;
+            case GL_SRC1_ALPHA:
+                env.src1alpha = (GLenum)param;
+                break;
+            case GL_SRC2_RGB:
+                env.src2rgb = (GLenum)param;
+                break;
+            case GL_SRC2_ALPHA:
+                env.src2alpha = (GLenum)param;
+                break;
+
+            case GL_OPERAND0_RGB:
+                env.op0rgb = (GLenum)param;
+                break;
+            case GL_OPERAND0_ALPHA:
+                env.op0alpha = (GLenum)param;
+                break;
+            case GL_OPERAND1_RGB:
+                env.op1rgb = (GLenum)param;
+                break;
+            case GL_OPERAND1_ALPHA:
+                env.op1alpha = (GLenum)param;
+                break;
+            case GL_OPERAND2_RGB:
+                env.op2rgb = (GLenum)param;
+                break;
+            case GL_OPERAND2_ALPHA:
+                env.op2alpha = (GLenum)param;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                fprintf(stderr, "%s: TODO: gles1 validation for GL_TEXTURE_ENV_COLOR\n", __func__);
+                break;
+            case GL_RGB_SCALE:
+                env.rgbScale = param;
+                break;
+            case GL_ALPHA_SCALE:
+                env.alphaScale = param;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                env.pointSpriteCoordReplace = param == GL_TRUE;
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnvfv(GLenum target, GLenum pname, const GLfloat *params)
+{
+    auto &env     = mTexUnitEnvs[mActiveSampler];
+    GLfloat param = params[0];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                env.envMode = (GLenum)param;
+                break;
+            case GL_COMBINE_RGB:
+                env.combineRgb = (GLenum)param;
+                break;
+            case GL_COMBINE_ALPHA:
+                env.combineAlpha = (GLenum)param;
+                break;
+
+            case GL_SRC0_RGB:
+                env.src0rgb = (GLenum)param;
+                break;
+            case GL_SRC0_ALPHA:
+                env.src0alpha = (GLenum)param;
+                break;
+            case GL_SRC1_RGB:
+                env.src1rgb = (GLenum)param;
+                break;
+            case GL_SRC1_ALPHA:
+                env.src1alpha = (GLenum)param;
+                break;
+            case GL_SRC2_RGB:
+                env.src2rgb = (GLenum)param;
+                break;
+            case GL_SRC2_ALPHA:
+                env.src2alpha = (GLenum)param;
+                break;
+
+            case GL_OPERAND0_RGB:
+                env.op0rgb = (GLenum)param;
+                break;
+            case GL_OPERAND0_ALPHA:
+                env.op0alpha = (GLenum)param;
+                break;
+            case GL_OPERAND1_RGB:
+                env.op1rgb = (GLenum)param;
+                break;
+            case GL_OPERAND1_ALPHA:
+                env.op1alpha = (GLenum)param;
+                break;
+            case GL_OPERAND2_RGB:
+                env.op2rgb = (GLenum)param;
+                break;
+            case GL_OPERAND2_ALPHA:
+                env.op2alpha = (GLenum)param;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                memcpy(env.envColor.data(), params, 4 * sizeof(GLfloat));
+                break;
+            case GL_RGB_SCALE:
+                env.rgbScale = param;
+                break;
+            case GL_ALPHA_SCALE:
+                env.alphaScale = param;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    auto &env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                env.envMode = (GLenum)param;
+                break;
+            case GL_COMBINE_RGB:
+                env.combineRgb = (GLenum)param;
+                break;
+            case GL_COMBINE_ALPHA:
+                env.combineAlpha = (GLenum)param;
+                break;
+
+            case GL_SRC0_RGB:
+                env.src0rgb = (GLenum)param;
+                break;
+            case GL_SRC0_ALPHA:
+                env.src0alpha = (GLenum)param;
+                break;
+            case GL_SRC1_RGB:
+                env.src1rgb = (GLenum)param;
+                break;
+            case GL_SRC1_ALPHA:
+                env.src1alpha = (GLenum)param;
+                break;
+            case GL_SRC2_RGB:
+                env.src2rgb = (GLenum)param;
+                break;
+            case GL_SRC2_ALPHA:
+                env.src2alpha = (GLenum)param;
+                break;
+
+            case GL_OPERAND0_RGB:
+                env.op0rgb = (GLenum)param;
+                break;
+            case GL_OPERAND0_ALPHA:
+                env.op0alpha = (GLenum)param;
+                break;
+            case GL_OPERAND1_RGB:
+                env.op1rgb = (GLenum)param;
+                break;
+            case GL_OPERAND1_ALPHA:
+                env.op1alpha = (GLenum)param;
+                break;
+            case GL_OPERAND2_RGB:
+                env.op2rgb = (GLenum)param;
+                break;
+            case GL_OPERAND2_ALPHA:
+                env.op2alpha = (GLenum)param;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                fprintf(stderr, "%s: TODO: gles1 validation for GL_TEXTURE_ENV_COLOR\n", __func__);
+                break;
+            case GL_RGB_SCALE:
+                env.rgbScale = (GLfloat)param;
+                break;
+            case GL_ALPHA_SCALE:
+                env.alphaScale = (GLfloat)param;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texEnviv(GLenum target, GLenum pname, const GLint *params)
+{
+    auto &env   = mTexUnitEnvs[mActiveSampler];
+    GLint param = params[0];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                env.envMode = (GLenum)param;
+                break;
+            case GL_COMBINE_RGB:
+                env.combineRgb = (GLenum)param;
+                break;
+            case GL_COMBINE_ALPHA:
+                env.combineAlpha = (GLenum)param;
+                break;
+
+            case GL_SRC0_RGB:
+                env.src0rgb = (GLenum)param;
+                break;
+            case GL_SRC0_ALPHA:
+                env.src0alpha = (GLenum)param;
+                break;
+            case GL_SRC1_RGB:
+                env.src1rgb = (GLenum)param;
+                break;
+            case GL_SRC1_ALPHA:
+                env.src1alpha = (GLenum)param;
+                break;
+            case GL_SRC2_RGB:
+                env.src2rgb = (GLenum)param;
+                break;
+            case GL_SRC2_ALPHA:
+                env.src2alpha = (GLenum)param;
+                break;
+
+            case GL_OPERAND0_RGB:
+                env.op0rgb = (GLenum)param;
+                break;
+            case GL_OPERAND0_ALPHA:
+                env.op0alpha = (GLenum)param;
+                break;
+            case GL_OPERAND1_RGB:
+                env.op1rgb = (GLenum)param;
+                break;
+            case GL_OPERAND1_ALPHA:
+                env.op1alpha = (GLenum)param;
+                break;
+            case GL_OPERAND2_RGB:
+                env.op2rgb = (GLenum)param;
+                break;
+            case GL_OPERAND2_ALPHA:
+                env.op2alpha = (GLenum)param;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                env.envColor[0] = params[0] / 255.0f;
+                env.envColor[1] = params[1] / 255.0f;
+                env.envColor[2] = params[2] / 255.0f;
+                env.envColor[3] = params[3] / 255.0f;
+                break;
+
+            case GL_RGB_SCALE:
+                env.rgbScale = (GLfloat)param;
+                break;
+            case GL_ALPHA_SCALE:
+                env.alphaScale = (GLfloat)param;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                env.pointSpriteCoordReplace = (GLboolean)param == GL_TRUE;
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::getTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
+{
+    auto &env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                params[0] = (GLfloat)env.envMode;
+                break;
+            case GL_COMBINE_RGB:
+                params[0] = (GLfloat)env.combineRgb;
+                break;
+            case GL_COMBINE_ALPHA:
+                params[0] = (GLfloat)env.combineAlpha;
+                break;
+
+            case GL_SRC0_RGB:
+                params[0] = (GLfloat)env.src0rgb;
+                break;
+            case GL_SRC0_ALPHA:
+                params[0] = (GLfloat)env.src0alpha;
+                break;
+            case GL_SRC1_RGB:
+                params[0] = (GLfloat)env.src1rgb;
+                break;
+            case GL_SRC1_ALPHA:
+                params[0] = (GLfloat)env.src1alpha;
+                break;
+            case GL_SRC2_RGB:
+                params[0] = (GLfloat)env.src2rgb;
+                break;
+            case GL_SRC2_ALPHA:
+                params[0] = (GLfloat)env.src2alpha;
+                break;
+
+            case GL_OPERAND0_RGB:
+                params[0] = (GLfloat)env.op0rgb;
+                break;
+            case GL_OPERAND0_ALPHA:
+                params[0] = (GLfloat)env.op0alpha;
+                break;
+            case GL_OPERAND1_RGB:
+                params[0] = (GLfloat)env.op1rgb;
+                break;
+            case GL_OPERAND1_ALPHA:
+                params[0] = (GLfloat)env.op1alpha;
+                break;
+            case GL_OPERAND2_RGB:
+                params[0] = (GLfloat)env.op2rgb;
+                break;
+            case GL_OPERAND2_ALPHA:
+                params[0] = (GLfloat)env.op2alpha;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                memcpy(params, env.envColor.data(), 4 * sizeof(GLfloat));
+                break;
+            case GL_RGB_SCALE:
+                params[0] = env.rgbScale;
+                break;
+            case GL_ALPHA_SCALE:
+                params[0] = env.alphaScale;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                params[0] = (GLfloat)(env.pointSpriteCoordReplace ? GL_TRUE : GL_FALSE);
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::getTexEnviv(GLenum target, GLenum pname, GLint *params)
+{
+    auto &env = mTexUnitEnvs[mActiveSampler];
+
+    if (target == GL_TEXTURE_ENV)
+    {
+
+        switch (pname)
+        {
+            case GL_TEXTURE_ENV_MODE:
+                params[0] = (GLint)env.envMode;
+                break;
+            case GL_COMBINE_RGB:
+                params[0] = (GLint)env.combineRgb;
+                break;
+            case GL_COMBINE_ALPHA:
+                params[0] = (GLint)env.combineAlpha;
+                break;
+
+            case GL_SRC0_RGB:
+                params[0] = (GLint)env.src0rgb;
+                break;
+            case GL_SRC0_ALPHA:
+                params[0] = (GLint)env.src0alpha;
+                break;
+            case GL_SRC1_RGB:
+                params[0] = (GLint)env.src1rgb;
+                break;
+            case GL_SRC1_ALPHA:
+                params[0] = (GLint)env.src1alpha;
+                break;
+            case GL_SRC2_RGB:
+                params[0] = (GLint)env.src2rgb;
+                break;
+            case GL_SRC2_ALPHA:
+                params[0] = (GLint)env.src2alpha;
+                break;
+
+            case GL_OPERAND0_RGB:
+                params[0] = (GLint)env.op0rgb;
+                break;
+            case GL_OPERAND0_ALPHA:
+                params[0] = (GLint)env.op0alpha;
+                break;
+            case GL_OPERAND1_RGB:
+                params[0] = (GLint)env.op1rgb;
+                break;
+            case GL_OPERAND1_ALPHA:
+                params[0] = (GLint)env.op1alpha;
+                break;
+            case GL_OPERAND2_RGB:
+                params[0] = (GLint)env.op2rgb;
+                break;
+            case GL_OPERAND2_ALPHA:
+                params[0] = (GLint)env.op2alpha;
+                break;
+
+            case GL_TEXTURE_ENV_COLOR:
+                params[0] = (GLint)(env.envColor[0] * 255.0f);
+                params[1] = (GLint)(env.envColor[1] * 255.0f);
+                params[2] = (GLint)(env.envColor[2] * 255.0f);
+                params[3] = (GLint)(env.envColor[3] * 255.0f);
+                break;
+            case GL_RGB_SCALE:
+                params[0] = (GLint)env.rgbScale;
+                break;
+            case GL_ALPHA_SCALE:
+                params[0] = (GLint)env.alphaScale;
+                break;
+        }
+    }
+    else if (target == GL_POINT_SPRITE_OES)
+    {
+        switch (pname)
+        {
+            case GL_COORD_REPLACE_OES:
+                params[0] = (GLint)(env.pointSpriteCoordReplace ? GL_TRUE : GL_FALSE);
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: unknown target 0x%x\n", __func__, target);
+    }
+}
+
+void State::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = param;
+    mTexGens[mActiveSampler][pname].type            = GL_FLOAT;
+}
+
+void State::texGenfv(GLenum coord, GLenum pname, const GLfloat *params)
+{
+    mTexGens[mActiveSampler][pname].val.floatVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type            = GL_FLOAT;
+}
+
+void State::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = param;
+    mTexGens[mActiveSampler][pname].type          = GL_INT;
+}
+
+void State::texGeniv(GLenum coord, GLenum pname, const GLint *params)
+{
+    mTexGens[mActiveSampler][pname].val.intVal[0] = params[0];
+    mTexGens[mActiveSampler][pname].type          = GL_INT;
+}
+
+void State::getTexGeniv(GLenum coord, GLenum pname, GLint *params)
+{
+    *params = mTexGens[mActiveSampler][pname].val.intVal[0];
+}
+
+void State::getTexGenfv(GLenum coord, GLenum pname, GLfloat *params)
+{
+    params[0] = mTexGens[mActiveSampler][pname].val.floatVal[0];
+    params[1] = mTexGens[mActiveSampler][pname].val.floatVal[1];
+    params[2] = mTexGens[mActiveSampler][pname].val.floatVal[2];
+    params[3] = mTexGens[mActiveSampler][pname].val.floatVal[3];
+}
+
+void State::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    switch (pname)
+    {
+        case GL_SHININESS:
+            mMaterial.specularExponent = param;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::materialfv(GLenum face, GLenum pname, const GLfloat *params)
+{
+    switch (pname)
+    {
+        case GL_AMBIENT:
+            memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_AMBIENT_AND_DIFFUSE:
+            memcpy(&mMaterial.ambient, params, 4 * sizeof(GLfloat));
+            memcpy(&mMaterial.diffuse, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(&mMaterial.specular, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_EMISSION:
+            memcpy(&mMaterial.emissive, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SHININESS:
+            mMaterial.specularExponent = *params;
+            break;
+        default:
+            return;
+    }
+}
+
+void State::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
+{
+    switch (pname)
+    {
+        case GL_AMBIENT:
+            if (mColorMaterialEnabled)
+            {
+                memcpy(params, mColor.data(), 4 * sizeof(GLfloat));
+            }
+            else
+            {
+                memcpy(params, &mMaterial.ambient, 4 * sizeof(GLfloat));
+            }
+            break;
+        case GL_DIFFUSE:
+            if (mColorMaterialEnabled)
+            {
+                memcpy(params, mColor.data(), 4 * sizeof(GLfloat));
+            }
+            else
+            {
+                memcpy(params, &mMaterial.diffuse, 4 * sizeof(GLfloat));
+            }
+            break;
+        case GL_SPECULAR:
+            memcpy(params, &mMaterial.specular, 4 * sizeof(GLfloat));
+            break;
+        case GL_EMISSION:
+            memcpy(params, &mMaterial.emissive, 4 * sizeof(GLfloat));
+            break;
+        case GL_SHININESS:
+            *params = mMaterial.specularExponent;
+            break;
+        default:
+            return;
+    }
+}
+
+void State::lightModelf(GLenum pname, GLfloat param)
+{
+    switch (pname)
+    {
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = param == 1.0f ? true : false;
+            break;
+        default:
+            break;
+            ;
+    }
+}
+
+void State::lightModelfv(GLenum pname, const GLfloat *params)
+{
+    switch (pname)
+    {
+        case GL_LIGHT_MODEL_AMBIENT:
+            memcpy(&mLightModel.color, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            mLightModel.twoSided = *params == 1.0f ? true : false;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    switch (pname)
+    {
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = param;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = param;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = param;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = param;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = param;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::lightfv(GLenum light, GLenum pname, const GLfloat *params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+
+    angle::Vector4 transformedPos;
+
+    auto mv = modelviewMatrix();
+    switch (pname)
+    {
+        case GL_AMBIENT:
+            memcpy(&mLights[lightIndex].ambient, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(&mLights[lightIndex].diffuse, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(&mLights[lightIndex].specular, params, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+            transformedPos = mv * angle::Vector4(params[0], params[1], params[2], params[3]);
+            mLights[lightIndex].position[0] = transformedPos[0];
+            mLights[lightIndex].position[1] = transformedPos[1];
+            mLights[lightIndex].position[2] = transformedPos[2];
+            mLights[lightIndex].position[3] = transformedPos[3];
+            break;
+        case GL_SPOT_DIRECTION:
+            transformedPos = mv * angle::Vector4(params[0], params[1], params[2], 0.0f);
+            mLights[lightIndex].direction[0] = transformedPos[0];
+            mLights[lightIndex].direction[1] = transformedPos[1];
+            mLights[lightIndex].direction[2] = transformedPos[2];
+            break;
+        case GL_SPOT_EXPONENT:
+            mLights[lightIndex].spotlightExponent = *params;
+            break;
+        case GL_SPOT_CUTOFF:
+            mLights[lightIndex].spotlightCutoffAngle = *params;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            mLights[lightIndex].attenuationConst = *params;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            mLights[lightIndex].attenuationLinear = *params;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            mLights[lightIndex].attenuationQuadratic = *params;
+            break;
+        default:
+            return;
+    }
+}
+
+void State::getLightfv(GLenum light, GLenum pname, GLfloat *params)
+{
+    uint32_t lightIndex = light - GL_LIGHT0;
+    switch (pname)
+    {
+        case GL_AMBIENT:
+            memcpy(params, &mLights[lightIndex].ambient, 4 * sizeof(GLfloat));
+            break;
+        case GL_DIFFUSE:
+            memcpy(params, &mLights[lightIndex].diffuse, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPECULAR:
+            memcpy(params, &mLights[lightIndex].specular, 4 * sizeof(GLfloat));
+            break;
+        case GL_POSITION:
+
+            memcpy(params, &mLights[lightIndex].position, 4 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_DIRECTION:
+            memcpy(params, &mLights[lightIndex].direction, 3 * sizeof(GLfloat));
+            break;
+        case GL_SPOT_EXPONENT:
+            *params = mLights[lightIndex].spotlightExponent;
+            break;
+        case GL_SPOT_CUTOFF:
+            *params = mLights[lightIndex].spotlightCutoffAngle;
+            break;
+        case GL_CONSTANT_ATTENUATION:
+            *params = mLights[lightIndex].attenuationConst;
+            break;
+        case GL_LINEAR_ATTENUATION:
+            *params = mLights[lightIndex].attenuationLinear;
+            break;
+        case GL_QUADRATIC_ATTENUATION:
+            *params = mLights[lightIndex].attenuationQuadratic;
+            break;
+        default:
+            break;
+    }
+}
+
+void State::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mMultiTexCoords[target - GL_TEXTURE0][0] = s;
+    mMultiTexCoords[target - GL_TEXTURE0][1] = t;
+    mMultiTexCoords[target - GL_TEXTURE0][2] = r;
+    mMultiTexCoords[target - GL_TEXTURE0][3] = q;
+}
+
+void State::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mNormal[0] = nx;
+    mNormal[1] = ny;
+    mNormal[2] = nz;
+}
+
+void State::fogf(GLenum pname, GLfloat param)
+{
+    switch (pname)
+    {
+        case GL_FOG_MODE:
+        {
+            GLenum mode = (GLenum)param;
+            switch (mode)
+            {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = param;
+            break;
+        case GL_FOG_START:
+            mFog.start = param;
+            break;
+        case GL_FOG_END:
+            mFog.end = param;
+            break;
+        case GL_FOG_COLOR:
+            break;
+        default:
+            break;
+    }
+}
+
+void State::fogfv(GLenum pname, const GLfloat *params)
+{
+    switch (pname)
+    {
+        case GL_FOG_MODE:
+        {
+            GLenum mode = (GLenum)params[0];
+            switch (mode)
+            {
+                case GL_EXP:
+                case GL_EXP2:
+                case GL_LINEAR:
+                    mFog.mode = mode;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_FOG_DENSITY:
+            mFog.density = params[0];
+            break;
+        case GL_FOG_START:
+            mFog.start = params[0];
+            break;
+        case GL_FOG_END:
+            mFog.end = params[0];
+            break;
+        case GL_FOG_COLOR:
+            memcpy(&mFog.color, params, 4 * sizeof(GLfloat));
+            break;
+        default:
+            return;
+    }
+}
+
+void State::enableClientState(GLenum clientState)
+{
+    if (clientState == GL_TEXTURE_COORD_ARRAY)
+    {
+        clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    mEnabledClientStates.insert(clientState);
+}
+
+void State::disableClientState(GLenum clientState)
+{
+    if (clientState == GL_TEXTURE_COORD_ARRAY)
+    {
+        clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    mEnabledClientStates.erase(clientState);
+}
+
+bool State::isClientStateEnabled(GLenum clientState) const
+{
+    if (clientState == GL_TEXTURE_COORD_ARRAY)
+    {
+        clientState = (GLenum)(GL_TEXTURE_COORD_ARRAY + mActiveSampler);
+    }
+    return mEnabledClientStates.find(clientState) != mEnabledClientStates.end();
+}
+
+void State::drawTexOES(float x, float y, float z, float width, float height)
+{
+}
+
+void State::rotatef(float deg, float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::rotate(deg, angle::Vector3(x, y, z)));
+}
+
+void State::scalef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::scale(angle::Vector3(x, y, z)));
+}
+
+void State::translatef(float x, float y, float z)
+{
+    currMatrix() = currMatrix().product(angle::Mat4::translate(angle::Vector3(x, y, z)));
+}
+
+void State::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mColor[0] = red;
+    mColor[1] = green;
+    mColor[2] = blue;
+    mColor[3] = alpha;
+}
+
+void State::clientActiveTexture(GLenum texture)
+{
+    mActiveSampler = texture - GL_TEXTURE0;
+}
+
+void State::alphaFunc(GLenum func, GLfloat ref)
+{
+    mAlphaFunc    = func;
+    mAlphaTestRef = ref;
+}
+
+void State::clipPlanef(GLenum p, const GLfloat *eqn)
+{
+    auto &plane = mClipPlanes[p - GL_CLIP_PLANE0];
+    plane[0]    = eqn[0];
+    plane[1]    = eqn[1];
+    plane[2]    = eqn[2];
+    plane[3]    = eqn[3];
+}
+
+void State::getClipPlanef(GLenum plane, GLfloat *equation)
+{
+    const auto &clipPlane = mClipPlanes[plane - GL_CLIP_PLANE0];
+    equation[0]           = clipPlane[0];
+    equation[1]           = clipPlane[1];
+    equation[2]           = clipPlane[2];
+    equation[3]           = clipPlane[3];
+}
+
+void State::pointParameterf(GLenum pname, GLfloat param)
+{
+    switch (pname)
+    {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = param;
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = param;
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = param;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            fprintf(stderr, "%s: todo: validation for GL_POINT_DISTANCE_ATTENUATION\n", __func__);
+            break;
+        default:
+            break;
+    }
+}
+
+void State::pointParameterfv(GLenum pname, const GLfloat *params)
+{
+    switch (pname)
+    {
+        case GL_POINT_SIZE_MIN:
+            mPointSizeMin = params[0];
+            break;
+        case GL_POINT_SIZE_MAX:
+            mPointSizeMax = params[0];
+            break;
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            mPointFadeThresholdSize = params[0];
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            mPointDistanceAttenuation[0] = params[0];
+            mPointDistanceAttenuation[1] = params[1];
+            mPointDistanceAttenuation[2] = params[2];
+            break;
+        default:
+            break;
+    }
+}
+
+void State::pointSize(GLfloat size)
+{
+    mPointSize = size;
+}
+
+void State::logicOp(GLenum opcode)
+{
+    mLogicOp = opcode;
+}
+
 bool State::hasMappedBuffer(BufferBinding target) const
 {
     if (target == BufferBinding::Array)
     {
         const VertexArray *vao     = getVertexArray();
-        const auto &vertexAttribs = vao->getVertexAttributes();
+        const auto &vertexAttribs  = vao->getVertexAttributes();
         const auto &vertexBindings = vao->getVertexBindings();
         for (size_t attribIndex : vao->getEnabledAttributesMask())
         {
@@ -2480,6 +4338,30 @@ AttributesMask State::getAndResetDirtyCurrentValues() const
     AttributesMask retVal = mDirtyCurrentValues;
     mDirtyCurrentValues.reset();
     return retVal;
+}
+
+// Matrix stack utility functions
+angle::Mat4 &State::currMatrix()
+{
+    return currMatrixStack().back();
+}
+
+State::MatrixStack &State::currMatrixStack()
+{
+    switch (mCurrMatrixMode)
+    {
+        case GL_TEXTURE:
+            return mTextureMatrices[mActiveSampler];
+        case GL_PROJECTION:
+            return mProjMatrices;
+        case GL_MODELVIEW:
+            return mModelviewMatrices;
+        default:
+            fprintf(stderr, "error: matrix mode set to 0x%x!\n", mCurrMatrixMode);
+    }
+
+    // Make compiler happy
+    return mModelviewMatrices;
 }
 
 }  // namespace gl
