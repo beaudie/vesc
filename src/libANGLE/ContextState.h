@@ -29,6 +29,7 @@ class SyncManager;
 class TextureManager;
 class ValidationContext;
 
+static constexpr Version ES_1_1 = Version(1, 1);
 static constexpr Version ES_2_0 = Version(2, 0);
 static constexpr Version ES_3_0 = Version(3, 0);
 static constexpr Version ES_3_1 = Version(3, 1);
@@ -53,6 +54,7 @@ class ContextState final : angle::NonCopyable
     GLint getClientMajorVersion() const { return mClientVersion.major; }
     GLint getClientMinorVersion() const { return mClientVersion.minor; }
     const Version &getClientVersion() const { return mClientVersion; }
+    void setClientVersion(const Version &version) { mClientVersion = version; }
     const State &getState() const { return *mState; }
     const Caps &getCaps() const { return mCaps; }
     const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
@@ -142,6 +144,8 @@ class ValidationContext : angle::NonCopyable
 
     bool isValidBufferBinding(BufferBinding binding) const { return mValidBufferBindings[binding]; }
 
+    bool isGles1() const { return mIsGles1; }
+
   protected:
     ContextState mState;
     bool mSkipValidation;
@@ -154,6 +158,9 @@ class ValidationContext : angle::NonCopyable
     mutable const ParamTypeInfo *mSavedArgsType;
     static constexpr size_t kParamsBufferSize = 64u;
     mutable std::array<uint8_t, kParamsBufferSize> mParamsBuffer;
+
+    // Distinguish emulated GLES1 for validation purposes.
+    bool mIsGles1;
 };
 
 template <typename T>
