@@ -24,6 +24,7 @@
             'common/mathutil.cpp',
             'common/mathutil.h',
             'common/matrix_utils.h',
+            'common/matrix_utils.cpp',
             'common/platform.h',
             'common/string_utils.cpp',
             'common/string_utils.h',
