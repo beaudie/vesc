@@ -11,10 +11,12 @@
 
 #include <bitset>
 #include <memory>
+#include <unordered_set>
 
 #include "common/Color.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
+#include "common/matrix_utils.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
@@ -160,6 +162,10 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // Hint setters
     void setGenerateMipmapHint(GLenum hint);
     void setFragmentShaderDerivativeHint(GLenum hint);
+    void setLineSmoothHint(GLenum hint);
+    void setPointSmoothHint(GLenum hint);
+    void setPerspectiveCorrectionHint(GLenum hint);
+    void setFogHint(GLenum hint);
 
     // GL_CHROMIUM_bind_generates_resource
     bool isBindGeneratesResourceEnabled() const;
@@ -180,6 +186,9 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     GLuint getSamplerTextureId(unsigned int sampler, GLenum type) const;
     void detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture);
     void initializeZeroTextures(const Context *context, const TextureMap &zeroTextures);
+    void setTextureTargetEnabled(GLenum target, bool enabled);
+    bool isTextureTargetEnabled(GLenum unit, GLenum textureTarget) const;
+    void getUnitForEnabledTarget(GLenum textureTarget, bool *everEnabled, GLenum *whichUnit);
 
     // Sampler object binding manipulation
     void setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler);
@@ -341,6 +350,104 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     bool hasMappedBuffer(BufferBinding target) const;
     bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
+
+    // GLES1-specific set/get
+    void shadeModel(GLenum mode);
+    GLenum getShadeModel() const;
+
+    void matrixMode(GLenum mode);
+    void loadIdentity();
+    void loadMatrixf(const GLfloat *m);
+    void pushMatrix();
+    void popMatrix();
+    void multMatrixf(const GLfloat *m);
+
+    void orthof(GLfloat left,
+                GLfloat right,
+                GLfloat bottom,
+                GLfloat top,
+                GLfloat zNear,
+                GLfloat zFar);
+    void frustumf(GLfloat left,
+                  GLfloat right,
+                  GLfloat bottom,
+                  GLfloat top,
+                  GLfloat zNear,
+                  GLfloat zFar);
+
+    void texEnvf(GLenum target, GLenum pname, GLfloat param);
+    void texEnvfv(GLenum target, GLenum pname, const GLfloat *params);
+    void texEnvi(GLenum target, GLenum pname, GLint param);
+    void texEnviv(GLenum target, GLenum pname, const GLint *params);
+    void getTexEnvfv(GLenum env, GLenum pname, GLfloat *params);
+    void getTexEnviv(GLenum env, GLenum pname, GLint *params);
+
+    const TextureEnvironmentParameters &getTextureEnvironment(unsigned int activeSampler) const;
+
+    void materialf(GLenum face, GLenum pname, GLfloat param);
+    void materialfv(GLenum face, GLenum pname, const GLfloat *params);
+    void getMaterialfv(GLenum face, GLenum pname, GLfloat *params);
+
+    void lightModelf(GLenum pname, GLfloat param);
+    void lightModelfv(GLenum pname, const GLfloat *params);
+    void lightf(GLenum light, GLenum pname, GLfloat param);
+    void lightfv(GLenum light, GLenum pname, const GLfloat *params);
+    void getLightfv(GLenum light, GLenum pname, GLfloat *params);
+
+    void multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
+    void normal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+
+    void fogf(GLenum pname, GLfloat param);
+    void fogfv(GLenum pname, const GLfloat *params);
+
+    void enableClientState(GLenum clientState);
+    void disableClientState(GLenum clientState);
+    bool isClientStateEnabled(GLenum clientState) const;
+    bool isTexCoordArrayEnabled(int unit) const;
+
+    const ColorF getCurrentColor() const;
+    const NormalF getCurrentNormal() const;
+    const TextureCoordF getCurrentTextureCoordinate() const;
+    const TextureCoordF getTextureCoordinate(int unit) const;
+
+    void rotatef(float deg, float x, float y, float z);
+    void scalef(float x, float y, float z);
+    void translatef(float x, float y, float z);
+
+    void color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+    void color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha);
+
+    void clientActiveTexture(GLenum texture);
+
+    // GLES1 TODO: Other API calls
+    void alphaFunc(GLenum func, GLfloat ref);
+    GLenum getAlphaFunc() const;
+    GLfloat getAlphaTestRef() const;
+
+    void clipPlanef(GLenum p, const GLfloat *eqn);
+    void getClipPlanef(GLenum plane, GLfloat *equation);
+
+    void pointParameterf(GLenum pname, GLfloat param);
+    void pointParameterfv(GLenum pname, const GLfloat *param);
+    void pointSize(GLfloat size);
+
+    GLfloat getPointSize() const;
+    void getPointSizeLimits(GLfloat *min, GLfloat *max) const;
+    void getPointDistanceAttenuation(GLfloat *att) const;
+
+    void logicOp(GLenum opcode);
+
+    GLenum getLogicOp() const;
+
+    angle::Mat4 projMatrix();
+    angle::Mat4 modelviewMatrix();
+    angle::Mat4 textureMatrix();
+    angle::Mat4 textureMatrix(int i);
+
+    const MaterialParameters &getMaterialParameters() const;
+    const LightModelParameters &getLightModelParameters() const;
+    const LightParameters &getLightParameters(unsigned int i) const;
+    const FogParameters &getFogParameters() const;
 
     // Sets the dirty bit for the program executable.
     void onProgramExecutableChange(Program *program);
@@ -598,6 +705,90 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
+
+    // GLES1 state
+    union GLVal {
+        Vec4 floatVal;
+        IVec4 intVal;
+        UBVec4 ubyteVal;
+        UIVec4 enumVal;
+    };
+
+    struct GLValTyped
+    {
+        GLenum type;
+        GLVal val;
+    };
+
+    using TexUnitEnvs = std::vector<TextureEnvironmentParameters>;
+    using TexGens     = std::vector<std::unordered_map<GLenum, GLValTyped>>;
+    using MatrixStack = std::vector<angle::Mat4>;
+
+    int mMaxMultitextureUnits;
+    int mMaxLights;
+    int mMaxModelviewMatrixStackDepth;
+    int mMaxProjectionMatrixStackDepth;
+    int mMaxTextureMatrixStackDepth;
+    int mMaxClipPlanes;
+
+    GLenum mShadeModel;
+    GLenum mCurrMatrixMode;
+
+    ColorF mCurrentColor;
+    NormalF mCurrentNormal;
+    std::vector<TextureCoordF> mCurrentTextureCoords;
+
+    std::vector<std::unordered_set<GLenum>> mTexUnitEnables;
+    TexUnitEnvs mTexUnitEnvs;
+
+    MatrixStack mProjMatrices;
+    MatrixStack mModelviewMatrices;
+    std::vector<MatrixStack> mTextureMatrices;
+    angle::Mat4 &currMatrix();
+    MatrixStack &currMatrixStack();
+
+    bool mLineSmoothEnabled;
+    bool mPointSmoothEnabled;
+    bool mPointSpriteEnabled;
+    bool mAlphaTestEnabled;
+    bool mLogicOpEnabled;
+    bool mLightingEnabled;
+    bool mFogEnabled;
+    bool mRescaleNormalEnabled;
+    bool mNormalizeEnabled;
+    bool mColorMaterialEnabled;
+    bool mReflecitonMapEnabled;
+
+    MaterialParameters mMaterial;
+    LightModelParameters mLightModel;
+    std::vector<LightParameters> mLights;
+    FogParameters mFog = {};
+
+    std::unordered_set<GLenum> mEnabledClientStates;
+
+    GLenum mAlphaFunc;
+    GLfloat mAlphaTestRef;
+    std::vector<bool> mClipPlaneEnabled;
+    std::vector<Vec4> mClipPlanes;
+
+    GLfloat mPointSizeMin;
+    GLfloat mPointSizeMax;
+    GLfloat mPointFadeThresholdSize;
+    Vec3 mPointDistanceAttenuation;
+    GLfloat mPointSize;
+
+    GLenum mLogicOp;
+
+    GLint mVertexArrayStride;
+    GLint mNormalArrayStride;
+    GLint mColorArrayStride;
+    GLint mTextureCoordArrayStride;
+
+    // GLES1-specific hints
+    GLenum mLineSmoothHint;
+    GLenum mPointSmoothHint;
+    GLenum mPerspectiveCorrectionHint;
+    GLenum mFogHint;
 
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
