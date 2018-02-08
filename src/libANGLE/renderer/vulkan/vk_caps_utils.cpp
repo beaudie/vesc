@@ -8,11 +8,19 @@
 //
 
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
+#include <iostream>
 #include "libANGLE/Caps.h"
 #include "vk_format_utils.h"
 
 namespace
 {
+constexpr VkFormatFeatureFlags kNecessaryBitsFullSupportDepthStencil =
+    VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
+    VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+constexpr VkFormatFeatureFlags kNecessaryBitsFullSupportColor =
+    VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
+    VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+
 constexpr unsigned int kComponentsPerVector = 4;
 bool HasFormatFeatureBits(const VkFormatFeatureFlags featureBits,
                           const VkFormatProperties &formatProperties)
@@ -40,6 +48,7 @@ void FillTextureCapsMap(const VkPhysicalDevice &physicalDevice,
                         gl::TextureCapsMap *textureCapsMap)
 {
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
+
     for (GLenum internalFormat : allFormats)
     {
         const rx::vk::Format &vkFormat = formatTable[internalFormat];
@@ -48,9 +57,24 @@ void FillTextureCapsMap(const VkPhysicalDevice &physicalDevice,
             // TODO(jmadill): Every angle format should be mapped to a vkFormat.
             continue;
         }
-        VkFormatProperties formatProperties;
-        vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat.vkTextureFormat,
-                                            &formatProperties);
+
+        VkFormatProperties formatProperties{0, 0, 0};
+
+        // Try filling out the info from our hard coded autogen switch, if we can't find the
+        // information we need, we'll make the call to Vulkan.
+        rx::vk::FillMandatoryTextureCaps(vkFormat.vkTextureFormat, formatProperties);
+
+        // Once we filled what we could with the mandatory texture caps, we verify if
+        // all the bits we need to satify all our checks are present, and if so we can
+        // skip the device call.
+        if ((formatProperties.optimalTilingFeatures & kNecessaryBitsFullSupportColor) !=
+                kNecessaryBitsFullSupportColor &&
+            (formatProperties.optimalTilingFeatures & kNecessaryBitsFullSupportDepthStencil) !=
+                kNecessaryBitsFullSupportDepthStencil)
+        {
+            vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat.vkTextureFormat,
+                                                &formatProperties);
+        }
 
         const gl::TextureCaps textureCaps = GenerateTextureFormatCaps(formatProperties);
         textureCapsMap->insert(internalFormat, textureCaps);
