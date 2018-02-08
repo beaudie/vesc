@@ -69,6 +69,9 @@ QueryT CastFromStateValue(GLenum pname, NativeT value);
 template <typename NativeT, typename QueryT>
 NativeT CastQueryValueTo(GLenum pname, QueryT value);
 
+template <typename NativeT, typename QueryT>
+NativeT CastQueryValuesTo(GLenum pname, const QueryT *values, int count, NativeT *out);
+
 template <typename ParamType>
 GLenum ConvertToGLenum(GLenum pname, ParamType param)
 {
@@ -101,8 +104,11 @@ GLboolean ConvertToGLBoolean(ParamType param)
 
 // The GL state query API types are: bool, int, uint, float, int64, uint64
 template <typename QueryT>
-void CastStateValues(Context *context, GLenum nativeType, GLenum pname,
-                     unsigned int numParams, QueryT *outParams);
+void CastStateValues(Context *context,
+                     GLenum nativeType,
+                     GLenum pname,
+                     unsigned int numParams,
+                     QueryT *outParams);
 
 // The GL state query API types are: bool, int, uint, float, int64, uint64
 template <typename QueryT>
