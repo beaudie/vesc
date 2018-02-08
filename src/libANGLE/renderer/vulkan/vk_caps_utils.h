@@ -34,6 +34,13 @@ void GenerateCaps(const VkPhysicalDevice &physicalDevice,
                   gl::TextureCapsMap *outTextureCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */);
+
+// This will fill the formatProperties object with the textureCaps if the
+// texture is a mandatory texture described in section 31.3.3. Required Format Support
+// of the Vulkan spec. A boolean indicating if the texture is mandatory or not will
+// be returned.
+bool FillMandatoryTextureCaps(VkFormat vkFormat, VkFormatProperties &formatProperties);
+
 }  // namespace vk
 }  // namespace rx
 
