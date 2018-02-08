@@ -9,8 +9,8 @@
 #ifndef LIBANGLE_TEXTURE_H_
 #define LIBANGLE_TEXTURE_H_
 
-#include <vector>
 #include <map>
+#include <vector>
 
 #include "angle_gl.h"
 #include "common/Optional.h"
@@ -114,6 +114,12 @@ struct TextureState final : private angle::NonCopyable
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
 
+    void setCrop(const gl::Rectangle& rect);
+    gl::Rectangle getCrop() const;
+
+    void setGenerateMipmapHint(GLenum hint);
+    GLenum getGenerateMipmapHint() const;
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -161,14 +167,21 @@ struct TextureState final : private angle::NonCopyable
     GLenum mUsage;
 
     std::vector<ImageDesc> mImageDescs;
+
+    // Texture crop rect (GLES1 only)
+    // Screen space, so not part of ImageDesc
+    gl::Rectangle mCropRect;
+
+    // Generate-mipmap hint per texture (GLES1 only)
+    GLenum mGenerateMipmapHint;
+
     InitState mInitState;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
 bool operator!=(const TextureState &a, const TextureState &b);
 
-class Texture final : public egl::ImageSibling,
-                      public LabeledObject
+class Texture final : public egl::ImageSibling, public LabeledObject
 {
   public:
     Texture(rx::GLImplFactory *factory, GLuint id, GLenum target);
@@ -358,6 +371,12 @@ class Texture final : public egl::ImageSibling,
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     const Format &getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
+
+    // GLES1
+    void setCrop(const gl::Rectangle& rect);
+    gl::Rectangle getCrop() const;
+    void setGenerateMipmapHint(GLenum generate);
+    GLenum getGenerateMipmapHint() const;
 
     void onAttach(const Context *context) override;
     void onDetach(const Context *context) override;
