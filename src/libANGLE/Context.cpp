@@ -164,8 +164,8 @@ gl::Version GetClientVersion(const egl::AttributeMap &attribs)
 
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 {
-    EGLAttrib attrib = attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT,
-                                   EGL_NO_RESET_NOTIFICATION);
+    EGLAttrib attrib =
+        attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT, EGL_NO_RESET_NOTIFICATION);
     switch (attrib)
     {
         case EGL_NO_RESET_NOTIFICATION:
@@ -301,6 +301,11 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mGLState.initialize(this, GetDebug(attribs), GetBindGeneratesResource(attribs),
                         GetClientArraysEnabled(attribs), robustResourceInit,
                         mMemoryProgramCache != nullptr);
+
+    if (getClientVersion() <= Version(1, 1))
+    {
+        gles1Emu = new GLES1on3(this, &mGLState);
+    }
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -1208,6 +1213,7 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
 
 void Context::getFloatvImpl(GLenum pname, GLfloat *params)
 {
+
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
     switch (pname)
@@ -1227,15 +1233,6 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params)
         case GL_MAX_TEXTURE_LOD_BIAS:
             *params = mCaps.maxLODBias;
             break;
-
-        case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
-        case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
-        {
-            ASSERT(mExtensions.pathRendering);
-            const GLfloat *m = mGLState.getPathRenderingMatrix(pname);
-            memcpy(params, m, 16 * sizeof(GLfloat));
-        }
-        break;
 
         default:
             mGLState.getFloatv(pname, params);
@@ -1627,7 +1624,7 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getPointerv(GLenum pname, void **params) const
+void Context::getPointerv(GLenum pname, void **params)
 {
     mGLState.getPointerv(pname, params);
 }
@@ -3708,6 +3705,18 @@ void Context::hint(GLenum target, GLenum mode)
             mGLState.setFragmentShaderDerivativeHint(mode);
             break;
 
+        case GL_LINE_SMOOTH_HINT:
+            mGLState.setLineSmoothHint(mode);
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            mGLState.setPointSmoothHint(mode);
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            mGLState.setPerspectiveCorrectionHint(mode);
+            break;
+        case GL_FOG_HINT:
+            mGLState.setFogHint(mode);
+            break;
         default:
             UNREACHABLE();
             return;
@@ -4062,8 +4071,14 @@ void Context::popDebugGroup()
 void Context::bufferData(BufferBinding target, GLsizeiptr size, const void *data, BufferUsage usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
-    ASSERT(buffer);
-    handleError(buffer->bufferData(this, target, data, size, usage));
+    if (!buffer)
+    {
+        // TODO: Validate buffer objects for GLES1
+    }
+    else
+    {
+        handleError(buffer->bufferData(this, target, data, size, usage));
+    }
 }
 
 void Context::bufferSubData(BufferBinding target,
@@ -5816,512 +5831,6 @@ void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES ima
 void Context::texStorage1D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width)
 {
     UNIMPLEMENTED();
-}
-
-void Context::alphaFunc(GLenum func, GLfloat ref)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::alphaFuncx(GLenum func, GLfixed ref)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::clearDepthx(GLfixed depth)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::clientActiveTexture(GLenum texture)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::clipPlanef(GLenum p, const GLfloat *eqn)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::clipPlanex(GLenum plane, const GLfixed *equation)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::colorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::cullFace(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::depthRangex(GLfixed n, GLfixed f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::disableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::enableClientState(GLenum array)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogx(GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::fogxv(GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getBufferParameteriv(GLenum target, GLenum pname, GLint *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getClipPlanef(GLenum plane, GLfloat *equation)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getClipPlanex(GLenum plane, GLfixed *equation)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getFixedv(GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getLightfv(GLenum light, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getLightxv(GLenum light, GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getMaterialxv(GLenum face, GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexEnviv(GLenum target, GLenum pname, GLint *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::getTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelx(GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightModelxv(GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightf(GLenum light, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightfv(GLenum light, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightx(GLenum light, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lightxv(GLenum light, GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::lineWidthx(GLfixed width)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadIdentity()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadMatrixf(const GLfloat *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadMatrixx(const GLfixed *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::logicOp(GLenum opcode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialf(GLenum face, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialfv(GLenum face, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialx(GLenum face, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::materialxv(GLenum face, GLenum pname, const GLfixed *param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::matrixMode(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multMatrixf(const GLfloat *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multMatrixx(const GLfixed *m)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::normalPointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterf(GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterfv(GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterx(GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointParameterxv(GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointSize(GLfloat size)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointSizex(GLfixed size)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::polygonOffsetx(GLfixed factor, GLfixed units)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::popMatrix()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pushMatrix()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::sampleCoveragex(GLclampx value, GLboolean invert)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::scalef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::scalex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::shadeModel(GLenum mode)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvf(GLenum target, GLenum pname, GLfloat param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvfv(GLenum target, GLenum pname, const GLfloat *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvi(GLenum target, GLenum pname, GLint param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnviv(GLenum target, GLenum pname, const GLint *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvx(GLenum target, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texEnvxv(GLenum target, GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texParameterx(GLenum target, GLenum pname, GLfixed param)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::texParameterxv(GLenum target, GLenum pname, const GLfixed *params)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::translatef(GLfloat x, GLfloat y, GLfloat z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::translatex(GLfixed x, GLfixed y, GLfixed z)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::vertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexf(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexfv(const GLfloat *coords)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexi(GLint x, GLint y, GLint z, GLint width, GLint height)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexiv(const GLint *coords)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexs(GLshort x, GLshort y, GLshort z, GLshort width, GLshort height)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexsv(const GLshort *coords)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexx(GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLfixed height)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::drawTexxv(const GLfixed *coords)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::currentPaletteMatrix(GLuint matrixpaletteindex)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::loadPaletteFromModelViewMatrix()
-{
-    UNIMPLEMENTED();
-}
-
-void Context::matrixIndexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::weightPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-void Context::pointSizePointer(GLenum type, GLsizei stride, const void *pointer)
-{
-    UNIMPLEMENTED();
-}
-
-GLbitfield Context::queryMatrixx(GLfixed *mantissa, GLint *exponent)
-{
-    UNIMPLEMENTED();
-    return 0;
 }
 
 }  // namespace gl
