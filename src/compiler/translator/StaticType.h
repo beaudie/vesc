@@ -222,12 +222,6 @@ constexpr const TType *GetForVec(TQualifier qualifier, unsigned char size)
     }
 }
 
-const TType *GetForFloatImage(TBasicType basicType);
-
-const TType *GetForIntImage(TBasicType basicType);
-
-const TType *GetForUintImage(TBasicType basicType);
-
 }  // namespace StaticType
 
 }  // namespace sh
