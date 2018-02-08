@@ -801,6 +801,41 @@ bool ValidCap(const Context *context, GLenum cap, bool queryOnly)
         case GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             return queryOnly && context->getExtensions().robustResourceInitialization;
 
+        // GLES1 caps
+        case GL_ALPHA_TEST:
+        case GL_COLOR_LOGIC_OP:
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP:
+        case GL_LIGHTING:
+        case GL_FOG:
+        case GL_COLOR_MATERIAL:
+        case GL_LINE_SMOOTH:
+        case GL_POINT_SMOOTH:
+        case GL_POINT_SPRITE_OES:
+        case GL_REFLECTION_MAP_OES:
+        case GL_NORMALIZE:
+        case GL_RESCALE_NORMAL:
+        case GL_LIGHT0:
+        case GL_LIGHT1:
+        case GL_LIGHT2:
+        case GL_LIGHT3:
+        case GL_LIGHT4:
+        case GL_LIGHT5:
+        case GL_LIGHT6:
+        case GL_LIGHT7:
+        case GL_CLIP_PLANE0:
+        case GL_CLIP_PLANE1:
+        case GL_CLIP_PLANE2:
+        case GL_CLIP_PLANE3:
+        case GL_CLIP_PLANE4:
+        case GL_CLIP_PLANE5:
+            return context->isGles1();
+        case GL_VERTEX_ARRAY:
+        case GL_NORMAL_ARRAY:
+        case GL_COLOR_ARRAY:
+        case GL_POINT_SIZE_ARRAY_OES:
+        case GL_TEXTURE_COORD_ARRAY:
+            return queryOnly && context->isGles1();
         default:
             return false;
     }
@@ -5360,6 +5395,12 @@ bool ValidateHint(ValidationContext *context, GLenum target, GLenum mode)
                 return false;
             }
             break;
+
+        case GL_LINE_SMOOTH_HINT:
+        case GL_POINT_SMOOTH_HINT:
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+        case GL_FOG_HINT:
+            return context->isGles1();
 
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
