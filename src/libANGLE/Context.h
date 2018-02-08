@@ -16,6 +16,7 @@
 #include "angle_gl.h"
 #include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
+#include "gles1/GLES1on3.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/ContextState.h"
@@ -60,6 +61,7 @@ class TransformFeedback;
 class VertexArray;
 struct VertexAttribute;
 class ProgramPipeline;
+class GLES1on3;
 
 class Context final : public ValidationContext
 {
@@ -1163,6 +1165,8 @@ class Context final : public ValidationContext
     egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }
 
     bool isRobustResourceInitEnabled() const { return mGLState.isRobustResourceInitEnabled(); }
+
+    GLES1on3 *gles1Emu;
 
   private:
     Error prepareForDraw();
