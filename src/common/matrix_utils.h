@@ -17,6 +17,9 @@
 
 #include "common/debug.h"
 #include "common/mathutil.h"
+#include "common/vector_utils.h"
+
+#include "math.h"
 
 namespace angle
 {
@@ -89,6 +92,14 @@ class Matrix
         return result;
     }
 
+    void operator*=(const Matrix<T> &m) {
+        ASSERT(columns() == m.rows());
+        Matrix<T> res = (*this) * m;
+        size_t numElts = res.elements().size();
+        mElements.resize(numElts);
+        memcpy(mElements.data(), res.data(), numElts * sizeof(float));
+    }
+
     unsigned int size() const
     {
         ASSERT(rows() == columns());
@@ -100,6 +111,7 @@ class Matrix
     unsigned int columns() const { return mCols; }
 
     std::vector<T> elements() const { return mElements; }
+    T* data() { return mElements.data(); }
 
     Matrix<T> compMult(const Matrix<T> &mat1) const
     {
@@ -374,10 +386,33 @@ class Matrix
         }
     }
 
-  private:
+  protected:
     std::vector<T> mElements;
     unsigned int mRows;
     unsigned int mCols;
+};
+
+class Mat4 : public Matrix<float> {
+public:
+    Mat4();
+    Mat4(const Matrix<float> generalMatrix);
+    Mat4(const std::vector<float>& elements);
+    Mat4(const float *elements);
+    Mat4(float m00, float m01, float m02, float m03,
+         float m10, float m11, float m12, float m13,
+         float m20, float m21, float m22, float m23,
+         float m30, float m31, float m32, float m33);
+
+    static Mat4 rotate(float angle, const Vector3 &axis);
+    static Mat4 translate(const Vector3 &t);
+    static Mat4 scale(const Vector3 &s);
+    static Mat4 frustum(float l, float r, float b, float t, float n, float f);
+    static Mat4 perspective(float fov, float aspectRatio, float n, float f);
+    static Mat4 ortho(float l, float r, float b, float t, float n, float f);
+
+    Mat4 product(const Mat4& m);
+    Vector4 operator*(const Vector4 &b);
+    void dump();
 };
 
 } // namespace angle
