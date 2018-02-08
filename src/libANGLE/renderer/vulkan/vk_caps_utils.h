@@ -28,6 +28,11 @@ namespace vk
 {
 class FormatTable;
 
+// This will return a pointer to a VkFormatProperties with the feature flags supported
+// if the texture is a mandatory texture described in section 31.3.3. Required Format Support
+// of the Vulkan spec. If the vkFormat isn't mandatory, it will return a nullptr.
+VkFormatProperties *GetMandatoryFormatSupport(VkFormat vkFormat);
+
 void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const gl::TextureCapsMap &textureCaps,
                   gl::Caps *outCaps,
@@ -35,6 +40,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   gl::Limitations * /* outLimitations */);
 
 gl::TextureCaps GenerateTextureFormatCaps(const VkFormatProperties &formatProperties);
+
 }  // namespace vk
 }  // namespace rx
 
