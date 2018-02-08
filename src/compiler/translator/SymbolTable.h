@@ -260,6 +260,7 @@ class TSymbolTable : angle::NonCopyable
                               SymbolType symbolType);
 
     bool insert(ESymbolLevel level, TSymbol *symbol);
+    void insertBuiltIn(ESymbolLevel level, const TSymbol *symbol);
 
     TFunction *findUserDefinedFunction(const ImmutableString &name) const;
 
@@ -277,6 +278,10 @@ class TSymbolTable : angle::NonCopyable
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
 
+    void insertStaticBuiltInVariables(sh::GLenum shaderType,
+                                      ShShaderSpec spec,
+                                      const ShBuiltInResources &resources);
+
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
 
@@ -286,6 +291,8 @@ class TSymbolTable : angle::NonCopyable
     std::vector<std::unique_ptr<PrecisionStackLevel>> mPrecisionStack;
 
     int mUniqueIdCounter;
+
+    static const int kLastStaticBuiltInId;
 
     // -1 before built-in init has finished, one past the last built-in id afterwards.
     // TODO(oetuaho): Make this a compile-time constant once the symbol table is initialized at
