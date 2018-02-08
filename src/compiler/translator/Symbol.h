@@ -89,7 +89,7 @@ class TVariable : public TSymbol
 
     void shareConstPointer(const TConstantUnion *constArray) { unionArray = constArray; }
 
-  private:
+    // Note: only to be used for static built-in variables!
     constexpr TVariable(const TSymbolUniqueId &id,
                         const ImmutableString &name,
                         SymbolType symbolType,
@@ -99,6 +99,7 @@ class TVariable : public TSymbol
     {
     }
 
+  private:
     const TType *mType;
     const TConstantUnion *unionArray;
 };
