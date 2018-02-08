@@ -29,6 +29,7 @@ class SyncManager;
 class TextureManager;
 class ValidationContext;
 
+static constexpr Version ES_1_1 = Version(1, 1);
 static constexpr Version ES_2_0 = Version(2, 0);
 static constexpr Version ES_3_0 = Version(3, 0);
 static constexpr Version ES_3_1 = Version(3, 1);
