@@ -251,6 +251,7 @@ class TSymbolTable : angle::NonCopyable
                               SymbolType symbolType);
 
     bool insert(ESymbolLevel level, TSymbol *symbol);
+    void insertBuiltIn(ESymbolLevel level, const TSymbol *symbol);
 
     TFunction *findUserDefinedFunction(const ImmutableString &name) const;
 
@@ -269,6 +270,10 @@ class TSymbolTable : angle::NonCopyable
                                     ShShaderSpec spec,
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
+
+    void insertStaticBuiltInVariables(sh::GLenum shaderType,
+                                      ShShaderSpec spec,
+                                      const ShBuiltInResources &resources);
 
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
