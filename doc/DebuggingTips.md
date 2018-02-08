@@ -24,3 +24,15 @@ export TRACE_LIBGL="/usr/lib/libGL.so.1" # may require a different path
 apitrace trace -o mytrace ./out/Debug/hello_triangle
 qapitrace mytrace
 ```
+
+## Running ANGLE under GAPID on Android
+
+1. ANGLE libraries must not be named like system libraries. Renaming is done via args.gn flag
+```
+angle_libs_suffix = "_ANGLE"
+```
+
+2. NativeTest based tests expect arguments to be set by test runner.
+Unfortunately, GAPID doesn't have an option to pass intent extra,
+so Chromium has to be patched with https://chromium-review.googlesource.com/920778.
+Modify `gtest_filter` with the test to run.
