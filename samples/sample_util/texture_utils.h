@@ -10,8 +10,12 @@
 #include <GLES2/gl2.h>
 
 GLuint CreateSimpleTexture2D();
+GLuint CreateSimpleTexture2DAlpha1();
+GLuint CreateSimpleTexture2DAlphaHalf();
 GLuint CreateSimpleTextureCubemap();
 
 GLuint CreateMipMappedTexture2D();
 
-#endif // SAMPLE_UTIL_TEXTURE_UTILS_H
+GLuint CreateTextureFromPng(const char *filename, unsigned *_width, unsigned *_height);
+
+#endif  // SAMPLE_UTIL_TEXTURE_UTILS_H
