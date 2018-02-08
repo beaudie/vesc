@@ -35,6 +35,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   gl::Limitations * /* outLimitations */);
 
 gl::TextureCaps GenerateTextureFormatCaps(const VkFormatProperties &formatProperties);
+
 }  // namespace vk
 }  // namespace rx
 
