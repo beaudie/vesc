@@ -9,8 +9,8 @@
 #ifndef LIBANGLE_TEXTURE_H_
 #define LIBANGLE_TEXTURE_H_
 
-#include <vector>
 #include <map>
+#include <vector>
 
 #include "angle_gl.h"
 #include "common/Optional.h"
@@ -114,6 +114,26 @@ struct TextureState final : private angle::NonCopyable
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
 
+    void setCrop(const int *vals)
+    {
+        mCropU = vals[0];
+        mCropV = vals[1];
+        mCropW = vals[2];
+        mCropH = vals[3];
+    }
+
+    void getCrop(int *vals) const
+    {
+        vals[0] = mCropU;
+        vals[1] = mCropV;
+        vals[2] = mCropW;
+        vals[3] = mCropH;
+    }
+
+    void setGenerateMipmapHint(bool shouldGenerate) { mGenerateMipmapHint = shouldGenerate; }
+
+    void getGenerateMipmapHint(bool *generate) const { *generate = mGenerateMipmapHint; }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -161,14 +181,22 @@ struct TextureState final : private angle::NonCopyable
     GLenum mUsage;
 
     std::vector<ImageDesc> mImageDescs;
+
+    // Texture crop rect (GLES1 only)
+    // Screen space, so not part of ImageDesc
+    int mCropU;
+    int mCropV;
+    int mCropW;
+    int mCropH;
+    int mGenerateMipmapHint;
+
     InitState mInitState;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
 bool operator!=(const TextureState &a, const TextureState &b);
 
-class Texture final : public egl::ImageSibling,
-                      public LabeledObject
+class Texture final : public egl::ImageSibling, public LabeledObject
 {
   public:
     Texture(rx::GLImplFactory *factory, GLuint id, GLenum target);
@@ -358,6 +386,12 @@ class Texture final : public egl::ImageSibling,
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     const Format &getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
+
+    // GLES1
+    void setCrop(const int *cropVals);
+    void getCrop(int *cropVals) const;
+    void setGenerateMipmapHint(bool generate);
+    void getGenerateMipmapHint(bool *generate) const;
 
     void onAttach(const Context *context) override;
     void onDetach(const Context *context) override;
