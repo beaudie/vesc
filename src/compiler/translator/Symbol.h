@@ -89,7 +89,7 @@ class TVariable : public TSymbol
 
     void shareConstPointer(const TConstantUnion *constArray) { unionArray = constArray; }
 
-  private:
+    // Note: only to be used for static built-in variables!
     constexpr TVariable(const TSymbolUniqueId &id,
                         const ImmutableString &name,
                         SymbolType symbolType,
@@ -99,6 +99,7 @@ class TVariable : public TSymbol
     {
     }
 
+  private:
     const TType *mType;
     const TConstantUnion *unionArray;
 };
@@ -246,7 +247,7 @@ class TFunction : public TSymbol
     bool isMain() const;
     bool isImageFunction() const;
 
-  private:
+    // Note: Only to be used for static built-in functions!
     constexpr TFunction(const TSymbolUniqueId &id,
                         const ImmutableString &name,
                         TExtension extension,
@@ -269,6 +270,7 @@ class TFunction : public TSymbol
     {
     }
 
+  private:
     ImmutableString buildMangledName() const;
 
     typedef TVector<TConstParameter> TParamVector;
