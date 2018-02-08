@@ -35,3 +35,28 @@ angle_shared_libvulkan = true
 ```
 
 When capturing traces of gtest based tests built inside Chromium checkout, make sure to run the tests with `--single-process-tests` argument.
+
+## Running ANGLE under GAPID on Android
+
+[GAPID](https://github.com/google/gapid) can be used to capture trace of Vulkan or OpenGLES commands on Android.
+For it to work, ANGLE's libraries must have different names from system libraries.
+This is done with the gn arg:
+```
+angle_libs_suffix = "_ANGLE"
+```
+
+Because all [NativeTest](https://chromium.googlesource.com/chromium/src/+/master/testing/android/native_test/java/src/org/chromium/native_test/NativeTest.java) based tests have the same activity name, `org.chromium.native_test.NativeUnitTestNativeActivity`, prior to capturing test trace, the specific test APK must be installed on the device. Best way to do it is with the launcher that building the test generates, for example, `./out/Release/bin/run_angle_end2end_tests`.
+In GAPID's "Capture Trace" dialog, "Package / Action:" should be
+```
+android.intent.action.MAIN:org.chromium.native_test/org.chromium.native_test.NativeUnitTestNativeActivity
+```
+
+Mandatory [intent extra argument](https://developer.android.com/studio/command-line/adb.html#IntentSpec) for starting the activity is `org.chromium.native_test.NativeTest.StdoutFile`, without it the test APK crashes. Test filters can be specified via either `org.chromium.native_test.NativeTest.CommandLineFlags` or `org.chromium.native_test.NativeTest.Shard` arguments.
+Example "Intent Arguments:" values in GAPID's "Capture Trace" dialog:
+```
+-e org.chromium.native_test.NativeTest.StdoutFile /sdcard/chromium_tests_root/out.txt -e org.chromium.native_test.NativeTest.CommandLineFlags "--gtest_filter=*ES2_VULKAN"
+```
+or
+```
+-e org.chromium.native_test.NativeTest.StdoutFile /sdcard/chromium_tests_root/out.txt --esal org.chromium.native_test.NativeTest.Shard RendererTest.SimpleOperation/ES2_VULKAN,SimpleOperationTest.DrawWithTexture/ES2_VULKAN
+```
