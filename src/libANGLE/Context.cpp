@@ -302,6 +302,13 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         GetClientArraysEnabled(attribs), robustResourceInit,
                         mMemoryProgramCache != nullptr);
 
+    gles1Emu = nullptr;
+
+    if (getClientVersion() <= Version(1, 1))
+    {
+        gles1Emu = new GLES1on3(this, &mGLState);
+    }
+
     mFenceNVHandleAllocator.setBaseHandle(0);
 
     // [OpenGL ES 2.0.24] section 3.7 page 83:
