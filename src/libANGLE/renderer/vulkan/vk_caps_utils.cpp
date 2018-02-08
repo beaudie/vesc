@@ -48,9 +48,16 @@ void FillTextureCapsMap(const VkPhysicalDevice &physicalDevice,
             // TODO(jmadill): Every angle format should be mapped to a vkFormat.
             continue;
         }
+
         VkFormatProperties formatProperties;
-        vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat.vkTextureFormat,
-                                            &formatProperties);
+
+        // Try filling out the info from our hard coded autogen switch, if we can't find the
+        // information we need, we'll make the call to Vulkan.
+        if (!rx::vk::FillMandatoryTextureCaps(vkFormat.vkTextureFormat, formatProperties))
+        {
+            vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat.vkTextureFormat,
+                                                &formatProperties);
+        }
 
         const gl::TextureCaps textureCaps = GenerateTextureFormatCaps(formatProperties);
         textureCapsMap->insert(internalFormat, textureCaps);
