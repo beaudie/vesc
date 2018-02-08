@@ -124,6 +124,11 @@ TextureState::TextureState(GLenum target)
       mUsage(GL_NONE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
+      mCropU(0),
+      mCropV(0),
+      mCropW(0),
+      mCropH(0),
+      mGenerateMipmapHint(false),
       mInitState(InitState::MayNeedInit)
 {
 }
@@ -169,7 +174,7 @@ GLuint TextureState::getMipmapMaxLevel() const
     GLuint expectedMipLevels       = 0;
     if (mTarget == GL_TEXTURE_3D)
     {
-        const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
+        const int maxDim  = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
                                     baseImageDesc.size.depth);
         expectedMipLevels = static_cast<GLuint>(log2(maxDim));
     }
@@ -1070,7 +1075,7 @@ Error Texture::copyTexture(const Context *context,
                                     unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
                                     source));
 
-    const auto &sourceDesc   = source->mState.getImageDesc(source->getTarget(), 0);
+    const auto &sourceDesc                   = source->mState.getImageDesc(source->getTarget(), 0);
     const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
     mState.setImageDesc(
         target, level,
@@ -1348,6 +1353,26 @@ const Format &Texture::getAttachmentFormat(GLenum /*binding*/, const ImageIndex 
 GLsizei Texture::getAttachmentSamples(const ImageIndex &imageIndex) const
 {
     return getSamples(imageIndex.type, 0);
+}
+
+void Texture::setCrop(const int *cropVals)
+{
+    mState.setCrop(cropVals);
+}
+
+void Texture::getCrop(int *cropVals) const
+{
+    mState.getCrop(cropVals);
+}
+
+void Texture::setGenerateMipmapHint(bool generate)
+{
+    mState.setGenerateMipmapHint(generate);
+}
+
+void Texture::getGenerateMipmapHint(bool *generate) const
+{
+    mState.getGenerateMipmapHint(generate);
 }
 
 void Texture::onAttach(const Context *context)
