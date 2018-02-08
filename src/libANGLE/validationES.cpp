@@ -92,8 +92,8 @@ bool ValidateDrawAttribs(ValidationContext *context,
 
         // If we have no buffer, then we either get an error, or there are no more checks to be
         // done.
-        const VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
-        gl::Buffer *buffer            = binding.getBuffer().get();
+        const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
+        gl::Buffer *buffer           = binding.getBuffer().get();
         if (!buffer)
         {
             if (webglCompatibility || !state.areClientArraysEnabled())
@@ -472,7 +472,7 @@ bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
 
 bool ValidateVertexShaderAttributeTypeMatch(ValidationContext *context)
 {
-    const auto &glState       = context->getGLState();
+    const auto &glState    = context->getGLState();
     const Program *program = context->getGLState().getProgram();
     const VertexArray *vao = context->getGLState().getVertexArray();
 
@@ -1314,7 +1314,7 @@ bool ValidateBlitFramebufferParameters(Context *context,
                     GLenum drawComponentType = drawFormat.info->componentType;
                     bool readFixedPoint      = (readComponentType == GL_UNSIGNED_NORMALIZED ||
                                            readComponentType == GL_SIGNED_NORMALIZED);
-                    bool drawFixedPoint = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
+                    bool drawFixedPoint      = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
                                            drawComponentType == GL_SIGNED_NORMALIZED);
 
                     if (extensions.colorBufferFloat)
@@ -2310,7 +2310,7 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
         return false;
     }
 
-    const auto &state    = context->getGLState();
+    const auto &state            = context->getGLState();
     Framebuffer *readFramebuffer = state.getReadFramebuffer();
     if (readFramebuffer->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -2601,7 +2601,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
          uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
         const gl::InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-        GLuint blockBinding                  = program->getUniformBlockBinding(uniformBlockIndex);
+        GLuint blockBinding                    = program->getUniformBlockBinding(uniformBlockIndex);
         const OffsetBindingPointer<Buffer> &uniformBuffer =
             state.getIndexedUniformBuffer(blockBinding);
 
@@ -4987,6 +4987,10 @@ bool ValidateGetTexParameterBase(Context *context, GLenum target, GLenum pname, 
             }
             break;
 
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            return context->getClientMajorVersion() < 2;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -5385,26 +5389,26 @@ bool ValidateTexParameterBase(Context *context,
         case GL_TEXTURE_WRAP_S:
         case GL_TEXTURE_WRAP_T:
         case GL_TEXTURE_WRAP_R:
+        {
+            bool restrictedWrapModes =
+                target == GL_TEXTURE_EXTERNAL_OES || target == GL_TEXTURE_RECTANGLE_ANGLE;
+            if (!ValidateTextureWrapModeValue(context, params, restrictedWrapModes))
             {
-                bool restrictedWrapModes =
-                    target == GL_TEXTURE_EXTERNAL_OES || target == GL_TEXTURE_RECTANGLE_ANGLE;
-                if (!ValidateTextureWrapModeValue(context, params, restrictedWrapModes))
-                {
-                    return false;
-                }
+                return false;
             }
-            break;
+        }
+        break;
 
         case GL_TEXTURE_MIN_FILTER:
+        {
+            bool restrictedMinFilter =
+                target == GL_TEXTURE_EXTERNAL_OES || target == GL_TEXTURE_RECTANGLE_ANGLE;
+            if (!ValidateTextureMinFilterValue(context, params, restrictedMinFilter))
             {
-                bool restrictedMinFilter =
-                    target == GL_TEXTURE_EXTERNAL_OES || target == GL_TEXTURE_RECTANGLE_ANGLE;
-                if (!ValidateTextureMinFilterValue(context, params, restrictedMinFilter))
-                {
-                    return false;
-                }
+                return false;
             }
-            break;
+        }
+        break;
 
         case GL_TEXTURE_MAG_FILTER:
             if (!ValidateTextureMagFilterValue(context, params))
@@ -5433,15 +5437,15 @@ bool ValidateTexParameterBase(Context *context,
             break;
 
         case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+        {
+            GLfloat paramValue = static_cast<GLfloat>(params[0]);
+            if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
             {
-                GLfloat paramValue = static_cast<GLfloat>(params[0]);
-                if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
-                {
-                    return false;
-                }
-                ASSERT(static_cast<ParamType>(paramValue) == params[0]);
+                return false;
             }
-            break;
+            ASSERT(static_cast<ParamType>(paramValue) == params[0]);
+        }
+        break;
 
         case GL_TEXTURE_MIN_LOD:
         case GL_TEXTURE_MAX_LOD:
@@ -5540,6 +5544,10 @@ bool ValidateTexParameterBase(Context *context,
                 return false;
             }
             break;
+
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            return context->getClientMajorVersion() < 2;
 
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
