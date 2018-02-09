@@ -1,0 +1,61 @@
+Name
+
+    CHROMIUM_texture_format_BGRA1010102
+
+Name Strings
+
+    None
+
+Version
+
+    Last Modified Date: February 7, 2018
+
+Dependencies
+
+    OpenGL ES 3.0 is required.
+
+    EXT_texture_format_BGRA8888 affects the definition of this extension.
+
+Overview
+
+    OpenGL ES has supported for a long time the RGB10_A2 texture format and
+    UNSIGNED_INT_2_10_10_10_REV, and RGBA as data type and format, respectively.
+
+    This extension adds support for BGRA_EXT data formats for the said texture
+    formats and data type.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+Additions to Chapter 3 of the OpenGL ES 3.0.5 Specification (Rasterization)
+
+    Modifications to table 3.2 (Valid combinations of format, type, and unsized
+    internalformat)
+
+        Add the following entries:
+
+                                                   External         Internal
+        Format    Type                             Bytes per Pixel  Format
+        ========  ===============================  ===============  ========
+        BGRA_EXT  UNSIGNED_INT_2_10_10_10_REV_EXT         4         RGB10_A2
+
+
+    Modifications to table 3.6 (Packed pixel formats)
+
+        Add the following entries:
+
+        type parameter                   GL          Number of    Matching
+        Token Name                       Data Type   Components   Pixel Formats
+        ===============================  ==========  ===========  ==============
+        UNSIGNED_INT_2_10_10_10_REV_EXT   uint            4        BGRA_EXT
+
+New State
+
+    None.
+
+Revision History
+
+    2/9/2018   Documented the extension
