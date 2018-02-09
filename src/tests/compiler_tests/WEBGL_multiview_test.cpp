@@ -688,7 +688,7 @@ TEST_F(WEBGLMultiviewFragmentShaderOutputCodeTest, ViewportArray2IsNotEmitted)
 TEST_F(WEBGLMultiviewComputeShaderOutputCodeTest, ViewportArray2IsNotEmitted)
 {
     const std::string &shaderString =
-        "#version 300 es\n"
+        "#version 310 es\n"
         "#extension GL_OVR_multiview : require\n"
         "void main()\n"
         "{\n"

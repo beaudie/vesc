@@ -1201,11 +1201,9 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.error_filters.case_11 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.error_groups.case_11 = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.buffer.bind_buffer_range = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader.compile_compute_shader = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.primitive_bounding_box = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.buffer.bind_buffer_range = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader.compile_compute_shader = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.primitive_bounding_box = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.tessellation_shader = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.bind_buffer_range = FAIL
@@ -1229,7 +1227,6 @@
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.copytexsubimage3d_invalid_offset = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage3d = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.texture.compressedtexsubimage3d_invalid_buffer_target = FAIL
-1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader.compile_compute_shader = SKIP
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
 1442 OPENGL D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.primitive_bounding_box = FAIL
