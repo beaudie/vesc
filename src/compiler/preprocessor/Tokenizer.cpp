@@ -908,6 +908,8 @@ IF YOU MODIFY THIS FILE YOU ALSO NEED TO RUN generate_parser.sh.
 #if defined(__GNUC__)
 // Triggered by the auto-generated yy_fatal_error function.
 #pragma GCC diagnostic ignored "-Wmissing-noreturn"
+// Flex uses `/*FALLTHROUGH*/` instead of dedicated statements.
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #elif defined(_MSC_VER)
 #pragma warning(disable: 4244)
 #endif
