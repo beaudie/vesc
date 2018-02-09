@@ -353,9 +353,10 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
     setASTMetadata(parseContext);
 
-    if (MapSpecToShaderVersion(shaderSpec) < shaderVersion)
+    // As the declaration of shader version 100 can be omitted, we check shader version after
+    // parsing the shader string.
+    if (!checkShaderVersion())
     {
-        mDiagnostics.globalError("unsupported shader version");
         return nullptr;
     }
 
@@ -366,6 +367,45 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
     }
 
     return root;
+}
+
+bool TCompiler::checkShaderVersion()
+{
+    if (MapSpecToShaderVersion(shaderSpec) < shaderVersion)
+    {
+        mDiagnostics.globalError("unsupported shader version");
+        return false;
+    }
+
+    if (shaderVersion < 310)
+    {
+        switch (shaderType)
+        {
+            case GL_COMPUTE_SHADER:
+                mDiagnostics.globalError("Compute shader is not supported in this shader version.");
+                return false;
+            case GL_GEOMETRY_SHADER_EXT:
+                mDiagnostics.globalError(
+                    "Geometry shader is not supported in this shader version.");
+                return false;
+            default:
+                break;
+        }
+    }
+    else if (shaderType == GL_GEOMETRY_SHADER_EXT)
+    {
+        const auto &gsExtension = extensionBehavior.find(TExtension::EXT_geometry_shader);
+        if (gsExtension == extensionBehavior.end() ||
+            gsExtension->second == TBehavior::EBhUndefined ||
+            gsExtension->second == TBehavior::EBhDisable)
+        {
+            mDiagnostics.globalError(
+                "Geometry shader is not supported without extension EXT_geometry_shader");
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void TCompiler::setASTMetadata(const TParseContext &parseContext)
