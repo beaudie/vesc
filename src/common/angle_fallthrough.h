@@ -6,8 +6,8 @@
 // aligned_memory: Defines ANGLE_FALLTHROUGH. Do not include in public headers.
 //
 
-#ifndef COMMON_ALIGNED_MEMORY_H_
-#define COMMON_ALIGNED_MEMORY_H_
+#ifndef COMMON_ANGLE_FALLTHROUGH_H_
+#define COMMON_ANGLE_FALLTHROUGH_H_
 
 // When clang suggests inserting [[clang::fallthrough]], it first checks if
 // it knows of a macro expanding to it, and if so suggests inserting the
@@ -21,4 +21,4 @@
 #define
 #endif
 
-#endif  // COMMON_ALIGNED_MEMORY_H_
+#endif  // COMMON_ANGLE_FALLTHROUGH_H_
