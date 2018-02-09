@@ -445,6 +445,7 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                                   "platform type of EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE or "
                                   "EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE.";
                     }
+                    break;
                 default:
                     break;
             }
@@ -2460,7 +2461,7 @@ Error ValidateSurfaceAttrib(const Display *display,
             switch (value)
             {
                 case EGL_MULTISAMPLE_RESOLVE_DEFAULT:
-                    break;
+                    return NoError();
 
                 case EGL_MULTISAMPLE_RESOLVE_BOX:
                     if ((surface->getConfig()->surfaceType & EGL_MULTISAMPLE_RESOLVE_BOX_BIT) == 0)
@@ -2468,7 +2469,7 @@ Error ValidateSurfaceAttrib(const Display *display,
                         return EglBadMatch()
                                << "Surface does not support EGL_MULTISAMPLE_RESOLVE_BOX.";
                     }
-                    break;
+                    return NoError();
 
                 default:
                     return EglBadAttribute() << "Invalid multisample resolve type.";
@@ -2483,10 +2484,10 @@ Error ValidateSurfaceAttrib(const Display *display,
                         return EglBadMatch()
                                << "Surface does not support EGL_SWAP_BEHAVIOR_PRESERVED.";
                     }
-                    break;
+                    return NoError();
 
                 case EGL_BUFFER_DESTROYED:
-                    break;
+                    return NoError();
 
                 default:
                     return EglBadAttribute() << "Invalid swap behaviour.";
