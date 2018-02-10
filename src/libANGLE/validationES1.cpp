@@ -592,4 +592,146 @@ bool ValidateQueryMatrixxOES(Context *context, GLfixed *mantissa, GLint *exponen
 {
     return true;
 }
+
+bool ValidateGenFramebuffersOES(Context *context, GLsizei n, GLuint *framebuffers)
+{
+    return true;
+}
+
+bool ValidateDeleteFramebuffersOES(Context *context, GLsizei n, const GLuint *framebuffers)
+{
+    return true;
+}
+
+bool ValidateGenRenderbuffersOES(Context *context, GLsizei n, GLuint *renderbuffers)
+{
+    return true;
+}
+
+bool ValidateDeleteRenderbuffersOES(Context *context, GLsizei n, const GLuint *renderbuffers)
+{
+    return true;
+}
+
+bool ValidateBindFramebufferOES(Context *context, GLenum target, GLuint framebuffer)
+{
+    return true;
+}
+
+bool ValidateBindRenderbufferOES(Context *context, GLenum target, GLuint renderbuffer)
+{
+    return true;
+}
+
+bool ValidateCheckFramebufferStatusOES(Context *context, GLenum target)
+{
+    return true;
+}
+
+bool ValidateFramebufferRenderbufferOES(Context *context,
+                                        GLenum target,
+                                        GLenum attachment,
+                                        GLenum rbtarget,
+                                        GLuint renderbuffer)
+{
+    return true;
+}
+
+bool ValidateFramebufferTexture2DOES(Context *context,
+                                     GLenum target,
+                                     GLenum attachment,
+                                     GLenum textarget,
+                                     GLuint texture,
+                                     GLint level)
+{
+    return true;
+}
+
+bool ValidateGenerateMipmapOES(Context *context, GLenum target)
+{
+    return true;
+}
+
+bool ValidateGetFramebufferAttachmentParameterivOES(Context *context,
+                                                    GLenum target,
+                                                    GLenum attachment,
+                                                    GLenum pname,
+                                                    GLint *params)
+{
+    return true;
+}
+
+bool ValidateGetRenderbufferParameterivOES(Context *context,
+                                           GLenum target,
+                                           GLenum pname,
+                                           GLint *params)
+{
+    return true;
+}
+
+bool ValidateIsFramebufferOES(Context *context, GLuint framebuffer)
+{
+    return true;
+}
+
+bool ValidateIsRenderbufferOES(Context *context, GLuint renderbuffer)
+{
+    return true;
+}
+
+bool ValidateRenderbufferStorageOES(Context *context,
+                                    GLenum target,
+                                    GLint internalformat,
+                                    GLsizei width,
+                                    GLsizei height)
+{
+    return true;
+}
+
+// GL_OES_texture_cube_map
+
+bool ValidateGetTexGenfvOES(Context *context, GLenum coord, GLenum pname, GLfloat *params)
+{
+    return true;
+}
+
+bool ValidateGetTexGenivOES(Context *context, GLenum coord, GLenum pname, int *params)
+{
+    return true;
+}
+
+bool ValidateGetTexGenxvOES(Context *context, GLenum coord, GLenum pname, GLfixed *params)
+{
+    return true;
+}
+
+bool ValidateTexGenfvOES(Context *context, GLenum coord, GLenum pname, const GLfloat *params)
+{
+    return true;
+}
+
+bool ValidateTexGenivOES(Context *context, GLenum coord, GLenum pname, const GLint *param)
+{
+    return true;
+}
+
+bool ValidateTexGenxvOES(Context *context, GLenum coord, GLenum pname, const GLint *param)
+{
+    return true;
+}
+
+bool ValidateTexGenfOES(Context *context, GLenum coord, GLenum pname, GLfloat param)
+{
+    return true;
+}
+
+bool ValidateTexGeniOES(Context *context, GLenum coord, GLenum pname, GLint param)
+{
+    return true;
+}
+
+bool ValidateTexGenxOES(Context *context, GLenum coord, GLenum pname, GLfixed param)
+{
+    return true;
+}
 }
