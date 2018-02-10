@@ -593,6 +593,7 @@ bool ValidateGetInternalFormativBase(Context *context,
                                      GLsizei bufSize,
                                      GLsizei *numParams);
 
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES_H_
