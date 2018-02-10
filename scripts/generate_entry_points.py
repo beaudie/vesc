@@ -14,12 +14,18 @@ from datetime import date
 # List of supported extensions. Add to this list to enable new extensions
 # available in gl.xml.
 # TODO(jmadill): Support extensions not in gl.xml.
-supported_extensions = sorted([
-    # ES1 (statically linked by some tests even if we don't support the extension)
+gles1_extensions = [
+    # ES1 (Possibly the min set of extensions needed by Android)
     "GL_OES_point_size_array",
     "GL_OES_query_matrix",
     "GL_OES_matrix_palette",
     "GL_OES_draw_texture",
+    "GL_OES_texture_cube_map",
+    "GL_OES_framebuffer_object",
+    "GL_OES_EGL_image",
+]
+
+supported_extensions = sorted(gles1_extensions + [
     # ES2+
     "GL_ANGLE_framebuffer_blit",
     "GL_ANGLE_framebuffer_multisample",
