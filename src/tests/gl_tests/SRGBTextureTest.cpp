@@ -286,7 +286,7 @@ TEST_P(SRGBTextureTest, GenerateMipmaps)
         return;
     }
 
-    if (IsOpenGL() && (IsIntel() || IsAMD()))
+    if (IsOpenGL() && IsOSX() && (IsIntel() || IsAMD()))
     {
         std::cout << "Test skipped on Intel and AMD OpenGL drivers." << std::endl;
         return;
