@@ -225,9 +225,11 @@ std::ostream &FmtHexInt(std::ostream &os, T value)
 
 #if !defined(NDEBUG)
 #define ANGLE_ASSERT_IMPL(expression) assert(expression)
+#define UNREACHABLE_IS_NORETURN 0
 #else
 // TODO(jmadill): Detect if debugger is attached and break.
 #define ANGLE_ASSERT_IMPL(expression) ANGLE_CRASH()
+#define UNREACHABLE_IS_NORETURN 1
 #endif  // !defined(NDEBUG)
 
 // A macro asserting a condition and outputting failures to the debug log
@@ -249,6 +251,7 @@ constexpr LogSeverity LOG_ASSERT = LOG_EVENT;
 #define ASSERT(condition)                                                     \
     ANGLE_LAZY_STREAM(ANGLE_LOG_STREAM(ASSERT), false ? !(condition) : false) \
         << "Check failed: " #condition ". "
+#define UNREACHABLE_IS_NORETURN 0
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
 
 #define UNUSED_VARIABLE(variable) ((void)variable)
