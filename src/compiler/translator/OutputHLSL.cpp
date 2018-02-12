@@ -2128,6 +2128,20 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             ASSERT(node->getUseEmulatedFunction());
             writeEmulatedFunctionTriplet(out, visit, node->getOp());
             break;
+        case EOpBarrier:
+            outputTriplet(out, visit, "GroupMemoryBarrierWithGroupSync(", "", ")");
+            break;
+        case EOpGroupMemoryBarrier:
+            outputTriplet(out, visit, "GroupMemoryBarrier(", "", ")");
+            break;
+        case EOpMemoryBarrier:
+            outputTriplet(out, visit, "AllMemoryBarrier(", "", ")");
+            break;
+        case EOpMemoryBarrierAtomicCounter:
+        case EOpMemoryBarrierBuffer:
+        case EOpMemoryBarrierImage:
+            outputTriplet(out, visit, "DeviceMemoryBarrier(", "", ")");
+            break;
         default:
             UNREACHABLE();
     }
