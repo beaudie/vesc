@@ -522,7 +522,7 @@ if (!is_android) {
     data = [
       "$root_out_dir/$data_dir/VkICD_mock_icd.json",
     ]
-    args += [ rebase_path("$root_out_dir/$data_dir", root_build_dir) ]
+    args += [ rebase_path("$root_out_dir/$data_dir/icd", root_build_dir) ]
   }
 }
 
