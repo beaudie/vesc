@@ -45,7 +45,7 @@ void InitializeViewIDAndInstanceID(const TVariable *viewID,
 
     // Create a uint(gl_InstanceID) node.
     TIntermSequence *glInstanceIDSymbolCastArguments = new TIntermSequence();
-    glInstanceIDSymbolCastArguments->push_back(new TIntermSymbol(&BuiltInVariable::gl_InstanceID));
+    glInstanceIDSymbolCastArguments->push_back(new TIntermSymbol(BuiltInVariable::gl_InstanceID()));
     TIntermAggregate *glInstanceIDAsUint = TIntermAggregate::CreateConstructor(
         TType(EbtUInt, EbpHigh, EvqTemporary), glInstanceIDSymbolCastArguments);
 
@@ -97,7 +97,7 @@ void SelectViewIndexInVertexShader(const TVariable *viewID,
         TType(EbtInt, EbpHigh, EvqTemporary), viewIDSymbolCastArguments);
 
     // Create a gl_ViewportIndex node.
-    TIntermSymbol *viewportIndexSymbol = new TIntermSymbol(&BuiltInVariable::gl_ViewportIndex);
+    TIntermSymbol *viewportIndexSymbol = new TIntermSymbol(BuiltInVariable::gl_ViewportIndex());
 
     // Create a { gl_ViewportIndex = int(ViewID_OVR) } node.
     TIntermBlock *viewportIndexInitializerInBlock = new TIntermBlock();
@@ -105,7 +105,7 @@ void SelectViewIndexInVertexShader(const TVariable *viewID,
         new TIntermBinary(EOpAssign, viewportIndexSymbol, viewIDAsInt));
 
     // Create a gl_Layer node.
-    TIntermSymbol *layerSymbol = new TIntermSymbol(&BuiltInVariable::gl_LayerVS);
+    TIntermSymbol *layerSymbol = new TIntermSymbol(BuiltInVariable::gl_LayerVS());
 
     // Create an int(ViewID_OVR) + multiviewBaseViewLayerIndex node
     TIntermBinary *sumOfViewIDAndBaseViewIndex = new TIntermBinary(
@@ -146,7 +146,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
                       new TType(EbtUInt, EbpHigh, viewIDQualifier), SymbolType::AngleInternal);
 
     DeclareGlobalVariable(root, viewID);
-    ReplaceVariable(root, &BuiltInVariable::gl_ViewID_OVR, viewID);
+    ReplaceVariable(root, BuiltInVariable::gl_ViewID_OVR(), viewID);
     if (shaderType == GL_VERTEX_SHADER)
     {
         // Replacing gl_InstanceID with InstanceID should happen before adding the initializers of
@@ -156,7 +156,7 @@ void DeclareAndInitBuiltinsForInstancedMultiview(TIntermBlock *root,
             new TVariable(symbolTable, kInstanceIDVariableName, instanceIDVariableType,
                           SymbolType::AngleInternal);
         DeclareGlobalVariable(root, instanceID);
-        ReplaceVariable(root, &BuiltInVariable::gl_InstanceID, instanceID);
+        ReplaceVariable(root, BuiltInVariable::gl_InstanceID(), instanceID);
 
         TIntermSequence *initializers = new TIntermSequence();
         InitializeViewIDAndInstanceID(viewID, instanceID, numberOfViews, *symbolTable,
