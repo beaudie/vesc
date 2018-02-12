@@ -1152,6 +1152,72 @@ TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTextureCube)
     }
 }
 
+// Test shader invocation control functions and shader memory control functions.
+TEST_P(ComputeShaderTest, ShaderInvocationAndMemoryControl)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=2, local_size_y=2, local_size_z=1) in;
+        layout(r32ui, binding = 0) uniform highp uimage2D uImage;
+        void main()
+        {
+            uint x = gl_LocalInvocationID.x;
+            uint y = gl_LocalInvocationID.y;
+            imageStore(uImage, ivec2(gl_LocalInvocationID.xy), uvec4(x + y));
+
+            memoryBarrier();
+            barrier();
+
+            uint sum = 0u;
+            for (int i = 0; i < 2; i++)
+            {
+                for(int j = 0; j < 2; j++)
+                {
+                    sum += imageLoad(uImage, ivec2(i, j)).x;
+                }
+            }
+
+            memoryBarrier();
+            barrier();
+
+            imageStore(uImage, ivec2(gl_LocalInvocationID.xy), uvec4(sum));
+
+            memoryBarrier();
+            barrier();
+        })";
+
+    constexpr int kWidth = 2, kHeight = 2;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint outputValues[4];
+    GLuint expectedValue = 4;
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth, kHeight, GL_RED_INTEGER, GL_UNSIGNED_INT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < kWidth * kHeight; i++)
+    {
+        EXPECT_EQ(expectedValue, outputValues[i]);
+    }
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
