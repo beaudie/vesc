@@ -22,50 +22,50 @@ void TSymbolTable::insertStaticBuiltInVariables(sh::GLenum shaderType,
 {
     if (shaderType == GL_FRAGMENT_SHADER)
     {
-        insertBuiltIn(COMMON_BUILTINS, &BuiltInVariable::gl_FragCoord);
-        insertBuiltIn(COMMON_BUILTINS, &BuiltInVariable::gl_FrontFacing);
-        insertBuiltIn(COMMON_BUILTINS, &BuiltInVariable::gl_PointCoord);
-        insertBuiltIn(ESSL1_BUILTINS, &BuiltInVariable::gl_FragColor);
-        insertBuiltIn(ESSL3_BUILTINS, &BuiltInVariable::gl_FragDepth);
+        insertBuiltIn(COMMON_BUILTINS, BuiltInVariable::gl_FragCoord());
+        insertBuiltIn(COMMON_BUILTINS, BuiltInVariable::gl_FrontFacing());
+        insertBuiltIn(COMMON_BUILTINS, BuiltInVariable::gl_PointCoord());
+        insertBuiltIn(ESSL1_BUILTINS, BuiltInVariable::gl_FragColor());
+        insertBuiltIn(ESSL3_BUILTINS, BuiltInVariable::gl_FragDepth());
         if (resources.EXT_blend_func_extended)
         {
-            insertBuiltIn(ESSL1_BUILTINS, &BuiltInVariable::gl_SecondaryFragColorEXT);
+            insertBuiltIn(ESSL1_BUILTINS, BuiltInVariable::gl_SecondaryFragColorEXT());
         }
         if (resources.NV_shader_framebuffer_fetch)
         {
-            insertBuiltIn(ESSL1_BUILTINS, &BuiltInVariable::gl_LastFragColor);
+            insertBuiltIn(ESSL1_BUILTINS, BuiltInVariable::gl_LastFragColor());
         }
         if (!resources.EXT_shader_framebuffer_fetch && !resources.NV_shader_framebuffer_fetch &&
             resources.ARM_shader_framebuffer_fetch)
         {
-            insertBuiltIn(ESSL1_BUILTINS, &BuiltInVariable::gl_LastFragColorARM);
+            insertBuiltIn(ESSL1_BUILTINS, BuiltInVariable::gl_LastFragColorARM());
         }
         if (resources.EXT_geometry_shader)
         {
-            insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_PrimitiveID);
-            insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_Layer);
+            insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_PrimitiveID());
+            insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_Layer());
         }
     }
-    insertBuiltIn(COMMON_BUILTINS, &BuiltInVariable::gl_Position);
-    insertBuiltIn(COMMON_BUILTINS, &BuiltInVariable::gl_PointSize);
-    insertBuiltIn(ESSL3_BUILTINS, &BuiltInVariable::gl_InstanceID);
-    insertBuiltIn(ESSL3_BUILTINS, &BuiltInVariable::gl_VertexID);
-    insertBuiltIn(GLSL_BUILTINS, &BuiltInVariable::gl_ViewportIndex);
-    insertBuiltIn(GLSL_BUILTINS, &BuiltInVariable::gl_LayerVS);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_NumWorkGroups);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_WorkGroupSize);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_WorkGroupID);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_LocalInvocationID);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_GlobalInvocationID);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_LocalInvocationIndex);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_PrimitiveIDIn);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_InvocationID);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_PrimitiveIDGS);
-    insertBuiltIn(ESSL3_1_BUILTINS, &BuiltInVariable::gl_LayerGS);
+    insertBuiltIn(COMMON_BUILTINS, BuiltInVariable::gl_Position());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInVariable::gl_PointSize());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInVariable::gl_InstanceID());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInVariable::gl_VertexID());
+    insertBuiltIn(GLSL_BUILTINS, BuiltInVariable::gl_ViewportIndex());
+    insertBuiltIn(GLSL_BUILTINS, BuiltInVariable::gl_LayerVS());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_NumWorkGroups());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_WorkGroupSize());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_WorkGroupID());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_LocalInvocationID());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_GlobalInvocationID());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_LocalInvocationIndex());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_PrimitiveIDIn());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_InvocationID());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_PrimitiveIDGS());
+    insertBuiltIn(ESSL3_1_BUILTINS, BuiltInVariable::gl_LayerGS());
     if (resources.OVR_multiview && shaderType != GL_COMPUTE_SHADER)
     {
-        insertBuiltIn(ESSL3_BUILTINS, &BuiltInVariable::gl_ViewID_OVR);
-        insertBuiltIn(ESSL1_BUILTINS, &BuiltInVariable::gl_ViewID_OVRESSL1);
+        insertBuiltIn(ESSL3_BUILTINS, BuiltInVariable::gl_ViewID_OVR());
+        insertBuiltIn(ESSL1_BUILTINS, BuiltInVariable::gl_ViewID_OVRESSL1());
     }
 }
 

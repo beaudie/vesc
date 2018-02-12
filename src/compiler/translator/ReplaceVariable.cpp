@@ -10,7 +10,6 @@
 
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/IntermTraverse.h"
-#include "compiler/translator/Symbol.h"
 
 namespace sh
 {
@@ -30,7 +29,7 @@ class ReplaceVariableTraverser : public TIntermTraverser
 
     void visitSymbol(TIntermSymbol *node) override
     {
-        if (node->variable().uniqueId() == mToBeReplaced->uniqueId())
+        if (&node->variable() == mToBeReplaced)
         {
             queueReplacement(new TIntermSymbol(mReplacement), OriginalNode::IS_DROPPED);
         }
