@@ -9,6 +9,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "common/angle_fallthrough.h"
 #include "common/mathutil.h"
 #include "compiler/preprocessor/SourceLocation.h"
 #include "compiler/translator/Declarator.h"
@@ -4995,6 +4996,7 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 break;
             case EOpIndexDirectStruct:
                 UNREACHABLE();
+                ANGLE_FALLTHROUGH;
 
             default:
                 error(loc, "Invalid operation for variables with an opaque type",

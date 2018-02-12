@@ -3,7 +3,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// aligned_memory: Defines ANGLE_FALLTHROUGH. Do not include in public headers.
+// Defines ANGLE_FALLTHROUGH. Do not include in public headers.
 //
 
 #ifndef COMMON_ANGLE_FALLTHROUGH_H_

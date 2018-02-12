@@ -216,6 +216,7 @@ GLenum GLVariableType(const TType &type)
                     return GL_FLOAT_VEC4;
                 default:
                     UNREACHABLE();
+                    return GL_NONE;
             }
         }
         else if (type.isMatrix())
@@ -233,6 +234,7 @@ GLenum GLVariableType(const TType &type)
                             return GL_FLOAT_MAT2x4;
                         default:
                             UNREACHABLE();
+                            return GL_NONE;
                     }
 
                 case 3:
@@ -246,6 +248,7 @@ GLenum GLVariableType(const TType &type)
                             return GL_FLOAT_MAT3x4;
                         default:
                             UNREACHABLE();
+                            return GL_NONE;
                     }
 
                 case 4:
@@ -259,10 +262,12 @@ GLenum GLVariableType(const TType &type)
                             return GL_FLOAT_MAT4;
                         default:
                             UNREACHABLE();
+                            return GL_NONE;
                     }
 
                 default:
                     UNREACHABLE();
+                    return GL_NONE;
             }
         }
         else
@@ -284,6 +289,7 @@ GLenum GLVariableType(const TType &type)
                     return GL_INT_VEC4;
                 default:
                     UNREACHABLE();
+                    return GL_NONE;
             }
         }
         else
@@ -306,6 +312,7 @@ GLenum GLVariableType(const TType &type)
                     return GL_UNSIGNED_INT_VEC4;
                 default:
                     UNREACHABLE();
+                    return GL_NONE;
             }
         }
         else
@@ -328,6 +335,7 @@ GLenum GLVariableType(const TType &type)
                     return GL_BOOL_VEC4;
                 default:
                     UNREACHABLE();
+                    return GL_NONE;
             }
         }
         else
