@@ -349,7 +349,7 @@ TIntermAggregate *TIntermAggregate::CreateRawFunctionCall(const TFunction &func,
     return new TIntermAggregate(&func, func.getReturnType(), EOpCallInternalRawFunction, arguments);
 }
 
-TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TFunction &func,
+TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TBuiltInFunction &func,
                                                               TIntermSequence *arguments)
 {
     TIntermAggregate *callNode =
@@ -365,18 +365,12 @@ TIntermAggregate *TIntermAggregate::CreateConstructor(const TType &type,
     return new TIntermAggregate(nullptr, type, EOpConstruct, arguments);
 }
 
-TIntermAggregate *TIntermAggregate::Create(const TFunction &func,
-                                           TOperator op,
-                                           TIntermSequence *arguments)
+TIntermAggregate *TIntermAggregate::Create(const TBuiltInFunction &func, TIntermSequence *arguments)
 {
-    ASSERT(op != EOpCallFunctionInAST);    // Should use CreateFunctionCall
-    ASSERT(op != EOpCallInternalRawFunction);  // Should use CreateRawFunctionCall
-    ASSERT(op != EOpCallBuiltInFunction);  // Should use CreateBuiltInFunctionCall
-    ASSERT(op != EOpConstruct);            // Should use CreateConstructor
-    return new TIntermAggregate(&func, func.getReturnType(), op, arguments);
+    return new TIntermAggregate(&func, func.getReturnType(), func.getBuiltInOp(), arguments);
 }
 
-TIntermAggregate::TIntermAggregate(const TFunction *func,
+TIntermAggregate::TIntermAggregate(const TFunctionBase *func,
                                    const TType &type,
                                    TOperator op,
                                    TIntermSequence *arguments)

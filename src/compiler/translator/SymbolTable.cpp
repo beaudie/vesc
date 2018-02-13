@@ -603,30 +603,29 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else
     {
-        TFunction *function =
-            new TFunction(this, ImmutableString(name), rvalue, SymbolType::BuiltIn, false, op, ext);
-
-        function->addParameter(TConstParameter(ptype1));
-
-        if (ptype2)
-        {
-            function->addParameter(TConstParameter(ptype2));
-        }
-
-        if (ptype3)
-        {
-            function->addParameter(TConstParameter(ptype3));
-        }
-
-        if (ptype4)
-        {
-            function->addParameter(TConstParameter(ptype4));
-        }
-
+        size_t paramCount = 1;
+        TBuiltInFunction::ParamList params{{TConstParameter(ptype1), TConstParameter(ptype2),
+                                            TConstParameter(ptype3), TConstParameter(ptype4),
+                                            TConstParameter(ptype5)}};
         if (ptype5)
         {
-            function->addParameter(TConstParameter(ptype5));
+            paramCount = 5;
         }
+        else if (ptype4)
+        {
+            paramCount = 4;
+        }
+        else if (ptype3)
+        {
+            paramCount = 3;
+        }
+        else if (ptype2)
+        {
+            paramCount = 2;
+        }
+        TBuiltInFunction *function =
+            new TBuiltInFunction(this, ImmutableString(name), SymbolType::BuiltIn, ext, rvalue,
+                                 false, op, paramCount, params);
 
         ASSERT(hasUnmangledBuiltInAtLevel(name, level));
         insert(level, function);
@@ -670,8 +669,9 @@ void TSymbolTable::insertBuiltInFunctionNoParameters(ESymbolLevel level,
                                                      const char *name)
 {
     insertUnmangledBuiltInName(name, level);
-    insert(level,
-           new TFunction(this, ImmutableString(name), rvalue, SymbolType::BuiltIn, false, op));
+    TBuiltInFunction::ParamList params;
+    insert(level, new TBuiltInFunction(this, ImmutableString(name), SymbolType::BuiltIn,
+                                       TExtension::UNDEFINED, rvalue, false, op, 0, params));
 }
 
 void TSymbolTable::insertBuiltInFunctionNoParametersExt(ESymbolLevel level,
@@ -681,8 +681,9 @@ void TSymbolTable::insertBuiltInFunctionNoParametersExt(ESymbolLevel level,
                                                         const char *name)
 {
     insertUnmangledBuiltInName(name, level);
-    insert(level,
-           new TFunction(this, ImmutableString(name), rvalue, SymbolType::BuiltIn, false, op, ext));
+    TBuiltInFunction::ParamList params;
+    insert(level, new TBuiltInFunction(this, ImmutableString(name), SymbolType::BuiltIn, ext,
+                                       rvalue, false, op, 0, params));
 }
 
 void TSymbolTable::setDefaultPrecision(TBasicType type, TPrecision prec)
