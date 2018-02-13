@@ -11,6 +11,7 @@
 
 #include "common/bitset_utils.h"
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
@@ -68,7 +69,8 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mCurrentDrawMode(GL_NONE),
       mVertexArrayDirty(false),
       mTexturesDirty(false),
-      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 1024)
+      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 1024),
+      mStreamingIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 1024 * 8)
 {
 }
 
@@ -281,30 +283,42 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, count, &commandBuffer));
-
-    if (indices)
-    {
-        // TODO(jmadill): Buffer offsets and immediate data.
-        UNIMPLEMENTED();
-        return gl::InternalError() << "Only zero-offset index buffers are currently implemented.";
-    }
-
     if (type == GL_UNSIGNED_BYTE)
     {
-        // TODO(jmadill): Index translation.
+        // TODO(fjhenigman): Index format translation.
         UNIMPLEMENTED();
         return gl::InternalError() << "Unsigned byte translation is not yet implemented.";
     }
 
-    const gl::Buffer *elementArrayBuffer =
-        mState.getState().getVertexArray()->getElementArrayBuffer().get();
-    ASSERT(elementArrayBuffer);
+    gl::IndexRange range;
+    VkBuffer buffer;
+    VkDeviceSize offset;
+    if (indices)
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        range = gl::ComputeIndexRange(type, indices, count, false /*primitiveRestartEnabled*/);
+        GLsizei amount = sizeof(GLushort) * count;
+        uint8_t *dst   = nullptr;
+        ANGLE_TRY(mStreamingIndexData.allocate(contextVk, amount, &dst, &buffer, &offset));
+        memcpy(dst, indices, amount);
+        ANGLE_TRY(mStreamingIndexData.flush(contextVk));
+    }
+    else
+    {
+        const gl::Buffer *elementArrayBuffer =
+            mState.getState().getVertexArray()->getElementArrayBuffer().get();
+        ASSERT(elementArrayBuffer);
 
-    BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+        BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+        ANGLE_TRY(elementArrayBufferVk->getIndexRange(context, type, 0, count,
+                                                      false /*primitiveRestartEnabled*/, &range));
+        buffer = elementArrayBufferVk->getVkBuffer().getHandle();
+        offset = 0;
+    }
 
-    commandBuffer->bindIndexBuffer(elementArrayBufferVk->getVkBuffer(), 0, GetVkIndexType(type));
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, range.end, &commandBuffer));
+    commandBuffer->bindIndexBuffer(buffer, offset, GetVkIndexType(type));
     commandBuffer->drawIndexed(count, 1, 0, 0, 0);
 
     return gl::NoError();

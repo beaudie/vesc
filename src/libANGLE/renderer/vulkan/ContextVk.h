@@ -183,6 +183,7 @@ class ContextVk : public ContextImpl
     bool mTexturesDirty;
 
     StreamingBuffer mStreamingVertexData;
+    StreamingBuffer mStreamingIndexData;
 };
 
 }  // namespace rx
