@@ -1690,7 +1690,7 @@ void TParseContext::checkYuvIsNotSpecified(const TSourceLoc &location, bool yuv)
     }
 }
 
-void TParseContext::functionCallRValueLValueErrorCheck(const TFunction *fnCandidate,
+void TParseContext::functionCallRValueLValueErrorCheck(const TFunctionBase *fnCandidate,
                                                        TIntermAggregate *fnCall)
 {
     for (size_t i = 0; i < fnCandidate->getParamCount(); ++i)
@@ -3429,7 +3429,7 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     }
 
     // Add the function as a prototype after parsing it (we do not support recursion)
-    return new TFunction(&symbolTable, name, new TType(type), SymbolType::UserDefined, false);
+    return new TFunction(&symbolTable, name, SymbolType::UserDefined, new TType(type), false);
 }
 
 TFunctionLookup *TParseContext::addNonConstructorFunc(const ImmutableString &name)
@@ -5816,7 +5816,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         }
         else
         {
-            const TFunction *fnCandidate = static_cast<const TFunction *>(symbol);
+            const TFunctionBase *fnCandidate = static_cast<const TFunctionBase *>(symbol);
             //
             // A declared function.
             //
@@ -5838,8 +5838,8 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
                 }
                 else
                 {
-                    TIntermAggregate *callNode =
-                        TIntermAggregate::Create(*fnCandidate, op, &fnCall->arguments());
+                    TIntermAggregate *callNode = TIntermAggregate::CreateBuiltInFunctionCall(
+                        *static_cast<const TBuiltInFunction *>(fnCandidate), &fnCall->arguments());
                     callNode->setLine(loc);
 
                     // Some built-in functions have out parameters too.
@@ -5860,8 +5860,8 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
                 // function with no op associated with it.
                 if (fnCandidate->symbolType() == SymbolType::BuiltIn)
                 {
-                    callNode = TIntermAggregate::CreateBuiltInFunctionCall(*fnCandidate,
-                                                                           &fnCall->arguments());
+                    callNode = TIntermAggregate::CreateBuiltInFunctionCall(
+                        *static_cast<const TBuiltInFunction *>(fnCandidate), &fnCall->arguments());
                     checkTextureOffsetConst(callNode);
                     checkTextureGather(callNode);
                     checkImageMemoryAccessForBuiltinFunctions(callNode);
@@ -5869,9 +5869,10 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
                 }
                 else
                 {
-                    callNode =
-                        TIntermAggregate::CreateFunctionCall(*fnCandidate, &fnCall->arguments());
-                    checkImageMemoryAccessForUserDefinedFunctions(fnCandidate, callNode);
+                    callNode = TIntermAggregate::CreateFunctionCall(
+                        *static_cast<const TFunction *>(fnCandidate), &fnCall->arguments());
+                    checkImageMemoryAccessForUserDefinedFunctions(
+                        static_cast<const TFunction *>(fnCandidate), callNode);
                 }
 
                 functionCallRValueLValueErrorCheck(fnCandidate, callNode);
