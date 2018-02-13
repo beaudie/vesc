@@ -133,9 +133,6 @@ TEST_P(ClearTest, RGBA8Framebuffer)
 
 TEST_P(ClearTest, ClearIssue)
 {
-    // TODO(jmadill): Depth/Stencil clears on Vulkan. http://anglebug.com/2357
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
@@ -167,7 +164,7 @@ TEST_P(ClearTest, ClearIssue)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     setupDefaultProgram();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, "position", 0.5f, 1.0f, true);
 
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
 }
