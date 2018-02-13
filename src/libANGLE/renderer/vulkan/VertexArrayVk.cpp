@@ -43,11 +43,33 @@ void VertexArrayVk::destroy(const gl::Context *context)
 {
 }
 
+bool VertexArrayVk::isVertexDataInClientMemory(const ContextVk *context) const
+{
+    const auto &attribs          = mState.getVertexAttributes();
+    const auto &bindings         = mState.getVertexBindings();
+    const gl::Program *programGL = context->getGLState().getProgram();
+
+    for (auto attribIndex : programGL->getActiveAttribLocationsMask())
+    {
+        const auto &attrib  = attribs[attribIndex];
+        const auto &binding = bindings[attrib.bindingIndex];
+        if (attrib.enabled && binding.getBuffer().get() == nullptr)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
                                           StreamingBuffer *stream,
-                                          int firstVertex,
-                                          int lastVertex)
+                                          size_t firstVertex,
+                                          size_t lastVertex)
 {
+    if (firstVertex >= lastVertex)
+        return gl::NoError();
+
     const auto &attribs          = mState.getVertexAttributes();
     const auto &bindings         = mState.getVertexBindings();
     const gl::Program *programGL = context->getGLState().getProgram();
@@ -176,9 +198,8 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
     }
 
     // Handle the bound element array buffer.
-    if (drawType == DrawType::Elements)
+    if (drawType == DrawType::Elements && mCurrentElementArrayBufferResource)
     {
-        ASSERT(mCurrentElementArrayBufferResource);
         mCurrentElementArrayBufferResource->onReadResource(readNode, serial);
     }
 }

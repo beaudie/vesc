@@ -25,11 +25,12 @@ class VertexArrayVk : public VertexArrayImpl
     ~VertexArrayVk() override;
 
     void destroy(const gl::Context *context) override;
+    bool isVertexDataInClientMemory(const ContextVk *context) const;
 
     gl::Error streamVertexData(ContextVk *context,
                                StreamingBuffer *stream,
-                               int firstVertex,
-                               int lastVertex);
+                               size_t firstVertex,
+                               size_t lastVertex);
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
 
