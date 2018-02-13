@@ -165,7 +165,7 @@ TEST_P(ClearTest, ClearIssue)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     setupDefaultProgram();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, "position", 0.5f, 1.0f, true);
 
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
 }
@@ -481,7 +481,8 @@ ANGLE_INSTANTIATE_TEST(ClearTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ScissoredClearTest, ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
 

@@ -40,7 +40,8 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
                                      size_t height)
 {
     ContextVk *contextVk       = vk::GetImpl(context);
-    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(internalformat);
+    RendererVk *renderer       = contextVk->getRenderer();
+    const vk::Format &vkFormat = renderer->getFormat(internalformat);
 
     VkImageUsageFlags usage =
         (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
@@ -68,7 +69,17 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
     ANGLE_TRY(mImage.init(contextVk->getDevice(), imageInfo));
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(vk::AllocateImageMemory(contextVk, flags, &mImage, &mDeviceMemory, &mRequiredSize));
+    ANGLE_TRY(vk::AllocateImageMemory(renderer, flags, &mImage, &mDeviceMemory, &mRequiredSize));
+
+    // Init RenderTarget.
+    mRenderTarget.extents.width  = static_cast<int>(width);
+    mRenderTarget.extents.height = static_cast<int>(height);
+    mRenderTarget.extents.depth  = 1;
+    mRenderTarget.format         = &vkFormat;
+    mRenderTarget.image          = &mImage;
+    mRenderTarget.resource       = this;
+    mRenderTarget.samples        = VK_SAMPLE_COUNT_1_BIT;  // TODO(jmadill): Multisample bits.
+
     return gl::NoError();
 }
 
@@ -88,13 +99,14 @@ gl::Error RenderbufferVk::setStorageEGLImageTarget(const gl::Context *context, e
     return gl::InternalError();
 }
 
-gl::Error RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
-                                                    const gl::ImageIndex &imageIndex,
+gl::Error RenderbufferVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
+                                                    GLenum /*binding*/,
+                                                    const gl::ImageIndex & /*imageIndex*/,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    ASSERT(mImage.valid());
+    *rtOut = &mRenderTarget;
+    return gl::NoError();
 }
 
 gl::Error RenderbufferVk::initializeContents(const gl::Context *context,
