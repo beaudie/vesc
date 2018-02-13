@@ -43,6 +43,11 @@ void VertexArrayVk::destroy(const gl::Context *context)
 {
 }
 
+bool VertexArrayVk::isVertexDataInClientMemory() const
+{
+    return mClientMemoryAttribs.any();
+}
+
 gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
                                           StreamingBuffer *stream,
                                           size_t firstVertex,
@@ -179,7 +184,7 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
     }
 
     // Handle the bound element array buffer.
-    if (drawType == DrawType::Elements)
+    if (drawType == DrawType::Elements && mCurrentElementArrayBufferResource)
     {
         if (elementArrayBufferOverride != nullptr)
         {
