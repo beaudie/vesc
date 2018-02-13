@@ -542,11 +542,7 @@ TEST_P(GLSLTest, ScopedStructsOrderBug)
     // (http://anglebug.com/1292)
     // TODO(geofflang): Find out why this doesn't compile on AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    if (IsDesktopOpenGL() && (IsOSX() || !IsNVIDIA()))
-    {
-        std::cout << "Test disabled on this OpenGL configuration." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL() && (IsOSX() || !IsNVIDIA()));
 
     const std::string fragmentShaderSource =
         R"(precision mediump float;
@@ -821,11 +817,7 @@ TEST_P(GLSLTest_ES3, InvariantVaryingOut)
 {
     // TODO: ESSL 3.00 -> GLSL 1.20 translation should add "invariant" in fragment shader
     // for varyings which are invariant in vertex shader (http://anglebug.com/1293)
-    if (IsDesktopOpenGL())
-    {
-        std::cout << "Test disabled on OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL());
 
     const std::string fragmentShaderSource =
         "#version 300 es\n"
@@ -963,11 +955,7 @@ TEST_P(GLSLTest, InvariantAllBoth)
     // TODO: ESSL 1.00 -> GLSL 1.20 translation should add "invariant" in fragment shader
     // for varyings which are invariant in vertex shader individually,
     // and remove invariant(all) from fragment shader (http://anglebug.com/1293)
-    if (IsDesktopOpenGL())
-    {
-        std::cout << "Test disabled on OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL());
 
     const std::string fragmentShaderSource =
         "#pragma STDGL invariant(all)\n"
@@ -1144,13 +1132,8 @@ TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
     // TODO(cwallez) remove the suppression once NVIDIA drivers are updated across trybots, drivers
     // since late 2016 should have the fix. Last check on 2017-05-30 revealed that the Windows
     // Server 2008 bots still had the old, failing drivers.
-    if (IsNVIDIA() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on NVIDIA OpenGL ES because it disallows returning "
-                     "structure of arrays"
-                  << std::endl;
-        return;
-    }
+    // It disallows returning structure of arrays on NVIDIA OpenGL ES.
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
 
     const std::string vertexShaderSource =
         "#version 300 es\n"
@@ -1255,11 +1238,7 @@ TEST_P(GLSLTest_ES3, InvariantAllOut)
     // TODO: ESSL 3.00 -> GLSL 1.20 translation should add "invariant" in fragment shader
     // for varyings which are invariant in vertex shader,
     // because of invariant(all) being used in vertex shader (http://anglebug.com/1293)
-    if (IsDesktopOpenGL())
-    {
-        std::cout << "Test disabled on OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL());
 
     const std::string fragmentShaderSource =
         "#version 300 es\n"
@@ -1282,13 +1261,9 @@ TEST_P(GLSLTest_ES3, InvariantAllOut)
 TEST_P(GLSLTest, MaxVaryingVec4)
 {
 #if defined(__APPLE__)
-    // TODO(geofflang): Find out why this doesn't compile on Apple AND OpenGL drivers
+    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test disabled on Apple AMD OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 #endif
 
     GLint maxVaryings = 0;
@@ -1400,13 +1375,9 @@ TEST_P(GLSLTest, TwiceMaxVaryingVec2)
     }
 
 #if defined(__APPLE__)
-    // TODO(geofflang): Find out why this doesn't compile on Apple AND OpenGL drivers
+    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test disabled on Apple AMD OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 #endif
 
     GLint maxVaryings = 0;
@@ -1418,27 +1389,15 @@ TEST_P(GLSLTest, TwiceMaxVaryingVec2)
 // Disabled because of a failure in D3D9
 TEST_P(GLSLTest, MaxVaryingVec2Arrays)
 {
-    if (IsD3DSM3())
-    {
-        std::cout << "Test disabled on SM3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3DSM3());
 
-    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE)
-    {
-        // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
-        std::cout << "Test disabled on OpenGL ES." << std::endl;
-        return;
-    }
+    // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
+    ANGLE_SKIP_TEST_IF(IsOpenGLES());
 
 #if defined(__APPLE__)
-    // TODO(geofflang): Find out why this doesn't compile on Apple AND OpenGL drivers
+    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        std::cout << "Test disabled on Apple AMD OpenGL." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 #endif
 
     GLint maxVaryings = 0;
@@ -2056,11 +2015,7 @@ TEST_P(GLSLTest_ES3, LargeNumberOfFloat4Parameters)
 TEST_P(GLSLTest_ES3, InitGlobalArrayWithArrayIndexing)
 {
     // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1428 is fixed
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     const std::string vertexShaderSource =
         "#version 300 es\n"
@@ -2089,10 +2044,7 @@ TEST_P(GLSLTest_ES3, InitGlobalArrayWithArrayIndexing)
 // Test that index-constant sampler array indexing is supported.
 TEST_P(GLSLTest, IndexConstantSamplerArrayIndexing)
 {
-    if (IsD3D11_FL93()) {
-        std::cout << "Test skipped on D3D11 FL 9.3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11_FL93());
 
     const std::string vertexShaderSource =
         "attribute vec4 vPosition;\n"
@@ -2718,11 +2670,7 @@ TEST_P(WebGLGLSLTest, MaxVaryingVec3ArrayAndMaxPlusOneFloatArray)
 TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
 {
     // Suspecting AMD driver bug - failure seen on bots running on AMD R5 230.
-    if (IsAMD() && IsOpenGL() && IsLinux())
-    {
-        std::cout << "Test skipped on AMD OpenGL Linux" << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsLinux());
 
     // Failing on N5X Oreo http://anglebug.com/2304
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
@@ -2751,13 +2699,8 @@ TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
 // Test that writing into a swizzled vector that is dynamically indexed succeeds.
 TEST_P(GLSLTest_ES3, WriteIntoDynamicIndexingOfSwizzledVector)
 {
-    if (IsOpenGL())
-    {
-        // http://anglebug.com/1924
-        std::cout << "Test skipped on all OpenGL configurations because it has incorrect results"
-                  << std::endl;
-        return;
-    }
+    // http://anglebug.com/1924
+    ANGLE_SKIP_TEST_IF(IsOpenGL());
 
     // The shader first assigns v.x to v.z (1.0)
     // Then v.y to v.y (2.0)
@@ -2786,11 +2729,7 @@ TEST_P(GLSLTest_ES3, NestedSamplingOperation)
 {
     // This seems to be bugged on some version of Android. Might not affect the newest versions.
     // TODO(jmadill): Lift suppression when Chromium bots are upgraded.
-    if (IsAndroid() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Android because of bug with Nexus 5X." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
     const std::string &vertexShader =
         "#version 300 es\n"
@@ -2914,14 +2853,8 @@ TEST_P(GLSLTest_ES3, ConstantStatementAsLoopInit)
 // Test that uninitialized local variables are initialized to 0.
 TEST_P(GLSLTest_ES3, InitUninitializedLocals)
 {
-    if (IsAndroid() && IsOpenGLES())
-    {
-        // http://anglebug.com/2046
-        std::cout
-            << "Test skipped on Android GLES because local variable initialization is disabled."
-            << std::endl;
-        return;
-    }
+    // http://anglebug.com/2046
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
     const std::string &fragmentShader =
         "#version 300 es\n"
@@ -2956,14 +2889,8 @@ TEST_P(GLSLTest_ES3, InitUninitializedLocals)
 // specifically tests with two different struct variables declared in the same block.
 TEST_P(GLSLTest, InitUninitializedStructContainingArrays)
 {
-    if (IsAndroid() && IsOpenGLES())
-    {
-        // http://anglebug.com/2046
-        std::cout
-            << "Test skipped on Android GLES because local variable initialization is disabled."
-            << std::endl;
-        return;
-    }
+    // http://anglebug.com/2046
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
     const std::string &fragmentShader =
         "precision mediump float;\n"
@@ -3045,14 +2972,8 @@ TEST_P(GLSLTest, StructureNameMatchingTest)
 // Test that an uninitialized nameless struct inside a for loop init statement works.
 TEST_P(GLSLTest_ES3, UninitializedNamelessStructInForInitStatement)
 {
-    if (IsAndroid() && IsOpenGLES())
-    {
-        // http://anglebug.com/2046
-        std::cout
-            << "Test skipped on Android GLES because local variable initialization is disabled."
-            << std::endl;
-        return;
-    }
+    // http://anglebug.com/2046
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
     const std::string &fragmentShader =
         "#version 300 es\n"
@@ -3290,12 +3211,8 @@ TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
 // This test covers passing an array of structs containing samplers as a function argument.
 TEST_P(GLSLTest, ArrayOfStructsWithSamplersAsFunctionArg)
 {
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        // Shader failed to compile on Android. http://anglebug.com/2114
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    // Shader failed to compile on Android. http://anglebug.com/2114
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     const std::string &vertexShader =
         "attribute vec2 position;\n"
@@ -3352,12 +3269,8 @@ TEST_P(GLSLTest, ArrayOfStructsWithSamplersAsFunctionArg)
 // This test covers passing a struct containing an array of samplers as a function argument.
 TEST_P(GLSLTest, StructWithSamplerArrayAsFunctionArg)
 {
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        // Shader failed to compile on Android. http://anglebug.com/2114
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    // Shader failed to compile on Android. http://anglebug.com/2114
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     const std::string &vertexShader =
         "attribute vec2 position;\n"

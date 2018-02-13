@@ -253,17 +253,8 @@ class D3DTextureTest : public ANGLETest
             return false;
         }
 
-        if (IsWindows() && IsAMD() && IsOpenGL())
-        {
-            std::cout << "Test skipped on Windows AMD OpenGL." << std::endl;
-            return false;
-        }
+        ANGLE_SKIP_TEST_IF(IsWindows() && (IsAMD() || IsIntel()) && IsOpenGL());
 
-        if (IsWindows() && IsIntel() && IsOpenGL())
-        {
-            std::cout << "Test skipped on Windows Intel OpenGL." << std::endl;
-            return false;
-        }
         return true;
     }
 
