@@ -25,6 +25,7 @@ class VertexArrayVk : public VertexArrayImpl
     ~VertexArrayVk() override;
 
     void destroy(const gl::Context *context) override;
+    bool isVertexDataInClientMemory() const;
 
     gl::Error streamVertexData(ContextVk *context,
                                StreamingBuffer *stream,
