@@ -32,6 +32,8 @@ struct Format final : private angle::NonCopyable
 {
     Format();
 
+    bool isValid() const { return internalFormat != 0; }
+
     // This is an auto-generated method in vk_format_table_autogen.cpp.
     void initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat);
 
