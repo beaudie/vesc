@@ -17,17 +17,17 @@ namespace sh
 namespace
 {
 
-const TFunction *LookUpBuiltInFunction(const char *name,
-                                       const TIntermSequence *arguments,
-                                       const TSymbolTable &symbolTable,
-                                       int shaderVersion)
+const TBuiltInFunction *LookUpBuiltInFunction(const char *name,
+                                              const TIntermSequence *arguments,
+                                              const TSymbolTable &symbolTable,
+                                              int shaderVersion)
 {
     const ImmutableString &mangledName = TFunctionLookup::GetMangledName(name, *arguments);
     const TSymbol *symbol              = symbolTable.findBuiltIn(mangledName, shaderVersion);
     if (symbol)
     {
         ASSERT(symbol->isFunction());
-        return static_cast<const TFunction *>(symbol);
+        return static_cast<const TBuiltInFunction *>(symbol);
     }
     return nullptr;
 }
@@ -256,7 +256,7 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
                                             const TSymbolTable &symbolTable,
                                             int shaderVersion)
 {
-    const TFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable, shaderVersion);
+    const TBuiltInFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable, shaderVersion);
     ASSERT(fn);
     TOperator op = fn->getBuiltInOp();
     if (op != EOpNull)
@@ -265,7 +265,7 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
         {
             return new TIntermUnary(op, arguments->at(0)->getAsTyped());
         }
-        return TIntermAggregate::Create(*fn, op, arguments);
+        return TIntermAggregate::Create(*fn, arguments);
     }
     return TIntermAggregate::CreateBuiltInFunctionCall(*fn, arguments);
 }

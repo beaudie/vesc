@@ -734,7 +734,7 @@ TString DecorateVariableIfNeeded(const TVariable &variable)
     }
 }
 
-TString DecorateFunctionIfNeeded(const TFunction *func)
+TString DecorateFunctionIfNeeded(const TFunctionBase *func)
 {
     if (func->symbolType() == SymbolType::AngleInternal)
     {

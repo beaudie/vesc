@@ -193,67 +193,139 @@ struct TParameter
     TType *type;
 };
 
-// The function sub-class of a symbol.
-class TFunction : public TSymbol
+// The function sub-classes of a symbol. TBuiltInFunction represents built-ins such as math
+// functions and texture lookup functions. TFunction represents user-defined functions and ANGLE
+// internal functions. In TFunction the parameters can be changed after creation, whereas
+// TBuiltInFunction can't be changed after creation.
+class TFunctionBase : public TSymbol
+{
+  public:
+    TFunctionBase(TSymbolTable *symbolTable,
+                  const ImmutableString &name,
+                  SymbolType symbolType,
+                  TExtension extension,
+                  const TType *returnType,
+                  bool knownToNotHaveSideEffects);
+
+    virtual TOperator getBuiltInOp() const                  = 0;
+    virtual size_t getParamCount() const                    = 0;
+    virtual const TConstParameter &getParam(size_t i) const = 0;
+
+    bool isFunction() const override { return true; }
+
+    ImmutableString buildMangledName() const;
+
+    const TType &getReturnType() const { return *mReturnType; }
+    bool isKnownToNotHaveSideEffects() const { return mKnownToNotHaveSideEffects; }
+    bool isMain() const;
+    bool isImageFunction() const;
+
+  protected:
+    constexpr TFunctionBase(const TSymbolUniqueId &id,
+                            const ImmutableString &name,
+                            SymbolType symbolType,
+                            TExtension extension,
+                            const TType *returnType,
+                            bool knownToNotHaveSideEffects)
+        : TSymbol(id, name, symbolType, extension),
+          mReturnType(returnType),
+          mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
+    {
+    }
+
+  private:
+    const TType *const mReturnType;
+    bool mKnownToNotHaveSideEffects;
+};
+
+class TBuiltInFunction : public TFunctionBase
+{
+  public:
+    using ParamList = std::array<const TConstParameter, 5>;
+
+    TBuiltInFunction(TSymbolTable *symbolTable,
+                     const ImmutableString &name,
+                     SymbolType symbolType,
+                     TExtension extension,
+                     const TType *returnType,
+                     bool knownToNotHaveSideEffects,
+                     TOperator op,
+                     size_t paramCount,
+                     const ParamList &parameters);
+    TOperator getBuiltInOp() const override { return mOp; }
+    size_t getParamCount() const override { return mParamCount; }
+    const TConstParameter &getParam(size_t i) const override { return mParameters[i]; }
+
+    ImmutableString getMangledName() const override { return mMangledName; }
+
+  private:
+    constexpr TBuiltInFunction(const TSymbolUniqueId &id,
+                               const ImmutableString &name,
+                               SymbolType symbolType,
+                               TExtension extension,
+                               const TType *returnType,
+                               bool knownToNotHaveSideEffects,
+                               TOperator op,
+                               size_t paramCount,
+                               const ParamList &parameters,
+                               const ImmutableString &mangledName)
+        : TFunctionBase(id, name, symbolType, extension, returnType, knownToNotHaveSideEffects),
+          mMangledName(mangledName),
+          mOp(op),
+          mParamCount(paramCount),
+          mParameters(parameters)
+    {
+    }
+
+    ImmutableString mMangledName;
+    const TOperator mOp;
+    const size_t mParamCount;
+    const ParamList mParameters;
+};
+
+class TFunction : public TFunctionBase
 {
   public:
     TFunction(TSymbolTable *symbolTable,
               const ImmutableString &name,
-              const TType *retType,
               SymbolType symbolType,
-              bool knownToNotHaveSideEffects,
-              TOperator tOp        = EOpNull,
-              TExtension extension = TExtension::UNDEFINED);
+              const TType *returnType,
+              bool knownToNotHaveSideEffects);
 
-    bool isFunction() const override { return true; }
+    TOperator getBuiltInOp() const override { return EOpNull; }
+    size_t getParamCount() const override { return mParameters.size(); }
+    const TConstParameter &getParam(size_t i) const override { return mParameters[i]; }
 
     void addParameter(const TConstParameter &p)
     {
-        parameters.push_back(p);
-        mangledName = ImmutableString("");
+        mParameters.push_back(p);
+        mMangledName = ImmutableString("");
     }
 
     void swapParameters(const TFunction &parametersSource);
 
     ImmutableString getMangledName() const override
     {
-        if (mangledName == "")
+        if (mMangledName == "")
         {
-            mangledName = buildMangledName();
+            mMangledName = buildMangledName();
         }
-        return mangledName;
+        return mMangledName;
     }
 
-    const TType &getReturnType() const { return *returnType; }
-
-    TOperator getBuiltInOp() const { return op; }
-
-    void setDefined() { defined = true; }
-    bool isDefined() { return defined; }
+    void setDefined() { mDefined = true; }
+    bool isDefined() { return mDefined; }
     void setHasPrototypeDeclaration() { mHasPrototypeDeclaration = true; }
     bool hasPrototypeDeclaration() const { return mHasPrototypeDeclaration; }
-
-    size_t getParamCount() const { return parameters.size(); }
-    const TConstParameter &getParam(size_t i) const { return parameters[i]; }
-
-    bool isKnownToNotHaveSideEffects() const { return mKnownToNotHaveSideEffects; }
-
-    bool isMain() const;
-    bool isImageFunction() const;
 
   private:
     void clearParameters();
 
-    ImmutableString buildMangledName() const;
-
-    typedef TVector<TConstParameter> TParamList;
-    TParamList parameters;
-    const TType *const returnType;
-    mutable ImmutableString mangledName;
-    const TOperator op;  // Only set for built-ins
-    bool defined;
+    mutable ImmutableString mMangledName;
+    using TParamList = TVector<TConstParameter>;
+    TParamList mParameters;
+    bool mDefined;
     bool mHasPrototypeDeclaration;
-    bool mKnownToNotHaveSideEffects;
 };
 
 }  // namespace sh

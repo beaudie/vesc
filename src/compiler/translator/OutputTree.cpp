@@ -13,7 +13,7 @@ namespace sh
 namespace
 {
 
-void OutputFunction(TInfoSinkBase &out, const char *str, const TFunction *func)
+void OutputFunction(TInfoSinkBase &out, const char *str, const TFunctionBase *func)
 {
     const char *internal =
         (func->symbolType() == SymbolType::AngleInternal) ? " (internal function)" : "";
