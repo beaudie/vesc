@@ -124,62 +124,101 @@ TInterfaceBlock::TInterfaceBlock(TSymbolTable *symbolTable,
     ASSERT(name != nullptr);
 }
 
-TFunction::TFunction(TSymbolTable *symbolTable,
-                     const ImmutableString &name,
-                     const TType *retType,
-                     SymbolType symbolType,
-                     bool knownToNotHaveSideEffects,
-                     TOperator tOp,
-                     TExtension extension)
+TFunctionBase::TFunctionBase(TSymbolTable *symbolTable,
+                             const ImmutableString &name,
+                             SymbolType symbolType,
+                             TExtension extension,
+                             const TType *returnType,
+                             bool knownToNotHaveSideEffects)
     : TSymbol(symbolTable, name, symbolType, extension),
-      returnType(retType),
-      mangledName(nullptr),
-      op(tOp),
-      defined(false),
-      mHasPrototypeDeclaration(false),
+      mReturnType(returnType),
       mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
 {
     // Functions with an empty name are not allowed.
     ASSERT(symbolType != SymbolType::Empty);
-    ASSERT(name != nullptr || symbolType == SymbolType::AngleInternal || tOp != EOpNull);
+}
+
+ImmutableString TFunctionBase::buildMangledName() const
+{
+    std::string newName(name().data(), name().length());
+    newName += kFunctionMangledNameSeparator;
+
+    size_t paramCount = getParamCount();
+    for (size_t paramIndex = 0u; paramIndex < paramCount; ++paramIndex)
+    {
+        newName += getParam(paramIndex).type->getMangledName();
+    }
+    return ImmutableString(newName);
+}
+
+bool TFunctionBase::isMain() const
+{
+    return symbolType() == SymbolType::UserDefined && name() == kMainName;
+}
+
+bool TFunctionBase::isImageFunction() const
+{
+    return symbolType() == SymbolType::BuiltIn &&
+           (name() == kImageSizeName || name() == kImageLoadName || name() == kImageStoreName);
+}
+
+TBuiltInFunction::TBuiltInFunction(TSymbolTable *symbolTable,
+                                   const ImmutableString &name,
+                                   SymbolType symbolType,
+                                   TExtension extension,
+                                   const TType *returnType,
+                                   bool knownToNotHaveSideEffects,
+                                   TOperator op,
+                                   size_t paramCount,
+                                   const ParamList &parameters)
+    : TFunctionBase(symbolTable,
+                    name,
+                    symbolType,
+                    extension,
+                    returnType,
+                    knownToNotHaveSideEffects),
+      mMangledName(""),
+      mOp(op),
+      mParamCount(paramCount),
+      mParameters(parameters)
+{
+    ASSERT(symbolType == SymbolType::BuiltIn);
+    ASSERT(op != EOpNull);  // Should be either EOpCallBuiltInFunction or a specific op.
+    mMangledName = buildMangledName();
+}
+
+TFunction::TFunction(TSymbolTable *symbolTable,
+                     const ImmutableString &name,
+                     SymbolType symbolType,
+                     const TType *returnType,
+                     bool knownToNotHaveSideEffects)
+    : TFunctionBase(symbolTable,
+                    name,
+                    symbolType,
+                    TExtension::UNDEFINED,
+                    returnType,
+                    knownToNotHaveSideEffects),
+      mMangledName(""),
+      mDefined(false),
+      mHasPrototypeDeclaration(false)
+{
+    ASSERT(symbolType != SymbolType::BuiltIn);
+    ASSERT(name != nullptr || symbolType == SymbolType::AngleInternal);
 }
 
 void TFunction::clearParameters()
 {
-    parameters.clear();
-    mangledName = ImmutableString("");
+    mParameters.clear();
+    mMangledName = ImmutableString("");
 }
 
 void TFunction::swapParameters(const TFunction &parametersSource)
 {
     clearParameters();
-    for (auto parameter : parametersSource.parameters)
+    for (auto parameter : parametersSource.mParameters)
     {
         addParameter(parameter);
     }
-}
-
-ImmutableString TFunction::buildMangledName() const
-{
-    std::string newName(name().data(), name().length());
-    newName += kFunctionMangledNameSeparator;
-
-    for (const auto &p : parameters)
-    {
-        newName += p.type->getMangledName();
-    }
-    return ImmutableString(newName);
-}
-
-bool TFunction::isMain() const
-{
-    return symbolType() == SymbolType::UserDefined && name() == kMainName;
-}
-
-bool TFunction::isImageFunction() const
-{
-    return symbolType() == SymbolType::BuiltIn &&
-           (name() == kImageSizeName || name() == kImageLoadName || name() == kImageStoreName);
 }
 
 }  // namespace sh

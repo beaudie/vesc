@@ -172,7 +172,8 @@ class TParseContext : angle::NonCopyable
                                        int versionRequired);
     bool checkWorkGroupSizeIsNotSpecified(const TSourceLoc &location,
                                           const TLayoutQualifier &layoutQualifier);
-    void functionCallRValueLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *fnCall);
+    void functionCallRValueLValueErrorCheck(const TFunctionBase *fnCandidate,
+                                            TIntermAggregate *fnCall);
     void checkInvariantVariableQualifier(bool invariant,
                                          const TQualifier qualifier,
                                          const TSourceLoc &invariantLocation);

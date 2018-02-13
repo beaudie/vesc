@@ -13,7 +13,7 @@ namespace sh
 namespace
 {
 
-void OutputFunction(TInfoSinkBase &out, const char *str, const TFunction *func)
+void OutputFunction(TInfoSinkBase &out, const char *str, const TFunctionBase *func)
 {
     const char *internal =
         (func->symbolType() == SymbolType::AngleInternal) ? " (internal function)" : "";
@@ -375,12 +375,7 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     OutputTreeText(mOut, node, mDepth);
 
-    if (node->getOp() == EOpNull)
-    {
-        mOut.prefix(SH_ERROR);
-        mOut << "node is still EOpNull!\n";
-        return true;
-    }
+    ASSERT(node->getOp() != EOpNull);
 
     // Give verbose names for some built-in functions that are easy to confuse with others, but
     // mostly use GLSL names for functions.
