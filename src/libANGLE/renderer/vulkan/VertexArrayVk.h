@@ -28,8 +28,8 @@ class VertexArrayVk : public VertexArrayImpl
 
     gl::Error streamVertexData(ContextVk *context,
                                StreamingBuffer *stream,
-                               int firstVertex,
-                               int lastVertex);
+                               size_t firstVertex,
+                               size_t lastVertex);
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
 
