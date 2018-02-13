@@ -59,7 +59,9 @@ class TIntermRaw;
 class TIntermBranch;
 
 class TSymbolTable;
+class TFunctionBase;
 class TFunction;
+class TBuiltInFunction;
 class TVariable;
 
 //
@@ -564,13 +566,11 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     static TIntermAggregate *CreateRawFunctionCall(const TFunction &func,
                                                    TIntermSequence *arguments);
 
-    static TIntermAggregate *CreateBuiltInFunctionCall(const TFunction &func,
+    static TIntermAggregate *CreateBuiltInFunctionCall(const TBuiltInFunction &func,
                                                        TIntermSequence *arguments);
     static TIntermAggregate *CreateConstructor(const TType &type,
                                                TIntermSequence *arguments);
-    static TIntermAggregate *Create(const TFunction &func,
-                                    TOperator op,
-                                    TIntermSequence *arguments);
+    static TIntermAggregate *Create(const TBuiltInFunction &func, TIntermSequence *arguments);
     ~TIntermAggregate() {}
 
     // Note: only supported for nodes that can be a part of an expression.
@@ -598,7 +598,7 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     // Returns true if changing parameter precision may affect the return value.
     bool gotPrecisionFromChildren() const { return mGotPrecisionFromChildren; }
 
-    const TFunction *getFunction() const { return mFunction; }
+    const TFunctionBase *getFunction() const { return mFunction; }
 
     // Get the function name to display to the user in an error message.
     const char *functionName() const;
@@ -612,10 +612,10 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
 
     bool mGotPrecisionFromChildren;
 
-    const TFunction *const mFunction;
+    const TFunctionBase *const mFunction;
 
   private:
-    TIntermAggregate(const TFunction *func,
+    TIntermAggregate(const TFunctionBase *func,
                      const TType &type,
                      TOperator op,
                      TIntermSequence *arguments);

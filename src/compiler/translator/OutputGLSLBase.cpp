@@ -1132,7 +1132,7 @@ ImmutableString TOutputGLSLBase::hashFieldName(const TSymbol *containingStruct,
     }
 }
 
-ImmutableString TOutputGLSLBase::hashFunctionNameIfNeeded(const TFunction *func)
+ImmutableString TOutputGLSLBase::hashFunctionNameIfNeeded(const TFunctionBase *func)
 {
     if (func->isMain())
     {
