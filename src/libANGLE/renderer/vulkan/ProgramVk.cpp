@@ -62,11 +62,13 @@ gl::Error InitDefaultUniformBlock(const gl::Context *context,
 
     ANGLE_TRY(storageOut->buffer.init(device, uniformBufferInfo));
 
+    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
+
     // Assume host vislble/coherent memory available.
     VkMemoryPropertyFlags flags =
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-    ANGLE_TRY(AllocateBufferMemory(vk::GetImpl(context), flags, &storageOut->buffer,
-                                   &storageOut->memory, requiredSizeOut));
+    ANGLE_TRY(AllocateBufferMemory(renderer, flags, &storageOut->buffer, &storageOut->memory,
+                                   requiredSizeOut));
 
     return gl::NoError();
 }
@@ -264,6 +266,7 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
 gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
+    RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = contextVk->getDevice();
 
     // Process vertex and fragment uniforms into std140 packing.
@@ -364,7 +367,7 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             VkMemoryPropertyFlags flags =
                 (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
             size_t requiredSize = 0;
-            ANGLE_TRY(AllocateBufferMemory(contextVk, flags, &mEmptyUniformBlockStorage.buffer,
+            ANGLE_TRY(AllocateBufferMemory(renderer, flags, &mEmptyUniformBlockStorage.buffer,
                                            &mEmptyUniformBlockStorage.memory, &requiredSize));
         }
 
