@@ -69,11 +69,7 @@ class SRGBTextureTest : public ANGLETest
 TEST_P(SRGBTextureTest, SRGBValidation)
 {
     // TODO(fjhenigman): Figure out why this fails on Ozone Intel.
-    if (IsOzone() && IsIntel() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Ozone Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel() && IsOpenGLES());
 
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientMajorVersion() == 3;
 
@@ -104,11 +100,7 @@ TEST_P(SRGBTextureTest, SRGBValidation)
 TEST_P(SRGBTextureTest, SRGBAValidation)
 {
     // TODO(fjhenigman): Figure out why this fails on Ozone Intel.
-    if (IsOzone() && IsIntel() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Ozone Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel() && IsOpenGLES());
 
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientMajorVersion() == 3;
 
@@ -203,11 +195,7 @@ TEST_P(SRGBTextureTest, SRGBDecodeExtensionAvailability)
 TEST_P(SRGBTextureTest, SRGBDecodeTextureParameter)
 {
     // TODO(fjhenigman): Figure out why this fails on Ozone Intel.
-    if (IsOzone() && IsIntel() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Ozone Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel() && IsOpenGLES());
 
     if (!extensionEnabled("GL_EXT_texture_sRGB_decode"))
     {

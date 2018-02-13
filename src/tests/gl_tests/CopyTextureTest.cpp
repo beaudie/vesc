@@ -690,11 +690,7 @@ TEST_P(CopyTextureTest, CopyToMipmap)
         return;
     }
 
-    if (IsOSX() && IsIntel())
-    {
-        std::cout << "Test skipped on Mac Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel());
 
     GLColor pixels[] = {GLColor::red, GLColor::red, GLColor::red, GLColor::red};
 

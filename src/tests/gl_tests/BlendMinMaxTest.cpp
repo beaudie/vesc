@@ -195,11 +195,7 @@ TEST_P(BlendMinMaxTest, RGBA32F)
     }
 
     // TODO (bug 1284): Investigate RGBA32f D3D SDK Layers messages on D3D11_FL9_3
-    if (IsD3D11_FL93())
-    {
-        std::cout << "Test skipped on Feature Level 9_3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11_FL93());
 
     runTest(GL_RGBA32F, GL_FLOAT);
 }
