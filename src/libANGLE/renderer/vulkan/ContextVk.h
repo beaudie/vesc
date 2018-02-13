@@ -191,6 +191,7 @@ class ContextVk : public ContextImpl
     VkClearValue mClearDepthStencilValue;
 
     StreamingBuffer mStreamingVertexData;
+    StreamingBuffer mStreamingIndexData;
 };
 
 }  // namespace rx

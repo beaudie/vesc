@@ -52,11 +52,7 @@ class Container
 
     void open(void) { memset(mMemory, 0xff, kSize); }
 
-    void fill(size_t numItem,
-              size_t itemSize,
-              const char *src,
-              unsigned offset,
-              unsigned stride)
+    void fill(size_t numItem, size_t itemSize, const char *src, unsigned offset, unsigned stride)
     {
         while (numItem--)
         {
@@ -337,9 +333,7 @@ void AttributeLayoutTest::GetTestCases(void)
 
     if (IsVulkan())
     {
-        std::cout
-            << "cases skipped on Vulkan: integer data, non-zero buffer offsets"
-            << std::endl;
+        std::cout << "cases skipped on Vulkan: integer data, non-zero buffer offsets" << std::endl;
         return;
     }
 
@@ -398,18 +392,6 @@ class AttributeLayoutMemoryIndexed : public AttributeLayoutTest
 
 class AttributeLayoutBufferIndexed : public AttributeLayoutTest
 {
-    bool Skip(void) override
-    {
-        if (IsVulkan() && mClientMemory)
-        {
-            std::cout
-                << "test case skipped on Vulkan: indexed draw with vertex data in client memory"
-                << std::endl;
-            return true;
-        }
-        return false;
-    }
-
     void Draw(int firstVertex, unsigned vertexCount, const GLushort *indices) override
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
@@ -435,12 +417,6 @@ TEST_P(AttributeLayoutNonIndexed, Test)
 
 TEST_P(AttributeLayoutMemoryIndexed, Test)
 {
-    if (IsVulkan())
-    {
-        std::cout << "test skipped on Vulkan: indices in memory not supported" << std::endl;
-        return;
-    }
-
     Run(true);
 
     if (IsWindows() && IsAMD() && (IsOpenGL() || GetParam() == ES2_D3D11_FL9_3()))
@@ -455,7 +431,6 @@ TEST_P(AttributeLayoutMemoryIndexed, Test)
 
 TEST_P(AttributeLayoutBufferIndexed, Test)
 {
-
     Run(true);
 
     if (IsWindows() && IsAMD() && (IsOpenGL() || GetParam() == ES2_D3D11_FL9_3()))
