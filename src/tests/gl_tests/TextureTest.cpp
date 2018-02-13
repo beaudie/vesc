@@ -1570,19 +1570,11 @@ TEST_P(Texture2DTest, CopySubImageFloat_RGB_RG)
 
 TEST_P(Texture2DTest, CopySubImageFloat_RGB_RGB)
 {
-    if (IsIntel() && IsLinux())
-    {
-        // TODO(cwallez): Fix on Linux Intel drivers (http://anglebug.com/1346)
-        std::cout << "Test disabled on Linux Intel OpenGL." << std::endl;
-        return;
-    }
+    // TODO(cwallez): Fix on Linux Intel drivers (http://anglebug.com/1346)
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux());
 
     // TODO (bug 1284): Investigate RGBA32f D3D SDK Layers messages on D3D11_FL9_3
-    if (IsD3D11_FL93())
-    {
-        std::cout << "Test skipped on Feature Level 9_3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11_FL93());
 
     testFloatCopySubImage(3, 3);
 }
@@ -1600,11 +1592,7 @@ TEST_P(Texture2DTest, CopySubImageFloat_RGBA_RG)
 TEST_P(Texture2DTest, CopySubImageFloat_RGBA_RGB)
 {
     // TODO (bug 1284): Investigate RGBA32f D3D SDK Layers messages on D3D11_FL9_3
-    if (IsD3D11_FL93())
-    {
-        std::cout << "Test skipped on Feature Level 9_3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11_FL93());
 
     testFloatCopySubImage(4, 3);
 }
@@ -1612,11 +1600,7 @@ TEST_P(Texture2DTest, CopySubImageFloat_RGBA_RGB)
 TEST_P(Texture2DTest, CopySubImageFloat_RGBA_RGBA)
 {
     // TODO (bug 1284): Investigate RGBA32f D3D SDK Layers messages on D3D11_FL9_3
-    if (IsD3D11_FL93())
-    {
-        std::cout << "Test skipped on Feature Level 9_3." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11_FL93());
 
     testFloatCopySubImage(4, 4);
 }
@@ -1759,12 +1743,9 @@ TEST_P(Texture2DTestES3, DrawWithBaseLevel1)
 // have images defined.
 TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeUndefined)
 {
-    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Observed crashing on AMD. Oddly the crash only happens with 2D textures, not 3D or array.
-        std::cout << "Test skipped on AMD OpenGL." << std::endl;
-        return;
-    }
+    // Observed crashing on AMD. Oddly the crash only happens with 2D textures, not 3D or array.
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     std::vector<GLColor> texDataGreen(2u * 2u, GLColor::green);
@@ -1785,12 +1766,9 @@ TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeUndefined)
 // Test that drawing works correctly when level 0 is undefined and base level is 1.
 TEST_P(Texture2DTestES3, DrawWithLevelZeroUndefined)
 {
-    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-    {
-        // Observed crashing on AMD. Oddly the crash only happens with 2D textures, not 3D or array.
-        std::cout << "Test skipped on AMD OpenGL." << std::endl;
-        return;
-    }
+    // Observed crashing on AMD. Oddly the crash only happens with 2D textures, not 3D or array.
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     std::vector<GLColor> texDataGreen(2u * 2u, GLColor::green);
@@ -1983,14 +1961,9 @@ TEST_P(Texture2DArrayTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensio
 
     ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsOpenGL());
 
-    if (IsNVIDIA() && (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE ||
-                       getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE))
-    {
-        // NVIDIA was observed drawing color 0,0,0,0 instead of the texture color after the base
-        // level was changed.
-        std::cout << "Test partially skipped on NVIDIA OpenGL." << std::endl;
-        return;
-    }
+    // NVIDIA was observed drawing color 0,0,0,0 instead of the texture color after the base
+    // level was changed.
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() && (IsOpenGL() || IsOpenGLES()));
 
     // Switch the level that is being used to the cyan level 2.
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 2);
@@ -2177,19 +2150,13 @@ TEST_P(Texture2DTestES3, ImmutableTextureBaseLevelOutOfRange)
 // Test that changing base level works when it affects the format of the texture.
 TEST_P(Texture2DTestES3, TextureFormatChangesWithBaseLevel)
 {
-    if (IsNVIDIA() && IsOpenGL())
-    {
-        // Observed rendering corruption on NVIDIA OpenGL.
-        std::cout << "Test skipped on NVIDIA OpenGL." << std::endl;
-        return;
-    }
+    // Observed rendering corruption on NVIDIA OpenGL.
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
+
     ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsDesktopOpenGL());
-    if (IsAMD() && IsDesktopOpenGL())
-    {
-        // Observed incorrect rendering on AMD OpenGL.
-        std::cout << "Test skipped on AMD OpenGL." << std::endl;
-        return;
-    }
+
+    // Observed incorrect rendering on AMD OpenGL.
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -2395,11 +2362,8 @@ TEST_P(SamplerTypeMixTestES3, SamplerTypeMixDraw)
 // Calling textureSize() on the samplers hits the D3D sampler metadata workaround.
 TEST_P(TextureSizeTextureArrayTest, BaseLevelVariesInTextureArray)
 {
-    if (IsAMD() && IsD3D11())
-    {
-        std::cout << "Test skipped on AMD D3D." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsD3D11());
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2DA);
     GLsizei size = 64;
@@ -2489,17 +2453,10 @@ TEST_P(Texture2DTestES3, TextureLuminance16ImplicitAlpha1)
 {
     if (extensionEnabled("GL_OES_texture_half_float"))
     {
-        if (IsNVIDIA() && IsOpenGLES())
-        {
-            std::cout << "Test skipped on NVIDIA" << std::endl;
-            return;
-        }
+        ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
+
         // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1420 is fixed
-        if (IsAndroid() && IsAdreno() && IsOpenGLES())
-        {
-            std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-            return;
-        }
+        ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -2655,12 +2612,8 @@ TEST_P(Texture2DTestES3, TextureRGB9E5ImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DTestES3, TextureCOMPRESSEDRGB8ETC2ImplicitAlpha1)
 {
-    if (IsOSX() && IsIntel() && IsOpenGL())
-    {
-        // Seems to fail on OSX 10.12 Intel.
-        std::cout << "Test skipped on OSX Intel." << std::endl;
-        return;
-    }
+    // Seems to fail on OSX 10.12 Intel.
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsOpenGL());
 
     // http://anglebug.com/2190
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA() && IsDesktopOpenGL());
@@ -2679,12 +2632,8 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDRGB8ETC2ImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DTestES3, TextureCOMPRESSEDSRGB8ETC2ImplicitAlpha1)
 {
-    if (IsOSX() && IsIntel() && IsOpenGL())
-    {
-        // Seems to fail on OSX 10.12 Intel.
-        std::cout << "Test skipped on OSX Intel." << std::endl;
-        return;
-    }
+    // Seems to fail on OSX 10.12 Intel.
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsOpenGL());
 
     // http://anglebug.com/2190
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA() && IsDesktopOpenGL());
@@ -2709,11 +2658,7 @@ TEST_P(SamplerInStructTest, SamplerInStruct)
 TEST_P(SamplerInStructAsFunctionParameterTest, SamplerInStructAsFunctionParameter)
 {
     // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1427 is fixed
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     runSamplerInStructTest();
 }
@@ -2723,11 +2668,8 @@ TEST_P(SamplerInStructAsFunctionParameterTest, SamplerInStructAsFunctionParamete
 TEST_P(SamplerInStructArrayAsFunctionParameterTest, SamplerInStructArrayAsFunctionParameter)
 {
     // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1427 is fixed
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
+
     runSamplerInStructTest();
 }
 
@@ -2736,11 +2678,8 @@ TEST_P(SamplerInStructArrayAsFunctionParameterTest, SamplerInStructArrayAsFuncti
 TEST_P(SamplerInNestedStructAsFunctionParameterTest, SamplerInNestedStructAsFunctionParameter)
 {
     // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1427 is fixed
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
+
     runSamplerInStructTest();
 }
 
@@ -3223,11 +3162,7 @@ TEST_P(Texture2DTestES3, UnpackSkipImages2D)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsDesktopOpenGL());
 
     // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1429 is fixed
-    if (IsAndroid() && IsAdreno() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on Adreno OpenGLES on Android." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -3291,17 +3226,10 @@ TEST_P(Texture2DTestES3, UnpackSkipPixelsOutOfBounds)
 // Test that unpacking rows that overlap in a pixel unpack buffer works as expected.
 TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
 {
-    if (IsD3D11())
-    {
-        std::cout << "Test skipped on D3D." << std::endl;
-        return;
-    }
-    if (IsOSX() && IsAMD())
-    {
-        // Incorrect rendering results seen on OSX AMD.
-        std::cout << "Test skipped on OSX AMD." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    // Incorrect rendering results seen on OSX AMD.
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD());
 
     const GLuint width            = 8u;
     const GLuint height           = 8u;
@@ -3361,11 +3289,7 @@ TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
     // TODO(cwallez) this is failing on Intel Win7 OpenGL.
     // TODO(zmo) this is faling on Win Intel HD 530 Debug.
     // http://anglebugs.com/1706
-    if (IsIntel() && IsWindows())
-    {
-        std::cout << "Test skipped on Win Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows());
 
     const int size = getWindowWidth();
 

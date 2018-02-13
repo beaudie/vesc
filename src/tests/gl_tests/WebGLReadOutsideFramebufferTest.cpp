@@ -394,12 +394,8 @@ TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImage2D)
 // the corresponding source pixel is outside the framebuffer.
 TEST_P(WebGL2ReadOutsideFramebufferTest, CopyTexSubImage3D)
 {
-    if (IsDesktopOpenGL() || IsOpenGLES())
-    {
-        std::cout << "Robust CopyTexSubImage3D behaviour is not implemented on OpenGL."
-                  << std::endl;
-        return;
-    }
+    // Robust CopyTexSubImage3D behaviour is not implemented on OpenGL.
+    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL() || IsOpenGLES());
 
     Main3D(&WebGLReadOutsideFramebufferTest::TestCopyTexSubImage3D, false);
 }

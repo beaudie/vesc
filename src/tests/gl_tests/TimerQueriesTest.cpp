@@ -192,11 +192,7 @@ TEST_P(TimerQueriesTest, TimeElapsed)
 TEST_P(TimerQueriesTest, TimeElapsedTextureTest)
 {
     // OSX drivers don't seem to properly time non-draw calls so we skip the test on Mac
-    if (IsOSX())
-    {
-        std::cout << "Test skipped on OSX" << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     if (!extensionEnabled("GL_EXT_disjoint_timer_query"))
     {
@@ -312,13 +308,9 @@ TEST_P(TimerQueriesTest, TimeElapsedValidationTest)
 // Tests timer queries operating under multiple EGL contexts with mid-query switching
 TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
 {
-    if (IsAMD() && IsOpenGL())
-    {
-        // TODO(jmadill): Figure out why this test is flaky on AMD/OpenGL.
-        // http://anglebug.com/1541
-        std::cout << "Test skipped on AMD OpenGL." << std::endl;
-        return;
-    }
+    // TODO(jmadill): Figure out why this test is flaky on AMD/OpenGL.
+    // http://anglebug.com/1541
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
     if (!extensionEnabled("GL_EXT_disjoint_timer_query"))
     {

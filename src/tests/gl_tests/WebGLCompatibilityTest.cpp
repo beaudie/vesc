@@ -2594,11 +2594,7 @@ TEST_P(WebGLCompatibilityTest, RG32FTextures)
 
 TEST_P(WebGLCompatibilityTest, RGB32FTextures)
 {
-    if (IsLinux() && IsIntel())
-    {
-        std::cout << "Test skipped on Linux Intel." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel());
 
     constexpr float data[] = {1000.0f, -500.0f, 10.0f, 1.0f};
 
@@ -2769,11 +2765,7 @@ TEST_P(WebGLCompatibilityTest, RG16FTextures)
 
 TEST_P(WebGLCompatibilityTest, RGB16FTextures)
 {
-    if (IsOzone() && IsIntel())
-    {
-        std::cout << "Test skipped on Intel Ozone." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel());
 
     constexpr float readPixelsData[] = {7000.0f, 100.0f, 33.0f, 1.0f};
     const GLushort textureData[]     = {
@@ -2822,11 +2814,7 @@ TEST_P(WebGLCompatibilityTest, RGB16FTextures)
 
 TEST_P(WebGLCompatibilityTest, RGBA16FTextures)
 {
-    if (IsOzone() && IsIntel())
-    {
-        std::cout << "Test skipped on Intel Ozone." << std::endl;
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel());
 
     constexpr float readPixelsData[] = {7000.0f, 100.0f, 33.0f, -1.0f};
     const GLushort textureData[]     = {
@@ -3213,11 +3201,8 @@ TEST_P(WebGL2CompatibilityTest, TextureCopyingFeedbackLoop3D)
 // the buffer type.
 TEST_P(WebGL2CompatibilityTest, ClearBufferTypeCompatibity)
 {
-    if (IsD3D11())
-    {
-        std::cout << "Test skipped because it generates D3D11 runtime warnings." << std::endl;
-        return;
-    }
+    // Test skipped for D3D11 because it generates D3D11 runtime warnings.
+    ANGLE_SKIP_TEST_IF(IsD3D11());
 
     constexpr float clearFloat[]       = {0.0f, 0.0f, 0.0f, 0.0f};
     constexpr int clearInt[]           = {0, 0, 0, 0};
