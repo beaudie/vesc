@@ -41,6 +41,32 @@ uint8_t PackGLBlendOp(GLenum blendOp)
     }
 }
 
+uint8_t PackGLCompareFunc(GLenum compareFunc)
+{
+    switch (compareFunc)
+    {
+        case GL_NEVER:
+            return VK_COMPARE_OP_NEVER;
+        case GL_ALWAYS:
+            return VK_COMPARE_OP_ALWAYS;
+        case GL_LESS:
+            return VK_COMPARE_OP_LESS;
+        case GL_LEQUAL:
+            return VK_COMPARE_OP_LESS_OR_EQUAL;
+        case GL_EQUAL:
+            return VK_COMPARE_OP_EQUAL;
+        case GL_GREATER:
+            return VK_COMPARE_OP_GREATER;
+        case GL_GEQUAL:
+            return VK_COMPARE_OP_GREATER_OR_EQUAL;
+        case GL_NOTEQUAL:
+            return VK_COMPARE_OP_NOT_EQUAL;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 VkSampleCountFlagBits ConvertSamples(GLint sampleCount)
 {
     switch (sampleCount)
@@ -211,7 +237,7 @@ void RenderPassDesc::packColorAttachment(const vk::Format &format, GLsizei sampl
 void RenderPassDesc::packDepthStencilAttachment(const vk::Format &format, GLsizei samples)
 {
     ASSERT(mDepthStencilAttachmentCount == 0);
-    packAttachment(mDepthStencilAttachmentCount++, format, samples);
+    packAttachment(mColorAttachmentCount + mDepthStencilAttachmentCount++, format, samples);
 }
 
 RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
@@ -654,6 +680,16 @@ void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
             static_cast<uint8_t>(blendState.sourceBlendAlpha);
         blendAttachmentState.dstAlphaBlendFactor = static_cast<uint8_t>(blendState.destBlendAlpha);
     }
+}
+
+void PipelineDesc::updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState)
+{
+    mDepthStencilStateInfo.depthTestEnable = static_cast<uint8_t>(depthStencilState.depthTest);
+}
+
+void PipelineDesc::updateDepthFunc(const gl::DepthStencilState &depthStencilState)
+{
+    mDepthStencilStateInfo.depthCompareOp = PackGLCompareFunc(depthStencilState.depthFunc);
 }
 
 void PipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPassDesc)
