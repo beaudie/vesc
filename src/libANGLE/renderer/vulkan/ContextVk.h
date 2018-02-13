@@ -166,8 +166,8 @@ class ContextVk : public ContextImpl
     gl::Error setupDraw(const gl::Context *context,
                         GLenum mode,
                         DrawType drawType,
-                        int firstVertex,
-                        int lastVertex,
+                        size_t firstVertex,
+                        size_t lastVertex,
                         vk::CommandBuffer **commandBuffer);
 
     RendererVk *mRenderer;
@@ -190,7 +190,11 @@ class ContextVk : public ContextImpl
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
 
+    constexpr static size_t kStreamingVertexDataSize = 1024 * 1024;
+    constexpr static size_t kStreamingIndexDataSize  = 1024 * 8;
+
     StreamingBuffer mStreamingVertexData;
+    StreamingBuffer mStreamingIndexData;
 
     vk::LineLoopHandler mLineLoopHandler;
 };
