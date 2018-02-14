@@ -934,6 +934,12 @@ bool ValidImageDataSize(ValidationContext *context,
             context->handleError(InvalidOperation());
             return false;
         }
+        if (pixelUnpackBuffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            context->handleError(InvalidOperation()
+                                 << "Pixel unpack buffer is bound for transform feedback.");
+            return false;
+        }
     }
     else
     {
@@ -2647,6 +2653,16 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
                                                        "feedback.");
             return false;
         }
+    }
+
+    const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
+    if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
+        transformFeedbackObject->buffersBoundForOtherUse())
+    {
+        context->handleError(
+            InvalidOperation()
+            << "A transform feedback buffer is bound to a non-transform-feedback target.");
+        return false;
     }
 
     // Do some additonal WebGL-specific validation
@@ -5241,6 +5257,12 @@ bool ValidateReadPixelsBase(Context *context,
     {
         // ...the buffer object's data store is currently mapped.
         context->handleError(InvalidOperation() << "Pixel pack buffer is mapped.");
+        return false;
+    }
+    if (pixelPackBuffer != nullptr && pixelPackBuffer->isBoundForTransformFeedbackAndOtherUse())
+    {
+        context->handleError(InvalidOperation()
+                             << "Pixel pack buffer is bound for transform feedback.");
         return false;
     }
 

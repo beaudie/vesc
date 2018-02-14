@@ -41,7 +41,7 @@ class SingleBindingPointer : public BindingPointer<ObjectType>, angle::NonCopyab
   public:
     SingleBindingPointer() {}
 
-    SingleBindingPointer(ObjectType *object) { set(object); }
+    SingleBindingPointer(const Context *context, ObjectType *object) { set(context, object); }
 
     void set(const Context *context, ObjectType *newObject) override
     {

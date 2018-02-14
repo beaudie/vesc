@@ -27,7 +27,12 @@ class GLImplFactory;
 namespace gl
 {
 class Buffer;
-template <bool>
+enum class IsTransformFeedback
+{
+    Yes,
+    No
+};
+template <enum IsTransformFeedback>
 class BufferTargetBinding;
 class Context;
 
@@ -50,7 +55,7 @@ class BufferState final : angle::NonCopyable
 
   private:
     friend class Buffer;
-    template <bool isTransformFeedback>
+    template <enum IsTransformFeedback>
     friend class BufferTargetBinding;
 
     std::string mLabel;
@@ -124,7 +129,7 @@ class Buffer final : public RefCountObject, public LabeledObject
     }
 
   private:
-    template <bool>
+    template <enum IsTransformFeedback>
     friend class BufferTargetBinding;
 
     BufferState mState;
@@ -133,7 +138,7 @@ class Buffer final : public RefCountObject, public LabeledObject
     mutable IndexRangeCache mIndexRangeCache;
 };
 
-template <bool isTransformFeedback = false>
+template <enum IsTransformFeedback isTransformFeedback = IsTransformFeedback::No>
 class BufferTargetBinding : public OffsetBindingPointer<Buffer>
 {
   public:
@@ -191,7 +196,7 @@ class BufferTargetBinding : public OffsetBindingPointer<Buffer>
             ASSERT(get()->mState.mBindingCount > 0);
             --get()->mState.mBindingCount;
         }
-        if (isTransformFeedback)
+        if (isTransformFeedback == IsTransformFeedback::Yes)
         {
             if (up)
             {

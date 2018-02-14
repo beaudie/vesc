@@ -61,7 +61,7 @@ State::State()
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
-      mVertexArray(nullptr),
+      mVertexArray(),
       mActiveSampler(0),
       mPrimitiveRestart(false),
       mMultiSampling(false),
@@ -247,6 +247,7 @@ void State::reset(const Context *context)
     {
         mBoundBuffers[type].set(context, nullptr);
     }
+    mTransformFeedbackBuffer.set(context, nullptr);
 
     if (mProgram)
     {
@@ -257,6 +258,8 @@ void State::reset(const Context *context)
     mProgramPipeline.set(context, nullptr);
 
     mTransformFeedback.set(context, nullptr);
+
+    mVertexArray.set(context, nullptr);
 
     for (State::ActiveQueryMap::iterator i = mActiveQueries.begin(); i != mActiveQueries.end(); i++)
     {
@@ -1063,12 +1066,12 @@ bool State::removeDrawFramebufferBinding(GLuint framebuffer)
     return false;
 }
 
-void State::setVertexArrayBinding(VertexArray *vertexArray)
+void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArray)
 {
-    mVertexArray = vertexArray;
+    mVertexArray.set(context, vertexArray);
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
 
-    if (mVertexArray && mVertexArray->hasAnyDirtyBit())
+    if (mVertexArray.get() && mVertexArray->hasAnyDirtyBit())
     {
         mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
     }
@@ -1076,21 +1079,21 @@ void State::setVertexArrayBinding(VertexArray *vertexArray)
 
 GLuint State::getVertexArrayId() const
 {
-    ASSERT(mVertexArray != nullptr);
+    ASSERT(mVertexArray.get() != nullptr);
     return mVertexArray->id();
 }
 
 VertexArray *State::getVertexArray() const
 {
-    ASSERT(mVertexArray != nullptr);
-    return mVertexArray;
+    ASSERT(mVertexArray.get() != nullptr);
+    return mVertexArray.get();
 }
 
-bool State::removeVertexArrayBinding(GLuint vertexArray)
+bool State::removeVertexArrayBinding(const Context *context, GLuint vertexArray)
 {
     if (mVertexArray->id() == vertexArray)
     {
-        mVertexArray = nullptr;
+        mVertexArray.set(context, nullptr);
         mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
         mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
         return true;
@@ -1266,12 +1269,6 @@ void State::setBufferBinding(const Context *context, BufferBinding target, Buffe
             mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
             break;
-        case BufferBinding::TransformFeedback:
-            if (mTransformFeedback.get() != nullptr)
-            {
-                mTransformFeedback->bindGenericBuffer(context, buffer);
-            }
-            break;
         case BufferBinding::ElementArray:
             getVertexArray()->setElementArrayBuffer(context, buffer);
             mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
@@ -1280,11 +1277,15 @@ void State::setBufferBinding(const Context *context, BufferBinding target, Buffe
             mBoundBuffers[target].set(context, buffer);
             mDirtyBits.set(DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
             break;
+        case BufferBinding::TransformFeedback:
+            mTransformFeedbackBuffer.set(context, buffer);
+            break;
         default:
             mBoundBuffers[target].set(context, buffer);
             break;
     }
 }
+
 void State::setIndexedBufferBinding(const Context *context,
                                     BufferBinding target,
                                     GLuint index,
@@ -1298,6 +1299,7 @@ void State::setIndexedBufferBinding(const Context *context,
     {
         case BufferBinding::TransformFeedback:
             mTransformFeedback->bindIndexedBuffer(context, index, buffer, offset, size);
+            setBufferBinding(context, target, buffer);
             break;
         case BufferBinding::Uniform:
             mUniformBuffers[index].set(context, buffer, offset, size);
@@ -1340,7 +1342,7 @@ Buffer *State::getTargetBuffer(BufferBinding target) const
         case BufferBinding::ElementArray:
             return getVertexArray()->getElementArrayBuffer().get();
         case BufferBinding::TransformFeedback:
-            return mTransformFeedback->getGenericBuffer().get();
+            return mTransformFeedbackBuffer.get();
         default:
             return mBoundBuffers[target].get();
     }
@@ -1354,6 +1356,11 @@ void State::detachBuffer(const Context *context, GLuint bufferName)
         {
             buffer.set(context, nullptr);
         }
+    }
+
+    if (mTransformFeedbackBuffer.id() == bufferName)
+    {
+        mTransformFeedbackBuffer.set(context, nullptr);
     }
 
     TransformFeedback *curTransformFeedback = getCurrentTransformFeedback();
@@ -2013,11 +2020,10 @@ void State::getIntegerv(const Context *context, GLenum pname, GLint *params)
           *params = mBoundBuffers[BufferBinding::Uniform].id();
           break;
       case GL_TRANSFORM_FEEDBACK_BINDING:
-        *params = mTransformFeedback.id();
-        break;
+          *params = mTransformFeedback.id();
+          break;
       case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-          ASSERT(mTransformFeedback.get() != nullptr);
-          *params = mTransformFeedback->getGenericBuffer().id();
+          *params = mTransformFeedbackBuffer.id();
           break;
       case GL_COPY_READ_BUFFER_BINDING:
           *params = mBoundBuffers[BufferBinding::CopyRead].id();
@@ -2258,7 +2264,7 @@ void State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
                 mDrawFramebuffer->syncState(context);
                 break;
             case DIRTY_OBJECT_VERTEX_ARRAY:
-                ASSERT(mVertexArray);
+                ASSERT(mVertexArray.get());
                 mVertexArray->syncState(context);
                 break;
             case DIRTY_OBJECT_PROGRAM_TEXTURES:
