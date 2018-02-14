@@ -18,7 +18,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/renderer_utils.h"
-#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -43,7 +43,7 @@ gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
 }
 
 gl::Error ClearDepthStencilImage(const gl::Context *context,
-                                 vk::CommandBufferNode *writeOperation,
+                                 vk::CommandGraphNode *writeOperation,
                                  Serial currentSerial,
                                  vk::CommandBuffer *commandBuffer,
                                  const gl::FramebufferAttachment *depthStencilAttachment,
@@ -152,8 +152,8 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     Serial currentSerial = renderer->getCurrentQueueSerial();
 
     // This command buffer is only started once.
-    vk::CommandBuffer *commandBuffer      = nullptr;
-    vk::CommandBufferNode *writeOperation = nullptr;
+    vk::CommandBuffer *commandBuffer     = nullptr;
+    vk::CommandGraphNode *writeOperation = nullptr;
 
     const gl::FramebufferAttachment *depthAttachment = mState.getDepthAttachment();
     bool clearDepth = (depthAttachment && (mask & GL_DEPTH_BUFFER_BIT) != 0);
@@ -165,8 +165,8 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
     if (clearDepth || clearStencil)
     {
-        ANGLE_TRY(beginWriteOperation(renderer, &commandBuffer));
-        writeOperation = getCurrentWriteOperation(currentSerial);
+        ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+        writeOperation = getCurrentWritingNode(currentSerial);
 
         const VkClearDepthStencilValue &clearDepthStencilValue =
             contextVk->getClearDepthStencilValue().depthStencil;
@@ -209,8 +209,8 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
     if (!commandBuffer)
     {
-        ANGLE_TRY(beginWriteOperation(renderer, &commandBuffer));
-        writeOperation = getCurrentWriteOperation(currentSerial);
+        ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+        writeOperation = getCurrentWritingNode(currentSerial);
     }
 
     for (const auto &colorAttachment : mState.getColorAttachments())
@@ -322,7 +322,7 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                 renderTarget->extents, vk::StagingUsage::Read));
 
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteOperation(renderer, &commandBuffer));
+    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
 
     stagingImage.getImage().changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
                                             commandBuffer);
@@ -527,20 +527,20 @@ gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
     return gl::InternalError() << "getSamplePosition is unimplemented.";
 }
 
-gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandBufferNode **nodeOut)
+gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandGraphNode **nodeOut)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     Serial currentSerial = renderer->getCurrentQueueSerial();
 
-    if (hasCurrentWriteOperation(currentSerial) && mLastRenderNodeSerial == currentSerial)
+    if (hasCurrentWritingNode(currentSerial) && mLastRenderNodeSerial == currentSerial)
     {
-        *nodeOut = getCurrentWriteOperation(currentSerial);
+        *nodeOut = getCurrentWritingNode(currentSerial);
         ASSERT((*nodeOut)->getInsideRenderPassCommands()->valid());
         return gl::NoError();
     }
 
-    vk::CommandBufferNode *node = getNewWriteNode(renderer);
+    vk::CommandGraphNode *node = getNewWritingNode(renderer);
 
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY_RESULT(getFramebuffer(context, renderer), framebuffer);
