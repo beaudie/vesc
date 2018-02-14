@@ -152,8 +152,6 @@ gl::Error VertexArrayGL::syncDrawState(const gl::Context *context,
                                        bool primitiveRestartEnabled,
                                        const void **outIndices) const
 {
-    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
-
     // Check if any attributes need to be streamed, determines if the index range needs to be
     // computed
     bool attributesNeedStreaming = mAttributesNeedStreaming.any();
@@ -328,6 +326,8 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
         mFunctions->bufferData(GL_ARRAY_BUFFER, requiredBufferSize, nullptr, GL_DYNAMIC_DRAW);
         mStreamingArrayBufferSize = requiredBufferSize;
     }
+
+    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
     // Unmapping a buffer can return GL_FALSE to indicate that the system has corrupted the data
     // somehow (such as by a screen change), retry writing the data a few times and return
