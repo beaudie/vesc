@@ -491,21 +491,7 @@ gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandBu
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY_RESULT(getFramebuffer(context, renderer), framebuffer);
 
-    const gl::State &glState = context->getGLState();
-
-    // Hard-code RenderPass to clear the first render target to the current clear value.
-    // TODO(jmadill): Proper clear value implementation.
-    VkClearColorValue colorClear;
-    memset(&colorClear, 0, sizeof(VkClearColorValue));
-    colorClear.float32[0] = glState.getColorClearValue().red;
-    colorClear.float32[1] = glState.getColorClearValue().green;
-    colorClear.float32[2] = glState.getColorClearValue().blue;
-    colorClear.float32[3] = glState.getColorClearValue().alpha;
-
     std::vector<VkClearValue> attachmentClearValues;
-    attachmentClearValues.push_back({colorClear});
-
-    node->storeRenderPassInfo(*framebuffer, glState.getViewport(), attachmentClearValues);
 
     // Initialize RenderPass info.
     // TODO(jmadill): Could cache this info, would require dependent state change messaging.
@@ -521,6 +507,10 @@ gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandBu
             // TODO(jmadill): May need layout transition.
             renderTarget->image->updateLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
             node->appendColorRenderTarget(currentSerial, renderTarget);
+
+            VkClearValue colorClear;
+            colorClear.color = contextVk->getClearColorValue();
+            attachmentClearValues.emplace_back(colorClear);
         }
     }
 
@@ -533,8 +523,16 @@ gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandBu
         // TODO(jmadill): May need layout transition.
         renderTarget->image->updateLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         node->appendDepthStencilRenderTarget(currentSerial, renderTarget);
+
+        VkClearValue dsClear;
+        dsClear.depthStencil = contextVk->getClearDepthStencilValue();
+        attachmentClearValues.emplace_back(dsClear);
     }
 
+    // Hard-code RenderPass to clear the first render target to the current clear value.
+    // TODO(jmadill): Proper clear value implementation.
+    const gl::State &glState = context->getGLState();
+    node->storeRenderPassInfo(*framebuffer, glState.getViewport(), attachmentClearValues);
     mLastRenderNodeSerial = currentSerial;
 
     *nodeOut = node;
