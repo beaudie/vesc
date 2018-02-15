@@ -472,6 +472,36 @@ void CommandBuffer::clearSingleColorImage(const vk::Image &image, const VkClearC
     vkCmdClearColorImage(mHandle, image.getHandle(), image.getCurrentLayout(), &color, 1, &range);
 }
 
+void CommandBuffer::clearColorAttachments(
+    const std::vector<gl::FramebufferAttachment> &colorAttachments,
+    const VkClearColorValue &clearColorValue,
+    const VkRect2D *rect)
+{
+    VkClearValue clearValue;
+    clearValue.color = clearColorValue;
+
+    std::vector<VkClearAttachment> clearAttachments(colorAttachments.size());
+    for (size_t i = 0; i < colorAttachments.size(); i++)
+    {
+        VkClearAttachment clearAttachment;
+        clearAttachment.aspectMask      = VK_IMAGE_ASPECT_COLOR_BIT;
+        clearAttachment.colorAttachment = static_cast<uint32_t>(i);
+        clearAttachment.clearValue      = clearValue;
+        clearAttachments.push_back(clearAttachment);
+    }
+
+    // TODO: Should be be using the depth of the images attached to each color attachment?
+    // If so, we'll need to call cmdClearAttachments for every attachment since the depths
+    // could be different between each attachment?
+    VkClearRect clearRect;
+    clearRect.baseArrayLayer = 0;
+    clearRect.layerCount     = 1;
+    clearRect.rect           = *rect;
+
+    vkCmdClearAttachments(mHandle, static_cast<uint32_t>(clearAttachments.size()),
+                          clearAttachments.data(), 1, &clearRect);
+}
+
 void CommandBuffer::copySingleImage(const vk::Image &srcImage,
                                     const vk::Image &destImage,
                                     const gl::Box &copyRegion,
