@@ -434,17 +434,12 @@ class ScissoredClearTest : public ANGLETest
 // Simple scissored clear.
 TEST_P(ScissoredClearTest, BasicScissoredColorClear)
 {
-    // The Vulkan back-end does not implement scissored clears yet.
-    // TODO(jmadill): Enable this when we implement scissored clears in Vulkan.
-    // http://anglebug.com/2356
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const int w     = getWindowWidth();
     const int h     = getWindowHeight();
     const int whalf = w >> 1;
     const int hhalf = h >> 1;
 
-    // Clear who region to red.
+    // Clear whole region to red.
     glClearColor(1.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -454,6 +449,8 @@ TEST_P(ScissoredClearTest, BasicScissoredColorClear)
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
+    
+    glDisable(GL_SCISSOR_TEST);
 
     // Check the four corners for the original clear color, and the middle for the scissored clear
     // color.
