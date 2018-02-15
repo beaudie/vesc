@@ -252,7 +252,7 @@ class PipelineDesc final
     ~PipelineDesc();
     PipelineDesc(const PipelineDesc &other);
     PipelineDesc &operator=(const PipelineDesc &other);
-
+    const VkRect2D &getScissor() { return mScissor; }
     size_t hash() const;
     bool operator==(const PipelineDesc &other) const;
 
