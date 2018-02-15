@@ -472,6 +472,16 @@ void CommandBuffer::clearSingleColorImage(const vk::Image &image, const VkClearC
     vkCmdClearColorImage(mHandle, image.getHandle(), image.getCurrentLayout(), &color, 1, &range);
 }
 
+void CommandBuffer::clearColorAttachments(uint32_t attachmentCount,
+                                          const VkClearAttachment *pAttachments,
+                                          uint32_t rectCount,
+                                          const VkClearRect *pRects)
+{
+    ASSERT(valid());
+
+    vkCmdClearAttachments(mHandle, attachmentCount, pAttachments, rectCount, pRects);
+}
+
 void CommandBuffer::copySingleImage(const vk::Image &srcImage,
                                     const vk::Image &destImage,
                                     const gl::Box &copyRegion,
