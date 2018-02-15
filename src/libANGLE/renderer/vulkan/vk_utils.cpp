@@ -472,6 +472,36 @@ void CommandBuffer::clearSingleColorImage(const vk::Image &image, const VkClearC
     vkCmdClearColorImage(mHandle, image.getHandle(), image.getCurrentLayout(), &color, 1, &range);
 }
 
+void CommandBuffer::clearColorAttachments(
+    const std::vector<gl::FramebufferAttachment> &colorAttachments,
+    const VkClearColorValue &clearColorValue,
+    const VkRect2D *rect)
+{
+    VkClearValue clearValue;
+    clearValue.color = clearColorValue;
+
+    std::vector<VkClearAttachment> clearAttachments(colorAttachments.size());
+    for (size_t i = 0; i < colorAttachments.size(); i++)
+    {
+        VkClearAttachment clearAttachment;
+        clearAttachment.aspectMask      = VK_IMAGE_ASPECT_COLOR_BIT;
+        clearAttachment.colorAttachment = static_cast<uint32_t>(i);
+        clearAttachment.clearValue      = clearValue;
+        clearAttachments[i]             = clearAttachment;
+    }
+
+    // We assume for now that we always need to clear only 1 layer starting at the
+    // baseArrayLayer 0, this might need to change depending how we'll implement
+    // cube maps.
+    VkClearRect clearRect;
+    clearRect.baseArrayLayer = 0;
+    clearRect.layerCount     = 1;
+    clearRect.rect           = *rect;
+
+    vkCmdClearAttachments(mHandle, static_cast<uint32_t>(clearAttachments.size()),
+                          clearAttachments.data(), 1, &clearRect);
+}
+
 void CommandBuffer::copySingleImage(const vk::Image &srcImage,
                                     const vk::Image &destImage,
                                     const gl::Box &copyRegion,
