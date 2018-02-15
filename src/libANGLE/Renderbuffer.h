@@ -20,6 +20,11 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/RenderbufferImpl.h"
 
+namespace rx
+{
+class GLImplFactory;
+}  // namespace rx
+
 namespace gl
 {
 // A GL renderbuffer object is usually used as a depth or stencil buffer attachment
@@ -27,11 +32,34 @@ namespace gl
 // FramebufferAttachment and Framebuffer for how they are applied to an FBO via an
 // attachment point.
 
+class RenderbufferState final : angle::NonCopyable
+{
+  public:
+    RenderbufferState();
+    ~RenderbufferState();
+
+    GLsizei getWidth() const;
+    GLsizei getHeight() const;
+    const Format &getFormat() const;
+    const GLsizei getSamples() const;
+
+  private:
+    friend class Renderbuffer;
+
+    GLsizei mWidth;
+    GLsizei mHeight;
+    Format mFormat;
+    GLsizei mSamples;
+
+    // For robust resource init.
+    InitState mInitState;
+};
+
 class Renderbuffer final : public egl::ImageSibling,
                            public LabeledObject
 {
   public:
-    Renderbuffer(rx::RenderbufferImpl *impl, GLuint id);
+    Renderbuffer(rx::GLImplFactory *implFactory, GLuint id);
     ~Renderbuffer() override;
 
     Error onDestroy(const Context *context) override;
@@ -75,17 +103,10 @@ class Renderbuffer final : public egl::ImageSibling,
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 
-    rx::RenderbufferImpl *mRenderbuffer;
+    RenderbufferState mState;
+    std::unique_ptr<rx::RenderbufferImpl> mImplementation;
 
     std::string mLabel;
-
-    GLsizei mWidth;
-    GLsizei mHeight;
-    Format mFormat;
-    GLsizei mSamples;
-
-    // For robust resource init.
-    InitState mInitState;
 };
 
 }  // namespace gl
