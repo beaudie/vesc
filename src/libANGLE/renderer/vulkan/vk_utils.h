@@ -36,6 +36,7 @@ class Display;
 
 namespace gl
 {
+class FramebufferAttachment;
 struct Box;
 struct Extents;
 struct RasterizerState;
@@ -331,6 +332,10 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                              const VkBufferMemoryBarrier &bufferBarrier);
 
     void clearSingleColorImage(const vk::Image &image, const VkClearColorValue &color);
+    void clearAttachments(uint32_t attachmentCount,
+                          const VkClearAttachment *pAttachments,
+                          uint32_t rectCount,
+                          const VkClearRect *pRects);
 
     void copyBuffer(const vk::Buffer &srcBuffer,
                     const vk::Buffer &destBuffer,
