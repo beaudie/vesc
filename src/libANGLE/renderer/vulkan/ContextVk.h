@@ -146,7 +146,6 @@ class ContextVk : public ContextImpl
                               GLuint numGroupsY,
                               GLuint numGroupsZ) override;
     gl::Error dispatchComputeIndirect(const gl::Context *context, GLintptr indirect) override;
-
     gl::Error memoryBarrier(const gl::Context *context, GLbitfield barriers) override;
     gl::Error memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers) override;
 
@@ -160,6 +159,7 @@ class ContextVk : public ContextImpl
 
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
+    const VkRect2D &getScissor() { return mPipelineDesc->getScissor(); }
 
   private:
     gl::Error initPipeline(const gl::Context *context);
