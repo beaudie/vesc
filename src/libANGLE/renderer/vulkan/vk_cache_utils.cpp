@@ -579,7 +579,6 @@ void PipelineDesc::updateViewport(const gl::Rectangle &viewport, float nearPlane
     mViewport.minDepth = nearPlane;
     mViewport.maxDepth = farPlane;
 
-    // TODO(jmadill): Scissor.
     mScissor.offset.x      = viewport.x;
     mScissor.offset.y      = viewport.y;
     mScissor.extent.width  = viewport.width;
@@ -702,7 +701,7 @@ void AttachmentOpsArray::initDummyOp(size_t index, VkImageLayout finalLayout)
 {
     PackedAttachmentOpsDesc &ops = mOps[index];
 
-    ops.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    ops.loadOp         = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     ops.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
     ops.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     ops.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
