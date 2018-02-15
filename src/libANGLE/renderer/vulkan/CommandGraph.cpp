@@ -3,11 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CommandBufferNode:
+// CommandGraph:
 //    Deferred work constructed by GL calls, that will later be flushed to Vulkan.
 //
 
-#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -51,16 +51,14 @@ Error InitAndBeginCommandBuffer(VkDevice device,
 
 }  // anonymous namespace
 
-// CommandBufferNode implementation.
+// CommandGraphNode implementation.
 
-CommandBufferNode::CommandBufferNode()
-    : mHasHappensAfterDependencies(false),
-      mVisitedState(VisitedState::Unvisited),
-      mIsFinishedRecording(false)
+CommandGraphNode::CommandGraphNode()
+    : mHasChildren(false), mVisitedState(VisitedState::Unvisited), mIsFinishedRecording(false)
 {
 }
 
-CommandBufferNode::~CommandBufferNode()
+CommandGraphNode::~CommandGraphNode()
 {
     mRenderPassFramebuffer.setHandle(VK_NULL_HANDLE);
 
@@ -69,21 +67,21 @@ CommandBufferNode::~CommandBufferNode()
     mInsideRenderPassCommands.releaseHandle();
 }
 
-CommandBuffer *CommandBufferNode::getOutsideRenderPassCommands()
+CommandBuffer *CommandGraphNode::getOutsideRenderPassCommands()
 {
     ASSERT(!mIsFinishedRecording);
     return &mOutsideRenderPassCommands;
 }
 
-CommandBuffer *CommandBufferNode::getInsideRenderPassCommands()
+CommandBuffer *CommandGraphNode::getInsideRenderPassCommands()
 {
     ASSERT(!mIsFinishedRecording);
     return &mInsideRenderPassCommands;
 }
 
-Error CommandBufferNode::startRecording(VkDevice device,
-                                        const CommandPool &commandPool,
-                                        CommandBuffer **commandsOut)
+Error CommandGraphNode::startRecording(VkDevice device,
+                                       const CommandPool &commandPool,
+                                       CommandBuffer **commandsOut)
 {
     ASSERT(!mIsFinishedRecording);
 
@@ -104,13 +102,13 @@ Error CommandBufferNode::startRecording(VkDevice device,
     return NoError();
 }
 
-Error CommandBufferNode::startRenderPassRecording(RendererVk *renderer, CommandBuffer **commandsOut)
+Error CommandGraphNode::startRenderPassRecording(RendererVk *renderer, CommandBuffer **commandsOut)
 {
     ASSERT(!mIsFinishedRecording);
 
     // Get a compatible RenderPass from the cache so we can initialize the inheritance info.
     // TODO(jmadill): Use different query method for compatible vs conformant render pass.
-    vk::RenderPass *compatibleRenderPass;
+    RenderPass *compatibleRenderPass;
     ANGLE_TRY(renderer->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
     VkCommandBufferInheritanceInfo inheritanceInfo;
@@ -131,34 +129,34 @@ Error CommandBufferNode::startRenderPassRecording(RendererVk *renderer, CommandB
     return NoError();
 }
 
-bool CommandBufferNode::isFinishedRecording() const
+bool CommandGraphNode::isFinishedRecording() const
 {
     return mIsFinishedRecording;
 }
 
-void CommandBufferNode::finishRecording()
+void CommandGraphNode::finishRecording()
 {
     mIsFinishedRecording = true;
 }
 
-void CommandBufferNode::storeRenderPassInfo(const Framebuffer &framebuffer,
-                                            const gl::Rectangle renderArea,
-                                            const std::vector<VkClearValue> &clearValues)
+void CommandGraphNode::storeRenderPassInfo(const Framebuffer &framebuffer,
+                                           const gl::Rectangle renderArea,
+                                           const std::vector<VkClearValue> &clearValues)
 {
     mRenderPassFramebuffer.setHandle(framebuffer.getHandle());
     mRenderPassRenderArea = renderArea;
     std::copy(clearValues.begin(), clearValues.end(), mRenderPassClearValues.begin());
 }
 
-void CommandBufferNode::appendColorRenderTarget(Serial serial, RenderTargetVk *colorRenderTarget)
+void CommandGraphNode::appendColorRenderTarget(Serial serial, RenderTargetVk *colorRenderTarget)
 {
     // TODO(jmadill): Layout transition?
     mRenderPassDesc.packColorAttachment(*colorRenderTarget->format, colorRenderTarget->samples);
     colorRenderTarget->resource->onWriteResource(this, serial);
 }
 
-void CommandBufferNode::appendDepthStencilRenderTarget(Serial serial,
-                                                       RenderTargetVk *depthStencilRenderTarget)
+void CommandGraphNode::appendDepthStencilRenderTarget(Serial serial,
+                                                      RenderTargetVk *depthStencilRenderTarget)
 {
     // TODO(jmadill): Layout transition?
     mRenderPassDesc.packDepthStencilAttachment(*depthStencilRenderTarget->format,
@@ -166,7 +164,7 @@ void CommandBufferNode::appendDepthStencilRenderTarget(Serial serial,
     depthStencilRenderTarget->resource->onWriteResource(this, serial);
 }
 
-void CommandBufferNode::initAttachmentDesc(VkAttachmentDescription *desc)
+void CommandGraphNode::initAttachmentDesc(VkAttachmentDescription *desc)
 {
     desc->flags          = 0;
     desc->format         = VK_FORMAT_UNDEFINED;
@@ -180,89 +178,87 @@ void CommandBufferNode::initAttachmentDesc(VkAttachmentDescription *desc)
 }
 
 // static
-void CommandBufferNode::SetHappensBeforeDependency(CommandBufferNode *beforeNode,
-                                                   CommandBufferNode *afterNode)
+void CommandGraphNode::SetHappensBeforeDependency(CommandGraphNode *beforeNode,
+                                                  CommandGraphNode *afterNode)
 {
-    afterNode->mHappensBeforeDependencies.emplace_back(beforeNode);
-    beforeNode->setHasHappensAfterDependencies();
+    afterNode->mParents.emplace_back(beforeNode);
+    beforeNode->setHasChildren();
     beforeNode->finishRecording();
-    ASSERT(beforeNode != afterNode && !beforeNode->happensAfter(afterNode));
+    ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
 }
 
 // static
-void CommandBufferNode::SetHappensBeforeDependencies(
-    const std::vector<CommandBufferNode *> &beforeNodes,
-    CommandBufferNode *afterNode)
+void CommandGraphNode::SetHappensBeforeDependencies(
+    const std::vector<CommandGraphNode *> &beforeNodes,
+    CommandGraphNode *afterNode)
 {
-    afterNode->mHappensBeforeDependencies.insert(afterNode->mHappensBeforeDependencies.end(),
-                                                 beforeNodes.begin(), beforeNodes.end());
+    afterNode->mParents.insert(afterNode->mParents.end(), beforeNodes.begin(), beforeNodes.end());
 
     // TODO(jmadill): is there a faster way to do this?
-    for (CommandBufferNode *beforeNode : beforeNodes)
+    for (CommandGraphNode *beforeNode : beforeNodes)
     {
-        beforeNode->setHasHappensAfterDependencies();
+        beforeNode->setHasChildren();
         beforeNode->finishRecording();
 
-        ASSERT(beforeNode != afterNode && !beforeNode->happensAfter(afterNode));
+        ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
     }
 }
 
-bool CommandBufferNode::hasHappensBeforeDependencies() const
+bool CommandGraphNode::hasParents() const
 {
-    return !mHappensBeforeDependencies.empty();
+    return !mParents.empty();
 }
 
-void CommandBufferNode::setHasHappensAfterDependencies()
+void CommandGraphNode::setHasChildren()
 {
-    mHasHappensAfterDependencies = true;
+    mHasChildren = true;
 }
 
-bool CommandBufferNode::hasHappensAfterDependencies() const
+bool CommandGraphNode::hasChildren() const
 {
-    return mHasHappensAfterDependencies;
+    return mHasChildren;
 }
 
 // Do not call this in anything but testing code, since it's slow.
-bool CommandBufferNode::happensAfter(CommandBufferNode *beforeNode)
+bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
-    std::set<CommandBufferNode *> visitedList;
-    std::vector<CommandBufferNode *> openList;
-    openList.insert(openList.begin(), mHappensBeforeDependencies.begin(),
-                    mHappensBeforeDependencies.end());
+    std::set<CommandGraphNode *> visitedList;
+    std::vector<CommandGraphNode *> openList;
+    openList.insert(openList.begin(), mParents.begin(), mParents.end());
     while (!openList.empty())
     {
-        CommandBufferNode *checkNode = openList.back();
+        CommandGraphNode *current = openList.back();
         openList.pop_back();
-        if (visitedList.count(checkNode) == 0)
+        if (visitedList.count(current) == 0)
         {
-            if (checkNode == beforeNode)
+            if (current == parent)
             {
                 return true;
             }
-            visitedList.insert(checkNode);
-            openList.insert(openList.end(), checkNode->mHappensBeforeDependencies.begin(),
-                            checkNode->mHappensBeforeDependencies.end());
+            visitedList.insert(current);
+            openList.insert(openList.end(), current->mParents.begin(), current->mParents.end());
         }
     }
 
     return false;
 }
 
-VisitedState CommandBufferNode::visitedState() const
+VisitedState CommandGraphNode::visitedState() const
 {
     return mVisitedState;
 }
 
-void CommandBufferNode::visitDependencies(std::vector<CommandBufferNode *> *stack)
+void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
 {
     ASSERT(mVisitedState == VisitedState::Unvisited);
-    stack->insert(stack->end(), mHappensBeforeDependencies.begin(),
-                  mHappensBeforeDependencies.end());
+    stack->insert(stack->end(), mParents.begin(), mParents.end());
     mVisitedState = VisitedState::Ready;
 }
 
-vk::Error CommandBufferNode::visitAndExecute(RendererVk *renderer,
-                                             vk::CommandBuffer *primaryCommandBuffer)
+Error CommandGraphNode::visitAndExecute(VkDevice device,
+                                        Serial serial,
+                                        RenderPassCache *renderPassCache,
+                                        CommandBuffer *primaryCommandBuffer)
 {
     if (mOutsideRenderPassCommands.valid())
     {
@@ -274,8 +270,9 @@ vk::Error CommandBufferNode::visitAndExecute(RendererVk *renderer,
     {
         // Pull a compatible RenderPass from the cache.
         // TODO(jmadill): Insert real ops and layout transitions.
-        vk::RenderPass *renderPass = nullptr;
-        ANGLE_TRY(renderer->getCompatibleRenderPass(mRenderPassDesc, &renderPass));
+        RenderPass *renderPass = nullptr;
+        ANGLE_TRY(
+            renderPassCache->getCompatibleRenderPass(device, serial, mRenderPassDesc, &renderPass));
 
         mInsideRenderPassCommands.end();
 
@@ -298,7 +295,105 @@ vk::Error CommandBufferNode::visitAndExecute(RendererVk *renderer,
     }
 
     mVisitedState = VisitedState::Visited;
-    return vk::NoError();
+    return NoError();
+}
+
+// CommandGraph implementation.
+CommandGraph::CommandGraph()
+{
+}
+
+CommandGraph::~CommandGraph()
+{
+    ASSERT(empty());
+}
+
+CommandGraphNode *CommandGraph::allocateNode()
+{
+    // TODO(jmadill): Use a pool allocator for the CPU node allocations.
+    CommandGraphNode *newCommands = new CommandGraphNode();
+    mNodes.emplace_back(newCommands);
+    return newCommands;
+}
+
+Error CommandGraph::submitCommands(VkDevice device,
+                                   Serial serial,
+                                   RenderPassCache *renderPassCache,
+                                   CommandPool *commandPool,
+                                   CommandBuffer *primaryCommandBufferOut)
+{
+    VkCommandBufferAllocateInfo primaryInfo;
+    primaryInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    primaryInfo.pNext              = nullptr;
+    primaryInfo.commandPool        = commandPool->getHandle();
+    primaryInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    primaryInfo.commandBufferCount = 1;
+
+    ANGLE_TRY(primaryCommandBufferOut->init(device, primaryInfo));
+
+    if (mNodes.empty())
+    {
+        return NoError();
+    }
+
+    std::vector<CommandGraphNode *> nodeStack;
+
+    VkCommandBufferBeginInfo beginInfo;
+    beginInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.pNext            = nullptr;
+    beginInfo.flags            = 0;
+    beginInfo.pInheritanceInfo = nullptr;
+
+    ANGLE_TRY(primaryCommandBufferOut->begin(beginInfo));
+
+    for (CommandGraphNode *topLevelNode : mNodes)
+    {
+        // Only process commands that don't have child commands. The others will be pulled in
+        // automatically. Also skip commands that have already been visited.
+        if (topLevelNode->hasChildren() || topLevelNode->visitedState() != VisitedState::Unvisited)
+            continue;
+
+        nodeStack.push_back(topLevelNode);
+
+        while (!nodeStack.empty())
+        {
+            CommandGraphNode *node = nodeStack.back();
+
+            switch (node->visitedState())
+            {
+                case VisitedState::Unvisited:
+                    node->visitParents(&nodeStack);
+                    break;
+                case VisitedState::Ready:
+                    ANGLE_TRY(node->visitAndExecute(device, serial, renderPassCache,
+                                                    primaryCommandBufferOut));
+                    nodeStack.pop_back();
+                    break;
+                case VisitedState::Visited:
+                    nodeStack.pop_back();
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+        }
+    }
+
+    ANGLE_TRY(primaryCommandBufferOut->end());
+
+    // TODO(jmadill): Use pool allocation so we don't need to deallocate command graph.
+    for (vk::CommandGraphNode *node : mNodes)
+    {
+        delete node;
+    }
+    mNodes.clear();
+
+    return NoError();
+}
+
+bool CommandGraph::empty() const
+{
+    return mNodes.empty();
 }
 
 }  // namespace vk
