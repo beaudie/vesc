@@ -17,8 +17,11 @@ namespace rx
 {
 
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
-    : RenderbufferImpl(state), mRequiredSize(0)
+    : RenderbufferImpl(state), mAllocatedMemorySize(0)
 {
+    mRenderTarget.image     = &mImage;
+    mRenderTarget.imageView = &mImageView;
+    mRenderTarget.resource  = this;
 }
 
 RenderbufferVk::~RenderbufferVk()
@@ -46,64 +49,78 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
     const vk::Format &vkFormat = renderer->getFormat(internalformat);
     VkDevice device            = renderer->getDevice();
 
-    VkImageUsageFlags usage =
-        (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-         VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
+    if (mImage.valid())
+    {
+        // Check against the state if we need to recreate the storage.
+        if (internalformat != mState.getFormat().info->internalFormat ||
+            width != mState.getWidth() || height != mState.getHeight())
+        {
+            ASSERT(mImageView.valid());
+            renderer->releaseResource(*this, &mImage);
+            renderer->releaseResource(*this, &mDeviceMemory);
+            renderer->releaseResource(*this, &mImageView);
+        }
+    }
 
-    VkImageCreateInfo imageInfo;
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.pNext                 = nullptr;
-    imageInfo.flags                 = 0;
-    imageInfo.imageType             = VK_IMAGE_TYPE_2D;
-    imageInfo.format                = vkFormat.vkTextureFormat;
-    imageInfo.extent.width          = static_cast<uint32_t>(width);
-    imageInfo.extent.height         = static_cast<uint32_t>(height);
-    imageInfo.extent.depth          = 1;
-    imageInfo.mipLevels             = 1;
-    imageInfo.arrayLayers           = 1;
-    imageInfo.samples               = VK_SAMPLE_COUNT_1_BIT;
-    imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
-    imageInfo.usage                 = usage;
-    imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    imageInfo.queueFamilyIndexCount = 0;
-    imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+    if (!mImage.valid())
+    {
+        VkImageUsageFlags usage =
+            (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
-    ANGLE_TRY(mImage.init(device, imageInfo));
+        VkImageCreateInfo imageInfo;
+        imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        imageInfo.pNext                 = nullptr;
+        imageInfo.flags                 = 0;
+        imageInfo.imageType             = VK_IMAGE_TYPE_2D;
+        imageInfo.format                = vkFormat.vkTextureFormat;
+        imageInfo.extent.width          = static_cast<uint32_t>(width);
+        imageInfo.extent.height         = static_cast<uint32_t>(height);
+        imageInfo.extent.depth          = 1;
+        imageInfo.mipLevels             = 1;
+        imageInfo.arrayLayers           = 1;
+        imageInfo.samples               = VK_SAMPLE_COUNT_1_BIT;
+        imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
+        imageInfo.usage                 = usage;
+        imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        imageInfo.queueFamilyIndexCount = 0;
+        imageInfo.pQueueFamilyIndices   = nullptr;
+        imageInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
 
-    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(vk::AllocateImageMemory(renderer, flags, &mImage, &mDeviceMemory, &mRequiredSize));
+        ANGLE_TRY(mImage.init(device, imageInfo));
 
-    VkImageAspectFlags aspect = VK_IMAGE_ASPECT_COLOR_BIT;
+        VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        ANGLE_TRY(vk::AllocateImageMemory(renderer, flags, &mImage, &mDeviceMemory,
+                                          &mAllocatedMemorySize));
 
-    // Allocate ImageView.
-    VkImageViewCreateInfo viewInfo;
-    viewInfo.sType                           = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    viewInfo.pNext                           = nullptr;
-    viewInfo.flags                           = 0;
-    viewInfo.image                           = mImage.getHandle();
-    viewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
-    viewInfo.format                          = vkFormat.vkTextureFormat;
-    viewInfo.components.r                    = VK_COMPONENT_SWIZZLE_R;
-    viewInfo.components.g                    = VK_COMPONENT_SWIZZLE_G;
-    viewInfo.components.b                    = VK_COMPONENT_SWIZZLE_B;
-    viewInfo.components.a                    = VK_COMPONENT_SWIZZLE_A;
-    viewInfo.subresourceRange.aspectMask     = aspect;
-    viewInfo.subresourceRange.baseMipLevel   = 0;
-    viewInfo.subresourceRange.levelCount     = 1;
-    viewInfo.subresourceRange.baseArrayLayer = 0;
-    viewInfo.subresourceRange.layerCount     = 1;
+        VkImageAspectFlags aspect = VK_IMAGE_ASPECT_COLOR_BIT;
 
-    ANGLE_TRY(mImageView.init(device, viewInfo));
+        // Allocate ImageView.
+        VkImageViewCreateInfo viewInfo;
+        viewInfo.sType                           = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.pNext                           = nullptr;
+        viewInfo.flags                           = 0;
+        viewInfo.image                           = mImage.getHandle();
+        viewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format                          = vkFormat.vkTextureFormat;
+        viewInfo.components.r                    = VK_COMPONENT_SWIZZLE_R;
+        viewInfo.components.g                    = VK_COMPONENT_SWIZZLE_G;
+        viewInfo.components.b                    = VK_COMPONENT_SWIZZLE_B;
+        viewInfo.components.a                    = VK_COMPONENT_SWIZZLE_A;
+        viewInfo.subresourceRange.aspectMask     = aspect;
+        viewInfo.subresourceRange.baseMipLevel   = 0;
+        viewInfo.subresourceRange.levelCount     = 1;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount     = 1;
+
+        ANGLE_TRY(mImageView.init(device, viewInfo));
+    }
 
     // Init RenderTarget.
     mRenderTarget.extents.width  = static_cast<int>(width);
     mRenderTarget.extents.height = static_cast<int>(height);
     mRenderTarget.extents.depth  = 1;
     mRenderTarget.format         = &vkFormat;
-    mRenderTarget.image          = &mImage;
-    mRenderTarget.imageView      = &mImageView;
-    mRenderTarget.resource       = this;
     mRenderTarget.samples        = VK_SAMPLE_COUNT_1_BIT;  // TODO(jmadill): Multisample bits.
 
     return gl::NoError();
