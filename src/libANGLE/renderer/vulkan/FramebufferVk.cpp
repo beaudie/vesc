@@ -31,6 +31,7 @@ namespace rx
 
 namespace
 {
+
 gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
     const gl::Context *context,
     const gl::FramebufferAttachment *readAttachment)
@@ -41,6 +42,7 @@ gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
     GLenum implFormat = renderTarget->format->textureFormat().fboImplementationInternalFormat;
     return &gl::GetSizedInternalFormatInfo(implFormat);
 }
+
 }  // anonymous namespace
 
 // static
@@ -136,7 +138,15 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         return gl::NoError();
     }
 
-    // TODO(jmadill): Scissored clears.
+    if (context->getGLState().isScissorTestEnabled())
+    {
+        // With scissor test enabled, we clear very differently and we don't need to access
+        // the image inside each attachment we can just use clearCmdAttachments with our
+        // scissor region instead.
+        ANGLE_TRY(clearColorAttachmentsWithScissorRegion(context, mState.getColorAttachments()));
+        return gl::NoError();
+    }
+
     const auto *attachment = mState.getFirstNonNullAttachment();
     ASSERT(attachment && attachment->isAttached());
     const auto &size = attachment->getSize();
@@ -150,8 +160,11 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
     Serial currentSerial = renderer->getCurrentQueueSerial();
 
-    for (const auto &colorAttachment : mState.getColorAttachments())
+    for (uint32_t colorAttachmentIndex = 0;
+         colorAttachmentIndex < mState.getColorAttachments().size(); colorAttachmentIndex++)
     {
+        const gl::FramebufferAttachment &colorAttachment =
+            mState.getColorAttachments()[colorAttachmentIndex];
         if (colorAttachment.isAttached())
         {
             RenderTargetVk *renderTarget = nullptr;
@@ -170,7 +183,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     }
 
     // TODO(jmadill): Depth/stencil clear.
-
     return gl::NoError();
 }
 
@@ -459,6 +471,36 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
     ANGLE_TRY(mFramebuffer.init(device, framebufferInfo));
 
     return &mFramebuffer;
+}
+
+gl::Error FramebufferVk::clearColorAttachmentsWithScissorRegion(
+    const gl::Context *context,
+    const std::vector<gl::FramebufferAttachment> &colorAttachments)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // This command can only happen inside a render pass, so obtain one if its already happening
+    // or create a new one if not.
+    vk::CommandBufferNode *node;
+    vk::CommandBuffer *insideRenderPassCmdBuffer = nullptr;
+    ANGLE_TRY(getRenderNode(context, &node));
+    if (node->getInsideRenderPassCommands()->valid())
+    {
+        insideRenderPassCmdBuffer = node->getInsideRenderPassCommands();
+    }
+    else
+    {
+        ANGLE_TRY(node->startRenderPassRecording(renderer, &insideRenderPassCmdBuffer));
+    }
+    const gl::State &glState = contextVk->getGLState();
+    const VkRect2D rect      = {{glState.getScissor().x, glState.getScissor().y},
+                           {static_cast<uint32_t>(glState.getScissor().width),
+                            static_cast<uint32_t>(glState.getScissor().height)}};
+
+    insideRenderPassCmdBuffer->clearColorAttachments(colorAttachments,
+                                                     contextVk->getClearColorValue().color, &rect);
+    return gl::NoError();
 }
 
 gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
