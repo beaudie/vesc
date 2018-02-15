@@ -3,12 +3,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CommandBufferNode:
+// CommandGraph:
 //    Deferred work constructed by GL calls, that will later be flushed to Vulkan.
 //
 
-#ifndef LIBANGLE_RENDERER_VULKAN_COMMAND_BUFFER_NODE_H_
-#define LIBANGLE_RENDERER_VULKAN_COMMAND_BUFFER_NODE_H_
+#ifndef LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
+#define LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
 
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -25,11 +25,15 @@ enum class VisitedState
     Visited,
 };
 
-class CommandBufferNode final : angle::NonCopyable
+// A command graph node contains some work to be done in Vulkan. The work is stored into
+// secondary vk::CommandBuffers that we then compose together with vk::RenderPasses as necessary
+// when we need to submit the work. We submit on a read operation - such as a SwapBuffers call
+// or ReadPixels.
+class CommandGraphNode final : angle::NonCopyable
 {
   public:
-    CommandBufferNode();
-    ~CommandBufferNode();
+    CommandGraphNode();
+    ~CommandGraphNode();
 
     // Immutable queries for when we're walking the commands tree.
     CommandBuffer *getOutsideRenderPassCommands();
@@ -55,24 +59,27 @@ class CommandBufferNode final : angle::NonCopyable
     void appendDepthStencilRenderTarget(Serial serial, RenderTargetVk *depthStencilRenderTarget);
 
     // Commands for linking nodes in the dependency graph.
-    static void SetHappensBeforeDependency(CommandBufferNode *beforeNode,
-                                           CommandBufferNode *afterNode);
-    static void SetHappensBeforeDependencies(const std::vector<CommandBufferNode *> &beforeNodes,
-                                             CommandBufferNode *afterNode);
-    bool hasHappensBeforeDependencies() const;
-    bool hasHappensAfterDependencies() const;
-
-    // Used for testing only.
-    bool happensAfter(CommandBufferNode *beforeNode);
+    static void SetHappensBeforeDependency(CommandGraphNode *beforeNode,
+                                           CommandGraphNode *afterNode);
+    static void SetHappensBeforeDependencies(const std::vector<CommandGraphNode *> &beforeNodes,
+                                             CommandGraphNode *afterNode);
+    bool hasParents() const;
+    bool hasChildren() const;
 
     // Commands for traversing the node on a flush operation.
     VisitedState visitedState() const;
-    void visitDependencies(std::vector<CommandBufferNode *> *stack);
-    Error visitAndExecute(RendererVk *renderer, CommandBuffer *primaryCommandBuffer);
+    void visitParents(std::vector<CommandGraphNode *> *stack);
+    Error visitAndExecute(VkDevice device,
+                          Serial serial,
+                          RenderPassCache *renderPassCache,
+                          CommandBuffer *primaryCommandBuffer);
 
   private:
     void initAttachmentDesc(VkAttachmentDescription *desc);
-    void setHasHappensAfterDependencies();
+    void setHasChildren();
+
+    // Used for testing only.
+    bool isChildOf(CommandGraphNode *parent);
 
     // Only used if we need a RenderPass for these commands.
     RenderPassDesc mRenderPassDesc;
@@ -85,11 +92,11 @@ class CommandBufferNode final : angle::NonCopyable
     CommandBuffer mOutsideRenderPassCommands;
     CommandBuffer mInsideRenderPassCommands;
 
-    // These commands must be submitted before 'this' command can be submitted correctly.
-    std::vector<CommandBufferNode *> mHappensBeforeDependencies;
+    // Parents must be submitted before 'this' CommandNode can be submitted correctly.
+    std::vector<CommandGraphNode *> mParents;
 
     // If this is true, other commands exist that must be submitted after 'this' command.
-    bool mHasHappensAfterDependencies;
+    bool mHasChildren;
 
     // Used when traversing the dependency graph.
     VisitedState mVisitedState;
@@ -97,7 +104,29 @@ class CommandBufferNode final : angle::NonCopyable
     // Is recording currently enabled?
     bool mIsFinishedRecording;
 };
+
+// The Command Graph consists of an array of open Command Graph Nodes. It supports allocating new
+// nodes for the graph, which are linked via dependency relation calls in CommandGraphNode, and
+// also submitting the whole command graph via submitCommands.
+class CommandGraph final : angle::NonCopyable
+{
+  public:
+    CommandGraph();
+    ~CommandGraph();
+
+    CommandGraphNode *allocateNode();
+    Error submitCommands(VkDevice device,
+                         Serial serial,
+                         RenderPassCache *renderPassCache,
+                         CommandPool *commandPool,
+                         CommandBuffer *primaryCommandBufferOut);
+    bool empty() const;
+
+  private:
+    std::vector<CommandGraphNode *> mNodes;
+};
+
 }  // namespace vk
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_VULKAN_COMMAND_BUFFER_NODE_H_
+#endif  // LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_

@@ -30,7 +30,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const;
 
-    void updateDrawDependencies(vk::CommandBufferNode *readNode,
+    void updateDrawDependencies(vk::CommandGraphNode *readNode,
                                 const gl::AttributesMask &activeAttribsMask,
                                 Serial serial,
                                 DrawType drawType);

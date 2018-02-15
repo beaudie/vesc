@@ -14,7 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
-#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
@@ -186,7 +186,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
     // TODO(jmadill): Need to link up the TextureVk to the Secondary CB.
-    vk::CommandBufferNode *renderNode = nullptr;
+    vk::CommandGraphNode *renderNode = nullptr;
     ANGLE_TRY(vkFBO->getRenderNode(context, &renderNode));
 
     if (!renderNode->getInsideRenderPassCommands()->valid())
