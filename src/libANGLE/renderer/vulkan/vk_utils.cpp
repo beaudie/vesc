@@ -472,6 +472,7 @@ void CommandBuffer::clearSingleColorImage(const vk::Image &image, const VkClearC
     vkCmdClearColorImage(mHandle, image.getHandle(), image.getCurrentLayout(), &color, 1, &range);
 }
 
+<<<<<<< HEAD
 void CommandBuffer::clearSingleDepthStencilImage(const vk::Image &image,
                                                  VkImageAspectFlags aspectFlags,
                                                  const VkClearDepthStencilValue &depthStencil)
@@ -498,6 +499,16 @@ void CommandBuffer::clearDepthStencilImage(const vk::Image &image,
 
     vkCmdClearDepthStencilImage(mHandle, image.getHandle(), image.getCurrentLayout(), &depthStencil,
                                 rangeCount, ranges);
+}
+
+void CommandBuffer::clearAttachments(uint32_t attachmentCount,
+                                     const VkClearAttachment *pAttachments,
+                                     uint32_t rectCount,
+                                     const VkClearRect *pRects)
+{
+    ASSERT(valid());
+
+    vkCmdClearAttachments(mHandle, attachmentCount, pAttachments, rectCount, pRects);
 }
 
 void CommandBuffer::copySingleImage(const vk::Image &srcImage,

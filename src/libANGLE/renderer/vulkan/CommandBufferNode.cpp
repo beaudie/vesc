@@ -166,19 +166,6 @@ void CommandBufferNode::appendDepthStencilRenderTarget(Serial serial,
     depthStencilRenderTarget->resource->onWriteResource(this, serial);
 }
 
-void CommandBufferNode::initAttachmentDesc(VkAttachmentDescription *desc)
-{
-    desc->flags          = 0;
-    desc->format         = VK_FORMAT_UNDEFINED;
-    desc->samples        = static_cast<VkSampleCountFlagBits>(0);
-    desc->loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    desc->storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-    desc->stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    desc->stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    desc->initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
-    desc->finalLayout    = VK_IMAGE_LAYOUT_UNDEFINED;
-}
-
 // static
 void CommandBufferNode::SetHappensBeforeDependency(CommandBufferNode *beforeNode,
                                                    CommandBufferNode *afterNode)
