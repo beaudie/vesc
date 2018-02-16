@@ -1,0 +1,2862 @@
+{
+    "Trigonometric": {
+        "functions": [
+            {
+                "name": "radians",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "degrees",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "sin",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "cos",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "tan",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "asin",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "acos",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "atan",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "atan",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "sinh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "cosh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "tanh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "asinh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "acosh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "atanh",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            }
+        ]
+    },
+    "Exponential": {
+        "functions": [
+            {
+                "name": "pow",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "exp",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "log",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "exp2",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "log2",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "sqrt",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "inversesqrt",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            }
+        ]
+    },
+    "Common": {
+        "functions": [
+            {
+                "name": "abs",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "abs",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "sign",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "sign",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "floor",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "trunc",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "round",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "roundEven",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "ceil",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "fract",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "mod",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            },
+            {
+                "name": "mod",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "min",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "max",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt"
+                    },
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "clamp",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "mix",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            },
+            {
+                "name": "mix",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "mix",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Bool",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "step",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "step",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "smoothstep",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "smoothstep",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float"
+                    },
+                    {
+                        "basic": "Float"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "modf",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            },
+            {
+                "name": "isnan",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "isinf",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "floatBitsToInt",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "floatBitsToUint",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "intBitsToFloat",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "uintBitsToFloat",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "frexp",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            },
+            {
+                "name": "ldexp",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "packSnorm2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "packUnorm2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "packHalf2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "unpackSnorm2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "unpackUnorm2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "unpackHalf2x16",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "packUnorm4x8",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    }
+                ]
+            },
+            {
+                "name": "packSnorm4x8",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    }
+                ]
+            },
+            {
+                "name": "unpackUnorm4x8",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            },
+            {
+                "name": "unpackSnorm4x8",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt"
+                    }
+                ]
+            }
+        ]
+    },
+    "Geometric": {
+        "functions": [
+            {
+                "name": "length",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "distance",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "dot",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "cross",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "vecSize": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    }
+                ]
+            },
+            {
+                "name": "normalize",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "faceforward",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "reflect",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "refract",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Float"
+                    }
+                ]
+            }
+        ]
+    },
+    "Matrix": {
+        "functions": [
+            {
+                "name": "matrixCompMult",
+                "level": "COMMON_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "COMMON_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "COMMON_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "matrixCompMult",
+                "level": "ESSL3_BUILTINS",
+                "op": "MulMatrixComponentWise",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 2
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    }
+                ]
+            },
+            {
+                "name": "outerProduct",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "vecSize": 3
+                    },
+                    {
+                        "basic": "Float",
+                        "vecSize": 4
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "transpose",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "determinant",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "determinant",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "determinant",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 4
+                    }
+                ]
+            },
+            {
+                "name": "inverse",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 2,
+                    "rows": 2
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 2,
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "name": "inverse",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 3,
+                    "rows": 3
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 3,
+                        "rows": 3
+                    }
+                ]
+            },
+            {
+                "name": "inverse",
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Float",
+                    "columns": 4,
+                    "rows": 4
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "columns": 4,
+                        "rows": 4
+                    }
+                ]
+            }
+        ]
+    },
+    "Vector": {
+        "functions": [
+            {
+                "name": "lessThan",
+                "level": "COMMON_BUILTINS",
+                "op": "LessThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "lessThan",
+                "level": "COMMON_BUILTINS",
+                "op": "LessThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "lessThan",
+                "level": "ESSL3_BUILTINS",
+                "op": "LessThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "lessThanEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "LessThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "lessThanEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "LessThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "lessThanEqual",
+                "level": "ESSL3_BUILTINS",
+                "op": "LessThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThan",
+                "level": "COMMON_BUILTINS",
+                "op": "GreaterThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThan",
+                "level": "COMMON_BUILTINS",
+                "op": "GreaterThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThan",
+                "level": "ESSL3_BUILTINS",
+                "op": "GreaterThanComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThanEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "GreaterThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThanEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "GreaterThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "greaterThanEqual",
+                "level": "ESSL3_BUILTINS",
+                "op": "GreaterThanEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "equal",
+                "level": "COMMON_BUILTINS",
+                "op": "EqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "equal",
+                "level": "COMMON_BUILTINS",
+                "op": "EqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "equal",
+                "level": "ESSL3_BUILTINS",
+                "op": "EqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "equal",
+                "level": "COMMON_BUILTINS",
+                "op": "EqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "notEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "NotEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Float",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "notEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "NotEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "notEqual",
+                "level": "ESSL3_BUILTINS",
+                "op": "NotEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "notEqual",
+                "level": "COMMON_BUILTINS",
+                "op": "NotEqualComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    },
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "any",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Bool"
+                },
+                "parameters": [
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "all",
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Bool"
+                },
+                "parameters": [
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    }
+                ]
+            },
+            {
+                "name": "not",
+                "level": "COMMON_BUILTINS",
+                "op": "LogicalNotComponentWise",
+                "returnType": {
+                    "basic": "Bool",
+                    "genType": "vec"
+                },
+                "parameters": [
+                    {
+                        "basic": "Bool",
+                        "genType": "vec"
+                    }
+                ],
+                "suffix": "Func"
+            }
+        ]
+    },
+    "Integer": {
+        "functions": [
+            {
+                "name": "bitfieldExtract",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "bitfieldExtract",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "bitfieldInsert",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "bitfieldInsert",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int"
+                    },
+                    {
+                        "basic": "Int"
+                    }
+                ]
+            },
+            {
+                "name": "bitfieldReverse",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "bitfieldReverse",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "bitCount",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "bitCount",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "findLSB",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "findLSB",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "findMSB",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "findMSB",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Int",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    }
+                ]
+            },
+            {
+                "name": "uaddCarry",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            },
+            {
+                "name": "usubBorrow",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "UInt",
+                    "genType": "yes"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            },
+            {
+                "name": "umulExtended",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Void"
+                },
+                "parameters": [
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    },
+                    {
+                        "basic": "UInt",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            },
+            {
+                "name": "imulExtended",
+                "level": "ESSL3_1_BUILTINS",
+                "op": "auto",
+                "returnType": {
+                    "basic": "Void"
+                },
+                "parameters": [
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    },
+                    {
+                        "basic": "Int",
+                        "genType": "yes",
+                        "qualifier": "Out"
+                    }
+                ]
+            }
+        ]
+    }
+}
