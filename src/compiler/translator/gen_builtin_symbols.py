@@ -9,6 +9,7 @@
 from collections import OrderedDict
 from datetime import date
 import json
+import re
 import os
 
 def set_working_dir():
@@ -34,6 +35,7 @@ template_builtin_header = """// GENERATED FILE - DO NOT EDIT.
 namespace sh
 {{
 
+class TFunction;
 class TVariable;
 
 constexpr const int kLastStaticBuiltInId = {last_static_builtin_id};
@@ -44,6 +46,14 @@ namespace BuiltInVariable
 {get_variable_declarations}
 
 }}  // namespace BuiltInVariable
+
+namespace BuiltInFunction
+{{
+
+{get_function_declarations}
+
+}}  // namespace BuiltInFunction
+
 
 }}  // namespace sh
 
@@ -66,6 +76,7 @@ template_builtin_cpp = """// GENERATED FILE - DO NOT EDIT.
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/SymbolUniqueId.h"
+#include "compiler/translator/SymbolTable.h"
 
 namespace sh
 {{
@@ -87,6 +98,13 @@ namespace BuiltInName
 
 }}  // namespace BuiltInName
 
+namespace BuiltInParameters
+{{
+
+{parameter_declarations}
+
+}}
+
 // TODO: Would be nice to make this a class instead of a namespace so that we could friend this
 // from TVariable. Now symbol constructors taking an id have to be public even though they're not
 // supposed to be accessible from outside of here.
@@ -98,6 +116,20 @@ namespace BuiltInVariable
 {get_variable_definitions}
 
 }};  // namespace BuiltInVariable
+
+namespace BuiltInFunction
+{{
+
+{function_declarations}
+
+{get_function_definitions}
+
+}};
+
+void TSymbolTable::insertStaticBuiltInFunctionUnmangledNames(sh::GLenum shaderType)
+{{
+{insert_unmangled_functions}
+}}
 
 }}  // namespace sh
 
@@ -128,6 +160,11 @@ void TSymbolTable::insertStaticBuiltInVariables(sh::GLenum shaderType,
 {insert_variables}
 }}
 
+void TSymbolTable::insertStaticBuiltInFunctions(sh::GLenum shaderType)
+{{
+{insert_functions}
+}}
+
 }}  // namespace sh
 """
 
@@ -138,6 +175,151 @@ variables_json_filename = 'builtin_variables.json'
 with open(variables_json_filename) as f:
     parsed_variables = json.load(f, object_pairs_hook=OrderedDict)
 
+def parse_type(type):
+    if type == 'float':
+        return OrderedDict([('basic', 'Float')])
+    if type == 'int':
+        return OrderedDict([('basic', 'Int')])
+    if type == 'uint':
+        return OrderedDict([('basic', 'UInt')])
+    if type == 'bool':
+        return OrderedDict([('basic', 'Bool')])
+
+    if type == 'void':
+        return OrderedDict([('basic', 'Void')])
+
+    if type == 'vec2':
+        return OrderedDict([('basic', 'Float'), ('vecSize', 2)])
+    if type == 'vec3':
+        return OrderedDict([('basic', 'Float'), ('vecSize', 3)])
+    if type == 'vec4':
+        return OrderedDict([('basic', 'Float'), ('vecSize', 4)])
+
+    if type == 'ivec2':
+        return OrderedDict([('basic', 'Int'), ('vecSize', 2)])
+    if type == 'ivec3':
+        return OrderedDict([('basic', 'Int'), ('vecSize', 3)])
+    if type == 'ivec4':
+        return OrderedDict([('basic', 'Int'), ('vecSize', 4)])
+
+    if type == 'uvec2':
+        return OrderedDict([('basic', 'UInt'), ('vecSize', 2)])
+    if type == 'uvec3':
+        return OrderedDict([('basic', 'UInt'), ('vecSize', 3)])
+    if type == 'uvec4':
+        return OrderedDict([('basic', 'UInt'), ('vecSize', 4)])
+
+    if type == 'bvec2':
+        return OrderedDict([('basic', 'Bool'), ('vecSize', 2)])
+    if type == 'bvec3':
+        return OrderedDict([('basic', 'Bool'), ('vecSize', 3)])
+    if type == 'bvec4':
+        return OrderedDict([('basic', 'Bool'), ('vecSize', 4)])
+
+    if type == 'mat2':
+        return OrderedDict([('basic', 'Float'), ('columns', 2), ('rows', 2)])
+    if type == 'mat3':
+        return OrderedDict([('basic', 'Float'), ('columns', 3), ('rows', 3)])
+    if type == 'mat4':
+        return OrderedDict([('basic', 'Float'), ('columns', 4), ('rows', 4)])
+
+    if type == 'mat2x3':
+        return OrderedDict([('basic', 'Float'), ('columns', 2), ('rows', 3)])
+    if type == 'mat2x4':
+        return OrderedDict([('basic', 'Float'), ('columns', 2), ('rows', 4)])
+    if type == 'mat3x2':
+        return OrderedDict([('basic', 'Float'), ('columns', 3), ('rows', 2)])
+    if type == 'mat3x4':
+        return OrderedDict([('basic', 'Float'), ('columns', 3), ('rows', 4)])
+    if type == 'mat4x2':
+        return OrderedDict([('basic', 'Float'), ('columns', 4), ('rows', 2)])
+    if type == 'mat4x3':
+        return OrderedDict([('basic', 'Float'), ('columns', 4), ('rows', 3)])
+
+    if type == 'genType':
+        return OrderedDict([('basic', 'Float'), ('genType', 'yes')])
+    if type == 'genIType':
+        return OrderedDict([('basic', 'Int'), ('genType', 'yes')])
+    if type == 'genUType':
+        return OrderedDict([('basic', 'UInt'), ('genType', 'yes')])
+    if type == 'genBType':
+        return OrderedDict([('basic', 'Bool'), ('genType', 'yes')])
+
+    if type == 'vec':
+        return OrderedDict([('basic', 'Float'), ('genType', 'vec')])
+    if type == 'ivec':
+        return OrderedDict([('basic', 'Int'), ('genType', 'vec')])
+    if type == 'uvec':
+        return OrderedDict([('basic', 'UInt'), ('genType', 'vec')])
+    if type == 'bvec':
+        return OrderedDict([('basic', 'Bool'), ('genType', 'vec')])
+
+    if type == 'out genType':
+        return OrderedDict([('basic', 'Float'), ('genType', 'yes'), ('qualifier', 'Out')])
+    if type == 'out genIType':
+        return OrderedDict([('basic', 'Int'), ('genType', 'yes'), ('qualifier', 'Out')])
+    if type == 'out genUType':
+        return OrderedDict([('basic', 'UInt'), ('genType', 'yes'), ('qualifier', 'Out')])
+    raise Exception('Unrecognized type: ' + str(type))
+
+def get_parsed_functions():
+
+    def parse_function_parameters(parameters):
+        parametersOut = []
+        parameters = parameters.split(', ')
+        for parameter in parameters:
+            parametersOut.append(parse_type(parameter.strip()))
+        return parametersOut
+
+    lines = []
+    with open('builtin_function_declarations.txt') as f:
+        lines = f.readlines()
+    lines = [line.strip() for line in lines if line.strip() != '']
+
+    fun_re = re.compile(r'(\w+) (\w+)\((.*)\);(.*)')
+
+    parsed_functions = OrderedDict()
+    group_functions = []
+    group_name = None
+
+    level = 'COMMON_BUILTINS'
+    op = 'auto'
+
+    for line in lines:
+        fun_match = fun_re.search(line)
+        if line.startswith('GROUP'):
+            if line.startswith('GROUP END'):
+                parsed_functions[group_name] = {'functions': group_functions}
+                group_functions = []
+            elif line.startswith('GROUP BEGIN '):
+                group_name = line[12:].strip()
+        elif fun_match:
+            return_type = fun_match.group(1)
+            name = fun_match.group(2)
+            parameters = fun_match.group(3)
+            metadata = fun_match.groups()[-1].strip()
+
+            function_props = OrderedDict([
+                ('name', name),
+                ('level', level),
+                ('op', op),
+                ('returnType', parse_type(return_type)),
+                ('parameters', parse_function_parameters(parameters))
+            ])
+            if metadata != '':
+                metadata = json.loads(metadata)
+                function_props.update(metadata)
+            group_functions.append(function_props)
+        else:
+            (level, op) = line.split(', ')
+
+    return parsed_functions
+
+parsed_functions = get_parsed_functions()
+
+# TODO: Add an option to dump intermediate json
+#with open('builtin_functions.json', 'w') as outfile:
+#    json.dump(parsed_functions, outfile, indent=4, separators=(',', ': '))
 
 # Declarations of symbol unique ids
 builtin_id_declarations = []
@@ -148,16 +330,38 @@ name_declarations = set()
 # Declarations of builtin TVariables
 variable_declarations = []
 
+# Declarations of parameter arrays for builtin TFunctions
+parameter_declarations = set()
+
+# Declarations of builtin TFunctions
+function_declarations = []
+
 # Functions for querying the pointer to a specific TVariable.
 get_variable_declarations = []
 get_variable_definitions = []
 
+# Functions for querying the pointer to a specific TFunction.
+get_function_declarations = []
+get_function_definitions = []
+
 # Code for inserting builtin TVariables to the symbol table.
 insert_variables = []
 
+# Code for inserting builtin TFunctions to the symbol table.
+insert_functions = []
+
+# Code for inserting unmangled builtin function names to the symbol table.
+insert_unmangled_functions = []
+
 id_counter = 0
 
-def get_type_string(typeObj):
+def is_matrix(typeObj):
+    return typeObj['secondarySize'] > 1
+
+def is_vector(typeObj):
+    return typeObj['secondarySize'] == 1 and typeObj['primarySize'] > 1
+
+def get_type_string(typeObj, allowUndefinedPrecision=True):
     if 'vecSize' in typeObj:
         typeObj['primarySize'] = typeObj['vecSize']
         typeObj['secondarySize'] = 1
@@ -168,9 +372,11 @@ def get_type_string(typeObj):
         typeObj['primarySize'] = 1
         typeObj['secondarySize'] = 1
     if 'precision' not in typeObj:
-        if typeObj['basic'] != 'Bool':
+        if typeObj['basic'] != 'Bool' and not allowUndefinedPrecision:
             raise Exception('Undefined precision for a non-bool variable')
         typeObj['precision'] = 'Undefined'
+    if 'qualifier' not in typeObj:
+        typeObj['qualifier'] = 'Global'
     template_type = 'StaticType::Get<Ebt{basic}, Ebp{precision}, Evq{qualifier}, {primarySize}, {secondarySize}>()'
     return template_type.format(**typeObj)
 
@@ -184,6 +390,113 @@ def get_extension(props):
         return props['extension']
     return 'UNDEFINED'
 
+def get_op(name, function_props):
+    if 'op' in function_props:
+        if function_props['op'] == 'auto':
+            return name[0].upper() + name[1:]
+        return function_props['op']
+    return 'CallBuiltInFunction'
+
+def get_known_to_not_have_side_effects(function_props):
+    if 'op' in function_props:
+        if 'hasSideEffects' in function_props:
+            return 'false'
+        else:
+            for param in get_parameters(function_props):
+                if 'qualifier' in param and param['qualifier'] == 'Out':
+                    return 'false'
+            return 'true'
+    return 'false'
+
+def get_parameters(function_props):
+    if 'parameters' in function_props:
+        return function_props['parameters']
+    return []
+
+basic_mangled_names = {
+    'Float': 'f',
+    'Int': 'i',
+    'UInt': 'u',
+    'Bool': 'b',
+    'YuvCscStandardEXT': 'ycs',
+    'Sampler2D': 's2',
+    'Sampler3D': 's3',
+    'SamplerCube': 'sC',
+    'Sampler2DArray': 's2a',
+    'SamplerExternalOES': 'sext',
+    'SamplerExternal2DY2YEXT': 'sext2y2y',
+    'Sampler2DRect': 's2r',
+    'Sampler2DMS': 's2ms',
+    'ISampler2D': 'is2',
+    'ISampler3D': 'is3',
+    'ISamplerCube': 'isC',
+    'ISampler2DArray': 'is2a',
+    'ISampler2DMS': 'is2ms',
+    'USampler2D': 'us2',
+    'USampler3D': 'us3',
+    'USamplerCube': 'usC',
+    'USampler2DArray': 'us2a',
+    'USampler2DMS': 'us2ms',
+    'Sampler2DShadow': 's2s',
+    'SamplerCubeShadow': 'sCs',
+    'Sampler2DArrayShadow': 's2as',
+    'Image2D': 'im2',
+    'IImage2D': 'iim2',
+    'UImage2D': 'uim2',
+    'Image3D': 'im3',
+    'IImage3D': 'iim3',
+    'UImage3D': 'uim3',
+    'Image2DArray': 'im2a',
+    'IImage2DArray': 'iim2a',
+    'UImage2DArray': 'uim2a',
+    'ImageCube': 'imc',
+    'IImageCube': 'iimc',
+    'UImageCube': 'uimc',
+    'AtomicCounter': 'ac'
+}
+
+def get_mangled_type_name(type, separator = ';'):
+    # This sets primarySize, secondarySize etc default values on the type object.
+    get_type_string(type)
+
+    mangled_name = ''
+
+    if is_matrix(type):
+        mangled_name += 'm'
+    elif is_vector(type):
+        mangled_name += 'v'
+    mangled_name += basic_mangled_names[type['basic']]
+
+    if is_matrix(type):
+        mangled_name += str(type['primarySize'])
+        mangled_name += 'x'
+        mangled_name += str(type['secondarySize'])
+    else:
+        mangled_name += str(type['primarySize'])
+
+    mangled_name += separator
+    return mangled_name
+
+def get_mangled_name(function_name, parameters):
+    mangled_name = function_name + '('
+    for param in parameters:
+        mangled_name += get_mangled_type_name(param)
+    return mangled_name
+
+def get_unique_identifier_name(function_name, parameters):
+    unique_name = function_name + '_'
+    for param in parameters:
+        unique_name += get_mangled_type_name(param, '_')
+    return unique_name
+
+def get_parameters_name(parameters):
+    unique_name = ''
+    for param in parameters:
+        if 'qualifier' in param and param['qualifier'] == 'Out':
+            unique_name += 'o_'
+        unique_name += get_mangled_type_name(param, '_')
+    return unique_name
+
 def process_variable_group(group_name, group):
     global id_counter
     if 'condition' in group:
@@ -196,7 +509,7 @@ def process_variable_group(group_name, group):
 
             # The name suffix makes the variable name unique in case it otherwise isn't.
             name_suffix = get_suffix(props)
-            type = get_type_string(props['type'])
+            type = get_type_string(props['type'], False)
             extension = get_extension(props)
 
             template_builtin_id_declaration = '    static constexpr const TSymbolUniqueId {name}{suffix} = TSymbolUniqueId({id});'
@@ -233,12 +546,154 @@ def process_variable_group(group_name, group):
 for group_name, group in parsed_variables.iteritems():
     process_variable_group(group_name, group)
 
+def specific_type(gen_type, vec_size):
+    get_type_string(gen_type)
+    if 'genType' in gen_type:
+        specific_type = {}
+        specific_type['basic'] = gen_type['basic']
+        specific_type['precision'] = gen_type['precision']
+        specific_type['qualifier'] = gen_type['qualifier']
+        specific_type['primarySize'] = vec_size
+        specific_type['secondarySize'] = 1
+        return specific_type
+    return gen_type
+
+def gen_function_variants(function_name, function_props):
+    function_variants = []
+    parameters = get_parameters(function_props)
+    function_is_gen_type = False
+    gsampler = False
+    gvec = False
+    for param in parameters:
+        if 'genType' in param:
+            function_is_gen_type = True
+            if param['genType'] == 'sampler':
+                gsampler = True
+            elif param['genType'] == 'vec':
+                gvec = True
+            elif param['genType'] != 'yes':
+                raise Exception('Unexpected value of genType "' + str(param['genType']) + '" should be "sampler", "vec", or "yes"')
+    if not function_is_gen_type:
+        function_variants.append(function_props)
+        return function_variants
+
+    if gsampler:
+        pass
+    else:
+        sizes = range(1, 5)
+        if gvec:
+            sizes = range(2, 5)
+        for size in sizes:
+            variant_props = function_props.copy()
+            variant_parameters = []
+            for param in parameters:
+                variant_parameters.append(specific_type(param, size))
+            variant_props['parameters'] = variant_parameters
+            variant_props['returnType'] = specific_type(function_props['returnType'], size)
+            function_variants.append(variant_props)
+
+    return function_variants
+
+defined_function_variants = set()
+
+def process_function_group(group_name, group):
+    global id_counter
+    if 'condition' in group:
+        insert_functions.append('  if ({condition})'.format(condition = group['condition']))
+        insert_functions.append('  {')
+    if 'functions' in group:
+        for function_props in group['functions']:
+            function_name = function_props['name']
+            name_suffix = get_suffix(function_props)
+            extension = get_extension(function_props)
+            op = get_op(function_name, function_props)
+            known_to_not_have_side_effects = get_known_to_not_have_side_effects(function_props)
+
+            function_variants = gen_function_variants(function_name, function_props)
+
+            template_name_declaration = 'constexpr const ImmutableString {name}{suffix}("{name}");'
+            name_declaration = template_name_declaration.format(name = function_name, suffix = name_suffix)
+            if not name_declaration in name_declarations:
+                name_declarations.add(name_declaration)
+
+                template_insert_unmangled = '    insertUnmangledBuiltIn(BuiltInName::{name}{suffix}.data(), TExtension::{extension}, {level});'
+                insert_unmangled_functions.append(template_insert_unmangled.format(name = function_name, suffix = name_suffix, extension = extension, level = function_props['level']))
+
+            for function_props in function_variants:
+                function_id = id_counter
+
+                parameters = get_parameters(function_props)
+                param_count = len(parameters)
+                return_type = get_type_string(function_props['returnType'])
+                mangled_name = get_mangled_name(function_name, parameters)
+
+                unique_name = get_unique_identifier_name(function_name + name_suffix, parameters)
+
+                if unique_name in defined_function_variants:
+                    continue
+                defined_function_variants.add(unique_name)
+
+                template_builtin_id_declaration = '    static constexpr const TSymbolUniqueId {unique_name} = TSymbolUniqueId({id});'
+                builtin_id_declarations.append(template_builtin_id_declaration.format(id = function_id, unique_name = unique_name))
+
+                template_mangled_name_declaration = 'constexpr const ImmutableString {unique_name}("{mangled_name}");'
+                name_declarations.add(template_mangled_name_declaration.format(unique_name = unique_name, mangled_name = mangled_name))
+
+                parameters_list = []
+                for param in parameters:
+                    template_parameter = 'TConstParameter({param_type})'
+                    parameters_list.append(template_parameter.format(param_type = get_type_string(param)))
+                template_parameter_list_declaration = 'constexpr const TConstParameter {parameters_name}[{param_count}] = {{ {parameters} }};'
+                parameters_name = get_parameters_name(parameters)
+                parameter_declarations.add(template_parameter_list_declaration.format(param_count = param_count, parameters_name = parameters_name, parameters = ', '.join(parameters_list)))
+
+                template_function_declaration = 'constexpr const TFunction kFunction_{unique_name}(BuiltInId::{unique_name}, BuiltInName::{name}{suffix}, TExtension::{extension}, BuiltInParameters::{parameters_name}, {param_count}, {return_type}, BuiltInName::{unique_name}, EOp{op}, {known_to_not_have_side_effects});'
+                function_declarations.append(template_function_declaration.format(name = function_name,
+                                                                                  suffix = name_suffix,
+                                                                                  unique_name = unique_name,
+                                                                                  extension = extension,
+                                                                                  parameters_name = parameters_name,
+                                                                                  param_count = param_count,
+                                                                                  return_type = return_type,
+                                                                                  op = op,
+                                                                                  known_to_not_have_side_effects = known_to_not_have_side_effects))
+
+                template_insert_function = '    insertBuiltIn({level}, BuiltInFunction::{unique_name}());'
+                insert_functions.append(template_insert_function.format(level = function_props['level'], unique_name = unique_name))
+
+                template_get_function_declaration = 'const TFunction *{unique_name}();'
+                get_function_declarations.append(template_get_function_declaration.format(unique_name = unique_name))
+
+                template_get_function_definition = """const TFunction *{unique_name}()
+{{
+    return &kFunction_{unique_name};
+}}
+"""
+                get_function_definitions.append(template_get_function_definition.format(unique_name = unique_name))
+
+                id_counter += 1
+
+    if 'subgroups' in group:
+        for subgroup_name, subgroup in group['subgroups'].iteritems():
+            process_function_group(subgroup_name, subgroup)
+    if 'condition' in group:
+        insert_functions.append('  }')
+
+for group_name, group in parsed_functions.iteritems():
+    process_function_group(group_name, group)
+
 builtin_id_declarations = '\n'.join(builtin_id_declarations)
 name_declarations = '\n'.join(sorted(list(name_declarations)))
 variable_declarations = '\n'.join(sorted(variable_declarations))
+function_declarations = '\n'.join(function_declarations)
 get_variable_declarations = '\n'.join(sorted(get_variable_declarations))
 get_variable_definitions = '\n'.join(sorted(get_variable_definitions))
+get_function_declarations = '\n'.join(get_function_declarations)
+get_function_definitions = '\n'.join(get_function_definitions)
 insert_variables = '\n'.join(insert_variables)
+insert_functions = '\n'.join(insert_functions)
+parameter_declarations = '\n'.join(sorted(parameter_declarations))
+insert_unmangled_functions = '\n'.join(insert_unmangled_functions)
 
 with open('BuiltIn_autogen.h', 'wt') as outfile_header:
     output_header = template_builtin_header.format(
@@ -246,6 +701,7 @@ with open('BuiltIn_autogen.h', 'wt') as outfile_header:
         variable_data_source_name = variables_json_filename,
         copyright_year = date.today().year,
         get_variable_declarations = get_variable_declarations,
+        get_function_declarations = get_function_declarations,
         last_static_builtin_id = id_counter - 1
         )
     outfile_header.write(output_header)
@@ -258,7 +714,11 @@ with open('BuiltIn_autogen.cpp', 'wt') as outfile_cpp:
         builtin_id_declarations = builtin_id_declarations,
         name_declarations = name_declarations,
         get_variable_definitions = get_variable_definitions,
+        get_function_definitions = get_function_definitions,
+        parameter_declarations = parameter_declarations,
         variable_declarations = variable_declarations,
+        function_declarations = function_declarations,
+        insert_unmangled_functions = insert_unmangled_functions
         )
     outfile_cpp.write(output_cpp)
 
@@ -267,7 +727,8 @@ with open('SymbolTable_autogen.cpp', 'wt') as outfile_cpp:
         script_name = os.path.basename(__file__),
         variable_data_source_name = variables_json_filename,
         copyright_year = date.today().year,
-        insert_variables = insert_variables
+        insert_variables = insert_variables,
+        insert_functions = insert_functions
         )
     outfile_cpp.write(output_cpp)
 
