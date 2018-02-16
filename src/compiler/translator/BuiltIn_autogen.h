@@ -14,9 +14,10 @@
 namespace sh
 {
 
+class TFunction;
 class TVariable;
 
-constexpr const int kLastStaticBuiltInId = 27;
+constexpr const int kLastStaticBuiltInId = 83;
 
 namespace BuiltInVariable
 {
@@ -51,6 +52,68 @@ const TVariable *gl_WorkGroupID();
 const TVariable *gl_WorkGroupSize();
 
 }  // namespace BuiltInVariable
+
+namespace BuiltInFunction
+{
+
+const TFunction *radians_f1_();
+const TFunction *radians_vf2_();
+const TFunction *radians_vf3_();
+const TFunction *radians_vf4_();
+const TFunction *degrees_f1_();
+const TFunction *degrees_vf2_();
+const TFunction *degrees_vf3_();
+const TFunction *degrees_vf4_();
+const TFunction *sin_f1_();
+const TFunction *sin_vf2_();
+const TFunction *sin_vf3_();
+const TFunction *sin_vf4_();
+const TFunction *cos_f1_();
+const TFunction *cos_vf2_();
+const TFunction *cos_vf3_();
+const TFunction *cos_vf4_();
+const TFunction *tan_f1_();
+const TFunction *tan_vf2_();
+const TFunction *tan_vf3_();
+const TFunction *tan_vf4_();
+const TFunction *asin_f1_();
+const TFunction *asin_vf2_();
+const TFunction *asin_vf3_();
+const TFunction *asin_vf4_();
+const TFunction *acos_f1_();
+const TFunction *acos_vf2_();
+const TFunction *acos_vf3_();
+const TFunction *acos_vf4_();
+const TFunction *atan_f1_f1_();
+const TFunction *atan_vf2_vf2_();
+const TFunction *atan_vf3_vf3_();
+const TFunction *atan_vf4_vf4_();
+const TFunction *sinh_f1_();
+const TFunction *sinh_vf2_();
+const TFunction *sinh_vf3_();
+const TFunction *sinh_vf4_();
+const TFunction *cosh_f1_();
+const TFunction *cosh_vf2_();
+const TFunction *cosh_vf3_();
+const TFunction *cosh_vf4_();
+const TFunction *tanh_f1_();
+const TFunction *tanh_vf2_();
+const TFunction *tanh_vf3_();
+const TFunction *tanh_vf4_();
+const TFunction *asinh_f1_();
+const TFunction *asinh_vf2_();
+const TFunction *asinh_vf3_();
+const TFunction *asinh_vf4_();
+const TFunction *acosh_f1_();
+const TFunction *acosh_vf2_();
+const TFunction *acosh_vf3_();
+const TFunction *acosh_vf4_();
+const TFunction *atanh_f1_();
+const TFunction *atanh_vf2_();
+const TFunction *atanh_vf3_();
+const TFunction *atanh_vf4_();
+
+}  // namespace BuiltInFunction
 
 }  // namespace sh
 

@@ -69,4 +69,66 @@ void TSymbolTable::insertStaticBuiltInVariables(sh::GLenum shaderType,
     }
 }
 
+void TSymbolTable::insertStaticBuiltInFunctions(sh::GLenum shaderType,
+                                                ShShaderSpec spec,
+                                                const ShBuiltInResources &resources)
+{
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::radians_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::radians_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::radians_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::radians_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::degrees_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::degrees_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::degrees_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::degrees_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::sin_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::sin_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::sin_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::sin_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::cos_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::cos_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::cos_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::cos_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::tan_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::tan_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::tan_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::tan_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::asin_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::asin_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::asin_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::asin_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::acos_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::acos_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::acos_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::acos_vf4_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::atan_f1_f1_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::atan_vf2_vf2_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::atan_vf3_vf3_());
+    insertBuiltIn(COMMON_BUILTINS, BuiltInFunction::atan_vf4_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::sinh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::sinh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::sinh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::sinh_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::cosh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::cosh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::cosh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::cosh_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::tanh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::tanh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::tanh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::tanh_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::asinh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::asinh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::asinh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::asinh_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::acosh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::acosh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::acosh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::acosh_vf4_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::atanh_f1_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::atanh_vf2_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::atanh_vf3_());
+    insertBuiltIn(ESSL3_BUILTINS, BuiltInFunction::atanh_vf4_());
+}
+
 }  // namespace sh
