@@ -13,7 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
-#include "libANGLE/renderer/vulkan/CommandBufferNode.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
@@ -163,7 +163,7 @@ const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets
     return mCurrentArrayBufferOffsets;
 }
 
-void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
+void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readingNode,
                                            const gl::AttributesMask &activeAttribsMask,
                                            Serial serial,
                                            DrawType drawType)
@@ -172,14 +172,14 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
     for (auto attribIndex : activeAttribsMask)
     {
         if (mCurrentArrayBufferResources[attribIndex])
-            mCurrentArrayBufferResources[attribIndex]->onReadResource(readNode, serial);
+            mCurrentArrayBufferResources[attribIndex]->onReadResource(readingNode, serial);
     }
 
     // Handle the bound element array buffer.
     if (drawType == DrawType::Elements)
     {
         ASSERT(mCurrentElementArrayBufferResource);
-        mCurrentElementArrayBufferResource->onReadResource(readNode, serial);
+        mCurrentElementArrayBufferResource->onReadResource(readingNode, serial);
     }
 }
 
