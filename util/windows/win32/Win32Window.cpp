@@ -611,12 +611,12 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
     // Hack for DWM: There is no way to wait for DWM animations to finish, so we just have to wait
     // for a while before issuing screenshot if window was just made visible.
     {
-        static const double WAIT_WINDOW_VISIBLE_MS = 0.5;  // Half a second for the animation
+        static const double WAIT_WINDOW_VISIBLE_MS = 2.0;  // Two seconds for the animation
         double timeSinceVisible                    = mSetVisibleTimer->getElapsedTime();
 
         if (timeSinceVisible < WAIT_WINDOW_VISIBLE_MS)
         {
-            Sleep(static_cast<DWORD>((WAIT_WINDOW_VISIBLE_MS - timeSinceVisible) * 1000));
+            Sleep(static_cast<DWORD>((WAIT_WINDOW_VISIBLE_MS - timeSinceVisible) * 1000.0));
         }
     }
 
