@@ -1,0 +1,161 @@
+{
+    "Trig":
+    {
+        "spec": "ESSL 3.00.6 section 8.1",
+        "functions":
+        {
+            "radians":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "degrees":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "sin":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "cos":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "tan":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "asin":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "acos":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "atan":
+            {
+                "level": "COMMON_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "sinh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "cosh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "tanh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "asinh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "acosh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            },
+            "atanh":
+            {
+                "level": "ESSL3_BUILTINS",
+                "op": "auto",
+                "returnType": {"basic": "Float", "genType": "yes"},
+                "parameters": [
+                    {"basic": "Float", "genType": "yes"}
+                ]
+            }
+        },
+        "subgroups":
+        {
+            "Atan2":
+            {
+                "functions":
+                {
+                    "atan":
+                    {
+                        "level": "COMMON_BUILTINS",
+                        "op": "auto",
+                        "returnType": {"basic": "Float", "genType": "yes"},
+                        "parameters": [
+                            {"basic": "Float", "genType": "yes"},
+                            {"basic": "Float", "genType": "yes"}
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "Exp":
+    {
+        "spec": "ESSL 3.00.6 section 8.2",
+        "functions":
+        {
+        }
+    }
+}

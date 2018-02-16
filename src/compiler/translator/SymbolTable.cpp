@@ -832,6 +832,8 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
     setDefaultPrecision(EbtAtomicCounter, EbpHigh);
 
     insertStaticBuiltInVariables(type, spec, resources);
+    insertStaticBuiltInFunctions(type);
+    insertStaticBuiltInFunctionUnmangledNames(type);
     mUniqueIdCounter = kLastStaticBuiltInId + 1;
 
     initializeBuiltInFunctions(type, spec, resources);
@@ -863,25 +865,6 @@ void TSymbolTable::initializeBuiltInFunctions(sh::GLenum type,
     const TType *genIType = StaticType::GetBasic<EbtGenIType>();
     const TType *genUType = StaticType::GetBasic<EbtGenUType>();
     const TType *genBType = StaticType::GetBasic<EbtGenBType>();
-
-    //
-    // Angle and Trigonometric Functions.
-    //
-    insertBuiltInOp(COMMON_BUILTINS, EOpRadians, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpDegrees, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpSin, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpCos, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpTan, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpAsin, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpAcos, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpAtan, genType, genType, genType);
-    insertBuiltInOp(COMMON_BUILTINS, EOpAtan, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpSinh, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpCosh, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpTanh, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpAsinh, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpAcosh, genType, genType);
-    insertBuiltInOp(ESSL3_BUILTINS, EOpAtanh, genType, genType);
 
     //
     // Exponential Functions.

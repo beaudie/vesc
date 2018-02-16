@@ -11,6 +11,7 @@
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/Symbol.h"
+#include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/SymbolUniqueId.h"
 
 namespace sh
@@ -49,11 +50,120 @@ class BuiltInId
     static constexpr const TSymbolUniqueId gl_LayerGS               = TSymbolUniqueId(25);
     static constexpr const TSymbolUniqueId gl_ViewID_OVR            = TSymbolUniqueId(26);
     static constexpr const TSymbolUniqueId gl_ViewID_OVRESSL1       = TSymbolUniqueId(27);
+    static constexpr const TSymbolUniqueId radians_f1_              = TSymbolUniqueId(28);
+    static constexpr const TSymbolUniqueId radians_vf2_             = TSymbolUniqueId(29);
+    static constexpr const TSymbolUniqueId radians_vf3_             = TSymbolUniqueId(30);
+    static constexpr const TSymbolUniqueId radians_vf4_             = TSymbolUniqueId(31);
+    static constexpr const TSymbolUniqueId degrees_f1_              = TSymbolUniqueId(32);
+    static constexpr const TSymbolUniqueId degrees_vf2_             = TSymbolUniqueId(33);
+    static constexpr const TSymbolUniqueId degrees_vf3_             = TSymbolUniqueId(34);
+    static constexpr const TSymbolUniqueId degrees_vf4_             = TSymbolUniqueId(35);
+    static constexpr const TSymbolUniqueId sin_f1_                  = TSymbolUniqueId(36);
+    static constexpr const TSymbolUniqueId sin_vf2_                 = TSymbolUniqueId(37);
+    static constexpr const TSymbolUniqueId sin_vf3_                 = TSymbolUniqueId(38);
+    static constexpr const TSymbolUniqueId sin_vf4_                 = TSymbolUniqueId(39);
+    static constexpr const TSymbolUniqueId cos_f1_                  = TSymbolUniqueId(40);
+    static constexpr const TSymbolUniqueId cos_vf2_                 = TSymbolUniqueId(41);
+    static constexpr const TSymbolUniqueId cos_vf3_                 = TSymbolUniqueId(42);
+    static constexpr const TSymbolUniqueId cos_vf4_                 = TSymbolUniqueId(43);
+    static constexpr const TSymbolUniqueId tan_f1_                  = TSymbolUniqueId(44);
+    static constexpr const TSymbolUniqueId tan_vf2_                 = TSymbolUniqueId(45);
+    static constexpr const TSymbolUniqueId tan_vf3_                 = TSymbolUniqueId(46);
+    static constexpr const TSymbolUniqueId tan_vf4_                 = TSymbolUniqueId(47);
+    static constexpr const TSymbolUniqueId asin_f1_                 = TSymbolUniqueId(48);
+    static constexpr const TSymbolUniqueId asin_vf2_                = TSymbolUniqueId(49);
+    static constexpr const TSymbolUniqueId asin_vf3_                = TSymbolUniqueId(50);
+    static constexpr const TSymbolUniqueId asin_vf4_                = TSymbolUniqueId(51);
+    static constexpr const TSymbolUniqueId acos_f1_                 = TSymbolUniqueId(52);
+    static constexpr const TSymbolUniqueId acos_vf2_                = TSymbolUniqueId(53);
+    static constexpr const TSymbolUniqueId acos_vf3_                = TSymbolUniqueId(54);
+    static constexpr const TSymbolUniqueId acos_vf4_                = TSymbolUniqueId(55);
+    static constexpr const TSymbolUniqueId atan_f1_                 = TSymbolUniqueId(56);
+    static constexpr const TSymbolUniqueId atan_vf2_                = TSymbolUniqueId(57);
+    static constexpr const TSymbolUniqueId atan_vf3_                = TSymbolUniqueId(58);
+    static constexpr const TSymbolUniqueId atan_vf4_                = TSymbolUniqueId(59);
+    static constexpr const TSymbolUniqueId sinh_f1_                 = TSymbolUniqueId(60);
+    static constexpr const TSymbolUniqueId sinh_vf2_                = TSymbolUniqueId(61);
+    static constexpr const TSymbolUniqueId sinh_vf3_                = TSymbolUniqueId(62);
+    static constexpr const TSymbolUniqueId sinh_vf4_                = TSymbolUniqueId(63);
+    static constexpr const TSymbolUniqueId cosh_f1_                 = TSymbolUniqueId(64);
+    static constexpr const TSymbolUniqueId cosh_vf2_                = TSymbolUniqueId(65);
+    static constexpr const TSymbolUniqueId cosh_vf3_                = TSymbolUniqueId(66);
+    static constexpr const TSymbolUniqueId cosh_vf4_                = TSymbolUniqueId(67);
+    static constexpr const TSymbolUniqueId tanh_f1_                 = TSymbolUniqueId(68);
+    static constexpr const TSymbolUniqueId tanh_vf2_                = TSymbolUniqueId(69);
+    static constexpr const TSymbolUniqueId tanh_vf3_                = TSymbolUniqueId(70);
+    static constexpr const TSymbolUniqueId tanh_vf4_                = TSymbolUniqueId(71);
+    static constexpr const TSymbolUniqueId asinh_f1_                = TSymbolUniqueId(72);
+    static constexpr const TSymbolUniqueId asinh_vf2_               = TSymbolUniqueId(73);
+    static constexpr const TSymbolUniqueId asinh_vf3_               = TSymbolUniqueId(74);
+    static constexpr const TSymbolUniqueId asinh_vf4_               = TSymbolUniqueId(75);
+    static constexpr const TSymbolUniqueId acosh_f1_                = TSymbolUniqueId(76);
+    static constexpr const TSymbolUniqueId acosh_vf2_               = TSymbolUniqueId(77);
+    static constexpr const TSymbolUniqueId acosh_vf3_               = TSymbolUniqueId(78);
+    static constexpr const TSymbolUniqueId acosh_vf4_               = TSymbolUniqueId(79);
+    static constexpr const TSymbolUniqueId atanh_f1_                = TSymbolUniqueId(80);
+    static constexpr const TSymbolUniqueId atanh_vf2_               = TSymbolUniqueId(81);
+    static constexpr const TSymbolUniqueId atanh_vf3_               = TSymbolUniqueId(82);
+    static constexpr const TSymbolUniqueId atanh_vf4_               = TSymbolUniqueId(83);
+    static constexpr const TSymbolUniqueId atan_f1_f1_              = TSymbolUniqueId(84);
+    static constexpr const TSymbolUniqueId atan_vf2_vf2_            = TSymbolUniqueId(85);
+    static constexpr const TSymbolUniqueId atan_vf3_vf3_            = TSymbolUniqueId(86);
+    static constexpr const TSymbolUniqueId atan_vf4_vf4_            = TSymbolUniqueId(87);
 };
 
 namespace BuiltInName
 {
 
+constexpr const ImmutableString acos("acos");
+constexpr const ImmutableString acos_f1_("acos(f1;");
+constexpr const ImmutableString acos_vf2_("acos(vf2;");
+constexpr const ImmutableString acos_vf3_("acos(vf3;");
+constexpr const ImmutableString acos_vf4_("acos(vf4;");
+constexpr const ImmutableString acosh("acosh");
+constexpr const ImmutableString acosh_f1_("acosh(f1;");
+constexpr const ImmutableString acosh_vf2_("acosh(vf2;");
+constexpr const ImmutableString acosh_vf3_("acosh(vf3;");
+constexpr const ImmutableString acosh_vf4_("acosh(vf4;");
+constexpr const ImmutableString asin("asin");
+constexpr const ImmutableString asin_f1_("asin(f1;");
+constexpr const ImmutableString asin_vf2_("asin(vf2;");
+constexpr const ImmutableString asin_vf3_("asin(vf3;");
+constexpr const ImmutableString asin_vf4_("asin(vf4;");
+constexpr const ImmutableString asinh("asinh");
+constexpr const ImmutableString asinh_f1_("asinh(f1;");
+constexpr const ImmutableString asinh_vf2_("asinh(vf2;");
+constexpr const ImmutableString asinh_vf3_("asinh(vf3;");
+constexpr const ImmutableString asinh_vf4_("asinh(vf4;");
+constexpr const ImmutableString atan("atan");
+constexpr const ImmutableString atan_f1_("atan(f1;");
+constexpr const ImmutableString atan_f1_f1_("atan(f1;f1;");
+constexpr const ImmutableString atan_vf2_("atan(vf2;");
+constexpr const ImmutableString atan_vf2_vf2_("atan(vf2;vf2;");
+constexpr const ImmutableString atan_vf3_("atan(vf3;");
+constexpr const ImmutableString atan_vf3_vf3_("atan(vf3;vf3;");
+constexpr const ImmutableString atan_vf4_("atan(vf4;");
+constexpr const ImmutableString atan_vf4_vf4_("atan(vf4;vf4;");
+constexpr const ImmutableString atanh("atanh");
+constexpr const ImmutableString atanh_f1_("atanh(f1;");
+constexpr const ImmutableString atanh_vf2_("atanh(vf2;");
+constexpr const ImmutableString atanh_vf3_("atanh(vf3;");
+constexpr const ImmutableString atanh_vf4_("atanh(vf4;");
+constexpr const ImmutableString cos("cos");
+constexpr const ImmutableString cos_f1_("cos(f1;");
+constexpr const ImmutableString cos_vf2_("cos(vf2;");
+constexpr const ImmutableString cos_vf3_("cos(vf3;");
+constexpr const ImmutableString cos_vf4_("cos(vf4;");
+constexpr const ImmutableString cosh("cosh");
+constexpr const ImmutableString cosh_f1_("cosh(f1;");
+constexpr const ImmutableString cosh_vf2_("cosh(vf2;");
+constexpr const ImmutableString cosh_vf3_("cosh(vf3;");
+constexpr const ImmutableString cosh_vf4_("cosh(vf4;");
+constexpr const ImmutableString degrees("degrees");
+constexpr const ImmutableString degrees_f1_("degrees(f1;");
+constexpr const ImmutableString degrees_vf2_("degrees(vf2;");
+constexpr const ImmutableString degrees_vf3_("degrees(vf3;");
+constexpr const ImmutableString degrees_vf4_("degrees(vf4;");
 constexpr const ImmutableString gl_FragColor("gl_FragColor");
 constexpr const ImmutableString gl_FragCoord("gl_FragCoord");
 constexpr const ImmutableString gl_FragDepth("gl_FragDepth");
@@ -78,8 +188,162 @@ constexpr const ImmutableString gl_ViewID_OVR("gl_ViewID_OVR");
 constexpr const ImmutableString gl_ViewportIndex("gl_ViewportIndex");
 constexpr const ImmutableString gl_WorkGroupID("gl_WorkGroupID");
 constexpr const ImmutableString gl_WorkGroupSize("gl_WorkGroupSize");
+constexpr const ImmutableString radians("radians");
+constexpr const ImmutableString radians_f1_("radians(f1;");
+constexpr const ImmutableString radians_vf2_("radians(vf2;");
+constexpr const ImmutableString radians_vf3_("radians(vf3;");
+constexpr const ImmutableString radians_vf4_("radians(vf4;");
+constexpr const ImmutableString sin("sin");
+constexpr const ImmutableString sin_f1_("sin(f1;");
+constexpr const ImmutableString sin_vf2_("sin(vf2;");
+constexpr const ImmutableString sin_vf3_("sin(vf3;");
+constexpr const ImmutableString sin_vf4_("sin(vf4;");
+constexpr const ImmutableString sinh("sinh");
+constexpr const ImmutableString sinh_f1_("sinh(f1;");
+constexpr const ImmutableString sinh_vf2_("sinh(vf2;");
+constexpr const ImmutableString sinh_vf3_("sinh(vf3;");
+constexpr const ImmutableString sinh_vf4_("sinh(vf4;");
+constexpr const ImmutableString tan("tan");
+constexpr const ImmutableString tan_f1_("tan(f1;");
+constexpr const ImmutableString tan_vf2_("tan(vf2;");
+constexpr const ImmutableString tan_vf3_("tan(vf3;");
+constexpr const ImmutableString tan_vf4_("tan(vf4;");
+constexpr const ImmutableString tanh("tanh");
+constexpr const ImmutableString tanh_f1_("tanh(f1;");
+constexpr const ImmutableString tanh_vf2_("tanh(vf2;");
+constexpr const ImmutableString tanh_vf3_("tanh(vf3;");
+constexpr const ImmutableString tanh_vf4_("tanh(vf4;");
 
 }  // namespace BuiltInName
+
+namespace BuiltInParameters
+{
+
+constexpr const TConstParameter radians_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter radians_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter radians_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter radians_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter degrees_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter degrees_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter degrees_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter degrees_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter sin_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter sin_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter sin_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter sin_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter cos_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter cos_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter cos_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter cos_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter tan_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter tan_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter tan_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter tan_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter asin_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter asin_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter asin_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter asin_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter acos_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter acos_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter acos_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter acos_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter atan_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter atan_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter atan_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter atan_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter sinh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter sinh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter sinh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter sinh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter cosh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter cosh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter cosh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter cosh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter tanh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter tanh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter tanh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter tanh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter asinh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter asinh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter asinh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter asinh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter acosh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter acosh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter acosh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter acosh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter atanh_f1_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter atanh_vf2_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter atanh_vf3_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter atanh_vf4_[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter atan_f1_f1_[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter atan_vf2_vf2_[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter atan_vf3_vf3_[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter atan_vf4_vf4_[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+}
 
 // TODO: Would be nice to make this a class instead of a namespace so that we could friend this
 // from TVariable. Now symbol constructors taking an id have to be public even though they're not
@@ -392,5 +656,928 @@ const TVariable *gl_WorkGroupSize()
 }
 
 };  // namespace BuiltInVariable
+
+namespace BuiltInFunction
+{
+
+constexpr const TFunction kFunction_radians_f1_(
+    BuiltInId::radians_f1_,
+    BuiltInName::radians,
+    TExtension::UNDEFINED,
+    BuiltInParameters::radians_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::radians_f1_,
+    EOpRadians,
+    true);
+constexpr const TFunction kFunction_radians_vf2_(
+    BuiltInId::radians_vf2_,
+    BuiltInName::radians,
+    TExtension::UNDEFINED,
+    BuiltInParameters::radians_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::radians_vf2_,
+    EOpRadians,
+    true);
+constexpr const TFunction kFunction_radians_vf3_(
+    BuiltInId::radians_vf3_,
+    BuiltInName::radians,
+    TExtension::UNDEFINED,
+    BuiltInParameters::radians_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::radians_vf3_,
+    EOpRadians,
+    true);
+constexpr const TFunction kFunction_radians_vf4_(
+    BuiltInId::radians_vf4_,
+    BuiltInName::radians,
+    TExtension::UNDEFINED,
+    BuiltInParameters::radians_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::radians_vf4_,
+    EOpRadians,
+    true);
+constexpr const TFunction kFunction_degrees_f1_(
+    BuiltInId::degrees_f1_,
+    BuiltInName::degrees,
+    TExtension::UNDEFINED,
+    BuiltInParameters::degrees_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::degrees_f1_,
+    EOpDegrees,
+    true);
+constexpr const TFunction kFunction_degrees_vf2_(
+    BuiltInId::degrees_vf2_,
+    BuiltInName::degrees,
+    TExtension::UNDEFINED,
+    BuiltInParameters::degrees_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::degrees_vf2_,
+    EOpDegrees,
+    true);
+constexpr const TFunction kFunction_degrees_vf3_(
+    BuiltInId::degrees_vf3_,
+    BuiltInName::degrees,
+    TExtension::UNDEFINED,
+    BuiltInParameters::degrees_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::degrees_vf3_,
+    EOpDegrees,
+    true);
+constexpr const TFunction kFunction_degrees_vf4_(
+    BuiltInId::degrees_vf4_,
+    BuiltInName::degrees,
+    TExtension::UNDEFINED,
+    BuiltInParameters::degrees_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::degrees_vf4_,
+    EOpDegrees,
+    true);
+constexpr const TFunction kFunction_sin_f1_(
+    BuiltInId::sin_f1_,
+    BuiltInName::sin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sin_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::sin_f1_,
+    EOpSin,
+    true);
+constexpr const TFunction kFunction_sin_vf2_(
+    BuiltInId::sin_vf2_,
+    BuiltInName::sin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sin_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::sin_vf2_,
+    EOpSin,
+    true);
+constexpr const TFunction kFunction_sin_vf3_(
+    BuiltInId::sin_vf3_,
+    BuiltInName::sin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sin_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::sin_vf3_,
+    EOpSin,
+    true);
+constexpr const TFunction kFunction_sin_vf4_(
+    BuiltInId::sin_vf4_,
+    BuiltInName::sin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sin_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::sin_vf4_,
+    EOpSin,
+    true);
+constexpr const TFunction kFunction_cos_f1_(
+    BuiltInId::cos_f1_,
+    BuiltInName::cos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cos_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::cos_f1_,
+    EOpCos,
+    true);
+constexpr const TFunction kFunction_cos_vf2_(
+    BuiltInId::cos_vf2_,
+    BuiltInName::cos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cos_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::cos_vf2_,
+    EOpCos,
+    true);
+constexpr const TFunction kFunction_cos_vf3_(
+    BuiltInId::cos_vf3_,
+    BuiltInName::cos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cos_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::cos_vf3_,
+    EOpCos,
+    true);
+constexpr const TFunction kFunction_cos_vf4_(
+    BuiltInId::cos_vf4_,
+    BuiltInName::cos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cos_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::cos_vf4_,
+    EOpCos,
+    true);
+constexpr const TFunction kFunction_tan_f1_(
+    BuiltInId::tan_f1_,
+    BuiltInName::tan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tan_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::tan_f1_,
+    EOpTan,
+    true);
+constexpr const TFunction kFunction_tan_vf2_(
+    BuiltInId::tan_vf2_,
+    BuiltInName::tan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tan_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::tan_vf2_,
+    EOpTan,
+    true);
+constexpr const TFunction kFunction_tan_vf3_(
+    BuiltInId::tan_vf3_,
+    BuiltInName::tan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tan_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::tan_vf3_,
+    EOpTan,
+    true);
+constexpr const TFunction kFunction_tan_vf4_(
+    BuiltInId::tan_vf4_,
+    BuiltInName::tan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tan_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::tan_vf4_,
+    EOpTan,
+    true);
+constexpr const TFunction kFunction_asin_f1_(
+    BuiltInId::asin_f1_,
+    BuiltInName::asin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asin_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::asin_f1_,
+    EOpAsin,
+    true);
+constexpr const TFunction kFunction_asin_vf2_(
+    BuiltInId::asin_vf2_,
+    BuiltInName::asin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asin_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::asin_vf2_,
+    EOpAsin,
+    true);
+constexpr const TFunction kFunction_asin_vf3_(
+    BuiltInId::asin_vf3_,
+    BuiltInName::asin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asin_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::asin_vf3_,
+    EOpAsin,
+    true);
+constexpr const TFunction kFunction_asin_vf4_(
+    BuiltInId::asin_vf4_,
+    BuiltInName::asin,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asin_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::asin_vf4_,
+    EOpAsin,
+    true);
+constexpr const TFunction kFunction_acos_f1_(
+    BuiltInId::acos_f1_,
+    BuiltInName::acos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acos_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::acos_f1_,
+    EOpAcos,
+    true);
+constexpr const TFunction kFunction_acos_vf2_(
+    BuiltInId::acos_vf2_,
+    BuiltInName::acos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acos_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::acos_vf2_,
+    EOpAcos,
+    true);
+constexpr const TFunction kFunction_acos_vf3_(
+    BuiltInId::acos_vf3_,
+    BuiltInName::acos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acos_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::acos_vf3_,
+    EOpAcos,
+    true);
+constexpr const TFunction kFunction_acos_vf4_(
+    BuiltInId::acos_vf4_,
+    BuiltInName::acos,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acos_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::acos_vf4_,
+    EOpAcos,
+    true);
+constexpr const TFunction kFunction_atan_f1_(
+    BuiltInId::atan_f1_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::atan_f1_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf2_(
+    BuiltInId::atan_vf2_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::atan_vf2_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf3_(
+    BuiltInId::atan_vf3_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::atan_vf3_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf4_(
+    BuiltInId::atan_vf4_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::atan_vf4_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_sinh_f1_(
+    BuiltInId::sinh_f1_,
+    BuiltInName::sinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sinh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::sinh_f1_,
+    EOpSinh,
+    true);
+constexpr const TFunction kFunction_sinh_vf2_(
+    BuiltInId::sinh_vf2_,
+    BuiltInName::sinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sinh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::sinh_vf2_,
+    EOpSinh,
+    true);
+constexpr const TFunction kFunction_sinh_vf3_(
+    BuiltInId::sinh_vf3_,
+    BuiltInName::sinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sinh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::sinh_vf3_,
+    EOpSinh,
+    true);
+constexpr const TFunction kFunction_sinh_vf4_(
+    BuiltInId::sinh_vf4_,
+    BuiltInName::sinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::sinh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::sinh_vf4_,
+    EOpSinh,
+    true);
+constexpr const TFunction kFunction_cosh_f1_(
+    BuiltInId::cosh_f1_,
+    BuiltInName::cosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cosh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::cosh_f1_,
+    EOpCosh,
+    true);
+constexpr const TFunction kFunction_cosh_vf2_(
+    BuiltInId::cosh_vf2_,
+    BuiltInName::cosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cosh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::cosh_vf2_,
+    EOpCosh,
+    true);
+constexpr const TFunction kFunction_cosh_vf3_(
+    BuiltInId::cosh_vf3_,
+    BuiltInName::cosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cosh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::cosh_vf3_,
+    EOpCosh,
+    true);
+constexpr const TFunction kFunction_cosh_vf4_(
+    BuiltInId::cosh_vf4_,
+    BuiltInName::cosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::cosh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::cosh_vf4_,
+    EOpCosh,
+    true);
+constexpr const TFunction kFunction_tanh_f1_(
+    BuiltInId::tanh_f1_,
+    BuiltInName::tanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tanh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::tanh_f1_,
+    EOpTanh,
+    true);
+constexpr const TFunction kFunction_tanh_vf2_(
+    BuiltInId::tanh_vf2_,
+    BuiltInName::tanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tanh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::tanh_vf2_,
+    EOpTanh,
+    true);
+constexpr const TFunction kFunction_tanh_vf3_(
+    BuiltInId::tanh_vf3_,
+    BuiltInName::tanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tanh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::tanh_vf3_,
+    EOpTanh,
+    true);
+constexpr const TFunction kFunction_tanh_vf4_(
+    BuiltInId::tanh_vf4_,
+    BuiltInName::tanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::tanh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::tanh_vf4_,
+    EOpTanh,
+    true);
+constexpr const TFunction kFunction_asinh_f1_(
+    BuiltInId::asinh_f1_,
+    BuiltInName::asinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asinh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::asinh_f1_,
+    EOpAsinh,
+    true);
+constexpr const TFunction kFunction_asinh_vf2_(
+    BuiltInId::asinh_vf2_,
+    BuiltInName::asinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asinh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::asinh_vf2_,
+    EOpAsinh,
+    true);
+constexpr const TFunction kFunction_asinh_vf3_(
+    BuiltInId::asinh_vf3_,
+    BuiltInName::asinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asinh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::asinh_vf3_,
+    EOpAsinh,
+    true);
+constexpr const TFunction kFunction_asinh_vf4_(
+    BuiltInId::asinh_vf4_,
+    BuiltInName::asinh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::asinh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::asinh_vf4_,
+    EOpAsinh,
+    true);
+constexpr const TFunction kFunction_acosh_f1_(
+    BuiltInId::acosh_f1_,
+    BuiltInName::acosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acosh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::acosh_f1_,
+    EOpAcosh,
+    true);
+constexpr const TFunction kFunction_acosh_vf2_(
+    BuiltInId::acosh_vf2_,
+    BuiltInName::acosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acosh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::acosh_vf2_,
+    EOpAcosh,
+    true);
+constexpr const TFunction kFunction_acosh_vf3_(
+    BuiltInId::acosh_vf3_,
+    BuiltInName::acosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acosh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::acosh_vf3_,
+    EOpAcosh,
+    true);
+constexpr const TFunction kFunction_acosh_vf4_(
+    BuiltInId::acosh_vf4_,
+    BuiltInName::acosh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::acosh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::acosh_vf4_,
+    EOpAcosh,
+    true);
+constexpr const TFunction kFunction_atanh_f1_(
+    BuiltInId::atanh_f1_,
+    BuiltInName::atanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atanh_f1_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::atanh_f1_,
+    EOpAtanh,
+    true);
+constexpr const TFunction kFunction_atanh_vf2_(
+    BuiltInId::atanh_vf2_,
+    BuiltInName::atanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atanh_vf2_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::atanh_vf2_,
+    EOpAtanh,
+    true);
+constexpr const TFunction kFunction_atanh_vf3_(
+    BuiltInId::atanh_vf3_,
+    BuiltInName::atanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atanh_vf3_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::atanh_vf3_,
+    EOpAtanh,
+    true);
+constexpr const TFunction kFunction_atanh_vf4_(
+    BuiltInId::atanh_vf4_,
+    BuiltInName::atanh,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atanh_vf4_,
+    1,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::atanh_vf4_,
+    EOpAtanh,
+    true);
+constexpr const TFunction kFunction_atan_f1_f1_(
+    BuiltInId::atan_f1_f1_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_f1_f1_,
+    2,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
+    BuiltInName::atan_f1_f1_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf2_vf2_(
+    BuiltInId::atan_vf2_vf2_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf2_vf2_,
+    2,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
+    BuiltInName::atan_vf2_vf2_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf3_vf3_(
+    BuiltInId::atan_vf3_vf3_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf3_vf3_,
+    2,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
+    BuiltInName::atan_vf3_vf3_,
+    EOpAtan,
+    true);
+constexpr const TFunction kFunction_atan_vf4_vf4_(
+    BuiltInId::atan_vf4_vf4_,
+    BuiltInName::atan,
+    TExtension::UNDEFINED,
+    BuiltInParameters::atan_vf4_vf4_,
+    2,
+    StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
+    BuiltInName::atan_vf4_vf4_,
+    EOpAtan,
+    true);
+
+const TFunction *radians_f1_()
+{
+    return &kFunction_radians_f1_;
+}
+
+const TFunction *radians_vf2_()
+{
+    return &kFunction_radians_vf2_;
+}
+
+const TFunction *radians_vf3_()
+{
+    return &kFunction_radians_vf3_;
+}
+
+const TFunction *radians_vf4_()
+{
+    return &kFunction_radians_vf4_;
+}
+
+const TFunction *degrees_f1_()
+{
+    return &kFunction_degrees_f1_;
+}
+
+const TFunction *degrees_vf2_()
+{
+    return &kFunction_degrees_vf2_;
+}
+
+const TFunction *degrees_vf3_()
+{
+    return &kFunction_degrees_vf3_;
+}
+
+const TFunction *degrees_vf4_()
+{
+    return &kFunction_degrees_vf4_;
+}
+
+const TFunction *sin_f1_()
+{
+    return &kFunction_sin_f1_;
+}
+
+const TFunction *sin_vf2_()
+{
+    return &kFunction_sin_vf2_;
+}
+
+const TFunction *sin_vf3_()
+{
+    return &kFunction_sin_vf3_;
+}
+
+const TFunction *sin_vf4_()
+{
+    return &kFunction_sin_vf4_;
+}
+
+const TFunction *cos_f1_()
+{
+    return &kFunction_cos_f1_;
+}
+
+const TFunction *cos_vf2_()
+{
+    return &kFunction_cos_vf2_;
+}
+
+const TFunction *cos_vf3_()
+{
+    return &kFunction_cos_vf3_;
+}
+
+const TFunction *cos_vf4_()
+{
+    return &kFunction_cos_vf4_;
+}
+
+const TFunction *tan_f1_()
+{
+    return &kFunction_tan_f1_;
+}
+
+const TFunction *tan_vf2_()
+{
+    return &kFunction_tan_vf2_;
+}
+
+const TFunction *tan_vf3_()
+{
+    return &kFunction_tan_vf3_;
+}
+
+const TFunction *tan_vf4_()
+{
+    return &kFunction_tan_vf4_;
+}
+
+const TFunction *asin_f1_()
+{
+    return &kFunction_asin_f1_;
+}
+
+const TFunction *asin_vf2_()
+{
+    return &kFunction_asin_vf2_;
+}
+
+const TFunction *asin_vf3_()
+{
+    return &kFunction_asin_vf3_;
+}
+
+const TFunction *asin_vf4_()
+{
+    return &kFunction_asin_vf4_;
+}
+
+const TFunction *acos_f1_()
+{
+    return &kFunction_acos_f1_;
+}
+
+const TFunction *acos_vf2_()
+{
+    return &kFunction_acos_vf2_;
+}
+
+const TFunction *acos_vf3_()
+{
+    return &kFunction_acos_vf3_;
+}
+
+const TFunction *acos_vf4_()
+{
+    return &kFunction_acos_vf4_;
+}
+
+const TFunction *atan_f1_()
+{
+    return &kFunction_atan_f1_;
+}
+
+const TFunction *atan_vf2_()
+{
+    return &kFunction_atan_vf2_;
+}
+
+const TFunction *atan_vf3_()
+{
+    return &kFunction_atan_vf3_;
+}
+
+const TFunction *atan_vf4_()
+{
+    return &kFunction_atan_vf4_;
+}
+
+const TFunction *sinh_f1_()
+{
+    return &kFunction_sinh_f1_;
+}
+
+const TFunction *sinh_vf2_()
+{
+    return &kFunction_sinh_vf2_;
+}
+
+const TFunction *sinh_vf3_()
+{
+    return &kFunction_sinh_vf3_;
+}
+
+const TFunction *sinh_vf4_()
+{
+    return &kFunction_sinh_vf4_;
+}
+
+const TFunction *cosh_f1_()
+{
+    return &kFunction_cosh_f1_;
+}
+
+const TFunction *cosh_vf2_()
+{
+    return &kFunction_cosh_vf2_;
+}
+
+const TFunction *cosh_vf3_()
+{
+    return &kFunction_cosh_vf3_;
+}
+
+const TFunction *cosh_vf4_()
+{
+    return &kFunction_cosh_vf4_;
+}
+
+const TFunction *tanh_f1_()
+{
+    return &kFunction_tanh_f1_;
+}
+
+const TFunction *tanh_vf2_()
+{
+    return &kFunction_tanh_vf2_;
+}
+
+const TFunction *tanh_vf3_()
+{
+    return &kFunction_tanh_vf3_;
+}
+
+const TFunction *tanh_vf4_()
+{
+    return &kFunction_tanh_vf4_;
+}
+
+const TFunction *asinh_f1_()
+{
+    return &kFunction_asinh_f1_;
+}
+
+const TFunction *asinh_vf2_()
+{
+    return &kFunction_asinh_vf2_;
+}
+
+const TFunction *asinh_vf3_()
+{
+    return &kFunction_asinh_vf3_;
+}
+
+const TFunction *asinh_vf4_()
+{
+    return &kFunction_asinh_vf4_;
+}
+
+const TFunction *acosh_f1_()
+{
+    return &kFunction_acosh_f1_;
+}
+
+const TFunction *acosh_vf2_()
+{
+    return &kFunction_acosh_vf2_;
+}
+
+const TFunction *acosh_vf3_()
+{
+    return &kFunction_acosh_vf3_;
+}
+
+const TFunction *acosh_vf4_()
+{
+    return &kFunction_acosh_vf4_;
+}
+
+const TFunction *atanh_f1_()
+{
+    return &kFunction_atanh_f1_;
+}
+
+const TFunction *atanh_vf2_()
+{
+    return &kFunction_atanh_vf2_;
+}
+
+const TFunction *atanh_vf3_()
+{
+    return &kFunction_atanh_vf3_;
+}
+
+const TFunction *atanh_vf4_()
+{
+    return &kFunction_atanh_vf4_;
+}
+
+const TFunction *atan_f1_f1_()
+{
+    return &kFunction_atan_f1_f1_;
+}
+
+const TFunction *atan_vf2_vf2_()
+{
+    return &kFunction_atan_vf2_vf2_;
+}
+
+const TFunction *atan_vf3_vf3_()
+{
+    return &kFunction_atan_vf3_vf3_;
+}
+
+const TFunction *atan_vf4_vf4_()
+{
+    return &kFunction_atan_vf4_vf4_;
+}
+};
+
+void TSymbolTable::insertStaticBuiltInFunctionUnmangledNames(sh::GLenum shaderType)
+{
+    insertUnmangledBuiltInName(BuiltInName::radians.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::degrees.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::sin.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::cos.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::tan.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::asin.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::acos.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::atan.data(), COMMON_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::sinh.data(), ESSL3_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::cosh.data(), ESSL3_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::tanh.data(), ESSL3_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::asinh.data(), ESSL3_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::acosh.data(), ESSL3_BUILTINS);
+    insertUnmangledBuiltInName(BuiltInName::atanh.data(), ESSL3_BUILTINS);
+}
 
 }  // namespace sh
