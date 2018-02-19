@@ -22,14 +22,8 @@ ANGLE_EXPORT void GL_APIENTRY AlphaFuncx(GLenum func, GLfixed ref);
 ANGLE_EXPORT void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer);
 ANGLE_EXPORT void GL_APIENTRY BindTexture(GLenum target, GLuint texture);
 ANGLE_EXPORT void GL_APIENTRY BlendFunc(GLenum sfactor, GLenum dfactor);
-ANGLE_EXPORT void GL_APIENTRY BufferData(GLenum target,
-                                         GLsizeiptr size,
-                                         const void *data,
-                                         GLenum usage);
-ANGLE_EXPORT void GL_APIENTRY BufferSubData(GLenum target,
-                                            GLintptr offset,
-                                            GLsizeiptr size,
-                                            const void *data);
+ANGLE_EXPORT void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage);
+ANGLE_EXPORT void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
 ANGLE_EXPORT void GL_APIENTRY Clear(GLbitfield mask);
 ANGLE_EXPORT void GL_APIENTRY ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 ANGLE_EXPORT void GL_APIENTRY ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
@@ -42,47 +36,12 @@ ANGLE_EXPORT void GL_APIENTRY ClipPlanex(GLenum plane, const GLfixed *equation);
 ANGLE_EXPORT void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 ANGLE_EXPORT void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha);
 ANGLE_EXPORT void GL_APIENTRY Color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
-ANGLE_EXPORT void GL_APIENTRY ColorMask(GLboolean red,
-                                        GLboolean green,
-                                        GLboolean blue,
-                                        GLboolean alpha);
-ANGLE_EXPORT void GL_APIENTRY ColorPointer(GLint size,
-                                           GLenum type,
-                                           GLsizei stride,
-                                           const void *pointer);
-ANGLE_EXPORT void GL_APIENTRY CompressedTexImage2D(GLenum target,
-                                                   GLint level,
-                                                   GLenum internalformat,
-                                                   GLsizei width,
-                                                   GLsizei height,
-                                                   GLint border,
-                                                   GLsizei imageSize,
-                                                   const void *data);
-ANGLE_EXPORT void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
-                                                      GLint level,
-                                                      GLint xoffset,
-                                                      GLint yoffset,
-                                                      GLsizei width,
-                                                      GLsizei height,
-                                                      GLenum format,
-                                                      GLsizei imageSize,
-                                                      const void *data);
-ANGLE_EXPORT void GL_APIENTRY CopyTexImage2D(GLenum target,
-                                             GLint level,
-                                             GLenum internalformat,
-                                             GLint x,
-                                             GLint y,
-                                             GLsizei width,
-                                             GLsizei height,
-                                             GLint border);
-ANGLE_EXPORT void GL_APIENTRY CopyTexSubImage2D(GLenum target,
-                                                GLint level,
-                                                GLint xoffset,
-                                                GLint yoffset,
-                                                GLint x,
-                                                GLint y,
-                                                GLsizei width,
-                                                GLsizei height);
+ANGLE_EXPORT void GL_APIENTRY ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
+ANGLE_EXPORT void GL_APIENTRY ColorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
+ANGLE_EXPORT void GL_APIENTRY CompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data);
+ANGLE_EXPORT void GL_APIENTRY CompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *data);
+ANGLE_EXPORT void GL_APIENTRY CopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+ANGLE_EXPORT void GL_APIENTRY CopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
 ANGLE_EXPORT void GL_APIENTRY CullFace(GLenum mode);
 ANGLE_EXPORT void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint *buffers);
 ANGLE_EXPORT void GL_APIENTRY DeleteTextures(GLsizei n, const GLuint *textures);
@@ -93,10 +52,7 @@ ANGLE_EXPORT void GL_APIENTRY DepthRangex(GLfixed n, GLfixed f);
 ANGLE_EXPORT void GL_APIENTRY Disable(GLenum cap);
 ANGLE_EXPORT void GL_APIENTRY DisableClientState(GLenum array);
 ANGLE_EXPORT void GL_APIENTRY DrawArrays(GLenum mode, GLint first, GLsizei count);
-ANGLE_EXPORT void GL_APIENTRY DrawElements(GLenum mode,
-                                           GLsizei count,
-                                           GLenum type,
-                                           const void *indices);
+ANGLE_EXPORT void GL_APIENTRY DrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);
 ANGLE_EXPORT void GL_APIENTRY Enable(GLenum cap);
 ANGLE_EXPORT void GL_APIENTRY EnableClientState(GLenum array);
 ANGLE_EXPORT void GL_APIENTRY Finish();
@@ -106,10 +62,8 @@ ANGLE_EXPORT void GL_APIENTRY Fogfv(GLenum pname, const GLfloat *params);
 ANGLE_EXPORT void GL_APIENTRY Fogx(GLenum pname, GLfixed param);
 ANGLE_EXPORT void GL_APIENTRY Fogxv(GLenum pname, const GLfixed *param);
 ANGLE_EXPORT void GL_APIENTRY FrontFace(GLenum mode);
-ANGLE_EXPORT void GL_APIENTRY
-Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
-ANGLE_EXPORT void GL_APIENTRY
-Frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
+ANGLE_EXPORT void GL_APIENTRY Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+ANGLE_EXPORT void GL_APIENTRY Frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
 ANGLE_EXPORT void GL_APIENTRY GenBuffers(GLsizei n, GLuint *buffers);
 ANGLE_EXPORT void GL_APIENTRY GenTextures(GLsizei n, GLuint *textures);
 ANGLE_EXPORT void GL_APIENTRY GetBooleanv(GLenum pname, GLboolean *data);
@@ -157,17 +111,13 @@ ANGLE_EXPORT void GL_APIENTRY Materialxv(GLenum face, GLenum pname, const GLfixe
 ANGLE_EXPORT void GL_APIENTRY MatrixMode(GLenum mode);
 ANGLE_EXPORT void GL_APIENTRY MultMatrixf(const GLfloat *m);
 ANGLE_EXPORT void GL_APIENTRY MultMatrixx(const GLfixed *m);
-ANGLE_EXPORT void GL_APIENTRY
-MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
-ANGLE_EXPORT void GL_APIENTRY
-MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q);
+ANGLE_EXPORT void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
+ANGLE_EXPORT void GL_APIENTRY MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q);
 ANGLE_EXPORT void GL_APIENTRY Normal3f(GLfloat nx, GLfloat ny, GLfloat nz);
 ANGLE_EXPORT void GL_APIENTRY Normal3x(GLfixed nx, GLfixed ny, GLfixed nz);
 ANGLE_EXPORT void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer);
-ANGLE_EXPORT void GL_APIENTRY
-Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
-ANGLE_EXPORT void GL_APIENTRY
-Orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
+ANGLE_EXPORT void GL_APIENTRY Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+ANGLE_EXPORT void GL_APIENTRY Orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
 ANGLE_EXPORT void GL_APIENTRY PixelStorei(GLenum pname, GLint param);
 ANGLE_EXPORT void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param);
 ANGLE_EXPORT void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params);
@@ -179,13 +129,7 @@ ANGLE_EXPORT void GL_APIENTRY PolygonOffset(GLfloat factor, GLfloat units);
 ANGLE_EXPORT void GL_APIENTRY PolygonOffsetx(GLfixed factor, GLfixed units);
 ANGLE_EXPORT void GL_APIENTRY PopMatrix();
 ANGLE_EXPORT void GL_APIENTRY PushMatrix();
-ANGLE_EXPORT void GL_APIENTRY ReadPixels(GLint x,
-                                         GLint y,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLenum format,
-                                         GLenum type,
-                                         void *pixels);
+ANGLE_EXPORT void GL_APIENTRY ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels);
 ANGLE_EXPORT void GL_APIENTRY Rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
 ANGLE_EXPORT void GL_APIENTRY Rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z);
 ANGLE_EXPORT void GL_APIENTRY SampleCoverage(GLfloat value, GLboolean invert);
@@ -197,46 +141,24 @@ ANGLE_EXPORT void GL_APIENTRY ShadeModel(GLenum mode);
 ANGLE_EXPORT void GL_APIENTRY StencilFunc(GLenum func, GLint ref, GLuint mask);
 ANGLE_EXPORT void GL_APIENTRY StencilMask(GLuint mask);
 ANGLE_EXPORT void GL_APIENTRY StencilOp(GLenum fail, GLenum zfail, GLenum zpass);
-ANGLE_EXPORT void GL_APIENTRY TexCoordPointer(GLint size,
-                                              GLenum type,
-                                              GLsizei stride,
-                                              const void *pointer);
+ANGLE_EXPORT void GL_APIENTRY TexCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
 ANGLE_EXPORT void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param);
 ANGLE_EXPORT void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params);
 ANGLE_EXPORT void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param);
 ANGLE_EXPORT void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params);
 ANGLE_EXPORT void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param);
 ANGLE_EXPORT void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params);
-ANGLE_EXPORT void GL_APIENTRY TexImage2D(GLenum target,
-                                         GLint level,
-                                         GLint internalformat,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLint border,
-                                         GLenum format,
-                                         GLenum type,
-                                         const void *pixels);
+ANGLE_EXPORT void GL_APIENTRY TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels);
 ANGLE_EXPORT void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param);
 ANGLE_EXPORT void GL_APIENTRY TexParameterfv(GLenum target, GLenum pname, const GLfloat *params);
 ANGLE_EXPORT void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param);
 ANGLE_EXPORT void GL_APIENTRY TexParameteriv(GLenum target, GLenum pname, const GLint *params);
 ANGLE_EXPORT void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param);
 ANGLE_EXPORT void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *params);
-ANGLE_EXPORT void GL_APIENTRY TexSubImage2D(GLenum target,
-                                            GLint level,
-                                            GLint xoffset,
-                                            GLint yoffset,
-                                            GLsizei width,
-                                            GLsizei height,
-                                            GLenum format,
-                                            GLenum type,
-                                            const void *pixels);
+ANGLE_EXPORT void GL_APIENTRY TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels);
 ANGLE_EXPORT void GL_APIENTRY Translatef(GLfloat x, GLfloat y, GLfloat z);
 ANGLE_EXPORT void GL_APIENTRY Translatex(GLfixed x, GLfixed y, GLfixed z);
-ANGLE_EXPORT void GL_APIENTRY VertexPointer(GLint size,
-                                            GLenum type,
-                                            GLsizei stride,
-                                            const void *pointer);
+ANGLE_EXPORT void GL_APIENTRY VertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer);
 ANGLE_EXPORT void GL_APIENTRY Viewport(GLint x, GLint y, GLsizei width, GLsizei height);
 }  // namespace gl
 
