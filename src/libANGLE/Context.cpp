@@ -302,6 +302,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         GetClientArraysEnabled(attribs), robustResourceInit,
                         mMemoryProgramCache != nullptr);
 
+    gles1Emu = nullptr;
+
     if (getClientVersion() <= Version(1, 1))
     {
         gles1Emu = new GLES1on3(this, &mGLState);
@@ -2632,13 +2634,14 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
     mCaps = mImplementation->getNativeCaps();
 
     // Emulated GLES1 caps.
-    if (getClientVersion() < Version(2, 0)) {
-        mCaps.maxMultitextureUnits = 4;
-        mCaps.maxClipPlanes = 6;
-        mCaps.maxLights = 8;
-        mCaps.maxModelviewMatrixStackDepth = 16;
+    if (getClientVersion() < Version(2, 0))
+    {
+        mCaps.maxMultitextureUnits          = 4;
+        mCaps.maxClipPlanes                 = 6;
+        mCaps.maxLights                     = 8;
+        mCaps.maxModelviewMatrixStackDepth  = 16;
         mCaps.maxProjectionMatrixStackDepth = 16;
-        mCaps.maxTextureMatrixStackDepth = 16;
+        mCaps.maxTextureMatrixStackDepth    = 16;
     }
 
     mExtensions = mImplementation->getNativeExtensions();
