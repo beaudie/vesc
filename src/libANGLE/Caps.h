@@ -583,6 +583,14 @@ struct Caps
     // limits
     GLuint maxGeometryImageUniforms;
     GLuint maxCombinedGeometryUniformComponents;
+
+    // Emulated ES 1.1 caps
+    GLuint maxMultitextureUnits;
+    GLuint maxClipPlanes;
+    GLuint maxLights;
+    GLuint maxModelviewMatrixStackDepth;
+    GLuint maxProjectionMatrixStackDepth;
+    GLuint maxTextureMatrixStackDepth;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
