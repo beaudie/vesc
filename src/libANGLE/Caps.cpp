@@ -885,6 +885,18 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
 {
     Caps caps;
 
+    if (clientVersion < Version(2, 0))
+    {
+        // ES 1.1 caps
+        caps.maxMultitextureUnits = 4;
+        caps.maxLights = 8;
+        caps.maxClipPlanes = 6;
+
+        caps.maxModelviewMatrixStackDepth = 16;
+        caps.maxProjectionMatrixStackDepth = 16;
+        caps.maxTextureMatrixStackDepth = 16;
+    }
+
     if (clientVersion >= Version(2, 0))
     {
         // Table 6.18

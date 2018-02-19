@@ -2631,6 +2631,16 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
 {
     mCaps = mImplementation->getNativeCaps();
 
+    // Emulated GLES1 caps.
+    if (getClientVersion() < Version(2, 0)) {
+        mCaps.maxMultitextureUnits = 4;
+        mCaps.maxClipPlanes = 6;
+        mCaps.maxLights = 8;
+        mCaps.maxModelviewMatrixStackDepth = 16;
+        mCaps.maxProjectionMatrixStackDepth = 16;
+        mCaps.maxTextureMatrixStackDepth = 16;
+    }
+
     mExtensions = mImplementation->getNativeExtensions();
 
     mLimitations = mImplementation->getNativeLimitations();
