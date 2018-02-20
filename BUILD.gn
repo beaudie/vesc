@@ -808,6 +808,7 @@ foreach(is_shared_library,
 
     if (is_win) {
       sources += rebase_path(util_gypi.util_win32_sources, ".", "util")
+      libs = [ "Dwmapi.lib" ]
     }
 
     if (is_linux) {

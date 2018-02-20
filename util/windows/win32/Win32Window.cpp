@@ -10,6 +10,8 @@
 
 #include <sstream>
 
+#include <dwmapi.h>
+
 #include "common/debug.h"
 
 Key VirtualKeyCodeToKey(WPARAM key, LPARAM flags)
@@ -565,6 +567,22 @@ bool Win32Window::initialize(const std::string &name, size_t width, size_t heigh
                                     static_cast<int>(width), static_cast<int>(height),
                                     mParentWindow, nullptr, GetModuleHandle(nullptr), this);
 
+    DWMNCRENDERINGPOLICY disabled = DWMNCRP_DISABLED;
+    if (FAILED(DwmSetWindowAttribute(mParentWindow, DWMWA_NCRENDERING_POLICY, &disabled,
+                                     sizeof(disabled))))
+    {
+        destroy();
+        return false;
+    }
+
+    BOOL forcedisabled = TRUE;
+    if (FAILED(DwmSetWindowAttribute(mParentWindow, DWMWA_TRANSITIONS_FORCEDISABLED, &forcedisabled,
+                                     sizeof(forcedisabled))))
+    {
+        destroy();
+        return false;
+    }
+
     mNativeDisplay = GetDC(mNativeWindow);
     if (!mNativeDisplay)
     {
@@ -607,6 +625,8 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
     }
 
     bool error = false;
+
+    DwmFlush();
 
     // Hack for DWM: There is no way to wait for DWM animations to finish, so we just have to wait
     // for a while before issuing screenshot if window was just made visible.
