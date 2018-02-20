@@ -19,7 +19,7 @@ namespace rx
 class RenderbufferVk : public RenderbufferImpl, public ResourceVk
 {
   public:
-    RenderbufferVk();
+    RenderbufferVk(const gl::RenderbufferState &state);
     ~RenderbufferVk() override;
 
     gl::Error onDestroy(const gl::Context *context) override;
