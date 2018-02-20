@@ -7,16 +7,12 @@
 //   Test for EXT_YUV_target implementation.
 //
 
-#include "angle_gl.h"
-#include "gtest/gtest.h"
-#include "GLSLANG/ShaderLang.h"
+#include "tests/test_utils/ShaderExtensionTest.h"
 
-using testing::Combine;
-using testing::Values;
+using EXTYUVTargetTest = sh::ShaderExtensionTest;
 
 namespace
 {
-const char ESSLVersion300[] = "#version 300 es\n";
 const char EXTYTPragma[]    = "#extension GL_EXT_YUV_target : require\n";
 
 const char ESSL300_SimpleShader[] =
@@ -220,61 +216,6 @@ const char ESSL300_BuiltInFunctionsShader[] =
         my_color = vec4(rgb, 1.0);
     })";
 
-class EXTYUVTargetTest : public testing::TestWithParam<testing::tuple<const char *, const char *>>
-{
-  protected:
-    virtual void SetUp()
-    {
-        sh::InitBuiltInResources(&mResources);
-        mResources.EXT_YUV_target = 1;
-
-        mCompiler = nullptr;
-    }
-
-    virtual void TearDown() { DestroyCompiler(); }
-    void DestroyCompiler()
-    {
-        if (mCompiler)
-        {
-            sh::Destruct(mCompiler);
-            mCompiler = nullptr;
-        }
-    }
-
-    void InitializeCompiler()
-    {
-        DestroyCompiler();
-        mCompiler =
-            sh::ConstructCompiler(GL_FRAGMENT_SHADER, SH_GLES3_SPEC, SH_ESSL_OUTPUT, &mResources);
-        ASSERT_TRUE(mCompiler != nullptr) << "Compiler could not be constructed.";
-    }
-
-    testing::AssertionResult TestShaderCompile(const char *pragma)
-    {
-        return TestShaderCompile(testing::get<0>(GetParam()),  // Version.
-                                 pragma,
-                                 testing::get<1>(GetParam())  // Shader.
-                                 );
-    }
-
-    testing::AssertionResult TestShaderCompile(const char *version,
-                                               const char *pragma,
-                                               const char *shader)
-    {
-        const char *shaderStrings[] = {version, pragma, shader};
-        bool success                = sh::Compile(mCompiler, shaderStrings, 3, 0);
-        if (success)
-        {
-            return ::testing::AssertionSuccess() << "Compilation success";
-        }
-        return ::testing::AssertionFailure() << sh::GetInfoLog(mCompiler);
-    }
-
-  protected:
-    ShBuiltInResources mResources;
-    ShHandle mCompiler;
-};
-
 // Extension flag is required to compile properly. Expect failure when it is
 // not present.
 TEST_P(EXTYUVTargetTest, CompileFailsWithoutExtension)
@@ -307,7 +248,8 @@ TEST_P(EXTYUVTargetTest, CompileSucceedsWithExtensionAndPragma)
 
 INSTANTIATE_TEST_CASE_P(CorrectVariantsWithExtensionAndPragma,
                         EXTYUVTargetTest,
-                        Combine(Values(ESSLVersion300),
+                        Combine(Values(SH_GLES3_SPEC),
+                                Values(sh::ESSLVersion300),
                                 Values(ESSL300_SimpleShader, ESSL300_FragColorShader)));
 
 class EXTYUVTargetCompileSuccessTest : public EXTYUVTargetTest
@@ -324,7 +266,8 @@ TEST_P(EXTYUVTargetCompileSuccessTest, CompileSucceeds)
 
 INSTANTIATE_TEST_CASE_P(CorrectESSL300Shaders,
                         EXTYUVTargetCompileSuccessTest,
-                        Combine(Values(ESSLVersion300),
+                        Combine(Values(SH_GLES3_SPEC),
+                                Values(sh::ESSLVersion300),
                                 Values(ESSL300_FragColorShader,
                                        ESSL300_YUVQualifierMultipleTimesShader,
                                        ESSL300_YuvCscStandardEXTShader,
@@ -344,7 +287,8 @@ TEST_P(EXTYUVTargetCompileFailureTest, CompileFails)
 
 INSTANTIATE_TEST_CASE_P(IncorrectESSL300Shaders,
                         EXTYUVTargetCompileFailureTest,
-                        Combine(Values(ESSLVersion300),
+                        Combine(Values(SH_GLES3_SPEC),
+                                Values(sh::ESSLVersion300),
                                 Values(ESSL300_YUVQualifierFailureShader1,
                                        ESSL300_YUVQualifierFailureShader2,
                                        ESSL300_LocationAndYUVFailureShader,
