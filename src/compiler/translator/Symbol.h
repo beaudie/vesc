@@ -247,7 +247,7 @@ class TFunction : public TSymbol
     bool isMain() const;
     bool isImageFunction() const;
 
-  private:
+    // Note: Only to be used for static built-in functions!
     constexpr TFunction(const TSymbolUniqueId &id,
                         const ImmutableString &name,
                         TExtension extension,
@@ -270,6 +270,7 @@ class TFunction : public TSymbol
     {
     }
 
+  private:
     ImmutableString buildMangledName() const;
 
     typedef TVector<TConstParameter> TParamVector;
