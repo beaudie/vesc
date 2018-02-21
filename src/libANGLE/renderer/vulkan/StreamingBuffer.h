@@ -28,6 +28,7 @@ class StreamingBuffer : public ResourceVk
                        VkDeviceSize *offsetOut);
     gl::Error flush(ContextVk *context);
     void destroy(VkDevice device);
+    bool valid();
 
   private:
     VkBufferUsageFlags mUsage;
