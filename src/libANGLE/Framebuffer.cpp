@@ -34,12 +34,6 @@ namespace gl
 
 namespace
 {
-
-void BindResourceChannel(OnAttachmentDirtyBinding *binding, FramebufferAttachmentObject *resource)
-{
-    binding->bind(resource ? resource->getDirtyChannel() : nullptr);
-}
-
 bool CheckMultiviewStateMatchesForCompleteness(const FramebufferAttachment *firstAttachment,
                                                const FramebufferAttachment *secondAttachment)
 {
@@ -617,34 +611,20 @@ Box FramebufferState::getDimensions() const
 }
 
 Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id)
-    : mState(caps),
-      mImpl(factory->createFramebuffer(mState)),
-      mId(id),
-      mCachedStatus(),
-      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+    : mState(caps), mImpl(factory->createFramebuffer(mState)), mId(id), mCachedStatus()
 {
     ASSERT(mId != 0);
     ASSERT(mImpl != nullptr);
     ASSERT(mState.mColorAttachments.size() == static_cast<size_t>(caps.maxColorAttachments));
-
-    for (uint32_t colorIndex = 0;
-         colorIndex < static_cast<uint32_t>(mState.mColorAttachments.size()); ++colorIndex)
-    {
-        mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex);
-    }
 }
 
 Framebuffer::Framebuffer(const egl::Display *display, egl::Surface *surface)
     : mState(),
       mImpl(surface->getImplementation()->createDefaultFramebuffer(mState)),
       mId(0),
-      mCachedStatus(GL_FRAMEBUFFER_COMPLETE),
-      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+      mCachedStatus(GL_FRAMEBUFFER_COMPLETE)
 {
     ASSERT(mImpl != nullptr);
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
 
     const Context *proxyContext = display->getProxyContext();
 
@@ -679,11 +659,8 @@ Framebuffer::Framebuffer(rx::GLImplFactory *factory)
     : mState(),
       mImpl(factory->createFramebuffer(mState)),
       mId(0),
-      mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES),
-      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+      mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES)
 {
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
     mState.mDrawBufferTypeMask.setIndex(getDrawbufferWriteType(0), 0);
 }
 
@@ -696,13 +673,32 @@ void Framebuffer::onDestroy(const Context *context)
 {
     for (auto &attachment : mState.mColorAttachments)
     {
-        attachment.detach(context, this);
+        if (attachment.isAttached())
+        {
+            resetAttachment(context, attachment.getBinding());
+        }
     }
-    mState.mDepthAttachment.detach(context, this);
-    mState.mStencilAttachment.detach(context, this);
-    mState.mWebGLDepthAttachment.detach(context, this);
-    mState.mWebGLStencilAttachment.detach(context, this);
-    mState.mWebGLDepthStencilAttachment.detach(context, this);
+
+    if (mState.mDepthAttachment.isAttached())
+    {
+        resetAttachment(context, mState.mDepthAttachment.getBinding());
+    }
+    if (mState.mStencilAttachment.isAttached())
+    {
+        resetAttachment(context, mState.mStencilAttachment.getBinding());
+    }
+    if (mState.mWebGLDepthAttachment.isAttached())
+    {
+        resetAttachment(context, mState.mWebGLDepthAttachment.getBinding());
+    }
+    if (mState.mWebGLStencilAttachment.isAttached())
+    {
+        resetAttachment(context, mState.mWebGLStencilAttachment.getBinding());
+    }
+    if (mState.mWebGLDepthStencilAttachment.isAttached())
+    {
+        resetAttachment(context, mState.mWebGLDepthStencilAttachment.getBinding());
+    }
 
     mImpl->destroy(context);
 }
@@ -785,9 +781,7 @@ bool Framebuffer::detachMatchingAttachment(const Context *context,
 {
     if (attachment->isAttached() && attachment->type() == matchType && attachment->id() == matchId)
     {
-        attachment->detach(context, this);
-        mDirtyBits.set(dirtyBit);
-        mState.mResourceNeedsInit.set(dirtyBit, false);
+        resetAttachment(context, attachment->getBinding());
         return true;
     }
 
@@ -1710,35 +1704,33 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                 }
             }
 
-            updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
-                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, multiviewLayout,
-                             viewportOffsets);
+            updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT, type,
+                             binding, textureIndex, attachmentObj, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
             updateAttachment(context, &mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
-                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, multiviewLayout,
-                             viewportOffsets);
+                             type, binding, textureIndex, attachmentObj, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
             break;
         }
 
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
-            updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
-                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex, resource,
-                             numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+            updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT, type,
+                             binding, textureIndex, resource, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
             break;
 
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
             updateAttachment(context, &mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
-                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex, resource,
-                             numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+                             type, binding, textureIndex, resource, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
             break;
 
         case GL_BACK:
             updateAttachment(context, &mState.mColorAttachments[0], DIRTY_BIT_COLOR_ATTACHMENT_0,
-                             &mDirtyColorAttachmentBindings[0], type, binding, textureIndex,
-                             resource, numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+                             type, binding, textureIndex, resource, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
             break;
 
         default:
@@ -1746,10 +1738,9 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             size_t colorIndex = binding - GL_COLOR_ATTACHMENT0;
             ASSERT(colorIndex < mState.mColorAttachments.size());
             size_t dirtyBit = DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex;
-            updateAttachment(context, &mState.mColorAttachments[colorIndex], dirtyBit,
-                             &mDirtyColorAttachmentBindings[colorIndex], type, binding,
-                             textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
-                             viewportOffsets);
+            updateAttachment(context, &mState.mColorAttachments[colorIndex], dirtyBit, type,
+                             binding, textureIndex, resource, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
 
             // TODO(jmadill): ASSERT instead of checking the attachment exists in
             // formsRenderingFeedbackLoopWith
@@ -1766,7 +1757,6 @@ void Framebuffer::setAttachmentImpl(const Context *context,
 void Framebuffer::updateAttachment(const Context *context,
                                    FramebufferAttachment *attachment,
                                    size_t dirtyBit,
-                                   OnAttachmentDirtyBinding *onDirtyBinding,
                                    GLenum type,
                                    GLenum binding,
                                    const ImageIndex &textureIndex,
@@ -1776,11 +1766,37 @@ void Framebuffer::updateAttachment(const Context *context,
                                    GLenum multiviewLayout,
                                    const GLint *viewportOffsets)
 {
+    if (attachment->getResource() && !resource)
+    {
+        attachment->getResource()->onParentObjectDetach(
+            this, binding, angle::DependentStateChangeMessage::FRAMEBUFFER_ATTACHMENT_DATA_CHANGE);
+    }
+
     attachment->attach(context, this, type, binding, textureIndex, resource, numViews,
                        baseViewIndex, multiviewLayout, viewportOffsets);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
-    BindResourceChannel(onDirtyBinding, resource);
+
+    if (resource)
+    {
+        auto callback = [this, dirtyBit, resource, textureIndex](const gl::Context *context) {
+            // Only reset the cached status if this is not the default framebuffer.  The default
+            // framebuffer will still use this channel to mark itself dirty.
+            if (this->mId != 0)
+            {
+                // TOOD(jmadill): Make this only update individual attachments to do less work.
+                this->mCachedStatus.reset();
+            }
+
+            // Mark the appropriate init flag.
+            this->mState.mResourceNeedsInit.set(
+                dirtyBit, resource->initState(textureIndex) == InitState::MayNeedInit);
+        };
+
+        resource->onParentObjectAttach(
+            this, binding, angle::DependentStateChangeMessage::FRAMEBUFFER_ATTACHMENT_DATA_CHANGE,
+            callback);
+    }
 }
 
 void Framebuffer::resetAttachment(const Context *context, GLenum binding)
@@ -1804,20 +1820,6 @@ void Framebuffer::syncState(const Context *context)
             mCachedStatus.reset();
         }
     }
-}
-
-void Framebuffer::signal(size_t dirtyBit, InitState state)
-{
-    // Only reset the cached status if this is not the default framebuffer.  The default framebuffer
-    // will still use this channel to mark itself dirty.
-    if (mId != 0)
-    {
-        // TOOD(jmadill): Make this only update individual attachments to do less work.
-        mCachedStatus.reset();
-    }
-
-    // Mark the appropriate init flag.
-    mState.mResourceNeedsInit.set(dirtyBit, state == InitState::MayNeedInit);
 }
 
 bool Framebuffer::complete(const Context *context)

@@ -34,11 +34,11 @@ class VertexArray;
 class Context;
 struct Caps;
 
-class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
+class State : angle::NonCopyable
 {
   public:
     State();
-    ~State() override;
+    ~State();
 
     void initialize(const Context *context,
                     bool debug,
@@ -462,9 +462,6 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     const std::vector<Texture *> &getCompleteTextureCache() const { return mCompleteTextureCache; }
     ComponentTypeMask getCurrentValuesTypeMask() const { return mCurrentValuesTypeMask; }
 
-    // Handle a dirty texture event.
-    void signal(size_t textureIndex, InitState initState) override;
-
     Error clearUnclearedActiveTextures(const Context *context);
 
   private:
@@ -527,6 +524,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
 
     // Texture Completeness Caching
     // ----------------------------
+    // FIXME: rewrite this
     // The texture completeness cache uses dirty bits to avoid having to scan the list
     // of textures each draw call. This gl::State class implements OnAttachmentDirtyReceiver,
     // and keeps an array of bindings to the Texture class. When the Textures are marked dirty,
@@ -541,7 +539,6 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // Don't use BindingPointer because this cache is only valid within a draw call.
     // Also stores a notification channel to the texture itself to handle texture change events.
     std::vector<Texture *> mCompleteTextureCache;
-    std::vector<OnAttachmentDirtyBinding> mCompleteTextureBindings;
     InitState mCachedTexturesInitState;
     using ActiveTextureMask = angle::BitSet<IMPLEMENTATION_MAX_ACTIVE_TEXTURES>;
     ActiveTextureMask mActiveTexturesMask;

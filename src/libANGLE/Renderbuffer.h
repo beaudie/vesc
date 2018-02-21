@@ -107,6 +107,7 @@ class Renderbuffer final : public egl::ImageSibling,
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
 
   private:
+    void onDependentStateChange(const Context *context);
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 
     RenderbufferState mState;

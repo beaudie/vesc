@@ -12,10 +12,10 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/HasParentObjectBindings.h"
 #include "libANGLE/ImageIndex.h"
-#include "libANGLE/signal_utils.h"
+#include "libANGLE/angletypes.h"
 
 namespace egl
 {
@@ -49,10 +49,6 @@ enum class InitState
     MayNeedInit,
     Initialized,
 };
-
-using OnAttachmentDirtyBinding  = angle::ChannelBinding<size_t, InitState>;
-using OnAttachmentDirtyChannel  = angle::BroadcastChannel<size_t, InitState>;
-using OnAttachmentDirtyReceiver = angle::SignalReceiver<size_t, InitState>;
 
 // FramebufferAttachment implements a GL framebuffer attachment.
 // Attachments are "light" containers, which store pointers to ref-counted GL objects.
@@ -210,11 +206,18 @@ class FramebufferAttachmentObject
                                     rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     void onFramebufferAttach(const Context *context, Framebuffer *framebuffer, GLenum bindingPoint);
-    void onFramebufferDetach(const Context *context, Framebuffer *framebuffer);
+    void onFramebufferDetach(const Context *context, Framebuffer *framebuffer, GLenum bindingPoint);
+
+    void onParentObjectAttach(angle::ParentID parentID,
+                              angle::ParentSubresource parentSubresource,
+                              angle::DependentStateChangeMessage message,
+                              const angle::GenericCallback &callback);
+
+    void onParentObjectDetach(angle::ParentID parentID,
+                              angle::ParentSubresource parentSubresource,
+                              angle::DependentStateChangeMessage message);
 
     Error initializeContents(const Context *context, const ImageIndex &imageIndex);
-
-    OnAttachmentDirtyChannel *getDirtyChannel();
 
     void onFramebufferAttachmentStateChange(const Context *context);
 
@@ -222,8 +225,6 @@ class FramebufferAttachmentObject
     virtual void onAttach(const Context *context)                          = 0;
     virtual void onDetach(const Context *context)                          = 0;
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
-
-    OnAttachmentDirtyChannel mDirtyChannel;
 };
 
 inline Extents FramebufferAttachment::getSize() const

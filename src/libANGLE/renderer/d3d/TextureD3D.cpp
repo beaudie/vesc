@@ -655,7 +655,7 @@ gl::Error TextureD3D::releaseTexStorage(const gl::Context *context)
     }
 
     // Notify Framebuffers that use this Texture of a state change.
-    onFramebufferAttachmentImplStateChange(context);
+    onDependentStateChange(context, angle::DependentStateChangeMessage::FRAMEBUFFER_DIRTY_BITS);
 
     auto err = mTexStorage->onDestroy(context);
     SafeDelete(mTexStorage);

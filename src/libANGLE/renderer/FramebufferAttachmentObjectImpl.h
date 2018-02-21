@@ -12,11 +12,12 @@
 #define LIBANGLE_RENDERER_FRAMEBUFFER_ATTACHMENT_OBJECT_IMPL_H_
 
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/HasParentObjectBindings.h"
 
 namespace rx
 {
 
-class FramebufferAttachmentObjectImpl : angle::NonCopyable
+class FramebufferAttachmentObjectImpl : public angle::HasParentObjectBindings
 {
   public:
     FramebufferAttachmentObjectImpl();
@@ -29,14 +30,6 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
 
     virtual gl::Error initializeContents(const gl::Context *context,
                                          const gl::ImageIndex &imageIndex);
-
-    void onAttach(gl::Framebuffer *framebuffer, GLenum bindingPoint);
-    void onDetach(gl::Framebuffer *framebuffer);
-
-    void onFramebufferAttachmentImplStateChange(const gl::Context *context);
-
-  private:
-    std::vector<std::pair<gl::Framebuffer *, size_t>> mParentFramebufferBindings;
 };
 
 }  // namespace rx

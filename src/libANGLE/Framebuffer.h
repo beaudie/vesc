@@ -133,7 +133,7 @@ class FramebufferState final : angle::NonCopyable
     angle::BitSet<IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 2> mResourceNeedsInit;
 };
 
-class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
+class Framebuffer final : public LabeledObject
 {
   public:
     // Constructor to build application-defined framebuffers
@@ -308,9 +308,6 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
 
     void syncState(const Context *context);
 
-    // OnAttachmentChangedReceiver implementation
-    void signal(size_t dirtyBit, InitState state) override;
-
     bool formsRenderingFeedbackLoopWith(const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,
                                       GLint copyTextureLevel,
@@ -356,7 +353,6 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     void updateAttachment(const Context *context,
                           FramebufferAttachment *attachment,
                           size_t dirtyBit,
-                          OnAttachmentDirtyBinding *onDirtyBinding,
                           GLenum type,
                           GLenum binding,
                           const ImageIndex &textureIndex,
@@ -382,10 +378,6 @@ class Framebuffer final : public LabeledObject, public OnAttachmentDirtyReceiver
     GLuint mId;
 
     Optional<GLenum> mCachedStatus;
-    std::vector<OnAttachmentDirtyBinding> mDirtyColorAttachmentBindings;
-    OnAttachmentDirtyBinding mDirtyDepthAttachmentBinding;
-    OnAttachmentDirtyBinding mDirtyStencilAttachmentBinding;
-
     DirtyBits mDirtyBits;
 
     // A cache of attached textures for quick validation of feedback loops.

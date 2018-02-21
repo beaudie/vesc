@@ -895,9 +895,11 @@ egl::Stream *Texture::getBoundStream() const
     return mBoundStream;
 }
 
-void Texture::signalDirty(InitState initState) const
+void Texture::signalDirty(const gl::Context *context, InitState initState)
 {
-    mDirtyChannel.signal(initState);
+    mState.mInitState = initState;
+    mTexture->onDependentStateChange(
+        context, angle::DependentStateChangeMessage::FRAMEBUFFER_ATTACHMENT_DATA_CHANGE);
     invalidateCompletenessCache();
 }
 
@@ -923,7 +925,7 @@ Error Texture::setImage(const Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
-    signalDirty(initState);
+    signalDirty(context, initState);
 
     return NoError();
 }
@@ -966,7 +968,7 @@ Error Texture::setCompressedImage(const Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
-    signalDirty(initState);
+    signalDirty(context, initState);
 
     return NoError();
 }
@@ -1020,7 +1022,7 @@ Error Texture::copyImage(const Context *context,
                                   Format(internalFormatInfo), InitState::Initialized));
 
     // We need to initialize this texture only if the source attachment is not initialized.
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
 
     return NoError();
 }
@@ -1076,7 +1078,7 @@ Error Texture::copyTexture(const Context *context,
         target, level,
         ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized));
 
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
 
     return NoError();
 }
@@ -1148,7 +1150,7 @@ Error Texture::setStorage(const Context *context,
     mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
 
-    signalDirty(InitState::MayNeedInit);
+    signalDirty(context, InitState::MayNeedInit);
 
     return NoError();
 }
@@ -1175,7 +1177,7 @@ Error Texture::setStorageMultisample(const Context *context,
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples, fixedSampleLocations,
                                         InitState::MayNeedInit);
 
-    signalDirty(InitState::MayNeedInit);
+    signalDirty(context, InitState::MayNeedInit);
 
     return NoError();
 }
@@ -1215,7 +1217,7 @@ Error Texture::generateMipmap(const Context *context)
                                  InitState::Initialized);
     }
 
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
 
     return NoError();
 }
@@ -1237,7 +1239,7 @@ Error Texture::bindTexImageFromSurface(const Context *context, egl::Surface *sur
     Extents size(surface->getWidth(), surface->getHeight(), 1);
     ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
     mState.setImageDesc(mState.mTarget, 0, desc);
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
     return NoError();
 }
 
@@ -1250,7 +1252,7 @@ Error Texture::releaseTexImageFromSurface(const Context *context)
     // Erase the image info for level 0
     ASSERT(mState.mTarget == GL_TEXTURE_2D || mState.mTarget == GL_TEXTURE_RECTANGLE_ANGLE);
     mState.clearImageDesc(mState.mTarget, 0);
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
     return NoError();
 }
 
@@ -1281,7 +1283,7 @@ Error Texture::acquireImageFromStream(const Context *context,
     Extents size(desc.width, desc.height, 1);
     mState.setImageDesc(mState.mTarget, 0,
                         ImageDesc(size, Format(desc.internalFormat), InitState::Initialized));
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
     return NoError();
 }
 
@@ -1293,7 +1295,7 @@ Error Texture::releaseImageFromStream(const Context *context)
 
     // Set to incomplete
     mState.clearImageDesc(mState.mTarget, 0);
-    signalDirty(InitState::Initialized);
+    signalDirty(context, InitState::Initialized);
     return NoError();
 }
 
@@ -1330,7 +1332,7 @@ Error Texture::setEGLImageTarget(const Context *context, GLenum target, egl::Ima
 
     mState.clearImageDescs();
     mState.setImageDesc(target, 0, ImageDesc(size, imageTarget->getFormat(), initState));
-    signalDirty(initState);
+    signalDirty(context, initState);
 
     return NoError();
 }
@@ -1427,9 +1429,8 @@ Error Texture::ensureInitialized(const Context *context)
     }
     if (anyDirty)
     {
-        signalDirty(InitState::Initialized);
+        signalDirty(context, InitState::Initialized);
     }
-    mState.mInitState = InitState::Initialized;
 
     return NoError();
 }

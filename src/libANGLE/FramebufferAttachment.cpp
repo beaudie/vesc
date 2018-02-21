@@ -38,7 +38,29 @@ std::vector<Offset> TransformViewportOffsetArrayToVectorOfOffsets(const GLint *v
     return offsetVector;
 }
 
-}  // namespace
+size_t ConvertBindingToDirtyBit(GLenum binding)
+{
+    switch (binding)
+    {
+        case GL_DEPTH:
+        case GL_DEPTH_ATTACHMENT:
+            return gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT;
+        case GL_STENCIL:
+        case GL_STENCIL_ATTACHMENT:
+            return gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT;
+        case GL_DEPTH_STENCIL:
+        case GL_DEPTH_STENCIL_ATTACHMENT:
+            return (gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT |
+                    gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT);
+        case GL_BACK:
+            return gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0;
+        default:
+            ASSERT(binding >= GL_COLOR_ATTACHMENT0 &&
+                   binding < GL_COLOR_ATTACHMENT0 + gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS);
+            return gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 + (binding - GL_COLOR_ATTACHMENT0);
+    }
+}
+}  // anonymous namespace
 
 ////// FramebufferAttachment::Target Implementation //////
 
@@ -130,7 +152,7 @@ void FramebufferAttachment::detach(const Context *context, Framebuffer *framebuf
     mType = GL_NONE;
     if (mResource != nullptr)
     {
-        mResource->onFramebufferDetach(context, framebuffer);
+        mResource->onFramebufferDetach(context, framebuffer, mTarget.binding());
         mResource = nullptr;
     }
     mNumViews        = kDefaultNumViews;
@@ -172,12 +194,13 @@ void FramebufferAttachment::attach(const Context *context,
     {
         mViewportOffsets = GetDefaultViewportOffsetVector();
     }
-    resource->onFramebufferAttach(context, framebuffer, binding);
 
     if (mResource != nullptr)
     {
-        mResource->onFramebufferDetach(context, framebuffer);
+        mResource->onFramebufferDetach(context, framebuffer, binding);
     }
+
+    resource->onFramebufferAttach(context, framebuffer, binding);
 
     mResource = resource;
 }
@@ -360,11 +383,6 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
 }
 
-OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
-{
-    return &mDirtyChannel;
-}
-
 Error FramebufferAttachmentObject::initializeContents(const Context *context,
                                                       const ImageIndex &imageIndex)
 {
@@ -388,20 +406,47 @@ void FramebufferAttachmentObject::onFramebufferAttach(const Context *context,
                                                       Framebuffer *framebuffer,
                                                       GLenum bindingPoint)
 {
-    getAttachmentImpl()->onAttach(framebuffer, bindingPoint);
+    size_t dirtyBits = ConvertBindingToDirtyBit(bindingPoint);
+
+    auto setFramebufferDirtyBits = [framebuffer, dirtyBits](const gl::Context *context) {
+        context->onGenericDirtyObject(framebuffer);
+        framebuffer->setDirtyBits(dirtyBits);
+    };
+
+    onParentObjectAttach(framebuffer, bindingPoint,
+                         angle::DependentStateChangeMessage::FRAMEBUFFER_DIRTY_BITS,
+                         setFramebufferDirtyBits);
     onAttach(context);
 }
 
 void FramebufferAttachmentObject::onFramebufferDetach(const Context *context,
-                                                      Framebuffer *framebuffer)
+                                                      Framebuffer *framebuffer,
+                                                      GLenum bindingPoint)
 {
-    getAttachmentImpl()->onDetach(framebuffer);
+    getAttachmentImpl()->onParentDetach(framebuffer, bindingPoint,
+                                        angle::DependentStateChangeMessage::FRAMEBUFFER_DIRTY_BITS);
     onDetach(context);
+}
+
+void FramebufferAttachmentObject::onParentObjectAttach(angle::ParentID parentID,
+                                                       angle::ParentSubresource parentSubresource,
+                                                       angle::DependentStateChangeMessage message,
+                                                       const angle::GenericCallback &callback)
+{
+    getAttachmentImpl()->onParentAttach(parentID, parentSubresource, message, callback);
+}
+
+void FramebufferAttachmentObject::onParentObjectDetach(angle::ParentID parentID,
+                                                       angle::ParentSubresource parentSubresource,
+                                                       angle::DependentStateChangeMessage message)
+{
+    getAttachmentImpl()->onParentDetach(parentID, parentSubresource, message);
 }
 
 void FramebufferAttachmentObject::onFramebufferAttachmentStateChange(const Context *context)
 {
-    getAttachmentImpl()->onFramebufferAttachmentImplStateChange(context);
+    getAttachmentImpl()->onDependentStateChange(
+        context, angle::DependentStateChangeMessage::FRAMEBUFFER_DIRTY_BITS);
 }
 
 }  // namespace gl

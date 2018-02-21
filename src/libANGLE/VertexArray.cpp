@@ -257,4 +257,9 @@ void VertexArray::syncState(const Context *context)
     }
 }
 
+void VertexArray::setDirtyBits(size_t dirtyBits)
+{
+    mDirtyBits.set(dirtyBits);
+}
+
 }  // namespace gl

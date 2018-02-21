@@ -192,6 +192,7 @@ class VertexArray final : public LabeledObject
 
     void syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    void setDirtyBits(size_t dirtyBits);
 
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }

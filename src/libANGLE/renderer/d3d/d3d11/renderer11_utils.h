@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/ResourceManager11.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+#include "libANGLE/signal_utils.h"
 
 namespace gl
 {

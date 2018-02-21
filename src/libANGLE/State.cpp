@@ -175,13 +175,7 @@ void State::initialize(const Context *context,
         mSamplerTextures[GL_TEXTURE_EXTERNAL_OES].resize(caps.maxCombinedTextureImageUnits);
     }
     mCompleteTextureCache.resize(caps.maxCombinedTextureImageUnits, nullptr);
-    mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
     mCachedTexturesInitState = InitState::MayNeedInit;
-    for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
-         ++textureIndex)
-    {
-        mCompleteTextureBindings.emplace_back(OnAttachmentDirtyBinding(this, textureIndex));
-    }
 
     mSamplers.resize(caps.maxCombinedTextureImageUnits);
 
@@ -2313,14 +2307,27 @@ void State::syncProgramTextures(const Context *context)
             {
                 texture->syncState();
                 mCompleteTextureCache[textureUnitIndex] = texture;
+
+                auto onTextureRedefinition = [this, texture](const gl::Context *context) {
+                    // Conservatively assume all textures are dirty.
+                    // TODO(jmadill): More fine-grained update.
+                    this->mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+
+                    if (texture->initState() == InitState::MayNeedInit)
+                    {
+                        this->mCachedTexturesInitState = InitState::MayNeedInit;
+                    }
+                };
+                mCompleteTextureCache[textureUnitIndex]->onParentObjectAttach(
+                    this, textureUnitIndex,
+                    angle::DependentStateChangeMessage::FRAMEBUFFER_ATTACHMENT_DATA_CHANGE,
+                    onTextureRedefinition);
             }
             else
             {
                 mCompleteTextureCache[textureUnitIndex] = nullptr;
             }
 
-            // Bind the texture unconditionally, to recieve completeness change notifications.
-            mCompleteTextureBindings[textureUnitIndex].bind(texture->getDirtyChannel());
             mActiveTexturesMask.set(textureUnitIndex);
             newActiveTextures.set(textureUnitIndex);
 
@@ -2342,7 +2349,6 @@ void State::syncProgramTextures(const Context *context)
     {
         for (auto textureIndex : negativeMask)
         {
-            mCompleteTextureBindings[textureIndex].reset();
             mCompleteTextureCache[textureIndex] = nullptr;
             mActiveTexturesMask.reset(textureIndex);
         }
@@ -2437,19 +2443,6 @@ void State::setImageUnit(const Context *context,
 const ImageUnit &State::getImageUnit(GLuint unit) const
 {
     return mImageUnits[unit];
-}
-
-// Handle a dirty texture event.
-void State::signal(size_t textureIndex, InitState initState)
-{
-    // Conservatively assume all textures are dirty.
-    // TODO(jmadill): More fine-grained update.
-    mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
-
-    if (initState == InitState::MayNeedInit)
-    {
-        mCachedTexturesInitState = InitState::MayNeedInit;
-    }
 }
 
 Error State::clearUnclearedActiveTextures(const Context *context)

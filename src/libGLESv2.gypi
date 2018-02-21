@@ -169,6 +169,8 @@
             'libANGLE/HandleAllocator.h',
             'libANGLE/HandleRangeAllocator.h',
             'libANGLE/HandleRangeAllocator.cpp',
+            'libANGLE/HasParentObjectBindings.cpp',
+            'libANGLE/HasParentObjectBindings.h',
             'libANGLE/Image.h',
             'libANGLE/Image.cpp',
             'libANGLE/ImageIndex.h',

@@ -348,7 +348,7 @@ class Texture final : public egl::ImageSibling,
     egl::Surface *getBoundSurface() const;
     egl::Stream *getBoundStream() const;
 
-    void signalDirty(InitState initState) const;
+    void signalDirty(const gl::Context *context, InitState initState);
 
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
 

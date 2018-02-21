@@ -2625,10 +2625,10 @@ void Context::requestExtension(const char *name)
 
     // Invalidate all textures and framebuffer. Some extensions make new formats renderable or
     // sampleable.
-    mState.mTextures->signalAllTexturesDirty();
+    mState.mTextures->signalAllTexturesDirty(this);
     for (auto &zeroTexture : mZeroTextures)
     {
-        zeroTexture.second->signalDirty(InitState::Initialized);
+        zeroTexture.second->signalDirty(this, InitState::Initialized);
     }
 
     mState.mFramebuffers->invalidateFramebufferComplenessCache();
@@ -6354,10 +6354,8 @@ GLbitfield Context::queryMatrixx(GLfixed *mantissa, GLint *exponent)
     return 0;
 }
 
-void Context::dirtyFramebuffer(gl::Framebuffer *framebuffer, size_t framebufferDirtyBits) const
+void Context::onGenericDirtyObject(gl::Framebuffer *framebuffer) const
 {
-    framebuffer->setDirtyBits(framebufferDirtyBits);
-
     if (mGLState.getReadFramebuffer() == framebuffer)
     {
         mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
@@ -6365,6 +6363,14 @@ void Context::dirtyFramebuffer(gl::Framebuffer *framebuffer, size_t framebufferD
     if (mGLState.getDrawFramebuffer() == framebuffer)
     {
         mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+    }
+}
+
+void Context::onGenericDirtyObject(gl::VertexArray *vertexArray) const
+{
+    if (mGLState.getVertexArray() == vertexArray)
+    {
+        mGLState.setObjectDirty(GL_VERTEX_ARRAY);
     }
 }
 
