@@ -68,7 +68,8 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mCurrentDrawMode(GL_NONE),
       mVertexArrayDirty(false),
       mTexturesDirty(false),
-      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 1024)
+      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 1024),
+      mLineLoopHandler(nullptr)
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -84,6 +85,12 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mDescriptorPool.destroy(device);
     mStreamingVertexData.destroy(device);
+
+    if (mLineLoopHandler != nullptr)
+    {
+        mLineLoopHandler->destroy(device);
+        mLineLoopHandler = nullptr;
+    }
 }
 
 gl::Error ContextVk::initialize()
@@ -126,6 +133,16 @@ gl::Error ContextVk::flush(const gl::Context *context)
 gl::Error ContextVk::finish(const gl::Context *context)
 {
     return mRenderer->finish(context);
+}
+
+vk::LineLoopHandler *ContextVk::getLineLoopHandler()
+{
+    if (mLineLoopHandler == nullptr)
+    {
+        mLineLoopHandler = new vk::LineLoopHandler();
+    }
+
+    return mLineLoopHandler;
 }
 
 gl::Error ContextVk::initPipeline(const gl::Context *context)
@@ -236,6 +253,14 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         ->bindVertexBuffers(0, maxAttrib, vkVAO->getCurrentArrayBufferHandles().data(),
                             vkVAO->getCurrentArrayBufferOffsets().data());
 
+    // Line loops require a bit more handling since vulkan does not have the line loop concept
+    // baked in.
+    if (mode == GL_LINE_LOOP)
+    {
+        ANGLE_TRY(getLineLoopHandler()->bindLineLoopIndexBuffer(firstVertex, lastVertex, this,
+                                                                commandBuffer));
+    }
+
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
     mCurrentPipeline->updateSerial(queueSerial);
@@ -264,7 +289,15 @@ gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint f
 {
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, first, first + count - 1, &commandBuffer));
-    commandBuffer->draw(count, 1, first, 0);
+    if (mode == GL_LINE_LOOP)
+    {
+        getLineLoopHandler()->draw(count, commandBuffer);
+    }
+    else
+    {
+        commandBuffer->draw(count, 1, first, 0);
+    }
+
     return gl::NoError();
 }
 
