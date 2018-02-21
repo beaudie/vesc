@@ -17,7 +17,7 @@ namespace rx
 {
 class Renderer11;
 
-class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
+class Framebuffer11 : public FramebufferD3D
 {
   public:
     Framebuffer11(const gl::FramebufferState &data, Renderer11 *renderer);
@@ -50,9 +50,8 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
     RenderTarget11 *getFirstRenderTarget() const;
 
     bool hasAnyInternalDirtyBit() const;
+    void setAllInternalDirtyBits();
     void syncInternalState(const gl::Context *context);
-
-    void signal(size_t channelID, const gl::Context *context) override;
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
@@ -92,9 +91,6 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
     RenderTarget11 *mCachedDepthStencilRenderTarget;
-
-    std::vector<OnRenderTargetDirtyBinding> mColorRenderTargetsDirty;
-    OnRenderTargetDirtyBinding mDepthStencilRenderTargetDirty;
 
     gl::Framebuffer::DirtyBits mInternalDirtyBits;
 };

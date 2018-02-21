@@ -696,13 +696,13 @@ void Framebuffer::onDestroy(const Context *context)
 {
     for (auto &attachment : mState.mColorAttachments)
     {
-        attachment.detach(context);
+        attachment.detach(context, this);
     }
-    mState.mDepthAttachment.detach(context);
-    mState.mStencilAttachment.detach(context);
-    mState.mWebGLDepthAttachment.detach(context);
-    mState.mWebGLStencilAttachment.detach(context);
-    mState.mWebGLDepthStencilAttachment.detach(context);
+    mState.mDepthAttachment.detach(context, this);
+    mState.mStencilAttachment.detach(context, this);
+    mState.mWebGLDepthAttachment.detach(context, this);
+    mState.mWebGLStencilAttachment.detach(context, this);
+    mState.mWebGLDepthStencilAttachment.detach(context, this);
 
     mImpl->destroy(context);
 }
@@ -785,7 +785,7 @@ bool Framebuffer::detachMatchingAttachment(const Context *context,
 {
     if (attachment->isAttached() && attachment->type() == matchType && attachment->id() == matchId)
     {
-        attachment->detach(context);
+        attachment->detach(context, this);
         mDirtyBits.set(dirtyBit);
         mState.mResourceNeedsInit.set(dirtyBit, false);
         return true;
@@ -1555,21 +1555,21 @@ void Framebuffer::setAttachment(const Context *context,
     {
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
-            mState.mWebGLDepthStencilAttachment.attach(context, type, binding, textureIndex,
+            mState.mWebGLDepthStencilAttachment.attach(context, this, type, binding, textureIndex,
                                                        resource, numViews, baseViewIndex,
                                                        multiviewLayout, viewportOffsets);
             break;
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
-            mState.mWebGLDepthAttachment.attach(context, type, binding, textureIndex, resource,
-                                                numViews, baseViewIndex, multiviewLayout,
+            mState.mWebGLDepthAttachment.attach(context, this, type, binding, textureIndex,
+                                                resource, numViews, baseViewIndex, multiviewLayout,
                                                 viewportOffsets);
             break;
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
-            mState.mWebGLStencilAttachment.attach(context, type, binding, textureIndex, resource,
-                                                  numViews, baseViewIndex, multiviewLayout,
-                                                  viewportOffsets);
+            mState.mWebGLStencilAttachment.attach(context, this, type, binding, textureIndex,
+                                                  resource, numViews, baseViewIndex,
+                                                  multiviewLayout, viewportOffsets);
             break;
         default:
             setAttachmentImpl(context, type, binding, textureIndex, resource, numViews,
@@ -1776,8 +1776,8 @@ void Framebuffer::updateAttachment(const Context *context,
                                    GLenum multiviewLayout,
                                    const GLint *viewportOffsets)
 {
-    attachment->attach(context, type, binding, textureIndex, resource, numViews, baseViewIndex,
-                       multiviewLayout, viewportOffsets);
+    attachment->attach(context, this, type, binding, textureIndex, resource, numViews,
+                       baseViewIndex, multiviewLayout, viewportOffsets);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
     BindResourceChannel(onDirtyBinding, resource);
@@ -1786,6 +1786,11 @@ void Framebuffer::updateAttachment(const Context *context,
 void Framebuffer::resetAttachment(const Context *context, GLenum binding)
 {
     setAttachment(context, GL_NONE, binding, ImageIndex::MakeInvalid(), nullptr);
+}
+
+void Framebuffer::setDirtyBits(size_t dirtyBits)
+{
+    mDirtyBits.set(dirtyBits);
 }
 
 void Framebuffer::syncState(const Context *context)

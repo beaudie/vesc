@@ -429,11 +429,6 @@ using OnBufferDataDirtyBinding  = angle::ChannelBinding<size_t, const gl::Contex
 using OnBufferDataDirtyChannel  = angle::BroadcastChannel<size_t, const gl::Context *>;
 using OnBufferDataDirtyReceiver = angle::SignalReceiver<size_t, const gl::Context *>;
 
-// Used for state change notifications between RenderTarget11 and Framebuffer11.
-using OnRenderTargetDirtyBinding  = angle::ChannelBinding<size_t, const gl::Context *>;
-using OnRenderTargetDirtyChannel  = angle::BroadcastChannel<size_t, const gl::Context *>;
-using OnRenderTargetDirtyReceiver = angle::SignalReceiver<size_t, const gl::Context *>;
-
 }  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_

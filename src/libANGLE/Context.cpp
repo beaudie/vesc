@@ -6354,4 +6354,18 @@ GLbitfield Context::queryMatrixx(GLfixed *mantissa, GLint *exponent)
     return 0;
 }
 
+void Context::dirtyFramebuffer(gl::Framebuffer *framebuffer, size_t framebufferDirtyBits) const
+{
+    framebuffer->setDirtyBits(framebufferDirtyBits);
+
+    if (mGLState.getReadFramebuffer() == framebuffer)
+    {
+        mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
+    }
+    if (mGLState.getDrawFramebuffer() == framebuffer)
+    {
+        mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+    }
+}
+
 }  // namespace gl

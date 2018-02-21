@@ -2378,7 +2378,7 @@ void State::syncDirtyObject(const Context *context, GLenum target)
     syncDirtyObjects(context, localSet);
 }
 
-void State::setObjectDirty(GLenum target)
+void State::setObjectDirty(GLenum target) const
 {
     switch (target)
     {

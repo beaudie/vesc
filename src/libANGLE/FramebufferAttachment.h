@@ -38,6 +38,7 @@ class FramebufferAttachmentObjectImpl;
 
 namespace gl
 {
+class Framebuffer;
 class FramebufferAttachmentObject;
 struct Format;
 class Renderbuffer;
@@ -65,6 +66,7 @@ class FramebufferAttachment final
     FramebufferAttachment();
 
     FramebufferAttachment(const Context *context,
+                          Framebuffer *framebuffer,
                           GLenum type,
                           GLenum binding,
                           const ImageIndex &textureIndex,
@@ -75,8 +77,9 @@ class FramebufferAttachment final
 
     ~FramebufferAttachment();
 
-    void detach(const Context *context);
+    void detach(const Context *context, Framebuffer *framebuffer);
     void attach(const Context *context,
+                Framebuffer *framebuffer,
                 GLenum type,
                 GLenum binding,
                 const ImageIndex &textureIndex,
@@ -131,7 +134,7 @@ class FramebufferAttachment final
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
-    gl::Error getRenderTarget(const Context *context, T **rtOut) const
+    Error getRenderTarget(const Context *context, T **rtOut) const
     {
         static_assert(std::is_base_of<rx::FramebufferAttachmentRenderTarget, T>(),
                       "Invalid RenderTarget class.");
@@ -149,8 +152,8 @@ class FramebufferAttachment final
     static const GLint kDefaultViewportOffsets[2];
 
   private:
-    gl::Error getRenderTargetImpl(const Context *context,
-                                  rx::FramebufferAttachmentRenderTarget **rtOut) const;
+    Error getRenderTargetImpl(const Context *context,
+                              rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     // A framebuffer attachment points to one of three types of resources: Renderbuffers,
     // Textures and egl::Surface. The "Target" struct indicates which part of the
@@ -195,8 +198,6 @@ class FramebufferAttachmentObject
                                               const ImageIndex &imageIndex) const = 0;
     virtual GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const      = 0;
 
-    virtual void onAttach(const Context *context) = 0;
-    virtual void onDetach(const Context *context) = 0;
     virtual GLuint getId() const = 0;
 
     // These are used for robust resource initialization.
@@ -208,11 +209,18 @@ class FramebufferAttachmentObject
                                     const ImageIndex &imageIndex,
                                     rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
+    void onFramebufferAttach(const Context *context, Framebuffer *framebuffer, GLenum bindingPoint);
+    void onFramebufferDetach(const Context *context, Framebuffer *framebuffer);
+
     Error initializeContents(const Context *context, const ImageIndex &imageIndex);
 
     OnAttachmentDirtyChannel *getDirtyChannel();
 
+    void onFramebufferAttachmentStateChange(const Context *context);
+
   protected:
+    virtual void onAttach(const Context *context)                          = 0;
+    virtual void onDetach(const Context *context)                          = 0;
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
 
     OnAttachmentDirtyChannel mDirtyChannel;
@@ -236,7 +244,7 @@ inline GLsizei FramebufferAttachment::getSamples() const
     return mResource->getAttachmentSamples(mTarget.textureIndex());
 }
 
-inline gl::Error FramebufferAttachment::getRenderTargetImpl(
+inline Error FramebufferAttachment::getRenderTargetImpl(
     const Context *context,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {

@@ -91,14 +91,15 @@ FramebufferAttachment::FramebufferAttachment()
 }
 
 FramebufferAttachment::FramebufferAttachment(const Context *context,
+                                             Framebuffer *framebuffer,
                                              GLenum type,
                                              GLenum binding,
                                              const ImageIndex &textureIndex,
                                              FramebufferAttachmentObject *resource)
     : mResource(nullptr)
 {
-    attach(context, type, binding, textureIndex, resource, kDefaultNumViews, kDefaultBaseViewIndex,
-           kDefaultMultiviewLayout, kDefaultViewportOffsets);
+    attach(context, framebuffer, type, binding, textureIndex, resource, kDefaultNumViews,
+           kDefaultBaseViewIndex, kDefaultMultiviewLayout, kDefaultViewportOffsets);
 }
 
 FramebufferAttachment::FramebufferAttachment(FramebufferAttachment &&other)
@@ -124,12 +125,12 @@ FramebufferAttachment::~FramebufferAttachment()
     ASSERT(!isAttached());
 }
 
-void FramebufferAttachment::detach(const Context *context)
+void FramebufferAttachment::detach(const Context *context, Framebuffer *framebuffer)
 {
     mType = GL_NONE;
     if (mResource != nullptr)
     {
-        mResource->onDetach(context);
+        mResource->onFramebufferDetach(context, framebuffer);
         mResource = nullptr;
     }
     mNumViews        = kDefaultNumViews;
@@ -142,6 +143,7 @@ void FramebufferAttachment::detach(const Context *context)
 }
 
 void FramebufferAttachment::attach(const Context *context,
+                                   Framebuffer *framebuffer,
                                    GLenum type,
                                    GLenum binding,
                                    const ImageIndex &textureIndex,
@@ -153,7 +155,7 @@ void FramebufferAttachment::attach(const Context *context,
 {
     if (resource == nullptr)
     {
-        detach(context);
+        detach(context, framebuffer);
         return;
     }
 
@@ -170,11 +172,11 @@ void FramebufferAttachment::attach(const Context *context,
     {
         mViewportOffsets = GetDefaultViewportOffsetVector();
     }
-    resource->onAttach(context);
+    resource->onFramebufferAttach(context, framebuffer, binding);
 
     if (mResource != nullptr)
     {
-        mResource->onDetach(context);
+        mResource->onFramebufferDetach(context, framebuffer);
     }
 
     mResource = resource;
@@ -380,6 +382,26 @@ Error FramebufferAttachmentObject::initializeContents(const Context *context,
     {
         return getAttachmentImpl()->initializeContents(context, imageIndex);
     }
+}
+
+void FramebufferAttachmentObject::onFramebufferAttach(const Context *context,
+                                                      Framebuffer *framebuffer,
+                                                      GLenum bindingPoint)
+{
+    getAttachmentImpl()->onAttach(framebuffer, bindingPoint);
+    onAttach(context);
+}
+
+void FramebufferAttachmentObject::onFramebufferDetach(const Context *context,
+                                                      Framebuffer *framebuffer)
+{
+    getAttachmentImpl()->onDetach(framebuffer);
+    onDetach(context);
+}
+
+void FramebufferAttachmentObject::onFramebufferAttachmentStateChange(const Context *context)
+{
+    getAttachmentImpl()->onFramebufferAttachmentImplStateChange(context);
 }
 
 }  // namespace gl

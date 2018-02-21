@@ -443,7 +443,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     void syncDirtyObjects(const Context *context);
     void syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
     void syncDirtyObject(const Context *context, GLenum target);
-    void setObjectDirty(GLenum target);
+    void setObjectDirty(GLenum target) const;
 
     // This actually clears the current value dirty bits.
     // TODO(jmadill): Pass mutable dirty bits into Impl.
@@ -599,8 +599,8 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
 
-    DirtyBits mDirtyBits;
-    DirtyObjects mDirtyObjects;
+    mutable DirtyBits mDirtyBits;
+    mutable DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
 };
 

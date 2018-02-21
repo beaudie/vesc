@@ -19,8 +19,8 @@ namespace rx
 class FramebufferAttachmentObjectImpl : angle::NonCopyable
 {
   public:
-    FramebufferAttachmentObjectImpl() {}
-    virtual ~FramebufferAttachmentObjectImpl() {}
+    FramebufferAttachmentObjectImpl();
+    virtual ~FramebufferAttachmentObjectImpl();
 
     virtual gl::Error getAttachmentRenderTarget(const gl::Context *context,
                                                 GLenum binding,
@@ -29,25 +29,15 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
 
     virtual gl::Error initializeContents(const gl::Context *context,
                                          const gl::ImageIndex &imageIndex);
+
+    void onAttach(gl::Framebuffer *framebuffer, GLenum bindingPoint);
+    void onDetach(gl::Framebuffer *framebuffer);
+
+    void onFramebufferAttachmentImplStateChange(const gl::Context *context);
+
+  private:
+    std::vector<std::pair<gl::Framebuffer *, size_t>> mParentFramebufferBindings;
 };
-
-inline gl::Error FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
-    const gl::Context *context,
-    GLenum binding,
-    const gl::ImageIndex &imageIndex,
-    FramebufferAttachmentRenderTarget **rtOut)
-{
-    UNIMPLEMENTED();
-    return gl::OutOfMemory() << "getAttachmentRenderTarget not supported.";
-}
-
-inline gl::Error FramebufferAttachmentObjectImpl::initializeContents(
-    const gl::Context *context,
-    const gl::ImageIndex &imageIndex)
-{
-    UNIMPLEMENTED();
-    return gl::OutOfMemory() << "initialize not supported.";
-}
 
 }  // namespace rx
 

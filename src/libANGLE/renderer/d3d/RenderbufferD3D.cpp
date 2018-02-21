@@ -112,9 +112,11 @@ gl::Error RenderbufferD3D::getAttachmentRenderTarget(const gl::Context *context,
 
 void RenderbufferD3D::deleteRenderTarget(const gl::Context *context)
 {
+    // Notify any parent Framebuffers of an attachment change.
+    onFramebufferAttachmentImplStateChange(context);
+
     if (mRenderTarget)
     {
-        mRenderTarget->signalDirty(context);
         SafeDelete(mRenderTarget);
     }
 }

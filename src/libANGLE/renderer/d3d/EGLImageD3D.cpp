@@ -79,8 +79,12 @@ gl::Error EGLImageD3D::copyToLocalRendertarget(const gl::Context *context)
     RenderTargetD3D *curRenderTarget = nullptr;
     ANGLE_TRY(getRenderTarget(context, &curRenderTarget));
 
-    // This only currently applies do D3D11, where it invalidates FBOs with this Image attached.
-    curRenderTarget->signalDirty(context);
+    // Notify targets that the RenderTarget changed. This only is currently necessary for D3D11, to
+    // synchronize dirty bits for the Framebuffer11.
+    for (auto target : mState.targets)
+    {
+        target->onFramebufferAttachmentStateChange(context);
+    }
 
     return mRenderer->createRenderTargetCopy(curRenderTarget, &mRenderTarget);
 }

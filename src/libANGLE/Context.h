@@ -1164,6 +1164,8 @@ class Context final : public ValidationContext
 
     bool isRobustResourceInitEnabled() const { return mGLState.isRobustResourceInitEnabled(); }
 
+    void dirtyFramebuffer(gl::Framebuffer *framebuffer, size_t framebufferDirtyBits) const;
+
   private:
     Error prepareForDraw();
     void syncRendererState();

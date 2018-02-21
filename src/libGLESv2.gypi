@@ -261,6 +261,7 @@
             'libANGLE/renderer/Format_ID_autogen.inl',
             'libANGLE/renderer/Format_table_autogen.cpp',
             'libANGLE/renderer/Format.h',
+            'libANGLE/renderer/FramebufferAttachmentObjectImpl.cpp',
             'libANGLE/renderer/FramebufferAttachmentObjectImpl.h',
             'libANGLE/renderer/FramebufferImpl.h',
             'libANGLE/renderer/GLImplFactory.h',

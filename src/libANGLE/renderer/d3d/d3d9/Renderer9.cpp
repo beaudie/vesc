@@ -1189,8 +1189,9 @@ gl::Error Renderer9::getNullColorbuffer(const gl::Context *context,
         return error;
     }
 
-    gl::FramebufferAttachment *nullbuffer = new gl::FramebufferAttachment(
-        context, GL_RENDERBUFFER, GL_NONE, gl::ImageIndex::MakeInvalid(), nullRenderbuffer);
+    gl::FramebufferAttachment *nullbuffer =
+        new gl::FramebufferAttachment(context, nullptr, GL_RENDERBUFFER, GL_NONE,
+                                      gl::ImageIndex::MakeInvalid(), nullRenderbuffer);
 
     // add nullbuffer to the cache
     NullColorbufferCacheEntry *oldest = &mNullColorbufferCache[0];
@@ -2242,7 +2243,7 @@ void Renderer9::releaseDeviceResources()
     {
         if (mNullColorbufferCache[i].buffer)
         {
-            mNullColorbufferCache[i].buffer->detach(mDisplay->getProxyContext());
+            mNullColorbufferCache[i].buffer->detach(mDisplay->getProxyContext(), nullptr);
         }
         SafeDelete(mNullColorbufferCache[i].buffer);
     }
