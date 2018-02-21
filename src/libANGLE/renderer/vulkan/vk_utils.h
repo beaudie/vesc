@@ -50,6 +50,7 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 
 namespace rx
 {
+class StreamingBuffer;
 class DisplayVk;
 class RenderTargetVk;
 class RendererVk;
@@ -375,6 +376,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
     void bindIndexBuffer(const vk::Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+    void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
                             const vk::PipelineLayout &layout,
                             uint32_t firstSet,
@@ -667,6 +669,33 @@ Error AllocateImageMemory(RendererVk *renderer,
                           Image *image,
                           DeviceMemory *deviceMemoryOut,
                           size_t *requiredSizeOut);
+
+// This class responsibility is to bind an indexed buffer needed to support
+// line loops in Vulkan. In the setup phase of drawing, the bindLineLoopIndexBuffer
+// method should be called with the first/last vertex and the current commandBuffer.
+// If the user wants to draw a loop between [v1, v2, v3], we will create an indexed
+// buffer with these indexes: [0, 1, 2, 3, 0] to emulate the loop.
+class LineLoopHandler : angle::NonCopyable
+{
+  public:
+    LineLoopHandler();
+    ~LineLoopHandler();
+
+    gl::Error bindLineLoopIndexBuffer(int firstVertex,
+                                      int lastVertex,
+                                      ContextVk *contextVk,
+                                      vk::CommandBuffer **commandBuffer);
+    void destroy(VkDevice device);
+    bool valid();
+    void draw(GLsizei count, CommandBuffer *commandBuffer);
+
+  private:
+    StreamingBuffer *mStreamingLineLoopIndicesData;
+    VkBuffer mLineLoopIndexBuffer;
+    VkDeviceSize mLineLoopIndexBufferOffset;
+    int mLineLoopBufferFirstIndex;
+    int mLineLoopBufferLastIndex;
+};
 
 }  // namespace vk
 

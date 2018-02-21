@@ -162,6 +162,7 @@ class ContextVk : public ContextImpl
     const VkClearValue &getClearDepthStencilValue() const;
 
   private:
+    vk::LineLoopHandler *getLineLoopHandler();
     gl::Error initPipeline(const gl::Context *context);
     gl::Error setupDraw(const gl::Context *context,
                         GLenum mode,
@@ -191,6 +192,9 @@ class ContextVk : public ContextImpl
     VkClearValue mClearDepthStencilValue;
 
     StreamingBuffer mStreamingVertexData;
+
+    // We lazily instantiate that only if needed since not everyone depends on line loops.
+    vk::LineLoopHandler *mLineLoopHandler;
 };
 
 }  // namespace rx
