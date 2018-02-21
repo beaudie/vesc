@@ -84,6 +84,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mDescriptorPool.destroy(device);
     mStreamingVertexData.destroy(device);
+    mLineLoopHandler.destroy(device);
 }
 
 gl::Error ContextVk::initialize()
@@ -236,6 +237,9 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         ->bindVertexBuffers(0, maxAttrib, vkVAO->getCurrentArrayBufferHandles().data(),
                             vkVAO->getCurrentArrayBufferOffsets().data());
 
+    ANGLE_TRY(mLineLoopHandler.bindLineLoopIndexBuffer(mode, firstVertex, lastVertex, this,
+                                                       commandBuffer));
+
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
     mCurrentPipeline->updateSerial(queueSerial);
@@ -264,7 +268,10 @@ gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint f
 {
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, first, first + count - 1, &commandBuffer));
-    commandBuffer->draw(count, 1, first, 0);
+    if (!mLineLoopHandler.draw(mode, count, commandBuffer))
+    {
+        commandBuffer->draw(count, 1, first, 0);
+    }
     return gl::NoError();
 }
 
