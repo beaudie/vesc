@@ -236,13 +236,13 @@ GLenum FramebufferAttachment::cubeMapFace() const
     ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mTarget.textureIndex();
-    return IsCubeMapTextureTarget(index.type) ? index.type : GL_NONE;
+    return index.type == GL_TEXTURE_CUBE_MAP ? index.target : GL_NONE;
 }
 
 GLint FramebufferAttachment::mipLevel() const
 {
     ASSERT(type() == GL_TEXTURE);
-    return mTarget.textureIndex().mipIndex;
+    return mTarget.textureIndex().level;
 }
 
 GLint FramebufferAttachment::layer() const
@@ -250,12 +250,7 @@ GLint FramebufferAttachment::layer() const
     ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mTarget.textureIndex();
-
-    if (index.type == GL_TEXTURE_2D_ARRAY || index.type == GL_TEXTURE_3D)
-    {
-        return index.layerIndex;
-    }
-    return 0;
+    return index.hasLayer() ? index.layer : 0;
 }
 
 GLsizei FramebufferAttachment::getNumViews() const
@@ -373,7 +368,7 @@ Error FramebufferAttachmentObject::initializeContents(const Context *context,
     if (imageIndex.type == GL_TEXTURE_2D_ARRAY && imageIndex.hasLayer())
     {
         ImageIndex fullMipIndex = imageIndex;
-        fullMipIndex.layerIndex = ImageIndex::ENTIRE_LEVEL;
+        fullMipIndex.layer      = ImageIndex::ENTIRE_LEVEL;
         return getAttachmentImpl()->initializeContents(context, fullMipIndex);
     }
     else

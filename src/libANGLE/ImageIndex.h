@@ -21,15 +21,20 @@ class ImageIndexIterator;
 struct ImageIndex
 {
     GLenum type;
-    GLint mipIndex;
-    GLint layerIndex;
-    GLint numLayers;
+    GLenum target;
 
-    ImageIndex(const ImageIndex &other);
-    ImageIndex &operator=(const ImageIndex &other);
+    GLint level;
 
-    bool hasLayer() const { return layerIndex != ENTIRE_LEVEL; }
+    GLint layer;
+    GLint layerCount;
+
+    ImageIndex(const ImageIndex &other) = default;
+    ImageIndex &operator=(const ImageIndex &other) = default;
+
+    bool hasLayer() const { return layer != ENTIRE_LEVEL; }
     bool is3D() const;
+    GLint cubeMapFaceIndex() const;
+    bool valid() const;
 
     static ImageIndex Make2D(GLint mipIndex);
     static ImageIndex MakeRectangle(GLint mipIndex);
@@ -44,15 +49,19 @@ struct ImageIndex
 
     static const GLint ENTIRE_LEVEL = static_cast<GLint>(-1);
 
-    bool operator<(const ImageIndex &other) const;
-    bool operator==(const ImageIndex &other) const;
-    bool operator!=(const ImageIndex &other) const;
-
   private:
     friend class ImageIndexIterator;
 
-    ImageIndex(GLenum typeIn, GLint mipIndexIn, GLint layerIndexIn, GLint numLayersIn);
+    ImageIndex(GLenum textureType,
+               GLenum textureTarget,
+               GLint level,
+               GLint layer,
+               GLint layerCount);
 };
+
+bool operator<(const ImageIndex &a, const ImageIndex &b);
+bool operator==(const ImageIndex &a, const ImageIndex &b);
+bool operator!=(const ImageIndex &a, const ImageIndex &b);
 
 class ImageIndexIterator
 {
@@ -71,19 +80,20 @@ class ImageIndexIterator
     bool hasNext() const;
 
   private:
-
-    ImageIndexIterator(GLenum type, const Range<GLint> &mipRange,
-                       const Range<GLint> &layerRange, const GLsizei *layerCounts);
+    ImageIndexIterator(GLenum textureType,
+                       const Range<GLenum> &textureTargetRange,
+                       const Range<GLint> &mipRange,
+                       const Range<GLint> &layerRange,
+                       const GLsizei *layerCounts);
 
     GLint maxLayer() const;
-    void done();
 
-    GLenum mType;
-    Range<GLint> mMipRange;
-    Range<GLint> mLayerRange;
-    const GLsizei *mLayerCounts;
-    GLint mCurrentMip;
-    GLint mCurrentLayer;
+    const Range<GLenum> mTextureTargetRange;
+    const Range<GLint> mMipRange;
+    const Range<GLint> mLayerRange;
+    const GLsizei *const mLayerCounts;
+
+    ImageIndex mCurrentIndex;
 };
 
 }

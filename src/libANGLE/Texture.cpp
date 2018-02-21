@@ -479,7 +479,7 @@ void TextureState::setImageDesc(GLenum target, size_t level, const ImageDesc &de
 
 const ImageDesc &TextureState::getImageDesc(const ImageIndex &imageIndex) const
 {
-    return getImageDesc(imageIndex.type, imageIndex.mipIndex);
+    return getImageDesc(imageIndex.target, imageIndex.level);
 }
 
 void TextureState::setImageDescChain(GLuint baseLevel,
@@ -1347,7 +1347,7 @@ const Format &Texture::getAttachmentFormat(GLenum /*binding*/, const ImageIndex 
 
 GLsizei Texture::getAttachmentSamples(const ImageIndex &imageIndex) const
 {
-    return getSamples(imageIndex.type, 0);
+    return getSamples(imageIndex.target, 0);
 }
 
 void Texture::onAttach(const Context *context)
@@ -1448,7 +1448,7 @@ void Texture::setInitState(const ImageIndex &imageIndex, InitState initState)
 {
     ImageDesc newDesc = mState.getImageDesc(imageIndex);
     newDesc.initState = initState;
-    mState.setImageDesc(imageIndex.type, imageIndex.mipIndex, newDesc);
+    mState.setImageDesc(imageIndex.target, imageIndex.level, newDesc);
 }
 
 Error Texture::ensureSubImageInitialized(const Context *context,

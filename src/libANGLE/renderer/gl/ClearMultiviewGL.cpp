@@ -160,7 +160,7 @@ void ClearMultiviewGL::attachTextures(const gl::FramebufferState &state, int lay
             static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + static_cast<int>(drawBufferId));
         const TextureGL *textureGL = GetImplAs<TextureGL>(attachment->getTexture());
         mFunctions->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, colorAttachment,
-                                            textureGL->getTextureID(), imageIndex.mipIndex, layer);
+                                            textureGL->getTextureID(), imageIndex.level, layer);
     }
 
     const gl::FramebufferAttachment *depthStencilAttachment = state.getDepthStencilAttachment();
@@ -173,7 +173,7 @@ void ClearMultiviewGL::attachTextures(const gl::FramebufferState &state, int lay
 
         const TextureGL *textureGL = GetImplAs<TextureGL>(depthStencilAttachment->getTexture());
         mFunctions->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
-                                            textureGL->getTextureID(), imageIndex.mipIndex, layer);
+                                            textureGL->getTextureID(), imageIndex.level, layer);
     }
     else if (depthAttachment != nullptr)
     {
@@ -182,7 +182,7 @@ void ClearMultiviewGL::attachTextures(const gl::FramebufferState &state, int lay
 
         const TextureGL *textureGL = GetImplAs<TextureGL>(depthAttachment->getTexture());
         mFunctions->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                            textureGL->getTextureID(), imageIndex.mipIndex, layer);
+                                            textureGL->getTextureID(), imageIndex.level, layer);
     }
     else if (stencilAttachment != nullptr)
     {
@@ -191,7 +191,7 @@ void ClearMultiviewGL::attachTextures(const gl::FramebufferState &state, int lay
 
         const TextureGL *textureGL = GetImplAs<TextureGL>(stencilAttachment->getTexture());
         mFunctions->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-                                            textureGL->getTextureID(), imageIndex.mipIndex, layer);
+                                            textureGL->getTextureID(), imageIndex.level, layer);
     }
 }
 

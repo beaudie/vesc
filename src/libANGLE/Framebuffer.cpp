@@ -151,8 +151,8 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
 
         // ES3.1 (section 9.4) requires that the value of TEXTURE_FIXED_SAMPLE_LOCATIONS should be
         // the same for all attached textures.
-        bool fixedSampleloc = texture->getFixedSampleLocations(attachmentImageIndex.type,
-                                                               attachmentImageIndex.mipIndex);
+        bool fixedSampleloc = texture->getFixedSampleLocations(attachmentImageIndex.target,
+                                                               attachmentImageIndex.level);
         if (fixedSampleLocations->valid() && fixedSampleloc != fixedSampleLocations->value())
         {
             return false;
@@ -1898,12 +1898,12 @@ bool Framebuffer::formsCopyingFeedbackLoopWith(GLuint copyTextureID,
     if (readAttachment->isTextureWithId(copyTextureID))
     {
         const auto &imageIndex = readAttachment->getTextureImageIndex();
-        if (imageIndex.mipIndex == copyTextureLevel)
+        if (imageIndex.level == copyTextureLevel)
         {
             // Check 3D/Array texture layers.
-            return imageIndex.layerIndex == ImageIndex::ENTIRE_LEVEL ||
+            return imageIndex.layer == ImageIndex::ENTIRE_LEVEL ||
                    copyTextureLayer == ImageIndex::ENTIRE_LEVEL ||
-                   imageIndex.layerIndex == copyTextureLayer;
+                   imageIndex.layer == copyTextureLayer;
         }
     }
     return false;

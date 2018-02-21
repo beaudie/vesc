@@ -375,7 +375,7 @@ gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(imageIndex.type == GL_TEXTURE_2D);
-    ASSERT(imageIndex.mipIndex == 0 && imageIndex.layerIndex == gl::ImageIndex::ENTIRE_LEVEL);
+    ASSERT(imageIndex.level == 0 && imageIndex.layer == gl::ImageIndex::ENTIRE_LEVEL);
     *rtOut = &mRenderTarget;
     return gl::NoError();
 }
