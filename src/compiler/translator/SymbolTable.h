@@ -187,78 +187,6 @@ class TSymbolTable : angle::NonCopyable
                           const ImmutableString &name,
                           const std::array<int, 3> &values);
 
-    // Note that for inserted built-in functions the const char *name needs to remain valid for the
-    // lifetime of the SymbolTable. SymbolTable does not allocate a copy of it.
-    void insertBuiltIn(ESymbolLevel level,
-                       TOperator op,
-                       TExtension ext,
-                       const TType *rvalue,
-                       const char *name,
-                       const TType *ptype1,
-                       const TType *ptype2 = 0,
-                       const TType *ptype3 = 0,
-                       const TType *ptype4 = 0,
-                       const TType *ptype5 = 0);
-
-    void insertBuiltIn(ESymbolLevel level,
-                       const TType *rvalue,
-                       const char *name,
-                       const TType *ptype1,
-                       const TType *ptype2 = 0,
-                       const TType *ptype3 = 0,
-                       const TType *ptype4 = 0,
-                       const TType *ptype5 = 0)
-    {
-        insertUnmangledBuiltIn(name, TExtension::UNDEFINED, level);
-        insertBuiltIn(level, EOpCallBuiltInFunction, TExtension::UNDEFINED, rvalue, name, ptype1,
-                      ptype2, ptype3, ptype4, ptype5);
-    }
-
-    void insertBuiltIn(ESymbolLevel level,
-                       TExtension ext,
-                       const TType *rvalue,
-                       const char *name,
-                       const TType *ptype1,
-                       const TType *ptype2 = 0,
-                       const TType *ptype3 = 0,
-                       const TType *ptype4 = 0,
-                       const TType *ptype5 = 0)
-    {
-        insertUnmangledBuiltIn(name, ext, level);
-        insertBuiltIn(level, EOpCallBuiltInFunction, ext, rvalue, name, ptype1, ptype2, ptype3,
-                      ptype4, ptype5);
-    }
-
-    void insertBuiltInOp(ESymbolLevel level,
-                         TOperator op,
-                         const TType *rvalue,
-                         const TType *ptype1,
-                         const TType *ptype2 = 0,
-                         const TType *ptype3 = 0,
-                         const TType *ptype4 = 0,
-                         const TType *ptype5 = 0);
-
-    void insertBuiltInOp(ESymbolLevel level,
-                         TOperator op,
-                         TExtension ext,
-                         const TType *rvalue,
-                         const TType *ptype1,
-                         const TType *ptype2 = 0,
-                         const TType *ptype3 = 0,
-                         const TType *ptype4 = 0,
-                         const TType *ptype5 = 0);
-
-    void insertBuiltInFunctionNoParameters(ESymbolLevel level,
-                                           TOperator op,
-                                           const TType *rvalue,
-                                           const char *name);
-
-    void insertBuiltInFunctionNoParametersExt(ESymbolLevel level,
-                                              TExtension ext,
-                                              TOperator op,
-                                              const TType *rvalue,
-                                              const char *name);
-
     TVariable *insertVariable(ESymbolLevel level,
                               const ImmutableString &name,
                               const TType *type,
@@ -277,7 +205,6 @@ class TSymbolTable : angle::NonCopyable
 
     void initSamplerDefaultPrecision(TBasicType samplerType);
 
-    void initializeBuiltInFunctions(sh::GLenum type);
     void initializeBuiltInVariables(sh::GLenum type,
                                     ShShaderSpec spec,
                                     const ShBuiltInResources &resources);
@@ -286,6 +213,8 @@ class TSymbolTable : angle::NonCopyable
     void insertStaticBuiltInVariables(sh::GLenum shaderType,
                                       ShShaderSpec spec,
                                       const ShBuiltInResources &resources);
+    void insertStaticBuiltInFunctions(sh::GLenum shaderType);
+    void insertStaticBuiltInFunctionUnmangledNames(sh::GLenum shaderType);
 
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
