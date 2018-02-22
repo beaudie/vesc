@@ -473,6 +473,12 @@ void TParseContext::checkPrecisionSpecified(const TSourceLoc &line,
 // an l-value that can be operated on this way.
 bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIntermTyped *node)
 {
+    if (node->getMemoryQualifier().readonly)
+    {
+        error(line, "can't modify a readonly variable", op);
+        return false;
+    }
+
     TIntermSymbol *symNode      = node->getAsSymbolNode();
     TIntermBinary *binaryNode   = node->getAsBinaryNode();
     TIntermSwizzle *swizzleNode = node->getAsSwizzleNode();
@@ -596,10 +602,6 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
             {
                 message = "can't modify a variable with type ";
                 message += getBasicString(node->getBasicType());
-            }
-            else if (node->getMemoryQualifier().readonly)
-            {
-                message = "can't modify a readonly variable";
             }
     }
 
