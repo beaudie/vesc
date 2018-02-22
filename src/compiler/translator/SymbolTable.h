@@ -59,8 +59,6 @@ const int GLOBAL_LEVEL       = 5;
 
 struct UnmangledBuiltIn
 {
-    constexpr UnmangledBuiltIn() : extension(TExtension::UNDEFINED) {}
-
     constexpr UnmangledBuiltIn(TExtension extension) : extension(extension) {}
 
     TExtension extension;
@@ -192,12 +190,6 @@ class TSymbolTable : angle::NonCopyable
 
     TFunction *findUserDefinedFunction(const ImmutableString &name) const;
 
-    // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00 and
-    // above.
-    void insertUnmangledBuiltIn(const ImmutableString &name, TExtension ext, ESymbolLevel level);
-
-    bool hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level);
-
     void initSamplerDefaultPrecision(TBasicType samplerType);
 
     void initializeBuiltInVariables(sh::GLenum type,
@@ -209,7 +201,6 @@ class TSymbolTable : angle::NonCopyable
                                       ShShaderSpec spec,
                                       const ShBuiltInResources &resources);
     void insertStaticBuiltInFunctions(sh::GLenum shaderType);
-    void insertStaticBuiltInFunctionUnmangledNames(sh::GLenum shaderType);
 
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
@@ -227,6 +218,8 @@ class TSymbolTable : angle::NonCopyable
     // TODO(oetuaho): Make this a compile-time constant once the symbol table is initialized at
     // compile time. http://anglebug.com/1432
     int mUserDefinedUniqueIdsStart;
+
+    sh::GLenum mShaderType;
 };
 
 }  // namespace sh

@@ -69,7 +69,6 @@ class TSymbolTable::TSymbolTableBuiltInLevel
     const TSymbol *find(const ImmutableString &name) const;
 
     void insertUnmangledBuiltIn(const ImmutableString &name, TExtension ext);
-    const UnmangledBuiltIn *getUnmangledBuiltIn(const ImmutableString &name) const;
 
   private:
     using tLevel        = TUnorderedMap<ImmutableString,
@@ -79,8 +78,6 @@ class TSymbolTable::TSymbolTableBuiltInLevel
     using tInsertResult = std::pair<tLevel::iterator, bool>;
 
     tLevel mLevel;
-
-    std::map<ImmutableString, UnmangledBuiltIn> mUnmangledBuiltIns;
 };
 
 bool TSymbolTable::TSymbolTableLevel::insert(TSymbol *symbol)
@@ -118,26 +115,6 @@ const TSymbol *TSymbolTable::TSymbolTableBuiltInLevel::find(const ImmutableStrin
         return nullptr;
     else
         return (*it).second;
-}
-
-void TSymbolTable::TSymbolTableBuiltInLevel::insertUnmangledBuiltIn(const ImmutableString &name,
-                                                                    TExtension ext)
-{
-    if (ext == TExtension::UNDEFINED || mUnmangledBuiltIns.find(name) == mUnmangledBuiltIns.end())
-    {
-        mUnmangledBuiltIns[name] = UnmangledBuiltIn(ext);
-    }
-}
-
-const UnmangledBuiltIn *TSymbolTable::TSymbolTableBuiltInLevel::getUnmangledBuiltIn(
-    const ImmutableString &name) const
-{
-    auto it = mUnmangledBuiltIns.find(ImmutableString(name));
-    if (it == mUnmangledBuiltIns.end())
-    {
-        return nullptr;
-    }
-    return &(it->second);
 }
 
 TSymbolTable::TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-1)
@@ -527,49 +504,6 @@ void TSymbolTable::setGlobalInvariant(bool invariant)
     mTable.back()->setGlobalInvariant(invariant);
 }
 
-void TSymbolTable::insertUnmangledBuiltIn(const ImmutableString &name,
-                                          TExtension ext,
-                                          ESymbolLevel level)
-{
-    ASSERT(level >= 0 && level <= LAST_BUILTIN_LEVEL);
-    ASSERT(mUserDefinedUniqueIdsStart == -1);
-    mBuiltInTable[level]->insertUnmangledBuiltIn(name, ext);
-}
-
-bool TSymbolTable::hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level)
-{
-    ASSERT(level >= 0 && level <= LAST_BUILTIN_LEVEL);
-    return mBuiltInTable[level]->getUnmangledBuiltIn(ImmutableString(name)) != nullptr;
-}
-
-const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
-    const ImmutableString &name,
-    int shaderVersion)
-{
-    for (int level = LAST_BUILTIN_LEVEL; level >= 0; --level)
-    {
-        if (level == ESSL3_1_BUILTINS && shaderVersion != 310)
-        {
-            --level;
-        }
-        if (level == ESSL3_BUILTINS && shaderVersion < 300)
-        {
-            --level;
-        }
-        if (level == ESSL1_BUILTINS && shaderVersion != 100)
-        {
-            --level;
-        }
-
-        const UnmangledBuiltIn *builtIn = mBuiltInTable[level]->getUnmangledBuiltIn(name);
-        if (builtIn != nullptr)
-        {
-            return builtIn;
-        }
-    }
-    return nullptr;
-}
-
 void TSymbolTable::markBuiltInInitializationFinished()
 {
     mUserDefinedUniqueIdsStart = mUniqueIdCounter;
@@ -593,6 +527,8 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
                                       ShShaderSpec spec,
                                       const ShBuiltInResources &resources)
 {
+    mShaderType = type;
+
     ASSERT(isEmpty());
     pushBuiltInLevel();  // COMMON_BUILTINS
     pushBuiltInLevel();  // ESSL1_BUILTINS
@@ -633,7 +569,6 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
 
     insertStaticBuiltInVariables(type, spec, resources);
     insertStaticBuiltInFunctions(type);
-    insertStaticBuiltInFunctionUnmangledNames(type);
     mUniqueIdCounter = kLastStaticBuiltInId + 1;
 
     initializeBuiltInVariables(type, spec, resources);
