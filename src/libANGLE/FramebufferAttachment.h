@@ -210,12 +210,10 @@ class FramebufferAttachmentObject
 
     Error initializeContents(const Context *context, const ImageIndex &imageIndex);
 
-    OnAttachmentDirtyChannel *getDirtyChannel();
+    angle::SubresourceMessageSender *getAsSubresourceMessageSender();
 
   protected:
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
-
-    OnAttachmentDirtyChannel mDirtyChannel;
 };
 
 inline Extents FramebufferAttachment::getSize() const

@@ -343,3 +343,92 @@ bool ComponentTypeMask::Validate(unsigned long outputTypes,
 }
 
 }  // namespace gl
+
+namespace angle
+{
+SubresourceMessageSender::SubresourceMessageSender()
+{
+}
+
+SubresourceMessageSender::~SubresourceMessageSender()
+{
+    ASSERT(mReceiverAttachments.empty());
+}
+
+void SubresourceMessageSender::attachSubresourceMessageReceiver(
+    ISubresourceMessagesReceiver *receiver,
+    SubresourceID subresource)
+{
+    mReceiverAttachments.emplace_back(receiver, subresource);
+}
+
+void SubresourceMessageSender::detachSubresourceMessageReceiver(
+    ISubresourceMessagesReceiver *receiver,
+    SubresourceID subresource)
+{
+    for (size_t attachmentIndex = 0; attachmentIndex < mReceiverAttachments.size();
+         ++attachmentIndex)
+    {
+        const auto &receiverAttachment = mReceiverAttachments[attachmentIndex];
+        if (receiverAttachment.first == receiver && receiverAttachment.second == subresource)
+        {
+            mReceiverAttachments.erase(mReceiverAttachments.begin() + attachmentIndex);
+            return;
+        }
+    }
+
+    UNREACHABLE();
+}
+
+void SubresourceMessageSender::sendSubresourceMessage(const gl::Context *context,
+                                                      SubresourceMessage message)
+{
+    if (mReceiverAttachments.empty())
+    {
+        return;
+    }
+
+    for (auto &receiverAttachment : mReceiverAttachments)
+    {
+        receiverAttachment.first->onSubresourceMessage(context, receiverAttachment.second, message);
+    }
+}
+
+SubresourceMessageBinding::SubresourceMessageBinding(ISubresourceMessagesReceiver *receiver,
+                                                     SubresourceID subresource)
+    : mReceiver(receiver), mSubresource(subresource), mCurrentlyBoundSender(nullptr)
+{
+}
+
+SubresourceMessageBinding::~SubresourceMessageBinding()
+{
+    reset();
+}
+
+SubresourceMessageBinding::SubresourceMessageBinding(SubresourceMessageBinding &&other)
+    : mReceiver(other.mReceiver),
+      mSubresource(other.mSubresource),
+      mCurrentlyBoundSender(other.mCurrentlyBoundSender)
+{
+    other.mReceiver             = nullptr;
+    other.mSubresource          = 0;
+    other.mCurrentlyBoundSender = nullptr;
+}
+
+void SubresourceMessageBinding::bindMessageSender(SubresourceMessageSender *sender)
+{
+    reset();
+    sender->attachSubresourceMessageReceiver(mReceiver, mSubresource);
+    mCurrentlyBoundSender = sender;
+}
+
+void SubresourceMessageBinding::reset()
+{
+    if (mCurrentlyBoundSender)
+    {
+        mCurrentlyBoundSender->detachSubresourceMessageReceiver(mReceiver, mSubresource);
+        mCurrentlyBoundSender = nullptr;
+    }
+}
+
+}  // namespace angle

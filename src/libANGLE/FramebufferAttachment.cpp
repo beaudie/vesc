@@ -358,9 +358,9 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
 }
 
-OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
+angle::SubresourceMessageSender *FramebufferAttachmentObject::getAsSubresourceMessageSender()
 {
-    return &mDirtyChannel;
+    return getAttachmentImpl();
 }
 
 Error FramebufferAttachmentObject::initializeContents(const Context *context,

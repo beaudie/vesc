@@ -35,9 +35,10 @@ namespace gl
 namespace
 {
 
-void BindResourceChannel(OnAttachmentDirtyBinding *binding, FramebufferAttachmentObject *resource)
+void BindResourceChannel(angle::SubresourceMessageBinding *binding,
+                         FramebufferAttachmentObject *resource)
 {
-    binding->bind(resource ? resource->getDirtyChannel() : nullptr);
+    binding->bindMessageSender(resource ? resource->getAsSubresourceMessageSender() : nullptr);
 }
 
 bool CheckMultiviewStateMatchesForCompleteness(const FramebufferAttachment *firstAttachment,
@@ -631,7 +632,8 @@ Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id
     for (uint32_t colorIndex = 0;
          colorIndex < static_cast<uint32_t>(mState.mColorAttachments.size()); ++colorIndex)
     {
-        mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex);
+        mDirtyColorAttachmentBindings.emplace_back(
+            this, static_cast<angle::SubresourceID>(DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex));
     }
 }
 
@@ -644,7 +646,8 @@ Framebuffer::Framebuffer(const egl::Display *display, egl::Surface *surface)
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
     ASSERT(mImpl != nullptr);
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
+    mDirtyColorAttachmentBindings.emplace_back(
+        this, static_cast<angle::SubresourceID>(DIRTY_BIT_COLOR_ATTACHMENT_0));
 
     const Context *proxyContext = display->getProxyContext();
 
@@ -683,7 +686,8 @@ Framebuffer::Framebuffer(rx::GLImplFactory *factory)
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
+    mDirtyColorAttachmentBindings.emplace_back(
+        this, static_cast<angle::SubresourceID>(DIRTY_BIT_COLOR_ATTACHMENT_0));
     mState.mDrawBufferTypeMask.setIndex(getDrawbufferWriteType(0), 0);
 }
 
@@ -1766,7 +1770,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
 void Framebuffer::updateAttachment(const Context *context,
                                    FramebufferAttachment *attachment,
                                    size_t dirtyBit,
-                                   OnAttachmentDirtyBinding *onDirtyBinding,
+                                   angle::SubresourceMessageBinding *onDirtyBinding,
                                    GLenum type,
                                    GLenum binding,
                                    const ImageIndex &textureIndex,
@@ -1801,7 +1805,19 @@ void Framebuffer::syncState(const Context *context)
     }
 }
 
-void Framebuffer::signal(size_t dirtyBit, InitState state)
+FramebufferAttachment *subresourceToAttachment(angle::SubresourceID subresourceID)
+{
+    return nullptr;
+}
+
+size_t SubresourceToDirtyBit(angle::SubresourceID subresourceID)
+{
+    return 0;
+}
+
+void Framebuffer::onSubresourceMessage(const gl::Context *context,
+                                       angle::SubresourceID subresourceID,
+                                       angle::SubresourceMessage message)
 {
     // Only reset the cached status if this is not the default framebuffer.  The default framebuffer
     // will still use this channel to mark itself dirty.
@@ -1812,7 +1828,10 @@ void Framebuffer::signal(size_t dirtyBit, InitState state)
     }
 
     // Mark the appropriate init flag.
-    mState.mResourceNeedsInit.set(dirtyBit, state == InitState::MayNeedInit);
+    FramebufferAttachment *attachment = subresourceToAttachment(subresourceID);
+
+    mState.mResourceNeedsInit.set(SubresourceToDirtyBit(subresourceID),
+                                  attachment->initState() == InitState::MayNeedInit);
 }
 
 bool Framebuffer::complete(const Context *context)

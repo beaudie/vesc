@@ -34,11 +34,11 @@ class VertexArray;
 class Context;
 struct Caps;
 
-class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
+class State : public angle::ISubresourceMessagesReceiver
 {
   public:
     State();
-    ~State() override;
+    ~State();
 
     void initialize(const Context *context,
                     bool debug,
@@ -463,7 +463,9 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     ComponentTypeMask getCurrentValuesTypeMask() const { return mCurrentValuesTypeMask; }
 
     // Handle a dirty texture event.
-    void signal(size_t textureIndex, InitState initState) override;
+    void onSubresourceMessage(const Context *context,
+                              angle::SubresourceID subresource,
+                              angle::SubresourceMessage message) override;
 
     Error clearUnclearedActiveTextures(const Context *context);
 
@@ -541,7 +543,7 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // Don't use BindingPointer because this cache is only valid within a draw call.
     // Also stores a notification channel to the texture itself to handle texture change events.
     std::vector<Texture *> mCompleteTextureCache;
-    std::vector<OnAttachmentDirtyBinding> mCompleteTextureBindings;
+    std::vector<angle::SubresourceMessageBinding> mCompleteTextureBindings;
     InitState mCachedTexturesInitState;
     using ActiveTextureMask = angle::BitSet<IMPLEMENTATION_MAX_ACTIVE_TEXTURES>;
     ActiveTextureMask mActiveTexturesMask;

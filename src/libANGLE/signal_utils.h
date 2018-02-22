@@ -182,6 +182,57 @@ void ChannelBinding<ChannelID, MessageT...>::onChannelClosed()
     mChannel = nullptr;
 }
 
+// Specialized bindings for dirty bits.
+using SubresourceID = uint32_t;
+enum class SubresourceMessage
+{
+    GL_STORAGE_CHANGED,
+    PIXELS_CHANGED,
+};
+
+class ISubresourceMessagesReceiver : angle::NonCopyable
+{
+  public:
+    virtual void onSubresourceMessage(const gl::Context *context,
+                                      SubresourceID subresourceID,
+                                      SubresourceMessage message) = 0;
+};
+
+class SubresourceMessageSender : angle::NonCopyable
+{
+  public:
+    SubresourceMessageSender();
+    ~SubresourceMessageSender();
+
+    void attachSubresourceMessageReceiver(ISubresourceMessagesReceiver *receiver,
+                                          SubresourceID subresource);
+    void detachSubresourceMessageReceiver(ISubresourceMessagesReceiver *receiver,
+                                          SubresourceID subresource);
+
+    void sendSubresourceMessage(const gl::Context *context, SubresourceMessage message);
+
+  private:
+    using SubresourceReceiverAttachment = std::pair<ISubresourceMessagesReceiver *, SubresourceID>;
+    std::vector<SubresourceReceiverAttachment> mReceiverAttachments;
+};
+
+class SubresourceMessageBinding : angle::NonCopyable
+{
+  public:
+    SubresourceMessageBinding(ISubresourceMessagesReceiver *receiver, SubresourceID subresource);
+    ~SubresourceMessageBinding();
+
+    SubresourceMessageBinding(SubresourceMessageBinding &&other);
+
+    void bindMessageSender(SubresourceMessageSender *sender);
+    void reset();
+
+  private:
+    ISubresourceMessagesReceiver *mReceiver;
+    SubresourceID mSubresource;
+    SubresourceMessageSender *mCurrentlyBoundSender;
+};
+
 }  // namespace angle
 
 #endif  // LIBANGLE_SIGNAL_UTILS_H_
