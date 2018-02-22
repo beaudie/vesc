@@ -205,6 +205,24 @@ TEST_F(BufferVariablesTest, AssignToBufferVariableWithinReadonlyBlock)
     }
 }
 
+// Test that can't assign to a readonly buffer variable through an instance name.
+TEST_F(BufferVariablesTest, AssignToReadonlyBufferVariableByInstanceName)
+{
+    const std::string &source =
+        R"(#version 310 es
+        layout(binding = 3) buffer buf {
+            readonly float f;
+        } instanceBuffer;
+        void main()
+        {
+            instanceBuffer.f += 0.2;
+        })";
+    if (compile(source))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+    }
+}
+
 // Test that a readonly and writeonly buffer variable should neither read or write.
 TEST_F(BufferVariablesTest, AccessReadonlyWriteonlyBufferVariable)
 {
