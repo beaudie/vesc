@@ -72,6 +72,13 @@ namespace BuiltInParameters
 
 }}
 
+namespace UnmangledBuiltIns
+{{
+
+{unmangled_builtin_declarations}
+
+}}
+
 // TODO: Would be nice to make this a class instead of a namespace so that we could friend this
 // from TFunction. Now symbol constructors taking an id have to be public even though they're not
 // supposed to be accessible from outside of here.
@@ -87,9 +94,10 @@ void TSymbolTable::insertStaticBuiltInFunctions(sh::GLenum shaderType)
 {insert_functions}
 }}
 
-void TSymbolTable::insertStaticBuiltInFunctionUnmangledNames(sh::GLenum shaderType)
+const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(const ImmutableString &name, int shaderVersion)
 {{
-{insert_unmangled_functions}
+    uint32_t nameHash = name.hash32();
+{get_unmangled_builtin}
 }}
 
 }}  // namespace sh
@@ -138,6 +146,29 @@ basic_mangled_names = {
     'UImageCube': 'uimc',
     'AtomicCounter': 'ac'
 }
+
+class GroupedList:
+    """"Class for storing a list of objects grouped by condition and symbol table level."""
+    def __init__(self):
+        self.objs = OrderedDict()
+    def add_obj(self, condition, level, name, obj):
+        levels = ['ESSL3_1_BUILTINS', 'ESSL3_BUILTINS', 'ESSL1_BUILTINS', 'COMMON_BUILTINS']
+        if (level not in levels):
+            raise Exception('Unexpected level: ' + str(level))
+        if condition not in self.objs:
+            self.objs[condition] = OrderedDict()
+            # We need to add all the levels here instead of lazily since they must be in a specific order.
+            for l in levels:
+                self.objs[condition][l] = OrderedDict()
+        self.objs[condition][level][name] = obj
+    def has_key(self, condition, level, name):
+        if condition not in self.objs:
+            return False
+        return (name in self.objs[condition][level])
+    def conditions(self):
+        return self.objs.iterkeys()
+    def iter_levels(self, condition):
+        return self.objs[condition].iteritems()
 
 class TType:
     def __init__(self, glsl_header_type):
@@ -380,12 +411,22 @@ function_declarations = []
 # Code for inserting builtin TFunctions to the symbol table. Grouped by condition.
 insert_functions_by_condition = OrderedDict()
 
-# Code for inserting unmangled builtin function names to the symbol table. Grouped by condition.
-# Each item in the dictionary is an OrderedDict from function name + level to the insert call.
-insert_unmangled_functions_by_condition = OrderedDict()
+# Declarations of UnmangledBuiltIn objects
+unmangled_builtin_declarations = set()
+
+# Code for querying builtin function unmangled names.
+unmangled_function_if_statements = GroupedList()
 
 id_counter = 0
 
+def hash32(str):
+    fnvOffsetBasis = 0x811c9dc5
+    fnvPrime = 16777619
+    hash = fnvOffsetBasis
+    for c in str:
+        hash = hash ^ ord(c)
+        hash = hash * fnvPrime & 0xffffffff
+    return hash
 
 def get_suffix(props):
     if 'suffix' in props:
@@ -516,10 +557,14 @@ def process_single_function_group(condition, group_name, group):
         if not name_declaration in name_declarations:
             name_declarations.add(name_declaration)
 
-        template_insert_unmangled = '    insertUnmangledBuiltIn(BuiltInName::{name}{suffix}, TExtension::{extension}, {level});'
-        insert_unmangled = template_insert_unmangled.format(**template_args)
-        if (function_name + ',' + level) not in insert_unmangled_functions_by_condition[condition] or extension == 'UNDEFINED':
-            insert_unmangled_functions_by_condition[condition][function_name + ',' + level] = insert_unmangled
+        template_unmangled_if = """if (name == BuiltInName::{name}{suffix})
+{{
+    return &UnmangledBuiltIns::{extension};
+}}"""
+        unmangled_if = template_unmangled_if.format(**template_args)
+        if (not unmangled_function_if_statements.has_key(condition, level, function_name)) or extension == 'UNDEFINED':
+            unmangled_function_if_statements.add_obj(condition, level, function_name, unmangled_if)
+            unmangled_builtin_declarations.add('constexpr const UnmangledBuiltIn {extension}(TExtension::{extension});'.format(**template_args))
 
         for function_props in function_variants:
             template_args['id'] = id_counter
@@ -565,7 +610,7 @@ def process_function_group(group_name, group):
         condition = group['condition']
     if condition not in insert_functions_by_condition:
         insert_functions_by_condition[condition] = []
-        insert_unmangled_functions_by_condition[condition] = OrderedDict()
+
     process_single_function_group(condition, group_name, group)
 
     if 'subgroups' in group:
@@ -589,25 +634,64 @@ output_strings = {
 }
 
 insert_functions = []
-insert_unmangled_functions = []
+get_unmangled_builtin = []
+
+def get_shader_version_condition_for_level(level):
+    if level == 'ESSL3_1_BUILTINS':
+        return 'shaderVersion >= 310'
+    elif level == 'ESSL3_BUILTINS':
+        return 'shaderVersion >= 300'
+    elif level == 'ESSL1_BUILTINS':
+        return 'shaderVersion == 100'
+    elif level == 'COMMON_BUILTINS':
+        return ''
+    else:
+        raise Exception('Unsupported symbol table level')
 
 for condition in insert_functions_by_condition:
     if condition != 'NO_CONDITION':
         condition_header = '  if ({condition})\n {{'.format(condition = condition)
         insert_functions.append(condition_header)
-        insert_unmangled_functions.append(condition_header)
-
     for insert_function in insert_functions_by_condition[condition]:
         insert_functions.append(insert_function)
-    for function_name, insert_function in insert_unmangled_functions_by_condition[condition].iteritems():
-        insert_unmangled_functions.append(insert_function)
-
     if condition != 'NO_CONDITION':
         insert_functions.append('}')
-        insert_unmangled_functions.append('}')
+
+for condition in unmangled_function_if_statements.conditions():
+    if condition != 'NO_CONDITION':
+        condition_header = '  if ({condition})\n {{'.format(condition = condition)
+        get_unmangled_builtin.append(condition_header.replace('shaderType', 'mShaderType'))
+    for level, functions in unmangled_function_if_statements.iter_levels(condition):
+        if len(functions) > 0:
+            level_condition = get_shader_version_condition_for_level(level)
+            if level_condition != '':
+                get_unmangled_builtin.append('if ({condition})\n {{'.format(condition = level_condition))
+
+            get_unmangled_builtin_switch = {}
+            for function_name, get_unmangled_case in functions.iteritems():
+                name_hash = hash32(function_name)
+                if name_hash not in get_unmangled_builtin_switch:
+                    get_unmangled_builtin_switch[name_hash] = []
+                get_unmangled_builtin_switch[name_hash].append(get_unmangled_case)
+
+            get_unmangled_builtin.append('switch(nameHash) {')
+            for name_hash, get_unmangled_cases in sorted(get_unmangled_builtin_switch.iteritems()):
+                get_unmangled_builtin.append('case 0x' + ('%x' % name_hash) + 'u:\n{')
+                get_unmangled_builtin += get_unmangled_cases
+                get_unmangled_builtin.append('break;\n}')
+            get_unmangled_builtin.append('}')
+
+            if level_condition != '':
+                get_unmangled_builtin.append('}')
+
+    if condition != 'NO_CONDITION':
+        get_unmangled_builtin.append('}')
+
+get_unmangled_builtin.append('return nullptr;')
 
 output_strings['insert_functions'] = '\n'.join(insert_functions)
-output_strings['insert_unmangled_functions'] = '\n'.join(insert_unmangled_functions)
+output_strings['unmangled_builtin_declarations'] = '\n'.join(sorted(unmangled_builtin_declarations))
+output_strings['get_unmangled_builtin'] = '\n'.join(get_unmangled_builtin)
 
 with open('SymbolTable_autogen.cpp', 'wt') as outfile_cpp:
     output_cpp = template_symboltable_cpp.format(**output_strings)
