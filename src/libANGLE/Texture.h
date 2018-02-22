@@ -255,7 +255,9 @@ class Texture final : public egl::ImageSibling,
     size_t getDepth(GLenum target, size_t level) const;
     size_t getDepth(TextureTarget target, size_t level) const;
     GLsizei getSamples(GLenum target, size_t level) const;
+    GLsizei getSamples(TextureTarget target, size_t level) const;
     bool getFixedSampleLocations(GLenum target, size_t level) const;
+    bool getFixedSampleLocations(TextureTarget target, size_t level) const;
     const Format &getFormat(GLenum target, size_t level) const;
     const Format &getFormat(TextureTarget target, size_t level) const;
 

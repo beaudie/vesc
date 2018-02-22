@@ -996,18 +996,18 @@ const char *GetGenericErrorMessage(EGLint error)
 
 namespace egl_gl
 {
-GLenum EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget)
+gl::TextureTarget EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget)
 {
     ASSERT(egl::IsCubeMapTextureTarget(eglTarget));
-    return gl::LayerIndexToCubeMapTextureTarget(egl::CubeMapTextureTargetToLayerIndex(eglTarget));
+    return gl::CubeFaceIndexToTextureTarget(egl::CubeMapTextureTargetToLayerIndex(eglTarget));
 }
 
-GLenum EGLImageTargetToGLTextureTarget(EGLenum eglTarget)
+gl::TextureTarget EGLImageTargetToGLTextureTarget(EGLenum eglTarget)
 {
     switch (eglTarget)
     {
         case EGL_GL_TEXTURE_2D_KHR:
-            return GL_TEXTURE_2D;
+            return gl::TextureTarget::_2D;
 
         case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR:
         case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR:
@@ -1018,11 +1018,11 @@ GLenum EGLImageTargetToGLTextureTarget(EGLenum eglTarget)
             return EGLCubeMapTargetToGLCubeMapTarget(eglTarget);
 
         case EGL_GL_TEXTURE_3D_KHR:
-            return GL_TEXTURE_3D;
+            return gl::TextureTarget::_3D;
 
         default:
             UNREACHABLE();
-            return GL_NONE;
+            return gl::TextureTarget::InvalidEnum;
     }
 }
 

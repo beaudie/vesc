@@ -3117,8 +3117,8 @@ void Context::framebufferTexture2D(GLenum target,
         }
         else
         {
-            ASSERT(IsCubeMapTextureTarget(ToGLenum(textarget)));
-            index = ImageIndex::MakeCube(ToGLenum(textarget), level);
+            ASSERT(TextureTargetToType(textarget) == TextureType::CubeMap);
+            index = ImageIndex::MakeCube(textarget, level);
         }
 
         framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);

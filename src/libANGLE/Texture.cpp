@@ -893,11 +893,21 @@ GLsizei Texture::getSamples(GLenum target, size_t level) const
     return mState.getImageDesc(target, level).samples;
 }
 
+const Format &Texture::getSamples(TextureTarget target, size_t level) const
+{
+    return getSamples(ToGLenum(target), level);
+}
+
 bool Texture::getFixedSampleLocations(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).fixedSampleLocations;
+}
+
+const Format &Texture::getFixedSampleLocations(TextureTarget target, size_t level) const
+{
+    return getFixedSampleLocations(ToGLenum(target), level);
 }
 
 GLuint Texture::getMipmapMaxLevel() const

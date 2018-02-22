@@ -59,4 +59,44 @@ namespace gl
         }
     }
 
+    int TextureTargetToCubeMapFaceIndex(TextureTarget target)
+    {
+        switch (target) {
+            case TextureTarget::CubeMapNegativeX:
+                return 0;
+            case TextureTarget::CubeMapPositiveX:
+                return 1;
+            case TextureTarget::CubeMapNegativeY:
+                return 2;
+            case TextureTarget::CubeMapPositiveY:
+                return 3;
+            case TextureTarget::CubeMapNegativeZ:
+                return 4;
+            case TextureTarget::CubeMapPositiveZ:
+                return 5;
+            default:
+                UNREACHABLE();
+                return -1;
+        }
+    }
+
+    TextureTarget CubeMapFaceIndexToTextureTarget(int face)
+    {
+        ASSERT(face >= 0 && face <= 5);
+        switch (face) {
+            case 0:
+                return TextureTarget::CubeMapNegativeX;
+            case 1:
+                return TextureTarget::CubeMapPositiveX;
+            case 2:
+                return TextureTarget::CubeMapNegativeY;
+            case 3:
+                return TextureTarget::CubeMapPositiveY;
+            case 4:
+                return TextureTarget::CubeMapNegativeZ;
+            case 5:
+                return TextureTarget::CubeMapPositiveZ;
+        }
+        return TextureTarget::InvalidEnum;
+    }
 }

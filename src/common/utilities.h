@@ -161,8 +161,8 @@ const char *GetGenericErrorMessage(EGLint error);
 
 namespace egl_gl
 {
-GLenum EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget);
-GLenum EGLImageTargetToGLTextureTarget(EGLenum eglTarget);
+gl::TextureTarget EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget);
+gl::TextureTarget EGLImageTargetToGLTextureTarget(EGLenum eglTarget);
 GLenum EGLTextureTargetToGLTextureTarget(EGLenum eglTarget);
 GLuint EGLClientBufferToGLObjectHandle(EGLClientBuffer buffer);
 }

@@ -136,6 +136,8 @@ namespace gl
 
 TextureType TextureTargetToType(TextureTarget target);
 TextureTarget NonCubeTextureTypeToTarget(TextureType type);
+int TextureTargetToCubeMapFaceIndex(TextureTarget target);
+TextureTarget CubeMapFaceIndexToTextureTarget(int face);
 
 }  // namespace gl
 
