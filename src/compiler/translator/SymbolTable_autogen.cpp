@@ -13291,669 +13291,1336 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
     const ImmutableString &name,
     int shaderVersion)
 {
+    uint32_t nameHash = name.hash32();
     if (shaderVersion >= 310)
     {
-        if (name == BuiltInName::frexp)
+        switch (nameHash)
         {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::ldexp)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::packUnorm4x8)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::packSnorm4x8)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::unpackUnorm4x8)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::unpackSnorm4x8)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::bitfieldExtract)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::bitfieldInsert)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::bitfieldReverse)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::bitCount)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::findLSB)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::findMSB)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::uaddCarry)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::usubBorrow)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::umulExtended)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::imulExtended)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::texelFetch)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureGather)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureGatherOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicCounter)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicCounterIncrement)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicCounterDecrement)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicAdd)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicMin)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicMax)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicAnd)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicOr)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicXor)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicExchange)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atomicCompSwap)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::imageStore)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::imageLoad)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::imageSize)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::memoryBarrier)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::memoryBarrierAtomicCounter)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::memoryBarrierBuffer)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::memoryBarrierImage)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
+            case 0x26813a3u:
+            {
+                if (name == BuiltInName::atomicAdd)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x1150d92eu:
+            {
+                if (name == BuiltInName::atomicMax)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x23647d3cu:
+            {
+                if (name == BuiltInName::atomicMin)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x2568837fu:
+            {
+                if (name == BuiltInName::bitCount)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x310cbdf3u:
+            {
+                if (name == BuiltInName::findLSB)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x33b8cbf8u:
+            {
+                if (name == BuiltInName::unpackUnorm4x8)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x3815d075u:
+            {
+                if (name == BuiltInName::memoryBarrier)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x44a612d1u:
+            {
+                if (name == BuiltInName::texelFetch)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x493c8c52u:
+            {
+                if (name == BuiltInName::imageLoad)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4d4a19b5u:
+            {
+                if (name == BuiltInName::packSnorm4x8)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4dafa4aau:
+            {
+                if (name == BuiltInName::memoryBarrierImage)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4f0e8e9bu:
+            {
+                if (name == BuiltInName::imageStore)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x55fde64fu:
+            {
+                if (name == BuiltInName::imulExtended)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x666490f9u:
+            {
+                if (name == BuiltInName::atomicCounterIncrement)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x6ef2b1c3u:
+            {
+                if (name == BuiltInName::imageSize)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x6fdf21cbu:
+            {
+                if (name == BuiltInName::memoryBarrierBuffer)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x7ba9e270u:
+            {
+                if (name == BuiltInName::findMSB)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x7c07f1eeu:
+            {
+                if (name == BuiltInName::unpackSnorm4x8)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x8c63f160u:
+            {
+                if (name == BuiltInName::ldexp)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xa30cdef4u:
+            {
+                if (name == BuiltInName::frexp)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xa3a03233u:
+            {
+                if (name == BuiltInName::textureGather)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xae0f4e53u:
+            {
+                if (name == BuiltInName::packUnorm4x8)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb24338c0u:
+            {
+                if (name == BuiltInName::textureGatherOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb5e7ff54u:
+            {
+                if (name == BuiltInName::memoryBarrierAtomicCounter)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb82cbfe3u:
+            {
+                if (name == BuiltInName::usubBorrow)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb94d85ddu:
+            {
+                if (name == BuiltInName::atomicExchange)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xbfd854b5u:
+            {
+                if (name == BuiltInName::atomicXor)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc1e02fa4u:
+            {
+                if (name == BuiltInName::atomicCounter)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xca0f40eeu:
+            {
+                if (name == BuiltInName::uaddCarry)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd2b1c53du:
+            {
+                if (name == BuiltInName::atomicOr)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd651bc5du:
+            {
+                if (name == BuiltInName::atomicCounterDecrement)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xe5c5029au:
+            {
+                if (name == BuiltInName::bitfieldReverse)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xe676f219u:
+            {
+                if (name == BuiltInName::atomicAnd)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xebfef903u:
+            {
+                if (name == BuiltInName::umulExtended)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xf3bd9210u:
+            {
+                if (name == BuiltInName::atomicCompSwap)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xf50788fdu:
+            {
+                if (name == BuiltInName::bitfieldExtract)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xf81301b9u:
+            {
+                if (name == BuiltInName::bitfieldInsert)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
         }
     }
     if (shaderVersion >= 300)
     {
-        if (name == BuiltInName::sinh)
+        switch (nameHash)
         {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::cosh)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::tanh)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::asinh)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::acosh)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::atanh)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::abs)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::sign)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::trunc)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::round)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::roundEven)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::min)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::max)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::clamp)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::mix)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::modf)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::isnan)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::isinf)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::floatBitsToInt)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::floatBitsToUint)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::intBitsToFloat)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::uintBitsToFloat)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::packSnorm2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::packUnorm2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::packHalf2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::unpackSnorm2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::unpackUnorm2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::unpackHalf2x16)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::matrixCompMult)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::outerProduct)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::transpose)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::determinant)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::inverse)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::lessThan)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::lessThanEqual)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::greaterThan)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::greaterThanEqual)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::equal)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::notEqual)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::texture)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProj)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureLod)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureSize)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProjOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureLodOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProjLod)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProjLodOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::texelFetch)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::texelFetchOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureGrad)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureGradOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProjGrad)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::textureProjGradOffset)
-        {
-            return &UnmangledBuiltIns::UNDEFINED;
-        }
-        if (name == BuiltInName::rgb_2_yuv)
-        {
-            return &UnmangledBuiltIns::EXT_YUV_target;
-        }
-        if (name == BuiltInName::yuv_2_rgb)
-        {
-            return &UnmangledBuiltIns::EXT_YUV_target;
+            case 0x23feff3u:
+            {
+                if (name == BuiltInName::textureLod)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4644cdeu:
+            {
+                if (name == BuiltInName::greaterThan)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x491f109u:
+            {
+                if (name == BuiltInName::lessThanEqual)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x5fc75c3u:
+            {
+                if (name == BuiltInName::lessThan)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x7275075u:
+            {
+                if (name == BuiltInName::atanh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x92855d0u:
+            {
+                if (name == BuiltInName::tanh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xcbc8ba4u:
+            {
+                if (name == BuiltInName::sign)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x10d2583fu:
+            {
+                if (name == BuiltInName::sinh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x12b2640eu:
+            {
+                if (name == BuiltInName::texelFetchOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x1535b7a5u:
+            {
+                if (name == BuiltInName::textureProjLodOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x2485bbbeu:
+            {
+                if (name == BuiltInName::notEqual)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x25680679u:
+            {
+                if (name == BuiltInName::unpackUnorm2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x26ac11d8u:
+            {
+                if (name == BuiltInName::isinf)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x28cedbc3u:
+            {
+                if (name == BuiltInName::unpackHalf2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x2a48023bu:
+            {
+                if (name == BuiltInName::abs)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x2f7508efu:
+            {
+                if (name == BuiltInName::equal)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x33a56e6cu:
+            {
+                if (name == BuiltInName::textureGrad)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x39d34980u:
+            {
+                if (name == BuiltInName::textureLodOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x3c6468f4u:
+            {
+                if (name == BuiltInName::texture)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4326f80au:
+            {
+                if (name == BuiltInName::packSnorm2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x44a612d1u:
+            {
+                if (name == BuiltInName::texelFetch)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x4f0be23bu:
+            {
+                if (name == BuiltInName::round)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x5bd36438u:
+            {
+                if (name == BuiltInName::packHalf2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x6b0ca057u:
+            {
+                if (name == BuiltInName::textureGradOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x6e02ba1bu:
+            {
+                if (name == BuiltInName::unpackSnorm2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x6ff78d04u:
+            {
+                if (name == BuiltInName::packUnorm2x16)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x767e36c0u:
+            {
+                if (name == BuiltInName::determinant)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x7bf8de3bu:
+            {
+                if (name == BuiltInName::textureProjGrad)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x88c917cfu:
+            {
+                if (name == BuiltInName::textureOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x8b45ed38u:
+            {
+                if (name == BuiltInName::textureProjGradOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x8f8617abu:
+            {
+                if (name == BuiltInName::outerProduct)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x94b08f7fu:
+            {
+                if (name == BuiltInName::textureProj)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xa4639127u:
+            {
+                if (name == BuiltInName::roundEven)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xa5212424u:
+            {
+                if (name == BuiltInName::textureProjOffset)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xa6789406u:
+            {
+                if (name == BuiltInName::rgb_2_yuv)
+                {
+                    return &UnmangledBuiltIns::EXT_YUV_target;
+                }
+                break;
+            }
+            case 0xa82efcbcu:
+            {
+                if (name == BuiltInName::clamp)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb15a3cc9u:
+            {
+                if (name == BuiltInName::floatBitsToInt)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb1b3c06au:
+            {
+                if (name == BuiltInName::isnan)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb201f283u:
+            {
+                if (name == BuiltInName::inverse)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xb755b482u:
+            {
+                if (name == BuiltInName::textureProjLod)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xbab19e4au:
+            {
+                if (name == BuiltInName::asinh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc03183c0u:
+            {
+                if (name == BuiltInName::transpose)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc29ffa7eu:
+            {
+                if (name == BuiltInName::uintBitsToFloat)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc73e788du:
+            {
+                if (name == BuiltInName::textureSize)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc7818fa2u:
+            {
+                if (name == BuiltInName::yuv_2_rgb)
+                {
+                    return &UnmangledBuiltIns::EXT_YUV_target;
+                }
+                break;
+            }
+            case 0xc8575388u:
+            {
+                if (name == BuiltInName::floatBitsToUint)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xc98f4557u:
+            {
+                if (name == BuiltInName::min)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd55e61e5u:
+            {
+                if (name == BuiltInName::trunc)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd5f05125u:
+            {
+                if (name == BuiltInName::matrixCompMult)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd78f5b61u:
+            {
+                if (name == BuiltInName::mix)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd7a2e319u:
+            {
+                if (name == BuiltInName::max)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xeb6ede7fu:
+            {
+                if (name == BuiltInName::modf)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xed7dc722u:
+            {
+                if (name == BuiltInName::greaterThanEqual)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xedf2c855u:
+            {
+                if (name == BuiltInName::acosh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xf45c461cu:
+            {
+                if (name == BuiltInName::cosh)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xfc501e17u:
+            {
+                if (name == BuiltInName::intBitsToFloat)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
         }
     }
     if (shaderVersion == 100)
     {
-        if (name == BuiltInName::texture2D)
+        switch (nameHash)
         {
-            return &UnmangledBuiltIns::UNDEFINED;
+            case 0x18a9c042u:
+            {
+                if (name == BuiltInName::texture2D)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0x1d18f29cu:
+            {
+                if (name == BuiltInName::textureCubeGradEXT)
+                {
+                    return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                }
+                break;
+            }
+            case 0x3d4abf10u:
+            {
+                if (name == BuiltInName::texture2DRect)
+                {
+                    return &UnmangledBuiltIns::ARB_texture_rectangle;
+                }
+                break;
+            }
+            case 0x4040698cu:
+            {
+                if (name == BuiltInName::texture2DProjGradEXT)
+                {
+                    return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                }
+                break;
+            }
+            case 0x6dc0e8e3u:
+            {
+                if (name == BuiltInName::texture2DRectProj)
+                {
+                    return &UnmangledBuiltIns::ARB_texture_rectangle;
+                }
+                break;
+            }
+            case 0xc7cb8969u:
+            {
+                if (name == BuiltInName::texture2DProj)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
+            case 0xd1836639u:
+            {
+                if (name == BuiltInName::texture2DGradEXT)
+                {
+                    return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                }
+                break;
+            }
+            case 0xfece2a39u:
+            {
+                if (name == BuiltInName::textureCube)
+                {
+                    return &UnmangledBuiltIns::UNDEFINED;
+                }
+                break;
+            }
         }
-        if (name == BuiltInName::texture2DProj)
+    }
+    switch (nameHash)
+    {
+        case 0x4644cdeu:
         {
-            return &UnmangledBuiltIns::UNDEFINED;
+            if (name == BuiltInName::greaterThan)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::textureCube)
+        case 0x491f109u:
         {
-            return &UnmangledBuiltIns::UNDEFINED;
+            if (name == BuiltInName::lessThanEqual)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::texture2DRect)
+        case 0x5fc75c3u:
         {
-            return &UnmangledBuiltIns::ARB_texture_rectangle;
+            if (name == BuiltInName::lessThan)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::texture2DRectProj)
+        case 0x66c705cu:
         {
-            return &UnmangledBuiltIns::ARB_texture_rectangle;
+            if (name == BuiltInName::refract)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::texture2DGradEXT)
+        case 0x678cabfu:
         {
-            return &UnmangledBuiltIns::EXT_shader_texture_lod;
+            if (name == BuiltInName::atan)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::texture2DProjGradEXT)
+        case 0xcbc8ba4u:
         {
-            return &UnmangledBuiltIns::EXT_shader_texture_lod;
+            if (name == BuiltInName::sign)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-        if (name == BuiltInName::textureCubeGradEXT)
+        case 0x10031ed9u:
         {
-            return &UnmangledBuiltIns::EXT_shader_texture_lod;
+            if (name == BuiltInName::log2)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
         }
-    }
-    if (name == BuiltInName::radians)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::degrees)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::sin)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::cos)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::tan)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::asin)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::acos)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::atan)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::pow)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::exp)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::log)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::exp2)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::log2)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::sqrt)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::inversesqrt)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::abs)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::sign)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::floor)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::ceil)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::fract)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::mod)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::min)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::max)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::clamp)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::mix)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::step)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::smoothstep)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::length)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::distance)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::dot)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::cross)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::normalize)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::faceforward)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::reflect)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::refract)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::matrixCompMult)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::lessThan)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::lessThanEqual)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::greaterThan)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::greaterThanEqual)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::equal)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::notEqual)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::any)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::all)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
-    }
-    if (name == BuiltInName::notFunc)
-    {
-        return &UnmangledBuiltIns::UNDEFINED;
+        case 0x13254bc4u:
+        {
+            if (name == BuiltInName::all)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x2485bbbeu:
+        {
+            if (name == BuiltInName::notEqual)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x29b19c8au:
+        {
+            if (name == BuiltInName::notFunc)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x29f5189bu:
+        {
+            if (name == BuiltInName::cross)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x2a48023bu:
+        {
+            if (name == BuiltInName::abs)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x2c29f04du:
+        {
+            if (name == BuiltInName::any)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x2eb31462u:
+        {
+            if (name == BuiltInName::distance)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x2f7508efu:
+        {
+            if (name == BuiltInName::equal)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x3c01df1fu:
+        {
+            if (name == BuiltInName::acos)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x3f515151u:
+        {
+            if (name == BuiltInName::log)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x58336ad5u:
+        {
+            if (name == BuiltInName::pow)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x5fd55fe1u:
+        {
+            if (name == BuiltInName::faceforward)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x62e4e208u:
+        {
+            if (name == BuiltInName::ceil)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x72a68728u:
+        {
+            if (name == BuiltInName::exp)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x7dee3bcfu:
+        {
+            if (name == BuiltInName::sqrt)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x83d03615u:
+        {
+            if (name == BuiltInName::length)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x856a57e1u:
+        {
+            if (name == BuiltInName::radians)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x92c778aau:
+        {
+            if (name == BuiltInName::reflect)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x95964e7du:
+        {
+            if (name == BuiltInName::smoothstep)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x9626adeeu:
+        {
+            if (name == BuiltInName::exp2)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0x9cf73498u:
+        {
+            if (name == BuiltInName::tan)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xa82efcbcu:
+        {
+            if (name == BuiltInName::clamp)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xaf5442eeu:
+        {
+            if (name == BuiltInName::degrees)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xb8e70c1du:
+        {
+            if (name == BuiltInName::floor)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xc7441a0fu:
+        {
+            if (name == BuiltInName::step)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xc98f4557u:
+        {
+            if (name == BuiltInName::min)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xce79296cu:
+        {
+            if (name == BuiltInName::normalize)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xd3689f20u:
+        {
+            if (name == BuiltInName::dot)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xd5f05125u:
+        {
+            if (name == BuiltInName::matrixCompMult)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xd78f5b61u:
+        {
+            if (name == BuiltInName::mix)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xd7a2e319u:
+        {
+            if (name == BuiltInName::max)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xdf9e7283u:
+        {
+            if (name == BuiltInName::mod)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xe0302a4du:
+        {
+            if (name == BuiltInName::sin)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xe8b548a5u:
+        {
+            if (name == BuiltInName::inversesqrt)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xed7dc722u:
+        {
+            if (name == BuiltInName::greaterThanEqual)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xeef29a67u:
+        {
+            if (name == BuiltInName::fract)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xfb8de29cu:
+        {
+            if (name == BuiltInName::cos)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
+        case 0xfeae7ea6u:
+        {
+            if (name == BuiltInName::asin)
+            {
+                return &UnmangledBuiltIns::UNDEFINED;
+            }
+            break;
+        }
     }
     if (mShaderType == GL_FRAGMENT_SHADER)
     {
         if (shaderVersion >= 300)
         {
-            if (name == BuiltInName::texture)
+            switch (nameHash)
             {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::textureProj)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::textureOffset)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::textureProjOffset)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::dFdx)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::dFdy)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::fwidth)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
+                case 0x3c6468f4u:
+                {
+                    if (name == BuiltInName::texture)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0x4b6e55d3u:
+                {
+                    if (name == BuiltInName::fwidth)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0x88c917cfu:
+                {
+                    if (name == BuiltInName::textureOffset)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0x94b08f7fu:
+                {
+                    if (name == BuiltInName::textureProj)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xa5212424u:
+                {
+                    if (name == BuiltInName::textureProjOffset)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xc78598f8u:
+                {
+                    if (name == BuiltInName::dFdy)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xc8859a8bu:
+                {
+                    if (name == BuiltInName::dFdx)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
             }
         }
         if (shaderVersion == 100)
         {
-            if (name == BuiltInName::texture2D)
+            switch (nameHash)
             {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::texture2DProj)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::textureCube)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::dFdx)
-            {
-                return &UnmangledBuiltIns::OES_standard_derivatives;
-            }
-            if (name == BuiltInName::dFdy)
-            {
-                return &UnmangledBuiltIns::OES_standard_derivatives;
-            }
-            if (name == BuiltInName::fwidth)
-            {
-                return &UnmangledBuiltIns::OES_standard_derivatives;
-            }
-            if (name == BuiltInName::texture2DLodEXT)
-            {
-                return &UnmangledBuiltIns::EXT_shader_texture_lod;
-            }
-            if (name == BuiltInName::texture2DProjLodEXT)
-            {
-                return &UnmangledBuiltIns::EXT_shader_texture_lod;
-            }
-            if (name == BuiltInName::textureCubeLodEXT)
-            {
-                return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                case 0x18a9c042u:
+                {
+                    if (name == BuiltInName::texture2D)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0x4b6e55d3u:
+                {
+                    if (name == BuiltInName::fwidth)
+                    {
+                        return &UnmangledBuiltIns::OES_standard_derivatives;
+                    }
+                    break;
+                }
+                case 0x7150ceb8u:
+                {
+                    if (name == BuiltInName::texture2DLodEXT)
+                    {
+                        return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                    }
+                    break;
+                }
+                case 0x7309b987u:
+                {
+                    if (name == BuiltInName::textureCubeLodEXT)
+                    {
+                        return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                    }
+                    break;
+                }
+                case 0xbacaedf7u:
+                {
+                    if (name == BuiltInName::texture2DProjLodEXT)
+                    {
+                        return &UnmangledBuiltIns::EXT_shader_texture_lod;
+                    }
+                    break;
+                }
+                case 0xc78598f8u:
+                {
+                    if (name == BuiltInName::dFdy)
+                    {
+                        return &UnmangledBuiltIns::OES_standard_derivatives;
+                    }
+                    break;
+                }
+                case 0xc7cb8969u:
+                {
+                    if (name == BuiltInName::texture2DProj)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xc8859a8bu:
+                {
+                    if (name == BuiltInName::dFdx)
+                    {
+                        return &UnmangledBuiltIns::OES_standard_derivatives;
+                    }
+                    break;
+                }
+                case 0xfece2a39u:
+                {
+                    if (name == BuiltInName::textureCube)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
             }
         }
     }
@@ -13961,17 +14628,32 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
     {
         if (shaderVersion == 100)
         {
-            if (name == BuiltInName::texture2DLod)
+            switch (nameHash)
             {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::texture2DProjLod)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::textureCubeLod)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
+                case 0x30ed9cfcu:
+                {
+                    if (name == BuiltInName::texture2DProjLod)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xb35e342cu:
+                {
+                    if (name == BuiltInName::textureCubeLod)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xfa79f401u:
+                {
+                    if (name == BuiltInName::texture2DLod)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
             }
         }
     }
@@ -13979,17 +14661,32 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
     {
         if (shaderVersion >= 310)
         {
-            if (name == BuiltInName::barrier)
+            switch (nameHash)
             {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::memoryBarrierShared)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
-            }
-            if (name == BuiltInName::groupMemoryBarrier)
-            {
-                return &UnmangledBuiltIns::UNDEFINED;
+                case 0x3d693fa0u:
+                {
+                    if (name == BuiltInName::barrier)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0x7afaf16eu:
+                {
+                    if (name == BuiltInName::groupMemoryBarrier)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
+                case 0xe85fa9e4u:
+                {
+                    if (name == BuiltInName::memoryBarrierShared)
+                    {
+                        return &UnmangledBuiltIns::UNDEFINED;
+                    }
+                    break;
+                }
             }
         }
     }
@@ -13997,13 +14694,24 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
     {
         if (shaderVersion >= 310)
         {
-            if (name == BuiltInName::EmitVertex)
+            switch (nameHash)
             {
-                return &UnmangledBuiltIns::EXT_geometry_shader;
-            }
-            if (name == BuiltInName::EndPrimitive)
-            {
-                return &UnmangledBuiltIns::EXT_geometry_shader;
+                case 0xb413b257u:
+                {
+                    if (name == BuiltInName::EndPrimitive)
+                    {
+                        return &UnmangledBuiltIns::EXT_geometry_shader;
+                    }
+                    break;
+                }
+                case 0xb5d34358u:
+                {
+                    if (name == BuiltInName::EmitVertex)
+                    {
+                        return &UnmangledBuiltIns::EXT_geometry_shader;
+                    }
+                    break;
+                }
             }
         }
     }

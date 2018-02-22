@@ -144,6 +144,7 @@ void TSymbolTable::insertStaticBuiltInFunctions(sh::GLenum shaderType)
 
 const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(const ImmutableString &name, int shaderVersion)
 {{
+    uint32_t nameHash = name.hash32();
 {get_unmangled_builtin}
 }}
 
@@ -409,6 +410,15 @@ unmangled_builtin_declarations = set()
 unmangled_functions_by_condition = OrderedDict()
 
 id_counter = 0
+
+def hash32(str):
+    fnvOffsetBasis = 0x811c9dc5
+    fnvPrime = 16777619
+    hash = fnvOffsetBasis
+    for c in str:
+        hash = hash ^ ord(c)
+        hash = hash * fnvPrime & 0xffffffff
+    return hash
 
 def is_matrix(type_obj):
     return type_obj['secondarySize'] > 1
@@ -716,7 +726,7 @@ def process_function_group(group_name, group):
 {{
     return &UnmangledBuiltIns::{extension};
 }}"""
-            unmangled = template_unmangled.format(name = function_name, suffix = name_suffix, extension = extension)
+            unmangled = template_unmangled.format(name = function_name, suffix = name_suffix, extension = extension, length = len(function_name))
             if function_name not in unmangled_functions_by_condition[condition][level] or extension == 'UNDEFINED':
                 unmangled_functions_by_condition[condition][level][function_name] = unmangled
 
@@ -820,13 +830,26 @@ for condition in insert_functions_by_condition:
             level_condition = get_shader_version_condition_for_level(level)
             if level_condition != '':
                 get_unmangled_builtin.append('if ({condition})\n {{'.format(condition = level_condition))
+
+            get_unmangled_builtin_switch = {}
             for function_name, get_unmangled_case in functions.iteritems():
                 builtin_required_re = re.compile(r'UnmangledBuiltIns::(\w+)')
                 mo = builtin_required_re.search(get_unmangled_case)
                 ext = mo.group(1)
                 unmangled_builtin_declarations.add('constexpr const UnmangledBuiltIn {extension}(TExtension::{extension});'.format(extension = ext))
 
-                get_unmangled_builtin.append(get_unmangled_case)
+                name_hash = hash32(function_name)
+                if name_hash not in get_unmangled_builtin_switch:
+                    get_unmangled_builtin_switch[name_hash] = []
+                get_unmangled_builtin_switch[name_hash].append(get_unmangled_case)
+
+            get_unmangled_builtin.append('switch(nameHash) {')
+            for name_hash, get_unmangled_cases in sorted(get_unmangled_builtin_switch.iteritems()):
+                get_unmangled_builtin.append('case ' + hex(name_hash) + 'u:\n{')
+                get_unmangled_builtin += get_unmangled_cases
+                get_unmangled_builtin.append('break;\n}')
+            get_unmangled_builtin.append('}')
+
             if level_condition != '':
                 get_unmangled_builtin.append('}')
 
