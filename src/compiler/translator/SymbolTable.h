@@ -147,20 +147,6 @@ class TSymbolTable : angle::NonCopyable
                            const ImmutableString &name,
                            const TType *type);
 
-    template <TPrecision precision>
-    void insertConstInt(ESymbolLevel level, const ImmutableString &name, int value);
-
-    template <TPrecision precision>
-    void insertConstIntExt(ESymbolLevel level,
-                           TExtension ext,
-                           const ImmutableString &name,
-                           int value);
-
-    template <TPrecision precision>
-    void insertConstIvec3(ESymbolLevel level,
-                          const ImmutableString &name,
-                          const std::array<int, 3> &values);
-
     void insertBuiltIn(ESymbolLevel level, const TSymbol *symbol);
 
     TFunction *findUserDefinedFunction(const ImmutableString &name) const;
@@ -172,6 +158,9 @@ class TSymbolTable : angle::NonCopyable
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
 
+    void insertStaticBuiltInVariables(sh::GLenum shaderType,
+                                      ShShaderSpec spec,
+                                      const ShBuiltInResources &resources);
     void insertStaticBuiltInFunctions(sh::GLenum shaderType);
 
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
