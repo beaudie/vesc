@@ -197,6 +197,9 @@ class TSymbolTable : angle::NonCopyable
                                     const ShBuiltInResources &resources);
     void markBuiltInInitializationFinished();
 
+    void insertStaticBuiltInVariables(sh::GLenum shaderType,
+                                      ShShaderSpec spec,
+                                      const ShBuiltInResources &resources);
     void insertStaticBuiltInFunctions(sh::GLenum shaderType);
 
     std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
