@@ -150,8 +150,10 @@ generators = {
     'ESSL static builtins': {
         'inputs': [
             'src/compiler/translator/builtin_function_declarations.txt',
+            'src/compiler/translator/builtin_variables.json',
         ],
         'outputs': [
+            'src/compiler/translator/BuiltIn_autogen.h',
             'src/compiler/translator/SymbolTable_autogen.cpp',
         ],
         'script': 'src/compiler/translator/gen_builtin_symbols.py',
