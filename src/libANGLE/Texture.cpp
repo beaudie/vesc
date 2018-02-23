@@ -763,7 +763,7 @@ Error Texture::setBaseLevel(const Context *context, GLuint baseLevel)
 {
     if (mState.setBaseLevel(baseLevel))
     {
-        ANGLE_TRY(mTexture->setBaseLevel(context, mState.getEffectiveBaseLevel()));
+        // ANGLE_TRY(mTexture->setBaseLevel(context, mState.getEffectiveBaseLevel()));
         mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
         invalidateCompletenessCache();
     }
