@@ -1174,14 +1174,6 @@ bool TextureGL::hasAnyDirtyBit() const
 
 gl::Error TextureGL::setBaseLevel(const gl::Context *context, GLuint baseLevel)
 {
-    if (baseLevel != mAppliedBaseLevel)
-    {
-        mAppliedBaseLevel = baseLevel;
-        mLocalDirtyBits.set(gl::Texture::DIRTY_BIT_BASE_LEVEL);
-
-        mStateManager->bindTexture(getTarget(), mTextureID);
-        mFunctions->texParameteri(getTarget(), GL_TEXTURE_BASE_LEVEL, baseLevel);
-    }
     return gl::NoError();
 }
 
