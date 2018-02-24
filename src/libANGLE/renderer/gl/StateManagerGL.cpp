@@ -872,32 +872,6 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
 
 void StateManagerGL::setGenericShaderState(const gl::Context *context)
 {
-    const gl::State &glState = context->getGLState();
-
-    // Sync the current program state
-    const gl::Program *program = glState.getProgram();
-    for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
-         uniformBlockIndex++)
-    {
-        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
-        const auto &uniformBuffer = glState.getIndexedUniformBuffer(binding);
-
-        if (uniformBuffer.get() != nullptr)
-        {
-            BufferGL *bufferGL = GetImplAs<BufferGL>(uniformBuffer.get());
-
-            if (uniformBuffer.getSize() == 0)
-            {
-                bindBufferBase(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID());
-            }
-            else
-            {
-                bindBufferRange(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID(),
-                                uniformBuffer.getOffset(), uniformBuffer.getSize());
-            }
-        }
-    }
-
     if (mProgramTexturesAndSamplersDirty)
     {
         updateProgramTextureAndSamplerBindings(context);
@@ -910,6 +884,10 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
         mProgramStorageBuffersDirty = false;
     }
 
+    const gl::State &glState = context->getGLState();
+
+    // Sync the current program state
+    const gl::Program *program = glState.getProgram();
     // TODO(xinghua.cao@intel.com): Track image units state with dirty bits to
     // avoid update every draw call.
     ASSERT(context->getClientVersion() >= gl::ES_3_1 || program->getImageBindings().size() == 0);
@@ -950,6 +928,34 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
             {
                 bindBufferRange(gl::BufferBinding::AtomicCounter, binding, bufferGL->getBufferID(),
                                 buffer.getOffset(), buffer.getSize());
+            }
+        }
+    }
+}
+
+void StateManagerGL::updateProgramUniformBufferBindings(const gl::Context *context)
+{
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+
+    for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
+         uniformBlockIndex++)
+    {
+        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
+        const auto &uniformBuffer = glState.getIndexedUniformBuffer(binding);
+
+        if (uniformBuffer.get() != nullptr)
+        {
+            BufferGL *bufferGL = GetImplAs<BufferGL>(uniformBuffer.get());
+
+            if (uniformBuffer.getSize() == 0)
+            {
+                bindBufferBase(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID());
+            }
+            else
+            {
+                bindBufferRange(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID(),
+                                uniformBuffer.getOffset(), uniformBuffer.getSize());
             }
         }
     }
@@ -1969,6 +1975,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             {
                 mProgramTexturesAndSamplersDirty = true;
                 mProgramStorageBuffersDirty      = true;
+                updateProgramUniformBufferBindings(context);
                 gl::Program *program = state.getProgram();
                 if (program != nullptr)
                 {
@@ -1988,6 +1995,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 mProgramTexturesAndSamplersDirty = true;
                 mProgramStorageBuffersDirty      = true;
+                updateProgramUniformBufferBindings(context);
                 propagateNumViewsToVAO(state.getProgram(),
                                        GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 updateMultiviewBaseViewLayerIndexUniform(
@@ -1998,7 +2006,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 mProgramStorageBuffersDirty = true;
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                // TODO(jmadll): State update.
+                updateProgramUniformBufferBindings(context);
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());

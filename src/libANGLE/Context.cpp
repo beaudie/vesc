@@ -418,6 +418,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mComputeDirtyBits.set(State::DIRTY_BIT_TEXTURE_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
+    mComputeDirtyBits.set(State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
 
     handleError(mImplementation->initialize());
 }
