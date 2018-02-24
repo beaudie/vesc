@@ -9,6 +9,7 @@
 #include "windows/win32/Win32Window.h"
 
 #include <sstream>
+#include <dwmapi.h>
 
 #include "common/debug.h"
 
@@ -608,18 +609,6 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
 
     bool error = false;
 
-    // Hack for DWM: There is no way to wait for DWM animations to finish, so we just have to wait
-    // for a while before issuing screenshot if window was just made visible.
-    {
-        static const double WAIT_WINDOW_VISIBLE_MS = 0.5;  // Half a second for the animation
-        double timeSinceVisible                    = mSetVisibleTimer->getElapsedTime();
-
-        if (timeSinceVisible < WAIT_WINDOW_VISIBLE_MS)
-        {
-            Sleep(static_cast<DWORD>((WAIT_WINDOW_VISIBLE_MS - timeSinceVisible) * 1000));
-        }
-    }
-
     HDC screenDC      = nullptr;
     HDC windowDC      = nullptr;
     HDC tmpDC         = nullptr;
@@ -659,6 +648,10 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
     {
         error = SelectObject(tmpDC, tmpBitmap) == nullptr;
     }
+
+    DwmFlush();
+    Sleep(500);
+    DwmFlush();
 
     if (!error)
     {
@@ -796,6 +789,8 @@ bool Win32Window::resize(int width, int height)
         return false;
     }
 
+    printf("Resize?");
+
     return true;
 }
 
@@ -805,12 +800,6 @@ void Win32Window::setVisible(bool isVisible)
 
     ShowWindow(mParentWindow, flag);
     ShowWindow(mNativeWindow, flag);
-
-    if (isVisible)
-    {
-        mSetVisibleTimer->stop();
-        mSetVisibleTimer->start();
-    }
 }
 
 void Win32Window::pushEvent(Event event)
