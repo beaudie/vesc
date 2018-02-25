@@ -180,7 +180,7 @@ void State::initialize(const Context *context,
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
     {
-        mCompleteTextureBindings.emplace_back(OnAttachmentDirtyBinding(this, textureIndex));
+        mCompleteTextureBindings.emplace_back(angle::ChannelBinding(this, textureIndex));
     }
 
     mSamplers.resize(caps.maxCombinedTextureImageUnits);
@@ -2440,13 +2440,14 @@ const ImageUnit &State::getImageUnit(GLuint unit) const
 }
 
 // Handle a dirty texture event.
-void State::signal(size_t textureIndex, InitState initState)
+void State::signal(const Context *context, angle::ChannelID channelID, angle::Message message)
 {
     // Conservatively assume all textures are dirty.
     // TODO(jmadill): More fine-grained update.
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
 
-    if (initState == InitState::MayNeedInit)
+    ASSERT(mCompleteTextureCache[channelID]);
+    if (mCompleteTextureCache[channelID]->initState() == InitState::MayNeedInit)
     {
         mCachedTexturesInitState = InitState::MayNeedInit;
     }

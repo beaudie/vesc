@@ -3262,8 +3262,9 @@ StateManager11::OnConstantBufferDirtyReceiver::~OnConstantBufferDirtyReceiver()
 {
 }
 
-void StateManager11::OnConstantBufferDirtyReceiver::signal(size_t messageID,
-                                                           const gl::Context *context)
+void StateManager11::OnConstantBufferDirtyReceiver::signal(const gl::Context *context,
+                                                           angle::ChannelID channelID,
+                                                           angle::Message message)
 {
     StateManager11 *stateManager = GetImplAs<Context11>(context)->getRenderer()->getStateManager();
     stateManager->invalidateProgramUniformBuffers();
@@ -3285,12 +3286,12 @@ void StateManager11::OnConstantBufferDirtyReceiver::bindPS(size_t index, Buffer1
 
 void StateManager11::OnConstantBufferDirtyReceiver::reset()
 {
-    for (OnBufferDataDirtyBinding &vsBinding : mBindingsVS)
+    for (angle::ChannelBinding &vsBinding : mBindingsVS)
     {
         vsBinding.bind(nullptr);
     }
 
-    for (OnBufferDataDirtyBinding &psBinding : mBindingsPS)
+    for (angle::ChannelBinding &psBinding : mBindingsPS)
     {
         psBinding.bind(nullptr);
     }

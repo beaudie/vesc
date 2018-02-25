@@ -21,8 +21,7 @@ namespace rx
 
 namespace
 {
-OnBufferDataDirtyChannel *GetBufferBroadcastChannel(Buffer11 *buffer11,
-                                                    IndexStorageType storageType)
+angle::BroadcastChannel *GetBufferBroadcastChannel(Buffer11 *buffer11, IndexStorageType storageType)
 {
     switch (storageType)
     {
@@ -222,7 +221,7 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
 
     if (oldBuffer11 != newBuffer11 || oldStorageType != newStorageType)
     {
-        OnBufferDataDirtyChannel *newChannel = nullptr;
+        angle::BroadcastChannel *newChannel = nullptr;
 
         if (newStorageType == VertexStorageType::CURRENT_VALUE)
         {
@@ -348,7 +347,9 @@ const std::vector<TranslatedAttribute> &VertexArray11::getTranslatedAttribs() co
     return mTranslatedAttribs;
 }
 
-void VertexArray11::signal(size_t channelID, const gl::Context *context)
+void VertexArray11::signal(const gl::Context *context,
+                           angle::ChannelID channelID,
+                           angle::Message message)
 {
     if (channelID == mAttributeStorageTypes.size())
     {
