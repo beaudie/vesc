@@ -898,7 +898,7 @@ egl::Stream *Texture::getBoundStream() const
 void Texture::signalDirty(const Context *context, InitState initState)
 {
     mState.mInitState = initState;
-    mDirtyChannel.signal(context, angle::MessageID::ATTACHMENT_CHANGE);
+    getDirtyChannel()->signal(context, angle::MessageID::ATTACHMENT_CHANGE);
     invalidateCompletenessCache();
 }
 

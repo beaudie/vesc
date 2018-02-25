@@ -2404,6 +2404,18 @@ void State::setObjectDirty(GLenum target)
     }
 }
 
+void State::setFramebufferDirty(const Framebuffer *framebuffer) const
+{
+    if (framebuffer == mReadFramebuffer)
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+    }
+    if (framebuffer == mDrawFramebuffer)
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+    }
+}
+
 void State::onProgramExecutableChange(Program *program)
 {
     // OpenGL Spec:

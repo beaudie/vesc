@@ -12,6 +12,7 @@
 #define LIBANGLE_RENDERER_FRAMEBUFFER_ATTACHMENT_OBJECT_IMPL_H_
 
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/signal_utils.h"
 
 namespace rx
 {
@@ -29,6 +30,11 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
 
     virtual gl::Error initializeContents(const gl::Context *context,
                                          const gl::ImageIndex &imageIndex);
+
+    angle::BroadcastChannel *getDirtyChannel();
+
+  protected:
+    angle::BroadcastChannel mDirtyChannel;
 };
 
 inline gl::Error FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
@@ -47,6 +53,11 @@ inline gl::Error FramebufferAttachmentObjectImpl::initializeContents(
 {
     UNIMPLEMENTED();
     return gl::OutOfMemory() << "initialize not supported.";
+}
+
+inline angle::BroadcastChannel *FramebufferAttachmentObjectImpl::getDirtyChannel()
+{
+    return &mDirtyChannel;
 }
 
 }  // namespace rx
