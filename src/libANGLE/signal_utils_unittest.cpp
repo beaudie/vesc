@@ -16,22 +16,25 @@ using namespace testing;
 namespace
 {
 
-struct SignalThing : public SignalReceiver<>
+struct SignalThing : public SignalReceiver
 {
-    void signal(uint32_t channelID) override { wasSignaled = true; }
+    void signal(const gl::Context *context, ChannelID channelID, MessageID message) override
+    {
+        wasSignaled = true;
+    }
     bool wasSignaled = false;
 };
 
 // Test that broadcast signals work.
 TEST(SignalTest, BroadcastSignals)
 {
-    BroadcastChannel<> channel;
+    BroadcastChannel channel;
     SignalThing thing;
-    ChannelBinding<> binding(&thing, 0u);
+    ChannelBinding binding(&thing, 0u);
 
     binding.bind(&channel);
     ASSERT_FALSE(thing.wasSignaled);
-    channel.signal();
+    channel.signal(nullptr, MessageID::ATTACHMENT_CHANGE);
     ASSERT_TRUE(thing.wasSignaled);
 }
 

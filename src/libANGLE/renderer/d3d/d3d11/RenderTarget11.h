@@ -35,12 +35,12 @@ class RenderTarget11 : public RenderTargetD3D
     virtual unsigned int getSubresourceIndex() const = 0;
 
     void signalDirty(const gl::Context *context) override;
-    OnRenderTargetDirtyChannel *getBroadcastChannel() { return &mBroadcastChannel; }
+    angle::BroadcastChannel *getBroadcastChannel() { return &mBroadcastChannel; }
 
     const d3d11::Format &getFormatSet() const { return mFormatSet; }
 
   protected:
-    OnRenderTargetDirtyChannel mBroadcastChannel;
+    angle::BroadcastChannel mBroadcastChannel;
     const d3d11::Format &mFormatSet;
 };
 

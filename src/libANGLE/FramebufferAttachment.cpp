@@ -358,7 +358,7 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
 }
 
-OnAttachmentDirtyChannel *FramebufferAttachmentObject::getDirtyChannel()
+angle::BroadcastChannel *FramebufferAttachmentObject::getDirtyChannel()
 {
     return &mDirtyChannel;
 }
