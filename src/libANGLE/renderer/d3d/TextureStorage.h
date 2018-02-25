@@ -23,6 +23,11 @@ struct Box;
 struct PixelUnpackState;
 }  // namespace gl
 
+namespace angle
+{
+class BroadcastChannel;
+}  // namespace angle
+
 namespace rx
 {
 class SwapChainD3D;
@@ -62,6 +67,12 @@ class TextureStorage : angle::NonCopyable
     // This is a no-op for most implementations of TextureStorage. Some (e.g. TextureStorage11_2D) might override it.
     virtual gl::Error useLevelZeroWorkaroundTexture(const gl::Context *context,
                                                     bool useLevelZeroTexture);
+
+    // Only used in D3D11.
+    void setDirtyChannel(angle::BroadcastChannel *dirtyChannel);
+
+  protected:
+    angle::BroadcastChannel *mDirtyChannel;
 };
 
 inline gl::Error TextureStorage::onDestroy(const gl::Context *context)
@@ -73,6 +84,11 @@ inline gl::Error TextureStorage::useLevelZeroWorkaroundTexture(const gl::Context
                                                                bool useLevelZeroTexture)
 {
     return gl::NoError();
+}
+
+inline void TextureStorage::setDirtyChannel(angle::BroadcastChannel *dirtyChannel)
+{
+    mDirtyChannel = dirtyChannel;
 }
 
 using TexStoragePointer = angle::UniqueObjectPointer<TextureStorage, gl::Context>;

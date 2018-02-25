@@ -1790,17 +1790,27 @@ void Framebuffer::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
+        mDirtyBitsGuard = mDirtyBits;
         mImpl->syncState(context, mDirtyBits);
         mDirtyBits.reset();
         if (mId != 0)
         {
             mCachedStatus.reset();
         }
+        mDirtyBitsGuard.reset();
     }
 }
 
 void Framebuffer::signal(const Context *context, angle::ChannelID channelID, angle::Message message)
 {
+    if (message == angle::Message::DEPENDENT_DIRTY_BITS)
+    {
+        ASSERT(!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(channelID));
+        mDirtyBits.set(channelID);
+        context->getGLState().setFramebufferDirty(this);
+        return;
+    }
+
     // Only reset the cached status if this is not the default framebuffer.  The default framebuffer
     // will still use this channel to mark itself dirty.
     if (mId != 0)

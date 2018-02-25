@@ -25,6 +25,7 @@ namespace angle
 enum Message
 {
     ATTACHMENT_CHANGE,
+    DEPENDENT_DIRTY_BITS,
 };
 
 using ChannelID = size_t;

@@ -15,7 +15,6 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
-#include "libANGLE/signal_utils.h"
 
 namespace egl
 {
@@ -35,6 +34,11 @@ class FramebufferAttachmentRenderTarget : angle::NonCopyable
 
 class FramebufferAttachmentObjectImpl;
 }
+
+namespace angle
+{
+class BroadcastChannel;
+}  // namespace angle
 
 namespace gl
 {
@@ -210,8 +214,6 @@ class FramebufferAttachmentObject
 
   protected:
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
-
-    angle::BroadcastChannel mDirtyChannel;
 };
 
 inline Extents FramebufferAttachment::getSize() const

@@ -17,7 +17,7 @@ namespace rx
 {
 class Renderer11;
 
-class Framebuffer11 : public FramebufferD3D, public angle::SignalReceiver
+class Framebuffer11 : public FramebufferD3D
 {
   public:
     Framebuffer11(const gl::FramebufferState &data, Renderer11 *renderer);
@@ -48,13 +48,6 @@ class Framebuffer11 : public FramebufferD3D, public angle::SignalReceiver
     }
 
     RenderTarget11 *getFirstRenderTarget() const;
-
-    bool hasAnyInternalDirtyBit() const;
-    void syncInternalState(const gl::Context *context);
-
-    void signal(const gl::Context *context,
-                angle::ChannelID channelID,
-                angle::Message message) override;
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
@@ -94,11 +87,6 @@ class Framebuffer11 : public FramebufferD3D, public angle::SignalReceiver
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
     RenderTarget11 *mCachedDepthStencilRenderTarget;
-
-    std::vector<angle::ChannelBinding> mColorRenderTargetsDirty;
-    angle::ChannelBinding mDepthStencilRenderTargetDirty;
-
-    gl::Framebuffer::DirtyBits mInternalDirtyBits;
 };
 
 }

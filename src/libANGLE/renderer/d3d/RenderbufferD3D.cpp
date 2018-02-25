@@ -112,9 +112,9 @@ gl::Error RenderbufferD3D::getAttachmentRenderTarget(const gl::Context *context,
 
 void RenderbufferD3D::deleteRenderTarget(const gl::Context *context)
 {
+    mDirtyChannel.signal(context, angle::Message::DEPENDENT_DIRTY_BITS);
     if (mRenderTarget)
     {
-        mRenderTarget->signalDirty(context);
         SafeDelete(mRenderTarget);
     }
 }
