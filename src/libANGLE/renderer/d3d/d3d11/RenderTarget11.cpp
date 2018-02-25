@@ -205,7 +205,7 @@ RenderTarget11::~RenderTarget11()
 
 void RenderTarget11::signalDirty(const gl::Context *context)
 {
-    mBroadcastChannel.signal(context);
+    mBroadcastChannel.signal(context, angle::MessageID::ATTACHMENT_CHANGE);
 
     // Clear the list. We can't do this in the receiver because it would mutate during iteration.
     mBroadcastChannel.reset();
