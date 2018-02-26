@@ -327,6 +327,66 @@ TEST_P(ShaderStorageBufferTest31, MultiStorageBuffersForMultiPrograms)
     EXPECT_GL_NO_ERROR();
 }
 
+// Verify that a link error is generated when the sum of the number of active image uniforms and
+// active shader storage blocks in a compute shader exceeds GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
+TEST_P(ShaderStorageBufferTest31, ExceedCombinedShaderOutputResourcesInCS)
+{
+    GLint maxCombinedShaderOutputResources;
+    GLint maxComputeShaderStorageBlocks;
+    GLint maxComputeImageUniforms;
+
+    glGetIntegerv(GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES, &maxCombinedShaderOutputResources);
+    glGetIntegerv(GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, &maxComputeShaderStorageBlocks);
+    glGetIntegerv(GL_MAX_COMPUTE_IMAGE_UNIFORMS, &maxComputeImageUniforms);
+
+    ANGLE_SKIP_TEST_IF(maxCombinedShaderOutputResources >=
+                       maxComputeShaderStorageBlocks + maxComputeImageUniforms);
+
+    GLint imageUniformCount = maxComputeImageUniforms;  // maxCombinedShaderOutputResources -
+                                                        // maxComputeShaderStorageBlocks + 1;
+
+    std::ostringstream computeShaderStream;
+    computeShaderStream << "#version 310 es\n"
+                           "layout(local_size_x = 3, local_size_y = 1, local_size_z = 1) in;\n";
+
+    for (int i = 0; i < maxComputeShaderStorageBlocks; ++i)
+    {
+        computeShaderStream << "layout(shared, binding = " << i << ") buffer blockName" << i
+                            << " {\n"
+                               "    uint data;\n"
+                               "} instance"
+                            << i << ";\n";
+    }
+
+    for (int i = 0; i < imageUniformCount; ++i)
+    {
+        computeShaderStream << "layout(r32f, binding = " << i << ") uniform highp image2D image"
+                            << i << ";\n";
+    }
+
+    computeShaderStream << "void main()\n"
+                           "{\n"
+                           "    uint val = 0u;\n"
+                           "    vec4 val2 = vec4(0.0);\n";
+
+    for (int i = 0; i < maxComputeShaderStorageBlocks; ++i)
+    {
+        computeShaderStream << "    val += instance" << i << ".data; \n";
+    }
+
+    for (int i = 0; i < imageUniformCount; ++i)
+    {
+        computeShaderStream << "    val2 += imageLoad(image" << i
+                            << ", ivec2(gl_LocalInvocationID.xy)); \n";
+    }
+
+    computeShaderStream << "    instance0.data = val + uint(val2.x);\n"
+                           "}\n";
+
+    GLuint computeProgram = CompileComputeProgram(computeShaderStream.str());
+    EXPECT_NE(0u, computeProgram);
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace
