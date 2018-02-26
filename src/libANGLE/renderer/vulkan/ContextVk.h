@@ -168,6 +168,7 @@ class ContextVk : public ContextImpl
                         DrawType drawType,
                         int firstVertex,
                         int lastVertex,
+                        Optional<ResourceVk *> overrideReadResource,
                         vk::CommandBuffer **commandBuffer);
 
     RendererVk *mRenderer;
