@@ -258,6 +258,1108 @@ GLES1on3::~GLES1on3()
 {
 }
 
+void GLES1on3::getPointerv(GLenum pname, void **params)
+{
+    switch (pname)
+    {
+        case GL_VERTEX_ARRAY_POINTER:
+        case GL_NORMAL_ARRAY_POINTER:
+        case GL_COLOR_ARRAY_POINTER:
+        case GL_TEXTURE_COORD_ARRAY_POINTER:
+        case GL_POINT_SIZE_ARRAY_POINTER_OES:
+            mContext->getVertexAttribPointerv((GLuint)vertexArrayIndex(pname),
+                                              GL_VERTEX_ATTRIB_ARRAY_POINTER, params);
+            return;
+    }
+
+    mGLState->getPointerv(pname, params);
+}
+
+// GL_OES_framebuffer_object
+
+void GLES1on3::getFramebufferAttachmentParameteriv(GLenum target,
+                                                   GLenum attachment,
+                                                   GLenum pname,
+                                                   GLint *params)
+{
+    mContext->getFramebufferAttachmentParameteriv(target, attachment, pname, params);
+}
+
+void GLES1on3::getRenderbufferParameteriv(GLenum target, GLenum pname, GLint *params)
+{
+    mContext->getRenderbufferParameteriv(target, pname, params);
+}
+
+void GLES1on3::framebufferTexture2D(GLenum target,
+                                    GLenum attachment,
+                                    GLenum textarget,
+                                    GLuint texture,
+                                    GLint level)
+{
+    mContext->framebufferTexture2D(target, attachment, textarget, texture, level);
+}
+
+void GLES1on3::framebufferRenderbuffer(GLenum target,
+                                       GLenum attachment,
+                                       GLenum renderbuffertarget,
+                                       GLuint renderbuffer)
+{
+    mContext->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+}
+
+void GLES1on3::bindFramebuffer(GLenum target, GLuint framebuffer)
+{
+    mContext->bindFramebuffer(target, framebuffer);
+}
+
+void GLES1on3::bindRenderbuffer(GLenum target, GLuint renderbuffer)
+{
+    mContext->bindRenderbuffer(target, renderbuffer);
+}
+
+void GLES1on3::renderbufferStorage(GLenum target,
+                                   GLenum internalformat,
+                                   GLsizei width,
+                                   GLsizei height)
+{
+    mContext->renderbufferStorage(target, internalformat, width, height);
+}
+
+GLenum GLES1on3::checkFramebufferStatus(GLenum target)
+{
+    return mContext->checkFramebufferStatus(target);
+}
+
+void GLES1on3::deleteFramebuffers(GLsizei n, const GLuint *framebuffers)
+{
+    mContext->deleteFramebuffers(n, framebuffers);
+}
+
+void GLES1on3::deleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
+{
+    mContext->deleteRenderbuffers(n, renderbuffers);
+}
+
+void GLES1on3::genFramebuffers(GLsizei n, GLuint *framebuffers)
+{
+    mContext->genFramebuffers(n, framebuffers);
+}
+
+void GLES1on3::genRenderbuffers(GLsizei n, GLuint *renderbuffers)
+{
+    mContext->genRenderbuffers(n, renderbuffers);
+}
+
+GLboolean GLES1on3::isFramebuffer(GLuint framebuffer)
+{
+    return mContext->isFramebuffer(framebuffer);
+}
+
+GLboolean GLES1on3::isRenderbuffer(GLuint renderbuffer)
+{
+    return mContext->isRenderbuffer(renderbuffer);
+}
+
+void GLES1on3::generateMipmap(GLenum target)
+{
+    mContext->generateMipmap(target);
+}
+
+// GLES 1 conversion macros
+
+#define X2F(x) (((float)(x)) / 65536.0f)
+#define X2D(x) (((double)(x)) / 65536.0)
+#define X2I(x) ((x) / 65536)
+#define B2S(x) ((short)x)
+
+#define F2X(d)                                 \
+    ((d) > 32767.65535 ? 32767 * 65536 + 65535 \
+                       : (d) < -32768.65535 ? -32768 * 65536 + 65535 : ((GLfixed)((d)*65536)))
+
+#define I2X(d) ((d)*65536)
+
+void GLES1on3::alphaFunc(GLenum func, GLfloat ref)
+{
+    mGLState->alphaFunc(func, ref);
+}
+
+void GLES1on3::alphaFuncx(GLenum func, GLfixed ref)
+{
+    alphaFunc(func, X2F(ref));
+}
+
+void GLES1on3::clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
+{
+    mContext->clearColor(X2F(red), X2F(green), X2F(blue), X2F(alpha));
+}
+
+void GLES1on3::clearDepthx(GLfixed depth)
+{
+    mContext->clearDepthf(X2F(depth));
+}
+
+void GLES1on3::clipPlanef(GLenum p, const GLfloat *eqn)
+{
+    mGLState->clipPlanef(p, eqn);
+}
+
+void GLES1on3::clipPlanex(GLenum plane, const GLfixed *equation)
+{
+    float equationf[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        equationf[i] = X2F(equation[i]);
+    }
+
+    clipPlanef(plane, equationf);
+}
+
+void GLES1on3::depthRangex(GLfixed n, GLfixed f)
+{
+    mGLState->setDepthRange(X2F(n), X2F(f));
+}
+
+void GLES1on3::fogx(GLenum pname, GLfixed param)
+{
+    fogf(pname, X2F(param));
+}
+
+void GLES1on3::fogxv(GLenum pname, const GLfixed *param)
+{
+    GLfloat paramf[4];
+    switch (pname)
+    {
+        case GL_FOG_MODE:
+            fogf(pname, (GLfloat)(GLenum)param[0]);
+            break;
+        case GL_FOG_DENSITY:
+        case GL_FOG_START:
+        case GL_FOG_END:
+            paramf[0] = X2F(param[0]);
+            fogf(pname, paramf[0]);
+            break;
+        case GL_FOG_COLOR:
+            for (int i = 0; i < 4; i++)
+            {
+                paramf[i] = X2F(param[i]);
+            }
+            fogfv(pname, paramf);
+            break;
+        default:
+            return;
+    }
+}
+
+void GLES1on3::frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
+{
+    frustumf(X2F(l), X2F(r), X2F(b), X2F(t), X2F(n), X2F(f));
+}
+
+void GLES1on3::getClipPlanef(GLenum plane, GLfloat *equation)
+{
+    mGLState->getClipPlanef(plane, equation);
+}
+
+void GLES1on3::getClipPlanex(GLenum plane, GLfixed *equation)
+{
+    GLfloat equationf[4];
+    getClipPlanef(plane, equationf);
+
+    for (int i = 0; i < 4; i++)
+    {
+        equation[i] = F2X(equationf[i]);
+    }
+}
+
+void GLES1on3::getFixedv(GLenum pname, GLfixed *params)
+{
+    GLfloat floatBuf[16];
+    GLint intBuf[16];
+
+    GLenum nativeType;
+    unsigned int numParams;
+    mContext->getQueryParameterInfo(pname, &nativeType, &numParams);
+
+    switch (nativeType)
+    {
+        case GL_INT:
+        case GL_BOOL:
+            mContext->getIntegerv(pname, intBuf);
+            for (unsigned int i = 0; i < numParams; i++)
+            {
+                // GLES1 TODO: Only if rescale applies to this pname
+                params[i] = I2X(intBuf[i]);
+            }
+            break;
+        case GL_FLOAT:
+            mContext->getFloatv(pname, floatBuf);
+            for (unsigned int i = 0; i < numParams; i++)
+            {
+                // GLES1 TODO: Only if rescale applies to this pname
+                params[i] = F2X(intBuf[i]);
+            }
+            break;
+        default:
+            UNIMPLEMENTED();
+    }
+}
+
+void GLES1on3::getLightxv(GLenum light, GLenum pname, GLfixed *params)
+{
+    GLfloat paramsf[4];
+    getLightfv(light, pname, paramsf);
+
+    unsigned int numParams = 4;
+    switch (pname)
+    {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_POSITION:
+            numParams = 4;
+            break;
+        case GL_SPOT_DIRECTION:
+            numParams = 3;
+            break;
+        case GL_SPOT_EXPONENT:
+        case GL_SPOT_CUTOFF:
+        case GL_CONSTANT_ATTENUATION:
+        case GL_LINEAR_ATTENUATION:
+        case GL_QUADRATIC_ATTENUATION:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        params[i] = F2X(paramsf[i]);
+    }
+}
+
+void GLES1on3::getMaterialxv(GLenum face, GLenum pname, GLfixed *params)
+{
+    GLfloat paramsf[4];
+    getMaterialfv(face, pname, paramsf);
+
+    unsigned int numParams = 4;
+
+    switch (pname)
+    {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_EMISSION:
+            numParams = 4;
+            break;
+        case GL_SHININESS:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        params[i] = F2X(paramsf[i]);
+    }
+}
+
+void GLES1on3::getTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
+{
+    GLfloat paramsf[4];
+    getTexEnvfv(target, pname, paramsf);
+
+    unsigned int numParams = 1;
+    bool rescale           = true;
+    switch (pname)
+    {
+        case GL_TEXTURE_ENV_MODE:
+            numParams = 1;
+            rescale   = false;
+            break;
+        case GL_TEXTURE_ENV_COLOR:
+            numParams = 4;
+            break;
+        case GL_COMBINE_RGB:
+            numParams = 3;
+            break;
+        case GL_COMBINE_ALPHA:
+        case GL_RGB_SCALE:
+        case GL_ALPHA_SCALE:
+            numParams = 1;
+            break;
+    }
+
+    if (rescale)
+    {
+        for (unsigned int i = 0; i < numParams; i++)
+        {
+            params[i] = F2X(paramsf[i]);
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < numParams; i++)
+        {
+            params[i] = (GLfixed)params[i];
+        }
+    }
+}
+
+void GLES1on3::getTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
+{
+    GLfloat paramsf[4];
+
+    mContext->getTexParameterfv(target, pname, paramsf);
+
+    unsigned int numParams = 1;
+    bool rescale           = true;
+
+    switch (pname)
+    {
+        case GL_TEXTURE_MAG_FILTER:
+        case GL_TEXTURE_MIN_FILTER:
+        case GL_TEXTURE_WRAP_S:
+        case GL_TEXTURE_WRAP_T:
+        case GL_TEXTURE_WRAP_R:
+        case GL_TEXTURE_IMMUTABLE_FORMAT:
+        case GL_TEXTURE_USAGE_ANGLE:
+        case GL_TEXTURE_SWIZZLE_R:
+        case GL_TEXTURE_SWIZZLE_G:
+        case GL_TEXTURE_SWIZZLE_B:
+        case GL_TEXTURE_SWIZZLE_A:
+        case GL_TEXTURE_COMPARE_MODE:
+        case GL_TEXTURE_COMPARE_FUNC:
+            numParams = 1;
+            rescale   = false;
+            break;
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+        case GL_TEXTURE_IMMUTABLE_LEVELS:
+        case GL_TEXTURE_BASE_LEVEL:
+        case GL_TEXTURE_MAX_LEVEL:
+        case GL_TEXTURE_MIN_LOD:
+        case GL_TEXTURE_MAX_LOD:
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_SRGB_DECODE_EXT:
+            numParams = 1;
+            rescale   = true;
+            break;
+        case GL_TEXTURE_CROP_RECT_OES:
+            numParams = 4;
+            rescale   = true;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
+    if (rescale)
+    {
+        for (unsigned int i = 0; i < numParams; i++)
+        {
+            params[i] = F2X(paramsf[i]);
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < numParams; i++)
+        {
+            params[i] = (GLfixed)params[i];
+        }
+    }
+}
+
+void GLES1on3::shadeModel(GLenum mode)
+{
+    mGLState->shadeModel(mode);
+}
+
+void GLES1on3::matrixMode(GLenum mode)
+{
+    mGLState->matrixMode(mode);
+}
+
+void GLES1on3::loadIdentity()
+{
+    mGLState->loadIdentity();
+}
+
+void GLES1on3::loadMatrixf(const GLfloat *m)
+{
+    mGLState->loadMatrixf(m);
+}
+
+void GLES1on3::loadMatrixx(const GLfixed *m)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::pushMatrix()
+{
+    mGLState->pushMatrix();
+}
+
+void GLES1on3::popMatrix()
+{
+    mGLState->popMatrix();
+}
+
+void GLES1on3::multMatrixf(const GLfloat *m)
+{
+    mGLState->multMatrixf(m);
+}
+
+void GLES1on3::orthof(GLfloat left,
+                      GLfloat right,
+                      GLfloat bottom,
+                      GLfloat top,
+                      GLfloat zNear,
+                      GLfloat zFar)
+{
+    mGLState->orthof(left, right, bottom, top, zNear, zFar);
+}
+
+void GLES1on3::frustumf(GLfloat left,
+                        GLfloat right,
+                        GLfloat bottom,
+                        GLfloat top,
+                        GLfloat zNear,
+                        GLfloat zFar)
+{
+    mGLState->frustumf(left, right, bottom, top, zNear, zFar);
+}
+
+void GLES1on3::texEnvf(GLenum target, GLenum pname, GLfloat param)
+{
+    mGLState->texEnvf(target, pname, param);
+}
+
+void GLES1on3::texEnvfv(GLenum target, GLenum pname, const GLfloat *params)
+{
+    mGLState->texEnvfv(target, pname, params);
+}
+
+void GLES1on3::texEnvi(GLenum target, GLenum pname, GLint param)
+{
+    mGLState->texEnvi(target, pname, param);
+}
+
+void GLES1on3::texEnviv(GLenum target, GLenum pname, const GLint *params)
+{
+    mGLState->texEnviv(target, pname, params);
+}
+
+void GLES1on3::getTexEnvfv(GLenum env, GLenum pname, GLfloat *params)
+{
+    mGLState->getTexEnvfv(env, pname, params);
+}
+
+void GLES1on3::getTexEnviv(GLenum env, GLenum pname, GLint *params)
+{
+    mGLState->getTexEnviv(env, pname, params);
+}
+
+void GLES1on3::texGenf(GLenum coord, GLenum pname, GLfloat param)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texGenfv(GLenum coord, GLenum pname, const GLfloat *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texGeni(GLenum coord, GLenum pname, GLint param)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texGeniv(GLenum coord, GLenum pname, const GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texGenx(GLenum coord, GLenum pname, GLfixed param)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texGenxv(GLenum coord, GLenum pname, const GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::getTexGeniv(GLenum coord, GLenum pname, GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::getTexGenfv(GLenum coord, GLenum pname, GLfloat *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::getTexGenxv(GLenum coord, GLenum pname, GLfixed *params)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::materialf(GLenum face, GLenum pname, GLfloat param)
+{
+    mGLState->materialf(face, pname, param);
+}
+
+void GLES1on3::materialfv(GLenum face, GLenum pname, const GLfloat *params)
+{
+    mGLState->materialfv(face, pname, params);
+}
+
+void GLES1on3::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
+{
+    mGLState->getMaterialfv(face, pname, params);
+}
+
+void GLES1on3::lightModelf(GLenum pname, GLfloat param)
+{
+    mGLState->lightModelf(pname, param);
+}
+
+void GLES1on3::lightModelfv(GLenum pname, const GLfloat *params)
+{
+    mGLState->lightModelfv(pname, params);
+}
+
+void GLES1on3::lightModelx(GLenum pname, GLfixed param)
+{
+    lightModelf(pname, X2F(param));
+}
+
+void GLES1on3::lightModelxv(GLenum pname, const GLfixed *param)
+{
+    GLfloat paramsf[4];
+
+    unsigned int numParams = 1;
+    switch (pname)
+    {
+        case GL_LIGHT_MODEL_AMBIENT:
+            numParams = 4;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            numParams = 1;
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        paramsf[i] = X2F(param[i]);
+    }
+
+    lightModelfv(pname, paramsf);
+}
+
+void GLES1on3::lightf(GLenum light, GLenum pname, GLfloat param)
+{
+    mGLState->lightf(light, pname, param);
+}
+
+void GLES1on3::lightfv(GLenum light, GLenum pname, const GLfloat *params)
+{
+    mGLState->lightfv(light, pname, params);
+}
+
+void GLES1on3::getLightfv(GLenum light, GLenum pname, GLfloat *params)
+{
+    mGLState->getLightfv(light, pname, params);
+}
+
+void GLES1on3::lightx(GLenum light, GLenum pname, GLfixed param)
+{
+    lightf(light, pname, X2F(param));
+}
+
+void GLES1on3::lightxv(GLenum light, GLenum pname, const GLfixed *params)
+{
+    GLfloat paramsf[4];
+
+    unsigned int numParams = 4;
+    switch (pname)
+    {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_POSITION:
+            numParams = 4;
+            break;
+        case GL_SPOT_DIRECTION:
+            numParams = 3;
+            break;
+        case GL_SPOT_EXPONENT:
+        case GL_SPOT_CUTOFF:
+        case GL_CONSTANT_ATTENUATION:
+        case GL_LINEAR_ATTENUATION:
+        case GL_QUADRATIC_ATTENUATION:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        paramsf[i] = X2F(params[i]);
+    }
+
+    lightfv(light, pname, paramsf);
+}
+
+void GLES1on3::lineWidthx(GLfixed width)
+{
+    mContext->lineWidth(X2F(width));
+}
+
+void GLES1on3::logicOp(GLenum opcode)
+{
+    mGLState->logicOp(opcode);
+}
+
+void GLES1on3::materialx(GLenum face, GLenum pname, GLfixed param)
+{
+    materialf(face, pname, X2F(param));
+}
+
+void GLES1on3::materialxv(GLenum face, GLenum pname, const GLfixed *param)
+{
+    GLfloat paramsf[4];
+    unsigned int numParams = 4;
+
+    switch (pname)
+    {
+        case GL_AMBIENT:
+        case GL_DIFFUSE:
+        case GL_SPECULAR:
+        case GL_EMISSION:
+            numParams = 4;
+            break;
+        case GL_SHININESS:
+            numParams = 1;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        paramsf[i] = X2F(param[i]);
+    }
+
+    materialfv(face, pname, paramsf);
+}
+
+void GLES1on3::multMatrixx(const GLfixed *m)
+{
+    GLfloat mf[16];
+    for (int i = 0; i < 16; i++)
+    {
+        mf[i] = X2F(m[i]);
+    }
+
+    multMatrixf(mf);
+}
+
+void GLES1on3::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
+{
+    mGLState->multiTexCoord4f(target, s, t, r, q);
+}
+
+void GLES1on3::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
+{
+    multiTexCoord4f(texture, X2F(s), X2F(t), X2F(r), X2F(q));
+}
+
+void GLES1on3::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+    mGLState->normal3f(nx, ny, nz);
+}
+
+void GLES1on3::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
+{
+    normal3f(X2F(nx), X2F(ny), X2F(nz));
+}
+
+void GLES1on3::orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
+{
+    orthof(X2F(l), X2F(r), X2F(b), X2F(t), X2F(n), X2F(f));
+}
+
+void GLES1on3::pointParameterf(GLenum pname, GLfloat param)
+{
+    mGLState->pointParameterf(pname, param);
+}
+
+void GLES1on3::pointParameterfv(GLenum pname, const GLfloat *params)
+{
+    mGLState->pointParameterfv(pname, params);
+}
+
+void GLES1on3::pointParameterx(GLenum pname, GLfixed param)
+{
+    mGLState->pointParameterf(pname, X2F(param));
+}
+
+void GLES1on3::pointParameterxv(GLenum pname, const GLfixed *params)
+{
+    GLfloat paramsf[4];
+    unsigned int numParams = 4;
+
+    switch (pname)
+    {
+        case GL_POINT_SIZE_MIN:
+        case GL_POINT_SIZE_MAX:
+        case GL_POINT_FADE_THRESHOLD_SIZE:
+            numParams = 1;
+            break;
+        case GL_POINT_DISTANCE_ATTENUATION:
+            numParams = 3;
+            break;
+        default:
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        paramsf[i] = X2F(params[i]);
+    }
+
+    pointParameterfv(pname, paramsf);
+}
+
+void GLES1on3::pointSize(GLfloat size)
+{
+    mGLState->pointSize(size);
+}
+
+void GLES1on3::pointSizex(GLfixed size)
+{
+    mGLState->pointSize(X2F(size));
+}
+
+void GLES1on3::polygonOffsetx(GLfixed factor, GLfixed units)
+{
+    mContext->polygonOffset(X2F(factor), X2F(units));
+}
+
+void GLES1on3::sampleCoveragex(GLclampx value, GLboolean invert)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::texEnvx(GLenum target, GLenum pname, GLfixed param)
+{
+    GLfloat tmpParam = (GLfloat)param;
+    texEnvf(target, pname, tmpParam);
+}
+
+void GLES1on3::texEnvxv(GLenum target, GLenum pname, const GLfixed *params)
+{
+    GLfloat tmpParams[4];
+
+    if (pname == GL_TEXTURE_ENV_COLOR)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            tmpParams[i] = X2F(params[i]);
+        }
+    }
+    else
+    {
+        tmpParams[0] = (GLfloat)params[0];
+    }
+
+    texEnvfv(target, pname, tmpParams);
+}
+
+void GLES1on3::texParameterx(GLenum target, GLenum pname, GLfixed param)
+{
+    mContext->texParameterf(target, pname, (GLfloat)param);
+}
+
+void GLES1on3::texParameterxv(GLenum target, GLenum pname, const GLfixed *params)
+{
+    GLfloat tmpParams[4];
+
+    if (pname == GL_TEXTURE_CROP_RECT_OES)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            tmpParams[i] = X2F(params[i]);
+        }
+    }
+    else
+    {
+        tmpParams[0] = (GLfloat)params[0];
+    }
+
+    mContext->texParameterfv(target, pname, tmpParams);
+}
+
+void GLES1on3::drawTexfv(const GLfloat *coords)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexi(GLint x, GLint y, GLint z, GLint width, GLint height)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexiv(const GLint *coords)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexs(GLshort x, GLshort y, GLshort z, GLshort width, GLshort height)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexsv(const GLshort *coords)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexx(GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLfixed height)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::drawTexxv(const GLfixed *coords)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::currentPaletteMatrix(GLuint matrixpaletteindex)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::loadPaletteFromModelViewMatrix()
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::matrixIndexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
+{
+    UNIMPLEMENTED();
+}
+
+void GLES1on3::weightPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
+{
+    UNIMPLEMENTED();
+}
+
+GLbitfield GLES1on3::queryMatrixx(GLfixed *mantissa, GLint *exponent)
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
+void GLES1on3::fogf(GLenum pname, GLfloat param)
+{
+    mGLState->fogf(pname, param);
+}
+
+void GLES1on3::fogfv(GLenum pname, const GLfloat *params)
+{
+    mGLState->fogfv(pname, params);
+}
+
+void GLES1on3::enableClientState(GLenum clientState)
+{
+    switch (clientState)
+    {
+        case GL_VERTEX_ARRAY:
+            mContext->enableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            mContext->enableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            mContext->enableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            mContext->enableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            mContext->enableVertexAttribArray(4 + mGLState->getActiveSampler());
+            break;
+        default:
+            break;
+    }
+
+    mGLState->enableClientState(clientState);
+}
+
+void GLES1on3::disableClientState(GLenum clientState)
+{
+    switch (clientState)
+    {
+        case GL_VERTEX_ARRAY:
+            mContext->disableVertexAttribArray(0);
+            break;
+        case GL_NORMAL_ARRAY:
+            mContext->disableVertexAttribArray(1);
+            break;
+        case GL_COLOR_ARRAY:
+            mContext->disableVertexAttribArray(2);
+            break;
+        case GL_POINT_SIZE_ARRAY_OES:
+            mContext->disableVertexAttribArray(3);
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            mContext->disableVertexAttribArray(4);
+            break;
+        default:
+            break;
+    }
+    mGLState->disableClientState(clientState);
+}
+
+void GLES1on3::drawTexf(float x, float y, float z, float width, float height)
+{
+    Context *gl = mContext;
+
+    // get viewport
+    GLint viewport[4] = {};
+    gl->getIntegerv(GL_VIEWPORT, viewport);
+
+    GLuint prog = drawTex.program;
+    gl->useProgram(prog);
+
+    // Compute screen coordinates for our texture.
+    // Recenter, rescale. (e.g., [0, 0, 1080, 1920] -> [-1, -1, 1, 1])
+    float xNdc = 2.0f * (float)(x - viewport[0] - viewport[2] / 2) / (float)viewport[2];
+    float yNdc = 2.0f * (float)(y - viewport[1] - viewport[3] / 2) / (float)viewport[3];
+    float wNdc = 2.0f * (float)width / (float)viewport[2];
+    float hNdc = 2.0f * (float)height / (float)viewport[3];
+    z          = z >= 1.0f ? 1.0f : z;
+    z          = z <= 0.0f ? 0.0f : z;
+    float zNdc = z * 2.0f - 1.0f;
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (mGLState->isTextureTargetEnabled(GL_TEXTURE0 + i, GL_TEXTURE_2D))
+        {
+            Texture *toDraw = mGLState->getSamplerTexture(i, GL_TEXTURE_2D);
+            if (toDraw)
+            {
+                auto cropRect = toDraw->getCrop();
+
+                float texCropU = (float)cropRect.x;
+                float texCropV = (float)cropRect.y;
+                float texCropW = (float)cropRect.width;
+                float texCropH = (float)cropRect.height;
+
+                float texW = (float)(toDraw->getWidth(GL_TEXTURE_2D, 0));
+                float texH = (float)(toDraw->getHeight(GL_TEXTURE_2D, 0));
+
+                float xyzwNdc[4]     = {xNdc, yNdc, zNdc, 1.0f};
+                float texuvwhCrop[4] = {texCropU, texCropV, texCropW, texCropH};
+                float texNdcDims[4]  = {texW, texH, wNdc, hNdc};
+
+                gl->uniform4fv(drawTex.xyzwNdcLoc, 1, xyzwNdc);
+                gl->uniform4fv(drawTex.texuvwhCropLoc, 1, texuvwhCrop);
+                gl->uniform4fv(drawTex.texNdcDimsLoc, 1, texNdcDims);
+            }
+
+            gl->activeTexture(GL_TEXTURE0 + i);
+            gl->uniform1i(drawTex.samplerLoc, i);
+            gl->drawArraysImpl(GL_TRIANGLES, 0, 6);
+        }
+    }
+
+    gl->useProgram(mDrawState.program);
+}
+
+void GLES1on3::rotatef(float angle, float x, float y, float z)
+{
+    mGLState->rotatef(angle, x, y, z);
+}
+
+void GLES1on3::rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
+{
+    rotatef(X2F(angle), X2F(x), X2F(y), X2F(z));
+}
+
+void GLES1on3::scalef(float x, float y, float z)
+{
+    mGLState->scalef(x, y, z);
+}
+
+void GLES1on3::scalex(GLfixed x, GLfixed y, GLfixed z)
+{
+    scalef(X2F(x), X2F(y), X2F(z));
+}
+
+void GLES1on3::translatef(float x, float y, float z)
+{
+    mGLState->translatef(x, y, z);
+}
+
+void GLES1on3::translatex(GLfixed x, GLfixed y, GLfixed z)
+{
+    translatef(X2F(x), X2F(y), X2F(z));
+}
+
+void GLES1on3::color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    mGLState->color4f(red, green, blue, alpha);
+}
+
+void GLES1on3::color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
+{
+    mGLState->color4f(((float)red) / 255.0f, ((float)green) / 255.0f, ((float)blue) / 255.0f,
+                      ((float)alpha) / 255.0f);
+}
+
+void GLES1on3::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
+{
+    mGLState->color4f(X2F(red), X2F(green), X2F(blue), X2F(alpha));
+}
+
+void GLES1on3::clientActiveTexture(GLenum texture)
+{
+    mContext->activeTexture(texture);
+}
+
+void GLES1on3::vertexPointer(GLint size, GLenum type, GLsizei stride, const void *ptr)
+{
+    mContext->vertexAttribPointer(kVertexAttribIndex, size, type, GL_FALSE, stride, ptr);
+}
+
+void GLES1on3::normalPointer(GLenum type, GLsizei stride, const void *ptr)
+{
+    mContext->vertexAttribPointer(kNormalAttribIndex, 3, type, GL_FALSE, stride, ptr);
+}
+
+void GLES1on3::colorPointer(GLint size, GLenum type, GLsizei stride, const void *ptr)
+{
+    mContext->vertexAttribPointer(kColorAttribIndex, size, type, GL_FALSE, stride, ptr);
+}
+
+void GLES1on3::pointSizePointer(GLenum type, GLsizei stride, const void *ptr)
+{
+    mContext->vertexAttribPointer(kPointsizeAttribIndex, 1, type, GL_FALSE, stride, ptr);
+}
+
+void GLES1on3::texCoordPointer(GLint size, GLenum type, GLsizei stride, const void *ptr)
+{
+    mContext->vertexAttribPointer(kTexcoordAttribIndexBase + mGLState->getActiveSampler(), size, type, GL_FALSE, stride,
+                                  ptr);
+}
+
 GLint GLES1on3::vertexArrayIndex(GLenum type) const
 {
     switch (type)
@@ -268,33 +1370,33 @@ GLint GLES1on3::vertexArrayIndex(GLenum type) const
         case GL_VERTEX_ARRAY_SIZE:
         case GL_VERTEX_ARRAY_TYPE:
         case GL_VERTEX_ARRAY_POINTER:
-            return 0;
+            return kVertexAttribIndex;
         case GL_NORMAL_ARRAY:
         case GL_NORMAL_ARRAY_BUFFER_BINDING:
         case GL_NORMAL_ARRAY_STRIDE:
         case GL_NORMAL_ARRAY_TYPE:
         case GL_NORMAL_ARRAY_POINTER:
-            return 1;
+            return kNormalAttribIndex;
         case GL_COLOR_ARRAY:
         case GL_COLOR_ARRAY_BUFFER_BINDING:
         case GL_COLOR_ARRAY_STRIDE:
         case GL_COLOR_ARRAY_SIZE:
         case GL_COLOR_ARRAY_TYPE:
         case GL_COLOR_ARRAY_POINTER:
-            return 2;
+            return kColorAttribIndex;
         case GL_POINT_SIZE_ARRAY_OES:
         case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
         case GL_POINT_SIZE_ARRAY_STRIDE_OES:
         case GL_POINT_SIZE_ARRAY_TYPE_OES:
         case GL_POINT_SIZE_ARRAY_POINTER_OES:
-            return 3;
+            return kPointsizeAttribIndex;
         case GL_TEXTURE_COORD_ARRAY:
         case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
         case GL_TEXTURE_COORD_ARRAY_STRIDE:
         case GL_TEXTURE_COORD_ARRAY_SIZE:
         case GL_TEXTURE_COORD_ARRAY_TYPE:
         case GL_TEXTURE_COORD_ARRAY_POINTER:
-            return 4 + mGLState->getActiveSampler();
+            return kTexcoordAttribIndexBase + mGLState->getActiveSampler();
     }
     return 0;
 }
@@ -323,19 +1425,19 @@ void GLES1on3::prepareDraw(GLenum mode)
     if (!glS->isClientStateEnabled(GL_NORMAL_ARRAY))
     {
         const auto normal = glS->getCurrentNormal();
-        gl->vertexAttrib3f(1, normal.x, normal.y, normal.z);
+        gl->vertexAttrib3f(kNormalAttribIndex, normal.x, normal.y, normal.z);
     }
 
     if (!glS->isClientStateEnabled(GL_COLOR_ARRAY))
     {
         const auto color = glS->getCurrentColor();
-        gl->vertexAttrib4f(2, color.red, color.green, color.blue, color.alpha);
+        gl->vertexAttrib4f(kColorAttribIndex, color.red, color.green, color.blue, color.alpha);
     }
 
     if (!glS->isClientStateEnabled(GL_POINT_SIZE_ARRAY_OES))
     {
         GLfloat pointSize = glS->getPointSize();
-        gl->vertexAttrib1f(3, pointSize);
+        gl->vertexAttrib1f(kPointsizeAttribIndex, pointSize);
     }
 
     for (int i = 0; i < 4; i++)
@@ -343,7 +1445,7 @@ void GLES1on3::prepareDraw(GLenum mode)
         if (!glS->isTexCoordArrayEnabled(i))
         {
             const auto texcoord = glS->getTextureCoordinate(i);
-            gl->vertexAttrib4f(4 + i, texcoord.s, texcoord.t, texcoord.r, texcoord.q);
+            gl->vertexAttrib4f(kTexcoordAttribIndexBase + i, texcoord.s, texcoord.t, texcoord.r, texcoord.q);
         }
     }
 
