@@ -214,6 +214,165 @@ void State::initialize(const Context *context,
 
     mRobustResourceInit = robustResourceInit;
     mProgramBinaryCacheEnabled = programBinaryCacheEnabled;
+
+    // GLES1.1 state initialization
+    // Values are taken from the ES 1.1 spec
+    if (clientVersion <= Version(1, 1))
+    {
+        mLineSmoothEnabled    = GL_FALSE;
+        mPointSmoothEnabled   = GL_FALSE;
+        mPointSpriteEnabled   = GL_FALSE;
+        mLogicOpEnabled       = GL_FALSE;
+        mAlphaTestEnabled     = GL_FALSE;
+        mLightingEnabled      = GL_FALSE;
+        mFogEnabled           = GL_FALSE;
+        mRescaleNormalEnabled = GL_FALSE;
+        mNormalizeEnabled     = GL_FALSE;
+        mColorMaterialEnabled = GL_FALSE;
+        mReflecitonMapEnabled = GL_FALSE;
+
+        mMaxMultitextureUnits          = caps.maxMultitextureUnits;
+        mMaxLights                     = caps.maxLights;
+        mMaxModelviewMatrixStackDepth  = caps.maxModelviewMatrixStackDepth;
+        mMaxProjectionMatrixStackDepth = caps.maxProjectionMatrixStackDepth;
+        mMaxTextureMatrixStackDepth    = caps.maxTextureMatrixStackDepth;
+        mMaxClipPlanes                 = caps.maxClipPlanes;
+
+        mShadeModel     = GL_SMOOTH;
+        mCurrMatrixMode = GL_MODELVIEW;
+        mActiveSampler  = 0;
+
+        mCurrentColor  = {1.0f, 1.0f, 1.0f, 1.0f};
+        mCurrentNormal = {0.0f, 0.0f, 1.0f};
+
+        mCurrentTextureCoords.resize(mMaxMultitextureUnits);
+        for (auto &texcoord : mCurrentTextureCoords)
+        {
+            memset(&texcoord, 0, sizeof(texcoord));
+        }
+
+        mTexUnitEnables.resize(mMaxMultitextureUnits);
+        mTexUnitEnvs.resize(mMaxMultitextureUnits);
+        for (int i = 0; i < mMaxMultitextureUnits; i++)
+        {
+            auto &env = mTexUnitEnvs[i];
+
+            env.envMode      = GL_MODULATE;
+            env.combineRgb   = GL_MODULATE;
+            env.combineAlpha = GL_MODULATE;
+
+            env.src0rgb   = GL_TEXTURE;
+            env.src0alpha = GL_TEXTURE;
+
+            env.src1rgb   = GL_PREVIOUS;
+            env.src1alpha = GL_PREVIOUS;
+
+            env.src2rgb   = GL_CONSTANT;
+            env.src2alpha = GL_CONSTANT;
+
+            env.op0rgb   = GL_SRC_COLOR;
+            env.op0alpha = GL_SRC_ALPHA;
+
+            env.op1rgb   = GL_SRC_COLOR;
+            env.op1alpha = GL_SRC_ALPHA;
+
+            env.op2rgb   = GL_SRC_ALPHA;
+            env.op2alpha = GL_SRC_ALPHA;
+
+            env.envColor   = {0.0f, 0.0f, 0.0f, 0.0f};
+            env.rgbScale   = 1.0;
+            env.alphaScale = 1.0;
+
+            env.pointSpriteCoordReplace = false;
+        }
+
+        mProjMatrices.resize(1, {});
+        mModelviewMatrices.resize(1, {});
+        mTextureMatrices.resize(mMaxMultitextureUnits);
+        for (int i = 0; i < mMaxMultitextureUnits; i++)
+        {
+            mTextureMatrices[i].resize(1, {});
+        }
+
+        mMaterial.ambient  = {0.2f, 0.2f, 0.2f, 1.0f};
+        mMaterial.diffuse  = {0.8f, 0.8f, 0.8f, 1.0f};
+        mMaterial.specular = {0.0f, 0.0f, 0.0f, 1.0f};
+        mMaterial.emissive = {0.0f, 0.0f, 0.0f, 1.0f};
+
+        mMaterial.specularExponent = 0.0f;
+
+        mLightModel.color    = {0.2f, 0.2f, 0.2f, 1.0f};
+        mLightModel.twoSided = false;
+
+        mLights.resize(mMaxLights, {});
+        for (auto &light : mLights)
+        {
+            light.enabled = false;
+
+            light.ambient   = {0.0f, 0.0f, 0.0f, 1.0f};
+            light.diffuse   = {0.0f, 0.0f, 0.0f, 1.0f};
+            light.specular  = {0.0f, 0.0f, 0.0f, 1.0f};
+            light.position  = {0.0f, 0.0f, 1.0f, 0.0f};
+            light.direction = {0.0f, 0.0f, -1.0f};
+
+            light.spotlightExponent    = 0.0f;
+            light.spotlightCutoffAngle = 180.0f;
+            light.attenuationConst     = 1.0f;
+            light.attenuationLinear    = 0.0f;
+            light.attenuationQuadratic = 0.0f;
+        }
+
+        // GL_LIGHT0 is special and has default state that avoids all-black
+        // renderings.
+        mLights[0].diffuse  = {1.0f, 1.0f, 1.0f, 1.0f};
+        mLights[0].specular = {1.0f, 1.0f, 1.0f, 1.0f};
+
+        mFog.mode    = GL_EXP;
+        mFog.density = 1.0f;
+        mFog.start   = 0.0f;
+        mFog.end     = 1.0f;
+
+        mFog.color = {0.0f, 0.0f, 0.0f, 0.0f};
+
+        mAlphaFunc    = GL_ALWAYS;
+        mAlphaTestRef = 0.0f;
+
+        mClipPlaneEnabled.resize(mMaxClipPlanes, {});
+        for (int i = 0; i < mMaxClipPlanes; i++)
+        {
+            mClipPlaneEnabled[i] = false;
+        }
+
+        mClipPlanes.resize(mMaxClipPlanes, {});
+        for (auto &plane : mClipPlanes)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                plane[i] = 0.0f;
+            }
+        }
+
+        mPointSizeMin                = 0.1f;
+        mPointSizeMax                = 100.0f;
+        mPointFadeThresholdSize      = 0.1f;
+        mPointDistanceAttenuation[0] = 1.0f;
+        mPointDistanceAttenuation[1] = 0.0f;
+        mPointDistanceAttenuation[2] = 0.0f;
+
+        mPointSize = 1.0f;
+
+        mLogicOp = GL_COPY;
+
+        mVertexArrayStride       = 0;
+        mNormalArrayStride       = 0;
+        mColorArrayStride        = 0;
+        mTextureCoordArrayStride = 0;
+
+        mLineSmoothHint            = GL_DONT_CARE;
+        mPointSmoothHint           = GL_DONT_CARE;
+        mPerspectiveCorrectionHint = GL_DONT_CARE;
+        mFogHint                   = GL_DONT_CARE;
+    }
 }
 
 void State::reset(const Context *context)

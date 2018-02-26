@@ -599,6 +599,90 @@ class State : public OnAttachmentDirtyReceiver, angle::NonCopyable
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
 
+    // GLES1 state
+    union GLVal {
+        Vec4 floatVal;
+        IVec4 intVal;
+        UBVec4 ubyteVal;
+        UIVec4 enumVal;
+    };
+
+    struct GLValTyped
+    {
+        GLenum type;
+        GLVal val;
+    };
+
+    using TexUnitEnvs = std::vector<TextureEnvironmentParameters>;
+    using TexGens     = std::vector<std::unordered_map<GLenum, GLValTyped>>;
+    using MatrixStack = std::vector<angle::Mat4>;
+
+    int mMaxMultitextureUnits;
+    int mMaxLights;
+    int mMaxModelviewMatrixStackDepth;
+    int mMaxProjectionMatrixStackDepth;
+    int mMaxTextureMatrixStackDepth;
+    int mMaxClipPlanes;
+
+    GLenum mShadeModel;
+    GLenum mCurrMatrixMode;
+
+    ColorF mCurrentColor;
+    NormalF mCurrentNormal;
+    std::vector<TextureCoordF> mCurrentTextureCoords;
+
+    std::vector<std::unordered_set<GLenum>> mTexUnitEnables;
+    TexUnitEnvs mTexUnitEnvs;
+
+    MatrixStack mProjMatrices;
+    MatrixStack mModelviewMatrices;
+    std::vector<MatrixStack> mTextureMatrices;
+    angle::Mat4 &currMatrix();
+    MatrixStack &currMatrixStack();
+
+    bool mLineSmoothEnabled;
+    bool mPointSmoothEnabled;
+    bool mPointSpriteEnabled;
+    bool mAlphaTestEnabled;
+    bool mLogicOpEnabled;
+    bool mLightingEnabled;
+    bool mFogEnabled;
+    bool mRescaleNormalEnabled;
+    bool mNormalizeEnabled;
+    bool mColorMaterialEnabled;
+    bool mReflecitonMapEnabled;
+
+    MaterialParameters mMaterial;
+    LightModelParameters mLightModel;
+    std::vector<LightParameters> mLights;
+    FogParameters mFog = {};
+
+    std::unordered_set<GLenum> mEnabledClientStates;
+
+    GLenum mAlphaFunc;
+    GLfloat mAlphaTestRef;
+    std::vector<bool> mClipPlaneEnabled;
+    std::vector<Vec4> mClipPlanes;
+
+    GLfloat mPointSizeMin;
+    GLfloat mPointSizeMax;
+    GLfloat mPointFadeThresholdSize;
+    Vec3 mPointDistanceAttenuation;
+    GLfloat mPointSize;
+
+    GLenum mLogicOp;
+
+    GLint mVertexArrayStride;
+    GLint mNormalArrayStride;
+    GLint mColorArrayStride;
+    GLint mTextureCoordArrayStride;
+
+    // GLES1-specific hints
+    GLenum mLineSmoothHint;
+    GLenum mPointSmoothHint;
+    GLenum mPerspectiveCorrectionHint;
+    GLenum mFogHint;
+
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
