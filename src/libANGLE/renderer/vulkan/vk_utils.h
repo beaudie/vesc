@@ -346,6 +346,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                     uint32_t regionCount,
                     const VkBufferCopy *regions);
 
+    void copyBuffer(const VkBuffer &srcBuffer,
+                    const VkBuffer &destBuffer,
+                    uint32_t regionCount,
+                    const VkBufferCopy *regions);
+
     void copySingleImage(const vk::Image &srcImage,
                          const vk::Image &destImage,
                          const gl::Box &copyRegion,
@@ -681,6 +686,15 @@ class LineLoopHandler final : angle::NonCopyable
     LineLoopHandler();
     ~LineLoopHandler();
 
+    void bindLineLoopIndexBuffer(VkIndexType indexType, vk::CommandBuffer **commandBuffer);
+    gl::Error createLineLoopIndexBufferFromScratch(ContextVk *contextVk,
+                                                   int firstVertex,
+                                                   int count);
+
+    gl::Error createLineLoopIndexBufferFromUsersIndexBuffer(ContextVk *contextVk,
+                                                            BufferVk *bufferVk,
+                                                            VkIndexType indexType,
+                                                            int count);
     void destroy(VkDevice device);
 
     gl::Error draw(ContextVk *contextVk, int firstVertex, int count, CommandBuffer *commandBuffer);
