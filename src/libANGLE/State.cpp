@@ -2288,9 +2288,7 @@ void State::syncProgramTextures(const Context *context)
         if (samplerBinding.unreferenced)
             continue;
 
-        GLenum textureTypeGL    = samplerBinding.textureType;
-        TextureType textureType = FromGLenum<TextureType>(textureTypeGL);
-
+        TextureType textureType = samplerBinding.textureType;
         for (GLuint textureUnitIndex : samplerBinding.boundTextureUnits)
         {
             Texture *texture = getSamplerTexture(textureUnitIndex, textureType);
