@@ -9,7 +9,9 @@
 #ifndef LIBANGLE_ANGLETYPES_H_
 #define LIBANGLE_ANGLETYPES_H_
 
+#include "common/Color.h"
 #include "common/bitset_utils.h"
+#include "common/vector_utils.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/PackedGLEnums.h"
@@ -75,12 +77,12 @@ bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *in
 
 struct Offset
 {
+    Offset() : x(0), y(0), z(0) {}
+    Offset(int x_in, int y_in, int z_in) : x(x_in), y(y_in), z(z_in) {}
+
     int x;
     int y;
     int z;
-
-    Offset() : x(0), y(0), z(0) { }
-    Offset(int x_in, int y_in, int z_in) : x(x_in), y(y_in), z(z_in) { }
 };
 
 bool operator==(const Offset &a, const Offset &b);
@@ -88,17 +90,17 @@ bool operator!=(const Offset &a, const Offset &b);
 
 struct Extents
 {
-    int width;
-    int height;
-    int depth;
-
-    Extents() : width(0), height(0), depth(0) { }
-    Extents(int width_, int height_, int depth_) : width(width_), height(height_), depth(depth_) { }
+    Extents() : width(0), height(0), depth(0) {}
+    Extents(int width_, int height_, int depth_) : width(width_), height(height_), depth(depth_) {}
 
     Extents(const Extents &other) = default;
     Extents &operator=(const Extents &other) = default;
 
     bool empty() const { return (width * height * depth) == 0; }
+
+    int width;
+    int height;
+    int depth;
 };
 
 bool operator==(const Extents &lhs, const Extents &rhs);
@@ -106,18 +108,29 @@ bool operator!=(const Extents &lhs, const Extents &rhs);
 
 struct Box
 {
+    Box() : x(0), y(0), z(0), width(0), height(0), depth(0) {}
+    Box(int x_in, int y_in, int z_in, int width_in, int height_in, int depth_in)
+        : x(x_in), y(y_in), z(z_in), width(width_in), height(height_in), depth(depth_in)
+    {
+    }
+    Box(const Offset &offset, const Extents &size)
+        : x(offset.x),
+          y(offset.y),
+          z(offset.z),
+          width(size.width),
+          height(size.height),
+          depth(size.depth)
+    {
+    }
+    bool operator==(const Box &other) const;
+    bool operator!=(const Box &other) const;
+
     int x;
     int y;
     int z;
     int width;
     int height;
     int depth;
-
-    Box() : x(0), y(0), z(0), width(0), height(0), depth(0) { }
-    Box(int x_in, int y_in, int z_in, int width_in, int height_in, int depth_in) : x(x_in), y(y_in), z(z_in), width(width_in), height(height_in), depth(depth_in) { }
-    Box(const Offset &offset, const Extents &size) : x(offset.x), y(offset.y), z(offset.z), width(size.width), height(size.height), depth(size.depth) { }
-    bool operator==(const Box &other) const;
-    bool operator!=(const Box &other) const;
 };
 
 struct RasterizerState final
@@ -327,6 +340,102 @@ using DrawBuffersArray = std::array<T, IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 template <typename T>
 using AttribArray = std::array<T, MAX_VERTEX_ATTRIBS>;
 
+// GLES1 emulation: State specific to GLES1 contexts
+
+struct NormalF
+{
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+};
+
+struct TextureCoordF
+{
+    GLfloat s = 0.0f;
+    GLfloat t = 0.0f;
+    GLfloat r = 0.0f;
+    GLfloat q = 0.0f;
+};
+
+struct MaterialParameters
+{
+    ColorF ambient;
+    ColorF diffuse;
+    ColorF specular;
+    ColorF emissive;
+    GLfloat specularExponent;
+};
+
+struct LightModelParameters
+{
+    ColorF color;
+    bool twoSided;
+};
+
+struct LightParameters
+{
+    bool enabled                 = false;
+    ColorF ambient               = {0.0f, 0.0f, 0.0f, 1.0f};
+    ColorF diffuse               = {0.0f, 0.0f, 0.0f, 1.0f};
+    ColorF specular              = {0.0f, 0.0f, 0.0f, 1.0f};
+    angle::Vector4 position      = {0.0f, 0.0f, 1.0f, 0.0f};
+    angle::Vector3 direction     = {0.0f, 0.0f, -1.0f};
+    GLfloat spotlightExponent    = 0.0f;
+    GLfloat spotlightCutoffAngle = 180.0f;
+    GLfloat attenuationConst     = 1.0f;
+    GLfloat attenuationLinear    = 0.0f;
+    GLfloat attenuationQuadratic = 0.0f;
+};
+
+struct FogParameters
+{
+    FogMode mode;
+    GLfloat density;
+    GLfloat start;
+    GLfloat end;
+    ColorF color;
+};
+
+struct TextureEnvironmentParameters
+{
+    TextureEnvMode envMode      = TextureEnvMode::Modulate;
+    TextureCombine combineRgb   = TextureCombine::Modulate;
+    TextureCombine combineAlpha = TextureCombine::Modulate;
+
+    TextureSrc src0rgb   = TextureSrc::Texture;
+    TextureSrc src0alpha = TextureSrc::Texture;
+
+    TextureSrc src1rgb   = TextureSrc::Previous;
+    TextureSrc src1alpha = TextureSrc::Previous;
+
+    TextureSrc src2rgb   = TextureSrc::Constant;
+    TextureSrc src2alpha = TextureSrc::Constant;
+
+    TextureOp op0rgb   = TextureOp::SrcColor;
+    TextureOp op0alpha = TextureOp::SrcAlpha;
+
+    TextureOp op1rgb   = TextureOp::SrcColor;
+    TextureOp op1alpha = TextureOp::SrcAlpha;
+
+    TextureOp op2rgb   = TextureOp::SrcAlpha;
+    TextureOp op2alpha = TextureOp::SrcAlpha;
+
+    ColorF envColor    = {0.0f, 0.0f, 0.0f, 0.0f};
+    GLfloat rgbScale   = 1.0f;
+    GLfloat alphaScale = 1.0f;
+
+    bool pointSpriteCoordReplace = false;
+};
+
+struct PointParameters
+{
+    GLfloat pointSizeMin;
+    GLfloat pointSizeMax;
+    GLfloat pointFadeThresholdSize;
+    angle::Vector3 pointDistanceAttenuation;
+    GLfloat pointSize;
+};
+
 }  // namespace gl
 
 namespace rx
@@ -336,12 +445,14 @@ namespace rx
 #if __has_feature(cxx_rtti)
 #define ANGLE_HAS_DYNAMIC_CAST 1
 #endif
-#elif !defined(NDEBUG) && (!defined(_MSC_VER) || defined(_CPPRTTI)) && (!defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) || defined(__GXX_RTTI))
+#elif !defined(NDEBUG) && (!defined(_MSC_VER) || defined(_CPPRTTI)) &&              \
+    (!defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) || \
+     defined(__GXX_RTTI))
 #define ANGLE_HAS_DYNAMIC_CAST 1
 #endif
 
 #ifdef ANGLE_HAS_DYNAMIC_CAST
-#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type >(obj) != nullptr)
+#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type>(obj) != nullptr)
 #undef ANGLE_HAS_DYNAMIC_CAST
 #else
 #define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (obj != nullptr)
@@ -351,15 +462,15 @@ namespace rx
 template <typename DestT, typename SrcT>
 inline DestT *GetAs(SrcT *src)
 {
-    ASSERT(ANGLE_HAS_DYNAMIC_TYPE(DestT*, src));
-    return static_cast<DestT*>(src);
+    ASSERT(ANGLE_HAS_DYNAMIC_TYPE(DestT *, src));
+    return static_cast<DestT *>(src);
 }
 
 template <typename DestT, typename SrcT>
 inline const DestT *GetAs(const SrcT *src)
 {
-    ASSERT(ANGLE_HAS_DYNAMIC_TYPE(const DestT*, src));
-    return static_cast<const DestT*>(src);
+    ASSERT(ANGLE_HAS_DYNAMIC_TYPE(const DestT *, src));
+    return static_cast<const DestT *>(src);
 }
 
 #undef ANGLE_HAS_DYNAMIC_TYPE
@@ -501,4 +612,4 @@ class ContextState;
 
 }  // namespace gl
 
-#endif // LIBANGLE_ANGLETYPES_H_
+#endif  // LIBANGLE_ANGLETYPES_H_
