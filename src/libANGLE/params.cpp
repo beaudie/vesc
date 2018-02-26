@@ -20,6 +20,7 @@ namespace gl
 constexpr ParamTypeInfo ParamsBase::TypeInfo;
 constexpr ParamTypeInfo HasIndexRange::TypeInfo;
 
+// HasIndexRange implementation.
 HasIndexRange::HasIndexRange()
     : ParamsBase(nullptr), mContext(nullptr), mCount(0), mType(GL_NONE), mIndices(nullptr)
 {
@@ -63,6 +64,60 @@ const Optional<IndexRange> &HasIndexRange::getIndexRange() const
     }
 
     return mIndexRange;
+}
+
+// DrawCallParams implementation.
+DrawCallParams::DrawCallParams(GLint firstVertex, GLsizei vertexCount, GLsizei instances)
+    : mHasIndexRange(nullptr),
+      mFirstVertex(firstVertex),
+      mVertexCount(vertexCount),
+      mInstances(instances),
+      mBaseVertex(0)
+{
+}
+
+// Use when in a drawElements call.
+DrawCallParams::DrawCallParams(const HasIndexRange &hasIndexRange,
+                               GLint baseVertex,
+                               GLsizei instances)
+    : mHasIndexRange(&hasIndexRange),
+      mFirstVertex(baseVertex),
+      mVertexCount(0),
+      mInstances(instances),
+      mBaseVertex(baseVertex)
+{
+}
+
+GLint DrawCallParams::firstVertex() const
+{
+    return mFirstVertex;
+}
+
+GLsizei DrawCallParams::vertexCount() const
+{
+    ASSERT(!mHasIndexRange);
+    return mVertexCount;
+}
+
+GLsizei DrawCallParams::instances() const
+{
+    return mInstances;
+}
+
+void DrawCallParams::ensureIndexRangeResolved() const
+{
+    if (!mHasIndexRange)
+    {
+        return;
+    }
+
+    ASSERT(mFirstVertex == 0 || mFirstVertex == mBaseVertex);
+
+    // Resolve the index range now if we need to.
+    const auto &indexRange = mHasIndexRange->getIndexRange().value();
+    mFirstVertex           = mBaseVertex + static_cast<GLint>(indexRange.start);
+    mVertexCount           = static_cast<GLsizei>(indexRange.vertexCount());
+    mHasIndexRange         = nullptr;
 }
 
 }  // namespace gl
