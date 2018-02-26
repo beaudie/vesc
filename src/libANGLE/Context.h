@@ -340,9 +340,8 @@ class Context final : public ValidationContext
                         GLchar *label) const;
     void getObjectPtrLabel(const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label) const;
 
-    Texture *getTargetTexture(GLenum target) const;
     Texture *getTargetTexture(TextureType type) const;
-    Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
+    Texture *getSamplerTexture(unsigned int sampler, TextureType type) const;
 
     Compiler *getCompiler() const;
 

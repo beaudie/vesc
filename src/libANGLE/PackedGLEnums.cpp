@@ -8,55 +8,131 @@
 
 #include "libANGLE/PackedGLEnums.h"
 
+#include "common/utilities.h"
+
 namespace gl
 {
 
-    TextureType TextureTargetToType(TextureTarget target)
+TextureType TextureTargetToType(TextureTarget target)
+{
+    switch (target)
     {
-        switch (target) {
-            case TextureTarget::CubeMapNegativeX:
-            case TextureTarget::CubeMapNegativeY:
-            case TextureTarget::CubeMapNegativeZ:
-            case TextureTarget::CubeMapPositiveX:
-            case TextureTarget::CubeMapPositiveY:
-            case TextureTarget::CubeMapPositiveZ:
-                return TextureType::CubeMap;
-            case TextureTarget::External:
-                return TextureType::External;
-            case TextureTarget::Rectangle:
-                return TextureType::Rectangle;
-            case TextureTarget::_2D:
-                return TextureType::_2D;
-            case TextureTarget::_2DArray:
-                return TextureType::_2DArray;
-            case TextureTarget::_2DMultisample:
-                return TextureType::_2DMultisample;
-            case TextureTarget::_3D:
-                return TextureType::_3D;
-            default:
-                UNREACHABLE();
-                return TextureType::InvalidEnum;
-        }
+        case TextureTarget::CubeMapNegativeX:
+        case TextureTarget::CubeMapNegativeY:
+        case TextureTarget::CubeMapNegativeZ:
+        case TextureTarget::CubeMapPositiveX:
+        case TextureTarget::CubeMapPositiveY:
+        case TextureTarget::CubeMapPositiveZ:
+            return TextureType::CubeMap;
+        case TextureTarget::External:
+            return TextureType::External;
+        case TextureTarget::Rectangle:
+            return TextureType::Rectangle;
+        case TextureTarget::_2D:
+            return TextureType::_2D;
+        case TextureTarget::_2DArray:
+            return TextureType::_2DArray;
+        case TextureTarget::_2DMultisample:
+            return TextureType::_2DMultisample;
+        case TextureTarget::_3D:
+            return TextureType::_3D;
+        default:
+            UNREACHABLE();
+            return TextureType::InvalidEnum;
+    }
+}
+
+TextureTarget NonCubeTextureTypeToTarget(TextureType type)
+{
+    switch (type)
+    {
+        case TextureType::External:
+            return TextureTarget::External;
+        case TextureType::Rectangle:
+            return TextureTarget::Rectangle;
+        case TextureType::_2D:
+            return TextureTarget::_2D;
+        case TextureType::_2DArray:
+            return TextureTarget::_2DArray;
+        case TextureType::_2DMultisample:
+            return TextureTarget::_2DMultisample;
+        case TextureType::_3D:
+            return TextureTarget::_3D;
+        default:
+            UNREACHABLE();
+            return TextureTarget::InvalidEnum;
+    }
+}
+
+TextureTarget CubeFaceIndexToTextureTarget(int face)
+{
+    ASSERT(face >= 0 && face < 6);
+    switch (face)
+    {
+        case 0:
+            return TextureTarget::CubeMapNegativeX;
+        case 1:
+            return TextureTarget::CubeMapPositiveX;
+        case 2:
+            return TextureTarget::CubeMapNegativeY;
+        case 3:
+            return TextureTarget::CubeMapPositiveY;
+        case 4:
+            return TextureTarget::CubeMapNegativeZ;
+        case 5:
+            return TextureTarget::CubeMapPositiveZ;
     }
 
-    TextureTarget NonCubeTextureTypeToTarget(TextureType type) {
-        switch (type) {
-            case TextureType::External:
-                return TextureTarget::External;
-            case TextureType::Rectangle:
-                return TextureTarget::Rectangle;
-            case TextureType::_2D:
-                return TextureTarget::_2D;
-            case TextureType::_2DArray:
-                return TextureTarget::_2DArray;
-            case TextureType::_2DMultisample:
-                return TextureTarget::_2DMultisample;
-            case TextureType::_3D:
-                return TextureTarget::_3D;
-            default:
-                UNREACHABLE();
-                return TextureTarget::InvalidEnum;
-        }
-    }
+    return TextureTarget::InvalidEnum;
+}
+}
 
+namespace egl_gl
+{
+
+gl::TextureTarget EGLCubeMapTargetToCubeMapTarget(EGLenum eglTarget)
+{
+    ASSERT(egl::IsCubeMapTextureTarget(eglTarget));
+    return gl::CubeFaceIndexToTextureTarget(egl::CubeMapTextureTargetToLayerIndex(eglTarget));
+}
+
+gl::TextureTarget EGLImageTargetToTextureTarget(EGLenum eglTarget)
+{
+    switch (eglTarget)
+    {
+        case EGL_GL_TEXTURE_2D_KHR:
+            return gl::TextureTarget::_2D;
+
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR:
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y_KHR:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_KHR:
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z_KHR:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR:
+            return EGLCubeMapTargetToCubeMapTarget(eglTarget);
+
+        case EGL_GL_TEXTURE_3D_KHR:
+            return gl::TextureTarget::_3D;
+
+        default:
+            UNREACHABLE();
+            return gl::TextureTarget::InvalidEnum;
+    }
+}
+
+gl::TextureType EGLTextureTargetToTextureType(EGLenum eglTarget)
+{
+    switch (eglTarget)
+    {
+        case EGL_TEXTURE_2D:
+            return gl::TextureType::_2D;
+
+        case EGL_TEXTURE_RECTANGLE_ANGLE:
+            return gl::TextureType::Rectangle;
+
+        default:
+            UNREACHABLE();
+            return gl::TextureType::InvalidEnum;
+    }
+}
 }

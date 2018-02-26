@@ -932,7 +932,7 @@ ANGLE_EXPORT void GL_APIENTRY GetTexParameterfvRobustANGLE(GLenum target,
             return;
         }
 
-        Texture *texture = context->getTargetTexture(target);
+        Texture *texture = context->getTargetTexture(targetPacked);
         QueryTexParameterfv(texture, pname, params);
         SetRobustLengthParam(length, numParams);
     }
@@ -960,7 +960,7 @@ ANGLE_EXPORT void GL_APIENTRY GetTexParameterivRobustANGLE(GLenum target,
             return;
         }
 
-        Texture *texture = context->getTargetTexture(target);
+        Texture *texture = context->getTargetTexture(targetPacked);
         QueryTexParameteriv(texture, pname, params);
         SetRobustLengthParam(length, numParams);
     }
@@ -1191,7 +1191,7 @@ ANGLE_EXPORT void GL_APIENTRY TexParameterfvRobustANGLE(GLenum target,
             return;
         }
 
-        Texture *texture = context->getTargetTexture(target);
+        Texture *texture = context->getTargetTexture(targetPacked);
         SetTexParameterfv(context, texture, pname, params);
     }
 }
@@ -1215,7 +1215,7 @@ ANGLE_EXPORT void GL_APIENTRY TexParameterivRobustANGLE(GLenum target,
             return;
         }
 
-        Texture *texture = context->getTargetTexture(target);
+        Texture *texture = context->getTargetTexture(targetPacked);
         SetTexParameteriv(context, texture, pname, params);
     }
 }

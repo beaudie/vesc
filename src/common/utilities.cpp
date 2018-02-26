@@ -996,52 +996,6 @@ const char *GetGenericErrorMessage(EGLint error)
 
 namespace egl_gl
 {
-GLenum EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget)
-{
-    ASSERT(egl::IsCubeMapTextureTarget(eglTarget));
-    return gl::LayerIndexToCubeMapTextureTarget(egl::CubeMapTextureTargetToLayerIndex(eglTarget));
-}
-
-GLenum EGLImageTargetToGLTextureTarget(EGLenum eglTarget)
-{
-    switch (eglTarget)
-    {
-        case EGL_GL_TEXTURE_2D_KHR:
-            return GL_TEXTURE_2D;
-
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y_KHR:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_KHR:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z_KHR:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR:
-            return EGLCubeMapTargetToGLCubeMapTarget(eglTarget);
-
-        case EGL_GL_TEXTURE_3D_KHR:
-            return GL_TEXTURE_3D;
-
-        default:
-            UNREACHABLE();
-            return GL_NONE;
-    }
-}
-
-GLenum EGLTextureTargetToGLTextureTarget(EGLenum eglTarget)
-{
-    switch (eglTarget)
-    {
-        case EGL_TEXTURE_2D:
-            return GL_TEXTURE_2D;
-
-        case EGL_TEXTURE_RECTANGLE_ANGLE:
-            return GL_TEXTURE_RECTANGLE_ANGLE;
-
-        default:
-            UNREACHABLE();
-            return GL_NONE;
-    }
-}
-
 GLuint EGLClientBufferToGLObjectHandle(EGLClientBuffer buffer)
 {
     return static_cast<GLuint>(reinterpret_cast<uintptr_t>(buffer));
