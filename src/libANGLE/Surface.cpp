@@ -156,7 +156,7 @@ void Surface::postSwap(const gl::Context *context)
     if (mRobustResourceInitialization && mSwapBehavior != EGL_BUFFER_PRESERVED)
     {
         mInitState = gl::InitState::MayNeedInit;
-        mDirtyChannel.signal(context, angle::MessageID::ATTACHMENT_CHANGE);
+        getDirtyChannel()->signal(context, angle::MessageID::ATTACHMENT_CHANGE);
     }
 }
 

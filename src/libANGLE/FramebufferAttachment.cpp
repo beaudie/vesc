@@ -360,7 +360,7 @@ Error FramebufferAttachmentObject::getAttachmentRenderTarget(
 
 angle::BroadcastChannel *FramebufferAttachmentObject::getDirtyChannel()
 {
-    return &mDirtyChannel;
+    return getAttachmentImpl()->getDirtyChannel();
 }
 
 Error FramebufferAttachmentObject::initializeContents(const Context *context,
