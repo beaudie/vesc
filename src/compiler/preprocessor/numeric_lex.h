@@ -48,12 +48,9 @@ bool numeric_lex_int(const std::string &str, IntType *value)
 template <typename FloatType>
 bool numeric_lex_float(const std::string &str, FloatType *value)
 {
-// On 64-bit Intel Android, istringstream is broken.  Until this is fixed in
-// a newer NDK, don't use it.  Android doesn't have locale support, so this
-// doesn't have to force the C locale.
-// TODO(thakis): Remove this once this bug has been fixed in the NDK and
-// that NDK has been rolled into chromium.
-#if defined(ANGLE_PLATFORM_ANDROID) && __x86_64__
+// Some platforms have issues with the usage of std::locale and std::stringstream and cause crashes.
+// Usage of strtod appears to be safe.
+#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_LINUX)
     *value = strtod(str.c_str(), nullptr);
     return errno != ERANGE;
 #else
