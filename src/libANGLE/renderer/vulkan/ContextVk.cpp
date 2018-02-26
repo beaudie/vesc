@@ -268,7 +268,9 @@ gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint f
 
     if (mode == GL_LINE_LOOP)
     {
-        ANGLE_TRY(mLineLoopHandler.draw(this, first, count, commandBuffer));
+        ANGLE_TRY(mLineLoopHandler.createIndexBuffer(this, first, count));
+        mLineLoopHandler.bindLineLoopIndexBuffer(VK_INDEX_TYPE_UINT32, &commandBuffer);
+        ANGLE_TRY(mLineLoopHandler.draw(count, commandBuffer));
     }
     else
     {
@@ -294,6 +296,18 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
+    const gl::Buffer *elementArrayBuffer =
+        mState.getState().getVertexArray()->getElementArrayBuffer().get();
+    ASSERT(elementArrayBuffer);
+
+    BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+
+    if (mode == GL_LINE_LOOP)
+    {
+        ANGLE_TRY(mLineLoopHandler.createIndexBufferFromUsersIndexBuffer(
+            this, elementArrayBufferVk, GetVkIndexType(type), count));
+    }
+
     vk::CommandBuffer *commandBuffer;
     // TODO(fjhenigman): calculate the index range and pass to setupDraw()
     ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, 0, 0, &commandBuffer));
@@ -312,14 +326,17 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
         return gl::InternalError() << "Unsigned byte translation is not yet implemented.";
     }
 
-    const gl::Buffer *elementArrayBuffer =
-        mState.getState().getVertexArray()->getElementArrayBuffer().get();
-    ASSERT(elementArrayBuffer);
-
-    BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
-
-    commandBuffer->bindIndexBuffer(elementArrayBufferVk->getVkBuffer(), 0, GetVkIndexType(type));
-    commandBuffer->drawIndexed(count, 1, 0, 0, 0);
+    if (mode == GL_LINE_LOOP)
+    {
+        mLineLoopHandler.bindLineLoopIndexBuffer(GetVkIndexType(type), &commandBuffer);
+        commandBuffer->drawIndexed(count + 1, 1, 0, 0, 0);
+    }
+    else
+    {
+        commandBuffer->bindIndexBuffer(elementArrayBufferVk->getVkBuffer(), 0,
+                                       GetVkIndexType(type));
+        commandBuffer->drawIndexed(count, 1, 0, 0, 0);
+    }
 
     return gl::NoError();
 }
