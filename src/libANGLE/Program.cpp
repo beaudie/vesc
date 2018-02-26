@@ -3361,7 +3361,8 @@ bool Program::samplesFromTexture(const gl::State &state, GLuint textureID) const
 
     for (const auto &binding : mState.mSamplerBindings)
     {
-        GLenum textureType = binding.textureType;
+        GLenum textureTypeGL    = binding.textureType;
+        TextureType textureType = FromGLenum<TextureType>(textureTypeGL);
         for (const auto &unit : binding.boundTextureUnits)
         {
             GLenum programTextureID = state.getSamplerTextureId(unit, textureType);

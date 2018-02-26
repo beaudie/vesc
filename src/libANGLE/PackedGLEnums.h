@@ -15,6 +15,8 @@
 #include <bitset>
 #include <cstddef>
 
+#include <EGL/egl.h>
+
 #include "common/bitset_utils.h"
 
 namespace angle
@@ -137,6 +139,15 @@ namespace gl
 TextureType TextureTargetToType(TextureTarget target);
 TextureTarget NonCubeTextureTypeToTarget(TextureType type);
 
+TextureTarget CubeFaceIndexToTextureTarget(size_t face);
+
 }  // namespace gl
+
+namespace egl_gl
+{
+gl::TextureTarget EGLCubeMapTargetToCubeMapTarget(EGLenum eglTarget);
+gl::TextureTarget EGLImageTargetToTextureTarget(EGLenum eglTarget);
+gl::TextureType EGLTextureTargetToTextureType(EGLenum eglTarget);
+}  // namespace egl_gl
 
 #endif  // LIBANGLE_PACKEDGLENUMS_H_
