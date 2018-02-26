@@ -57,7 +57,7 @@ gl::Error MarkAttachmentsDirty(const gl::Context *context,
 void UpdateCachedRenderTarget(const gl::Context *context,
                               const gl::FramebufferAttachment *attachment,
                               RenderTarget11 *&cachedRenderTarget,
-                              OnRenderTargetDirtyBinding *channelBinding)
+                              angle::ChannelBinding *channelBinding)
 {
     RenderTarget11 *newRenderTarget = nullptr;
     if (attachment)
@@ -71,7 +71,7 @@ void UpdateCachedRenderTarget(const gl::Context *context,
     }
     if (newRenderTarget != cachedRenderTarget)
     {
-        OnRenderTargetDirtyChannel *channel =
+        angle::BroadcastChannel *channel =
             (newRenderTarget ? newRenderTarget->getBroadcastChannel() : nullptr);
         channelBinding->bind(channel);
         cachedRenderTarget = newRenderTarget;
@@ -451,7 +451,9 @@ void Framebuffer11::syncState(const gl::Context *context,
     }
 }
 
-void Framebuffer11::signal(size_t channelID, const gl::Context *context)
+void Framebuffer11::signal(const gl::Context *context,
+                           angle::ChannelID channelID,
+                           angle::MessageID message)
 {
     if (channelID == gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS)
     {

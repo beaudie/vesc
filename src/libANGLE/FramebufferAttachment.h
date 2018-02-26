@@ -49,10 +49,6 @@ enum class InitState
     Initialized,
 };
 
-using OnAttachmentDirtyBinding  = angle::ChannelBinding<size_t, InitState>;
-using OnAttachmentDirtyChannel  = angle::BroadcastChannel<size_t, InitState>;
-using OnAttachmentDirtyReceiver = angle::SignalReceiver<size_t, InitState>;
-
 // FramebufferAttachment implements a GL framebuffer attachment.
 // Attachments are "light" containers, which store pointers to ref-counted GL objects.
 // We support GL texture (2D/3D/Cube/2D array) and renderbuffer object attachments.
@@ -210,12 +206,12 @@ class FramebufferAttachmentObject
 
     Error initializeContents(const Context *context, const ImageIndex &imageIndex);
 
-    OnAttachmentDirtyChannel *getDirtyChannel();
+    angle::BroadcastChannel *getDirtyChannel();
 
   protected:
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
 
-    OnAttachmentDirtyChannel mDirtyChannel;
+    angle::BroadcastChannel mDirtyChannel;
 };
 
 inline Extents FramebufferAttachment::getSize() const
