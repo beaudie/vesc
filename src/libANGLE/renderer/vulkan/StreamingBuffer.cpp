@@ -32,11 +32,15 @@ StreamingBuffer::~StreamingBuffer()
 }
 
 gl::Error StreamingBuffer::allocate(ContextVk *context,
+                                    VkMemoryPropertyFlags memoryPropertyFlags,
                                     size_t sizeInBytes,
                                     uint8_t **ptrOut,
                                     VkBuffer *handleOut,
                                     VkDeviceSize *offsetOut)
 {
+    // Users should not pass in HOST_COHERENT_BIT for performance purposes.
+    ASSERT(memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT == 0);
+
     RendererVk *renderer = context->getRenderer();
 
     // TODO(fjhenigman): Update this when we have buffers that need to
@@ -68,8 +72,11 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
         ANGLE_TRY(mBuffer.init(device, createInfo));
-        ANGLE_TRY(vk::AllocateBufferMemory(renderer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &mBuffer,
-                                           &mMemory, &mSize));
+
+        // Remove the host coherent bit if it was passed, we know we can deal without it with this
+        // streaming buffer implementation.
+        ANGLE_TRY(
+            vk::AllocateBufferMemory(renderer, memoryPropertyFlags, &mBuffer, &mMemory, &mSize));
         ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mMappedMemory));
         mNextWriteOffset = 0;
         mLastFlushOffset = 0;
