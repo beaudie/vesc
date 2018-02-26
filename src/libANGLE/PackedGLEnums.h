@@ -141,6 +141,8 @@ TextureTarget NonCubeTextureTypeToTarget(TextureType type);
 
 TextureTarget CubeFaceIndexToTextureTarget(size_t face);
 
+TextureType SamplerTypeToTextureType(GLenum samplerType);
+
 }  // namespace gl
 
 namespace egl_gl
