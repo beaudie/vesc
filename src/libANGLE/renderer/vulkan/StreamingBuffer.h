@@ -22,6 +22,7 @@ class StreamingBuffer : public ResourceVk
     StreamingBuffer(VkBufferUsageFlags usage, size_t minSize);
     ~StreamingBuffer();
     gl::Error allocate(ContextVk *context,
+                       VkMemoryPropertyFlags memoryPropertyFlags,
                        size_t amount,
                        uint8_t **ptrOut,
                        VkBuffer *handleOut,

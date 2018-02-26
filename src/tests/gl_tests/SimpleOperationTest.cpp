@@ -438,6 +438,113 @@ TEST_P(SimpleOperationTest, DrawLineStrip)
     }
 }
 
+// Simple line loop test.
+TEST_P(SimpleOperationTest, DrawLineLoop)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    // We expect to draw a square with these 4 vertices.
+    auto vertices = std::vector<Vector3>{
+        {-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}};
+
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+    int i = 0;
+    while (i++ < 1000)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_LINE_LOOP, 0, static_cast<GLsizei>(vertices.size()));
+        glDrawArrays(GL_LINE_LOOP, 1, static_cast<GLsizei>(vertices.size() - 1));
+        swapBuffers();
+    }
+    glDisableVertexAttribArray(positionLocation);
+
+    ASSERT_GL_NO_ERROR();
+
+    int quarterWidth  = getWindowWidth() / 4;
+    int quarterHeight = getWindowHeight() / 4;
+
+    // Bottom left
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, quarterHeight, GLColor::green);
+
+    // Top left
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+    // Top right
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+    // bottom right
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, quarterHeight, GLColor::green);
+
+    // Verify line is closed between the 2 last vertices
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 2) - 1, quarterHeight - 1, GLColor::green);
+}
+
+// Simple indexed line loop test.
+TEST_P(SimpleOperationTest, DrawIndexedLineLoop)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    // We expect to draw a square with these 4 vertices.
+    auto vertices = std::vector<Vector3>{
+        {-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}};
+
+    auto indices = std::vector<GLushort>{0, 1, 2, 3};
+
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+    int i = 0;
+    while (i++ < 1000)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, nullptr);
+        swapBuffers();
+    }
+    glDisableVertexAttribArray(positionLocation);
+
+    ASSERT_GL_NO_ERROR();
+
+    int quarterWidth  = getWindowWidth() / 4;
+    int quarterHeight = getWindowHeight() / 4;
+
+    // Bottom left
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, quarterHeight, GLColor::green);
+
+    // Top left
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+    // Top right
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+    // bottom right
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, quarterHeight, GLColor::green);
+
+    // Verify line is closed between the 2 last vertices
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 2) - 1, quarterHeight - 1, GLColor::green);
+}
+
 // Simple triangle fans test.
 TEST_P(SimpleOperationTest, DrawTriangleFan)
 {
