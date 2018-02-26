@@ -38,7 +38,6 @@ bool IsSamplerType(GLenum type);
 bool IsImageType(GLenum type);
 bool IsAtomicCounterType(GLenum type);
 bool IsOpaqueType(GLenum type);
-GLenum SamplerTypeToTextureType(GLenum samplerType);
 bool IsMatrixType(GLenum type);
 GLenum TransposeMatrixType(GLenum type);
 int VariableRegisterCount(GLenum type);

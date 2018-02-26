@@ -85,6 +85,51 @@ TextureTarget CubeFaceIndexToTextureTarget(int face)
 
     return TextureTarget::InvalidEnum;
 }
+
+TextureType SamplerTypeToTextureType(GLenum samplerType)
+{
+    switch (samplerType)
+    {
+      case GL_SAMPLER_2D:
+      case GL_INT_SAMPLER_2D:
+      case GL_UNSIGNED_INT_SAMPLER_2D:
+      case GL_SAMPLER_2D_SHADOW:
+        return TextureType::_2D;
+
+      case GL_SAMPLER_EXTERNAL_OES:
+          return TextureType::External;
+
+      case GL_SAMPLER_CUBE:
+      case GL_INT_SAMPLER_CUBE:
+      case GL_UNSIGNED_INT_SAMPLER_CUBE:
+      case GL_SAMPLER_CUBE_SHADOW:
+        return TextureType::CubeMap;
+
+      case GL_SAMPLER_2D_ARRAY:
+      case GL_INT_SAMPLER_2D_ARRAY:
+      case GL_UNSIGNED_INT_SAMPLER_2D_ARRAY:
+      case GL_SAMPLER_2D_ARRAY_SHADOW:
+        return TextureType::_2DArray;
+
+      case GL_SAMPLER_3D:
+      case GL_INT_SAMPLER_3D:
+      case GL_UNSIGNED_INT_SAMPLER_3D:
+        return TextureType::_3D;
+
+      case GL_SAMPLER_2D_MULTISAMPLE:
+      case GL_INT_SAMPLER_2D_MULTISAMPLE:
+      case GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE:
+          return TextureType::_2DMultisample;
+
+      case GL_SAMPLER_2D_RECT_ANGLE:
+          return TextureType::Rectangle;
+
+      default:
+        UNREACHABLE();
+        return TextureType::InvalidEnum;
+    }
+}
+
 }
 
 namespace egl_gl
