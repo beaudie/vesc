@@ -78,7 +78,7 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
             const size_t lastByte =
                 lastVertex * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
             uint8_t *dst = nullptr;
-            ANGLE_TRY(stream->allocate(context, lastByte, &dst,
+            ANGLE_TRY(stream->allocate(context, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lastByte, &dst,
                                        &mCurrentArrayBufferHandles[attribIndex],
                                        &mCurrentArrayBufferOffsets[attribIndex]));
             memcpy(dst + firstByte, static_cast<const uint8_t *>(attrib.pointer) + firstByte,
@@ -163,10 +163,12 @@ const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets
     return mCurrentArrayBufferOffsets;
 }
 
-void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
-                                           const gl::AttributesMask &activeAttribsMask,
-                                           Serial serial,
-                                           DrawType drawType)
+void VertexArrayVk::updateDrawDependencies(
+    vk::CommandGraphNode *readNode,
+    const gl::AttributesMask &activeAttribsMask,
+    const Optional<ResourceVk *> &overrideElementArrayBufferReadResource,
+    Serial serial,
+    DrawType drawType)
 {
     // Handle the bound array buffers.
     for (auto attribIndex : activeAttribsMask)
@@ -178,8 +180,15 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
     // Handle the bound element array buffer.
     if (drawType == DrawType::Elements)
     {
-        ASSERT(mCurrentElementArrayBufferResource);
-        mCurrentElementArrayBufferResource->onReadResource(readNode, serial);
+        if (overrideElementArrayBufferReadResource.valid())
+        {
+            overrideElementArrayBufferReadResource.value()->onReadResource(readNode, serial);
+        }
+        else
+        {
+            ASSERT(mCurrentElementArrayBufferResource);
+            mCurrentElementArrayBufferResource->onReadResource(readNode, serial);
+        }
     }
 }
 
