@@ -11,11 +11,15 @@
 
 #include <bitset>
 #include <memory>
+#include <unordered_set>
 
 #include "common/Color.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
+#include "common/matrix_utils.h"
+#include "common/vector_utils.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/GLES1State.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/RefCountObject.h"
@@ -600,6 +604,9 @@ class State : public angle::ObserverInterface, angle::NonCopyable
 
     // GL_ANGLE_program_cache_control
     bool mProgramBinaryCacheEnabled;
+
+    // GLES1 state
+    GLES1State mGles1State;
 
     DirtyBits mDirtyBits;
     mutable DirtyObjects mDirtyObjects;
