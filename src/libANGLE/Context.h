@@ -359,7 +359,7 @@ class Context final : public ValidationContext
     void getIntegerv(GLenum pname, GLint *params);
     void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
-    void getPointerv(GLenum pname, void **params) const;
+    void getPointerv(GLenum pname, void **params);
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data);
     void getIntegeri_v(GLenum target, GLuint index, GLint *data);
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);
@@ -463,6 +463,7 @@ class Context final : public ValidationContext
     void clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
 
     void drawArrays(GLenum mode, GLint first, GLsizei count);
+    void drawArraysImpl(GLenum mode, GLint first, GLsizei count);
     void drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount);
 
     void drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);

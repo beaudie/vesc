@@ -164,8 +164,8 @@ gl::Version GetClientVersion(const egl::AttributeMap &attribs)
 
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 {
-    EGLAttrib attrib = attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT,
-                                   EGL_NO_RESET_NOTIFICATION);
+    EGLAttrib attrib =
+        attribs.get(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT, EGL_NO_RESET_NOTIFICATION);
     switch (attrib)
     {
         case EGL_NO_RESET_NOTIFICATION:
@@ -1215,6 +1215,26 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
 
 void Context::getFloatvImpl(GLenum pname, GLfloat *params)
 {
+
+    if (gles1Emu)
+    {
+        // These end up sharing enums, so we should query
+        // those first, and go to the GLES1 path with mGLState
+        // Enum collision:
+        //  case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+        //  case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+        switch (pname)
+        {
+            case GL_MODELVIEW_MATRIX:
+            case GL_PROJECTION_MATRIX:
+            {
+                mGLState.getFloatv(pname, params);
+                return;
+            }
+            break;
+        }
+    }
+
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
     switch (pname)
@@ -1235,15 +1255,6 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params)
             *params = mCaps.maxLODBias;
             break;
 
-        case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
-        case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
-        {
-            ASSERT(mExtensions.pathRendering);
-            const GLfloat *m = mGLState.getPathRenderingMatrix(pname);
-            memcpy(params, m, 16 * sizeof(GLfloat));
-        }
-        break;
-
         default:
             mGLState.getFloatv(pname, params);
             break;
@@ -1254,6 +1265,46 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
 {
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
+
+    if (gles1Emu)
+    {
+        switch (pname)
+        {
+            // GLES 1 Context-related params
+            case GL_VERTEX_ARRAY_BUFFER_BINDING:
+            case GL_NORMAL_ARRAY_BUFFER_BINDING:
+            case GL_COLOR_ARRAY_BUFFER_BINDING:
+            case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
+            case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+                getVertexAttribiv((GLuint)gles1Emu->vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, params);
+                return;
+            case GL_VERTEX_ARRAY_STRIDE:
+            case GL_NORMAL_ARRAY_STRIDE:
+            case GL_COLOR_ARRAY_STRIDE:
+            case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+            case GL_TEXTURE_COORD_ARRAY_STRIDE:
+                getVertexAttribiv((GLuint)gles1Emu->vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_STRIDE, params);
+                return;
+            case GL_VERTEX_ARRAY_SIZE:
+            case GL_COLOR_ARRAY_SIZE:
+            case GL_TEXTURE_COORD_ARRAY_SIZE:
+                getVertexAttribiv((GLuint)gles1Emu->vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_SIZE, params);
+                return;
+            case GL_VERTEX_ARRAY_TYPE:
+            case GL_COLOR_ARRAY_TYPE:
+            case GL_NORMAL_ARRAY_TYPE:
+            case GL_POINT_SIZE_ARRAY_TYPE_OES:
+            case GL_TEXTURE_COORD_ARRAY_TYPE:
+                getVertexAttribiv((GLuint)gles1Emu->vertexArrayIndex(pname),
+                                  GL_VERTEX_ATTRIB_ARRAY_TYPE, params);
+                return;
+            default:
+                break;
+        }
+    }
 
     switch (pname)
     {
@@ -1634,8 +1685,23 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getPointerv(GLenum pname, void **params) const
+void Context::getPointerv(GLenum pname, void **params)
 {
+    if (gles1Emu)
+    {
+        switch (pname)
+        {
+            case GL_VERTEX_ARRAY_POINTER:
+            case GL_NORMAL_ARRAY_POINTER:
+            case GL_COLOR_ARRAY_POINTER:
+            case GL_TEXTURE_COORD_ARRAY_POINTER:
+            case GL_POINT_SIZE_ARRAY_POINTER_OES:
+                getVertexAttribPointerv((GLuint)gles1Emu->vertexArrayIndex(pname),
+                                        GL_VERTEX_ATTRIB_ARRAY_POINTER, params);
+                return;
+        }
+    }
+
     mGLState.getPointerv(pname, params);
 }
 
@@ -1794,6 +1860,14 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
         return;
     }
 
+    if (gles1Emu)
+        gles1Emu->prepareDraw(mode);
+
+    drawArraysImpl(mode, first, count);
+}
+
+void Context::drawArraysImpl(GLenum mode, GLint first, GLsizei count)
+{
     ANGLE_CONTEXT_TRY(prepareForDraw());
     ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
     MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
@@ -1820,6 +1894,9 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const void *
     {
         return;
     }
+
+    if (gles1Emu)
+        gles1Emu->prepareDraw(mode);
 
     ANGLE_CONTEXT_TRY(prepareForDraw());
     ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
@@ -3333,6 +3410,14 @@ void Context::texImage2D(GLenum target,
         getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
     handleError(texture->setImage(this, mGLState.getUnpackState(), target, level, internalformat,
                                   size, format, type, reinterpret_cast<const uint8_t *>(pixels)));
+
+    if (gles1Emu)
+    {
+        if (texture->getGenerateMipmapHint())
+        {
+            generateMipmap(target);
+        }
+    }
 }
 
 void Context::texImage3D(GLenum target,
@@ -3756,6 +3841,18 @@ void Context::hint(GLenum target, GLenum mode)
             mGLState.setFragmentShaderDerivativeHint(mode);
             break;
 
+        case GL_LINE_SMOOTH_HINT:
+            mGLState.setLineSmoothHint(mode);
+            break;
+        case GL_POINT_SMOOTH_HINT:
+            mGLState.setPointSmoothHint(mode);
+            break;
+        case GL_PERSPECTIVE_CORRECTION_HINT:
+            mGLState.setPerspectiveCorrectionHint(mode);
+            break;
+        case GL_FOG_HINT:
+            mGLState.setFogHint(mode);
+            break;
         default:
             UNREACHABLE();
             return;
@@ -4110,8 +4207,14 @@ void Context::popDebugGroup()
 void Context::bufferData(BufferBinding target, GLsizeiptr size, const void *data, BufferUsage usage)
 {
     Buffer *buffer = mGLState.getTargetBuffer(target);
-    ASSERT(buffer);
-    handleError(buffer->bufferData(this, target, data, size, usage));
+    if (!buffer)
+    {
+        // TODO: Validate buffer objects for GLES1
+    }
+    else
+    {
+        handleError(buffer->bufferData(this, target, data, size, usage));
+    }
 }
 
 void Context::bufferSubData(BufferBinding target,
@@ -4550,7 +4653,40 @@ void Context::getIntegerv(GLenum pname, GLint *params)
     }
     else
     {
-        CastStateValues(this, nativeType, pname, numParams, params);
+        if (gles1Emu)
+        {
+            bool floatRescale = false;
+            switch (pname)
+            {
+                case GL_CURRENT_COLOR:
+                case GL_CURRENT_NORMAL:
+                case GL_CURRENT_TEXTURE_COORDS:
+                case GL_ALPHA_TEST_REF:
+                    floatRescale = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (floatRescale)
+            {
+                GLfloat floatParams[4];
+                getFloatvImpl(pname, floatParams);
+                for (unsigned int i = 0; i < numParams; i++)
+                {
+                    params[i] =
+                        (GLint)(0.5f * ((floatParams[i] * (pow(2.0f, 32.0f) - 1.0f)) - 1.0f));
+                }
+            }
+            else
+            {
+                CastStateValues(this, nativeType, pname, numParams, params);
+            }
+        }
+        else
+        {
+            CastStateValues(this, nativeType, pname, numParams, params);
+        }
     }
 }
 
