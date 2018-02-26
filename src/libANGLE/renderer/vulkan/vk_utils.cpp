@@ -9,7 +9,9 @@
 
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <functional>
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -457,6 +459,15 @@ void CommandBuffer::copyBuffer(const vk::Buffer &srcBuffer,
     ASSERT(valid());
     ASSERT(srcBuffer.valid() && destBuffer.valid());
     vkCmdCopyBuffer(mHandle, srcBuffer.getHandle(), destBuffer.getHandle(), regionCount, regions);
+}
+
+void CommandBuffer::copyBuffer(const VkBuffer &srcBuffer,
+                               const VkBuffer &destBuffer,
+                               uint32_t regionCount,
+                               const VkBufferCopy *regions)
+{
+    ASSERT(valid());
+    vkCmdCopyBuffer(mHandle, srcBuffer, destBuffer, regionCount, regions);
 }
 
 void CommandBuffer::clearSingleColorImage(const vk::Image &image, const VkClearColorValue &color)
@@ -1322,7 +1333,8 @@ void GarbageObject::destroy(VkDevice device)
 
 LineLoopHandler::LineLoopHandler()
     : mStreamingLineLoopIndicesData(
-          new StreamingBuffer(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kLineLoopStreamingBufferMinSize)),
+          new StreamingBuffer(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                              kLineLoopStreamingBufferMinSize)),
       mLineLoopIndexBuffer(VK_NULL_HANDLE),
       mLineLoopIndexBufferOffset(VK_NULL_HANDLE)
 {
@@ -1330,10 +1342,15 @@ LineLoopHandler::LineLoopHandler()
 
 LineLoopHandler::~LineLoopHandler() = default;
 
-gl::Error LineLoopHandler::bindLineLoopIndexBuffer(ContextVk *contextVk,
-                                                   int firstVertex,
-                                                   int count,
-                                                   vk::CommandBuffer **commandBuffer)
+void LineLoopHandler::bindLineLoopIndexBuffer(VkIndexType indexType,
+                                              vk::CommandBuffer **commandBuffer)
+{
+    (*commandBuffer)->bindIndexBuffer(mLineLoopIndexBuffer, mLineLoopIndexBufferOffset, indexType);
+}
+
+gl::Error LineLoopHandler::createLineLoopIndexBufferFromScratch(ContextVk *contextVk,
+                                                                int firstVertex,
+                                                                int count)
 {
     int lastVertex = firstVertex + count;
     if (mLineLoopIndexBuffer == VK_NULL_HANDLE || !mLineLoopBufferFirstIndex.valid() ||
@@ -1343,8 +1360,9 @@ gl::Error LineLoopHandler::bindLineLoopIndexBuffer(ContextVk *contextVk,
         uint32_t *indices = nullptr;
 
         ANGLE_TRY(mStreamingLineLoopIndicesData->allocate(
-            contextVk, sizeof(uint32_t) * (count + 1), reinterpret_cast<uint8_t **>(&indices),
-            &mLineLoopIndexBuffer, &mLineLoopIndexBufferOffset));
+            contextVk, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, sizeof(uint32_t) * (count + 1),
+            reinterpret_cast<uint8_t **>(&indices), &mLineLoopIndexBuffer,
+            &mLineLoopIndexBufferOffset));
 
         auto unsignedFirstVertex = static_cast<uint32_t>(firstVertex);
         for (auto vertexIndex = unsignedFirstVertex; vertexIndex < (count + unsignedFirstVertex);
@@ -1363,8 +1381,70 @@ gl::Error LineLoopHandler::bindLineLoopIndexBuffer(ContextVk *contextVk,
         mLineLoopBufferLastIndex  = lastVertex;
     }
 
-    (*commandBuffer)
-        ->bindIndexBuffer(mLineLoopIndexBuffer, mLineLoopIndexBufferOffset, VK_INDEX_TYPE_UINT32);
+    return gl::NoError();
+}
+
+gl::Error LineLoopHandler::createLineLoopIndexBufferFromUsersIndexBuffer(ContextVk *contextVk,
+                                                                         BufferVk *bufferVk,
+                                                                         VkIndexType indexType,
+                                                                         int count)
+{
+    if (mLineLoopIndexBuffer != VK_NULL_HANDLE)
+    {
+        return gl::NoError();
+    }
+
+    uint32_t *indices = nullptr;
+
+    // Copy from the user's bufferVk to our own custom index buffer and bind that one instead.
+
+    // TODO: Add a check if something has changed in the bufferVk so we can reuse if nothing is
+    // changing.
+    // TODO: Dont always copy from 0 to count when we'll support a first index != 0.
+
+    auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
+    ANGLE_TRY(mStreamingLineLoopIndicesData->allocate(
+        contextVk, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, unitSize * (count + 1),
+        reinterpret_cast<uint8_t **>(&indices), &mLineLoopIndexBuffer,
+        &mLineLoopIndexBufferOffset));
+
+    VkBufferCopy copy1                 = {0, 0, static_cast<VkDeviceSize>(count) * unitSize};
+    VkBufferCopy copy2                 = {0, static_cast<VkDeviceSize>(count) * unitSize, unitSize};
+    std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
+
+    VkCommandBufferAllocateInfo allocInfo = {};
+    allocInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandPool                 = contextVk->getRenderer()->getCommandPool().getHandle();
+    allocInfo.commandBufferCount          = 1;
+
+    VkCommandBuffer commandBuffer;
+    vkAllocateCommandBuffers(contextVk->getDevice(), &allocInfo, &commandBuffer);
+
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+    vkCmdCopyBuffer(commandBuffer, bufferVk->getVkBuffer().getHandle(), mLineLoopIndexBuffer, 2,
+                    copies.data());
+    vkEndCommandBuffer(commandBuffer);
+
+    VkSubmitInfo submitInfo       = {};
+    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers    = &commandBuffer;
+
+    vkQueueSubmit(contextVk->getRenderer()->getQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueWaitIdle(contextVk->getRenderer()->getQueue());
+    vkFreeCommandBuffers(contextVk->getDevice(),
+                         contextVk->getRenderer()->getCommandPool().getHandle(), 1, &commandBuffer);
+
+    // Since we are not using the VK_MEMORY_PROPERTY_HOST_COHERENT_BIT flag when creating the
+    // device memory in the StreamingBuffer, we always need to make sure we flush it after
+    // writing.
+    ANGLE_TRY(mStreamingLineLoopIndicesData->flush(contextVk));
+
     return gl::NoError();
 }
 
@@ -1378,8 +1458,6 @@ gl::Error LineLoopHandler::draw(ContextVk *contextVk,
                                 int count,
                                 CommandBuffer *commandBuffer)
 {
-    ANGLE_TRY(bindLineLoopIndexBuffer(contextVk, firstVertex, count, &commandBuffer));
-
     // Our first index is always 0 because that's how we set it up in the
     // bindLineLoopIndexBuffer.
     commandBuffer->drawIndexed(count + 1, 1, 0, 0, 0);
