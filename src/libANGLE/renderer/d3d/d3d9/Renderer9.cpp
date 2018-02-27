@@ -2511,7 +2511,7 @@ gl::Error Renderer9::copyImageCube(const gl::Context *context,
                                    GLenum destFormat,
                                    const gl::Offset &destOffset,
                                    TextureStorage *storage,
-                                   GLenum target,
+                                   gl::TextureTarget target,
                                    GLint level)
 {
     RECT rect;
@@ -2558,7 +2558,7 @@ gl::Error Renderer9::copyTexture(const gl::Context *context,
                                  GLenum destType,
                                  const gl::Offset &destOffset,
                                  TextureStorage *storage,
-                                 GLenum destTarget,
+                                 gl::TextureTarget destTarget,
                                  GLint destLevel,
                                  bool unpackFlipY,
                                  bool unpackPremultiplyAlpha,
@@ -3259,8 +3259,8 @@ gl::Error Renderer9::applyTextures(const gl::Context *context, gl::ShaderType sh
         }
         else
         {
-            GLenum textureType =
-                ToGLenum(programD3D->getSamplerTextureType(shaderType, samplerIndex));
+            gl::TextureType textureType =
+                programD3D->getSamplerTextureType(shaderType, samplerIndex);
 
             // Texture is not sampler complete or it is in use by the framebuffer.  Bind the
             // incomplete texture.
