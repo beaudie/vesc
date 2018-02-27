@@ -35,7 +35,7 @@ namespace gl
 namespace
 {
 
-void BindResourceChannel(OnAttachmentDirtyBinding *binding, FramebufferAttachmentObject *resource)
+void BindResourceChannel(angle::ChannelBinding *binding, FramebufferAttachmentObject *resource)
 {
     binding->bind(resource ? resource->getDirtyChannel() : nullptr);
 }
@@ -199,13 +199,13 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
 
 // Needed to index into the attachment arrays/bitsets.
 static_assert(static_cast<size_t>(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS) ==
-                  gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX,
+                  Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX,
               "Framebuffer Dirty bit mismatch");
 static_assert(static_cast<size_t>(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS) ==
-                  gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT,
+                  Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT,
               "Framebuffer Dirty bit mismatch");
 static_assert(static_cast<size_t>(IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS + 1) ==
-                  gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT,
+                  Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT,
               "Framebuffer Dirty bit mismatch");
 
 Error InitAttachment(const Context *context, FramebufferAttachment *attachment)
@@ -497,7 +497,7 @@ bool FramebufferState::attachmentsHaveSameDimensions() const
     return !hasMismatchedSize(mStencilAttachment);
 }
 
-const gl::FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBufferIdx) const
+const FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBufferIdx) const
 {
     ASSERT(drawBufferIdx < mDrawBufferStates.size());
     if (mDrawBufferStates[drawBufferIdx] != GL_NONE)
@@ -532,7 +532,7 @@ bool FramebufferState::colorAttachmentsAreUniqueImages() const
     for (size_t firstAttachmentIdx = 0; firstAttachmentIdx < mColorAttachments.size();
          firstAttachmentIdx++)
     {
-        const gl::FramebufferAttachment &firstAttachment = mColorAttachments[firstAttachmentIdx];
+        const FramebufferAttachment &firstAttachment = mColorAttachments[firstAttachmentIdx];
         if (!firstAttachment.isAttached())
         {
             continue;
@@ -541,8 +541,7 @@ bool FramebufferState::colorAttachmentsAreUniqueImages() const
         for (size_t secondAttachmentIdx = firstAttachmentIdx + 1;
              secondAttachmentIdx < mColorAttachments.size(); secondAttachmentIdx++)
         {
-            const gl::FramebufferAttachment &secondAttachment =
-                mColorAttachments[secondAttachmentIdx];
+            const FramebufferAttachment &secondAttachment = mColorAttachments[secondAttachmentIdx];
             if (!secondAttachment.isAttached())
             {
                 continue;
@@ -648,7 +647,7 @@ Framebuffer::Framebuffer(const egl::Display *display, egl::Surface *surface)
 
     const Context *proxyContext = display->getProxyContext();
 
-    setAttachmentImpl(proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_BACK, gl::ImageIndex::MakeInvalid(),
+    setAttachmentImpl(proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex::MakeInvalid(),
                       surface, FramebufferAttachment::kDefaultNumViews,
                       FramebufferAttachment::kDefaultBaseViewIndex,
                       FramebufferAttachment::kDefaultMultiviewLayout,
@@ -656,21 +655,20 @@ Framebuffer::Framebuffer(const egl::Display *display, egl::Surface *surface)
 
     if (surface->getConfig()->depthSize > 0)
     {
-        setAttachmentImpl(
-            proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, gl::ImageIndex::MakeInvalid(), surface,
-            FramebufferAttachment::kDefaultNumViews, FramebufferAttachment::kDefaultBaseViewIndex,
-            FramebufferAttachment::kDefaultMultiviewLayout,
-            FramebufferAttachment::kDefaultViewportOffsets);
+        setAttachmentImpl(proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, ImageIndex::MakeInvalid(),
+                          surface, FramebufferAttachment::kDefaultNumViews,
+                          FramebufferAttachment::kDefaultBaseViewIndex,
+                          FramebufferAttachment::kDefaultMultiviewLayout,
+                          FramebufferAttachment::kDefaultViewportOffsets);
     }
 
     if (surface->getConfig()->stencilSize > 0)
     {
-        setAttachmentImpl(proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_STENCIL,
-                          gl::ImageIndex::MakeInvalid(), surface,
-                          FramebufferAttachment::kDefaultNumViews,
-                          FramebufferAttachment::kDefaultBaseViewIndex,
-                          FramebufferAttachment::kDefaultMultiviewLayout,
-                          FramebufferAttachment::kDefaultViewportOffsets);
+        setAttachmentImpl(
+            proxyContext, GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, ImageIndex::MakeInvalid(), surface,
+            FramebufferAttachment::kDefaultNumViews, FramebufferAttachment::kDefaultBaseViewIndex,
+            FramebufferAttachment::kDefaultMultiviewLayout,
+            FramebufferAttachment::kDefaultViewportOffsets);
     }
     mState.mDrawBufferTypeMask.setIndex(getDrawbufferWriteType(0), 0);
 }
@@ -1277,7 +1275,7 @@ bool Framebuffer::partialClearNeedsInit(const Context *context,
 Error Framebuffer::invalidateSub(const Context *context,
                                  size_t count,
                                  const GLenum *attachments,
-                                 const gl::Rectangle &area)
+                                 const Rectangle &area)
 {
     // Back-ends might make the contents of the FBO undefined. In WebGL 2.0, invalidate operations
     // can be no-ops, so we should probably do that to ensure consistency.
@@ -1286,7 +1284,7 @@ Error Framebuffer::invalidateSub(const Context *context,
     return mImpl->invalidateSub(context, count, attachments, area);
 }
 
-Error Framebuffer::clear(const gl::Context *context, GLbitfield mask)
+Error Framebuffer::clear(const Context *context, GLbitfield mask)
 {
     const auto &glState = context->getGLState();
     if (glState.isRasterizerDiscardEnabled())
@@ -1316,7 +1314,7 @@ Error Framebuffer::clear(const gl::Context *context, GLbitfield mask)
     return NoError();
 }
 
-Error Framebuffer::clearBufferfv(const gl::Context *context,
+Error Framebuffer::clearBufferfv(const Context *context,
                                  GLenum buffer,
                                  GLint drawbuffer,
                                  const GLfloat *values)
@@ -1341,7 +1339,7 @@ Error Framebuffer::clearBufferfv(const gl::Context *context,
     return NoError();
 }
 
-Error Framebuffer::clearBufferuiv(const gl::Context *context,
+Error Framebuffer::clearBufferuiv(const Context *context,
                                   GLenum buffer,
                                   GLint drawbuffer,
                                   const GLuint *values)
@@ -1366,7 +1364,7 @@ Error Framebuffer::clearBufferuiv(const gl::Context *context,
     return NoError();
 }
 
-Error Framebuffer::clearBufferiv(const gl::Context *context,
+Error Framebuffer::clearBufferiv(const Context *context,
                                  GLenum buffer,
                                  GLint drawbuffer,
                                  const GLint *values)
@@ -1391,7 +1389,7 @@ Error Framebuffer::clearBufferiv(const gl::Context *context,
     return NoError();
 }
 
-Error Framebuffer::clearBufferfi(const gl::Context *context,
+Error Framebuffer::clearBufferfi(const Context *context,
                                  GLenum buffer,
                                  GLint drawbuffer,
                                  GLfloat depth,
@@ -1427,7 +1425,7 @@ GLenum Framebuffer::getImplementationColorReadType(const Context *context) const
     return mImpl->getImplementationColorReadType(context);
 }
 
-Error Framebuffer::readPixels(const gl::Context *context,
+Error Framebuffer::readPixels(const Context *context,
                               const Rectangle &area,
                               GLenum format,
                               GLenum type,
@@ -1436,7 +1434,7 @@ Error Framebuffer::readPixels(const gl::Context *context,
     ANGLE_TRY(ensureReadAttachmentInitialized(context, GL_COLOR_BUFFER_BIT));
     ANGLE_TRY(mImpl->readPixels(context, area, format, type, pixels));
 
-    Buffer *unpackBuffer = context->getGLState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    Buffer *unpackBuffer = context->getGLState().getTargetBuffer(BufferBinding::PixelUnpack);
     if (unpackBuffer)
     {
         unpackBuffer->onPixelUnpack();
@@ -1445,7 +1443,7 @@ Error Framebuffer::readPixels(const gl::Context *context,
     return NoError();
 }
 
-Error Framebuffer::blit(const gl::Context *context,
+Error Framebuffer::blit(const Context *context,
                         const Rectangle &sourceArea,
                         const Rectangle &destArea,
                         GLbitfield mask,
@@ -1766,7 +1764,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
 void Framebuffer::updateAttachment(const Context *context,
                                    FramebufferAttachment *attachment,
                                    size_t dirtyBit,
-                                   OnAttachmentDirtyBinding *onDirtyBinding,
+                                   angle::ChannelBinding *onDirtyBinding,
                                    GLenum type,
                                    GLenum binding,
                                    const ImageIndex &textureIndex,
@@ -1801,7 +1799,9 @@ void Framebuffer::syncState(const Context *context)
     }
 }
 
-void Framebuffer::signal(size_t dirtyBit, InitState state)
+void Framebuffer::signal(const Context *context,
+                         angle::ChannelID channelID,
+                         angle::MessageID message)
 {
     // Only reset the cached status if this is not the default framebuffer.  The default framebuffer
     // will still use this channel to mark itself dirty.
@@ -1811,8 +1811,25 @@ void Framebuffer::signal(size_t dirtyBit, InitState state)
         mCachedStatus.reset();
     }
 
+    FramebufferAttachment *attachment = getAttachmentFromDirtyBit(channelID);
+
     // Mark the appropriate init flag.
-    mState.mResourceNeedsInit.set(dirtyBit, state == InitState::MayNeedInit);
+    mState.mResourceNeedsInit.set(channelID, attachment->initState() == InitState::MayNeedInit);
+}
+
+FramebufferAttachment *Framebuffer::getAttachmentFromDirtyBit(size_t dirtyBit)
+{
+    switch (dirtyBit)
+    {
+        case DIRTY_BIT_DEPTH_ATTACHMENT:
+            return &mState.mDepthAttachment;
+        case DIRTY_BIT_STENCIL_ATTACHMENT:
+            return &mState.mStencilAttachment;
+        default:
+            size_t colorIndex = (dirtyBit - DIRTY_BIT_COLOR_ATTACHMENT_0);
+            ASSERT(colorIndex < mState.mColorAttachments.size());
+            return &mState.mColorAttachments[colorIndex];
+    }
 }
 
 bool Framebuffer::complete(const Context *context)
