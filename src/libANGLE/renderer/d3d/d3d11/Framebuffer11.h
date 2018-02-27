@@ -17,7 +17,7 @@ namespace rx
 {
 class Renderer11;
 
-class Framebuffer11 : public FramebufferD3D, public angle::ObserverInterface
+class Framebuffer11 : public FramebufferD3D
 {
   public:
     Framebuffer11(const gl::FramebufferState &data, Renderer11 *renderer);
@@ -48,14 +48,6 @@ class Framebuffer11 : public FramebufferD3D, public angle::ObserverInterface
     }
 
     RenderTarget11 *getFirstRenderTarget() const;
-
-    bool hasAnyInternalDirtyBit() const;
-    void syncInternalState(const gl::Context *context);
-
-    // Observer implementation.
-    void onSubjectStateChange(const gl::Context *context,
-                              angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
@@ -95,13 +87,8 @@ class Framebuffer11 : public FramebufferD3D, public angle::ObserverInterface
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
     RenderTarget11 *mCachedDepthStencilRenderTarget;
-
-    std::vector<angle::ObserverBinding> mColorRenderTargetsDirty;
-    angle::ObserverBinding mDepthStencilRenderTargetDirty;
-
-    gl::Framebuffer::DirtyBits mInternalDirtyBits;
 };
 
-}
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_FRAMBUFFER11_H_
