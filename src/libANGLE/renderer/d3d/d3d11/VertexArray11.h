@@ -50,8 +50,6 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
     // is adjusted.
     void markAllAttributeDivisorsForAdjustment(int numViews);
 
-    bool flushAttribUpdates(const gl::Context *context);
-
     // Returns true if the element array buffer needs to be translated.
     bool updateElementArrayStorage(const gl::Context *context,
                                    GLenum elementType,
@@ -64,6 +62,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
 
   private:
     void updateVertexAttribStorage(const gl::Context *context, size_t attribIndex);
+    bool flushAttribUpdates(const gl::Context *context);
 
     std::vector<VertexStorageType> mAttributeStorageTypes;
     std::vector<TranslatedAttribute> mTranslatedAttribs;
