@@ -34,6 +34,17 @@ LinkedUniform *FindUniform(std::vector<LinkedUniform> &list, const std::string &
     return nullptr;
 }
 
+bool ContainUniform(const std::vector<sh::Uniform> &list, const std::string &name)
+{
+    for (const sh::Uniform &uniform : list)
+    {
+        if (uniform.name == name)
+            return true;
+    }
+
+    return false;
+}
+
 int GetUniformLocationBinding(const ProgramBindings &uniformLocationBindings,
                               const sh::Uniform &uniform)
 {
@@ -62,6 +73,29 @@ void SetStaticUse(std::vector<VarT> *list,
             return;
         }
     }
+}
+
+GLenum GetShaderTypeFromUniformName(const Context *context,
+                                    const std::string &uniformName,
+                                    const std::vector<Shader *> &linkedShaders)
+{
+    ASSERT(!linkedShaders.empty());
+    if (linkedShaders.size() == 1)
+    {
+        return linkedShaders[0]->getType();
+    }
+
+    for (size_t shaderIndex = 0; shaderIndex < linkedShaders.size() - 1; ++shaderIndex)
+    {
+        Shader *linkedShader = linkedShaders[shaderIndex];
+        ASSERT(linkedShader);
+        if (ContainUniform(linkedShader->getUniforms(context), uniformName))
+        {
+            return linkedShader->getType();
+        }
+    }
+
+    return linkedShaders.back()->getType();
 }
 
 }  // anonymous namespace
@@ -114,36 +148,77 @@ bool UniformLinker::link(const Context *context,
 
 bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &infoLog) const
 {
-    // Check that uniforms defined in the vertex and fragment shaders are identical
-    std::map<std::string, const sh::Uniform *> linkedUniforms;
-    const std::vector<sh::Uniform> &vertexUniforms =
-        mState.getAttachedVertexShader()->getUniforms(context);
-    const std::vector<sh::Uniform> &fragmentUniforms =
-        mState.getAttachedFragmentShader()->getUniforms(context);
+    std::vector<Shader *> linkedShaders = {mState.getAttachedVertexShader()};
 
-    for (const sh::Uniform &vertexUniform : vertexUniforms)
+    // Check that uniforms defined in the graphics shaders are identical
+    std::map<std::string, const sh::Uniform *> linkedUniforms;
+    for (const sh::Uniform &vertexUniform : linkedShaders.front()->getUniforms(context))
     {
         linkedUniforms[vertexUniform.name] = &vertexUniform;
     }
 
-    for (const sh::Uniform &fragmentUniform : fragmentUniforms)
+    std::vector<Shader *> activeUnlinkedShaders;
+    if (mState.getAttachedGeometryShader())
     {
-        auto entry = linkedUniforms.find(fragmentUniform.name);
-        if (entry != linkedUniforms.end())
+        activeUnlinkedShaders.push_back(mState.getAttachedGeometryShader());
+    }
+    activeUnlinkedShaders.push_back(mState.getAttachedFragmentShader());
+
+    const size_t activeUnlinkedShaderCount = activeUnlinkedShaders.size();
+    for (size_t shaderIndex = 0; shaderIndex < activeUnlinkedShaders.size(); ++shaderIndex)
+    {
+        bool isLastShader     = (shaderIndex == activeUnlinkedShaderCount - 1);
+        Shader *currentShader = activeUnlinkedShaders[shaderIndex];
+
+        const std::string *mismatchedUniformName = nullptr;
+        std::string mismatchedStructFieldName;
+        LinkMismatchError linkError = validateGraphicsUniformsPerShader(
+            currentShader->getUniforms(context), !isLastShader, &linkedUniforms,
+            &mismatchedUniformName, &mismatchedStructFieldName);
+        if (linkError != LinkMismatchError::NO_MISMATCH)
         {
-            const sh::Uniform &vertexUniform = *(entry->second);
-            std::string mismatchedStructFieldName;
+            ASSERT(mismatchedUniformName);
+            LogLinkMismatch(
+                infoLog, *mismatchedUniformName, "uniform", linkError, mismatchedStructFieldName,
+                currentShader->getType(),
+                GetShaderTypeFromUniformName(context, *mismatchedUniformName, linkedShaders));
+            return false;
+        }
+        linkedShaders.push_back(currentShader);
+    }
+
+    return true;
+}
+
+LinkMismatchError UniformLinker::validateGraphicsUniformsPerShader(
+    const std::vector<sh::Uniform> &uniformsToLink,
+    bool extendLinkedUniforms,
+    std::map<std::string, const sh::Uniform *> *linkedUniforms,
+    const std::string **mismatchedUniformName,
+    std::string *mismatchedStructFieldName)
+{
+    ASSERT(mismatchedUniformName && mismatchedStructFieldName && linkedUniforms);
+    for (const sh::Uniform &uniform : uniformsToLink)
+    {
+        auto entry = linkedUniforms->find(uniform.name);
+        if (entry != linkedUniforms->end())
+        {
+            const sh::Uniform &linkedUniform = *(entry->second);
             LinkMismatchError linkError =
-                LinkValidateUniforms(vertexUniform, fragmentUniform, &mismatchedStructFieldName);
+                LinkValidateUniforms(uniform, linkedUniform, mismatchedStructFieldName);
             if (linkError != LinkMismatchError::NO_MISMATCH)
             {
-                LogLinkMismatch(infoLog, fragmentUniform.name, "uniform", linkError,
-                                mismatchedStructFieldName, GL_VERTEX_SHADER, GL_FRAGMENT_SHADER);
-                return false;
+                *mismatchedUniformName = &uniform.name;
+                return linkError;
             }
         }
+        else if (extendLinkedUniforms)
+        {
+            (*linkedUniforms)[uniform.name] = &uniform;
+        }
     }
-    return true;
+
+    return LinkMismatchError::NO_MISMATCH;
 }
 
 // GLSL ES Spec 3.00.3, section 4.3.5.
@@ -463,6 +538,22 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Context *context, InfoLog 
                 "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
                 "Fragment shader image count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
                 "Fragment shader atomic counter count exceeds MAX_FRAGMENT_ATOMIC_COUNTERS (",
+                samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
+        {
+            return false;
+        }
+
+        Shader *geometryShader = mState.getAttachedGeometryShader();
+        // TODO (jiawei.shao@intel.com): check whether we need finer-grained component counting
+        if (geometryShader &&
+            !flattenUniformsAndCheckCapsForShader(
+                context, geometryShader, caps.maxGeometryUniformComponents / 4,
+                caps.maxGeometryTextureImageUnits, caps.maxGeometryImageUniforms,
+                caps.maxGeometryAtomicCounters,
+                "Geometry shader active uniforms exceed MAX_GEOMETRY_UNIFORM_VECTORS_EXT (",
+                "Geometry shader sampler count exceeds MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT (",
+                "Geometry shader image count exceeds MAX_GEOMETRY_IMAGE_UNIFORMS_EXT (",
+                "Geometry shader atomic counter count exceeds MAX_GEOMETRY_ATOMIC_COUNTERS_EXT (",
                 samplerUniforms, imageUniforms, atomicCounterUniforms, infoLog))
         {
             return false;
