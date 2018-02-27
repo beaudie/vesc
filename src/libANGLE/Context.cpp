@@ -2905,7 +2905,7 @@ Error Context::prepareForDraw()
     syncRendererState();
 
     const auto &drawCallParams = getParams<gl::DrawCallParams>();
-    mGLState.getVertexArray()->syncState(this, drawCallParams);
+    ANGLE_TRY(mGLState.getVertexArray()->syncState(this, drawCallParams));
 
     if (isRobustResourceInitEnabled())
     {

@@ -30,9 +30,9 @@ class VertexArrayVk : public VertexArrayImpl
                                StreamingBuffer *stream,
                                int firstVertex,
                                int lastVertex);
-    void syncState(const gl::Context *context,
-                   const gl::VertexArray::DirtyBits &dirtyBits,
-                   const gl::DrawCallParams &drawCallParams) override;
+    gl::Error syncState(const gl::Context *context,
+                        const gl::VertexArray::DirtyBits &dirtyBits,
+                        const gl::DrawCallParams &drawCallParams) override;
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const;
     const gl::AttribArray<VkDeviceSize> &getCurrentArrayBufferOffsets() const;
