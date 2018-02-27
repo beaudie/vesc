@@ -79,7 +79,15 @@ class UniformLinker final : angle::NonCopyable
         unsigned int atomicCounterCount;
     };
 
+    using ShaderUniform = std::pair<GLenum, const sh::Uniform *>;
+
     bool validateGraphicsUniforms(const Context *context, InfoLog &infoLog) const;
+    static bool ValidateGraphicsUniformsPerShader(
+        const Context *context,
+        Shader *shaderToLink,
+        bool extendLinkedUniforms,
+        std::map<std::string, ShaderUniform> *linkedUniforms,
+        InfoLog &infoLog);
 
     static LinkMismatchError LinkValidateUniforms(const sh::Uniform &uniform1,
                                                   const sh::Uniform &uniform2,
