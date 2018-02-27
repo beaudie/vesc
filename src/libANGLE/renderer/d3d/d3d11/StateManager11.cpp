@@ -2001,14 +2001,6 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
         mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
     }
 
-    // Changing the vertex attribute state can affect the vertex shader.
-    gl::VertexArray *vao = glState.getVertexArray();
-    VertexArray11 *vao11 = GetImplAs<VertexArray11>(vao);
-    if (vao11->flushAttribUpdates(context))
-    {
-        mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
-    }
-
     auto dirtyBitsCopy = mInternalDirtyBits;
     mInternalDirtyBits.reset();
 
