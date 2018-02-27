@@ -824,6 +824,13 @@ bool ValidateES3CopyTexImageParametersBase(ValidationContext *context,
 
     const FramebufferAttachment *source = framebuffer->getReadColorbuffer();
 
+    // According to ES 3 and 3.1 spec, if the internalformat of the texture
+    // is RGB9_E5 and copy from such a texture, generate INVALID_OPERATION.
+    if (source->getFormat().info->sizedInternalFormat == GL_RGB9_E5)
+    {
+        context->handleError(InvalidOperation());
+    }
+
     if (isSubImage)
     {
         if (!IsValidES3CopyTexImageCombination(*textureFormat.info, *source->getFormat().info,
