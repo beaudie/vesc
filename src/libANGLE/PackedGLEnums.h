@@ -140,6 +140,17 @@ TextureType TextureTargetToType(TextureTarget target);
 TextureTarget NonCubeTextureTypeToTarget(TextureType type);
 
 TextureTarget CubeFaceIndexToTextureTarget(size_t face);
+size_t CubeMapTextureTargetToFaceIndex(TextureTarget target);
+
+static constexpr TextureTarget kFirstCubeMapTextureTarget = TextureTarget::CubeMapPositiveX;
+static constexpr TextureTarget kLastCubeMapTextureTarget  = TextureTarget::CubeMapNegativeZ;
+static constexpr TextureTarget kAfterLastCubeMapTextureTarget =
+    static_cast<TextureTarget>(static_cast<uint8_t>(kLastCubeMapTextureTarget) + 1);
+struct CubeFaceTextureTargets
+{
+    angle::EnumIterator<TextureTarget> begin() const { return kFirstCubeMapTextureTarget; }
+    angle::EnumIterator<TextureTarget> end() const { return kAfterLastCubeMapTextureTarget; }
+};
 
 TextureType SamplerTypeToTextureType(GLenum samplerType);
 
