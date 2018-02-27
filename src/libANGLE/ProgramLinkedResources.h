@@ -80,6 +80,12 @@ class UniformLinker final : angle::NonCopyable
     };
 
     bool validateGraphicsUniforms(const Context *context, InfoLog &infoLog) const;
+    static LinkMismatchError validateGraphicsUniformsPerShader(
+        const std::vector<sh::Uniform> &uniformsToLink,
+        bool extendLinkedUniforms,
+        std::map<std::string, const sh::Uniform *> *linkedUniforms,
+        const std::string **mismatchedUniformName,
+        std::string *mismatchedStructFieldName);
 
     static LinkMismatchError LinkValidateUniforms(const sh::Uniform &uniform1,
                                                   const sh::Uniform &uniform2,
