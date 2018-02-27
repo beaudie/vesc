@@ -86,6 +86,29 @@ TextureTarget CubeFaceIndexToTextureTarget(size_t face)
     }
 }
 
+size_t CubeMapTextureTargetToFaceIndex(TextureTarget target)
+{
+    ASSERT(TextureTargetToType(target) == TextureType::CubeMap);
+    switch (target)
+    {
+        case TextureTarget::CubeMapPositiveX:
+            return 0u;
+        case TextureTarget::CubeMapNegativeX:
+            return 1u;
+        case TextureTarget::CubeMapPositiveY:
+            return 2u;
+        case TextureTarget::CubeMapNegativeY:
+            return 3u;
+        case TextureTarget::CubeMapPositiveZ:
+            return 4u;
+        case TextureTarget::CubeMapNegativeZ:
+            return 5u;
+        default:
+            UNREACHABLE();
+            return 42;
+    }
+}
+
 TextureType SamplerTypeToTextureType(GLenum samplerType)
 {
     switch (samplerType)
