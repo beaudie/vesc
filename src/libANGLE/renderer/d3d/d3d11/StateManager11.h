@@ -183,11 +183,11 @@ class StateManager11 final : angle::NonCopyable
     // Called by the Framebuffer11 and VertexArray11.
     void invalidateShaders();
 
-    // Called by VertexArray11 to trigger attribute translation.
-    void invalidateVertexAttributeTranslation();
-
     // Called by the Program on Uniform Buffer change. Also called internally.
     void invalidateProgramUniformBuffers();
+
+    // Called by VertexArray11.
+    void invalidateInputLayout();
 
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
@@ -257,6 +257,8 @@ class StateManager11 final : angle::NonCopyable
 
     // Only used in testing.
     InputLayoutCache *getInputLayoutCache() { return &mInputLayoutCache; }
+
+    VertexDataManager *getVertexDataManager() { return &mVertexDataManager; }
 
   private:
     template <typename SRVType>
@@ -463,7 +465,6 @@ class StateManager11 final : angle::NonCopyable
     // Current applied input layout.
     ResourceSerial mCurrentInputLayout;
     bool mInputLayoutIsDirty;
-    bool mVertexAttribsNeedTranslation;
 
     // Current applied vertex states.
     // TODO(jmadill): Figure out how to use ResourceSerial here.
