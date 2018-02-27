@@ -310,25 +310,25 @@ Context::Context(rx::EGLImplFactory *implFactory,
     // In order that access to these initial textures not be lost, they are treated as texture
     // objects all of whose names are 0.
 
-    Texture *zeroTexture2D = new Texture(mImplementation.get(), 0, GL_TEXTURE_2D);
+    Texture *zeroTexture2D = new Texture(mImplementation.get(), 0, TextureType::_2D);
     mZeroTextures[TextureType::_2D].set(this, zeroTexture2D);
 
-    Texture *zeroTextureCube = new Texture(mImplementation.get(), 0, GL_TEXTURE_CUBE_MAP);
+    Texture *zeroTextureCube = new Texture(mImplementation.get(), 0, TextureType::CubeMap);
     mZeroTextures[TextureType::CubeMap].set(this, zeroTextureCube);
 
     if (getClientVersion() >= Version(3, 0))
     {
         // TODO: These could also be enabled via extension
-        Texture *zeroTexture3D = new Texture(mImplementation.get(), 0, GL_TEXTURE_3D);
+        Texture *zeroTexture3D = new Texture(mImplementation.get(), 0, TextureType::_3D);
         mZeroTextures[TextureType::_3D].set(this, zeroTexture3D);
 
-        Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_ARRAY);
+        Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, TextureType::_2DArray);
         mZeroTextures[TextureType::_2DArray].set(this, zeroTexture2DArray);
     }
     if (getClientVersion() >= Version(3, 1))
     {
         Texture *zeroTexture2DMultisample =
-            new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_MULTISAMPLE);
+            new Texture(mImplementation.get(), 0, TextureType::_2DMultisample);
         mZeroTextures[TextureType::_2DMultisample].set(this, zeroTexture2DMultisample);
 
         for (unsigned int i = 0; i < mCaps.maxAtomicCounterBufferBindings; i++)
@@ -346,14 +346,13 @@ Context::Context(rx::EGLImplFactory *implFactory,
     if (nativeExtensions.textureRectangle)
     {
         Texture *zeroTextureRectangle =
-            new Texture(mImplementation.get(), 0, GL_TEXTURE_RECTANGLE_ANGLE);
+            new Texture(mImplementation.get(), 0, TextureType::Rectangle);
         mZeroTextures[TextureType::Rectangle].set(this, zeroTextureRectangle);
     }
 
     if (nativeExtensions.eglImageExternal || nativeExtensions.eglStreamConsumerExternal)
     {
-        Texture *zeroTextureExternal =
-            new Texture(mImplementation.get(), 0, GL_TEXTURE_EXTERNAL_OES);
+        Texture *zeroTextureExternal = new Texture(mImplementation.get(), 0, TextureType::External);
         mZeroTextures[TextureType::External].set(this, zeroTextureExternal);
     }
 
@@ -978,8 +977,7 @@ void Context::bindTexture(TextureType target, GLuint handle)
     }
     else
     {
-        texture = mState.mTextures->checkTextureAllocation(mImplementation.get(), handle,
-                                                           ToGLenum(target));
+        texture = mState.mTextures->checkTextureAllocation(mImplementation.get(), handle, target);
     }
 
     ASSERT(texture);
@@ -1743,7 +1741,7 @@ void Context::getTexParameteriv(TextureType target, GLenum pname, GLint *params)
 void Context::getTexLevelParameteriv(TextureTarget target, GLint level, GLenum pname, GLint *params)
 {
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    QueryTexLevelParameteriv(texture, ToGLenum(target), level, pname, params);
+    QueryTexLevelParameteriv(texture, target, level, pname, params);
 }
 
 void Context::getTexLevelParameterfv(TextureTarget target,
@@ -1752,7 +1750,7 @@ void Context::getTexLevelParameterfv(TextureTarget target,
                                      GLfloat *params)
 {
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    QueryTexLevelParameterfv(texture, ToGLenum(target), level, pname, params);
+    QueryTexLevelParameterfv(texture, target, level, pname, params);
 }
 
 void Context::texParameterf(TextureType target, GLenum pname, GLfloat param)
@@ -3033,8 +3031,7 @@ void Context::copyTexImage2D(TextureTarget target,
 
     Framebuffer *framebuffer = mGLState.getReadFramebuffer();
     Texture *texture         = getTargetTexture(TextureTargetToType(target));
-    handleError(
-        texture->copyImage(this, ToGLenum(target), level, sourceArea, internalformat, framebuffer));
+    handleError(texture->copyImage(this, target, level, sourceArea, internalformat, framebuffer));
 }
 
 void Context::copyTexSubImage2D(TextureTarget target,
@@ -3059,8 +3056,7 @@ void Context::copyTexSubImage2D(TextureTarget target,
 
     Framebuffer *framebuffer = mGLState.getReadFramebuffer();
     Texture *texture         = getTargetTexture(TextureTargetToType(target));
-    handleError(
-        texture->copySubImage(this, ToGLenum(target), level, destOffset, sourceArea, framebuffer));
+    handleError(texture->copySubImage(this, target, level, destOffset, sourceArea, framebuffer));
 }
 
 void Context::copyTexSubImage3D(TextureType target,
@@ -3086,8 +3082,8 @@ void Context::copyTexSubImage3D(TextureType target,
 
     Framebuffer *framebuffer = mGLState.getReadFramebuffer();
     Texture *texture         = getTargetTexture(target);
-    handleError(
-        texture->copySubImage(this, ToGLenum(target), level, destOffset, sourceArea, framebuffer));
+    handleError(texture->copySubImage(this, NonCubeTextureTypeToTarget(target), level, destOffset,
+                                      sourceArea, framebuffer));
 }
 
 void Context::framebufferTexture2D(GLenum target,
@@ -3121,7 +3117,7 @@ void Context::framebufferTexture2D(GLenum target,
         else
         {
             ASSERT(TextureTargetToType(textarget) == TextureType::CubeMap);
-            index = ImageIndex::MakeCube(ToGLenum(textarget), level);
+            index = ImageIndex::MakeCube(textarget, level);
         }
 
         framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);
@@ -3172,13 +3168,13 @@ void Context::framebufferTextureLayer(GLenum target,
 
         ImageIndex index = ImageIndex::MakeInvalid();
 
-        if (textureObject->getTarget() == GL_TEXTURE_3D)
+        if (textureObject->getType() == TextureType::_3D)
         {
             index = ImageIndex::Make3D(level, layer);
         }
         else
         {
-            ASSERT(textureObject->getTarget() == GL_TEXTURE_2D_ARRAY);
+            ASSERT(textureObject->getType() == TextureType::_2DArray);
             index = ImageIndex::Make2DArray(level, layer);
         }
 
@@ -3327,9 +3323,8 @@ void Context::texImage2D(TextureTarget target,
 
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    handleError(texture->setImage(this, mGLState.getUnpackState(), ToGLenum(target), level,
-                                  internalformat, size, format, type,
-                                  reinterpret_cast<const uint8_t *>(pixels)));
+    handleError(texture->setImage(this, mGLState.getUnpackState(), target, level, internalformat,
+                                  size, format, type, reinterpret_cast<const uint8_t *>(pixels)));
 }
 
 void Context::texImage3D(TextureType target,
@@ -3347,9 +3342,9 @@ void Context::texImage3D(TextureType target,
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setImage(this, mGLState.getUnpackState(), ToGLenum(target), level,
-                                  internalformat, size, format, type,
-                                  reinterpret_cast<const uint8_t *>(pixels)));
+    handleError(texture->setImage(this, mGLState.getUnpackState(),
+                                  NonCubeTextureTypeToTarget(target), level, internalformat, size,
+                                  format, type, reinterpret_cast<const uint8_t *>(pixels)));
 }
 
 void Context::texSubImage2D(TextureTarget target,
@@ -3372,8 +3367,8 @@ void Context::texSubImage2D(TextureTarget target,
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    handleError(texture->setSubImage(this, mGLState.getUnpackState(), ToGLenum(target), level, area,
-                                     format, type, reinterpret_cast<const uint8_t *>(pixels)));
+    handleError(texture->setSubImage(this, mGLState.getUnpackState(), target, level, area, format,
+                                     type, reinterpret_cast<const uint8_t *>(pixels)));
 }
 
 void Context::texSubImage3D(TextureType target,
@@ -3398,8 +3393,9 @@ void Context::texSubImage3D(TextureType target,
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setSubImage(this, mGLState.getUnpackState(), ToGLenum(target), level, area,
-                                     format, type, reinterpret_cast<const uint8_t *>(pixels)));
+    handleError(texture->setSubImage(this, mGLState.getUnpackState(),
+                                     NonCubeTextureTypeToTarget(target), level, area, format, type,
+                                     reinterpret_cast<const uint8_t *>(pixels)));
 }
 
 void Context::compressedTexImage2D(TextureTarget target,
@@ -3415,8 +3411,8 @@ void Context::compressedTexImage2D(TextureTarget target,
 
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    handleError(texture->setCompressedImage(this, mGLState.getUnpackState(), ToGLenum(target),
-                                            level, internalformat, size, imageSize,
+    handleError(texture->setCompressedImage(this, mGLState.getUnpackState(), target, level,
+                                            internalformat, size, imageSize,
                                             reinterpret_cast<const uint8_t *>(data)));
 }
 
@@ -3434,9 +3430,9 @@ void Context::compressedTexImage3D(TextureType target,
 
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setCompressedImage(this, mGLState.getUnpackState(), ToGLenum(target),
-                                            level, internalformat, size, imageSize,
-                                            reinterpret_cast<const uint8_t *>(data)));
+    handleError(texture->setCompressedImage(
+        this, mGLState.getUnpackState(), NonCubeTextureTypeToTarget(target), level, internalformat,
+        size, imageSize, reinterpret_cast<const uint8_t *>(data)));
 }
 
 void Context::compressedTexSubImage2D(TextureTarget target,
@@ -3453,8 +3449,8 @@ void Context::compressedTexSubImage2D(TextureTarget target,
 
     Box area(xoffset, yoffset, 0, width, height, 1);
     Texture *texture = getTargetTexture(TextureTargetToType(target));
-    handleError(texture->setCompressedSubImage(this, mGLState.getUnpackState(), ToGLenum(target),
-                                               level, area, format, imageSize,
+    handleError(texture->setCompressedSubImage(this, mGLState.getUnpackState(), target, level, area,
+                                               format, imageSize,
                                                reinterpret_cast<const uint8_t *>(data)));
 }
 
@@ -3480,9 +3476,9 @@ void Context::compressedTexSubImage3D(TextureType target,
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setCompressedSubImage(this, mGLState.getUnpackState(), ToGLenum(target),
-                                               level, area, format, imageSize,
-                                               reinterpret_cast<const uint8_t *>(data)));
+    handleError(texture->setCompressedSubImage(
+        this, mGLState.getUnpackState(), NonCubeTextureTypeToTarget(target), level, area, format,
+        imageSize, reinterpret_cast<const uint8_t *>(data)));
 }
 
 void Context::generateMipmap(TextureType target)
@@ -3493,7 +3489,7 @@ void Context::generateMipmap(TextureType target)
 
 void Context::copyTexture(GLuint sourceId,
                           GLint sourceLevel,
-                          GLenum destTarget,
+                          TextureTarget destTarget,
                           GLuint destId,
                           GLint destLevel,
                           GLint internalFormat,
@@ -3514,7 +3510,7 @@ void Context::copyTexture(GLuint sourceId,
 
 void Context::copySubTexture(GLuint sourceId,
                              GLint sourceLevel,
-                             GLenum destTarget,
+                             TextureTarget destTarget,
                              GLuint destId,
                              GLint destLevel,
                              GLint xoffset,
@@ -4215,8 +4211,8 @@ void Context::texStorage2DMultisample(TextureType target,
 {
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setStorageMultisample(this, ToGLenum(target), samples, internalformat,
-                                               size, ConvertToBool(fixedsamplelocations)));
+    handleError(texture->setStorageMultisample(this, target, samples, internalformat, size,
+                                               ConvertToBool(fixedsamplelocations)));
 }
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
@@ -4337,7 +4333,7 @@ void Context::texStorage2D(TextureType target,
 {
     Extents size(width, height, 1);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setStorage(this, ToGLenum(target), levels, internalFormat, size));
+    handleError(texture->setStorage(this, target, levels, internalFormat, size));
 }
 
 void Context::texStorage3D(TextureType target,
@@ -4349,7 +4345,7 @@ void Context::texStorage3D(TextureType target,
 {
     Extents size(width, height, depth);
     Texture *texture = getTargetTexture(target);
-    handleError(texture->setStorage(this, ToGLenum(target), levels, internalFormat, size));
+    handleError(texture->setStorage(this, target, levels, internalFormat, size));
 }
 
 void Context::memoryBarrier(GLbitfield barriers)
@@ -5846,7 +5842,7 @@ void Context::eGLImageTargetTexture2D(TextureType target, GLeglImageOES image)
 {
     Texture *texture        = getTargetTexture(target);
     egl::Image *imageObject = reinterpret_cast<egl::Image *>(image);
-    handleError(texture->setEGLImageTarget(this, ToGLenum(target), imageObject));
+    handleError(texture->setEGLImageTarget(this, target, imageObject));
 }
 
 void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image)
