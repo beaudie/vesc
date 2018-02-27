@@ -33,7 +33,7 @@ namespace
 
 template <typename ParamType>
 void QueryTexLevelParameterBase(const Texture *texture,
-                                GLenum target,
+                                TextureTarget target,
                                 GLint level,
                                 GLenum pname,
                                 ParamType *params)
@@ -848,8 +848,16 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
             break;
 
         case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
-            *params = attachmentObject->cubeMapFace();
-            break;
+        {
+            *params = GL_NONE;
+
+            TextureTarget face = attachmentObject->cubeMapFace();
+            if (face != TextureTarget::InvalidEnum)
+            {
+                *params = ToGLenum(attachmentObject->cubeMapFace());
+            }
+        }
+        break;
 
         case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
             *params = attachmentObject->getRedSize();
@@ -1099,7 +1107,7 @@ void QueryShaderiv(const Context *context, Shader *shader, GLenum pname, GLint *
 }
 
 void QueryTexLevelParameterfv(const Texture *texture,
-                              GLenum target,
+                              TextureTarget target,
                               GLint level,
                               GLenum pname,
                               GLfloat *params)
@@ -1108,7 +1116,7 @@ void QueryTexLevelParameterfv(const Texture *texture,
 }
 
 void QueryTexLevelParameteriv(const Texture *texture,
-                              GLenum target,
+                              TextureTarget target,
                               GLint level,
                               GLenum pname,
                               GLint *params)
