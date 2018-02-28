@@ -41,6 +41,32 @@ uint8_t PackGLBlendOp(GLenum blendOp)
     }
 }
 
+uint8_t PackGLCompareFunc(GLenum compareFunc)
+{
+    switch (compareFunc)
+    {
+        case GL_NEVER:
+            return VK_COMPARE_OP_NEVER;
+        case GL_ALWAYS:
+            return VK_COMPARE_OP_ALWAYS;
+        case GL_LESS:
+            return VK_COMPARE_OP_LESS;
+        case GL_LEQUAL:
+            return VK_COMPARE_OP_LESS_OR_EQUAL;
+        case GL_EQUAL:
+            return VK_COMPARE_OP_EQUAL;
+        case GL_GREATER:
+            return VK_COMPARE_OP_GREATER;
+        case GL_GEQUAL:
+            return VK_COMPARE_OP_GREATER_OR_EQUAL;
+        case GL_NOTEQUAL:
+            return VK_COMPARE_OP_NOT_EQUAL;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 VkSampleCountFlagBits ConvertSamples(GLint sampleCount)
 {
     switch (sampleCount)
@@ -656,6 +682,16 @@ void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
     }
 }
 
+void PipelineDesc::updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState)
+{
+    mDepthStencilStateInfo.depthTestEnable = static_cast<uint8_t>(depthStencilState.depthTest);
+}
+
+void PipelineDesc::updateDepthFunc(const gl::DepthStencilState &depthStencilState)
+{
+    mDepthStencilStateInfo.depthCompareOp = PackGLCompareFunc(depthStencilState.depthFunc);
+}
+
 void PipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPassDesc)
 {
     mRenderPassDesc = renderPassDesc;
@@ -702,7 +738,7 @@ void AttachmentOpsArray::initDummyOp(size_t index, VkImageLayout finalLayout)
 {
     PackedAttachmentOpsDesc &ops = mOps[index];
 
-    ops.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    ops.loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD;
     ops.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
     ops.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     ops.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
