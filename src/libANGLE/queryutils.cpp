@@ -848,15 +848,16 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
             break;
 
         case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
-            {
-                *params = GL_NONE;
+        {
+            *params = GL_NONE;
 
-                TextureTarget face = attachmentObject->cubeMapFace();
-                if (face != TextureTarget::InvalidEnum) {
-                    *params = ToGLenum(attachmentObject->cubeMapFace());
-                }
+            TextureTarget face = attachmentObject->cubeMapFace();
+            if (face != TextureTarget::InvalidEnum)
+            {
+                *params = ToGLenum(attachmentObject->cubeMapFace());
             }
-            break;
+        }
+        break;
 
         case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
             *params = attachmentObject->getRedSize();

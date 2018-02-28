@@ -228,7 +228,7 @@ void Image11::disassociateStorage()
     }
 }
 
-bool Image11::redefine(GLenum target,
+bool Image11::redefine(gl::TextureType type,
                        GLenum internalformat,
                        const gl::Extents &size,
                        bool forceRelease)
@@ -245,7 +245,7 @@ bool Image11::redefine(GLenum target,
         mHeight         = size.height;
         mDepth          = size.depth;
         mInternalFormat = internalformat;
-        mTarget         = target;
+        mType           = type;
 
         // compute the d3d format that will be used
         const d3d11::Format &formatInfo =
@@ -540,7 +540,7 @@ gl::Error Image11::createStagingTexture()
     // adjust size if needed for compressed textures
     d3d11::MakeValidSize(false, dxgiFormat, &width, &height, &lodOffset);
 
-    if (mTarget == GL_TEXTURE_3D)
+    if (mType == gl::TextureType::_3D)
     {
         D3D11_TEXTURE3D_DESC desc;
         desc.Width          = width;
@@ -572,8 +572,8 @@ gl::Error Image11::createStagingTexture()
         mStagingTexture.setDebugName("Image11::StagingTexture3D");
         mStagingSubresource = D3D11CalcSubresource(lodOffset, 0, lodOffset + 1);
     }
-    else if (mTarget == GL_TEXTURE_2D || mTarget == GL_TEXTURE_2D_ARRAY ||
-             mTarget == GL_TEXTURE_CUBE_MAP)
+    else if (mType == gl::TextureType::_2D || mType == gl::TextureType::_2DArray ||
+             mType == gl::TextureType::CubeMap)
     {
         D3D11_TEXTURE2D_DESC desc;
         desc.Width              = width;
