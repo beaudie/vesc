@@ -145,6 +145,16 @@ TSymbolTable::TSymbolTable() : mUniqueIdCounter(0), mUserDefinedUniqueIdsStart(-
 
 TSymbolTable::~TSymbolTable() = default;
 
+bool TSymbolTable::isEmpty() const
+{
+    return mTable.empty();
+}
+
+bool TSymbolTable::atGlobalLevel() const
+{
+    return mTable.size() == 1u;
+}
+
 void TSymbolTable::pushBuiltInLevel()
 {
     mBuiltInTable.push_back(
@@ -251,25 +261,17 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
     return nullptr;
 }
 
-bool TSymbolTable::declareVariable(TVariable *variable)
+bool TSymbolTable::declare(TSymbol *symbol)
 {
-    ASSERT(variable->symbolType() == SymbolType::UserDefined);
-    return insertVariable(currentLevel(), variable);
-}
-
-bool TSymbolTable::declareStructType(TStructure *str)
-{
-    return insertStructType(currentLevel(), str);
-}
-
-bool TSymbolTable::declareInterfaceBlock(TInterfaceBlock *interfaceBlock)
-{
-    return insert(currentLevel(), interfaceBlock);
+    ASSERT(!mTable.empty());
+    ASSERT(symbol->symbolType() == SymbolType::UserDefined);
+    ASSERT(!symbol->isFunction());
+    return mTable.back()->insert(symbol);
 }
 
 void TSymbolTable::declareUserDefinedFunction(TFunction *function, bool insertUnmangledName)
 {
-    ASSERT(currentLevel() >= GLOBAL_LEVEL);
+    ASSERT(!mTable.empty());
     if (insertUnmangledName)
     {
         // Insert the unmangled name to detect potential future redefinition as a variable.
@@ -278,27 +280,13 @@ void TSymbolTable::declareUserDefinedFunction(TFunction *function, bool insertUn
     mTable[0]->insert(function);
 }
 
-TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
-                                        const ImmutableString &name,
-                                        const TType *type)
+void TSymbolTable::insertVariable(ESymbolLevel level,
+                                  const ImmutableString &name,
+                                  const TType *type)
 {
-    ASSERT(level <= LAST_BUILTIN_LEVEL);
     ASSERT(type->isRealized());
-    return insertVariable(level, name, type, SymbolType::BuiltIn);
-}
-
-TVariable *TSymbolTable::insertVariable(ESymbolLevel level,
-                                        const ImmutableString &name,
-                                        const TType *type,
-                                        SymbolType symbolType)
-{
-    ASSERT(level > LAST_BUILTIN_LEVEL || type->isRealized());
-    TVariable *var = new TVariable(this, name, type, symbolType);
-    if (insert(level, var))
-    {
-        return var;
-    }
-    return nullptr;
+    TVariable *var = new TVariable(this, name, type, SymbolType::BuiltIn);
+    insertBuiltIn(level, var);
 }
 
 void TSymbolTable::insertVariableExt(ESymbolLevel level,
@@ -306,66 +294,32 @@ void TSymbolTable::insertVariableExt(ESymbolLevel level,
                                      const ImmutableString &name,
                                      const TType *type)
 {
-    ASSERT(level <= LAST_BUILTIN_LEVEL);
     ASSERT(type->isRealized());
     TVariable *var = new TVariable(this, name, type, SymbolType::BuiltIn, ext);
-    bool inserted  = insert(level, var);
-    UNUSED_VARIABLE(inserted);
-    ASSERT(inserted);
-}
-
-bool TSymbolTable::insertVariable(ESymbolLevel level, TVariable *variable)
-{
-    ASSERT(variable);
-    ASSERT(level > LAST_BUILTIN_LEVEL || variable->getType().isRealized());
-    return insert(level, variable);
-}
-
-bool TSymbolTable::insert(ESymbolLevel level, TSymbol *symbol)
-{
-    ASSERT(level > LAST_BUILTIN_LEVEL || mUserDefinedUniqueIdsStart == -1);
-    if (level <= LAST_BUILTIN_LEVEL)
-    {
-        return mBuiltInTable[level]->insert(symbol);
-    }
-    else
-    {
-        return mTable[level - LAST_BUILTIN_LEVEL - 1]->insert(symbol);
-    }
+    insertBuiltIn(level, var);
 }
 
 void TSymbolTable::insertBuiltIn(ESymbolLevel level, const TSymbol *symbol)
 {
     ASSERT(symbol);
     ASSERT(level <= LAST_BUILTIN_LEVEL);
+
     mBuiltInTable[level]->insert(symbol);
 }
 
-bool TSymbolTable::insertStructType(ESymbolLevel level, TStructure *str)
-{
-    ASSERT(str);
-    return insert(level, str);
-}
-
-bool TSymbolTable::insertInterfaceBlock(ESymbolLevel level, TInterfaceBlock *interfaceBlock)
-{
-    ASSERT(interfaceBlock);
-    return insert(level, interfaceBlock);
-}
-
 template <TPrecision precision>
-bool TSymbolTable::insertConstInt(ESymbolLevel level, const ImmutableString &name, int value)
+void TSymbolTable::insertConstInt(ESymbolLevel level, const ImmutableString &name, int value)
 {
     TVariable *constant = new TVariable(
         this, name, StaticType::Get<EbtInt, precision, EvqConst, 1, 1>(), SymbolType::BuiltIn);
     TConstantUnion *unionArray = new TConstantUnion[1];
     unionArray[0].setIConst(value);
     constant->shareConstPointer(unionArray);
-    return insert(level, constant);
+    insertBuiltIn(level, constant);
 }
 
 template <TPrecision precision>
-bool TSymbolTable::insertConstIntExt(ESymbolLevel level,
+void TSymbolTable::insertConstIntExt(ESymbolLevel level,
                                      TExtension ext,
                                      const ImmutableString &name,
                                      int value)
@@ -375,11 +329,11 @@ bool TSymbolTable::insertConstIntExt(ESymbolLevel level,
     TConstantUnion *unionArray = new TConstantUnion[1];
     unionArray[0].setIConst(value);
     constant->shareConstPointer(unionArray);
-    return insert(level, constant);
+    insertBuiltIn(level, constant);
 }
 
 template <TPrecision precision>
-bool TSymbolTable::insertConstIvec3(ESymbolLevel level,
+void TSymbolTable::insertConstIvec3(ESymbolLevel level,
                                     const ImmutableString &name,
                                     const std::array<int, 3> &values)
 {
@@ -393,7 +347,7 @@ bool TSymbolTable::insertConstIvec3(ESymbolLevel level,
     }
     constantIvec3->shareConstPointer(unionArray);
 
-    return insert(level, constantIvec3);
+    insertBuiltIn(level, constantIvec3);
 }
 
 void TSymbolTable::setDefaultPrecision(TBasicType type, TPrecision prec)
@@ -584,7 +538,7 @@ void TSymbolTable::initializeBuiltInVariables(sh::GLenum type,
     fields->push_back(diff);
     TStructure *depthRangeStruct = new TStructure(this, ImmutableString("gl_DepthRangeParameters"),
                                                   fields, SymbolType::BuiltIn);
-    insertStructType(COMMON_BUILTINS, depthRangeStruct);
+    insertBuiltIn(COMMON_BUILTINS, depthRangeStruct);
     TType *depthRangeType = new TType(depthRangeStruct);
     depthRangeType->setQualifier(EvqUniform);
     depthRangeType->realize();
@@ -883,7 +837,7 @@ void TSymbolTable::initializeBuiltInVariables(sh::GLenum type,
             TInterfaceBlock *glPerVertexInBlock =
                 new TInterfaceBlock(this, glPerVertexString, glPerVertexFieldList,
                                     TLayoutQualifier::Create(), SymbolType::BuiltIn, extension);
-            insertInterfaceBlock(ESSL3_1_BUILTINS, glPerVertexInBlock);
+            insertBuiltIn(ESSL3_1_BUILTINS, glPerVertexInBlock);
 
             // The array size of gl_in is undefined until we get a valid input primitive
             // declaration.
