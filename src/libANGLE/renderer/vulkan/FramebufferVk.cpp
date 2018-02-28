@@ -41,6 +41,34 @@ gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
     GLenum implFormat = renderTarget->format->textureFormat().fboImplementationInternalFormat;
     return &gl::GetSizedInternalFormatInfo(implFormat);
 }
+
+gl::Error ClearDepthStencilImage(const gl::Context *context,
+                                 vk::CommandGraphNode *writingNode,
+                                 Serial currentSerial,
+                                 vk::CommandBuffer *commandBuffer,
+                                 const gl::FramebufferAttachment *depthStencilAttachment,
+                                 const VkClearDepthStencilValue &depthStencil)
+{
+    RenderTargetVk *renderTarget = nullptr;
+    ANGLE_TRY(depthStencilAttachment->getRenderTarget(context, &renderTarget));
+
+    const angle::Format &angleFormat = renderTarget->format->textureFormat();
+
+    const bool hasDepth   = (angleFormat.depthBits > 0);
+    const bool hasStencil = (angleFormat.stencilBits > 0);
+
+    const VkImageAspectFlags aspectFlags =
+        (hasDepth ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) | (hasStencil ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
+
+    renderTarget->resource->onWriteResource(writingNode, currentSerial);
+    renderTarget->image->changeLayoutWithStages(aspectFlags, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                                VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+
+    commandBuffer->clearSingleDepthStencilImage(*renderTarget->image, aspectFlags, depthStencil);
+
+    return gl::NoError();
+}
 }  // anonymous namespace
 
 // static
@@ -119,36 +147,69 @@ gl::Error FramebufferVk::invalidateSub(const gl::Context *context,
 
 gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 {
-    if (mState.getDepthAttachment() && (mask & GL_DEPTH_BUFFER_BIT) != 0)
-    {
-        // TODO(jmadill): Depth clear
-        UNIMPLEMENTED();
-    }
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+    Serial currentSerial = renderer->getCurrentQueueSerial();
 
-    if (mState.getStencilAttachment() && (mask & GL_STENCIL_BUFFER_BIT) != 0)
-    {
-        // TODO(jmadill): Stencil clear
-        UNIMPLEMENTED();
-    }
+    // This command buffer is only started once.
+    vk::CommandBuffer *commandBuffer  = nullptr;
+    vk::CommandGraphNode *writingNode = nullptr;
 
-    if ((mask & GL_COLOR_BUFFER_BIT) == 0)
+    const gl::FramebufferAttachment *depthAttachment = mState.getDepthAttachment();
+    bool clearDepth = (depthAttachment && (mask & GL_DEPTH_BUFFER_BIT) != 0);
+    ASSERT(!clearDepth || depthAttachment->isAttached());
+
+    const gl::FramebufferAttachment *stencilAttachment = mState.getStencilAttachment();
+    bool clearStencil = (stencilAttachment && (mask & GL_STENCIL_BUFFER_BIT) != 0);
+    ASSERT(!clearStencil || stencilAttachment->isAttached());
+
+    if (clearDepth || clearStencil)
     {
-        return gl::NoError();
+        ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+        writingNode = getCurrentWritingNode(currentSerial);
+
+        const VkClearDepthStencilValue &clearDepthStencilValue =
+            contextVk->getClearDepthStencilValue().depthStencil;
+
+        const gl::FramebufferAttachment *depthStencilAttachment =
+            mState.getDepthStencilAttachment();
+        if (depthStencilAttachment && clearDepth && clearStencil)
+        {
+            // Combined depth/stencil clear.
+            ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
+                                             depthStencilAttachment, clearDepthStencilValue));
+        }
+        else
+        {
+            // Separate depth clear.
+            if (clearDepth)
+            {
+                ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
+                                                 depthAttachment, clearDepthStencilValue));
+            }
+            // Separate stencil clear.
+            if (clearStencil)
+            {
+                ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
+                                                 stencilAttachment, clearDepthStencilValue));
+            }
+        }
+
+        if ((mask & GL_COLOR_BUFFER_BIT) == 0)
+        {
+            return gl::NoError();
+        }
     }
 
     // TODO(jmadill): Scissored clears.
     const auto *attachment = mState.getFirstNonNullAttachment();
     ASSERT(attachment && attachment->isAttached());
-    const auto &size = attachment->getSize();
-    const gl::Rectangle renderArea(0, 0, size.width, size.height);
 
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
-
-    Serial currentSerial = renderer->getCurrentQueueSerial();
+    if (!commandBuffer)
+    {
+        ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+        writingNode = getCurrentWritingNode(currentSerial);
+    }
 
     for (const auto &colorAttachment : mState.getColorAttachments())
     {
@@ -157,8 +218,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             RenderTargetVk *renderTarget = nullptr;
             ANGLE_TRY(colorAttachment.getRenderTarget(context, &renderTarget));
 
-            renderTarget->resource->onWriteResource(getCurrentWritingNode(currentSerial),
-                                                    currentSerial);
+            renderTarget->resource->onWriteResource(writingNode, currentSerial);
 
             renderTarget->image->changeLayoutWithStages(
                 VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -168,8 +228,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
                                                  contextVk->getClearColorValue().color);
         }
     }
-
-    // TODO(jmadill): Depth/stencil clear.
 
     return gl::NoError();
 }
