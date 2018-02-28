@@ -107,8 +107,8 @@ class Buffer11 : public BufferD3D
     // We use two set of dirty events. Static buffers are marked dirty whenever
     // data changes, because they must be re-translated. Direct buffers only need to be
     // updated when the underlying ID3D11Buffer pointer changes - hopefully far less often.
-    OnBufferDataDirtyChannel *getStaticBroadcastChannel();
-    OnBufferDataDirtyChannel *getDirectBroadcastChannel();
+    angle::Subject *getStaticBroadcastChannel();
+    angle::Subject *getDirectBroadcastChannel();
 
   private:
     class BufferStorage;
@@ -180,8 +180,8 @@ class Buffer11 : public BufferD3D
     size_t mConstantBufferStorageAdditionalSize;
     unsigned int mMaxConstantBufferLruCount;
 
-    OnBufferDataDirtyChannel mStaticBroadcastChannel;
-    OnBufferDataDirtyChannel mDirectBroadcastChannel;
+    angle::Subject mStaticBroadcastChannel;
+    angle::Subject mDirectBroadcastChannel;
 };
 
 }  // namespace rx

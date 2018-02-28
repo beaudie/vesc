@@ -21,8 +21,7 @@ namespace rx
 
 namespace
 {
-OnBufferDataDirtyChannel *GetBufferBroadcastChannel(Buffer11 *buffer11,
-                                                    IndexStorageType storageType)
+angle::Subject *GetBufferBroadcastChannel(Buffer11 *buffer11, IndexStorageType storageType)
 {
     switch (storageType)
     {
@@ -222,7 +221,7 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
 
     if (oldBuffer11 != newBuffer11 || oldStorageType != newStorageType)
     {
-        OnBufferDataDirtyChannel *newChannel = nullptr;
+        angle::Subject *newChannel = nullptr;
 
         if (newStorageType == VertexStorageType::CURRENT_VALUE)
         {
@@ -348,9 +347,11 @@ const std::vector<TranslatedAttribute> &VertexArray11::getTranslatedAttribs() co
     return mTranslatedAttribs;
 }
 
-void VertexArray11::signal(size_t channelID, const gl::Context *context)
+void VertexArray11::onSubjectStateChange(const gl::Context *context,
+                                         angle::SubjectIndex index,
+                                         angle::SubjectMessage message)
 {
-    if (channelID == mAttributeStorageTypes.size())
+    if (index == mAttributeStorageTypes.size())
     {
         mCachedIndexInfoValid   = false;
         mLastElementType        = GL_NONE;
@@ -358,10 +359,10 @@ void VertexArray11::signal(size_t channelID, const gl::Context *context)
     }
     else
     {
-        ASSERT(mAttributeStorageTypes[channelID] != VertexStorageType::CURRENT_VALUE);
+        ASSERT(mAttributeStorageTypes[index] != VertexStorageType::CURRENT_VALUE);
 
         // This can change a buffer's storage, we'll need to re-check.
-        mAttribsToUpdate.set(channelID);
+        mAttribsToUpdate.set(index);
 
         // Changing the vertex attribute state can affect the vertex shader.
         Renderer11 *renderer = GetImplAs<Context11>(context)->getRenderer();
