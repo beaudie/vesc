@@ -12,12 +12,13 @@
 
 #include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
+#include "libANGLE/signal_utils.h"
 
 namespace rx
 {
 class RendererVk;
 
-class BufferVk : public BufferImpl, public ResourceVk
+class BufferVk : public BufferImpl, public ResourceVk, public angle::Subject
 {
   public:
     BufferVk(const gl::BufferState &state);
