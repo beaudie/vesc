@@ -273,7 +273,7 @@ config("vulkan_loader_config") {
 }
 
 if (!is_android) {
-  static_library("vulkan_loader") {
+  shared_library("libvulkan") {
     sources = [
       "src/loader/cJSON.c",
       "src/loader/cJSON.h",
