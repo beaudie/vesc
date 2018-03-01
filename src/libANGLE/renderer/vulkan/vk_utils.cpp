@@ -1330,7 +1330,9 @@ void GarbageObject::destroy(VkDevice device)
 }
 
 LineLoopHandler::LineLoopHandler()
-    : mStreamingLineLoopIndicesData(
+    : mInvalidateIndexBuffer(false),
+      mObserverBinding(this, 0u),
+      mStreamingLineLoopIndicesData(
           new StreamingBuffer(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
                               kLineLoopStreamingBufferMinSize)),
       mLineLoopIndexBuffer(VK_NULL_HANDLE),
@@ -1385,10 +1387,15 @@ gl::Error LineLoopHandler::createIndexBufferFromElementArrayBuffer(ContextVk *co
 {
     ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
 
-    if (mLineLoopIndexBuffer != VK_NULL_HANDLE)
+    if (!mInvalidateIndexBuffer && mLineLoopIndexBuffer != VK_NULL_HANDLE)
     {
         return gl::NoError();
     }
+
+    // We want to know if the bufferVk changes at any point in time, because if it does we need to
+    // recopy our data on the next call.
+    mObserverBinding.reset();
+    mObserverBinding.bind(bufferVk);
 
     uint32_t *indices = nullptr;
 
@@ -1417,11 +1424,13 @@ gl::Error LineLoopHandler::createIndexBufferFromElementArrayBuffer(ContextVk *co
 
     ANGLE_TRY(mStreamingLineLoopIndicesData->flush(contextVk));
 
+    mInvalidateIndexBuffer = false;
     return gl::NoError();
 }
 
 void LineLoopHandler::destroy(VkDevice device)
 {
+    mObserverBinding.reset();
     mStreamingLineLoopIndicesData->destroy(device);
 }
 
@@ -1437,6 +1446,18 @@ gl::Error LineLoopHandler::draw(int count, CommandBuffer *commandBuffer)
 ResourceVk *LineLoopHandler::getLineLoopBufferResource()
 {
     return mStreamingLineLoopIndicesData.get();
+}
+
+void LineLoopHandler::onSubjectStateChange(const gl::Context *context,
+                                           angle::SubjectIndex index,
+                                           angle::SubjectMessage message)
+{
+    // Set a boolean to indicate we want to recopy on next draw since something changed in the
+    // buffer.
+    if (message == angle::SubjectMessage::STATE_CHANGE)
+    {
+        mInvalidateIndexBuffer = true;
+    }
 }
 }  // namespace vk
 
