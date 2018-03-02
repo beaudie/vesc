@@ -1173,9 +1173,15 @@ void TSymbolTable::initializeBuiltInFunctions(sh::GLenum type)
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler3D, float3);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsamplerCube, float3);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler2DArray, float3);
+    insertBuiltIn(ESSL3_BUILTINS, TExtension::ARB_texture_rectangle, float4, "texture",
+                  sampler2DRect, float2);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProj", gsampler2D, float3);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProj", gsampler2D, float4);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProj", gsampler3D, float4);
+    insertBuiltIn(ESSL3_BUILTINS, TExtension::ARB_texture_rectangle, float4, "textureProj",
+                  sampler2DRect, float3);
+    insertBuiltIn(ESSL3_BUILTINS, TExtension::ARB_texture_rectangle, float4, "textureProj",
+                  sampler2DRect, float4);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsampler2D, float2, float1);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsampler3D, float3, float1);
     insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsamplerCube, float3, float1);
