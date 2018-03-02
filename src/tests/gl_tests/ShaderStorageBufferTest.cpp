@@ -85,45 +85,60 @@ TEST_P(ShaderStorageBufferTest31, ExceedMaxVertexShaderStorageBlocks)
 
 // Linking should fail if the sum of the number of active shader storage blocks exceeds
 // MAX_COMBINED_SHADER_STORAGE_BLOCKS.
-// This case may generate linking error due to exceeding MAX_FRAGMENT_SHADER_STORAGE_BLOCKS.
 TEST_P(ShaderStorageBufferTest31, ExceedMaxCombinedShaderStorageBlocks)
 {
-    std::ostringstream vertexInstanceCount;
     GLint maxVertexShaderStorageBlocks = 0;
     glGetIntegerv(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, &maxVertexShaderStorageBlocks);
-    vertexInstanceCount << maxVertexShaderStorageBlocks;
+
+    GLint maxFragmentShaderStorageBlocks = 0;
+    glGetIntegerv(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, &maxFragmentShaderStorageBlocks);
 
     GLint maxCombinedShaderStorageBlocks = 0;
     glGetIntegerv(GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS, &maxCombinedShaderStorageBlocks);
     EXPECT_GL_NO_ERROR();
 
-    std::ostringstream fragmentInstanceCount;
-    GLint fragmentShaderStorageBlocks =
+    ASSERT_GE(maxCombinedShaderStorageBlocks, maxVertexShaderStorageBlocks);
+    ASSERT_GE(maxCombinedShaderStorageBlocks, maxFragmentShaderStorageBlocks);
+
+    // As SPEC allows MAX_VERTEX_SHADER_STORAGE_BLOCKS and MAX_FRAGMENT_SHADER_STORAGE_BLOCKS to be
+    // 0, in this situation we should skip this test to prevent these unexpected errors.
+    ANGLE_SKIP_TEST_IF(maxVertexShaderStorageBlocks == 0 || maxFragmentShaderStorageBlocks == 0);
+
+    const GLint vertexShaderStorageBlocks = maxVertexShaderStorageBlocks;
+    const GLint fragmentShaderStorageBlocks =
         maxCombinedShaderStorageBlocks - maxVertexShaderStorageBlocks + 1;
-    fragmentInstanceCount << fragmentShaderStorageBlocks;
 
-    const std::string &vertexShaderSource =
-        "#version 310 es\n"
-        "layout(shared) buffer blockName0 {\n"
-        "    uint data;\n"
-        "} instance0[" +
-        vertexInstanceCount.str() +
-        "];\n"
-        "void main()\n"
-        "{\n"
-        "}\n";
-    const std::string &fragmentShaderSource =
-        "#version 310 es\n"
-        "layout(shared) buffer blockName1 {\n"
-        "    uint data;\n"
-        "} instance1[" +
-        fragmentInstanceCount.str() +
-        "];\n"
-        "void main()\n"
-        "{\n"
-        "}\n";
+    ANGLE_SKIP_TEST_IF(fragmentShaderStorageBlocks > maxFragmentShaderStorageBlocks);
 
-    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    std::ostringstream vsStream;
+    vsStream << "#version 310 es\n"
+                "layout(shared) buffer blockName0 {\n"
+                "    uint data;\n"
+                "} instance0["
+             << vertexShaderStorageBlocks << "];\n"
+             << "void main()\n"
+                "{\n";
+    for (int i = 0; i < vertexShaderStorageBlocks; ++i)
+    {
+        vsStream << "    instance0[" << i << "].data = 0u;\n";
+    }
+    vsStream << "}\n";
+
+    std::ostringstream fsStream;
+    fsStream << "#version 310 es\n"
+                "layout(shared) buffer blockName1 {\n"
+                "    uint data;\n"
+                "} instance1["
+             << fragmentShaderStorageBlocks << "];\n"
+             << "void main()\n"
+                "{\n";
+    for (int i = 0; i < fragmentShaderStorageBlocks; ++i)
+    {
+        fsStream << "    instance1[" << i << "].data = 0u;\n";
+    }
+    fsStream << "}\n";
+
+    GLuint program = CompileProgram(vsStream.str(), fsStream.str());
     EXPECT_EQ(0u, program);
 }
 
