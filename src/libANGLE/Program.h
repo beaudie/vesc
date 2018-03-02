@@ -192,6 +192,8 @@ struct VariableLocation
     bool ignored;
 };
 
+bool IsActiveInterfaceBlock(const sh::InterfaceBlock &block);
+
 // Information about a variable binding.
 // Currently used by CHROMIUM_path_rendering
 struct BindingInfo
