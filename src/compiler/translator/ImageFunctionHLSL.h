@@ -32,7 +32,6 @@ class ImageFunctionHLSL final : angle::NonCopyable
 
     void imageFunctionHeader(TInfoSinkBase &out);
 
-  private:
     struct ImageFunction
     {
         // See ESSL 3.10.4 section 8.12 for reference about what the different methods below do.
@@ -55,18 +54,19 @@ class ImageFunctionHLSL final : angle::NonCopyable
         Method method;
     };
 
+  private:
     static void OutputImageFunctionArgumentList(
         TInfoSinkBase &out,
         const ImageFunctionHLSL::ImageFunction &imageFunction);
     static void OutputImageSizeFunctionBody(TInfoSinkBase &out,
                                             const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                            const TString &imageReference);
+                                            const ImmutableString &imageReference);
     static void OutputImageLoadFunctionBody(TInfoSinkBase &out,
                                             const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                            const TString &imageReference);
+                                            const ImmutableString &imageReference);
     static void OutputImageStoreFunctionBody(TInfoSinkBase &out,
                                              const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                             const TString &imageReference);
+                                             const ImmutableString &imageReference);
     using ImageFunctionSet = std::set<ImageFunction>;
     ImageFunctionSet mUsesImage;
 };

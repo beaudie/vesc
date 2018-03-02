@@ -7,6 +7,7 @@
 //
 
 #include "compiler/translator/ImageFunctionHLSL.h"
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/UtilsHLSL.h"
 
 namespace sh
@@ -17,14 +18,7 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction)
 {
-    if (imageFunction.readonly)
-    {
-        out << TextureString(imageFunction.image, imageFunction.imageInternalFormat) << " tex";
-    }
-    else
-    {
-        out << RWTextureString(imageFunction.image, imageFunction.imageInternalFormat) << " tex";
-    }
+    out << "uint imageIndex";
 
     if (imageFunction.method == ImageFunctionHLSL::ImageFunction::Method::LOAD ||
         imageFunction.method == ImageFunctionHLSL::ImageFunction::Method::STORE)
@@ -80,11 +74,41 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
     }
 }
 
+void GetTextureReference(TInfoSinkBase &out,
+                         const ImageFunctionHLSL::ImageFunction &imageFunction,
+                         ImmutableString *imageReference)
+{
+    static const ImmutableString kImageIndexStr("[index]");
+    if (imageFunction.readonly)
+    {
+        const ImmutableString kImageStr("readonlyImages");
+        ImmutableString suffix(
+            TextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat));
+        out << "    const uint index = imageIndex - readonlyImageIndexOffset" << suffix.data()
+            << ";\n";
+        ImmutableStringBuilder imageRefBuilder(kImageStr.length() + suffix.length() +
+                                               kImageIndexStr.length());
+        imageRefBuilder << kImageStr << suffix << kImageIndexStr;
+        *imageReference = imageRefBuilder;
+    }
+    else
+    {
+        const ImmutableString kImageStr("images");
+        ImmutableString suffix(
+            RWTextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat));
+        out << "    const uint index = imageIndex - imageIndexOffset" << suffix.data() << ";\n";
+        ImmutableStringBuilder imageRefBuilder(kImageStr.length() + suffix.length() +
+                                               kImageIndexStr.length());
+        imageRefBuilder << kImageStr << suffix << kImageIndexStr;
+        *imageReference = imageRefBuilder;
+    }
+}
+
 // static
 void ImageFunctionHLSL::OutputImageSizeFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
         IsImageCube(imageFunction.image))
@@ -115,7 +139,7 @@ void ImageFunctionHLSL::OutputImageSizeFunctionBody(
 void ImageFunctionHLSL::OutputImageLoadFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
         IsImageCube(imageFunction.image))
@@ -134,7 +158,7 @@ void ImageFunctionHLSL::OutputImageLoadFunctionBody(
 void ImageFunctionHLSL::OutputImageStoreFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
         IsImage2D(imageFunction.image) || IsImageCube(imageFunction.image))
@@ -281,7 +305,8 @@ void ImageFunctionHLSL::imageFunctionHeader(TInfoSinkBase &out)
         out << ")\n"
                "{\n";
 
-        TString imageReference("tex");
+        ImmutableString imageReference("");
+        GetTextureReference(out, imageFunction, &imageReference);
 
         if (imageFunction.method == ImageFunction::Method::SIZE)
         {

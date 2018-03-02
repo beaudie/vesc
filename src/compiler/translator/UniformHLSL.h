@@ -95,6 +95,15 @@ class UniformHLSL : angle::NonCopyable
         const TMap<const TVariable *, TString> &samplerInStructSymbolsToAPINames,
         unsigned int *groupTextureRegisterIndex);
 
+    void outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
+                                             const HLSLTextureGroup textureGroup,
+                                             const TVector<const TVariable *> &group,
+                                             unsigned int *groupTextureRegisterIndex);
+    void outputHLSLImageUniformGroup(TInfoSinkBase &out,
+                                     const HLSLRWTextureGroup textureGroup,
+                                     const TVector<const TVariable *> &group,
+                                     unsigned int *groupTextureRegisterIndex);
+
     unsigned int mUniformRegister;
     unsigned int mUniformBlockRegister;
     unsigned int mTextureRegister;
