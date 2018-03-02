@@ -481,18 +481,18 @@ const char *TType::buildMangledName() const
 {
     TString mangledName;
 
-    if (isMatrix())
+    unsigned char sizeKey = (getSecondarySize() - 1u) * 4u + getNominalSize() - 1u;
+    if (sizeKey < 10u)
     {
-        mangledName += static_cast<char>('0' + getCols());
-        mangledName += static_cast<char>('0' + getRows());
+        mangledName += '0' + sizeKey;
     }
-    else if (getNominalSize() > 1)
+    else
     {
-        mangledName += static_cast<char>('0' + getNominalSize());
+        mangledName += 'A' + sizeKey - 10;
     }
 
-    const char *basicMangledName = GetBasicMangledName(type);
-    if (basicMangledName != nullptr)
+    char basicMangledName = GetBasicMangledName(type);
+    if (basicMangledName != '{')
     {
         mangledName += basicMangledName;
     }
@@ -502,17 +502,19 @@ const char *TType::buildMangledName() const
         switch (type)
         {
             case EbtStruct:
-                mangledName += "struct-";
+                mangledName += "{s";
                 if (mStructure->symbolType() != SymbolType::Empty)
                 {
                     mangledName += mStructure->name().data();
                 }
                 mangledName += mStructure->mangledFieldList();
+                mangledName += '}';
                 break;
             case EbtInterfaceBlock:
-                mangledName += "iblock-";
+                mangledName += "{i";
                 mangledName += mInterfaceBlock->name().data();
                 mangledName += mInterfaceBlock->mangledFieldList();
+                mangledName += '}';
                 break;
             default:
                 UNREACHABLE();
@@ -531,8 +533,6 @@ const char *TType::buildMangledName() const
             mangledName += ']';
         }
     }
-
-    mangledName += ';';
 
     // Copy string contents into a pool-allocated buffer, so we never need to call delete.
     return AllocatePoolCharArray(mangledName.c_str(), mangledName.size());
@@ -874,7 +874,6 @@ TString TFieldListCollection::buildMangledFieldList() const
     TString mangledName;
     for (const auto *field : *mFields)
     {
-        mangledName += '-';
         mangledName += field->type()->getMangledName();
     }
     return mangledName;
