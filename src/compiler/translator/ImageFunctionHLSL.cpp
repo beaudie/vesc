@@ -7,6 +7,7 @@
 //
 
 #include "compiler/translator/ImageFunctionHLSL.h"
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/UtilsHLSL.h"
 
 namespace sh
@@ -17,14 +18,7 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction)
 {
-    if (imageFunction.readonly)
-    {
-        out << TextureString(imageFunction.image, imageFunction.imageInternalFormat) << " tex";
-    }
-    else
-    {
-        out << RWTextureString(imageFunction.image, imageFunction.imageInternalFormat) << " tex";
-    }
+    out << "uint imageIndex";
 
     if (imageFunction.method == ImageFunctionHLSL::ImageFunction::Method::LOAD ||
         imageFunction.method == ImageFunctionHLSL::ImageFunction::Method::STORE)
@@ -80,51 +74,186 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
     }
 }
 
+void GetTextureReference(const ImageFunctionHLSL::ImageFunction &imageFunction,
+                         ImmutableString *imageReference)
+{
+    if (imageFunction.readonly)
+    {
+        const ImmutableString kImageStr("readonlyImages");
+        ImmutableString suffix(
+            TextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat));
+        ImmutableStringBuilder imageRefBuilder(kImageStr.length() + suffix.length());
+        imageRefBuilder << kImageStr << suffix;
+        *imageReference = imageRefBuilder;
+    }
+    else
+    {
+        const ImmutableString kImageStr("images");
+        ImmutableString suffix(
+            RWTextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat));
+        ImmutableStringBuilder imageRefBuilder(kImageStr.length() + suffix.length());
+        imageRefBuilder << kImageStr << suffix;
+        *imageReference = imageRefBuilder;
+    }
+}
+
+TString GetImageIndexOffset(const ImageFunctionHLSL::ImageFunction &imageFunction, std::string str)
+{
+    TString name = "";
+    if (imageFunction.readonly)
+    {
+        name += "readonlyImageIndexOffset";
+        name += TextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat);
+    }
+    else
+    {
+        name += "imageIndexOffset";
+        name += RWTextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat);
+    }
+
+    name += str.c_str();
+    return name;
+}
+
+void GenerateMacroBegin(TInfoSinkBase &out,
+                        const ImageFunctionHLSL::ImageFunction &imageFunction,
+                        std::string str)
+{
+    TString macro = "gl_image";
+    if (imageFunction.readonly)
+    {
+        macro += TextureTypeSuffix(imageFunction.image, imageFunction.imageInternalFormat);
+    }
+    else
+    {
+        macro += RWTextureTypeSuffix(imageFunction.image, imageFunction.imageInternalFormat);
+    }
+    macro += str.c_str();
+
+    out << "#ifdef " << macro << "\n";
+}
+
+void GenerateMacroEnd(TInfoSinkBase &out)
+{
+    out << "#endif\n";
+}
+
 // static
 void ImageFunctionHLSL::OutputImageSizeFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
         IsImageCube(imageFunction.image))
     {
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
         // "depth" stores either the number of layers in an array texture or 3D depth
-        out << "    uint width; uint height; uint depth;\n"
-            << "    " << imageReference << ".GetDimensions(width, height, depth);\n";
+        out << "    uint width; uint height; uint depth;\n";
+        out << "    " << imageReference << "[index].GetDimensions(width, height, depth);\n";
     }
     else if (IsImage2D(imageFunction.image))
     {
-        out << "    uint width; uint height;\n"
-            << "    " << imageReference << ".GetDimensions(width, height);\n";
+        GenerateMacroBegin(out, imageFunction, "");
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
+        out << "    uint width; uint height;\n";
+        out << "    " << imageReference << "[index].GetDimensions(width, height);\n";
+        out << "    return int2(width, height);\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "3D") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2D") << ";\n";
+        out << "        uint width; uint height;\n";
+        out << "        " << imageReference << "2D[index].GetDimensions(width, height);\n";
+        out << "        return int2(width, height);\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "3D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "3D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "3D") << ";\n";
+        out << "        uint width; uint height; uint depth;\n";
+        out << "        " << imageReference << "3D[index].GetDimensions(width, height, depth);\n";
+        out << "        return int2(width, height);\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2DArray");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2DArray") << ";\n";
+        out << "        uint width; uint height; uint depth;\n";
+        out << "        " << imageReference
+            << "2DArray[index].GetDimensions(width, height, depth);\n";
+        out << "        return int2(width, height);\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
     }
     else
         UNREACHABLE();
-
-    if (strcmp(imageFunction.getReturnType(), "int3") == 0)
-    {
-        out << "    return int3(width, height, depth);\n";
-    }
-    else
-    {
-        out << "    return int2(width, height);\n";
-    }
 }
 
 // static
 void ImageFunctionHLSL::OutputImageLoadFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
         IsImageCube(imageFunction.image))
     {
-        out << "    return " << imageReference << "[uint3(p.x, p.y, p.z)];\n";
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
+        out << "    return " << imageReference << "[index][uint3(p.x, p.y, p.z)];\n";
     }
     else if (IsImage2D(imageFunction.image))
     {
-        out << "    return " << imageReference << "[uint2(p.x, p.y)];\n";
+        GenerateMacroBegin(out, imageFunction, "");
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
+        out << "    return " << imageReference << "[index][uint2(p.x, p.y)];\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "3D") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2D") << ";\n";
+        out << "        return " << imageReference << "2D[index][uint2(p.x, p.y)];\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "3D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "3D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "3D") << ";\n";
+        out << "        return " << imageReference
+            << "3D[index][uint3(p.x, p.y, layer[imageIndex])];\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2DArray");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2DArray") << ";\n";
+        out << "        return " << imageReference
+            << "2DArray[index][uint3(p.x, p.y, layer[imageIndex])];\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
     }
     else
         UNREACHABLE();
@@ -134,12 +263,52 @@ void ImageFunctionHLSL::OutputImageLoadFunctionBody(
 void ImageFunctionHLSL::OutputImageStoreFunctionBody(
     TInfoSinkBase &out,
     const ImageFunctionHLSL::ImageFunction &imageFunction,
-    const TString &imageReference)
+    const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
-        IsImage2D(imageFunction.image) || IsImageCube(imageFunction.image))
+        IsImageCube(imageFunction.image))
     {
-        out << "    " << imageReference << "[p] = data;\n";
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
+        out << "    " << imageReference << "[index][p] = data;\n";
+    }
+    else if (IsImage2D(imageFunction.image))
+    {
+        GenerateMacroBegin(out, imageFunction, "");
+        out << "    const uint index = imageIndex - " << GetImageIndexOffset(imageFunction, "")
+            << ";\n";
+        out << "    " << imageReference << "[index][p] = data;\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "3D") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2D") << ";\n";
+        out << "        " << imageReference << "2D[index][p] = data;\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "3D");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "3D")
+            << " && imageIndex < " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "3D") << ";\n";
+        out << "        " << imageReference << "3D[index][uint3(p, layer[imageIndex])] = data;\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
+
+        GenerateMacroBegin(out, imageFunction, "2DArray");
+        out << "    if (imageIndex >= " << GetImageIndexOffset(imageFunction, "2DArray") << ")\n";
+        out << "    {\n";
+        out << "        const uint index = imageIndex - "
+            << GetImageIndexOffset(imageFunction, "2DArray") << ";\n";
+        out << "        " << imageReference
+            << "2DArray[index][uint3(p, layer[imageIndex])] = data;\n";
+        out << "    }\n";
+        GenerateMacroEnd(out);
     }
     else
         UNREACHABLE();
@@ -233,10 +402,40 @@ const char *ImageFunctionHLSL::ImageFunction::getReturnType() const
     return "";
 }
 
+ImageFunctionHLSL::ImageFunction::DataType ImageFunctionHLSL::ImageFunction::getDataType(
+    TLayoutImageInternalFormat format) const
+{
+    switch (format)
+    {
+        case EiifRGBA32F:
+        case EiifRGBA16F:
+        case EiifR32F:
+            return ImageFunction::DataType::FLOAT4;
+        case EiifRGBA32UI:
+        case EiifRGBA16UI:
+        case EiifRGBA8UI:
+        case EiifR32UI:
+            return ImageFunction::DataType::UINT4;
+        case EiifRGBA32I:
+        case EiifRGBA16I:
+        case EiifRGBA8I:
+        case EiifR32I:
+            return ImageFunction::DataType::INT4;
+        case EiifRGBA8:
+            return ImageFunction::DataType::UNORM_FLOAT4;
+        case EiifRGBA8_SNORM:
+            return ImageFunction::DataType::SNORM_FLOAT4;
+        default:
+            UNREACHABLE();
+    }
+
+    return ImageFunction::DataType::NONE;
+}
+
 bool ImageFunctionHLSL::ImageFunction::operator<(const ImageFunction &rhs) const
 {
-    return std::tie(image, imageInternalFormat, readonly, method) <
-           std::tie(rhs.image, rhs.imageInternalFormat, rhs.readonly, rhs.method);
+    return std::tie(image, type, method, readonly) <
+           std::tie(rhs.image, rhs.type, rhs.method, rhs.readonly);
 }
 
 TString ImageFunctionHLSL::useImageFunction(const ImmutableString &name,
@@ -249,6 +448,7 @@ TString ImageFunctionHLSL::useImageFunction(const ImmutableString &name,
     imageFunction.image               = type;
     imageFunction.imageInternalFormat = imageInternalFormat;
     imageFunction.readonly            = readonly;
+    imageFunction.type                = imageFunction.getDataType(imageInternalFormat);
 
     if (name == "imageSize")
     {
@@ -281,7 +481,8 @@ void ImageFunctionHLSL::imageFunctionHeader(TInfoSinkBase &out)
         out << ")\n"
                "{\n";
 
-        TString imageReference("tex");
+        ImmutableString imageReference("");
+        GetTextureReference(imageFunction, &imageReference);
 
         if (imageFunction.method == ImageFunction::Method::SIZE)
         {

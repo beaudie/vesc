@@ -75,6 +75,25 @@ void GetDefaultOutputLayoutFromShader(
     }
 }
 
+void GetDefaultImage2dBoundLayoutFromComputeShader(
+    const std::vector<Image2DGroupHLSL> &image2DGroupHLSL,
+    std::map<unsigned int, gl::TextureType> *image2dBoundLayout)
+{
+    image2dBoundLayout->clear();
+
+    for (auto &image2DGroup : image2DGroupHLSL)
+    {
+        for (auto image2D : image2DGroup.image2DVars)
+        {
+            for (unsigned int index = 0; index < image2D.count; index++)
+            {
+                image2dBoundLayout->insert(std::pair<unsigned int, gl::TextureType>(
+                    image2D.binding + index, gl::TextureType::_2D));
+            }
+        }
+    }
+}
+
 template <typename T, int cols, int rows>
 bool TransposeExpandMatrix(T *target, const GLfloat *value)
 {
@@ -624,6 +643,18 @@ ProgramD3D::PixelExecutable::~PixelExecutable()
     SafeDelete(mShaderExecutable);
 }
 
+ProgramD3D::ComputeExecutable::ComputeExecutable(
+    const std::map<unsigned int, gl::TextureType> &signature,
+    ShaderExecutableD3D *shaderExecutable)
+    : mSignature(signature), mShaderExecutable(shaderExecutable)
+{
+}
+
+ProgramD3D::ComputeExecutable::~ComputeExecutable()
+{
+    SafeDelete(mShaderExecutable);
+}
+
 ProgramD3D::Sampler::Sampler()
     : active(false), logicalTextureUnit(0), textureType(gl::TextureType::_2D)
 {
@@ -640,7 +671,6 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
       mRenderer(renderer),
       mDynamicHLSL(nullptr),
       mGeometryExecutables(gl::PRIMITIVE_TYPE_MAX),
-      mComputeExecutable(nullptr),
       mUsesPointSize(false),
       mUsesFlatInterpolation(false),
       mUsedShaderSamplerRanges({}),
@@ -1085,8 +1115,6 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
             infoLog << "Could not create compute shader.";
             return false;
         }
-
-        mComputeExecutable.reset(computeExecutable);
     }
 
     initializeUniformStorage(mState.getLinkedShaderStages());
@@ -1253,17 +1281,6 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(geometryShaderSize);
         stream->writeBytes(geometryExecutable->getFunction(), geometryShaderSize);
     }
-
-    if (mComputeExecutable)
-    {
-        size_t computeShaderSize = mComputeExecutable->getLength();
-        stream->writeInt(computeShaderSize);
-        stream->writeBytes(mComputeExecutable->getFunction(), computeShaderSize);
-    }
-    else
-    {
-        stream->writeInt(0);
-    }
 }
 
 void ProgramD3D::setBinaryRetrievableHint(bool /* retrievable */)
@@ -1294,7 +1311,7 @@ gl::Error ProgramD3D::getPixelExecutableForCachedOutputLayout(ShaderExecutableD3
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
 
     ANGLE_TRY(mRenderer->compileToExecutable(
-        *currentInfoLog, finalPixelHLSL, gl::ShaderType::Fragment, mStreamOutVaryings,
+        *currentInfoLog, finalPixelHLSL, gl::ShaderType::Fragment, nullptr, mStreamOutVaryings,
         (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS),
         mShaderWorkarounds[gl::ShaderType::Fragment], &pixelExecutable));
 
@@ -1335,7 +1352,7 @@ gl::Error ProgramD3D::getVertexExecutableForCachedInputLayout(ShaderExecutableD3
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
 
     ANGLE_TRY(mRenderer->compileToExecutable(
-        *currentInfoLog, finalVertexHLSL, gl::ShaderType::Vertex, mStreamOutVaryings,
+        *currentInfoLog, finalVertexHLSL, gl::ShaderType::Vertex, nullptr, mStreamOutVaryings,
         (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS),
         mShaderWorkarounds[gl::ShaderType::Vertex], &vertexExecutable));
 
@@ -1392,7 +1409,7 @@ gl::Error ProgramD3D::getGeometryExecutableForPrimitiveType(const gl::Context *c
 
     ShaderExecutableD3D *geometryExecutable = nullptr;
     gl::Error error                         = mRenderer->compileToExecutable(
-        *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, mStreamOutVaryings,
+        *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, nullptr, mStreamOutVaryings,
         (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS),
         angle::CompilerWorkaroundsD3D(), &geometryExecutable);
 
@@ -1485,6 +1502,13 @@ void ProgramD3D::updateCachedOutputLayoutFromShader()
     updateCachedPixelExecutableIndex();
 }
 
+void ProgramD3D::updateCachedImage2dBoundLayoutFromComputeShader()
+{
+    GetDefaultImage2dBoundLayoutFromComputeShader(mComputeShaderImage2DHLSL,
+                                                  &mComputeShaderImage2dBoundLayoutCache);
+    updateCachedComputeExecutableIndex();
+}
+
 class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTask
 {
   public:
@@ -1509,16 +1533,6 @@ class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTa
   private:
     const gl::Context *mContext;
 };
-
-gl::Error ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutable)
-{
-    if (outExecutable)
-    {
-        *outExecutable = mComputeExecutable.get();
-    }
-
-    return gl::NoError();
-}
 
 gl::LinkResult ProgramD3D::compileProgramExecutables(const gl::Context *context,
                                                      gl::InfoLog &infoLog)
@@ -1588,33 +1602,59 @@ gl::LinkResult ProgramD3D::compileProgramExecutables(const gl::Context *context,
             (!usesGeometryShader(GL_POINTS) || pointGS));
 }
 
+gl::Error ProgramD3D::getComputeExecutableForImageBoundLayout(ShaderExecutableD3D **outExecutable,
+                                                              gl::InfoLog *infoLog)
+{
+    if (mCachedComputeExecutableIndex.valid())
+    {
+        *outExecutable =
+            mComputeExecutables[mCachedComputeExecutableIndex.value()]->shaderExecutable();
+        return gl::NoError();
+    }
+
+    std::vector<std::string> macroStrings;
+    std::string finalComputeHLSL = mDynamicHLSL->generateComputeShaderForImageBoundSignature(
+        mState, mComputeHLSL, mComputeShaderImage2DHLSL, mComputeShaderImage2dBoundLayoutCache,
+        macroStrings, mComputeShaderImageLayerIndexCache);
+
+    // Generate new pixel executable
+    ShaderExecutableD3D *computeExecutable = nullptr;
+
+    gl::InfoLog tempInfoLog;
+    gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
+
+    ANGLE_TRY(mRenderer->compileToExecutable(
+        *currentInfoLog, finalComputeHLSL, gl::ShaderType::Compute, &macroStrings,
+        std::vector<D3DVarying>(), false, angle::CompilerWorkaroundsD3D(), &computeExecutable));
+
+    if (computeExecutable)
+    {
+        mComputeExecutables.push_back(std::unique_ptr<ComputeExecutable>(
+            new ComputeExecutable(mComputeShaderImage2dBoundLayoutCache, computeExecutable)));
+        mCachedComputeExecutableIndex = mComputeExecutables.size() - 1;
+    }
+    else if (!infoLog)
+    {
+        ERR() << "Error compiling dynamic compute executable:" << std::endl
+              << tempInfoLog.str() << std::endl;
+    }
+
+    *outExecutable = computeExecutable;
+
+    return gl::NoError();
+}
+
 gl::LinkResult ProgramD3D::compileComputeExecutable(const gl::Context *context,
                                                     gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
     ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
 
-    std::string computeShader = mDynamicHLSL->generateComputeShaderLinkHLSL(context, mState);
-
+    updateCachedImage2dBoundLayoutFromComputeShader();
     ShaderExecutableD3D *computeExecutable = nullptr;
-    ANGLE_TRY(mRenderer->compileToExecutable(infoLog, computeShader, gl::ShaderType::Compute,
-                                             std::vector<D3DVarying>(), false,
-                                             angle::CompilerWorkaroundsD3D(), &computeExecutable));
+    ANGLE_TRY(getComputeExecutableForImageBoundLayout(&computeExecutable, &infoLog));
 
-    if (computeExecutable == nullptr)
-    {
-        ERR() << "Error compiling dynamic compute executable:" << std::endl
-              << infoLog.str() << std::endl;
-    }
-    else
-    {
-        const ShaderD3D *computeShaderD3D =
-            GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Compute));
-        computeShaderD3D->appendDebugInfo(computeExecutable->getDebugInfo());
-        mComputeExecutable.reset(computeExecutable);
-    }
-
-    return mComputeExecutable.get() != nullptr;
+    return computeExecutable != nullptr;
 }
 
 gl::LinkResult ProgramD3D::link(const gl::Context *context,
@@ -1634,7 +1674,13 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         mReadonlyImagesCS.resize(data.getCaps().maxImageUnits);
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
+
+        ShaderD3D *shaderD3D      = GetImplAs<ShaderD3D>(computeShader);
+        mComputeShaderImage2DHLSL = shaderD3D->getImage2DGroupHLSL();
+
         defineUniformsAndAssignRegisters(context);
+
+        mDynamicHLSL->generateComputeShaderLinkHLSL(context, mState, &mComputeHLSL);
 
         gl::LinkResult result = compileComputeExecutable(context, infoLog);
         if (result.isError())
@@ -2568,13 +2614,12 @@ void ProgramD3D::reset()
 {
     mVertexExecutables.clear();
     mPixelExecutables.clear();
+    mComputeExecutables.clear();
 
     for (auto &geometryExecutable : mGeometryExecutables)
     {
         geometryExecutable.reset(nullptr);
     }
-
-    mComputeExecutable.reset(nullptr);
 
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -2708,6 +2753,25 @@ void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
     updateCachedPixelExecutableIndex();
 }
 
+void ProgramD3D::updateCachedComputeImage2dBoundLayout(const gl::Context *context)
+{
+    const auto &glState = context->getGLState();
+    for (auto &image2dBoundLayout : mComputeShaderImage2dBoundLayoutCache)
+    {
+        const auto &imageUnit = glState.getImageUnit(image2dBoundLayout.first);
+        if (imageUnit.texture.get())
+        {
+            image2dBoundLayout.second = imageUnit.texture->getType();
+        }
+        else
+        {
+            image2dBoundLayout.second = gl::TextureType::_2D;
+        }
+    }
+
+    updateCachedComputeExecutableIndex();
+}
+
 void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyingPacking,
                                                  const BuiltinInfo &builtins)
 {
@@ -2811,6 +2875,11 @@ bool ProgramD3D::anyShaderUniformsDirty() const
     return mShaderUniformsDirty.any();
 }
 
+bool ProgramD3D::hasComputeExecutableForCachedImageBoundLayout()
+{
+    return mCachedComputeExecutableIndex.valid();
+}
+
 template <typename DestT>
 void ProgramD3D::getUniformInternal(GLint location, DestT *dataOut) const
 {
@@ -2867,6 +2936,21 @@ void ProgramD3D::updateCachedPixelExecutableIndex()
         if (mPixelExecutables[executableIndex]->matchesSignature(mPixelShaderOutputLayoutCache))
         {
             mCachedPixelExecutableIndex = executableIndex;
+            break;
+        }
+    }
+}
+
+void ProgramD3D::updateCachedComputeExecutableIndex()
+{
+    mCachedComputeExecutableIndex.reset();
+    for (size_t executableIndex = 0; executableIndex < mComputeExecutables.size();
+         executableIndex++)
+    {
+        if (mComputeExecutables[executableIndex]->matchesSignature(
+                mComputeShaderImage2dBoundLayoutCache))
+        {
+            mCachedComputeExecutableIndex = executableIndex;
             break;
         }
     }

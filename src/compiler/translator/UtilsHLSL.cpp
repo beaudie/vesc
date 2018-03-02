@@ -338,6 +338,47 @@ const char *TextureString(const TBasicType type, TLayoutImageInternalFormat imag
     return TextureString(TextureGroup(type, imageInternalFormat));
 }
 
+const char *TextureElementTypeString(const HLSLTextureGroup textureGroup)
+{
+    switch (textureGroup)
+    {
+        case HLSL_TEXTURE_2D:
+        case HLSL_TEXTURE_CUBE:
+        case HLSL_TEXTURE_2D_ARRAY:
+        case HLSL_TEXTURE_3D:
+        case HLSL_TEXTURE_2D_MS:
+            return "float4";
+        case HLSL_TEXTURE_2D_UNORM:
+        case HLSL_TEXTURE_CUBE_UNORM:
+        case HLSL_TEXTURE_2D_ARRAY_UNORN:
+        case HLSL_TEXTURE_3D_UNORM:
+            return "unorm float4";
+        case HLSL_TEXTURE_2D_SNORM:
+        case HLSL_TEXTURE_CUBE_SNORM:
+        case HLSL_TEXTURE_2D_ARRAY_SNORM:
+        case HLSL_TEXTURE_3D_SNORM:
+            return "snorm float4";
+        case HLSL_TEXTURE_2D_INT4:
+        case HLSL_TEXTURE_3D_INT4:
+        case HLSL_TEXTURE_2D_ARRAY_INT4:
+        case HLSL_TEXTURE_2D_MS_INT4:
+            return "int4";
+        case HLSL_TEXTURE_2D_UINT4:
+        case HLSL_TEXTURE_3D_UINT4:
+        case HLSL_TEXTURE_2D_ARRAY_UINT4:
+        case HLSL_TEXTURE_2D_MS_UINT4:
+            return "uint4";
+        case HLSL_TEXTURE_2D_COMPARISON:
+        case HLSL_TEXTURE_CUBE_COMPARISON:
+        case HLSL_TEXTURE_2D_ARRAY_COMPARISON:
+            return "";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown read texture type>";
+}
+
 const char *TextureGroupSuffix(const HLSLTextureGroup type)
 {
     switch (type)
@@ -689,6 +730,37 @@ const char *RWTextureString(const TBasicType type, TLayoutImageInternalFormat im
     return RWTextureString(RWTextureGroup(type, imageInternalFormat));
 }
 
+const char *RWTextureElementTypeString(const HLSLRWTextureGroup RWTextureGroup)
+{
+    switch (RWTextureGroup)
+    {
+        case HLSL_RWTEXTURE_2D_FLOAT4:
+        case HLSL_RWTEXTURE_2D_ARRAY_FLOAT4:
+        case HLSL_RWTEXTURE_3D_FLOAT4:
+            return "float4";
+        case HLSL_RWTEXTURE_2D_UNORM:
+        case HLSL_RWTEXTURE_2D_ARRAY_UNORN:
+        case HLSL_RWTEXTURE_3D_UNORM:
+            return "unorm float4";
+        case HLSL_RWTEXTURE_2D_SNORM:
+        case HLSL_RWTEXTURE_2D_ARRAY_SNORM:
+        case HLSL_RWTEXTURE_3D_SNORM:
+            return "snorm float4";
+        case HLSL_RWTEXTURE_2D_UINT4:
+        case HLSL_RWTEXTURE_2D_ARRAY_UINT4:
+        case HLSL_RWTEXTURE_3D_UINT4:
+            return "uint4";
+        case HLSL_RWTEXTURE_2D_INT4:
+        case HLSL_RWTEXTURE_2D_ARRAY_INT4:
+        case HLSL_RWTEXTURE_3D_INT4:
+            return "int4";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown read and write texture type>";
+}
+
 const char *RWTextureGroupSuffix(const HLSLRWTextureGroup type)
 {
     switch (type)
@@ -794,7 +866,7 @@ const char *RWTextureTypeSuffix(const TBasicType type,
         }
         default:
             // All other types are identified by their group suffix
-            return TextureGroupSuffix(type, imageInternalFormat);
+            return RWTextureGroupSuffix(type, imageInternalFormat);
     }
 #if !UNREACHABLE_IS_NORETURN
     UNREACHABLE();
@@ -1047,6 +1119,35 @@ const char *QualifierString(TQualifier qualifier)
             return "inout";
         case EvqConstReadOnly:
             return "const";
+        default:
+            UNREACHABLE();
+    }
+
+    return "";
+}
+
+const char *ImageFormatString(TLayoutImageInternalFormat format)
+{
+    switch (format)
+    {
+        case EiifRGBA32F:
+        case EiifRGBA16F:
+        case EiifR32F:
+            return "float4";
+        case EiifRGBA32UI:
+        case EiifRGBA16UI:
+        case EiifRGBA8UI:
+        case EiifR32UI:
+            return "uint4";
+        case EiifRGBA32I:
+        case EiifRGBA16I:
+        case EiifRGBA8I:
+        case EiifR32I:
+            return "int4";
+        case EiifRGBA8:
+            return "unorm float4";
+        case EiifRGBA8_SNORM:
+            return "snorm float4";
         default:
             UNREACHABLE();
     }

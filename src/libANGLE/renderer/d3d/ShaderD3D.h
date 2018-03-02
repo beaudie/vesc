@@ -57,6 +57,9 @@ class ShaderD3D : public ShaderImpl
     unsigned int getUniformRegister(const std::string &uniformName) const;
 
     unsigned int getUniformBlockRegister(const std::string &blockName) const;
+    unsigned int getTextureRegisterCount() const { return mTextureRegisterCount; }
+    const std::vector<Image2DGroupHLSL> &getImage2DGroupHLSL() const { return mImage2DGroupHLSL; }
+
     void appendDebugInfo(const std::string &info) const { mDebugInfo += info; }
 
     void generateWorkarounds(angle::CompilerWorkaroundsD3D *workarounds) const;
@@ -95,6 +98,8 @@ class ShaderD3D : public ShaderImpl
     mutable std::string mDebugInfo;
     std::map<std::string, unsigned int> mUniformRegisterMap;
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
+    unsigned int mTextureRegisterCount;
+    std::vector<Image2DGroupHLSL> mImage2DGroupHLSL;
     ShCompileOptions mAdditionalOptions;
 };
 }  // namespace rx

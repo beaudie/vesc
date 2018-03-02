@@ -202,8 +202,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
 
     unsigned int firstUniformRegister =
         ((compileOptions & SH_SKIP_D3D_CONSTANT_REGISTER_ZERO) != 0) ? 1u : 0u;
-    mUniformHLSL =
-        new UniformHLSL(shaderType, mStructureHLSL, outputType, uniforms, firstUniformRegister);
+    mUniformHLSL = new UniformHLSL(mStructureHLSL, outputType, uniforms, firstUniformRegister);
 
     if (mOutputType == SH_HLSL_3_0_OUTPUT)
     {
@@ -283,6 +282,16 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformBlockRegisterMa
 const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() const
 {
     return mUniformHLSL->getUniformRegisterMap();
+}
+
+unsigned int OutputHLSL::getTextureRegisterCount()
+{
+    return mUniformHLSL->getTextureRegisterCount();
+}
+
+const std::vector<Image2DGroupHLSL> &OutputHLSL::getImage2DGroupHLSL() const
+{
+    return mUniformHLSL->getImage2DGroupHLSL();
 }
 
 TString OutputHLSL::structInitializerString(int indent,
@@ -757,8 +766,10 @@ void OutputHLSL::header(TInfoSinkBase &out,
         {
             out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
         }
+
+        out << "uint layer[8] : packoffset(c1);\n";
         ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
-        mUniformHLSL->samplerMetadataUniforms(out, "c1");
+        mUniformHLSL->samplerMetadataUniforms(out, "c9");
         out << "};\n";
 
         // Follow built-in variables would be initialized in

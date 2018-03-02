@@ -32,7 +32,6 @@ class ImageFunctionHLSL final : angle::NonCopyable
 
     void imageFunctionHeader(TInfoSinkBase &out);
 
-  private:
     struct ImageFunction
     {
         // See ESSL 3.10.4 section 8.12 for reference about what the different methods below do.
@@ -43,30 +42,44 @@ class ImageFunctionHLSL final : angle::NonCopyable
             STORE
         };
 
+        enum class DataType
+        {
+            NONE,
+            FLOAT4,
+            UINT4,
+            INT4,
+            UNORM_FLOAT4,
+            SNORM_FLOAT4
+        };
+
         TString name() const;
 
         bool operator<(const ImageFunction &rhs) const;
 
         const char *getReturnType() const;
 
+        DataType getDataType(TLayoutImageInternalFormat format) const;
+
         TBasicType image;
         TLayoutImageInternalFormat imageInternalFormat;
         bool readonly;
         Method method;
+        DataType type;
     };
 
+  private:
     static void OutputImageFunctionArgumentList(
         TInfoSinkBase &out,
         const ImageFunctionHLSL::ImageFunction &imageFunction);
     static void OutputImageSizeFunctionBody(TInfoSinkBase &out,
                                             const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                            const TString &imageReference);
+                                            const ImmutableString &imageReference);
     static void OutputImageLoadFunctionBody(TInfoSinkBase &out,
                                             const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                            const TString &imageReference);
+                                            const ImmutableString &imageReference);
     static void OutputImageStoreFunctionBody(TInfoSinkBase &out,
                                              const ImageFunctionHLSL::ImageFunction &imageFunction,
-                                             const TString &imageReference);
+                                             const ImmutableString &imageReference);
     using ImageFunctionSet = std::set<ImageFunction>;
     ImageFunctionSet mUsesImage;
 };

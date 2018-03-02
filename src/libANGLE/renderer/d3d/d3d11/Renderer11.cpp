@@ -2703,6 +2703,7 @@ gl::Error Renderer11::loadExecutable(const uint8_t *function,
 gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
                                           const std::string &shaderHLSL,
                                           gl::ShaderType type,
+                                          const std::vector<std::string> *macroStrings,
                                           const std::vector<D3DVarying> &streamOutVaryings,
                                           bool separatedOutputBuffers,
                                           const angle::CompilerWorkaroundsD3D &workarounds,
@@ -2764,13 +2765,22 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
             CompileConfig(flags | D3DCOMPILE_AVOID_FLOW_CONTROL, "avoid flow control"));
     }
 
-    D3D_SHADER_MACRO loopMacros[] = {{"ANGLE_ENABLE_LOOP_FLATTEN", "1"}, {0, 0}};
+    std::vector<D3D_SHADER_MACRO> macros(macroStrings->size() + 2);
+    for (size_t index = 0; index < macroStrings->size(); ++index)
+    {
+        macros[index].Name       = (*macroStrings)[index].c_str();
+        macros[index].Definition = "1";
+    }
+    macros[macroStrings->size()].Name           = "ANGLE_ENABLE_LOOP_FLATTEN";
+    macros[macroStrings->size()].Definition     = "1";
+    macros[macroStrings->size() + 1].Name       = nullptr;
+    macros[macroStrings->size() + 1].Definition = nullptr;
 
     // TODO(jmadill): Use ComPtr?
     ID3DBlob *binary = nullptr;
     std::string debugInfo;
-    ANGLE_TRY(mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, loopMacros, &binary,
-                                        &debugInfo));
+    ANGLE_TRY(mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, macros.data(),
+                                        &binary, &debugInfo));
 
     // It's possible that binary is NULL if the compiler failed in all configurations.  Set the
     // executable to NULL and return GL_NO_ERROR to signify that there was a link error but the
@@ -3665,7 +3675,7 @@ gl::Error Renderer11::applyComputeShader(const gl::Context *context)
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
 
     ShaderExecutableD3D *computeExe = nullptr;
-    ANGLE_TRY(programD3D->getComputeExecutable(&computeExe));
+    ANGLE_TRY(programD3D->getComputeExecutableForImageBoundLayout(&computeExe, nullptr));
     ASSERT(computeExe != nullptr);
 
     mStateManager.setComputeShader(&GetAs<ShaderExecutable11>(computeExe)->getComputeShader());

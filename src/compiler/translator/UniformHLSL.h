@@ -22,8 +22,7 @@ class TSymbolTable;
 class UniformHLSL : angle::NonCopyable
 {
   public:
-    UniformHLSL(sh::GLenum shaderType,
-                StructureHLSL *structureHLSL,
+    UniformHLSL(StructureHLSL *structureHLSL,
                 ShShaderOutput outputType,
                 const std::vector<Uniform> &uniforms,
                 unsigned int firstUniformRegister);
@@ -53,6 +52,10 @@ class UniformHLSL : angle::NonCopyable
         return mUniformRegisterMap;
     }
 
+    unsigned int getTextureRegisterCount() { return mTextureRegisterCount; }
+
+    const std::vector<Image2DGroupHLSL> &getImage2DGroupHLSL() const { return mImage2DGroupHLSL; }
+
   private:
     TString uniformBlockString(const TInterfaceBlock &interfaceBlock,
                                const TVariable *instanceVariable,
@@ -67,14 +70,6 @@ class UniformHLSL : angle::NonCopyable
                                     const TType &type,
                                     const TVariable &variable,
                                     const unsigned int registerIndex);
-    void outputHLSL4_1_FL11Texture(TInfoSinkBase &out,
-                                   const TType &type,
-                                   const TVariable &variable,
-                                   const unsigned int registerIndex);
-    void outputHLSL4_1_FL11RWTexture(TInfoSinkBase &out,
-                                     const TType &type,
-                                     const TVariable &variable,
-                                     const unsigned int registerIndex);
     void outputUniform(TInfoSinkBase &out,
                        const TType &type,
                        const TVariable &variable,
@@ -95,18 +90,28 @@ class UniformHLSL : angle::NonCopyable
         const TMap<const TVariable *, TString> &samplerInStructSymbolsToAPINames,
         unsigned int *groupTextureRegisterIndex);
 
+    void outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
+                                             const HLSLTextureGroup textureGroup,
+                                             const TVector<const TVariable *> &group,
+                                             unsigned int *groupTextureRegisterIndex);
+    void outputHLSLImageUniformGroup(TInfoSinkBase &out,
+                                     const HLSLRWTextureGroup textureGroup,
+                                     const TVector<const TVariable *> &group,
+                                     unsigned int *groupTextureRegisterIndex);
+
     unsigned int mUniformRegister;
     unsigned int mUniformBlockRegister;
     unsigned int mTextureRegister;
     unsigned int mRWTextureRegister;
     unsigned int mSamplerCount;
-    sh::GLenum mShaderType;
+    unsigned int mTextureRegisterCount;
     StructureHLSL *mStructureHLSL;
     ShShaderOutput mOutputType;
 
     const std::vector<Uniform> &mUniforms;
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    std::vector<Image2DGroupHLSL> mImage2DGroupHLSL;
 };
 }
 

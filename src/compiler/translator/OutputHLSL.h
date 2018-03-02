@@ -62,6 +62,8 @@ class OutputHLSL : public TIntermTraverser
 
     const std::map<std::string, unsigned int> &getUniformBlockRegisterMap() const;
     const std::map<std::string, unsigned int> &getUniformRegisterMap() const;
+    unsigned int getTextureRegisterCount();
+    const std::vector<Image2DGroupHLSL> &getImage2DGroupHLSL() const;
 
     static TString zeroInitializer(const TType &type);
 

@@ -38,6 +38,7 @@ class ShaderConstants11 : angle::NonCopyable
     void markDirty();
 
     void setComputeWorkGroups(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
+    void setImageBoundTextureLayer(const gl::Context *context);
     void setMultiviewWriteToViewportIndex(GLfloat index);
     void onViewportChange(const gl::Rectangle &glViewport,
                           const D3D11_VIEWPORT &dxViewport,
@@ -123,6 +124,17 @@ class ShaderConstants11 : angle::NonCopyable
     static_assert(sizeof(SamplerMetadata) == 16u,
                   "Sampler metadata struct must be one 4-vec / 16 bytes.");
 
+    struct ImageMetadata
+    {
+        ImageMetadata() : layer(0), padding{0} {}
+
+        int layer;
+        int padding[3];
+    };
+
+    static_assert(sizeof(ImageMetadata) == 16u,
+                  "Image metadata struct must be one 4-vec / 16 bytes.");
+
     // Return true if dirty.
     bool updateSamplerMetadata(SamplerMetadata *data, const gl::Texture &texture);
 
@@ -137,6 +149,8 @@ class ShaderConstants11 : angle::NonCopyable
     int mNumActivePSSamplers;
     std::vector<SamplerMetadata> mSamplerMetadataCS;
     int mNumActiveCSSamplers;
+
+    std::vector<ImageMetadata> mImageMetadataCS;
 };
 
 class StateManager11 final : angle::NonCopyable
@@ -283,6 +297,7 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
     gl::Error syncProgram(const gl::Context *context, GLenum drawMode);
+    gl::Error syncProgramForCompute(const gl::Context *context);
 
     gl::Error syncTextures(const gl::Context *context);
     gl::Error applyTextures(const gl::Context *context, gl::ShaderType shaderType);

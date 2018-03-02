@@ -529,6 +529,30 @@ const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle 
 #endif  // ANGLE_ENABLE_HLSL
 }
 
+unsigned int *GetTextureRegisterCount(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getTextureRegisterCount();
+#else
+    return nullptr;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+const std::vector<Image2DGroupHLSL> *GetImage2DGroupHLSL(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getImage2DGroupHLSL();
+#else
+    return nullptr;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
 bool HasValidGeometryShaderInputPrimitiveType(const ShHandle handle)
 {
     ASSERT(handle);

@@ -462,6 +462,40 @@ struct ShBuiltInResources
 //
 using ShHandle = void *;
 
+enum HLSLImage2DType
+{
+    TEXTURE_2D_FLOAT4,
+    TEXTURE_2D_UNORM,
+    TEXTURE_2D_SNORM,
+    TEXTURE_2D_UINT4,
+    TEXTURE_2D_INT4,
+    RWTEXTURE_2D_FLOAT4,
+    RWTEXTURE_2D_UNORM,
+    RWTEXTURE_2D_SNORM,
+    RWTEXTURE_2D_UINT4,
+    RWTEXTURE_2D_INT4
+};
+
+struct Image2DVariable
+{
+    std::string name;
+    unsigned int count;
+    int binding;
+};
+
+struct Image2DGroupHLSL
+{
+    std::string name;
+    unsigned int count;
+    std::string offsetName;
+    unsigned int offset;
+    std::string resourcePrefix;
+    std::string elementType;
+    bool readonly;
+    std::string macroPrefix;
+    std::vector<Image2DVariable> image2DVars;
+};
+
 namespace sh
 {
 
@@ -605,6 +639,8 @@ bool GetUniformBlockRegister(const ShHandle handle,
 // Gives a map from uniform names to compiler-assigned registers in the default uniform block.
 // Note that the map contains also registers of samplers that have been extracted from structs.
 const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle handle);
+unsigned int *GetTextureRegisterCount(const ShHandle handle);
+const std::vector<Image2DGroupHLSL> *GetImage2DGroupHLSL(const ShHandle handle);
 
 bool HasValidGeometryShaderInputPrimitiveType(const ShHandle handle);
 bool HasValidGeometryShaderOutputPrimitiveType(const ShHandle handle);

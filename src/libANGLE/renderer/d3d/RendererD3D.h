@@ -211,6 +211,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
     virtual gl::Error compileToExecutable(gl::InfoLog &infoLog,
                                           const std::string &shaderHLSL,
                                           gl::ShaderType type,
+                                          const std::vector<std::string> *macroStrings,
                                           const std::vector<D3DVarying> &streamOutVaryings,
                                           bool separatedOutputBuffers,
                                           const angle::CompilerWorkaroundsD3D &workarounds,

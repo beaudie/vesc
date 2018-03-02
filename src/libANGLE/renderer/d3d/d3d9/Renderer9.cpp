@@ -2698,6 +2698,7 @@ gl::Error Renderer9::loadExecutable(const uint8_t *function,
 gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
                                          const std::string &shaderHLSL,
                                          gl::ShaderType type,
+                                         const std::vector<std::string> *macroStrings,
                                          const std::vector<D3DVarying> &streamOutVaryings,
                                          bool separatedOutputBuffers,
                                          const angle::CompilerWorkaroundsD3D &workarounds,
@@ -2755,10 +2756,30 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
     configs.push_back(CompileConfig(flags | D3DCOMPILE_AVOID_FLOW_CONTROL, "avoid flow control"));
     configs.push_back(CompileConfig(flags | D3DCOMPILE_PREFER_FLOW_CONTROL, "prefer flow control"));
 
+    /*std::vector<D3D_SHADER_MACRO> macros;
+    if (!macroStrings)
+    {
+        for (auto &macroStr : *macroStrings)
+        {
+            //D3D_SHADER_MACRO macro(macroStr, "1");
+            macros.push_back(D3D_SHADER_MACRO(macroStr, "1"));
+        }
+            macros.push_back(D3D_SHADER_MACRO(nullptr, nullptr));
+    }*/
+
+    std::vector<D3D_SHADER_MACRO> macros(macroStrings->size() + 1);
+    for (size_t index = 0; index < macroStrings->size(); ++index)
+    {
+        macros[index].Name       = (*macroStrings)[index].c_str();
+        macros[index].Definition = "1";
+    }
+    macros[macroStrings->size() + 1].Name       = nullptr;
+    macros[macroStrings->size() + 1].Definition = nullptr;
+
     ID3DBlob *binary = nullptr;
     std::string debugInfo;
-    gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, nullptr,
-                                                &binary, &debugInfo);
+    gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs,
+                                                macros.data(), &binary, &debugInfo);
     if (error.isError())
     {
         return error;

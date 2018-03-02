@@ -132,8 +132,10 @@ void TranslatorHLSL::translate(TIntermBlock *root,
 
     outputHLSL.output(root, getInfoSink().obj);
 
+    mTextureRegisterCount      = outputHLSL.getTextureRegisterCount();
     mUniformBlockRegisterMap   = outputHLSL.getUniformBlockRegisterMap();
     mUniformRegisterMap        = outputHLSL.getUniformRegisterMap();
+    mImage2DGroupHLSL          = outputHLSL.getImage2DGroupHLSL();
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()
@@ -156,6 +158,16 @@ unsigned int TranslatorHLSL::getUniformBlockRegister(const std::string &uniformB
 const std::map<std::string, unsigned int> *TranslatorHLSL::getUniformRegisterMap() const
 {
     return &mUniformRegisterMap;
+}
+
+unsigned int *TranslatorHLSL::getTextureRegisterCount()
+{
+    return &mTextureRegisterCount;
+}
+
+const std::vector<Image2DGroupHLSL> *TranslatorHLSL::getImage2DGroupHLSL() const
+{
+    return &mImage2DGroupHLSL;
 }
 
 }  // namespace sh

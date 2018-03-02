@@ -937,7 +937,7 @@ size_t GetMaximumImageUnits(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_11_0:
             // TODO(xinghua.cao@intel.com): Get a more accurate limit. For now using
             // the minimum requirement for GLES 3.1.
-            return 4;
+            return 8;
         default:
             return 0;
     }
@@ -951,7 +951,7 @@ size_t GetMaximumComputeImageUniforms(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_11_0:
             // TODO(xinghua.cao@intel.com): Get a more accurate limit. For now using
             // the minimum requirement for GLES 3.1.
-            return 4;
+            return 8;
         default:
             return 0;
     }

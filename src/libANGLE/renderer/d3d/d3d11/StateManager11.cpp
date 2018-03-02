@@ -275,6 +275,7 @@ void ShaderConstants11::init(const gl::Caps &caps)
     mSamplerMetadataVS.resize(caps.maxShaderTextureImageUnits[gl::ShaderType::Vertex]);
     mSamplerMetadataPS.resize(caps.maxShaderTextureImageUnits[gl::ShaderType::Fragment]);
     mSamplerMetadataCS.resize(caps.maxShaderTextureImageUnits[gl::ShaderType::Compute]);
+    mImageMetadataCS.resize(caps.maxImageUnits);
 }
 
 size_t ShaderConstants11::getRequiredBufferSize(gl::ShaderType shaderType) const
@@ -286,7 +287,8 @@ size_t ShaderConstants11::getRequiredBufferSize(gl::ShaderType shaderType) const
         case gl::ShaderType::Fragment:
             return sizeof(Pixel) + mSamplerMetadataPS.size() * sizeof(SamplerMetadata);
         case gl::ShaderType::Compute:
-            return sizeof(Compute) + mSamplerMetadataCS.size() * sizeof(SamplerMetadata);
+            return sizeof(Compute) + mImageMetadataCS.size() * sizeof(ImageMetadata) +
+                   mSamplerMetadataCS.size() * sizeof(SamplerMetadata);
         default:
             UNREACHABLE();
             return 0;
@@ -395,6 +397,18 @@ void ShaderConstants11::setComputeWorkGroups(GLuint numGroupsX,
     mShaderConstantsDirty.set(gl::ShaderType::Compute);
 }
 
+void ShaderConstants11::setImageBoundTextureLayer(const gl::Context *context)
+{
+    const auto &glState    = context->getGLState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+
+    for (auto &imageBoundLayerIndex : programD3D->getImageBoundlayerIndexMap())
+    {
+        mImageMetadataCS[imageBoundLayerIndex.second].layer =
+            glState.getImageUnit(imageBoundLayerIndex.first).layer;
+    }
+}
+
 void ShaderConstants11::setMultiviewWriteToViewportIndex(GLfloat index)
 {
     mVertex.multiviewWriteToViewportIndex = index;
@@ -499,6 +513,7 @@ gl::Error ShaderConstants11::updateBuffer(Renderer11 *renderer,
     size_t dataSize            = 0;
     const uint8_t *data        = nullptr;
     const uint8_t *samplerData = nullptr;
+    const uint8_t *imageData   = nullptr;
 
     // Re-upload the sampler meta-data if the current program uses more samplers
     // than we previously uploaded.
@@ -529,6 +544,7 @@ gl::Error ShaderConstants11::updateBuffer(Renderer11 *renderer,
                     (mNumActiveCSSamplers < numSamplers);
             dataSize                = sizeof(Compute);
             data                    = reinterpret_cast<const uint8_t *>(&mCompute);
+            imageData               = reinterpret_cast<const uint8_t *>(mImageMetadataCS.data());
             samplerData             = reinterpret_cast<const uint8_t *>(mSamplerMetadataCS.data());
             mShaderConstantsDirty.set(gl::ShaderType::Compute, false);
             mNumActiveCSSamplers    = numSamplers;
@@ -744,6 +760,10 @@ gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
                                                 GLuint numGroupsZ)
 {
     mShaderConstants.setComputeWorkGroups(numGroupsX, numGroupsY, numGroupsZ);
+    mShaderConstants.setImageBoundTextureLayer(context);
+
+    // TODO(xinghua.cao@intel.com): Use dirty bits.
+    ANGLE_TRY(syncProgramForCompute(context));
 
     // TODO(jmadill): Use dirty bits.
     const auto &glState = context->getGLState();
@@ -2763,6 +2783,42 @@ gl::Error StateManager11::syncVertexBuffersAndInputLayout(const gl::Context *con
 
     // Update the applied vertex buffers.
     ANGLE_TRY(applyVertexBuffers(context, drawCallParams));
+
+    return gl::NoError();
+}
+
+gl::Error StateManager11::syncProgramForCompute(const gl::Context *context)
+{
+    const auto &glState    = context->getGLState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+
+    programD3D->updateCachedComputeImage2dBoundLayout(context);
+
+    bool recompileCS = !programD3D->hasComputeExecutableForCachedImageBoundLayout();
+
+    if (!recompileCS)
+    {
+        return gl::NoError();
+    }
+
+    // Load the compiler if necessary and recompile the programs.
+    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
+
+    gl::InfoLog infoLog;
+
+    ShaderExecutableD3D *computeExe = nullptr;
+    ANGLE_TRY(programD3D->getComputeExecutableForImageBoundLayout(&computeExe, &infoLog));
+    if (!programD3D->hasComputeExecutableForCachedImageBoundLayout())
+    {
+        ASSERT(infoLog.getLength() > 0);
+        ERR() << "Dynamic recompilation error log: " << infoLog.str();
+        return gl::InternalError()
+               << "Error compiling dynamic compute executable:" << infoLog.str();
+    }
+
+    const d3d11::ComputeShader *computeShader =
+        (computeExe ? &GetAs<ShaderExecutable11>(computeExe)->getComputeShader() : nullptr);
+    setComputeShader(computeShader);
 
     return gl::NoError();
 }

@@ -147,6 +147,8 @@ void WriteArrayString(std::ostringstream &strstr, unsigned int i)
 
 constexpr const char *VERTEX_ATTRIBUTE_STUB_STRING = "@@ VERTEX ATTRIBUTES @@";
 constexpr const char *PIXEL_OUTPUT_STUB_STRING     = "@@ PIXEL OUTPUT @@";
+constexpr const char *IMAGE_DECLARATION_OUTPUT_STUB_STRING =
+    "// @@ IMAGE DECLARATION OUTPUT @@ // ";
 }  // anonymous namespace
 
 // BuiltinInfo implementation
@@ -158,6 +160,143 @@ BuiltinInfo::~BuiltinInfo() = default;
 
 DynamicHLSL::DynamicHLSL(RendererD3D *const renderer) : mRenderer(renderer)
 {
+}
+
+std::string DynamicHLSL::generateComputeShaderForImageBoundSignature(
+    const gl::ProgramState &programData,
+    const std::string &sourceShader,
+    std::vector<Image2DGroupHLSL> &image2DGroupHLSL,
+    const std::map<unsigned int, gl::TextureType> &imageBoundLayout,
+    std::vector<std::string> &macroStrings,
+    std::map<unsigned int, unsigned int> &imageLayerIndexMap) const
+{
+    std::ostringstream declarationStream;
+    gl::Shader *computeShaderGL    = programData.getAttachedShader(ShaderType::Compute);
+    const ShaderD3D *computeShader = GetImplAs<ShaderD3D>(computeShaderGL);
+
+    const unsigned int textureRegisterCount = computeShader->getTextureRegisterCount();
+
+    for (auto &image2DGroup : image2DGroupHLSL)
+    {
+        unsigned int texture2DCount = 0, texture3DCount = 0, texture2DArrayCount = 0;
+
+        for (auto image2D : image2DGroup.image2DVars)
+        {
+            for (unsigned int index = 0; index < image2D.count; index++)
+            {
+                switch (imageBoundLayout.at(image2D.binding + index))
+                {
+                    case gl::TextureType::_2D:
+                        texture2DCount++;
+                        break;
+                    case gl::TextureType::_3D:
+                        texture3DCount++;
+                        break;
+                    case gl::TextureType::_2DArray:
+                    case gl::TextureType::CubeMap:
+                        texture2DArrayCount++;
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+            }
+        }
+
+        if (texture3DCount == 0 && texture2DArrayCount == 0)
+        {
+            macroStrings.push_back(image2DGroup.macroPrefix);
+            continue;
+        }
+
+        unsigned int texture2DStart = image2DGroup.offset;
+        int texture3DStart          = texture2DStart + texture2DCount;
+        int texture2DArrayStart     = texture3DStart + texture3DCount;
+        const char *regPrefix       = image2DGroup.readonly ? "t" : "u";
+
+        declarationStream << "static const uint " << image2DGroup.offsetName
+                          << "2D = " << texture2DStart << ";\n";
+        declarationStream << "static const uint " << image2DGroup.offsetName
+                          << "3D = " << texture3DStart << ";\n";
+        declarationStream << "static const uint " << image2DGroup.offsetName
+                          << "2DArray = " << texture2DArrayStart << ";\n";
+        if (texture2DCount > 0)
+        {
+            unsigned int registerStart =
+                image2DGroup.readonly ? texture2DStart : texture2DStart - textureRegisterCount;
+            declarationStream << "uniform " << image2DGroup.resourcePrefix << "2D <"
+                              << image2DGroup.elementType << "> " << image2DGroup.name << "2D["
+                              << texture2DCount << "] : register(" << regPrefix << registerStart
+                              << ");\n";
+            macroStrings.push_back(image2DGroup.macroPrefix + "2D");
+        }
+        if (texture3DCount > 0)
+        {
+            unsigned int registerStart =
+                image2DGroup.readonly ? texture3DStart : texture3DStart - textureRegisterCount;
+            declarationStream << "uniform " << image2DGroup.resourcePrefix << "3D <"
+                              << image2DGroup.elementType << "> " << image2DGroup.name << "3D["
+                              << texture3DCount << "] : register(" << regPrefix << registerStart
+                              << ");\n";
+            macroStrings.push_back(image2DGroup.macroPrefix + "3D");
+        }
+        if (texture2DArrayCount > 0)
+        {
+            unsigned int registerStart = image2DGroup.readonly
+                                             ? texture2DArrayStart
+                                             : texture2DArrayStart - textureRegisterCount;
+            declarationStream << "uniform " << image2DGroup.resourcePrefix << "2DArray <"
+                              << image2DGroup.elementType << "> " << image2DGroup.name << "2DArray["
+                              << texture2DArrayCount << "] : register(" << regPrefix
+                              << registerStart << ");\n";
+            macroStrings.push_back(image2DGroup.macroPrefix + "2DArray");
+        }
+
+        int texture2DIndex = 0, texture3DIndex = 0, texture2DArrayIndex = 0;
+        for (auto image2D : image2DGroup.image2DVars)
+        {
+            declarationStream << "static const uint " << image2D.name << " = {";
+            for (unsigned int index = 0; index < image2D.count; index++)
+            {
+                if (index > 0)
+                {
+                    declarationStream << ", ";
+                }
+
+                switch (imageBoundLayout.at(image2D.binding + index))
+                {
+                    case gl::TextureType::_2D:
+                        declarationStream << texture2DStart + texture2DIndex;
+                        imageLayerIndexMap.insert(std::pair<unsigned int, unsigned int>(
+                            image2D.binding + index, texture2DStart + texture2DIndex));
+                        texture2DIndex++;
+                        break;
+                    case gl::TextureType::_3D:
+                        declarationStream << texture3DStart + texture3DIndex;
+                        imageLayerIndexMap.insert(std::pair<unsigned int, unsigned int>(
+                            image2D.binding + index, texture3DStart + texture3DIndex));
+                        texture3DIndex++;
+                        break;
+                    case gl::TextureType::_2DArray:
+                    case gl::TextureType::CubeMap:
+                        declarationStream << texture2DArrayStart + texture2DArrayIndex;
+                        imageLayerIndexMap.insert(std::pair<unsigned int, unsigned int>(
+                            image2D.binding + index, texture2DArrayStart + texture2DArrayIndex));
+                        texture2DArrayIndex++;
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+            }
+            declarationStream << "};\n";
+        }
+    }
+
+    std::string computeHLSL(sourceShader);
+    bool success = angle::ReplaceSubstring(&computeHLSL, IMAGE_DECLARATION_OUTPUT_STUB_STRING,
+                                           declarationStream.str());
+    ASSERT(success);
+
+    return computeHLSL;
 }
 
 std::string DynamicHLSL::generateVertexShaderForInputLayout(
@@ -849,8 +988,9 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
     (*shaderHLSL)[gl::ShaderType::Fragment] = pixelStream.str();
 }
 
-std::string DynamicHLSL::generateComputeShaderLinkHLSL(const gl::Context *context,
-                                                       const gl::ProgramState &programData) const
+void DynamicHLSL::generateComputeShaderLinkHLSL(const gl::Context *context,
+                                                const gl::ProgramState &programData,
+                                                std::string *computeHLSL) const
 {
     gl::Shader *computeShaderGL = programData.getAttachedShader(ShaderType::Compute);
     std::stringstream computeStream;
@@ -920,7 +1060,7 @@ std::string DynamicHLSL::generateComputeShaderLinkHLSL(const gl::Context *contex
                   << "    gl_main();\n"
                   << "}\n";
 
-    return computeStream.str();
+    *computeHLSL = computeStream.str();
 }
 
 std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &varyingPacking,

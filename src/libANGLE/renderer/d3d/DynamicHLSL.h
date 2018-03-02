@@ -140,8 +140,16 @@ class DynamicHLSL : angle::NonCopyable
                                 const gl::VaryingPacking &varyingPacking,
                                 const BuiltinVaryingsD3D &builtinsD3D,
                                 gl::ShaderMap<std::string> *shaderHLSL) const;
-    std::string generateComputeShaderLinkHLSL(const gl::Context *context,
-                                              const gl::ProgramState &programData) const;
+    void generateComputeShaderLinkHLSL(const gl::Context *context,
+                                       const gl::ProgramState &programData,
+                                       std::string *computeHLSL) const;
+    std::string generateComputeShaderForImageBoundSignature(
+        const gl::ProgramState &programData,
+        const std::string &sourceShader,
+        std::vector<Image2DGroupHLSL> &image2DGroupHLSL,
+        const std::map<unsigned int, gl::TextureType> &imageBoundLayout,
+        std::vector<std::string> &macroStrings,
+        std::map<unsigned int, unsigned int> &imageLayerIndexMap) const;
 
     std::string generateGeometryShaderPreamble(const gl::VaryingPacking &varyingPacking,
                                                const BuiltinVaryingsD3D &builtinsD3D,

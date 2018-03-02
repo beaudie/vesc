@@ -194,7 +194,8 @@ class ProgramD3D : public ProgramImpl
                                                     gl::InfoLog *infoLog);
     gl::Error getPixelExecutableForCachedOutputLayout(ShaderExecutableD3D **outExectuable,
                                                       gl::InfoLog *infoLog);
-    gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
+    gl::Error getComputeExecutableForImageBoundLayout(ShaderExecutableD3D **outExecutable,
+                                                      gl::InfoLog *infoLog);
     gl::LinkResult link(const gl::Context *context,
                         const gl::ProgramLinkedResources &resources,
                         gl::InfoLog &infoLog) override;
@@ -280,6 +281,7 @@ class ProgramD3D : public ProgramImpl
 
     void updateCachedInputLayout(Serial associatedSerial, const gl::State &state);
     void updateCachedOutputLayout(const gl::Context *context, const gl::Framebuffer *framebuffer);
+    void updateCachedComputeImage2dBoundLayout(const gl::Context *context);
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
 
@@ -287,6 +289,7 @@ class ProgramD3D : public ProgramImpl
     bool hasVertexExecutableForCachedInputLayout();
     bool hasGeometryExecutableForPrimitiveType(GLenum drawMode);
     bool hasPixelExecutableForCachedOutputLayout();
+    bool hasComputeExecutableForCachedImageBoundLayout();
 
     bool anyShaderUniformsDirty() const;
     bool areShaderUniformsDirty(gl::ShaderType shaderType) const
@@ -295,6 +298,10 @@ class ProgramD3D : public ProgramImpl
     }
     const std::vector<D3DUniform *> &getD3DUniforms() const { return mD3DUniforms; }
     void markUniformsClean();
+    const std::map<unsigned int, unsigned int> &getImageBoundlayerIndexMap() const
+    {
+        return mComputeShaderImageLayerIndexCache;
+    }
 
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
@@ -354,6 +361,26 @@ class ProgramD3D : public ProgramImpl
 
       private:
         std::vector<GLenum> mOutputSignature;
+        ShaderExecutableD3D *mShaderExecutable;
+    };
+
+    class ComputeExecutable
+    {
+      public:
+        ComputeExecutable(const std::map<unsigned int, gl::TextureType> &signature,
+                          ShaderExecutableD3D *shaderExecutable);
+        ~ComputeExecutable();
+
+        bool matchesSignature(const std::map<unsigned int, gl::TextureType> &signature) const
+        {
+            return mSignature == signature;
+        }
+
+        const std::map<unsigned int, gl::TextureType> &Signature() const { return mSignature; }
+        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
+
+      private:
+        std::map<unsigned int, gl::TextureType> mSignature;
         ShaderExecutableD3D *mShaderExecutable;
     };
 
@@ -467,8 +494,10 @@ class ProgramD3D : public ProgramImpl
 
     void updateCachedInputLayoutFromShader(const gl::Context *context);
     void updateCachedOutputLayoutFromShader();
+    void updateCachedImage2dBoundLayoutFromComputeShader();
     void updateCachedVertexExecutableIndex();
     void updateCachedPixelExecutableIndex();
+    void updateCachedComputeExecutableIndex();
 
     void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
 
@@ -478,7 +507,7 @@ class ProgramD3D : public ProgramImpl
     std::vector<std::unique_ptr<VertexExecutable>> mVertexExecutables;
     std::vector<std::unique_ptr<PixelExecutable>> mPixelExecutables;
     std::vector<std::unique_ptr<ShaderExecutableD3D>> mGeometryExecutables;
-    std::unique_ptr<ShaderExecutableD3D> mComputeExecutable;
+    std::vector<std::unique_ptr<ComputeExecutable>> mComputeExecutables;
 
     gl::ShaderMap<std::string> mShaderHLSL;
     gl::ShaderMap<angle::CompilerWorkaroundsD3D> mShaderWorkarounds;
@@ -487,6 +516,12 @@ class ProgramD3D : public ProgramImpl
     bool mHasANGLEMultiviewEnabled;
     bool mUsesViewID;
     std::vector<PixelShaderOutputVariable> mPixelShaderKey;
+
+    std::string mComputeHLSL;
+    std::vector<Image2DGroupHLSL> mComputeShaderImage2DHLSL;
+    std::map<unsigned int, gl::TextureType> mComputeShaderImage2dBoundLayoutCache;
+    Optional<size_t> mCachedComputeExecutableIndex;
+    std::map<unsigned int, unsigned int> mComputeShaderImageLayerIndexCache;
 
     // Common code for all dynamic geometry shaders. Consists mainly of the GS input and output
     // structures, built from the linked varying info. We store the string itself instead of the

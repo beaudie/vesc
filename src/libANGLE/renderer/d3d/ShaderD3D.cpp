@@ -174,6 +174,19 @@ const std::map<std::string, unsigned int> &GetUniformRegisterMap(
     return *uniformRegisterMap;
 }
 
+unsigned int GetTextureReigsterCount(unsigned int *textureRegisterCount)
+{
+    ASSERT(textureRegisterCount);
+    return *textureRegisterCount;
+}
+
+const std::vector<Image2DGroupHLSL> &GetImage2DGroupHLSL(
+    const std::vector<Image2DGroupHLSL> *image2DGroupHLSL)
+{
+    ASSERT(image2DGroupHLSL);
+    return *image2DGroupHLSL;
+}
+
 bool ShaderD3D::postTranslateCompile(const gl::Context *context,
                                      gl::Compiler *compiler,
                                      std::string *infoLog)
@@ -204,6 +217,8 @@ bool ShaderD3D::postTranslateCompile(const gl::Context *context,
     ShHandle compilerHandle = compiler->getCompilerHandle(mData.getShaderType());
 
     mUniformRegisterMap = GetUniformRegisterMap(sh::GetUniformRegisterMap(compilerHandle));
+    mTextureRegisterCount = GetTextureReigsterCount(sh::GetTextureRegisterCount(compilerHandle));
+    mImage2DGroupHLSL     = GetImage2DGroupHLSL(sh::GetImage2DGroupHLSL(compilerHandle));
 
     for (const sh::InterfaceBlock &interfaceBlock : mData.getUniformBlocks())
     {

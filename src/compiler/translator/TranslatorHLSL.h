@@ -23,6 +23,9 @@ class TranslatorHLSL : public TCompiler
 
     const std::map<std::string, unsigned int> *getUniformRegisterMap() const;
 
+    unsigned int *getTextureRegisterCount();
+    const std::vector<Image2DGroupHLSL> *getImage2DGroupHLSL() const;
+
   protected:
     void translate(TIntermBlock *root,
                    ShCompileOptions compileOptions,
@@ -32,8 +35,10 @@ class TranslatorHLSL : public TCompiler
     // collectVariables needs to be run always so registers can be assigned.
     bool shouldCollectVariables(ShCompileOptions compileOptions) override { return true; }
 
+    unsigned int mTextureRegisterCount;
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    std::vector<Image2DGroupHLSL> mImage2DGroupHLSL;
 };
 
 }  // namespace sh

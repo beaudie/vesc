@@ -877,8 +877,6 @@ TEST_P(ComputeShaderTest, BindImageTextureWithTextureCube)
 // contents.
 TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture2DArray)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     GLTexture texture[2];
     GLFramebuffer framebuffer;
     const std::string csSource =
@@ -947,7 +945,6 @@ TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture2DArray)
 // contents.
 TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture3D)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D11());
     GLTexture texture[2];
     GLFramebuffer framebuffer;
     const std::string csSource =
@@ -1016,8 +1013,6 @@ TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture3D)
 // contents.
 TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTextureCube)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     GLTexture texture[2];
     GLFramebuffer framebuffer;
     const std::string csSource =
