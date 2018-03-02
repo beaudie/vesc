@@ -381,7 +381,7 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
 
 void TSymbolTable::initSamplerDefaultPrecision(TBasicType samplerType)
 {
-    ASSERT(samplerType > EbtGuardSamplerBegin && samplerType < EbtGuardSamplerEnd);
+    ASSERT(samplerType >= EbtGuardSamplerBegin && samplerType <= EbtGuardSamplerEnd);
     setDefaultPrecision(samplerType, EbpLow);
 }
 
