@@ -154,6 +154,7 @@ generators = {
         ],
         'outputs': [
             'src/compiler/translator/BuiltIn_autogen.h',
+            'src/compiler/translator/ParseContext_autogen.h',
             'src/compiler/translator/SymbolTable_autogen.cpp',
         ],
         'script': 'src/compiler/translator/gen_builtin_symbols.py',
