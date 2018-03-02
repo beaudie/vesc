@@ -188,7 +188,7 @@ parsed_variables = None
 variables_json_filename = 'builtin_variables.json'
 functions_txt_filename = 'builtin_function_declarations.txt'
 
-basic_mangled_names = {
+basic_mangled_names_readable = {
     'Float': 'f',
     'Int': 'i',
     'UInt': 'u',
@@ -229,6 +229,55 @@ basic_mangled_names = {
     'UImageCube': 'uIc',
     'AtomicCounter': 'a'
 }
+
+basic_types_enumeration = [
+    'Void',
+    'Float',
+    'Int',
+    'UInt',
+    'Bool',
+    'AtomicCounter',
+    'YuvCscStandardEXT',
+    'Sampler2D',
+    'Sampler3D',
+    'SamplerCube',
+    'Sampler2DArray',
+    'SamplerExternalOES',
+    'SamplerExternal2DY2YEXT',
+    'Sampler2DRect',
+    'Sampler2DMS',
+    'ISampler2D',
+    'ISampler3D',
+    'ISamplerCube',
+    'ISampler2DArray',
+    'ISampler2DMS',
+    'USampler2D',
+    'USampler3D',
+    'USamplerCube',
+    'USampler2DArray',
+    'USampler2DMS',
+    'Sampler2DShadow',
+    'SamplerCubeShadow',
+    'Sampler2DArrayShadow',
+    'Image2D',
+    'IImage2D',
+    'UImage2D',
+    'Image3D',
+    'IImage3D',
+    'UImage3D',
+    'Image2DArray',
+    'IImage2DArray',
+    'UImage2DArray',
+    'ImageCube',
+    'IImageCube',
+    'UImageCube'
+]
+
+def get_basic_mangled_name(basic):
+    index = basic_types_enumeration.index(basic)
+    if index < 26:
+        return chr(ord('A') + index)
+    return chr(ord('a') + index - 26)
 
 levels = ['ESSL3_1_BUILTINS', 'ESSL3_BUILTINS', 'ESSL1_BUILTINS', 'COMMON_BUILTINS']
 
@@ -293,7 +342,7 @@ class TType:
         template_type = 'new TType(Ebt{basic}, Ebp{precision}, Evq{qualifier}, {primarySize}, {secondarySize})'
         return template_type.format(**self.data)
 
-    def get_mangled_name(self, separator = ';'):
+    def get_readable_mangled_name(self, separator=';'):
         mangled_name = ''
 
         if self.is_matrix():
@@ -302,9 +351,21 @@ class TType:
         elif self.data['primarySize'] > 1:
             mangled_name += str(self.data['primarySize'])
 
-        mangled_name += basic_mangled_names[self.data['basic']]
+        mangled_name += basic_mangled_names_readable[self.data['basic']]
 
         mangled_name += separator
+        return mangled_name
+
+    def get_non_readable_mangled_name(self, separator=';'):
+        mangled_name = ''
+
+        size_key = (self.data['secondarySize'] - 1) * 4 + self.data['primarySize'] - 1
+        if size_key < 10:
+            mangled_name += chr(ord('0') + size_key)
+        elif self.data['primarySize'] > 1:
+            mangled_name += chr(ord('A') + size_key - 10)
+
+        mangled_name += get_basic_mangled_name(self.data['basic'])
         return mangled_name
 
     def is_vector(self):
@@ -583,13 +644,21 @@ def get_parameters(function_props):
 def get_function_mangled_name(function_name, parameters):
     mangled_name = function_name + '('
     for param in parameters:
-        mangled_name += param.get_mangled_name()
+        mangled_name += param.get_readable_mangled_name(';')
     return mangled_name
 
-def get_unique_identifier_name(function_name, parameters):
+def get_unique_name(function_name, parameters):
     unique_name = function_name + '_'
     for param in parameters:
-        unique_name += param.get_mangled_name('_')
+
+        unique_name += param.get_non_readable_mangled_name('_')
+    return unique_name
+
+def get_unique_name_readable(function_name, parameters):
+    unique_name = function_name + '_'
+    for param in parameters:
+
+        unique_name += param.get_readable_mangled_name('_')
     return unique_name
 
 def get_variable_name_to_store_parameters(parameters):
@@ -602,7 +671,7 @@ def get_variable_name_to_store_parameters(parameters):
                 unique_name += 'o_'
             if param.data['qualifier'] == 'InOut':
                 unique_name += 'io_'
-        unique_name += param.get_mangled_name('_')
+        unique_name += param.get_non_readable_mangled_name('_')
     return unique_name
 
 def gen_function_variants(function_name, function_props):
@@ -695,7 +764,8 @@ def process_single_function_group(condition, group_name, group):
 
             parameters = get_parameters(function_props)
 
-            template_args['unique_name'] = get_unique_identifier_name(template_args['name_with_suffix'], parameters)
+            template_args['unique_name'] = get_unique_name(template_args['name_with_suffix'], parameters)
+            template_args['unique_name_readable'] = get_unique_name_readable(template_args['name_with_suffix'], parameters)
 
             if template_args['unique_name'] in defined_function_variants:
                 continue
@@ -705,10 +775,10 @@ def process_single_function_group(condition, group_name, group):
             template_args['return_type'] = function_props['returnType'].get_statictype_string()
             template_args['mangled_name'] = get_function_mangled_name(function_name, parameters)
 
-            template_builtin_id_declaration = '    static constexpr const TSymbolUniqueId {unique_name} = TSymbolUniqueId({id});'
+            template_builtin_id_declaration = '    static constexpr const TSymbolUniqueId {unique_name_readable} = TSymbolUniqueId({id});'
             builtin_id_declarations.append(template_builtin_id_declaration.format(**template_args))
 
-            template_mangled_name_declaration = 'constexpr const ImmutableString {unique_name}("{mangled_name}");'
+            template_mangled_name_declaration = 'constexpr const ImmutableString {unique_name_readable}("{mangled_name}");'
             name_declarations.add(template_mangled_name_declaration.format(**template_args))
 
             parameters_list = []
@@ -724,10 +794,10 @@ def process_single_function_group(condition, group_name, group):
                 template_parameter_list_declaration = 'constexpr const TConstParameter *{parameters_var_name} = nullptr;'
                 parameter_declarations.add(template_parameter_list_declaration.format(**template_args))
 
-            template_function_declaration = 'constexpr const TFunction kFunction_{unique_name}(BuiltInId::{unique_name}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, BuiltInName::{unique_name}, EOp{op}, {known_to_not_have_side_effects});'
+            template_function_declaration = 'constexpr const TFunction kFunction_{unique_name}(BuiltInId::{unique_name_readable}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, BuiltInName::{unique_name_readable}, EOp{op}, {known_to_not_have_side_effects});'
             function_declarations.append(template_function_declaration.format(**template_args))
 
-            template_insert_function = '    insertBuiltIn({level}, &BuiltInFunction::kFunction_{unique_name});'
+            template_insert_function = '    insertBuiltIn({level}, &BuiltInFunction::kFunction_{unique_name_readable});'
             insert_functions_by_condition[condition].append(template_insert_function.format(**template_args))
 
             id_counter += 1

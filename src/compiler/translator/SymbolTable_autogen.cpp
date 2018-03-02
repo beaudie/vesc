@@ -2206,1588 +2206,1588 @@ constexpr const ImmutableString yuv_2_rgb_3f_y_("yuv_2_rgb(3f;y;");
 namespace BuiltInParameters
 {
 
-constexpr const TConstParameter *empty        = nullptr;
-constexpr const TConstParameter p_22f_22f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>())};
-constexpr const TConstParameter p_22f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>())};
-constexpr const TConstParameter p_23f_23f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>())};
-constexpr const TConstParameter p_23f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>())};
-constexpr const TConstParameter p_24f_24f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>())};
-constexpr const TConstParameter p_24f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>())};
-constexpr const TConstParameter p_2b_2b_[2] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2b_[1] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_2f_2b_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_2f_2f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2f_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_2f_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_2f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2f_f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2f_f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+constexpr const TConstParameter *empty      = nullptr;
+constexpr const TConstParameter p_0B0B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2f_o_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 2, 1>())};
-constexpr const TConstParameter p_2f_o_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>())};
-constexpr const TConstParameter p_2i_2i_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2i_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2i_2i_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2i_2i_o_2i_o_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>())};
-constexpr const TConstParameter p_2i_[1] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2i_i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2i_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2u_2u_2u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2u_2u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2u_2u_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2u_2u_o_2u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>())};
-constexpr const TConstParameter p_2u_2u_o_2u_o_2u_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>())};
-constexpr const TConstParameter p_2u_[1] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_2u_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2u_u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_2u_u_u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_32f_32f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>())};
-constexpr const TConstParameter p_32f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>())};
-constexpr const TConstParameter p_33f_33f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>())};
-constexpr const TConstParameter p_33f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>())};
-constexpr const TConstParameter p_34f_34f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>())};
-constexpr const TConstParameter p_34f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>())};
-constexpr const TConstParameter p_3b_3b_[2] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3b_[1] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_3f_3f_3b_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_3f_3f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3f_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_3f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3f_f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3f_f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3f_o_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 3, 1>())};
-constexpr const TConstParameter p_3f_o_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>())};
-constexpr const TConstParameter p_3f_y_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtYuvCscStandardEXT, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3i_3i_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3i_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3i_3i_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3i_3i_o_3i_o_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>())};
-constexpr const TConstParameter p_3i_[1] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3i_i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3i_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3u_3u_3u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3u_3u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3u_3u_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3u_3u_o_3u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>())};
-constexpr const TConstParameter p_3u_3u_o_3u_o_3u_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>())};
-constexpr const TConstParameter p_3u_[1] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_3u_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3u_u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_3u_u_u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_42f_42f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>())};
-constexpr const TConstParameter p_42f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>())};
-constexpr const TConstParameter p_43f_43f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>())};
-constexpr const TConstParameter p_43f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>())};
-constexpr const TConstParameter p_44f_44f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>())};
-constexpr const TConstParameter p_44f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>())};
-constexpr const TConstParameter p_4b_4b_[2] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4b_[1] = {
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_4f_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_4f_4f_4b_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_4f_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4f_4i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4f_f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4f_f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4f_o_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 4, 1>())};
-constexpr const TConstParameter p_4f_o_4i_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>())};
-constexpr const TConstParameter p_4i_4i_4i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4i_4i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4i_4i_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4i_4i_o_4i_o_4i_[4] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>())};
-constexpr const TConstParameter p_4i_[1] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4i_i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4i_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4u_4u_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4u_4u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4u_4u_i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4u_4u_o_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>())};
-constexpr const TConstParameter p_4u_4u_o_4u_o_4u_[4] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>())};
-constexpr const TConstParameter p_4u_[1] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_4u_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4u_u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_4u_u_u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_I2_2i_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_I2_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_I2_[1] = {
-    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_I3_3i_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_I3_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_I3_[1] = {
-    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_IA_3i_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_IA_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_IA_[1] = {
-    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_Ic_3i_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_Ic_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_Ic_[1] = {
-    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_a_[1] = {
-    TConstParameter(StaticType::Get<EbtAtomicCounter, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_f_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_f_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_f_[1] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_f_2f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_f_f_3f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_f_f_4f_[3] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_f_f_[2] = {
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_f_b_[3] = {
+constexpr const TConstParameter p_0B0B0E[3] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_f_f_[3] = {
+constexpr const TConstParameter p_0B0B1B[3] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0B0B2B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0B0B3B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0B0B[2] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_i_[2] = {
+constexpr const TConstParameter p_0B0C[2] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_f_o_f_[2] = {
+constexpr const TConstParameter p_0B1B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0B2B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0B3B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Bo_0B[2] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 1, 1>())};
-constexpr const TConstParameter p_f_o_i_[2] = {
+constexpr const TConstParameter p_0Bo_0C[2] = {
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 1, 1>())};
-constexpr const TConstParameter p_iI2_2i_4i_[3] = {
-    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_iI2_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_iI2_[1] = {
-    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_iI3_3i_4i_[3] = {
-    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_iI3_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_iI3_[1] = {
-    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_iIA_3i_4i_[3] = {
-    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_iIA_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_iIA_[1] = {
-    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_iIc_3i_4i_[3] = {
-    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_iIc_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_iIc_[1] = {
-    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_i_[1] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_i_i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_i_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_i_i_i_i_[4] = {
+constexpr const TConstParameter p_0C0C0C0C[4] = {
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_i_i_o_i_o_i_[4] = {
+constexpr const TConstParameter p_0C0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0C0C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0C0Co_0Co_0C[4] = {
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 1, 1>())};
-constexpr const TConstParameter p_io_i_i_[2] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqInOut, 1, 1>()),
+constexpr const TConstParameter p_0C[1] = {
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_io_i_i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqInOut, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_io_u_u_[2] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqInOut, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_io_u_u_u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqInOut, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_2f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_2f_2i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_2f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_2i_i_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is2_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_4f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_4f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_4f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_4f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_is2_4f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_is2_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is2_i_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_3f_3f_3f_3i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3f_3i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3f_f_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_3i_i_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_3i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_4f_3f_3f_3i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_4f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_4f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_4f_3i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_is3_4f_f_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_is3_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_is3_i_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_isA_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_isA_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_isA_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_3f_2i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_isA_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_isA_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_3i_i_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_isA_3i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isA_i_[2] = {
-    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isC_3f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_isC_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_isC_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isC_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isC_i_[2] = {
-    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isM_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtISampler2DMS, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_isM_[1] = {
-    TConstParameter(StaticType::Get<EbtISampler2DMS, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_2f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_2f_2i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_2f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_2i_i_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s2_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_4f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_4f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_4f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_4f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_s2_4f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_2f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s2s_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_4f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_4f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_4f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_4f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_s2s_4f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_s2s_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s2s_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_3f_3f_3f_3i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3f_3i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3f_f_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_3i_i_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_3i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_4f_3f_3f_3i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_4f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_4f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_4f_3i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_s3_4f_f_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_s3_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_s3_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sA_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sA_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sA_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_3f_2i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sA_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sA_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_3i_i_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sA_3i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sA_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sAs_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sAs_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sAs_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sAs_4f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sAs_4f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sAs_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_sAs_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sC_3f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sC_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sC_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sC_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sC_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sCs_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sCs_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sCs_4f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sCs_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_sCs_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sCs_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sM_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sM_[1] = {
-    TConstParameter(StaticType::Get<EbtSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sR_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sR_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sR_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_sX_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sX_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sX_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sX_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sX_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sX_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_sX_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sX_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sY_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_sY_2f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sY_2i_i_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sY_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_sY_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sY_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_sY_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_sY_i_[2] = {
-    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_uI2_2i_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_uI2_2i_[2] = {
-    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_uI2_[1] = {
-    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_uI3_3i_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_uI3_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_uI3_[1] = {
-    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_uIA_3i_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_uIA_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_uIA_[1] = {
-    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_uIc_3i_4u_[3] = {
-    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_uIc_3i_[2] = {
-    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_uIc_[1] = {
-    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_u_[1] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_u_i_i_[3] = {
+constexpr const TConstParameter p_0D0C0C[3] = {
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_u_u_[2] = {
+constexpr const TConstParameter p_0D0D0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0D0D0D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_u_u_i_i_[4] = {
+constexpr const TConstParameter p_0D0D[2] = {
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_u_u_o_u_[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0D0Do_0D[3] = {
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 1, 1>())};
-constexpr const TConstParameter p_u_u_o_u_o_u_[4] = {
+constexpr const TConstParameter p_0D0Do_0Do_0D[4] = {
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 1, 1>()),
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 1, 1>())};
-constexpr const TConstParameter p_u_u_u_[3] = {
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0D[1] = {
     TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_2f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0F[1] = {
+    TConstParameter(StaticType::Get<EbtAtomicCounter, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H0C[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H1B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H1B0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H1B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0H1B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0H1B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_2f_2i_i_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0H1B1C0C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_2f_[2] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0H1B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H1B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2f_f_2i_[4] = {
+constexpr const TConstParameter p_0H1C0C1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0H3B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H3B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H3B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H3B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0H3B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0H3B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0I0C[2] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I2B0B2C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I2B2B2B2C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2B2C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I2B2C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2C0C2C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I2C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I3B0B2C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I3B2B2B2C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I3B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I3B2C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0I3B2C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0I3B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0J0C[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0J2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0J2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0J2B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0J2B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0K0C[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0K2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0K2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0K2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0K2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0K2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0K2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0K2B1C0C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0K2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0K2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0K2C0C1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0K2C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L0C[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L1B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0L1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L2B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0L3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0L3B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternalOES, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0M0C[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0M1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0M1B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0M1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0M2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0M2B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0M3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0M3B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerExternal2DY2YEXT, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0N1B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0N2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0N3B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DRect, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0O1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0O[1] = {
+    TConstParameter(StaticType::Get<EbtSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P0C[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P1B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P1B0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P1B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P1B1C0C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P1B1C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1C0C1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P2B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0P3B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P3B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P3B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P3B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0P3B1C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0P3B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0Q0C[2] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q2B0B2C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q2B2B2B2C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2B2C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q2B2C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2C0C2C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q2C0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q3B0B2C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q3B2B2B2C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q3B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q3B2C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Q3B2C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Q3B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0R0C[2] = {
+    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0R2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0R2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0R2B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0R2B[2] = {
+    TConstParameter(StaticType::Get<EbtISamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0S0C[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0S2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0S2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0S2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0S2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0S2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0S2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0S2B1C0C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0S2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0S2B[2] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0S2C0C1C[4] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0S2C0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0T1C0C[3] = {
+    TConstParameter(StaticType::Get<EbtISampler2DMS, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0T[1] = {
+    TConstParameter(StaticType::Get<EbtISampler2DMS, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U0C[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U1B0B1C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2f_f_[3] = {
+constexpr const TConstParameter p_0U1B0B[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_2f_i_[3] = {
+constexpr const TConstParameter p_0U1B0C[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_2i_i_2i_[4] = {
+constexpr const TConstParameter p_0U1B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U1B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U1B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U1B1C0C[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U1B1C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U1B[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U1C0C1C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_2i_i_[3] = {
+constexpr const TConstParameter p_0U1C0C[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_3f_2f_2f_2i_[5] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_3f_2f_2f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_3f_2i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us2_3f_f_2i_[4] = {
+constexpr const TConstParameter p_0U2B0B1C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_3f_f_[3] = {
+constexpr const TConstParameter p_0U2B0B[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_4f_2f_2f_2i_[5] = {
+constexpr const TConstParameter p_0U2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U2B[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0U3B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0U3B1B1B1C[5] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_4f_2f_2f_[4] = {
+constexpr const TConstParameter p_0U3B1B1B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_4f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_4f_2i_f_[4] = {
+constexpr const TConstParameter p_0U3B1C0B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_4f_[2] = {
+constexpr const TConstParameter p_0U3B1C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0U3B[2] = {
     TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_us2_4f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_us2_4f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us2_i_[2] = {
-    TConstParameter(StaticType::Get<EbtUSampler2D, EbpUndefined, EvqGlobal, 1, 1>()),
+constexpr const TConstParameter p_0V0C[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_3f_3f_3f_3i_[5] = {
+constexpr const TConstParameter p_0V2B0B2C[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0V2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0V2B2B2B2C[5] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3f_3f_3f_[4] = {
+constexpr const TConstParameter p_0V2B2B2B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3f_3i_f_[4] = {
+constexpr const TConstParameter p_0V2B2C0B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_3f_[2] = {
+constexpr const TConstParameter p_0V2B2C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0V2B[2] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3f_f_3i_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_3i_i_3i_[4] = {
+constexpr const TConstParameter p_0V2C0C2C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_3i_i_[3] = {
+constexpr const TConstParameter p_0V2C0C[3] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_4f_3f_3f_3i_[5] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_4f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_4f_3i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_4f_3i_f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_4f_[2] = {
-    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
-constexpr const TConstParameter p_us3_4f_f_3i_[4] = {
+constexpr const TConstParameter p_0V3B0B2C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_us3_4f_f_[3] = {
+constexpr const TConstParameter p_0V3B0B[3] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_us3_i_[2] = {
+constexpr const TConstParameter p_0V3B2B2B2C[5] = {
     TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0V3B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0V3B2C0B[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0V3B2C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0V3B[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0W0C[2] = {
+    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_3f_2f_2f_2i_[5] = {
+constexpr const TConstParameter p_0W2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0W2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0W2B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0W2B[2] = {
+    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0X0C[2] = {
+    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0X2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0X2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0X2B0C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0X2B1B1B1C[5] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_usA_3f_2f_2f_[4] = {
+constexpr const TConstParameter p_0X2B1B1B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_usA_3f_2i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_usA_3f_2i_f_[4] = {
+constexpr const TConstParameter p_0X2B1C0B[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_3f_2i_i_[4] = {
+constexpr const TConstParameter p_0X2B1C0C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_3f_[2] = {
+constexpr const TConstParameter p_0X2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0X2B[2] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_usA_3f_f_2i_[4] = {
-    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_usA_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_3i_i_2i_[4] = {
+constexpr const TConstParameter p_0X2C0C1C[4] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
-constexpr const TConstParameter p_usA_3i_i_[3] = {
+constexpr const TConstParameter p_0X2C0C[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usA_i_[2] = {
-    TConstParameter(StaticType::Get<EbtUSampler2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usC_3f_3f_3f_[4] = {
-    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_usC_3f_[2] = {
-    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
-constexpr const TConstParameter p_usC_3f_f_[3] = {
-    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usC_3f_i_[3] = {
-    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usC_i_[2] = {
-    TConstParameter(StaticType::Get<EbtUSamplerCube, EbpUndefined, EvqGlobal, 1, 1>()),
-    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usM_2i_i_[3] = {
+constexpr const TConstParameter p_0Y1C0C[3] = {
     TConstParameter(StaticType::Get<EbtUSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
     TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
-constexpr const TConstParameter p_usM_[1] = {
+constexpr const TConstParameter p_0Y[1] = {
     TConstParameter(StaticType::Get<EbtUSampler2DMS, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z0C[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z1B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z1B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z2B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z2B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z2B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z2B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0Z3B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z3B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z3B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z3B1C0B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0Z3B1C[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0Z3B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0a0C[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0a2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0a2B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0a3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0a3B2B2B[4] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0a3B[2] = {
+    TConstParameter(StaticType::Get<EbtSamplerCubeShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0b0C[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0b2B0B1C[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0b2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0b2B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0b3B1B1B1C[5] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0b3B1B1B[4] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0b3B[2] = {
+    TConstParameter(StaticType::Get<EbtSampler2DArrayShadow, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0c1C3B[3] = {
+    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0c1C[2] = {
+    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0c[1] = {
+    TConstParameter(StaticType::Get<EbtImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0d1C3C[3] = {
+    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0d1C[2] = {
+    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0d[1] = {
+    TConstParameter(StaticType::Get<EbtIImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0e1C3D[3] = {
+    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0e1C[2] = {
+    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_0e[1] = {
+    TConstParameter(StaticType::Get<EbtUImage2D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0f2C3B[3] = {
+    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0f2C[2] = {
+    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0f[1] = {
+    TConstParameter(StaticType::Get<EbtImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0g2C3C[3] = {
+    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0g2C[2] = {
+    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0g[1] = {
+    TConstParameter(StaticType::Get<EbtIImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0h2C3D[3] = {
+    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0h2C[2] = {
+    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0h[1] = {
+    TConstParameter(StaticType::Get<EbtUImage3D, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0i2C3B[3] = {
+    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0i2C[2] = {
+    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0i[1] = {
+    TConstParameter(StaticType::Get<EbtImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0j2C3C[3] = {
+    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0j2C[2] = {
+    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0j[1] = {
+    TConstParameter(StaticType::Get<EbtIImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0k2C3D[3] = {
+    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0k2C[2] = {
+    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0k[1] = {
+    TConstParameter(StaticType::Get<EbtUImage2DArray, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0l2C3B[3] = {
+    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0l2C[2] = {
+    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0l[1] = {
+    TConstParameter(StaticType::Get<EbtImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0m2C3C[3] = {
+    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0m2C[2] = {
+    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0m[1] = {
+    TConstParameter(StaticType::Get<EbtIImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_0n2C3D[3] = {
+    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_0n2C[2] = {
+    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_0n[1] = {
+    TConstParameter(StaticType::Get<EbtUImageCube, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1B0B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1B0B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1B1B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1B1B1B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1B1B1E[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1B1B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1B1C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1B2B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_1B3B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_1B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1Bo_1B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 2, 1>())};
+constexpr const TConstParameter p_1Bo_1C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>())};
+constexpr const TConstParameter p_1C0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1C0C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1C1C0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1C1C1C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1C1C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1C1Co_1Co_1C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 2, 1>())};
+constexpr const TConstParameter p_1C[1] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1D0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1D0D0D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1D0D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1D1D0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_1D1D1D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1D1D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1D1Do_1D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>())};
+constexpr const TConstParameter p_1D1Do_1Do_1D[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 2, 1>())};
+constexpr const TConstParameter p_1D[1] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1E1E[2] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_1E[1] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_2B0B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2B0B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2B0G[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtYuvCscStandardEXT, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2B1B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_2B2B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2B2B2B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2B2B2E[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2B2B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2B2C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2B3B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_2B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2Bo_2B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 3, 1>())};
+constexpr const TConstParameter p_2Bo_2C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>())};
+constexpr const TConstParameter p_2C0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2C0C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2C2C0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2C2C2C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2C2C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2C2Co_2Co_2C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 3, 1>())};
+constexpr const TConstParameter p_2C[1] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2D0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2D0D0D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2D0D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2D2D0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_2D2D2D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2D2D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2D2Do_2D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>())};
+constexpr const TConstParameter p_2D2Do_2Do_2D[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 3, 1>())};
+constexpr const TConstParameter p_2D[1] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2E2E[2] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_2E[1] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_3B0B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3B0B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3B1B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>())};
+constexpr const TConstParameter p_3B2B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>())};
+constexpr const TConstParameter p_3B3B0B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3B3B3B[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3B3B3E[3] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3B3B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3B3C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3Bo_3B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqOut, 4, 1>())};
+constexpr const TConstParameter p_3Bo_3C[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>())};
+constexpr const TConstParameter p_3C0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3C0C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3C3C0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3C3C3C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3C3C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3C3Co_3Co_3C[4] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqOut, 4, 1>())};
+constexpr const TConstParameter p_3C[1] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3D0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3D0D0D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3D0D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3D3D0C0C[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_3D3D3D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3D3D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3D3Do_3D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>())};
+constexpr const TConstParameter p_3D3Do_3Do_3D[4] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>())};
+constexpr const TConstParameter p_3D[1] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3E3E[2] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>()),
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_3E[1] = {
+    TConstParameter(StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>())};
+constexpr const TConstParameter p_5B5B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>())};
+constexpr const TConstParameter p_5B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>())};
+constexpr const TConstParameter p_6B6B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>())};
+constexpr const TConstParameter p_6B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>())};
+constexpr const TConstParameter p_7B7B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>())};
+constexpr const TConstParameter p_7B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>())};
+constexpr const TConstParameter p_9B9B[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>())};
+constexpr const TConstParameter p_9B[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>())};
+constexpr const TConstParameter p_ABAB[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>())};
+constexpr const TConstParameter p_AB[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>())};
+constexpr const TConstParameter p_BBBB[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>())};
+constexpr const TConstParameter p_BB[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>())};
+constexpr const TConstParameter p_DBDB[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>())};
+constexpr const TConstParameter p_DB[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>())};
+constexpr const TConstParameter p_EBEB[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>())};
+constexpr const TConstParameter p_EB[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>())};
+constexpr const TConstParameter p_FBFB[2] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>()),
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>())};
+constexpr const TConstParameter p_FB[1] = {
+    TConstParameter(StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>())};
+constexpr const TConstParameter p_io_0C0C0C[3] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqInOut, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_io_0C0C[2] = {
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqInOut, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_io_0D0D0D[3] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqInOut, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
+constexpr const TConstParameter p_io_0D0D[2] = {
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqInOut, 1, 1>()),
+    TConstParameter(StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>())};
 
 }  // namespace BuiltInParameters
 
@@ -4121,8450 +4121,8447 @@ const TVariable *gl_WorkGroupSize()
 namespace BuiltInFunction
 {
 
-constexpr const TFunction kFunction_radians_f_(
+constexpr const TFunction kFunction_radians_0B(
     BuiltInId::radians_f_,
     BuiltInName::radians,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::radians_f_,
     EOpRadians,
     true);
-constexpr const TFunction kFunction_radians_2f_(
+constexpr const TFunction kFunction_radians_1B(
     BuiltInId::radians_2f_,
     BuiltInName::radians,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::radians_2f_,
     EOpRadians,
     true);
-constexpr const TFunction kFunction_radians_3f_(
+constexpr const TFunction kFunction_radians_2B(
     BuiltInId::radians_3f_,
     BuiltInName::radians,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::radians_3f_,
     EOpRadians,
     true);
-constexpr const TFunction kFunction_radians_4f_(
+constexpr const TFunction kFunction_radians_3B(
     BuiltInId::radians_4f_,
     BuiltInName::radians,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::radians_4f_,
     EOpRadians,
     true);
-constexpr const TFunction kFunction_degrees_f_(
+constexpr const TFunction kFunction_degrees_0B(
     BuiltInId::degrees_f_,
     BuiltInName::degrees,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::degrees_f_,
     EOpDegrees,
     true);
-constexpr const TFunction kFunction_degrees_2f_(
+constexpr const TFunction kFunction_degrees_1B(
     BuiltInId::degrees_2f_,
     BuiltInName::degrees,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::degrees_2f_,
     EOpDegrees,
     true);
-constexpr const TFunction kFunction_degrees_3f_(
+constexpr const TFunction kFunction_degrees_2B(
     BuiltInId::degrees_3f_,
     BuiltInName::degrees,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::degrees_3f_,
     EOpDegrees,
     true);
-constexpr const TFunction kFunction_degrees_4f_(
+constexpr const TFunction kFunction_degrees_3B(
     BuiltInId::degrees_4f_,
     BuiltInName::degrees,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::degrees_4f_,
     EOpDegrees,
     true);
-constexpr const TFunction kFunction_sin_f_(
+constexpr const TFunction kFunction_sin_0B(
     BuiltInId::sin_f_,
     BuiltInName::sin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::sin_f_,
     EOpSin,
     true);
-constexpr const TFunction kFunction_sin_2f_(
+constexpr const TFunction kFunction_sin_1B(
     BuiltInId::sin_2f_,
     BuiltInName::sin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::sin_2f_,
     EOpSin,
     true);
-constexpr const TFunction kFunction_sin_3f_(
+constexpr const TFunction kFunction_sin_2B(
     BuiltInId::sin_3f_,
     BuiltInName::sin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::sin_3f_,
     EOpSin,
     true);
-constexpr const TFunction kFunction_sin_4f_(
+constexpr const TFunction kFunction_sin_3B(
     BuiltInId::sin_4f_,
     BuiltInName::sin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::sin_4f_,
     EOpSin,
     true);
-constexpr const TFunction kFunction_cos_f_(
+constexpr const TFunction kFunction_cos_0B(
     BuiltInId::cos_f_,
     BuiltInName::cos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::cos_f_,
     EOpCos,
     true);
-constexpr const TFunction kFunction_cos_2f_(
+constexpr const TFunction kFunction_cos_1B(
     BuiltInId::cos_2f_,
     BuiltInName::cos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::cos_2f_,
     EOpCos,
     true);
-constexpr const TFunction kFunction_cos_3f_(
+constexpr const TFunction kFunction_cos_2B(
     BuiltInId::cos_3f_,
     BuiltInName::cos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::cos_3f_,
     EOpCos,
     true);
-constexpr const TFunction kFunction_cos_4f_(
+constexpr const TFunction kFunction_cos_3B(
     BuiltInId::cos_4f_,
     BuiltInName::cos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::cos_4f_,
     EOpCos,
     true);
-constexpr const TFunction kFunction_tan_f_(
+constexpr const TFunction kFunction_tan_0B(
     BuiltInId::tan_f_,
     BuiltInName::tan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::tan_f_,
     EOpTan,
     true);
-constexpr const TFunction kFunction_tan_2f_(
+constexpr const TFunction kFunction_tan_1B(
     BuiltInId::tan_2f_,
     BuiltInName::tan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::tan_2f_,
     EOpTan,
     true);
-constexpr const TFunction kFunction_tan_3f_(
+constexpr const TFunction kFunction_tan_2B(
     BuiltInId::tan_3f_,
     BuiltInName::tan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::tan_3f_,
     EOpTan,
     true);
-constexpr const TFunction kFunction_tan_4f_(
+constexpr const TFunction kFunction_tan_3B(
     BuiltInId::tan_4f_,
     BuiltInName::tan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::tan_4f_,
     EOpTan,
     true);
-constexpr const TFunction kFunction_asin_f_(
+constexpr const TFunction kFunction_asin_0B(
     BuiltInId::asin_f_,
     BuiltInName::asin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::asin_f_,
     EOpAsin,
     true);
-constexpr const TFunction kFunction_asin_2f_(
+constexpr const TFunction kFunction_asin_1B(
     BuiltInId::asin_2f_,
     BuiltInName::asin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::asin_2f_,
     EOpAsin,
     true);
-constexpr const TFunction kFunction_asin_3f_(
+constexpr const TFunction kFunction_asin_2B(
     BuiltInId::asin_3f_,
     BuiltInName::asin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::asin_3f_,
     EOpAsin,
     true);
-constexpr const TFunction kFunction_asin_4f_(
+constexpr const TFunction kFunction_asin_3B(
     BuiltInId::asin_4f_,
     BuiltInName::asin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::asin_4f_,
     EOpAsin,
     true);
-constexpr const TFunction kFunction_acos_f_(
+constexpr const TFunction kFunction_acos_0B(
     BuiltInId::acos_f_,
     BuiltInName::acos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::acos_f_,
     EOpAcos,
     true);
-constexpr const TFunction kFunction_acos_2f_(
+constexpr const TFunction kFunction_acos_1B(
     BuiltInId::acos_2f_,
     BuiltInName::acos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::acos_2f_,
     EOpAcos,
     true);
-constexpr const TFunction kFunction_acos_3f_(
+constexpr const TFunction kFunction_acos_2B(
     BuiltInId::acos_3f_,
     BuiltInName::acos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::acos_3f_,
     EOpAcos,
     true);
-constexpr const TFunction kFunction_acos_4f_(
+constexpr const TFunction kFunction_acos_3B(
     BuiltInId::acos_4f_,
     BuiltInName::acos,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::acos_4f_,
     EOpAcos,
     true);
-constexpr const TFunction kFunction_atan_f_f_(
+constexpr const TFunction kFunction_atan_0B0B(
     BuiltInId::atan_f_f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atan_f_f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_2f_2f_(
+constexpr const TFunction kFunction_atan_1B1B(
     BuiltInId::atan_2f_2f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::atan_2f_2f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_3f_3f_(
+constexpr const TFunction kFunction_atan_2B2B(
     BuiltInId::atan_3f_3f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::atan_3f_3f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_4f_4f_(
+constexpr const TFunction kFunction_atan_3B3B(
     BuiltInId::atan_4f_4f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::atan_4f_4f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_f_(
+constexpr const TFunction kFunction_atan_0B(
     BuiltInId::atan_f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atan_f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_2f_(
+constexpr const TFunction kFunction_atan_1B(
     BuiltInId::atan_2f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::atan_2f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_3f_(
+constexpr const TFunction kFunction_atan_2B(
     BuiltInId::atan_3f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::atan_3f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_atan_4f_(
+constexpr const TFunction kFunction_atan_3B(
     BuiltInId::atan_4f_,
     BuiltInName::atan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::atan_4f_,
     EOpAtan,
     true);
-constexpr const TFunction kFunction_sinh_f_(
+constexpr const TFunction kFunction_sinh_0B(
     BuiltInId::sinh_f_,
     BuiltInName::sinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::sinh_f_,
     EOpSinh,
     true);
-constexpr const TFunction kFunction_sinh_2f_(
+constexpr const TFunction kFunction_sinh_1B(
     BuiltInId::sinh_2f_,
     BuiltInName::sinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::sinh_2f_,
     EOpSinh,
     true);
-constexpr const TFunction kFunction_sinh_3f_(
+constexpr const TFunction kFunction_sinh_2B(
     BuiltInId::sinh_3f_,
     BuiltInName::sinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::sinh_3f_,
     EOpSinh,
     true);
-constexpr const TFunction kFunction_sinh_4f_(
+constexpr const TFunction kFunction_sinh_3B(
     BuiltInId::sinh_4f_,
     BuiltInName::sinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::sinh_4f_,
     EOpSinh,
     true);
-constexpr const TFunction kFunction_cosh_f_(
+constexpr const TFunction kFunction_cosh_0B(
     BuiltInId::cosh_f_,
     BuiltInName::cosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::cosh_f_,
     EOpCosh,
     true);
-constexpr const TFunction kFunction_cosh_2f_(
+constexpr const TFunction kFunction_cosh_1B(
     BuiltInId::cosh_2f_,
     BuiltInName::cosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::cosh_2f_,
     EOpCosh,
     true);
-constexpr const TFunction kFunction_cosh_3f_(
+constexpr const TFunction kFunction_cosh_2B(
     BuiltInId::cosh_3f_,
     BuiltInName::cosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::cosh_3f_,
     EOpCosh,
     true);
-constexpr const TFunction kFunction_cosh_4f_(
+constexpr const TFunction kFunction_cosh_3B(
     BuiltInId::cosh_4f_,
     BuiltInName::cosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::cosh_4f_,
     EOpCosh,
     true);
-constexpr const TFunction kFunction_tanh_f_(
+constexpr const TFunction kFunction_tanh_0B(
     BuiltInId::tanh_f_,
     BuiltInName::tanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::tanh_f_,
     EOpTanh,
     true);
-constexpr const TFunction kFunction_tanh_2f_(
+constexpr const TFunction kFunction_tanh_1B(
     BuiltInId::tanh_2f_,
     BuiltInName::tanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::tanh_2f_,
     EOpTanh,
     true);
-constexpr const TFunction kFunction_tanh_3f_(
+constexpr const TFunction kFunction_tanh_2B(
     BuiltInId::tanh_3f_,
     BuiltInName::tanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::tanh_3f_,
     EOpTanh,
     true);
-constexpr const TFunction kFunction_tanh_4f_(
+constexpr const TFunction kFunction_tanh_3B(
     BuiltInId::tanh_4f_,
     BuiltInName::tanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::tanh_4f_,
     EOpTanh,
     true);
-constexpr const TFunction kFunction_asinh_f_(
+constexpr const TFunction kFunction_asinh_0B(
     BuiltInId::asinh_f_,
     BuiltInName::asinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::asinh_f_,
     EOpAsinh,
     true);
-constexpr const TFunction kFunction_asinh_2f_(
+constexpr const TFunction kFunction_asinh_1B(
     BuiltInId::asinh_2f_,
     BuiltInName::asinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::asinh_2f_,
     EOpAsinh,
     true);
-constexpr const TFunction kFunction_asinh_3f_(
+constexpr const TFunction kFunction_asinh_2B(
     BuiltInId::asinh_3f_,
     BuiltInName::asinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::asinh_3f_,
     EOpAsinh,
     true);
-constexpr const TFunction kFunction_asinh_4f_(
+constexpr const TFunction kFunction_asinh_3B(
     BuiltInId::asinh_4f_,
     BuiltInName::asinh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::asinh_4f_,
     EOpAsinh,
     true);
-constexpr const TFunction kFunction_acosh_f_(
+constexpr const TFunction kFunction_acosh_0B(
     BuiltInId::acosh_f_,
     BuiltInName::acosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::acosh_f_,
     EOpAcosh,
     true);
-constexpr const TFunction kFunction_acosh_2f_(
+constexpr const TFunction kFunction_acosh_1B(
     BuiltInId::acosh_2f_,
     BuiltInName::acosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::acosh_2f_,
     EOpAcosh,
     true);
-constexpr const TFunction kFunction_acosh_3f_(
+constexpr const TFunction kFunction_acosh_2B(
     BuiltInId::acosh_3f_,
     BuiltInName::acosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::acosh_3f_,
     EOpAcosh,
     true);
-constexpr const TFunction kFunction_acosh_4f_(
+constexpr const TFunction kFunction_acosh_3B(
     BuiltInId::acosh_4f_,
     BuiltInName::acosh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::acosh_4f_,
     EOpAcosh,
     true);
-constexpr const TFunction kFunction_atanh_f_(
+constexpr const TFunction kFunction_atanh_0B(
     BuiltInId::atanh_f_,
     BuiltInName::atanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atanh_f_,
     EOpAtanh,
     true);
-constexpr const TFunction kFunction_atanh_2f_(
+constexpr const TFunction kFunction_atanh_1B(
     BuiltInId::atanh_2f_,
     BuiltInName::atanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::atanh_2f_,
     EOpAtanh,
     true);
-constexpr const TFunction kFunction_atanh_3f_(
+constexpr const TFunction kFunction_atanh_2B(
     BuiltInId::atanh_3f_,
     BuiltInName::atanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::atanh_3f_,
     EOpAtanh,
     true);
-constexpr const TFunction kFunction_atanh_4f_(
+constexpr const TFunction kFunction_atanh_3B(
     BuiltInId::atanh_4f_,
     BuiltInName::atanh,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::atanh_4f_,
     EOpAtanh,
     true);
-constexpr const TFunction kFunction_pow_f_f_(
+constexpr const TFunction kFunction_pow_0B0B(
     BuiltInId::pow_f_f_,
     BuiltInName::pow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::pow_f_f_,
     EOpPow,
     true);
-constexpr const TFunction kFunction_pow_2f_2f_(
+constexpr const TFunction kFunction_pow_1B1B(
     BuiltInId::pow_2f_2f_,
     BuiltInName::pow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::pow_2f_2f_,
     EOpPow,
     true);
-constexpr const TFunction kFunction_pow_3f_3f_(
+constexpr const TFunction kFunction_pow_2B2B(
     BuiltInId::pow_3f_3f_,
     BuiltInName::pow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::pow_3f_3f_,
     EOpPow,
     true);
-constexpr const TFunction kFunction_pow_4f_4f_(
+constexpr const TFunction kFunction_pow_3B3B(
     BuiltInId::pow_4f_4f_,
     BuiltInName::pow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::pow_4f_4f_,
     EOpPow,
     true);
-constexpr const TFunction kFunction_exp_f_(
+constexpr const TFunction kFunction_exp_0B(
     BuiltInId::exp_f_,
     BuiltInName::exp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::exp_f_,
     EOpExp,
     true);
-constexpr const TFunction kFunction_exp_2f_(
+constexpr const TFunction kFunction_exp_1B(
     BuiltInId::exp_2f_,
     BuiltInName::exp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::exp_2f_,
     EOpExp,
     true);
-constexpr const TFunction kFunction_exp_3f_(
+constexpr const TFunction kFunction_exp_2B(
     BuiltInId::exp_3f_,
     BuiltInName::exp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::exp_3f_,
     EOpExp,
     true);
-constexpr const TFunction kFunction_exp_4f_(
+constexpr const TFunction kFunction_exp_3B(
     BuiltInId::exp_4f_,
     BuiltInName::exp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::exp_4f_,
     EOpExp,
     true);
-constexpr const TFunction kFunction_log_f_(
+constexpr const TFunction kFunction_log_0B(
     BuiltInId::log_f_,
     BuiltInName::log,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::log_f_,
     EOpLog,
     true);
-constexpr const TFunction kFunction_log_2f_(
+constexpr const TFunction kFunction_log_1B(
     BuiltInId::log_2f_,
     BuiltInName::log,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::log_2f_,
     EOpLog,
     true);
-constexpr const TFunction kFunction_log_3f_(
+constexpr const TFunction kFunction_log_2B(
     BuiltInId::log_3f_,
     BuiltInName::log,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::log_3f_,
     EOpLog,
     true);
-constexpr const TFunction kFunction_log_4f_(
+constexpr const TFunction kFunction_log_3B(
     BuiltInId::log_4f_,
     BuiltInName::log,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::log_4f_,
     EOpLog,
     true);
-constexpr const TFunction kFunction_exp2_f_(
+constexpr const TFunction kFunction_exp2_0B(
     BuiltInId::exp2_f_,
     BuiltInName::exp2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::exp2_f_,
     EOpExp2,
     true);
-constexpr const TFunction kFunction_exp2_2f_(
+constexpr const TFunction kFunction_exp2_1B(
     BuiltInId::exp2_2f_,
     BuiltInName::exp2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::exp2_2f_,
     EOpExp2,
     true);
-constexpr const TFunction kFunction_exp2_3f_(
+constexpr const TFunction kFunction_exp2_2B(
     BuiltInId::exp2_3f_,
     BuiltInName::exp2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::exp2_3f_,
     EOpExp2,
     true);
-constexpr const TFunction kFunction_exp2_4f_(
+constexpr const TFunction kFunction_exp2_3B(
     BuiltInId::exp2_4f_,
     BuiltInName::exp2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::exp2_4f_,
     EOpExp2,
     true);
-constexpr const TFunction kFunction_log2_f_(
+constexpr const TFunction kFunction_log2_0B(
     BuiltInId::log2_f_,
     BuiltInName::log2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::log2_f_,
     EOpLog2,
     true);
-constexpr const TFunction kFunction_log2_2f_(
+constexpr const TFunction kFunction_log2_1B(
     BuiltInId::log2_2f_,
     BuiltInName::log2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::log2_2f_,
     EOpLog2,
     true);
-constexpr const TFunction kFunction_log2_3f_(
+constexpr const TFunction kFunction_log2_2B(
     BuiltInId::log2_3f_,
     BuiltInName::log2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::log2_3f_,
     EOpLog2,
     true);
-constexpr const TFunction kFunction_log2_4f_(
+constexpr const TFunction kFunction_log2_3B(
     BuiltInId::log2_4f_,
     BuiltInName::log2,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::log2_4f_,
     EOpLog2,
     true);
-constexpr const TFunction kFunction_sqrt_f_(
+constexpr const TFunction kFunction_sqrt_0B(
     BuiltInId::sqrt_f_,
     BuiltInName::sqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::sqrt_f_,
     EOpSqrt,
     true);
-constexpr const TFunction kFunction_sqrt_2f_(
+constexpr const TFunction kFunction_sqrt_1B(
     BuiltInId::sqrt_2f_,
     BuiltInName::sqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::sqrt_2f_,
     EOpSqrt,
     true);
-constexpr const TFunction kFunction_sqrt_3f_(
+constexpr const TFunction kFunction_sqrt_2B(
     BuiltInId::sqrt_3f_,
     BuiltInName::sqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::sqrt_3f_,
     EOpSqrt,
     true);
-constexpr const TFunction kFunction_sqrt_4f_(
+constexpr const TFunction kFunction_sqrt_3B(
     BuiltInId::sqrt_4f_,
     BuiltInName::sqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::sqrt_4f_,
     EOpSqrt,
     true);
-constexpr const TFunction kFunction_inversesqrt_f_(
+constexpr const TFunction kFunction_inversesqrt_0B(
     BuiltInId::inversesqrt_f_,
     BuiltInName::inversesqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::inversesqrt_f_,
     EOpInversesqrt,
     true);
-constexpr const TFunction kFunction_inversesqrt_2f_(
+constexpr const TFunction kFunction_inversesqrt_1B(
     BuiltInId::inversesqrt_2f_,
     BuiltInName::inversesqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::inversesqrt_2f_,
     EOpInversesqrt,
     true);
-constexpr const TFunction kFunction_inversesqrt_3f_(
+constexpr const TFunction kFunction_inversesqrt_2B(
     BuiltInId::inversesqrt_3f_,
     BuiltInName::inversesqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::inversesqrt_3f_,
     EOpInversesqrt,
     true);
-constexpr const TFunction kFunction_inversesqrt_4f_(
+constexpr const TFunction kFunction_inversesqrt_3B(
     BuiltInId::inversesqrt_4f_,
     BuiltInName::inversesqrt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::inversesqrt_4f_,
     EOpInversesqrt,
     true);
-constexpr const TFunction kFunction_abs_f_(
+constexpr const TFunction kFunction_abs_0B(
     BuiltInId::abs_f_,
     BuiltInName::abs,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::abs_f_,
     EOpAbs,
     true);
-constexpr const TFunction kFunction_abs_2f_(
+constexpr const TFunction kFunction_abs_1B(
     BuiltInId::abs_2f_,
     BuiltInName::abs,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::abs_2f_,
     EOpAbs,
     true);
-constexpr const TFunction kFunction_abs_3f_(
+constexpr const TFunction kFunction_abs_2B(
     BuiltInId::abs_3f_,
     BuiltInName::abs,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::abs_3f_,
     EOpAbs,
     true);
-constexpr const TFunction kFunction_abs_4f_(
+constexpr const TFunction kFunction_abs_3B(
     BuiltInId::abs_4f_,
     BuiltInName::abs,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::abs_4f_,
     EOpAbs,
     true);
-constexpr const TFunction kFunction_abs_i_(BuiltInId::abs_i_,
+constexpr const TFunction kFunction_abs_0C(BuiltInId::abs_i_,
                                            BuiltInName::abs,
                                            TExtension::UNDEFINED,
-                                           BuiltInParameters::p_i_,
+                                           BuiltInParameters::p_0C,
                                            1,
                                            StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
                                            BuiltInName::abs_i_,
                                            EOpAbs,
                                            true);
-constexpr const TFunction kFunction_abs_2i_(
-    BuiltInId::abs_2i_,
-    BuiltInName::abs,
-    TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
-    1,
-    StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
-    BuiltInName::abs_2i_,
-    EOpAbs,
-    true);
-constexpr const TFunction kFunction_abs_3i_(
-    BuiltInId::abs_3i_,
-    BuiltInName::abs,
-    TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
-    1,
-    StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
-    BuiltInName::abs_3i_,
-    EOpAbs,
-    true);
-constexpr const TFunction kFunction_abs_4i_(
-    BuiltInId::abs_4i_,
-    BuiltInName::abs,
-    TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
-    1,
-    StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
-    BuiltInName::abs_4i_,
-    EOpAbs,
-    true);
-constexpr const TFunction kFunction_sign_f_(
+constexpr const TFunction kFunction_abs_1C(BuiltInId::abs_2i_,
+                                           BuiltInName::abs,
+                                           TExtension::UNDEFINED,
+                                           BuiltInParameters::p_1C,
+                                           1,
+                                           StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
+                                           BuiltInName::abs_2i_,
+                                           EOpAbs,
+                                           true);
+constexpr const TFunction kFunction_abs_2C(BuiltInId::abs_3i_,
+                                           BuiltInName::abs,
+                                           TExtension::UNDEFINED,
+                                           BuiltInParameters::p_2C,
+                                           1,
+                                           StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
+                                           BuiltInName::abs_3i_,
+                                           EOpAbs,
+                                           true);
+constexpr const TFunction kFunction_abs_3C(BuiltInId::abs_4i_,
+                                           BuiltInName::abs,
+                                           TExtension::UNDEFINED,
+                                           BuiltInParameters::p_3C,
+                                           1,
+                                           StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
+                                           BuiltInName::abs_4i_,
+                                           EOpAbs,
+                                           true);
+constexpr const TFunction kFunction_sign_0B(
     BuiltInId::sign_f_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::sign_f_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_2f_(
+constexpr const TFunction kFunction_sign_1B(
     BuiltInId::sign_2f_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::sign_2f_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_3f_(
+constexpr const TFunction kFunction_sign_2B(
     BuiltInId::sign_3f_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::sign_3f_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_4f_(
+constexpr const TFunction kFunction_sign_3B(
     BuiltInId::sign_4f_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::sign_4f_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_i_(
+constexpr const TFunction kFunction_sign_0C(
     BuiltInId::sign_i_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::sign_i_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_2i_(
+constexpr const TFunction kFunction_sign_1C(
     BuiltInId::sign_2i_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::sign_2i_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_3i_(
+constexpr const TFunction kFunction_sign_2C(
     BuiltInId::sign_3i_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::sign_3i_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_sign_4i_(
+constexpr const TFunction kFunction_sign_3C(
     BuiltInId::sign_4i_,
     BuiltInName::sign,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::sign_4i_,
     EOpSign,
     true);
-constexpr const TFunction kFunction_floor_f_(
+constexpr const TFunction kFunction_floor_0B(
     BuiltInId::floor_f_,
     BuiltInName::floor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::floor_f_,
     EOpFloor,
     true);
-constexpr const TFunction kFunction_floor_2f_(
+constexpr const TFunction kFunction_floor_1B(
     BuiltInId::floor_2f_,
     BuiltInName::floor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::floor_2f_,
     EOpFloor,
     true);
-constexpr const TFunction kFunction_floor_3f_(
+constexpr const TFunction kFunction_floor_2B(
     BuiltInId::floor_3f_,
     BuiltInName::floor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::floor_3f_,
     EOpFloor,
     true);
-constexpr const TFunction kFunction_floor_4f_(
+constexpr const TFunction kFunction_floor_3B(
     BuiltInId::floor_4f_,
     BuiltInName::floor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::floor_4f_,
     EOpFloor,
     true);
-constexpr const TFunction kFunction_trunc_f_(
+constexpr const TFunction kFunction_trunc_0B(
     BuiltInId::trunc_f_,
     BuiltInName::trunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::trunc_f_,
     EOpTrunc,
     true);
-constexpr const TFunction kFunction_trunc_2f_(
+constexpr const TFunction kFunction_trunc_1B(
     BuiltInId::trunc_2f_,
     BuiltInName::trunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::trunc_2f_,
     EOpTrunc,
     true);
-constexpr const TFunction kFunction_trunc_3f_(
+constexpr const TFunction kFunction_trunc_2B(
     BuiltInId::trunc_3f_,
     BuiltInName::trunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::trunc_3f_,
     EOpTrunc,
     true);
-constexpr const TFunction kFunction_trunc_4f_(
+constexpr const TFunction kFunction_trunc_3B(
     BuiltInId::trunc_4f_,
     BuiltInName::trunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::trunc_4f_,
     EOpTrunc,
     true);
-constexpr const TFunction kFunction_round_f_(
+constexpr const TFunction kFunction_round_0B(
     BuiltInId::round_f_,
     BuiltInName::round,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::round_f_,
     EOpRound,
     true);
-constexpr const TFunction kFunction_round_2f_(
+constexpr const TFunction kFunction_round_1B(
     BuiltInId::round_2f_,
     BuiltInName::round,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::round_2f_,
     EOpRound,
     true);
-constexpr const TFunction kFunction_round_3f_(
+constexpr const TFunction kFunction_round_2B(
     BuiltInId::round_3f_,
     BuiltInName::round,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::round_3f_,
     EOpRound,
     true);
-constexpr const TFunction kFunction_round_4f_(
+constexpr const TFunction kFunction_round_3B(
     BuiltInId::round_4f_,
     BuiltInName::round,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::round_4f_,
     EOpRound,
     true);
-constexpr const TFunction kFunction_roundEven_f_(
+constexpr const TFunction kFunction_roundEven_0B(
     BuiltInId::roundEven_f_,
     BuiltInName::roundEven,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::roundEven_f_,
     EOpRoundEven,
     true);
-constexpr const TFunction kFunction_roundEven_2f_(
+constexpr const TFunction kFunction_roundEven_1B(
     BuiltInId::roundEven_2f_,
     BuiltInName::roundEven,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::roundEven_2f_,
     EOpRoundEven,
     true);
-constexpr const TFunction kFunction_roundEven_3f_(
+constexpr const TFunction kFunction_roundEven_2B(
     BuiltInId::roundEven_3f_,
     BuiltInName::roundEven,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::roundEven_3f_,
     EOpRoundEven,
     true);
-constexpr const TFunction kFunction_roundEven_4f_(
+constexpr const TFunction kFunction_roundEven_3B(
     BuiltInId::roundEven_4f_,
     BuiltInName::roundEven,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::roundEven_4f_,
     EOpRoundEven,
     true);
-constexpr const TFunction kFunction_ceil_f_(
+constexpr const TFunction kFunction_ceil_0B(
     BuiltInId::ceil_f_,
     BuiltInName::ceil,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::ceil_f_,
     EOpCeil,
     true);
-constexpr const TFunction kFunction_ceil_2f_(
+constexpr const TFunction kFunction_ceil_1B(
     BuiltInId::ceil_2f_,
     BuiltInName::ceil,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::ceil_2f_,
     EOpCeil,
     true);
-constexpr const TFunction kFunction_ceil_3f_(
+constexpr const TFunction kFunction_ceil_2B(
     BuiltInId::ceil_3f_,
     BuiltInName::ceil,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::ceil_3f_,
     EOpCeil,
     true);
-constexpr const TFunction kFunction_ceil_4f_(
+constexpr const TFunction kFunction_ceil_3B(
     BuiltInId::ceil_4f_,
     BuiltInName::ceil,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::ceil_4f_,
     EOpCeil,
     true);
-constexpr const TFunction kFunction_fract_f_(
+constexpr const TFunction kFunction_fract_0B(
     BuiltInId::fract_f_,
     BuiltInName::fract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::fract_f_,
     EOpFract,
     true);
-constexpr const TFunction kFunction_fract_2f_(
+constexpr const TFunction kFunction_fract_1B(
     BuiltInId::fract_2f_,
     BuiltInName::fract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::fract_2f_,
     EOpFract,
     true);
-constexpr const TFunction kFunction_fract_3f_(
+constexpr const TFunction kFunction_fract_2B(
     BuiltInId::fract_3f_,
     BuiltInName::fract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::fract_3f_,
     EOpFract,
     true);
-constexpr const TFunction kFunction_fract_4f_(
+constexpr const TFunction kFunction_fract_3B(
     BuiltInId::fract_4f_,
     BuiltInName::fract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::fract_4f_,
     EOpFract,
     true);
-constexpr const TFunction kFunction_mod_f_f_(
+constexpr const TFunction kFunction_mod_0B0B(
     BuiltInId::mod_f_f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::mod_f_f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_2f_f_(
+constexpr const TFunction kFunction_mod_1B0B(
     BuiltInId::mod_2f_f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_f_,
+    BuiltInParameters::p_1B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::mod_2f_f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_3f_f_(
+constexpr const TFunction kFunction_mod_2B0B(
     BuiltInId::mod_3f_f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_f_,
+    BuiltInParameters::p_2B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::mod_3f_f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_4f_f_(
+constexpr const TFunction kFunction_mod_3B0B(
     BuiltInId::mod_4f_f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_f_,
+    BuiltInParameters::p_3B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::mod_4f_f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_2f_2f_(
+constexpr const TFunction kFunction_mod_1B1B(
     BuiltInId::mod_2f_2f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::mod_2f_2f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_3f_3f_(
+constexpr const TFunction kFunction_mod_2B2B(
     BuiltInId::mod_3f_3f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::mod_3f_3f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_mod_4f_4f_(
+constexpr const TFunction kFunction_mod_3B3B(
     BuiltInId::mod_4f_4f_,
     BuiltInName::mod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::mod_4f_4f_,
     EOpMod,
     true);
-constexpr const TFunction kFunction_min_f_f_(
+constexpr const TFunction kFunction_min_0B0B(
     BuiltInId::min_f_f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::min_f_f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2f_f_(
+constexpr const TFunction kFunction_min_1B0B(
     BuiltInId::min_2f_f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_f_,
+    BuiltInParameters::p_1B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2f_f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3f_f_(
+constexpr const TFunction kFunction_min_2B0B(
     BuiltInId::min_3f_f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_f_,
+    BuiltInParameters::p_2B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3f_f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4f_f_(
+constexpr const TFunction kFunction_min_3B0B(
     BuiltInId::min_4f_f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_f_,
+    BuiltInParameters::p_3B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4f_f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2f_2f_(
+constexpr const TFunction kFunction_min_1B1B(
     BuiltInId::min_2f_2f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2f_2f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3f_3f_(
+constexpr const TFunction kFunction_min_2B2B(
     BuiltInId::min_3f_3f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3f_3f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4f_4f_(
+constexpr const TFunction kFunction_min_3B3B(
     BuiltInId::min_4f_4f_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4f_4f_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_i_i_(
+constexpr const TFunction kFunction_min_0C0C(
     BuiltInId::min_i_i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_,
+    BuiltInParameters::p_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::min_i_i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2i_2i_(
+constexpr const TFunction kFunction_min_1C1C(
     BuiltInId::min_2i_2i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2i_2i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3i_3i_(
+constexpr const TFunction kFunction_min_2C2C(
     BuiltInId::min_3i_3i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3i_3i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4i_4i_(
+constexpr const TFunction kFunction_min_3C3C(
     BuiltInId::min_4i_4i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4i_4i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2i_i_(
+constexpr const TFunction kFunction_min_1C0C(
     BuiltInId::min_2i_i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_i_,
+    BuiltInParameters::p_1C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2i_i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3i_i_(
+constexpr const TFunction kFunction_min_2C0C(
     BuiltInId::min_3i_i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_i_,
+    BuiltInParameters::p_2C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3i_i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4i_i_(
+constexpr const TFunction kFunction_min_3C0C(
     BuiltInId::min_4i_i_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_i_,
+    BuiltInParameters::p_3C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4i_i_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_u_u_(
+constexpr const TFunction kFunction_min_0D0D(
     BuiltInId::min_u_u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_,
+    BuiltInParameters::p_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::min_u_u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2u_2u_(
+constexpr const TFunction kFunction_min_1D1D(
     BuiltInId::min_2u_2u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2u_2u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3u_3u_(
+constexpr const TFunction kFunction_min_2D2D(
     BuiltInId::min_3u_3u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3u_3u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4u_4u_(
+constexpr const TFunction kFunction_min_3D3D(
     BuiltInId::min_4u_4u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4u_4u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_2u_u_(
+constexpr const TFunction kFunction_min_1D0D(
     BuiltInId::min_2u_u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_u_,
+    BuiltInParameters::p_1D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::min_2u_u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_3u_u_(
+constexpr const TFunction kFunction_min_2D0D(
     BuiltInId::min_3u_u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_u_,
+    BuiltInParameters::p_2D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::min_3u_u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_min_4u_u_(
+constexpr const TFunction kFunction_min_3D0D(
     BuiltInId::min_4u_u_,
     BuiltInName::min,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_u_,
+    BuiltInParameters::p_3D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::min_4u_u_,
     EOpMin,
     true);
-constexpr const TFunction kFunction_max_f_f_(
+constexpr const TFunction kFunction_max_0B0B(
     BuiltInId::max_f_f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::max_f_f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2f_f_(
+constexpr const TFunction kFunction_max_1B0B(
     BuiltInId::max_2f_f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_f_,
+    BuiltInParameters::p_1B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2f_f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3f_f_(
+constexpr const TFunction kFunction_max_2B0B(
     BuiltInId::max_3f_f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_f_,
+    BuiltInParameters::p_2B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3f_f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4f_f_(
+constexpr const TFunction kFunction_max_3B0B(
     BuiltInId::max_4f_f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_f_,
+    BuiltInParameters::p_3B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4f_f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2f_2f_(
+constexpr const TFunction kFunction_max_1B1B(
     BuiltInId::max_2f_2f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2f_2f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3f_3f_(
+constexpr const TFunction kFunction_max_2B2B(
     BuiltInId::max_3f_3f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3f_3f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4f_4f_(
+constexpr const TFunction kFunction_max_3B3B(
     BuiltInId::max_4f_4f_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4f_4f_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_i_i_(
+constexpr const TFunction kFunction_max_0C0C(
     BuiltInId::max_i_i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_,
+    BuiltInParameters::p_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::max_i_i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2i_2i_(
+constexpr const TFunction kFunction_max_1C1C(
     BuiltInId::max_2i_2i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2i_2i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3i_3i_(
+constexpr const TFunction kFunction_max_2C2C(
     BuiltInId::max_3i_3i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3i_3i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4i_4i_(
+constexpr const TFunction kFunction_max_3C3C(
     BuiltInId::max_4i_4i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4i_4i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2i_i_(
+constexpr const TFunction kFunction_max_1C0C(
     BuiltInId::max_2i_i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_i_,
+    BuiltInParameters::p_1C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2i_i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3i_i_(
+constexpr const TFunction kFunction_max_2C0C(
     BuiltInId::max_3i_i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_i_,
+    BuiltInParameters::p_2C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3i_i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4i_i_(
+constexpr const TFunction kFunction_max_3C0C(
     BuiltInId::max_4i_i_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_i_,
+    BuiltInParameters::p_3C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4i_i_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_u_u_(
+constexpr const TFunction kFunction_max_0D0D(
     BuiltInId::max_u_u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_,
+    BuiltInParameters::p_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::max_u_u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2u_2u_(
+constexpr const TFunction kFunction_max_1D1D(
     BuiltInId::max_2u_2u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2u_2u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3u_3u_(
+constexpr const TFunction kFunction_max_2D2D(
     BuiltInId::max_3u_3u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3u_3u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4u_4u_(
+constexpr const TFunction kFunction_max_3D3D(
     BuiltInId::max_4u_4u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4u_4u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_2u_u_(
+constexpr const TFunction kFunction_max_1D0D(
     BuiltInId::max_2u_u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_u_,
+    BuiltInParameters::p_1D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::max_2u_u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_3u_u_(
+constexpr const TFunction kFunction_max_2D0D(
     BuiltInId::max_3u_u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_u_,
+    BuiltInParameters::p_2D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::max_3u_u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_max_4u_u_(
+constexpr const TFunction kFunction_max_3D0D(
     BuiltInId::max_4u_u_,
     BuiltInName::max,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_u_,
+    BuiltInParameters::p_3D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::max_4u_u_,
     EOpMax,
     true);
-constexpr const TFunction kFunction_clamp_f_f_f_(
+constexpr const TFunction kFunction_clamp_0B0B0B(
     BuiltInId::clamp_f_f_f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_f_,
+    BuiltInParameters::p_0B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::clamp_f_f_f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2f_f_f_(
+constexpr const TFunction kFunction_clamp_1B0B0B(
     BuiltInId::clamp_2f_f_f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_f_f_,
+    BuiltInParameters::p_1B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2f_f_f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3f_f_f_(
+constexpr const TFunction kFunction_clamp_2B0B0B(
     BuiltInId::clamp_3f_f_f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_f_f_,
+    BuiltInParameters::p_2B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3f_f_f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4f_f_f_(
+constexpr const TFunction kFunction_clamp_3B0B0B(
     BuiltInId::clamp_4f_f_f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_f_f_,
+    BuiltInParameters::p_3B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4f_f_f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2f_2f_2f_(
+constexpr const TFunction kFunction_clamp_1B1B1B(
     BuiltInId::clamp_2f_2f_2f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_2f_,
+    BuiltInParameters::p_1B1B1B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2f_2f_2f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3f_3f_3f_(
+constexpr const TFunction kFunction_clamp_2B2B2B(
     BuiltInId::clamp_3f_3f_3f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_3f_,
+    BuiltInParameters::p_2B2B2B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3f_3f_3f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4f_4f_4f_(
+constexpr const TFunction kFunction_clamp_3B3B3B(
     BuiltInId::clamp_4f_4f_4f_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_4f_,
+    BuiltInParameters::p_3B3B3B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4f_4f_4f_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_i_i_i_(
+constexpr const TFunction kFunction_clamp_0C0C0C(
     BuiltInId::clamp_i_i_i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_i_,
+    BuiltInParameters::p_0C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::clamp_i_i_i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2i_i_i_(
+constexpr const TFunction kFunction_clamp_1C0C0C(
     BuiltInId::clamp_2i_i_i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_i_i_,
+    BuiltInParameters::p_1C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2i_i_i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3i_i_i_(
+constexpr const TFunction kFunction_clamp_2C0C0C(
     BuiltInId::clamp_3i_i_i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_i_i_,
+    BuiltInParameters::p_2C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3i_i_i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4i_i_i_(
+constexpr const TFunction kFunction_clamp_3C0C0C(
     BuiltInId::clamp_4i_i_i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_i_i_,
+    BuiltInParameters::p_3C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4i_i_i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2i_2i_2i_(
+constexpr const TFunction kFunction_clamp_1C1C1C(
     BuiltInId::clamp_2i_2i_2i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_2i_,
+    BuiltInParameters::p_1C1C1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2i_2i_2i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3i_3i_3i_(
+constexpr const TFunction kFunction_clamp_2C2C2C(
     BuiltInId::clamp_3i_3i_3i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_3i_,
+    BuiltInParameters::p_2C2C2C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3i_3i_3i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4i_4i_4i_(
+constexpr const TFunction kFunction_clamp_3C3C3C(
     BuiltInId::clamp_4i_4i_4i_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_4i_,
+    BuiltInParameters::p_3C3C3C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4i_4i_4i_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_u_u_u_(
+constexpr const TFunction kFunction_clamp_0D0D0D(
     BuiltInId::clamp_u_u_u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_u_,
+    BuiltInParameters::p_0D0D0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::clamp_u_u_u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2u_u_u_(
+constexpr const TFunction kFunction_clamp_1D0D0D(
     BuiltInId::clamp_2u_u_u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_u_u_,
+    BuiltInParameters::p_1D0D0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2u_u_u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3u_u_u_(
+constexpr const TFunction kFunction_clamp_2D0D0D(
     BuiltInId::clamp_3u_u_u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_u_u_,
+    BuiltInParameters::p_2D0D0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3u_u_u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4u_u_u_(
+constexpr const TFunction kFunction_clamp_3D0D0D(
     BuiltInId::clamp_4u_u_u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_u_u_,
+    BuiltInParameters::p_3D0D0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4u_u_u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_2u_2u_2u_(
+constexpr const TFunction kFunction_clamp_1D1D1D(
     BuiltInId::clamp_2u_2u_2u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_2u_,
+    BuiltInParameters::p_1D1D1D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::clamp_2u_2u_2u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_3u_3u_3u_(
+constexpr const TFunction kFunction_clamp_2D2D2D(
     BuiltInId::clamp_3u_3u_3u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_3u_,
+    BuiltInParameters::p_2D2D2D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::clamp_3u_3u_3u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_clamp_4u_4u_4u_(
+constexpr const TFunction kFunction_clamp_3D3D3D(
     BuiltInId::clamp_4u_4u_4u_,
     BuiltInName::clamp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_4u_,
+    BuiltInParameters::p_3D3D3D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::clamp_4u_4u_4u_,
     EOpClamp,
     true);
-constexpr const TFunction kFunction_mix_f_f_f_(
+constexpr const TFunction kFunction_mix_0B0B0B(
     BuiltInId::mix_f_f_f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_f_,
+    BuiltInParameters::p_0B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::mix_f_f_f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_2f_2f_f_(
+constexpr const TFunction kFunction_mix_1B1B0B(
     BuiltInId::mix_2f_2f_f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_f_,
+    BuiltInParameters::p_1B1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::mix_2f_2f_f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_3f_3f_f_(
+constexpr const TFunction kFunction_mix_2B2B0B(
     BuiltInId::mix_3f_3f_f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_f_,
+    BuiltInParameters::p_2B2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::mix_3f_3f_f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_4f_4f_f_(
+constexpr const TFunction kFunction_mix_3B3B0B(
     BuiltInId::mix_4f_4f_f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_f_,
+    BuiltInParameters::p_3B3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::mix_4f_4f_f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_2f_2f_2f_(
+constexpr const TFunction kFunction_mix_1B1B1B(
     BuiltInId::mix_2f_2f_2f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_2f_,
+    BuiltInParameters::p_1B1B1B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::mix_2f_2f_2f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_3f_3f_3f_(
+constexpr const TFunction kFunction_mix_2B2B2B(
     BuiltInId::mix_3f_3f_3f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_3f_,
+    BuiltInParameters::p_2B2B2B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::mix_3f_3f_3f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_4f_4f_4f_(
+constexpr const TFunction kFunction_mix_3B3B3B(
     BuiltInId::mix_4f_4f_4f_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_4f_,
+    BuiltInParameters::p_3B3B3B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::mix_4f_4f_4f_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_f_f_b_(
+constexpr const TFunction kFunction_mix_0B0B0E(
     BuiltInId::mix_f_f_b_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_b_,
+    BuiltInParameters::p_0B0B0E,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::mix_f_f_b_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_2f_2f_2b_(
+constexpr const TFunction kFunction_mix_1B1B1E(
     BuiltInId::mix_2f_2f_2b_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_2b_,
+    BuiltInParameters::p_1B1B1E,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::mix_2f_2f_2b_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_3f_3f_3b_(
+constexpr const TFunction kFunction_mix_2B2B2E(
     BuiltInId::mix_3f_3f_3b_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_3b_,
+    BuiltInParameters::p_2B2B2E,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::mix_3f_3f_3b_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_mix_4f_4f_4b_(
+constexpr const TFunction kFunction_mix_3B3B3E(
     BuiltInId::mix_4f_4f_4b_,
     BuiltInName::mix,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_4b_,
+    BuiltInParameters::p_3B3B3E,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::mix_4f_4f_4b_,
     EOpMix,
     true);
-constexpr const TFunction kFunction_step_f_f_(
+constexpr const TFunction kFunction_step_0B0B(
     BuiltInId::step_f_f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::step_f_f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_2f_2f_(
+constexpr const TFunction kFunction_step_1B1B(
     BuiltInId::step_2f_2f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::step_2f_2f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_3f_3f_(
+constexpr const TFunction kFunction_step_2B2B(
     BuiltInId::step_3f_3f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::step_3f_3f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_4f_4f_(
+constexpr const TFunction kFunction_step_3B3B(
     BuiltInId::step_4f_4f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::step_4f_4f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_f_2f_(
+constexpr const TFunction kFunction_step_0B1B(
     BuiltInId::step_f_2f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_2f_,
+    BuiltInParameters::p_0B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::step_f_2f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_f_3f_(
+constexpr const TFunction kFunction_step_0B2B(
     BuiltInId::step_f_3f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_3f_,
+    BuiltInParameters::p_0B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::step_f_3f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_step_f_4f_(
+constexpr const TFunction kFunction_step_0B3B(
     BuiltInId::step_f_4f_,
     BuiltInName::step,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_4f_,
+    BuiltInParameters::p_0B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::step_f_4f_,
     EOpStep,
     true);
-constexpr const TFunction kFunction_smoothstep_f_f_f_(
+constexpr const TFunction kFunction_smoothstep_0B0B0B(
     BuiltInId::smoothstep_f_f_f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_f_,
+    BuiltInParameters::p_0B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::smoothstep_f_f_f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_2f_2f_2f_(
+constexpr const TFunction kFunction_smoothstep_1B1B1B(
     BuiltInId::smoothstep_2f_2f_2f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_2f_,
+    BuiltInParameters::p_1B1B1B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::smoothstep_2f_2f_2f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_3f_3f_3f_(
+constexpr const TFunction kFunction_smoothstep_2B2B2B(
     BuiltInId::smoothstep_3f_3f_3f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_3f_,
+    BuiltInParameters::p_2B2B2B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::smoothstep_3f_3f_3f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_4f_4f_4f_(
+constexpr const TFunction kFunction_smoothstep_3B3B3B(
     BuiltInId::smoothstep_4f_4f_4f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_4f_,
+    BuiltInParameters::p_3B3B3B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::smoothstep_4f_4f_4f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_f_f_2f_(
+constexpr const TFunction kFunction_smoothstep_0B0B1B(
     BuiltInId::smoothstep_f_f_2f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_2f_,
+    BuiltInParameters::p_0B0B1B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::smoothstep_f_f_2f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_f_f_3f_(
+constexpr const TFunction kFunction_smoothstep_0B0B2B(
     BuiltInId::smoothstep_f_f_3f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_3f_,
+    BuiltInParameters::p_0B0B2B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::smoothstep_f_f_3f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_smoothstep_f_f_4f_(
+constexpr const TFunction kFunction_smoothstep_0B0B3B(
     BuiltInId::smoothstep_f_f_4f_,
     BuiltInName::smoothstep,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_4f_,
+    BuiltInParameters::p_0B0B3B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::smoothstep_f_f_4f_,
     EOpSmoothstep,
     true);
-constexpr const TFunction kFunction_modf_f_f_(
+constexpr const TFunction kFunction_modf_0B0B(
     BuiltInId::modf_f_f_,
     BuiltInName::modf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_o_f_,
+    BuiltInParameters::p_0Bo_0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::modf_f_f_,
     EOpModf,
     false);
-constexpr const TFunction kFunction_modf_2f_2f_(
+constexpr const TFunction kFunction_modf_1B1B(
     BuiltInId::modf_2f_2f_,
     BuiltInName::modf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_o_2f_,
+    BuiltInParameters::p_1Bo_1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::modf_2f_2f_,
     EOpModf,
     false);
-constexpr const TFunction kFunction_modf_3f_3f_(
+constexpr const TFunction kFunction_modf_2B2B(
     BuiltInId::modf_3f_3f_,
     BuiltInName::modf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_o_3f_,
+    BuiltInParameters::p_2Bo_2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::modf_3f_3f_,
     EOpModf,
     false);
-constexpr const TFunction kFunction_modf_4f_4f_(
+constexpr const TFunction kFunction_modf_3B3B(
     BuiltInId::modf_4f_4f_,
     BuiltInName::modf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_o_4f_,
+    BuiltInParameters::p_3Bo_3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::modf_4f_4f_,
     EOpModf,
     false);
-constexpr const TFunction kFunction_isnan_f_(
+constexpr const TFunction kFunction_isnan_0B(
     BuiltInId::isnan_f_,
     BuiltInName::isnan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::isnan_f_,
     EOpIsnan,
     true);
-constexpr const TFunction kFunction_isnan_2f_(
+constexpr const TFunction kFunction_isnan_1B(
     BuiltInId::isnan_2f_,
     BuiltInName::isnan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::isnan_2f_,
     EOpIsnan,
     true);
-constexpr const TFunction kFunction_isnan_3f_(
+constexpr const TFunction kFunction_isnan_2B(
     BuiltInId::isnan_3f_,
     BuiltInName::isnan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::isnan_3f_,
     EOpIsnan,
     true);
-constexpr const TFunction kFunction_isnan_4f_(
+constexpr const TFunction kFunction_isnan_3B(
     BuiltInId::isnan_4f_,
     BuiltInName::isnan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::isnan_4f_,
     EOpIsnan,
     true);
-constexpr const TFunction kFunction_isinf_f_(
+constexpr const TFunction kFunction_isinf_0B(
     BuiltInId::isinf_f_,
     BuiltInName::isinf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::isinf_f_,
     EOpIsinf,
     true);
-constexpr const TFunction kFunction_isinf_2f_(
+constexpr const TFunction kFunction_isinf_1B(
     BuiltInId::isinf_2f_,
     BuiltInName::isinf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::isinf_2f_,
     EOpIsinf,
     true);
-constexpr const TFunction kFunction_isinf_3f_(
+constexpr const TFunction kFunction_isinf_2B(
     BuiltInId::isinf_3f_,
     BuiltInName::isinf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::isinf_3f_,
     EOpIsinf,
     true);
-constexpr const TFunction kFunction_isinf_4f_(
+constexpr const TFunction kFunction_isinf_3B(
     BuiltInId::isinf_4f_,
     BuiltInName::isinf,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::isinf_4f_,
     EOpIsinf,
     true);
-constexpr const TFunction kFunction_floatBitsToInt_f_(
+constexpr const TFunction kFunction_floatBitsToInt_0B(
     BuiltInId::floatBitsToInt_f_,
     BuiltInName::floatBitsToInt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::floatBitsToInt_f_,
     EOpFloatBitsToInt,
     true);
-constexpr const TFunction kFunction_floatBitsToInt_2f_(
+constexpr const TFunction kFunction_floatBitsToInt_1B(
     BuiltInId::floatBitsToInt_2f_,
     BuiltInName::floatBitsToInt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::floatBitsToInt_2f_,
     EOpFloatBitsToInt,
     true);
-constexpr const TFunction kFunction_floatBitsToInt_3f_(
+constexpr const TFunction kFunction_floatBitsToInt_2B(
     BuiltInId::floatBitsToInt_3f_,
     BuiltInName::floatBitsToInt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::floatBitsToInt_3f_,
     EOpFloatBitsToInt,
     true);
-constexpr const TFunction kFunction_floatBitsToInt_4f_(
+constexpr const TFunction kFunction_floatBitsToInt_3B(
     BuiltInId::floatBitsToInt_4f_,
     BuiltInName::floatBitsToInt,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::floatBitsToInt_4f_,
     EOpFloatBitsToInt,
     true);
-constexpr const TFunction kFunction_floatBitsToUint_f_(
+constexpr const TFunction kFunction_floatBitsToUint_0B(
     BuiltInId::floatBitsToUint_f_,
     BuiltInName::floatBitsToUint,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::floatBitsToUint_f_,
     EOpFloatBitsToUint,
     true);
-constexpr const TFunction kFunction_floatBitsToUint_2f_(
+constexpr const TFunction kFunction_floatBitsToUint_1B(
     BuiltInId::floatBitsToUint_2f_,
     BuiltInName::floatBitsToUint,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::floatBitsToUint_2f_,
     EOpFloatBitsToUint,
     true);
-constexpr const TFunction kFunction_floatBitsToUint_3f_(
+constexpr const TFunction kFunction_floatBitsToUint_2B(
     BuiltInId::floatBitsToUint_3f_,
     BuiltInName::floatBitsToUint,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::floatBitsToUint_3f_,
     EOpFloatBitsToUint,
     true);
-constexpr const TFunction kFunction_floatBitsToUint_4f_(
+constexpr const TFunction kFunction_floatBitsToUint_3B(
     BuiltInId::floatBitsToUint_4f_,
     BuiltInName::floatBitsToUint,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::floatBitsToUint_4f_,
     EOpFloatBitsToUint,
     true);
-constexpr const TFunction kFunction_intBitsToFloat_i_(
+constexpr const TFunction kFunction_intBitsToFloat_0C(
     BuiltInId::intBitsToFloat_i_,
     BuiltInName::intBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::intBitsToFloat_i_,
     EOpIntBitsToFloat,
     true);
-constexpr const TFunction kFunction_intBitsToFloat_2i_(
+constexpr const TFunction kFunction_intBitsToFloat_1C(
     BuiltInId::intBitsToFloat_2i_,
     BuiltInName::intBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::intBitsToFloat_2i_,
     EOpIntBitsToFloat,
     true);
-constexpr const TFunction kFunction_intBitsToFloat_3i_(
+constexpr const TFunction kFunction_intBitsToFloat_2C(
     BuiltInId::intBitsToFloat_3i_,
     BuiltInName::intBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::intBitsToFloat_3i_,
     EOpIntBitsToFloat,
     true);
-constexpr const TFunction kFunction_intBitsToFloat_4i_(
+constexpr const TFunction kFunction_intBitsToFloat_3C(
     BuiltInId::intBitsToFloat_4i_,
     BuiltInName::intBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::intBitsToFloat_4i_,
     EOpIntBitsToFloat,
     true);
-constexpr const TFunction kFunction_uintBitsToFloat_u_(
+constexpr const TFunction kFunction_uintBitsToFloat_0D(
     BuiltInId::uintBitsToFloat_u_,
     BuiltInName::uintBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::uintBitsToFloat_u_,
     EOpUintBitsToFloat,
     true);
-constexpr const TFunction kFunction_uintBitsToFloat_2u_(
+constexpr const TFunction kFunction_uintBitsToFloat_1D(
     BuiltInId::uintBitsToFloat_2u_,
     BuiltInName::uintBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_,
+    BuiltInParameters::p_1D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::uintBitsToFloat_2u_,
     EOpUintBitsToFloat,
     true);
-constexpr const TFunction kFunction_uintBitsToFloat_3u_(
+constexpr const TFunction kFunction_uintBitsToFloat_2D(
     BuiltInId::uintBitsToFloat_3u_,
     BuiltInName::uintBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_,
+    BuiltInParameters::p_2D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::uintBitsToFloat_3u_,
     EOpUintBitsToFloat,
     true);
-constexpr const TFunction kFunction_uintBitsToFloat_4u_(
+constexpr const TFunction kFunction_uintBitsToFloat_3D(
     BuiltInId::uintBitsToFloat_4u_,
     BuiltInName::uintBitsToFloat,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_,
+    BuiltInParameters::p_3D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::uintBitsToFloat_4u_,
     EOpUintBitsToFloat,
     true);
-constexpr const TFunction kFunction_frexp_f_i_(
+constexpr const TFunction kFunction_frexp_0B0C(
     BuiltInId::frexp_f_i_,
     BuiltInName::frexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_o_i_,
+    BuiltInParameters::p_0Bo_0C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::frexp_f_i_,
     EOpFrexp,
     false);
-constexpr const TFunction kFunction_frexp_2f_2i_(
+constexpr const TFunction kFunction_frexp_1B1C(
     BuiltInId::frexp_2f_2i_,
     BuiltInName::frexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_o_2i_,
+    BuiltInParameters::p_1Bo_1C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::frexp_2f_2i_,
     EOpFrexp,
     false);
-constexpr const TFunction kFunction_frexp_3f_3i_(
+constexpr const TFunction kFunction_frexp_2B2C(
     BuiltInId::frexp_3f_3i_,
     BuiltInName::frexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_o_3i_,
+    BuiltInParameters::p_2Bo_2C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::frexp_3f_3i_,
     EOpFrexp,
     false);
-constexpr const TFunction kFunction_frexp_4f_4i_(
+constexpr const TFunction kFunction_frexp_3B3C(
     BuiltInId::frexp_4f_4i_,
     BuiltInName::frexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_o_4i_,
+    BuiltInParameters::p_3Bo_3C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::frexp_4f_4i_,
     EOpFrexp,
     false);
-constexpr const TFunction kFunction_ldexp_f_i_(
+constexpr const TFunction kFunction_ldexp_0B0C(
     BuiltInId::ldexp_f_i_,
     BuiltInName::ldexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_i_,
+    BuiltInParameters::p_0B0C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::ldexp_f_i_,
     EOpLdexp,
     true);
-constexpr const TFunction kFunction_ldexp_2f_2i_(
+constexpr const TFunction kFunction_ldexp_1B1C(
     BuiltInId::ldexp_2f_2i_,
     BuiltInName::ldexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2i_,
+    BuiltInParameters::p_1B1C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::ldexp_2f_2i_,
     EOpLdexp,
     true);
-constexpr const TFunction kFunction_ldexp_3f_3i_(
+constexpr const TFunction kFunction_ldexp_2B2C(
     BuiltInId::ldexp_3f_3i_,
     BuiltInName::ldexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3i_,
+    BuiltInParameters::p_2B2C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::ldexp_3f_3i_,
     EOpLdexp,
     true);
-constexpr const TFunction kFunction_ldexp_4f_4i_(
+constexpr const TFunction kFunction_ldexp_3B3C(
     BuiltInId::ldexp_4f_4i_,
     BuiltInName::ldexp,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4i_,
+    BuiltInParameters::p_3B3C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::ldexp_4f_4i_,
     EOpLdexp,
     true);
-constexpr const TFunction kFunction_packSnorm2x16_2f_(
+constexpr const TFunction kFunction_packSnorm2x16_1B(
     BuiltInId::packSnorm2x16_2f_,
     BuiltInName::packSnorm2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::packSnorm2x16_2f_,
     EOpPackSnorm2x16,
     true);
-constexpr const TFunction kFunction_packUnorm2x16_2f_(
+constexpr const TFunction kFunction_packUnorm2x16_1B(
     BuiltInId::packUnorm2x16_2f_,
     BuiltInName::packUnorm2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::packUnorm2x16_2f_,
     EOpPackUnorm2x16,
     true);
-constexpr const TFunction kFunction_packHalf2x16_2f_(
+constexpr const TFunction kFunction_packHalf2x16_1B(
     BuiltInId::packHalf2x16_2f_,
     BuiltInName::packHalf2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::packHalf2x16_2f_,
     EOpPackHalf2x16,
     true);
-constexpr const TFunction kFunction_unpackSnorm2x16_u_(
+constexpr const TFunction kFunction_unpackSnorm2x16_0D(
     BuiltInId::unpackSnorm2x16_u_,
     BuiltInName::unpackSnorm2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::unpackSnorm2x16_u_,
     EOpUnpackSnorm2x16,
     true);
-constexpr const TFunction kFunction_unpackUnorm2x16_u_(
+constexpr const TFunction kFunction_unpackUnorm2x16_0D(
     BuiltInId::unpackUnorm2x16_u_,
     BuiltInName::unpackUnorm2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::unpackUnorm2x16_u_,
     EOpUnpackUnorm2x16,
     true);
-constexpr const TFunction kFunction_unpackHalf2x16_u_(
+constexpr const TFunction kFunction_unpackHalf2x16_0D(
     BuiltInId::unpackHalf2x16_u_,
     BuiltInName::unpackHalf2x16,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::unpackHalf2x16_u_,
     EOpUnpackHalf2x16,
     true);
-constexpr const TFunction kFunction_packUnorm4x8_4f_(
+constexpr const TFunction kFunction_packUnorm4x8_3B(
     BuiltInId::packUnorm4x8_4f_,
     BuiltInName::packUnorm4x8,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::packUnorm4x8_4f_,
     EOpPackUnorm4x8,
     true);
-constexpr const TFunction kFunction_packSnorm4x8_4f_(
+constexpr const TFunction kFunction_packSnorm4x8_3B(
     BuiltInId::packSnorm4x8_4f_,
     BuiltInName::packSnorm4x8,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::packSnorm4x8_4f_,
     EOpPackSnorm4x8,
     true);
-constexpr const TFunction kFunction_unpackUnorm4x8_u_(
+constexpr const TFunction kFunction_unpackUnorm4x8_0D(
     BuiltInId::unpackUnorm4x8_u_,
     BuiltInName::unpackUnorm4x8,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::unpackUnorm4x8_u_,
     EOpUnpackUnorm4x8,
     true);
-constexpr const TFunction kFunction_unpackSnorm4x8_u_(
+constexpr const TFunction kFunction_unpackSnorm4x8_0D(
     BuiltInId::unpackSnorm4x8_u_,
     BuiltInName::unpackSnorm4x8,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::unpackSnorm4x8_u_,
     EOpUnpackSnorm4x8,
     true);
-constexpr const TFunction kFunction_length_f_(
+constexpr const TFunction kFunction_length_0B(
     BuiltInId::length_f_,
     BuiltInName::length,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::length_f_,
     EOpLength,
     true);
-constexpr const TFunction kFunction_length_2f_(
+constexpr const TFunction kFunction_length_1B(
     BuiltInId::length_2f_,
     BuiltInName::length,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::length_2f_,
     EOpLength,
     true);
-constexpr const TFunction kFunction_length_3f_(
+constexpr const TFunction kFunction_length_2B(
     BuiltInId::length_3f_,
     BuiltInName::length,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::length_3f_,
     EOpLength,
     true);
-constexpr const TFunction kFunction_length_4f_(
+constexpr const TFunction kFunction_length_3B(
     BuiltInId::length_4f_,
     BuiltInName::length,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::length_4f_,
     EOpLength,
     true);
-constexpr const TFunction kFunction_distance_f_f_(
+constexpr const TFunction kFunction_distance_0B0B(
     BuiltInId::distance_f_f_,
     BuiltInName::distance,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::distance_f_f_,
     EOpDistance,
     true);
-constexpr const TFunction kFunction_distance_2f_2f_(
+constexpr const TFunction kFunction_distance_1B1B(
     BuiltInId::distance_2f_2f_,
     BuiltInName::distance,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::distance_2f_2f_,
     EOpDistance,
     true);
-constexpr const TFunction kFunction_distance_3f_3f_(
+constexpr const TFunction kFunction_distance_2B2B(
     BuiltInId::distance_3f_3f_,
     BuiltInName::distance,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::distance_3f_3f_,
     EOpDistance,
     true);
-constexpr const TFunction kFunction_distance_4f_4f_(
+constexpr const TFunction kFunction_distance_3B3B(
     BuiltInId::distance_4f_4f_,
     BuiltInName::distance,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::distance_4f_4f_,
     EOpDistance,
     true);
-constexpr const TFunction kFunction_dot_f_f_(
+constexpr const TFunction kFunction_dot_0B0B(
     BuiltInId::dot_f_f_,
     BuiltInName::dot,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dot_f_f_,
     EOpDot,
     true);
-constexpr const TFunction kFunction_dot_2f_2f_(
+constexpr const TFunction kFunction_dot_1B1B(
     BuiltInId::dot_2f_2f_,
     BuiltInName::dot,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dot_2f_2f_,
     EOpDot,
     true);
-constexpr const TFunction kFunction_dot_3f_3f_(
+constexpr const TFunction kFunction_dot_2B2B(
     BuiltInId::dot_3f_3f_,
     BuiltInName::dot,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dot_3f_3f_,
     EOpDot,
     true);
-constexpr const TFunction kFunction_dot_4f_4f_(
+constexpr const TFunction kFunction_dot_3B3B(
     BuiltInId::dot_4f_4f_,
     BuiltInName::dot,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dot_4f_4f_,
     EOpDot,
     true);
-constexpr const TFunction kFunction_cross_3f_3f_(
+constexpr const TFunction kFunction_cross_2B2B(
     BuiltInId::cross_3f_3f_,
     BuiltInName::cross,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::cross_3f_3f_,
     EOpCross,
     true);
-constexpr const TFunction kFunction_normalize_f_(
+constexpr const TFunction kFunction_normalize_0B(
     BuiltInId::normalize_f_,
     BuiltInName::normalize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::normalize_f_,
     EOpNormalize,
     true);
-constexpr const TFunction kFunction_normalize_2f_(
+constexpr const TFunction kFunction_normalize_1B(
     BuiltInId::normalize_2f_,
     BuiltInName::normalize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::normalize_2f_,
     EOpNormalize,
     true);
-constexpr const TFunction kFunction_normalize_3f_(
+constexpr const TFunction kFunction_normalize_2B(
     BuiltInId::normalize_3f_,
     BuiltInName::normalize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::normalize_3f_,
     EOpNormalize,
     true);
-constexpr const TFunction kFunction_normalize_4f_(
+constexpr const TFunction kFunction_normalize_3B(
     BuiltInId::normalize_4f_,
     BuiltInName::normalize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::normalize_4f_,
     EOpNormalize,
     true);
-constexpr const TFunction kFunction_faceforward_f_f_f_(
+constexpr const TFunction kFunction_faceforward_0B0B0B(
     BuiltInId::faceforward_f_f_f_,
     BuiltInName::faceforward,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_f_,
+    BuiltInParameters::p_0B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::faceforward_f_f_f_,
     EOpFaceforward,
     true);
-constexpr const TFunction kFunction_faceforward_2f_2f_2f_(
+constexpr const TFunction kFunction_faceforward_1B1B1B(
     BuiltInId::faceforward_2f_2f_2f_,
     BuiltInName::faceforward,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_2f_,
+    BuiltInParameters::p_1B1B1B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::faceforward_2f_2f_2f_,
     EOpFaceforward,
     true);
-constexpr const TFunction kFunction_faceforward_3f_3f_3f_(
+constexpr const TFunction kFunction_faceforward_2B2B2B(
     BuiltInId::faceforward_3f_3f_3f_,
     BuiltInName::faceforward,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_3f_,
+    BuiltInParameters::p_2B2B2B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::faceforward_3f_3f_3f_,
     EOpFaceforward,
     true);
-constexpr const TFunction kFunction_faceforward_4f_4f_4f_(
+constexpr const TFunction kFunction_faceforward_3B3B3B(
     BuiltInId::faceforward_4f_4f_4f_,
     BuiltInName::faceforward,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_4f_,
+    BuiltInParameters::p_3B3B3B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::faceforward_4f_4f_4f_,
     EOpFaceforward,
     true);
-constexpr const TFunction kFunction_reflect_f_f_(
+constexpr const TFunction kFunction_reflect_0B0B(
     BuiltInId::reflect_f_f_,
     BuiltInName::reflect,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_,
+    BuiltInParameters::p_0B0B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::reflect_f_f_,
     EOpReflect,
     true);
-constexpr const TFunction kFunction_reflect_2f_2f_(
+constexpr const TFunction kFunction_reflect_1B1B(
     BuiltInId::reflect_2f_2f_,
     BuiltInName::reflect,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::reflect_2f_2f_,
     EOpReflect,
     true);
-constexpr const TFunction kFunction_reflect_3f_3f_(
+constexpr const TFunction kFunction_reflect_2B2B(
     BuiltInId::reflect_3f_3f_,
     BuiltInName::reflect,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::reflect_3f_3f_,
     EOpReflect,
     true);
-constexpr const TFunction kFunction_reflect_4f_4f_(
+constexpr const TFunction kFunction_reflect_3B3B(
     BuiltInId::reflect_4f_4f_,
     BuiltInName::reflect,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::reflect_4f_4f_,
     EOpReflect,
     true);
-constexpr const TFunction kFunction_refract_f_f_f_(
+constexpr const TFunction kFunction_refract_0B0B0B(
     BuiltInId::refract_f_f_f_,
     BuiltInName::refract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_f_f_,
+    BuiltInParameters::p_0B0B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::refract_f_f_f_,
     EOpRefract,
     true);
-constexpr const TFunction kFunction_refract_2f_2f_f_(
+constexpr const TFunction kFunction_refract_1B1B0B(
     BuiltInId::refract_2f_2f_f_,
     BuiltInName::refract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_f_,
+    BuiltInParameters::p_1B1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::refract_2f_2f_f_,
     EOpRefract,
     true);
-constexpr const TFunction kFunction_refract_3f_3f_f_(
+constexpr const TFunction kFunction_refract_2B2B0B(
     BuiltInId::refract_3f_3f_f_,
     BuiltInName::refract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_f_,
+    BuiltInParameters::p_2B2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::refract_3f_3f_f_,
     EOpRefract,
     true);
-constexpr const TFunction kFunction_refract_4f_4f_f_(
+constexpr const TFunction kFunction_refract_3B3B0B(
     BuiltInId::refract_4f_4f_f_,
     BuiltInName::refract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_f_,
+    BuiltInParameters::p_3B3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::refract_4f_4f_f_,
     EOpRefract,
     true);
-constexpr const TFunction kFunction_matrixCompMult_22f_22f_(
+constexpr const TFunction kFunction_matrixCompMult_5B5B(
     BuiltInId::matrixCompMult_22f_22f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_22f_22f_,
+    BuiltInParameters::p_5B5B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>(),
     BuiltInName::matrixCompMult_22f_22f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_33f_33f_(
+constexpr const TFunction kFunction_matrixCompMult_ABAB(
     BuiltInId::matrixCompMult_33f_33f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_33f_33f_,
+    BuiltInParameters::p_ABAB,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>(),
     BuiltInName::matrixCompMult_33f_33f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_44f_44f_(
+constexpr const TFunction kFunction_matrixCompMult_FBFB(
     BuiltInId::matrixCompMult_44f_44f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_44f_44f_,
+    BuiltInParameters::p_FBFB,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>(),
     BuiltInName::matrixCompMult_44f_44f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_23f_23f_(
+constexpr const TFunction kFunction_matrixCompMult_9B9B(
     BuiltInId::matrixCompMult_23f_23f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_23f_23f_,
+    BuiltInParameters::p_9B9B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>(),
     BuiltInName::matrixCompMult_23f_23f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_32f_32f_(
+constexpr const TFunction kFunction_matrixCompMult_6B6B(
     BuiltInId::matrixCompMult_32f_32f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_32f_32f_,
+    BuiltInParameters::p_6B6B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>(),
     BuiltInName::matrixCompMult_32f_32f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_24f_24f_(
+constexpr const TFunction kFunction_matrixCompMult_DBDB(
     BuiltInId::matrixCompMult_24f_24f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_24f_24f_,
+    BuiltInParameters::p_DBDB,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>(),
     BuiltInName::matrixCompMult_24f_24f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_42f_42f_(
+constexpr const TFunction kFunction_matrixCompMult_7B7B(
     BuiltInId::matrixCompMult_42f_42f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_42f_42f_,
+    BuiltInParameters::p_7B7B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>(),
     BuiltInName::matrixCompMult_42f_42f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_34f_34f_(
+constexpr const TFunction kFunction_matrixCompMult_EBEB(
     BuiltInId::matrixCompMult_34f_34f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_34f_34f_,
+    BuiltInParameters::p_EBEB,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>(),
     BuiltInName::matrixCompMult_34f_34f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_matrixCompMult_43f_43f_(
+constexpr const TFunction kFunction_matrixCompMult_BBBB(
     BuiltInId::matrixCompMult_43f_43f_,
     BuiltInName::matrixCompMult,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_43f_43f_,
+    BuiltInParameters::p_BBBB,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>(),
     BuiltInName::matrixCompMult_43f_43f_,
     EOpMulMatrixComponentWise,
     true);
-constexpr const TFunction kFunction_outerProduct_2f_2f_(
+constexpr const TFunction kFunction_outerProduct_1B1B(
     BuiltInId::outerProduct_2f_2f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>(),
     BuiltInName::outerProduct_2f_2f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_3f_3f_(
+constexpr const TFunction kFunction_outerProduct_2B2B(
     BuiltInId::outerProduct_3f_3f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>(),
     BuiltInName::outerProduct_3f_3f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_4f_4f_(
+constexpr const TFunction kFunction_outerProduct_3B3B(
     BuiltInId::outerProduct_4f_4f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>(),
     BuiltInName::outerProduct_4f_4f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_3f_2f_(
+constexpr const TFunction kFunction_outerProduct_2B1B(
     BuiltInId::outerProduct_3f_2f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_2f_,
+    BuiltInParameters::p_2B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>(),
     BuiltInName::outerProduct_3f_2f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_2f_3f_(
+constexpr const TFunction kFunction_outerProduct_1B2B(
     BuiltInId::outerProduct_2f_3f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_3f_,
+    BuiltInParameters::p_1B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>(),
     BuiltInName::outerProduct_2f_3f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_4f_2f_(
+constexpr const TFunction kFunction_outerProduct_3B1B(
     BuiltInId::outerProduct_4f_2f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_2f_,
+    BuiltInParameters::p_3B1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>(),
     BuiltInName::outerProduct_4f_2f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_2f_4f_(
+constexpr const TFunction kFunction_outerProduct_1B3B(
     BuiltInId::outerProduct_2f_4f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_4f_,
+    BuiltInParameters::p_1B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>(),
     BuiltInName::outerProduct_2f_4f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_4f_3f_(
+constexpr const TFunction kFunction_outerProduct_3B2B(
     BuiltInId::outerProduct_4f_3f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_3f_,
+    BuiltInParameters::p_3B2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>(),
     BuiltInName::outerProduct_4f_3f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_outerProduct_3f_4f_(
+constexpr const TFunction kFunction_outerProduct_2B3B(
     BuiltInId::outerProduct_3f_4f_,
     BuiltInName::outerProduct,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_4f_,
+    BuiltInParameters::p_2B3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>(),
     BuiltInName::outerProduct_3f_4f_,
     EOpOuterProduct,
     true);
-constexpr const TFunction kFunction_transpose_22f_(
+constexpr const TFunction kFunction_transpose_5B(
     BuiltInId::transpose_22f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_22f_,
+    BuiltInParameters::p_5B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>(),
     BuiltInName::transpose_22f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_33f_(
+constexpr const TFunction kFunction_transpose_AB(
     BuiltInId::transpose_33f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_33f_,
+    BuiltInParameters::p_AB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>(),
     BuiltInName::transpose_33f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_44f_(
+constexpr const TFunction kFunction_transpose_FB(
     BuiltInId::transpose_44f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_44f_,
+    BuiltInParameters::p_FB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>(),
     BuiltInName::transpose_44f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_32f_(
+constexpr const TFunction kFunction_transpose_6B(
     BuiltInId::transpose_32f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_32f_,
+    BuiltInParameters::p_6B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 3>(),
     BuiltInName::transpose_32f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_23f_(
+constexpr const TFunction kFunction_transpose_9B(
     BuiltInId::transpose_23f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_23f_,
+    BuiltInParameters::p_9B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 2>(),
     BuiltInName::transpose_23f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_42f_(
+constexpr const TFunction kFunction_transpose_7B(
     BuiltInId::transpose_42f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_42f_,
+    BuiltInParameters::p_7B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 4>(),
     BuiltInName::transpose_42f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_24f_(
+constexpr const TFunction kFunction_transpose_DB(
     BuiltInId::transpose_24f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_24f_,
+    BuiltInParameters::p_DB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 2>(),
     BuiltInName::transpose_24f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_43f_(
+constexpr const TFunction kFunction_transpose_BB(
     BuiltInId::transpose_43f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_43f_,
+    BuiltInParameters::p_BB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 4>(),
     BuiltInName::transpose_43f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_transpose_34f_(
+constexpr const TFunction kFunction_transpose_EB(
     BuiltInId::transpose_34f_,
     BuiltInName::transpose,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_34f_,
+    BuiltInParameters::p_EB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 3>(),
     BuiltInName::transpose_34f_,
     EOpTranspose,
     true);
-constexpr const TFunction kFunction_determinant_22f_(
+constexpr const TFunction kFunction_determinant_5B(
     BuiltInId::determinant_22f_,
     BuiltInName::determinant,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_22f_,
+    BuiltInParameters::p_5B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::determinant_22f_,
     EOpDeterminant,
     true);
-constexpr const TFunction kFunction_determinant_33f_(
+constexpr const TFunction kFunction_determinant_AB(
     BuiltInId::determinant_33f_,
     BuiltInName::determinant,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_33f_,
+    BuiltInParameters::p_AB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::determinant_33f_,
     EOpDeterminant,
     true);
-constexpr const TFunction kFunction_determinant_44f_(
+constexpr const TFunction kFunction_determinant_FB(
     BuiltInId::determinant_44f_,
     BuiltInName::determinant,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_44f_,
+    BuiltInParameters::p_FB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::determinant_44f_,
     EOpDeterminant,
     true);
-constexpr const TFunction kFunction_inverse_22f_(
+constexpr const TFunction kFunction_inverse_5B(
     BuiltInId::inverse_22f_,
     BuiltInName::inverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_22f_,
+    BuiltInParameters::p_5B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 2>(),
     BuiltInName::inverse_22f_,
     EOpInverse,
     true);
-constexpr const TFunction kFunction_inverse_33f_(
+constexpr const TFunction kFunction_inverse_AB(
     BuiltInId::inverse_33f_,
     BuiltInName::inverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_33f_,
+    BuiltInParameters::p_AB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 3>(),
     BuiltInName::inverse_33f_,
     EOpInverse,
     true);
-constexpr const TFunction kFunction_inverse_44f_(
+constexpr const TFunction kFunction_inverse_FB(
     BuiltInId::inverse_44f_,
     BuiltInName::inverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_44f_,
+    BuiltInParameters::p_FB,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 4>(),
     BuiltInName::inverse_44f_,
     EOpInverse,
     true);
-constexpr const TFunction kFunction_lessThan_2f_2f_(
+constexpr const TFunction kFunction_lessThan_1B1B(
     BuiltInId::lessThan_2f_2f_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThan_2f_2f_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_3f_3f_(
+constexpr const TFunction kFunction_lessThan_2B2B(
     BuiltInId::lessThan_3f_3f_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThan_3f_3f_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_4f_4f_(
+constexpr const TFunction kFunction_lessThan_3B3B(
     BuiltInId::lessThan_4f_4f_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThan_4f_4f_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_2i_2i_(
+constexpr const TFunction kFunction_lessThan_1C1C(
     BuiltInId::lessThan_2i_2i_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThan_2i_2i_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_3i_3i_(
+constexpr const TFunction kFunction_lessThan_2C2C(
     BuiltInId::lessThan_3i_3i_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThan_3i_3i_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_4i_4i_(
+constexpr const TFunction kFunction_lessThan_3C3C(
     BuiltInId::lessThan_4i_4i_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThan_4i_4i_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_2u_2u_(
+constexpr const TFunction kFunction_lessThan_1D1D(
     BuiltInId::lessThan_2u_2u_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThan_2u_2u_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_3u_3u_(
+constexpr const TFunction kFunction_lessThan_2D2D(
     BuiltInId::lessThan_3u_3u_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThan_3u_3u_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThan_4u_4u_(
+constexpr const TFunction kFunction_lessThan_3D3D(
     BuiltInId::lessThan_4u_4u_,
     BuiltInName::lessThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThan_4u_4u_,
     EOpLessThanComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_2f_2f_(
+constexpr const TFunction kFunction_lessThanEqual_1B1B(
     BuiltInId::lessThanEqual_2f_2f_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThanEqual_2f_2f_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_3f_3f_(
+constexpr const TFunction kFunction_lessThanEqual_2B2B(
     BuiltInId::lessThanEqual_3f_3f_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThanEqual_3f_3f_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_4f_4f_(
+constexpr const TFunction kFunction_lessThanEqual_3B3B(
     BuiltInId::lessThanEqual_4f_4f_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThanEqual_4f_4f_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_2i_2i_(
+constexpr const TFunction kFunction_lessThanEqual_1C1C(
     BuiltInId::lessThanEqual_2i_2i_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThanEqual_2i_2i_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_3i_3i_(
+constexpr const TFunction kFunction_lessThanEqual_2C2C(
     BuiltInId::lessThanEqual_3i_3i_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThanEqual_3i_3i_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_4i_4i_(
+constexpr const TFunction kFunction_lessThanEqual_3C3C(
     BuiltInId::lessThanEqual_4i_4i_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThanEqual_4i_4i_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_2u_2u_(
+constexpr const TFunction kFunction_lessThanEqual_1D1D(
     BuiltInId::lessThanEqual_2u_2u_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::lessThanEqual_2u_2u_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_3u_3u_(
+constexpr const TFunction kFunction_lessThanEqual_2D2D(
     BuiltInId::lessThanEqual_3u_3u_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::lessThanEqual_3u_3u_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_lessThanEqual_4u_4u_(
+constexpr const TFunction kFunction_lessThanEqual_3D3D(
     BuiltInId::lessThanEqual_4u_4u_,
     BuiltInName::lessThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::lessThanEqual_4u_4u_,
     EOpLessThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_2f_2f_(
+constexpr const TFunction kFunction_greaterThan_1B1B(
     BuiltInId::greaterThan_2f_2f_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThan_2f_2f_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_3f_3f_(
+constexpr const TFunction kFunction_greaterThan_2B2B(
     BuiltInId::greaterThan_3f_3f_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThan_3f_3f_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_4f_4f_(
+constexpr const TFunction kFunction_greaterThan_3B3B(
     BuiltInId::greaterThan_4f_4f_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThan_4f_4f_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_2i_2i_(
+constexpr const TFunction kFunction_greaterThan_1C1C(
     BuiltInId::greaterThan_2i_2i_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThan_2i_2i_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_3i_3i_(
+constexpr const TFunction kFunction_greaterThan_2C2C(
     BuiltInId::greaterThan_3i_3i_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThan_3i_3i_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_4i_4i_(
+constexpr const TFunction kFunction_greaterThan_3C3C(
     BuiltInId::greaterThan_4i_4i_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThan_4i_4i_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_2u_2u_(
+constexpr const TFunction kFunction_greaterThan_1D1D(
     BuiltInId::greaterThan_2u_2u_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThan_2u_2u_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_3u_3u_(
+constexpr const TFunction kFunction_greaterThan_2D2D(
     BuiltInId::greaterThan_3u_3u_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThan_3u_3u_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThan_4u_4u_(
+constexpr const TFunction kFunction_greaterThan_3D3D(
     BuiltInId::greaterThan_4u_4u_,
     BuiltInName::greaterThan,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThan_4u_4u_,
     EOpGreaterThanComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_2f_2f_(
+constexpr const TFunction kFunction_greaterThanEqual_1B1B(
     BuiltInId::greaterThanEqual_2f_2f_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThanEqual_2f_2f_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_3f_3f_(
+constexpr const TFunction kFunction_greaterThanEqual_2B2B(
     BuiltInId::greaterThanEqual_3f_3f_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThanEqual_3f_3f_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_4f_4f_(
+constexpr const TFunction kFunction_greaterThanEqual_3B3B(
     BuiltInId::greaterThanEqual_4f_4f_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThanEqual_4f_4f_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_2i_2i_(
+constexpr const TFunction kFunction_greaterThanEqual_1C1C(
     BuiltInId::greaterThanEqual_2i_2i_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThanEqual_2i_2i_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_3i_3i_(
+constexpr const TFunction kFunction_greaterThanEqual_2C2C(
     BuiltInId::greaterThanEqual_3i_3i_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThanEqual_3i_3i_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_4i_4i_(
+constexpr const TFunction kFunction_greaterThanEqual_3C3C(
     BuiltInId::greaterThanEqual_4i_4i_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThanEqual_4i_4i_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_2u_2u_(
+constexpr const TFunction kFunction_greaterThanEqual_1D1D(
     BuiltInId::greaterThanEqual_2u_2u_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::greaterThanEqual_2u_2u_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_3u_3u_(
+constexpr const TFunction kFunction_greaterThanEqual_2D2D(
     BuiltInId::greaterThanEqual_3u_3u_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::greaterThanEqual_3u_3u_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_greaterThanEqual_4u_4u_(
+constexpr const TFunction kFunction_greaterThanEqual_3D3D(
     BuiltInId::greaterThanEqual_4u_4u_,
     BuiltInName::greaterThanEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::greaterThanEqual_4u_4u_,
     EOpGreaterThanEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_2f_2f_(
+constexpr const TFunction kFunction_equal_1B1B(
     BuiltInId::equal_2f_2f_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::equal_2f_2f_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_3f_3f_(
+constexpr const TFunction kFunction_equal_2B2B(
     BuiltInId::equal_3f_3f_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::equal_3f_3f_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_4f_4f_(
+constexpr const TFunction kFunction_equal_3B3B(
     BuiltInId::equal_4f_4f_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::equal_4f_4f_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_2i_2i_(
+constexpr const TFunction kFunction_equal_1C1C(
     BuiltInId::equal_2i_2i_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::equal_2i_2i_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_3i_3i_(
+constexpr const TFunction kFunction_equal_2C2C(
     BuiltInId::equal_3i_3i_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::equal_3i_3i_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_4i_4i_(
+constexpr const TFunction kFunction_equal_3C3C(
     BuiltInId::equal_4i_4i_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::equal_4i_4i_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_2u_2u_(
+constexpr const TFunction kFunction_equal_1D1D(
     BuiltInId::equal_2u_2u_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::equal_2u_2u_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_3u_3u_(
+constexpr const TFunction kFunction_equal_2D2D(
     BuiltInId::equal_3u_3u_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::equal_3u_3u_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_4u_4u_(
+constexpr const TFunction kFunction_equal_3D3D(
     BuiltInId::equal_4u_4u_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::equal_4u_4u_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_2b_2b_(
+constexpr const TFunction kFunction_equal_1E1E(
     BuiltInId::equal_2b_2b_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2b_2b_,
+    BuiltInParameters::p_1E1E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::equal_2b_2b_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_3b_3b_(
+constexpr const TFunction kFunction_equal_2E2E(
     BuiltInId::equal_3b_3b_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3b_3b_,
+    BuiltInParameters::p_2E2E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::equal_3b_3b_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_equal_4b_4b_(
+constexpr const TFunction kFunction_equal_3E3E(
     BuiltInId::equal_4b_4b_,
     BuiltInName::equal,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4b_4b_,
+    BuiltInParameters::p_3E3E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::equal_4b_4b_,
     EOpEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_2f_2f_(
+constexpr const TFunction kFunction_notEqual_1B1B(
     BuiltInId::notEqual_2f_2f_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_2f_,
+    BuiltInParameters::p_1B1B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::notEqual_2f_2f_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_3f_3f_(
+constexpr const TFunction kFunction_notEqual_2B2B(
     BuiltInId::notEqual_3f_3f_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_3f_,
+    BuiltInParameters::p_2B2B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::notEqual_3f_3f_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_4f_4f_(
+constexpr const TFunction kFunction_notEqual_3B3B(
     BuiltInId::notEqual_4f_4f_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_4f_,
+    BuiltInParameters::p_3B3B,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::notEqual_4f_4f_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_2i_2i_(
+constexpr const TFunction kFunction_notEqual_1C1C(
     BuiltInId::notEqual_2i_2i_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_,
+    BuiltInParameters::p_1C1C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::notEqual_2i_2i_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_3i_3i_(
+constexpr const TFunction kFunction_notEqual_2C2C(
     BuiltInId::notEqual_3i_3i_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_,
+    BuiltInParameters::p_2C2C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::notEqual_3i_3i_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_4i_4i_(
+constexpr const TFunction kFunction_notEqual_3C3C(
     BuiltInId::notEqual_4i_4i_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_,
+    BuiltInParameters::p_3C3C,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::notEqual_4i_4i_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_2u_2u_(
+constexpr const TFunction kFunction_notEqual_1D1D(
     BuiltInId::notEqual_2u_2u_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_,
+    BuiltInParameters::p_1D1D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::notEqual_2u_2u_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_3u_3u_(
+constexpr const TFunction kFunction_notEqual_2D2D(
     BuiltInId::notEqual_3u_3u_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_,
+    BuiltInParameters::p_2D2D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::notEqual_3u_3u_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_4u_4u_(
+constexpr const TFunction kFunction_notEqual_3D3D(
     BuiltInId::notEqual_4u_4u_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_,
+    BuiltInParameters::p_3D3D,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::notEqual_4u_4u_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_2b_2b_(
+constexpr const TFunction kFunction_notEqual_1E1E(
     BuiltInId::notEqual_2b_2b_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2b_2b_,
+    BuiltInParameters::p_1E1E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::notEqual_2b_2b_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_3b_3b_(
+constexpr const TFunction kFunction_notEqual_2E2E(
     BuiltInId::notEqual_3b_3b_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3b_3b_,
+    BuiltInParameters::p_2E2E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::notEqual_3b_3b_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_notEqual_4b_4b_(
+constexpr const TFunction kFunction_notEqual_3E3E(
     BuiltInId::notEqual_4b_4b_,
     BuiltInName::notEqual,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4b_4b_,
+    BuiltInParameters::p_3E3E,
     2,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::notEqual_4b_4b_,
     EOpNotEqualComponentWise,
     true);
-constexpr const TFunction kFunction_any_2b_(
+constexpr const TFunction kFunction_any_1E(
     BuiltInId::any_2b_,
     BuiltInName::any,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2b_,
+    BuiltInParameters::p_1E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::any_2b_,
     EOpAny,
     true);
-constexpr const TFunction kFunction_any_3b_(
+constexpr const TFunction kFunction_any_2E(
     BuiltInId::any_3b_,
     BuiltInName::any,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3b_,
+    BuiltInParameters::p_2E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::any_3b_,
     EOpAny,
     true);
-constexpr const TFunction kFunction_any_4b_(
+constexpr const TFunction kFunction_any_3E(
     BuiltInId::any_4b_,
     BuiltInName::any,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4b_,
+    BuiltInParameters::p_3E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::any_4b_,
     EOpAny,
     true);
-constexpr const TFunction kFunction_all_2b_(
+constexpr const TFunction kFunction_all_1E(
     BuiltInId::all_2b_,
     BuiltInName::all,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2b_,
+    BuiltInParameters::p_1E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::all_2b_,
     EOpAll,
     true);
-constexpr const TFunction kFunction_all_3b_(
+constexpr const TFunction kFunction_all_2E(
     BuiltInId::all_3b_,
     BuiltInName::all,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3b_,
+    BuiltInParameters::p_2E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::all_3b_,
     EOpAll,
     true);
-constexpr const TFunction kFunction_all_4b_(
+constexpr const TFunction kFunction_all_3E(
     BuiltInId::all_4b_,
     BuiltInName::all,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4b_,
+    BuiltInParameters::p_3E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::all_4b_,
     EOpAll,
     true);
-constexpr const TFunction kFunction_notFunc_2b_(
+constexpr const TFunction kFunction_notFunc_1E(
     BuiltInId::notFunc_2b_,
     BuiltInName::notFunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2b_,
+    BuiltInParameters::p_1E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::notFunc_2b_,
     EOpLogicalNotComponentWise,
     true);
-constexpr const TFunction kFunction_notFunc_3b_(
+constexpr const TFunction kFunction_notFunc_2E(
     BuiltInId::notFunc_3b_,
     BuiltInName::notFunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3b_,
+    BuiltInParameters::p_2E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::notFunc_3b_,
     EOpLogicalNotComponentWise,
     true);
-constexpr const TFunction kFunction_notFunc_4b_(
+constexpr const TFunction kFunction_notFunc_3E(
     BuiltInId::notFunc_4b_,
     BuiltInName::notFunc,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4b_,
+    BuiltInParameters::p_3E,
     1,
     StaticType::Get<EbtBool, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::notFunc_4b_,
     EOpLogicalNotComponentWise,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_i_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_0C0C0C(
     BuiltInId::bitfieldExtract_i_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_i_,
+    BuiltInParameters::p_0C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldExtract_i_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_2i_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_1C0C0C(
     BuiltInId::bitfieldExtract_2i_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_i_i_,
+    BuiltInParameters::p_1C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldExtract_2i_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_3i_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_2C0C0C(
     BuiltInId::bitfieldExtract_3i_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_i_i_,
+    BuiltInParameters::p_2C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldExtract_3i_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_4i_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_3C0C0C(
     BuiltInId::bitfieldExtract_4i_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_i_i_,
+    BuiltInParameters::p_3C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldExtract_4i_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_u_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_0D0C0C(
     BuiltInId::bitfieldExtract_u_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_i_i_,
+    BuiltInParameters::p_0D0C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldExtract_u_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_2u_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_1D0C0C(
     BuiltInId::bitfieldExtract_2u_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_i_i_,
+    BuiltInParameters::p_1D0C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldExtract_2u_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_3u_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_2D0C0C(
     BuiltInId::bitfieldExtract_3u_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_i_i_,
+    BuiltInParameters::p_2D0C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldExtract_3u_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldExtract_4u_i_i_(
+constexpr const TFunction kFunction_bitfieldExtract_3D0C0C(
     BuiltInId::bitfieldExtract_4u_i_i_,
     BuiltInName::bitfieldExtract,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_i_i_,
+    BuiltInParameters::p_3D0C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldExtract_4u_i_i_,
     EOpBitfieldExtract,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_i_i_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_0C0C0C0C(
     BuiltInId::bitfieldInsert_i_i_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_i_i_,
+    BuiltInParameters::p_0C0C0C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldInsert_i_i_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_2i_2i_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_1C1C0C0C(
     BuiltInId::bitfieldInsert_2i_2i_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_i_i_,
+    BuiltInParameters::p_1C1C0C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldInsert_2i_2i_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_3i_3i_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_2C2C0C0C(
     BuiltInId::bitfieldInsert_3i_3i_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_i_i_,
+    BuiltInParameters::p_2C2C0C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldInsert_3i_3i_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_4i_4i_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_3C3C0C0C(
     BuiltInId::bitfieldInsert_4i_4i_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_i_i_,
+    BuiltInParameters::p_3C3C0C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldInsert_4i_4i_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_u_u_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_0D0D0C0C(
     BuiltInId::bitfieldInsert_u_u_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_i_i_,
+    BuiltInParameters::p_0D0D0C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldInsert_u_u_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_2u_2u_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_1D1D0C0C(
     BuiltInId::bitfieldInsert_2u_2u_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_i_i_,
+    BuiltInParameters::p_1D1D0C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldInsert_2u_2u_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_3u_3u_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_2D2D0C0C(
     BuiltInId::bitfieldInsert_3u_3u_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_i_i_,
+    BuiltInParameters::p_2D2D0C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldInsert_3u_3u_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldInsert_4u_4u_i_i_(
+constexpr const TFunction kFunction_bitfieldInsert_3D3D0C0C(
     BuiltInId::bitfieldInsert_4u_4u_i_i_,
     BuiltInName::bitfieldInsert,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_i_i_,
+    BuiltInParameters::p_3D3D0C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldInsert_4u_4u_i_i_,
     EOpBitfieldInsert,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_i_(
+constexpr const TFunction kFunction_bitfieldReverse_0C(
     BuiltInId::bitfieldReverse_i_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldReverse_i_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_2i_(
+constexpr const TFunction kFunction_bitfieldReverse_1C(
     BuiltInId::bitfieldReverse_2i_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldReverse_2i_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_3i_(
+constexpr const TFunction kFunction_bitfieldReverse_2C(
     BuiltInId::bitfieldReverse_3i_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldReverse_3i_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_4i_(
+constexpr const TFunction kFunction_bitfieldReverse_3C(
     BuiltInId::bitfieldReverse_4i_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldReverse_4i_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_u_(
+constexpr const TFunction kFunction_bitfieldReverse_0D(
     BuiltInId::bitfieldReverse_u_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitfieldReverse_u_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_2u_(
+constexpr const TFunction kFunction_bitfieldReverse_1D(
     BuiltInId::bitfieldReverse_2u_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_,
+    BuiltInParameters::p_1D,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitfieldReverse_2u_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_3u_(
+constexpr const TFunction kFunction_bitfieldReverse_2D(
     BuiltInId::bitfieldReverse_3u_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_,
+    BuiltInParameters::p_2D,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitfieldReverse_3u_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitfieldReverse_4u_(
+constexpr const TFunction kFunction_bitfieldReverse_3D(
     BuiltInId::bitfieldReverse_4u_,
     BuiltInName::bitfieldReverse,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_,
+    BuiltInParameters::p_3D,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitfieldReverse_4u_,
     EOpBitfieldReverse,
     true);
-constexpr const TFunction kFunction_bitCount_i_(
+constexpr const TFunction kFunction_bitCount_0C(
     BuiltInId::bitCount_i_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitCount_i_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_2i_(
+constexpr const TFunction kFunction_bitCount_1C(
     BuiltInId::bitCount_2i_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitCount_2i_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_3i_(
+constexpr const TFunction kFunction_bitCount_2C(
     BuiltInId::bitCount_3i_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitCount_3i_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_4i_(
+constexpr const TFunction kFunction_bitCount_3C(
     BuiltInId::bitCount_4i_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitCount_4i_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_u_(
+constexpr const TFunction kFunction_bitCount_0D(
     BuiltInId::bitCount_u_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::bitCount_u_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_2u_(
+constexpr const TFunction kFunction_bitCount_1D(
     BuiltInId::bitCount_2u_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_,
+    BuiltInParameters::p_1D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::bitCount_2u_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_3u_(
+constexpr const TFunction kFunction_bitCount_2D(
     BuiltInId::bitCount_3u_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_,
+    BuiltInParameters::p_2D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::bitCount_3u_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_bitCount_4u_(
+constexpr const TFunction kFunction_bitCount_3D(
     BuiltInId::bitCount_4u_,
     BuiltInName::bitCount,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_,
+    BuiltInParameters::p_3D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::bitCount_4u_,
     EOpBitCount,
     true);
-constexpr const TFunction kFunction_findLSB_i_(
+constexpr const TFunction kFunction_findLSB_0C(
     BuiltInId::findLSB_i_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::findLSB_i_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_2i_(
+constexpr const TFunction kFunction_findLSB_1C(
     BuiltInId::findLSB_2i_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::findLSB_2i_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_3i_(
+constexpr const TFunction kFunction_findLSB_2C(
     BuiltInId::findLSB_3i_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::findLSB_3i_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_4i_(
+constexpr const TFunction kFunction_findLSB_3C(
     BuiltInId::findLSB_4i_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::findLSB_4i_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_u_(
+constexpr const TFunction kFunction_findLSB_0D(
     BuiltInId::findLSB_u_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::findLSB_u_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_2u_(
+constexpr const TFunction kFunction_findLSB_1D(
     BuiltInId::findLSB_2u_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_,
+    BuiltInParameters::p_1D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::findLSB_2u_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_3u_(
+constexpr const TFunction kFunction_findLSB_2D(
     BuiltInId::findLSB_3u_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_,
+    BuiltInParameters::p_2D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::findLSB_3u_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findLSB_4u_(
+constexpr const TFunction kFunction_findLSB_3D(
     BuiltInId::findLSB_4u_,
     BuiltInName::findLSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_,
+    BuiltInParameters::p_3D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::findLSB_4u_,
     EOpFindLSB,
     true);
-constexpr const TFunction kFunction_findMSB_i_(
+constexpr const TFunction kFunction_findMSB_0C(
     BuiltInId::findMSB_i_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_,
+    BuiltInParameters::p_0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::findMSB_i_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_2i_(
+constexpr const TFunction kFunction_findMSB_1C(
     BuiltInId::findMSB_2i_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_,
+    BuiltInParameters::p_1C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::findMSB_2i_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_3i_(
+constexpr const TFunction kFunction_findMSB_2C(
     BuiltInId::findMSB_3i_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_,
+    BuiltInParameters::p_2C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::findMSB_3i_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_4i_(
+constexpr const TFunction kFunction_findMSB_3C(
     BuiltInId::findMSB_4i_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_,
+    BuiltInParameters::p_3C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::findMSB_4i_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_u_(
+constexpr const TFunction kFunction_findMSB_0D(
     BuiltInId::findMSB_u_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_,
+    BuiltInParameters::p_0D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::findMSB_u_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_2u_(
+constexpr const TFunction kFunction_findMSB_1D(
     BuiltInId::findMSB_2u_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_,
+    BuiltInParameters::p_1D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::findMSB_2u_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_3u_(
+constexpr const TFunction kFunction_findMSB_2D(
     BuiltInId::findMSB_3u_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_,
+    BuiltInParameters::p_2D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::findMSB_3u_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_findMSB_4u_(
+constexpr const TFunction kFunction_findMSB_3D(
     BuiltInId::findMSB_4u_,
     BuiltInName::findMSB,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_,
+    BuiltInParameters::p_3D,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::findMSB_4u_,
     EOpFindMSB,
     true);
-constexpr const TFunction kFunction_uaddCarry_u_u_u_(
+constexpr const TFunction kFunction_uaddCarry_0D0D0D(
     BuiltInId::uaddCarry_u_u_u_,
     BuiltInName::uaddCarry,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_o_u_,
+    BuiltInParameters::p_0D0Do_0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::uaddCarry_u_u_u_,
     EOpUaddCarry,
     false);
-constexpr const TFunction kFunction_uaddCarry_2u_2u_2u_(
+constexpr const TFunction kFunction_uaddCarry_1D1D1D(
     BuiltInId::uaddCarry_2u_2u_2u_,
     BuiltInName::uaddCarry,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_o_2u_,
+    BuiltInParameters::p_1D1Do_1D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::uaddCarry_2u_2u_2u_,
     EOpUaddCarry,
     false);
-constexpr const TFunction kFunction_uaddCarry_3u_3u_3u_(
+constexpr const TFunction kFunction_uaddCarry_2D2D2D(
     BuiltInId::uaddCarry_3u_3u_3u_,
     BuiltInName::uaddCarry,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_o_3u_,
+    BuiltInParameters::p_2D2Do_2D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::uaddCarry_3u_3u_3u_,
     EOpUaddCarry,
     false);
-constexpr const TFunction kFunction_uaddCarry_4u_4u_4u_(
+constexpr const TFunction kFunction_uaddCarry_3D3D3D(
     BuiltInId::uaddCarry_4u_4u_4u_,
     BuiltInName::uaddCarry,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_o_4u_,
+    BuiltInParameters::p_3D3Do_3D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::uaddCarry_4u_4u_4u_,
     EOpUaddCarry,
     false);
-constexpr const TFunction kFunction_usubBorrow_u_u_u_(
+constexpr const TFunction kFunction_usubBorrow_0D0D0D(
     BuiltInId::usubBorrow_u_u_u_,
     BuiltInName::usubBorrow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_o_u_,
+    BuiltInParameters::p_0D0Do_0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::usubBorrow_u_u_u_,
     EOpUsubBorrow,
     false);
-constexpr const TFunction kFunction_usubBorrow_2u_2u_2u_(
+constexpr const TFunction kFunction_usubBorrow_1D1D1D(
     BuiltInId::usubBorrow_2u_2u_2u_,
     BuiltInName::usubBorrow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_o_2u_,
+    BuiltInParameters::p_1D1Do_1D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::usubBorrow_2u_2u_2u_,
     EOpUsubBorrow,
     false);
-constexpr const TFunction kFunction_usubBorrow_3u_3u_3u_(
+constexpr const TFunction kFunction_usubBorrow_2D2D2D(
     BuiltInId::usubBorrow_3u_3u_3u_,
     BuiltInName::usubBorrow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_o_3u_,
+    BuiltInParameters::p_2D2Do_2D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::usubBorrow_3u_3u_3u_,
     EOpUsubBorrow,
     false);
-constexpr const TFunction kFunction_usubBorrow_4u_4u_4u_(
+constexpr const TFunction kFunction_usubBorrow_3D3D3D(
     BuiltInId::usubBorrow_4u_4u_4u_,
     BuiltInName::usubBorrow,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_o_4u_,
+    BuiltInParameters::p_3D3Do_3D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::usubBorrow_4u_4u_4u_,
     EOpUsubBorrow,
     false);
-constexpr const TFunction kFunction_umulExtended_u_u_u_u_(
+constexpr const TFunction kFunction_umulExtended_0D0D0D0D(
     BuiltInId::umulExtended_u_u_u_u_,
     BuiltInName::umulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_u_u_o_u_o_u_,
+    BuiltInParameters::p_0D0Do_0Do_0D,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::umulExtended_u_u_u_u_,
     EOpUmulExtended,
     false);
-constexpr const TFunction kFunction_umulExtended_2u_2u_2u_2u_(
+constexpr const TFunction kFunction_umulExtended_1D1D1D1D(
     BuiltInId::umulExtended_2u_2u_2u_2u_,
     BuiltInName::umulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2u_2u_o_2u_o_2u_,
+    BuiltInParameters::p_1D1Do_1Do_1D,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::umulExtended_2u_2u_2u_2u_,
     EOpUmulExtended,
     false);
-constexpr const TFunction kFunction_umulExtended_3u_3u_3u_3u_(
+constexpr const TFunction kFunction_umulExtended_2D2D2D2D(
     BuiltInId::umulExtended_3u_3u_3u_3u_,
     BuiltInName::umulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3u_3u_o_3u_o_3u_,
+    BuiltInParameters::p_2D2Do_2Do_2D,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::umulExtended_3u_3u_3u_3u_,
     EOpUmulExtended,
     false);
-constexpr const TFunction kFunction_umulExtended_4u_4u_4u_4u_(
+constexpr const TFunction kFunction_umulExtended_3D3D3D3D(
     BuiltInId::umulExtended_4u_4u_4u_4u_,
     BuiltInName::umulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4u_4u_o_4u_o_4u_,
+    BuiltInParameters::p_3D3Do_3Do_3D,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::umulExtended_4u_4u_4u_4u_,
     EOpUmulExtended,
     false);
-constexpr const TFunction kFunction_imulExtended_i_i_i_i_(
+constexpr const TFunction kFunction_imulExtended_0C0C0C0C(
     BuiltInId::imulExtended_i_i_i_i_,
     BuiltInName::imulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_i_i_o_i_o_i_,
+    BuiltInParameters::p_0C0Co_0Co_0C,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imulExtended_i_i_i_i_,
     EOpImulExtended,
     false);
-constexpr const TFunction kFunction_imulExtended_2i_2i_2i_2i_(
+constexpr const TFunction kFunction_imulExtended_1C1C1C1C(
     BuiltInId::imulExtended_2i_2i_2i_2i_,
     BuiltInName::imulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2i_2i_o_2i_o_2i_,
+    BuiltInParameters::p_1C1Co_1Co_1C,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imulExtended_2i_2i_2i_2i_,
     EOpImulExtended,
     false);
-constexpr const TFunction kFunction_imulExtended_3i_3i_3i_3i_(
+constexpr const TFunction kFunction_imulExtended_2C2C2C2C(
     BuiltInId::imulExtended_3i_3i_3i_3i_,
     BuiltInName::imulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3i_3i_o_3i_o_3i_,
+    BuiltInParameters::p_2C2Co_2Co_2C,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imulExtended_3i_3i_3i_3i_,
     EOpImulExtended,
     false);
-constexpr const TFunction kFunction_imulExtended_4i_4i_4i_4i_(
+constexpr const TFunction kFunction_imulExtended_3C3C3C3C(
     BuiltInId::imulExtended_4i_4i_4i_4i_,
     BuiltInName::imulExtended,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4i_4i_o_4i_o_4i_,
+    BuiltInParameters::p_3C3Co_3Co_3C,
     4,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imulExtended_4i_4i_4i_4i_,
     EOpImulExtended,
     false);
-constexpr const TFunction kFunction_texture2D_s2_2f_(
+constexpr const TFunction kFunction_texture2D_0H1B(
     BuiltInId::texture2D_s2_2f_,
     BuiltInName::texture2D,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_,
+    BuiltInParameters::p_0H1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2D_s2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_s2_3f_(
+constexpr const TFunction kFunction_texture2DProj_0H2B(
     BuiltInId::texture2DProj_s2_3f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_,
+    BuiltInParameters::p_0H2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_s2_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_s2_4f_(
+constexpr const TFunction kFunction_texture2DProj_0H3B(
     BuiltInId::texture2DProj_s2_4f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_,
+    BuiltInParameters::p_0H3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_s2_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureCube_sC_3f_(
+constexpr const TFunction kFunction_textureCube_0J2B(
     BuiltInId::textureCube_sC_3f_,
     BuiltInName::textureCube,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_,
+    BuiltInParameters::p_0J2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureCube_sC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2D_sX_2f_(
+constexpr const TFunction kFunction_texture2D_0L1B(
     BuiltInId::texture2D_sX_2f_,
     BuiltInName::texture2D,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sX_2f_,
+    BuiltInParameters::p_0L1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2D_sX_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_sX_3f_(
+constexpr const TFunction kFunction_texture2DProj_0L2B(
     BuiltInId::texture2DProj_sX_3f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sX_3f_,
+    BuiltInParameters::p_0L2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_sX_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_sX_4f_(
+constexpr const TFunction kFunction_texture2DProj_0L3B(
     BuiltInId::texture2DProj_sX_4f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sX_4f_,
+    BuiltInParameters::p_0L3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_sX_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DRect_sR_2f_(
+constexpr const TFunction kFunction_texture2DRect_0N1B(
     BuiltInId::texture2DRect_sR_2f_,
     BuiltInName::texture2DRect,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_2f_,
+    BuiltInParameters::p_0N1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DRect_sR_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DRectProj_sR_3f_(
+constexpr const TFunction kFunction_texture2DRectProj_0N2B(
     BuiltInId::texture2DRectProj_sR_3f_,
     BuiltInName::texture2DRectProj,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_3f_,
+    BuiltInParameters::p_0N2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DRectProj_sR_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DRectProj_sR_4f_(
+constexpr const TFunction kFunction_texture2DRectProj_0N3B(
     BuiltInId::texture2DRectProj_sR_4f_,
     BuiltInName::texture2DRectProj,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_4f_,
+    BuiltInParameters::p_0N3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DRectProj_sR_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sR_2f_(
+constexpr const TFunction kFunction_texture_0N1B(
     BuiltInId::texture_sR_2f_,
     BuiltInName::texture,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_2f_,
+    BuiltInParameters::p_0N1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sR_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sR_3f_(
+constexpr const TFunction kFunction_textureProj_0N2B(
     BuiltInId::textureProj_sR_3f_,
     BuiltInName::textureProj,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_3f_,
+    BuiltInParameters::p_0N2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sR_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sR_4f_(
+constexpr const TFunction kFunction_textureProj_0N3B(
     BuiltInId::textureProj_sR_4f_,
     BuiltInName::textureProj,
     TExtension::ARB_texture_rectangle,
-    BuiltInParameters::p_sR_4f_,
+    BuiltInParameters::p_0N3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sR_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DGradEXT_s2_2f_2f_2f_(
+constexpr const TFunction kFunction_texture2DGradEXT_0H1B1B1B(
     BuiltInId::texture2DGradEXT_s2_2f_2f_2f_,
     BuiltInName::texture2DGradEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_2f_2f_2f_,
+    BuiltInParameters::p_0H1B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DGradEXT_s2_2f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjGradEXT_s2_3f_2f_2f_(
+constexpr const TFunction kFunction_texture2DProjGradEXT_0H2B1B1B(
     BuiltInId::texture2DProjGradEXT_s2_3f_2f_2f_,
     BuiltInName::texture2DProjGradEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_3f_2f_2f_,
+    BuiltInParameters::p_0H2B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjGradEXT_s2_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjGradEXT_s2_4f_2f_2f_(
+constexpr const TFunction kFunction_texture2DProjGradEXT_0H3B1B1B(
     BuiltInId::texture2DProjGradEXT_s2_4f_2f_2f_,
     BuiltInName::texture2DProjGradEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_4f_2f_2f_,
+    BuiltInParameters::p_0H3B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjGradEXT_s2_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureCubeGradEXT_sC_3f_3f_3f_(
+constexpr const TFunction kFunction_textureCubeGradEXT_0J2B2B2B(
     BuiltInId::textureCubeGradEXT_sC_3f_3f_3f_,
     BuiltInName::textureCubeGradEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_sC_3f_3f_3f_,
+    BuiltInParameters::p_0J2B2B2B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureCubeGradEXT_sC_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2D_s2_2f_f_(
+constexpr const TFunction kFunction_texture2D_0H1B0B(
     BuiltInId::texture2D_s2_2f_f_,
     BuiltInName::texture2D,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_f_,
+    BuiltInParameters::p_0H1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2D_s2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_s2_3f_f_(
+constexpr const TFunction kFunction_texture2DProj_0H2B0B(
     BuiltInId::texture2DProj_s2_3f_f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_f_,
+    BuiltInParameters::p_0H2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_s2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProj_s2_4f_f_(
+constexpr const TFunction kFunction_texture2DProj_0H3B0B(
     BuiltInId::texture2DProj_s2_4f_f_,
     BuiltInName::texture2DProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_f_,
+    BuiltInParameters::p_0H3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProj_s2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureCube_sC_3f_f_(
+constexpr const TFunction kFunction_textureCube_0J2B0B(
     BuiltInId::textureCube_sC_3f_f_,
     BuiltInName::textureCube,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_f_,
+    BuiltInParameters::p_0J2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureCube_sC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_dFdxExt_f_(
+constexpr const TFunction kFunction_dFdxExt_0B(
     BuiltInId::dFdxExt_f_,
     BuiltInName::dFdxExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dFdxExt_f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdxExt_2f_(
+constexpr const TFunction kFunction_dFdxExt_1B(
     BuiltInId::dFdxExt_2f_,
     BuiltInName::dFdxExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::dFdxExt_2f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdxExt_3f_(
+constexpr const TFunction kFunction_dFdxExt_2B(
     BuiltInId::dFdxExt_3f_,
     BuiltInName::dFdxExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::dFdxExt_3f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdxExt_4f_(
+constexpr const TFunction kFunction_dFdxExt_3B(
     BuiltInId::dFdxExt_4f_,
     BuiltInName::dFdxExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::dFdxExt_4f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdyExt_f_(
+constexpr const TFunction kFunction_dFdyExt_0B(
     BuiltInId::dFdyExt_f_,
     BuiltInName::dFdyExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dFdyExt_f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdyExt_2f_(
+constexpr const TFunction kFunction_dFdyExt_1B(
     BuiltInId::dFdyExt_2f_,
     BuiltInName::dFdyExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::dFdyExt_2f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdyExt_3f_(
+constexpr const TFunction kFunction_dFdyExt_2B(
     BuiltInId::dFdyExt_3f_,
     BuiltInName::dFdyExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::dFdyExt_3f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdyExt_4f_(
+constexpr const TFunction kFunction_dFdyExt_3B(
     BuiltInId::dFdyExt_4f_,
     BuiltInName::dFdyExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::dFdyExt_4f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_fwidthExt_f_(
+constexpr const TFunction kFunction_fwidthExt_0B(
     BuiltInId::fwidthExt_f_,
     BuiltInName::fwidthExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::fwidthExt_f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidthExt_2f_(
+constexpr const TFunction kFunction_fwidthExt_1B(
     BuiltInId::fwidthExt_2f_,
     BuiltInName::fwidthExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::fwidthExt_2f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidthExt_3f_(
+constexpr const TFunction kFunction_fwidthExt_2B(
     BuiltInId::fwidthExt_3f_,
     BuiltInName::fwidthExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::fwidthExt_3f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidthExt_4f_(
+constexpr const TFunction kFunction_fwidthExt_3B(
     BuiltInId::fwidthExt_4f_,
     BuiltInName::fwidthExt,
     TExtension::OES_standard_derivatives,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::fwidthExt_4f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_texture2DLodEXT_s2_2f_f_(
+constexpr const TFunction kFunction_texture2DLodEXT_0H1B0B(
     BuiltInId::texture2DLodEXT_s2_2f_f_,
     BuiltInName::texture2DLodEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_2f_f_,
+    BuiltInParameters::p_0H1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DLodEXT_s2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjLodEXT_s2_3f_f_(
+constexpr const TFunction kFunction_texture2DProjLodEXT_0H2B0B(
     BuiltInId::texture2DProjLodEXT_s2_3f_f_,
     BuiltInName::texture2DProjLodEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_3f_f_,
+    BuiltInParameters::p_0H2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjLodEXT_s2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjLodEXT_s2_4f_f_(
+constexpr const TFunction kFunction_texture2DProjLodEXT_0H3B0B(
     BuiltInId::texture2DProjLodEXT_s2_4f_f_,
     BuiltInName::texture2DProjLodEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_s2_4f_f_,
+    BuiltInParameters::p_0H3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjLodEXT_s2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureCubeLodEXT_sC_3f_f_(
+constexpr const TFunction kFunction_textureCubeLodEXT_0J2B0B(
     BuiltInId::textureCubeLodEXT_sC_3f_f_,
     BuiltInName::textureCubeLodEXT,
     TExtension::EXT_shader_texture_lod,
-    BuiltInParameters::p_sC_3f_f_,
+    BuiltInParameters::p_0J2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureCubeLodEXT_sC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DLod_s2_2f_f_(
+constexpr const TFunction kFunction_texture2DLod_0H1B0B(
     BuiltInId::texture2DLod_s2_2f_f_,
     BuiltInName::texture2DLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_f_,
+    BuiltInParameters::p_0H1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DLod_s2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjLod_s2_3f_f_(
+constexpr const TFunction kFunction_texture2DProjLod_0H2B0B(
     BuiltInId::texture2DProjLod_s2_3f_f_,
     BuiltInName::texture2DProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_f_,
+    BuiltInParameters::p_0H2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjLod_s2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture2DProjLod_s2_4f_f_(
+constexpr const TFunction kFunction_texture2DProjLod_0H3B0B(
     BuiltInId::texture2DProjLod_s2_4f_f_,
     BuiltInName::texture2DProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_f_,
+    BuiltInParameters::p_0H3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture2DProjLod_s2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureCubeLod_sC_3f_f_(
+constexpr const TFunction kFunction_textureCubeLod_0J2B0B(
     BuiltInId::textureCubeLod_sC_3f_f_,
     BuiltInName::textureCubeLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_f_,
+    BuiltInParameters::p_0J2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureCubeLod_sC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s2_2f_(
+constexpr const TFunction kFunction_texture_0H1B(
     BuiltInId::texture_s2_2f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_,
+    BuiltInParameters::p_0H1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_s2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_is2_2f_(
+constexpr const TFunction kFunction_texture_0P1B(
     BuiltInId::texture_is2_2f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_,
+    BuiltInParameters::p_0P1B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_is2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_us2_2f_(
+constexpr const TFunction kFunction_texture_0U1B(
     BuiltInId::texture_us2_2f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_,
+    BuiltInParameters::p_0U1B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_us2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s3_3f_(
+constexpr const TFunction kFunction_texture_0I2B(
     BuiltInId::texture_s3_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_,
+    BuiltInParameters::p_0I2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_s3_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_is3_3f_(
+constexpr const TFunction kFunction_texture_0Q2B(
     BuiltInId::texture_is3_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_,
+    BuiltInParameters::p_0Q2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_is3_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_us3_3f_(
+constexpr const TFunction kFunction_texture_0V2B(
     BuiltInId::texture_us3_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_,
+    BuiltInParameters::p_0V2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_us3_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sC_3f_(
+constexpr const TFunction kFunction_texture_0J2B(
     BuiltInId::texture_sC_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_,
+    BuiltInParameters::p_0J2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_isC_3f_(
+constexpr const TFunction kFunction_texture_0R2B(
     BuiltInId::texture_isC_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_,
+    BuiltInParameters::p_0R2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_isC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_usC_3f_(
+constexpr const TFunction kFunction_texture_0W2B(
     BuiltInId::texture_usC_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_,
+    BuiltInParameters::p_0W2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_usC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sA_3f_(
+constexpr const TFunction kFunction_texture_0K2B(
     BuiltInId::texture_sA_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_,
+    BuiltInParameters::p_0K2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_isA_3f_(
+constexpr const TFunction kFunction_texture_0S2B(
     BuiltInId::texture_isA_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_,
+    BuiltInParameters::p_0S2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_isA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_usA_3f_(
+constexpr const TFunction kFunction_texture_0X2B(
     BuiltInId::texture_usA_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_,
+    BuiltInParameters::p_0X2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_usA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2_3f_(
+constexpr const TFunction kFunction_textureProj_0H2B(
     BuiltInId::textureProj_s2_3f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_,
+    BuiltInParameters::p_0H2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s2_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is2_3f_(
+constexpr const TFunction kFunction_textureProj_0P2B(
     BuiltInId::textureProj_is2_3f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_,
+    BuiltInParameters::p_0P2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is2_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us2_3f_(
+constexpr const TFunction kFunction_textureProj_0U2B(
     BuiltInId::textureProj_us2_3f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_,
+    BuiltInParameters::p_0U2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us2_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2_4f_(
+constexpr const TFunction kFunction_textureProj_0H3B(
     BuiltInId::textureProj_s2_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_,
+    BuiltInParameters::p_0H3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s2_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is2_4f_(
+constexpr const TFunction kFunction_textureProj_0P3B(
     BuiltInId::textureProj_is2_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_,
+    BuiltInParameters::p_0P3B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is2_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us2_4f_(
+constexpr const TFunction kFunction_textureProj_0U3B(
     BuiltInId::textureProj_us2_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_,
+    BuiltInParameters::p_0U3B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us2_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s3_4f_(
+constexpr const TFunction kFunction_textureProj_0I3B(
     BuiltInId::textureProj_s3_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_,
+    BuiltInParameters::p_0I3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s3_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is3_4f_(
+constexpr const TFunction kFunction_textureProj_0Q3B(
     BuiltInId::textureProj_is3_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_,
+    BuiltInParameters::p_0Q3B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is3_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us3_4f_(
+constexpr const TFunction kFunction_textureProj_0V3B(
     BuiltInId::textureProj_us3_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_,
+    BuiltInParameters::p_0V3B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us3_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_s2_2f_f_(
+constexpr const TFunction kFunction_textureLod_0H1B0B(
     BuiltInId::textureLod_s2_2f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_f_,
+    BuiltInParameters::p_0H1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_s2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_is2_2f_f_(
+constexpr const TFunction kFunction_textureLod_0P1B0B(
     BuiltInId::textureLod_is2_2f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_f_,
+    BuiltInParameters::p_0P1B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_is2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_us2_2f_f_(
+constexpr const TFunction kFunction_textureLod_0U1B0B(
     BuiltInId::textureLod_us2_2f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_f_,
+    BuiltInParameters::p_0U1B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_us2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_s3_3f_f_(
+constexpr const TFunction kFunction_textureLod_0I2B0B(
     BuiltInId::textureLod_s3_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_f_,
+    BuiltInParameters::p_0I2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_s3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_is3_3f_f_(
+constexpr const TFunction kFunction_textureLod_0Q2B0B(
     BuiltInId::textureLod_is3_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_f_,
+    BuiltInParameters::p_0Q2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_is3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_us3_3f_f_(
+constexpr const TFunction kFunction_textureLod_0V2B0B(
     BuiltInId::textureLod_us3_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_f_,
+    BuiltInParameters::p_0V2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_us3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_sC_3f_f_(
+constexpr const TFunction kFunction_textureLod_0J2B0B(
     BuiltInId::textureLod_sC_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_f_,
+    BuiltInParameters::p_0J2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_sC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_isC_3f_f_(
+constexpr const TFunction kFunction_textureLod_0R2B0B(
     BuiltInId::textureLod_isC_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_f_,
+    BuiltInParameters::p_0R2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_isC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_usC_3f_f_(
+constexpr const TFunction kFunction_textureLod_0W2B0B(
     BuiltInId::textureLod_usC_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_f_,
+    BuiltInParameters::p_0W2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_usC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_sA_3f_f_(
+constexpr const TFunction kFunction_textureLod_0K2B0B(
     BuiltInId::textureLod_sA_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_f_,
+    BuiltInParameters::p_0K2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_sA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_isA_3f_f_(
+constexpr const TFunction kFunction_textureLod_0S2B0B(
     BuiltInId::textureLod_isA_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_f_,
+    BuiltInParameters::p_0S2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_isA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_usA_3f_f_(
+constexpr const TFunction kFunction_textureLod_0X2B0B(
     BuiltInId::textureLod_usA_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_f_,
+    BuiltInParameters::p_0X2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLod_usA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s2s_3f_(
+constexpr const TFunction kFunction_texture_0Z2B(
     BuiltInId::texture_s2s_3f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_,
+    BuiltInParameters::p_0Z2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::texture_s2s_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sCs_4f_(
+constexpr const TFunction kFunction_texture_0a3B(
     BuiltInId::texture_sCs_4f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_4f_,
+    BuiltInParameters::p_0a3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::texture_sCs_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sAs_4f_(
+constexpr const TFunction kFunction_texture_0b3B(
     BuiltInId::texture_sAs_4f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_4f_,
+    BuiltInParameters::p_0b3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::texture_sAs_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2s_4f_(
+constexpr const TFunction kFunction_textureProj_0Z3B(
     BuiltInId::textureProj_s2s_4f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_,
+    BuiltInParameters::p_0Z3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProj_s2s_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLod_s2s_3f_f_(
+constexpr const TFunction kFunction_textureLod_0Z2B0B(
     BuiltInId::textureLod_s2s_3f_f_,
     BuiltInName::textureLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_f_,
+    BuiltInParameters::p_0Z2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureLod_s2s_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_s2_i_(
+constexpr const TFunction kFunction_textureSize_0H0C(
     BuiltInId::textureSize_s2_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_i_,
+    BuiltInParameters::p_0H0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_s2_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_is2_i_(
+constexpr const TFunction kFunction_textureSize_0P0C(
     BuiltInId::textureSize_is2_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_i_,
+    BuiltInParameters::p_0P0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_is2_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_us2_i_(
+constexpr const TFunction kFunction_textureSize_0U0C(
     BuiltInId::textureSize_us2_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_i_,
+    BuiltInParameters::p_0U0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_us2_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_s3_i_(
+constexpr const TFunction kFunction_textureSize_0I0C(
     BuiltInId::textureSize_s3_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_i_,
+    BuiltInParameters::p_0I0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_s3_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_is3_i_(
+constexpr const TFunction kFunction_textureSize_0Q0C(
     BuiltInId::textureSize_is3_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_i_,
+    BuiltInParameters::p_0Q0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_is3_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_us3_i_(
+constexpr const TFunction kFunction_textureSize_0V0C(
     BuiltInId::textureSize_us3_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_i_,
+    BuiltInParameters::p_0V0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_us3_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sC_i_(
+constexpr const TFunction kFunction_textureSize_0J0C(
     BuiltInId::textureSize_sC_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_i_,
+    BuiltInParameters::p_0J0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_sC_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_isC_i_(
+constexpr const TFunction kFunction_textureSize_0R0C(
     BuiltInId::textureSize_isC_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_i_,
+    BuiltInParameters::p_0R0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_isC_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_usC_i_(
+constexpr const TFunction kFunction_textureSize_0W0C(
     BuiltInId::textureSize_usC_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_i_,
+    BuiltInParameters::p_0W0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_usC_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sA_i_(
+constexpr const TFunction kFunction_textureSize_0K0C(
     BuiltInId::textureSize_sA_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_i_,
+    BuiltInParameters::p_0K0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_sA_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_isA_i_(
+constexpr const TFunction kFunction_textureSize_0S0C(
     BuiltInId::textureSize_isA_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_i_,
+    BuiltInParameters::p_0S0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_isA_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_usA_i_(
+constexpr const TFunction kFunction_textureSize_0X0C(
     BuiltInId::textureSize_usA_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_i_,
+    BuiltInParameters::p_0X0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_usA_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_s2s_i_(
+constexpr const TFunction kFunction_textureSize_0Z0C(
     BuiltInId::textureSize_s2s_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_i_,
+    BuiltInParameters::p_0Z0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_s2s_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sCs_i_(
+constexpr const TFunction kFunction_textureSize_0a0C(
     BuiltInId::textureSize_sCs_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_i_,
+    BuiltInParameters::p_0a0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_sCs_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sAs_i_(
+constexpr const TFunction kFunction_textureSize_0b0C(
     BuiltInId::textureSize_sAs_i_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_i_,
+    BuiltInParameters::p_0b0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::textureSize_sAs_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sM_(
+constexpr const TFunction kFunction_textureSize_0O(
     BuiltInId::textureSize_sM_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sM_,
+    BuiltInParameters::p_0O,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_sM_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_isM_(
+constexpr const TFunction kFunction_textureSize_0T(
     BuiltInId::textureSize_isM_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isM_,
+    BuiltInParameters::p_0T,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_isM_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_usM_(
+constexpr const TFunction kFunction_textureSize_0Y(
     BuiltInId::textureSize_usM_,
     BuiltInName::textureSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usM_,
+    BuiltInParameters::p_0Y,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_usM_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_s2_3f_f_(
+constexpr const TFunction kFunction_textureProjLod_0H2B0B(
     BuiltInId::textureProjLod_s2_3f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_f_,
+    BuiltInParameters::p_0H2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_s2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_is2_3f_f_(
+constexpr const TFunction kFunction_textureProjLod_0P2B0B(
     BuiltInId::textureProjLod_is2_3f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_f_,
+    BuiltInParameters::p_0P2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_is2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_us2_3f_f_(
+constexpr const TFunction kFunction_textureProjLod_0U2B0B(
     BuiltInId::textureProjLod_us2_3f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_f_,
+    BuiltInParameters::p_0U2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_us2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_s2_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0H3B0B(
     BuiltInId::textureProjLod_s2_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_f_,
+    BuiltInParameters::p_0H3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_s2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_is2_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0P3B0B(
     BuiltInId::textureProjLod_is2_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_f_,
+    BuiltInParameters::p_0P3B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_is2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_us2_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0U3B0B(
     BuiltInId::textureProjLod_us2_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_f_,
+    BuiltInParameters::p_0U3B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_us2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_s3_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0I3B0B(
     BuiltInId::textureProjLod_s3_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_f_,
+    BuiltInParameters::p_0I3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_s3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_is3_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0Q3B0B(
     BuiltInId::textureProjLod_is3_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_f_,
+    BuiltInParameters::p_0Q3B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_is3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_us3_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0V3B0B(
     BuiltInId::textureProjLod_us3_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_f_,
+    BuiltInParameters::p_0V3B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLod_us3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLod_s2s_4f_f_(
+constexpr const TFunction kFunction_textureProjLod_0Z3B0B(
     BuiltInId::textureProjLod_s2s_4f_f_,
     BuiltInName::textureProjLod,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_f_,
+    BuiltInParameters::p_0Z3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjLod_s2s_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_s2_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0H1C0C(
     BuiltInId::texelFetch_s2_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2i_i_,
+    BuiltInParameters::p_0H1C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_s2_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_is2_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0P1C0C(
     BuiltInId::texelFetch_is2_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2i_i_,
+    BuiltInParameters::p_0P1C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_is2_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_us2_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0U1C0C(
     BuiltInId::texelFetch_us2_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2i_i_,
+    BuiltInParameters::p_0U1C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_us2_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_s3_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0I2C0C(
     BuiltInId::texelFetch_s3_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3i_i_,
+    BuiltInParameters::p_0I2C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_s3_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_is3_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0Q2C0C(
     BuiltInId::texelFetch_is3_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3i_i_,
+    BuiltInParameters::p_0Q2C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_is3_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_us3_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0V2C0C(
     BuiltInId::texelFetch_us3_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3i_i_,
+    BuiltInParameters::p_0V2C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_us3_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_sA_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0K2C0C(
     BuiltInId::texelFetch_sA_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3i_i_,
+    BuiltInParameters::p_0K2C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_sA_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_isA_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0S2C0C(
     BuiltInId::texelFetch_isA_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3i_i_,
+    BuiltInParameters::p_0S2C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_isA_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_usA_3i_i_(
+constexpr const TFunction kFunction_texelFetch_0X2C0C(
     BuiltInId::texelFetch_usA_3i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3i_i_,
+    BuiltInParameters::p_0X2C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_usA_3i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_s2_2f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0H1B1B1B(
     BuiltInId::textureGrad_s2_2f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2f_2f_,
+    BuiltInParameters::p_0H1B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_s2_2f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_is2_2f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0P1B1B1B(
     BuiltInId::textureGrad_is2_2f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2f_2f_,
+    BuiltInParameters::p_0P1B1B1B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_is2_2f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_us2_2f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0U1B1B1B(
     BuiltInId::textureGrad_us2_2f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2f_2f_,
+    BuiltInParameters::p_0U1B1B1B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_us2_2f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_s3_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0I2B2B2B(
     BuiltInId::textureGrad_s3_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_3f_3f_,
+    BuiltInParameters::p_0I2B2B2B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_s3_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_is3_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0Q2B2B2B(
     BuiltInId::textureGrad_is3_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_3f_3f_,
+    BuiltInParameters::p_0Q2B2B2B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_is3_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_us3_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0V2B2B2B(
     BuiltInId::textureGrad_us3_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_3f_3f_,
+    BuiltInParameters::p_0V2B2B2B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_us3_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_sC_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0J2B2B2B(
     BuiltInId::textureGrad_sC_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_3f_3f_,
+    BuiltInParameters::p_0J2B2B2B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_sC_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_isC_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0R2B2B2B(
     BuiltInId::textureGrad_isC_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_3f_3f_,
+    BuiltInParameters::p_0R2B2B2B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_isC_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_usC_3f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0W2B2B2B(
     BuiltInId::textureGrad_usC_3f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_3f_3f_,
+    BuiltInParameters::p_0W2B2B2B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_usC_3f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_s2s_3f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0Z2B1B1B(
     BuiltInId::textureGrad_s2s_3f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_2f_2f_,
+    BuiltInParameters::p_0Z2B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureGrad_s2s_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_sCs_4f_3f_3f_(
+constexpr const TFunction kFunction_textureGrad_0a3B2B2B(
     BuiltInId::textureGrad_sCs_4f_3f_3f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_4f_3f_3f_,
+    BuiltInParameters::p_0a3B2B2B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureGrad_sCs_4f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_sA_3f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0K2B1B1B(
     BuiltInId::textureGrad_sA_3f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2f_2f_,
+    BuiltInParameters::p_0K2B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_sA_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_isA_3f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0S2B1B1B(
     BuiltInId::textureGrad_isA_3f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2f_2f_,
+    BuiltInParameters::p_0S2B1B1B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_isA_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_usA_3f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0X2B1B1B(
     BuiltInId::textureGrad_usA_3f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2f_2f_,
+    BuiltInParameters::p_0X2B1B1B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGrad_usA_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGrad_sAs_4f_2f_2f_(
+constexpr const TFunction kFunction_textureGrad_0b3B1B1B(
     BuiltInId::textureGrad_sAs_4f_2f_2f_,
     BuiltInName::textureGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_4f_2f_2f_,
+    BuiltInParameters::p_0b3B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureGrad_sAs_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_s2_3f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0H2B1B1B(
     BuiltInId::textureProjGrad_s2_3f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_2f_2f_,
+    BuiltInParameters::p_0H2B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_s2_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_is2_3f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0P2B1B1B(
     BuiltInId::textureProjGrad_is2_3f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_2f_2f_,
+    BuiltInParameters::p_0P2B1B1B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_is2_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_us2_3f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0U2B1B1B(
     BuiltInId::textureProjGrad_us2_3f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_2f_2f_,
+    BuiltInParameters::p_0U2B1B1B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_us2_3f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_s2_4f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0H3B1B1B(
     BuiltInId::textureProjGrad_s2_4f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_2f_2f_,
+    BuiltInParameters::p_0H3B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_s2_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_is2_4f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0P3B1B1B(
     BuiltInId::textureProjGrad_is2_4f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_2f_2f_,
+    BuiltInParameters::p_0P3B1B1B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_is2_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_us2_4f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0U3B1B1B(
     BuiltInId::textureProjGrad_us2_4f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_2f_2f_,
+    BuiltInParameters::p_0U3B1B1B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_us2_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_s3_4f_3f_3f_(
+constexpr const TFunction kFunction_textureProjGrad_0I3B2B2B(
     BuiltInId::textureProjGrad_s3_4f_3f_3f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_3f_3f_,
+    BuiltInParameters::p_0I3B2B2B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_s3_4f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_is3_4f_3f_3f_(
+constexpr const TFunction kFunction_textureProjGrad_0Q3B2B2B(
     BuiltInId::textureProjGrad_is3_4f_3f_3f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_3f_3f_,
+    BuiltInParameters::p_0Q3B2B2B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_is3_4f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_us3_4f_3f_3f_(
+constexpr const TFunction kFunction_textureProjGrad_0V3B2B2B(
     BuiltInId::textureProjGrad_us3_4f_3f_3f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_3f_3f_,
+    BuiltInParameters::p_0V3B2B2B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGrad_us3_4f_3f_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGrad_s2s_4f_2f_2f_(
+constexpr const TFunction kFunction_textureProjGrad_0Z3B1B1B(
     BuiltInId::textureProjGrad_s2s_4f_2f_2f_,
     BuiltInName::textureProjGrad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_2f_2f_,
+    BuiltInParameters::p_0Z3B1B1B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjGrad_s2s_4f_2f_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s2_2f_2i_(
+constexpr const TFunction kFunction_textureOffset_0H1B1C(
     BuiltInId::textureOffset_s2_2f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2i_,
+    BuiltInParameters::p_0H1B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_s2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_is2_2f_2i_(
+constexpr const TFunction kFunction_textureOffset_0P1B1C(
     BuiltInId::textureOffset_is2_2f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2i_,
+    BuiltInParameters::p_0P1B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_is2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_us2_2f_2i_(
+constexpr const TFunction kFunction_textureOffset_0U1B1C(
     BuiltInId::textureOffset_us2_2f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2i_,
+    BuiltInParameters::p_0U1B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_us2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s3_3f_3i_(
+constexpr const TFunction kFunction_textureOffset_0I2B2C(
     BuiltInId::textureOffset_s3_3f_3i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_3i_,
+    BuiltInParameters::p_0I2B2C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_s3_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_is3_3f_3i_(
+constexpr const TFunction kFunction_textureOffset_0Q2B2C(
     BuiltInId::textureOffset_is3_3f_3i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_3i_,
+    BuiltInParameters::p_0Q2B2C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_is3_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_us3_3f_3i_(
+constexpr const TFunction kFunction_textureOffset_0V2B2C(
     BuiltInId::textureOffset_us3_3f_3i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_3i_,
+    BuiltInParameters::p_0V2B2C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_us3_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s2s_3f_2i_(
+constexpr const TFunction kFunction_textureOffset_0Z2B1C(
     BuiltInId::textureOffset_s2s_3f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_2i_,
+    BuiltInParameters::p_0Z2B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureOffset_s2s_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_sA_3f_2i_(
+constexpr const TFunction kFunction_textureOffset_0K2B1C(
     BuiltInId::textureOffset_sA_3f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2i_,
+    BuiltInParameters::p_0K2B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_sA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_isA_3f_2i_(
+constexpr const TFunction kFunction_textureOffset_0S2B1C(
     BuiltInId::textureOffset_isA_3f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2i_,
+    BuiltInParameters::p_0S2B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_isA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_usA_3f_2i_(
+constexpr const TFunction kFunction_textureOffset_0X2B1C(
     BuiltInId::textureOffset_usA_3f_2i_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2i_,
+    BuiltInParameters::p_0X2B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_usA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2_3f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0H2B1C(
     BuiltInId::textureProjOffset_s2_3f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_2i_,
+    BuiltInParameters::p_0H2B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s2_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is2_3f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0P2B1C(
     BuiltInId::textureProjOffset_is2_3f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_2i_,
+    BuiltInParameters::p_0P2B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is2_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us2_3f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0U2B1C(
     BuiltInId::textureProjOffset_us2_3f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_2i_,
+    BuiltInParameters::p_0U2B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us2_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2_4f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0H3B1C(
     BuiltInId::textureProjOffset_s2_4f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_2i_,
+    BuiltInParameters::p_0H3B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s2_4f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is2_4f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0P3B1C(
     BuiltInId::textureProjOffset_is2_4f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_2i_,
+    BuiltInParameters::p_0P3B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is2_4f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us2_4f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0U3B1C(
     BuiltInId::textureProjOffset_us2_4f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_2i_,
+    BuiltInParameters::p_0U3B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us2_4f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s3_4f_3i_(
+constexpr const TFunction kFunction_textureProjOffset_0I3B2C(
     BuiltInId::textureProjOffset_s3_4f_3i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_3i_,
+    BuiltInParameters::p_0I3B2C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s3_4f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is3_4f_3i_(
+constexpr const TFunction kFunction_textureProjOffset_0Q3B2C(
     BuiltInId::textureProjOffset_is3_4f_3i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_3i_,
+    BuiltInParameters::p_0Q3B2C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is3_4f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us3_4f_3i_(
+constexpr const TFunction kFunction_textureProjOffset_0V3B2C(
     BuiltInId::textureProjOffset_us3_4f_3i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_3i_,
+    BuiltInParameters::p_0V3B2C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us3_4f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2s_4f_2i_(
+constexpr const TFunction kFunction_textureProjOffset_0Z3B1C(
     BuiltInId::textureProjOffset_s2s_4f_2i_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_2i_,
+    BuiltInParameters::p_0Z3B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjOffset_s2s_4f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_s2_2f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0H1B0B1C(
     BuiltInId::textureLodOffset_s2_2f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_f_2i_,
+    BuiltInParameters::p_0H1B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_s2_2f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_is2_2f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0P1B0B1C(
     BuiltInId::textureLodOffset_is2_2f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_f_2i_,
+    BuiltInParameters::p_0P1B0B1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_is2_2f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_us2_2f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0U1B0B1C(
     BuiltInId::textureLodOffset_us2_2f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_f_2i_,
+    BuiltInParameters::p_0U1B0B1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_us2_2f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_s3_3f_f_3i_(
+constexpr const TFunction kFunction_textureLodOffset_0I2B0B2C(
     BuiltInId::textureLodOffset_s3_3f_f_3i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_f_3i_,
+    BuiltInParameters::p_0I2B0B2C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_s3_3f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_is3_3f_f_3i_(
+constexpr const TFunction kFunction_textureLodOffset_0Q2B0B2C(
     BuiltInId::textureLodOffset_is3_3f_f_3i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_f_3i_,
+    BuiltInParameters::p_0Q2B0B2C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_is3_3f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_us3_3f_f_3i_(
+constexpr const TFunction kFunction_textureLodOffset_0V2B0B2C(
     BuiltInId::textureLodOffset_us3_3f_f_3i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_f_3i_,
+    BuiltInParameters::p_0V2B0B2C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_us3_3f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_s2s_3f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0Z2B0B1C(
     BuiltInId::textureLodOffset_s2s_3f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_f_2i_,
+    BuiltInParameters::p_0Z2B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureLodOffset_s2s_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_sA_3f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0K2B0B1C(
     BuiltInId::textureLodOffset_sA_3f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_f_2i_,
+    BuiltInParameters::p_0K2B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_sA_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_isA_3f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0S2B0B1C(
     BuiltInId::textureLodOffset_isA_3f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_f_2i_,
+    BuiltInParameters::p_0S2B0B1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_isA_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureLodOffset_usA_3f_f_2i_(
+constexpr const TFunction kFunction_textureLodOffset_0X2B0B1C(
     BuiltInId::textureLodOffset_usA_3f_f_2i_,
     BuiltInName::textureLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_f_2i_,
+    BuiltInParameters::p_0X2B0B1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureLodOffset_usA_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_s2_3f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0H2B0B1C(
     BuiltInId::textureProjLodOffset_s2_3f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_f_2i_,
+    BuiltInParameters::p_0H2B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_s2_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_is2_3f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0P2B0B1C(
     BuiltInId::textureProjLodOffset_is2_3f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_f_2i_,
+    BuiltInParameters::p_0P2B0B1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_is2_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_us2_3f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0U2B0B1C(
     BuiltInId::textureProjLodOffset_us2_3f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_f_2i_,
+    BuiltInParameters::p_0U2B0B1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_us2_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_s2_4f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0H3B0B1C(
     BuiltInId::textureProjLodOffset_s2_4f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_f_2i_,
+    BuiltInParameters::p_0H3B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_s2_4f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_is2_4f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0P3B0B1C(
     BuiltInId::textureProjLodOffset_is2_4f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_f_2i_,
+    BuiltInParameters::p_0P3B0B1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_is2_4f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_us2_4f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0U3B0B1C(
     BuiltInId::textureProjLodOffset_us2_4f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_f_2i_,
+    BuiltInParameters::p_0U3B0B1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_us2_4f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_s3_4f_f_3i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0I3B0B2C(
     BuiltInId::textureProjLodOffset_s3_4f_f_3i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_f_3i_,
+    BuiltInParameters::p_0I3B0B2C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_s3_4f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_is3_4f_f_3i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0Q3B0B2C(
     BuiltInId::textureProjLodOffset_is3_4f_f_3i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_f_3i_,
+    BuiltInParameters::p_0Q3B0B2C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_is3_4f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_us3_4f_f_3i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0V3B0B2C(
     BuiltInId::textureProjLodOffset_us3_4f_f_3i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_f_3i_,
+    BuiltInParameters::p_0V3B0B2C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjLodOffset_us3_4f_f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjLodOffset_s2s_4f_f_2i_(
+constexpr const TFunction kFunction_textureProjLodOffset_0Z3B0B1C(
     BuiltInId::textureProjLodOffset_s2s_4f_f_2i_,
     BuiltInName::textureProjLodOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_f_2i_,
+    BuiltInParameters::p_0Z3B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjLodOffset_s2s_4f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_s2_2i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0H1C0C1C(
     BuiltInId::texelFetchOffset_s2_2i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2i_i_2i_,
+    BuiltInParameters::p_0H1C0C1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_s2_2i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_is2_2i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0P1C0C1C(
     BuiltInId::texelFetchOffset_is2_2i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2i_i_2i_,
+    BuiltInParameters::p_0P1C0C1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_is2_2i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_us2_2i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0U1C0C1C(
     BuiltInId::texelFetchOffset_us2_2i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2i_i_2i_,
+    BuiltInParameters::p_0U1C0C1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_us2_2i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_s3_3i_i_3i_(
+constexpr const TFunction kFunction_texelFetchOffset_0I2C0C2C(
     BuiltInId::texelFetchOffset_s3_3i_i_3i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3i_i_3i_,
+    BuiltInParameters::p_0I2C0C2C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_s3_3i_i_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_is3_3i_i_3i_(
+constexpr const TFunction kFunction_texelFetchOffset_0Q2C0C2C(
     BuiltInId::texelFetchOffset_is3_3i_i_3i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3i_i_3i_,
+    BuiltInParameters::p_0Q2C0C2C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_is3_3i_i_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_us3_3i_i_3i_(
+constexpr const TFunction kFunction_texelFetchOffset_0V2C0C2C(
     BuiltInId::texelFetchOffset_us3_3i_i_3i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3i_i_3i_,
+    BuiltInParameters::p_0V2C0C2C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_us3_3i_i_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_sA_3i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0K2C0C1C(
     BuiltInId::texelFetchOffset_sA_3i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3i_i_2i_,
+    BuiltInParameters::p_0K2C0C1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_sA_3i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_isA_3i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0S2C0C1C(
     BuiltInId::texelFetchOffset_isA_3i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3i_i_2i_,
+    BuiltInParameters::p_0S2C0C1C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_isA_3i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetchOffset_usA_3i_i_2i_(
+constexpr const TFunction kFunction_texelFetchOffset_0X2C0C1C(
     BuiltInId::texelFetchOffset_usA_3i_i_2i_,
     BuiltInName::texelFetchOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3i_i_2i_,
+    BuiltInParameters::p_0X2C0C1C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetchOffset_usA_3i_i_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_s2_2f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0H1B1B1B1C(
     BuiltInId::textureGradOffset_s2_2f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2f_2f_2i_,
+    BuiltInParameters::p_0H1B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_s2_2f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_is2_2f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0P1B1B1B1C(
     BuiltInId::textureGradOffset_is2_2f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2f_2f_2i_,
+    BuiltInParameters::p_0P1B1B1B1C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_is2_2f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_us2_2f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0U1B1B1B1C(
     BuiltInId::textureGradOffset_us2_2f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2f_2f_2i_,
+    BuiltInParameters::p_0U1B1B1B1C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_us2_2f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_s3_3f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureGradOffset_0I2B2B2B2C(
     BuiltInId::textureGradOffset_s3_3f_3f_3f_3i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_3f_3f_3i_,
+    BuiltInParameters::p_0I2B2B2B2C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_s3_3f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_is3_3f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureGradOffset_0Q2B2B2B2C(
     BuiltInId::textureGradOffset_is3_3f_3f_3f_3i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_3f_3f_3i_,
+    BuiltInParameters::p_0Q2B2B2B2C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_is3_3f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_us3_3f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureGradOffset_0V2B2B2B2C(
     BuiltInId::textureGradOffset_us3_3f_3f_3f_3i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_3f_3f_3i_,
+    BuiltInParameters::p_0V2B2B2B2C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_us3_3f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_s2s_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0Z2B1B1B1C(
     BuiltInId::textureGradOffset_s2s_3f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_2f_2f_2i_,
+    BuiltInParameters::p_0Z2B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureGradOffset_s2s_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_sA_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0K2B1B1B1C(
     BuiltInId::textureGradOffset_sA_3f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2f_2f_2i_,
+    BuiltInParameters::p_0K2B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_sA_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_isA_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0S2B1B1B1C(
     BuiltInId::textureGradOffset_isA_3f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2f_2f_2i_,
+    BuiltInParameters::p_0S2B1B1B1C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_isA_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_usA_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0X2B1B1B1C(
     BuiltInId::textureGradOffset_usA_3f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2f_2f_2i_,
+    BuiltInParameters::p_0X2B1B1B1C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGradOffset_usA_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGradOffset_sAs_4f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureGradOffset_0b3B1B1B1C(
     BuiltInId::textureGradOffset_sAs_4f_2f_2f_2i_,
     BuiltInName::textureGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_4f_2f_2f_2i_,
+    BuiltInParameters::p_0b3B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureGradOffset_sAs_4f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_s2_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0H2B1B1B1C(
     BuiltInId::textureProjGradOffset_s2_3f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_2f_2f_2i_,
+    BuiltInParameters::p_0H2B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_s2_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_is2_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0P2B1B1B1C(
     BuiltInId::textureProjGradOffset_is2_3f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_2f_2f_2i_,
+    BuiltInParameters::p_0P2B1B1B1C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_is2_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_us2_3f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0U2B1B1B1C(
     BuiltInId::textureProjGradOffset_us2_3f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_2f_2f_2i_,
+    BuiltInParameters::p_0U2B1B1B1C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_us2_3f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_s2_4f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0H3B1B1B1C(
     BuiltInId::textureProjGradOffset_s2_4f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_2f_2f_2i_,
+    BuiltInParameters::p_0H3B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_s2_4f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_is2_4f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0P3B1B1B1C(
     BuiltInId::textureProjGradOffset_is2_4f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_2f_2f_2i_,
+    BuiltInParameters::p_0P3B1B1B1C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_is2_4f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_us2_4f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0U3B1B1B1C(
     BuiltInId::textureProjGradOffset_us2_4f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_2f_2f_2i_,
+    BuiltInParameters::p_0U3B1B1B1C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_us2_4f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_s3_4f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0I3B2B2B2C(
     BuiltInId::textureProjGradOffset_s3_4f_3f_3f_3i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_3f_3f_3i_,
+    BuiltInParameters::p_0I3B2B2B2C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_s3_4f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_is3_4f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0Q3B2B2B2C(
     BuiltInId::textureProjGradOffset_is3_4f_3f_3f_3i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_3f_3f_3i_,
+    BuiltInParameters::p_0Q3B2B2B2C,
     5,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_is3_4f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_us3_4f_3f_3f_3i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0V3B2B2B2C(
     BuiltInId::textureProjGradOffset_us3_4f_3f_3f_3i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_3f_3f_3i_,
+    BuiltInParameters::p_0V3B2B2B2C,
     5,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjGradOffset_us3_4f_3f_3f_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjGradOffset_s2s_4f_2f_2f_2i_(
+constexpr const TFunction kFunction_textureProjGradOffset_0Z3B1B1B1C(
     BuiltInId::textureProjGradOffset_s2s_4f_2f_2f_2i_,
     BuiltInName::textureProjGradOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_2f_2f_2i_,
+    BuiltInParameters::p_0Z3B1B1B1C,
     5,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjGradOffset_s2s_4f_2f_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s2_2f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0H1B1C0B(
     BuiltInId::textureOffset_s2_2f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2i_f_,
+    BuiltInParameters::p_0H1B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_s2_2f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_is2_2f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0P1B1C0B(
     BuiltInId::textureOffset_is2_2f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2i_f_,
+    BuiltInParameters::p_0P1B1C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_is2_2f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_us2_2f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0U1B1C0B(
     BuiltInId::textureOffset_us2_2f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2i_f_,
+    BuiltInParameters::p_0U1B1C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_us2_2f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s3_3f_3i_f_(
+constexpr const TFunction kFunction_textureOffset_0I2B2C0B(
     BuiltInId::textureOffset_s3_3f_3i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_3i_f_,
+    BuiltInParameters::p_0I2B2C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_s3_3f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_is3_3f_3i_f_(
+constexpr const TFunction kFunction_textureOffset_0Q2B2C0B(
     BuiltInId::textureOffset_is3_3f_3i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_3i_f_,
+    BuiltInParameters::p_0Q2B2C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_is3_3f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_us3_3f_3i_f_(
+constexpr const TFunction kFunction_textureOffset_0V2B2C0B(
     BuiltInId::textureOffset_us3_3f_3i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_3i_f_,
+    BuiltInParameters::p_0V2B2C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_us3_3f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_s2s_3f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0Z2B1C0B(
     BuiltInId::textureOffset_s2s_3f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_2i_f_,
+    BuiltInParameters::p_0Z2B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureOffset_s2s_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_sA_3f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0K2B1C0B(
     BuiltInId::textureOffset_sA_3f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2i_f_,
+    BuiltInParameters::p_0K2B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_sA_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_isA_3f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0S2B1C0B(
     BuiltInId::textureOffset_isA_3f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2i_f_,
+    BuiltInParameters::p_0S2B1C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_isA_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureOffset_usA_3f_2i_f_(
+constexpr const TFunction kFunction_textureOffset_0X2B1C0B(
     BuiltInId::textureOffset_usA_3f_2i_f_,
     BuiltInName::textureOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2i_f_,
+    BuiltInParameters::p_0X2B1C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureOffset_usA_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2_3f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0H2B1C0B(
     BuiltInId::textureProjOffset_s2_3f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_2i_f_,
+    BuiltInParameters::p_0H2B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s2_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is2_3f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0P2B1C0B(
     BuiltInId::textureProjOffset_is2_3f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_2i_f_,
+    BuiltInParameters::p_0P2B1C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is2_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us2_3f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0U2B1C0B(
     BuiltInId::textureProjOffset_us2_3f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_2i_f_,
+    BuiltInParameters::p_0U2B1C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us2_3f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2_4f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0H3B1C0B(
     BuiltInId::textureProjOffset_s2_4f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_2i_f_,
+    BuiltInParameters::p_0H3B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s2_4f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is2_4f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0P3B1C0B(
     BuiltInId::textureProjOffset_is2_4f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_2i_f_,
+    BuiltInParameters::p_0P3B1C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is2_4f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us2_4f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0U3B1C0B(
     BuiltInId::textureProjOffset_us2_4f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_2i_f_,
+    BuiltInParameters::p_0U3B1C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us2_4f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s3_4f_3i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0I3B2C0B(
     BuiltInId::textureProjOffset_s3_4f_3i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_3i_f_,
+    BuiltInParameters::p_0I3B2C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_s3_4f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_is3_4f_3i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0Q3B2C0B(
     BuiltInId::textureProjOffset_is3_4f_3i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_3i_f_,
+    BuiltInParameters::p_0Q3B2C0B,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_is3_4f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_us3_4f_3i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0V3B2C0B(
     BuiltInId::textureProjOffset_us3_4f_3i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_3i_f_,
+    BuiltInParameters::p_0V3B2C0B,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProjOffset_us3_4f_3i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProjOffset_s2s_4f_2i_f_(
+constexpr const TFunction kFunction_textureProjOffset_0Z3B1C0B(
     BuiltInId::textureProjOffset_s2s_4f_2i_f_,
     BuiltInName::textureProjOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_2i_f_,
+    BuiltInParameters::p_0Z3B1C0B,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProjOffset_s2s_4f_2i_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sX_2f_(
+constexpr const TFunction kFunction_texture_0L1B(
     BuiltInId::texture_sX_2f_,
     BuiltInName::texture,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_2f_,
+    BuiltInParameters::p_0L1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sX_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sX_3f_(
+constexpr const TFunction kFunction_textureProj_0L2B(
     BuiltInId::textureProj_sX_3f_,
     BuiltInName::textureProj,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_3f_,
+    BuiltInParameters::p_0L2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sX_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sX_4f_(
+constexpr const TFunction kFunction_textureProj_0L3B(
     BuiltInId::textureProj_sX_4f_,
     BuiltInName::textureProj,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_4f_,
+    BuiltInParameters::p_0L3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sX_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sX_i_(
+constexpr const TFunction kFunction_textureSize_0L0C(
     BuiltInId::textureSize_sX_i_,
     BuiltInName::textureSize,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_i_,
+    BuiltInParameters::p_0L0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_sX_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_sX_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0L1C0C(
     BuiltInId::texelFetch_sX_2i_i_,
     BuiltInName::texelFetch,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_2i_i_,
+    BuiltInParameters::p_0L1C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_sX_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sY_2f_(
+constexpr const TFunction kFunction_texture_0M1B(
     BuiltInId::texture_sY_2f_,
     BuiltInName::texture,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_2f_,
+    BuiltInParameters::p_0M1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sY_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sY_3f_(
+constexpr const TFunction kFunction_textureProj_0M2B(
     BuiltInId::textureProj_sY_3f_,
     BuiltInName::textureProj,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_3f_,
+    BuiltInParameters::p_0M2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sY_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sY_4f_(
+constexpr const TFunction kFunction_textureProj_0M3B(
     BuiltInId::textureProj_sY_4f_,
     BuiltInName::textureProj,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_4f_,
+    BuiltInParameters::p_0M3B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sY_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_rgb_2_yuv_3f_y_(
+constexpr const TFunction kFunction_rgb_2_yuv_2B0G(
     BuiltInId::rgb_2_yuv_3f_y_,
     BuiltInName::rgb_2_yuv,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_3f_y_,
+    BuiltInParameters::p_2B0G,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::rgb_2_yuv_3f_y_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_yuv_2_rgb_3f_y_(
+constexpr const TFunction kFunction_yuv_2_rgb_2B0G(
     BuiltInId::yuv_2_rgb_3f_y_,
     BuiltInName::yuv_2_rgb,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_3f_y_,
+    BuiltInParameters::p_2B0G,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::yuv_2_rgb_3f_y_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureSize_sY_i_(
+constexpr const TFunction kFunction_textureSize_0M0C(
     BuiltInId::textureSize_sY_i_,
     BuiltInName::textureSize,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_i_,
+    BuiltInParameters::p_0M0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::textureSize_sY_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_sY_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0M1C0C(
     BuiltInId::texelFetch_sY_2i_i_,
     BuiltInName::texelFetch,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_2i_i_,
+    BuiltInParameters::p_0M1C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_sY_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s2_2f_f_(
+constexpr const TFunction kFunction_texture_0H1B0B(
     BuiltInId::texture_s2_2f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_f_,
+    BuiltInParameters::p_0H1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_s2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_is2_2f_f_(
+constexpr const TFunction kFunction_texture_0P1B0B(
     BuiltInId::texture_is2_2f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_f_,
+    BuiltInParameters::p_0P1B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_is2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_us2_2f_f_(
+constexpr const TFunction kFunction_texture_0U1B0B(
     BuiltInId::texture_us2_2f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_f_,
+    BuiltInParameters::p_0U1B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_us2_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s3_3f_f_(
+constexpr const TFunction kFunction_texture_0I2B0B(
     BuiltInId::texture_s3_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_3f_f_,
+    BuiltInParameters::p_0I2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_s3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_is3_3f_f_(
+constexpr const TFunction kFunction_texture_0Q2B0B(
     BuiltInId::texture_is3_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_3f_f_,
+    BuiltInParameters::p_0Q2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_is3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_us3_3f_f_(
+constexpr const TFunction kFunction_texture_0V2B0B(
     BuiltInId::texture_us3_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_3f_f_,
+    BuiltInParameters::p_0V2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_us3_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sC_3f_f_(
+constexpr const TFunction kFunction_texture_0J2B0B(
     BuiltInId::texture_sC_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_f_,
+    BuiltInParameters::p_0J2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_isC_3f_f_(
+constexpr const TFunction kFunction_texture_0R2B0B(
     BuiltInId::texture_isC_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_f_,
+    BuiltInParameters::p_0R2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_isC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_usC_3f_f_(
+constexpr const TFunction kFunction_texture_0W2B0B(
     BuiltInId::texture_usC_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_f_,
+    BuiltInParameters::p_0W2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_usC_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sA_3f_f_(
+constexpr const TFunction kFunction_texture_0K2B0B(
     BuiltInId::texture_sA_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_f_,
+    BuiltInParameters::p_0K2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_isA_3f_f_(
+constexpr const TFunction kFunction_texture_0S2B0B(
     BuiltInId::texture_isA_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_f_,
+    BuiltInParameters::p_0S2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_isA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_usA_3f_f_(
+constexpr const TFunction kFunction_texture_0X2B0B(
     BuiltInId::texture_usA_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_f_,
+    BuiltInParameters::p_0X2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_usA_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2_3f_f_(
+constexpr const TFunction kFunction_textureProj_0H2B0B(
     BuiltInId::textureProj_s2_3f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_3f_f_,
+    BuiltInParameters::p_0H2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is2_3f_f_(
+constexpr const TFunction kFunction_textureProj_0P2B0B(
     BuiltInId::textureProj_is2_3f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_3f_f_,
+    BuiltInParameters::p_0P2B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us2_3f_f_(
+constexpr const TFunction kFunction_textureProj_0U2B0B(
     BuiltInId::textureProj_us2_3f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_3f_f_,
+    BuiltInParameters::p_0U2B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us2_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2_4f_f_(
+constexpr const TFunction kFunction_textureProj_0H3B0B(
     BuiltInId::textureProj_s2_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_4f_f_,
+    BuiltInParameters::p_0H3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is2_4f_f_(
+constexpr const TFunction kFunction_textureProj_0P3B0B(
     BuiltInId::textureProj_is2_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_4f_f_,
+    BuiltInParameters::p_0P3B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us2_4f_f_(
+constexpr const TFunction kFunction_textureProj_0U3B0B(
     BuiltInId::textureProj_us2_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_4f_f_,
+    BuiltInParameters::p_0U3B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us2_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s3_4f_f_(
+constexpr const TFunction kFunction_textureProj_0I3B0B(
     BuiltInId::textureProj_s3_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s3_4f_f_,
+    BuiltInParameters::p_0I3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_s3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_is3_4f_f_(
+constexpr const TFunction kFunction_textureProj_0Q3B0B(
     BuiltInId::textureProj_is3_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is3_4f_f_,
+    BuiltInParameters::p_0Q3B0B,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_is3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_us3_4f_f_(
+constexpr const TFunction kFunction_textureProj_0V3B0B(
     BuiltInId::textureProj_us3_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us3_4f_f_,
+    BuiltInParameters::p_0V3B0B,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_us3_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_s2s_3f_f_(
+constexpr const TFunction kFunction_texture_0Z2B0B(
     BuiltInId::texture_s2s_3f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_3f_f_,
+    BuiltInParameters::p_0Z2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::texture_s2s_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sCs_4f_f_(
+constexpr const TFunction kFunction_texture_0a3B0B(
     BuiltInId::texture_sCs_4f_f_,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_4f_f_,
+    BuiltInParameters::p_0a3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::texture_sCs_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_s2s_4f_f_(
+constexpr const TFunction kFunction_textureProj_0Z3B0B(
     BuiltInId::textureProj_s2s_4f_f_,
     BuiltInName::textureProj,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_4f_f_,
+    BuiltInParameters::p_0Z3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::textureProj_s2s_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sX_2f_f_(
+constexpr const TFunction kFunction_texture_0L1B0B(
     BuiltInId::texture_sX_2f_f_,
     BuiltInName::texture,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_2f_f_,
+    BuiltInParameters::p_0L1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sX_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sX_3f_f_(
+constexpr const TFunction kFunction_textureProj_0L2B0B(
     BuiltInId::textureProj_sX_3f_f_,
     BuiltInName::textureProj,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_3f_f_,
+    BuiltInParameters::p_0L2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sX_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sX_4f_f_(
+constexpr const TFunction kFunction_textureProj_0L3B0B(
     BuiltInId::textureProj_sX_4f_f_,
     BuiltInName::textureProj,
     TExtension::OES_EGL_image_external_essl3,
-    BuiltInParameters::p_sX_4f_f_,
+    BuiltInParameters::p_0L3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sX_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texture_sY_2f_f_(
+constexpr const TFunction kFunction_texture_0M1B0B(
     BuiltInId::texture_sY_2f_f_,
     BuiltInName::texture,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_2f_f_,
+    BuiltInParameters::p_0M1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texture_sY_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sY_3f_f_(
+constexpr const TFunction kFunction_textureProj_0M2B0B(
     BuiltInId::textureProj_sY_3f_f_,
     BuiltInName::textureProj,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_3f_f_,
+    BuiltInParameters::p_0M2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sY_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureProj_sY_4f_f_(
+constexpr const TFunction kFunction_textureProj_0M3B0B(
     BuiltInId::textureProj_sY_4f_f_,
     BuiltInName::textureProj,
     TExtension::EXT_YUV_target,
-    BuiltInParameters::p_sY_4f_f_,
+    BuiltInParameters::p_0M3B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureProj_sY_4f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_sM_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0O1C0C(
     BuiltInId::texelFetch_sM_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sM_2i_i_,
+    BuiltInParameters::p_0O1C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_sM_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_isM_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0T1C0C(
     BuiltInId::texelFetch_isM_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isM_2i_i_,
+    BuiltInParameters::p_0T1C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_isM_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_texelFetch_usM_2i_i_(
+constexpr const TFunction kFunction_texelFetch_0Y1C0C(
     BuiltInId::texelFetch_usM_2i_i_,
     BuiltInName::texelFetch,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usM_2i_i_,
+    BuiltInParameters::p_0Y1C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::texelFetch_usM_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_s2_2f_(
+constexpr const TFunction kFunction_textureGather_0H1B(
     BuiltInId::textureGather_s2_2f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_,
+    BuiltInParameters::p_0H1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_s2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_is2_2f_(
+constexpr const TFunction kFunction_textureGather_0P1B(
     BuiltInId::textureGather_is2_2f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_,
+    BuiltInParameters::p_0P1B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_is2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_us2_2f_(
+constexpr const TFunction kFunction_textureGather_0U1B(
     BuiltInId::textureGather_us2_2f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_,
+    BuiltInParameters::p_0U1B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_us2_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_s2_2f_i_(
+constexpr const TFunction kFunction_textureGather_0H1B0C(
     BuiltInId::textureGather_s2_2f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_i_,
+    BuiltInParameters::p_0H1B0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_s2_2f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_is2_2f_i_(
+constexpr const TFunction kFunction_textureGather_0P1B0C(
     BuiltInId::textureGather_is2_2f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_i_,
+    BuiltInParameters::p_0P1B0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_is2_2f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_us2_2f_i_(
+constexpr const TFunction kFunction_textureGather_0U1B0C(
     BuiltInId::textureGather_us2_2f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_i_,
+    BuiltInParameters::p_0U1B0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_us2_2f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sA_3f_(
+constexpr const TFunction kFunction_textureGather_0K2B(
     BuiltInId::textureGather_sA_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_,
+    BuiltInParameters::p_0K2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_isA_3f_(
+constexpr const TFunction kFunction_textureGather_0S2B(
     BuiltInId::textureGather_isA_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_,
+    BuiltInParameters::p_0S2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_isA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_usA_3f_(
+constexpr const TFunction kFunction_textureGather_0X2B(
     BuiltInId::textureGather_usA_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_,
+    BuiltInParameters::p_0X2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_usA_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sA_3f_i_(
+constexpr const TFunction kFunction_textureGather_0K2B0C(
     BuiltInId::textureGather_sA_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_i_,
+    BuiltInParameters::p_0K2B0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sA_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_isA_3f_i_(
+constexpr const TFunction kFunction_textureGather_0S2B0C(
     BuiltInId::textureGather_isA_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_i_,
+    BuiltInParameters::p_0S2B0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_isA_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_usA_3f_i_(
+constexpr const TFunction kFunction_textureGather_0X2B0C(
     BuiltInId::textureGather_usA_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_i_,
+    BuiltInParameters::p_0X2B0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_usA_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sC_3f_(
+constexpr const TFunction kFunction_textureGather_0J2B(
     BuiltInId::textureGather_sC_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_,
+    BuiltInParameters::p_0J2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_isC_3f_(
+constexpr const TFunction kFunction_textureGather_0R2B(
     BuiltInId::textureGather_isC_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_,
+    BuiltInParameters::p_0R2B,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_isC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_usC_3f_(
+constexpr const TFunction kFunction_textureGather_0W2B(
     BuiltInId::textureGather_usC_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_,
+    BuiltInParameters::p_0W2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_usC_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sC_3f_i_(
+constexpr const TFunction kFunction_textureGather_0J2B0C(
     BuiltInId::textureGather_sC_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sC_3f_i_,
+    BuiltInParameters::p_0J2B0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sC_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_isC_3f_i_(
+constexpr const TFunction kFunction_textureGather_0R2B0C(
     BuiltInId::textureGather_isC_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isC_3f_i_,
+    BuiltInParameters::p_0R2B0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_isC_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_usC_3f_i_(
+constexpr const TFunction kFunction_textureGather_0W2B0C(
     BuiltInId::textureGather_usC_3f_i_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usC_3f_i_,
+    BuiltInParameters::p_0W2B0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_usC_3f_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_s2s_2f_(
+constexpr const TFunction kFunction_textureGather_0Z1B(
     BuiltInId::textureGather_s2s_2f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_2f_,
+    BuiltInParameters::p_0Z1B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_s2s_2f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_s2s_2f_f_(
+constexpr const TFunction kFunction_textureGather_0Z1B0B(
     BuiltInId::textureGather_s2s_2f_f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_2f_f_,
+    BuiltInParameters::p_0Z1B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_s2s_2f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sAs_3f_(
+constexpr const TFunction kFunction_textureGather_0b2B(
     BuiltInId::textureGather_sAs_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_3f_,
+    BuiltInParameters::p_0b2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sAs_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sAs_3f_f_(
+constexpr const TFunction kFunction_textureGather_0b2B0B(
     BuiltInId::textureGather_sAs_3f_f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_3f_f_,
+    BuiltInParameters::p_0b2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sAs_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sCs_3f_(
+constexpr const TFunction kFunction_textureGather_0a2B(
     BuiltInId::textureGather_sCs_3f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_3f_,
+    BuiltInParameters::p_0a2B,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sCs_3f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGather_sCs_3f_f_(
+constexpr const TFunction kFunction_textureGather_0a2B0B(
     BuiltInId::textureGather_sCs_3f_f_,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sCs_3f_f_,
+    BuiltInParameters::p_0a2B0B,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGather_sCs_3f_f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_s2_2f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0H1B1C(
     BuiltInId::textureGatherOffset_s2_2f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2i_,
+    BuiltInParameters::p_0H1B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_s2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_is2_2f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0P1B1C(
     BuiltInId::textureGatherOffset_is2_2f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2i_,
+    BuiltInParameters::p_0P1B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_is2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_us2_2f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0U1B1C(
     BuiltInId::textureGatherOffset_us2_2f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2i_,
+    BuiltInParameters::p_0U1B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_us2_2f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_s2_2f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0H1B1C0C(
     BuiltInId::textureGatherOffset_s2_2f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2_2f_2i_i_,
+    BuiltInParameters::p_0H1B1C0C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_s2_2f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_is2_2f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0P1B1C0C(
     BuiltInId::textureGatherOffset_is2_2f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_is2_2f_2i_i_,
+    BuiltInParameters::p_0P1B1C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_is2_2f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_us2_2f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0U1B1C0C(
     BuiltInId::textureGatherOffset_us2_2f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_us2_2f_2i_i_,
+    BuiltInParameters::p_0U1B1C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_us2_2f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_sA_3f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0K2B1C(
     BuiltInId::textureGatherOffset_sA_3f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2i_,
+    BuiltInParameters::p_0K2B1C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_sA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_isA_3f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0S2B1C(
     BuiltInId::textureGatherOffset_isA_3f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2i_,
+    BuiltInParameters::p_0S2B1C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_isA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_usA_3f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0X2B1C(
     BuiltInId::textureGatherOffset_usA_3f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2i_,
+    BuiltInParameters::p_0X2B1C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_usA_3f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_sA_3f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0K2B1C0C(
     BuiltInId::textureGatherOffset_sA_3f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sA_3f_2i_i_,
+    BuiltInParameters::p_0K2B1C0C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_sA_3f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_isA_3f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0S2B1C0C(
     BuiltInId::textureGatherOffset_isA_3f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_isA_3f_2i_i_,
+    BuiltInParameters::p_0S2B1C0C,
     4,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_isA_3f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_usA_3f_2i_i_(
+constexpr const TFunction kFunction_textureGatherOffset_0X2B1C0C(
     BuiltInId::textureGatherOffset_usA_3f_2i_i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_usA_3f_2i_i_,
+    BuiltInParameters::p_0X2B1C0C,
     4,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_usA_3f_2i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_s2s_2f_f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0Z1B0B1C(
     BuiltInId::textureGatherOffset_s2s_2f_f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_s2s_2f_f_2i_,
+    BuiltInParameters::p_0Z1B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_s2s_2f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_textureGatherOffset_sAs_3f_f_2i_(
+constexpr const TFunction kFunction_textureGatherOffset_0b2B0B1C(
     BuiltInId::textureGatherOffset_sAs_3f_f_2i_,
     BuiltInName::textureGatherOffset,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_sAs_3f_f_2i_,
+    BuiltInParameters::p_0b2B0B1C,
     4,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::textureGatherOffset_sAs_3f_f_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_dFdx_f_(
+constexpr const TFunction kFunction_dFdx_0B(
     BuiltInId::dFdx_f_,
     BuiltInName::dFdx,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dFdx_f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdx_2f_(
+constexpr const TFunction kFunction_dFdx_1B(
     BuiltInId::dFdx_2f_,
     BuiltInName::dFdx,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::dFdx_2f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdx_3f_(
+constexpr const TFunction kFunction_dFdx_2B(
     BuiltInId::dFdx_3f_,
     BuiltInName::dFdx,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::dFdx_3f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdx_4f_(
+constexpr const TFunction kFunction_dFdx_3B(
     BuiltInId::dFdx_4f_,
     BuiltInName::dFdx,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::dFdx_4f_,
     EOpDFdx,
     false);
-constexpr const TFunction kFunction_dFdy_f_(
+constexpr const TFunction kFunction_dFdy_0B(
     BuiltInId::dFdy_f_,
     BuiltInName::dFdy,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::dFdy_f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdy_2f_(
+constexpr const TFunction kFunction_dFdy_1B(
     BuiltInId::dFdy_2f_,
     BuiltInName::dFdy,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::dFdy_2f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdy_3f_(
+constexpr const TFunction kFunction_dFdy_2B(
     BuiltInId::dFdy_3f_,
     BuiltInName::dFdy,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::dFdy_3f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_dFdy_4f_(
+constexpr const TFunction kFunction_dFdy_3B(
     BuiltInId::dFdy_4f_,
     BuiltInName::dFdy,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::dFdy_4f_,
     EOpDFdy,
     false);
-constexpr const TFunction kFunction_fwidth_f_(
+constexpr const TFunction kFunction_fwidth_0B(
     BuiltInId::fwidth_f_,
     BuiltInName::fwidth,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_f_,
+    BuiltInParameters::p_0B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::fwidth_f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidth_2f_(
+constexpr const TFunction kFunction_fwidth_1B(
     BuiltInId::fwidth_2f_,
     BuiltInName::fwidth,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_2f_,
+    BuiltInParameters::p_1B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::fwidth_2f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidth_3f_(
+constexpr const TFunction kFunction_fwidth_2B(
     BuiltInId::fwidth_3f_,
     BuiltInName::fwidth,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_3f_,
+    BuiltInParameters::p_2B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::fwidth_3f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_fwidth_4f_(
+constexpr const TFunction kFunction_fwidth_3B(
     BuiltInId::fwidth_4f_,
     BuiltInName::fwidth,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_4f_,
+    BuiltInParameters::p_3B,
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::fwidth_4f_,
     EOpFwidth,
     false);
-constexpr const TFunction kFunction_atomicCounter_a_(
+constexpr const TFunction kFunction_atomicCounter_0F(
     BuiltInId::atomicCounter_a_,
     BuiltInName::atomicCounter,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_a_,
+    BuiltInParameters::p_0F,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicCounter_a_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicCounterIncrement_a_(
+constexpr const TFunction kFunction_atomicCounterIncrement_0F(
     BuiltInId::atomicCounterIncrement_a_,
     BuiltInName::atomicCounterIncrement,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_a_,
+    BuiltInParameters::p_0F,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicCounterIncrement_a_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicCounterDecrement_a_(
+constexpr const TFunction kFunction_atomicCounterDecrement_0F(
     BuiltInId::atomicCounterDecrement_a_,
     BuiltInName::atomicCounterDecrement,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_a_,
+    BuiltInParameters::p_0F,
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicCounterDecrement_a_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicAdd_u_u_(
+constexpr const TFunction kFunction_atomicAdd_0D0D(
     BuiltInId::atomicAdd_u_u_,
     BuiltInName::atomicAdd,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicAdd_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicAdd_i_i_(
+constexpr const TFunction kFunction_atomicAdd_0C0C(
     BuiltInId::atomicAdd_i_i_,
     BuiltInName::atomicAdd,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicAdd_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicMin_u_u_(
+constexpr const TFunction kFunction_atomicMin_0D0D(
     BuiltInId::atomicMin_u_u_,
     BuiltInName::atomicMin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicMin_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicMin_i_i_(
+constexpr const TFunction kFunction_atomicMin_0C0C(
     BuiltInId::atomicMin_i_i_,
     BuiltInName::atomicMin,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicMin_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicMax_u_u_(
+constexpr const TFunction kFunction_atomicMax_0D0D(
     BuiltInId::atomicMax_u_u_,
     BuiltInName::atomicMax,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicMax_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicMax_i_i_(
+constexpr const TFunction kFunction_atomicMax_0C0C(
     BuiltInId::atomicMax_i_i_,
     BuiltInName::atomicMax,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicMax_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicAnd_u_u_(
+constexpr const TFunction kFunction_atomicAnd_0D0D(
     BuiltInId::atomicAnd_u_u_,
     BuiltInName::atomicAnd,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicAnd_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicAnd_i_i_(
+constexpr const TFunction kFunction_atomicAnd_0C0C(
     BuiltInId::atomicAnd_i_i_,
     BuiltInName::atomicAnd,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicAnd_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicOr_u_u_(
+constexpr const TFunction kFunction_atomicOr_0D0D(
     BuiltInId::atomicOr_u_u_,
     BuiltInName::atomicOr,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicOr_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicOr_i_i_(
+constexpr const TFunction kFunction_atomicOr_0C0C(
     BuiltInId::atomicOr_i_i_,
     BuiltInName::atomicOr,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicOr_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicXor_u_u_(
+constexpr const TFunction kFunction_atomicXor_0D0D(
     BuiltInId::atomicXor_u_u_,
     BuiltInName::atomicXor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicXor_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicXor_i_i_(
+constexpr const TFunction kFunction_atomicXor_0C0C(
     BuiltInId::atomicXor_i_i_,
     BuiltInName::atomicXor,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicXor_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicExchange_u_u_(
+constexpr const TFunction kFunction_atomicExchange_0D0D(
     BuiltInId::atomicExchange_u_u_,
     BuiltInName::atomicExchange,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_,
+    BuiltInParameters::p_io_0D0D,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicExchange_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicExchange_i_i_(
+constexpr const TFunction kFunction_atomicExchange_0C0C(
     BuiltInId::atomicExchange_i_i_,
     BuiltInName::atomicExchange,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_,
+    BuiltInParameters::p_io_0C0C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicExchange_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicCompSwap_u_u_u_(
+constexpr const TFunction kFunction_atomicCompSwap_0D0D0D(
     BuiltInId::atomicCompSwap_u_u_u_,
     BuiltInName::atomicCompSwap,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_u_u_u_,
+    BuiltInParameters::p_io_0D0D0D,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicCompSwap_u_u_u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_atomicCompSwap_i_i_i_(
+constexpr const TFunction kFunction_atomicCompSwap_0C0C0C(
     BuiltInId::atomicCompSwap_i_i_i_,
     BuiltInName::atomicCompSwap,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_io_i_i_i_,
+    BuiltInParameters::p_io_0C0C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::atomicCompSwap_i_i_i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_I2_(
+constexpr const TFunction kFunction_imageSize_0c(
     BuiltInId::imageSize_I2_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I2_,
+    BuiltInParameters::p_0c,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_I2_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_iI2_(
+constexpr const TFunction kFunction_imageSize_0d(
     BuiltInId::imageSize_iI2_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI2_,
+    BuiltInParameters::p_0d,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_iI2_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_uI2_(
+constexpr const TFunction kFunction_imageSize_0e(
     BuiltInId::imageSize_uI2_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI2_,
+    BuiltInParameters::p_0e,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_uI2_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_I3_(
+constexpr const TFunction kFunction_imageSize_0f(
     BuiltInId::imageSize_I3_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I3_,
+    BuiltInParameters::p_0f,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_I3_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_iI3_(
+constexpr const TFunction kFunction_imageSize_0g(
     BuiltInId::imageSize_iI3_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI3_,
+    BuiltInParameters::p_0g,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_iI3_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_uI3_(
+constexpr const TFunction kFunction_imageSize_0h(
     BuiltInId::imageSize_uI3_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI3_,
+    BuiltInParameters::p_0h,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_uI3_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_IA_(
+constexpr const TFunction kFunction_imageSize_0i(
     BuiltInId::imageSize_IA_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_IA_,
+    BuiltInParameters::p_0i,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_IA_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_iIA_(
+constexpr const TFunction kFunction_imageSize_0j(
     BuiltInId::imageSize_iIA_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIA_,
+    BuiltInParameters::p_0j,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_iIA_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_uIA_(
+constexpr const TFunction kFunction_imageSize_0k(
     BuiltInId::imageSize_uIA_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIA_,
+    BuiltInParameters::p_0k,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 3, 1>(),
     BuiltInName::imageSize_uIA_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_Ic_(
+constexpr const TFunction kFunction_imageSize_0l(
     BuiltInId::imageSize_Ic_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_Ic_,
+    BuiltInParameters::p_0l,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_Ic_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_iIc_(
+constexpr const TFunction kFunction_imageSize_0m(
     BuiltInId::imageSize_iIc_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIc_,
+    BuiltInParameters::p_0m,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_iIc_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageSize_uIc_(
+constexpr const TFunction kFunction_imageSize_0n(
     BuiltInId::imageSize_uIc_,
     BuiltInName::imageSize,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIc_,
+    BuiltInParameters::p_0n,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
     BuiltInName::imageSize_uIc_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_I2_2i_(
+constexpr const TFunction kFunction_imageLoad_0c1C(
     BuiltInId::imageLoad_I2_2i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I2_2i_,
+    BuiltInParameters::p_0c1C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_I2_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_iI2_2i_(
+constexpr const TFunction kFunction_imageLoad_0d1C(
     BuiltInId::imageLoad_iI2_2i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI2_2i_,
+    BuiltInParameters::p_0d1C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_iI2_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_uI2_2i_(
+constexpr const TFunction kFunction_imageLoad_0e1C(
     BuiltInId::imageLoad_uI2_2i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI2_2i_,
+    BuiltInParameters::p_0e1C,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_uI2_2i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_I3_3i_(
+constexpr const TFunction kFunction_imageLoad_0f2C(
     BuiltInId::imageLoad_I3_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I3_3i_,
+    BuiltInParameters::p_0f2C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_I3_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_iI3_3i_(
+constexpr const TFunction kFunction_imageLoad_0g2C(
     BuiltInId::imageLoad_iI3_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI3_3i_,
+    BuiltInParameters::p_0g2C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_iI3_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_uI3_3i_(
+constexpr const TFunction kFunction_imageLoad_0h2C(
     BuiltInId::imageLoad_uI3_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI3_3i_,
+    BuiltInParameters::p_0h2C,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_uI3_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_IA_3i_(
+constexpr const TFunction kFunction_imageLoad_0i2C(
     BuiltInId::imageLoad_IA_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_IA_3i_,
+    BuiltInParameters::p_0i2C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_IA_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_iIA_3i_(
+constexpr const TFunction kFunction_imageLoad_0j2C(
     BuiltInId::imageLoad_iIA_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIA_3i_,
+    BuiltInParameters::p_0j2C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_iIA_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_uIA_3i_(
+constexpr const TFunction kFunction_imageLoad_0k2C(
     BuiltInId::imageLoad_uIA_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIA_3i_,
+    BuiltInParameters::p_0k2C,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_uIA_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_Ic_3i_(
+constexpr const TFunction kFunction_imageLoad_0l2C(
     BuiltInId::imageLoad_Ic_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_Ic_3i_,
+    BuiltInParameters::p_0l2C,
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_Ic_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_iIc_3i_(
+constexpr const TFunction kFunction_imageLoad_0m2C(
     BuiltInId::imageLoad_iIc_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIc_3i_,
+    BuiltInParameters::p_0m2C,
     2,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_iIc_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageLoad_uIc_3i_(
+constexpr const TFunction kFunction_imageLoad_0n2C(
     BuiltInId::imageLoad_uIc_3i_,
     BuiltInName::imageLoad,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIc_3i_,
+    BuiltInParameters::p_0n2C,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     BuiltInName::imageLoad_uIc_3i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_I2_2i_4f_(
+constexpr const TFunction kFunction_imageStore_0c1C3B(
     BuiltInId::imageStore_I2_2i_4f_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I2_2i_4f_,
+    BuiltInParameters::p_0c1C3B,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_I2_2i_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_iI2_2i_4i_(
+constexpr const TFunction kFunction_imageStore_0d1C3C(
     BuiltInId::imageStore_iI2_2i_4i_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI2_2i_4i_,
+    BuiltInParameters::p_0d1C3C,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_iI2_2i_4i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_uI2_2i_4u_(
+constexpr const TFunction kFunction_imageStore_0e1C3D(
     BuiltInId::imageStore_uI2_2i_4u_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI2_2i_4u_,
+    BuiltInParameters::p_0e1C3D,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_uI2_2i_4u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_I3_3i_4f_(
+constexpr const TFunction kFunction_imageStore_0f2C3B(
     BuiltInId::imageStore_I3_3i_4f_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_I3_3i_4f_,
+    BuiltInParameters::p_0f2C3B,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_I3_3i_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_iI3_3i_4i_(
+constexpr const TFunction kFunction_imageStore_0g2C3C(
     BuiltInId::imageStore_iI3_3i_4i_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iI3_3i_4i_,
+    BuiltInParameters::p_0g2C3C,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_iI3_3i_4i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_uI3_3i_4u_(
+constexpr const TFunction kFunction_imageStore_0h2C3D(
     BuiltInId::imageStore_uI3_3i_4u_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uI3_3i_4u_,
+    BuiltInParameters::p_0h2C3D,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_uI3_3i_4u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_IA_3i_4f_(
+constexpr const TFunction kFunction_imageStore_0i2C3B(
     BuiltInId::imageStore_IA_3i_4f_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_IA_3i_4f_,
+    BuiltInParameters::p_0i2C3B,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_IA_3i_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_iIA_3i_4i_(
+constexpr const TFunction kFunction_imageStore_0j2C3C(
     BuiltInId::imageStore_iIA_3i_4i_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIA_3i_4i_,
+    BuiltInParameters::p_0j2C3C,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_iIA_3i_4i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_uIA_3i_4u_(
+constexpr const TFunction kFunction_imageStore_0k2C3D(
     BuiltInId::imageStore_uIA_3i_4u_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIA_3i_4u_,
+    BuiltInParameters::p_0k2C3D,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_uIA_3i_4u_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_Ic_3i_4f_(
+constexpr const TFunction kFunction_imageStore_0l2C3B(
     BuiltInId::imageStore_Ic_3i_4f_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_Ic_3i_4f_,
+    BuiltInParameters::p_0l2C3B,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_Ic_3i_4f_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_iIc_3i_4i_(
+constexpr const TFunction kFunction_imageStore_0m2C3C(
     BuiltInId::imageStore_iIc_3i_4i_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_iIc_3i_4i_,
+    BuiltInParameters::p_0m2C3C,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_iIc_3i_4i_,
     EOpCallBuiltInFunction,
     false);
-constexpr const TFunction kFunction_imageStore_uIc_3i_4u_(
+constexpr const TFunction kFunction_imageStore_0n2C3D(
     BuiltInId::imageStore_uIc_3i_4u_,
     BuiltInName::imageStore,
     TExtension::UNDEFINED,
-    BuiltInParameters::p_uIc_3i_4u_,
+    BuiltInParameters::p_0n2C3D,
     3,
     StaticType::Get<EbtVoid, EbpUndefined, EvqGlobal, 1, 1>(),
     BuiltInName::imageStore_uIc_3i_4u_,
