@@ -213,7 +213,10 @@ bool validateInterfaceBlocksCount(GLuint maxInterfaceBlocks,
     GLuint blockCount = 0;
     for (const sh::InterfaceBlock &block : interfaceBlocks)
     {
-        if (block.staticUse || block.layout != sh::BLOCKLAYOUT_PACKED)
+        // [OpenGL ES 3.1] Chapter 7.8 Page 111
+        // If the number of active shader storage blocks referenced by the shaders in a program
+        // exceeds implementation-dependent limits, the program will fail to link.
+        if (IsActiveInterfaceBlock(block))
         {
             blockCount += (block.arraySize ? block.arraySize : 1);
             if (blockCount > maxInterfaceBlocks)
@@ -505,6 +508,25 @@ void LogLinkMismatch(InfoLog &infoLog,
            << GetShaderTypeString(shaderType2) << " shaders.";
 
     infoLog << stream.str();
+}
+
+bool IsActiveInterfaceBlock(const sh::InterfaceBlock &block)
+{
+    if (block.staticUse)
+    {
+        return true;
+    }
+
+    // [OpenGL ES 3.1] Chapter 7.6 Page 96:
+    // All members of a named uniform block declared with a shared or std140 layout qualifier are
+    // considered active, even if they are not referenced in any shader in the program. The uniform
+    // block itself is also considered active, even if no member of the block is referenced.
+    if (block.blockType == sh::BlockType::BLOCK_UNIFORM)
+    {
+        return block.layout == sh::BLOCKLAYOUT_SHARED || block.layout == sh::BLOCKLAYOUT_STD140;
+    }
+
+    return false;
 }
 
 // VariableLocation implementation.
@@ -2636,7 +2658,7 @@ bool Program::ValidateGraphicsInterfaceBlocks(
     for (const sh::InterfaceBlock &vertexInterfaceBlock : vertexInterfaceBlocks)
     {
         linkedInterfaceBlocks[vertexInterfaceBlock.name] = &vertexInterfaceBlock;
-        if (vertexInterfaceBlock.staticUse || vertexInterfaceBlock.layout != sh::BLOCKLAYOUT_PACKED)
+        if (IsActiveInterfaceBlock(vertexInterfaceBlock))
         {
             blockCount += std::max(vertexInterfaceBlock.arraySize, 1u);
         }
@@ -2659,13 +2681,16 @@ bool Program::ValidateGraphicsInterfaceBlocks(
                 return false;
             }
         }
-        else
+
+        // [OpenGL ES 3.1] Chapter 7.6.2 Page 105:
+        // If a uniform block is used by multiple shader stages, each such use counts separately
+        // against this combined limit.
+        // [OpenGL ES 3.1] Chapter 7.8 Page 111:
+        // If a shader storage block in a program is referenced by multiple shaders, each such
+        // reference counts separately against this combined limit.
+        if (IsActiveInterfaceBlock(fragmentInterfaceBlock))
         {
-            if (fragmentInterfaceBlock.staticUse ||
-                fragmentInterfaceBlock.layout != sh::BLOCKLAYOUT_PACKED)
-            {
-                blockCount += std::max(fragmentInterfaceBlock.arraySize, 1u);
-            }
+            blockCount += std::max(fragmentInterfaceBlock.arraySize, 1u);
         }
     }
 
