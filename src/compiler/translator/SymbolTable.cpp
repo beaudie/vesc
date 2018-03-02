@@ -519,7 +519,6 @@ void TSymbolTable::initSamplerDefaultPrecision(TBasicType samplerType)
     setDefaultPrecision(samplerType, EbpLow);
 }
 
-
 void TSymbolTable::initializeBuiltInVariables(sh::GLenum type,
                                               ShShaderSpec spec,
                                               const ShBuiltInResources &resources)
