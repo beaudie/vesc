@@ -185,18 +185,18 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     Serial queueSerial           = mRenderer->getCurrentQueueSerial();
     uint32_t maxAttrib           = programGL->getState().getMaxActiveAttribLocation();
 
-    vk::CommandGraphNode *renderNode = nullptr;
-    ANGLE_TRY(vkFBO->getRenderNode(context, &renderNode));
+    vk::CommandGraphNode *graphNode = nullptr;
+    ANGLE_TRY(vkFBO->getCommandGraphNodeForDraw(context, &graphNode));
 
-    if (!renderNode->getInsideRenderPassCommands()->valid())
+    if (!graphNode->getInsideRenderPassCommands()->valid())
     {
         mVertexArrayDirty = true;
         mTexturesDirty    = true;
-        ANGLE_TRY(renderNode->beginInsideRenderPassRecording(mRenderer, commandBuffer));
+        ANGLE_TRY(graphNode->beginInsideRenderPassRecording(mRenderer, commandBuffer));
     }
     else
     {
-        *commandBuffer = renderNode->getInsideRenderPassCommands();
+        *commandBuffer = graphNode->getInsideRenderPassCommands();
     }
 
     // Ensure any writes to the VAO buffers are flushed before we read from them.
@@ -204,7 +204,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     {
 
         mVertexArrayDirty = false;
-        vkVAO->updateDrawDependencies(renderNode, programGL->getActiveAttribLocationsMask(),
+        vkVAO->updateDrawDependencies(graphNode, programGL->getActiveAttribLocationsMask(),
                                       elementArrayBufferOverride, queueSerial, drawType);
     }
 
@@ -228,7 +228,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
             ASSERT(texture);
 
             TextureVk *textureVk = vk::GetImpl(texture);
-            textureVk->onReadResource(renderNode, mRenderer->getCurrentQueueSerial());
+            textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
         }
     }
 
