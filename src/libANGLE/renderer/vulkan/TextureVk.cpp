@@ -316,7 +316,7 @@ gl::Error TextureVk::copyImage(const gl::Context *context,
                                size_t level,
                                const gl::Rectangle &sourceArea,
                                GLenum internalFormat,
-                               const gl::Framebuffer *source)
+                               gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
     return gl::InternalError();
@@ -327,7 +327,7 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
                                   size_t level,
                                   const gl::Offset &destOffset,
                                   const gl::Rectangle &sourceArea,
-                                  const gl::Framebuffer *source)
+                                  gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
     return gl::InternalError();
