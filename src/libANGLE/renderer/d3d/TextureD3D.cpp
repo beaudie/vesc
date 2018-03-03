@@ -946,7 +946,7 @@ gl::Error TextureD3D_2D::copyImage(const gl::Context *context,
                                    size_t imageLevel,
                                    const gl::Rectangle &origSourceArea,
                                    GLenum internalFormat,
-                                   const gl::Framebuffer *source)
+                                   gl::Framebuffer *source)
 {
     ASSERT(target == GL_TEXTURE_2D);
 
@@ -1020,7 +1020,7 @@ gl::Error TextureD3D_2D::copySubImage(const gl::Context *context,
                                       size_t imageLevel,
                                       const gl::Offset &origDestOffset,
                                       const gl::Rectangle &origSourceArea,
-                                      const gl::Framebuffer *source)
+                                      gl::Framebuffer *source)
 {
     ASSERT(target == GL_TEXTURE_2D && origDestOffset.z == 0);
 
@@ -1730,7 +1730,7 @@ gl::Error TextureD3D_Cube::copyImage(const gl::Context *context,
                                      size_t imageLevel,
                                      const gl::Rectangle &origSourceArea,
                                      GLenum internalFormat,
-                                     const gl::Framebuffer *source)
+                                     gl::Framebuffer *source)
 {
     int faceIndex              = static_cast<int>(gl::CubeMapTextureTargetToLayerIndex(target));
     const gl::InternalFormat &internalFormatInfo =
@@ -1808,7 +1808,7 @@ gl::Error TextureD3D_Cube::copySubImage(const gl::Context *context,
                                         size_t imageLevel,
                                         const gl::Offset &origDestOffset,
                                         const gl::Rectangle &origSourceArea,
-                                        const gl::Framebuffer *source)
+                                        gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorbuffer()->getSize();
     gl::Rectangle sourceArea;
@@ -2536,7 +2536,7 @@ gl::Error TextureD3D_3D::copyImage(const gl::Context *context,
                                    size_t level,
                                    const gl::Rectangle &sourceArea,
                                    GLenum internalFormat,
-                                   const gl::Framebuffer *source)
+                                   gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
     return gl::InternalError() << "Copying 3D textures is unimplemented.";
@@ -2547,7 +2547,7 @@ gl::Error TextureD3D_3D::copySubImage(const gl::Context *context,
                                       size_t imageLevel,
                                       const gl::Offset &destOffset,
                                       const gl::Rectangle &sourceArea,
-                                      const gl::Framebuffer *source)
+                                      gl::Framebuffer *source)
 {
     ASSERT(target == GL_TEXTURE_3D);
 
@@ -3106,7 +3106,7 @@ gl::Error TextureD3D_2DArray::copyImage(const gl::Context *context,
                                         size_t level,
                                         const gl::Rectangle &sourceArea,
                                         GLenum internalFormat,
-                                        const gl::Framebuffer *source)
+                                        gl::Framebuffer *source)
 {
     UNIMPLEMENTED();
     return gl::InternalError() << "Copying 2D array textures is unimplemented.";
@@ -3117,7 +3117,7 @@ gl::Error TextureD3D_2DArray::copySubImage(const gl::Context *context,
                                            size_t imageLevel,
                                            const gl::Offset &destOffset,
                                            const gl::Rectangle &sourceArea,
-                                           const gl::Framebuffer *source)
+                                           gl::Framebuffer *source)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
 
@@ -3616,7 +3616,7 @@ gl::Error TextureD3D_External::copyImage(const gl::Context *context,
                                          size_t imageLevel,
                                          const gl::Rectangle &sourceArea,
                                          GLenum internalFormat,
-                                         const gl::Framebuffer *source)
+                                         gl::Framebuffer *source)
 {
     UNREACHABLE();
     return gl::InternalError();
@@ -3627,7 +3627,7 @@ gl::Error TextureD3D_External::copySubImage(const gl::Context *context,
                                             size_t imageLevel,
                                             const gl::Offset &destOffset,
                                             const gl::Rectangle &sourceArea,
-                                            const gl::Framebuffer *source)
+                                            gl::Framebuffer *source)
 {
     UNREACHABLE();
     return gl::InternalError();
@@ -3831,7 +3831,7 @@ gl::Error TextureD3D_2DMultisample::copyImage(const gl::Context *context,
                                               size_t level,
                                               const gl::Rectangle &sourceArea,
                                               GLenum internalFormat,
-                                              const gl::Framebuffer *source)
+                                              gl::Framebuffer *source)
 {
     UNREACHABLE();
     return gl::InternalError();
@@ -3842,7 +3842,7 @@ gl::Error TextureD3D_2DMultisample::copySubImage(const gl::Context *context,
                                                  size_t level,
                                                  const gl::Offset &destOffset,
                                                  const gl::Rectangle &sourceArea,
-                                                 const gl::Framebuffer *source)
+                                                 gl::Framebuffer *source)
 {
     UNREACHABLE();
     return gl::InternalError();
