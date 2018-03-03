@@ -272,6 +272,7 @@
             'libANGLE/renderer/ProgramPipelineImpl.h',
             'libANGLE/renderer/QueryImpl.h',
             'libANGLE/renderer/RenderbufferImpl.h',
+            'libANGLE/renderer/RenderTargetCache.h',
             'libANGLE/renderer/SamplerImpl.h',
             'libANGLE/renderer/ShaderImpl.h',
             'libANGLE/renderer/StreamProducerImpl.h',
