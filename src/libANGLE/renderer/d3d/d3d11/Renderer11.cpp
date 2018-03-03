@@ -1644,10 +1644,10 @@ gl::Error Renderer11::drawElements(const gl::Context *context,
 
     const auto &lazyIndexRange = context->getParams<gl::HasIndexRange>();
 
+    DrawCallVertexParams vertexParams(lazyIndexRange, 0, instances);
+
     bool usePrimitiveRestartWorkaround =
         UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), type);
-    DrawCallVertexParams vertexParams(!usePrimitiveRestartWorkaround, lazyIndexRange, 0, instances);
-
     ANGLE_TRY(mStateManager.applyIndexBuffer(context, indices, count, type, lazyIndexRange,
                                              usePrimitiveRestartWorkaround));
     ANGLE_TRY(mStateManager.applyVertexBuffer(context, mode, vertexParams, true));
@@ -1824,7 +1824,7 @@ gl::Error Renderer11::drawElementsIndirect(const gl::Context *context,
     ANGLE_TRY(mStateManager.applyIndexBuffer(context, indices, count, type, lazyIndexRange,
                                              usePrimitiveRestartWorkaround));
 
-    DrawCallVertexParams vertexParams(false, lazyIndexRange, baseVertex, instances);
+    DrawCallVertexParams vertexParams(lazyIndexRange, baseVertex, instances);
 
     ANGLE_TRY(mStateManager.applyVertexBuffer(context, mode, vertexParams, true));
 
