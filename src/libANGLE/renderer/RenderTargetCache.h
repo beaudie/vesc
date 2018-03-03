@@ -35,6 +35,8 @@ class RenderTargetCache final : angle::NonCopyable
     const RenderTargetArray &getColors() const;
     RenderTargetT *getDepthStencil() const;
 
+    RenderTargetT *getColorRead(const gl::FramebufferState &state) const;
+
   private:
     void updateCachedRenderTarget(const gl::Context *context,
                                   const gl::FramebufferAttachment *attachment,
@@ -140,6 +142,14 @@ void RenderTargetCache<RenderTargetT>::updateCachedRenderTarget(
         ANGLE_SWALLOW_ERR(attachment->getRenderTarget(context, &newRenderTarget));
     }
     *cachedRenderTarget = newRenderTarget;
+}
+
+template <typename RenderTargetT>
+RenderTargetT *RenderTargetCache<RenderTargetT>::getColorRead(
+    const gl::FramebufferState &state) const
+{
+    ASSERT(mColorRenderTargets[state.getReadIndex()]);
+    return mColorRenderTargets[state.getReadIndex()];
 }
 
 }  // namespace rx
