@@ -31,27 +31,20 @@ namespace rx
 
 namespace
 {
-gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
-    const gl::Context *context,
-    const gl::FramebufferAttachment *readAttachment)
+const gl::InternalFormat &GetReadAttachmentInfo(const gl::Context *context,
+                                                RenderTargetVk *renderTarget)
 {
-    RenderTargetVk *renderTarget = nullptr;
-    ANGLE_TRY(readAttachment->getRenderTarget(context, &renderTarget));
-
     GLenum implFormat = renderTarget->format->textureFormat().fboImplementationInternalFormat;
-    return &gl::GetSizedInternalFormatInfo(implFormat);
+    return gl::GetSizedInternalFormatInfo(implFormat);
 }
 
 gl::Error ClearDepthStencilImage(const gl::Context *context,
                                  vk::CommandGraphNode *writingNode,
                                  Serial currentSerial,
                                  vk::CommandBuffer *commandBuffer,
-                                 const gl::FramebufferAttachment *depthStencilAttachment,
+                                 RenderTargetVk *renderTarget,
                                  const VkClearDepthStencilValue &depthStencil)
 {
-    RenderTargetVk *renderTarget = nullptr;
-    ANGLE_TRY(depthStencilAttachment->getRenderTarget(context, &renderTarget));
-
     const angle::Format &angleFormat = renderTarget->format->textureFormat();
 
     const bool hasDepth   = (angleFormat.depthBits > 0);
@@ -171,13 +164,12 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         const VkClearDepthStencilValue &clearDepthStencilValue =
             contextVk->getClearDepthStencilValue().depthStencil;
 
-        const gl::FramebufferAttachment *depthStencilAttachment =
-            mState.getDepthStencilAttachment();
-        if (depthStencilAttachment && clearDepth && clearStencil)
+        RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+        if (depthStencilRenderTarget && clearDepth && clearStencil)
         {
             // Combined depth/stencil clear.
             ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
-                                             depthStencilAttachment, clearDepthStencilValue));
+                                             depthStencilRenderTarget, clearDepthStencilValue));
         }
         else
         {
@@ -185,13 +177,13 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             if (clearDepth)
             {
                 ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
-                                                 depthAttachment, clearDepthStencilValue));
+                                                 depthStencilRenderTarget, clearDepthStencilValue));
             }
             // Separate stencil clear.
             if (clearStencil)
             {
                 ANGLE_TRY(ClearDepthStencilImage(context, writingNode, currentSerial, commandBuffer,
-                                                 stencilAttachment, clearDepthStencilValue));
+                                                 depthStencilRenderTarget, clearDepthStencilValue));
             }
         }
 
@@ -211,20 +203,18 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         writingNode = getCurrentWritingNode(currentSerial);
     }
 
-    for (const auto &colorAttachment : mState.getColorAttachments())
+    // Note: This code might have to be updated to handle gaps in RenderTargets.
+    for (RenderTargetVk *colorRenderTarget : mRenderTargetCache.getColors())
     {
-        if (colorAttachment.isAttached())
+        if (colorRenderTarget)
         {
-            RenderTargetVk *renderTarget = nullptr;
-            ANGLE_TRY(colorAttachment.getRenderTarget(context, &renderTarget));
+            colorRenderTarget->resource->onWriteResource(writingNode, currentSerial);
 
-            renderTarget->resource->onWriteResource(writingNode, currentSerial);
-
-            renderTarget->image->changeLayoutWithStages(
+            colorRenderTarget->image->changeLayoutWithStages(
                 VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
-            commandBuffer->clearSingleColorImage(*renderTarget->image,
+            commandBuffer->clearSingleColorImage(*colorRenderTarget->image,
                                                  contextVk->getClearColorValue().color);
         }
     }
@@ -271,30 +261,12 @@ gl::Error FramebufferVk::clearBufferfi(const gl::Context *context,
 
 GLenum FramebufferVk::getImplementationColorReadFormat(const gl::Context *context) const
 {
-    auto errOrResult = GetReadAttachmentInfo(context, mState.getReadAttachment());
-
-    // TODO(jmadill): Handle getRenderTarget error.
-    if (errOrResult.isError())
-    {
-        ERR() << "Internal error in FramebufferVk::getImplementationColorReadFormat.";
-        return GL_NONE;
-    }
-
-    return errOrResult.getResult()->format;
+    return GetReadAttachmentInfo(context, mRenderTargetCache.getColorRead(mState)).format;
 }
 
 GLenum FramebufferVk::getImplementationColorReadType(const gl::Context *context) const
 {
-    auto errOrResult = GetReadAttachmentInfo(context, mState.getReadAttachment());
-
-    // TODO(jmadill): Handle getRenderTarget error.
-    if (errOrResult.isError())
-    {
-        ERR() << "Internal error in FramebufferVk::getImplementationColorReadFormat.";
-        return GL_NONE;
-    }
-
-    return errOrResult.getResult()->type;
+    return GetReadAttachmentInfo(context, mRenderTargetCache.getColorRead(mState)).type;
 }
 
 gl::Error FramebufferVk::readPixels(const gl::Context *context,
@@ -303,16 +275,13 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                     GLenum type,
                                     void *pixels)
 {
-    const auto &glState         = context->getGLState();
-    const auto *readFramebuffer = glState.getReadFramebuffer();
-    const auto *readAttachment  = readFramebuffer->getReadColorbuffer();
-
-    RenderTargetVk *renderTarget = nullptr;
-    ANGLE_TRY(readAttachment->getRenderTarget(context, &renderTarget));
-
+    const gl::State &glState = context->getGLState();
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
+
+    RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
+    ASSERT(renderTarget);
 
     vk::Image *readImage = renderTarget->image;
     vk::StagingImage stagingImage;
@@ -404,7 +373,8 @@ void FramebufferVk::syncState(const gl::Context *context,
 
     ASSERT(dirtyBits.any());
 
-    // TODO(jmadill): Smarter update.
+    mRenderTargetCache.update(context, mState, dirtyBits);
+
     mRenderPassDesc.reset();
     renderer->releaseResource(*this, &mFramebuffer);
 
@@ -423,26 +393,20 @@ const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc(const gl::Context *co
 
     vk::RenderPassDesc desc;
 
-    const auto &colorAttachments = mState.getColorAttachments();
-    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    // Note: this code may need to be adjusted to handle gaps in RenderTargets.
+    for (RenderTargetVk *colorRenderTarget : mRenderTargetCache.getColors())
     {
-        const auto &colorAttachment = colorAttachments[attachmentIndex];
-        if (colorAttachment.isAttached())
+        if (colorRenderTarget)
         {
-            RenderTargetVk *renderTarget = nullptr;
-            ANGLE_SWALLOW_ERR(colorAttachment.getRenderTarget(context, &renderTarget));
-            desc.packColorAttachment(*renderTarget->format, colorAttachment.getSamples());
+            desc.packColorAttachment(*colorRenderTarget->format, colorRenderTarget->samples);
         }
     }
 
-    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
-
-    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+    if (depthStencilRenderTarget)
     {
-        RenderTargetVk *renderTarget = nullptr;
-        ANGLE_SWALLOW_ERR(depthStencilAttachment->getRenderTarget(context, &renderTarget));
-        desc.packDepthStencilAttachment(*renderTarget->format,
-                                        depthStencilAttachment->getSamples());
+        desc.packDepthStencilAttachment(*depthStencilRenderTarget->format,
+                                        depthStencilRenderTarget->samples);
     }
 
     mRenderPassDesc = desc;
@@ -474,30 +438,25 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
     std::vector<VkImageView> attachments;
     gl::Extents attachmentsSize;
 
-    const auto &colorAttachments = mState.getColorAttachments();
-    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    // Note: this code may have to adjusted to handle gaps in RenderTargets.
+    for (RenderTargetVk *colorRenderTarget : mRenderTargetCache.getColors())
     {
-        const auto &colorAttachment = colorAttachments[attachmentIndex];
-        if (colorAttachment.isAttached())
+        if (colorRenderTarget)
         {
-            RenderTargetVk *renderTarget = nullptr;
-            ANGLE_TRY(colorAttachment.getRenderTarget(context, &renderTarget));
-            attachments.push_back(renderTarget->imageView->getHandle());
+            attachments.push_back(colorRenderTarget->imageView->getHandle());
 
-            ASSERT(attachmentsSize.empty() || attachmentsSize == colorAttachment.getSize());
-            attachmentsSize = colorAttachment.getSize();
+            ASSERT(attachmentsSize.empty() || attachmentsSize == colorRenderTarget->extents);
+            attachmentsSize = colorRenderTarget->extents;
         }
     }
 
-    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
-    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+    if (depthStencilRenderTarget)
     {
-        RenderTargetVk *renderTarget = nullptr;
-        ANGLE_TRY(depthStencilAttachment->getRenderTarget(context, &renderTarget));
-        attachments.push_back(renderTarget->imageView->getHandle());
+        attachments.push_back(depthStencilRenderTarget->imageView->getHandle());
 
-        ASSERT(attachmentsSize.empty() || attachmentsSize == depthStencilAttachment->getSize());
-        attachmentsSize = depthStencilAttachment->getSize();
+        ASSERT(attachmentsSize.empty() || attachmentsSize == depthStencilRenderTarget->extents);
+        attachmentsSize = depthStencilRenderTarget->extents;
     }
 
     ASSERT(!attachments.empty());
@@ -550,42 +509,34 @@ gl::Error FramebufferVk::getRenderNode(const gl::Context *context, vk::CommandGr
                                                     renderer->getCommandPool(), &commandBuffer));
 
     // Initialize RenderPass info.
-    // TODO(jmadill): Could cache this info, would require dependent state change messaging.
-    const auto &colorAttachments = mState.getColorAttachments();
-    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    // Note: This code might have to be updated to handle gaps in Render Targets.
+    for (RenderTargetVk *colorRenderTarget : mRenderTargetCache.getColors())
     {
-        const auto &colorAttachment = colorAttachments[attachmentIndex];
-        if (colorAttachment.isAttached())
+        if (colorRenderTarget)
         {
-            RenderTargetVk *renderTarget = nullptr;
-            ANGLE_SWALLOW_ERR(colorAttachment.getRenderTarget(context, &renderTarget));
-
             // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
-            renderTarget->image->changeLayoutWithStages(
+            colorRenderTarget->image->changeLayoutWithStages(
                 VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 commandBuffer);
-            node->appendColorRenderTarget(currentSerial, renderTarget);
+            node->appendColorRenderTarget(currentSerial, colorRenderTarget);
             attachmentClearValues.emplace_back(contextVk->getClearColorValue());
         }
     }
 
-    const gl::FramebufferAttachment *depthStencilAttachment = mState.getDepthOrStencilAttachment();
-    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+    if (depthStencilRenderTarget)
     {
-        RenderTargetVk *renderTarget = nullptr;
-        ANGLE_SWALLOW_ERR(depthStencilAttachment->getRenderTarget(context, &renderTarget));
-
         // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
-        const angle::Format &format    = renderTarget->format->textureFormat();
+        const angle::Format &format    = depthStencilRenderTarget->format->textureFormat();
         VkImageAspectFlags aspectFlags = (format.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
                                          (format.stencilBits > 0 ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
 
-        renderTarget->image->changeLayoutWithStages(
+        depthStencilRenderTarget->image->changeLayoutWithStages(
             aspectFlags, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
             commandBuffer);
-        node->appendDepthStencilRenderTarget(currentSerial, renderTarget);
+        node->appendDepthStencilRenderTarget(currentSerial, depthStencilRenderTarget);
         attachmentClearValues.emplace_back(contextVk->getClearDepthStencilValue());
     }
 
