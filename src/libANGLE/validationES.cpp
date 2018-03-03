@@ -5174,7 +5174,7 @@ bool ValidateReadPixelsBase(Context *context,
         return false;
     }
 
-    const Framebuffer *framebuffer = context->getGLState().getReadFramebuffer();
+    Framebuffer *framebuffer = context->getGLState().getReadFramebuffer();
     ASSERT(framebuffer);
 
     if (framebuffer->getReadBufferState() == GL_NONE)
