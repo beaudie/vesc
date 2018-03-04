@@ -47,7 +47,7 @@ enum BufferUsage
 
 typedef size_t DataRevision;
 
-class Buffer11 : public BufferD3D, public angle::Subject
+class Buffer11 : public BufferD3D
 {
   public:
     Buffer11(const gl::BufferState &state, Renderer11 *renderer);

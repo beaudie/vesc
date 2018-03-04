@@ -9,6 +9,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/VertexArrayImpl.h"
 
@@ -36,8 +37,13 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
                          size_t maxAttribBindings)
     : mId(id),
       mState(maxAttribs, maxAttribBindings),
-      mVertexArray(factory->createVertexArray(mState))
+      mVertexArray(factory->createVertexArray(mState)),
+      mElementArrayBufferObserverBinding(this, maxAttribBindings)
 {
+    for (size_t attribIndex = 0; attribIndex < maxAttribBindings; ++attribIndex)
+    {
+        mArrayBufferObserverBindings.emplace_back(this, attribIndex);
+    }
 }
 
 void VertexArray::onDestroy(const Context *context)
@@ -121,6 +127,9 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     binding->setBuffer(context, boundBuffer);
     binding->setOffset(offset);
     binding->setStride(stride);
+
+    mArrayBufferObserverBindings[bindingIndex].bind(boundBuffer ? boundBuffer->getImplementation()
+                                                                : nullptr);
 }
 
 void VertexArray::bindVertexBuffer(const Context *context,
@@ -245,6 +254,7 @@ void VertexArray::setVertexAttribPointer(const Context *context,
 void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
 {
     mState.mElementArrayBuffer.set(context, buffer);
+    mElementArrayBufferObserverBinding.bind(buffer ? buffer->getImplementation() : nullptr);
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
 }
 
@@ -253,9 +263,25 @@ Error VertexArray::syncState(const Context *context, const DrawCallParams &drawC
     // We call syncState even if we have no dirty bits, so the back end can do any draw call
     // related state updates. Some state updates might depends on drawCallParams changes rather
     // than dirty bits themselves.
+    // FIXME: add dirty bits guard.
     ANGLE_TRY(mVertexArray->syncState(context, mDirtyBits, drawCallParams));
     mDirtyBits.reset();
     return NoError();
+}
+
+void VertexArray::onSubjectStateChange(const gl::Context *context,
+                                       angle::SubjectIndex index,
+                                       angle::SubjectMessage message)
+{
+    if (index == mArrayBufferObserverBindings.size())
+    {
+        mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+    }
+    else
+    {
+        ASSERT(index < mArrayBufferObserverBindings.size());
+        mDirtyBits.set(DIRTY_BIT_BINDING_0_BUFFER + index);
+    }
 }
 
 }  // namespace gl

@@ -10,7 +10,6 @@
 #define LIBANGLE_RENDERER_D3D_D3D11_VERTEXARRAY11_H_
 
 #include "libANGLE/Framebuffer.h"
-#include "libANGLE/Observer.h"
 #include "libANGLE/renderer/VertexArrayImpl.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
@@ -19,7 +18,7 @@ namespace rx
 {
 class Renderer11;
 
-class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
+class VertexArray11 : public VertexArrayImpl
 {
   public:
     VertexArray11(const gl::VertexArrayState &data);
@@ -36,11 +35,6 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
 
     const std::vector<TranslatedAttribute> &getTranslatedAttribs() const;
 
-    // Observer implementation
-    void onSubjectStateChange(const gl::Context *context,
-                              angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
-
     Serial getCurrentStateSerial() const { return mCurrentStateSerial; }
 
     // In case of a multi-view program change, we have to update all attributes so that the divisor
@@ -48,14 +42,15 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
     void markAllAttributeDivisorsForAdjustment(int numViews);
 
     // Returns true if the element array buffer needs to be translated.
-    bool updateElementArrayStorage(const gl::Context *context,
-                                   GLenum elementType,
-                                   GLenum destElementType,
-                                   const void *indices);
+    gl::Error updateElementArrayStorage(const gl::Context *context,
+                                        const gl::DrawCallParams &drawCallParams,
+                                        bool restartEnabled);
 
-    TranslatedIndexData *getCachedIndexInfo();
-    void setCachedIndexInfoValid();
+    const TranslatedIndexData &getCachedIndexInfo() const;
+    void updateCachedIndexInfo(const TranslatedIndexData &indexInfo);
     bool isCachedIndexInfoValid() const;
+
+    GLenum getCachedDestinationIndexType() const;
 
   private:
     void updateVertexAttribStorage(const gl::Context *context, size_t attribIndex);
@@ -77,24 +72,18 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
     // A set of attributes we know are dirty, and need to be re-translated.
     gl::AttributesMask mAttribsToTranslate;
 
-    // We need to keep a safe pointer to the Buffer so we can attach the correct dirty callbacks.
-    std::vector<gl::BindingPointer<gl::Buffer>> mCurrentArrayBuffers;
-    gl::BindingPointer<gl::Buffer> mCurrentElementArrayBuffer;
-
-    std::vector<angle::ObserverBinding> mOnArrayBufferDataDirty;
-    angle::ObserverBinding mOnElementArrayBufferDataDirty;
-
     Serial mCurrentStateSerial;
 
     // The numViews value used to adjust the divisor.
     int mAppliedNumViewsToDivisor;
 
     // If the index buffer needs re-streaming.
-    GLenum mLastElementType;
-    unsigned int mLastDrawElementsOffset;
+    Optional<GLenum> mLastDrawElementsType;
+    Optional<const void *> mLastDrawElementsIndices;
+    Optional<bool> mLastPrimitiveRestartEnabled;
     IndexStorageType mCurrentElementArrayStorage;
-    TranslatedIndexData mCachedIndexInfo;
-    bool mCachedIndexInfoValid;
+    Optional<TranslatedIndexData> mCachedIndexInfo;
+    GLenum mCachedDestinationIndexType;
 };
 
 }  // namespace rx
