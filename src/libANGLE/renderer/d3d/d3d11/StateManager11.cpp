@@ -2637,8 +2637,7 @@ gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMod
 
 gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
                                             GLenum mode,
-                                            const gl::DrawCallParams &drawCallParams,
-                                            bool isIndexedRendering)
+                                            const gl::DrawCallParams &drawCallParams)
 {
     const auto &state       = context->getGLState();
     const gl::VertexArray *vertexArray = state.getVertexArray();
@@ -2685,8 +2684,9 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
                                                   sortedSemanticIndices, drawCallParams));
 
     // Update the applied vertex buffers.
-    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(
-        context, mCurrentAttributes, mode, drawCallParams.firstVertex(), isIndexedRendering));
+    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(context, mCurrentAttributes, mode,
+                                                   drawCallParams.firstVertex(),
+                                                   drawCallParams.isDrawElements()));
 
     // InputLayoutCache::applyVertexBuffers calls through to the Bufer11 to get the native vertex
     // buffer (ID3D11Buffer *). Because we allocate these buffers lazily, this will trigger

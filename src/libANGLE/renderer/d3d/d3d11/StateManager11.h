@@ -240,8 +240,7 @@ class StateManager11 final : angle::NonCopyable
     // Not handled by an internal dirty bit because of the extra draw parameters.
     gl::Error applyVertexBuffer(const gl::Context *context,
                                 GLenum mode,
-                                const gl::DrawCallParams &vertexParams,
-                                bool isIndexedRendering);
+                                const gl::DrawCallParams &vertexParams);
 
     gl::Error applyIndexBuffer(const gl::Context *context,
                                const gl::DrawCallParams &drawCallParams,
