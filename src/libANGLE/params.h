@@ -93,9 +93,6 @@ class DrawCallParams final : angle::NonCopyable
     // Called by DrawElementsIndirect.
     DrawCallParams(GLenum mode, GLenum type, const void *indirect);
 
-    // It should be possible to also use an overload to handle the 'slow' indirect draw path.
-    // TODO(jmadill): Indirect draw slow path overload.
-
     GLenum mode() const;
 
     // This value is the sum of 'baseVertex' and the first indexed vertex for DrawElements calls.
