@@ -91,9 +91,11 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
 }
 
 void VertexArrayVk::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits)
+                              const gl::VertexArray::DirtyBits &dirtyBits,
+                              const gl::DrawCallParams &drawCallParams)
 {
-    ASSERT(dirtyBits.any());
+    if (!dirtyBits.any())
+        return;
 
     // Invalidate current pipeline.
     ContextVk *contextVk = vk::GetImpl(context);

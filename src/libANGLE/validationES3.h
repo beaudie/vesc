@@ -428,7 +428,7 @@ bool ValidateGetSynciv(Context *context,
                        GLsizei *length,
                        GLint *values);
 
-bool ValidateDrawElementsInstanced(ValidationContext *context,
+bool ValidateDrawElementsInstanced(Context *context,
                                    GLenum mode,
                                    GLsizei count,
                                    GLenum type,

@@ -594,7 +594,7 @@ bool ValidateVertexAttrib4f(ValidationContext *context,
                             GLfloat w);
 bool ValidateVertexAttrib4fv(ValidationContext *context, GLuint index, const GLfloat *values);
 bool ValidateViewport(ValidationContext *context, GLint x, GLint y, GLsizei width, GLsizei height);
-bool ValidateDrawElements(ValidationContext *context,
+bool ValidateDrawElements(Context *context,
                           GLenum mode,
                           GLsizei count,
                           GLenum type,
