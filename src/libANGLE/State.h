@@ -418,12 +418,13 @@ class State : public angle::ObserverInterface, angle::NonCopyable
 
     static_assert(DIRTY_BIT_MAX <= 64, "State dirty bits must be capped at 64");
 
+    // Note that the Vertex Array is not stored in the list of dirty objects, because it is
+    // synced unconditionally every draw, and only on draw calls.
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType
     {
         DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
-        DIRTY_OBJECT_VERTEX_ARRAY,
         // Use a very coarse bit for any program or texture change.
         // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
         DIRTY_OBJECT_PROGRAM_TEXTURES,

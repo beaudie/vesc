@@ -1067,11 +1067,6 @@ void State::setVertexArrayBinding(VertexArray *vertexArray)
 {
     mVertexArray = vertexArray;
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-
-    if (mVertexArray && mVertexArray->hasAnyDirtyBit())
-    {
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
-    }
 }
 
 GLuint State::getVertexArrayId() const
@@ -1092,7 +1087,6 @@ bool State::removeVertexArrayBinding(GLuint vertexArray)
     {
         mVertexArray = nullptr;
         mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
         return true;
     }
 
@@ -1106,13 +1100,11 @@ void State::bindVertexBuffer(const Context *context,
                              GLsizei stride)
 {
     getVertexArray()->bindVertexBuffer(context, bindingIndex, boundBuffer, offset, stride);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribBinding(const Context *context, GLuint attribIndex, GLuint bindingIndex)
 {
     getVertexArray()->setVertexAttribBinding(context, attribIndex, bindingIndex);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribFormat(GLuint attribIndex,
@@ -1124,13 +1116,11 @@ void State::setVertexAttribFormat(GLuint attribIndex,
 {
     getVertexArray()->setVertexAttribFormat(attribIndex, size, type, normalized, pureInteger,
                                             relativeOffset);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
 {
     getVertexArray()->setVertexBindingDivisor(bindingIndex, divisor);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setProgram(const Context *context, Program *newProgram)
@@ -1274,7 +1264,6 @@ void State::setBufferBinding(const Context *context, BufferBinding target, Buffe
             break;
         case BufferBinding::ElementArray:
             getVertexArray()->setElementArrayBuffer(context, buffer);
-            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case BufferBinding::ShaderStorage:
             mBoundBuffers[target].set(context, buffer);
@@ -1368,7 +1357,6 @@ void State::detachBuffer(const Context *context, GLuint bufferName)
 void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
 {
     getVertexArray()->enableAttribute(attribNum, enabled);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribf(GLuint index, const GLfloat values[4])
@@ -1410,13 +1398,11 @@ void State::setVertexAttribPointer(const Context *context,
 {
     getVertexArray()->setVertexAttribPointer(context, attribNum, boundBuffer, size, type,
                                              normalized, pureInteger, stride, pointer);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribDivisor(const Context *context, GLuint index, GLuint divisor)
 {
     getVertexArray()->setVertexAttribDivisor(context, index, divisor);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 const VertexAttribCurrentValueData &State::getVertexAttribCurrentValue(size_t attribNum) const
@@ -2257,10 +2243,6 @@ void State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
                 ASSERT(mDrawFramebuffer);
                 mDrawFramebuffer->syncState(context);
                 break;
-            case DIRTY_OBJECT_VERTEX_ARRAY:
-                ASSERT(mVertexArray);
-                mVertexArray->syncState(context);
-                break;
             case DIRTY_OBJECT_PROGRAM_TEXTURES:
                 syncProgramTextures(context);
                 break;
@@ -2365,9 +2347,6 @@ void State::syncDirtyObject(const Context *context, GLenum target)
             localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
             localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
             break;
-        case GL_VERTEX_ARRAY:
-            localSet.set(DIRTY_OBJECT_VERTEX_ARRAY);
-            break;
         case GL_TEXTURE:
         case GL_SAMPLER:
         case GL_PROGRAM:
@@ -2391,9 +2370,6 @@ void State::setObjectDirty(GLenum target)
         case GL_FRAMEBUFFER:
             mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-            break;
-        case GL_VERTEX_ARRAY:
-            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case GL_TEXTURE:
         case GL_SAMPLER:

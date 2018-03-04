@@ -152,7 +152,7 @@ class ValidationContext : angle::NonCopyable
 
     // Caches entry point parameters and values re-used between layers.
     mutable const ParamTypeInfo *mSavedArgsType;
-    static constexpr size_t kParamsBufferSize = 64u;
+    static constexpr size_t kParamsBufferSize = 128u;
     mutable std::array<uint8_t, kParamsBufferSize> mParamsBuffer;
 };
 

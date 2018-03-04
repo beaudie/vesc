@@ -5840,7 +5840,7 @@ bool ValidateDrawArrays(ValidationContext *context, GLenum mode, GLint first, GL
     return ValidateDrawArraysCommon(context, mode, first, count, 1);
 }
 
-bool ValidateDrawElements(ValidationContext *context,
+bool ValidateDrawElements(Context *context,
                           GLenum mode,
                           GLsizei count,
                           GLenum type,

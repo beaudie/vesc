@@ -272,14 +272,14 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       GLsizei primcount);
 
 bool ValidateDrawElementsBase(ValidationContext *context, GLenum type);
-bool ValidateDrawElementsCommon(ValidationContext *context,
+bool ValidateDrawElementsCommon(Context *context,
                                 GLenum mode,
                                 GLsizei count,
                                 GLenum type,
                                 const void *indices,
                                 GLsizei primcount);
 
-bool ValidateDrawElementsInstancedCommon(ValidationContext *context,
+bool ValidateDrawElementsInstancedCommon(Context *context,
                                          GLenum mode,
                                          GLsizei count,
                                          GLenum type,
@@ -594,5 +594,11 @@ bool ValidateGetInternalFormativBase(Context *context,
                                      GLsizei *numParams);
 
 }  // namespace gl
+
+// Utility macro for handling implementation methods inside Validation.
+#define ANGLE_HANDLE_VALIDATION_ERR(X) \
+    context->handleError(X);           \
+    return false;
+#define ANGLE_VALIDATION_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_HANDLE_VALIDATION_ERR);
 
 #endif  // LIBANGLE_VALIDATION_ES_H_

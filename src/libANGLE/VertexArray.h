@@ -30,6 +30,7 @@ class VertexArrayImpl;
 namespace gl
 {
 class Buffer;
+class DrawCallParams;
 
 class VertexArrayState final : angle::NonCopyable
 {
@@ -190,7 +191,7 @@ class VertexArray final : public LabeledObject
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
 
-    void syncState(const Context *context);
+    void syncState(const Context *context, const DrawCallParams &drawCallParams);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }

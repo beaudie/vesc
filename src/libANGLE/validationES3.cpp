@@ -1289,15 +1289,12 @@ bool ValidateDrawRangeElements(Context *context,
     }
 
     // Use the parameter buffer to retrieve and cache the index range.
-    const auto &params        = context->getParams<HasIndexRange>();
-    const auto &indexRangeOpt = params.getIndexRange();
-    if (!indexRangeOpt.valid())
-    {
-        // Unexpected error.
-        return false;
-    }
+    const auto &params = context->getParams<DrawCallParams>();
+    ANGLE_VALIDATION_TRY(params.ensureIndexRangeResolved(context));
 
-    if (indexRangeOpt.value().end > end || indexRangeOpt.value().start < start)
+    const IndexRange &indexRange = params.getIndexRange();
+
+    if (indexRange.end > end || indexRange.start < start)
     {
         // GL spec says that behavior in this case is undefined - generating an error is fine.
         context->handleError(InvalidOperation() << "Indices are out of the start, end range.");
@@ -2781,7 +2778,7 @@ bool ValidateGetSynciv(Context *context,
     return true;
 }
 
-bool ValidateDrawElementsInstanced(ValidationContext *context,
+bool ValidateDrawElementsInstanced(Context *context,
                                    GLenum mode,
                                    GLsizei count,
                                    GLenum type,
