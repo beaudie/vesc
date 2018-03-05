@@ -1723,7 +1723,8 @@ void Framebuffer::updateAttachment(const Context *context,
                        multiviewLayout, viewportOffsets);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
-    onDirtyBinding->bind(resource ? resource->getSubject() : nullptr);
+    onDirtyBinding->bind(resource ? resource->getSubject() : nullptr,
+                         &Framebuffer::onSubjectStateChange);
 }
 
 void Framebuffer::resetAttachment(const Context *context, GLenum binding)
