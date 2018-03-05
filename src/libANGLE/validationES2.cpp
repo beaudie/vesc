@@ -376,9 +376,15 @@ bool IsValidCopyTextureDestinationLevel(Context *context,
                                         GLenum target,
                                         GLint level,
                                         GLsizei width,
-                                        GLsizei height)
+                                        GLsizei height,
+                                        bool isSubImage)
 {
     if (!ValidMipLevel(context, target, level))
+    {
+        return false;
+    }
+
+    if (!ValidImageSizeParameters(context, target, level, width, height, 1 /*depth*/, isSubImage))
     {
         return false;
     }
@@ -3928,7 +3934,7 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
     }
 
     if (!IsValidCopyTextureDestinationLevel(context, destTarget, destLevel, sourceWidth,
-                                            sourceHeight))
+                                            sourceHeight, false /*isSubImage*/))
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidMipLevel);
         return false;
@@ -4055,7 +4061,8 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
         return false;
     }
 
-    if (!IsValidCopyTextureDestinationLevel(context, destTarget, destLevel, width, height))
+    if (!IsValidCopyTextureDestinationLevel(context, destTarget, destLevel, width, height,
+                                            true /*isSubImage*/))
     {
         context->handleError(InvalidValue() << "Destination texture level is not valid.");
         return false;
