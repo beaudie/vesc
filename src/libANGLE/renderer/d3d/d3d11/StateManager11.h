@@ -574,7 +574,7 @@ class StateManager11 final : angle::NonCopyable
 
         void onSubjectStateChange(const gl::Context *context,
                                   angle::SubjectIndex index,
-                                  angle::SubjectMessage message) override;
+                                  angle::SubjectMessage message);
 
         void reset();
         void bindVS(size_t index, Buffer11 *buffer);

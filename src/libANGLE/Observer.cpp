@@ -71,7 +71,7 @@ void Subject::resetObservers()
 
 // ObserverBinding implementation.
 ObserverBinding::ObserverBinding(ObserverInterface *observer, SubjectIndex index)
-    : mSubject(nullptr), mObserver(observer), mIndex(index)
+    : mSubject(nullptr), mObserver(observer), mIndex(index), mFunction(nullptr)
 {
     ASSERT(observer);
 }
@@ -85,7 +85,7 @@ ObserverBinding::ObserverBinding(const ObserverBinding &other) = default;
 
 ObserverBinding &ObserverBinding::operator=(const ObserverBinding &other) = default;
 
-void ObserverBinding::bind(Subject *subject)
+void ObserverBinding::bind(Subject *subject, ObserverInterface::Function function)
 {
     ASSERT(mObserver);
     if (mSubject)
@@ -93,7 +93,8 @@ void ObserverBinding::bind(Subject *subject)
         mSubject->removeObserver(this);
     }
 
-    mSubject = subject;
+    mSubject  = subject;
+    mFunction = function;
 
     if (mSubject)
     {
@@ -103,12 +104,12 @@ void ObserverBinding::bind(Subject *subject)
 
 void ObserverBinding::reset()
 {
-    bind(nullptr);
+    bind(nullptr, nullptr);
 }
 
 void ObserverBinding::onStateChange(const gl::Context *context, SubjectMessage message) const
 {
-    mObserver->onSubjectStateChange(context, mIndex, message);
+    (mObserver->*mFunction)(context, mIndex, message);
 }
 
 void ObserverBinding::onSubjectReset()

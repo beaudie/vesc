@@ -2320,7 +2320,8 @@ void State::syncProgramTextures(const Context *context)
             }
 
             // Bind the texture unconditionally, to recieve completeness change notifications.
-            mCompleteTextureBindings[textureUnitIndex].bind(texture->getSubject());
+            mCompleteTextureBindings[textureUnitIndex].bind(texture->getSubject(),
+                                                            &State::onSubjectStateChange);
             mActiveTexturesMask.set(textureUnitIndex);
             newActiveTextures.set(textureUnitIndex);
 

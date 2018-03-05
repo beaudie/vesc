@@ -36,9 +36,9 @@ class ObserverInterface
 {
   public:
     virtual ~ObserverInterface();
-    virtual void onSubjectStateChange(const gl::Context *context,
-                                      SubjectIndex index,
-                                      SubjectMessage message) = 0;
+    using Function = void (ObserverInterface::*)(const gl::Context *context,
+                                                 SubjectIndex index,
+                                                 SubjectMessage message);
 };
 
 class ObserverBinding;
@@ -72,16 +72,26 @@ class ObserverBinding final
     ObserverBinding(const ObserverBinding &other);
     ObserverBinding &operator=(const ObserverBinding &other);
 
-    void bind(Subject *subject);
+    template <typename FuncT>
+    void bind(Subject *subject, FuncT function);
     void reset();
     void onStateChange(const gl::Context *context, SubjectMessage message) const;
     void onSubjectReset();
 
   private:
+    void bind(Subject *subject, ObserverInterface::Function function);
+
     Subject *mSubject;
     ObserverInterface *mObserver;
     SubjectIndex mIndex;
+    ObserverInterface::Function mFunction;
 };
+
+template <typename FuncT>
+void ObserverBinding::bind(Subject *subject, FuncT function)
+{
+    bind(subject, static_cast<ObserverInterface::Function>(function));
+}
 
 }  // namespace angle
 

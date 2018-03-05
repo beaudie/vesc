@@ -3269,26 +3269,28 @@ void StateManager11::OnConstantBufferDirtyReceiver::bindVS(size_t index, Buffer1
 {
     ASSERT(buffer);
     ASSERT(index < mBindingsVS.size());
-    mBindingsVS[index].bind(buffer->getDirectSubject());
+    mBindingsVS[index].bind(buffer->getDirectSubject(),
+                            &OnConstantBufferDirtyReceiver::onSubjectStateChange);
 }
 
 void StateManager11::OnConstantBufferDirtyReceiver::bindPS(size_t index, Buffer11 *buffer)
 {
     ASSERT(buffer);
     ASSERT(index < mBindingsPS.size());
-    mBindingsPS[index].bind(buffer->getDirectSubject());
+    mBindingsPS[index].bind(buffer->getDirectSubject(),
+                            &OnConstantBufferDirtyReceiver::onSubjectStateChange);
 }
 
 void StateManager11::OnConstantBufferDirtyReceiver::reset()
 {
     for (angle::ObserverBinding &vsBinding : mBindingsVS)
     {
-        vsBinding.bind(nullptr);
+        vsBinding.bind(nullptr, nullptr);
     }
 
     for (angle::ObserverBinding &psBinding : mBindingsPS)
     {
-        psBinding.bind(nullptr);
+        psBinding.bind(nullptr, nullptr);
     }
 }
 

@@ -41,7 +41,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::ObserverInterface
     // Observer implementation
     void onSubjectStateChange(const gl::Context *context,
                               angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
+                              angle::SubjectMessage message);
 
     Serial getCurrentStateSerial() const { return mCurrentStateSerial; }
 
