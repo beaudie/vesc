@@ -119,6 +119,27 @@ class CopyTextureTest : public ANGLETest
         EXPECT_EQ(expectedUniqueValues[3], uniqueValues[3].size());
     }
 
+    template <typename T>
+    void FillTexture2D(GLuint texture,
+                       GLsizei width,
+                       GLsizei height,
+                       const T &onePixelData,
+                       GLint level,
+                       GLint internalFormat,
+                       GLenum format,
+                       GLenum type)
+    {
+        std::vector<T> allPixelsData(width * height, onePixelData);
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type,
+                     allPixelsData.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
     GLuint mTextures[2] = {
         0, 0,
     };
@@ -130,6 +151,12 @@ class CopyTextureTest : public ANGLETest
 
 class CopyTextureTestDest : public CopyTextureTest
 {
+};
+
+class CopyTextureTestWebGL : public CopyTextureTest
+{
+  protected:
+    CopyTextureTestWebGL() : CopyTextureTest() { setWebGLCompatibilityEnabled(true); }
 };
 
 class CopyTextureTestES3 : public CopyTextureTest
@@ -1179,6 +1206,35 @@ TEST_P(CopyTextureTestDest, AlphaCopyWithRGB)
     EXPECT_PIXEL_COLOR_EQ(0, 0, expectedPixels);
 }
 
+// Test to ensure that CopyTexture will fail with a non-zero level and NPOT texture in WebGL
+TEST_P(CopyTextureTestWebGL, NPOT)
+{
+    if (extensionRequestable("GL_CHROMIUM_copy_texture"))
+    {
+        glRequestExtensionANGLE("GL_CHROMIUM_copy_texture");
+    }
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_CHROMIUM_copy_texture"));
+
+    std::vector<GLColor> pixelData(10 * 10, GLColor::red);
+
+    glBindTexture(GL_TEXTURE_2D, mTextures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+
+    // Do a basic copy to make sure things work
+    glCopyTextureCHROMIUM(mTextures[0], 0, GL_TEXTURE_2D, mTextures[1], 0, GL_RGBA,
+                          GL_UNSIGNED_BYTE, false, false, false);
+
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Do the same operation with destLevel 1, which should fail
+    glCopyTextureCHROMIUM(mTextures[0], 0, GL_TEXTURE_2D, mTextures[1], 1, GL_RGBA,
+                          GL_UNSIGNED_BYTE, false, false, false);
+
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
 // Test the newly added ES3 unorm formats
 TEST_P(CopyTextureTestES3, ES3UnormFormats)
 {
@@ -1524,6 +1580,7 @@ TEST_P(CopyTextureTestES3, ES3UintFormats)
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(CopyTextureTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
+ANGLE_INSTANTIATE_TEST(CopyTextureTestWebGL, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
 ANGLE_INSTANTIATE_TEST(CopyTextureTestDest, ES2_D3D11());
 ANGLE_INSTANTIATE_TEST(CopyTextureTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
