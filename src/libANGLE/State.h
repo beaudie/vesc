@@ -466,7 +466,7 @@ class State : public angle::ObserverInterface, angle::NonCopyable
     // Observer implementation.
     void onSubjectStateChange(const Context *context,
                               angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
+                              angle::SubjectMessage message);
 
     Error clearUnclearedActiveTextures(const Context *context);
 
