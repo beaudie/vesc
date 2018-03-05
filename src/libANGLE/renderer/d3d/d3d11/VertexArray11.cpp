@@ -159,7 +159,7 @@ bool VertexArray11::updateElementArrayStorage(const gl::Context *context,
         angle::Subject *subject = GetBufferSubject(newBuffer11, newStorageType);
 
         mCurrentElementArrayStorage = newStorageType;
-        mOnElementArrayBufferDataDirty.bind(subject);
+        mOnElementArrayBufferDataDirty.bind(subject, &VertexArray11::onSubjectStateChange);
         needsTranslation = true;
     }
 
@@ -246,7 +246,7 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
             }
         }
 
-        mOnArrayBufferDataDirty[attribIndex].bind(subject);
+        mOnArrayBufferDataDirty[attribIndex].bind(subject, &VertexArray11::onSubjectStateChange);
         mCurrentArrayBuffers[attribIndex].set(context, binding.getBuffer().get());
     }
 }

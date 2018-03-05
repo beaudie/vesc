@@ -686,7 +686,7 @@ Error AllocateImageMemory(RendererVk *renderer,
 // first/last vertex and the current commandBuffer. If the user wants to draw a loop between [v1,
 // v2, v3], we will create an indexed buffer with these indexes: [0, 1, 2, 3, 0] to emulate the
 // loop.
-class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
+class LineLoopHandler final : public angle::ObserverInterface, angle::NonCopyable
 {
   public:
     LineLoopHandler();
@@ -708,7 +708,7 @@ class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
     // Observer interface implementation.
     void onSubjectStateChange(const gl::Context *context,
                               angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
+                              angle::SubjectMessage message);
 
   private:
     angle::ObserverBinding mObserverBinding;

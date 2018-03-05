@@ -304,7 +304,7 @@ class Framebuffer final : public angle::ObserverInterface, public LabeledObject
     // Observer implementation
     void onSubjectStateChange(const Context *context,
                               angle::SubjectIndex index,
-                              angle::SubjectMessage message) override;
+                              angle::SubjectMessage message);
 
     bool formsRenderingFeedbackLoopWith(const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,

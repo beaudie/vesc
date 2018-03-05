@@ -1397,7 +1397,7 @@ gl::Error LineLoopHandler::createIndexBufferFromElementArrayBuffer(ContextVk *co
 
     // We want to know if the bufferVk changes at any point in time, because if it does we need to
     // recopy our data on the next call.
-    mObserverBinding.bind(bufferVk);
+    mObserverBinding.bind(bufferVk, &LineLoopHandler::onSubjectStateChange);
 
     uint32_t *indices = nullptr;
 

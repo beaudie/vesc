@@ -20,7 +20,7 @@ struct ObserverClass : public ObserverInterface
 {
     void onSubjectStateChange(const gl::Context *context,
                               SubjectIndex index,
-                              SubjectMessage message) override
+                              SubjectMessage message)
     {
         wasNotified = true;
     }
@@ -34,7 +34,7 @@ TEST(ObserverTest, BasicUsage)
     ObserverClass observer;
     ObserverBinding binding(&observer, 0u);
 
-    binding.bind(&subject);
+    binding.bind(&subject, &ObserverClass::onSubjectStateChange);
     ASSERT_FALSE(observer.wasNotified);
     subject.onStateChange(nullptr, SubjectMessage::STATE_CHANGE);
     ASSERT_TRUE(observer.wasNotified);
