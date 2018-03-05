@@ -2735,7 +2735,7 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
     // mExtensions.robustBufferAccessBehavior is true only if robust access is true and the backend
     // supports it.
     mExtensions.robustBufferAccessBehavior =
-        mRobustAccess && mExtensions.robustBufferAccessBehavior;
+        mExtensions.robustBufferAccessBehavior;
 
     // Enable the cache control query unconditionally.
     mExtensions.programCacheControl = true;

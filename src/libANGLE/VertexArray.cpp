@@ -16,7 +16,7 @@ namespace gl
 {
 
 VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
-    : mLabel(), mVertexBindings(maxAttribBindings)
+    : mLabel(), mVertexBindings(maxAttribBindings), mMaxAttribDataSizeNoOffsetCache(maxAttribBindings, 0)
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
@@ -28,6 +28,19 @@ VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
 
 VertexArrayState::~VertexArrayState()
 {
+}
+
+void VertexArrayState::updateMaxAttribDataSizeCache(size_t index)
+{
+    const VertexAttribute &attrib = mVertexAttributes[index];
+    const VertexBinding &binding = mVertexBindings[index];
+
+    // FIXME: swizzle and dependent state change.
+    uint64_t bufferSize = binding.getBuffer().get()->getSize();
+    uint64_t attribOffset = ComputeVertexAttributeOffset(attrib, binding);
+    uint64_t attribSize = ComputeVertexAttributeTypeSize(attrib);
+
+    mMaxAttribDataSizeNoOffsetCache[index] = bufferSize - attribOffset - attribSize;
 }
 
 VertexArray::VertexArray(rx::GLImplFactory *factory,
@@ -121,6 +134,10 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     binding->setBuffer(context, boundBuffer);
     binding->setOffset(offset);
     binding->setStride(stride);
+
+    // FIXME: needs swizzle.
+    mState.mClientVertexArraysMask.set(bindingIndex, boundBuffer == nullptr);
+    mState.mEnabledBufferArraysMask.set(bindingIndex, mState.mVertexAttributes[bindingIndex].enabled);
 }
 
 void VertexArray::bindVertexBuffer(const Context *context,
@@ -211,6 +228,8 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
+    mState.mEnabledBufferArraysMask.set(attribIndex, enabledState && mState.mVertexBindings[attribIndex].getBuffer().get() != nullptr);
+
 }
 
 void VertexArray::setVertexAttribPointer(const Context *context,
@@ -237,7 +256,11 @@ void VertexArray::setVertexAttribPointer(const Context *context,
     attrib.pointer                 = pointer;
     attrib.vertexAttribArrayStride = stride;
 
+    mState.mZeroPointerVertexArraysMask.set(attribIndex, pointer == nullptr);
+
     bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
+
+    mState.updateMaxAttribDataSizeCache(attribIndex);
 
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_POINTER + attribIndex);
 }
@@ -255,6 +278,21 @@ void VertexArray::syncState(const Context *context)
         mVertexArray->syncState(context, mDirtyBits);
         mDirtyBits.reset();
     }
+}
+
+bool VertexArray::hasClientVertexArrays() const
+{
+    return (mState.mClientVertexArraysMask & mState.mEnabledAttributesMask).any();
+}
+
+bool VertexArray::hasNullPointerClientVertexArray() const
+{
+    return (mState.mClientVertexArraysMask & mState.mEnabledAttributesMask & mState.mZeroPointerVertexArraysMask).any();
+}
+
+AttributesMask VertexArray::getActiveBufferAttributesMask(const AttributesMask &activeAttribsMask) const
+{
+    return (mState.mEnabledBufferArraysMask & activeAttribsMask);
 }
 
 }  // namespace gl

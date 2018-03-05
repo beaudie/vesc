@@ -72,62 +72,51 @@ bool ValidateDrawAttribs(ValidationContext *context,
                          GLint maxVertex,
                          GLint vertexCount)
 {
-    const gl::State &state     = context->getGLState();
-    const gl::Program *program = state.getProgram();
+    const gl::State &state = context->getGLState();
+    const VertexArray *vao = state.getVertexArray();
 
-    bool webglCompatibility = context->getExtensions().webglCompatibility;
+    if (vao->hasClientVertexArrays())
+    {
+        if (context->getExtensions().webglCompatibility || !state.areClientArraysEnabled())
+        {
+            // [WebGL 1.0] Section 6.5 Enabled Vertex Attributes and Range Checking
+            // If a vertex attribute is enabled as an array via enableVertexAttribArray but
+            // no buffer is bound to that attribute via bindBuffer and vertexAttribPointer,
+            // then calls to drawArrays or drawElements will generate an INVALID_OPERATION
+            // error.
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), VertexArrayNoBuffer);
+            return false;
+        }
+        else if (vao->hasNullPointerClientVertexArray())
+        {
+            // This is an application error that would normally result in a crash,
+            // but we catch it and return an error
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), VertexArrayNoBufferPointer);
+            return false;
+        }
+    }
 
-    const VertexArray *vao     = state.getVertexArray();
     const auto &vertexAttribs  = vao->getVertexAttributes();
     const auto &vertexBindings = vao->getVertexBindings();
-    for (size_t attributeIndex : vao->getEnabledAttributesMask())
+    const gl::Program *program = state.getProgram();
+
+    // If we're drawing zero vertices, we have enough data.
+    // This needs to come after the check for client arrays as even unused attributes cannot use
+    // client-side arrays
+    if (vertexCount <= 0 || primcount <= 0)
+    {
+        return true;
+    }
+
+    const auto &cache = vao->getMaxAttribDataSizeNoOffsetCache();
+
+    for (size_t attributeIndex : vao->getActiveBufferAttributesMask(program->getActiveAttribLocationsMask()))
     {
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
 
-        // No need to range check for disabled attribs.
-        if (!attrib.enabled)
-        {
-            continue;
-        }
-
         // If we have no buffer, then we either get an error, or there are no more checks to be
         // done.
-        const VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
-        gl::Buffer *buffer            = binding.getBuffer().get();
-        if (!buffer)
-        {
-            if (webglCompatibility || !state.areClientArraysEnabled())
-            {
-                // [WebGL 1.0] Section 6.5 Enabled Vertex Attributes and Range Checking
-                // If a vertex attribute is enabled as an array via enableVertexAttribArray but
-                // no buffer is bound to that attribute via bindBuffer and vertexAttribPointer,
-                // then calls to drawArrays or drawElements will generate an INVALID_OPERATION
-                // error.
-                ANGLE_VALIDATION_ERR(context, InvalidOperation(), VertexArrayNoBuffer);
-                return false;
-            }
-            else if (attrib.pointer == nullptr)
-            {
-                // This is an application error that would normally result in a crash,
-                // but we catch it and return an error
-                ANGLE_VALIDATION_ERR(context, InvalidOperation(), VertexArrayNoBufferPointer);
-                return false;
-            }
-            continue;
-        }
-
-        // This needs to come after the check for client arrays as even unused attributes cannot use
-        // client-side arrays
-        if (!program->isAttribLocationActive(attributeIndex))
-        {
-            continue;
-        }
-
-        // If we're drawing zero vertices, we have enough data.
-        if (vertexCount <= 0 || primcount <= 0)
-        {
-            continue;
-        }
+        const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
 
         GLint maxVertexElement = 0;
         GLuint divisor         = binding.getDivisor();
@@ -152,28 +141,26 @@ bool ValidateDrawAttribs(ValidationContext *context,
         // We know attribStride is given as a GLsizei which is typedefed to int.
         // We also know an upper bound for attribSize.
         static_assert(std::is_same<int, GLsizei>::value, "");
-        uint64_t attribStride = ComputeVertexAttributeStride(attrib, binding);
-        uint64_t attribSize   = ComputeVertexAttributeTypeSize(attrib);
-        ASSERT(attribStride <= kIntMax && attribSize <= kMaxAttribSize);
+        uint64_t attribStride = binding.getStride();
+        //ASSERT(attribStride <= kIntMax && attribSize <= kMaxAttribSize);
 
         // Computing the max offset using uint64_t without attrib.offset is overflow
         // safe. Note: Last vertex element does not take the full stride!
         static_assert(kIntMax * kIntMax < kUint64Max - kMaxAttribSize, "");
-        uint64_t attribDataSizeNoOffset = maxVertexElement * attribStride + attribSize;
+        uint64_t attribDataSize = maxVertexElement * attribStride;
 
-        // An overflow can happen when adding the offset, check for it.
-        uint64_t attribOffset = ComputeVertexAttributeOffset(attrib, binding);
-        if (attribDataSizeNoOffset > kUint64Max - attribOffset)
-        {
-            ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
-            return false;
-        }
-        uint64_t attribDataSizeWithOffset = attribDataSizeNoOffset + attribOffset;
+        //// An overflow can happen when adding the offset, check for it.
+        //if (attribDataSizeNoOffset > kUint64Max - attribOffset)
+        //{
+        //    ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
+        //    return false;
+        //}
+        //uint64_t attribDataSizeWithOffset = attribDataSizeNoOffset + attribOffset;
 
         // [OpenGL ES 3.0.2] section 2.9.4 page 40:
         // We can return INVALID_OPERATION if our vertex attribute does not have
         // enough backing data.
-        if (attribDataSizeWithOffset > static_cast<uint64_t>(buffer->getSize()))
+        if (attribDataSize > cache[attributeIndex])
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientVertexBufferSize);
             return false;

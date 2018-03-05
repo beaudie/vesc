@@ -62,7 +62,13 @@ class VertexArrayState final : angle::NonCopyable
         return mVertexAttributes[attribIndex].bindingIndex;
     }
 
+    const std::vector<uint64_t> &getMaxAttribDataSizeNoOffsetCache() const
+    {
+        return mMaxAttribDataSizeNoOffsetCache;
+    }
+
   private:
+      void updateMaxAttribDataSizeCache(size_t index);
     friend class VertexArray;
     std::string mLabel;
     std::vector<VertexAttribute> mVertexAttributes;
@@ -70,6 +76,10 @@ class VertexArrayState final : angle::NonCopyable
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
     ComponentTypeMask mVertexAttributesTypeMask;
+    AttributesMask mClientVertexArraysMask;
+    AttributesMask mZeroPointerVertexArraysMask;
+    AttributesMask mEnabledBufferArraysMask;
+    std::vector<uint64_t> mMaxAttribDataSizeNoOffsetCache;
 };
 
 class VertexArray final : public LabeledObject
@@ -152,6 +162,15 @@ class VertexArray final : public LabeledObject
     {
         return mState.getEnabledAttributesMask();
     }
+
+    const std::vector<uint64_t> &getMaxAttribDataSizeNoOffsetCache() const
+    {
+        return mState.mMaxAttribDataSizeNoOffsetCache;
+    }
+
+    bool hasClientVertexArrays() const;
+    bool hasNullPointerClientVertexArray() const;
+    AttributesMask getActiveBufferAttributesMask(const AttributesMask &activeAttribsMask) const;
 
     enum DirtyBitType
     {
