@@ -27,7 +27,7 @@ template_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
 // {out_file_name}:
 //   Queries for full Vulkan format information based on GL format.
 
-#include "libANGLE/renderer/vulkan/formatutilsvk.h"
+#include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
 #include "image_util/copyimage.h"
 #include "image_util/generatemip.h"
