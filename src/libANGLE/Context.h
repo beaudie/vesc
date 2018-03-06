@@ -1317,7 +1317,6 @@ class Context final : angle::NonCopyable
     State::DirtyBits mBlitDirtyBits;
     State::DirtyObjects mBlitDirtyObjects;
     State::DirtyBits mComputeDirtyBits;
-    State::DirtyObjects mComputeDirtyObjects;
 
     Workarounds mWorkarounds;
 

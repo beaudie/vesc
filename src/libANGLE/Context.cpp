@@ -416,7 +416,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
 
-    // TODO(xinghua.cao@intel.com): add other dirty bits and dirty objects.
+    // TODO(xinghua.cao@intel.com): add other dirty bits.
     mComputeDirtyBits.set(State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
     mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_BINDING);
     mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_EXECUTABLE);
@@ -4354,7 +4354,8 @@ Error Context::getZeroFilledBuffer(size_t requstedSizeBytes,
 
 Error Context::prepareForDispatch()
 {
-    ANGLE_TRY(syncState(mComputeDirtyBits, mComputeDirtyObjects));
+    ANGLE_TRY(syncDirtyObjects());
+    ANGLE_TRY(syncDirtyBits(mComputeDirtyBits));
 
     if (isRobustResourceInitEnabled())
     {
