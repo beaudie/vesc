@@ -205,6 +205,13 @@ bool EGLWindow::initializeDisplayAndSurface(OSWindow *osWindow)
         displayAttributes.push_back(mDebugLayersEnabled.value() ? EGL_TRUE : EGL_FALSE);
     }
 
+    // Set VK Null driver if requested. TODO : Is this appropriate place to set this?
+    if (mNullDriverEnabled.valid())
+    {
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+        displayAttributes.push_back(mNullDriverEnabled.value() ? EGL_TRUE : EGL_FALSE);
+    }
+
     if (mPlatformMethods)
     {
         static_assert(sizeof(EGLAttrib) == sizeof(mPlatformMethods), "Unexpected pointer size");

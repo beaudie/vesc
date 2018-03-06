@@ -382,6 +382,19 @@ bool ShouldUseDebugLayers(const egl::AttributeMap &attribs)
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
 }
 
+bool ShouldUseNullICD(const egl::AttributeMap &attribs)
+{
+    EGLAttrib nullSetting = attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE, EGL_DONT_CARE);
+
+// TODO: We don't want NULL driver on in Debug by default. Just doing this for testing for now
+#if 0
+    //defined(ANGLE_ENABLE_ASSERTS)
+    return (nullSetting != EGL_FALSE);
+#else
+    return (nullSetting == EGL_TRUE);
+#endif  // defined(ANGLE_ENABLE_ASSERTS)
+}
+
 void CopyImageCHROMIUM(const uint8_t *sourceData,
                        size_t sourceRowPitch,
                        size_t sourcePixelBytes,

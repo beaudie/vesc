@@ -88,11 +88,14 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
 // If we're loading the validation layers, we could be running from any random directory.
 // Change to the executable directory so we can find the layers, then change back to the
 // previous directory to be safe we don't disrupt the application.
+// TODO: Set ICD env var in similar fashion
 class ScopedVkLoaderEnvironment : angle::NonCopyable
 {
   public:
-    ScopedVkLoaderEnvironment(bool enableValidationLayers)
-        : mEnableValidationLayers(enableValidationLayers), mChangedCWD(false)
+    ScopedVkLoaderEnvironment(bool enableValidationLayers, bool enableNullDriver)
+        : mEnableValidationLayers(enableValidationLayers),
+          mEnableNullDriver(enableNullDriver),
+          mChangedCWD(false)
     {
 // Changing CWD and setting environment variables makes no sense on Android,
 // since this code is a part of Java application there.
@@ -128,6 +131,17 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
                 mEnableValidationLayers = false;
             }
         }
+
+        // Override environement variable to use Vulkan Mock ICD
+        if (mEnableNullDriver)
+        {
+            // ANGLE_VK_MOCK_ICD_DIR gets set to built mock ICD in BUILD.gn
+            if (!angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_MOCK_ICD_DIR))
+            {
+                ERR() << "Error setting Vk Mock ICD environment for Vulkan init";
+                mEnableNullDriver = false;
+            }
+        }
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
     }
 
@@ -144,8 +158,11 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 
     bool canEnableValidationLayers() { return mEnableValidationLayers; }
 
+    bool canEnableNullDriver() { return mEnableNullDriver; }
+
   private:
     bool mEnableValidationLayers;
+    bool mEnableNullDriver;
     bool mChangedCWD;
     Optional<std::string> mPreviousCWD;
 };
@@ -250,8 +267,10 @@ RendererVk::~RendererVk()
 
 vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *wsiName)
 {
-    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs));
+    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
+                                                ShouldUseNullICD(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
+    mEnableNullDriver       = scopedEnvironment.canEnableNullDriver();
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
@@ -278,6 +297,7 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     uint32_t enabledLayerCount           = 0;
     if (mEnableValidationLayers)
     {
+        // TODO : Model this code to add EGL ext backdoor to turn on Mock VK ICD
         bool layersRequested =
             (attribs.get(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE, EGL_DONT_CARE) == EGL_TRUE);
         mEnableValidationLayers = GetAvailableValidationLayers(
@@ -345,11 +365,29 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     ANGLE_VK_CHECK(physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
-    physicalDeviceCount = 1;
-    ANGLE_VK_TRY(vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, &mPhysicalDevice));
-
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    ANGLE_VK_TRY(
+        vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, physicalDevices.data()));
+    // Favor the first-returned physicalDevice by default
+    mPhysicalDevice = physicalDevices[0];
     vkGetPhysicalDeviceProperties(mPhysicalDevice, &mPhysicalDeviceProperties);
 
+    // If NULL driver is enabled then use it if it's found
+    if (mEnableNullDriver)
+    {
+        VkPhysicalDeviceProperties physicalDeviceProperties;
+        for (const auto &physicalDevice : physicalDevices)
+        {
+            vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
+            // These are the vendor/device ID values for the Mock ICD
+            if ((0xba5eba11 == physicalDeviceProperties.vendorID) &&
+                (0xf005ba11 == physicalDeviceProperties.deviceID))
+            {
+                mPhysicalDevice           = physicalDevice;
+                mPhysicalDeviceProperties = physicalDeviceProperties;
+            }
+        }
+    }
     // Ensure we can find a graphics queue family.
     uint32_t queueCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueCount, nullptr);

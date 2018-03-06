@@ -323,6 +323,7 @@ class ANGLETestBase
     void setRobustAccess(bool enabled);
     void setBindGeneratesResource(bool bindGeneratesResource);
     void setDebugLayersEnabled(bool enabled);
+    void setNullDriverEnabled(bool enabled);
     void setClientArraysEnabled(bool enabled);
     void setRobustResourceInit(bool enabled);
     void setContextProgramCacheEnabled(bool enabled);

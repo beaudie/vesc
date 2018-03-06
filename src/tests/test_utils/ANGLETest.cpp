@@ -225,6 +225,9 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     // Default debug layers to enabled in tests.
     mEGLWindow->setDebugLayersEnabled(true);
 
+    // TODO: Make this dynamic & not sure this is best place to set this value.
+    mEGLWindow->setNullDriverEnabled(true);
+
     // Workaround for NVIDIA not being able to share OpenGL and Vulkan contexts.
     EGLint renderer      = params.getRenderer();
     bool needsWindowSwap = mLastRendererType.valid() &&
@@ -865,6 +868,11 @@ void ANGLETestBase::setBindGeneratesResource(bool bindGeneratesResource)
 void ANGLETestBase::setDebugLayersEnabled(bool enabled)
 {
     mEGLWindow->setDebugLayersEnabled(enabled);
+}
+
+void ANGLETestBase::setNullDriverEnabled(bool enabled)
+{
+    mEGLWindow->setNullDriverEnabled(enabled);
 }
 
 void ANGLETestBase::setClientArraysEnabled(bool enabled)
