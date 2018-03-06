@@ -260,6 +260,7 @@ config("vulkan_loader_config") {
   ]
   defines = [
     "ANGLE_VK_LAYERS_DIR=\"$data_dir\"",
+    "ANGLE_VK_MOCK_ICD_DIR=\"$data_dir\"",
     "API_NAME=\"Vulkan\"",
   ]
 
@@ -518,12 +519,12 @@ if (!is_android) {
 
     # The layer JSON files are part of the necessary data deps.
     outputs = [
-      "$root_out_dir/$data_dir/icd/VkICD_mock_icd.json",
+      "$root_out_dir/$data_dir/VkICD_mock_icd.json",
     ]
     data = [
-      "$root_out_dir/$data_dir/icd/VkICD_mock_icd.json",
+      "$root_out_dir/$data_dir/VkICD_mock_icd.json",
     ]
-    args += [ rebase_path("$root_out_dir/$data_dir/icd", root_build_dir) ]
+    args += [ rebase_path("$root_out_dir/$data_dir", root_build_dir) ]
   }
 }
 
