@@ -648,12 +648,36 @@ LoadImageFunctionInfo LUMINANCE32F_EXT_to_default(GLenum type)
     }
 }
 
+LoadImageFunctionInfo LUMINANCE8_ALPHA8_EXT_to_L8A8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 2>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo LUMINANCE8_ALPHA8_EXT_to_default(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadLA8ToRGBA8, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo LUMINANCE8_EXT_to_L8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 1>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1867,9 +1891,25 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, Format::ID angleForma
         case GL_LUMINANCE32F_EXT:
             return LUMINANCE32F_EXT_to_default;
         case GL_LUMINANCE8_ALPHA8_EXT:
-            return LUMINANCE8_ALPHA8_EXT_to_default;
+        {
+            switch (angleFormat)
+            {
+                case Format::ID::L8A8_UNORM:
+                    return LUMINANCE8_ALPHA8_EXT_to_L8A8_UNORM;
+                default:
+                    return LUMINANCE8_ALPHA8_EXT_to_default;
+            }
+        }
         case GL_LUMINANCE8_EXT:
-            return LUMINANCE8_EXT_to_default;
+        {
+            switch (angleFormat)
+            {
+                case Format::ID::L8_UNORM:
+                    return LUMINANCE8_EXT_to_L8_UNORM;
+                default:
+                    return LUMINANCE8_EXT_to_default;
+            }
+        }
         case GL_LUMINANCE_ALPHA:
         {
             switch (angleFormat)

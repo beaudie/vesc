@@ -2379,8 +2379,10 @@ TEST_P(Texture2DTestES3, TextureRGBImplicitAlpha1)
 
 // When sampling a texture without an alpha channel, "1" is returned as the alpha value.
 // ES 3.0.4 table 3.24
-TEST_P(Texture2DTestES3, TextureLuminanceImplicitAlpha1)
+TEST_P(Texture2DTest, TextureLuminanceImplicitAlpha1)
 {
+    setUpProgram();
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
@@ -2391,10 +2393,43 @@ TEST_P(Texture2DTestES3, TextureLuminanceImplicitAlpha1)
     EXPECT_PIXEL_ALPHA_EQ(0, 0, 255);
 }
 
+TEST_P(Texture2DTest, TextureLuminanceRGBSame)
+{
+    setUpProgram();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    uint8_t pixel = 50;
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, &pixel);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(pixel, pixel, pixel, 255));
+}
+
+TEST_P(Texture2DTest, TextureLuminanceAlphaRGBSame)
+{
+    setUpProgram();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    uint8_t pixel[] = {50, 25};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, 1, 1, 0, GL_LUMINANCE_ALPHA,
+                 GL_UNSIGNED_BYTE, pixel);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(pixel[0], pixel[0], pixel[0], pixel[1]));
+}
+
 // When sampling a texture without an alpha channel, "1" is returned as the alpha value.
 // ES 3.0.4 table 3.24
-TEST_P(Texture2DTestES3, TextureLuminance32ImplicitAlpha1)
+TEST_P(Texture2DTest, TextureLuminance32ImplicitAlpha1)
 {
+    setUpProgram();
+
     if (extensionEnabled("GL_OES_texture_float"))
     {
         glActiveTexture(GL_TEXTURE0);
@@ -2410,10 +2445,12 @@ TEST_P(Texture2DTestES3, TextureLuminance32ImplicitAlpha1)
 
 // When sampling a texture without an alpha channel, "1" is returned as the alpha value.
 // ES 3.0.4 table 3.24
-TEST_P(Texture2DTestES3, TextureLuminance16ImplicitAlpha1)
+TEST_P(Texture2DTest, TextureLuminance16ImplicitAlpha1)
 {
     if (extensionEnabled("GL_OES_texture_half_float"))
     {
+        setUpProgram();
+
         ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
 
         // TODO(ynovikov): re-enable once root cause of http://anglebug.com/1420 is fixed
@@ -3677,7 +3714,8 @@ ANGLE_INSTANTIATE_TEST(Texture2DTest,
                        ES2_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES());
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(TextureCubeTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
