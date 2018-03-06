@@ -2337,7 +2337,14 @@ void State::syncProgramTextures(const Context *context)
         return;
     }
 
-    ASSERT(mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES]);
+    // mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES] may be 0 if we call DispatchCompute more than
+    // once and use the same program. Draw* won't meet 0 is because render pipeline reach here
+    // through syncDirtyObjects(context) not syncDirtyObjects(context, mComputeDirtyObjects).
+    if (!mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES])
+    {
+        return;
+    }
+
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 
     ActiveTextureMask newActiveTextures;
