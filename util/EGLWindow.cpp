@@ -126,6 +126,7 @@ EGLWindow::EGLWindow(EGLint glesMajorVersion,
       mSwapInterval(-1),
       mSamples(-1),
       mDebugLayersEnabled(),
+      mNullDriverEnabled(),
       mContextProgramCacheEnabled(),
       mPlatformMethods(nullptr)
 {
@@ -203,6 +204,13 @@ bool EGLWindow::initializeDisplayAndSurface(OSWindow *osWindow)
     {
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE);
         displayAttributes.push_back(mDebugLayersEnabled.value() ? EGL_TRUE : EGL_FALSE);
+    }
+
+    // Set VK Null driver if requested.
+    if (mNullDriverEnabled.valid())
+    {
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+        displayAttributes.push_back(mNullDriverEnabled.value() ? EGL_TRUE : EGL_FALSE);
     }
 
     if (mPlatformMethods)

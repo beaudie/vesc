@@ -80,6 +80,7 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
         mBindGeneratesResource = bindGeneratesResource;
     }
     void setDebugLayersEnabled(bool enabled) { mDebugLayersEnabled = enabled; }
+    void setNullDriverEnabled(bool enabled) { mNullDriverEnabled = enabled; }
     void setClientArraysEnabled(bool enabled) { mClientArraysEnabled = enabled; }
     void setRobustAccess(bool enabled) { mRobustAccess = enabled; }
     void setRobustResourceInit(bool enabled) { mRobustResourceInit = enabled; }
@@ -158,6 +159,7 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
     EGLint mSwapInterval;
     EGLint mSamples;
     Optional<bool> mDebugLayersEnabled;
+    Optional<bool> mNullDriverEnabled;
     Optional<bool> mContextProgramCacheEnabled;
     angle::PlatformMethods *mPlatformMethods;
 };

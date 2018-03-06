@@ -138,6 +138,7 @@ class RendererVk : angle::NonCopyable
 
     VkInstance mInstance;
     bool mEnableValidationLayers;
+    bool mEnableNullDriver;
     VkDebugReportCallbackEXT mDebugReportCallback;
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
