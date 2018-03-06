@@ -28,6 +28,13 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "platform/Platform.h"
 
+// Consts
+namespace
+{
+const uint32_t MockVendorID = 0xba5eba11;
+const uint32_t MockDeviceID = 0xf005ba11;
+}
+
 namespace rx
 {
 
@@ -253,6 +260,22 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
 
+    bool enableNullDriver = false;
+#if !defined(ANGLE_PLATFORM_ANDROID)  // Mock ICD does not currently run on Android
+    enableNullDriver = (attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
+                                    EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE) ==
+                        EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+    if (enableNullDriver)
+    {
+        // Override environment variable to use built Mock ICD
+        // ANGLE_VK_MOCK_ICD_DIR gets set to the built mock ICD in BUILD.gn
+        if (!angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_MOCK_ICD_DIR))
+        {
+            ERR() << "Error setting Vk Mock ICD environment for Vulkan init";
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+    }
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     ANGLE_VK_TRY(vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
@@ -345,10 +368,30 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     ANGLE_VK_CHECK(physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
-    physicalDeviceCount = 1;
-    ANGLE_VK_TRY(vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, &mPhysicalDevice));
-
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    ANGLE_VK_TRY(
+        vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, physicalDevices.data()));
+    // Favor the first-returned physicalDevice by default
+    mPhysicalDevice = physicalDevices[0];
     vkGetPhysicalDeviceProperties(mPhysicalDevice, &mPhysicalDeviceProperties);
+
+    // If NULL driver is enabled then use it if it's found
+    if (enableNullDriver)
+    {
+        VkPhysicalDeviceProperties physicalDeviceProperties;
+        for (const auto &physicalDevice : physicalDevices)
+        {
+            vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
+            // These are the vendor/device ID values for the Mock ICD
+            if ((MockVendorID == physicalDeviceProperties.vendorID) &&
+                (MockDeviceID == physicalDeviceProperties.deviceID) &&
+                (strcmp("Vulkan Mock Device", physicalDeviceProperties.deviceName) == 0))
+            {
+                mPhysicalDevice           = physicalDevice;
+                mPhysicalDeviceProperties = physicalDeviceProperties;
+            }
+        }
+    }
 
     // Ensure we can find a graphics queue family.
     uint32_t queueCount = 0;
