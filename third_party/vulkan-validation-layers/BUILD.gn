@@ -260,6 +260,7 @@ config("vulkan_loader_config") {
   ]
   defines = [
     "ANGLE_VK_LAYERS_DIR=\"$data_dir\"",
+    "ANGLE_VK_MOCK_ICD_DIR=\"$data_dir/icd\"",
     "API_NAME=\"Vulkan\"",
   ]
 

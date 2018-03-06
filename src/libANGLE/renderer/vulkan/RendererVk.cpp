@@ -28,6 +28,14 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "platform/Platform.h"
 
+// Consts
+namespace
+{
+const uint32_t kMockVendorID     = 0xba5eba11;
+const uint32_t kMockDeviceID     = 0xf005ba11;
+constexpr char kMockDeviceName[] = "Vulkan Mock Device";
+}  // anonymous namespace
+
 namespace rx
 {
 
@@ -248,11 +256,53 @@ RendererVk::~RendererVk()
     mPhysicalDevice = VK_NULL_HANDLE;
 }
 
+void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
+                          bool preferMockICD,
+                          VkPhysicalDevice *physicalDeviceOut,
+                          VkPhysicalDeviceProperties *physicalDevicePropertiesOut)
+{
+    ASSERT(!physicalDevices.empty());
+    if (preferMockICD)
+    {
+        for (const VkPhysicalDevice &physicalDevice : physicalDevices)
+        {
+            vkGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
+            if ((kMockVendorID == physicalDevicePropertiesOut.vendorID) &&
+                (kMockDeviceID == physicalDevicePropertiesOut.deviceID) &&
+                (strcmp(kMockDeviceName, physicalDevicePropertiesOut.deviceName) == 0))
+            {
+                *physicalDeviceOut = physicalDevice;
+                return;
+            }
+        }
+        WARN() << "Vulkan Mock Driver was requested but Mock Device was not found. Using default "
+                  "physicalDevice instead.";
+    }
+
+    // Fall back to first device.
+    *physicalDeviceOut = physicalDevices[0];
+    vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
+}
+
 vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *wsiName)
 {
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
 
+    bool enableNullDriver = false;
+#if !defined(ANGLE_PLATFORM_ANDROID)
+    // Mock ICD does not currently run on Android
+    enableNullDriver = (attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
+                                    EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE) ==
+                        EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+    if (enableNullDriver)
+    {
+        // Override environment variable to use built Mock ICD
+        // ANGLE_VK_MOCK_ICD_DIR gets set to the built mock ICD in BUILD.gn
+        ANGLE_VK_CHECK(angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_MOCK_ICD_DIR),
+                       VK_ERROR_INITIALIZATION_FAILED);
+    }
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     ANGLE_VK_TRY(vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
@@ -345,10 +395,29 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     ANGLE_VK_CHECK(physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
-    physicalDeviceCount = 1;
-    ANGLE_VK_TRY(vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, &mPhysicalDevice));
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    ANGLE_VK_TRY(
+        vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, physicalDevices.data()));
+    ChoosePhysicalDevice(physicalDevices, enableNullDriver, &mPhysicalDevice,
+                         &mPhysicalDeviceProperties);
 
-    vkGetPhysicalDeviceProperties(mPhysicalDevice, &mPhysicalDeviceProperties);
+    // If NULL driver is enabled then use it if it's found
+    if (enableNullDriver)
+    {
+        VkPhysicalDeviceProperties physicalDeviceProperties;
+        for (const auto &physicalDevice : physicalDevices)
+        {
+            vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
+            // These are the vendor/device ID values for the Mock ICD
+            if ((kMockVendorID == physicalDeviceProperties.vendorID) &&
+                (kMockDeviceID == physicalDeviceProperties.deviceID) &&
+                (strcmp(kMockDeviceName, physicalDeviceProperties.deviceName) == 0))
+            {
+                mPhysicalDevice           = physicalDevice;
+                mPhysicalDeviceProperties = physicalDeviceProperties;
+            }
+        }
+    }
 
     // Ensure we can find a graphics queue family.
     uint32_t queueCount = 0;
