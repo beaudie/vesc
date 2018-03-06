@@ -2337,7 +2337,11 @@ void State::syncProgramTextures(const Context *context)
         return;
     }
 
-    ASSERT(mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES]);
+    if (!mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES])
+    {
+        return;
+    }
+
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 
     ActiveTextureMask newActiveTextures;
