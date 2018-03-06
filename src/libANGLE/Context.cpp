@@ -423,6 +423,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mComputeDirtyBits.set(State::DIRTY_BIT_TEXTURE_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
 
     handleError(mImplementation->initialize());
 }
@@ -2980,7 +2981,8 @@ Error Context::syncDirtyObjects()
 
 Error Context::syncDirtyObjects(const State::DirtyObjects &objectMask)
 {
-    return mGLState.syncDirtyObjects(this, objectMask);
+    const State::DirtyObjects &dirtyObjects = (mGLState.getDirtyObjects() & objectMask);
+    return mGLState.syncDirtyObjects(this, dirtyObjects);
 }
 
 void Context::blitFramebuffer(GLint srcX0,

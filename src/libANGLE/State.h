@@ -439,6 +439,7 @@ class State : public angle::ObserverInterface, angle::NonCopyable
     void setAllDirtyBits() { mDirtyBits.set(); }
 
     using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
+    const DirtyObjects &getDirtyObjects() const { return mDirtyObjects; }
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
     Error syncDirtyObjects(const Context *context);
