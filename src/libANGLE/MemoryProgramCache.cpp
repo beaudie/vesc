@@ -106,6 +106,7 @@ void WriteBufferVariable(BinaryOutputStream *stream, const BufferVariable &var)
     stream->writeInt(var.vertexStaticUse);
     stream->writeInt(var.fragmentStaticUse);
     stream->writeInt(var.computeStaticUse);
+    stream->writeInt(var.geometryStaticUse);
 }
 
 void LoadBufferVariable(BinaryInputStream *stream, BufferVariable *var)
@@ -122,6 +123,7 @@ void LoadBufferVariable(BinaryInputStream *stream, BufferVariable *var)
     var->vertexStaticUse               = stream->readBool();
     var->fragmentStaticUse             = stream->readBool();
     var->computeStaticUse              = stream->readBool();
+    var->geometryStaticUse             = stream->readBool();
 }
 
 void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block)

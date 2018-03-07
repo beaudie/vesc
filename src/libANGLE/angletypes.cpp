@@ -39,6 +39,24 @@ PrimitiveType GetPrimitiveType(GLenum drawMode)
     }
 }
 
+GLenum GetShaderTypeGLenum(ShaderType shaderType)
+{
+    switch (shaderType)
+    {
+        case ShaderType::SHADER_VERTEX:
+            return GL_VERTEX_SHADER;
+        case ShaderType::SHADER_GEOMETRY:
+            return GL_GEOMETRY_SHADER_EXT;
+        case ShaderType::SHADER_FRAGMENT:
+            return GL_FRAGMENT_SHADER;
+        case ShaderType::SHADER_COMPUTE:
+            return GL_COMPUTE_SHADER;
+        default:
+            UNREACHABLE();
+            return GL_INVALID_VALUE;
+    }
+}
+
 RasterizerState::RasterizerState()
 {
     memset(this, 0, sizeof(RasterizerState));

@@ -43,11 +43,16 @@ PrimitiveType GetPrimitiveType(GLenum drawMode);
 enum ShaderType
 {
     SHADER_VERTEX,
-    SHADER_FRAGMENT,
     SHADER_GEOMETRY,
-    SHADER_COMPUTE,
+    SHADER_FRAGMENT,
+    SHADER_GRAPHICS_MAX,
+
+    SHADER_COMPUTE = SHADER_GRAPHICS_MAX,
+
     SHADER_TYPE_MAX
 };
+
+GLenum GetShaderTypeGLenum(ShaderType shaderType);
 
 struct Rectangle
 {
