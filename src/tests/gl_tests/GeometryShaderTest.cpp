@@ -317,7 +317,7 @@ TEST_P(GeometryShaderTest, VertexShaderArrayOutput)
 }
 
 // Verify that an link error occurs when the definition of a unform in fragment shader is different
-// from those in a geometry shader.
+// from that in a geometry shader.
 TEST_P(GeometryShaderTest, UniformMismatchBetweenGeometryAndFragmentShader)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_geometry_shader"));
@@ -360,6 +360,181 @@ TEST_P(GeometryShaderTest, UniformMismatchBetweenGeometryAndFragmentShader)
         })";
 
     GLuint program = CompileProgramWithGS(vertexShader, geometryShader, fragmentShader);
+    EXPECT_EQ(0u, program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Verify that an link error occurs when the number of uniform blocks in a geometry shader exceeds
+// MAX_GEOMETRY_UNIFORM_BLOCKS_EXT.
+TEST_P(GeometryShaderTest, TooManyUniformBlocks)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_geometry_shader"));
+
+    GLint maxGeometryUniformBlocks = 0;
+    glGetIntegerv(GL_MAX_GEOMETRY_UNIFORM_BLOCKS_EXT, &maxGeometryUniformBlocks);
+
+    GLint numUniformBlocks = maxGeometryUniformBlocks + 1;
+    std::ostringstream stream;
+    stream << "#version 310 es\n"
+              "#extension GL_EXT_geometry_shader : require\n"
+              "uniform ubo\n"
+              "{\n"
+              "    vec4 value1;\n"
+              "} block0["
+           << numUniformBlocks
+           << "];\n"
+              "layout (triangles) in;\n"
+              "layout (points, max_vertices = 1) out;\n"
+              "void main()\n"
+              "{\n"
+              "    gl_Position = gl_in[0].gl_Position;\n";
+
+    for (GLint i = 0; i < numUniformBlocks; ++i)
+    {
+        stream << "    gl_Position += block0[" << i << "].value1;\n";
+    }
+    stream << "    EmitVertex();\n"
+              "}\n";
+
+    GLuint program =
+        CompileProgramWithGS(kDefaultVertexShader, stream.str(), kDefaultFragmentShader);
+    EXPECT_EQ(0u, program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Verify that an link error occurs when the number of shader storage blocks in a geometry shader
+// exceeds MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT.
+TEST_P(GeometryShaderTest, TooManyShaderStorageBlocks)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_geometry_shader"));
+
+    GLint maxGeometryShaderStorageBlocks = 0;
+    glGetIntegerv(GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT, &maxGeometryShaderStorageBlocks);
+
+    GLint numSSBOs = maxGeometryShaderStorageBlocks + 1;
+    std::ostringstream stream;
+    stream << "#version 310 es\n"
+              "#extension GL_EXT_geometry_shader : require\n"
+              "buffer ssbo\n"
+              "{\n"
+              "    vec4 value1;\n"
+              "} block0["
+           << numSSBOs
+           << "];\n"
+              "layout (triangles) in;\n"
+              "layout (points, max_vertices = 1) out;\n"
+              "void main()\n"
+              "{\n"
+              "    gl_Position = gl_in[0].gl_Position;\n";
+
+    for (GLint i = 0; i < numSSBOs; ++i)
+    {
+        stream << "    gl_Position += block0[" << i << "].value1;\n";
+    }
+    stream << "    EmitVertex();\n"
+              "}\n";
+
+    GLuint program =
+        CompileProgramWithGS(kDefaultVertexShader, stream.str(), kDefaultFragmentShader);
+    EXPECT_EQ(0u, program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Verify that an link error occurs when the definition of a unform block in the vertex shader is
+// different from that in a geometry shader.
+TEST_P(GeometryShaderTest, UniformBlockMismatchBetweenVertexAndGeometryShader)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_geometry_shader"));
+
+    const std::string &vertexShader =
+        R"(#version 310 es
+        uniform ubo
+        {
+            vec4 uniform_value_vert;
+        } block0;
+        in vec4 vertex_in;
+        out vec4 vertex_out;
+        void main()
+        {
+            gl_Position = vertex_in;
+            vertex_out = block0.uniform_value_vert;
+        })";
+
+    const std::string &geometryShader =
+        R"(#version 310 es
+        #extension GL_EXT_geometry_shader : require
+        uniform ubo
+        {
+            vec4 uniform_value_geom;
+        } block0;
+        layout (triangles) in;
+        layout (points, max_vertices = 1) out;
+        in vec4 vertex_out[];
+        void main()
+        {
+            gl_Position = gl_in[0].gl_Position + vertex_out[0];
+            gl_Position += block0.uniform_value_geom;
+            EmitVertex();
+        })";
+
+    GLuint program = CompileProgramWithGS(vertexShader, geometryShader, kDefaultFragmentShader);
+    EXPECT_EQ(0u, program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Verify that an link error occurs when the definition of a shader storage block in the geometry
+// shader is different from that in a fragment shader.
+TEST_P(GeometryShaderTest, ShaderStorageBlockMismatchBetweenGeometryAndFragmentShader)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_geometry_shader"));
+
+    GLint maxGeometryShaderStorageBlocks = 0;
+    glGetIntegerv(GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT, &maxGeometryShaderStorageBlocks);
+
+    // The minimun value of MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT can be 0.
+    // [EXT_geometry_shader] Table 20.43gs
+    ANGLE_SKIP_TEST_IF(maxGeometryShaderStorageBlocks == 0);
+
+    GLint maxFragmentShaderStorageBlocks = 0;
+    glGetIntegerv(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, &maxFragmentShaderStorageBlocks);
+
+    // The minimun value of MAX_FRAGMENT_SHADER_STORAGE_BLOCKS can be 0.
+    // [OpenGL ES 3.1] Table 20.44
+    ANGLE_SKIP_TEST_IF(maxFragmentShaderStorageBlocks == 0);
+
+    const std::string &geometryShader =
+        R"(#version 310 es
+        #extension GL_EXT_geometry_shader : require
+        buffer ssbo
+        {
+            vec4 ssbo_value;
+        } block0;
+        layout (triangles) in;
+        layout (points, max_vertices = 1) out;
+        void main()
+        {
+            gl_Position = gl_in[0].gl_Position + block0.ssbo_value;
+            EmitVertex();
+        })";
+
+    const std::string &fragmentShader =
+        R"(#version 310 es
+        precision highp float;
+        buffer ssbo
+        {
+            vec3 ssbo_value;
+        } block0;
+        layout (location = 0) out vec4 output_color;
+        void main()
+        {
+            output_color = vec4(block0.ssbo_value, 1);
+        })";
+
+    GLuint program = CompileProgramWithGS(kDefaultVertexShader, geometryShader, fragmentShader);
     EXPECT_EQ(0u, program);
 
     EXPECT_GL_NO_ERROR();
