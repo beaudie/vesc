@@ -157,6 +157,14 @@ class ConfigSorter
 
         static_assert(EGL_RGB_BUFFER < EGL_LUMINANCE_BUFFER, "Unexpected EGL enum value.");
         SORT(colorBufferType);
+        // Sorting configs by alphaSize ensures correct ordering of configs when context is
+        // initialized with alpha set to false. It ensures the correct config later get selected and
+        // used. For example, if we do not sort them by alphaSize, a config with RGB10_A2 format
+        // would be put in front of a config with RGB8 format due to comparing ComponentSize. Later,
+        // the config with RGB10_A2 would be chosen and used, but the config with RGB8 is what we
+        // really need since context's alpha channel is set to false. Therefore, sorting configs by
+        // alphaSize is necessary to ensure correct behavior.
+        SORT(alphaSize);
 
         // By larger total number of color bits, only considering those that are requested to be > 0.
         EGLint xComponentsSize = wantedComponentsSize(x);
