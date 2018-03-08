@@ -1593,7 +1593,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxGeometryShaderStorageBlocks;
             break;
         default:
-            mGLState.getIntegerv(this, pname, params);
+            handleError(mGLState.getIntegerv(this, pname, params));
             break;
     }
 }
@@ -3297,7 +3297,9 @@ void Context::invalidateFramebuffer(GLenum target,
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->checkStatus(this) != GL_FRAMEBUFFER_COMPLETE)
+    bool complete = false;
+    ANGLE_CONTEXT_TRY(framebuffer->isComplete(this, &complete));
+    if (!complete)
     {
         return;
     }
@@ -3319,7 +3321,9 @@ void Context::invalidateSubFramebuffer(GLenum target,
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->checkStatus(this) != GL_FRAMEBUFFER_COMPLETE)
+    bool complete = false;
+    ANGLE_CONTEXT_TRY(framebuffer->isComplete(this, &complete));
+    if (!complete)
     {
         return;
     }
@@ -4382,7 +4386,14 @@ GLenum Context::checkFramebufferStatus(GLenum target)
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    return framebuffer->checkStatus(this);
+    GLenum status = GL_NONE;
+    Error err     = framebuffer->checkStatus(this, &status);
+    if (err.isError())
+    {
+        handleError(err);
+        return 0;
+    }
+    return status;
 }
 
 void Context::compileShader(GLuint shader)
