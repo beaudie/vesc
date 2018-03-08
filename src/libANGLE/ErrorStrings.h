@@ -41,10 +41,13 @@ ERRMSG(ExceedsMaxElement, "Element value exceeds maximum element index.");
 ERRMSG(ExpectedProgramName, "Expected a program name, but found a shader name.");
 ERRMSG(ExpectedShaderName, "Expected a shader name, but found a program name.");
 ERRMSG(ExtensionNotEnabled, "Extension is not enabled.");
+ERRMSG(EXTgeometryshaderRequired, "GL_EXT_geometry_shader Required.")
 ERRMSG(FeedbackLoop, "Feedback loop formed between Framebuffer and active Texture.");
 ERRMSG(FramebufferIncompleteAttachment,
        "Attachment type must be compatible with attachment object.");
 ERRMSG(GenerateMipmapNotAllowed, "Texture format does not support mipmap generation.");
+ERRMSG(IncompatibleDrawModeAgainstGeometryShader,
+       "Primitive mode is incompatible with the input primitive type of the geometry shader.");
 ERRMSG(IndexExceedsMaxActiveUniform, "Index exceeds program active uniform count.");
 ERRMSG(IndexExceedsMaxDrawBuffer, "Index exceeds MAX_DRAW_BUFFERS.");
 ERRMSG(IndexExceedsMaxVertexAttribute, "Index exceeds MAX_VERTEX_ATTRIBS.");
