@@ -41,6 +41,8 @@ ERRMSG(FeedbackLoop, "Feedback loop formed between Framebuffer and active Textur
 ERRMSG(FramebufferIncompleteAttachment,
        "Attachment type must be compatible with attachment object.");
 ERRMSG(GenerateMipmapNotAllowed, "Texture format does not support mipmap generation.");
+ERRMSG(IncompatibleDrawModeAgainstGeometryShader,
+       "Primitive mode is incompatible with the input primitive type of the geometry shader.");
 ERRMSG(IndexExceedsMaxActiveUniform, "Index exceeds program active uniform count.");
 ERRMSG(IndexExceedsMaxDrawBuffer, "Index exceeds MAX_DRAW_BUFFERS.");
 ERRMSG(IndexExceedsMaxVertexAttribute, "Index exceeds MAX_VERTEX_ATTRIBS.");
