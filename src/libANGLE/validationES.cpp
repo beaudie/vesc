@@ -67,10 +67,7 @@ bool CompressedSubTextureFormatRequiresExactSize(GLenum internalFormat)
     return CompressedTextureFormatRequiresExactSize(internalFormat) ||
            IsETC2EACFormat(internalFormat);
 }
-bool ValidateDrawAttribs(ValidationContext *context,
-                         GLint primcount,
-                         GLint maxVertex,
-                         GLint vertexCount)
+bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLint vertexCount)
 {
     const gl::State &state     = context->getGLState();
     const gl::Program *program = state.getProgram();
@@ -183,7 +180,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
     return true;
 }
 
-bool ValidReadPixelsTypeEnum(ValidationContext *context, GLenum type)
+bool ValidReadPixelsTypeEnum(Context *context, GLenum type)
 {
     switch (type)
     {
@@ -224,7 +221,7 @@ bool ValidReadPixelsTypeEnum(ValidationContext *context, GLenum type)
     }
 }
 
-bool ValidReadPixelsFormatEnum(ValidationContext *context, GLenum format)
+bool ValidReadPixelsFormatEnum(Context *context, GLenum format)
 {
     switch (format)
     {
@@ -255,7 +252,7 @@ bool ValidReadPixelsFormatEnum(ValidationContext *context, GLenum format)
     }
 }
 
-bool ValidReadPixelsFormatType(ValidationContext *context,
+bool ValidReadPixelsFormatType(Context *context,
                                GLenum framebufferComponentType,
                                GLenum format,
                                GLenum type)
@@ -453,7 +450,7 @@ bool ValidateTextureMaxAnisotropyValue(Context *context, GLfloat paramValue)
     return true;
 }
 
-bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
+bool ValidateFragmentShaderColorBufferTypeMatch(Context *context)
 {
     const Program *program         = context->getGLState().getProgram();
     const Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
@@ -470,7 +467,7 @@ bool ValidateFragmentShaderColorBufferTypeMatch(ValidationContext *context)
     return true;
 }
 
-bool ValidateVertexShaderAttributeTypeMatch(ValidationContext *context)
+bool ValidateVertexShaderAttributeTypeMatch(Context *context)
 {
     const auto &glState       = context->getGLState();
     const Program *program = context->getGLState().getProgram();
@@ -517,7 +514,7 @@ bool IsETC2EACFormat(const GLenum format)
     }
 }
 
-bool ValidTextureTarget(const ValidationContext *context, TextureType type)
+bool ValidTextureTarget(const Context *context, TextureType type)
 {
     switch (type)
     {
@@ -540,7 +537,7 @@ bool ValidTextureTarget(const ValidationContext *context, TextureType type)
     }
 }
 
-bool ValidTexture2DTarget(const ValidationContext *context, TextureType type)
+bool ValidTexture2DTarget(const Context *context, TextureType type)
 {
     switch (type)
     {
@@ -556,7 +553,7 @@ bool ValidTexture2DTarget(const ValidationContext *context, TextureType type)
     }
 }
 
-bool ValidTexture3DTarget(const ValidationContext *context, TextureType target)
+bool ValidTexture3DTarget(const Context *context, TextureType target)
 {
     switch (target)
     {
@@ -571,7 +568,7 @@ bool ValidTexture3DTarget(const ValidationContext *context, TextureType target)
 
 // Most texture GL calls are not compatible with external textures, so we have a separate validation
 // function for use in the GL calls that do
-bool ValidTextureExternalTarget(const ValidationContext *context, TextureType target)
+bool ValidTextureExternalTarget(const Context *context, TextureType target)
 {
     return (target == TextureType::External) &&
            (context->getExtensions().eglImageExternal ||
@@ -582,7 +579,7 @@ bool ValidTextureExternalTarget(const ValidationContext *context, TextureType ta
 // usable as the destination of a 2D operation-- so a cube face is valid, but
 // GL_TEXTURE_CUBE_MAP is not.
 // Note: duplicate of IsInternalTextureTarget
-bool ValidTexture2DDestinationTarget(const ValidationContext *context, TextureTarget target)
+bool ValidTexture2DDestinationTarget(const Context *context, TextureTarget target)
 {
     switch (target)
     {
@@ -601,7 +598,7 @@ bool ValidTexture2DDestinationTarget(const ValidationContext *context, TextureTa
     }
 }
 
-bool ValidateDrawElementsInstancedBase(ValidationContext *context,
+bool ValidateDrawElementsInstancedBase(Context *context,
                                        GLenum mode,
                                        GLsizei count,
                                        GLenum type,
@@ -642,7 +639,7 @@ bool ValidateDrawArraysInstancedBase(Context *context,
     return true;
 }
 
-bool ValidateDrawInstancedANGLE(ValidationContext *context)
+bool ValidateDrawInstancedANGLE(Context *context)
 {
     // Verify there is at least one active attribute with a divisor of zero
     const State &state = context->getGLState();
@@ -665,7 +662,7 @@ bool ValidateDrawInstancedANGLE(ValidationContext *context)
     return false;
 }
 
-bool ValidTexture3DDestinationTarget(const ValidationContext *context, TextureType target)
+bool ValidTexture3DDestinationTarget(const Context *context, TextureType target)
 {
     switch (target)
     {
@@ -677,7 +674,7 @@ bool ValidTexture3DDestinationTarget(const ValidationContext *context, TextureTy
     }
 }
 
-bool ValidTexLevelDestinationTarget(const ValidationContext *context, TextureType type)
+bool ValidTexLevelDestinationTarget(const Context *context, TextureType type)
 {
     switch (type)
     {
@@ -694,7 +691,7 @@ bool ValidTexLevelDestinationTarget(const ValidationContext *context, TextureTyp
     }
 }
 
-bool ValidFramebufferTarget(const ValidationContext *context, GLenum target)
+bool ValidFramebufferTarget(const Context *context, GLenum target)
 {
     static_assert(GL_DRAW_FRAMEBUFFER_ANGLE == GL_DRAW_FRAMEBUFFER &&
                       GL_READ_FRAMEBUFFER_ANGLE == GL_READ_FRAMEBUFFER,
@@ -715,7 +712,7 @@ bool ValidFramebufferTarget(const ValidationContext *context, GLenum target)
     }
 }
 
-bool ValidMipLevel(const ValidationContext *context, TextureType type, GLint level)
+bool ValidMipLevel(const Context *context, TextureType type, GLint level)
 {
     const auto &caps    = context->getCaps();
     size_t maxDimension = 0;
@@ -741,7 +738,7 @@ bool ValidMipLevel(const ValidationContext *context, TextureType type, GLint lev
     return level <= gl::log2(static_cast<int>(maxDimension)) && level >= 0;
 }
 
-bool ValidImageSizeParameters(ValidationContext *context,
+bool ValidImageSizeParameters(Context *context,
                               TextureType target,
                               GLint level,
                               GLsizei width,
@@ -780,7 +777,7 @@ bool ValidCompressedDimension(GLsizei size, GLuint blockSize, bool smallerThanBl
            (size % blockSize == 0);
 }
 
-bool ValidCompressedImageSize(const ValidationContext *context,
+bool ValidCompressedImageSize(const Context *context,
                               GLenum internalFormat,
                               GLint level,
                               GLsizei width,
@@ -816,7 +813,7 @@ bool ValidCompressedImageSize(const ValidationContext *context,
     return true;
 }
 
-bool ValidCompressedSubImageSize(const ValidationContext *context,
+bool ValidCompressedSubImageSize(const Context *context,
                                  GLenum internalFormat,
                                  GLint xoffset,
                                  GLint yoffset,
@@ -860,7 +857,7 @@ bool ValidCompressedSubImageSize(const ValidationContext *context,
     return true;
 }
 
-bool ValidImageDataSize(ValidationContext *context,
+bool ValidImageDataSize(Context *context,
                         TextureType texType,
                         GLsizei width,
                         GLsizei height,
@@ -953,7 +950,7 @@ bool ValidQueryType(const Context *context, GLenum queryType)
     }
 }
 
-bool ValidateWebGLVertexAttribPointer(ValidationContext *context,
+bool ValidateWebGLVertexAttribPointer(Context *context,
                                       GLenum type,
                                       GLboolean normalized,
                                       GLsizei stride,
@@ -997,7 +994,7 @@ bool ValidateWebGLVertexAttribPointer(ValidationContext *context,
     return true;
 }
 
-Program *GetValidProgram(ValidationContext *context, GLuint id)
+Program *GetValidProgram(Context *context, GLuint id)
 {
     // ES3 spec (section 2.11.1) -- "Commands that accept shader or program object names will
     // generate the error INVALID_VALUE if the provided name is not the name of either a shader
@@ -1021,7 +1018,7 @@ Program *GetValidProgram(ValidationContext *context, GLuint id)
     return validProgram;
 }
 
-Shader *GetValidShader(ValidationContext *context, GLuint id)
+Shader *GetValidShader(Context *context, GLuint id)
 {
     // See ValidProgram for spec details.
 
@@ -1087,7 +1084,7 @@ bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
     return true;
 }
 
-bool ValidateRenderbufferStorageParametersBase(ValidationContext *context,
+bool ValidateRenderbufferStorageParametersBase(Context *context,
                                                GLenum target,
                                                GLsizei samples,
                                                GLenum internalformat,
@@ -1965,7 +1962,7 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
     return true;
 }
 
-bool ValidateUniformCommonBase(ValidationContext *context,
+bool ValidateUniformCommonBase(Context *context,
                                gl::Program *program,
                                GLint location,
                                GLsizei count,
@@ -2030,7 +2027,7 @@ bool ValidateUniformCommonBase(ValidationContext *context,
     return true;
 }
 
-bool ValidateUniform1ivValue(ValidationContext *context,
+bool ValidateUniform1ivValue(Context *context,
                              GLenum uniformType,
                              GLsizei count,
                              const GLint *value)
@@ -2062,7 +2059,7 @@ bool ValidateUniform1ivValue(ValidationContext *context,
     return false;
 }
 
-bool ValidateUniformValue(ValidationContext *context, GLenum valueType, GLenum uniformType)
+bool ValidateUniformValue(Context *context, GLenum valueType, GLenum uniformType)
 {
     // Check that the value type is compatible with uniform type.
     // Do the cheaper test first, for a little extra speed.
@@ -2075,7 +2072,7 @@ bool ValidateUniformValue(ValidationContext *context, GLenum valueType, GLenum u
     return false;
 }
 
-bool ValidateUniformMatrixValue(ValidationContext *context, GLenum valueType, GLenum uniformType)
+bool ValidateUniformMatrixValue(Context *context, GLenum valueType, GLenum uniformType)
 {
     // Check that the value type is compatible with uniform type.
     if (valueType == uniformType)
@@ -2087,7 +2084,7 @@ bool ValidateUniformMatrixValue(ValidationContext *context, GLenum valueType, GL
     return false;
 }
 
-bool ValidateUniform(ValidationContext *context, GLenum valueType, GLint location, GLsizei count)
+bool ValidateUniform(Context *context, GLenum valueType, GLint location, GLsizei count)
 {
     const LinkedUniform *uniform = nullptr;
     gl::Program *programObject   = context->getGLState().getProgram();
@@ -2095,10 +2092,7 @@ bool ValidateUniform(ValidationContext *context, GLenum valueType, GLint locatio
            ValidateUniformValue(context, valueType, uniform->type);
 }
 
-bool ValidateUniform1iv(ValidationContext *context,
-                        GLint location,
-                        GLsizei count,
-                        const GLint *value)
+bool ValidateUniform1iv(Context *context, GLint location, GLsizei count, const GLint *value)
 {
     const LinkedUniform *uniform = nullptr;
     gl::Program *programObject   = context->getGLState().getProgram();
@@ -2106,7 +2100,7 @@ bool ValidateUniform1iv(ValidationContext *context,
            ValidateUniform1ivValue(context, uniform->type, count, value);
 }
 
-bool ValidateUniformMatrix(ValidationContext *context,
+bool ValidateUniformMatrix(Context *context,
                            GLenum valueType,
                            GLint location,
                            GLsizei count,
@@ -2124,10 +2118,7 @@ bool ValidateUniformMatrix(ValidationContext *context,
            ValidateUniformMatrixValue(context, valueType, uniform->type);
 }
 
-bool ValidateStateQuery(ValidationContext *context,
-                        GLenum pname,
-                        GLenum *nativeType,
-                        unsigned int *numParams)
+bool ValidateStateQuery(Context *context, GLenum pname, GLenum *nativeType, unsigned int *numParams)
 {
     if (!context->getQueryParameterInfo(pname, nativeType, numParams))
     {
@@ -2216,7 +2207,7 @@ bool ValidateStateQuery(ValidationContext *context,
     return true;
 }
 
-bool ValidateRobustStateQuery(ValidationContext *context,
+bool ValidateRobustStateQuery(Context *context,
                               GLenum pname,
                               GLsizei bufSize,
                               GLenum *nativeType,
@@ -2240,7 +2231,7 @@ bool ValidateRobustStateQuery(ValidationContext *context,
     return true;
 }
 
-bool ValidateCopyTexImageParametersBase(ValidationContext *context,
+bool ValidateCopyTexImageParametersBase(Context *context,
                                         TextureTarget target,
                                         GLint level,
                                         GLenum internalformat,
@@ -2434,7 +2425,7 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     return true;
 }
 
-bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
+bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
 {
     switch (mode)
     {
@@ -2629,7 +2620,7 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
     return true;
 }
 
-bool ValidateDrawArraysCommon(ValidationContext *context,
+bool ValidateDrawArraysCommon(Context *context,
                               GLenum mode,
                               GLint first,
                               GLsizei count,
@@ -2702,7 +2693,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     return ValidateDrawInstancedANGLE(context);
 }
 
-bool ValidateDrawElementsBase(ValidationContext *context, GLenum type)
+bool ValidateDrawElementsBase(Context *context, GLenum type)
 {
     switch (type)
     {
@@ -2737,7 +2728,7 @@ bool ValidateDrawElementsBase(ValidationContext *context, GLenum type)
     return true;
 }
 
-bool ValidateDrawElementsCommon(ValidationContext *context,
+bool ValidateDrawElementsCommon(Context *context,
                                 GLenum mode,
                                 GLsizei count,
                                 GLenum type,
@@ -2907,7 +2898,7 @@ bool ValidateDrawElementsCommon(ValidationContext *context,
     return true;
 }
 
-bool ValidateDrawElementsInstancedCommon(ValidationContext *context,
+bool ValidateDrawElementsInstancedCommon(Context *context,
                                          GLenum mode,
                                          GLsizei count,
                                          GLenum type,
@@ -3412,7 +3403,7 @@ bool ValidateGetProgramBinaryBase(Context *context,
     return true;
 }
 
-bool ValidateDrawBuffersBase(ValidationContext *context, GLsizei n, const GLenum *bufs)
+bool ValidateDrawBuffersBase(Context *context, GLsizei n, const GLenum *bufs)
 {
     // INVALID_VALUE is generated if n is negative or greater than value of MAX_DRAW_BUFFERS
     if (n < 0)
@@ -3720,7 +3711,7 @@ bool ValidateGenOrDelete(Context *context, GLint n)
     return true;
 }
 
-bool ValidateRobustEntryPoint(ValidationContext *context, GLsizei bufSize)
+bool ValidateRobustEntryPoint(Context *context, GLsizei bufSize)
 {
     if (!context->getExtensions().robustClientMemory)
     {
@@ -3738,7 +3729,7 @@ bool ValidateRobustEntryPoint(ValidationContext *context, GLsizei bufSize)
     return true;
 }
 
-bool ValidateRobustBufferSize(ValidationContext *context, GLsizei bufSize, GLsizei numParams)
+bool ValidateRobustBufferSize(Context *context, GLsizei bufSize, GLsizei numParams)
 {
     if (bufSize < numParams)
     {
@@ -4038,7 +4029,7 @@ bool ValidateGetFramebufferAttachmentParameterivRobustANGLE(Context *context,
     return true;
 }
 
-bool ValidateGetBufferParameterivRobustANGLE(ValidationContext *context,
+bool ValidateGetBufferParameterivRobustANGLE(Context *context,
                                              BufferBinding target,
                                              GLenum pname,
                                              GLsizei bufSize,
@@ -4063,7 +4054,7 @@ bool ValidateGetBufferParameterivRobustANGLE(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetBufferParameteri64vRobustANGLE(ValidationContext *context,
+bool ValidateGetBufferParameteri64vRobustANGLE(Context *context,
                                                BufferBinding target,
                                                GLenum pname,
                                                GLsizei bufSize,
@@ -4088,10 +4079,7 @@ bool ValidateGetBufferParameteri64vRobustANGLE(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetProgramivBase(ValidationContext *context,
-                              GLuint program,
-                              GLenum pname,
-                              GLsizei *numParams)
+bool ValidateGetProgramivBase(Context *context, GLuint program, GLenum pname, GLsizei *numParams)
 {
     // Currently, all GetProgramiv queries return 1 parameter
     if (numParams)
@@ -4588,7 +4576,7 @@ bool ValidateGetInternalFormativRobustANGLE(Context *context,
     return true;
 }
 
-bool ValidateVertexFormatBase(ValidationContext *context,
+bool ValidateVertexFormatBase(Context *context,
                               GLuint attribIndex,
                               GLint size,
                               GLenum type,
@@ -4682,7 +4670,7 @@ bool ValidateVertexFormatBase(ValidationContext *context,
 // In the WebGL 2 API, trying to perform a clear when there is a mismatch between the type of the
 // specified clear value and the type of a buffer that is being cleared generates an
 // INVALID_OPERATION error instead of producing undefined results
-bool ValidateWebGLFramebufferAttachmentClearType(ValidationContext *context,
+bool ValidateWebGLFramebufferAttachmentClearType(Context *context,
                                                  GLint drawbuffer,
                                                  const GLenum *validComponentTypes,
                                                  size_t validComponentTypeCount)
@@ -4705,9 +4693,7 @@ bool ValidateWebGLFramebufferAttachmentClearType(ValidationContext *context,
     return true;
 }
 
-bool ValidateRobustCompressedTexImageBase(ValidationContext *context,
-                                          GLsizei imageSize,
-                                          GLsizei dataSize)
+bool ValidateRobustCompressedTexImageBase(Context *context, GLsizei imageSize, GLsizei dataSize)
 {
     if (!ValidateRobustEntryPoint(context, dataSize))
     {
@@ -4726,7 +4712,7 @@ bool ValidateRobustCompressedTexImageBase(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetBufferParameterBase(ValidationContext *context,
+bool ValidateGetBufferParameterBase(Context *context,
                                     BufferBinding target,
                                     GLenum pname,
                                     bool pointerVersion,
@@ -5586,7 +5572,7 @@ bool ValidateTexParameterBase(Context *context,
 template bool ValidateTexParameterBase(Context *, TextureType, GLenum, GLsizei, const GLfloat *);
 template bool ValidateTexParameterBase(Context *, TextureType, GLenum, GLsizei, const GLint *);
 
-bool ValidateVertexAttribIndex(ValidationContext *context, GLuint index)
+bool ValidateVertexAttribIndex(Context *context, GLuint index)
 {
     if (index >= MAX_VERTEX_ATTRIBS)
     {

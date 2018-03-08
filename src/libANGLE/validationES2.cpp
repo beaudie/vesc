@@ -455,7 +455,7 @@ bool IsValidStencilOp(GLenum op)
     }
 }
 
-bool ValidateES2CopyTexImageParameters(ValidationContext *context,
+bool ValidateES2CopyTexImageParameters(Context *context,
                                        TextureTarget target,
                                        GLint level,
                                        GLenum internalformat,
@@ -954,7 +954,7 @@ bool IsValidESSLShaderSourceString(const char *str, size_t len, bool lineContinu
     return true;
 }
 
-bool ValidateWebGLNamePrefix(ValidationContext *context, const GLchar *name)
+bool ValidateWebGLNamePrefix(Context *context, const GLchar *name)
 {
     ASSERT(context->isWebGL());
 
@@ -969,7 +969,7 @@ bool ValidateWebGLNamePrefix(ValidationContext *context, const GLchar *name)
     return true;
 }
 
-bool ValidateWebGLNameLength(ValidationContext *context, size_t length)
+bool ValidateWebGLNameLength(Context *context, size_t length)
 {
     ASSERT(context->isWebGL());
 
@@ -2539,7 +2539,7 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                                              dstX1, dstY1, mask, filter);
 }
 
-bool ValidateClear(ValidationContext *context, GLbitfield mask)
+bool ValidateClear(Context *context, GLbitfield mask)
 {
     Framebuffer *fbo = context->getGLState().getDrawFramebuffer();
     if (fbo->checkStatus(context) != GL_FRAMEBUFFER_COMPLETE)
@@ -2573,7 +2573,7 @@ bool ValidateClear(ValidationContext *context, GLbitfield mask)
     return true;
 }
 
-bool ValidateDrawBuffersEXT(ValidationContext *context, GLsizei n, const GLenum *bufs)
+bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs)
 {
     if (!context->getExtensions().drawBuffers)
     {
@@ -4181,7 +4181,7 @@ bool ValidateCreateShader(Context *context, GLenum type)
     return true;
 }
 
-bool ValidateBufferData(ValidationContext *context,
+bool ValidateBufferData(Context *context,
                         BufferBinding target,
                         GLsizeiptr size,
                         const void *data,
@@ -4235,7 +4235,7 @@ bool ValidateBufferData(ValidationContext *context,
     return true;
 }
 
-bool ValidateBufferSubData(ValidationContext *context,
+bool ValidateBufferSubData(Context *context,
                            BufferBinding target,
                            GLintptr offset,
                            GLsizeiptr size,
@@ -4308,7 +4308,7 @@ bool ValidateRequestExtensionANGLE(Context *context, const GLchar *name)
     return true;
 }
 
-bool ValidateActiveTexture(ValidationContext *context, GLenum texture)
+bool ValidateActiveTexture(Context *context, GLenum texture)
 {
     if (texture < GL_TEXTURE0 ||
         texture > GL_TEXTURE0 + context->getCaps().maxCombinedTextureImageUnits - 1)
@@ -4320,7 +4320,7 @@ bool ValidateActiveTexture(ValidationContext *context, GLenum texture)
     return true;
 }
 
-bool ValidateAttachShader(ValidationContext *context, GLuint program, GLuint shader)
+bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
 {
     Program *programObject = GetValidProgram(context, program);
     if (!programObject)
@@ -4380,10 +4380,7 @@ bool ValidateAttachShader(ValidationContext *context, GLuint program, GLuint sha
     return true;
 }
 
-bool ValidateBindAttribLocation(ValidationContext *context,
-                                GLuint program,
-                                GLuint index,
-                                const GLchar *name)
+bool ValidateBindAttribLocation(Context *context, GLuint program, GLuint index, const GLchar *name)
 {
     if (index >= MAX_VERTEX_ATTRIBS)
     {
@@ -4418,7 +4415,7 @@ bool ValidateBindAttribLocation(ValidationContext *context,
     return GetValidProgram(context, program) != nullptr;
 }
 
-bool ValidateBindBuffer(ValidationContext *context, BufferBinding target, GLuint buffer)
+bool ValidateBindBuffer(Context *context, BufferBinding target, GLuint buffer)
 {
     if (!context->isValidBufferBinding(target))
     {
@@ -4436,7 +4433,7 @@ bool ValidateBindBuffer(ValidationContext *context, BufferBinding target, GLuint
     return true;
 }
 
-bool ValidateBindFramebuffer(ValidationContext *context, GLenum target, GLuint framebuffer)
+bool ValidateBindFramebuffer(Context *context, GLenum target, GLuint framebuffer)
 {
     if (!ValidFramebufferTarget(context, target))
     {
@@ -4454,7 +4451,7 @@ bool ValidateBindFramebuffer(ValidationContext *context, GLenum target, GLuint f
     return true;
 }
 
-bool ValidateBindRenderbuffer(ValidationContext *context, GLenum target, GLuint renderbuffer)
+bool ValidateBindRenderbuffer(Context *context, GLenum target, GLuint renderbuffer)
 {
     if (target != GL_RENDERBUFFER)
     {
@@ -4472,7 +4469,7 @@ bool ValidateBindRenderbuffer(ValidationContext *context, GLenum target, GLuint 
     return true;
 }
 
-static bool ValidBlendEquationMode(const ValidationContext *context, GLenum mode)
+static bool ValidBlendEquationMode(const Context *context, GLenum mode)
 {
     switch (mode)
     {
@@ -4490,16 +4487,12 @@ static bool ValidBlendEquationMode(const ValidationContext *context, GLenum mode
     }
 }
 
-bool ValidateBlendColor(ValidationContext *context,
-                        GLfloat red,
-                        GLfloat green,
-                        GLfloat blue,
-                        GLfloat alpha)
+bool ValidateBlendColor(Context *context, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
     return true;
 }
 
-bool ValidateBlendEquation(ValidationContext *context, GLenum mode)
+bool ValidateBlendEquation(Context *context, GLenum mode)
 {
     if (!ValidBlendEquationMode(context, mode))
     {
@@ -4510,7 +4503,7 @@ bool ValidateBlendEquation(ValidationContext *context, GLenum mode)
     return true;
 }
 
-bool ValidateBlendEquationSeparate(ValidationContext *context, GLenum modeRGB, GLenum modeAlpha)
+bool ValidateBlendEquationSeparate(Context *context, GLenum modeRGB, GLenum modeAlpha)
 {
     if (!ValidBlendEquationMode(context, modeRGB))
     {
@@ -4527,7 +4520,7 @@ bool ValidateBlendEquationSeparate(ValidationContext *context, GLenum modeRGB, G
     return true;
 }
 
-bool ValidateBlendFunc(ValidationContext *context, GLenum sfactor, GLenum dfactor)
+bool ValidateBlendFunc(Context *context, GLenum sfactor, GLenum dfactor)
 {
     return ValidateBlendFuncSeparate(context, sfactor, dfactor, sfactor, dfactor);
 }
@@ -4586,7 +4579,7 @@ static bool ValidDstBlendFunc(GLenum dstBlend, GLint contextMajorVersion)
     }
 }
 
-bool ValidateBlendFuncSeparate(ValidationContext *context,
+bool ValidateBlendFuncSeparate(Context *context,
                                GLenum srcRGB,
                                GLenum dstRGB,
                                GLenum srcAlpha,
@@ -4677,7 +4670,7 @@ bool ValidateGetString(Context *context, GLenum name)
     return true;
 }
 
-bool ValidateLineWidth(ValidationContext *context, GLfloat width)
+bool ValidateLineWidth(Context *context, GLfloat width)
 {
     if (width <= 0.0f || isNaN(width))
     {
@@ -4688,7 +4681,7 @@ bool ValidateLineWidth(ValidationContext *context, GLfloat width)
     return true;
 }
 
-bool ValidateVertexAttribPointer(ValidationContext *context,
+bool ValidateVertexAttribPointer(Context *context,
                                  GLuint index,
                                  GLint size,
                                  GLenum type,
@@ -4759,7 +4752,7 @@ bool ValidateVertexAttribPointer(ValidationContext *context,
     return true;
 }
 
-bool ValidateDepthRangef(ValidationContext *context, GLfloat zNear, GLfloat zFar)
+bool ValidateDepthRangef(Context *context, GLfloat zNear, GLfloat zFar)
 {
     if (context->getExtensions().webglCompatibility && zNear > zFar)
     {
@@ -4770,7 +4763,7 @@ bool ValidateDepthRangef(ValidationContext *context, GLfloat zNear, GLfloat zFar
     return true;
 }
 
-bool ValidateRenderbufferStorage(ValidationContext *context,
+bool ValidateRenderbufferStorage(Context *context,
                                  GLenum target,
                                  GLenum internalformat,
                                  GLsizei width,
@@ -4780,7 +4773,7 @@ bool ValidateRenderbufferStorage(ValidationContext *context,
                                                      height);
 }
 
-bool ValidateRenderbufferStorageMultisampleANGLE(ValidationContext *context,
+bool ValidateRenderbufferStorageMultisampleANGLE(Context *context,
                                                  GLenum target,
                                                  GLsizei samples,
                                                  GLenum internalformat,
@@ -4821,7 +4814,7 @@ bool ValidateRenderbufferStorageMultisampleANGLE(ValidationContext *context,
                                                      width, height);
 }
 
-bool ValidateCheckFramebufferStatus(ValidationContext *context, GLenum target)
+bool ValidateCheckFramebufferStatus(Context *context, GLenum target)
 {
     if (!ValidFramebufferTarget(context, target))
     {
@@ -4832,26 +4825,22 @@ bool ValidateCheckFramebufferStatus(ValidationContext *context, GLenum target)
     return true;
 }
 
-bool ValidateClearColor(ValidationContext *context,
-                        GLfloat red,
-                        GLfloat green,
-                        GLfloat blue,
-                        GLfloat alpha)
+bool ValidateClearColor(Context *context, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
     return true;
 }
 
-bool ValidateClearDepthf(ValidationContext *context, GLfloat depth)
+bool ValidateClearDepthf(Context *context, GLfloat depth)
 {
     return true;
 }
 
-bool ValidateClearStencil(ValidationContext *context, GLint s)
+bool ValidateClearStencil(Context *context, GLint s)
 {
     return true;
 }
 
-bool ValidateColorMask(ValidationContext *context,
+bool ValidateColorMask(Context *context,
                        GLboolean red,
                        GLboolean green,
                        GLboolean blue,
@@ -4860,17 +4849,17 @@ bool ValidateColorMask(ValidationContext *context,
     return true;
 }
 
-bool ValidateCompileShader(ValidationContext *context, GLuint shader)
+bool ValidateCompileShader(Context *context, GLuint shader)
 {
     return true;
 }
 
-bool ValidateCreateProgram(ValidationContext *context)
+bool ValidateCreateProgram(Context *context)
 {
     return true;
 }
 
-bool ValidateCullFace(ValidationContext *context, CullFaceMode mode)
+bool ValidateCullFace(Context *context, CullFaceMode mode)
 {
     switch (mode)
     {
@@ -4887,7 +4876,7 @@ bool ValidateCullFace(ValidationContext *context, CullFaceMode mode)
     return true;
 }
 
-bool ValidateDeleteProgram(ValidationContext *context, GLuint program)
+bool ValidateDeleteProgram(Context *context, GLuint program)
 {
     if (program == 0)
     {
@@ -4911,7 +4900,7 @@ bool ValidateDeleteProgram(ValidationContext *context, GLuint program)
     return true;
 }
 
-bool ValidateDeleteShader(ValidationContext *context, GLuint shader)
+bool ValidateDeleteShader(Context *context, GLuint shader)
 {
     if (shader == 0)
     {
@@ -4935,7 +4924,7 @@ bool ValidateDeleteShader(ValidationContext *context, GLuint shader)
     return true;
 }
 
-bool ValidateDepthFunc(ValidationContext *context, GLenum func)
+bool ValidateDepthFunc(Context *context, GLenum func)
 {
     switch (func)
     {
@@ -4957,12 +4946,12 @@ bool ValidateDepthFunc(ValidationContext *context, GLenum func)
     return true;
 }
 
-bool ValidateDepthMask(ValidationContext *context, GLboolean flag)
+bool ValidateDepthMask(Context *context, GLboolean flag)
 {
     return true;
 }
 
-bool ValidateDetachShader(ValidationContext *context, GLuint program, GLuint shader)
+bool ValidateDetachShader(Context *context, GLuint program, GLuint shader)
 {
     Program *programObject = GetValidProgram(context, program);
     if (!programObject)
@@ -5014,7 +5003,7 @@ bool ValidateDetachShader(ValidationContext *context, GLuint program, GLuint sha
     return true;
 }
 
-bool ValidateDisableVertexAttribArray(ValidationContext *context, GLuint index)
+bool ValidateDisableVertexAttribArray(Context *context, GLuint index)
 {
     if (index >= MAX_VERTEX_ATTRIBS)
     {
@@ -5025,7 +5014,7 @@ bool ValidateDisableVertexAttribArray(ValidationContext *context, GLuint index)
     return true;
 }
 
-bool ValidateEnableVertexAttribArray(ValidationContext *context, GLuint index)
+bool ValidateEnableVertexAttribArray(Context *context, GLuint index)
 {
     if (index >= MAX_VERTEX_ATTRIBS)
     {
@@ -5036,17 +5025,17 @@ bool ValidateEnableVertexAttribArray(ValidationContext *context, GLuint index)
     return true;
 }
 
-bool ValidateFinish(ValidationContext *context)
+bool ValidateFinish(Context *context)
 {
     return true;
 }
 
-bool ValidateFlush(ValidationContext *context)
+bool ValidateFlush(Context *context)
 {
     return true;
 }
 
-bool ValidateFrontFace(ValidationContext *context, GLenum mode)
+bool ValidateFrontFace(Context *context, GLenum mode)
 {
     switch (mode)
     {
@@ -5061,7 +5050,7 @@ bool ValidateFrontFace(ValidationContext *context, GLenum mode)
     return true;
 }
 
-bool ValidateGetActiveAttrib(ValidationContext *context,
+bool ValidateGetActiveAttrib(Context *context,
                              GLuint program,
                              GLuint index,
                              GLsizei bufsize,
@@ -5092,7 +5081,7 @@ bool ValidateGetActiveAttrib(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetActiveUniform(ValidationContext *context,
+bool ValidateGetActiveUniform(Context *context,
                               GLuint program,
                               GLuint index,
                               GLsizei bufsize,
@@ -5123,7 +5112,7 @@ bool ValidateGetActiveUniform(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetAttachedShaders(ValidationContext *context,
+bool ValidateGetAttachedShaders(Context *context,
                                 GLuint program,
                                 GLsizei maxcount,
                                 GLsizei *count,
@@ -5145,7 +5134,7 @@ bool ValidateGetAttachedShaders(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetAttribLocation(ValidationContext *context, GLuint program, const GLchar *name)
+bool ValidateGetAttribLocation(Context *context, GLuint program, const GLchar *name)
 {
     // The WebGL spec (section 6.20) disallows strings containing invalid ESSL characters for
     // shader-related entry points
@@ -5172,33 +5161,33 @@ bool ValidateGetAttribLocation(ValidationContext *context, GLuint program, const
     return true;
 }
 
-bool ValidateGetBooleanv(ValidationContext *context, GLenum pname, GLboolean *params)
+bool ValidateGetBooleanv(Context *context, GLenum pname, GLboolean *params)
 {
     GLenum nativeType;
     unsigned int numParams = 0;
     return ValidateStateQuery(context, pname, &nativeType, &numParams);
 }
 
-bool ValidateGetError(ValidationContext *context)
+bool ValidateGetError(Context *context)
 {
     return true;
 }
 
-bool ValidateGetFloatv(ValidationContext *context, GLenum pname, GLfloat *params)
+bool ValidateGetFloatv(Context *context, GLenum pname, GLfloat *params)
 {
     GLenum nativeType;
     unsigned int numParams = 0;
     return ValidateStateQuery(context, pname, &nativeType, &numParams);
 }
 
-bool ValidateGetIntegerv(ValidationContext *context, GLenum pname, GLint *params)
+bool ValidateGetIntegerv(Context *context, GLenum pname, GLint *params)
 {
     GLenum nativeType;
     unsigned int numParams = 0;
     return ValidateStateQuery(context, pname, &nativeType, &numParams);
 }
 
-bool ValidateGetProgramInfoLog(ValidationContext *context,
+bool ValidateGetProgramInfoLog(Context *context,
                                GLuint program,
                                GLsizei bufsize,
                                GLsizei *length,
@@ -5219,7 +5208,7 @@ bool ValidateGetProgramInfoLog(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetShaderInfoLog(ValidationContext *context,
+bool ValidateGetShaderInfoLog(Context *context,
                               GLuint shader,
                               GLsizei bufsize,
                               GLsizei *length,
@@ -5240,7 +5229,7 @@ bool ValidateGetShaderInfoLog(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetShaderPrecisionFormat(ValidationContext *context,
+bool ValidateGetShaderPrecisionFormat(Context *context,
                                       GLenum shadertype,
                                       GLenum precisiontype,
                                       GLint *range,
@@ -5278,7 +5267,7 @@ bool ValidateGetShaderPrecisionFormat(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetShaderSource(ValidationContext *context,
+bool ValidateGetShaderSource(Context *context,
                              GLuint shader,
                              GLsizei bufsize,
                              GLsizei *length,
@@ -5299,7 +5288,7 @@ bool ValidateGetShaderSource(ValidationContext *context,
     return true;
 }
 
-bool ValidateGetUniformLocation(ValidationContext *context, GLuint program, const GLchar *name)
+bool ValidateGetUniformLocation(Context *context, GLuint program, const GLchar *name)
 {
     if (strstr(name, "gl_") == name)
     {
@@ -5330,7 +5319,7 @@ bool ValidateGetUniformLocation(ValidationContext *context, GLuint program, cons
     return true;
 }
 
-bool ValidateHint(ValidationContext *context, GLenum target, GLenum mode)
+bool ValidateHint(Context *context, GLenum target, GLenum mode)
 {
     switch (mode)
     {
@@ -5366,37 +5355,37 @@ bool ValidateHint(ValidationContext *context, GLenum target, GLenum mode)
     return true;
 }
 
-bool ValidateIsBuffer(ValidationContext *context, GLuint buffer)
+bool ValidateIsBuffer(Context *context, GLuint buffer)
 {
     return true;
 }
 
-bool ValidateIsFramebuffer(ValidationContext *context, GLuint framebuffer)
+bool ValidateIsFramebuffer(Context *context, GLuint framebuffer)
 {
     return true;
 }
 
-bool ValidateIsProgram(ValidationContext *context, GLuint program)
+bool ValidateIsProgram(Context *context, GLuint program)
 {
     return true;
 }
 
-bool ValidateIsRenderbuffer(ValidationContext *context, GLuint renderbuffer)
+bool ValidateIsRenderbuffer(Context *context, GLuint renderbuffer)
 {
     return true;
 }
 
-bool ValidateIsShader(ValidationContext *context, GLuint shader)
+bool ValidateIsShader(Context *context, GLuint shader)
 {
     return true;
 }
 
-bool ValidateIsTexture(ValidationContext *context, GLuint texture)
+bool ValidateIsTexture(Context *context, GLuint texture)
 {
     return true;
 }
 
-bool ValidatePixelStorei(ValidationContext *context, GLenum pname, GLint param)
+bool ValidatePixelStorei(Context *context, GLenum pname, GLint param)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -5478,22 +5467,22 @@ bool ValidatePixelStorei(ValidationContext *context, GLenum pname, GLint param)
     return true;
 }
 
-bool ValidatePolygonOffset(ValidationContext *context, GLfloat factor, GLfloat units)
+bool ValidatePolygonOffset(Context *context, GLfloat factor, GLfloat units)
 {
     return true;
 }
 
-bool ValidateReleaseShaderCompiler(ValidationContext *context)
+bool ValidateReleaseShaderCompiler(Context *context)
 {
     return true;
 }
 
-bool ValidateSampleCoverage(ValidationContext *context, GLfloat value, GLboolean invert)
+bool ValidateSampleCoverage(Context *context, GLfloat value, GLboolean invert)
 {
     return true;
 }
 
-bool ValidateScissor(ValidationContext *context, GLint x, GLint y, GLsizei width, GLsizei height)
+bool ValidateScissor(Context *context, GLint x, GLint y, GLsizei width, GLsizei height)
 {
     if (width < 0 || height < 0)
     {
@@ -5504,7 +5493,7 @@ bool ValidateScissor(ValidationContext *context, GLint x, GLint y, GLsizei width
     return true;
 }
 
-bool ValidateShaderBinary(ValidationContext *context,
+bool ValidateShaderBinary(Context *context,
                           GLsizei n,
                           const GLuint *shaders,
                           GLenum binaryformat,
@@ -5522,7 +5511,7 @@ bool ValidateShaderBinary(ValidationContext *context,
     return true;
 }
 
-bool ValidateShaderSource(ValidationContext *context,
+bool ValidateShaderSource(Context *context,
                           GLuint shader,
                           GLsizei count,
                           const GLchar *const *string,
@@ -5562,7 +5551,7 @@ bool ValidateShaderSource(ValidationContext *context,
     return true;
 }
 
-bool ValidateStencilFunc(ValidationContext *context, GLenum func, GLint ref, GLuint mask)
+bool ValidateStencilFunc(Context *context, GLenum func, GLint ref, GLuint mask)
 {
     if (!IsValidStencilFunc(func))
     {
@@ -5573,11 +5562,7 @@ bool ValidateStencilFunc(ValidationContext *context, GLenum func, GLint ref, GLu
     return true;
 }
 
-bool ValidateStencilFuncSeparate(ValidationContext *context,
-                                 GLenum face,
-                                 GLenum func,
-                                 GLint ref,
-                                 GLuint mask)
+bool ValidateStencilFuncSeparate(Context *context, GLenum face, GLenum func, GLint ref, GLuint mask)
 {
     if (!IsValidStencilFace(face))
     {
@@ -5594,12 +5579,12 @@ bool ValidateStencilFuncSeparate(ValidationContext *context,
     return true;
 }
 
-bool ValidateStencilMask(ValidationContext *context, GLuint mask)
+bool ValidateStencilMask(Context *context, GLuint mask)
 {
     return true;
 }
 
-bool ValidateStencilMaskSeparate(ValidationContext *context, GLenum face, GLuint mask)
+bool ValidateStencilMaskSeparate(Context *context, GLenum face, GLuint mask)
 {
     if (!IsValidStencilFace(face))
     {
@@ -5610,7 +5595,7 @@ bool ValidateStencilMaskSeparate(ValidationContext *context, GLenum face, GLuint
     return true;
 }
 
-bool ValidateStencilOp(ValidationContext *context, GLenum fail, GLenum zfail, GLenum zpass)
+bool ValidateStencilOp(Context *context, GLenum fail, GLenum zfail, GLenum zpass)
 {
     if (!IsValidStencilOp(fail))
     {
@@ -5633,7 +5618,7 @@ bool ValidateStencilOp(ValidationContext *context, GLenum fail, GLenum zfail, GL
     return true;
 }
 
-bool ValidateStencilOpSeparate(ValidationContext *context,
+bool ValidateStencilOpSeparate(Context *context,
                                GLenum face,
                                GLenum fail,
                                GLenum zfail,
@@ -5648,92 +5633,82 @@ bool ValidateStencilOpSeparate(ValidationContext *context,
     return ValidateStencilOp(context, fail, zfail, zpass);
 }
 
-bool ValidateUniform1f(ValidationContext *context, GLint location, GLfloat x)
+bool ValidateUniform1f(Context *context, GLint location, GLfloat x)
 {
     return ValidateUniform(context, GL_FLOAT, location, 1);
 }
 
-bool ValidateUniform1fv(ValidationContext *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform1fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT, location, count);
 }
 
-bool ValidateUniform1i(ValidationContext *context, GLint location, GLint x)
+bool ValidateUniform1i(Context *context, GLint location, GLint x)
 {
     return ValidateUniform1iv(context, location, 1, &x);
 }
 
-bool ValidateUniform2f(ValidationContext *context, GLint location, GLfloat x, GLfloat y)
+bool ValidateUniform2f(Context *context, GLint location, GLfloat x, GLfloat y)
 {
     return ValidateUniform(context, GL_FLOAT_VEC2, location, 1);
 }
 
-bool ValidateUniform2fv(ValidationContext *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform2fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC2, location, count);
 }
 
-bool ValidateUniform2i(ValidationContext *context, GLint location, GLint x, GLint y)
+bool ValidateUniform2i(Context *context, GLint location, GLint x, GLint y)
 {
     return ValidateUniform(context, GL_INT_VEC2, location, 1);
 }
 
-bool ValidateUniform2iv(ValidationContext *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform2iv(Context *context, GLint location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC2, location, count);
 }
 
-bool ValidateUniform3f(ValidationContext *context, GLint location, GLfloat x, GLfloat y, GLfloat z)
+bool ValidateUniform3f(Context *context, GLint location, GLfloat x, GLfloat y, GLfloat z)
 {
     return ValidateUniform(context, GL_FLOAT_VEC3, location, 1);
 }
 
-bool ValidateUniform3fv(ValidationContext *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform3fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC3, location, count);
 }
 
-bool ValidateUniform3i(ValidationContext *context, GLint location, GLint x, GLint y, GLint z)
+bool ValidateUniform3i(Context *context, GLint location, GLint x, GLint y, GLint z)
 {
     return ValidateUniform(context, GL_INT_VEC3, location, 1);
 }
 
-bool ValidateUniform3iv(ValidationContext *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform3iv(Context *context, GLint location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC3, location, count);
 }
 
-bool ValidateUniform4f(ValidationContext *context,
-                       GLint location,
-                       GLfloat x,
-                       GLfloat y,
-                       GLfloat z,
-                       GLfloat w)
+bool ValidateUniform4f(Context *context, GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     return ValidateUniform(context, GL_FLOAT_VEC4, location, 1);
 }
 
-bool ValidateUniform4fv(ValidationContext *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform4fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC4, location, count);
 }
 
-bool ValidateUniform4i(ValidationContext *context,
-                       GLint location,
-                       GLint x,
-                       GLint y,
-                       GLint z,
-                       GLint w)
+bool ValidateUniform4i(Context *context, GLint location, GLint x, GLint y, GLint z, GLint w)
 {
     return ValidateUniform(context, GL_INT_VEC4, location, 1);
 }
 
-bool ValidateUniform4iv(ValidationContext *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform4iv(Context *context, GLint location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC4, location, count);
 }
 
-bool ValidateUniformMatrix2fv(ValidationContext *context,
+bool ValidateUniformMatrix2fv(Context *context,
                               GLint location,
                               GLsizei count,
                               GLboolean transpose,
@@ -5742,7 +5717,7 @@ bool ValidateUniformMatrix2fv(ValidationContext *context,
     return ValidateUniformMatrix(context, GL_FLOAT_MAT2, location, count, transpose);
 }
 
-bool ValidateUniformMatrix3fv(ValidationContext *context,
+bool ValidateUniformMatrix3fv(Context *context,
                               GLint location,
                               GLsizei count,
                               GLboolean transpose,
@@ -5751,7 +5726,7 @@ bool ValidateUniformMatrix3fv(ValidationContext *context,
     return ValidateUniformMatrix(context, GL_FLOAT_MAT3, location, count, transpose);
 }
 
-bool ValidateUniformMatrix4fv(ValidationContext *context,
+bool ValidateUniformMatrix4fv(Context *context,
                               GLint location,
                               GLsizei count,
                               GLboolean transpose,
@@ -5760,7 +5735,7 @@ bool ValidateUniformMatrix4fv(ValidationContext *context,
     return ValidateUniformMatrix(context, GL_FLOAT_MAT4, location, count, transpose);
 }
 
-bool ValidateValidateProgram(ValidationContext *context, GLuint program)
+bool ValidateValidateProgram(Context *context, GLuint program)
 {
     Program *programObject = GetValidProgram(context, program);
 
@@ -5772,41 +5747,37 @@ bool ValidateValidateProgram(ValidationContext *context, GLuint program)
     return true;
 }
 
-bool ValidateVertexAttrib1f(ValidationContext *context, GLuint index, GLfloat x)
+bool ValidateVertexAttrib1f(Context *context, GLuint index, GLfloat x)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib1fv(ValidationContext *context, GLuint index, const GLfloat *values)
+bool ValidateVertexAttrib1fv(Context *context, GLuint index, const GLfloat *values)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib2f(ValidationContext *context, GLuint index, GLfloat x, GLfloat y)
+bool ValidateVertexAttrib2f(Context *context, GLuint index, GLfloat x, GLfloat y)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib2fv(ValidationContext *context, GLuint index, const GLfloat *values)
+bool ValidateVertexAttrib2fv(Context *context, GLuint index, const GLfloat *values)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib3f(ValidationContext *context,
-                            GLuint index,
-                            GLfloat x,
-                            GLfloat y,
-                            GLfloat z)
+bool ValidateVertexAttrib3f(Context *context, GLuint index, GLfloat x, GLfloat y, GLfloat z)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib3fv(ValidationContext *context, GLuint index, const GLfloat *values)
+bool ValidateVertexAttrib3fv(Context *context, GLuint index, const GLfloat *values)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib4f(ValidationContext *context,
+bool ValidateVertexAttrib4f(Context *context,
                             GLuint index,
                             GLfloat x,
                             GLfloat y,
@@ -5816,12 +5787,12 @@ bool ValidateVertexAttrib4f(ValidationContext *context,
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateVertexAttrib4fv(ValidationContext *context, GLuint index, const GLfloat *values)
+bool ValidateVertexAttrib4fv(Context *context, GLuint index, const GLfloat *values)
 {
     return ValidateVertexAttribIndex(context, index);
 }
 
-bool ValidateViewport(ValidationContext *context, GLint x, GLint y, GLsizei width, GLsizei height)
+bool ValidateViewport(Context *context, GLint x, GLint y, GLsizei width, GLsizei height)
 {
     if (width < 0 || height < 0)
     {
@@ -5832,12 +5803,12 @@ bool ValidateViewport(ValidationContext *context, GLint x, GLint y, GLsizei widt
     return true;
 }
 
-bool ValidateDrawArrays(ValidationContext *context, GLenum mode, GLint first, GLsizei count)
+bool ValidateDrawArrays(Context *context, GLenum mode, GLint first, GLsizei count)
 {
     return ValidateDrawArraysCommon(context, mode, first, count, 1);
 }
 
-bool ValidateDrawElements(ValidationContext *context,
+bool ValidateDrawElements(Context *context,
                           GLenum mode,
                           GLsizei count,
                           GLenum type,
@@ -5856,12 +5827,12 @@ bool ValidateGetFramebufferAttachmentParameteriv(Context *context,
                                                            nullptr);
 }
 
-bool ValidateGetProgramiv(ValidationContext *context, GLuint program, GLenum pname, GLint *params)
+bool ValidateGetProgramiv(Context *context, GLuint program, GLenum pname, GLint *params)
 {
     return ValidateGetProgramivBase(context, program, pname, nullptr);
 }
 
-bool ValidateCopyTexImage2D(ValidationContext *context,
+bool ValidateCopyTexImage2D(Context *context,
                             TextureTarget target,
                             GLint level,
                             GLenum internalformat,
@@ -6205,7 +6176,7 @@ bool ValidateGenerateMipmap(Context *context, TextureType target)
     return true;
 }
 
-bool ValidateGetBufferParameteriv(ValidationContext *context,
+bool ValidateGetBufferParameteriv(Context *context,
                                   BufferBinding target,
                                   GLenum pname,
                                   GLint *params)
