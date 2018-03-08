@@ -181,14 +181,11 @@ TIntermFunctionDefinition *GetIndexFunctionDefinition(const TType &type,
     TIntermFunctionPrototype *prototypeNode = CreateInternalFunctionPrototypeNode(func);
 
     TIntermSymbol *baseParam = CreateParameterSymbol(func.getParam(0), symbolTable);
-    prototypeNode->getSequence()->push_back(baseParam);
     TIntermSymbol *indexParam = CreateParameterSymbol(func.getParam(1), symbolTable);
-    prototypeNode->getSequence()->push_back(indexParam);
     TIntermSymbol *valueParam = nullptr;
     if (write)
     {
         valueParam = CreateParameterSymbol(func.getParam(2), symbolTable);
-        prototypeNode->getSequence()->push_back(valueParam);
     }
 
     TIntermBlock *statementList = new TIntermBlock();

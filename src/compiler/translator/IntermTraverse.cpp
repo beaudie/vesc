@@ -496,29 +496,7 @@ void TIntermTraverser::traverseDeclaration(TIntermDeclaration *node)
 void TIntermTraverser::traverseFunctionPrototype(TIntermFunctionPrototype *node)
 {
     ScopedNodeInTraversalPath addToPath(this, node);
-
-    bool visit = true;
-
-    TIntermSequence *sequence = node->getSequence();
-
-    if (preVisit)
-        visit = visitFunctionPrototype(PreVisit, node);
-
-    if (visit)
-    {
-        for (auto *child : *sequence)
-        {
-            child->traverse(this);
-            if (visit && inVisit)
-            {
-                if (child != sequence->back())
-                    visit = visitFunctionPrototype(InVisit, node);
-            }
-        }
-    }
-
-    if (visit && postVisit)
-        visitFunctionPrototype(PostVisit, node);
+    visitFunctionPrototype(node);
 }
 
 // Traverse an aggregate node.  Same comments in binary node apply here.

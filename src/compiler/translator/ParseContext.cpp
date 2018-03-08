@@ -3182,15 +3182,12 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
     {
         const TConstParameter &param = function.getParam(i);
 
-        TIntermSymbol *symbol = nullptr;
-
         // If the parameter has no name, it's not an error, just don't add it to symbol table (could
         // be used for unused args).
         if (param.name != nullptr)
         {
             TVariable *variable =
                 new TVariable(&symbolTable, param.name, param.type, SymbolType::UserDefined);
-            symbol = new TIntermSymbol(variable);
             // Insert the parameter in the symbol table.
             if (insertParametersToSymbolTable)
             {
@@ -3211,16 +3208,6 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
                 // inaccessible.
             }
         }
-        if (!symbol)
-        {
-            // The parameter had no name or declaring the symbol failed - either way, add a nameless
-            // symbol.
-            TVariable *emptyVariable =
-                new TVariable(&symbolTable, ImmutableString(""), param.type, SymbolType::Empty);
-            symbol = new TIntermSymbol(emptyVariable);
-        }
-        symbol->setLine(location);
-        prototype->appendParameter(symbol);
     }
     return prototype;
 }

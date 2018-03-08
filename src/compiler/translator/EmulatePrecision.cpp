@@ -618,11 +618,6 @@ bool EmulatePrecision::visitInvariantDeclaration(Visit visit, TIntermInvariantDe
     return false;
 }
 
-bool EmulatePrecision::visitFunctionPrototype(Visit visit, TIntermFunctionPrototype *node)
-{
-    return false;
-}
-
 bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     if (visit != PreVisit)
