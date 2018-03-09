@@ -929,13 +929,8 @@ bool ValidImageDataSize(ValidationContext *context,
     return true;
 }
 
-bool ValidQueryType(const Context *context, GLenum queryType)
+bool ValidQueryType(const Context *context, QueryType queryType)
 {
-    static_assert(GL_ANY_SAMPLES_PASSED == GL_ANY_SAMPLES_PASSED_EXT,
-                  "GL extension enums not equal.");
-    static_assert(GL_ANY_SAMPLES_PASSED_CONSERVATIVE == GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT,
-                  "GL extension enums not equal.");
-
     switch (queryType)
     {
         case GL_ANY_SAMPLES_PASSED:
@@ -1550,7 +1545,7 @@ bool ValidateIsQueryEXT(gl::Context *context, GLuint id)
     return true;
 }
 
-bool ValidateBeginQueryBase(gl::Context *context, GLenum target, GLuint id)
+bool ValidateBeginQueryBase(gl::Context *context, QueryType target, GLuint id)
 {
     if (!ValidQueryType(context, target))
     {
@@ -1605,7 +1600,7 @@ bool ValidateBeginQueryBase(gl::Context *context, GLenum target, GLuint id)
     return true;
 }
 
-bool ValidateBeginQueryEXT(gl::Context *context, GLenum target, GLuint id)
+bool ValidateBeginQueryEXT(gl::Context *context, QueryType target, GLuint id)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
         !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
@@ -1617,7 +1612,7 @@ bool ValidateBeginQueryEXT(gl::Context *context, GLenum target, GLuint id)
     return ValidateBeginQueryBase(context, target, id);
 }
 
-bool ValidateEndQueryBase(gl::Context *context, GLenum target)
+bool ValidateEndQueryBase(gl::Context *context, QueryType target)
 {
     if (!ValidQueryType(context, target))
     {
@@ -1636,7 +1631,7 @@ bool ValidateEndQueryBase(gl::Context *context, GLenum target)
     return true;
 }
 
-bool ValidateEndQueryEXT(gl::Context *context, GLenum target)
+bool ValidateEndQueryEXT(gl::Context *context, QueryType target)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
         !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
@@ -1648,7 +1643,7 @@ bool ValidateEndQueryEXT(gl::Context *context, GLenum target)
     return ValidateEndQueryBase(context, target);
 }
 
-bool ValidateQueryCounterEXT(Context *context, GLuint id, GLenum target)
+bool ValidateQueryCounterEXT(Context *context, GLuint id, QueryType target)
 {
     if (!context->getExtensions().disjointTimerQuery)
     {
@@ -1678,7 +1673,7 @@ bool ValidateQueryCounterEXT(Context *context, GLuint id, GLenum target)
     return true;
 }
 
-bool ValidateGetQueryivBase(Context *context, GLenum target, GLenum pname, GLsizei *numParams)
+bool ValidateGetQueryivBase(Context *context, QueryType target, GLenum pname, GLsizei *numParams)
 {
     if (numParams)
     {
@@ -1722,7 +1717,7 @@ bool ValidateGetQueryivBase(Context *context, GLenum target, GLenum pname, GLsiz
     return true;
 }
 
-bool ValidateGetQueryivEXT(Context *context, GLenum target, GLenum pname, GLint *params)
+bool ValidateGetQueryivEXT(Context *context, QueryType target, GLenum pname, GLint *params)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
         !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
@@ -1735,7 +1730,7 @@ bool ValidateGetQueryivEXT(Context *context, GLenum target, GLenum pname, GLint 
 }
 
 bool ValidateGetQueryivRobustANGLE(Context *context,
-                                   GLenum target,
+                                   QueryType target,
                                    GLenum pname,
                                    GLsizei bufSize,
                                    GLsizei *length,
