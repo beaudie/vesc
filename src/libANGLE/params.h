@@ -97,27 +97,51 @@ class HasIndexRange : public ParamsBase
 class DrawCallParams final : angle::NonCopyable
 {
   public:
-    // Called by a drawArrays call.
-    DrawCallParams(GLint firstVertex, GLsizei vertexCount, GLsizei instances);
+    // Called by DrawArrays.
+    DrawCallParams(GLenum mode, GLint firstVertex, GLsizei vertexCount, GLsizei instances);
 
-    // Called by a drawElements call.
-    DrawCallParams(const HasIndexRange &hasIndexRange, GLint baseVertex, GLsizei instances);
+    // Called by DrawElements.
+    DrawCallParams(GLenum mode,
+                   const HasIndexRange &hasIndexRange,
+                   GLint indexCount,
+                   GLenum type,
+                   const void *indices,
+                   GLint baseVertex,
+                   GLsizei instances);
+
+    // Called by DrawArraysIndirect.
+    DrawCallParams(GLenum mode, const void *indirect);
+
+    // Called by DrawElementsIndirect.
+    DrawCallParams(GLenum mode, GLenum type, const void *indirect);
 
     // It should be possible to also use an overload to handle the 'slow' indirect draw path.
     // TODO(jmadill): Indirect draw slow path overload.
 
+    GLenum mode() const;
     GLint firstVertex() const;
     GLsizei vertexCount() const;
+    GLsizei indexCount() const;
+    GLint baseVertex() const;
+    GLenum type() const;
+    const void *indices() const;
     GLsizei instances() const;
+    const void *indirect() const;
 
     void ensureIndexRangeResolved() const;
+    bool isDrawElements() const;
 
   private:
+    GLenum mMode;
     mutable const HasIndexRange *mHasIndexRange;
     mutable GLint mFirstVertex;
     mutable GLsizei mVertexCount;
-    GLsizei mInstances;
+    GLint mIndexCount;
     GLint mBaseVertex;
+    GLenum mType;
+    const void *mIndices;
+    GLsizei mInstances;
+    const void *mIndirect;
 };
 
 // Entry point funcs essentially re-map different entry point parameter arrays into
