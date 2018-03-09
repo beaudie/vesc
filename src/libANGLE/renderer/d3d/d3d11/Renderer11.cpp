@@ -1533,10 +1533,7 @@ gl::Error Renderer11::drawElements(const gl::Context *context, const gl::DrawCal
     const auto &glState = context->getGLState();
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
-    bool usePrimitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), params.type());
-
-    ANGLE_TRY(mStateManager.applyIndexBuffer(context, params, usePrimitiveRestartWorkaround));
+    ANGLE_TRY(mStateManager.applyIndexBuffer(context, params));
 
     int startVertex = static_cast<int>(params.firstVertex());
     int baseVertex  = -startVertex;
@@ -1648,13 +1645,9 @@ gl::Error Renderer11::drawElementsIndirect(const gl::Context *context,
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
     uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
 
-    bool usePrimitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), type);
-
     gl::DrawCallParams drawCallParams(mode, type, indirect);
     ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
-    ANGLE_TRY(
-        mStateManager.applyIndexBuffer(context, drawCallParams, usePrimitiveRestartWorkaround));
+    ANGLE_TRY(mStateManager.applyIndexBuffer(context, drawCallParams));
     ID3D11Buffer *buffer = nullptr;
     ANGLE_TRY_RESULT(storage->getBuffer(context, BUFFER_USAGE_INDIRECT), buffer);
     mDeviceContext->DrawIndexedInstancedIndirect(buffer, static_cast<unsigned int>(offset));
