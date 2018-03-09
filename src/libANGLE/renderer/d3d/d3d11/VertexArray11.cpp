@@ -18,26 +18,6 @@ using namespace angle;
 
 namespace rx
 {
-
-namespace
-{
-angle::Subject *GetBufferSubject(Buffer11 *buffer11, IndexStorageType storageType)
-{
-    switch (storageType)
-    {
-        case IndexStorageType::Direct:
-            return buffer11->getDirectSubject();
-        case IndexStorageType::Static:
-            return buffer11->getStaticSubject();
-        case IndexStorageType::Dynamic:
-            return buffer11 ? buffer11->getStaticSubject() : nullptr;
-        default:
-            UNREACHABLE();
-            return nullptr;
-    }
-}
-}  // anonymous namespace
-
 VertexArray11::VertexArray11(const gl::VertexArrayState &data)
     : VertexArrayImpl(data),
       mAttributeStorageTypes(data.getMaxAttribs(), VertexStorageType::CURRENT_VALUE),
@@ -177,11 +157,8 @@ bool VertexArray11::updateElementArrayStorage(const gl::Context *context,
     if (newStorageType != mCurrentElementArrayStorage || newBuffer != oldBuffer)
     {
         Buffer11 *newBuffer11 = SafeGetImplAs<Buffer11>(newBuffer);
-
-        angle::Subject *subject = GetBufferSubject(newBuffer11, newStorageType);
-
         mCurrentElementArrayStorage = newStorageType;
-        mOnElementArrayBufferDataDirty.bind(subject);
+        mOnElementArrayBufferDataDirty.bind(newBuffer11);
         needsTranslation = true;
     }
 
@@ -242,32 +219,12 @@ void VertexArray11::updateVertexAttribStorage(const gl::Context *context, size_t
 
     if (oldBuffer11 != newBuffer11 || oldStorageType != newStorageType)
     {
-        angle::Subject *subject = nullptr;
-
         if (newStorageType == VertexStorageType::CURRENT_VALUE)
         {
             stateManager->invalidateCurrentValueAttrib(attribIndex);
         }
-        else if (newBuffer11 != nullptr)
-        {
-            // Note that for static callbacks, promotion to a static buffer from a dynamic buffer
-            // means we need to tag dynamic buffers with static callbacks.
-            switch (newStorageType)
-            {
-                case VertexStorageType::DIRECT:
-                    subject = newBuffer11->getDirectSubject();
-                    break;
-                case VertexStorageType::STATIC:
-                case VertexStorageType::DYNAMIC:
-                    subject = newBuffer11->getStaticSubject();
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
-            }
-        }
 
-        mOnArrayBufferDataDirty[attribIndex].bind(subject);
+        mOnArrayBufferDataDirty[attribIndex].bind(newBuffer11);
         mCurrentArrayBuffers[attribIndex].set(context, binding.getBuffer().get());
     }
 }
