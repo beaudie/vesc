@@ -95,7 +95,6 @@ class IndexDataManager : angle::NonCopyable
 };
 
 gl::Error GetIndexTranslationDestType(const gl::Context *context,
-                                      GLenum srcType,
                                       const gl::DrawCallParams &drawCallParams,
                                       bool usePrimitiveRestartWorkaround,
                                       GLenum *destTypeOut);
