@@ -1473,12 +1473,14 @@ GetQueryivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei *len
     if (context)
     {
         GLsizei numParams = 0;
-        if (!ValidateGetQueryivRobustANGLE(context, target, pname, bufSize, &numParams, params))
+        QueryType targetPacked = FromGLenum<QueryType>(target);
+        if (!ValidateGetQueryivRobustANGLE(context, targetPacked, pname, bufSize, &numParams,
+                                           params))
         {
             return;
         }
 
-        context->getQueryiv(target, pname, params);
+        context->getQueryiv(targetPacked, pname, params);
         SetRobustLengthParam(length, numParams);
     }
 }
