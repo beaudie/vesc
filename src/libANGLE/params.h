@@ -90,6 +90,36 @@ class HasIndexRange : public ParamsBase
     mutable Optional<IndexRange> mIndexRange;
 };
 
+// Helper class that encompasses draw call parameters. It uses the HasIndexRange
+// helper class to only pull index range info lazily to prevent unnecessary readback.
+// It is also used when syncing state for the VertexArray implementation, since the
+// vertex and index buffer updates depend on draw call parameters.
+class DrawCallParams final : angle::NonCopyable
+{
+  public:
+    // Called by a drawArrays call.
+    DrawCallParams(GLint firstVertex, GLsizei vertexCount, GLsizei instances);
+
+    // Called by a drawElements call.
+    DrawCallParams(const HasIndexRange &hasIndexRange, GLint baseVertex, GLsizei instances);
+
+    // It should be possible to also use an overload to handle the 'slow' indirect draw path.
+    // TODO(jmadill): Indirect draw slow path overload.
+
+    GLint firstVertex() const;
+    GLsizei vertexCount() const;
+    GLsizei instances() const;
+
+    void ensureIndexRangeResolved() const;
+
+  private:
+    mutable const HasIndexRange *mHasIndexRange;
+    mutable GLint mFirstVertex;
+    mutable GLsizei mVertexCount;
+    GLsizei mInstances;
+    GLint mBaseVertex;
+};
+
 // Entry point funcs essentially re-map different entry point parameter arrays into
 // the format the parameter type class expects. For example, for HasIndexRange, for the
 // various indexed draw calls, they drop parameters that aren't useful and re-arrange
