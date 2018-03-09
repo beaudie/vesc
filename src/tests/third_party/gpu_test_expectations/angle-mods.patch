@@ -1,6 +1,6 @@
 diff -rupN --strip-trailing-cr gpu_test_expectations_reverted/HowToMakeChanges.md gpu_test_expectations/HowToMakeChanges.md
---- gpu_test_expectations_reverted/HowToMakeChanges.md	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/HowToMakeChanges.md	2018-01-29 15:28:13.820679300 -0500
+--- gpu_test_expectations_reverted/HowToMakeChanges.md  1969-12-31 19:00:00.000000000 -0500
++++ gpu_test_expectations/HowToMakeChanges.md 2018-01-29 15:28:13.820679300 -0500
 @@ -0,0 +1,22 @@
 +Because the ```gpu_test_expectations``` directory is based on parts of Chromium's ```gpu/config```
 +directory, we want to keep a patch of the changes added to make it compile with ANGLE. This
