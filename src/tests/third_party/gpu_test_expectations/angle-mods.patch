@@ -1,29 +1,3 @@
-diff -rupN --strip-trailing-cr gpu_test_expectations_reverted/HowToMakeChanges.md gpu_test_expectations/HowToMakeChanges.md
---- gpu_test_expectations_reverted/HowToMakeChanges.md	1969-12-31 19:00:00.000000000 -0500
-+++ gpu_test_expectations/HowToMakeChanges.md	2018-01-29 15:28:13.820679300 -0500
-@@ -0,0 +1,22 @@
-+Because the ```gpu_test_expectations``` directory is based on parts of Chromium's ```gpu/config```
-+directory, we want to keep a patch of the changes added to make it compile with ANGLE. This
-+will allow us to merge Chromium changes easily in our ```gpu_test_expectations```.
-+
-+In order to make a change to this directory, do the following:
-+
-+ * copy the directory somewhere like in ```gpu_test_expectations_reverted```
-+ * in ```gpu_test_expectations_reverted``` run ```patch -p 1 -R < angle-mods.patch```
-+ * do your changes in ```gpu_test_expectations```
-+ * delete angle-mods.patch in both directories
-+ * run ```diff -rupN gpu_test_expectations_reverted gpu_test_expectations > angle-mods.patch```
-+ * copy ```angle-mods.patch``` in ```gpu_test_expectations```
-+
-+How to update from Chromium:
-+
-+ * ```git apply -R angle-mods.patch```, ```git add . -u```, ```git commit```
-+ * Copy over Chromium files, ```git add . -u```, ```git commit```
-+ * ```git revert HEAD~```
-+ * ```rm angle-mods.patch```
-+ * ```git diff HEAD~ (`)ls(`) > angle-mods.patch```,```git add angle-mods.patch```, ```git commit --amend```
-+ * ```git rebase -i``` to squash the three patches into one.
-+
 diff -rupN --strip-trailing-cr gpu_test_expectations_reverted/angle_config.h gpu_test_expectations/angle_config.h
 --- gpu_test_expectations_reverted/angle_config.h	1969-12-31 19:00:00.000000000 -0500
 +++ gpu_test_expectations/angle_config.h	2017-09-11 17:09:26.892352900 -0400

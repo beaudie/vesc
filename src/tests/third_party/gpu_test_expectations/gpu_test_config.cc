@@ -202,7 +202,7 @@ bool GPUTestConfig::OverlapsWith(const GPUTestConfig& config) const {
       (build_type_ & config.build_type_) == 0)
     return false;
   if (config.api() != kAPIUnknown && api_ != kAPIUnknown && api_ != config.api_)
-    return false;   
+      return false;
   return true;
 }
 

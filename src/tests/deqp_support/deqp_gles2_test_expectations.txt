@@ -180,13 +180,11 @@
 // Vulkan failures
 2161 VULKAN : dEQP-GLES2.functional.prerequisite.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.implementation_limits.* = SKIP
-2161 VULKAN : dEQP-GLES2.functional.color_clear.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.depth_stencil_clear.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.buffer.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.light_amount.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.shaders.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.* = SKIP
-// 2161 VULKAN : dEQP-GLES2.functional.fragment_ops.random.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.fragment_ops.random.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.fragment_ops.interaction.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.fragment_ops.depth.* = SKIP
