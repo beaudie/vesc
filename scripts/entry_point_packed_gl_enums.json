@@ -1,4 +1,10 @@
 {
+    "glBeginQuery": {
+        "target": "QueryType"
+    },
+    "glBeginQueryEXT": {
+        "target": "QueryType"
+    },
     "glBindBuffer": {
         "target": "BufferBinding"
     },
@@ -67,6 +73,12 @@
     "glEGLImageTargetTexture2DOES": {
         "target": "TextureType"
     },
+    "glEndQuery": {
+        "target": "QueryType"
+    },
+    "glEndQueryEXT": {
+        "target": "QueryType"
+    },
     "glFlushMappedBufferRange": {
         "target": "BufferBinding"
     },
@@ -99,6 +111,15 @@
     },
     "glGetBufferPointervRobustANGLE": {
         "target": "BufferBinding"
+    },
+    "glGetQueryiv": {
+        "target": "QueryType"
+    },
+    "glGetQueryivEXT": {
+        "target": "QueryType"
+    },
+    "glGetQueryivRobustANGLE": {
+        "target": "QueryType"
     },
     "glGetTexLevelParameterfv": {
         "target": "TextureTarget"
@@ -144,6 +165,9 @@
     },
     "glMapBufferRangeEXT": {
         "target": "BufferBinding"
+    },
+    "glQueryCounterEXT": {
+        "target": "QueryType"
     },
     "glTexImage2D": {
         "target": "TextureTarget"
