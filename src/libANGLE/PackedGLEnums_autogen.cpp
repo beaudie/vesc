@@ -172,6 +172,46 @@ GLenum ToGLenum(CullFaceMode from)
 }
 
 template <>
+QueryType FromGLenum<QueryType>(GLenum from)
+{
+    switch (from)
+    {
+        case GL_ANY_SAMPLES_PASSED:
+            return QueryType::AnySamples;
+        case GL_ANY_SAMPLES_PASSED_CONSERVATIVE:
+            return QueryType::AnySamplesConservative;
+        case GL_COMMANDS_COMPLETED_CHROMIUM:
+            return QueryType::CommandsCompleted;
+        case GL_TIME_ELAPSED_EXT:
+            return QueryType::TimeElapsed;
+        case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
+            return QueryType::TransformFeedbackPrimitives;
+        default:
+            return QueryType::InvalidEnum;
+    }
+}
+
+GLenum ToGLenum(QueryType from)
+{
+    switch (from)
+    {
+        case QueryType::AnySamples:
+            return GL_ANY_SAMPLES_PASSED;
+        case QueryType::AnySamplesConservative:
+            return GL_ANY_SAMPLES_PASSED_CONSERVATIVE;
+        case QueryType::CommandsCompleted:
+            return GL_COMMANDS_COMPLETED_CHROMIUM;
+        case QueryType::TimeElapsed:
+            return GL_TIME_ELAPSED_EXT;
+        case QueryType::TransformFeedbackPrimitives:
+            return GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
+}
+
+template <>
 TextureTarget FromGLenum<TextureTarget>(GLenum from)
 {
     switch (from)

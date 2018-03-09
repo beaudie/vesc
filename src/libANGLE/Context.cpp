@@ -1058,7 +1058,7 @@ void Context::bindProgramPipeline(GLuint pipelineHandle)
     mGLState.setProgramPipelineBinding(this, pipeline);
 }
 
-void Context::beginQuery(GLenum target, GLuint query)
+void Context::beginQuery(QueryType target, GLuint query)
 {
     Query *queryObject = getQuery(query, true, target);
     ASSERT(queryObject);
@@ -1070,7 +1070,7 @@ void Context::beginQuery(GLenum target, GLuint query)
     mGLState.setActiveQuery(this, target, queryObject);
 }
 
-void Context::endQuery(GLenum target)
+void Context::endQuery(QueryType target)
 {
     Query *queryObject = mGLState.getActiveQuery(target);
     ASSERT(queryObject);
@@ -1081,7 +1081,7 @@ void Context::endQuery(GLenum target)
     mGLState.setActiveQuery(this, target, nullptr);
 }
 
-void Context::queryCounter(GLuint id, GLenum target)
+void Context::queryCounter(GLuint id, QueryType target)
 {
     ASSERT(target == GL_TIMESTAMP_EXT);
 
@@ -1091,7 +1091,7 @@ void Context::queryCounter(GLuint id, GLenum target)
     handleError(queryObject->queryCounter());
 }
 
-void Context::getQueryiv(GLenum target, GLenum pname, GLint *params)
+void Context::getQueryiv(QueryType target, GLenum pname, GLint *params)
 {
     switch (pname)
     {
@@ -1149,7 +1149,7 @@ FenceNV *Context::getFenceNV(GLuint handle)
     return mFenceNVMap.query(handle);
 }
 
-Query *Context::getQuery(GLuint handle, bool create, GLenum type)
+Query *Context::getQuery(GLuint handle, bool create, QueryType type)
 {
     if (!mQueryMap.contains(handle))
     {

@@ -32,6 +32,14 @@
         "Front": "GL_FRONT",
         "FrontAndBack": "GL_FRONT_AND_BACK"
     },
+    "QueryType":
+    {
+        "AnySamples": "GL_ANY_SAMPLES_PASSED",
+        "AnySamplesConservative": "GL_ANY_SAMPLES_PASSED_CONSERVATIVE",
+        "CommandsCompleted": "GL_COMMANDS_COMPLETED_CHROMIUM",
+        "TimeElapsed": "GL_TIME_ELAPSED_EXT",
+        "TransformFeedbackPrimitives": "GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"
+    },
     "TextureType":
     [
         {"name": "_2D", "gl_name": "GL_TEXTURE_2D", "value": 0},
