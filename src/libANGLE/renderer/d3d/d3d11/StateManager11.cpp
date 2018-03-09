@@ -2651,7 +2651,7 @@ gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMod
 
 gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
                                             GLenum mode,
-                                            const DrawCallVertexParams &vertexParams,
+                                            const gl::DrawCallParams &drawCallParams,
                                             bool isIndexedRendering)
 {
     const auto &state       = context->getGLState();
@@ -2661,16 +2661,16 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     if (mVertexAttribsNeedTranslation)
     {
         ANGLE_TRY(vertexArray11->updateDirtyAndDynamicAttribs(context, &mVertexDataManager,
-                                                              vertexParams));
+                                                              drawCallParams));
         mInputLayoutIsDirty = true;
 
         // Determine if we need to update attribs on the next draw.
         mVertexAttribsNeedTranslation = (vertexArray11->hasActiveDynamicAttrib(context));
     }
 
-    if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != vertexParams.firstVertex())
+    if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != drawCallParams.firstVertex())
     {
-        mLastFirstVertex    = vertexParams.firstVertex();
+        mLastFirstVertex    = drawCallParams.firstVertex();
         mInputLayoutIsDirty = true;
     }
 
@@ -2706,11 +2706,11 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
 
     // Update the applied input layout by querying the cache.
     ANGLE_TRY(mInputLayoutCache.updateInputLayout(mRenderer, state, mCurrentAttributes, mode,
-                                                  sortedSemanticIndices, vertexParams));
+                                                  sortedSemanticIndices, drawCallParams));
 
     // Update the applied vertex buffers.
-    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(context, mCurrentAttributes, mode,
-                                                   vertexParams.firstVertex(), isIndexedRendering));
+    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(
+        context, mCurrentAttributes, mode, drawCallParams.firstVertex(), isIndexedRendering));
 
     // InputLayoutCache::applyVertexBuffers calls through to the Bufer11 to get the native vertex
     // buffer (ID3D11Buffer *). Because we allocate these buffers lazily, this will trigger
@@ -2719,7 +2719,7 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     // update on the second draw call.
     // Hence we clear the flags here, after we've applied vertex data, since we know everything
     // is clean. This is a bit of a hack.
-    vertexArray11->clearDirtyAndPromoteDynamicAttribs(context, vertexParams);
+    vertexArray11->clearDirtyAndPromoteDynamicAttribs(context, drawCallParams);
 
     mInputLayoutIsDirty = false;
     return gl::NoError();
@@ -3174,62 +3174,6 @@ gl::Error StateManager11::syncTransformFeedbackBuffers(const gl::Context *contex
     tf11->onApply();
 
     return gl::NoError();
-}
-
-// DrawCallVertexParams implementation.
-DrawCallVertexParams::DrawCallVertexParams(GLint firstVertex,
-                                           GLsizei vertexCount,
-                                           GLsizei instances)
-    : mHasIndexRange(nullptr),
-      mFirstVertex(firstVertex),
-      mVertexCount(vertexCount),
-      mInstances(instances),
-      mBaseVertex(0)
-{
-}
-
-// Use when in a drawElements call.
-DrawCallVertexParams::DrawCallVertexParams(const gl::HasIndexRange &hasIndexRange,
-                                           GLint baseVertex,
-                                           GLsizei instances)
-    : mHasIndexRange(&hasIndexRange),
-      mFirstVertex(baseVertex),
-      mVertexCount(0),
-      mInstances(instances),
-      mBaseVertex(baseVertex)
-{
-}
-
-GLint DrawCallVertexParams::firstVertex() const
-{
-    return mFirstVertex;
-}
-
-GLsizei DrawCallVertexParams::vertexCount() const
-{
-    ASSERT(mHasIndexRange == nullptr);
-    return mVertexCount;
-}
-
-GLsizei DrawCallVertexParams::instances() const
-{
-    return mInstances;
-}
-
-void DrawCallVertexParams::ensureIndexRangeResolved() const
-{
-    if (!mHasIndexRange)
-    {
-        return;
-    }
-
-    ASSERT(mFirstVertex == 0 || mFirstVertex == mBaseVertex);
-
-    // Resolve the index range now if we need to.
-    const auto &indexRange = mHasIndexRange->getIndexRange().value();
-    mFirstVertex           = mBaseVertex + static_cast<GLint>(indexRange.start);
-    mVertexCount           = static_cast<GLsizei>(indexRange.vertexCount());
-    mHasIndexRange         = nullptr;
 }
 
 // OnConstantBufferDirtyReceiver implementation.
