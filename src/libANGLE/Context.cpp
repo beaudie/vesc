@@ -2924,7 +2924,7 @@ Error Context::prepareForDraw()
     ANGLE_TRY(syncDirtyBits());
 
     const DrawCallParams &drawCallParams = getParams<DrawCallParams>();
-    mGLState.getVertexArray()->syncState(this, drawCallParams);
+    ANGLE_TRY(mGLState.getVertexArray()->syncState(this, drawCallParams));
 
     return NoError();
 }
