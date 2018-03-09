@@ -94,9 +94,11 @@ class IndexDataManager : angle::NonCopyable
     std::unique_ptr<StreamingIndexBufferInterface> mStreamingBufferInt;
 };
 
-GLenum GetIndexTranslationDestType(GLenum srcType,
-                                   const gl::HasIndexRange &lazyIndexRange,
-                                   bool usePrimitiveRestartWorkaround);
+gl::Error GetIndexTranslationDestType(const gl::Context *context,
+                                      GLenum srcType,
+                                      const gl::DrawCallParams &drawCallParams,
+                                      bool usePrimitiveRestartWorkaround,
+                                      GLenum *destTypeOut);
 
 bool IsOffsetAligned(GLenum elementType, unsigned int offset);
 

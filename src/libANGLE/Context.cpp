@@ -2915,6 +2915,9 @@ Error Context::prepareForDraw()
 {
     ANGLE_TRY(syncRendererDirtyObjects());
 
+    const auto &drawCallParams = getParams<gl::DrawCallParams>();
+    mGLState.getVertexArray()->syncState(this, drawCallParams);
+
     if (isRobustResourceInitEnabled())
     {
         ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
