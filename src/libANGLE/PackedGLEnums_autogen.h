@@ -79,6 +79,22 @@ template <>
 CullFaceMode FromGLenum<CullFaceMode>(GLenum from);
 GLenum ToGLenum(CullFaceMode from);
 
+enum class QueryType : uint8_t
+{
+    AnySamples                  = 0,
+    AnySamplesConservative      = 1,
+    CommandsCompleted           = 2,
+    TimeElapsed                 = 3,
+    TransformFeedbackPrimitives = 4,
+
+    InvalidEnum = 5,
+    EnumCount   = 5,
+};
+
+template <>
+QueryType FromGLenum<QueryType>(GLenum from);
+GLenum ToGLenum(QueryType from);
+
 enum class TextureTarget : uint8_t
 {
     _2D              = 0,
