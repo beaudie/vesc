@@ -572,7 +572,6 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurrentValueAttribs(),
       mCurrentInputLayout(),
       mInputLayoutIsDirty(false),
-      mVertexAttribsNeedTranslation(false),
       mDirtyVertexBufferRange(gl::MAX_VERTEX_ATTRIBS, 0),
       mCurrentPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
       mDirtySwizzles(false),
@@ -1431,7 +1430,6 @@ void StateManager11::invalidateVertexBuffer()
     mDirtyVertexBufferRange = gl::RangeUI(0, limit);
     mInputLayoutIsDirty     = true;
     mInternalDirtyBits.set(DIRTY_BIT_CURRENT_VALUE_ATTRIBS);
-    invalidateVertexAttributeTranslation();
 }
 
 void StateManager11::invalidateViewport(const gl::Context *context)
@@ -1492,6 +1490,11 @@ void StateManager11::invalidateShaders()
     mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
 }
 
+void StateManager11::invalidateInputLayout()
+{
+    mInputLayoutIsDirty = true;
+}
+
 void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv)
 {
     if ((rtv && unsetConflictingView(rtv)) || (dsv && unsetConflictingView(dsv)))
@@ -1526,11 +1529,6 @@ void StateManager11::setRenderTargets(ID3D11RenderTargetView **rtvs,
 
     mRenderer->getDeviceContext()->OMSetRenderTargets(numRTVs, (numRTVs > 0) ? rtvs : nullptr, dsv);
     mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
-}
-
-void StateManager11::invalidateVertexAttributeTranslation()
-{
-    mVertexAttribsNeedTranslation = true;
 }
 
 void StateManager11::onBeginQuery(Query11 *query)
@@ -2649,16 +2647,6 @@ gl::Error StateManager11::applyVertexBuffer(const gl::Context *context,
     const auto &state       = context->getGLState();
     const gl::VertexArray *vertexArray = state.getVertexArray();
     VertexArray11 *vertexArray11       = GetImplAs<VertexArray11>(vertexArray);
-
-    if (mVertexAttribsNeedTranslation)
-    {
-        ANGLE_TRY(vertexArray11->updateDirtyAndDynamicAttribs(context, &mVertexDataManager,
-                                                              drawCallParams));
-        mInputLayoutIsDirty = true;
-
-        // Determine if we need to update attribs on the next draw.
-        mVertexAttribsNeedTranslation = (vertexArray11->hasActiveDynamicAttrib(context));
-    }
 
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != drawCallParams.firstVertex())
     {
