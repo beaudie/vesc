@@ -92,12 +92,12 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
     return gl::NoError();
 }
 
-void VertexArrayVk::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits,
-                              const gl::DrawCallParams &drawCallParams)
+gl::Error VertexArrayVk::syncState(const gl::Context *context,
+                                   const gl::VertexArray::DirtyBits &dirtyBits,
+                                   const gl::DrawCallParams &drawCallParams)
 {
     if (!dirtyBits.any())
-        return;
+        return gl::NoError();
 
     // Invalidate current pipeline.
     ContextVk *contextVk = vk::GetImpl(context);
@@ -158,6 +158,8 @@ void VertexArrayVk::syncState(const gl::Context *context,
             UNIMPLEMENTED();
         }
     }
+
+    return gl::NoError();
 }
 
 const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() const
