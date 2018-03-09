@@ -1171,10 +1171,10 @@ class Context final : public ValidationContext
     Error prepareForDraw();
     Error prepareForClear(GLbitfield mask);
     Error prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
-    Error syncRendererState();
-    Error syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
-    Error syncRendererDirtyBits();
-    Error syncRendererDirtyBits(const State::DirtyBits &bitMask);
+    Error syncImplementationState();
+    Error syncImplementationState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
+    Error syncImplementationDirtyBits();
+    Error syncImplementationDirtyBits(const State::DirtyBits &bitMask);
     Error syncRendererDirtyObjects();
     Error syncRendererDirtyObjects(const State::DirtyObjects &objectMask);
     Error syncStateForReadPixels();

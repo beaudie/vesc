@@ -1938,7 +1938,7 @@ void Context::stencilFillPath(GLuint path, GLenum fillMode, GLuint mask)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilFillPath(pathObj, fillMode, mask);
 }
@@ -1950,7 +1950,7 @@ void Context::stencilStrokePath(GLuint path, GLint reference, GLuint mask)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilStrokePath(pathObj, reference, mask);
 }
@@ -1962,7 +1962,7 @@ void Context::coverFillPath(GLuint path, GLenum coverMode)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->coverFillPath(pathObj, coverMode);
 }
@@ -1974,7 +1974,7 @@ void Context::coverStrokePath(GLuint path, GLenum coverMode)
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->coverStrokePath(pathObj, coverMode);
 }
@@ -1986,7 +1986,7 @@ void Context::stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilThenCoverFillPath(pathObj, fillMode, mask, coverMode);
 }
@@ -2001,7 +2001,7 @@ void Context::stencilThenCoverStrokePath(GLuint path,
         return;
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilThenCoverStrokePath(pathObj, reference, mask, coverMode);
 }
@@ -2017,7 +2017,7 @@ void Context::coverFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->coverFillPathInstanced(pathObjects, coverMode, transformType, transformValues);
 }
@@ -2033,7 +2033,7 @@ void Context::coverStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->coverStrokePathInstanced(pathObjects, coverMode, transformType,
                                               transformValues);
@@ -2051,7 +2051,7 @@ void Context::stencilFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilFillPathInstanced(pathObjects, fillMode, mask, transformType,
                                               transformValues);
@@ -2069,7 +2069,7 @@ void Context::stencilStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilStrokePathInstanced(pathObjects, reference, mask, transformType,
                                                 transformValues);
@@ -2088,7 +2088,7 @@ void Context::stencilThenCoverFillPathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilThenCoverFillPathInstanced(pathObjects, coverMode, fillMode, mask,
                                                        transformType, transformValues);
@@ -2107,7 +2107,7 @@ void Context::stencilThenCoverStrokePathInstanced(GLsizei numPaths,
     const auto &pathObjects = GatherPaths(*mState.mPaths, numPaths, pathNameType, paths, pathBase);
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
-    ANGLE_CONTEXT_TRY(syncRendererState());
+    ANGLE_CONTEXT_TRY(syncImplementationState());
 
     mImplementation->stencilThenCoverStrokePathInstanced(pathObjects, coverMode, reference, mask,
                                                          transformType, transformValues);
@@ -2915,7 +2915,7 @@ Error Context::prepareForDraw()
         ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
     }
 
-    ANGLE_TRY(syncRendererDirtyBits());
+    ANGLE_TRY(syncImplementationDirtyBits());
     return NoError();
 }
 
@@ -2923,7 +2923,7 @@ Error Context::prepareForClear(GLbitfield mask)
 {
     ANGLE_TRY(syncRendererDirtyObjects(mClearDirtyObjects));
     ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
-    ANGLE_TRY(syncRendererDirtyBits(mClearDirtyBits));
+    ANGLE_TRY(syncImplementationDirtyBits(mClearDirtyBits));
     return NoError();
 }
 
@@ -2932,26 +2932,26 @@ Error Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
     ANGLE_TRY(syncRendererDirtyObjects(mClearDirtyObjects));
     ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureClearBufferAttachmentsInitialized(this, buffer,
                                                                                      drawbuffer));
-    ANGLE_TRY(syncRendererDirtyBits(mClearDirtyBits));
+    ANGLE_TRY(syncImplementationDirtyBits(mClearDirtyBits));
     return NoError();
 }
 
-Error Context::syncRendererState()
+Error Context::syncImplementationState()
 {
     ANGLE_TRY(syncRendererDirtyObjects());
-    ANGLE_TRY(syncRendererDirtyBits());
+    ANGLE_TRY(syncImplementationDirtyBits());
     return NoError();
 }
 
-Error Context::syncRendererState(const State::DirtyBits &bitMask,
+Error Context::syncImplementationState(const State::DirtyBits &bitMask,
                                  const State::DirtyObjects &objectMask)
 {
     ANGLE_TRY(syncRendererDirtyObjects(objectMask));
-    ANGLE_TRY(syncRendererDirtyBits(bitMask));
+    ANGLE_TRY(syncImplementationDirtyBits(bitMask));
     return NoError();
 }
 
-Error Context::syncRendererDirtyBits()
+Error Context::syncImplementationDirtyBits()
 {
     const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
     mImplementation->syncState(this, dirtyBits);
@@ -2959,7 +2959,7 @@ Error Context::syncRendererDirtyBits()
     return NoError();
 }
 
-Error Context::syncRendererDirtyBits(const State::DirtyBits &bitMask)
+Error Context::syncImplementationDirtyBits(const State::DirtyBits &bitMask)
 {
     const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
     mImplementation->syncState(this, dirtyBits);
@@ -3672,17 +3672,17 @@ void Context::flushMappedBufferRange(BufferBinding /*target*/,
 
 Error Context::syncStateForReadPixels()
 {
-    return syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
+    return syncImplementationState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);
 }
 
 Error Context::syncStateForTexImage()
 {
-    return syncRendererState(mTexImageDirtyBits, mTexImageDirtyObjects);
+    return syncImplementationState(mTexImageDirtyBits, mTexImageDirtyObjects);
 }
 
 Error Context::syncStateForBlit()
 {
-    return syncRendererState(mBlitDirtyBits, mBlitDirtyObjects);
+    return syncImplementationState(mBlitDirtyBits, mBlitDirtyObjects);
 }
 
 void Context::activeShaderProgram(GLuint pipeline, GLuint program)
@@ -4349,7 +4349,7 @@ Error Context::getZeroFilledBuffer(size_t requstedSizeBytes,
 
 Error Context::prepareForDispatch()
 {
-    ANGLE_TRY(syncRendererState(mComputeDirtyBits, mComputeDirtyObjects));
+    ANGLE_TRY(syncImplementationState(mComputeDirtyBits, mComputeDirtyObjects));
 
     if (isRobustResourceInitEnabled())
     {
