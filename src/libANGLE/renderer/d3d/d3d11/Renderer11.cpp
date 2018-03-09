@@ -1819,7 +1819,7 @@ gl::Error Renderer11::drawElementsIndirect(const gl::Context *context,
         reinterpret_cast<const void *>(static_cast<uintptr_t>(firstIndex * typeInfo.bytes));
 
     gl::DrawCallParams drawCallParams(mode, count, type, indices, baseVertex, instances);
-    drawCallParams.ensureIndexRangeResolved(context);
+    ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
 
     ANGLE_TRY(
         mStateManager.applyIndexBuffer(context, drawCallParams, usePrimitiveRestartWorkaround));
