@@ -67,25 +67,71 @@ const Optional<IndexRange> &HasIndexRange::getIndexRange() const
 }
 
 // DrawCallParams implementation.
-DrawCallParams::DrawCallParams(GLint firstVertex, GLsizei vertexCount, GLsizei instances)
-    : mHasIndexRange(nullptr),
+// Called by DrawArrays.
+DrawCallParams::DrawCallParams(GLenum mode,
+                               GLint firstVertex,
+                               GLsizei vertexCount,
+                               GLsizei instances)
+    : mMode(mode),
+      mHasIndexRange(nullptr),
       mFirstVertex(firstVertex),
       mVertexCount(vertexCount),
+      mIndexCount(0),
+      mBaseVertex(0),
+      mType(GL_NONE),
+      mIndices(nullptr),
       mInstances(instances),
-      mBaseVertex(0)
+      mIndirect(nullptr)
 {
 }
 
-// Use when in a drawElements call.
-DrawCallParams::DrawCallParams(const HasIndexRange &hasIndexRange,
+// Called by DrawElements.
+DrawCallParams::DrawCallParams(GLenum mode,
+                               const HasIndexRange &hasIndexRange,
+                               GLint indexCount,
+                               GLenum type,
+                               const void *indices,
                                GLint baseVertex,
                                GLsizei instances)
-    : mHasIndexRange(&hasIndexRange),
-      mFirstVertex(baseVertex),
-      mVertexCount(0),
+    : mMode(mode),
+      mHasIndexRange(&hasIndexRange),
+      mFirstVertex(0),
+      mIndexCount(indexCount),
+      mBaseVertex(baseVertex),
+      mType(type),
+      mIndices(indices),
       mInstances(instances),
-      mBaseVertex(baseVertex)
+      mIndirect(nullptr)
 {
+}
+
+// Called by DrawArraysIndirect.
+DrawCallParams::DrawCallParams(GLenum mode, const void *indirect)
+    : mMode(mode),
+      mIndexCount(0),
+      mBaseVertex(0),
+      mType(GL_NONE),
+      mIndices(nullptr),
+      mInstances(0),
+      mIndirect(indirect)
+{
+}
+
+// Called by DrawElementsIndirect.
+DrawCallParams::DrawCallParams(GLenum mode, GLenum type, const void *indirect)
+    : mMode(mode),
+      mIndexCount(0),
+      mBaseVertex(0),
+      mType(type),
+      mIndices(nullptr),
+      mInstances(0),
+      mIndirect(indirect)
+{
+}
+
+GLenum DrawCallParams::mode() const
+{
+    return mMode;
 }
 
 GLint DrawCallParams::firstVertex() const
@@ -99,9 +145,41 @@ GLsizei DrawCallParams::vertexCount() const
     return mVertexCount;
 }
 
+GLsizei DrawCallParams::indexCount() const
+{
+    ASSERT(isDrawElements());
+    return mIndexCount;
+}
+
+GLint DrawCallParams::baseVertex() const
+{
+    return mBaseVertex;
+}
+
+GLenum DrawCallParams::type() const
+{
+    ASSERT(isDrawElements());
+    return mType;
+}
+
+const void *DrawCallParams::indices() const
+{
+    return mIndices;
+}
+
 GLsizei DrawCallParams::instances() const
 {
     return mInstances;
+}
+
+const void *DrawCallParams::indirect() const
+{
+    return mIndirect;
+}
+
+bool DrawCallParams::isDrawElements() const
+{
+    return (mType != GL_NONE);
 }
 
 void DrawCallParams::ensureIndexRangeResolved() const
