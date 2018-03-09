@@ -309,7 +309,7 @@ gl::Error InputLayoutCache::updateInputLayout(
     const std::vector<const TranslatedAttribute *> &currentAttributes,
     GLenum mode,
     const AttribIndexArray &sortedSemanticIndices,
-    const DrawCallVertexParams &vertexParams)
+    const gl::DrawCallParams &drawCallParams)
 {
     gl::Program *program         = state.getProgram();
     const auto &shaderAttributes = program->getAttributes();
@@ -330,7 +330,7 @@ gl::Error InputLayoutCache::updateInputLayout(
         layout.flags |= PackedAttributeLayout::FLAG_INSTANCED_SPRITES_ACTIVE;
     }
 
-    if (vertexParams.instances() > 0)
+    if (drawCallParams.instances() > 0)
     {
         layout.flags |= PackedAttributeLayout::FLAG_INSTANCED_RENDERING_ACTIVE;
     }
@@ -372,7 +372,7 @@ gl::Error InputLayoutCache::updateInputLayout(
 
             d3d11::InputLayout newInputLayout;
             ANGLE_TRY(createInputLayout(renderer, sortedSemanticIndices, currentAttributes, mode,
-                                        program, vertexParams, &newInputLayout));
+                                        program, drawCallParams, &newInputLayout));
 
             auto insertIt = mLayoutCache.Put(layout, std::move(newInputLayout));
             inputLayout   = &insertIt->second;
@@ -389,7 +389,7 @@ gl::Error InputLayoutCache::createInputLayout(
     const std::vector<const TranslatedAttribute *> &currentAttributes,
     GLenum mode,
     gl::Program *program,
-    const DrawCallVertexParams &vertexParams,
+    const gl::DrawCallParams &drawCallParams,
     d3d11::InputLayout *inputLayoutOut)
 {
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
@@ -440,10 +440,10 @@ gl::Error InputLayoutCache::createInputLayout(
         // simultaneously, so a non-instanced element must exist.
 
         GLsizei numIndicesPerInstance = 0;
-        if (vertexParams.instances() > 0)
+        if (drawCallParams.instances() > 0)
         {
             // This may trigger an evaluation of the index range.
-            numIndicesPerInstance = vertexParams.vertexCount();
+            numIndicesPerInstance = drawCallParams.vertexCount();
         }
 
         for (size_t elementIndex = 0; elementIndex < inputElementCount; ++elementIndex)
