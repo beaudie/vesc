@@ -415,13 +415,6 @@ enum class IndexStorageType
     Invalid,
 };
 
-IndexStorageType ClassifyIndexStorage(const gl::State &glState,
-                                      const gl::Buffer *elementArrayBuffer,
-                                      GLenum elementType,
-                                      GLenum destElementType,
-                                      unsigned int offset,
-                                      bool *needsTranslation);
-
 }  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
