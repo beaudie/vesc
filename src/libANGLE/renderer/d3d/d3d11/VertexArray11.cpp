@@ -76,9 +76,11 @@ void VertexArray11::destroy(const gl::Context *context)
 }
 
 void VertexArray11::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits)
+                              const gl::VertexArray::DirtyBits &dirtyBits,
+                              const gl::DrawCallParams &drawCallParams)
 {
-    ASSERT(dirtyBits.any());
+    if (!dirtyBits.any())
+        return;
 
     // Generate a state serial. This serial is used in the program class to validate the cached
     // input layout, and skip recomputation in the fast path.
@@ -315,7 +317,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(const gl::Context *context
 
     if (mDynamicAttribsMask.any())
     {
-        drawCallParams.ensureIndexRangeResolved();
+        ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
 
         auto activeDynamicAttribs = (mDynamicAttribsMask & activeLocations);
         if (activeDynamicAttribs.none())
