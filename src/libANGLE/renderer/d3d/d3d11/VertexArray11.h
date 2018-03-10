@@ -31,9 +31,6 @@ class VertexArray11 : public angle::ObserverInterface, public VertexArrayImpl
                         const gl::DrawCallParams &drawCallParams) override;
     // This will flush any pending attrib updates and then check the dynamic attribs mask.
     bool hasActiveDynamicAttrib(const gl::Context *context);
-    gl::Error updateDirtyAndDynamicAttribs(const gl::Context *context,
-                                           VertexDataManager *vertexDataManager,
-                                           const gl::DrawCallParams &drawCallParams);
     void clearDirtyAndPromoteDynamicAttribs(const gl::Context *context,
                                             const gl::DrawCallParams &drawCallParams);
 
@@ -50,8 +47,6 @@ class VertexArray11 : public angle::ObserverInterface, public VertexArrayImpl
     // is adjusted.
     void markAllAttributeDivisorsForAdjustment(int numViews);
 
-    bool flushAttribUpdates(const gl::Context *context);
-
     // Returns true if the element array buffer needs to be translated.
     bool updateElementArrayStorage(const gl::Context *context,
                                    GLenum elementType,
@@ -64,6 +59,11 @@ class VertexArray11 : public angle::ObserverInterface, public VertexArrayImpl
 
   private:
     void updateVertexAttribStorage(const gl::Context *context, size_t attribIndex);
+    bool flushAttribUpdates(const gl::Context *context);
+    gl::Error updateDirtyAttribs(const gl::Context *context, StateManager11 *stateManager);
+    gl::Error updateDynamicAttribs(const gl::Context *context,
+                                   StateManager11 *stateManager,
+                                   const gl::DrawCallParams &drawCallParams);
 
     std::vector<VertexStorageType> mAttributeStorageTypes;
     std::vector<TranslatedAttribute> mTranslatedAttribs;
