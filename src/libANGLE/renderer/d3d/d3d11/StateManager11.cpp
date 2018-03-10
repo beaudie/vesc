@@ -3189,35 +3189,25 @@ DrawCallVertexParams::DrawCallVertexParams(GLint firstVertex,
 }
 
 // Use when in a drawElements call.
-DrawCallVertexParams::DrawCallVertexParams(bool firstVertexDefinitelyZero,
-                                           const gl::HasIndexRange &hasIndexRange,
+DrawCallVertexParams::DrawCallVertexParams(const gl::HasIndexRange &hasIndexRange,
                                            GLint baseVertex,
                                            GLsizei instances)
     : mHasIndexRange(&hasIndexRange),
-      mFirstVertex(),
+      mFirstVertex(baseVertex),
       mVertexCount(0),
       mInstances(instances),
       mBaseVertex(baseVertex)
 {
-    if (firstVertexDefinitelyZero)
-    {
-        mFirstVertex = baseVertex;
-    }
 }
 
 GLint DrawCallVertexParams::firstVertex() const
 {
-    if (!mFirstVertex.valid())
-    {
-        ensureResolved();
-        ASSERT(mFirstVertex.valid());
-    }
-    return mFirstVertex.value();
+    return mFirstVertex;
 }
 
 GLsizei DrawCallVertexParams::vertexCount() const
 {
-    ensureResolved();
+    ASSERT(mHasIndexRange == nullptr);
     return mVertexCount;
 }
 
@@ -3226,18 +3216,20 @@ GLsizei DrawCallVertexParams::instances() const
     return mInstances;
 }
 
-void DrawCallVertexParams::ensureResolved() const
+void DrawCallVertexParams::ensureIndexRangeResolved() const
 {
-    if (mHasIndexRange)
+    if (!mHasIndexRange)
     {
-        ASSERT(!mFirstVertex.valid() || mFirstVertex == mBaseVertex);
-
-        // Resolve the index range now if we need to.
-        const auto &indexRange = mHasIndexRange->getIndexRange().value();
-        mFirstVertex           = mBaseVertex + static_cast<GLint>(indexRange.start);
-        mVertexCount           = static_cast<GLsizei>(indexRange.vertexCount());
-        mHasIndexRange         = nullptr;
+        return;
     }
+
+    ASSERT(mFirstVertex == 0 || mFirstVertex == mBaseVertex);
+
+    // Resolve the index range now if we need to.
+    const auto &indexRange = mHasIndexRange->getIndexRange().value();
+    mFirstVertex           = mBaseVertex + static_cast<GLint>(indexRange.start);
+    mVertexCount           = static_cast<GLsizei>(indexRange.vertexCount());
+    mHasIndexRange         = nullptr;
 }
 
 // OnConstantBufferDirtyReceiver implementation.
