@@ -23,9 +23,9 @@ class VertexArray9 : public VertexArrayImpl
   public:
     VertexArray9(const gl::VertexArrayState &data) : VertexArrayImpl(data) {}
 
-    void syncState(const gl::Context *context,
-                   const gl::VertexArray::DirtyBits &dirtyBits,
-                   const gl::DrawCallParams &drawCallParams) override;
+    gl::Error syncState(const gl::Context *context,
+                        const gl::VertexArray::DirtyBits &dirtyBits,
+                        const gl::DrawCallParams &drawCallParams) override;
 
     ~VertexArray9() override {}
 
@@ -35,14 +35,16 @@ class VertexArray9 : public VertexArrayImpl
     Serial mCurrentStateSerial;
 };
 
-inline void VertexArray9::syncState(const gl::Context *context,
-                                    const gl::VertexArray::DirtyBits &dirtyBits,
-                                    const gl::DrawCallParams &drawCallParams)
+inline gl::Error VertexArray9::syncState(const gl::Context *context,
+                                         const gl::VertexArray::DirtyBits &dirtyBits,
+                                         const gl::DrawCallParams &drawCallParams)
 {
     if (!dirtyBits.any())
-        return;
+        return gl::NoError();
     Renderer9 *renderer = GetImplAs<Context9>(context)->getRenderer();
     mCurrentStateSerial = renderer->generateSerial();
+
+    return gl::NoError();
 }
 }  // namespace rx
 
