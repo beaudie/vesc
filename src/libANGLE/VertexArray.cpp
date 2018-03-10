@@ -260,13 +260,14 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
 }
 
-void VertexArray::syncState(const Context *context, const DrawCallParams &drawCallParams)
+Error VertexArray::syncState(const Context *context, const DrawCallParams &drawCallParams)
 {
     // We call syncState even if we have no dirty bits, so the back end can do any draw call
     // related state updates. Some state updates might depends on drawCallParams changes rather
     // than dirty bits themselves.
-    mVertexArray->syncState(context, mDirtyBits, drawCallParams);
+    ANGLE_TRY(mVertexArray->syncState(context, mDirtyBits, drawCallParams));
     mDirtyBits.reset();
+    return NoError();
 }
 
 void VertexArray::onBindingChanged(bool bound)
