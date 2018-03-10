@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/IndexBuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/ProgramPipeline11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
@@ -29,6 +30,97 @@
 
 namespace rx
 {
+
+namespace
+{
+bool DrawCallHasStreamingVertexArrays(const gl::Context *context, GLenum mode)
+{
+    const auto &glState                = context->getGLState();
+    const gl::VertexArray *vertexArray = glState.getVertexArray();
+    VertexArray11 *vertexArray11       = GetImplAs<VertexArray11>(vertexArray);
+    // Direct drawing doesn't support dynamic attribute storage since it needs the first and count
+    // to translate when applyVertexBuffer. GL_LINE_LOOP and GL_TRIANGLE_FAN are not supported
+    // either since we need to simulate them in D3D.
+    if (vertexArray11->hasActiveDynamicAttrib(context) || mode == GL_LINE_LOOP ||
+        mode == GL_TRIANGLE_FAN)
+    {
+        return true;
+    }
+
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+    if (InstancedPointSpritesActive(programD3D, mode))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// This code shares a lot in common with ClassifyIndexStorage, but it can't read back the index
+// range. We would need to read back the indirect arguments buffer before computing the index
+// range, but we need to know the index storage to determine if we should read back the indirect
+// buffer, so there's a chicken/egg readback problem. For now assume we will have to translate
+// the indices if there's a possiblity of having to use the primitive restart workaround.
+bool DrawCallHasStreamingElementArray(const gl::Context *context, GLenum srcType)
+{
+    const auto &glState  = context->getGLState();
+    gl::Buffer *glBuffer = glState.getVertexArray()->getElementArrayBuffer().get();
+
+    // Case 1: the indices are passed by pointer, which forces the streaming of index data
+    if (glBuffer == nullptr)
+    {
+        return true;
+    }
+
+    bool primitiveRestartWorkaround =
+        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), srcType);
+
+    BufferD3D *buffer    = GetImplAs<BufferD3D>(glBuffer);
+    const GLenum dstType = (srcType == GL_UNSIGNED_INT || primitiveRestartWorkaround)
+                               ? GL_UNSIGNED_INT
+                               : GL_UNSIGNED_SHORT;
+
+    // Case 2a: the buffer can be used directly
+    if (buffer->supportsDirectBinding() && dstType == srcType)
+    {
+        return false;
+    }
+
+    // Case 2b: use a static translated copy or fall back to streaming
+    StaticIndexBufferInterface *staticBuffer = buffer->getStaticIndexBuffer();
+    if (staticBuffer == nullptr)
+    {
+        return true;
+    }
+
+    if ((staticBuffer->getBufferSize() == 0) || (staticBuffer->getIndexType() != dstType))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+template <typename IndirectBufferT>
+gl::Error ReadbackIndirectBuffer(const gl::Context *context,
+                                 const void *indirect,
+                                 const IndirectBufferT **bufferPtrOut)
+{
+    const auto &glState            = context->getGLState();
+    gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    ASSERT(drawIndirectBuffer);
+    Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
+    uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
+
+    const uint8_t *bufferData = nullptr;
+    ANGLE_TRY(storage->getData(context, &bufferData));
+    ASSERT(bufferData);
+
+    *bufferPtrOut = reinterpret_cast<const IndirectBufferT *>(bufferData + offset);
+    return gl::NoError();
+}
+
+}  // anonymous namespace
 
 Context11::Context11(const gl::ContextState &state, Renderer11 *renderer)
     : ContextImpl(state), mRenderer(renderer)
@@ -158,8 +250,9 @@ gl::Error Context11::finish(const gl::Context *context)
 
 gl::Error Context11::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawArrays(context, mode, first, count, 0);
+    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    return mRenderer->drawArrays(context, drawCallParams);
 }
 
 gl::Error Context11::drawArraysInstanced(const gl::Context *context,
@@ -168,8 +261,9 @@ gl::Error Context11::drawArraysInstanced(const gl::Context *context,
                                          GLsizei count,
                                          GLsizei instanceCount)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawArrays(context, mode, first, count, instanceCount);
+    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    return mRenderer->drawArrays(context, drawCallParams);
 }
 
 gl::Error Context11::drawElements(const gl::Context *context,
@@ -178,8 +272,9 @@ gl::Error Context11::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawElements(context, mode, count, type, indices, 0);
+    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    return mRenderer->drawElements(context, drawCallParams);
 }
 
 gl::Error Context11::drawElementsInstanced(const gl::Context *context,
@@ -189,8 +284,9 @@ gl::Error Context11::drawElementsInstanced(const gl::Context *context,
                                            const void *indices,
                                            GLsizei instances)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawElements(context, mode, count, type, indices, instances);
+    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    return mRenderer->drawElements(context, drawCallParams);
 }
 
 gl::Error Context11::drawRangeElements(const gl::Context *context,
@@ -201,16 +297,30 @@ gl::Error Context11::drawRangeElements(const gl::Context *context,
                                        GLenum type,
                                        const void *indices)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawElements(context, mode, count, type, indices, 0);
+    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    return mRenderer->drawElements(context, drawCallParams);
 }
 
 gl::Error Context11::drawArraysIndirect(const gl::Context *context,
                                         GLenum mode,
                                         const void *indirect)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawArraysIndirect(context, mode, indirect);
+    if (DrawCallHasStreamingVertexArrays(context, mode))
+    {
+        const gl::DrawArraysIndirectCommand *cmd = nullptr;
+        ANGLE_TRY(ReadbackIndirectBuffer(context, indirect, &cmd));
+
+        gl::DrawCallParams drawCallParams(mode, cmd->first, cmd->count, cmd->instanceCount);
+        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        return mRenderer->drawArrays(context, drawCallParams);
+    }
+    else
+    {
+        const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        return mRenderer->drawArraysIndirect(context, mode, indirect);
+    }
 }
 
 gl::Error Context11::drawElementsIndirect(const gl::Context *context,
@@ -218,8 +328,27 @@ gl::Error Context11::drawElementsIndirect(const gl::Context *context,
                                           GLenum type,
                                           const void *indirect)
 {
-    ANGLE_TRY(prepareForDrawCall(context, mode));
-    return mRenderer->drawElementsIndirect(context, mode, type, indirect);
+    if (DrawCallHasStreamingVertexArrays(context, mode) ||
+        DrawCallHasStreamingElementArray(context, type))
+    {
+        const gl::DrawElementsIndirectCommand *cmd = nullptr;
+        ANGLE_TRY(ReadbackIndirectBuffer(context, indirect, &cmd));
+
+        const gl::Type &typeInfo = gl::GetTypeInfo(type);
+        const void *indices      = reinterpret_cast<const void *>(
+            static_cast<uintptr_t>(cmd->firstIndex * typeInfo.bytes));
+
+        gl::DrawCallParams drawCallParams(mode, cmd->count, type, indices, cmd->baseVertex,
+                                          cmd->primCount);
+        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        return mRenderer->drawElements(context, drawCallParams);
+    }
+    else
+    {
+        const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
+        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        return mRenderer->drawElementsIndirect(context, mode, type, indirect);
+    }
 }
 
 GLenum Context11::getResetStatus()
@@ -401,9 +530,10 @@ gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *cont
     return gl::NoError();
 }
 
-gl::Error Context11::prepareForDrawCall(const gl::Context *context, GLenum drawMode)
+gl::Error Context11::prepareForDrawCall(const gl::Context *context,
+                                        const gl::DrawCallParams &drawCallParams)
 {
-    ANGLE_TRY(mRenderer->getStateManager()->updateState(context, drawMode));
+    ANGLE_TRY(mRenderer->getStateManager()->updateState(context, drawCallParams));
     return gl::NoError();
 }
 
