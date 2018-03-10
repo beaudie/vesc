@@ -75,12 +75,12 @@ void VertexArray11::destroy(const gl::Context *context)
     mCurrentElementArrayBuffer.set(context, nullptr);
 }
 
-void VertexArray11::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits,
-                              const gl::DrawCallParams &drawCallParams)
+gl::Error VertexArray11::syncState(const gl::Context *context,
+                                   const gl::VertexArray::DirtyBits &dirtyBits,
+                                   const gl::DrawCallParams &drawCallParams)
 {
     if (!dirtyBits.any())
-        return;
+        return gl::NoError();
 
     // Generate a state serial. This serial is used in the program class to validate the cached
     // input layout, and skip recomputation in the fast path.
@@ -105,6 +105,8 @@ void VertexArray11::syncState(const gl::Context *context,
             mAttribsToUpdate.set(index);
         }
     }
+
+    return gl::NoError();
 }
 
 bool VertexArray11::flushAttribUpdates(const gl::Context *context)

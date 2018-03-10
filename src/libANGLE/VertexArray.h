@@ -191,7 +191,7 @@ class VertexArray final : public LabeledObject
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
 
-    void syncState(const Context *context, const DrawCallParams &drawCallParams);
+    Error syncState(const Context *context, const DrawCallParams &drawCallParams);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
