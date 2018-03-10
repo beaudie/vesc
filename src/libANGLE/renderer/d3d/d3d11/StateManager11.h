@@ -192,6 +192,9 @@ class StateManager11 final : angle::NonCopyable
     // Called by VertexArray11.
     void invalidateInputLayout();
 
+    // Called by VertexArray11 element array buffer sync.
+    void invalidateIndexBuffer();
+
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
 
@@ -234,8 +237,7 @@ class StateManager11 final : angle::NonCopyable
 
     // Not handled by an internal dirty bit because of the extra draw parameters.
     gl::Error applyIndexBuffer(const gl::Context *context,
-                               const gl::DrawCallParams &drawCallParams,
-                               bool usePrimitiveRestartWorkaround);
+                               const gl::DrawCallParams &drawCallParams);
 
     void setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
