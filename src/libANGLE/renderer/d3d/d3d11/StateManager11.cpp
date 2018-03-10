@@ -583,8 +583,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mVertexDataManager(renderer),
       mIndexDataManager(renderer),
       mIsMultiviewEnabled(false),
-      mEmptySerial(mRenderer->generateSerial()),
-      mIsTransformFeedbackCurrentlyActiveUnpaused(false)
+      mEmptySerial(mRenderer->generateSerial())
 {
     mCurBlendState.blend                 = false;
     mCurBlendState.sourceBlendRGB        = GL_ONE;
@@ -760,9 +759,9 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
         return;
     }
 
-    const auto &state = context->getGLState();
+    const gl::State &state = context->getGLState();
 
-    for (auto dirtyBit : dirtyBits)
+    for (size_t dirtyBit : dirtyBits)
     {
         switch (dirtyBit)
         {
@@ -1005,6 +1004,9 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 invalidateTexturesAndSamplers();
+                break;
+            case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
+                invalidateTransformFeedback();
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
@@ -1492,6 +1494,13 @@ void StateManager11::invalidateShaders()
     mInternalDirtyBits.set(DIRTY_BIT_SHADERS);
 }
 
+void StateManager11::invalidateTransformFeedback()
+{
+    // Transform feedback affects the stream-out geometry shader.
+    invalidateShaders();
+    mInternalDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK);
+}
+
 void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv)
 {
     if ((rtv && unsetConflictingView(rtv)) || (dsv && unsetConflictingView(dsv)))
@@ -1966,14 +1975,6 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
         mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
     }
 
-    // Transform feedback affects the stream-out geometry shader.
-    // TODO(jmadill): Use dirty bits.
-    if (glState.isTransformFeedbackActiveUnpaused() != mIsTransformFeedbackCurrentlyActiveUnpaused)
-    {
-        mIsTransformFeedbackCurrentlyActiveUnpaused = glState.isTransformFeedbackActiveUnpaused();
-        invalidateShaders();
-    }
-
     // Swizzling can cause internal state changes with blit shaders.
     if (mDirtySwizzles)
     {
@@ -2058,13 +2059,14 @@ gl::Error StateManager11::updateState(const gl::Context *context, GLenum drawMod
             case DIRTY_BIT_CURRENT_VALUE_ATTRIBS:
                 ANGLE_TRY(syncCurrentValueAttribs(glState));
                 break;
+            case DIRTY_BIT_TRANSFORM_FEEDBACK:
+                ANGLE_TRY(syncTransformFeedbackBuffers(context));
+                break;
             default:
                 UNREACHABLE();
                 break;
         }
     }
-
-    ANGLE_TRY(syncTransformFeedbackBuffers(context));
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop.
     ASSERT(mInternalDirtyBits.none());
