@@ -2922,6 +2922,10 @@ Error Context::prepareForDraw()
     }
 
     ANGLE_TRY(syncDirtyBits());
+
+    const DrawCallParams &drawCallParams = getParams<DrawCallParams>();
+    mGLState.getVertexArray()->syncState(this, drawCallParams);
+
     return NoError();
 }
 
@@ -3203,7 +3207,7 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
 
-        framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, gl::ImageIndex::MakeInvalid(),
+        framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, ImageIndex::MakeInvalid(),
                                    renderbufferObject);
     }
     else
