@@ -43,6 +43,7 @@
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
+#include "platform/Platform.h"
 
 namespace
 {
@@ -2530,7 +2531,7 @@ void Context::initExtensionStrings()
     };
 
     mExtensionStrings.clear();
-    for (const auto &extensionString : mExtensions.getStrings())
+    for (const auto &extensionString : GetExtensionsStrings(mExtensions))
     {
         mExtensionStrings.push_back(MakeStaticString(extensionString));
     }
@@ -2768,6 +2769,10 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
     LimitCap(&mCaps.maxTextureImageUnits, IMPLEMENTATION_MAX_ACTIVE_TEXTURES / 2);
 
     mCaps.maxSampleMaskWords = std::min<GLuint>(mCaps.maxSampleMaskWords, MAX_SAMPLE_MASK_WORDS);
+
+    // Allow tests to force certain extension settings.
+    auto *platform = ANGLEPlatformCurrent();
+    platform->overrideGLExtensions(platform, &mExtensions);
 
     // WebGL compatibility
     mExtensions.webglCompatibility = mWebGLContext;

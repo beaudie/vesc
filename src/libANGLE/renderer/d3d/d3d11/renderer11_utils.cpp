@@ -1449,7 +1449,7 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxFramebufferHeight = caps->maxFramebufferWidth;
 
     // GL extension support
-    extensions->setTextureExtensionSupport(*textureCapsMap);
+    SetTextureExtensionSupport(extensions, *textureCapsMap);
     extensions->elementIndexUint = true;
     extensions->getProgramBinary = true;
     extensions->rgb8rgba8 = true;

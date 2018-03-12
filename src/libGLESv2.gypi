@@ -126,6 +126,7 @@
             '../include/GLSLANG/ShaderLang.h',
             '../include/GLSLANG/ShaderVars.h',
             '../include/KHR/khrplatform.h',
+            '../include/platform/Extensions.h',
             '../include/platform/Platform.h',
             '../include/platform/WorkaroundsD3D.h',
         ],

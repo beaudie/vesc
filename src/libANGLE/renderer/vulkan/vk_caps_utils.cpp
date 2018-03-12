@@ -32,7 +32,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */)
 {
-    outExtensions->setTextureExtensionSupport(textureCaps);
+    gl::SetTextureExtensionSupport(outExtensions, textureCaps);
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.
