@@ -1925,10 +1925,12 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
           break;
       case GL_STENCIL_CLEAR_VALUE:                      *params = mStencilClearValue;                             break;
       case GL_IMPLEMENTATION_COLOR_READ_TYPE:
-          *params = mReadFramebuffer->getImplementationColorReadType(context);
+          ANGLE_TRY(mReadFramebuffer->getImplementationColorReadType(
+              context, reinterpret_cast<GLenum *>(params)));
           break;
       case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
-          *params = mReadFramebuffer->getImplementationColorReadFormat(context);
+          ANGLE_TRY(mReadFramebuffer->getImplementationColorReadFormat(
+              context, reinterpret_cast<GLenum *>(params)));
           break;
       case GL_SAMPLE_BUFFERS:
       case GL_SAMPLES:
