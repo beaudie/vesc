@@ -1362,13 +1362,15 @@ Error Framebuffer::clearBufferfi(const Context *context,
     return NoError();
 }
 
-GLenum Framebuffer::getImplementationColorReadFormat(const Context *context) const
+GLenum Framebuffer::getImplementationColorReadFormat(const Context *context)
 {
+    syncState(context);
     return mImpl->getImplementationColorReadFormat(context);
 }
 
-GLenum Framebuffer::getImplementationColorReadType(const Context *context) const
+GLenum Framebuffer::getImplementationColorReadType(const Context *context)
 {
+    syncState(context);
     return mImpl->getImplementationColorReadType(context);
 }
 

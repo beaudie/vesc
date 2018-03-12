@@ -169,7 +169,7 @@ gl::Error BlitGL::copyImageToLUMAWorkaroundTexture(const gl::Context *context,
                                                    size_t level,
                                                    const gl::Rectangle &sourceArea,
                                                    GLenum internalFormat,
-                                                   const gl::Framebuffer *source)
+                                                   gl::Framebuffer *source)
 {
     mStateManager->bindTexture(textureType, texture);
 
@@ -196,7 +196,7 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *context
                                                       size_t level,
                                                       const gl::Offset &destOffset,
                                                       const gl::Rectangle &sourceArea,
-                                                      const gl::Framebuffer *source)
+                                                      gl::Framebuffer *source)
 {
     ANGLE_TRY(initializeResources());
 
