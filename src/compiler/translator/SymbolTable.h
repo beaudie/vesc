@@ -38,6 +38,7 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/Symbol.h"
+#include "compiler/translator/SymbolTable_autogen.h"
 
 namespace sh
 {
@@ -134,23 +135,16 @@ class TSymbolTable : angle::NonCopyable
     friend class TSymbolUniqueId;
     int nextUniqueIdValue();
 
-    class TSymbolTableBuiltInLevel;
     class TSymbolTableLevel;
-
-    void pushBuiltInLevel();
-
-    void insertBuiltIn(ESymbolLevel level, const TSymbol *symbol);
 
     TFunction *findUserDefinedFunction(const ImmutableString &name) const;
 
     void initSamplerDefaultPrecision(TBasicType samplerType);
 
-    void insertBuiltInFunctions(sh::GLenum shaderType);
-    void insertBuiltInVariables(sh::GLenum shaderType,
-                                ShShaderSpec spec,
-                                const ShBuiltInResources &resources);
+    void initializeBuiltInVariables(sh::GLenum shaderType,
+                                    ShShaderSpec spec,
+                                    const ShBuiltInResources &resources);
 
-    std::vector<std::unique_ptr<TSymbolTableBuiltInLevel>> mBuiltInTable;
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
 
     // There's one precision stack level for predefined precisions and then one level for each scope
@@ -163,6 +157,10 @@ class TSymbolTable : angle::NonCopyable
     static const int kLastBuiltInId;
 
     sh::GLenum mShaderType;
+    ShBuiltInResources mResources;
+
+    SH_SYMBOLTABLE_MEMBERS_AUTOGEN
+#undef SH_SYMBOLTABLE_MEMBERS_AUTOGEN
 };
 
 }  // namespace sh
