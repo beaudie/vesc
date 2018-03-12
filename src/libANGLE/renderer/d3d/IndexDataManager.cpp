@@ -300,7 +300,6 @@ gl::Error IndexDataManager::getStreamingIndexBuffer(GLenum destinationIndexType,
 }
 
 gl::Error GetIndexTranslationDestType(const gl::Context *context,
-                                      GLenum srcType,
                                       const gl::DrawCallParams &drawCallParams,
                                       bool usePrimitiveRestartWorkaround,
                                       GLenum *destTypeOut)
@@ -309,16 +308,23 @@ gl::Error GetIndexTranslationDestType(const gl::Context *context,
     // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb205124(v=vs.85).aspx
     if (usePrimitiveRestartWorkaround)
     {
+        // Conservatively assume we need to translate the indices for draw indirect.
+        if (drawCallParams.isDrawIndirect())
+        {
+            *destTypeOut = GL_UNSIGNED_INT;
+            return gl::NoError();
+        }
+
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
         const gl::IndexRange &indexRange = drawCallParams.getIndexRange();
-        if (indexRange.end == gl::GetPrimitiveRestartIndex(srcType))
+        if (indexRange.end == gl::GetPrimitiveRestartIndex(drawCallParams.type()))
         {
             *destTypeOut = GL_UNSIGNED_INT;
             return gl::NoError();
         }
     }
 
-    *destTypeOut = (srcType == GL_UNSIGNED_INT) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
+    *destTypeOut = (drawCallParams.type() == GL_UNSIGNED_INT) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
     return gl::NoError();
 }
 
