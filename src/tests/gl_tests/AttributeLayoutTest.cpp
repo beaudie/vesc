@@ -352,23 +352,23 @@ void AttributeLayoutTest::GetTestCases(void)
     // 5. stride != size
     mTestCases.push_back({Attrib(B0, 0, 16, mCoord), Attrib(B1, 0, 12, mColor)});
 
-    if (IsVulkan())
-    {
-        std::cout << "cases skipped on Vulkan: integer data, non-zero buffer offsets" << std::endl;
-        return;
-    }
-
     // 6. one buffer, sequential
     mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B0, 96, 12, mColor)});
 
     // 7. one buffer, interleaved
     mTestCases.push_back({Attrib(B0, 0, 20, mCoord), Attrib(B0, 8, 20, mColor)});
 
-    // 8. memory and buffer, float and integer
-    mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(B0, 0, 12, mBColor)});
-
-    // 9. buffer and memory, unusual offset and stride
+    // 8. buffer and memory, unusual offset and stride
     mTestCases.push_back({Attrib(B0, 11, 13, mCoord), Attrib(M0, 23, 17, mColor)});
+
+    if (IsVulkan())
+    {
+        std::cout << "skipped on Vulkan: integer vertex data" << std::endl;
+        return;
+    }
+
+    // 9. memory and buffer, float and integer
+    mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(B0, 0, 12, mBColor)});
 }
 
 class AttributeLayoutNonIndexed : public AttributeLayoutTest
