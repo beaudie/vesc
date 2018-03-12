@@ -16,22 +16,6 @@
 
 namespace gl
 {
-void GL_APIENTRY ActiveTexture(GLenum texture)
-{
-    EVENT("(GLenum texture = 0x%X)", texture);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ActiveTexture>(texture);
-
-        if (context->skipValidation() || ValidateActiveTexture(context, texture))
-        {
-            context->activeTexture(texture);
-        }
-    }
-}
-
 void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
 {
     EVENT("(GLenum func = 0x%X, GLfloat ref = %f)", func, ref);
@@ -43,7 +27,7 @@ void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
 
         if (context->skipValidation() || ValidateAlphaFunc(context, func, ref))
         {
-            context->alphaFunc(func, ref);
+            context->gles1Emu->alphaFunc(func, ref);
         }
     }
 }
@@ -59,133 +43,7 @@ void GL_APIENTRY AlphaFuncx(GLenum func, GLfixed ref)
 
         if (context->skipValidation() || ValidateAlphaFuncx(context, func, ref))
         {
-            context->alphaFuncx(func, ref);
-        }
-    }
-}
-
-void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
-{
-    EVENT("(GLenum target = 0x%X, GLuint buffer = %u)", target, buffer);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
-        context->gatherParams<EntryPoint::BindBuffer>(targetPacked, buffer);
-
-        if (context->skipValidation() || ValidateBindBuffer(context, targetPacked, buffer))
-        {
-            context->bindBuffer(targetPacked, buffer);
-        }
-    }
-}
-
-void GL_APIENTRY BindTexture(GLenum target, GLuint texture)
-{
-    EVENT("(GLenum target = 0x%X, GLuint texture = %u)", target, texture);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::BindTexture>(targetPacked, texture);
-
-        if (context->skipValidation() || ValidateBindTexture(context, targetPacked, texture))
-        {
-            context->bindTexture(targetPacked, texture);
-        }
-    }
-}
-
-void GL_APIENTRY BlendFunc(GLenum sfactor, GLenum dfactor)
-{
-    EVENT("(GLenum sfactor = 0x%X, GLenum dfactor = 0x%X)", sfactor, dfactor);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::BlendFunc>(sfactor, dfactor);
-
-        if (context->skipValidation() || ValidateBlendFunc(context, sfactor, dfactor))
-        {
-            context->blendFunc(sfactor, dfactor);
-        }
-    }
-}
-
-void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLsizeiptr size = %d, const void *data = 0x%0.8p, GLenum usage = "
-        "0x%X)",
-        target, size, data, usage);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
-        BufferUsage usagePacked    = FromGLenum<BufferUsage>(usage);
-        context->gatherParams<EntryPoint::BufferData>(targetPacked, size, data, usagePacked);
-
-        if (context->skipValidation() ||
-            ValidateBufferData(context, targetPacked, size, data, usagePacked))
-        {
-            context->bufferData(targetPacked, size, data, usagePacked);
-        }
-    }
-}
-
-void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr size = %d, const void *data = "
-        "0x%0.8p)",
-        target, offset, size, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
-        context->gatherParams<EntryPoint::BufferSubData>(targetPacked, offset, size, data);
-
-        if (context->skipValidation() ||
-            ValidateBufferSubData(context, targetPacked, offset, size, data))
-        {
-            context->bufferSubData(targetPacked, offset, size, data);
-        }
-    }
-}
-
-void GL_APIENTRY Clear(GLbitfield mask)
-{
-    EVENT("(GLbitfield mask = 0x%X)", mask);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Clear>(mask);
-
-        if (context->skipValidation() || ValidateClear(context, mask))
-        {
-            context->clear(mask);
-        }
-    }
-}
-
-void GL_APIENTRY ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-    EVENT("(GLfloat red = %f, GLfloat green = %f, GLfloat blue = %f, GLfloat alpha = %f)", red,
-          green, blue, alpha);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ClearColor>(red, green, blue, alpha);
-
-        if (context->skipValidation() || ValidateClearColor(context, red, green, blue, alpha))
-        {
-            context->clearColor(red, green, blue, alpha);
+            context->gles1Emu->alphaFuncx(func, ref);
         }
     }
 }
@@ -202,23 +60,7 @@ void GL_APIENTRY ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed a
 
         if (context->skipValidation() || ValidateClearColorx(context, red, green, blue, alpha))
         {
-            context->clearColorx(red, green, blue, alpha);
-        }
-    }
-}
-
-void GL_APIENTRY ClearDepthf(GLfloat d)
-{
-    EVENT("(GLfloat d = %f)", d);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ClearDepthf>(d);
-
-        if (context->skipValidation() || ValidateClearDepthf(context, d))
-        {
-            context->clearDepthf(d);
+            context->gles1Emu->clearColorx(red, green, blue, alpha);
         }
     }
 }
@@ -234,23 +76,7 @@ void GL_APIENTRY ClearDepthx(GLfixed depth)
 
         if (context->skipValidation() || ValidateClearDepthx(context, depth))
         {
-            context->clearDepthx(depth);
-        }
-    }
-}
-
-void GL_APIENTRY ClearStencil(GLint s)
-{
-    EVENT("(GLint s = %d)", s);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ClearStencil>(s);
-
-        if (context->skipValidation() || ValidateClearStencil(context, s))
-        {
-            context->clearStencil(s);
+            context->gles1Emu->clearDepthx(depth);
         }
     }
 }
@@ -266,7 +92,7 @@ void GL_APIENTRY ClientActiveTexture(GLenum texture)
 
         if (context->skipValidation() || ValidateClientActiveTexture(context, texture))
         {
-            context->clientActiveTexture(texture);
+            context->gles1Emu->clientActiveTexture(texture);
         }
     }
 }
@@ -282,7 +108,7 @@ void GL_APIENTRY ClipPlanef(GLenum p, const GLfloat *eqn)
 
         if (context->skipValidation() || ValidateClipPlanef(context, p, eqn))
         {
-            context->clipPlanef(p, eqn);
+            context->gles1Emu->clipPlanef(p, eqn);
         }
     }
 }
@@ -298,7 +124,7 @@ void GL_APIENTRY ClipPlanex(GLenum plane, const GLfixed *equation)
 
         if (context->skipValidation() || ValidateClipPlanex(context, plane, equation))
         {
-            context->clipPlanex(plane, equation);
+            context->gles1Emu->clipPlanex(plane, equation);
         }
     }
 }
@@ -315,7 +141,7 @@ void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
 
         if (context->skipValidation() || ValidateColor4f(context, red, green, blue, alpha))
         {
-            context->color4f(red, green, blue, alpha);
+            context->gles1Emu->color4f(red, green, blue, alpha);
         }
     }
 }
@@ -332,7 +158,7 @@ void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alph
 
         if (context->skipValidation() || ValidateColor4ub(context, red, green, blue, alpha))
         {
-            context->color4ub(red, green, blue, alpha);
+            context->gles1Emu->color4ub(red, green, blue, alpha);
         }
     }
 }
@@ -349,24 +175,7 @@ void GL_APIENTRY Color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha
 
         if (context->skipValidation() || ValidateColor4x(context, red, green, blue, alpha))
         {
-            context->color4x(red, green, blue, alpha);
-        }
-    }
-}
-
-void GL_APIENTRY ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
-{
-    EVENT("(GLboolean red = %u, GLboolean green = %u, GLboolean blue = %u, GLboolean alpha = %u)",
-          red, green, blue, alpha);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ColorMask>(red, green, blue, alpha);
-
-        if (context->skipValidation() || ValidateColorMask(context, red, green, blue, alpha))
-        {
-            context->colorMask(red, green, blue, alpha);
+            context->gles1Emu->color4x(red, green, blue, alpha);
         }
     }
 }
@@ -384,230 +193,7 @@ void GL_APIENTRY ColorPointer(GLint size, GLenum type, GLsizei stride, const voi
 
         if (context->skipValidation() || ValidateColorPointer(context, size, type, stride, pointer))
         {
-            context->colorPointer(size, type, stride, pointer);
-        }
-    }
-}
-
-void GL_APIENTRY CompressedTexImage2D(GLenum target,
-                                      GLint level,
-                                      GLenum internalformat,
-                                      GLsizei width,
-                                      GLsizei height,
-                                      GLint border,
-                                      GLsizei imageSize,
-                                      const void *data)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
-        "%d, GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, const void *data = "
-        "0x%0.8p)",
-        target, level, internalformat, width, height, border, imageSize, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::CompressedTexImage2D>(
-            targetPacked, level, internalformat, width, height, border, imageSize, data);
-
-        if (context->skipValidation() ||
-            ValidateCompressedTexImage2D(context, targetPacked, level, internalformat, width,
-                                         height, border, imageSize, data))
-        {
-            context->compressedTexImage2D(targetPacked, level, internalformat, width, height,
-                                          border, imageSize, data);
-        }
-    }
-}
-
-void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
-                                         GLint level,
-                                         GLint xoffset,
-                                         GLint yoffset,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLenum format,
-                                         GLsizei imageSize,
-                                         const void *data)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
-        "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLsizei imageSize = %d, const void "
-        "*data = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, imageSize, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::CompressedTexSubImage2D>(
-            targetPacked, level, xoffset, yoffset, width, height, format, imageSize, data);
-
-        if (context->skipValidation() ||
-            ValidateCompressedTexSubImage2D(context, targetPacked, level, xoffset, yoffset, width,
-                                            height, format, imageSize, data))
-        {
-            context->compressedTexSubImage2D(targetPacked, level, xoffset, yoffset, width, height,
-                                             format, imageSize, data);
-        }
-    }
-}
-
-void GL_APIENTRY CopyTexImage2D(GLenum target,
-                                GLint level,
-                                GLenum internalformat,
-                                GLint x,
-                                GLint y,
-                                GLsizei width,
-                                GLsizei height,
-                                GLint border)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLint x = %d, "
-        "GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLint border = %d)",
-        target, level, internalformat, x, y, width, height, border);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::CopyTexImage2D>(targetPacked, level, internalformat, x, y,
-                                                          width, height, border);
-
-        if (context->skipValidation() ||
-            ValidateCopyTexImage2D(context, targetPacked, level, internalformat, x, y, width,
-                                   height, border))
-        {
-            context->copyTexImage2D(targetPacked, level, internalformat, x, y, width, height,
-                                    border);
-        }
-    }
-}
-
-void GL_APIENTRY CopyTexSubImage2D(GLenum target,
-                                   GLint level,
-                                   GLint xoffset,
-                                   GLint yoffset,
-                                   GLint x,
-                                   GLint y,
-                                   GLsizei width,
-                                   GLsizei height)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint x "
-        "= %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)",
-        target, level, xoffset, yoffset, x, y, width, height);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::CopyTexSubImage2D>(targetPacked, level, xoffset, yoffset,
-                                                             x, y, width, height);
-
-        if (context->skipValidation() ||
-            ValidateCopyTexSubImage2D(context, targetPacked, level, xoffset, yoffset, x, y, width,
-                                      height))
-        {
-            context->copyTexSubImage2D(targetPacked, level, xoffset, yoffset, x, y, width, height);
-        }
-    }
-}
-
-void GL_APIENTRY CullFace(GLenum mode)
-{
-    EVENT("(GLenum mode = 0x%X)", mode);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        CullFaceMode modePacked = FromGLenum<CullFaceMode>(mode);
-        context->gatherParams<EntryPoint::CullFace>(modePacked);
-
-        if (context->skipValidation() || ValidateCullFace(context, modePacked))
-        {
-            context->cullFace(modePacked);
-        }
-    }
-}
-
-void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint *buffers)
-{
-    EVENT("(GLsizei n = %d, const GLuint *buffers = 0x%0.8p)", n, buffers);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DeleteBuffers>(n, buffers);
-
-        if (context->skipValidation() || ValidateDeleteBuffers(context, n, buffers))
-        {
-            context->deleteBuffers(n, buffers);
-        }
-    }
-}
-
-void GL_APIENTRY DeleteTextures(GLsizei n, const GLuint *textures)
-{
-    EVENT("(GLsizei n = %d, const GLuint *textures = 0x%0.8p)", n, textures);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DeleteTextures>(n, textures);
-
-        if (context->skipValidation() || ValidateDeleteTextures(context, n, textures))
-        {
-            context->deleteTextures(n, textures);
-        }
-    }
-}
-
-void GL_APIENTRY DepthFunc(GLenum func)
-{
-    EVENT("(GLenum func = 0x%X)", func);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DepthFunc>(func);
-
-        if (context->skipValidation() || ValidateDepthFunc(context, func))
-        {
-            context->depthFunc(func);
-        }
-    }
-}
-
-void GL_APIENTRY DepthMask(GLboolean flag)
-{
-    EVENT("(GLboolean flag = %u)", flag);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DepthMask>(flag);
-
-        if (context->skipValidation() || ValidateDepthMask(context, flag))
-        {
-            context->depthMask(flag);
-        }
-    }
-}
-
-void GL_APIENTRY DepthRangef(GLfloat n, GLfloat f)
-{
-    EVENT("(GLfloat n = %f, GLfloat f = %f)", n, f);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DepthRangef>(n, f);
-
-        if (context->skipValidation() || ValidateDepthRangef(context, n, f))
-        {
-            context->depthRangef(n, f);
+            context->gles1Emu->colorPointer(size, type, stride, pointer);
         }
     }
 }
@@ -623,23 +209,7 @@ void GL_APIENTRY DepthRangex(GLfixed n, GLfixed f)
 
         if (context->skipValidation() || ValidateDepthRangex(context, n, f))
         {
-            context->depthRangex(n, f);
-        }
-    }
-}
-
-void GL_APIENTRY Disable(GLenum cap)
-{
-    EVENT("(GLenum cap = 0x%X)", cap);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Disable>(cap);
-
-        if (context->skipValidation() || ValidateDisable(context, cap))
-        {
-            context->disable(cap);
+            context->gles1Emu->depthRangex(n, f);
         }
     }
 }
@@ -655,58 +225,7 @@ void GL_APIENTRY DisableClientState(GLenum array)
 
         if (context->skipValidation() || ValidateDisableClientState(context, array))
         {
-            context->disableClientState(array);
-        }
-    }
-}
-
-void GL_APIENTRY DrawArrays(GLenum mode, GLint first, GLsizei count)
-{
-    EVENT("(GLenum mode = 0x%X, GLint first = %d, GLsizei count = %d)", mode, first, count);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DrawArrays>(mode, first, count);
-
-        if (context->skipValidation() || ValidateDrawArrays(context, mode, first, count))
-        {
-            context->drawArrays(mode, first, count);
-        }
-    }
-}
-
-void GL_APIENTRY DrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
-{
-    EVENT(
-        "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
-        "0x%0.8p)",
-        mode, count, type, indices);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::DrawElements>(mode, count, type, indices);
-
-        if (context->skipValidation() || ValidateDrawElements(context, mode, count, type, indices))
-        {
-            context->drawElements(mode, count, type, indices);
-        }
-    }
-}
-
-void GL_APIENTRY Enable(GLenum cap)
-{
-    EVENT("(GLenum cap = 0x%X)", cap);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Enable>(cap);
-
-        if (context->skipValidation() || ValidateEnable(context, cap))
-        {
-            context->enable(cap);
+            context->gles1Emu->disableClientState(array);
         }
     }
 }
@@ -722,39 +241,7 @@ void GL_APIENTRY EnableClientState(GLenum array)
 
         if (context->skipValidation() || ValidateEnableClientState(context, array))
         {
-            context->enableClientState(array);
-        }
-    }
-}
-
-void GL_APIENTRY Finish()
-{
-    EVENT("()");
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Finish>();
-
-        if (context->skipValidation() || ValidateFinish(context))
-        {
-            context->finish();
-        }
-    }
-}
-
-void GL_APIENTRY Flush()
-{
-    EVENT("()");
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Flush>();
-
-        if (context->skipValidation() || ValidateFlush(context))
-        {
-            context->flush();
+            context->gles1Emu->enableClientState(array);
         }
     }
 }
@@ -770,7 +257,7 @@ void GL_APIENTRY Fogf(GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateFogf(context, pname, param))
         {
-            context->fogf(pname, param);
+            context->gles1Emu->fogf(pname, param);
         }
     }
 }
@@ -786,7 +273,7 @@ void GL_APIENTRY Fogfv(GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateFogfv(context, pname, params))
         {
-            context->fogfv(pname, params);
+            context->gles1Emu->fogfv(pname, params);
         }
     }
 }
@@ -802,7 +289,7 @@ void GL_APIENTRY Fogx(GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateFogx(context, pname, param))
         {
-            context->fogx(pname, param);
+            context->gles1Emu->fogx(pname, param);
         }
     }
 }
@@ -818,23 +305,7 @@ void GL_APIENTRY Fogxv(GLenum pname, const GLfixed *param)
 
         if (context->skipValidation() || ValidateFogxv(context, pname, param))
         {
-            context->fogxv(pname, param);
-        }
-    }
-}
-
-void GL_APIENTRY FrontFace(GLenum mode)
-{
-    EVENT("(GLenum mode = 0x%X)", mode);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::FrontFace>(mode);
-
-        if (context->skipValidation() || ValidateFrontFace(context, mode))
-        {
-            context->frontFace(mode);
+            context->gles1Emu->fogxv(pname, param);
         }
     }
 }
@@ -853,7 +324,7 @@ void GL_APIENTRY Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n,
 
         if (context->skipValidation() || ValidateFrustumf(context, l, r, b, t, n, f))
         {
-            context->frustumf(l, r, b, t, n, f);
+            context->gles1Emu->frustumf(l, r, b, t, n, f);
         }
     }
 }
@@ -872,74 +343,7 @@ void GL_APIENTRY Frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n,
 
         if (context->skipValidation() || ValidateFrustumx(context, l, r, b, t, n, f))
         {
-            context->frustumx(l, r, b, t, n, f);
-        }
-    }
-}
-
-void GL_APIENTRY GenBuffers(GLsizei n, GLuint *buffers)
-{
-    EVENT("(GLsizei n = %d, GLuint *buffers = 0x%0.8p)", n, buffers);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GenBuffers>(n, buffers);
-
-        if (context->skipValidation() || ValidateGenBuffers(context, n, buffers))
-        {
-            context->genBuffers(n, buffers);
-        }
-    }
-}
-
-void GL_APIENTRY GenTextures(GLsizei n, GLuint *textures)
-{
-    EVENT("(GLsizei n = %d, GLuint *textures = 0x%0.8p)", n, textures);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GenTextures>(n, textures);
-
-        if (context->skipValidation() || ValidateGenTextures(context, n, textures))
-        {
-            context->genTextures(n, textures);
-        }
-    }
-}
-
-void GL_APIENTRY GetBooleanv(GLenum pname, GLboolean *data)
-{
-    EVENT("(GLenum pname = 0x%X, GLboolean *data = 0x%0.8p)", pname, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GetBooleanv>(pname, data);
-
-        if (context->skipValidation() || ValidateGetBooleanv(context, pname, data))
-        {
-            context->getBooleanv(pname, data);
-        }
-    }
-}
-
-void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint *params)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
-        context->gatherParams<EntryPoint::GetBufferParameteriv>(targetPacked, pname, params);
-
-        if (context->skipValidation() ||
-            ValidateGetBufferParameteriv(context, targetPacked, pname, params))
-        {
-            context->getBufferParameteriv(targetPacked, pname, params);
+            context->gles1Emu->frustumx(l, r, b, t, n, f);
         }
     }
 }
@@ -955,7 +359,7 @@ void GL_APIENTRY GetClipPlanef(GLenum plane, GLfloat *equation)
 
         if (context->skipValidation() || ValidateGetClipPlanef(context, plane, equation))
         {
-            context->getClipPlanef(plane, equation);
+            context->gles1Emu->getClipPlanef(plane, equation);
         }
     }
 }
@@ -971,27 +375,9 @@ void GL_APIENTRY GetClipPlanex(GLenum plane, GLfixed *equation)
 
         if (context->skipValidation() || ValidateGetClipPlanex(context, plane, equation))
         {
-            context->getClipPlanex(plane, equation);
+            context->gles1Emu->getClipPlanex(plane, equation);
         }
     }
-}
-
-GLenum GL_APIENTRY GetError()
-{
-    EVENT("()");
-
-    Context *context = GetGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GetError>();
-
-        if (context->skipValidation() || ValidateGetError(context))
-        {
-            return context->getError();
-        }
-    }
-
-    return GetDefaultReturnValue<EntryPoint::GetError, GLenum>();
 }
 
 void GL_APIENTRY GetFixedv(GLenum pname, GLfixed *params)
@@ -1005,39 +391,7 @@ void GL_APIENTRY GetFixedv(GLenum pname, GLfixed *params)
 
         if (context->skipValidation() || ValidateGetFixedv(context, pname, params))
         {
-            context->getFixedv(pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY GetFloatv(GLenum pname, GLfloat *data)
-{
-    EVENT("(GLenum pname = 0x%X, GLfloat *data = 0x%0.8p)", pname, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GetFloatv>(pname, data);
-
-        if (context->skipValidation() || ValidateGetFloatv(context, pname, data))
-        {
-            context->getFloatv(pname, data);
-        }
-    }
-}
-
-void GL_APIENTRY GetIntegerv(GLenum pname, GLint *data)
-{
-    EVENT("(GLenum pname = 0x%X, GLint *data = 0x%0.8p)", pname, data);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GetIntegerv>(pname, data);
-
-        if (context->skipValidation() || ValidateGetIntegerv(context, pname, data))
-        {
-            context->getIntegerv(pname, data);
+            context->gles1Emu->getFixedv(pname, params);
         }
     }
 }
@@ -1054,7 +408,7 @@ void GL_APIENTRY GetLightfv(GLenum light, GLenum pname, GLfloat *params)
 
         if (context->skipValidation() || ValidateGetLightfv(context, light, pname, params))
         {
-            context->getLightfv(light, pname, params);
+            context->gles1Emu->getLightfv(light, pname, params);
         }
     }
 }
@@ -1071,7 +425,7 @@ void GL_APIENTRY GetLightxv(GLenum light, GLenum pname, GLfixed *params)
 
         if (context->skipValidation() || ValidateGetLightxv(context, light, pname, params))
         {
-            context->getLightxv(light, pname, params);
+            context->gles1Emu->getLightxv(light, pname, params);
         }
     }
 }
@@ -1088,7 +442,7 @@ void GL_APIENTRY GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
 
         if (context->skipValidation() || ValidateGetMaterialfv(context, face, pname, params))
         {
-            context->getMaterialfv(face, pname, params);
+            context->gles1Emu->getMaterialfv(face, pname, params);
         }
     }
 }
@@ -1105,7 +459,7 @@ void GL_APIENTRY GetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
 
         if (context->skipValidation() || ValidateGetMaterialxv(context, face, pname, params))
         {
-            context->getMaterialxv(face, pname, params);
+            context->gles1Emu->getMaterialxv(face, pname, params);
         }
     }
 }
@@ -1121,27 +475,9 @@ void GL_APIENTRY GetPointerv(GLenum pname, void **params)
 
         if (context->skipValidation() || ValidateGetPointerv(context, pname, params))
         {
-            context->getPointerv(pname, params);
+            context->gles1Emu->getPointerv(pname, params);
         }
     }
-}
-
-const GLubyte *GL_APIENTRY GetString(GLenum name)
-{
-    EVENT("(GLenum name = 0x%X)", name);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::GetString>(name);
-
-        if (context->skipValidation() || ValidateGetString(context, name))
-        {
-            return context->getString(name);
-        }
-    }
-
-    return GetDefaultReturnValue<EntryPoint::GetString, const GLubyte *>();
 }
 
 void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
@@ -1156,7 +492,7 @@ void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
 
         if (context->skipValidation() || ValidateGetTexEnvfv(context, target, pname, params))
         {
-            context->getTexEnvfv(target, pname, params);
+            context->gles1Emu->getTexEnvfv(target, pname, params);
         }
     }
 }
@@ -1173,7 +509,7 @@ void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
 
         if (context->skipValidation() || ValidateGetTexEnviv(context, target, pname, params))
         {
-            context->getTexEnviv(target, pname, params);
+            context->gles1Emu->getTexEnviv(target, pname, params);
         }
     }
 }
@@ -1190,45 +526,7 @@ void GL_APIENTRY GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
 
         if (context->skipValidation() || ValidateGetTexEnvxv(context, target, pname, params))
         {
-            context->getTexEnvxv(target, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat *params)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", target, pname,
-          params);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::GetTexParameterfv>(targetPacked, pname, params);
-
-        if (context->skipValidation() ||
-            ValidateGetTexParameterfv(context, targetPacked, pname, params))
-        {
-            context->getTexParameterfv(targetPacked, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint *params)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::GetTexParameteriv>(targetPacked, pname, params);
-
-        if (context->skipValidation() ||
-            ValidateGetTexParameteriv(context, targetPacked, pname, params))
-        {
-            context->getTexParameteriv(targetPacked, pname, params);
+            context->gles1Emu->getTexEnvxv(target, pname, params);
         }
     }
 }
@@ -1247,79 +545,9 @@ void GL_APIENTRY GetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
         if (context->skipValidation() ||
             ValidateGetTexParameterxv(context, targetPacked, pname, params))
         {
-            context->getTexParameterxv(targetPacked, pname, params);
+            context->gles1Emu->getTexParameterxv(targetPacked, pname, params);
         }
     }
-}
-
-void GL_APIENTRY Hint(GLenum target, GLenum mode)
-{
-    EVENT("(GLenum target = 0x%X, GLenum mode = 0x%X)", target, mode);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Hint>(target, mode);
-
-        if (context->skipValidation() || ValidateHint(context, target, mode))
-        {
-            context->hint(target, mode);
-        }
-    }
-}
-
-GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
-{
-    EVENT("(GLuint buffer = %u)", buffer);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::IsBuffer>(buffer);
-
-        if (context->skipValidation() || ValidateIsBuffer(context, buffer))
-        {
-            return context->isBuffer(buffer);
-        }
-    }
-
-    return GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
-}
-
-GLboolean GL_APIENTRY IsEnabled(GLenum cap)
-{
-    EVENT("(GLenum cap = 0x%X)", cap);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::IsEnabled>(cap);
-
-        if (context->skipValidation() || ValidateIsEnabled(context, cap))
-        {
-            return context->isEnabled(cap);
-        }
-    }
-
-    return GetDefaultReturnValue<EntryPoint::IsEnabled, GLboolean>();
-}
-
-GLboolean GL_APIENTRY IsTexture(GLuint texture)
-{
-    EVENT("(GLuint texture = %u)", texture);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::IsTexture>(texture);
-
-        if (context->skipValidation() || ValidateIsTexture(context, texture))
-        {
-            return context->isTexture(texture);
-        }
-    }
-
-    return GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
 }
 
 void GL_APIENTRY LightModelf(GLenum pname, GLfloat param)
@@ -1333,7 +561,7 @@ void GL_APIENTRY LightModelf(GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateLightModelf(context, pname, param))
         {
-            context->lightModelf(pname, param);
+            context->gles1Emu->lightModelf(pname, param);
         }
     }
 }
@@ -1349,7 +577,7 @@ void GL_APIENTRY LightModelfv(GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateLightModelfv(context, pname, params))
         {
-            context->lightModelfv(pname, params);
+            context->gles1Emu->lightModelfv(pname, params);
         }
     }
 }
@@ -1365,7 +593,7 @@ void GL_APIENTRY LightModelx(GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateLightModelx(context, pname, param))
         {
-            context->lightModelx(pname, param);
+            context->gles1Emu->lightModelx(pname, param);
         }
     }
 }
@@ -1381,7 +609,7 @@ void GL_APIENTRY LightModelxv(GLenum pname, const GLfixed *param)
 
         if (context->skipValidation() || ValidateLightModelxv(context, pname, param))
         {
-            context->lightModelxv(pname, param);
+            context->gles1Emu->lightModelxv(pname, param);
         }
     }
 }
@@ -1397,7 +625,7 @@ void GL_APIENTRY Lightf(GLenum light, GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateLightf(context, light, pname, param))
         {
-            context->lightf(light, pname, param);
+            context->gles1Emu->lightf(light, pname, param);
         }
     }
 }
@@ -1414,7 +642,7 @@ void GL_APIENTRY Lightfv(GLenum light, GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateLightfv(context, light, pname, params))
         {
-            context->lightfv(light, pname, params);
+            context->gles1Emu->lightfv(light, pname, params);
         }
     }
 }
@@ -1430,7 +658,7 @@ void GL_APIENTRY Lightx(GLenum light, GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateLightx(context, light, pname, param))
         {
-            context->lightx(light, pname, param);
+            context->gles1Emu->lightx(light, pname, param);
         }
     }
 }
@@ -1447,23 +675,7 @@ void GL_APIENTRY Lightxv(GLenum light, GLenum pname, const GLfixed *params)
 
         if (context->skipValidation() || ValidateLightxv(context, light, pname, params))
         {
-            context->lightxv(light, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY LineWidth(GLfloat width)
-{
-    EVENT("(GLfloat width = %f)", width);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::LineWidth>(width);
-
-        if (context->skipValidation() || ValidateLineWidth(context, width))
-        {
-            context->lineWidth(width);
+            context->gles1Emu->lightxv(light, pname, params);
         }
     }
 }
@@ -1479,7 +691,7 @@ void GL_APIENTRY LineWidthx(GLfixed width)
 
         if (context->skipValidation() || ValidateLineWidthx(context, width))
         {
-            context->lineWidthx(width);
+            context->gles1Emu->lineWidthx(width);
         }
     }
 }
@@ -1495,7 +707,7 @@ void GL_APIENTRY LoadIdentity()
 
         if (context->skipValidation() || ValidateLoadIdentity(context))
         {
-            context->loadIdentity();
+            context->gles1Emu->loadIdentity();
         }
     }
 }
@@ -1511,7 +723,7 @@ void GL_APIENTRY LoadMatrixf(const GLfloat *m)
 
         if (context->skipValidation() || ValidateLoadMatrixf(context, m))
         {
-            context->loadMatrixf(m);
+            context->gles1Emu->loadMatrixf(m);
         }
     }
 }
@@ -1527,7 +739,7 @@ void GL_APIENTRY LoadMatrixx(const GLfixed *m)
 
         if (context->skipValidation() || ValidateLoadMatrixx(context, m))
         {
-            context->loadMatrixx(m);
+            context->gles1Emu->loadMatrixx(m);
         }
     }
 }
@@ -1543,7 +755,7 @@ void GL_APIENTRY LogicOp(GLenum opcode)
 
         if (context->skipValidation() || ValidateLogicOp(context, opcode))
         {
-            context->logicOp(opcode);
+            context->gles1Emu->logicOp(opcode);
         }
     }
 }
@@ -1559,7 +771,7 @@ void GL_APIENTRY Materialf(GLenum face, GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateMaterialf(context, face, pname, param))
         {
-            context->materialf(face, pname, param);
+            context->gles1Emu->materialf(face, pname, param);
         }
     }
 }
@@ -1576,7 +788,7 @@ void GL_APIENTRY Materialfv(GLenum face, GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateMaterialfv(context, face, pname, params))
         {
-            context->materialfv(face, pname, params);
+            context->gles1Emu->materialfv(face, pname, params);
         }
     }
 }
@@ -1592,7 +804,7 @@ void GL_APIENTRY Materialx(GLenum face, GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateMaterialx(context, face, pname, param))
         {
-            context->materialx(face, pname, param);
+            context->gles1Emu->materialx(face, pname, param);
         }
     }
 }
@@ -1609,7 +821,7 @@ void GL_APIENTRY Materialxv(GLenum face, GLenum pname, const GLfixed *param)
 
         if (context->skipValidation() || ValidateMaterialxv(context, face, pname, param))
         {
-            context->materialxv(face, pname, param);
+            context->gles1Emu->materialxv(face, pname, param);
         }
     }
 }
@@ -1625,7 +837,7 @@ void GL_APIENTRY MatrixMode(GLenum mode)
 
         if (context->skipValidation() || ValidateMatrixMode(context, mode))
         {
-            context->matrixMode(mode);
+            context->gles1Emu->matrixMode(mode);
         }
     }
 }
@@ -1641,7 +853,7 @@ void GL_APIENTRY MultMatrixf(const GLfloat *m)
 
         if (context->skipValidation() || ValidateMultMatrixf(context, m))
         {
-            context->multMatrixf(m);
+            context->gles1Emu->multMatrixf(m);
         }
     }
 }
@@ -1657,7 +869,7 @@ void GL_APIENTRY MultMatrixx(const GLfixed *m)
 
         if (context->skipValidation() || ValidateMultMatrixx(context, m))
         {
-            context->multMatrixx(m);
+            context->gles1Emu->multMatrixx(m);
         }
     }
 }
@@ -1674,7 +886,7 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
 
         if (context->skipValidation() || ValidateMultiTexCoord4f(context, target, s, t, r, q))
         {
-            context->multiTexCoord4f(target, s, t, r, q);
+            context->gles1Emu->multiTexCoord4f(target, s, t, r, q);
         }
     }
 }
@@ -1693,7 +905,7 @@ void GL_APIENTRY MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r
 
         if (context->skipValidation() || ValidateMultiTexCoord4x(context, texture, s, t, r, q))
         {
-            context->multiTexCoord4x(texture, s, t, r, q);
+            context->gles1Emu->multiTexCoord4x(texture, s, t, r, q);
         }
     }
 }
@@ -1709,7 +921,7 @@ void GL_APIENTRY Normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
 
         if (context->skipValidation() || ValidateNormal3f(context, nx, ny, nz))
         {
-            context->normal3f(nx, ny, nz);
+            context->gles1Emu->normal3f(nx, ny, nz);
         }
     }
 }
@@ -1725,7 +937,7 @@ void GL_APIENTRY Normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
 
         if (context->skipValidation() || ValidateNormal3x(context, nx, ny, nz))
         {
-            context->normal3x(nx, ny, nz);
+            context->gles1Emu->normal3x(nx, ny, nz);
         }
     }
 }
@@ -1742,7 +954,7 @@ void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer)
 
         if (context->skipValidation() || ValidateNormalPointer(context, type, stride, pointer))
         {
-            context->normalPointer(type, stride, pointer);
+            context->gles1Emu->normalPointer(type, stride, pointer);
         }
     }
 }
@@ -1761,7 +973,7 @@ void GL_APIENTRY Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, G
 
         if (context->skipValidation() || ValidateOrthof(context, l, r, b, t, n, f))
         {
-            context->orthof(l, r, b, t, n, f);
+            context->gles1Emu->orthof(l, r, b, t, n, f);
         }
     }
 }
@@ -1780,23 +992,7 @@ void GL_APIENTRY Orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, G
 
         if (context->skipValidation() || ValidateOrthox(context, l, r, b, t, n, f))
         {
-            context->orthox(l, r, b, t, n, f);
-        }
-    }
-}
-
-void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
-{
-    EVENT("(GLenum pname = 0x%X, GLint param = %d)", pname, param);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::PixelStorei>(pname, param);
-
-        if (context->skipValidation() || ValidatePixelStorei(context, pname, param))
-        {
-            context->pixelStorei(pname, param);
+            context->gles1Emu->orthox(l, r, b, t, n, f);
         }
     }
 }
@@ -1812,7 +1008,7 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidatePointParameterf(context, pname, param))
         {
-            context->pointParameterf(pname, param);
+            context->gles1Emu->pointParameterf(pname, param);
         }
     }
 }
@@ -1828,7 +1024,7 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidatePointParameterfv(context, pname, params))
         {
-            context->pointParameterfv(pname, params);
+            context->gles1Emu->pointParameterfv(pname, params);
         }
     }
 }
@@ -1844,7 +1040,7 @@ void GL_APIENTRY PointParameterx(GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidatePointParameterx(context, pname, param))
         {
-            context->pointParameterx(pname, param);
+            context->gles1Emu->pointParameterx(pname, param);
         }
     }
 }
@@ -1860,7 +1056,7 @@ void GL_APIENTRY PointParameterxv(GLenum pname, const GLfixed *params)
 
         if (context->skipValidation() || ValidatePointParameterxv(context, pname, params))
         {
-            context->pointParameterxv(pname, params);
+            context->gles1Emu->pointParameterxv(pname, params);
         }
     }
 }
@@ -1876,7 +1072,7 @@ void GL_APIENTRY PointSize(GLfloat size)
 
         if (context->skipValidation() || ValidatePointSize(context, size))
         {
-            context->pointSize(size);
+            context->gles1Emu->pointSize(size);
         }
     }
 }
@@ -1892,23 +1088,7 @@ void GL_APIENTRY PointSizex(GLfixed size)
 
         if (context->skipValidation() || ValidatePointSizex(context, size))
         {
-            context->pointSizex(size);
-        }
-    }
-}
-
-void GL_APIENTRY PolygonOffset(GLfloat factor, GLfloat units)
-{
-    EVENT("(GLfloat factor = %f, GLfloat units = %f)", factor, units);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::PolygonOffset>(factor, units);
-
-        if (context->skipValidation() || ValidatePolygonOffset(context, factor, units))
-        {
-            context->polygonOffset(factor, units);
+            context->gles1Emu->pointSizex(size);
         }
     }
 }
@@ -1924,7 +1104,7 @@ void GL_APIENTRY PolygonOffsetx(GLfixed factor, GLfixed units)
 
         if (context->skipValidation() || ValidatePolygonOffsetx(context, factor, units))
         {
-            context->polygonOffsetx(factor, units);
+            context->gles1Emu->polygonOffsetx(factor, units);
         }
     }
 }
@@ -1940,7 +1120,7 @@ void GL_APIENTRY PopMatrix()
 
         if (context->skipValidation() || ValidatePopMatrix(context))
         {
-            context->popMatrix();
+            context->gles1Emu->popMatrix();
         }
     }
 }
@@ -1956,33 +1136,7 @@ void GL_APIENTRY PushMatrix()
 
         if (context->skipValidation() || ValidatePushMatrix(context))
         {
-            context->pushMatrix();
-        }
-    }
-}
-
-void GL_APIENTRY ReadPixels(GLint x,
-                            GLint y,
-                            GLsizei width,
-                            GLsizei height,
-                            GLenum format,
-                            GLenum type,
-                            void *pixels)
-{
-    EVENT(
-        "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, void *pixels = 0x%0.8p)",
-        x, y, width, height, format, type, pixels);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::ReadPixels>(x, y, width, height, format, type, pixels);
-
-        if (context->skipValidation() ||
-            ValidateReadPixels(context, x, y, width, height, format, type, pixels))
-        {
-            context->readPixels(x, y, width, height, format, type, pixels);
+            context->gles1Emu->pushMatrix();
         }
     }
 }
@@ -1998,7 +1152,7 @@ void GL_APIENTRY Rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 
         if (context->skipValidation() || ValidateRotatef(context, angle, x, y, z))
         {
-            context->rotatef(angle, x, y, z);
+            context->gles1Emu->rotatef(angle, x, y, z);
         }
     }
 }
@@ -2015,23 +1169,7 @@ void GL_APIENTRY Rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
 
         if (context->skipValidation() || ValidateRotatex(context, angle, x, y, z))
         {
-            context->rotatex(angle, x, y, z);
-        }
-    }
-}
-
-void GL_APIENTRY SampleCoverage(GLfloat value, GLboolean invert)
-{
-    EVENT("(GLfloat value = %f, GLboolean invert = %u)", value, invert);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::SampleCoverage>(value, invert);
-
-        if (context->skipValidation() || ValidateSampleCoverage(context, value, invert))
-        {
-            context->sampleCoverage(value, invert);
+            context->gles1Emu->rotatex(angle, x, y, z);
         }
     }
 }
@@ -2047,7 +1185,7 @@ void GL_APIENTRY SampleCoveragex(GLclampx value, GLboolean invert)
 
         if (context->skipValidation() || ValidateSampleCoveragex(context, value, invert))
         {
-            context->sampleCoveragex(value, invert);
+            context->gles1Emu->sampleCoveragex(value, invert);
         }
     }
 }
@@ -2063,7 +1201,7 @@ void GL_APIENTRY Scalef(GLfloat x, GLfloat y, GLfloat z)
 
         if (context->skipValidation() || ValidateScalef(context, x, y, z))
         {
-            context->scalef(x, y, z);
+            context->gles1Emu->scalef(x, y, z);
         }
     }
 }
@@ -2079,24 +1217,7 @@ void GL_APIENTRY Scalex(GLfixed x, GLfixed y, GLfixed z)
 
         if (context->skipValidation() || ValidateScalex(context, x, y, z))
         {
-            context->scalex(x, y, z);
-        }
-    }
-}
-
-void GL_APIENTRY Scissor(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-    EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width,
-          height);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Scissor>(x, y, width, height);
-
-        if (context->skipValidation() || ValidateScissor(context, x, y, width, height))
-        {
-            context->scissor(x, y, width, height);
+            context->gles1Emu->scalex(x, y, z);
         }
     }
 }
@@ -2112,55 +1233,7 @@ void GL_APIENTRY ShadeModel(GLenum mode)
 
         if (context->skipValidation() || ValidateShadeModel(context, mode))
         {
-            context->shadeModel(mode);
-        }
-    }
-}
-
-void GL_APIENTRY StencilFunc(GLenum func, GLint ref, GLuint mask)
-{
-    EVENT("(GLenum func = 0x%X, GLint ref = %d, GLuint mask = %u)", func, ref, mask);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::StencilFunc>(func, ref, mask);
-
-        if (context->skipValidation() || ValidateStencilFunc(context, func, ref, mask))
-        {
-            context->stencilFunc(func, ref, mask);
-        }
-    }
-}
-
-void GL_APIENTRY StencilMask(GLuint mask)
-{
-    EVENT("(GLuint mask = %u)", mask);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::StencilMask>(mask);
-
-        if (context->skipValidation() || ValidateStencilMask(context, mask))
-        {
-            context->stencilMask(mask);
-        }
-    }
-}
-
-void GL_APIENTRY StencilOp(GLenum fail, GLenum zfail, GLenum zpass)
-{
-    EVENT("(GLenum fail = 0x%X, GLenum zfail = 0x%X, GLenum zpass = 0x%X)", fail, zfail, zpass);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::StencilOp>(fail, zfail, zpass);
-
-        if (context->skipValidation() || ValidateStencilOp(context, fail, zfail, zpass))
-        {
-            context->stencilOp(fail, zfail, zpass);
+            context->gles1Emu->shadeModel(mode);
         }
     }
 }
@@ -2179,7 +1252,7 @@ void GL_APIENTRY TexCoordPointer(GLint size, GLenum type, GLsizei stride, const 
         if (context->skipValidation() ||
             ValidateTexCoordPointer(context, size, type, stride, pointer))
         {
-            context->texCoordPointer(size, type, stride, pointer);
+            context->gles1Emu->texCoordPointer(size, type, stride, pointer);
         }
     }
 }
@@ -2195,7 +1268,7 @@ void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param)
 
         if (context->skipValidation() || ValidateTexEnvf(context, target, pname, param))
         {
-            context->texEnvf(target, pname, param);
+            context->gles1Emu->texEnvf(target, pname, param);
         }
     }
 }
@@ -2212,7 +1285,7 @@ void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
 
         if (context->skipValidation() || ValidateTexEnvfv(context, target, pname, params))
         {
-            context->texEnvfv(target, pname, params);
+            context->gles1Emu->texEnvfv(target, pname, params);
         }
     }
 }
@@ -2228,7 +1301,7 @@ void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param)
 
         if (context->skipValidation() || ValidateTexEnvi(context, target, pname, param))
         {
-            context->texEnvi(target, pname, param);
+            context->gles1Emu->texEnvi(target, pname, param);
         }
     }
 }
@@ -2245,7 +1318,7 @@ void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
 
         if (context->skipValidation() || ValidateTexEnviv(context, target, pname, params))
         {
-            context->texEnviv(target, pname, params);
+            context->gles1Emu->texEnviv(target, pname, params);
         }
     }
 }
@@ -2262,7 +1335,7 @@ void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateTexEnvx(context, target, pname, param))
         {
-            context->texEnvx(target, pname, param);
+            context->gles1Emu->texEnvx(target, pname, param);
         }
     }
 }
@@ -2279,112 +1352,7 @@ void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
 
         if (context->skipValidation() || ValidateTexEnvxv(context, target, pname, params))
         {
-            context->texEnvxv(target, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY TexImage2D(GLenum target,
-                            GLint level,
-                            GLint internalformat,
-                            GLsizei width,
-                            GLsizei height,
-                            GLint border,
-                            GLenum format,
-                            GLenum type,
-                            const void *pixels)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
-        "GLsizei height = %d, GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, const "
-        "void *pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, border, format, type, pixels);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::TexImage2D>(targetPacked, level, internalformat, width,
-                                                      height, border, format, type, pixels);
-
-        if (context->skipValidation() ||
-            ValidateTexImage2D(context, targetPacked, level, internalformat, width, height, border,
-                               format, type, pixels))
-        {
-            context->texImage2D(targetPacked, level, internalformat, width, height, border, format,
-                                type, pixels);
-        }
-    }
-}
-
-void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat param = %f)", target, pname, param);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameterf>(targetPacked, pname, param);
-
-        if (context->skipValidation() || ValidateTexParameterf(context, targetPacked, pname, param))
-        {
-            context->texParameterf(targetPacked, pname, param);
-        }
-    }
-}
-
-void GL_APIENTRY TexParameterfv(GLenum target, GLenum pname, const GLfloat *params)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", target,
-          pname, params);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameterfv>(targetPacked, pname, params);
-
-        if (context->skipValidation() ||
-            ValidateTexParameterfv(context, targetPacked, pname, params))
-        {
-            context->texParameterfv(targetPacked, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %d)", target, pname, param);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameteri>(targetPacked, pname, param);
-
-        if (context->skipValidation() || ValidateTexParameteri(context, targetPacked, pname, param))
-        {
-            context->texParameteri(targetPacked, pname, param);
-        }
-    }
-}
-
-void GL_APIENTRY TexParameteriv(GLenum target, GLenum pname, const GLint *params)
-{
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", target,
-          pname, params);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameteriv>(targetPacked, pname, params);
-
-        if (context->skipValidation() ||
-            ValidateTexParameteriv(context, targetPacked, pname, params))
-        {
-            context->texParameteriv(targetPacked, pname, params);
+            context->gles1Emu->texEnvxv(target, pname, params);
         }
     }
 }
@@ -2402,7 +1370,7 @@ void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param)
 
         if (context->skipValidation() || ValidateTexParameterx(context, targetPacked, pname, param))
         {
-            context->texParameterx(targetPacked, pname, param);
+            context->gles1Emu->texParameterx(targetPacked, pname, param);
         }
     }
 }
@@ -2421,40 +1389,7 @@ void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *para
         if (context->skipValidation() ||
             ValidateTexParameterxv(context, targetPacked, pname, params))
         {
-            context->texParameterxv(targetPacked, pname, params);
-        }
-    }
-}
-
-void GL_APIENTRY TexSubImage2D(GLenum target,
-                               GLint level,
-                               GLint xoffset,
-                               GLint yoffset,
-                               GLsizei width,
-                               GLsizei height,
-                               GLenum format,
-                               GLenum type,
-                               const void *pixels)
-{
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
-        "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, const void "
-        "*pixels = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, type, pixels);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
-        context->gatherParams<EntryPoint::TexSubImage2D>(targetPacked, level, xoffset, yoffset,
-                                                         width, height, format, type, pixels);
-
-        if (context->skipValidation() ||
-            ValidateTexSubImage2D(context, targetPacked, level, xoffset, yoffset, width, height,
-                                  format, type, pixels))
-        {
-            context->texSubImage2D(targetPacked, level, xoffset, yoffset, width, height, format,
-                                   type, pixels);
+            context->gles1Emu->texParameterxv(targetPacked, pname, params);
         }
     }
 }
@@ -2470,7 +1405,7 @@ void GL_APIENTRY Translatef(GLfloat x, GLfloat y, GLfloat z)
 
         if (context->skipValidation() || ValidateTranslatef(context, x, y, z))
         {
-            context->translatef(x, y, z);
+            context->gles1Emu->translatef(x, y, z);
         }
     }
 }
@@ -2486,7 +1421,7 @@ void GL_APIENTRY Translatex(GLfixed x, GLfixed y, GLfixed z)
 
         if (context->skipValidation() || ValidateTranslatex(context, x, y, z))
         {
-            context->translatex(x, y, z);
+            context->gles1Emu->translatex(x, y, z);
         }
     }
 }
@@ -2505,24 +1440,7 @@ void GL_APIENTRY VertexPointer(GLint size, GLenum type, GLsizei stride, const vo
         if (context->skipValidation() ||
             ValidateVertexPointer(context, size, type, stride, pointer))
         {
-            context->vertexPointer(size, type, stride, pointer);
-        }
-    }
-}
-
-void GL_APIENTRY Viewport(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-    EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width,
-          height);
-
-    Context *context = GetValidGlobalContext();
-    if (context)
-    {
-        context->gatherParams<EntryPoint::Viewport>(x, y, width, height);
-
-        if (context->skipValidation() || ValidateViewport(context, x, y, width, height))
-        {
-            context->viewport(x, y, width, height);
+            context->gles1Emu->vertexPointer(size, type, stride, pointer);
         }
     }
 }

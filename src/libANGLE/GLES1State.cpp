@@ -142,4 +142,9 @@ void GLES1State::initialize(const Context *context)
     mFogHint                   = HintSetting::DontCare;
 }
 
+void GLES1State::matrixMode(MatrixType mode)
+{
+    mCurrMatrixMode = mode;
+}
+
 }  // namespace gl

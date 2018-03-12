@@ -117,6 +117,10 @@ class GLES1State final : angle::NonCopyable
 
     void initialize(const Context *context);
 
+    // State transitions corresponding roughly to
+    // GLES1 entry points
+    void matrixMode(MatrixType mode);
+
   private:
     // All initial state values come from the
     // OpenGL ES 1.1 spec.
