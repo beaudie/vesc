@@ -147,7 +147,6 @@ void VertexArrayVk::syncState(const gl::Context *context,
                 mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
                 mClientMemoryAttribs.set(attribIndex);
             }
-            // TODO(jmadill): Offset handling.  Assume zero for now.
             mCurrentArrayBufferOffsets[attribIndex] = 0;
         }
         else
