@@ -6,6 +6,7 @@
 
 #include "libANGLE/TransformFeedback.h"
 
+#include "common/mathutil.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Context.h"
@@ -14,14 +15,42 @@
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
 
+#include <limits>
+
 namespace gl
 {
+
+angle::CheckedNumeric<GLsizeiptr> GetVerticesNeededForDraw(GLenum primitiveMode,
+                                                           GLsizei count,
+                                                           GLsizei primcount)
+{
+    if (count < 0 || primcount < 0)
+    {
+        return false;
+    }
+    // Transform feedback only outputs complete primitives, so we need to round  down to the nearest
+    // complete primitive before multiplying by the number of instances.
+    angle::CheckedNumeric<GLsizeiptr> checkedCount     = count;
+    angle::CheckedNumeric<GLsizeiptr> checkedPrimcount = primcount;
+    switch (primitiveMode)
+    {
+        case GL_TRIANGLES:
+            return checkedPrimcount * (checkedCount - checkedCount % 3);
+        case GL_LINES:
+            return checkedPrimcount * (checkedCount - checkedCount % 2);
+        case GL_POINTS:
+            return checkedPrimcount * checkedCount;
+        default:
+            NOTREACHED();
+    }
+}
 
 TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
     : mLabel(),
       mActive(false),
       mPrimitiveMode(GL_NONE),
       mPaused(false),
+      mVerticesDrawn(0),
       mProgram(nullptr),
       mIndexedBuffers(maxIndexedBuffers)
 {
@@ -87,15 +116,29 @@ void TransformFeedback::begin(const Context *context, GLenum primitiveMode, Prog
     mState.mActive        = true;
     mState.mPrimitiveMode = primitiveMode;
     mState.mPaused        = false;
+    mState.mVerticesDrawn = 0;
     mImplementation->begin(primitiveMode);
     bindProgram(context, program);
+
+    // Compute the number of vertices we can draw before overflowing the bound buffers.
+    auto vertexSizes = mState.mProgram->getTransformFeedbackPerVertexSizes();
+    ASSERT(vertexSizes.size() <= mState.mIndexedBuffers.size() && vertexSizes.size() > 0);
+    GLsizeiptr minCapacity = std::numeric_limits<GLsizeiptr>::max();
+    for (size_t index = 0; index < vertexSizes.size(); index++)
+    {
+        GLsizeiptr capacity = GetAvailableSize(mState.mIndexedBuffers[index]) / vertexSizes[index];
+        minCapacity         = std::min(minCapacity, capacity);
+    }
+    mState.mVertexCapacity = minCapacity;
 }
 
 void TransformFeedback::end(const Context *context)
 {
-    mState.mActive        = false;
-    mState.mPrimitiveMode = GL_NONE;
-    mState.mPaused        = false;
+    mState.mActive         = false;
+    mState.mPrimitiveMode  = GL_NONE;
+    mState.mPaused         = false;
+    mState.mVerticesDrawn  = 0;
+    mState.mVertexCapacity = 0;
     mImplementation->end();
     if (mState.mProgram)
     {
@@ -129,6 +172,22 @@ bool TransformFeedback::isPaused() const
 GLenum TransformFeedback::getPrimitiveMode() const
 {
     return mState.mPrimitiveMode;
+}
+
+bool TransformFeedback::checkBufferSpaceForDraw(GLsizei count, GLsizei primcount) const
+{
+    auto vertices =
+        mState.mVerticesDrawn + GetVerticesNeededForDraw(mState.mPrimitiveMode, count, primcount);
+    return vertices.IsValid() && vertices.ValueOrDie() <= mState.mVertexCapacity;
+}
+
+void TransformFeedback::onVerticesDrawn(GLsizei count, GLsizei primcount)
+{
+    ASSERT(mState.mActive && !mState.mPaused);
+    // All draws should be validated with checkBufferSpaceForDraw so ValueOrDie should never fail.
+    mState.mVerticesDrawn =
+        (mState.mVerticesDrawn + GetVerticesNeededForDraw(mState.mPrimitiveMode, count, primcount))
+            .ValueOrDie();
 }
 
 void TransformFeedback::bindProgram(const Context *context, Program *program)

@@ -342,4 +342,33 @@ bool ComponentTypeMask::Validate(unsigned long outputTypes,
     return (outputTypes & inputMask) == ((inputTypes & outputMask) & inputMask);
 }
 
+GLsizeiptr GetAvailableSize(const OffsetBindingPointer<Buffer> &binding)
+{
+    Buffer *buffer = binding.get();
+    if (buffer)
+    {
+        if (binding.getSize() == 0)
+            return buffer->getSize();
+        angle::CheckedNumeric<GLintptr> offset       = binding.getOffset();
+        angle::CheckedNumeric<GLsizeiptr> size       = binding.getSize();
+        angle::CheckedNumeric<GLsizeiptr> bufferSize = buffer->getSize();
+        auto end                                     = offset + size;
+        auto clampedSize                             = size;
+        auto difference                              = end - bufferSize;
+        if (!difference.IsValid())
+        {
+            return 0;
+        }
+        if (difference.ValueOrDie() > 0)
+        {
+            clampedSize = size - difference;
+        }
+        return clampedSize.ValueOrDefault(0);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 }  // namespace gl
