@@ -14,6 +14,140 @@ using namespace angle;
 
 namespace
 {
+class SimpleUniformTest : public ANGLETest
+{
+  protected:
+    SimpleUniformTest() : mProgram(0), mUniformFLocation(-1), mUniformILocation(-1)
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        const std::string &vertexShader = "void main() { gl_Position = vec4(1); }";
+        const std::string &fragShader =
+            "precision mediump float;\n"
+            "uniform float uniF;\n"
+            "uniform int uniI;\n"
+            "uniform vec2 uniVec2;\n"
+            "uniform vec3 uniVec3;\n"
+            "uniform vec4 uniVec4;\n"
+            "void main() {\n"
+            "  gl_FragColor = vec4(uniF + float(uniI), uniVec2, 1.0);\n"
+            "  gl_FragColor += vec4(uniF, uniVec3);\n"
+            "  gl_FragColor += uniVec4;\n"
+            "}";
+
+        mProgram = CompileProgram(vertexShader, fragShader);
+        ASSERT_NE(mProgram, 0u);
+
+        mUniformFLocation = glGetUniformLocation(mProgram, "uniF");
+        ASSERT_NE(mUniformFLocation, -1);
+
+        mUniformILocation = glGetUniformLocation(mProgram, "uniI");
+        ASSERT_NE(mUniformILocation, -1);
+
+        mUniformVec2Location = glGetUniformLocation(mProgram, "uniVec2");
+        ASSERT_NE(mUniformVec2Location, -1);
+
+        mUniformVec3Location = glGetUniformLocation(mProgram, "uniVec3");
+        ASSERT_NE(mUniformVec3Location, -1);
+
+        mUniformVec4Location = glGetUniformLocation(mProgram, "uniVec4");
+        ASSERT_NE(mUniformVec4Location, -1);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        glDeleteProgram(mProgram);
+        ANGLETest::TearDown();
+    }
+
+    GLuint mProgram;
+    GLint mUniformFLocation;
+    GLint mUniformILocation;
+    GLint mUniformVec2Location;
+    GLint mUniformVec3Location;
+    GLint mUniformVec4Location;
+};
+
+TEST_P(SimpleUniformTest, FloatUniformStateQuery)
+{
+    glUseProgram(mProgram);
+    GLfloat expected = 1.02f;
+    glUniform1f(mUniformFLocation, expected);
+
+    GLfloat f;
+    glGetUniformfv(mProgram, mUniformFLocation, &f);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EQ(f, expected);
+}
+
+TEST_P(SimpleUniformTest, IntUniformStateQuery)
+{
+    glUseProgram(mProgram);
+    GLint expected = 4;
+    glUniform1i(mUniformILocation, expected);
+
+    GLint i;
+    glGetUniformiv(mProgram, mUniformILocation, &i);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EQ(i, expected);
+}
+
+TEST_P(SimpleUniformTest, FloatVec2UniformStateQuery)
+{
+    glUseProgram(mProgram);
+    std::vector<GLfloat> expected = {{1.0f, 0.5f}};
+    glUniform2fv(mUniformVec2Location, 1, expected.data());
+
+    GLfloat floats[2] = {0};
+    glGetUniformfv(mProgram, mUniformVec2Location, floats);
+    ASSERT_GL_NO_ERROR();
+    for (size_t i = 0; i < expected.size(); i++)
+    {
+        ASSERT_EQ(floats[i], expected[i]);
+    }
+}
+
+TEST_P(SimpleUniformTest, FloatVec3UniformStateQuery)
+{
+    glUseProgram(mProgram);
+    std::vector<GLfloat> expected = {{1.0f, 0.5f, 0.2f}};
+    glUniform3fv(mUniformVec3Location, 1, expected.data());
+
+    GLfloat floats[3] = {0};
+    glGetUniformfv(mProgram, mUniformVec3Location, floats);
+    ASSERT_GL_NO_ERROR();
+    for (size_t i = 0; i < expected.size(); i++)
+    {
+        ASSERT_EQ(floats[i], expected[i]);
+    }
+}
+
+TEST_P(SimpleUniformTest, FloatVec4UniformStateQuery)
+{
+    glUseProgram(mProgram);
+    std::vector<GLfloat> expected = {{1.0f, 0.5f, 0.2f, -0.8f}};
+    glUniform4fv(mUniformVec4Location, 1, expected.data());
+
+    GLfloat floats[4] = {0};
+    glGetUniformfv(mProgram, mUniformVec4Location, floats);
+    ASSERT_GL_NO_ERROR();
+    for (size_t i = 0; i < expected.size(); i++)
+    {
+        ASSERT_EQ(floats[i], expected[i]);
+    }
+}
 
 class UniformTest : public ANGLETest
 {
@@ -964,6 +1098,16 @@ TEST_P(UniformTest, UniformWithReservedOpenGLName)
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
+ANGLE_INSTANTIATE_TEST(SimpleUniformTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES2_D3D11_FL9_3(),
+                       ES2_OPENGL(),
+                       ES3_D3D11(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(UniformTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
