@@ -26,6 +26,7 @@ constexpr Format g_formatInfoTable[] = {
     // clang-format off
     { Format::ID::NONE, GL_NONE, GL_NONE, nullptr, NoCopyFunctions, nullptr, nullptr, GL_NONE, 0, 0, 0, 0, 0, 0 },
     { Format::ID::A16_FLOAT, GL_ALPHA16F_EXT, GL_ALPHA16F_EXT, GenerateMip<A16F>, NoCopyFunctions, ReadColor<A16F, GLfloat>, WriteColor<A16F, GLfloat>, GL_FLOAT, 0, 0, 0, 16, 0, 0 },
+    { Format::ID::A1R5G5B5_TYPELESS_UNORM, GL_A1R5G5B5_TYPELESS_ANGLEX, GL_A1R5G5B5_TYPELESS_ANGLEX, GenerateMip<A1R5G5B5>, NoCopyFunctions, ReadColor<A1R5G5B5, GLfloat>, WriteColor<A1R5G5B5, GLfloat>, GL_UNSIGNED_NORMALIZED, 5, 5, 5, 1, 0, 0 },
     { Format::ID::A32_FLOAT, GL_ALPHA32F_EXT, GL_ALPHA32F_EXT, GenerateMip<A32F>, NoCopyFunctions, ReadColor<A32F, GLfloat>, WriteColor<A32F, GLfloat>, GL_FLOAT, 0, 0, 0, 32, 0, 0 },
     { Format::ID::A8_UNORM, GL_ALPHA8_EXT, GL_ALPHA8_EXT, GenerateMip<A8>, NoCopyFunctions, ReadColor<A8, GLfloat>, WriteColor<A8, GLfloat>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 8, 0, 0 },
     { Format::ID::ASTC_10x10_SRGB_BLOCK, GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR, GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 0 },
@@ -214,6 +215,8 @@ Format::ID Format::InternalFormatToID(GLenum internalFormat)
             return Format::ID::R8_SNORM;
         case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT:
             return Format::ID::BC1_RGBA_UNORM_SRGB_BLOCK;
+        case GL_A1R5G5B5_TYPELESS_ANGLEX:
+            return Format::ID::A1R5G5B5_TYPELESS_UNORM;
         case GL_LUMINANCE32F_EXT:
             return Format::ID::L32_FLOAT;
         case GL_RG16_EXT:

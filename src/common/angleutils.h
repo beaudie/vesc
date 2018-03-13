@@ -206,6 +206,9 @@ std::string ToString(const T &value)
 #define GL_BGRA8_TYPELESS_ANGLEX 0x6AC3
 #define GL_BGRA8_TYPELESS_SRGB_ANGLEX 0x6AC4
 
+// Format used by Vulkan implementation to be able to refer to VK_FORMAT_A1R5G5B5_UNORM_PACK16
+#define GL_A1R5G5B5_TYPELESS_ANGLEX 0x6AC5
+
 // TODO(jmadill): Clean this up at some point.
 #define EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX 0x9999
 

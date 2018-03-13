@@ -30,6 +30,17 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             // This format is not implemented in Vulkan.
             break;
 
+        case angle::Format::ID::A1R5G5B5_TYPELESS_UNORM:
+        {
+            internalFormat          = GL_A1R5G5B5_TYPELESS_ANGLEX;
+            textureFormatID         = angle::Format::ID::A1R5G5B5_TYPELESS_UNORM;
+            vkTextureFormat         = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::A1R5G5B5_TYPELESS_UNORM;
+            vkBufferFormat          = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
+            dataInitializerFunction = nullptr;
+            break;
+        }
+
         case angle::Format::ID::A32_FLOAT:
             // This format is not implemented in Vulkan.
             break;
@@ -1017,10 +1028,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R4G4B4A4_UNORM:
         {
             internalFormat          = GL_RGBA4;
-            textureFormatID         = angle::Format::ID::R4G4B4A4_UNORM;
-            vkTextureFormat         = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::R4G4B4A4_UNORM;
-            vkBufferFormat          = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_UNORM;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_UNORM;
             dataInitializerFunction = nullptr;
             break;
         }
@@ -1028,10 +1039,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         case angle::Format::ID::R5G5B5A1_UNORM:
         {
             internalFormat          = GL_RGB5_A1;
-            textureFormatID         = angle::Format::ID::R5G5B5A1_UNORM;
-            vkTextureFormat         = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::R5G5B5A1_UNORM;
-            vkBufferFormat          = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
+            textureFormatID         = angle::Format::ID::A1R5G5B5_TYPELESS_UNORM;
+            vkTextureFormat         = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
+            bufferFormatID          = angle::Format::ID::A1R5G5B5_TYPELESS_UNORM;
+            vkBufferFormat          = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
             dataInitializerFunction = nullptr;
             break;
         }
