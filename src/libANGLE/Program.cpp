@@ -1063,6 +1063,7 @@ Error Program::link(const gl::Context *context)
         double delta = platform->currentTime(platform) - startTime;
         int us       = static_cast<int>(delta * 1000000.0);
         ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
+        gatherTransformFeedbackVaryings(getMergedVaryings(context));
         return NoError();
     }
 
@@ -1226,6 +1227,30 @@ void Program::updateLinkedShaderStages()
     if (mState.mAttachedGeometryShader)
     {
         mState.mLinkedShaderStages.set(ShaderType::Geometry);
+    }
+}
+
+void Program::updateTransformFeedbackStrides()
+{
+    if (mState.mTransformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
+    {
+        mState.mTransformFeedbackStrides.resize(1);
+        size_t totalSize = 0;
+        for (auto &varying : mState.mLinkedTransformFeedbackVaryings)
+        {
+            totalSize += varying.size() * VariableExternalSize(varying.type);
+        }
+        mState.mTransformFeedbackStrides[0] = static_cast<GLsizei>(totalSize);
+    }
+    else
+    {
+        mState.mTransformFeedbackStrides.resize(mState.mLinkedTransformFeedbackVaryings.size());
+        for (size_t i = 0; i < mState.mLinkedTransformFeedbackVaryings.size(); i++)
+        {
+            auto &varying = mState.mLinkedTransformFeedbackVaryings[i];
+            mState.mTransformFeedbackStrides[i] =
+                static_cast<GLsizei>(varying.size() * VariableExternalSize(varying.type));
+        }
     }
 }
 
@@ -3229,6 +3254,7 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
             }
         }
     }
+    updateTransformFeedbackStrides();
 }
 
 ProgramMergedVaryings Program::getMergedVaryings(const Context *context) const
