@@ -14,6 +14,7 @@
 
 #include "angle_gl.h"
 #include "common/debug.h"
+#include "common/mathutil.h"
 #include "libANGLE/Error.h"
 
 #include <cstddef>
