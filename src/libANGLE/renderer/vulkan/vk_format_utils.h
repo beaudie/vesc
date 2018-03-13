@@ -76,6 +76,10 @@ VkFormat GetNativeVertexFormat(gl::VertexFormatType vertexFormat);
 // initialized to 0.
 const VkFormatProperties &GetMandatoryFormatSupport(VkFormat vkFormat);
 
+void GetFormatProperties(VkPhysicalDevice physicalDevice,
+                         VkFormat vkFormat,
+                         VkFormatProperties *propertiesOut);
+
 }  // namespace vk
 
 }  // namespace rx
