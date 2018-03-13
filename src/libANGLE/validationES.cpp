@@ -2583,13 +2583,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
             return false;
         }
 
-        size_t uniformBufferSize = uniformBuffer.getSize();
-        if (uniformBufferSize == 0)
-        {
-            // Bind the whole buffer.
-            uniformBufferSize = static_cast<size_t>(uniformBuffer->getSize());
-        }
-
+        size_t uniformBufferSize = uniformBuffer.getSizeClamped();
         if (uniformBufferSize < uniformBlock.dataSize)
         {
             // undefined behaviour
@@ -2641,6 +2635,25 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     return true;
 }
 
+// Transform feedback only outputs finished primitives, so we need to round down to the nearest
+// number of whole primitives.
+GLsizei VerticesOutputByTransformFeedback(GLenum mode, GLsizei count, GLsizei primcount)
+{
+    switch (mode)
+    {
+        case GL_POINTS:
+            return count * primcount;
+        case GL_LINES:
+            // Round count down to even.
+            return (count - count % 2) * primcount;
+        case GL_TRIANGLES:
+            // Round count down to a multiple of 3.
+            return (count - count % 3) * primcount;
+        default:
+            NOTREACHED();
+    }
+}
+
 bool ValidateDrawArraysCommon(Context *context,
                               GLenum mode,
                               GLint first,
@@ -2656,14 +2669,23 @@ bool ValidateDrawArraysCommon(Context *context,
     const State &state                          = context->getGLState();
     gl::TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
     if (curTransformFeedback && curTransformFeedback->isActive() &&
-        !curTransformFeedback->isPaused() && curTransformFeedback->getPrimitiveMode() != mode)
+        !curTransformFeedback->isPaused())
     {
-        // It is an invalid operation to call DrawArrays or DrawArraysInstanced with a draw mode
-        // that does not match the current transform feedback object's draw mode (if transform
-        // feedback
-        // is active), (3.0.2, section 2.14, pg 86)
-        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidDrawModeTransformFeedback);
-        return false;
+        if (curTransformFeedback->getPrimitiveMode() != mode)
+        {
+            // It is an invalid operation to call DrawArrays or DrawArraysInstanced with a draw mode
+            // that does not match the current transform feedback object's draw mode (if transform
+            // feedback
+            // is active), (3.0.2, section 2.14, pg 86)
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidDrawModeTransformFeedback);
+            return false;
+        }
+
+        if (!curTransformFeedback->checkBufferSpaceForDraw(count, primcount))
+        {
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), TransformFeedbackBufferTooSmall);
+            return false;
+        }
     }
 
     if (!ValidateDrawBase(context, mode, count))

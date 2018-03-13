@@ -432,6 +432,10 @@ class ProgramState final : angle::NonCopyable
     GLenum mGeometryShaderOutputPrimitiveType;
     int mGeometryShaderInvocations;
     int mGeometryShaderMaxVertices;
+
+    // The size of the data written to each transform feedback buffer per
+    // vertex.
+    std::vector<GLsizei> mTransformFeedbackPerVertexSizes;
 };
 
 class ProgramBindings final : angle::NonCopyable
@@ -692,6 +696,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     ComponentTypeMask getAttributesTypeMask() const { return mState.mAttributesTypeMask; }
     AttributesMask getAttributesMask() const { return mState.mAttributesMask; }
 
+    const std::vector<GLsizei> &getTransformFeedbackPerVertexSizes() const
+    {
+        return mState.mTransformFeedbackPerVertexSizes;
+    }
+
   private:
     ~Program() override;
 
@@ -744,6 +753,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        const Caps &caps) const;
     bool linkValidateGlobalNames(const Context *context, InfoLog &infoLog) const;
 
+    void updateTransformFeedbackPerVertexSizes();
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings);
 
     ProgramMergedVaryings getMergedVaryings(const Context *context) const;
