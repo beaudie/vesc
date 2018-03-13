@@ -146,6 +146,21 @@ bool LinkedUniform::isField() const
     return name.find('.') != std::string::npos;
 }
 
+size_t LinkedUniform::getUniformIndex() const
+{
+    if (vertexStaticUse)
+        return SHADER_VERTEX;
+    if (fragmentStaticUse)
+        return SHADER_FRAGMENT;
+    if (computeStaticUse)
+        return SHADER_COMPUTE;
+    if (geometryStaticUse)
+        return SHADER_GEOMETRY;
+
+    UNREACHABLE();
+    return SHADER_TYPE_MAX;
+}
+
 size_t LinkedUniform::getElementSize() const
 {
     return typeInfo->externalSize;
