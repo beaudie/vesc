@@ -604,4 +604,10 @@ bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuff
 
 }  // namespace gl
 
+// Utility macro for handling implementation methods inside Validation.
+#define ANGLE_HANDLE_VALIDATION_ERR(X) \
+    context->handleError(X);           \
+    return false;
+#define ANGLE_VALIDATION_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_HANDLE_VALIDATION_ERR);
+
 #endif  // LIBANGLE_VALIDATION_ES_H_
