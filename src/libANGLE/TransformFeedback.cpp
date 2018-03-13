@@ -22,6 +22,7 @@ TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
       mActive(false),
       mPrimitiveMode(GL_NONE),
       mPaused(false),
+      mVerticesDrawn(0),
       mProgram(nullptr),
       mIndexedBuffers(maxIndexedBuffers)
 {
@@ -87,6 +88,7 @@ void TransformFeedback::begin(const Context *context, GLenum primitiveMode, Prog
     mState.mActive        = true;
     mState.mPrimitiveMode = primitiveMode;
     mState.mPaused        = false;
+    mState.mVerticesDrawn = 0;
     mImplementation->begin(primitiveMode);
     bindProgram(context, program);
 }
@@ -96,6 +98,7 @@ void TransformFeedback::end(const Context *context)
     mState.mActive        = false;
     mState.mPrimitiveMode = GL_NONE;
     mState.mPaused        = false;
+    mState.mVerticesDrawn = 0;
     mImplementation->end();
     if (mState.mProgram)
     {
@@ -129,6 +132,61 @@ bool TransformFeedback::isPaused() const
 GLenum TransformFeedback::getPrimitiveMode() const
 {
     return mState.mPrimitiveMode;
+}
+
+bool TransformFeedback::checkBufferSpaceForDraw(GLsizei count, GLsizei primcount) const
+{
+    angle::CheckedNumeric<GLsizeiptr> vertices = getVerticesNeededForDraw(count, primcount);
+    auto vertexSizes = mState.mProgram->getTransformFeedbackPerVertexSizes();
+    if (vertexSizes.size() > mState.mIndexedBuffers.size())
+    {
+        return false;
+    }
+    for (size_t index = 0; index < vertexSizes.size(); index++)
+    {
+        angle::CheckedNumeric<GLsizeiptr> size = vertices * vertexSizes[index];
+        if (!size.IsValid() || !mState.mIndexedBuffers[index].get() ||
+            size.ValueOrDie() > GetAvailableSize(mState.mIndexedBuffers[index]))
+            return false;
+    }
+    return true;
+}
+
+angle::CheckedNumeric<GLsizeiptr> TransformFeedback::getVerticesNeededForDraw(
+    GLsizei count,
+    GLsizei primcount) const
+{
+    if (count < 0 || primcount < 0)
+    {
+        return false;
+    }
+    // Transform feedback only outputs complete primitives, so we need to round  down to the nearest
+    // complete primitive before multiplying by the number of instances.
+    angle::CheckedNumeric<GLsizeiptr> checkedVertices  = mState.mVerticesDrawn;
+    angle::CheckedNumeric<GLsizeiptr> checkedCount     = count;
+    angle::CheckedNumeric<GLsizeiptr> checkedPrimcount = primcount;
+    switch (mState.mPrimitiveMode)
+    {
+        case GL_TRIANGLES:
+            checkedVertices += checkedPrimcount * (checkedCount - checkedCount % 3);
+            break;
+        case GL_LINES:
+            checkedVertices += checkedPrimcount * (checkedCount - checkedCount % 2);
+            break;
+        case GL_POINTS:
+            checkedVertices += checkedPrimcount * checkedCount;
+            break;
+        default:
+            NOTREACHED();
+    }
+    return checkedVertices;
+}
+
+void TransformFeedback::onVerticesDrawn(GLsizei count, GLsizei primcount)
+{
+    ASSERT(mState.mActive && !mState.mPaused);
+    // All draws should be validated with checkBufferSpaceForDraw so ValueOrDie should never fail.
+    mState.mVerticesDrawn = getVerticesNeededForDraw(count, primcount).ValueOrDie();
 }
 
 void TransformFeedback::bindProgram(const Context *context, Program *program)

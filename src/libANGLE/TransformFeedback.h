@@ -10,6 +10,7 @@
 #include "libANGLE/RefCountObject.h"
 
 #include "common/angleutils.h"
+#include "common/mathutil.h"
 #include "libANGLE/Debug.h"
 
 #include "angle_gl.h"
@@ -44,6 +45,7 @@ class TransformFeedbackState final : angle::NonCopyable
     bool mActive;
     GLenum mPrimitiveMode;
     bool mPaused;
+    GLsizeiptr mVerticesDrawn;
 
     Program *mProgram;
 
@@ -68,6 +70,14 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     bool isActive() const;
     bool isPaused() const;
     GLenum getPrimitiveMode() const;
+    // Validates that the vertices produced by a draw call will fit in the bound transform feedback
+    // buffers.
+    bool checkBufferSpaceForDraw(GLsizei count, GLsizei primcount) const;
+    // This must be called after each draw call when transform feedback is enabled to keep track of
+    // how many vertices have been written to the buffers. This information is needed by
+    // checkBufferSpaceForDraw because each draw call appends vertices to the buffers starting just
+    // after the last vertex of the previous draw call.
+    void onVerticesDrawn(GLsizei count, GLsizei primcount);
 
     bool hasBoundProgram(GLuint program) const;
 
@@ -91,6 +101,8 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
   private:
     void bindProgram(const Context *context, Program *program);
+    angle::CheckedNumeric<GLsizeiptr> getVerticesNeededForDraw(GLsizei count,
+                                                               GLsizei primcount) const;
 
     TransformFeedbackState mState;
     rx::TransformFeedbackImpl* mImplementation;
