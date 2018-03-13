@@ -640,56 +640,183 @@ void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
     mAppliedBindings[bindingIndex].setDivisor(adjustedDivisor);
 }
 
-void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::DirtyBits &dirtyBits)
+void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
+                                    size_t attribIndex,
+                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
+{
+    ASSERT(dirtyAttribBits.any());
+
+    for (size_t dirtyBit : dirtyAttribBits)
+    {
+        switch (dirtyBit)
+        {
+            case VertexArray::DIRTY_ATTRIB_ENABLED:
+                updateAttribEnabled(attribIndex);
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_POINTER:
+                updateAttribPointer(context, attribIndex);
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_FORMAT:
+                ASSERT(supportVertexAttribBinding());
+                updateAttribFormat(attribIndex);
+                break;
+
+            case VertexArray::DIRTY_ATTRIB_BINDING:
+                ASSERT(supportVertexAttribBinding());
+                updateAttribBinding(attribIndex);
+                break;
+
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
+                                     size_t bindingIndex,
+                                     const gl::VertexArray::DirtyBindingBits &dirtyBindingBits)
+{
+    ASSERT(dirtyBindingBits.any());
+
+    for (size_t dirtyBit : dirtyBindingBits)
+    {
+        switch (dirtyBit)
+        {
+            case VertexArray::DIRTY_BINDING_BUFFER:
+                ASSERT(supportVertexAttribBinding());
+                updateBindingBuffer(context, bindingIndex);
+                break;
+
+            case VertexArray::DIRTY_BINDING_DIVISOR:
+                updateBindingDivisor(bindingIndex);
+                break;
+
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+void VertexArrayGL::syncState(const gl::Context *context,
+                              const VertexArray::DirtyBits &dirtyBits,
+                              const gl::VertexArray::DirtyAttribBitsArray &attribBits,
+                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
 {
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
     for (size_t dirtyBit : dirtyBits)
     {
-        if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        switch (dirtyBit)
         {
+        case VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER:
             updateElementArrayBufferBinding(context);
-            continue;
-        }
+            break;
 
-        size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
-        if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED &&
-            dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
-        {
-            updateAttribEnabled(index);
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_POINTER &&
-                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
-        {
-            updateAttribPointer(context, index);
-        }
+        case VertexArray::DIRTY_BIT_ATTRIB_0:
+            syncDirtyAttrib(context, 0, attribBits[0]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 1:
+            syncDirtyAttrib(context, 1, attribBits[1]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 2:
+            syncDirtyAttrib(context, 2, attribBits[2]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 3:
+            syncDirtyAttrib(context, 3, attribBits[3]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 4:
+            syncDirtyAttrib(context, 4, attribBits[4]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 5:
+            syncDirtyAttrib(context, 5, attribBits[5]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 6:
+            syncDirtyAttrib(context, 6, attribBits[6]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 7:
+            syncDirtyAttrib(context, 7, attribBits[7]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 8:
+            syncDirtyAttrib(context, 8, attribBits[8]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 9:
+            syncDirtyAttrib(context, 9, attribBits[9]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 10:
+            syncDirtyAttrib(context, 10, attribBits[10]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 11:
+            syncDirtyAttrib(context, 11, attribBits[11]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 12:
+            syncDirtyAttrib(context, 12, attribBits[12]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 13:
+            syncDirtyAttrib(context, 13, attribBits[13]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 14:
+            syncDirtyAttrib(context, 14, attribBits[14]);
+            break;
+        case VertexArray::DIRTY_BIT_ATTRIB_0 + 15:
+            syncDirtyAttrib(context, 15, attribBits[15]);
+            break;
 
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_FORMAT &&
-                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_FORMAT)
-        {
-            ASSERT(supportVertexAttribBinding());
-            updateAttribFormat(index);
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_BINDING &&
-                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_BINDING)
-        {
-            ASSERT(supportVertexAttribBinding());
-            updateAttribBinding(index);
-        }
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_BUFFER &&
-                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_BUFFER)
-        {
-            ASSERT(supportVertexAttribBinding());
-            updateBindingBuffer(context, index);
-        }
+        case VertexArray::DIRTY_BIT_BINDING_0:
+            syncDirtyBinding(context, 0, bindingBits[0]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 1:
+            syncDirtyBinding(context, 1, bindingBits[1]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 2:
+            syncDirtyBinding(context, 2, bindingBits[2]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 3:
+            syncDirtyBinding(context, 3, bindingBits[3]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 4:
+            syncDirtyBinding(context, 4, bindingBits[4]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 5:
+            syncDirtyBinding(context, 5, bindingBits[5]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 6:
+            syncDirtyBinding(context, 6, bindingBits[6]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 7:
+            syncDirtyBinding(context, 7, bindingBits[7]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 8:
+            syncDirtyBinding(context, 8, bindingBits[8]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 9:
+            syncDirtyBinding(context, 9, bindingBits[9]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 10:
+            syncDirtyBinding(context, 10, bindingBits[10]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 11:
+            syncDirtyBinding(context, 11, bindingBits[11]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 12:
+            syncDirtyBinding(context, 12, bindingBits[12]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 13:
+            syncDirtyBinding(context, 13, bindingBits[13]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 14:
+            syncDirtyBinding(context, 14, bindingBits[14]);
+            break;
+        case VertexArray::DIRTY_BIT_BINDING_0 + 15:
+            syncDirtyBinding(context, 15, bindingBits[15]);
+            break;
 
-        else if (dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0_DIVISOR &&
-                 dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX_DIVISOR)
-        {
-            updateBindingDivisor(index);
-        }
-        else
+        default:
             UNREACHABLE();
+        }
     }
 }
 
