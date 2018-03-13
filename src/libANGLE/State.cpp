@@ -1429,6 +1429,10 @@ Buffer *State::getTargetBuffer(BufferBinding target) const
 
 void State::detachBuffer(const Context *context, GLuint bufferName)
 {
+    if (!context->getBuffer(bufferName)->isBound())
+    {
+        return;
+    }
     for (auto target : angle::AllEnums<BufferBinding>())
     {
         if (mBoundBuffers[target].id() == bufferName)
