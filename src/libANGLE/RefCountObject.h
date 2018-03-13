@@ -14,6 +14,7 @@
 
 #include "angle_gl.h"
 #include "common/debug.h"
+#include "common/mathutil.h"
 #include "libANGLE/Error.h"
 
 #include <cstddef>
@@ -170,6 +171,37 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
 
     GLintptr getOffset() const { return mOffset; }
     GLsizeiptr getSize() const { return mSize; }
+
+    // This getter clamps the size of the region to the actual size of the bound
+    // buffer, or 0 if nothing is bound or integer overflow occurs.
+    GLsizeiptr getSizeClamped() const
+    {
+        ObjectType *buffer = BindingPointer<ObjectType>::get();
+        if (buffer)
+        {
+            if (mSize == 0)
+                return buffer->getSize();
+            angle::CheckedNumeric<GLintptr> offset       = mOffset;
+            angle::CheckedNumeric<GLsizeiptr> size       = mSize;
+            angle::CheckedNumeric<GLsizeiptr> bufferSize = buffer->getSize();
+            auto end                                     = offset + size;
+            auto clampedSize                             = size;
+            auto difference                              = end - bufferSize;
+            if (!difference.IsValid())
+            {
+                return 0;
+            }
+            if (difference.ValueOrDie() > 0)
+            {
+                clampedSize = size - difference;
+            }
+            return clampedSize.ValueOrDefault(0);
+        }
+        else
+        {
+            return 0;
+        }
+    }
 
     bool operator==(const OffsetBindingPointer<ObjectType> &other) const
     {
