@@ -917,6 +917,8 @@ Error Program::link(const gl::Context *context)
         double delta = platform->currentTime(platform) - startTime;
         int us       = static_cast<int>(delta * 1000000.0);
         ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
+        gatherTransformFeedbackVaryings(getMergedVaryings(context));
+        updateTransformFeedbackPerVertexSizes();
         return NoError();
     }
 
@@ -1030,6 +1032,7 @@ Error Program::link(const gl::Context *context)
         }
 
         gatherTransformFeedbackVaryings(mergedVaryings);
+        updateTransformFeedbackPerVertexSizes();
     }
 
     initInterfaceBlockBindings();
@@ -1080,6 +1083,31 @@ void Program::updateLinkedShaderStages()
     if (mState.mAttachedGeometryShader)
     {
         mState.mLinkedShaderStages.set(SHADER_GEOMETRY);
+    }
+}
+
+void Program::updateTransformFeedbackPerVertexSizes()
+{
+    if (mState.mTransformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
+    {
+        mState.mTransformFeedbackPerVertexSizes.resize(1);
+        GLsizei totalSize = 0;
+        for (auto &varying : mState.mLinkedTransformFeedbackVaryings)
+        {
+            totalSize += varying.size() * VariableExternalSize(varying.type);
+        }
+        mState.mTransformFeedbackPerVertexSizes[0] = totalSize;
+    }
+    else
+    {
+        mState.mTransformFeedbackPerVertexSizes.resize(
+            mState.mLinkedTransformFeedbackVaryings.size());
+        for (size_t i = 0; i < mState.mLinkedTransformFeedbackVaryings.size(); i++)
+        {
+            auto &varying = mState.mLinkedTransformFeedbackVaryings[i];
+            mState.mTransformFeedbackPerVertexSizes[i] =
+                varying.size() * VariableExternalSize(varying.type);
+        }
     }
 }
 
