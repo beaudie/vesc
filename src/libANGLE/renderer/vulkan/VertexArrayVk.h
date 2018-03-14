@@ -99,6 +99,10 @@ class VertexArrayVk : public VertexArrayImpl
                             vk::CommandGraphNode *drawNode,
                             bool newCommandBuffer);
 
+    void syncDirtyAttrib(const gl::VertexAttribute &attrib,
+                         const gl::VertexBinding &binding,
+                         size_t attribIndex);
+
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<vk::CommandGraphResource *> mCurrentArrayBufferResources;
