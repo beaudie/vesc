@@ -88,7 +88,6 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
 // If we're loading the validation layers, we could be running from any random directory.
 // Change to the executable directory so we can find the layers, then change back to the
 // previous directory to be safe we don't disrupt the application.
-// TODO: Set ICD env var in similar fashion
 class ScopedVkLoaderEnvironment : angle::NonCopyable
 {
   public:
@@ -132,7 +131,7 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
             }
         }
 
-        // Override environement variable to use Vulkan Mock ICD
+        // Override environment variable to use Vulkan Mock ICD
         if (mEnableNullDriver)
         {
             // ANGLE_VK_MOCK_ICD_DIR gets set to built mock ICD in BUILD.gn
@@ -297,7 +296,6 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     uint32_t enabledLayerCount           = 0;
     if (mEnableValidationLayers)
     {
-        // TODO : Model this code to add EGL ext backdoor to turn on Mock VK ICD
         bool layersRequested =
             (attribs.get(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE, EGL_DONT_CARE) == EGL_TRUE);
         mEnableValidationLayers = GetAvailableValidationLayers(
