@@ -9,6 +9,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/VertexArrayImpl.h"
 
@@ -36,8 +37,13 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
                          size_t maxAttribBindings)
     : mId(id),
       mState(maxAttribs, maxAttribBindings),
-      mVertexArray(factory->createVertexArray(mState))
+      mVertexArray(factory->createVertexArray(mState)),
+      mElementArrayBufferObserverBinding(this, maxAttribBindings)
 {
+    for (size_t attribIndex = 0; attribIndex < maxAttribBindings; ++attribIndex)
+    {
+        mArrayBufferObserverBindings.emplace_back(this, attribIndex);
+    }
 }
 
 void VertexArray::onDestroy(const Context *context)
@@ -128,6 +134,10 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     binding->setBuffer(context, boundBuffer, isBound);
     binding->setOffset(offset);
     binding->setStride(stride);
+
+    // FIXME: should call enabled.
+    mArrayBufferObserverBindings[bindingIndex].bind(boundBuffer ? boundBuffer->getImplementation()
+                                                                : nullptr);
 }
 
 void VertexArray::bindVertexBuffer(const Context *context,
@@ -257,6 +267,7 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
     mState.mElementArrayBuffer.set(context, buffer);
     if (isBound && mState.mElementArrayBuffer.get())
         mState.mElementArrayBuffer->onBindingChanged(true, BufferBinding::ElementArray);
+    mElementArrayBufferObserverBinding.bind(buffer ? buffer->getImplementation() : nullptr);
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
 }
 
@@ -264,6 +275,7 @@ void VertexArray::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
+        // FIXME: add guard.
         mVertexArray->syncState(context, mDirtyBits);
         mDirtyBits.reset();
     }
@@ -277,6 +289,24 @@ void VertexArray::onBindingChanged(bool bound)
     {
         binding.onContainerBindingChanged(bound);
     }
+}
+
+void VertexArray::onSubjectStateChange(const gl::Context *context,
+                                       angle::SubjectIndex index,
+                                       angle::SubjectMessage message)
+{
+    // FIXME: different handling for contents/dirty bits?
+    if (index == mArrayBufferObserverBindings.size())
+    {
+        mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+    }
+    else
+    {
+        ASSERT(index < mArrayBufferObserverBindings.size());
+        mDirtyBits.set(DIRTY_BIT_BINDING_0_BUFFER + index);
+    }
+
+    context->getGLState().setVertexArrayDirty(this);
 }
 
 }  // namespace gl
