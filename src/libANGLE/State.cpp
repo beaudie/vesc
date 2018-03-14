@@ -2640,6 +2640,14 @@ void State::setFramebufferDirty(const Framebuffer *framebuffer) const
     }
 }
 
+void State::setVertexArrayDirty(const VertexArray *vertexArray) const
+{
+    if (vertexArray == mVertexArray)
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    }
+}
+
 void State::onProgramExecutableChange(Program *program)
 {
     // OpenGL Spec:
