@@ -175,6 +175,11 @@ EGLAPI EGLint EGLAPIENTRY eglProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limi
 #define EGL_TEXTURE_INTERNAL_FORMAT_ANGLE 0x345D
 #endif /* EGL_ANGLE_iosurface_client_buffer */
 
+#ifndef EGL_ANGLE_request_extension
+#define EGL_ANGLE_request_extension 1
+#define EGL_EXTENSIONS_ENABLED_ANGLE 0x345F
+#endif /* EGL_ANGLE_request_extension */
+
 // clang-format on
 
 #endif  // INCLUDE_EGL_EGLEXT_ANGLE_

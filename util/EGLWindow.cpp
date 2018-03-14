@@ -118,6 +118,7 @@ EGLWindow::EGLWindow(EGLint glesMajorVersion,
       mDebug(false),
       mNoError(false),
       mWebGLCompatibility(false),
+      mExtensionsEnabled(),
       mBindGeneratesResource(true),
       mClientArraysEnabled(true),
       mRobustAccess(false),
@@ -320,6 +321,13 @@ bool EGLWindow::initializeContext()
         return false;
     }
 
+    bool hasRequestExtension = strstr(displayExtensions, "EGL_ANGLE_request_extension") != nullptr;
+    if (mExtensionsEnabled.valid() && !hasRequestExtension)
+    {
+        destroyGL();
+        return false;
+    }
+
     bool hasRobustness = strstr(displayExtensions, "EGL_EXT_create_context_robustness") != nullptr;
     if (mRobustAccess && !hasRobustness)
     {
@@ -382,6 +390,12 @@ bool EGLWindow::initializeContext()
         {
             contextAttributes.push_back(EGL_CONTEXT_WEBGL_COMPATIBILITY_ANGLE);
             contextAttributes.push_back(mWebGLCompatibility ? EGL_TRUE : EGL_FALSE);
+        }
+
+        if (mExtensionsEnabled.valid())
+        {
+            contextAttributes.push_back(EGL_EXTENSIONS_ENABLED_ANGLE);
+            contextAttributes.push_back(mExtensionsEnabled.value() ? EGL_TRUE : EGL_FALSE);
         }
 
         if (hasRobustness)
