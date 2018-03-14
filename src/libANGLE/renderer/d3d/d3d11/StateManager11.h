@@ -542,11 +542,11 @@ class StateManager11 final : angle::NonCopyable
     FragmentConstantBufferArray<GLintptr> mCurrentConstantBufferPSOffset;
     FragmentConstantBufferArray<GLsizeiptr> mCurrentConstantBufferPSSize;
 
-    class OnConstantBufferDirtyReceiver : public angle::ObserverInterface
+    class ConstantBufferObserver : public angle::ObserverInterface
     {
       public:
-        OnConstantBufferDirtyReceiver();
-        ~OnConstantBufferDirtyReceiver() override;
+        ConstantBufferObserver();
+        ~ConstantBufferObserver() override;
 
         void onSubjectStateChange(const gl::Context *context,
                                   angle::SubjectIndex index,
@@ -560,7 +560,7 @@ class StateManager11 final : angle::NonCopyable
         std::vector<angle::ObserverBinding> mBindingsVS;
         std::vector<angle::ObserverBinding> mBindingsPS;
     };
-    OnConstantBufferDirtyReceiver mOnConstantBufferDirtyReceiver;
+    ConstantBufferObserver mConstantBufferObserver;
 
     // Currently applied transform feedback buffers
     Serial mAppliedTFSerial;
