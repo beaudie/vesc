@@ -126,6 +126,13 @@ After the tests finish, get the results with
 ```
 adb pull /sdcard/chromium_tests_root/third_party/deqp/src/data/TestResults.qpa .
 ```
+#### Update Android.bp blueprint file
+When there is a change to the ANGLE build, you'll need to generate a new Android.bp so that the Android build works as well.
+The scripts/gen_angle_android_bp.py script will use the gn build information to create an Android.bp that can be used for Android.
+```
+cd <chromium>/src
+./third_party/angle/scripts/gen_angle_android_bp.py --gn_out out/Default //third_party/angle:libGLESv2 //third_party/angle:libEGL
+```
 
 In order to run GPU telemetry tests, build `chrome_public_apk` target. Then follow [GPU Testing](http://www.chromium.org/developers/testing/gpu-testing#TOC-Running-the-GPU-Tests-Locally) doc, using `--browser=android-chromium` argument. Make sure to set your `CHROMIUM_OUT_DIR` environment variable, so that your browser is found, otherwise the stock one will run.
 
