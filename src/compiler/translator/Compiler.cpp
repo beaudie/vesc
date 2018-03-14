@@ -26,6 +26,7 @@
 #include "compiler/translator/IsASTDepthBelowLimit.h"
 #include "compiler/translator/OutputTree.h"
 #include "compiler/translator/ParseContext.h"
+#include "compiler/translator/PruneEmptyCases.h"
 #include "compiler/translator/PruneNoOps.h"
 #include "compiler/translator/RegenerateStructNames.h"
 #include "compiler/translator/RemoveArrayLengthMethod.h"
@@ -587,6 +588,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     RemoveArrayLengthMethod(root);
 
     RemoveUnreferencedVariables(root, &symbolTable);
+
+    PruneEmptyCases(root);
 
     // Built-in function emulation needs to happen after validateLimitations pass.
     // TODO(jmadill): Remove global pool allocator.
