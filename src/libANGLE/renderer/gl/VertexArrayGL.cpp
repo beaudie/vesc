@@ -701,6 +701,16 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
     }
 }
 
+#define ANGLE_DIRTY_ATTRIB_FUNC(INDEX)              \
+    case VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:   \
+        syncDirtyAttrib(context, 0, attribBits[0]); \
+        break;
+
+#define ANGLE_DIRTY_BINDING_FUNC(INDEX)               \
+    case VertexArray::DIRTY_BIT_BINDING_0 + INDEX:    \
+        syncDirtyBinding(context, 0, bindingBits[0]); \
+        break;
+
 void VertexArrayGL::syncState(const gl::Context *context,
                               const VertexArray::DirtyBits &dirtyBits,
                               const gl::VertexArray::DirtyAttribBitsArray &attribBits,
@@ -716,22 +726,12 @@ void VertexArrayGL::syncState(const gl::Context *context,
                 updateElementArrayBufferBinding(context);
                 break;
 
+                ANGLE_VERTEX_INDEX_CASES(ANGLE_DIRTY_ATTRIB_FUNC);
+                ANGLE_VERTEX_INDEX_CASES(ANGLE_DIRTY_BINDING_FUNC);
+
             default:
-            {
-                size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
-                if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0 &&
-                    dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_0 + VertexArray::DIRTY_BIT_ATTRIB_MAX)
-                {
-                    syncDirtyAttrib(context, 0, attribBits[index]);
-                }
-                else
-                {
-                    ASSERT(dirtyBit >= VertexArray::DIRTY_BIT_BINDING_0 &&
-                           dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX);
-                    syncDirtyBinding(context, 0, bindingBits[index]);
-                }
+                UNREACHABLE();
                 break;
-            }
         }
     }
 }

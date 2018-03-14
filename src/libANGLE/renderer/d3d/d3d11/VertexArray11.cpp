@@ -75,6 +75,18 @@ void VertexArray11::destroy(const gl::Context *context)
     mCurrentElementArrayBuffer.set(context, nullptr);
 }
 
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                          \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                  \
+        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
+        mAttribsToUpdate.set(INDEX);                                   \
+        break;
+
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                         \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                 \
+        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
+        mAttribsToUpdate.set(INDEX);                                   \
+        break;
+
 void VertexArray11::syncState(const gl::Context *context,
                               const gl::VertexArray::DirtyBits &dirtyBits,
                               const gl::VertexArray::DirtyAttribBitsArray &attribBits,
@@ -92,17 +104,19 @@ void VertexArray11::syncState(const gl::Context *context,
 
     for (auto dirtyBit : dirtyBits)
     {
-        if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        switch (dirtyBit)
         {
-            mCachedIndexInfoValid = false;
-            mLastElementType      = GL_NONE;
-        }
-        else
-        {
-            size_t index = gl::VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
-            // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
-            ASSERT(index == mState.getBindingIndexFromAttribIndex(index));
-            mAttribsToUpdate.set(index);
+            case gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER:
+                mCachedIndexInfoValid = false;
+                mLastElementType      = GL_NONE;
+                break;
+
+                ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_ATTRIB_FUNC);
+                ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BINDING_FUNC);
+
+            default:
+                UNREACHABLE();
+                break;
         }
     }
 }
