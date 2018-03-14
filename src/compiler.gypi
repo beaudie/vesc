@@ -109,6 +109,8 @@
             'compiler/translator/PoolAlloc.cpp',
             'compiler/translator/PoolAlloc.h',
             'compiler/translator/Pragma.h',
+            'compiler/translator/PruneEmptyCases.cpp',
+            'compiler/translator/PruneEmptyCases.h',
             'compiler/translator/PruneNoOps.cpp',
             'compiler/translator/PruneNoOps.h',
             'compiler/translator/QualifierTypes.h',
