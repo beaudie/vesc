@@ -534,7 +534,8 @@ void ProgramVk::setUniformMatrix2fv(GLint location,
                                     GLboolean transpose,
                                     const GLfloat *value)
 {
-    UNIMPLEMENTED();
+    if (transpose == GL_FALSE) { UNIMPLEMENTED(); }
+    setUniformImpl(location, count, value, GL_FLOAT_MAT2);
 }
 
 void ProgramVk::setUniformMatrix3fv(GLint location,
@@ -542,7 +543,8 @@ void ProgramVk::setUniformMatrix3fv(GLint location,
                                     GLboolean transpose,
                                     const GLfloat *value)
 {
-    UNIMPLEMENTED();
+    if (transpose == GL_FALSE) { UNIMPLEMENTED(); }
+    setUniformImpl(location, count, value, GL_FLOAT_MAT3);
 }
 
 void ProgramVk::setUniformMatrix4fv(GLint location,
@@ -550,7 +552,8 @@ void ProgramVk::setUniformMatrix4fv(GLint location,
                                     GLboolean transpose,
                                     const GLfloat *value)
 {
-    UNIMPLEMENTED();
+    if (transpose == GL_FALSE) { UNIMPLEMENTED(); }
+    setUniformImpl(location, count, value, GL_FLOAT_MAT4);
 }
 
 void ProgramVk::setUniformMatrix2x3fv(GLint location,
