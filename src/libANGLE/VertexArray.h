@@ -15,6 +15,7 @@
 
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/Observer.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
@@ -72,7 +73,7 @@ class VertexArrayState final : angle::NonCopyable
     ComponentTypeMask mVertexAttributesTypeMask;
 };
 
-class VertexArray final : public LabeledObject
+class VertexArray final : public angle::ObserverInterface, public LabeledObject
 {
   public:
     VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
@@ -153,6 +154,11 @@ class VertexArray final : public LabeledObject
         return mState.getEnabledAttributesMask();
     }
 
+    // Observer implementation
+    void onSubjectStateChange(const gl::Context *context,
+                              angle::SubjectIndex index,
+                              angle::SubjectMessage message) override;
+
     enum DirtyBitType
     {
         DIRTY_BIT_ELEMENT_ARRAY_BUFFER,
@@ -207,6 +213,9 @@ class VertexArray final : public LabeledObject
     DirtyBits mDirtyBits;
 
     rx::VertexArrayImpl *mVertexArray;
+
+    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    angle::ObserverBinding mElementArrayBufferObserverBinding;
 };
 
 }  // namespace gl

@@ -1322,7 +1322,7 @@ gl::Error Renderer9::applyIndexBuffer(const gl::Context *context,
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
 
     GLenum dstType = GL_NONE;
-    ANGLE_TRY(GetIndexTranslationDestType(context, type, drawCallParams, false, &dstType));
+    ANGLE_TRY(GetIndexTranslationDestType(context, drawCallParams, false, &dstType));
 
     ANGLE_TRY(mIndexDataManager->prepareIndexData(context, type, dstType, count, elementArrayBuffer,
                                                   indices, indexInfo));
