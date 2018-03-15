@@ -13,12 +13,18 @@
 
 #include "angle_gl.h"
 #include "common/utilities.h"
+#include "compiler/translator/BuiltIn_autogen.h"
+#include "compiler/translator/FindMain.h"
+#include "compiler/translator/IntermNode_util.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
+#include "compiler/translator/StaticType.h"
 #include "compiler/translator/util.h"
 
 namespace sh
 {
 
+namespace
+{
 class DeclareDefaultUniformsTraverser : public TIntermTraverser
 {
   public:
@@ -90,6 +96,43 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
     bool mInDefaultUniform;
 };
 
+// This traverser performs the viewport depth translation needed by Vulkan. In GL the viewport
+// transformation is slightly different - see the GL 2.0 spec section "2.12.1 Controlling the
+// Viewport". In Vulkan the corresponding spec section is currently "23.4. Coordinate
+// Transformations". The equations reduce to an expression of "z_vk = 0.5 * z_gl + 0.5", where z_vk
+// is the depth output of a Vulkan vertex shader and z_gl is the same for GL.
+void AppendVertexShaderDepthCorrectionToMain(TIntermBlock *root, const TSymbolTable &symbolTable)
+{
+    // Create a symbol reference to "gl_Position"
+    const TVariable *position  = BuiltInVariable::gl_Position();
+    TIntermSymbol *positionRef = new TIntermSymbol(position);
+
+    // Create a swizzle to "gl_Position.z"
+    TVector<int> swizzleOperand;
+    swizzleOperand.push_back(2);
+    TIntermSwizzle *positionZ = new TIntermSwizzle(positionRef, swizzleOperand);
+
+    // Create a constant "0.5"
+    const TType *constantType     = StaticType::GetBasic<TBasicType::EbtFloat>();
+    TConstantUnion *constantValue = new TConstantUnion();
+    constantValue->setFConst(1.0f);
+    TIntermConstantUnion *oneHalf = new TIntermConstantUnion(constantValue, *constantType);
+
+    // Create the expression "gl_Position.z * 0.5 + 0.5"
+    TIntermBinary *halfZ         = new TIntermBinary(TOperator::EOpMul, positionZ, oneHalf);
+    TIntermBinary *halfZPlusHalf = new TIntermBinary(TOperator::EOpAdd, halfZ, oneHalf->deepCopy());
+
+    // Create the assignment "gl_Position.z = gl_Position.z * 0.5 + 0.5"
+    TIntermTyped *positionZLHS = positionZ->deepCopy();
+    TIntermBinary *assignment =
+        new TIntermBinary(TOperator::EOpAssign, positionZLHS, halfZPlusHalf);
+
+    // Append the assignment as a statement at the end of main.
+    TIntermBlock *mainBody = FindMainBody(root);
+    mainBody->getSequence()->insert(mainBody->getSequence()->end(), assignment);
+}
+}  // anonymous namespace
+
 TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_GLSL_450_CORE_OUTPUT)
 {
@@ -155,6 +198,13 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         {
             sink << "layout(location = 0) out vec4 webgl_FragData[gl_MaxDrawBuffers];\n";
         }
+    }
+    else
+    {
+        ASSERT(getShaderType() == GL_VERTEX_SHADER);
+
+        // Append depth range translation to main.
+        AppendVertexShaderDepthCorrectionToMain(root, getSymbolTable());
     }
 
     // Write translated shader.
