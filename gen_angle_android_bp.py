@@ -478,7 +478,7 @@ def create_blueprint_for_targets(desc, targets):
         '-fvisibility=hidden',
         '-Oz',
     ]
-    defaults.sdk_version = '16'
+    defaults.sdk_version = '21'
 
     blueprint.add_module(defaults)
     for target in targets:
