@@ -68,12 +68,14 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mCurrentDrawMode(GL_NONE),
       mVertexArrayDirty(false),
       mTexturesDirty(false),
-      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kStreamingVertexDataSize, 1),
-      mStreamingIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kStreamingIndexDataSize, 1),
+      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kStreamingVertexDataSize),
+      mStreamingIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kStreamingIndexDataSize),
       mDynamicDescriptorPool()
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
+    mStreamingVertexData.init(1);
+    mStreamingIndexData.init(1);
 }
 
 ContextVk::~ContextVk()
@@ -244,9 +246,22 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(!descriptorSets.empty());
         const vk::PipelineLayout &pipelineLayout = mRenderer->getGraphicsPipelineLayout();
+
+        // Only if some uniform is used, we bind dynamic buffers for them.
+        uint32_t dynamicOffsetsCount                          = 0;
+        std::array<uint32_t, 2>::const_pointer dynamicOffsets = nullptr;
+
+        if (usedRange.contains(0))
+        {
+            dynamicOffsetsCount =
+                static_cast<uint32_t>(programVk->getUniformBlocksOffsets().size());
+            dynamicOffsets = programVk->getUniformBlocksOffsets().data();
+        }
+
         (*commandBuffer)
             ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(),
-                                 usedRange.length(), &descriptorSets[usedRange.low()], 0, nullptr);
+                                 usedRange.length(), &descriptorSets[usedRange.low()],
+                                 dynamicOffsetsCount, dynamicOffsets);
     }
 
     return gl::NoError();

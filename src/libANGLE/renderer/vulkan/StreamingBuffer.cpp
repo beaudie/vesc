@@ -17,19 +17,31 @@
 
 namespace rx
 {
-StreamingBuffer::StreamingBuffer(VkBufferUsageFlags usage, size_t minSize, size_t minAlignment)
+StreamingBuffer::StreamingBuffer(VkBufferUsageFlags usage, size_t minSize)
     : mUsage(usage),
       mMinSize(minSize),
       mNextWriteOffset(0),
       mLastFlushOffset(0),
       mSize(0),
-      mMinAlignment(minAlignment),
+      mMinAlignment(0),
       mMappedMemory(nullptr)
 {
 }
 
+void StreamingBuffer::init(size_t minAlignment)
+{
+    ASSERT(minAlignment > 0);
+    mMinAlignment = minAlignment;
+}
+
 StreamingBuffer::~StreamingBuffer()
 {
+    ASSERT(mMinAlignment == 0);
+}
+
+bool StreamingBuffer::valid()
+{
+    return mMinAlignment > 0;
 }
 
 gl::Error StreamingBuffer::allocate(ContextVk *context,
@@ -39,6 +51,7 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
                                     VkDeviceSize *offsetOut,
                                     bool *outNewBufferAllocated)
 {
+    ASSERT(valid());
     RendererVk *renderer = context->getRenderer();
 
     // TODO(fjhenigman): Update this when we have buffers that need to
@@ -93,7 +106,11 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
     }
 
     ASSERT(mBuffer.valid());
-    *handleOut = mBuffer.getHandle();
+
+    if (handleOut != nullptr)
+    {
+        *handleOut = mBuffer.getHandle();
+    }
 
     ASSERT(mMappedMemory);
     *ptrOut    = mMappedMemory + mNextWriteOffset;
@@ -122,8 +139,13 @@ gl::Error StreamingBuffer::flush(ContextVk *context)
 
 void StreamingBuffer::destroy(VkDevice device)
 {
+    mMinAlignment = 0;
     mBuffer.destroy(device);
     mMemory.destroy(device);
 }
 
+const VkBuffer StreamingBuffer::getCurrentBufferHandle() const
+{
+    return mBuffer.getHandle();
+}
 }  // namespace rx
