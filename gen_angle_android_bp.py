@@ -349,10 +349,8 @@ def make_genrules_for_action(blueprint, desc, target_name):
 
     module = Module('genrule', label_to_module_name(target_name))
 
-    # TODO: Need to convert script from gn target name to actual file name
     module.tool_files = [label_to_path(target['script'])]
 
-    # TODO: Need output
     module.out = ["commit_id.h"]
     module.srcs = ["src/commit.h"]
     module.export_include_dirs = ['.']
@@ -395,6 +393,12 @@ def create_modules_from_target(blueprint, desc, target_name):
     elif target['type'] == 'static_library':
         module = Module('cc_library_static', label_to_module_name(target_name))
         module.export_include_dirs = ['include']
+        for dir in target['include_dirs']:
+            if dir.startswith('//third_party/angle/'):
+                include_path = label_to_path(dir).rstrip('/')
+                if not include_path in module.local_include_dirs:
+                    module.local_include_dirs.append(include_path)
+
         modules = [module]
     elif target['type'] == 'shared_library':
         modules = [

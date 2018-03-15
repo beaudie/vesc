@@ -135,6 +135,11 @@ cc_library_static {
     "-no-canonical-prefixes",
     "-pipe",
   ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+  ],
 }
 
 // GN target: //third_party/angle:angle_gpu_info_util
@@ -230,6 +235,11 @@ cc_library_static {
     "-mtune=generic-armv7-a",
     "-no-canonical-prefixes",
     "-pipe",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
 
@@ -329,6 +339,11 @@ cc_library_static {
     "-mtune=generic-armv7-a",
     "-no-canonical-prefixes",
     "-pipe",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
 
@@ -578,6 +593,12 @@ cc_library_static {
     "-mtune=generic-armv7-a",
     "-no-canonical-prefixes",
     "-pipe",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+    "src/third_party/khronos",
   ],
   product_variables: {
     pdk: {
@@ -904,6 +925,11 @@ cc_library_static {
     "-no-canonical-prefixes",
     "-pipe",
   ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+  ],
 }
 
 // GN target: //third_party/angle:translator
@@ -1091,5 +1117,10 @@ cc_library_static {
     "-mtune=generic-armv7-a",
     "-no-canonical-prefixes",
     "-pipe",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
