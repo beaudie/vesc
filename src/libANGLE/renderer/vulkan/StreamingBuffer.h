@@ -19,16 +19,22 @@ namespace rx
 class StreamingBuffer : public ResourceVk
 {
   public:
-    StreamingBuffer(VkBufferUsageFlags usage, size_t minSize, size_t minAlignment);
+    StreamingBuffer(VkBufferUsageFlags usage, size_t minSize);
+    void init(size_t minAlignment);
+    bool valid();
     ~StreamingBuffer();
-    gl::Error allocate(ContextVk *context,
+    vk::Error allocate(ContextVk *context,
                        size_t sizeInBytes,
                        uint8_t **ptrOut,
                        VkBuffer *handleOut,
                        VkDeviceSize *offsetOut,
                        bool *outNewBufferAllocated);
-    gl::Error flush(ContextVk *context);
+    vk::Error flush(ContextVk *context);
     void destroy(VkDevice device);
+    VkBuffer getCurrentBufferHandle() const;
+
+    // For testing only!
+    void setMinimumSize(size_t minSize);
 
   private:
     VkBufferUsageFlags mUsage;

@@ -9,6 +9,7 @@
 //
 
 #include "StreamingBuffer.h"
+#include <iostream>
 
 #include "anglebase/numerics/safe_math.h"
 
@@ -17,28 +18,41 @@
 
 namespace rx
 {
-StreamingBuffer::StreamingBuffer(VkBufferUsageFlags usage, size_t minSize, size_t minAlignment)
+StreamingBuffer::StreamingBuffer(VkBufferUsageFlags usage, size_t minSize)
     : mUsage(usage),
       mMinSize(minSize),
       mNextWriteOffset(0),
       mLastFlushOffset(0),
       mSize(0),
-      mMinAlignment(minAlignment),
+      mMinAlignment(0),
       mMappedMemory(nullptr)
 {
 }
 
-StreamingBuffer::~StreamingBuffer()
+void StreamingBuffer::init(size_t minAlignment)
 {
+    ASSERT(minAlignment > 0);
+    mMinAlignment = minAlignment;
 }
 
-gl::Error StreamingBuffer::allocate(ContextVk *context,
+StreamingBuffer::~StreamingBuffer()
+{
+    ASSERT(mMinAlignment == 0);
+}
+
+bool StreamingBuffer::valid()
+{
+    return mMinAlignment > 0;
+}
+
+vk::Error StreamingBuffer::allocate(ContextVk *context,
                                     size_t sizeInBytes,
                                     uint8_t **ptrOut,
                                     VkBuffer *handleOut,
                                     VkDeviceSize *offsetOut,
                                     bool *outNewBufferAllocated)
 {
+    ASSERT(valid());
     RendererVk *renderer = context->getRenderer();
 
     // TODO(fjhenigman): Update this when we have buffers that need to
@@ -46,6 +60,8 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
     updateQueueSerial(renderer->getCurrentQueueSerial());
 
     size_t sizeToAllocate = roundUp(sizeInBytes, mMinAlignment);
+    std::cout << "size to allocate: " << sizeToAllocate << ", "
+              << "SizeInBytes: " << sizeInBytes << ", Alignment: " << mMinAlignment << std::endl;
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextWriteOffset;
     checkedNextWriteOffset += sizeToAllocate;
@@ -93,17 +109,21 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
     }
 
     ASSERT(mBuffer.valid());
-    *handleOut = mBuffer.getHandle();
+
+    if (handleOut != nullptr)
+    {
+        *handleOut = mBuffer.getHandle();
+    }
 
     ASSERT(mMappedMemory);
     *ptrOut    = mMappedMemory + mNextWriteOffset;
     *offsetOut = mNextWriteOffset;
     mNextWriteOffset += sizeToAllocate;
 
-    return gl::NoError();
+    return vk::NoError();
 }
 
-gl::Error StreamingBuffer::flush(ContextVk *context)
+vk::Error StreamingBuffer::flush(ContextVk *context)
 {
     if (mNextWriteOffset > mLastFlushOffset)
     {
@@ -117,13 +137,27 @@ gl::Error StreamingBuffer::flush(ContextVk *context)
 
         mLastFlushOffset = mNextWriteOffset;
     }
-    return gl::NoError();
+    return vk::NoError();
 }
 
 void StreamingBuffer::destroy(VkDevice device)
 {
+    mMinAlignment = 0;
     mBuffer.destroy(device);
     mMemory.destroy(device);
 }
 
+VkBuffer StreamingBuffer::getCurrentBufferHandle() const
+{
+    return mBuffer.getHandle();
+}
+
+void StreamingBuffer::setMinimumSize(size_t minSize)
+{
+    // This will really only have an effect next time we call allocate.
+    mMinSize = minSize;
+
+    // Forces a new allocation on the next allocate.
+    mSize = 0;
+}
 }  // namespace rx
