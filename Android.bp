@@ -142,6 +142,11 @@ cc_library_static {
     "check-ipc",
     "find-bad-constructs",
   ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+  ],
 }
 
 // GN target: //third_party/angle:angle_gpu_info_util
@@ -244,6 +249,11 @@ cc_library_static {
     "../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.so",
     "check-ipc",
     "find-bad-constructs",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
 
@@ -350,6 +360,11 @@ cc_library_static {
     "../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.so",
     "check-ipc",
     "find-bad-constructs",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
 
@@ -606,6 +621,12 @@ cc_library_static {
     "../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.so",
     "check-ipc",
     "find-bad-constructs",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+    "src/third_party/khronos",
   ],
   product_variables: {
     pdk: {
@@ -953,6 +974,11 @@ cc_library_static {
     "check-ipc",
     "find-bad-constructs",
   ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
+  ],
 }
 
 // GN target: //third_party/angle:translator
@@ -1147,5 +1173,10 @@ cc_library_static {
     "../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.so",
     "check-ipc",
     "find-bad-constructs",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
 }
