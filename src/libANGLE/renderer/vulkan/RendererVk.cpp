@@ -92,9 +92,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
 class ScopedVkLoaderEnvironment : angle::NonCopyable
 {
   public:
-    ScopedVkLoaderEnvironment(bool enableValidationLayers, bool enableNullDriver)
+    ScopedVkLoaderEnvironment(bool enableValidationLayers)
         : mEnableValidationLayers(enableValidationLayers),
-          mEnableNullDriver(enableNullDriver),
           mChangedCWD(false)
     {
 // Changing CWD and setting environment variables makes no sense on Android,
@@ -131,17 +130,6 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
                 mEnableValidationLayers = false;
             }
         }
-
-        // Override environement variable to use Vulkan Mock ICD
-        if (mEnableNullDriver)
-        {
-            // ANGLE_VK_MOCK_ICD_DIR gets set to built mock ICD in BUILD.gn
-            if (!angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_MOCK_ICD_DIR))
-            {
-                ERR() << "Error setting Vk Mock ICD environment for Vulkan init";
-                mEnableNullDriver = false;
-            }
-        }
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
     }
 
@@ -158,11 +146,8 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 
     bool canEnableValidationLayers() { return mEnableValidationLayers; }
 
-    bool canEnableNullDriver() { return mEnableNullDriver; }
-
   private:
     bool mEnableValidationLayers;
-    bool mEnableNullDriver;
     bool mChangedCWD;
     Optional<std::string> mPreviousCWD;
 };
@@ -267,11 +252,24 @@ RendererVk::~RendererVk()
 
 vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *wsiName)
 {
-    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
-                                                ShouldUseNullICD(attribs));
+    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
-    mEnableNullDriver       = scopedEnvironment.canEnableNullDriver();
 
+    mEnableNullDriver = false;
+#if !defined(ANGLE_PLATFORM_ANDROID) // Mock ICD does not currently run on Android
+    mEnableNullDriver =
+            (attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE, EGL_DONT_CARE) == EGL_TRUE);
+    if (mEnableNullDriver)
+    {
+        // Override environment variable to use built Mock ICD
+        // ANGLE_VK_MOCK_ICD_DIR gets set to the built mock ICD in BUILD.gn
+        if (!angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_MOCK_ICD_DIR))
+        {
+            ERR() << "Error setting Vk Mock ICD environment for Vulkan init";
+            mEnableNullDriver = false;
+        }
+    }
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     ANGLE_VK_TRY(vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
@@ -381,7 +379,8 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
             vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
             // These are the vendor/device ID values for the Mock ICD
             if ((0xba5eba11 == physicalDeviceProperties.vendorID) &&
-                (0xf005ba11 == physicalDeviceProperties.deviceID))
+                (0xf005ba11 == physicalDeviceProperties.deviceID) &&
+                (strcmp("Vulkan Mock Device", physicalDeviceProperties.deviceName) == 0))
             {
                 mPhysicalDevice           = physicalDevice;
                 mPhysicalDeviceProperties = physicalDeviceProperties;

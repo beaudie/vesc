@@ -210,8 +210,6 @@ using LoadFunctionMap = LoadImageFunctionInfo (*)(GLenum);
 
 bool ShouldUseDebugLayers(const egl::AttributeMap &attribs);
 
-bool ShouldUseNullICD(const egl::AttributeMap &attribs);
-
 void CopyImageCHROMIUM(const uint8_t *sourceData,
                        size_t sourceRowPitch,
                        size_t sourcePixelBytes,
