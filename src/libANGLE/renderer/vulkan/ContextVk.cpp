@@ -99,7 +99,7 @@ gl::Error ContextVk::initialize()
     VkDevice device = mRenderer->getDevice();
 
     VkDescriptorPoolSize poolSizes[2];
-    poolSizes[UniformBufferPool].type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    poolSizes[UniformBufferPool].type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     poolSizes[UniformBufferPool].descriptorCount = 1024;
     poolSizes[TexturePool].type                  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     poolSizes[TexturePool].descriptorCount       = 1024;
@@ -268,7 +268,9 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         const vk::PipelineLayout &pipelineLayout = mRenderer->getGraphicsPipelineLayout();
         (*commandBuffer)
             ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(),
-                                 usedRange.length(), &descriptorSets[usedRange.low()], 0, nullptr);
+                                 usedRange.length(), &descriptorSets[usedRange.low()],
+                                 static_cast<uint32_t>(programVk->getUniformBlocksOffsets().size()),
+                                 programVk->getUniformBlocksOffsets().data());
     }
 
     return gl::NoError();
