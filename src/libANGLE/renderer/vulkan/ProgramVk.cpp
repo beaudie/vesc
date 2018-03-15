@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/vulkan/DynamicDescriptorPool.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/StreamingBuffer.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 
 namespace rx
@@ -25,9 +26,7 @@ namespace
 {
 
 gl::Error InitDefaultUniformBlock(const gl::Context *context,
-                                  VkDevice device,
                                   gl::Shader *shader,
-                                  vk::BufferAndMemory *storageOut,
                                   sh::BlockLayoutMap *blockLayoutMapOut,
                                   size_t *requiredSizeOut)
 {
@@ -51,27 +50,7 @@ gl::Error InitDefaultUniformBlock(const gl::Context *context,
         return gl::NoError();
     }
 
-    VkBufferCreateInfo uniformBufferInfo;
-    uniformBufferInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    uniformBufferInfo.pNext                 = nullptr;
-    uniformBufferInfo.flags                 = 0;
-    uniformBufferInfo.size                  = blockSize;
-    uniformBufferInfo.usage                 = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-    uniformBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    uniformBufferInfo.queueFamilyIndexCount = 0;
-    uniformBufferInfo.pQueueFamilyIndices   = nullptr;
-
-    ANGLE_TRY(storageOut->buffer.init(device, uniformBufferInfo));
-
-    // Assume host vislble/coherent memory available.
-    VkMemoryPropertyFlags flags =
-        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-    ContextVk *contextVk = vk::GetImpl(context);
-
-    ANGLE_TRY(AllocateBufferMemory(contextVk->getRenderer(), flags, &storageOut->buffer,
-                                   &storageOut->memory, requiredSizeOut));
-
+    *requiredSizeOut = blockSize;
     return gl::NoError();
 }
 
@@ -114,15 +93,21 @@ void ReadFromDefaultUniformBlock(int componentCount,
     }
 }
 
-vk::Error SyncDefaultUniformBlock(VkDevice device,
-                                  vk::DeviceMemory *bufferMemory,
-                                  const angle::MemoryBuffer &bufferData)
+vk::Error SyncDefaultUniformBlock(ContextVk *contextVk,
+                                  StreamingBuffer &streamingBuffer,
+                                  const angle::MemoryBuffer &bufferData,
+                                  VkBuffer *outBuffer,
+                                  uint32_t *outOffset,
+                                  bool *outBufferModified)
 {
-    ASSERT(bufferMemory->valid() && !bufferData.empty());
-    uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(bufferMemory->map(device, 0, bufferData.size(), 0, &mapPointer));
-    memcpy(mapPointer, bufferData.data(), bufferData.size());
-    bufferMemory->unmap(device);
+    ASSERT(!bufferData.empty());
+    uint8_t *data = nullptr;
+    VkDeviceSize deviceSizeOffset;
+    streamingBuffer.allocate(contextVk, bufferData.size(), &data,
+                             outBuffer, &deviceSizeOffset, outBufferModified);
+    *outOffset = static_cast<uint32_t>(deviceSizeOffset);
+    memcpy(data, bufferData.data(), bufferData.size());
+    streamingBuffer.flush(contextVk);
     return vk::NoError();
 }
 
@@ -151,7 +136,11 @@ gl::Shader *GetShader(const gl::ProgramState &programState, uint32_t shaderIndex
 }  // anonymous namespace
 
 ProgramVk::DefaultUniformBlock::DefaultUniformBlock()
-    : storage(), uniformData(), uniformsDirty(false), uniformLayout()
+    : storage(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 256 * 128),
+      uniformData(),
+      uniformsDirty(false),
+      uniformLayout(),
+      currentBuffer(VK_NULL_HANDLE)
 {
 }
 
@@ -160,8 +149,13 @@ ProgramVk::DefaultUniformBlock::~DefaultUniformBlock()
 }
 
 ProgramVk::ProgramVk(const gl::ProgramState &state)
-    : ProgramImpl(state), mDefaultUniformBlocks(), mUsedDescriptorSetRange(), mDirtyTextures(true)
+    : ProgramImpl(state),
+      mDefaultUniformBlocks(),
+      mUniformBlocksOffsets(),
+      mUsedDescriptorSetRange(),
+      mDirtyTextures(true)
 {
+    mUniformBlocksOffsets.fill(0);
     mUsedDescriptorSetRange.invalidate();
 }
 
@@ -183,8 +177,7 @@ vk::Error ProgramVk::reset(ContextVk *contextVk)
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
-        uniformBlock.storage.memory.destroy(device);
-        uniformBlock.storage.buffer.destroy(device);
+        uniformBlock.storage.destroy(device);
     }
 
     mEmptyUniformBlockStorage.memory.destroy(device);
@@ -296,8 +289,7 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
     for (uint32_t shaderIndex = MinShaderIndex; shaderIndex < MaxShaderIndex; ++shaderIndex)
     {
-        ANGLE_TRY(InitDefaultUniformBlock(glContext, device, GetShader(mState, shaderIndex),
-                                          &mDefaultUniformBlocks[shaderIndex].storage,
+        ANGLE_TRY(InitDefaultUniformBlock(glContext, GetShader(mState, shaderIndex),
                                           &layoutMap[shaderIndex],
                                           &requiredBufferSize[shaderIndex]));
     }
@@ -341,6 +333,9 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
         for (uint32_t shaderIndex = MinShaderIndex; shaderIndex < MaxShaderIndex; ++shaderIndex)
         {
             mDefaultUniformBlocks[shaderIndex].uniformLayout.push_back(layoutInfo[shaderIndex]);
+            mDefaultUniformBlocks[shaderIndex].storage.init(contextVk->getRenderer()
+                                                         ->getPhysicalDeviceProperties()
+                                                         .limits.minUniformBufferOffsetAlignment);
         }
     }
 
@@ -391,8 +386,6 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             ANGLE_TRY(AllocateBufferMemory(renderer, flags, &mEmptyUniformBlockStorage.buffer,
                                            &mEmptyUniformBlockStorage.memory, &requiredSize));
         }
-
-        ANGLE_TRY(updateDefaultUniformsDescriptorSet(contextVk));
 
         // Ensure the descriptor set range includes the uniform buffers at position 0.
         mUsedDescriptorSetRange.extend(0);
@@ -694,16 +687,23 @@ vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
 
     ASSERT(mUsedDescriptorSetRange.contains(0));
 
-    VkDevice device = contextVk->getDevice();
-
     // Update buffer memory by immediate mapping. This immediate update only works once.
     // TODO(jmadill): Handle inserting updates into the command stream, or use dynamic buffers.
-    for (auto &uniformBlock : mDefaultUniformBlocks)
+    for (size_t index = 0; index < mDefaultUniformBlocks.size(); index++)
     {
+        DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[index];
+
         if (uniformBlock.uniformsDirty)
         {
-            ANGLE_TRY(SyncDefaultUniformBlock(device, &uniformBlock.storage.memory,
-                                              uniformBlock.uniformData));
+            bool bufferModified = false;
+            uint32_t offset     = 0;
+            SyncDefaultUniformBlock(contextVk, uniformBlock.storage, uniformBlock.uniformData,
+                                    &uniformBlock.currentBuffer, &offset, &bufferModified);
+            mUniformBlocksOffsets[index] = offset;
+            if (bufferModified)
+            {
+                updateDefaultUniformsDescriptorSet(contextVk);
+            }
             uniformBlock.uniformsDirty = false;
         }
     }
@@ -721,19 +721,21 @@ vk::Error ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk)
     {
         auto &bufferInfo = descriptorBufferInfo[bufferCount];
 
+        auto &writeInfo = writeDescriptorInfo[bufferCount];
+
         if (!uniformBlock.uniformData.empty())
         {
-            bufferInfo.buffer = uniformBlock.storage.buffer.getHandle();
+            bufferInfo.buffer        = uniformBlock.currentBuffer;
+            writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         }
         else
         {
             bufferInfo.buffer = mEmptyUniformBlockStorage.buffer.getHandle();
+            writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         }
 
         bufferInfo.offset = 0;
         bufferInfo.range  = VK_WHOLE_SIZE;
-
-        auto &writeInfo = writeDescriptorInfo[bufferCount];
 
         writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         writeInfo.pNext            = nullptr;
@@ -741,7 +743,6 @@ vk::Error ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk)
         writeInfo.dstBinding       = bufferCount;
         writeInfo.dstArrayElement  = 0;
         writeInfo.descriptorCount  = 1;
-        writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         writeInfo.pImageInfo       = nullptr;
         writeInfo.pBufferInfo      = &bufferInfo;
         writeInfo.pTexelBufferView = nullptr;
@@ -759,6 +760,11 @@ vk::Error ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk)
 const std::vector<VkDescriptorSet> &ProgramVk::getDescriptorSets() const
 {
     return mDescriptorSets;
+}
+
+const std::array<uint32_t, 2> ProgramVk::getUniformBlocksOffsets()
+{
+    return mUniformBlocksOffsets;
 }
 
 const gl::RangeUI &ProgramVk::getUsedDescriptorSetRange() const
