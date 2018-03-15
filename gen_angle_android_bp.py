@@ -166,6 +166,7 @@ class Module(object):
         self.defaults = []
         self.cflags = set()
         self.local_include_dirs = []
+        self.sdk_version = None
 
     def to_string(self, output):
         if self.comment:
@@ -186,6 +187,7 @@ class Module(object):
         self._output_field(output, 'defaults')
         self._output_field(output, 'cflags')
         self._output_field(output, 'local_include_dirs')
+        self._output_field(output, 'sdk_version')
         if any(name in library_not_in_pdk for name in self.shared_libs):
             output.append('  product_variables: {')
             output.append('    pdk: {')
@@ -465,6 +467,7 @@ def create_blueprint_for_targets(desc, targets):
         '-fvisibility=hidden',
         '-Oz',
     ]
+    defaults.sdk_version = '16'
 
     blueprint.add_module(defaults)
     for target in targets:
