@@ -121,6 +121,8 @@ class RendererVk : angle::NonCopyable
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueProgramSerial();
 
+    const VkPhysicalDeviceProperties &getPhysicalDeviceProperties() const;
+
   private:
     vk::Error initializeDevice(uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
