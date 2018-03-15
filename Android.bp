@@ -26,6 +26,7 @@ cc_defaults {
   ],
   local_include_dirs: [
     "include",
+    "src",
   ],
   sdk_version: "16",
 }
