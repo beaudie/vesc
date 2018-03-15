@@ -78,7 +78,8 @@ defaults_module = module_prefix + 'defaults'
 tree_path = 'external/angle'
 
 # Compiler flags which are passed through to the blueprint.
-cflag_whitelist = ''
+#cflag_whitelist = ''
+cflag_whitelist = r'^-DANGLE.*$'
 
 # Compiler flags which are passed through to the blueprint.
 cflag_blacklist = [
@@ -88,7 +89,8 @@ cflag_blacklist = [
 ]
 
 # Compiler defines which are passed through to the blueprint.
-define_whitelist = ''
+#define_whitelist = ''
+define_whitelist = r'^ANGLE.*$'
 
 # Shared libraries which are not in PDK.
 library_not_in_pdk = {
