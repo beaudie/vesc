@@ -78,13 +78,19 @@ defaults_module = module_prefix + 'defaults'
 tree_path = 'external/angle'
 
 # Compiler flags which are passed through to the blueprint.
-cflag_whitelist = ''
+#cflag_whitelist = ''
+cflag_whitelist = r'^-DANGLE.*$'
 
 # Compiler flags which are passed through to the blueprint.
-cflag_blacklist = r'-isystem..*'
+cflag_blacklist = [
+        '-isystem../../third_party/android_ndk/sysroot/usr/include/arm-linux-androideabi',
+        '-march=armv7-a',
+        '-mtune=generic-armv7-a'
+]
 
 # Compiler defines which are passed through to the blueprint.
-define_whitelist = ''
+#define_whitelist = ''
+define_whitelist = r'^ANGLE.*$'
 
 # Shared libraries which are not in PDK.
 library_not_in_pdk = {
@@ -359,7 +365,7 @@ def make_genrules_for_action(blueprint, desc, target_name):
 
 def _get_cflags(target):
     cflags = set(flag for flag in target.get('cflags', [])
-                 if re.match(cflag_whitelist, flag) and not re.match(cflag_blacklist, flag))
+                 if re.match(cflag_whitelist, flag) and flag not in cflag_blacklist)
     cflags |= set("-D%s" % define.replace('"', '\\"') for define in target.get('defines', [])
                   if re.match(define_whitelist, define))
     return cflags
