@@ -46,6 +46,10 @@ class RendererVk : angle::NonCopyable
 
     VkInstance getInstance() const { return mInstance; }
     VkPhysicalDevice getPhysicalDevice() const { return mPhysicalDevice; }
+    VkPhysicalDeviceProperties getPhysicalDeviceProperties() const
+    {
+        return mPhysicalDeviceProperties;
+    }
     VkQueue getQueue() const { return mQueue; }
     VkDevice getDevice() const { return mDevice; }
 
@@ -62,6 +66,8 @@ class RendererVk : angle::NonCopyable
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
+    uint32_t getMaxActiveTextures();
+    uint32_t getUniformBufferDescriptorCount();
 
     GlslangWrapper *getGlslangWrapper();
 
@@ -128,6 +134,7 @@ class RendererVk : angle::NonCopyable
     vk::Error checkInFlightCommands();
     void freeAllInFlightResources();
     vk::Error flushCommandGraph(const gl::Context *context, vk::CommandBuffer *commandBatch);
+
     vk::Error initGraphicsPipelineLayout();
 
     mutable bool mCapsInitialized;
