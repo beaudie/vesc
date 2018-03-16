@@ -22,10 +22,12 @@ class StreamingBuffer : public ResourceVk
     StreamingBuffer(VkBufferUsageFlags usage, size_t minSize);
     ~StreamingBuffer();
     gl::Error allocate(ContextVk *context,
-                       size_t amount,
+                       size_t sizeInBytes,
                        uint8_t **ptrOut,
                        VkBuffer *handleOut,
-                       VkDeviceSize *offsetOut);
+                       VkDeviceSize *offsetOut,
+                       bool *outNewBufferAllocated,
+                       size_t minAlignmentInBytes = 1);
     gl::Error flush(ContextVk *context);
     void destroy(VkDevice device);
 

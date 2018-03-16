@@ -367,7 +367,8 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             const GLsizei amount = sizeof(GLushort) * count;
             GLubyte *dst         = nullptr;
 
-            ANGLE_TRY(mStreamingIndexData.allocate(contextVk, amount, &dst, &buffer, &offset));
+            ANGLE_TRY(
+                mStreamingIndexData.allocate(contextVk, amount, &dst, &buffer, &offset, nullptr));
             if (type == GL_UNSIGNED_BYTE)
             {
                 // Unsigned bytes don't have direct support in Vulkan so we have to expand the
