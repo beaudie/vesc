@@ -752,6 +752,8 @@
             'libANGLE/renderer/vulkan/CompilerVk.h',
             'libANGLE/renderer/vulkan/ContextVk.cpp',
             'libANGLE/renderer/vulkan/ContextVk.h',
+            'libANGLE/renderer/vulkan/DescriptorPoolManager.h',
+            'libANGLE/renderer/vulkan/DescriptorPoolManager.cpp',
             'libANGLE/renderer/vulkan/DeviceVk.cpp',
             'libANGLE/renderer/vulkan/DeviceVk.h',
             'libANGLE/renderer/vulkan/DisplayVk.cpp',
