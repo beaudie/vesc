@@ -57,6 +57,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
@@ -86,6 +87,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
@@ -118,6 +120,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
@@ -293,6 +296,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
@@ -327,6 +331,7 @@ cc_library_shared {
     "libandroid",
     "liblog",
   ],
+  stl: "c++_shared",
   defaults: [
     "angle_defaults",
   ],
@@ -359,6 +364,7 @@ cc_library_shared {
     "angle_third_party_angle_preprocessor",
     "angle_third_party_angle_translator",
   ],
+  stl: "c++_shared",
   defaults: [
     "angle_defaults",
   ],
@@ -404,6 +410,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
@@ -523,6 +530,7 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  stl: "c++_static",
   defaults: [
     "angle_defaults",
   ],
