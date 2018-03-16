@@ -58,6 +58,9 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
+  ],
   stl: "c++_static",
   defaults: [
     "angle_defaults",
@@ -87,6 +90,9 @@ cc_library_static {
   ],
   export_include_dirs: [
     "include",
+  ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
   ],
   stl: "c++_static",
   defaults: [
@@ -121,6 +127,9 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
+  ],
   stl: "c++_static",
   defaults: [
     "angle_defaults",
@@ -145,9 +154,9 @@ genrule {
   tool_files: [
     "src/commit_id.py",
   ],
-  cmd: "$(location src/commit_id.py) gen $(location) $(out)",
+  cmd: "$(location src/commit_id.py) gen $(in) $(out)",
   out: [
-    "commit_id.h",
+    "external/angle/id/commit.h",
   ],
   export_include_dirs: [
     ".",
@@ -297,6 +306,9 @@ cc_library_static {
   export_include_dirs: [
     "include",
   ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
+  ],
   stl: "c++_static",
   defaults: [
     "angle_defaults",
@@ -369,6 +381,9 @@ cc_library_shared {
     "angle_third_party_angle_preprocessor",
     "angle_third_party_angle_translator",
   ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
+  ],
   stl: "c++_shared",
   defaults: [
     "angle_defaults",
@@ -419,6 +434,9 @@ cc_library_static {
   ],
   export_include_dirs: [
     "include",
+  ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
   ],
   stl: "c++_static",
   defaults: [
@@ -539,6 +557,9 @@ cc_library_static {
   ],
   export_include_dirs: [
     "include",
+  ],
+  generated_headers: [
+    "angle_third_party_angle_commit_id",
   ],
   stl: "c++_static",
   defaults: [
