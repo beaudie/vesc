@@ -173,6 +173,7 @@ class Module(object):
         self.cflags = set()
         self.local_include_dirs = []
         self.sdk_version = None
+        self.stl = None
 
     def to_string(self, output):
         if self.comment:
@@ -190,6 +191,7 @@ class Module(object):
         self._output_field(output, 'export_include_dirs')
         self._output_field(output, 'generated_headers')
         self._output_field(output, 'export_generated_headers')
+        self._output_field(output, 'stl')
         self._output_field(output, 'defaults')
         self._output_field(output, 'cflags')
         self._output_field(output, 'local_include_dirs')
@@ -403,11 +405,12 @@ def create_modules_from_target(blueprint, desc, target_name):
                 if not include_path in module.local_include_dirs:
                     module.local_include_dirs.append(include_path)
 
-        modules = [module]
+        module.stl = 'c++_static'
+        modules = [ module ]
     elif target['type'] == 'shared_library':
-        modules = [
-            Module('cc_library_shared', label_to_module_name(target_name))
-        ]
+        module = Module('cc_library_shared', label_to_module_name(target_name))
+        module.stl = 'c++_shared'
+        modules = [ module ]
     else:
         raise Error('Unknown target type: %s' % target['type'])
 
