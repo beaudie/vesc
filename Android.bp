@@ -22,6 +22,7 @@ cc_defaults {
     "-Wno-non-virtual-dtor",
     "-Wno-sign-compare",
     "-Wno-sign-promo",
+    "-Wno-unneeded-internal-declaration",
     "-Wno-unused-parameter",
     "-fvisibility=hidden",
   ],
