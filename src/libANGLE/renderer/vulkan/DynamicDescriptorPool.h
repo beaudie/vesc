@@ -1,0 +1,52 @@
+//
+// Copyright 2018 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// DynamicDescriptorPool:
+//    Uses DescriptorPool to allocate descriptor sets as needed. If the descriptor pool
+//    is full, we simply allocate a new pool to keep allocating descriptor sets as needed and
+//    leave the renderer take care of the life time of the pools that become unused.
+//
+
+#ifndef LIBANGLE_RENDERER_VULKAN_DYNAMIC_DESCRIPTOR_POOL_H_
+#define LIBANGLE_RENDERER_VULKAN_DYNAMIC_DESCRIPTOR_POOL_H_
+
+#include "libANGLE/renderer/vulkan/vk_utils.h"
+
+namespace rx
+{
+
+enum DescriptorPoolIndex : uint8_t
+{
+    UniformBufferPool = 0,
+    TexturePool       = 1,
+};
+
+class DynamicDescriptorPool : public ResourceVk
+{
+  public:
+    DynamicDescriptorPool();
+    ~DynamicDescriptorPool();
+    void destroy();
+    vk::Error init(ContextVk *contextVk,
+                   uint32_t uniformBufferPoolCount,
+                   uint32_t texturePoolCount);
+    vk::Error allocateDescriptorSets(const VkDescriptorSetLayout *descriptorSetLayout,
+                                     uint32_t descriptorSetCount,
+                                     VkDescriptorSet *descriptorSetsOut);
+    VkDescriptorPool getCurrentPoolHandle();
+
+  private:
+    vk::Error allocateNewPool();
+
+    vk::DescriptorPool mCurrentDescriptorSetPool;
+    size_t mDescriptorSetsCountInPool;
+    ContextVk *mContextVk;
+    uint32_t mUniformBufferPoolCount;
+    uint32_t mTexturePoolCount;
+};
+
+}  // namespace rx
+
+#endif  // LIBANGLE_RENDERER_VULKAN_DYNAMIC_DESCRIPTOR_POOL_H_
