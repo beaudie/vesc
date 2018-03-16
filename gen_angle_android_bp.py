@@ -219,6 +219,13 @@ class Module(object):
         else:
             output.append('  %s: "%s",' % (name, value))
 
+    def add_local_includes(self, include_dirs):
+        for dir in include_dirs:
+            if dir.startswith('//third_party/angle/'):
+                include_path = label_to_path(dir).rstrip('/')
+                if not include_path in self.local_include_dirs:
+                    self.local_include_dirs.append(include_path)
+
 
 class Blueprint(object):
     """In-memory representation of an Android.bp file."""
@@ -388,6 +395,8 @@ def create_modules_from_target(blueprint, desc, target_name):
     """
     target = desc[target_name]
     logging.debug("target: %s, type %s" % (target_name, target['type']))
+    module_name = label_to_module_name(target_name)
+
     if target['type'] == 'executable':
         if 'host' in target['toolchain']:
             module_type = 'cc_binary_host'
@@ -395,23 +404,19 @@ def create_modules_from_target(blueprint, desc, target_name):
             module_type = 'cc_test'
         else:
             module_type = 'cc_binary'
-        modules = [Module(module_type, label_to_module_name(target_name))]
+        modules = [Module(module_type, module_name)]
     elif target['type'] == 'action':
         modules = [make_genrules_for_action(blueprint, desc, target_name)]
     elif target['type'] == 'static_library':
-        module = Module('cc_library_static', label_to_module_name(target_name))
+        module = Module('cc_library_static', module_name)
         module.export_include_dirs = ['include']
-        for dir in target['include_dirs']:
-            if dir.startswith('//third_party/angle/'):
-                include_path = label_to_path(dir).rstrip('/')
-                if not include_path in module.local_include_dirs:
-                    module.local_include_dirs.append(include_path)
-
         module.stl = 'c++_static'
+        module.add_local_includes(target['include_dirs'])
         modules = [ module ]
     elif target['type'] == 'shared_library':
-        module = Module('cc_library_shared', label_to_module_name(target_name))
+        module = Module('cc_library_shared', module_name)
         module.stl = 'c++_shared'
+        module.add_local_includes(target['include_dirs'])
         modules = [ module ]
     else:
         raise Error('Unknown target type: %s' % target['type'])

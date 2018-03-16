@@ -342,6 +342,10 @@ cc_library_shared {
     "-DANGLE_ENABLE_OPENGL_NULL",
     "-DANGLE_IS_32_BIT_CPU",
   ],
+  local_include_dirs: [
+    "include",
+    "src",
+  ],
   product_variables: {
     pdk: {
       enabled: false,
@@ -377,6 +381,11 @@ cc_library_shared {
     "-DANGLE_ENABLE_OPENGL_NULL",
     "-DANGLE_GENERATE_SHADER_DEBUG_INFO",
     "-DANGLE_IS_32_BIT_CPU",
+  ],
+  local_include_dirs: [
+    "include",
+    "src",
+    "src/common/third_party/base",
   ],
   product_variables: {
     pdk: {
