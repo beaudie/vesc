@@ -321,7 +321,7 @@ def apply_module_dependency(blueprint, desc, module, dep_name):
         create_modules_from_target(blueprint, desc, dep_name)
         # Depend both on the headers -- see make_genrules_for_action.
         # TODO: What should dependency be here?
-        # module.srcs.append(':' + label_to_module_name(dep_name))
+        module.generated_headers.append(label_to_module_name(dep_name))
     elif type == 'static_library' and label_to_module_name(
             dep_name) != module.name:
         create_modules_from_target(blueprint, desc, dep_name)
@@ -366,10 +366,10 @@ def make_genrules_for_action(blueprint, desc, target_name):
 
     module.tool_files = [label_to_path(target['script'])]
 
-    module.out = ["commit_id.h"]
+    module.out = [tree_path + "/id/commit.h"]
     module.srcs = ["src/commit.h"]
     module.export_include_dirs = ['.']
-    module.cmd = '$(location src/commit_id.py) gen $(location) $(out)'
+    module.cmd = '$(location src/commit_id.py) gen $(in) $(out)'
 
     return module
 
@@ -433,10 +433,6 @@ def create_modules_from_target(blueprint, desc, target_name):
             apply_module_dependency(blueprint, desc, module, target_name)
             for dep in resolve_dependencies(desc, target_name):
                 apply_module_dependency(blueprint, desc, module, dep)
-
-        # If the module is a static library, export all the generated headers.
-        if module.type == 'cc_library_static':
-            module.export_generated_headers = module.generated_headers
 
         blueprint.add_module(module)
 
