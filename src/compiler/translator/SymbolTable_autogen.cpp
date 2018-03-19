@@ -1136,97 +1136,50 @@ constexpr const ImmutableString EmitVertex_("EmitVertex(");
 constexpr const ImmutableString EndPrimitive("EndPrimitive");
 constexpr const ImmutableString EndPrimitive_("EndPrimitive(");
 constexpr const ImmutableString abs("abs");
-constexpr const ImmutableString abs_0B("abs(0B");
-constexpr const ImmutableString abs_0C("abs(0C");
-constexpr const ImmutableString abs_1B("abs(1B");
-constexpr const ImmutableString abs_1C("abs(1C");
-constexpr const ImmutableString abs_2B("abs(2B");
-constexpr const ImmutableString abs_2C("abs(2C");
-constexpr const ImmutableString abs_3B("abs(3B");
-constexpr const ImmutableString abs_3C("abs(3C");
+constexpr const ImmutableString abs_("abs(");
 constexpr const ImmutableString acos("acos");
-constexpr const ImmutableString acos_0B("acos(0B");
-constexpr const ImmutableString acos_1B("acos(1B");
-constexpr const ImmutableString acos_2B("acos(2B");
-constexpr const ImmutableString acos_3B("acos(3B");
+constexpr const ImmutableString acos_("acos(");
 constexpr const ImmutableString acosh("acosh");
-constexpr const ImmutableString acosh_0B("acosh(0B");
-constexpr const ImmutableString acosh_1B("acosh(1B");
-constexpr const ImmutableString acosh_2B("acosh(2B");
-constexpr const ImmutableString acosh_3B("acosh(3B");
+constexpr const ImmutableString acosh_("acosh(");
 constexpr const ImmutableString all("all");
-constexpr const ImmutableString all_1E("all(1E");
-constexpr const ImmutableString all_2E("all(2E");
-constexpr const ImmutableString all_3E("all(3E");
+constexpr const ImmutableString all_("all(");
 constexpr const ImmutableString any("any");
-constexpr const ImmutableString any_1E("any(1E");
-constexpr const ImmutableString any_2E("any(2E");
-constexpr const ImmutableString any_3E("any(3E");
+constexpr const ImmutableString any_("any(");
 constexpr const ImmutableString asin("asin");
-constexpr const ImmutableString asin_0B("asin(0B");
-constexpr const ImmutableString asin_1B("asin(1B");
-constexpr const ImmutableString asin_2B("asin(2B");
-constexpr const ImmutableString asin_3B("asin(3B");
+constexpr const ImmutableString asin_("asin(");
 constexpr const ImmutableString asinh("asinh");
-constexpr const ImmutableString asinh_0B("asinh(0B");
-constexpr const ImmutableString asinh_1B("asinh(1B");
-constexpr const ImmutableString asinh_2B("asinh(2B");
-constexpr const ImmutableString asinh_3B("asinh(3B");
+constexpr const ImmutableString asinh_("asinh(");
 constexpr const ImmutableString atan("atan");
-constexpr const ImmutableString atan_0B("atan(0B");
-constexpr const ImmutableString atan_0B0B("atan(0B0B");
-constexpr const ImmutableString atan_1B("atan(1B");
-constexpr const ImmutableString atan_1B1B("atan(1B1B");
-constexpr const ImmutableString atan_2B("atan(2B");
-constexpr const ImmutableString atan_2B2B("atan(2B2B");
-constexpr const ImmutableString atan_3B("atan(3B");
-constexpr const ImmutableString atan_3B3B("atan(3B3B");
+constexpr const ImmutableString atan_("atan(");
 constexpr const ImmutableString atanh("atanh");
-constexpr const ImmutableString atanh_0B("atanh(0B");
-constexpr const ImmutableString atanh_1B("atanh(1B");
-constexpr const ImmutableString atanh_2B("atanh(2B");
-constexpr const ImmutableString atanh_3B("atanh(3B");
+constexpr const ImmutableString atanh_("atanh(");
 constexpr const ImmutableString atomicAdd("atomicAdd");
-constexpr const ImmutableString atomicAdd_0C0C("atomicAdd(0C0C");
-constexpr const ImmutableString atomicAdd_0D0D("atomicAdd(0D0D");
+constexpr const ImmutableString atomicAdd_("atomicAdd(");
 constexpr const ImmutableString atomicAnd("atomicAnd");
-constexpr const ImmutableString atomicAnd_0C0C("atomicAnd(0C0C");
-constexpr const ImmutableString atomicAnd_0D0D("atomicAnd(0D0D");
+constexpr const ImmutableString atomicAnd_("atomicAnd(");
 constexpr const ImmutableString atomicCompSwap("atomicCompSwap");
 constexpr const ImmutableString atomicCompSwap_0C0C0C("atomicCompSwap(0C0C0C");
 constexpr const ImmutableString atomicCompSwap_0D0D0D("atomicCompSwap(0D0D0D");
 constexpr const ImmutableString atomicCounter("atomicCounter");
 constexpr const ImmutableString atomicCounterDecrement("atomicCounterDecrement");
-constexpr const ImmutableString atomicCounterDecrement_0F("atomicCounterDecrement(0F");
+constexpr const ImmutableString atomicCounterDecrement_("atomicCounterDecrement(");
 constexpr const ImmutableString atomicCounterIncrement("atomicCounterIncrement");
-constexpr const ImmutableString atomicCounterIncrement_0F("atomicCounterIncrement(0F");
-constexpr const ImmutableString atomicCounter_0F("atomicCounter(0F");
+constexpr const ImmutableString atomicCounterIncrement_("atomicCounterIncrement(");
+constexpr const ImmutableString atomicCounter_("atomicCounter(");
 constexpr const ImmutableString atomicExchange("atomicExchange");
-constexpr const ImmutableString atomicExchange_0C0C("atomicExchange(0C0C");
-constexpr const ImmutableString atomicExchange_0D0D("atomicExchange(0D0D");
+constexpr const ImmutableString atomicExchange_("atomicExchange(");
 constexpr const ImmutableString atomicMax("atomicMax");
-constexpr const ImmutableString atomicMax_0C0C("atomicMax(0C0C");
-constexpr const ImmutableString atomicMax_0D0D("atomicMax(0D0D");
+constexpr const ImmutableString atomicMax_("atomicMax(");
 constexpr const ImmutableString atomicMin("atomicMin");
-constexpr const ImmutableString atomicMin_0C0C("atomicMin(0C0C");
-constexpr const ImmutableString atomicMin_0D0D("atomicMin(0D0D");
+constexpr const ImmutableString atomicMin_("atomicMin(");
 constexpr const ImmutableString atomicOr("atomicOr");
-constexpr const ImmutableString atomicOr_0C0C("atomicOr(0C0C");
-constexpr const ImmutableString atomicOr_0D0D("atomicOr(0D0D");
+constexpr const ImmutableString atomicOr_("atomicOr(");
 constexpr const ImmutableString atomicXor("atomicXor");
-constexpr const ImmutableString atomicXor_0C0C("atomicXor(0C0C");
-constexpr const ImmutableString atomicXor_0D0D("atomicXor(0D0D");
+constexpr const ImmutableString atomicXor_("atomicXor(");
 constexpr const ImmutableString barrier("barrier");
 constexpr const ImmutableString barrier_("barrier(");
 constexpr const ImmutableString bitCount("bitCount");
-constexpr const ImmutableString bitCount_0C("bitCount(0C");
-constexpr const ImmutableString bitCount_0D("bitCount(0D");
-constexpr const ImmutableString bitCount_1C("bitCount(1C");
-constexpr const ImmutableString bitCount_1D("bitCount(1D");
-constexpr const ImmutableString bitCount_2C("bitCount(2C");
-constexpr const ImmutableString bitCount_2D("bitCount(2D");
-constexpr const ImmutableString bitCount_3C("bitCount(3C");
-constexpr const ImmutableString bitCount_3D("bitCount(3D");
+constexpr const ImmutableString bitCount_("bitCount(");
 constexpr const ImmutableString bitfieldExtract("bitfieldExtract");
 constexpr const ImmutableString bitfieldExtract_0C0C0C("bitfieldExtract(0C0C0C");
 constexpr const ImmutableString bitfieldExtract_0D0C0C("bitfieldExtract(0D0C0C");
@@ -1246,19 +1199,9 @@ constexpr const ImmutableString bitfieldInsert_2D2D0C0C("bitfieldInsert(2D2D0C0C
 constexpr const ImmutableString bitfieldInsert_3C3C0C0C("bitfieldInsert(3C3C0C0C");
 constexpr const ImmutableString bitfieldInsert_3D3D0C0C("bitfieldInsert(3D3D0C0C");
 constexpr const ImmutableString bitfieldReverse("bitfieldReverse");
-constexpr const ImmutableString bitfieldReverse_0C("bitfieldReverse(0C");
-constexpr const ImmutableString bitfieldReverse_0D("bitfieldReverse(0D");
-constexpr const ImmutableString bitfieldReverse_1C("bitfieldReverse(1C");
-constexpr const ImmutableString bitfieldReverse_1D("bitfieldReverse(1D");
-constexpr const ImmutableString bitfieldReverse_2C("bitfieldReverse(2C");
-constexpr const ImmutableString bitfieldReverse_2D("bitfieldReverse(2D");
-constexpr const ImmutableString bitfieldReverse_3C("bitfieldReverse(3C");
-constexpr const ImmutableString bitfieldReverse_3D("bitfieldReverse(3D");
+constexpr const ImmutableString bitfieldReverse_("bitfieldReverse(");
 constexpr const ImmutableString ceil("ceil");
-constexpr const ImmutableString ceil_0B("ceil(0B");
-constexpr const ImmutableString ceil_1B("ceil(1B");
-constexpr const ImmutableString ceil_2B("ceil(2B");
-constexpr const ImmutableString ceil_3B("ceil(3B");
+constexpr const ImmutableString ceil_("ceil(");
 constexpr const ImmutableString clamp("clamp");
 constexpr const ImmutableString clamp_0B0B0B("clamp(0B0B0B");
 constexpr const ImmutableString clamp_0C0C0C("clamp(0C0C0C");
@@ -1282,80 +1225,34 @@ constexpr const ImmutableString clamp_3C3C3C("clamp(3C3C3C");
 constexpr const ImmutableString clamp_3D0D0D("clamp(3D0D0D");
 constexpr const ImmutableString clamp_3D3D3D("clamp(3D3D3D");
 constexpr const ImmutableString cos("cos");
-constexpr const ImmutableString cos_0B("cos(0B");
-constexpr const ImmutableString cos_1B("cos(1B");
-constexpr const ImmutableString cos_2B("cos(2B");
-constexpr const ImmutableString cos_3B("cos(3B");
+constexpr const ImmutableString cos_("cos(");
 constexpr const ImmutableString cosh("cosh");
-constexpr const ImmutableString cosh_0B("cosh(0B");
-constexpr const ImmutableString cosh_1B("cosh(1B");
-constexpr const ImmutableString cosh_2B("cosh(2B");
-constexpr const ImmutableString cosh_3B("cosh(3B");
+constexpr const ImmutableString cosh_("cosh(");
 constexpr const ImmutableString cross("cross");
-constexpr const ImmutableString cross_2B2B("cross(2B2B");
+constexpr const ImmutableString cross_("cross(");
 constexpr const ImmutableString dFdx("dFdx");
 constexpr const ImmutableString dFdxExt("dFdx");
-constexpr const ImmutableString dFdxExt_0B("dFdx(0B");
-constexpr const ImmutableString dFdxExt_1B("dFdx(1B");
-constexpr const ImmutableString dFdxExt_2B("dFdx(2B");
-constexpr const ImmutableString dFdxExt_3B("dFdx(3B");
-constexpr const ImmutableString dFdx_0B("dFdx(0B");
-constexpr const ImmutableString dFdx_1B("dFdx(1B");
-constexpr const ImmutableString dFdx_2B("dFdx(2B");
-constexpr const ImmutableString dFdx_3B("dFdx(3B");
+constexpr const ImmutableString dFdxExt_("dFdx(");
+constexpr const ImmutableString dFdx_("dFdx(");
 constexpr const ImmutableString dFdy("dFdy");
 constexpr const ImmutableString dFdyExt("dFdy");
-constexpr const ImmutableString dFdyExt_0B("dFdy(0B");
-constexpr const ImmutableString dFdyExt_1B("dFdy(1B");
-constexpr const ImmutableString dFdyExt_2B("dFdy(2B");
-constexpr const ImmutableString dFdyExt_3B("dFdy(3B");
-constexpr const ImmutableString dFdy_0B("dFdy(0B");
-constexpr const ImmutableString dFdy_1B("dFdy(1B");
-constexpr const ImmutableString dFdy_2B("dFdy(2B");
-constexpr const ImmutableString dFdy_3B("dFdy(3B");
+constexpr const ImmutableString dFdyExt_("dFdy(");
+constexpr const ImmutableString dFdy_("dFdy(");
 constexpr const ImmutableString degrees("degrees");
-constexpr const ImmutableString degrees_0B("degrees(0B");
-constexpr const ImmutableString degrees_1B("degrees(1B");
-constexpr const ImmutableString degrees_2B("degrees(2B");
-constexpr const ImmutableString degrees_3B("degrees(3B");
+constexpr const ImmutableString degrees_("degrees(");
 constexpr const ImmutableString determinant("determinant");
-constexpr const ImmutableString determinant_5B("determinant(5B");
-constexpr const ImmutableString determinant_AB("determinant(AB");
-constexpr const ImmutableString determinant_FB("determinant(FB");
+constexpr const ImmutableString determinant_("determinant(");
 constexpr const ImmutableString diff("diff");
 constexpr const ImmutableString distance("distance");
-constexpr const ImmutableString distance_0B0B("distance(0B0B");
-constexpr const ImmutableString distance_1B1B("distance(1B1B");
-constexpr const ImmutableString distance_2B2B("distance(2B2B");
-constexpr const ImmutableString distance_3B3B("distance(3B3B");
+constexpr const ImmutableString distance_("distance(");
 constexpr const ImmutableString dot("dot");
-constexpr const ImmutableString dot_0B0B("dot(0B0B");
-constexpr const ImmutableString dot_1B1B("dot(1B1B");
-constexpr const ImmutableString dot_2B2B("dot(2B2B");
-constexpr const ImmutableString dot_3B3B("dot(3B3B");
+constexpr const ImmutableString dot_("dot(");
 constexpr const ImmutableString equal("equal");
-constexpr const ImmutableString equal_1B1B("equal(1B1B");
-constexpr const ImmutableString equal_1C1C("equal(1C1C");
-constexpr const ImmutableString equal_1D1D("equal(1D1D");
-constexpr const ImmutableString equal_1E1E("equal(1E1E");
-constexpr const ImmutableString equal_2B2B("equal(2B2B");
-constexpr const ImmutableString equal_2C2C("equal(2C2C");
-constexpr const ImmutableString equal_2D2D("equal(2D2D");
-constexpr const ImmutableString equal_2E2E("equal(2E2E");
-constexpr const ImmutableString equal_3B3B("equal(3B3B");
-constexpr const ImmutableString equal_3C3C("equal(3C3C");
-constexpr const ImmutableString equal_3D3D("equal(3D3D");
-constexpr const ImmutableString equal_3E3E("equal(3E3E");
+constexpr const ImmutableString equal_("equal(");
 constexpr const ImmutableString exp("exp");
 constexpr const ImmutableString exp2("exp2");
-constexpr const ImmutableString exp2_0B("exp2(0B");
-constexpr const ImmutableString exp2_1B("exp2(1B");
-constexpr const ImmutableString exp2_2B("exp2(2B");
-constexpr const ImmutableString exp2_3B("exp2(3B");
-constexpr const ImmutableString exp_0B("exp(0B");
-constexpr const ImmutableString exp_1B("exp(1B");
-constexpr const ImmutableString exp_2B("exp(2B");
-constexpr const ImmutableString exp_3B("exp(3B");
+constexpr const ImmutableString exp2_("exp2(");
+constexpr const ImmutableString exp_("exp(");
 constexpr const ImmutableString faceforward("faceforward");
 constexpr const ImmutableString faceforward_0B0B0B("faceforward(0B0B0B");
 constexpr const ImmutableString faceforward_1B1B1B("faceforward(1B1B1B");
@@ -1363,58 +1260,23 @@ constexpr const ImmutableString faceforward_2B2B2B("faceforward(2B2B2B");
 constexpr const ImmutableString faceforward_3B3B3B("faceforward(3B3B3B");
 constexpr const ImmutableString far("far");
 constexpr const ImmutableString findLSB("findLSB");
-constexpr const ImmutableString findLSB_0C("findLSB(0C");
-constexpr const ImmutableString findLSB_0D("findLSB(0D");
-constexpr const ImmutableString findLSB_1C("findLSB(1C");
-constexpr const ImmutableString findLSB_1D("findLSB(1D");
-constexpr const ImmutableString findLSB_2C("findLSB(2C");
-constexpr const ImmutableString findLSB_2D("findLSB(2D");
-constexpr const ImmutableString findLSB_3C("findLSB(3C");
-constexpr const ImmutableString findLSB_3D("findLSB(3D");
+constexpr const ImmutableString findLSB_("findLSB(");
 constexpr const ImmutableString findMSB("findMSB");
-constexpr const ImmutableString findMSB_0C("findMSB(0C");
-constexpr const ImmutableString findMSB_0D("findMSB(0D");
-constexpr const ImmutableString findMSB_1C("findMSB(1C");
-constexpr const ImmutableString findMSB_1D("findMSB(1D");
-constexpr const ImmutableString findMSB_2C("findMSB(2C");
-constexpr const ImmutableString findMSB_2D("findMSB(2D");
-constexpr const ImmutableString findMSB_3C("findMSB(3C");
-constexpr const ImmutableString findMSB_3D("findMSB(3D");
+constexpr const ImmutableString findMSB_("findMSB(");
 constexpr const ImmutableString floatBitsToInt("floatBitsToInt");
-constexpr const ImmutableString floatBitsToInt_0B("floatBitsToInt(0B");
-constexpr const ImmutableString floatBitsToInt_1B("floatBitsToInt(1B");
-constexpr const ImmutableString floatBitsToInt_2B("floatBitsToInt(2B");
-constexpr const ImmutableString floatBitsToInt_3B("floatBitsToInt(3B");
+constexpr const ImmutableString floatBitsToInt_("floatBitsToInt(");
 constexpr const ImmutableString floatBitsToUint("floatBitsToUint");
-constexpr const ImmutableString floatBitsToUint_0B("floatBitsToUint(0B");
-constexpr const ImmutableString floatBitsToUint_1B("floatBitsToUint(1B");
-constexpr const ImmutableString floatBitsToUint_2B("floatBitsToUint(2B");
-constexpr const ImmutableString floatBitsToUint_3B("floatBitsToUint(3B");
+constexpr const ImmutableString floatBitsToUint_("floatBitsToUint(");
 constexpr const ImmutableString floor("floor");
-constexpr const ImmutableString floor_0B("floor(0B");
-constexpr const ImmutableString floor_1B("floor(1B");
-constexpr const ImmutableString floor_2B("floor(2B");
-constexpr const ImmutableString floor_3B("floor(3B");
+constexpr const ImmutableString floor_("floor(");
 constexpr const ImmutableString fract("fract");
-constexpr const ImmutableString fract_0B("fract(0B");
-constexpr const ImmutableString fract_1B("fract(1B");
-constexpr const ImmutableString fract_2B("fract(2B");
-constexpr const ImmutableString fract_3B("fract(3B");
+constexpr const ImmutableString fract_("fract(");
 constexpr const ImmutableString frexp("frexp");
-constexpr const ImmutableString frexp_0B0C("frexp(0B0C");
-constexpr const ImmutableString frexp_1B1C("frexp(1B1C");
-constexpr const ImmutableString frexp_2B2C("frexp(2B2C");
-constexpr const ImmutableString frexp_3B3C("frexp(3B3C");
+constexpr const ImmutableString frexp_("frexp(");
 constexpr const ImmutableString fwidth("fwidth");
 constexpr const ImmutableString fwidthExt("fwidth");
-constexpr const ImmutableString fwidthExt_0B("fwidth(0B");
-constexpr const ImmutableString fwidthExt_1B("fwidth(1B");
-constexpr const ImmutableString fwidthExt_2B("fwidth(2B");
-constexpr const ImmutableString fwidthExt_3B("fwidth(3B");
-constexpr const ImmutableString fwidth_0B("fwidth(0B");
-constexpr const ImmutableString fwidth_1B("fwidth(1B");
-constexpr const ImmutableString fwidth_2B("fwidth(2B");
-constexpr const ImmutableString fwidth_3B("fwidth(3B");
+constexpr const ImmutableString fwidthExt_("fwidth(");
+constexpr const ImmutableString fwidth_("fwidth(");
 constexpr const ImmutableString gl_DepthRange("gl_DepthRange");
 constexpr const ImmutableString gl_DepthRangeParameters("gl_DepthRangeParameters");
 constexpr const ImmutableString gl_FragColor("gl_FragColor");
@@ -1498,52 +1360,14 @@ constexpr const ImmutableString gl_WorkGroupSize("gl_WorkGroupSize");
 constexpr const ImmutableString gl_in("gl_in");
 constexpr const ImmutableString greaterThan("greaterThan");
 constexpr const ImmutableString greaterThanEqual("greaterThanEqual");
-constexpr const ImmutableString greaterThanEqual_1B1B("greaterThanEqual(1B1B");
-constexpr const ImmutableString greaterThanEqual_1C1C("greaterThanEqual(1C1C");
-constexpr const ImmutableString greaterThanEqual_1D1D("greaterThanEqual(1D1D");
-constexpr const ImmutableString greaterThanEqual_2B2B("greaterThanEqual(2B2B");
-constexpr const ImmutableString greaterThanEqual_2C2C("greaterThanEqual(2C2C");
-constexpr const ImmutableString greaterThanEqual_2D2D("greaterThanEqual(2D2D");
-constexpr const ImmutableString greaterThanEqual_3B3B("greaterThanEqual(3B3B");
-constexpr const ImmutableString greaterThanEqual_3C3C("greaterThanEqual(3C3C");
-constexpr const ImmutableString greaterThanEqual_3D3D("greaterThanEqual(3D3D");
-constexpr const ImmutableString greaterThan_1B1B("greaterThan(1B1B");
-constexpr const ImmutableString greaterThan_1C1C("greaterThan(1C1C");
-constexpr const ImmutableString greaterThan_1D1D("greaterThan(1D1D");
-constexpr const ImmutableString greaterThan_2B2B("greaterThan(2B2B");
-constexpr const ImmutableString greaterThan_2C2C("greaterThan(2C2C");
-constexpr const ImmutableString greaterThan_2D2D("greaterThan(2D2D");
-constexpr const ImmutableString greaterThan_3B3B("greaterThan(3B3B");
-constexpr const ImmutableString greaterThan_3C3C("greaterThan(3C3C");
-constexpr const ImmutableString greaterThan_3D3D("greaterThan(3D3D");
+constexpr const ImmutableString greaterThanEqual_("greaterThanEqual(");
+constexpr const ImmutableString greaterThan_("greaterThan(");
 constexpr const ImmutableString groupMemoryBarrier("groupMemoryBarrier");
 constexpr const ImmutableString groupMemoryBarrier_("groupMemoryBarrier(");
 constexpr const ImmutableString imageLoad("imageLoad");
-constexpr const ImmutableString imageLoad_0c1C("imageLoad(0c1C");
-constexpr const ImmutableString imageLoad_0d1C("imageLoad(0d1C");
-constexpr const ImmutableString imageLoad_0e1C("imageLoad(0e1C");
-constexpr const ImmutableString imageLoad_0f2C("imageLoad(0f2C");
-constexpr const ImmutableString imageLoad_0g2C("imageLoad(0g2C");
-constexpr const ImmutableString imageLoad_0h2C("imageLoad(0h2C");
-constexpr const ImmutableString imageLoad_0i2C("imageLoad(0i2C");
-constexpr const ImmutableString imageLoad_0j2C("imageLoad(0j2C");
-constexpr const ImmutableString imageLoad_0k2C("imageLoad(0k2C");
-constexpr const ImmutableString imageLoad_0l2C("imageLoad(0l2C");
-constexpr const ImmutableString imageLoad_0m2C("imageLoad(0m2C");
-constexpr const ImmutableString imageLoad_0n2C("imageLoad(0n2C");
+constexpr const ImmutableString imageLoad_("imageLoad(");
 constexpr const ImmutableString imageSize("imageSize");
-constexpr const ImmutableString imageSize_0c("imageSize(0c");
-constexpr const ImmutableString imageSize_0d("imageSize(0d");
-constexpr const ImmutableString imageSize_0e("imageSize(0e");
-constexpr const ImmutableString imageSize_0f("imageSize(0f");
-constexpr const ImmutableString imageSize_0g("imageSize(0g");
-constexpr const ImmutableString imageSize_0h("imageSize(0h");
-constexpr const ImmutableString imageSize_0i("imageSize(0i");
-constexpr const ImmutableString imageSize_0j("imageSize(0j");
-constexpr const ImmutableString imageSize_0k("imageSize(0k");
-constexpr const ImmutableString imageSize_0l("imageSize(0l");
-constexpr const ImmutableString imageSize_0m("imageSize(0m");
-constexpr const ImmutableString imageSize_0n("imageSize(0n");
+constexpr const ImmutableString imageSize_("imageSize(");
 constexpr const ImmutableString imageStore("imageStore");
 constexpr const ImmutableString imageStore_0c1C3B("imageStore(0c1C3B");
 constexpr const ImmutableString imageStore_0d1C3C("imageStore(0d1C3C");
@@ -1563,101 +1387,31 @@ constexpr const ImmutableString imulExtended_1C1C1C1C("imulExtended(1C1C1C1C");
 constexpr const ImmutableString imulExtended_2C2C2C2C("imulExtended(2C2C2C2C");
 constexpr const ImmutableString imulExtended_3C3C3C3C("imulExtended(3C3C3C3C");
 constexpr const ImmutableString intBitsToFloat("intBitsToFloat");
-constexpr const ImmutableString intBitsToFloat_0C("intBitsToFloat(0C");
-constexpr const ImmutableString intBitsToFloat_1C("intBitsToFloat(1C");
-constexpr const ImmutableString intBitsToFloat_2C("intBitsToFloat(2C");
-constexpr const ImmutableString intBitsToFloat_3C("intBitsToFloat(3C");
+constexpr const ImmutableString intBitsToFloat_("intBitsToFloat(");
 constexpr const ImmutableString inverse("inverse");
-constexpr const ImmutableString inverse_5B("inverse(5B");
-constexpr const ImmutableString inverse_AB("inverse(AB");
-constexpr const ImmutableString inverse_FB("inverse(FB");
+constexpr const ImmutableString inverse_("inverse(");
 constexpr const ImmutableString inversesqrt("inversesqrt");
-constexpr const ImmutableString inversesqrt_0B("inversesqrt(0B");
-constexpr const ImmutableString inversesqrt_1B("inversesqrt(1B");
-constexpr const ImmutableString inversesqrt_2B("inversesqrt(2B");
-constexpr const ImmutableString inversesqrt_3B("inversesqrt(3B");
+constexpr const ImmutableString inversesqrt_("inversesqrt(");
 constexpr const ImmutableString isinf("isinf");
-constexpr const ImmutableString isinf_0B("isinf(0B");
-constexpr const ImmutableString isinf_1B("isinf(1B");
-constexpr const ImmutableString isinf_2B("isinf(2B");
-constexpr const ImmutableString isinf_3B("isinf(3B");
+constexpr const ImmutableString isinf_("isinf(");
 constexpr const ImmutableString isnan("isnan");
-constexpr const ImmutableString isnan_0B("isnan(0B");
-constexpr const ImmutableString isnan_1B("isnan(1B");
-constexpr const ImmutableString isnan_2B("isnan(2B");
-constexpr const ImmutableString isnan_3B("isnan(3B");
+constexpr const ImmutableString isnan_("isnan(");
 constexpr const ImmutableString ldexp("ldexp");
-constexpr const ImmutableString ldexp_0B0C("ldexp(0B0C");
-constexpr const ImmutableString ldexp_1B1C("ldexp(1B1C");
-constexpr const ImmutableString ldexp_2B2C("ldexp(2B2C");
-constexpr const ImmutableString ldexp_3B3C("ldexp(3B3C");
+constexpr const ImmutableString ldexp_("ldexp(");
 constexpr const ImmutableString length("length");
-constexpr const ImmutableString length_0B("length(0B");
-constexpr const ImmutableString length_1B("length(1B");
-constexpr const ImmutableString length_2B("length(2B");
-constexpr const ImmutableString length_3B("length(3B");
+constexpr const ImmutableString length_("length(");
 constexpr const ImmutableString lessThan("lessThan");
 constexpr const ImmutableString lessThanEqual("lessThanEqual");
-constexpr const ImmutableString lessThanEqual_1B1B("lessThanEqual(1B1B");
-constexpr const ImmutableString lessThanEqual_1C1C("lessThanEqual(1C1C");
-constexpr const ImmutableString lessThanEqual_1D1D("lessThanEqual(1D1D");
-constexpr const ImmutableString lessThanEqual_2B2B("lessThanEqual(2B2B");
-constexpr const ImmutableString lessThanEqual_2C2C("lessThanEqual(2C2C");
-constexpr const ImmutableString lessThanEqual_2D2D("lessThanEqual(2D2D");
-constexpr const ImmutableString lessThanEqual_3B3B("lessThanEqual(3B3B");
-constexpr const ImmutableString lessThanEqual_3C3C("lessThanEqual(3C3C");
-constexpr const ImmutableString lessThanEqual_3D3D("lessThanEqual(3D3D");
-constexpr const ImmutableString lessThan_1B1B("lessThan(1B1B");
-constexpr const ImmutableString lessThan_1C1C("lessThan(1C1C");
-constexpr const ImmutableString lessThan_1D1D("lessThan(1D1D");
-constexpr const ImmutableString lessThan_2B2B("lessThan(2B2B");
-constexpr const ImmutableString lessThan_2C2C("lessThan(2C2C");
-constexpr const ImmutableString lessThan_2D2D("lessThan(2D2D");
-constexpr const ImmutableString lessThan_3B3B("lessThan(3B3B");
-constexpr const ImmutableString lessThan_3C3C("lessThan(3C3C");
-constexpr const ImmutableString lessThan_3D3D("lessThan(3D3D");
+constexpr const ImmutableString lessThanEqual_("lessThanEqual(");
+constexpr const ImmutableString lessThan_("lessThan(");
 constexpr const ImmutableString log("log");
 constexpr const ImmutableString log2("log2");
-constexpr const ImmutableString log2_0B("log2(0B");
-constexpr const ImmutableString log2_1B("log2(1B");
-constexpr const ImmutableString log2_2B("log2(2B");
-constexpr const ImmutableString log2_3B("log2(3B");
-constexpr const ImmutableString log_0B("log(0B");
-constexpr const ImmutableString log_1B("log(1B");
-constexpr const ImmutableString log_2B("log(2B");
-constexpr const ImmutableString log_3B("log(3B");
+constexpr const ImmutableString log2_("log2(");
+constexpr const ImmutableString log_("log(");
 constexpr const ImmutableString matrixCompMult("matrixCompMult");
-constexpr const ImmutableString matrixCompMult_5B5B("matrixCompMult(5B5B");
-constexpr const ImmutableString matrixCompMult_6B6B("matrixCompMult(6B6B");
-constexpr const ImmutableString matrixCompMult_7B7B("matrixCompMult(7B7B");
-constexpr const ImmutableString matrixCompMult_9B9B("matrixCompMult(9B9B");
-constexpr const ImmutableString matrixCompMult_ABAB("matrixCompMult(ABAB");
-constexpr const ImmutableString matrixCompMult_BBBB("matrixCompMult(BBBB");
-constexpr const ImmutableString matrixCompMult_DBDB("matrixCompMult(DBDB");
-constexpr const ImmutableString matrixCompMult_EBEB("matrixCompMult(EBEB");
-constexpr const ImmutableString matrixCompMult_FBFB("matrixCompMult(FBFB");
+constexpr const ImmutableString matrixCompMult_("matrixCompMult(");
 constexpr const ImmutableString max("max");
-constexpr const ImmutableString max_0B0B("max(0B0B");
-constexpr const ImmutableString max_0C0C("max(0C0C");
-constexpr const ImmutableString max_0D0D("max(0D0D");
-constexpr const ImmutableString max_1B0B("max(1B0B");
-constexpr const ImmutableString max_1B1B("max(1B1B");
-constexpr const ImmutableString max_1C0C("max(1C0C");
-constexpr const ImmutableString max_1C1C("max(1C1C");
-constexpr const ImmutableString max_1D0D("max(1D0D");
-constexpr const ImmutableString max_1D1D("max(1D1D");
-constexpr const ImmutableString max_2B0B("max(2B0B");
-constexpr const ImmutableString max_2B2B("max(2B2B");
-constexpr const ImmutableString max_2C0C("max(2C0C");
-constexpr const ImmutableString max_2C2C("max(2C2C");
-constexpr const ImmutableString max_2D0D("max(2D0D");
-constexpr const ImmutableString max_2D2D("max(2D2D");
-constexpr const ImmutableString max_3B0B("max(3B0B");
-constexpr const ImmutableString max_3B3B("max(3B3B");
-constexpr const ImmutableString max_3C0C("max(3C0C");
-constexpr const ImmutableString max_3C3C("max(3C3C");
-constexpr const ImmutableString max_3D0D("max(3D0D");
-constexpr const ImmutableString max_3D3D("max(3D3D");
+constexpr const ImmutableString max_("max(");
 constexpr const ImmutableString memoryBarrier("memoryBarrier");
 constexpr const ImmutableString memoryBarrierAtomicCounter("memoryBarrierAtomicCounter");
 constexpr const ImmutableString memoryBarrierAtomicCounter_("memoryBarrierAtomicCounter(");
@@ -1669,27 +1423,7 @@ constexpr const ImmutableString memoryBarrierShared("memoryBarrierShared");
 constexpr const ImmutableString memoryBarrierShared_("memoryBarrierShared(");
 constexpr const ImmutableString memoryBarrier_("memoryBarrier(");
 constexpr const ImmutableString min("min");
-constexpr const ImmutableString min_0B0B("min(0B0B");
-constexpr const ImmutableString min_0C0C("min(0C0C");
-constexpr const ImmutableString min_0D0D("min(0D0D");
-constexpr const ImmutableString min_1B0B("min(1B0B");
-constexpr const ImmutableString min_1B1B("min(1B1B");
-constexpr const ImmutableString min_1C0C("min(1C0C");
-constexpr const ImmutableString min_1C1C("min(1C1C");
-constexpr const ImmutableString min_1D0D("min(1D0D");
-constexpr const ImmutableString min_1D1D("min(1D1D");
-constexpr const ImmutableString min_2B0B("min(2B0B");
-constexpr const ImmutableString min_2B2B("min(2B2B");
-constexpr const ImmutableString min_2C0C("min(2C0C");
-constexpr const ImmutableString min_2C2C("min(2C2C");
-constexpr const ImmutableString min_2D0D("min(2D0D");
-constexpr const ImmutableString min_2D2D("min(2D2D");
-constexpr const ImmutableString min_3B0B("min(3B0B");
-constexpr const ImmutableString min_3B3B("min(3B3B");
-constexpr const ImmutableString min_3C0C("min(3C0C");
-constexpr const ImmutableString min_3C3C("min(3C3C");
-constexpr const ImmutableString min_3D0D("min(3D0D");
-constexpr const ImmutableString min_3D3D("min(3D3D");
+constexpr const ImmutableString min_("min(");
 constexpr const ImmutableString mix("mix");
 constexpr const ImmutableString mix_0B0B0B("mix(0B0B0B");
 constexpr const ImmutableString mix_0B0B0E("mix(0B0B0E");
@@ -1703,112 +1437,51 @@ constexpr const ImmutableString mix_3B3B0B("mix(3B3B0B");
 constexpr const ImmutableString mix_3B3B3B("mix(3B3B3B");
 constexpr const ImmutableString mix_3B3B3E("mix(3B3B3E");
 constexpr const ImmutableString mod("mod");
-constexpr const ImmutableString mod_0B0B("mod(0B0B");
-constexpr const ImmutableString mod_1B0B("mod(1B0B");
-constexpr const ImmutableString mod_1B1B("mod(1B1B");
-constexpr const ImmutableString mod_2B0B("mod(2B0B");
-constexpr const ImmutableString mod_2B2B("mod(2B2B");
-constexpr const ImmutableString mod_3B0B("mod(3B0B");
-constexpr const ImmutableString mod_3B3B("mod(3B3B");
+constexpr const ImmutableString mod_("mod(");
 constexpr const ImmutableString modf("modf");
-constexpr const ImmutableString modf_0B0B("modf(0B0B");
-constexpr const ImmutableString modf_1B1B("modf(1B1B");
-constexpr const ImmutableString modf_2B2B("modf(2B2B");
-constexpr const ImmutableString modf_3B3B("modf(3B3B");
+constexpr const ImmutableString modf_("modf(");
 constexpr const ImmutableString near("near");
 constexpr const ImmutableString normalize("normalize");
-constexpr const ImmutableString normalize_0B("normalize(0B");
-constexpr const ImmutableString normalize_1B("normalize(1B");
-constexpr const ImmutableString normalize_2B("normalize(2B");
-constexpr const ImmutableString normalize_3B("normalize(3B");
+constexpr const ImmutableString normalize_("normalize(");
 constexpr const ImmutableString notEqual("notEqual");
-constexpr const ImmutableString notEqual_1B1B("notEqual(1B1B");
-constexpr const ImmutableString notEqual_1C1C("notEqual(1C1C");
-constexpr const ImmutableString notEqual_1D1D("notEqual(1D1D");
-constexpr const ImmutableString notEqual_1E1E("notEqual(1E1E");
-constexpr const ImmutableString notEqual_2B2B("notEqual(2B2B");
-constexpr const ImmutableString notEqual_2C2C("notEqual(2C2C");
-constexpr const ImmutableString notEqual_2D2D("notEqual(2D2D");
-constexpr const ImmutableString notEqual_2E2E("notEqual(2E2E");
-constexpr const ImmutableString notEqual_3B3B("notEqual(3B3B");
-constexpr const ImmutableString notEqual_3C3C("notEqual(3C3C");
-constexpr const ImmutableString notEqual_3D3D("notEqual(3D3D");
-constexpr const ImmutableString notEqual_3E3E("notEqual(3E3E");
+constexpr const ImmutableString notEqual_("notEqual(");
 constexpr const ImmutableString notFunc("not");
-constexpr const ImmutableString notFunc_1E("not(1E");
-constexpr const ImmutableString notFunc_2E("not(2E");
-constexpr const ImmutableString notFunc_3E("not(3E");
+constexpr const ImmutableString notFunc_("not(");
 constexpr const ImmutableString outerProduct("outerProduct");
-constexpr const ImmutableString outerProduct_1B1B("outerProduct(1B1B");
-constexpr const ImmutableString outerProduct_1B2B("outerProduct(1B2B");
-constexpr const ImmutableString outerProduct_1B3B("outerProduct(1B3B");
-constexpr const ImmutableString outerProduct_2B1B("outerProduct(2B1B");
-constexpr const ImmutableString outerProduct_2B2B("outerProduct(2B2B");
-constexpr const ImmutableString outerProduct_2B3B("outerProduct(2B3B");
-constexpr const ImmutableString outerProduct_3B1B("outerProduct(3B1B");
-constexpr const ImmutableString outerProduct_3B2B("outerProduct(3B2B");
-constexpr const ImmutableString outerProduct_3B3B("outerProduct(3B3B");
+constexpr const ImmutableString outerProduct_("outerProduct(");
 constexpr const ImmutableString packHalf2x16("packHalf2x16");
-constexpr const ImmutableString packHalf2x16_1B("packHalf2x16(1B");
+constexpr const ImmutableString packHalf2x16_("packHalf2x16(");
 constexpr const ImmutableString packSnorm2x16("packSnorm2x16");
-constexpr const ImmutableString packSnorm2x16_1B("packSnorm2x16(1B");
+constexpr const ImmutableString packSnorm2x16_("packSnorm2x16(");
 constexpr const ImmutableString packSnorm4x8("packSnorm4x8");
-constexpr const ImmutableString packSnorm4x8_3B("packSnorm4x8(3B");
+constexpr const ImmutableString packSnorm4x8_("packSnorm4x8(");
 constexpr const ImmutableString packUnorm2x16("packUnorm2x16");
-constexpr const ImmutableString packUnorm2x16_1B("packUnorm2x16(1B");
+constexpr const ImmutableString packUnorm2x16_("packUnorm2x16(");
 constexpr const ImmutableString packUnorm4x8("packUnorm4x8");
-constexpr const ImmutableString packUnorm4x8_3B("packUnorm4x8(3B");
+constexpr const ImmutableString packUnorm4x8_("packUnorm4x8(");
 constexpr const ImmutableString pow("pow");
-constexpr const ImmutableString pow_0B0B("pow(0B0B");
-constexpr const ImmutableString pow_1B1B("pow(1B1B");
-constexpr const ImmutableString pow_2B2B("pow(2B2B");
-constexpr const ImmutableString pow_3B3B("pow(3B3B");
+constexpr const ImmutableString pow_("pow(");
 constexpr const ImmutableString radians("radians");
-constexpr const ImmutableString radians_0B("radians(0B");
-constexpr const ImmutableString radians_1B("radians(1B");
-constexpr const ImmutableString radians_2B("radians(2B");
-constexpr const ImmutableString radians_3B("radians(3B");
+constexpr const ImmutableString radians_("radians(");
 constexpr const ImmutableString reflect("reflect");
-constexpr const ImmutableString reflect_0B0B("reflect(0B0B");
-constexpr const ImmutableString reflect_1B1B("reflect(1B1B");
-constexpr const ImmutableString reflect_2B2B("reflect(2B2B");
-constexpr const ImmutableString reflect_3B3B("reflect(3B3B");
+constexpr const ImmutableString reflect_("reflect(");
 constexpr const ImmutableString refract("refract");
 constexpr const ImmutableString refract_0B0B0B("refract(0B0B0B");
 constexpr const ImmutableString refract_1B1B0B("refract(1B1B0B");
 constexpr const ImmutableString refract_2B2B0B("refract(2B2B0B");
 constexpr const ImmutableString refract_3B3B0B("refract(3B3B0B");
 constexpr const ImmutableString rgb_2_yuv("rgb_2_yuv");
-constexpr const ImmutableString rgb_2_yuv_2B0G("rgb_2_yuv(2B0G");
+constexpr const ImmutableString rgb_2_yuv_("rgb_2_yuv(");
 constexpr const ImmutableString round("round");
 constexpr const ImmutableString roundEven("roundEven");
-constexpr const ImmutableString roundEven_0B("roundEven(0B");
-constexpr const ImmutableString roundEven_1B("roundEven(1B");
-constexpr const ImmutableString roundEven_2B("roundEven(2B");
-constexpr const ImmutableString roundEven_3B("roundEven(3B");
-constexpr const ImmutableString round_0B("round(0B");
-constexpr const ImmutableString round_1B("round(1B");
-constexpr const ImmutableString round_2B("round(2B");
-constexpr const ImmutableString round_3B("round(3B");
+constexpr const ImmutableString roundEven_("roundEven(");
+constexpr const ImmutableString round_("round(");
 constexpr const ImmutableString sign("sign");
-constexpr const ImmutableString sign_0B("sign(0B");
-constexpr const ImmutableString sign_0C("sign(0C");
-constexpr const ImmutableString sign_1B("sign(1B");
-constexpr const ImmutableString sign_1C("sign(1C");
-constexpr const ImmutableString sign_2B("sign(2B");
-constexpr const ImmutableString sign_2C("sign(2C");
-constexpr const ImmutableString sign_3B("sign(3B");
-constexpr const ImmutableString sign_3C("sign(3C");
+constexpr const ImmutableString sign_("sign(");
 constexpr const ImmutableString sin("sin");
-constexpr const ImmutableString sin_0B("sin(0B");
-constexpr const ImmutableString sin_1B("sin(1B");
-constexpr const ImmutableString sin_2B("sin(2B");
-constexpr const ImmutableString sin_3B("sin(3B");
+constexpr const ImmutableString sin_("sin(");
 constexpr const ImmutableString sinh("sinh");
-constexpr const ImmutableString sinh_0B("sinh(0B");
-constexpr const ImmutableString sinh_1B("sinh(1B");
-constexpr const ImmutableString sinh_2B("sinh(2B");
-constexpr const ImmutableString sinh_3B("sinh(3B");
+constexpr const ImmutableString sinh_("sinh(");
 constexpr const ImmutableString smoothstep("smoothstep");
 constexpr const ImmutableString smoothstep_0B0B0B("smoothstep(0B0B0B");
 constexpr const ImmutableString smoothstep_0B0B1B("smoothstep(0B0B1B");
@@ -1818,28 +1491,13 @@ constexpr const ImmutableString smoothstep_1B1B1B("smoothstep(1B1B1B");
 constexpr const ImmutableString smoothstep_2B2B2B("smoothstep(2B2B2B");
 constexpr const ImmutableString smoothstep_3B3B3B("smoothstep(3B3B3B");
 constexpr const ImmutableString sqrt("sqrt");
-constexpr const ImmutableString sqrt_0B("sqrt(0B");
-constexpr const ImmutableString sqrt_1B("sqrt(1B");
-constexpr const ImmutableString sqrt_2B("sqrt(2B");
-constexpr const ImmutableString sqrt_3B("sqrt(3B");
+constexpr const ImmutableString sqrt_("sqrt(");
 constexpr const ImmutableString step("step");
-constexpr const ImmutableString step_0B0B("step(0B0B");
-constexpr const ImmutableString step_0B1B("step(0B1B");
-constexpr const ImmutableString step_0B2B("step(0B2B");
-constexpr const ImmutableString step_0B3B("step(0B3B");
-constexpr const ImmutableString step_1B1B("step(1B1B");
-constexpr const ImmutableString step_2B2B("step(2B2B");
-constexpr const ImmutableString step_3B3B("step(3B3B");
+constexpr const ImmutableString step_("step(");
 constexpr const ImmutableString tan("tan");
-constexpr const ImmutableString tan_0B("tan(0B");
-constexpr const ImmutableString tan_1B("tan(1B");
-constexpr const ImmutableString tan_2B("tan(2B");
-constexpr const ImmutableString tan_3B("tan(3B");
+constexpr const ImmutableString tan_("tan(");
 constexpr const ImmutableString tanh("tanh");
-constexpr const ImmutableString tanh_0B("tanh(0B");
-constexpr const ImmutableString tanh_1B("tanh(1B");
-constexpr const ImmutableString tanh_2B("tanh(2B");
-constexpr const ImmutableString tanh_3B("tanh(3B");
+constexpr const ImmutableString tanh_("tanh(");
 constexpr const ImmutableString texelFetch("texelFetch");
 constexpr const ImmutableString texelFetchOffset("texelFetchOffset");
 constexpr const ImmutableString texelFetchOffset_0H1C0C1C("texelFetchOffset(0H1C0C1C");
@@ -1883,20 +1541,15 @@ constexpr const ImmutableString texture2DProjLodEXT_0H2B0B("texture2DProjLodEXT(
 constexpr const ImmutableString texture2DProjLodEXT_0H3B0B("texture2DProjLodEXT(0H3B0B");
 constexpr const ImmutableString texture2DProjLod_0H2B0B("texture2DProjLod(0H2B0B");
 constexpr const ImmutableString texture2DProjLod_0H3B0B("texture2DProjLod(0H3B0B");
-constexpr const ImmutableString texture2DProj_0H2B("texture2DProj(0H2B");
+constexpr const ImmutableString texture2DProj_("texture2DProj(");
 constexpr const ImmutableString texture2DProj_0H2B0B("texture2DProj(0H2B0B");
-constexpr const ImmutableString texture2DProj_0H3B("texture2DProj(0H3B");
 constexpr const ImmutableString texture2DProj_0H3B0B("texture2DProj(0H3B0B");
-constexpr const ImmutableString texture2DProj_0L2B("texture2DProj(0L2B");
-constexpr const ImmutableString texture2DProj_0L3B("texture2DProj(0L3B");
 constexpr const ImmutableString texture2DRect("texture2DRect");
 constexpr const ImmutableString texture2DRectProj("texture2DRectProj");
-constexpr const ImmutableString texture2DRectProj_0N2B("texture2DRectProj(0N2B");
-constexpr const ImmutableString texture2DRectProj_0N3B("texture2DRectProj(0N3B");
-constexpr const ImmutableString texture2DRect_0N1B("texture2DRect(0N1B");
-constexpr const ImmutableString texture2D_0H1B("texture2D(0H1B");
+constexpr const ImmutableString texture2DRectProj_("texture2DRectProj(");
+constexpr const ImmutableString texture2DRect_("texture2DRect(");
+constexpr const ImmutableString texture2D_("texture2D(");
 constexpr const ImmutableString texture2D_0H1B0B("texture2D(0H1B0B");
-constexpr const ImmutableString texture2D_0L1B("texture2D(0L1B");
 constexpr const ImmutableString textureCube("textureCube");
 constexpr const ImmutableString textureCubeGradEXT("textureCubeGradEXT");
 constexpr const ImmutableString textureCubeGradEXT_0J2B2B2B("textureCubeGradEXT(0J2B2B2B");
@@ -1904,7 +1557,7 @@ constexpr const ImmutableString textureCubeLod("textureCubeLod");
 constexpr const ImmutableString textureCubeLodEXT("textureCubeLodEXT");
 constexpr const ImmutableString textureCubeLodEXT_0J2B0B("textureCubeLodEXT(0J2B0B");
 constexpr const ImmutableString textureCubeLod_0J2B0B("textureCubeLod(0J2B0B");
-constexpr const ImmutableString textureCube_0J2B("textureCube(0J2B");
+constexpr const ImmutableString textureCube_("textureCube(");
 constexpr const ImmutableString textureCube_0J2B0B("textureCube(0J2B0B");
 constexpr const ImmutableString textureGather("textureGather");
 constexpr const ImmutableString textureGatherOffset("textureGatherOffset");
@@ -1922,29 +1575,18 @@ constexpr const ImmutableString textureGatherOffset_0X2B1C("textureGatherOffset(
 constexpr const ImmutableString textureGatherOffset_0X2B1C0C("textureGatherOffset(0X2B1C0C");
 constexpr const ImmutableString textureGatherOffset_0Z1B0B1C("textureGatherOffset(0Z1B0B1C");
 constexpr const ImmutableString textureGatherOffset_0b2B0B1C("textureGatherOffset(0b2B0B1C");
-constexpr const ImmutableString textureGather_0H1B("textureGather(0H1B");
+constexpr const ImmutableString textureGather_("textureGather(");
 constexpr const ImmutableString textureGather_0H1B0C("textureGather(0H1B0C");
-constexpr const ImmutableString textureGather_0J2B("textureGather(0J2B");
 constexpr const ImmutableString textureGather_0J2B0C("textureGather(0J2B0C");
-constexpr const ImmutableString textureGather_0K2B("textureGather(0K2B");
 constexpr const ImmutableString textureGather_0K2B0C("textureGather(0K2B0C");
-constexpr const ImmutableString textureGather_0P1B("textureGather(0P1B");
 constexpr const ImmutableString textureGather_0P1B0C("textureGather(0P1B0C");
-constexpr const ImmutableString textureGather_0R2B("textureGather(0R2B");
 constexpr const ImmutableString textureGather_0R2B0C("textureGather(0R2B0C");
-constexpr const ImmutableString textureGather_0S2B("textureGather(0S2B");
 constexpr const ImmutableString textureGather_0S2B0C("textureGather(0S2B0C");
-constexpr const ImmutableString textureGather_0U1B("textureGather(0U1B");
 constexpr const ImmutableString textureGather_0U1B0C("textureGather(0U1B0C");
-constexpr const ImmutableString textureGather_0W2B("textureGather(0W2B");
 constexpr const ImmutableString textureGather_0W2B0C("textureGather(0W2B0C");
-constexpr const ImmutableString textureGather_0X2B("textureGather(0X2B");
 constexpr const ImmutableString textureGather_0X2B0C("textureGather(0X2B0C");
-constexpr const ImmutableString textureGather_0Z1B("textureGather(0Z1B");
 constexpr const ImmutableString textureGather_0Z1B0B("textureGather(0Z1B0B");
-constexpr const ImmutableString textureGather_0a2B("textureGather(0a2B");
 constexpr const ImmutableString textureGather_0a2B0B("textureGather(0a2B0B");
-constexpr const ImmutableString textureGather_0b2B("textureGather(0b2B");
 constexpr const ImmutableString textureGather_0b2B0B("textureGather(0b2B0B");
 constexpr const ImmutableString textureGrad("textureGrad");
 constexpr const ImmutableString textureGradOffset("textureGradOffset");
@@ -2096,138 +1738,73 @@ constexpr const ImmutableString textureProjOffset_0V3B2C("textureProjOffset(0V3B
 constexpr const ImmutableString textureProjOffset_0V3B2C0B("textureProjOffset(0V3B2C0B");
 constexpr const ImmutableString textureProjOffset_0Z3B1C("textureProjOffset(0Z3B1C");
 constexpr const ImmutableString textureProjOffset_0Z3B1C0B("textureProjOffset(0Z3B1C0B");
-constexpr const ImmutableString textureProj_0H2B("textureProj(0H2B");
+constexpr const ImmutableString textureProj_("textureProj(");
 constexpr const ImmutableString textureProj_0H2B0B("textureProj(0H2B0B");
-constexpr const ImmutableString textureProj_0H3B("textureProj(0H3B");
 constexpr const ImmutableString textureProj_0H3B0B("textureProj(0H3B0B");
-constexpr const ImmutableString textureProj_0I3B("textureProj(0I3B");
 constexpr const ImmutableString textureProj_0I3B0B("textureProj(0I3B0B");
-constexpr const ImmutableString textureProj_0L2B("textureProj(0L2B");
 constexpr const ImmutableString textureProj_0L2B0B("textureProj(0L2B0B");
-constexpr const ImmutableString textureProj_0L3B("textureProj(0L3B");
 constexpr const ImmutableString textureProj_0L3B0B("textureProj(0L3B0B");
-constexpr const ImmutableString textureProj_0M2B("textureProj(0M2B");
 constexpr const ImmutableString textureProj_0M2B0B("textureProj(0M2B0B");
-constexpr const ImmutableString textureProj_0M3B("textureProj(0M3B");
 constexpr const ImmutableString textureProj_0M3B0B("textureProj(0M3B0B");
-constexpr const ImmutableString textureProj_0N2B("textureProj(0N2B");
-constexpr const ImmutableString textureProj_0N3B("textureProj(0N3B");
-constexpr const ImmutableString textureProj_0P2B("textureProj(0P2B");
 constexpr const ImmutableString textureProj_0P2B0B("textureProj(0P2B0B");
-constexpr const ImmutableString textureProj_0P3B("textureProj(0P3B");
 constexpr const ImmutableString textureProj_0P3B0B("textureProj(0P3B0B");
-constexpr const ImmutableString textureProj_0Q3B("textureProj(0Q3B");
 constexpr const ImmutableString textureProj_0Q3B0B("textureProj(0Q3B0B");
-constexpr const ImmutableString textureProj_0U2B("textureProj(0U2B");
 constexpr const ImmutableString textureProj_0U2B0B("textureProj(0U2B0B");
-constexpr const ImmutableString textureProj_0U3B("textureProj(0U3B");
 constexpr const ImmutableString textureProj_0U3B0B("textureProj(0U3B0B");
-constexpr const ImmutableString textureProj_0V3B("textureProj(0V3B");
 constexpr const ImmutableString textureProj_0V3B0B("textureProj(0V3B0B");
-constexpr const ImmutableString textureProj_0Z3B("textureProj(0Z3B");
 constexpr const ImmutableString textureProj_0Z3B0B("textureProj(0Z3B0B");
 constexpr const ImmutableString textureSize("textureSize");
-constexpr const ImmutableString textureSize_0H0C("textureSize(0H0C");
-constexpr const ImmutableString textureSize_0I0C("textureSize(0I0C");
-constexpr const ImmutableString textureSize_0J0C("textureSize(0J0C");
-constexpr const ImmutableString textureSize_0K0C("textureSize(0K0C");
-constexpr const ImmutableString textureSize_0L0C("textureSize(0L0C");
-constexpr const ImmutableString textureSize_0M0C("textureSize(0M0C");
-constexpr const ImmutableString textureSize_0O("textureSize(0O");
-constexpr const ImmutableString textureSize_0P0C("textureSize(0P0C");
-constexpr const ImmutableString textureSize_0Q0C("textureSize(0Q0C");
-constexpr const ImmutableString textureSize_0R0C("textureSize(0R0C");
-constexpr const ImmutableString textureSize_0S0C("textureSize(0S0C");
-constexpr const ImmutableString textureSize_0T("textureSize(0T");
-constexpr const ImmutableString textureSize_0U0C("textureSize(0U0C");
-constexpr const ImmutableString textureSize_0V0C("textureSize(0V0C");
-constexpr const ImmutableString textureSize_0W0C("textureSize(0W0C");
-constexpr const ImmutableString textureSize_0X0C("textureSize(0X0C");
-constexpr const ImmutableString textureSize_0Y("textureSize(0Y");
-constexpr const ImmutableString textureSize_0Z0C("textureSize(0Z0C");
-constexpr const ImmutableString textureSize_0a0C("textureSize(0a0C");
-constexpr const ImmutableString textureSize_0b0C("textureSize(0b0C");
-constexpr const ImmutableString texture_0H1B("texture(0H1B");
+constexpr const ImmutableString textureSize_("textureSize(");
+constexpr const ImmutableString texture_("texture(");
 constexpr const ImmutableString texture_0H1B0B("texture(0H1B0B");
-constexpr const ImmutableString texture_0I2B("texture(0I2B");
 constexpr const ImmutableString texture_0I2B0B("texture(0I2B0B");
-constexpr const ImmutableString texture_0J2B("texture(0J2B");
 constexpr const ImmutableString texture_0J2B0B("texture(0J2B0B");
-constexpr const ImmutableString texture_0K2B("texture(0K2B");
 constexpr const ImmutableString texture_0K2B0B("texture(0K2B0B");
-constexpr const ImmutableString texture_0L1B("texture(0L1B");
 constexpr const ImmutableString texture_0L1B0B("texture(0L1B0B");
-constexpr const ImmutableString texture_0M1B("texture(0M1B");
 constexpr const ImmutableString texture_0M1B0B("texture(0M1B0B");
-constexpr const ImmutableString texture_0N1B("texture(0N1B");
-constexpr const ImmutableString texture_0P1B("texture(0P1B");
 constexpr const ImmutableString texture_0P1B0B("texture(0P1B0B");
-constexpr const ImmutableString texture_0Q2B("texture(0Q2B");
 constexpr const ImmutableString texture_0Q2B0B("texture(0Q2B0B");
-constexpr const ImmutableString texture_0R2B("texture(0R2B");
 constexpr const ImmutableString texture_0R2B0B("texture(0R2B0B");
-constexpr const ImmutableString texture_0S2B("texture(0S2B");
 constexpr const ImmutableString texture_0S2B0B("texture(0S2B0B");
-constexpr const ImmutableString texture_0U1B("texture(0U1B");
 constexpr const ImmutableString texture_0U1B0B("texture(0U1B0B");
-constexpr const ImmutableString texture_0V2B("texture(0V2B");
 constexpr const ImmutableString texture_0V2B0B("texture(0V2B0B");
-constexpr const ImmutableString texture_0W2B("texture(0W2B");
 constexpr const ImmutableString texture_0W2B0B("texture(0W2B0B");
-constexpr const ImmutableString texture_0X2B("texture(0X2B");
 constexpr const ImmutableString texture_0X2B0B("texture(0X2B0B");
-constexpr const ImmutableString texture_0Z2B("texture(0Z2B");
 constexpr const ImmutableString texture_0Z2B0B("texture(0Z2B0B");
-constexpr const ImmutableString texture_0a3B("texture(0a3B");
 constexpr const ImmutableString texture_0a3B0B("texture(0a3B0B");
-constexpr const ImmutableString texture_0b3B("texture(0b3B");
 constexpr const ImmutableString transpose("transpose");
-constexpr const ImmutableString transpose_5B("transpose(5B");
-constexpr const ImmutableString transpose_6B("transpose(6B");
-constexpr const ImmutableString transpose_7B("transpose(7B");
-constexpr const ImmutableString transpose_9B("transpose(9B");
-constexpr const ImmutableString transpose_AB("transpose(AB");
-constexpr const ImmutableString transpose_BB("transpose(BB");
-constexpr const ImmutableString transpose_DB("transpose(DB");
-constexpr const ImmutableString transpose_EB("transpose(EB");
-constexpr const ImmutableString transpose_FB("transpose(FB");
+constexpr const ImmutableString transpose_("transpose(");
 constexpr const ImmutableString trunc("trunc");
-constexpr const ImmutableString trunc_0B("trunc(0B");
-constexpr const ImmutableString trunc_1B("trunc(1B");
-constexpr const ImmutableString trunc_2B("trunc(2B");
-constexpr const ImmutableString trunc_3B("trunc(3B");
+constexpr const ImmutableString trunc_("trunc(");
 constexpr const ImmutableString uaddCarry("uaddCarry");
 constexpr const ImmutableString uaddCarry_0D0D0D("uaddCarry(0D0D0D");
 constexpr const ImmutableString uaddCarry_1D1D1D("uaddCarry(1D1D1D");
 constexpr const ImmutableString uaddCarry_2D2D2D("uaddCarry(2D2D2D");
 constexpr const ImmutableString uaddCarry_3D3D3D("uaddCarry(3D3D3D");
 constexpr const ImmutableString uintBitsToFloat("uintBitsToFloat");
-constexpr const ImmutableString uintBitsToFloat_0D("uintBitsToFloat(0D");
-constexpr const ImmutableString uintBitsToFloat_1D("uintBitsToFloat(1D");
-constexpr const ImmutableString uintBitsToFloat_2D("uintBitsToFloat(2D");
-constexpr const ImmutableString uintBitsToFloat_3D("uintBitsToFloat(3D");
+constexpr const ImmutableString uintBitsToFloat_("uintBitsToFloat(");
 constexpr const ImmutableString umulExtended("umulExtended");
 constexpr const ImmutableString umulExtended_0D0D0D0D("umulExtended(0D0D0D0D");
 constexpr const ImmutableString umulExtended_1D1D1D1D("umulExtended(1D1D1D1D");
 constexpr const ImmutableString umulExtended_2D2D2D2D("umulExtended(2D2D2D2D");
 constexpr const ImmutableString umulExtended_3D3D3D3D("umulExtended(3D3D3D3D");
 constexpr const ImmutableString unpackHalf2x16("unpackHalf2x16");
-constexpr const ImmutableString unpackHalf2x16_0D("unpackHalf2x16(0D");
+constexpr const ImmutableString unpackHalf2x16_("unpackHalf2x16(");
 constexpr const ImmutableString unpackSnorm2x16("unpackSnorm2x16");
-constexpr const ImmutableString unpackSnorm2x16_0D("unpackSnorm2x16(0D");
+constexpr const ImmutableString unpackSnorm2x16_("unpackSnorm2x16(");
 constexpr const ImmutableString unpackSnorm4x8("unpackSnorm4x8");
-constexpr const ImmutableString unpackSnorm4x8_0D("unpackSnorm4x8(0D");
+constexpr const ImmutableString unpackSnorm4x8_("unpackSnorm4x8(");
 constexpr const ImmutableString unpackUnorm2x16("unpackUnorm2x16");
-constexpr const ImmutableString unpackUnorm2x16_0D("unpackUnorm2x16(0D");
+constexpr const ImmutableString unpackUnorm2x16_("unpackUnorm2x16(");
 constexpr const ImmutableString unpackUnorm4x8("unpackUnorm4x8");
-constexpr const ImmutableString unpackUnorm4x8_0D("unpackUnorm4x8(0D");
+constexpr const ImmutableString unpackUnorm4x8_("unpackUnorm4x8(");
 constexpr const ImmutableString usubBorrow("usubBorrow");
 constexpr const ImmutableString usubBorrow_0D0D0D("usubBorrow(0D0D0D");
 constexpr const ImmutableString usubBorrow_1D1D1D("usubBorrow(1D1D1D");
 constexpr const ImmutableString usubBorrow_2D2D2D("usubBorrow(2D2D2D");
 constexpr const ImmutableString usubBorrow_3D3D3D("usubBorrow(3D3D3D");
 constexpr const ImmutableString yuv_2_rgb("yuv_2_rgb");
-constexpr const ImmutableString yuv_2_rgb_2B0G("yuv_2_rgb(2B0G");
+constexpr const ImmutableString yuv_2_rgb_("yuv_2_rgb(");
 
 }  // namespace BuiltInName
 
@@ -11932,7 +11509,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x00a05f04u:
             {
-                if (name == BuiltInName::imageLoad_0g2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0g2C;
                 }
@@ -11948,7 +11525,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0296d786u:
             {
-                if (name == BuiltInName::findMSB_3C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_3C;
                 }
@@ -11964,7 +11541,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x032be593u:
             {
-                if (name == BuiltInName::bitCount_2D)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_2D;
                 }
@@ -11980,7 +11557,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0596dc3fu:
             {
-                if (name == BuiltInName::findMSB_3D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_3D;
                 }
@@ -11988,7 +11565,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x082bed72u:
             {
-                if (name == BuiltInName::bitCount_2C)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_2C;
                 }
@@ -12012,7 +11589,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0b8d8d0eu:
             {
-                if (name == BuiltInName::atomicCounter_0F)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::atomicCounter_))
                 {
                     return &BuiltInFunction::kFunction_atomicCounter_0F;
                 }
@@ -12020,7 +11597,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0f0c6701u:
             {
-                if (name == BuiltInName::bitfieldReverse_3D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_3D;
                 }
@@ -12028,7 +11605,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0f61635eu:
             {
-                if (name == BuiltInName::textureGather_0P1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0P1B;
                 }
@@ -12052,7 +11629,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x100c6894u:
             {
-                if (name == BuiltInName::bitfieldReverse_3C)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_3C;
                 }
@@ -12068,7 +11645,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x11253fd8u:
             {
-                if (name == BuiltInName::bitCount_1D)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_1D;
                 }
@@ -12076,7 +11653,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x11c8ccddu:
             {
-                if (name == BuiltInName::imageLoad_0h2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0h2C;
                 }
@@ -12092,7 +11669,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x124f3157u:
             {
-                if (name == BuiltInName::ldexp_1B1C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::ldexp_))
                 {
                     return &BuiltInFunction::kFunction_ldexp_1B1C;
                 }
@@ -12100,7 +11677,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x129034f1u:
             {
-                if (name == BuiltInName::findMSB_0C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_0C;
                 }
@@ -12108,7 +11685,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x13903684u:
             {
-                if (name == BuiltInName::findMSB_0D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_0D;
                 }
@@ -12116,7 +11693,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x16f120efu:
             {
-                if (name == BuiltInName::atomicXor_0C0C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicXor_))
                 {
                     return &BuiltInFunction::kFunction_atomicXor_0C0C;
                 }
@@ -12124,7 +11701,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x174429d9u:
             {
-                if (name == BuiltInName::atomicAdd_0C0C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicAdd_))
                 {
                     return &BuiltInFunction::kFunction_atomicAdd_0C0C;
                 }
@@ -12132,7 +11709,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x17aa3bbfu:
             {
-                if (name == BuiltInName::frexp_2B2C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::frexp_))
                 {
                     return &BuiltInFunction::kFunction_frexp_2B2C;
                 }
@@ -12140,7 +11717,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x181a7211u:
             {
-                if (name == BuiltInName::textureGather_0U1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0U1B;
                 }
@@ -12148,7 +11725,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x18254addu:
             {
-                if (name == BuiltInName::bitCount_1C)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_1C;
                 }
@@ -12188,7 +11765,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x243de78bu:
             {
-                if (name == BuiltInName::imageLoad_0n2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0n2C;
                 }
@@ -12220,7 +11797,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x28a31a5fu:
             {
-                if (name == BuiltInName::imageLoad_0j2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0j2C;
                 }
@@ -12228,7 +11805,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2bceb1c6u:
             {
-                if (name == BuiltInName::unpackSnorm4x8_0D)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::unpackSnorm4x8_))
                 {
                     return &BuiltInFunction::kFunction_unpackSnorm4x8_0D;
                 }
@@ -12276,7 +11853,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2f35a524u:
             {
-                if (name == BuiltInName::atomicMin_0C0C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicMin_))
                 {
                     return &BuiltInFunction::kFunction_atomicMin_0C0C;
                 }
@@ -12292,7 +11869,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3292a5e8u:
             {
-                if (name == BuiltInName::findMSB_1C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_1C;
                 }
@@ -12300,7 +11877,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x32d4301fu:
             {
-                if (name == BuiltInName::atomicExchange_0D0D)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::atomicExchange_))
                 {
                     return &BuiltInFunction::kFunction_atomicExchange_0D0D;
                 }
@@ -12340,7 +11917,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3727ba41u:
             {
-                if (name == BuiltInName::bitCount_0D)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_0D;
                 }
@@ -12356,7 +11933,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x380ee623u:
             {
-                if (name == BuiltInName::bitfieldReverse_0C)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_0C;
                 }
@@ -12364,7 +11941,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3827bbd4u:
             {
-                if (name == BuiltInName::bitCount_0C)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_0C;
                 }
@@ -12388,7 +11965,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3992b0edu:
             {
-                if (name == BuiltInName::findMSB_1D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_1D;
                 }
@@ -12396,7 +11973,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3d0eee02u:
             {
-                if (name == BuiltInName::bitfieldReverse_0D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_0D;
                 }
@@ -12436,7 +12013,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x449a297fu:
             {
-                if (name == BuiltInName::atomicOr_0D0D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::atomicOr_))
                 {
                     return &BuiltInFunction::kFunction_atomicOr_0D0D;
                 }
@@ -12452,7 +12029,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x48923c61u:
             {
-                if (name == BuiltInName::atomicAdd_0D0D)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicAdd_))
                 {
                     return &BuiltInFunction::kFunction_atomicAdd_0D0D;
                 }
@@ -12516,7 +12093,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x573d1826u:
             {
-                if (name == BuiltInName::textureGather_0H1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0H1B;
                 }
@@ -12524,7 +12101,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x57b9431bu:
             {
-                if (name == BuiltInName::ldexp_0B0C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::ldexp_))
                 {
                     return &BuiltInFunction::kFunction_ldexp_0B0C;
                 }
@@ -12556,7 +12133,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5e97fd5au:
             {
-                if (name == BuiltInName::textureGather_0a2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0a2B;
                 }
@@ -12564,7 +12141,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x602a3963u:
             {
-                if (name == BuiltInName::bitCount_3C)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_3C;
                 }
@@ -12572,7 +12149,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x62f2ce12u:
             {
-                if (name == BuiltInName::imageLoad_0m2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0m2C;
                 }
@@ -12580,7 +12157,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x652a4142u:
             {
-                if (name == BuiltInName::bitCount_3D)
+                if (name.length() == 11 && name.beginsWith(BuiltInName::bitCount_))
                 {
                     return &BuiltInFunction::kFunction_bitCount_3D;
                 }
@@ -12588,7 +12165,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x68f37977u:
             {
-                if (name == BuiltInName::atomicExchange_0C0C)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::atomicExchange_))
                 {
                     return &BuiltInFunction::kFunction_atomicExchange_0C0C;
                 }
@@ -12612,7 +12189,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x6c195e87u:
             {
-                if (name == BuiltInName::imageLoad_0c1C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0c1C;
                 }
@@ -12628,7 +12205,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x6d7cd09au:
             {
-                if (name == BuiltInName::packSnorm4x8_3B)
+                if (name.length() == 15 && name.beginsWith(BuiltInName::packSnorm4x8_))
                 {
                     return &BuiltInFunction::kFunction_packSnorm4x8_3B;
                 }
@@ -12644,7 +12221,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x753e7136u:
             {
-                if (name == BuiltInName::imageLoad_0d1C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0d1C;
                 }
@@ -12660,7 +12237,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x77ff0931u:
             {
-                if (name == BuiltInName::textureGather_0X2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0X2B;
                 }
@@ -12668,7 +12245,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x797c3e57u:
             {
-                if (name == BuiltInName::atomicOr_0C0C)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::atomicOr_))
                 {
                     return &BuiltInFunction::kFunction_atomicOr_0C0C;
                 }
@@ -12676,7 +12253,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7a93e532u:
             {
-                if (name == BuiltInName::atomicMax_0D0D)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicMax_))
                 {
                     return &BuiltInFunction::kFunction_atomicMax_0D0D;
                 }
@@ -12684,7 +12261,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7bff68f8u:
             {
-                if (name == BuiltInName::textureGather_0W2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0W2B;
                 }
@@ -12701,7 +12278,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7dbee433u:
             {
-                if (name == BuiltInName::frexp_3B3C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::frexp_))
                 {
                     return &BuiltInFunction::kFunction_frexp_3B3C;
                 }
@@ -12709,7 +12286,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7de6c91cu:
             {
-                if (name == BuiltInName::atomicMin_0D0D)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicMin_))
                 {
                     return &BuiltInFunction::kFunction_atomicMin_0D0D;
                 }
@@ -12717,7 +12294,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7e0ed3ccu:
             {
-                if (name == BuiltInName::unpackUnorm4x8_0D)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::unpackUnorm4x8_))
                 {
                     return &BuiltInFunction::kFunction_unpackUnorm4x8_0D;
                 }
@@ -12733,7 +12310,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x80649bccu:
             {
-                if (name == BuiltInName::textureGather_0S2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0S2B;
                 }
@@ -12757,7 +12334,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x82b86afcu:
             {
-                if (name == BuiltInName::packUnorm4x8_3B)
+                if (name.length() == 15 && name.beginsWith(BuiltInName::packUnorm4x8_))
                 {
                     return &BuiltInFunction::kFunction_packUnorm4x8_3B;
                 }
@@ -12821,7 +12398,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x889130b4u:
             {
-                if (name == BuiltInName::textureGather_0K2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0K2B;
                 }
@@ -12837,7 +12414,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8d315d40u:
             {
-                if (name == BuiltInName::imageLoad_0k2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0k2C;
                 }
@@ -12853,7 +12430,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8f5a420bu:
             {
-                if (name == BuiltInName::atomicAnd_0C0C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicAnd_))
                 {
                     return &BuiltInFunction::kFunction_atomicAnd_0C0C;
                 }
@@ -12869,7 +12446,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x91ba0efeu:
             {
-                if (name == BuiltInName::findLSB_2C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_2C;
                 }
@@ -12885,7 +12462,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x94ba13b7u:
             {
-                if (name == BuiltInName::findLSB_2D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_2D;
                 }
@@ -12893,7 +12470,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x94d22cc3u:
             {
-                if (name == BuiltInName::ldexp_2B2C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::ldexp_))
                 {
                     return &BuiltInFunction::kFunction_ldexp_2B2C;
                 }
@@ -12925,7 +12502,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x9ad4e7a3u:
             {
-                if (name == BuiltInName::imageLoad_0f2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0f2C;
                 }
@@ -12933,7 +12510,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa1b1d969u:
             {
-                if (name == BuiltInName::findLSB_1C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_1C;
                 }
@@ -12941,7 +12518,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa2b1dafcu:
             {
-                if (name == BuiltInName::findLSB_1D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_1D;
                 }
@@ -12949,7 +12526,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa30b98d3u:
             {
-                if (name == BuiltInName::frexp_1B1C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::frexp_))
                 {
                     return &BuiltInFunction::kFunction_frexp_1B1C;
                 }
@@ -12957,7 +12534,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa7570267u:
             {
-                if (name == BuiltInName::memoryBarrier_)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::memoryBarrier_))
                 {
                     return &BuiltInFunction::kFunction_memoryBarrier_;
                 }
@@ -12965,7 +12542,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa7a68486u:
             {
-                if (name == BuiltInName::imageLoad_0i2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0i2C;
                 }
@@ -12973,7 +12550,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa9d0e5b5u:
             {
-                if (name == BuiltInName::imageLoad_0e1C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0e1C;
                 }
@@ -13029,7 +12606,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb32c4610u:
             {
-                if (name == BuiltInName::imageSize_0c)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0c;
                 }
@@ -13037,7 +12614,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb72c4c5cu:
             {
-                if (name == BuiltInName::imageSize_0g)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0g;
                 }
@@ -13053,7 +12630,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb82c4defu:
             {
-                if (name == BuiltInName::imageSize_0f)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0f;
                 }
@@ -13061,7 +12638,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb92c4f82u:
             {
-                if (name == BuiltInName::imageSize_0e)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0e;
                 }
@@ -13069,7 +12646,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xba2c5115u:
             {
-                if (name == BuiltInName::imageSize_0d)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0d;
                 }
@@ -13085,7 +12662,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbb2c52a8u:
             {
-                if (name == BuiltInName::imageSize_0k)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0k;
                 }
@@ -13101,7 +12678,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbc2c543bu:
             {
-                if (name == BuiltInName::imageSize_0j)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0j;
                 }
@@ -13125,7 +12702,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbd2c55ceu:
             {
-                if (name == BuiltInName::imageSize_0i)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0i;
                 }
@@ -13133,7 +12710,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbe2c5761u:
             {
-                if (name == BuiltInName::imageSize_0h)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0h;
                 }
@@ -13149,7 +12726,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc02c5a87u:
             {
-                if (name == BuiltInName::imageSize_0n)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0n;
                 }
@@ -13165,7 +12742,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc12c5c1au:
             {
-                if (name == BuiltInName::imageSize_0m)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0m;
                 }
@@ -13173,7 +12750,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc1b44a60u:
             {
-                if (name == BuiltInName::findLSB_0C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_0C;
                 }
@@ -13181,7 +12758,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc22c5dadu:
             {
-                if (name == BuiltInName::imageSize_0l)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::imageSize_))
                 {
                     return &BuiltInFunction::kFunction_imageSize_0l;
                 }
@@ -13197,7 +12774,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc3dadff4u:
             {
-                if (name == BuiltInName::textureGather_0Z1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0Z1B;
                 }
@@ -13213,7 +12790,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc8b45565u:
             {
-                if (name == BuiltInName::findLSB_0D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_0D;
                 }
@@ -13221,7 +12798,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc90f20b3u:
             {
-                if (name == BuiltInName::atomicAnd_0D0D)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicAnd_))
                 {
                     return &BuiltInFunction::kFunction_atomicAnd_0D0D;
                 }
@@ -13237,7 +12814,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xcd7ff8a6u:
             {
-                if (name == BuiltInName::memoryBarrierImage_)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::memoryBarrierImage_))
                 {
                     return &BuiltInFunction::kFunction_memoryBarrierImage_;
                 }
@@ -13245,7 +12822,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xce50b7e9u:
             {
-                if (name == BuiltInName::imageLoad_0l2C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::imageLoad_))
                 {
                     return &BuiltInFunction::kFunction_imageLoad_0l2C;
                 }
@@ -13285,7 +12862,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd794553eu:
             {
-                if (name == BuiltInName::findMSB_2D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_2D;
                 }
@@ -13293,7 +12870,8 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd8373034u:
             {
-                if (name == BuiltInName::memoryBarrierAtomicCounter_)
+                if (name.length() == 27 &&
+                    name.beginsWith(BuiltInName::memoryBarrierAtomicCounter_))
                 {
                     return &BuiltInFunction::kFunction_memoryBarrierAtomicCounter_;
                 }
@@ -13325,7 +12903,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xda9459f7u:
             {
-                if (name == BuiltInName::findMSB_2C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findMSB_))
                 {
                     return &BuiltInFunction::kFunction_findMSB_2C;
                 }
@@ -13333,7 +12911,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdb122553u:
             {
-                if (name == BuiltInName::bitfieldReverse_1D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_1D;
                 }
@@ -13341,7 +12919,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdc0090e3u:
             {
-                if (name == BuiltInName::textureGather_0b2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0b2B;
                 }
@@ -13349,7 +12927,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe0122d32u:
             {
-                if (name == BuiltInName::bitfieldReverse_1C)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_1C;
                 }
@@ -13357,7 +12935,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe0d1d797u:
             {
-                if (name == BuiltInName::atomicXor_0D0D)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicXor_))
                 {
                     return &BuiltInFunction::kFunction_atomicXor_0D0D;
                 }
@@ -13397,7 +12975,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe6b6c336u:
             {
-                if (name == BuiltInName::findLSB_3D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_3D;
                 }
@@ -13405,7 +12983,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe6f2e1d3u:
             {
-                if (name == BuiltInName::textureGather_0R2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0R2B;
                 }
@@ -13413,7 +12991,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe909ec98u:
             {
-                if (name == BuiltInName::bitfieldReverse_2D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_2D;
                 }
@@ -13429,7 +13007,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe9b6c7efu:
             {
-                if (name == BuiltInName::findLSB_3C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::findLSB_))
                 {
                     return &BuiltInFunction::kFunction_findLSB_3C;
                 }
@@ -13461,7 +13039,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf009f79du:
             {
-                if (name == BuiltInName::bitfieldReverse_2C)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::bitfieldReverse_))
                 {
                     return &BuiltInFunction::kFunction_bitfieldReverse_2C;
                 }
@@ -13469,7 +13047,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf05b183bu:
             {
-                if (name == BuiltInName::textureGather_0J2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::textureGather_))
                 {
                     return &BuiltInFunction::kFunction_textureGather_0J2B;
                 }
@@ -13493,7 +13071,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf0f5289du:
             {
-                if (name == BuiltInName::atomicCounterIncrement_0F)
+                if (name.length() == 25 && name.beginsWith(BuiltInName::atomicCounterIncrement_))
                 {
                     return &BuiltInFunction::kFunction_atomicCounterIncrement_0F;
                 }
@@ -13501,7 +13079,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf35a12fau:
             {
-                if (name == BuiltInName::atomicMax_0C0C)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::atomicMax_))
                 {
                     return &BuiltInFunction::kFunction_atomicMax_0C0C;
                 }
@@ -13509,7 +13087,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf3de0717u:
             {
-                if (name == BuiltInName::frexp_0B0C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::frexp_))
                 {
                     return &BuiltInFunction::kFunction_frexp_0B0C;
                 }
@@ -13525,7 +13103,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf5adf6d1u:
             {
-                if (name == BuiltInName::atomicCounterDecrement_0F)
+                if (name.length() == 25 && name.beginsWith(BuiltInName::atomicCounterDecrement_))
                 {
                     return &BuiltInFunction::kFunction_atomicCounterDecrement_0F;
                 }
@@ -13557,7 +13135,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xfae6d537u:
             {
-                if (name == BuiltInName::ldexp_3B3C)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::ldexp_))
                 {
                     return &BuiltInFunction::kFunction_ldexp_3B3C;
                 }
@@ -13565,7 +13143,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xff425859u:
             {
-                if (name == BuiltInName::memoryBarrierBuffer_)
+                if (name.length() == 20 && name.beginsWith(BuiltInName::memoryBarrierBuffer_))
                 {
                     return &BuiltInFunction::kFunction_memoryBarrierBuffer_;
                 }
@@ -13586,7 +13164,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x34af0318u:
                 {
-                    if (name == BuiltInName::barrier_)
+                    if (name.length() == 8 && name.beginsWith(BuiltInName::barrier_))
                     {
                         return &BuiltInFunction::kFunction_barrier_;
                     }
@@ -13626,7 +13204,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x9a984c24u:
                 {
-                    if (name == BuiltInName::memoryBarrierShared_)
+                    if (name.length() == 20 && name.beginsWith(BuiltInName::memoryBarrierShared_))
                     {
                         return &BuiltInFunction::kFunction_memoryBarrierShared_;
                     }
@@ -13642,7 +13220,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xdf09d132u:
                 {
-                    if (name == BuiltInName::groupMemoryBarrier_)
+                    if (name.length() == 19 && name.beginsWith(BuiltInName::groupMemoryBarrier_))
                     {
                         return &BuiltInFunction::kFunction_groupMemoryBarrier_;
                     }
@@ -13680,7 +13258,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xab932950u:
                 {
-                    if (name == BuiltInName::EmitVertex_)
+                    if (name.length() == 11 && name.beginsWith(BuiltInName::EmitVertex_))
                     {
                         return &BuiltInFunction::kFunction_EmitVertex_;
                     }
@@ -13704,7 +13282,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xfa01fdedu:
                 {
-                    if (name == BuiltInName::EndPrimitive_)
+                    if (name.length() == 13 && name.beginsWith(BuiltInName::EndPrimitive_))
                     {
                         return &BuiltInFunction::kFunction_EndPrimitive_;
                     }
@@ -13757,7 +13335,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x013cb578u:
             {
-                if (name == BuiltInName::roundEven_3B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::roundEven_))
                 {
                     return &BuiltInFunction::kFunction_roundEven_3B;
                 }
@@ -13781,7 +13359,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x01cd0981u:
             {
-                if (name == BuiltInName::modf_3B3B)
+                if (name.length() == 9 && name.beginsWith(BuiltInName::modf_))
                 {
                     return &BuiltInFunction::kFunction_modf_3B3B;
                 }
@@ -13797,7 +13375,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0246537au:
             {
-                if (name == BuiltInName::asinh_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::asinh_))
                 {
                     return &BuiltInFunction::kFunction_asinh_2B;
                 }
@@ -13805,7 +13383,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x039cfeb9u:
             {
-                if (name == BuiltInName::tanh_3B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::tanh_))
                 {
                     return &BuiltInFunction::kFunction_tanh_3B;
                 }
@@ -13813,7 +13391,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x04a657b6u:
             {
-                if (name == BuiltInName::floatBitsToUint_0B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::floatBitsToUint_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToUint_0B;
                 }
@@ -13821,7 +13399,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x04cd89bbu:
             {
-                if (name == BuiltInName::transpose_AB)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_AB;
                 }
@@ -13829,7 +13407,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x05fa8e2fu:
             {
-                if (name == BuiltInName::textureProj_0U3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0U3B;
                 }
@@ -13837,7 +13415,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0671c30au:
             {
-                if (name == BuiltInName::inverse_5B)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::inverse_))
                 {
                     return &BuiltInFunction::kFunction_inverse_5B;
                 }
@@ -13861,7 +13439,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x077c06e5u:
             {
-                if (name == BuiltInName::textureSize_0I0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0I0C;
                 }
@@ -13893,7 +13471,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0b283d1du:
             {
-                if (name == BuiltInName::texture_0S2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0S2B;
                 }
@@ -13901,7 +13479,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0b5bd931u:
             {
-                if (name == BuiltInName::lessThan_3D3D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
                 {
                     return &BuiltInFunction::kFunction_lessThan_3D3D;
                 }
@@ -13909,7 +13487,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0be139b9u:
             {
-                if (name == BuiltInName::textureSize_0M0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0M0C;
                 }
@@ -13917,7 +13495,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0c15d48au:
             {
-                if (name == BuiltInName::intBitsToFloat_2C)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::intBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_intBitsToFloat_2C;
                 }
@@ -13925,7 +13503,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0c26b204u:
             {
-                if (name == BuiltInName::outerProduct_2B3B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_2B3B;
                 }
@@ -13933,7 +13511,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0c3745dau:
             {
-                if (name == BuiltInName::isnan_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isnan_))
                 {
                     return &BuiltInFunction::kFunction_isnan_2B;
                 }
@@ -13941,7 +13519,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0c793f9bu:
             {
-                if (name == BuiltInName::round_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::round_))
                 {
                     return &BuiltInFunction::kFunction_round_0B;
                 }
@@ -13949,7 +13527,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0d1f9db8u:
             {
-                if (name == BuiltInName::textureProj_0P3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0P3B;
                 }
@@ -13965,7 +13543,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0f7d6756u:
             {
-                if (name == BuiltInName::inverse_AB)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::inverse_))
                 {
                     return &BuiltInFunction::kFunction_inverse_AB;
                 }
@@ -13973,7 +13551,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0f88eaa3u:
             {
-                if (name == BuiltInName::matrixCompMult_9B9B)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_9B9B;
                 }
@@ -13981,7 +13559,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x0faba203u:
             {
-                if (name == BuiltInName::floatBitsToInt_2B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::floatBitsToInt_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToInt_2B;
                 }
@@ -13997,7 +13575,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x10769e08u:
             {
-                if (name == BuiltInName::abs_0C)
+                if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
                 {
                     return &BuiltInFunction::kFunction_abs_0C;
                 }
@@ -14005,7 +13583,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x119658feu:
             {
-                if (name == BuiltInName::tanh_0B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::tanh_))
                 {
                     return &BuiltInFunction::kFunction_tanh_0B;
                 }
@@ -14021,7 +13599,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x12fad71du:
             {
-                if (name == BuiltInName::outerProduct_1B1B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_1B1B;
                 }
@@ -14037,7 +13615,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x13bfb65fu:
             {
-                if (name == BuiltInName::min_2D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_2D0D;
                 }
@@ -14053,7 +13631,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x154b0321u:
             {
-                if (name == BuiltInName::textureSize_0U0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0U0C;
                 }
@@ -14093,7 +13671,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x196baf10u:
             {
-                if (name == BuiltInName::outerProduct_3B2B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_3B2B;
                 }
@@ -14101,7 +13679,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x198ec035u:
             {
-                if (name == BuiltInName::inverse_FB)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::inverse_))
                 {
                     return &BuiltInFunction::kFunction_inverse_FB;
                 }
@@ -14141,7 +13719,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x1c0f31f5u:
             {
-                if (name == BuiltInName::intBitsToFloat_1C)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::intBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_intBitsToFloat_1C;
                 }
@@ -14157,7 +13735,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x1f00492au:
             {
-                if (name == BuiltInName::max_1C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_1C0C;
                 }
@@ -14173,7 +13751,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x20f43162u:
             {
-                if (name == BuiltInName::outerProduct_1B2B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_1B2B;
                 }
@@ -14205,7 +13783,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2448c797u:
             {
-                if (name == BuiltInName::asinh_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::asinh_))
                 {
                     return &BuiltInFunction::kFunction_asinh_3B;
                 }
@@ -14213,7 +13791,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x25704cc5u:
             {
-                if (name == BuiltInName::sinh_2B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sinh_))
                 {
                     return &BuiltInFunction::kFunction_sinh_2B;
                 }
@@ -14221,7 +13799,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x25876e15u:
             {
-                if (name == BuiltInName::texture_0K2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0K2B;
                 }
@@ -14229,7 +13807,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2620dd52u:
             {
-                if (name == BuiltInName::greaterThan_3D3D)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
                 {
                     return &BuiltInFunction::kFunction_greaterThan_3D3D;
                 }
@@ -14237,7 +13815,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x267a1e16u:
             {
-                if (name == BuiltInName::greaterThanEqual_2D2D)
+                if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_greaterThanEqual_2D2D;
                 }
@@ -14245,7 +13823,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x26c07245u:
             {
-                if (name == BuiltInName::trunc_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::trunc_))
                 {
                     return &BuiltInFunction::kFunction_trunc_0B;
                 }
@@ -14269,7 +13847,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2b3f362du:
             {
-                if (name == BuiltInName::roundEven_2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::roundEven_))
                 {
                     return &BuiltInFunction::kFunction_roundEven_2B;
                 }
@@ -14277,7 +13855,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2cbb3831u:
             {
-                if (name == BuiltInName::lessThan_2D2D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
                 {
                     return &BuiltInFunction::kFunction_lessThan_2D2D;
                 }
@@ -14293,7 +13871,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2d7ebf02u:
             {
-                if (name == BuiltInName::greaterThan_1D1D)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
                 {
                     return &BuiltInFunction::kFunction_greaterThan_1D1D;
                 }
@@ -14301,7 +13879,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2db85505u:
             {
-                if (name == BuiltInName::textureProj_0H2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0H2B;
                 }
@@ -14325,7 +13903,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x327bba04u:
             {
-                if (name == BuiltInName::round_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::round_))
                 {
                     return &BuiltInFunction::kFunction_round_3B;
                 }
@@ -14349,7 +13927,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3368140au:
             {
-                if (name == BuiltInName::sinh_1B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sinh_))
                 {
                     return &BuiltInFunction::kFunction_sinh_1B;
                 }
@@ -14357,7 +13935,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3398cd1bu:
             {
-                if (name == BuiltInName::tanh_1B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::tanh_))
                 {
                     return &BuiltInFunction::kFunction_tanh_1B;
                 }
@@ -14373,7 +13951,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x346dec93u:
             {
-                if (name == BuiltInName::matrixCompMult_7B7B)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_7B7B;
                 }
@@ -14389,7 +13967,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x34b8398au:
             {
-                if (name == BuiltInName::trunc_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::trunc_))
                 {
                     return &BuiltInFunction::kFunction_trunc_3B;
                 }
@@ -14397,7 +13975,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x35ae1c6cu:
             {
-                if (name == BuiltInName::floatBitsToInt_1B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::floatBitsToInt_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToInt_1B;
                 }
@@ -14405,7 +13983,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x37221e6du:
             {
-                if (name == BuiltInName::textureProj_0P2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0P2B;
                 }
@@ -14413,7 +13991,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x38791b97u:
             {
-                if (name == BuiltInName::abs_3C)
+                if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
                 {
                     return &BuiltInFunction::kFunction_abs_3C;
                 }
@@ -14429,7 +14007,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x393c36c2u:
             {
-                if (name == BuiltInName::texture_0V2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0V2B;
                 }
@@ -14445,7 +14023,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3ba7cb8au:
             {
-                if (name == BuiltInName::greaterThan_2D2D)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
                 {
                     return &BuiltInFunction::kFunction_greaterThan_2D2D;
                 }
@@ -14461,7 +14039,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3c11a2ecu:
             {
-                if (name == BuiltInName::intBitsToFloat_0C)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::intBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_intBitsToFloat_0C;
                 }
@@ -14469,7 +14047,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3da16996u:
             {
-                if (name == BuiltInName::texture_0Z2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0Z2B;
                 }
@@ -14485,7 +14063,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3e30e0d4u:
             {
-                if (name == BuiltInName::textureSize_0J0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0J0C;
                 }
@@ -14493,7 +14071,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x3f5e397eu:
             {
-                if (name == BuiltInName::textureProj_0V3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0V3B;
                 }
@@ -14509,7 +14087,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x405da95du:
             {
-                if (name == BuiltInName::min_0D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_0D0D;
                 }
@@ -14533,7 +14111,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x42f6a57fu:
             {
-                if (name == BuiltInName::outerProduct_1B3B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_1B3B;
                 }
@@ -14589,7 +14167,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x47bb8b0du:
             {
-                if (name == BuiltInName::min_2D2D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_2D2D;
                 }
@@ -14597,7 +14175,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4869dbd3u:
             {
-                if (name == BuiltInName::lessThanEqual_2D2D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_lessThanEqual_2D2D;
                 }
@@ -14605,7 +14183,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x499e99d6u:
             {
-                if (name == BuiltInName::min_3C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_3C0C;
                 }
@@ -14613,7 +14191,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x49e092b7u:
             {
-                if (name == BuiltInName::min_2C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_2C0C;
                 }
@@ -14629,7 +14207,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4b027db7u:
             {
-                if (name == BuiltInName::textureSize_0S0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0S0C;
                 }
@@ -14637,7 +14215,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4b343265u:
             {
-                if (name == BuiltInName::equal_2D2D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
                 {
                     return &BuiltInFunction::kFunction_equal_2D2D;
                 }
@@ -14645,7 +14223,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4b60ca6fu:
             {
-                if (name == BuiltInName::texture_0I2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0I2B;
                 }
@@ -14661,7 +14239,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4bfe4a10u:
             {
-                if (name == BuiltInName::textureSize_0V0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0V0C;
                 }
@@ -14669,7 +14247,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x4cc044ccu:
             {
-                if (name == BuiltInName::isinf_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isinf_))
                 {
                     return &BuiltInFunction::kFunction_isinf_2B;
                 }
@@ -14693,7 +14271,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x505a7783u:
             {
-                if (name == BuiltInName::max_2D2D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_2D2D;
                 }
@@ -14701,7 +14279,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x515a7a59u:
             {
-                if (name == BuiltInName::modf_1B1B)
+                if (name.length() == 9 && name.beginsWith(BuiltInName::modf_))
                 {
                     return &BuiltInFunction::kFunction_modf_1B1B;
                 }
@@ -14709,7 +14287,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x528b682cu:
             {
-                if (name == BuiltInName::textureSize_0b0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0b0C;
                 }
@@ -14717,7 +14295,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5306a6a9u:
             {
-                if (name == BuiltInName::max_2C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_2C0C;
                 }
@@ -14725,7 +14303,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x556a8827u:
             {
-                if (name == BuiltInName::sinh_0B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sinh_))
                 {
                     return &BuiltInFunction::kFunction_sinh_0B;
                 }
@@ -14741,7 +14319,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x56baada7u:
             {
-                if (name == BuiltInName::trunc_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::trunc_))
                 {
                     return &BuiltInFunction::kFunction_trunc_2B;
                 }
@@ -14773,7 +14351,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x593a41bbu:
             {
-                if (name == BuiltInName::max_3D3D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_3D3D;
                 }
@@ -14781,7 +14359,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x593a5ce2u:
             {
-                if (name == BuiltInName::notEqual_1D1D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
                 {
                     return &BuiltInFunction::kFunction_notEqual_1D1D;
                 }
@@ -14789,7 +14367,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5997f741u:
             {
-                if (name == BuiltInName::min_3C3C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_3C3C;
                 }
@@ -14805,7 +14383,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x599b4784u:
             {
-                if (name == BuiltInName::tanh_2B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::tanh_))
                 {
                     return &BuiltInFunction::kFunction_tanh_2B;
                 }
@@ -14837,7 +14415,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5b723064u:
             {
-                if (name == BuiltInName::sign_1C)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
                 {
                     return &BuiltInFunction::kFunction_sign_1C;
                 }
@@ -14845,7 +14423,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5bcc4eaau:
             {
-                if (name == BuiltInName::textureProj_0M2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0M2B;
                 }
@@ -14861,7 +14439,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5c02c345u:
             {
-                if (name == BuiltInName::uintBitsToFloat_3D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::uintBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_uintBitsToFloat_3D;
                 }
@@ -14877,7 +14455,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5fb09d21u:
             {
-                if (name == BuiltInName::floatBitsToInt_0B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::floatBitsToInt_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToInt_0B;
                 }
@@ -14885,7 +14463,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x61168ef7u:
             {
-                if (name == BuiltInName::atanh_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::atanh_))
                 {
                     return &BuiltInFunction::kFunction_atanh_2B;
                 }
@@ -14901,7 +14479,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x61bd085du:
             {
-                if (name == BuiltInName::min_3D3D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_3D3D;
                 }
@@ -14925,7 +14503,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x6414207bu:
             {
-                if (name == BuiltInName::intBitsToFloat_3C)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::intBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_intBitsToFloat_3C;
                 }
@@ -14965,7 +14543,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x68fefbb2u:
             {
-                if (name == BuiltInName::cosh_0B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::cosh_))
                 {
                     return &BuiltInFunction::kFunction_cosh_0B;
                 }
@@ -14973,7 +14551,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x6e70010cu:
             {
-                if (name == BuiltInName::textureSize_0Y)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0Y;
                 }
@@ -14981,7 +14559,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x6f92d00cu:
             {
-                if (name == BuiltInName::min_1D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_1D0D;
                 }
@@ -15005,7 +14583,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x71ef80d7u:
             {
-                if (name == BuiltInName::texture_0Q2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0Q2B;
                 }
@@ -15021,7 +14599,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x726d9e79u:
             {
-                if (name == BuiltInName::textureProj_0L2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0L2B;
                 }
@@ -15029,7 +14607,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x737008ebu:
             {
-                if (name == BuiltInName::textureSize_0T)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0T;
                 }
@@ -15053,7 +14631,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x75c877acu:
             {
-                if (name == BuiltInName::texture_0M1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0M1B;
                 }
@@ -15061,7 +14639,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x76c2c581u:
             {
-                if (name == BuiltInName::isinf_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isinf_))
                 {
                     return &BuiltInFunction::kFunction_isinf_3B;
                 }
@@ -15101,7 +14679,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7a053116u:
             {
-                if (name == BuiltInName::uintBitsToFloat_0D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::uintBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_uintBitsToFloat_0D;
                 }
@@ -15117,7 +14695,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7b6d0290u:
             {
-                if (name == BuiltInName::sinh_3B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sinh_))
                 {
                     return &BuiltInFunction::kFunction_sinh_3B;
                 }
@@ -15125,7 +14703,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7c291893u:
             {
-                if (name == BuiltInName::yuv_2_rgb_2B0G)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::yuv_2_rgb_))
                 {
                     return &BuiltInFunction::kFunction_yuv_2_rgb_2B0G;
                 }
@@ -15141,7 +14719,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7c701716u:
             {
-                if (name == BuiltInName::textureSize_0O)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0O;
                 }
@@ -15149,7 +14727,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7cbd2810u:
             {
-                if (name == BuiltInName::trunc_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::trunc_))
                 {
                     return &BuiltInFunction::kFunction_trunc_1B;
                 }
@@ -15165,7 +14743,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7dcec2c7u:
             {
-                if (name == BuiltInName::textureProj_0M3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0M3B;
                 }
@@ -15173,7 +14751,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7f4a0e15u:
             {
-                if (name == BuiltInName::modf_0B0B)
+                if (name.length() == 9 && name.beginsWith(BuiltInName::modf_))
                 {
                     return &BuiltInFunction::kFunction_modf_0B0B;
                 }
@@ -15181,7 +14759,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x7fbf762eu:
             {
-                if (name == BuiltInName::min_3D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_3D0D;
                 }
@@ -15205,7 +14783,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x80de719du:
             {
-                if (name == BuiltInName::min_1C1C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_1C1C;
                 }
@@ -15213,7 +14791,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x81dadab1u:
             {
-                if (name == BuiltInName::min_2C2C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_2C2C;
                 }
@@ -15221,7 +14799,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8374adf3u:
             {
-                if (name == BuiltInName::sign_2C)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
                 {
                     return &BuiltInFunction::kFunction_sign_2C;
                 }
@@ -15229,7 +14807,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x83b69dd0u:
             {
-                if (name == BuiltInName::textureProj_0H3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0H3B;
                 }
@@ -15237,7 +14815,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8411eff2u:
             {
-                if (name == BuiltInName::textureProj_0Z3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0Z3B;
                 }
@@ -15245,7 +14823,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8454b931u:
             {
-                if (name == BuiltInName::max_2D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_2D0D;
                 }
@@ -15253,7 +14831,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x84bc1fc6u:
             {
-                if (name == BuiltInName::isinf_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isinf_))
                 {
                     return &BuiltInFunction::kFunction_isinf_0B;
                 }
@@ -15261,7 +14839,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x85509e6au:
             {
-                if (name == BuiltInName::textureSize_0H0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0H0C;
                 }
@@ -15269,7 +14847,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x87190960u:
             {
-                if (name == BuiltInName::atanh_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::atanh_))
                 {
                     return &BuiltInFunction::kFunction_atanh_1B;
                 }
@@ -15293,7 +14871,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x89b5d13eu:
             {
-                if (name == BuiltInName::textureSize_0L0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0L0C;
                 }
@@ -15301,7 +14879,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8b016fcfu:
             {
-                if (name == BuiltInName::cosh_1B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::cosh_))
                 {
                     return &BuiltInFunction::kFunction_cosh_1B;
                 }
@@ -15309,7 +14887,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8b97d9fbu:
             {
-                if (name == BuiltInName::texture_0b3B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0b3B;
                 }
@@ -15325,7 +14903,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8e78ffabu:
             {
-                if (name == BuiltInName::textureSize_0W0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0W0C;
                 }
@@ -15333,7 +14911,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8ee6e7c6u:
             {
-                if (name == BuiltInName::texture_0J2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0J2B;
                 }
@@ -15349,7 +14927,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x8f8e3971u:
             {
-                if (name == BuiltInName::texture_0W2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0W2B;
                 }
@@ -15373,7 +14951,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x90b39384u:
             {
-                if (name == BuiltInName::textureSize_0Z0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0Z0C;
                 }
@@ -15381,7 +14959,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x919deb77u:
             {
-                if (name == BuiltInName::max_3C3C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_3C3C;
                 }
@@ -15397,7 +14975,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x938e9938u:
             {
-                if (name == BuiltInName::texture_0X2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0X2B;
                 }
@@ -15405,7 +14983,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x93b01b17u:
             {
-                if (name == BuiltInName::matrixCompMult_6B6B)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_6B6B;
                 }
@@ -15421,7 +14999,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x95954a75u:
             {
-                if (name == BuiltInName::min_1D1D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_1D1D;
                 }
@@ -15445,7 +15023,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x97123500u:
             {
-                if (name == BuiltInName::acosh_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::acosh_))
                 {
                     return &BuiltInFunction::kFunction_acosh_1B;
                 }
@@ -15453,7 +15031,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x987daeb7u:
             {
-                if (name == BuiltInName::matrixCompMult_BBBB)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_BBBB;
                 }
@@ -15477,7 +15055,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x9b0b952fu:
             {
-                if (name == BuiltInName::max_2C2C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_2C2C;
                 }
@@ -15485,7 +15063,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x9cd7735fu:
             {
-                if (name == BuiltInName::transpose_EB)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_EB;
                 }
@@ -15501,7 +15079,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x9e7b5ec8u:
             {
-                if (name == BuiltInName::determinant_FB)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::determinant_))
                 {
                     return &BuiltInFunction::kFunction_determinant_FB;
                 }
@@ -15509,7 +15087,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x9ef04df5u:
             {
-                if (name == BuiltInName::packSnorm2x16_1B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::packSnorm2x16_))
                 {
                     return &BuiltInFunction::kFunction_packSnorm2x16_1B;
                 }
@@ -15533,7 +15111,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa0e0e294u:
             {
-                if (name == BuiltInName::min_1C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_1C0C;
                 }
@@ -15541,7 +15119,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa1c52958u:
             {
-                if (name == BuiltInName::transpose_6B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_6B;
                 }
@@ -15565,7 +15143,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa4fce6e2u:
             {
-                if (name == BuiltInName::max_1D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_1D0D;
                 }
@@ -15589,7 +15167,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa6a99553u:
             {
-                if (name == BuiltInName::floatBitsToUint_1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::floatBitsToUint_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToUint_1B;
                 }
@@ -15597,7 +15175,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa6be93e3u:
             {
-                if (name == BuiltInName::isinf_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isinf_))
                 {
                     return &BuiltInFunction::kFunction_isinf_1B;
                 }
@@ -15613,7 +15191,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa807b817u:
             {
-                if (name == BuiltInName::uintBitsToFloat_1D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::uintBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_uintBitsToFloat_1D;
                 }
@@ -15629,7 +15207,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xaaa9d50bu:
             {
-                if (name == BuiltInName::max_0C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_0C0C;
                 }
@@ -15637,7 +15215,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xaad0cda4u:
             {
-                if (name == BuiltInName::transpose_BB)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_BB;
                 }
@@ -15645,7 +15223,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xab46cb2du:
             {
-                if (name == BuiltInName::unpackSnorm2x16_0D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::unpackSnorm2x16_))
                 {
                     return &BuiltInFunction::kFunction_unpackSnorm2x16_0D;
                 }
@@ -15653,7 +15231,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xab772b82u:
             {
-                if (name == BuiltInName::sign_3C)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
                 {
                     return &BuiltInFunction::kFunction_sign_3C;
                 }
@@ -15677,7 +15255,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xae38f077u:
             {
-                if (name == BuiltInName::isnan_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isnan_))
                 {
                     return &BuiltInFunction::kFunction_isnan_3B;
                 }
@@ -15685,7 +15263,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xae3dea39u:
             {
-                if (name == BuiltInName::lessThan_1D1D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
                 {
                     return &BuiltInFunction::kFunction_lessThan_1D1D;
                 }
@@ -15717,7 +15295,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb103ea38u:
             {
-                if (name == BuiltInName::cosh_2B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::cosh_))
                 {
                     return &BuiltInFunction::kFunction_cosh_2B;
                 }
@@ -15725,7 +15303,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb11b8a15u:
             {
-                if (name == BuiltInName::atanh_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::atanh_))
                 {
                     return &BuiltInFunction::kFunction_atanh_0B;
                 }
@@ -15741,7 +15319,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb3a4f203u:
             {
-                if (name == BuiltInName::transpose_9B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_9B;
                 }
@@ -15749,7 +15327,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb3da1777u:
             {
-                if (name == BuiltInName::rgb_2_yuv_2B0G)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::rgb_2_yuv_))
                 {
                     return &BuiltInFunction::kFunction_rgb_2_yuv_2B0G;
                 }
@@ -15757,7 +15335,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb5ff7f5cu:
             {
-                if (name == BuiltInName::uintBitsToFloat_2D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::uintBitsToFloat_))
                 {
                     return &BuiltInFunction::kFunction_uintBitsToFloat_2D;
                 }
@@ -15765,7 +15343,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb6286939u:
             {
-                if (name == BuiltInName::outerProduct_2B2B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_2B2B;
                 }
@@ -15797,7 +15375,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb7326e16u:
             {
-                if (name == BuiltInName::textureProj_0N3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0N3B;
                 }
@@ -15805,7 +15383,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb91a42d3u:
             {
-                if (name == BuiltInName::textureProj_0I3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0I3B;
                 }
@@ -15813,7 +15391,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb937c6f2u:
             {
-                if (name == BuiltInName::roundEven_1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::roundEven_))
                 {
                     return &BuiltInFunction::kFunction_roundEven_1B;
                 }
@@ -15821,7 +15399,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbb0a6cb5u:
             {
-                if (name == BuiltInName::unpackHalf2x16_0D)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::unpackHalf2x16_))
                 {
                     return &BuiltInFunction::kFunction_unpackHalf2x16_0D;
                 }
@@ -15837,7 +15415,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbb7088edu:
             {
-                if (name == BuiltInName::sign_0C)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
                 {
                     return &BuiltInFunction::kFunction_sign_0C;
                 }
@@ -15845,7 +15423,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbc4bed83u:
             {
-                if (name == BuiltInName::lessThanEqual_1D1D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_lessThanEqual_1D1D;
                 }
@@ -15861,7 +15439,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbdf50df5u:
             {
-                if (name == BuiltInName::min_0C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
                 {
                     return &BuiltInFunction::kFunction_min_0C0C;
                 }
@@ -15877,7 +15455,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbed19cffu:
             {
-                if (name == BuiltInName::texture_0H1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0H1B;
                 }
@@ -15885,7 +15463,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbf14e45au:
             {
-                if (name == BuiltInName::atanh_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::atanh_))
                 {
                     return &BuiltInFunction::kFunction_atanh_3B;
                 }
@@ -15893,7 +15471,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xbfd16903u:
             {
-                if (name == BuiltInName::packHalf2x16_1B)
+                if (name.length() == 15 && name.beginsWith(BuiltInName::packHalf2x16_))
                 {
                     return &BuiltInFunction::kFunction_packHalf2x16_1B;
                 }
@@ -15901,7 +15479,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc011536du:
             {
-                if (name == BuiltInName::equal_1D1D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
                 {
                     return &BuiltInFunction::kFunction_equal_1D1D;
                 }
@@ -15917,7 +15495,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc114b5b5u:
             {
-                if (name == BuiltInName::acosh_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::acosh_))
                 {
                     return &BuiltInFunction::kFunction_acosh_0B;
                 }
@@ -15925,7 +15503,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc1997dcfu:
             {
-                if (name == BuiltInName::textureSize_0K0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0K0C;
                 }
@@ -15933,7 +15511,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc282793bu:
             {
-                if (name == BuiltInName::textureProj_0Q3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0Q3B;
                 }
@@ -15949,7 +15527,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc2d9edc8u:
             {
-                if (name == BuiltInName::transpose_FB)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_FB;
                 }
@@ -15957,7 +15535,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc2ff54b3u:
             {
-                if (name == BuiltInName::max_1D1D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_1D1D;
                 }
@@ -15965,7 +15543,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc336cfd3u:
             {
-                if (name == BuiltInName::texture_0L1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0L1B;
                 }
@@ -15973,7 +15551,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc36ef945u:
             {
-                if (name == BuiltInName::outerProduct_3B3B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_3B3B;
                 }
@@ -15989,7 +15567,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc3be50cau:
             {
-                if (name == BuiltInName::texture_0a3B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0a3B;
                 }
@@ -15997,7 +15575,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc421c37eu:
             {
-                if (name == BuiltInName::outerProduct_2B1B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_2B1B;
                 }
@@ -16005,7 +15583,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc53620b2u:
             {
-                if (name == BuiltInName::notEqual_3D3D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
                 {
                     return &BuiltInFunction::kFunction_notEqual_3D3D;
                 }
@@ -16021,7 +15599,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc5a2d6f5u:
             {
-                if (name == BuiltInName::texture_0N1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0N1B;
                 }
@@ -16037,7 +15615,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc799e0bcu:
             {
-                if (name == BuiltInName::textureSize_0R0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0R0C;
                 }
@@ -16045,7 +15623,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc86a5444u:
             {
-                if (name == BuiltInName::textureProj_0L3B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0L3B;
                 }
@@ -16053,7 +15631,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xca4a7880u:
             {
-                if (name == BuiltInName::asinh_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::asinh_))
                 {
                     return &BuiltInFunction::kFunction_asinh_0B;
                 }
@@ -16077,7 +15655,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xcbc7aa0du:
             {
-                if (name == BuiltInName::transpose_7B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_7B;
                 }
@@ -16101,7 +15679,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xccac0fbcu:
             {
-                if (name == BuiltInName::floatBitsToUint_2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::floatBitsToUint_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToUint_2B;
                 }
@@ -16109,7 +15687,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xcd2de632u:
             {
-                if (name == BuiltInName::textureSize_0P0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0P0C;
                 }
@@ -16117,7 +15695,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xce15eaeau:
             {
-                if (name == BuiltInName::notEqual_2D2D)
+                if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
                 {
                     return &BuiltInFunction::kFunction_notEqual_2D2D;
                 }
@@ -16125,7 +15703,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xcf0e0ffau:
             {
-                if (name == BuiltInName::acosh_3B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::acosh_))
                 {
                     return &BuiltInFunction::kFunction_acosh_3B;
                 }
@@ -16141,7 +15719,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd095b9adu:
             {
-                if (name == BuiltInName::textureSize_0Q0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0Q0C;
                 }
@@ -16149,7 +15727,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd1427cfeu:
             {
-                if (name == BuiltInName::greaterThanEqual_3D3D)
+                if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_greaterThanEqual_3D3D;
                 }
@@ -16157,7 +15735,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd43b6ae0u:
             {
-                if (name == BuiltInName::isnan_0B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isnan_))
                 {
                     return &BuiltInFunction::kFunction_isnan_0B;
                 }
@@ -16173,7 +15751,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd6961c9au:
             {
-                if (name == BuiltInName::textureSize_0X0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0X0C;
                 }
@@ -16181,7 +15759,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd75220b5u:
             {
-                if (name == BuiltInName::equal_3D3D)
+                if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
                 {
                     return &BuiltInFunction::kFunction_equal_3D3D;
                 }
@@ -16189,7 +15767,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd763566fu:
             {
-                if (name == BuiltInName::determinant_5B)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::determinant_))
                 {
                     return &BuiltInFunction::kFunction_determinant_5B;
                 }
@@ -16197,7 +15775,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd7cedc37u:
             {
-                if (name == BuiltInName::matrixCompMult_DBDB)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_DBDB;
                 }
@@ -16213,7 +15791,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd8a05eaeu:
             {
-                if (name == BuiltInName::greaterThanEqual_1D1D)
+                if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_greaterThanEqual_1D1D;
                 }
@@ -16221,7 +15799,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd934e233u:
             {
-                if (name == BuiltInName::textureProj_0N2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0N2B;
                 }
@@ -16237,7 +15815,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdb066aedu:
             {
-                if (name == BuiltInName::cosh_3B)
+                if (name.length() == 7 && name.beginsWith(BuiltInName::cosh_))
                 {
                     return &BuiltInFunction::kFunction_cosh_3B;
                 }
@@ -16245,7 +15823,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdb3a3b0fu:
             {
-                if (name == BuiltInName::roundEven_0B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::roundEven_))
                 {
                     return &BuiltInFunction::kFunction_roundEven_0B;
                 }
@@ -16253,7 +15831,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdb6a1034u:
             {
-                if (name == BuiltInName::texture_0U1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0U1B;
                 }
@@ -16261,7 +15839,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdb880a9du:
             {
-                if (name == BuiltInName::textureSize_0a0C)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureSize_))
                 {
                     return &BuiltInFunction::kFunction_textureSize_0a0C;
                 }
@@ -16269,7 +15847,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdc7d7139u:
             {
-                if (name == BuiltInName::round_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::round_))
                 {
                     return &BuiltInFunction::kFunction_round_2B;
                 }
@@ -16301,7 +15879,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xdf2d350bu:
             {
-                if (name == BuiltInName::lessThanEqual_3D3D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
                 {
                     return &BuiltInFunction::kFunction_lessThanEqual_3D3D;
                 }
@@ -16325,7 +15903,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe06efabbu:
             {
-                if (name == BuiltInName::determinant_AB)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::determinant_))
                 {
                     return &BuiltInFunction::kFunction_determinant_AB;
                 }
@@ -16333,7 +15911,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe07acfa6u:
             {
-                if (name == BuiltInName::abs_2C)
+                if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
                 {
                     return &BuiltInFunction::kFunction_abs_2C;
                 }
@@ -16349,7 +15927,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe12111f7u:
             {
-                if (name == BuiltInName::unpackUnorm2x16_0D)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::unpackUnorm2x16_))
                 {
                     return &BuiltInFunction::kFunction_unpackUnorm2x16_0D;
                 }
@@ -16365,7 +15943,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe3f81a12u:
             {
-                if (name == BuiltInName::textureProj_0U2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureProj_))
                 {
                     return &BuiltInFunction::kFunction_textureProj_0U2B;
                 }
@@ -16373,7 +15951,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe4231ee7u:
             {
-                if (name == BuiltInName::texture_0P1B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0P1B;
                 }
@@ -16381,7 +15959,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe45eb3b3u:
             {
-                if (name == BuiltInName::max_0D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_0D0D;
                 }
@@ -16397,7 +15975,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe732d280u:
             {
-                if (name == BuiltInName::max_3D0D)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_3D0D;
                 }
@@ -16405,7 +15983,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe73def97u:
             {
-                if (name == BuiltInName::packUnorm2x16_1B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::packUnorm2x16_))
                 {
                     return &BuiltInFunction::kFunction_packUnorm2x16_1B;
                 }
@@ -16421,7 +15999,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe99c3768u:
             {
-                if (name == BuiltInName::max_3C0C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_3C0C;
                 }
@@ -16429,7 +16007,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xea76cb7eu:
             {
-                if (name == BuiltInName::round_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::round_))
                 {
                     return &BuiltInFunction::kFunction_round_1B;
                 }
@@ -16453,7 +16031,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xeda92de6u:
             {
-                if (name == BuiltInName::floatBitsToInt_3B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::floatBitsToInt_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToInt_3B;
                 }
@@ -16485,7 +16063,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf0742d11u:
             {
-                if (name == BuiltInName::abs_1C)
+                if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
                 {
                     return &BuiltInFunction::kFunction_abs_1C;
                 }
@@ -16493,7 +16071,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf1108417u:
             {
-                if (name == BuiltInName::acosh_2B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::acosh_))
                 {
                     return &BuiltInFunction::kFunction_acosh_2B;
                 }
@@ -16501,7 +16079,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf36934a7u:
             {
-                if (name == BuiltInName::outerProduct_3B1B)
+                if (name.length() == 17 && name.beginsWith(BuiltInName::outerProduct_))
                 {
                     return &BuiltInFunction::kFunction_outerProduct_3B1B;
                 }
@@ -16509,7 +16087,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf44cf935u:
             {
-                if (name == BuiltInName::asinh_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::asinh_))
                 {
                     return &BuiltInFunction::kFunction_asinh_1B;
                 }
@@ -16517,7 +16095,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf486ed4eu:
             {
-                if (name == BuiltInName::texture_0R2B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::texture_))
                 {
                     return &BuiltInFunction::kFunction_texture_0R2B;
                 }
@@ -16525,7 +16103,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf4880c75u:
             {
-                if (name == BuiltInName::modf_2B2B)
+                if (name.length() == 9 && name.beginsWith(BuiltInName::modf_))
                 {
                     return &BuiltInFunction::kFunction_modf_2B2B;
                 }
@@ -16541,7 +16119,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf68d511bu:
             {
-                if (name == BuiltInName::matrixCompMult_EBEB)
+                if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
                 {
                     return &BuiltInFunction::kFunction_matrixCompMult_EBEB;
                 }
@@ -16549,7 +16127,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf6ae9071u:
             {
-                if (name == BuiltInName::floatBitsToUint_3B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::floatBitsToUint_))
                 {
                     return &BuiltInFunction::kFunction_floatBitsToUint_3B;
                 }
@@ -16557,7 +16135,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xf6fdcb9bu:
             {
-                if (name == BuiltInName::max_1C1C)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
                 {
                     return &BuiltInFunction::kFunction_max_1C1C;
                 }
@@ -16573,7 +16151,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xfad5c8c2u:
             {
-                if (name == BuiltInName::transpose_DB)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_DB;
                 }
@@ -16597,7 +16175,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xfbc1e56fu:
             {
-                if (name == BuiltInName::transpose_5B)
+                if (name.length() == 12 && name.beginsWith(BuiltInName::transpose_))
                 {
                     return &BuiltInFunction::kFunction_transpose_5B;
                 }
@@ -16621,7 +16199,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xfe3deb95u:
             {
-                if (name == BuiltInName::isnan_1B)
+                if (name.length() == 8 && name.beginsWith(BuiltInName::isnan_))
                 {
                     return &BuiltInFunction::kFunction_isnan_1B;
                 }
@@ -16658,7 +16236,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x04c9f876u:
                 {
-                    if (name == BuiltInName::fwidth_1B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidth_))
                     {
                         return &BuiltInFunction::kFunction_fwidth_1B;
                     }
@@ -16722,7 +16300,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x2a65dfa6u:
                 {
-                    if (name == BuiltInName::dFdy_0B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdy_))
                     {
                         return &BuiltInFunction::kFunction_dFdy_0B;
                     }
@@ -16738,7 +16316,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x30de4eebu:
                 {
-                    if (name == BuiltInName::dFdx_0B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdx_))
                     {
                         return &BuiltInFunction::kFunction_dFdx_0B;
                     }
@@ -16802,7 +16380,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x4c6853c3u:
                 {
-                    if (name == BuiltInName::dFdy_1B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdy_))
                     {
                         return &BuiltInFunction::kFunction_dFdy_1B;
                     }
@@ -16834,7 +16412,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x56e0c954u:
                 {
-                    if (name == BuiltInName::dFdx_3B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdx_))
                     {
                         return &BuiltInFunction::kFunction_dFdx_3B;
                     }
@@ -16874,7 +16452,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x726ace2cu:
                 {
-                    if (name == BuiltInName::dFdy_2B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdy_))
                     {
                         return &BuiltInFunction::kFunction_dFdy_2B;
                     }
@@ -16906,7 +16484,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x80e34a09u:
                 {
-                    if (name == BuiltInName::dFdx_2B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdx_))
                     {
                         return &BuiltInFunction::kFunction_dFdx_2B;
                     }
@@ -16930,7 +16508,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x8edb114eu:
                 {
-                    if (name == BuiltInName::dFdx_1B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdx_))
                     {
                         return &BuiltInFunction::kFunction_dFdx_1B;
                     }
@@ -16938,7 +16516,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x9c6d4ee1u:
                 {
-                    if (name == BuiltInName::dFdy_3B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdy_))
                     {
                         return &BuiltInFunction::kFunction_dFdy_3B;
                     }
@@ -16946,7 +16524,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xa6cba313u:
                 {
-                    if (name == BuiltInName::fwidth_0B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidth_))
                     {
                         return &BuiltInFunction::kFunction_fwidth_0B;
                     }
@@ -17042,7 +16620,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xccce1d7cu:
                 {
-                    if (name == BuiltInName::fwidth_3B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidth_))
                     {
                         return &BuiltInFunction::kFunction_fwidth_3B;
                     }
@@ -17114,7 +16692,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xf6d09e31u:
                 {
-                    if (name == BuiltInName::fwidth_2B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidth_))
                     {
                         return &BuiltInFunction::kFunction_fwidth_2B;
                     }
@@ -17189,7 +16767,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         {
             case 0x05cd2a61u:
             {
-                if (name == BuiltInName::texture2DRect_0N1B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::texture2DRect_))
                 {
                     return &BuiltInFunction::kFunction_texture2DRect_0N1B;
                 }
@@ -17197,7 +16775,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x11ea9d29u:
             {
-                if (name == BuiltInName::textureCube_0J2B)
+                if (name.length() == 16 && name.beginsWith(BuiltInName::textureCube_))
                 {
                     return &BuiltInFunction::kFunction_textureCube_0J2B;
                 }
@@ -17205,7 +16783,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x2c852cb5u:
             {
-                if (name == BuiltInName::texture2D_0H1B)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::texture2D_))
                 {
                     return &BuiltInFunction::kFunction_texture2D_0H1B;
                 }
@@ -17230,7 +16808,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0x5270451fu:
             {
-                if (name == BuiltInName::texture2DProj_0L2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::texture2DProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DProj_0L2B;
                 }
@@ -17274,7 +16852,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xa777e1bau:
             {
-                if (name == BuiltInName::texture2DRectProj_0N3B)
+                if (name.length() == 22 && name.beginsWith(BuiltInName::texture2DRectProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DRectProj_0N3B;
                 }
@@ -17290,7 +16868,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb06d0782u:
             {
-                if (name == BuiltInName::texture2DProj_0L3B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::texture2DProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DProj_0L3B;
                 }
@@ -17298,7 +16876,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xb4d23a56u:
             {
-                if (name == BuiltInName::texture2DProj_0H3B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::texture2DProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DProj_0H3B;
                 }
@@ -17306,7 +16884,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xc97a55d7u:
             {
-                if (name == BuiltInName::texture2DRectProj_0N2B)
+                if (name.length() == 22 && name.beginsWith(BuiltInName::texture2DRectProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DRectProj_0N2B;
                 }
@@ -17314,7 +16892,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xd6d4ae73u:
             {
-                if (name == BuiltInName::texture2DProj_0H2B)
+                if (name.length() == 18 && name.beginsWith(BuiltInName::texture2DProj_))
                 {
                     return &BuiltInFunction::kFunction_texture2DProj_0H2B;
                 }
@@ -17330,7 +16908,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             }
             case 0xe7d17641u:
             {
-                if (name == BuiltInName::texture2D_0L1B)
+                if (name.length() == 14 && name.beginsWith(BuiltInName::texture2D_))
                 {
                     return &BuiltInFunction::kFunction_texture2D_0L1B;
                 }
@@ -17343,7 +16921,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
             {
                 case 0x04c9f876u:
                 {
-                    if (name == BuiltInName::fwidthExt_1B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidthExt_))
                     {
                         return &BuiltInFunction::kFunction_fwidthExt_1B;
                     }
@@ -17359,7 +16937,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x2a65dfa6u:
                 {
-                    if (name == BuiltInName::dFdyExt_0B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdyExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdyExt_0B;
                     }
@@ -17375,7 +16953,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x30de4eebu:
                 {
-                    if (name == BuiltInName::dFdxExt_0B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdxExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdxExt_0B;
                     }
@@ -17399,7 +16977,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x4c6853c3u:
                 {
-                    if (name == BuiltInName::dFdyExt_1B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdyExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdyExt_1B;
                     }
@@ -17407,7 +16985,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x56e0c954u:
                 {
-                    if (name == BuiltInName::dFdxExt_3B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdxExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdxExt_3B;
                     }
@@ -17415,7 +16993,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x726ace2cu:
                 {
-                    if (name == BuiltInName::dFdyExt_2B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdyExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdyExt_2B;
                     }
@@ -17423,7 +17001,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x80e34a09u:
                 {
-                    if (name == BuiltInName::dFdxExt_2B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdxExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdxExt_2B;
                     }
@@ -17447,7 +17025,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x8edb114eu:
                 {
-                    if (name == BuiltInName::dFdxExt_1B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdxExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdxExt_1B;
                     }
@@ -17463,7 +17041,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0x9c6d4ee1u:
                 {
-                    if (name == BuiltInName::dFdyExt_3B)
+                    if (name.length() == 7 && name.beginsWith(BuiltInName::dFdyExt_))
                     {
                         return &BuiltInFunction::kFunction_dFdyExt_3B;
                     }
@@ -17471,7 +17049,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xa6cba313u:
                 {
-                    if (name == BuiltInName::fwidthExt_0B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidthExt_))
                     {
                         return &BuiltInFunction::kFunction_fwidthExt_0B;
                     }
@@ -17487,7 +17065,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xccce1d7cu:
                 {
-                    if (name == BuiltInName::fwidthExt_3B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidthExt_))
                     {
                         return &BuiltInFunction::kFunction_fwidthExt_3B;
                     }
@@ -17503,7 +17081,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 case 0xf6d09e31u:
                 {
-                    if (name == BuiltInName::fwidthExt_2B)
+                    if (name.length() == 9 && name.beginsWith(BuiltInName::fwidthExt_))
                     {
                         return &BuiltInFunction::kFunction_fwidthExt_2B;
                     }
@@ -17634,7 +17212,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
     {
         case 0x009846a3u:
         {
-            if (name == BuiltInName::max_2B2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_2B2B;
             }
@@ -17642,7 +17220,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x046a9b13u:
         {
-            if (name == BuiltInName::mod_2B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_2B0B;
             }
@@ -17650,7 +17228,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x05339330u:
         {
-            if (name == BuiltInName::acos_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::acos_))
             {
                 return &BuiltInFunction::kFunction_acos_3B;
             }
@@ -17658,7 +17236,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x0548e241u:
         {
-            if (name == BuiltInName::atan_3B3B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_3B3B;
             }
@@ -17666,7 +17244,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x061a7a4fu:
         {
-            if (name == BuiltInName::fract_0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::fract_))
             {
                 return &BuiltInFunction::kFunction_fract_0B;
             }
@@ -17682,7 +17260,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x0887a662u:
         {
-            if (name == BuiltInName::distance_3B3B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::distance_))
             {
                 return &BuiltInFunction::kFunction_distance_3B3B;
             }
@@ -17690,7 +17268,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x0b09eda9u:
         {
-            if (name == BuiltInName::log_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::log_))
             {
                 return &BuiltInFunction::kFunction_log_0B;
             }
@@ -17706,7 +17284,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x0f84439eu:
         {
-            if (name == BuiltInName::all_1E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::all_))
             {
                 return &BuiltInFunction::kFunction_all_1E;
             }
@@ -17714,7 +17292,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x0fc88166u:
         {
-            if (name == BuiltInName::degrees_2B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::degrees_))
             {
                 return &BuiltInFunction::kFunction_degrees_2B;
             }
@@ -17722,7 +17300,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x108d38a3u:
         {
-            if (name == BuiltInName::tan_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::tan_))
             {
                 return &BuiltInFunction::kFunction_tan_1B;
             }
@@ -17730,7 +17308,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x11769f9bu:
         {
-            if (name == BuiltInName::abs_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
             {
                 return &BuiltInFunction::kFunction_abs_0B;
             }
@@ -17738,7 +17316,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x128e361eu:
         {
-            if (name == BuiltInName::notFunc_3E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::notFunc_))
             {
                 return &BuiltInFunction::kFunction_notFunc_3E;
             }
@@ -17754,7 +17332,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x13e5dde0u:
         {
-            if (name == BuiltInName::mod_1B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_1B0B;
             }
@@ -17762,7 +17340,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x14414e83u:
         {
-            if (name == BuiltInName::exp2_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::exp2_))
             {
                 return &BuiltInFunction::kFunction_exp2_3B;
             }
@@ -17770,7 +17348,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x15095167u:
         {
-            if (name == BuiltInName::inversesqrt_2B)
+            if (name.length() == 14 && name.beginsWith(BuiltInName::inversesqrt_))
             {
                 return &BuiltInFunction::kFunction_inversesqrt_2B;
             }
@@ -17778,7 +17356,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x15c84f3cu:
         {
-            if (name == BuiltInName::ceil_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::ceil_))
             {
                 return &BuiltInFunction::kFunction_ceil_2B;
             }
@@ -17794,7 +17372,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x1731e675u:
         {
-            if (name == BuiltInName::length_0B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::length_))
             {
                 return &BuiltInFunction::kFunction_length_0B;
             }
@@ -17802,7 +17380,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x177cf26du:
         {
-            if (name == BuiltInName::min_2B2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_2B2B;
             }
@@ -17810,7 +17388,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x17fa43b8u:
         {
-            if (name == BuiltInName::cos_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::cos_))
             {
                 return &BuiltInFunction::kFunction_cos_2B;
             }
@@ -17818,7 +17396,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x1901b4eeu:
         {
-            if (name == BuiltInName::log_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::log_))
             {
                 return &BuiltInFunction::kFunction_log_3B;
             }
@@ -17826,7 +17404,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x1a10ccb7u:
         {
-            if (name == BuiltInName::sqrt_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sqrt_))
             {
                 return &BuiltInFunction::kFunction_sqrt_0B;
             }
@@ -17834,7 +17412,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x1a473286u:
         {
-            if (name == BuiltInName::distance_2B2B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::distance_))
             {
                 return &BuiltInFunction::kFunction_distance_2B2B;
             }
@@ -17842,7 +17420,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x1da7dd5eu:
         {
-            if (name == BuiltInName::notEqual_1E1E)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_1E1E;
             }
@@ -17858,7 +17436,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x22da85d0u:
         {
-            if (name == BuiltInName::step_0B1B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_0B1B;
             }
@@ -17866,7 +17444,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x23497dfcu:
         {
-            if (name == BuiltInName::min_1B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_1B0B;
             }
@@ -17874,7 +17452,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x242c7b45u:
         {
-            if (name == BuiltInName::equal_3E3E)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_3E3E;
             }
@@ -17882,7 +17460,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2529adbau:
         {
-            if (name == BuiltInName::length_3B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::length_))
             {
                 return &BuiltInFunction::kFunction_length_3B;
             }
@@ -17890,7 +17468,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2530925bu:
         {
-            if (name == BuiltInName::matrixCompMult_5B5B)
+            if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
             {
                 return &BuiltInFunction::kFunction_matrixCompMult_5B5B;
             }
@@ -17906,7 +17484,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2a4048e4u:
         {
-            if (name == BuiltInName::dot_3B3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::dot_))
             {
                 return &BuiltInFunction::kFunction_dot_3B3B;
             }
@@ -17914,7 +17492,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2ba422c6u:
         {
-            if (name == BuiltInName::notEqual_2E2E)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_2E2E;
             }
@@ -17922,7 +17500,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2c1cf4b8u:
         {
-            if (name == BuiltInName::fract_3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::fract_))
             {
                 return &BuiltInFunction::kFunction_fract_3B;
             }
@@ -17930,7 +17508,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2e4fef86u:
         {
-            if (name == BuiltInName::greaterThan_1B1B)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_1B1B;
             }
@@ -17938,7 +17516,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x2f3613e5u:
         {
-            if (name == BuiltInName::acos_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::acos_))
             {
                 return &BuiltInFunction::kFunction_acos_2B;
             }
@@ -17946,7 +17524,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x31a9230bu:
         {
-            if (name == BuiltInName::pow_3B3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::pow_))
             {
                 return &BuiltInFunction::kFunction_pow_3B3B;
             }
@@ -17954,7 +17532,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x31caf583u:
         {
-            if (name == BuiltInName::degrees_3B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::degrees_))
             {
                 return &BuiltInFunction::kFunction_degrees_3B;
             }
@@ -17962,7 +17540,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x32a4419du:
         {
-            if (name == BuiltInName::any_1E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::any_))
             {
                 return &BuiltInFunction::kFunction_any_1E;
             }
@@ -17994,7 +17572,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x34e1bad1u:
         {
-            if (name == BuiltInName::equal_3B3B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_3B3B;
             }
@@ -18002,7 +17580,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x35731765u:
         {
-            if (name == BuiltInName::step_2B2B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_2B2B;
             }
@@ -18010,7 +17588,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x35d2bc55u:
         {
-            if (name == BuiltInName::lessThan_1B1B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_1B1B;
             }
@@ -18018,7 +17596,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x36d7afdeu:
         {
-            if (name == BuiltInName::greaterThan_3C3C)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_3C3C;
             }
@@ -18034,7 +17612,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x37791a04u:
         {
-            if (name == BuiltInName::abs_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
             {
                 return &BuiltInFunction::kFunction_abs_3B;
             }
@@ -18042,7 +17620,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3a43c8ecu:
         {
-            if (name == BuiltInName::exp2_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::exp2_))
             {
                 return &BuiltInFunction::kFunction_exp2_0B;
             }
@@ -18058,7 +17636,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3b04290bu:
         {
-            if (name == BuiltInName::log_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::log_))
             {
                 return &BuiltInFunction::kFunction_log_2B;
             }
@@ -18066,7 +17644,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3b0bcbd0u:
         {
-            if (name == BuiltInName::inversesqrt_1B)
+            if (name.length() == 14 && name.beginsWith(BuiltInName::inversesqrt_))
             {
                 return &BuiltInFunction::kFunction_inversesqrt_1B;
             }
@@ -18074,7 +17652,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3b8c728du:
         {
-            if (name == BuiltInName::min_0B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_0B0B;
             }
@@ -18082,7 +17660,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3d2f6e2au:
         {
-            if (name == BuiltInName::acos_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::acos_))
             {
                 return &BuiltInFunction::kFunction_acos_1B;
             }
@@ -18098,7 +17676,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3de85e95u:
         {
-            if (name == BuiltInName::mod_1B1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_1B1B;
             }
@@ -18106,7 +17684,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x3fcacff1u:
         {
-            if (name == BuiltInName::ceil_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::ceil_))
             {
                 return &BuiltInFunction::kFunction_ceil_3B;
             }
@@ -18114,7 +17692,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x40134720u:
         {
-            if (name == BuiltInName::sqrt_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sqrt_))
             {
                 return &BuiltInFunction::kFunction_sqrt_3B;
             }
@@ -18122,7 +17700,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x40514dceu:
         {
-            if (name == BuiltInName::reflect_2B2B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::reflect_))
             {
                 return &BuiltInFunction::kFunction_reflect_2B2B;
             }
@@ -18130,7 +17708,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x41aa3804u:
         {
-            if (name == BuiltInName::dot_1B1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::dot_))
             {
                 return &BuiltInFunction::kFunction_dot_1B1B;
             }
@@ -18138,7 +17716,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x41fcc46du:
         {
-            if (name == BuiltInName::cos_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::cos_))
             {
                 return &BuiltInFunction::kFunction_cos_3B;
             }
@@ -18146,7 +17724,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x421d21e5u:
         {
-            if (name == BuiltInName::lessThan_3C3C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_3C3C;
             }
@@ -18162,7 +17740,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x44c523e7u:
         {
-            if (name == BuiltInName::max_3B3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_3B3B;
             }
@@ -18170,7 +17748,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x44eb729fu:
         {
-            if (name == BuiltInName::normalize_1B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::normalize_))
             {
                 return &BuiltInFunction::kFunction_normalize_1B;
             }
@@ -18186,7 +17764,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x472c21d7u:
         {
-            if (name == BuiltInName::length_2B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::length_))
             {
                 return &BuiltInFunction::kFunction_length_2B;
             }
@@ -18194,7 +17772,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x4c59f3f1u:
         {
-            if (name == BuiltInName::lessThan_2B2B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_2B2B;
             }
@@ -18202,7 +17780,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x4c7e8006u:
         {
-            if (name == BuiltInName::notEqual_2C2C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_2C2C;
             }
@@ -18210,7 +17788,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x4c9b39c9u:
         {
-            if (name == BuiltInName::cross_2B2B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::cross_))
             {
                 return &BuiltInFunction::kFunction_cross_2B2B;
             }
@@ -18218,7 +17796,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x4d4bfeb1u:
         {
-            if (name == BuiltInName::min_1B1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_1B1B;
             }
@@ -18226,7 +17804,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x4dc29736u:
         {
-            if (name == BuiltInName::ceil_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::ceil_))
             {
                 return &BuiltInFunction::kFunction_ceil_0B;
             }
@@ -18234,7 +17812,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x525f6fa6u:
         {
-            if (name == BuiltInName::greaterThan_3B3B)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_3B3B;
             }
@@ -18242,7 +17820,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x546f9631u:
         {
-            if (name == BuiltInName::mod_2B2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_2B2B;
             }
@@ -18250,7 +17828,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x54d4c019u:
         {
-            if (name == BuiltInName::atan_1B1B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_1B1B;
             }
@@ -18266,7 +17844,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x561f756du:
         {
-            if (name == BuiltInName::fract_2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::fract_))
             {
                 return &BuiltInFunction::kFunction_fract_2B;
             }
@@ -18282,7 +17860,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x57cd6fecu:
         {
-            if (name == BuiltInName::degrees_0B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::degrees_))
             {
                 return &BuiltInFunction::kFunction_degrees_0B;
             }
@@ -18290,7 +17868,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x58ce58e6u:
         {
-            if (name == BuiltInName::notEqual_1B1B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_1B1B;
             }
@@ -18314,7 +17892,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x5c7231f7u:
         {
-            if (name == BuiltInName::sign_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
             {
                 return &BuiltInFunction::kFunction_sign_1B;
             }
@@ -18330,7 +17908,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x5e435845u:
         {
-            if (name == BuiltInName::atan_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_2B;
             }
@@ -18338,7 +17916,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x5ea009b3u:
         {
-            if (name == BuiltInName::any_3E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::any_))
             {
                 return &BuiltInFunction::kFunction_any_3E;
             }
@@ -18346,7 +17924,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x5f31e247u:
         {
-            if (name == BuiltInName::acos_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::acos_))
             {
                 return &BuiltInFunction::kFunction_acos_0B;
             }
@@ -18354,7 +17932,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x5ff73ab9u:
         {
-            if (name == BuiltInName::radians_0B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::radians_))
             {
                 return &BuiltInFunction::kFunction_radians_0B;
             }
@@ -18362,7 +17940,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x60053498u:
         {
-            if (name == BuiltInName::sin_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::sin_))
             {
                 return &BuiltInFunction::kFunction_sin_1B;
             }
@@ -18378,7 +17956,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x60d77e47u:
         {
-            if (name == BuiltInName::pow_2B2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::pow_))
             {
                 return &BuiltInFunction::kFunction_pow_2B2B;
             }
@@ -18386,7 +17964,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6106a374u:
         {
-            if (name == BuiltInName::log_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::log_))
             {
                 return &BuiltInFunction::kFunction_log_1B;
             }
@@ -18394,7 +17972,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x619b508au:
         {
-            if (name == BuiltInName::reflect_3B3B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::reflect_))
             {
                 return &BuiltInFunction::kFunction_reflect_3B3B;
             }
@@ -18402,7 +17980,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x63c84382u:
         {
-            if (name == BuiltInName::greaterThanEqual_2C2C)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_2C2C;
             }
@@ -18410,7 +17988,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x641f1576u:
         {
-            if (name == BuiltInName::reflect_0B0B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::reflect_))
             {
                 return &BuiltInFunction::kFunction_reflect_0B0B;
             }
@@ -18418,7 +17996,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x644649a1u:
         {
-            if (name == BuiltInName::exp2_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::exp2_))
             {
                 return &BuiltInFunction::kFunction_exp2_1B;
             }
@@ -18426,7 +18004,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x646d7617u:
         {
-            if (name == BuiltInName::matrixCompMult_FBFB)
+            if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
             {
                 return &BuiltInFunction::kFunction_matrixCompMult_FBFB;
             }
@@ -18434,7 +18012,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x658a699au:
         {
-            if (name == BuiltInName::notEqual_1C1C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_1C1C;
             }
@@ -18442,7 +18020,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x68b063ddu:
         {
-            if (name == BuiltInName::floor_0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::floor_))
             {
                 return &BuiltInFunction::kFunction_floor_0B;
             }
@@ -18450,7 +18028,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x69652f41u:
         {
-            if (name == BuiltInName::lessThan_1C1C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_1C1C;
             }
@@ -18458,7 +18036,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6a15c7d5u:
         {
-            if (name == BuiltInName::sqrt_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sqrt_))
             {
                 return &BuiltInFunction::kFunction_sqrt_2B;
             }
@@ -18466,7 +18044,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6ac79e50u:
         {
-            if (name == BuiltInName::max_3B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_3B0B;
             }
@@ -18474,7 +18052,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6aeded08u:
         {
-            if (name == BuiltInName::normalize_2B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::normalize_))
             {
                 return &BuiltInFunction::kFunction_normalize_2B;
             }
@@ -18498,7 +18076,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6c3b1f8au:
         {
-            if (name == BuiltInName::atan_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_1B;
             }
@@ -18506,7 +18084,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x6df094feu:
         {
-            if (name == BuiltInName::radians_3B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::radians_))
             {
                 return &BuiltInFunction::kFunction_radians_3B;
             }
@@ -18514,7 +18092,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x7000d433u:
         {
-            if (name == BuiltInName::pow_1B1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::pow_))
             {
                 return &BuiltInFunction::kFunction_pow_1B1B;
             }
@@ -18522,7 +18100,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x7173e986u:
         {
-            if (name == BuiltInName::notEqual_3B3B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_3B3B;
             }
@@ -18538,7 +18116,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x76a82b22u:
         {
-            if (name == BuiltInName::floor_3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::floor_))
             {
                 return &BuiltInFunction::kFunction_floor_3B;
             }
@@ -18546,7 +18124,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x780d8f1au:
         {
-            if (name == BuiltInName::sqrt_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sqrt_))
             {
                 return &BuiltInFunction::kFunction_sqrt_1B;
             }
@@ -18554,7 +18132,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x785bc622u:
         {
-            if (name == BuiltInName::notEqual_3E3E)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_3E3E;
             }
@@ -18562,7 +18140,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x81cff0a1u:
         {
-            if (name == BuiltInName::degrees_1B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::degrees_))
             {
                 return &BuiltInFunction::kFunction_degrees_1B;
             }
@@ -18570,7 +18148,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x8274ac60u:
         {
-            if (name == BuiltInName::sign_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
             {
                 return &BuiltInFunction::kFunction_sign_2B;
             }
@@ -18578,7 +18156,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x82a280f6u:
         {
-            if (name == BuiltInName::any_2E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::any_))
             {
                 return &BuiltInFunction::kFunction_any_2E;
             }
@@ -18586,7 +18164,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x82c5e6d5u:
         {
-            if (name == BuiltInName::atan_0B0B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_0B0B;
             }
@@ -18594,7 +18172,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x8417e089u:
         {
-            if (name == BuiltInName::equal_2C2C)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_2C2C;
             }
@@ -18610,7 +18188,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x8a07b54du:
         {
-            if (name == BuiltInName::sin_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::sin_))
             {
                 return &BuiltInFunction::kFunction_sin_0B;
             }
@@ -18618,7 +18196,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x8e3d93a7u:
         {
-            if (name == BuiltInName::atan_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_0B;
             }
@@ -18626,7 +18204,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x8ff3091bu:
         {
-            if (name == BuiltInName::radians_2B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::radians_))
             {
                 return &BuiltInFunction::kFunction_radians_2B;
             }
@@ -18642,7 +18220,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x92458549u:
         {
-            if (name == BuiltInName::step_1B1B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_1B1B;
             }
@@ -18650,7 +18228,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x931af97fu:
         {
-            if (name == BuiltInName::lessThanEqual_2C2C)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_2C2C;
             }
@@ -18658,7 +18236,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x94f06dbdu:
         {
-            if (name == BuiltInName::normalize_3B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::normalize_))
             {
                 return &BuiltInFunction::kFunction_normalize_3B;
             }
@@ -18666,7 +18244,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x95a6e964u:
         {
-            if (name == BuiltInName::asin_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::asin_))
             {
                 return &BuiltInFunction::kFunction_asin_0B;
             }
@@ -18674,7 +18252,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x965473c7u:
         {
-            if (name == BuiltInName::lessThanEqual_3C3C)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_3C3C;
             }
@@ -18682,7 +18260,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x97b032ceu:
         {
-            if (name == BuiltInName::distance_0B0B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::distance_))
             {
                 return &BuiltInFunction::kFunction_distance_0B0B;
             }
@@ -18690,7 +18268,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x98010f92u:
         {
-            if (name == BuiltInName::sin_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::sin_))
             {
                 return &BuiltInFunction::kFunction_sin_3B;
             }
@@ -18698,7 +18276,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x98571f82u:
         {
-            if (name == BuiltInName::greaterThanEqual_1B1B)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_1B1B;
             }
@@ -18706,7 +18284,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x98aa9f3fu:
         {
-            if (name == BuiltInName::floor_2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::floor_))
             {
                 return &BuiltInFunction::kFunction_floor_2B;
             }
@@ -18714,7 +18292,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x99b92ec5u:
         {
-            if (name == BuiltInName::equal_2B2B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_2B2B;
             }
@@ -18722,7 +18300,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0x9be659d3u:
         {
-            if (name == BuiltInName::log2_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::log2_))
             {
                 return &BuiltInFunction::kFunction_log2_2B;
             }
@@ -18730,7 +18308,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa02bb012u:
         {
-            if (name == BuiltInName::max_1B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_1B0B;
             }
@@ -18738,7 +18316,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa05f6bc8u:
         {
-            if (name == BuiltInName::dot_0B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::dot_))
             {
                 return &BuiltInFunction::kFunction_dot_0B0B;
             }
@@ -18746,7 +18324,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa0dedfdau:
         {
-            if (name == BuiltInName::greaterThanEqual_3C3C)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_3C3C;
             }
@@ -18754,7 +18332,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa2e83502u:
         {
-            if (name == BuiltInName::normalize_0B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::normalize_))
             {
                 return &BuiltInFunction::kFunction_normalize_0B;
             }
@@ -18762,7 +18340,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa46f126au:
         {
-            if (name == BuiltInName::greaterThan_2B2B)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_2B2B;
             }
@@ -18770,7 +18348,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa5ac8e51u:
         {
-            if (name == BuiltInName::exp_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::exp_))
             {
                 return &BuiltInFunction::kFunction_exp_3B;
             }
@@ -18778,7 +18356,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xa694989du:
         {
-            if (name == BuiltInName::lessThan_3B3B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_3B3B;
             }
@@ -18786,7 +18364,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xab5a7a95u:
         {
-            if (name == BuiltInName::equal_1C1C)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_1C1C;
             }
@@ -18794,7 +18372,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xac772d15u:
         {
-            if (name == BuiltInName::sign_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
             {
                 return &BuiltInFunction::kFunction_sign_3B;
             }
@@ -18802,7 +18380,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xaeabcdddu:
         {
-            if (name == BuiltInName::mod_3B3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_3B3B;
             }
@@ -18818,7 +18396,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb3a5e896u:
         {
-            if (name == BuiltInName::exp_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::exp_))
             {
                 return &BuiltInFunction::kFunction_exp_0B;
             }
@@ -18826,7 +18404,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb4400e10u:
         {
-            if (name == BuiltInName::atan_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_3B;
             }
@@ -18834,7 +18412,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb5a0c6cau:
         {
-            if (name == BuiltInName::notEqual_2B2B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_2B2B;
             }
@@ -18850,7 +18428,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb5f58384u:
         {
-            if (name == BuiltInName::radians_1B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::radians_))
             {
                 return &BuiltInFunction::kFunction_radians_1B;
             }
@@ -18858,7 +18436,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb6907c8cu:
         {
-            if (name == BuiltInName::tan_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::tan_))
             {
                 return &BuiltInFunction::kFunction_tan_2B;
             }
@@ -18866,7 +18444,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xb9cf953au:
         {
-            if (name == BuiltInName::greaterThan_1C1C)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_1C1C;
             }
@@ -18874,7 +18452,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xba0383afu:
         {
-            if (name == BuiltInName::sin_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::sin_))
             {
                 return &BuiltInFunction::kFunction_sin_2B;
             }
@@ -18882,7 +18460,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xba1060a6u:
         {
-            if (name == BuiltInName::greaterThan_2C2C)
+            if (name.length() == 16 && name.beginsWith(BuiltInName::greaterThan_))
             {
                 return &BuiltInFunction::kFunction_greaterThan_2C2C;
             }
@@ -18890,7 +18468,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xba70875au:
         {
-            if (name == BuiltInName::sign_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::sign_))
             {
                 return &BuiltInFunction::kFunction_sign_0B;
             }
@@ -18898,7 +18476,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbb7abcffu:
         {
-            if (name == BuiltInName::lessThanEqual_1B1B)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_1B1B;
             }
@@ -18906,7 +18484,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbc669fa2u:
         {
-            if (name == BuiltInName::greaterThanEqual_3B3B)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_3B3B;
             }
@@ -18914,7 +18492,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbca39522u:
         {
-            if (name == BuiltInName::mod_3B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_3B0B;
             }
@@ -18930,7 +18508,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbe0f6df9u:
         {
-            if (name == BuiltInName::min_3B3B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_3B3B;
             }
@@ -18946,7 +18524,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbead19a8u:
         {
-            if (name == BuiltInName::floor_1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::floor_))
             {
                 return &BuiltInFunction::kFunction_floor_1B;
             }
@@ -18954,7 +18532,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbf879745u:
         {
-            if (name == BuiltInName::all_2E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::all_))
             {
                 return &BuiltInFunction::kFunction_all_2E;
             }
@@ -18962,7 +18540,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xbfa96a19u:
         {
-            if (name == BuiltInName::asin_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::asin_))
             {
                 return &BuiltInFunction::kFunction_asin_1B;
             }
@@ -18970,7 +18548,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xc1e8d43cu:
         {
-            if (name == BuiltInName::log2_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::log2_))
             {
                 return &BuiltInFunction::kFunction_log2_1B;
             }
@@ -18978,7 +18556,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xc22e242fu:
         {
-            if (name == BuiltInName::max_1B1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_1B1B;
             }
@@ -18994,7 +18572,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xc42d3370u:
         {
-            if (name == BuiltInName::dot_2B2B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::dot_))
             {
                 return &BuiltInFunction::kFunction_dot_2B2B;
             }
@@ -19002,7 +18580,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xc777f74fu:
         {
-            if (name == BuiltInName::min_2B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_2B0B;
             }
@@ -19010,7 +18588,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xca322aeau:
         {
-            if (name == BuiltInName::reflect_1B1B)
+            if (name.length() == 12 && name.beginsWith(BuiltInName::reflect_))
             {
                 return &BuiltInFunction::kFunction_reflect_1B1B;
             }
@@ -19018,7 +18596,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xcab81737u:
         {
-            if (name == BuiltInName::lessThanEqual_3B3B)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_3B3B;
             }
@@ -19034,7 +18612,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xcc07353eu:
         {
-            if (name == BuiltInName::min_3B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::min_))
             {
                 return &BuiltInFunction::kFunction_min_3B0B;
             }
@@ -19050,7 +18628,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xccdc3d05u:
         {
-            if (name == BuiltInName::step_0B0B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_0B0B;
             }
@@ -19058,7 +18636,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xcda2c45eu:
         {
-            if (name == BuiltInName::asin_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::asin_))
             {
                 return &BuiltInFunction::kFunction_asin_2B;
             }
@@ -19066,7 +18644,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xce0b0283u:
         {
-            if (name == BuiltInName::matrixCompMult_ABAB)
+            if (name.length() == 19 && name.beginsWith(BuiltInName::matrixCompMult_))
             {
                 return &BuiltInFunction::kFunction_matrixCompMult_ABAB;
             }
@@ -19074,7 +18652,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xce27bec6u:
         {
-            if (name == BuiltInName::greaterThanEqual_2B2B)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_2B2B;
             }
@@ -19082,7 +18660,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xcf6001f1u:
         {
-            if (name == BuiltInName::step_3B3B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_3B3B;
             }
@@ -19090,7 +18668,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xcff55532u:
         {
-            if (name == BuiltInName::cos_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::cos_))
             {
                 return &BuiltInFunction::kFunction_cos_0B;
             }
@@ -19098,7 +18676,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xd06a4419u:
         {
-            if (name == BuiltInName::equal_3C3C)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_3C3C;
             }
@@ -19106,7 +18684,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xd09e0b41u:
         {
-            if (name == BuiltInName::max_2B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_2B0B;
             }
@@ -19122,7 +18700,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xd4d6b527u:
         {
-            if (name == BuiltInName::pow_0B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::pow_))
             {
                 return &BuiltInFunction::kFunction_pow_0B0B;
             }
@@ -19138,7 +18716,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xd5a85cb3u:
         {
-            if (name == BuiltInName::exp_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::exp_))
             {
                 return &BuiltInFunction::kFunction_exp_1B;
             }
@@ -19146,7 +18724,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xd5eb603eu:
         {
-            if (name == BuiltInName::notEqual_3C3C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::notEqual_))
             {
                 return &BuiltInFunction::kFunction_notEqual_3C3C;
             }
@@ -19154,7 +18732,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xdad5974au:
         {
-            if (name == BuiltInName::step_0B3B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_0B3B;
             }
@@ -19162,7 +18740,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xdb8a01f0u:
         {
-            if (name == BuiltInName::all_3E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::all_))
             {
                 return &BuiltInFunction::kFunction_all_3E;
             }
@@ -19170,7 +18748,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xdc6a3fd9u:
         {
-            if (name == BuiltInName::equal_2E2E)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_2E2E;
             }
@@ -19186,7 +18764,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xde93f470u:
         {
-            if (name == BuiltInName::notFunc_1E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::notFunc_))
             {
                 return &BuiltInFunction::kFunction_notFunc_1E;
             }
@@ -19194,7 +18772,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xdeb59d35u:
         {
-            if (name == BuiltInName::atan_2B2B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::atan_))
             {
                 return &BuiltInFunction::kFunction_atan_2B2B;
             }
@@ -19202,7 +18780,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe092fd41u:
         {
-            if (name == BuiltInName::tan_3B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::tan_))
             {
                 return &BuiltInFunction::kFunction_tan_3B;
             }
@@ -19210,7 +18788,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe17ad139u:
         {
-            if (name == BuiltInName::abs_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
             {
                 return &BuiltInFunction::kFunction_abs_2B;
             }
@@ -19218,7 +18796,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe3884196u:
         {
-            if (name == BuiltInName::greaterThanEqual_1C1C)
+            if (name.length() == 21 && name.beginsWith(BuiltInName::greaterThanEqual_))
             {
                 return &BuiltInFunction::kFunction_greaterThanEqual_1C1C;
             }
@@ -19226,7 +18804,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe4180632u:
         {
-            if (name == BuiltInName::fract_1B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::fract_))
             {
                 return &BuiltInFunction::kFunction_fract_1B;
             }
@@ -19234,7 +18812,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe50d8305u:
         {
-            if (name == BuiltInName::inversesqrt_0B)
+            if (name.length() == 14 && name.beginsWith(BuiltInName::inversesqrt_))
             {
                 return &BuiltInFunction::kFunction_inversesqrt_0B;
             }
@@ -19242,7 +18820,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xe7f2b603u:
         {
-            if (name == BuiltInName::max_0B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::max_))
             {
                 return &BuiltInFunction::kFunction_max_0B0B;
             }
@@ -19250,7 +18828,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xeba3b9c1u:
         {
-            if (name == BuiltInName::equal_1E1E)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_1E1E;
             }
@@ -19258,7 +18836,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xebeb54f1u:
         {
-            if (name == BuiltInName::log2_0B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::log2_))
             {
                 return &BuiltInFunction::kFunction_log2_0B;
             }
@@ -19266,7 +18844,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xed15f051u:
         {
-            if (name == BuiltInName::mod_0B0B)
+            if (name.length() == 8 && name.beginsWith(BuiltInName::mod_))
             {
                 return &BuiltInFunction::kFunction_mod_0B0B;
             }
@@ -19274,7 +18852,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xed2f65c0u:
         {
-            if (name == BuiltInName::length_1B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::length_))
             {
                 return &BuiltInFunction::kFunction_length_1B;
             }
@@ -19290,7 +18868,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xee8ac486u:
         {
-            if (name == BuiltInName::tan_0B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::tan_))
             {
                 return &BuiltInFunction::kFunction_tan_0B;
             }
@@ -19298,7 +18876,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xee8bbedbu:
         {
-            if (name == BuiltInName::notFunc_2E)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::notFunc_))
             {
                 return &BuiltInFunction::kFunction_notFunc_2E;
             }
@@ -19306,7 +18884,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xef0d2febu:
         {
-            if (name == BuiltInName::lessThanEqual_1C1C)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_1C1C;
             }
@@ -19314,7 +18892,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xef742b7eu:
         {
-            if (name == BuiltInName::abs_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::abs_))
             {
                 return &BuiltInFunction::kFunction_abs_1B;
             }
@@ -19322,7 +18900,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xefa5387bu:
         {
-            if (name == BuiltInName::asin_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::asin_))
             {
                 return &BuiltInFunction::kFunction_asin_3B;
             }
@@ -19330,7 +18908,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xefc5d4d3u:
         {
-            if (name == BuiltInName::ceil_1B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::ceil_))
             {
                 return &BuiltInFunction::kFunction_ceil_1B;
             }
@@ -19346,7 +18924,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf1f7c94fu:
         {
-            if (name == BuiltInName::cos_1B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::cos_))
             {
                 return &BuiltInFunction::kFunction_cos_1B;
             }
@@ -19354,7 +18932,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf23eda66u:
         {
-            if (name == BuiltInName::exp2_2B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::exp2_))
             {
                 return &BuiltInFunction::kFunction_exp2_2B;
             }
@@ -19362,7 +18940,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf306dd4au:
         {
-            if (name == BuiltInName::inversesqrt_3B)
+            if (name.length() == 14 && name.beginsWith(BuiltInName::inversesqrt_))
             {
                 return &BuiltInFunction::kFunction_inversesqrt_3B;
             }
@@ -19378,7 +18956,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf68b9ca9u:
         {
-            if (name == BuiltInName::equal_1B1B)
+            if (name.length() == 10 && name.beginsWith(BuiltInName::equal_))
             {
                 return &BuiltInFunction::kFunction_equal_1B1B;
             }
@@ -19386,7 +18964,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf707f2d5u:
         {
-            if (name == BuiltInName::lessThan_2C2C)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::lessThan_))
             {
                 return &BuiltInFunction::kFunction_lessThan_2C2C;
             }
@@ -19394,7 +18972,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf9e31c36u:
         {
-            if (name == BuiltInName::log2_3B)
+            if (name.length() == 7 && name.beginsWith(BuiltInName::log2_))
             {
                 return &BuiltInFunction::kFunction_log2_3B;
             }
@@ -19402,7 +18980,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xf9e4df73u:
         {
-            if (name == BuiltInName::lessThanEqual_2B2B)
+            if (name.length() == 18 && name.beginsWith(BuiltInName::lessThanEqual_))
             {
                 return &BuiltInFunction::kFunction_lessThanEqual_2B2B;
             }
@@ -19418,7 +18996,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xfbaad71cu:
         {
-            if (name == BuiltInName::exp_2B)
+            if (name.length() == 6 && name.beginsWith(BuiltInName::exp_))
             {
                 return &BuiltInFunction::kFunction_exp_2B;
             }
@@ -19426,7 +19004,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xfcd80b67u:
         {
-            if (name == BuiltInName::step_0B2B)
+            if (name.length() == 9 && name.beginsWith(BuiltInName::step_))
             {
                 return &BuiltInFunction::kFunction_step_0B2B;
             }
@@ -19434,7 +19012,7 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         case 0xfdc4db42u:
         {
-            if (name == BuiltInName::distance_1B1B)
+            if (name.length() == 13 && name.beginsWith(BuiltInName::distance_))
             {
                 return &BuiltInFunction::kFunction_distance_1B1B;
             }
