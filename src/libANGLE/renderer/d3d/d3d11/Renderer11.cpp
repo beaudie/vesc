@@ -1488,8 +1488,6 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
         ANGLE_TRY(markTransformFeedbackUsage(context));
     }
 
-    ANGLE_TRY(mStateManager.applyVertexBuffer(context, params));
-
     gl::Program *program = glState.getProgram();
     ASSERT(program != nullptr);
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(program, params.instances());
@@ -1613,12 +1611,6 @@ gl::Error Renderer11::drawElements(const gl::Context *context, const gl::DrawCal
     // API validation layer.
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
-    bool usePrimitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), params.type());
-
-    ANGLE_TRY(mStateManager.applyIndexBuffer(context, params, usePrimitiveRestartWorkaround));
-    ANGLE_TRY(mStateManager.applyVertexBuffer(context, params));
-
     // If this draw call is coming from an indirect call, offset by the indirect call's base vertex.
     // No base vertex parameter exists for a normal drawElements, so params.baseVertex will be zero.
     int startVertex = static_cast<int>(params.firstVertex() - params.baseVertex());
@@ -1701,8 +1693,6 @@ gl::Error Renderer11::drawArraysIndirect(const gl::Context *context,
         return gl::NoError();
     }
 
-    ANGLE_TRY(mStateManager.applyVertexBuffer(context, params));
-
     gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(drawIndirectBuffer);
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
@@ -1731,11 +1721,6 @@ gl::Error Renderer11::drawElementsIndirect(const gl::Context *context,
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
     uintptr_t offset  = reinterpret_cast<uintptr_t>(params.indirect());
 
-    bool usePrimitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), params.type());
-
-    ANGLE_TRY(mStateManager.applyIndexBuffer(context, params, usePrimitiveRestartWorkaround));
-    ANGLE_TRY(mStateManager.applyVertexBuffer(context, params));
     ID3D11Buffer *buffer = nullptr;
     ANGLE_TRY_RESULT(storage->getBuffer(context, BUFFER_USAGE_INDIRECT), buffer);
     mDeviceContext->DrawIndexedInstancedIndirect(buffer, static_cast<unsigned int>(offset));
