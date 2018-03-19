@@ -108,6 +108,7 @@ class ProgramVk : public ProgramImpl
 
     const std::vector<VkDescriptorSet> &getDescriptorSets() const;
     const std::array<uint32_t, 2> getUniformBlocksOffsets();
+    const size_t getDynamicUniformCount();
 
     // In Vulkan, it is invalid to pass in a NULL descriptor set to vkCmdBindDescriptorSets.
     // However, it's valid to leave them in an undefined, unbound state, if they are never used.
@@ -119,8 +120,9 @@ class ProgramVk : public ProgramImpl
 
     void updateTexturesDescriptorSet(ContextVk *contextVk);
     void invalidateTextures();
+    
 
-  private:
+private:
     vk::Error reset(ContextVk *contextVk);
     vk::Error initDescriptorSets(ContextVk *contextVk);
     gl::Error initDefaultUniformBlocks(const gl::Context *glContext);
@@ -157,6 +159,7 @@ class ProgramVk : public ProgramImpl
 
     std::array<DefaultUniformBlock, 2> mDefaultUniformBlocks;
     std::array<uint32_t, 2> mUniformBlocksOffsets;
+    size_t mDynamicUniformCount;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms.
     // It is necessary because we want to keep a compatible pipeline layout in all cases,

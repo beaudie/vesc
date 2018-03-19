@@ -1364,7 +1364,7 @@ void main()
     ASSERT_NE(colorUniformLocation, -1);
 
     int i = 0;
-    while (i++ <= 10000)
+    while (i++ <= 100)
     {
         // draw a red quad to the left side.
         glUniform2f(posUniformLocation, -0.5, 0.0);

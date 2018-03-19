@@ -246,12 +246,15 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(!descriptorSets.empty());
         const vk::PipelineLayout &pipelineLayout = mRenderer->getGraphicsPipelineLayout();
-
+        const std::array<uint32_t, 2>::const_pointer dynamicOffsets =
+            programVk->getDynamicUniformCount() > 0
+                ? programVk->getUniformBlocksOffsets().data()
+                : nullptr;
         (*commandBuffer)
             ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(),
                                  usedRange.length(), &descriptorSets[usedRange.low()],
-                                 static_cast<uint32_t>(programVk->getUniformBlocksOffsets().size()),
-                                 programVk->getUniformBlocksOffsets().data());
+                                 static_cast<uint32_t>(programVk->getDynamicUniformCount()),
+                                 dynamicOffsets);
     }
 
     return gl::NoError();
