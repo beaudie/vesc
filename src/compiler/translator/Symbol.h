@@ -209,7 +209,8 @@ class TFunction : public TSymbol
 
     ImmutableString getMangledName() const override
     {
-        if (mMangledName == "")
+        ASSERT(symbolType() != SymbolType::BuiltIn);
+        if (mMangledName.empty())
         {
             mMangledName = buildMangledName();
         }
@@ -240,7 +241,6 @@ class TFunction : public TSymbol
                         const TVariable *const *parameters,
                         size_t paramCount,
                         const TType *retType,
-                        const ImmutableString &mangledName,
                         TOperator op,
                         bool knownToNotHaveSideEffects)
         : TSymbol(id, name, SymbolType::BuiltIn, extension),
@@ -248,7 +248,7 @@ class TFunction : public TSymbol
           mParameters(parameters),
           mParamCount(paramCount),
           returnType(retType),
-          mMangledName(mangledName),
+          mMangledName(nullptr),
           mOp(op),
           defined(false),
           mHasPrototypeDeclaration(false),
