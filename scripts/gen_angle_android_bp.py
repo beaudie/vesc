@@ -508,7 +508,6 @@ def create_blueprint_for_targets(desc, targets):
         '-Wno-sign-promo',
         '-Wno-unused-parameter',
         '-Wno-non-virtual-dtor',
-        '-Wno-unneeded-internal-declaration',
         '-fvisibility=hidden',
         '-Oz',
     ]
