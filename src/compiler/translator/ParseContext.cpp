@@ -584,6 +584,7 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
     TIntermSymbol *symNode = node->getAsSymbolNode();
     if (message.empty() && symNode != nullptr)
     {
+        symbolTable.markStaticWrite(symNode->variable());
         return true;
     }
 

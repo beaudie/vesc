@@ -70,16 +70,16 @@ VarT *FindVariable(const ImmutableString &name, std::vector<VarT> *infoList)
 
 // Note that this shouldn't be called for interface blocks - static use information is collected for
 // individual fields in case of interface blocks.
-void MarkStaticallyUsed(ShaderVariable *variable)
+void MarkActive(ShaderVariable *variable)
 {
-    if (!variable->staticUse)
+    if (!variable->active)
     {
         if (variable->isStruct())
         {
             // Conservatively assume all fields are statically used as well.
             for (auto &field : variable->fields)
             {
-                MarkStaticallyUsed(&field);
+                MarkActive(&field);
             }
         }
         variable->staticUse = true;
@@ -585,7 +585,7 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
     }
     if (var)
     {
-        MarkStaticallyUsed(var);
+        MarkActive(var);
     }
 }
 
@@ -646,6 +646,7 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
     ASSERT(variable.symbolType() != SymbolType::Empty);
     variableOut->name.assign(variable.name().data(), variable.name().length());
     variableOut->mappedName = getMappedName(&variable);
+    variableOut->staticUse = mSymbolTable->isStaticallyUsed(variable);
 }
 
 Attribute CollectVariablesTraverser::recordAttribute(const TIntermSymbol &variable) const

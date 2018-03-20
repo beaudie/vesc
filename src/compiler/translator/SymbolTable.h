@@ -90,6 +90,10 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     const TFunction *setFunctionParameterNamesFromDefinition(const TFunction *function,
                                                              bool *wasDefinedOut);
 
+    void markStaticRead(const TVariable &variable);
+    void markStaticWrite(const TVariable &variable);
+    bool isStaticallyUsed(const TVariable &variable);
+
     // find() is guaranteed not to retain a reference to the ImmutableString, so an ImmutableString
     // with a reference to a short-lived char * is fine to pass here.
     const TSymbol *find(const ImmutableString &name, int shaderVersion) const;
@@ -154,6 +158,15 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
 
     sh::GLenum mShaderType;
     ShBuiltInResources mResources;
+
+    struct VariableMetadata {
+        VariableMetadata();
+        bool staticRead;
+        bool staticWrite;
+    };
+
+    // Indexed by unique id. Map instead of vector since the variables are fairly sparse.
+    std::map<int, VariableMetadata> mVariableMetadata;
 };
 
 }  // namespace sh

@@ -137,6 +137,35 @@ const TFunction *TSymbolTable::setFunctionParameterNamesFromDefinition(const TFu
     return firstDeclaration;
 }
 
+void TSymbolTable::markStaticWrite(const TVariable &variable)
+{
+    int id = variable.uniqueId().get();
+    auto iter = mVariableMetadata.find(id);
+    if (iter == mVariableMetadata.end())
+    {
+        iter = mVariableMetadata.insert(std::make_pair(id, VariableMetadata())).first;
+    }
+    iter->second.staticWrite = true;
+}
+
+void TSymbolTable::markStaticRead(const TVariable &variable)
+{
+    int id = variable.uniqueId().get();
+    auto iter = mVariableMetadata.find(id);
+    if (iter == mVariableMetadata.end())
+    {
+        iter = mVariableMetadata.insert(std::make_pair(id, VariableMetadata())).first;
+    }
+    iter->second.staticRead = true;
+}
+
+bool TSymbolTable::isStaticallyUsed(const TVariable &variable)
+{
+    int id = variable.uniqueId().get();
+    auto iter = mVariableMetadata.find(id);
+    return iter != mVariableMetadata.end();
+}
+
 const TSymbol *TSymbolTable::find(const ImmutableString &name, int shaderVersion) const
 {
     int userDefinedLevel = static_cast<int>(mTable.size()) - 1;
@@ -296,5 +325,9 @@ void TSymbolTable::initSamplerDefaultPrecision(TBasicType samplerType)
     ASSERT(samplerType >= EbtGuardSamplerBegin && samplerType <= EbtGuardSamplerEnd);
     setDefaultPrecision(samplerType, EbpLow);
 }
+
+TSymbolTable::VariableMetadata::VariableMetadata()
+: staticRead(false), staticWrite(false)
+{}
 
 }  // namespace sh
