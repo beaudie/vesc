@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+"""Generate commit.h with git commit hash.
+"""
+
 import subprocess as sp
 import sys
 import os
@@ -13,7 +17,7 @@ if len(sys.argv) < 3:
     sys.exit(usage)
 
 operation = sys.argv[1]
-cwd = sys.argv[2]
+cwd = os.path.dirname(sys.argv[2])
 
 if operation == 'check':
     index_path = os.path.join(cwd, '.git', 'index')
