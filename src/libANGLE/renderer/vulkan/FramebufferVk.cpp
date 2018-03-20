@@ -308,17 +308,28 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
 
     // TODO(jmadill): Use pixel bytes from the ANGLE format directly.
     const auto &glFormat = gl::GetSizedInternalFormatInfo(angleFormat.glInternalFormat);
-    int inputPitch       = glFormat.pixelBytes * area.width;
+    int outputPitch      = glFormat.pixelBytes * area.width;
+
+    // Get the staging image pitch and use it to pack the pixels later.
+    VkImageSubresource subresource;
+    subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresource.mipLevel   = 0;
+    subresource.arrayLayer = 0;
+
+    VkSubresourceLayout subresourceLayout;
+    vkGetImageSubresourceLayout(device, stagingImage.getImage().getHandle(), &subresource,
+                                &subresourceLayout);
 
     PackPixelsParams params;
     params.area        = area;
     params.format      = format;
     params.type        = type;
-    params.outputPitch = inputPitch;
+    params.outputPitch = outputPitch;
     params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
     params.pack        = glState.getPackState();
 
-    PackPixels(params, angleFormat, inputPitch, mapPointer, reinterpret_cast<uint8_t *>(pixels));
+    PackPixels(params, angleFormat, static_cast<int>(subresourceLayout.rowPitch), mapPointer,
+               reinterpret_cast<uint8_t *>(pixels));
 
     stagingImage.getDeviceMemory().unmap(device);
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &stagingImage);
