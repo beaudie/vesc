@@ -114,7 +114,7 @@ class UniformLinker final : angle::NonCopyable
         std::vector<LinkedUniform> *imageUniforms,
         std::vector<LinkedUniform> *atomicCounterUniforms,
         GLenum shaderType,
-        bool markStaticUse,
+        bool markActive,
         int binding,
         int offset,
         int *location);
@@ -126,7 +126,7 @@ class UniformLinker final : angle::NonCopyable
                                             std::vector<LinkedUniform> *imageUniforms,
                                             std::vector<LinkedUniform> *atomicCounterUniforms,
                                             GLenum shaderType,
-                                            bool markStaticUse,
+                                            bool markActive,
                                             int binding,
                                             int offset,
                                             int *location);
@@ -138,12 +138,12 @@ class UniformLinker final : angle::NonCopyable
                                            std::vector<LinkedUniform> *imageUniforms,
                                            std::vector<LinkedUniform> *atomicCounterUniforms,
                                            GLenum shaderType,
-                                           bool markStaticUse,
+                                           bool markActive,
                                            int binding,
                                            int offset,
                                            int *location);
 
-    // markStaticUse is given as a separate parameter because it is tracked here at struct
+    // markActive is given as a separate parameter because it is tracked here at struct
     // granularity.
     ShaderUniformCount flattenUniformImpl(const sh::ShaderVariable &uniform,
                                           const std::string &fullName,
@@ -152,7 +152,7 @@ class UniformLinker final : angle::NonCopyable
                                           std::vector<LinkedUniform> *imageUniforms,
                                           std::vector<LinkedUniform> *atomicCounterUniforms,
                                           GLenum shaderType,
-                                          bool markStaticUse,
+                                          bool markActive,
                                           int binding,
                                           int offset,
                                           int *location);

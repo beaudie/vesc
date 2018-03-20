@@ -213,7 +213,7 @@ bool validateInterfaceBlocksCount(GLuint maxInterfaceBlocks,
     GLuint blockCount = 0;
     for (const sh::InterfaceBlock &block : interfaceBlocks)
     {
-        if (block.staticUse || block.layout != sh::BLOCKLAYOUT_PACKED)
+        if (block.active || block.layout != sh::BLOCKLAYOUT_PACKED)
         {
             blockCount += (block.arraySize ? block.arraySize : 1);
             if (blockCount > maxInterfaceBlocks)
@@ -646,7 +646,7 @@ void LogLinkMismatch(InfoLog &infoLog,
 bool IsActiveInterfaceBlock(const sh::InterfaceBlock &interfaceBlock)
 {
     // Only 'packed' blocks are allowed to be considered inactive.
-    return interfaceBlock.staticUse || interfaceBlock.layout != sh::BLOCKLAYOUT_PACKED;
+    return interfaceBlock.active || interfaceBlock.layout != sh::BLOCKLAYOUT_PACKED;
 }
 
 // VariableLocation implementation.

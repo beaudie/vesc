@@ -343,13 +343,13 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
                     return false;
                 }
                 reservedLocations->insert(elementLocation);
-                if (!uniform.staticUse)
+                if (!uniform.active)
                 {
                     ignoredLocations->insert(elementLocation);
                 }
             }
         }
-        else if (apiBoundLocation != -1 && uniform.staticUse)
+        else if (apiBoundLocation != -1 && uniform.active)
         {
             // Only the first location is reserved even if the uniform is an array.
             *maxUniformLocation = std::max(*maxUniformLocation, apiBoundLocation);
@@ -382,7 +382,7 @@ void UniformLinker::pruneUnusedUniforms()
     auto uniformIter = mUniforms.begin();
     while (uniformIter != mUniforms.end())
     {
-        if (uniformIter->staticUse)
+        if (uniformIter->active)
         {
             ++uniformIter;
         }
@@ -533,9 +533,9 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniform(
     int location = uniform.location;
     ShaderUniformCount shaderUniformCount =
         flattenUniformImpl(uniform, uniform.name, uniform.mappedName, samplerUniforms,
-                           imageUniforms, atomicCounterUniforms, shaderType, uniform.staticUse,
+                           imageUniforms, atomicCounterUniforms, shaderType, uniform.active,
                            uniform.binding, uniform.offset, &location);
-    if (uniform.staticUse)
+    if (uniform.active)
     {
         return shaderUniformCount;
     }
@@ -551,7 +551,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayOfStructsUniform(
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
     GLenum shaderType,
-    bool markStaticUse,
+    bool markActive,
     int binding,
     int offset,
     int *location)
@@ -568,14 +568,14 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayOfStructsUniform(
         {
             shaderUniformCount += flattenArrayOfStructsUniform(
                 uniform, arrayNestingIndex + 1u, elementName, elementMappedName, samplerUniforms,
-                imageUniforms, atomicCounterUniforms, shaderType, markStaticUse, binding, offset,
+                imageUniforms, atomicCounterUniforms, shaderType, markActive, binding, offset,
                 location);
         }
         else
         {
             shaderUniformCount += flattenStructUniform(
                 uniform.fields, elementName, elementMappedName, samplerUniforms, imageUniforms,
-                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+                atomicCounterUniforms, shaderType, markActive, binding, offset, location);
         }
     }
     return shaderUniformCount;
@@ -589,7 +589,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenStructUniform(
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
     GLenum shaderType,
-    bool markStaticUse,
+    bool markActive,
     int binding,
     int offset,
     int *location)
@@ -602,7 +602,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenStructUniform(
 
         shaderUniformCount +=
             flattenUniformImpl(field, fieldName, fieldMappedName, samplerUniforms, imageUniforms,
-                               atomicCounterUniforms, shaderType, markStaticUse, -1, -1, location);
+                               atomicCounterUniforms, shaderType, markActive, -1, -1, location);
     }
     return shaderUniformCount;
 }
@@ -615,7 +615,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayUniform(
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
     GLenum shaderType,
-    bool markStaticUse,
+    bool markActive,
     int binding,
     int offset,
     int *location)
@@ -633,7 +633,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayUniform(
 
         shaderUniformCount += flattenUniformImpl(
             uniformElement, elementName, elementMappedName, samplerUniforms, imageUniforms,
-            atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+            atomicCounterUniforms, shaderType, markActive, binding, offset, location);
     }
     return shaderUniformCount;
 }
@@ -646,7 +646,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
     std::vector<LinkedUniform> *imageUniforms,
     std::vector<LinkedUniform> *atomicCounterUniforms,
     GLenum shaderType,
-    bool markStaticUse,
+    bool markActive,
     int binding,
     int offset,
     int *location)
@@ -660,13 +660,13 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         {
             shaderUniformCount += flattenArrayOfStructsUniform(
                 uniform, 0u, fullName, fullMappedName, samplerUniforms, imageUniforms,
-                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+                atomicCounterUniforms, shaderType, markActive, binding, offset, location);
         }
         else
         {
             shaderUniformCount += flattenStructUniform(
                 uniform.fields, fullName, fullMappedName, samplerUniforms, imageUniforms,
-                atomicCounterUniforms, shaderType, markStaticUse, binding, offset, location);
+                atomicCounterUniforms, shaderType, markActive, binding, offset, location);
         }
         return shaderUniformCount;
     }
@@ -676,7 +676,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         // "For an active variable declared as an array of an aggregate data type (structures or
         // arrays), a separate entry will be generated for each active array element"
         return flattenArrayUniform(uniform, fullName, fullMappedName, samplerUniforms,
-                                   imageUniforms, atomicCounterUniforms, shaderType, markStaticUse,
+                                   imageUniforms, atomicCounterUniforms, shaderType, markActive,
                                    binding, offset, location);
     }
 
@@ -724,9 +724,9 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         {
             existingUniform->location = *location;
         }
-        if (markStaticUse)
+        if (markActive)
         {
-            existingUniform->staticUse = true;
+            existingUniform->active = true;
             existingUniform->setStaticUse(shaderType, true);
         }
     }
@@ -737,9 +737,9 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
                                     uniform.arraySizes, binding, offset, *location, -1,
                                     sh::BlockMemberInfo::getDefaultBlockInfo());
         linkedUniform.mappedName                    = fullMappedNameWithArrayIndex;
-        linkedUniform.staticUse                     = markStaticUse;
+        linkedUniform.active                        = markActive;
         linkedUniform.flattenedOffsetInParentArrays = uniform.flattenedOffsetInParentArrays;
-        if (markStaticUse)
+        if (markActive)
         {
             linkedUniform.setStaticUse(shaderType, true);
         }
@@ -771,7 +771,7 @@ bool UniformLinker::checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &in
     unsigned int atomicCounterCount = 0;
     for (const auto &uniform : mUniforms)
     {
-        if (IsAtomicCounterType(uniform.type) && uniform.staticUse)
+        if (IsAtomicCounterType(uniform.type) && uniform.active)
         {
             atomicCounterCount += uniform.getBasicTypeElementCount();
             if (atomicCounterCount > caps.maxCombinedAtomicCounters)

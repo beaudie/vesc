@@ -44,6 +44,7 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeString(var.mappedName);
     stream->writeIntVector(var.arraySizes);
     stream->writeInt(var.staticUse);
+    stream->writeInt(var.active);
     stream->writeString(var.structName);
     ASSERT(var.fields.empty());
 }
@@ -56,6 +57,7 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->mappedName = stream->readString();
     stream->readIntVector<unsigned int>(&var->arraySizes);
     var->staticUse  = stream->readBool();
+    var->active     = stream->readBool();
     var->structName = stream->readString();
 }
 
