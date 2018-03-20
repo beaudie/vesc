@@ -4148,6 +4148,39 @@ TEST_P(GLSLTest_ES3, ErrorMessageOfLinkInterfaceBlockStructFieldMismatch)
                                      "interface block 'S' member 'S.val1.t2'");
 }
 
+// Test a vertex shader that doesn't declare any varyings with a fragment shader that statically
+// uses a varying, but in a statement that gets trivially optimized out by the compiler.
+TEST_P(GLSLTest_ES3, FragmentShaderStaticallyUsesVaryingMissingFromVertex)
+{
+    const std::string &vertexShader =
+        R"(#version 300 es
+
+        precision mediump float;
+
+        void main()
+        {
+            gl_Position = vec4(0, 1, 0, 1);
+        })";
+
+    const std::string &fragmentShader =
+        R"(#version 300 es
+
+        precision mediump float;
+        in float foo;
+        out vec4 my_FragColor;
+
+        void main()
+        {
+            if (false)
+            {
+                float unreferenced = foo;
+            }
+            my_FragColor = vec4(0, 1, 0, 1);
+        })";
+
+    validateComponentsInErrorMessage(vertexShader, fragmentShader, "does not match any", "foo");
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
