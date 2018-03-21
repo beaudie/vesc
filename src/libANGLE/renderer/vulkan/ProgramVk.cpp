@@ -266,7 +266,7 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         mFragmentModuleSerial = renderer->issueProgramSerial();
     }
 
-    ANGLE_TRY(allocateDescriptorSets(contextVk));
+    ANGLE_TRY(allocateDescriptorSets(contextVk, DescriptorSetLayoutAll));
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
     // If we have empty uniforms, we want them initialized at least when we link the program.
@@ -657,7 +657,8 @@ Serial ProgramVk::getFragmentModuleSerial() const
     return mFragmentModuleSerial;
 }
 
-vk::Error ProgramVk::allocateDescriptorSets(ContextVk *contextVk)
+vk::Error ProgramVk::allocateDescriptorSets(ContextVk *contextVk,
+                                            DescriptorSetLayoutIndex descriptSetLayoutIndex)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -665,15 +666,29 @@ vk::Error ProgramVk::allocateDescriptorSets(ContextVk *contextVk)
     DynamicDescriptorPool *dynamicDescriptorPool = contextVk->getDynamicDescriptorPool();
 
     const auto &descriptorSetLayouts = renderer->getGraphicsDescriptorSetLayouts();
-    uint32_t descriptorSetCount = static_cast<uint32_t>(descriptorSetLayouts.size());
+    const VkDescriptorSetLayout *descriptorSetLayout = nullptr;
 
-    mDescriptorSets.resize(descriptorSetCount, VK_NULL_HANDLE);
+    uint32_t descriptorSetCount  = 0;
+    uint32_t indexToUseForLayout = 0;
+    if (descriptSetLayoutIndex == DescriptorSetLayoutAll)
+    {
+        descriptorSetCount = DescriptorSetLayoutCount;
+    }
+    else
+    {
+        descriptorSetCount  = 1;
+        indexToUseForLayout = descriptSetLayoutIndex;
+    }
 
-    // TODO(lucferron): Its wasteful to reallocate the texture descriptor sets when we only
-    // care about the uniforms.
-    // http://anglebug.com/2421
+    descriptorSetLayout = descriptorSetLayouts[indexToUseForLayout].ptr();
+
+    if (descriptorSetCount > mDescriptorSets.size())
+    {
+        mDescriptorSets.resize(descriptorSetCount, VK_NULL_HANDLE);
+    }
+
     ANGLE_TRY(dynamicDescriptorPool->allocateDescriptorSets(
-        contextVk, descriptorSetLayouts[0].ptr(), descriptorSetCount, &mDescriptorSets[0]));
+        contextVk, descriptorSetLayout, descriptorSetCount, &mDescriptorSets[indexToUseForLayout]));
     return vk::NoError();
 }
 
@@ -728,7 +743,7 @@ vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
-        ANGLE_TRY(allocateDescriptorSets(contextVk));
+        ANGLE_TRY(allocateDescriptorSets(contextVk, UniformLayoutIndex));
         ANGLE_TRY(updateDefaultUniformsDescriptorSet(contextVk));
     }
 
