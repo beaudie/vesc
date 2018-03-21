@@ -146,7 +146,7 @@ ERRMSG(NoActiveGeometryShaderStage, "No active geometry shader stage in this pro
 ERRMSG(NoActiveProgramWithComputeShader, "No active program for the compute shader stage.");
 ERRMSG(NoSuchPath, "No such path object.");
 ERRMSG(NoTransformFeedbackOutputVariables,
-    "The active program has specified no output variables to record.");
+       "The active program has specified no output variables to record.");
 ERRMSG(NoZeroDivisor, "At least one enabled attribute must have a divisor of zero.");
 ERRMSG(NVFenceNotSupported, "GL_NV_fence is not supported");
 ERRMSG(ObjectNotGenerated, "Object cannot be used because it has not been generated.");
@@ -205,6 +205,7 @@ ERRMSG(WebglBindAttribLocationReservedPrefix,
        "Attributes that begin with 'webgl_', or '_webgl_' are not allowed.");
 ERRMSG(WebglNameLengthLimitExceeded,
        "Location name lengths must not be greater than 256 characters.");
+ERRMSG(GLES1Only, "GLES1-only function.");
 }
 #undef ERRMSG
 #endif  // LIBANGLE_ERRORSTRINGS_H_
