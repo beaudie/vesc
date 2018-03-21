@@ -207,6 +207,11 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
         return nullptr;
     }}
     uint32_t nameHash = name.mangledNameHash();
+    if ((nameHash >> 31) != 0)
+    {{
+        // The name contains [ or {{.
+        return nullptr;
+    }}
 {get_builtin}
 }}
 
@@ -556,6 +561,7 @@ for basic_type in basic_types_enumeration:
             ttype_mangled_name_variants.append(type.get_mangled_name())
 
 def gen_parameters_mangled_name_variants(str_len):
+    # Note that this doesn't generate variants with array parameters or struct / interface block parameters. They are assumed to have been filtered out separately.
     if str_len % 2 != 0:
         raise Exception('Expecting parameters mangled name length to be divisible by two')
     num_variants = pow(len(ttype_mangled_name_variants), str_len / 2)
@@ -706,13 +712,16 @@ def mangledNameHash(str, save_test = True):
     index = 0
     max_six_bit_value = (1 << 6) - 1
     paren_location = max_six_bit_value
+    has_array_or_block_param_bit = 0
     for c in str:
         hash = hash ^ ord(c)
         hash = hash * fnvPrime & 0xffffffff
         if c == '(':
             paren_location = index
+        elif c == '{' or c == '[':
+            has_array_or_block_param_bit = 1
         index += 1
-    hash = ((hash >> 12) ^ (hash & 0xfff)) | (paren_location << 26) | (index << 20)
+    hash = ((hash >> 13) ^ (hash & 0x1fff)) | (index << 19) | (paren_location << 25) | (has_array_or_block_param_bit << 31)
     if save_test:
         sanity_check = '    ASSERT_EQ(0x{hash}u, ImmutableString("{str}").mangledNameHash());'.format(hash = ('%08x' % hash), str = str)
         script_generated_hash_tests.update({sanity_check: None})
@@ -765,11 +774,8 @@ def mangled_name_hash_can_collide_with_different_parameters(function_variant_pro
     mangled_name_prefix = function_variant_props['name'] + '('
     parameters_mangled_name_len = len(mangled_name) - len(mangled_name_prefix)
     parameters_mangled_name = mangled_name[len(mangled_name_prefix):]
-    if (parameters_mangled_name_len > 4):
-        # In this case a struct parameter or an array parameter would fit to the space reserved for
-        # parameter mangled names. This increases the complexity of searching for hash collisions
-        # considerably, so rather than doing it we just conservatively assume that a hash collision
-        # may be possible.
+    if (parameters_mangled_name_len > 6):
+        # This increases the complexity of searching for hash collisions considerably, so rather than doing it we just conservatively assume that a hash collision may be possible.
         return True
     for variant in gen_parameters_mangled_name_variants(parameters_mangled_name_len):
         if parameters_mangled_name != variant and mangledNameHash(mangled_name_prefix + variant, False) == hash:
