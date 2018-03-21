@@ -109,13 +109,18 @@ struct PointParameters
 };
 
 class Context;
+class State;
 class GLES1State final : angle::NonCopyable
 {
+    friend class State;
+
   public:
     GLES1State();
     ~GLES1State();
 
     void initialize(const Context *context);
+
+    void alphaFunc(AlphaTestFunc func, GLfloat ref);
 
   private:
     // All initial state values come from the
@@ -179,7 +184,7 @@ class GLES1State final : angle::NonCopyable
     PointParameters mPointParameters;
 
     // Table 6.16
-    AlphaTestFunc mAlphaFunc;
+    AlphaTestFunc mAlphaTestFunc;
     GLfloat mAlphaTestRef;
     LogicalOperation mLogicOp;
 
