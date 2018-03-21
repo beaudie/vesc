@@ -163,8 +163,8 @@ void LogLinkMismatch(InfoLog &infoLog,
                      const char *variableType,
                      LinkMismatchError linkError,
                      const std::string &mismatchedStructOrBlockFieldName,
-                     GLenum shaderType1,
-                     GLenum shaderType2);
+                     ShaderType shaderType1,
+                     ShaderType shaderType2);
 
 bool IsActiveInterfaceBlock(const sh::InterfaceBlock &interfaceBlock);
 
@@ -277,7 +277,7 @@ struct ImageBinding
     std::vector<GLuint> boundImageUnits;
 };
 
-using ShaderStagesMask = angle::BitSet<SHADER_TYPE_MAX>;
+using ShaderStagesMask = angle::PackedEnumBitSet<ShaderType>;
 
 class ProgramState final : angle::NonCopyable
 {
@@ -500,10 +500,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const gl::Context *context);
     bool isLinked() const;
 
-    bool hasLinkedVertexShader() const { return mState.mLinkedShaderStages[SHADER_VERTEX]; }
-    bool hasLinkedFragmentShader() const { return mState.mLinkedShaderStages[SHADER_FRAGMENT]; }
-    bool hasLinkedComputeShader() const { return mState.mLinkedShaderStages[SHADER_COMPUTE]; }
-    bool hasLinkedGeometryShader() const { return mState.mLinkedShaderStages[SHADER_GEOMETRY]; }
+    bool hasLinkedShaderStage(ShaderType shaderType) const;
 
     Error loadBinary(const Context *context,
                      GLenum binaryFormat,

@@ -134,6 +134,22 @@ enum ShaderIndex : uint32_t
     MaxShaderIndex = 2,
 };
 
+// TODO(jiawei.shao@intel.com): Remove this function when ShaderIndex is fully replaced by
+// gl::ShaderType. (BUG=angleproject:2169)
+ShaderIndex ConvertToShaderIndex(gl::ShaderType shaderType)
+{
+    switch (shaderType)
+    {
+        case gl::ShaderType::Vertex:
+            return ShaderIndex::VertexShader;
+        case gl::ShaderType::Fragment:
+            return ShaderIndex::FragmentShader;
+        default:
+            UNREACHABLE();
+            return ShaderIndex::MaxShaderIndex;
+    }
+}
+
 gl::Shader *GetShader(const gl::ProgramState &programState, uint32_t shaderIndex)
 {
     switch (shaderIndex)
@@ -458,9 +474,10 @@ void ProgramVk::getUniformImpl(GLint location, T *v, GLenum entryPointType) cons
 
     ASSERT(linkedUniform.typeInfo->componentType == entryPointType);
     const gl::ShaderType shaderType = linkedUniform.getFirstShaderTypeWhereActive();
-    ASSERT(shaderType != gl::ShaderType::SHADER_TYPE_INVALID);
+    ASSERT(shaderType != gl::ShaderType::InvalidEnum);
 
-    const DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
+    const DefaultUniformBlock &uniformBlock =
+        mDefaultUniformBlocks[ConvertToShaderIndex(shaderType)];
     const sh::BlockMemberInfo &layoutInfo   = uniformBlock.uniformLayout[location];
     ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, v, layoutInfo,
                                 &uniformBlock.uniformData);
