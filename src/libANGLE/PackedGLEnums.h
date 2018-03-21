@@ -152,6 +152,16 @@ struct AllCubeFaceTextureTargets
     angle::EnumIterator<TextureTarget> end() const { return kAfterLastCubeMapTextureTarget; }
 };
 
+constexpr ShaderType kFirstGraphicsShaderType = ShaderType::Vertex;
+constexpr ShaderType kLastGraphicsShaderType  = ShaderType::Fragment;
+constexpr ShaderType kAfterLastGraphicsShaderType =
+    static_cast<ShaderType>(static_cast<uint8_t>(kLastGraphicsShaderType) + 1);
+struct AllGraphicsShaderTypes
+{
+    angle::EnumIterator<ShaderType> begin() const { return kFirstGraphicsShaderType; }
+    angle::EnumIterator<ShaderType> end() const { return kLastGraphicsShaderType; }
+};
+
 TextureType SamplerTypeToTextureType(GLenum samplerType);
 
 }  // namespace gl

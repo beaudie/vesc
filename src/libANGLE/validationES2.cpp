@@ -4159,15 +4159,15 @@ bool ValidateCompressedCopyTextureCHROMIUM(Context *context, GLuint sourceId, GL
     return true;
 }
 
-bool ValidateCreateShader(Context *context, GLenum type)
+bool ValidateCreateShader(Context *context, ShaderType type)
 {
     switch (type)
     {
-        case GL_VERTEX_SHADER:
-        case GL_FRAGMENT_SHADER:
+        case ShaderType::Vertex:
+        case ShaderType::Fragment:
             break;
 
-        case GL_COMPUTE_SHADER:
+        case ShaderType::Compute:
             if (context->getClientVersion() < Version(3, 1))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), ES31Required);
@@ -4175,7 +4175,7 @@ bool ValidateCreateShader(Context *context, GLenum type)
             }
             break;
 
-        case GL_GEOMETRY_SHADER_EXT:
+        case ShaderType::Geometry:
             if (!context->getExtensions().geometryShader)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidShaderType);
@@ -4359,7 +4359,7 @@ bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
 
     switch (shaderObject->getType())
     {
-        case GL_VERTEX_SHADER:
+        case ShaderType::Vertex:
         {
             if (programObject->getAttachedVertexShader())
             {
@@ -4368,7 +4368,7 @@ bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
             }
             break;
         }
-        case GL_FRAGMENT_SHADER:
+        case ShaderType::Fragment:
         {
             if (programObject->getAttachedFragmentShader())
             {
@@ -4377,7 +4377,7 @@ bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
             }
             break;
         }
-        case GL_COMPUTE_SHADER:
+        case ShaderType::Compute:
         {
             if (programObject->getAttachedComputeShader())
             {
@@ -4386,7 +4386,7 @@ bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
             }
             break;
         }
-        case GL_GEOMETRY_SHADER_EXT:
+        case ShaderType::Geometry:
         {
             if (programObject->getAttachedGeometryShader())
             {
@@ -4992,22 +4992,22 @@ bool ValidateDetachShader(Context *context, GLuint program, GLuint shader)
 
     switch (shaderObject->getType())
     {
-        case GL_VERTEX_SHADER:
+        case ShaderType::Vertex:
         {
             attachedShader = programObject->getAttachedVertexShader();
             break;
         }
-        case GL_FRAGMENT_SHADER:
+        case ShaderType::Fragment:
         {
             attachedShader = programObject->getAttachedFragmentShader();
             break;
         }
-        case GL_COMPUTE_SHADER:
+        case ShaderType::Compute:
         {
             attachedShader = programObject->getAttachedComputeShader();
             break;
         }
-        case GL_GEOMETRY_SHADER_EXT:
+        case ShaderType::Geometry:
         {
             attachedShader = programObject->getAttachedGeometryShader();
             break;

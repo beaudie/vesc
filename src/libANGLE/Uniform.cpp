@@ -28,23 +28,23 @@ StaticallyUsed::~StaticallyUsed()
 StaticallyUsed::StaticallyUsed(const StaticallyUsed &rhs) = default;
 StaticallyUsed &StaticallyUsed::operator=(const StaticallyUsed &rhs) = default;
 
-void StaticallyUsed::setStaticUse(GLenum shaderType, bool used)
+void StaticallyUsed::setStaticUse(ShaderType shaderType, bool used)
 {
     switch (shaderType)
     {
-        case GL_VERTEX_SHADER:
+        case ShaderType::Vertex:
             vertexStaticUse = used;
             break;
 
-        case GL_FRAGMENT_SHADER:
+        case ShaderType::Fragment:
             fragmentStaticUse = used;
             break;
 
-        case GL_COMPUTE_SHADER:
+        case ShaderType::Compute:
             computeStaticUse = used;
             break;
 
-        case GL_GEOMETRY_SHADER_EXT:
+        case ShaderType::Geometry:
             geometryStaticUse = used;
             break;
 
@@ -64,16 +64,16 @@ void StaticallyUsed::unionReferencesWith(const StaticallyUsed &other)
 ShaderType StaticallyUsed::getFirstStaticUseShaderType() const
 {
     if (vertexStaticUse)
-        return SHADER_VERTEX;
+        return ShaderType::Vertex;
     if (fragmentStaticUse)
-        return SHADER_FRAGMENT;
+        return ShaderType::Fragment;
     if (computeStaticUse)
-        return SHADER_COMPUTE;
+        return ShaderType::Compute;
     if (geometryStaticUse)
-        return SHADER_GEOMETRY;
+        return ShaderType::Geometry;
 
     UNREACHABLE();
-    return SHADER_TYPE_INVALID;
+    return ShaderType::InvalidEnum;
 }
 
 LinkedUniform::LinkedUniform()
