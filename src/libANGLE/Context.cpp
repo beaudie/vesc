@@ -4619,7 +4619,38 @@ void Context::getIntegerv(GLenum pname, GLint *params)
     }
     else
     {
-        CastStateValues(this, nativeType, pname, numParams, params);
+        // GLES1 emulation: Certain things have to be rescaled
+        // when converting from float to int.
+        bool floatRescale = false;
+        if (getClientVersion() < Version(2, 0))
+        {
+            switch (pname)
+            {
+                // TODO
+                // case GL_CURRENT_COLOR:
+                // case GL_CURRENT_NORMAL:
+                // case GL_CURRENT_TEXTURE_COORDS:
+                case GL_ALPHA_TEST_REF:
+                    floatRescale = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (floatRescale)
+        {
+            GLfloat floatParams[4];
+            getFloatvImpl(pname, floatParams);
+            for (unsigned int i = 0; i < numParams; i++)
+            {
+                params[i] = (GLint)(0.5f * ((floatParams[i] * (pow(2.0f, 32.0f) - 1.0f)) - 1.0f));
+            }
+        }
+        else
+        {
+            CastStateValues(this, nativeType, pname, numParams, params);
+        }
     }
 }
 
@@ -6546,6 +6577,22 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             case GL_MAX_GEOMETRY_IMAGE_UNIFORMS_EXT:
             case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT:
                 *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
+    // GLES1 emulation
+    if (getClientVersion() < Version(2, 0))
+    {
+        switch (pname)
+        {
+            case GL_ALPHA_TEST_FUNC:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+            case GL_ALPHA_TEST_REF:
+                *type      = GL_FLOAT;
                 *numParams = 1;
                 return true;
         }
