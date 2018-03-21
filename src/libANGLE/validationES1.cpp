@@ -9,20 +9,30 @@
 #include "libANGLE/validationES1.h"
 
 #include "common/debug.h"
+#include "libANGLE/Context.h"
 
 namespace gl
 {
 
-bool ValidateAlphaFunc(Context *context, GLenum func, GLfloat ref)
+bool ValidateAlphaFuncCommon(Context *context, AlphaTestFunc func)
 {
-    UNIMPLEMENTED();
+    if (func == AlphaTestFunc::InvalidEnum)
+    {
+        context->handleError(InvalidEnum());
+        return false;
+    }
+
     return true;
 }
 
-bool ValidateAlphaFuncx(Context *context, GLenum func, GLfixed ref)
+bool ValidateAlphaFunc(Context *context, AlphaTestFunc func, GLfloat ref)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateAlphaFuncCommon(context, func);
+}
+
+bool ValidateAlphaFuncx(Context *context, AlphaTestFunc func, GLfixed ref)
+{
+    return ValidateAlphaFuncCommon(context, func);
 }
 
 bool ValidateClearColorx(Context *context, GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)

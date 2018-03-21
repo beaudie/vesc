@@ -10,17 +10,39 @@
 
 #include "common/utilities.h"
 
+namespace
+{
+
+inline GLfloat Fixed2Float(GLfixed f)
+{
+    return ((GLfloat)f) / 65536.0f;
+}
+
+// TODO: unused for now
+// inline GLfixed Float2Fixed(GLfloat f) {
+//     static constexpr GLfixed highest = 32767 * 65536 + 65535;
+//     static constexpr GLfixed lowest = -32768 * 65536 + 65535;
+//     if (f > 32767.65535) {
+//         return highest;
+//     } else if (f < -32768.65535) {
+//         return lowest;
+//     } else {
+//         return (GLfixed)(f * 65536);
+//     }
+// }
+}
+
 namespace gl
 {
 
-void Context::alphaFunc(GLenum func, GLfloat ref)
+void Context::alphaFunc(AlphaTestFunc func, GLfloat ref)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().alphaFunc(func, ref);
 }
 
-void Context::alphaFuncx(GLenum func, GLfixed ref)
+void Context::alphaFuncx(AlphaTestFunc func, GLfixed ref)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().alphaFunc(func, Fixed2Float(ref));
 }
 
 void Context::clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
