@@ -28,6 +28,14 @@ namespace rx
 class FramebufferVk;
 class GlslangWrapper;
 
+enum DescriptorSetLayoutIndex : uint8_t
+{
+    UniformLayoutIndex       = 0,
+    TextureLayoutIndex       = 1,
+    DescriptorSetLayoutAll   = 2,
+    DescriptorSetLayoutCount = DescriptorSetLayoutAll
+};
+
 namespace vk
 {
 struct Format;
