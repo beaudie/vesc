@@ -23,15 +23,16 @@ class GLImplFactory;
 namespace gl
 {
 class ContextState;
+enum class ShaderType : uint8_t;
 
 class Compiler final : public RefCountObjectNoID
 {
   public:
     Compiler(rx::GLImplFactory *implFactory, const ContextState &data);
 
-    ShHandle getCompilerHandle(GLenum type);
+    ShHandle getCompilerHandle(ShaderType shaderType);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
-    const std::string &getBuiltinResourcesString(GLenum type);
+    const std::string &getBuiltinResourcesString(ShaderType type);
 
   private:
     ~Compiler() override;

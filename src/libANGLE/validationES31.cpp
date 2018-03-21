@@ -1756,7 +1756,7 @@ bool ValidateActiveShaderProgram(Context *context, GLuint pipeline, GLuint progr
 }
 
 bool ValidateCreateShaderProgramv(Context *context,
-                                  GLenum type,
+                                  ShaderType type,
                                   GLsizei count,
                                   const GLchar *const *strings)
 {

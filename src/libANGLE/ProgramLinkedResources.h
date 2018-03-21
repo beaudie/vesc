@@ -39,6 +39,7 @@ class ProgramBindings;
 class Shader;
 struct VariableLocation;
 struct ShaderVariableBuffer;
+enum class ShaderType : uint8_t;
 
 using AtomicCounterBuffer = ShaderVariableBuffer;
 
@@ -103,7 +104,7 @@ class UniformLinker final : angle::NonCopyable
                                       std::vector<LinkedUniform> *samplerUniforms,
                                       std::vector<LinkedUniform> *imageUniforms,
                                       std::vector<LinkedUniform> *atomicCounterUniforms,
-                                      GLenum shaderType);
+                                      ShaderType shaderType);
 
     ShaderUniformCount flattenArrayOfStructsUniform(
         const sh::ShaderVariable &uniform,
@@ -113,7 +114,7 @@ class UniformLinker final : angle::NonCopyable
         std::vector<LinkedUniform> *samplerUniforms,
         std::vector<LinkedUniform> *imageUniforms,
         std::vector<LinkedUniform> *atomicCounterUniforms,
-        GLenum shaderType,
+        ShaderType shaderType,
         bool markStaticUse,
         int binding,
         int offset,
@@ -125,7 +126,7 @@ class UniformLinker final : angle::NonCopyable
                                             std::vector<LinkedUniform> *samplerUniforms,
                                             std::vector<LinkedUniform> *imageUniforms,
                                             std::vector<LinkedUniform> *atomicCounterUniforms,
-                                            GLenum shaderType,
+                                            ShaderType shaderType,
                                             bool markStaticUse,
                                             int binding,
                                             int offset,
@@ -137,7 +138,7 @@ class UniformLinker final : angle::NonCopyable
                                            std::vector<LinkedUniform> *samplerUniforms,
                                            std::vector<LinkedUniform> *imageUniforms,
                                            std::vector<LinkedUniform> *atomicCounterUniforms,
-                                           GLenum shaderType,
+                                           ShaderType shaderType,
                                            bool markStaticUse,
                                            int binding,
                                            int offset,
@@ -151,7 +152,7 @@ class UniformLinker final : angle::NonCopyable
                                           std::vector<LinkedUniform> *samplerUniforms,
                                           std::vector<LinkedUniform> *imageUniforms,
                                           std::vector<LinkedUniform> *atomicCounterUniforms,
-                                          GLenum shaderType,
+                                          ShaderType shaderType,
                                           bool markStaticUse,
                                           int binding,
                                           int offset,
@@ -185,7 +186,7 @@ class InterfaceBlockLinker : angle::NonCopyable
 
     // This is called once per shader stage. It stores a pointer to the block vector, so it's
     // important that this class does not persist longer than the duration of Program::link.
-    void addShaderBlocks(GLenum shader, const std::vector<sh::InterfaceBlock> *blocks);
+    void addShaderBlocks(ShaderType shader, const std::vector<sh::InterfaceBlock> *blocks);
 
     // This is called once during a link operation, after all shader blocks are added.
     void linkBlocks(const GetBlockSize &getBlockSize,
@@ -196,7 +197,7 @@ class InterfaceBlockLinker : angle::NonCopyable
     void defineInterfaceBlock(const GetBlockSize &getBlockSize,
                               const GetBlockMemberInfo &getMemberInfo,
                               const sh::InterfaceBlock &interfaceBlock,
-                              GLenum shaderType) const;
+                              ShaderType shaderType) const;
 
     template <typename VarT>
     void defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
@@ -206,7 +207,7 @@ class InterfaceBlockLinker : angle::NonCopyable
                             int blockIndex,
                             bool singleEntryForTopLevelArray,
                             int topLevelArraySize,
-                            GLenum shaderType) const;
+                            ShaderType shaderType) const;
     template <typename VarT>
     void defineBlockMember(const GetBlockMemberInfo &getMemberInfo,
                            const VarT &field,
@@ -215,7 +216,7 @@ class InterfaceBlockLinker : angle::NonCopyable
                            int blockIndex,
                            bool singleEntryForTopLevelArray,
                            int topLevelArraySize,
-                           GLenum shaderType) const;
+                           ShaderType shaderType) const;
 
     virtual void defineBlockMemberImpl(const sh::ShaderVariable &field,
                                        const std::string &fullName,
@@ -223,13 +224,13 @@ class InterfaceBlockLinker : angle::NonCopyable
                                        int blockIndex,
                                        const sh::BlockMemberInfo &memberInfo,
                                        int topLevelArraySize,
-                                       GLenum shaderType) const                 = 0;
+                                       ShaderType shaderType) const             = 0;
     virtual size_t getCurrentBlockMemberIndex() const                           = 0;
     virtual void updateBlockMemberStaticUsedImpl(const std::string &fullName,
-                                                 GLenum shaderType,
+                                                 ShaderType shaderType,
                                                  bool staticUse) const          = 0;
 
-    using ShaderBlocks = std::pair<GLenum, const std::vector<sh::InterfaceBlock> *>;
+    using ShaderBlocks = std::pair<ShaderType, const std::vector<sh::InterfaceBlock> *>;
     std::vector<ShaderBlocks> mShaderBlocks;
 
     std::vector<InterfaceBlock> *mBlocksOut;
@@ -244,7 +245,7 @@ class InterfaceBlockLinker : angle::NonCopyable
                                           int blockIndex,
                                           bool singleEntryForTopLevelArray,
                                           int topLevelArraySize,
-                                          GLenum shaderType) const;
+                                          ShaderType shaderType) const;
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
@@ -261,10 +262,10 @@ class UniformBlockLinker final : public InterfaceBlockLinker
                                int blockIndex,
                                const sh::BlockMemberInfo &memberInfo,
                                int topLevelArraySize,
-                               GLenum shaderType) const override;
+                               ShaderType shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
     void updateBlockMemberStaticUsedImpl(const std::string &fullName,
-                                         GLenum shaderType,
+                                         ShaderType shaderType,
                                          bool staticUse) const override;
     std::vector<LinkedUniform> *mUniformsOut;
 };
@@ -283,10 +284,10 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
                                int blockIndex,
                                const sh::BlockMemberInfo &memberInfo,
                                int topLevelArraySize,
-                               GLenum shaderType) const override;
+                               ShaderType shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
     void updateBlockMemberStaticUsedImpl(const std::string &fullName,
-                                         GLenum shaderType,
+                                         ShaderType shaderType,
                                          bool staticUse) const override;
     std::vector<BufferVariable> *mBufferVariablesOut;
 };
