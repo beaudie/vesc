@@ -14,6 +14,7 @@
 
 #include "libANGLE/Constants.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/StreamingBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -127,7 +128,8 @@ class ProgramVk : public ProgramImpl
 
   private:
     vk::Error reset(ContextVk *contextVk);
-    vk::Error allocateDescriptorSets(ContextVk *contextVk);
+    vk::Error allocateDescriptorSets(ContextVk *contextVk,
+                                     DescriptorSetLayoutIndex descriptSetLayoutIndex);
     gl::Error initDefaultUniformBlocks(const gl::Context *glContext);
     vk::Error updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
 
