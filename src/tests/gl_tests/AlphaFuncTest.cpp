@@ -1,0 +1,84 @@
+//
+// Copyright 2018 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
+
+#include "random_utils.h"
+
+#include <stdint.h>
+
+using namespace angle;
+
+class AlphaFuncTest : public ANGLETest
+{
+    protected:
+        AlphaFuncTest()
+        {
+            setWindowWidth(1);
+            setWindowHeight(1);
+            setConfigRedBits(8);
+            setConfigGreenBits(8);
+            setConfigBlueBits(8);
+            setConfigAlphaBits(8);
+            setConfigDepthBits(24);
+        }
+
+        void SetUp() override
+        {
+            ANGLETest::SetUp();
+        }
+
+        void TearDown() override
+        {
+            ANGLETest::TearDown();
+        }
+};
+
+TEST_P(AlphaFuncTest, EnableDisable)
+{
+    EXPECT_EQ(GL_FALSE, glIsEnabled(GL_ALPHA_TEST));
+    EXPECT_GL_NO_ERROR();
+
+    glEnable(GL_ALPHA_TEST);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(GL_TRUE, glIsEnabled(GL_ALPHA_TEST));
+    EXPECT_GL_NO_ERROR();
+
+    glDisable(GL_ALPHA_TEST);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(GL_FALSE, glIsEnabled(GL_ALPHA_TEST));
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(AlphaFuncTest, SetFuncNegative)
+{
+    glAlphaFunc((GLenum)0, 0.0f);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    glAlphaFunc((GLenum)1, 0.0f);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    glAlphaFunc((GLenum)GL_ALPHA, 0.0f);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+}
+
+TEST_P(AlphaFuncTest, SetFunc)
+{
+    GLfloat alphaTestVal = -1.0f;
+    glAlphaFunc(GL_ALWAYS, 0.0f);
+    glGetFloatv(GL_ALPHA_TEST_REF, &alphaTestVal);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(0.0f, alphaTestVal);
+}
+
+ANGLE_INSTANTIATE_TEST(AlphaFuncTest,
+                       ES1_D3D11(),
+                       ES1_OPENGL(),
+                       ES1_OPENGLES());
+
