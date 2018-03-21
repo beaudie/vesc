@@ -142,14 +142,24 @@ TextureTarget NonCubeTextureTypeToTarget(TextureType type);
 TextureTarget CubeFaceIndexToTextureTarget(size_t face);
 size_t CubeMapTextureTargetToFaceIndex(TextureTarget target);
 
-constexpr TextureTarget kFirstCubeMapTextureTarget = TextureTarget::CubeMapPositiveX;
-constexpr TextureTarget kLastCubeMapTextureTarget  = TextureTarget::CubeMapNegativeZ;
-constexpr TextureTarget kAfterLastCubeMapTextureTarget =
-    static_cast<TextureTarget>(static_cast<uint8_t>(kLastCubeMapTextureTarget) + 1);
+constexpr TextureTarget kCubeMapTextureTargetMin = TextureTarget::CubeMapPositiveX;
+constexpr TextureTarget kCubeMapTextureTargetMax = TextureTarget::CubeMapNegativeZ;
+constexpr TextureTarget kAfterCubeMapTextureTargetMax =
+    static_cast<TextureTarget>(static_cast<uint8_t>(kCubeMapTextureTargetMax) + 1);
 struct AllCubeFaceTextureTargets
 {
-    angle::EnumIterator<TextureTarget> begin() const { return kFirstCubeMapTextureTarget; }
-    angle::EnumIterator<TextureTarget> end() const { return kAfterLastCubeMapTextureTarget; }
+    angle::EnumIterator<TextureTarget> begin() const { return kCubeMapTextureTargetMin; }
+    angle::EnumIterator<TextureTarget> end() const { return kAfterCubeMapTextureTargetMax; }
+};
+
+constexpr ShaderType kGLES2ShaderTypeMin = ShaderType::Vertex;
+constexpr ShaderType kGLES2ShaderTypeMax = ShaderType::Fragment;
+constexpr ShaderType kAfterGLES2ShaderTypeMax =
+    static_cast<ShaderType>(static_cast<uint8_t>(kGLES2ShaderTypeMax) + 1);
+struct AllGLES2ShaderTypes
+{
+    angle::EnumIterator<ShaderType> begin() const { return kGLES2ShaderTypeMin; }
+    angle::EnumIterator<ShaderType> end() const { return kGLES2ShaderTypeMax; }
 };
 
 TextureType SamplerTypeToTextureType(GLenum samplerType);
