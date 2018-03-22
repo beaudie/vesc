@@ -142,9 +142,8 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
         // We only support packed depth/stencil, not separate.
         ASSERT(!(clearDepth && clearStencil) || mState.getDepthStencilAttachment());
-
-        const VkImageAspectFlags aspectFlags = (clearDepth ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
-                                               (clearDepth ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
+        const VkImageAspectFlags aspectFlags =
+            (clearDepth ? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT : 0);
 
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
         renderTarget->resource->onWriteResource(writingNode, currentSerial);
