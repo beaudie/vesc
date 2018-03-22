@@ -77,9 +77,13 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
 
     if (!mImage.valid() && (width != 0 || height != 0))
     {
+        gl::InternalFormat format      = gl::GetSizedInternalFormatInfo(internalformat);
+        boolean isDepthOrStencilFormat = format.depthBits > 0 || format.stencilBits > 0;
         const VkImageUsageFlags usage =
-            (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
+            VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+            VK_IMAGE_USAGE_SAMPLED_BIT |
+            (format.redBits > 0 ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0) |
+            (isDepthOrStencilFormat ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : 0);
 
         VkImageCreateInfo imageInfo;
         imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -106,7 +110,9 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
         ANGLE_TRY(vk::AllocateImageMemory(renderer, flags, &mImage, &mDeviceMemory,
                                           &mAllocatedMemorySize));
 
-        VkImageAspectFlags aspect = VK_IMAGE_ASPECT_COLOR_BIT;
+        VkImageAspectFlags aspect = (format.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
+                                    (format.stencilBits > 0 ? VK_IMAGE_ASPECT_STENCIL_BIT : 0) |
+                                    (format.redBits > 0 ? VK_IMAGE_ASPECT_COLOR_BIT : 0);
 
         // Allocate ImageView.
         VkImageViewCreateInfo viewInfo;
@@ -132,10 +138,20 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
         VkClearColorValue black = {{0}};
-        mImage.changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
-        commandBuffer->clearSingleColorImage(mImage, black);
+        mImage.changeLayoutWithStages(aspect, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                      VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                      VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+
+        if (isDepthOrStencilFormat)
+        {
+            const VkClearDepthStencilValue &clearDepthStencilValue =
+                contextVk->getClearDepthStencilValue().depthStencil;
+            commandBuffer->clearSingleDepthStencilImage(mImage, aspect, clearDepthStencilValue);
+        }
+        else
+        {
+            commandBuffer->clearSingleColorImage(mImage, black);
+        }
     }
 
     return gl::NoError();
