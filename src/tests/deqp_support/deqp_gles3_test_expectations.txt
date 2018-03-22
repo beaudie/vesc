@@ -96,6 +96,18 @@
 // Windows and Linux failures
 1095 WIN LINUX : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
 
+// Failures related to using a depth/stencil enabled backbuffer on Windows / NVIDIA.
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.shaders.invariance.highp.common_subexpression_1 = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.shaders.invariance.mediump.common_subexpression_1 = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.shaders.invariance.lowp.common_subexpression_1 = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.render_all = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.render_depth_stencil = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.bind_depth_stencil = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.draw_framebuffer_all = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.read_framebuffer_all = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.fbo.invalidate.default.bind_all = SKIP
+2426 D3D11 NVIDIA : dEQP-GLES3.functional.polygon_offset.default.render_with_units = SKIP
+
 // Windows only failure
 1092 WIN : dEQP-GLES3.functional.shaders.texture_functions.textureoffset.sampler3d_fixed_fragment = FAIL
 1092 WIN : dEQP-GLES3.functional.shaders.texture_functions.textureoffset.sampler3d_float_fragment = FAIL

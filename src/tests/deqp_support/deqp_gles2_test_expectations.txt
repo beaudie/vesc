@@ -64,6 +64,16 @@
 1655 D3D11 : dEQP-GLES2.functional.fragment_ops.random.* = FAIL
 1655 D3D11 : dEQP-GLES2.functional.fragment_ops.interaction.basic_shader.* = FAIL
 
+// Failures related to using a depth/stencil enabled backbuffer on Windows / NVIDIA.
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.write.reverse = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.write.half_to_zero = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.write.one_to_half = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.write.0_8_to_third = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.compare.reverse = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.compare.half_to_zero = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.compare.one_to_half = FAIL
+2426 D3D11 NVIDIA : dEQP-GLES2.functional.depth_range.compare.0_8_to_third = FAIL
+ 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //  Temporary entries: they should be removed once the bugs are fixed.
@@ -259,3 +269,7 @@
 2161 VULKAN : dEQP-GLES2.functional.default_vertex_attrib.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.lifetime.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.debug_marker.* = SKIP
+
+// Failures related to using a depth/stencil enabled backbuffer on Windows / NVIDIA.
+2427 VULKAN : dEQP-GLES2.functional.fragment_ops.scissor.clear_depth = FAIL
+2427 VULKAN : dEQP-GLES2.functional.fragment_ops.scissor.clear_stencil = FAIL
