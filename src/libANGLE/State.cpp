@@ -2462,6 +2462,7 @@ Error State::syncDirtyObjects(const Context *context)
     if (!mDirtyObjects.any())
         return NoError();
 
+    printf(" State::syncDirtyObjects 0\n");
     return syncDirtyObjects(context, mDirtyObjects);
 }
 
@@ -2482,6 +2483,7 @@ Error State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset
                 break;
             case DIRTY_OBJECT_VERTEX_ARRAY:
                 ASSERT(mVertexArray);
+                printf(" State::syncDirtyObjects222222222222 0\n");
                 mVertexArray->syncState(context);
                 break;
             case DIRTY_OBJECT_PROGRAM_TEXTURES:

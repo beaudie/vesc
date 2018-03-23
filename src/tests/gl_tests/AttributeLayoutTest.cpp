@@ -295,6 +295,7 @@ class AttributeLayoutTest : public ANGLETest
     std::vector<TestCase> mTestCases;
 
     VertexData<GLfloat, 2> mCoord;
+    VertexData<GLbyte, 2> mBCoord;
     VertexData<GLfloat, 3> mColor;
     VertexData<GLbyte, 3> mBColor;
 };
@@ -317,6 +318,9 @@ void AttributeLayoutTest::PrepareVertexData(void)
         mCoord[i * 2 + 0] = x;
         mCoord[i * 2 + 1] = y;
 
+        mBCoord[i * 2 + 0] = x;
+        mBCoord[i * 2 + 1] = y;
+
         mColor[i * 3 + 0] = r;
         mColor[i * 3 + 1] = g;
         mColor[i * 3 + 2] = b;
@@ -333,6 +337,12 @@ void AttributeLayoutTest::GetTestCases(void)
     std::shared_ptr<Container> M1 = std::make_shared<Memory>();
     std::shared_ptr<Container> B0 = std::make_shared<Buffer>();
     std::shared_ptr<Container> B1 = std::make_shared<Buffer>();
+
+    // mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M0, 96, 3, mBColor)});
+    mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B0, 96, 3, mBColor)});  // float,float works; float,byte works if byte stride >= 11
+    // mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M1, 0, 12, mColor)});
+    // mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B1, 0, 12, mBColor)});  // works
+    return;
 
     // 0. two buffers
     mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B1, 0, 12, mColor)});
@@ -402,6 +412,7 @@ class AttributeLayoutBufferIndexed : public AttributeLayoutTest
 TEST_P(AttributeLayoutNonIndexed, Test)
 {
     Run(true);
+    return;
 
     if (IsWindows() && IsAMD() && IsOpenGL())
     {

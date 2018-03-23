@@ -18,6 +18,23 @@ namespace rx
 class BufferVk;
 class StreamingBuffer;
 
+class Translation : public ResourceVk
+{
+  public:
+    gl::Error translate(const gl::Context *context,
+                        BufferVk *src,
+                        size_t offset,
+                        size_t stride,
+                        int dimension,
+                        GLenum type);
+    void destroy(VkDevice device);
+
+    vk::Buffer mBuffer;
+
+  private:
+    vk::DeviceMemory mMemory;
+};
+
 class VertexArrayVk : public VertexArrayImpl
 {
   public:
@@ -31,6 +48,7 @@ class VertexArrayVk : public VertexArrayImpl
                                StreamingBuffer *stream,
                                size_t firstVertex,
                                size_t lastVertex);
+    gl::Error translateVertexData(ContextVk *context, size_t attribIndex);
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
 
@@ -59,6 +77,7 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<ResourceVk *> mCurrentArrayBufferResources;
+    gl::AttribArray<Translation> mTranslationBuffers;
     ResourceVk *mCurrentElementArrayBufferResource;
 
     // Keep a cache of binding and attribute descriptions for easy pipeline updates.

@@ -15,10 +15,121 @@
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+
+static void br0() {}
+
+namespace
+{
+
+template <class T, int Scale>
+void ToFloat(float *dst, const uint8_t *src, size_t srcSize, size_t stride, int dimension)
+{
+    printf("ToFloat item %d stride %d dim %d\n", (int)sizeof(T), (int)stride, (int)dimension);
+    const uint8_t *const srcLast = src + srcSize - dimension * sizeof(T);
+    int cnt                      = 0;
+    while (src <= srcLast)
+    {
+        printf("%d", cnt);
+        for (int i = 0; i < dimension; ++i)
+        {
+            *dst = (reinterpret_cast<const T *>(src))[i] / Scale;
+            printf(" %f", *dst);
+            dst++;
+        }
+        printf("\n");
+        src += stride;
+        cnt += 1;
+    }
+    printf("stored %d vertices\n", cnt);
+}
+
+void ToFloat(float *dst,
+             const uint8_t *src,
+             size_t srcSize,
+             size_t stride,
+             int dimension,
+             GLenum type)
+{
+    switch (type)
+    {
+        case GL_BYTE:
+            return ToFloat<GLbyte, 1>(dst, src, srcSize, stride, dimension);
+        case GL_SHORT:
+            return ToFloat<GLshort, 1>(dst, src, srcSize, stride, dimension);
+        case GL_INT:
+            return ToFloat<GLint, 1>(dst, src, srcSize, stride, dimension);
+        case GL_UNSIGNED_BYTE:
+            return ToFloat<GLubyte, 1>(dst, src, srcSize, stride, dimension);
+        case GL_UNSIGNED_SHORT:
+            return ToFloat<GLushort, 1>(dst, src, srcSize, stride, dimension);
+        case GL_UNSIGNED_INT:
+            return ToFloat<GLuint, 1>(dst, src, srcSize, stride, dimension);
+        case GL_FLOAT:
+            return ToFloat<GLfloat, 1>(dst, src, srcSize, stride, dimension);
+        case GL_FIXED:
+            return ToFloat<GLint, 0x10000>(dst, src, srcSize, stride, dimension);
+    }
+    UNREACHABLE();
+}
+}
 
 namespace rx
 {
+
+gl::Error Translation::translate(const gl::Context *context,
+                                 BufferVk *src,
+                                 size_t offset,
+                                 size_t stride,
+                                 int dimension,
+                                 GLenum type)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+    VkDevice device      = contextVk->getDevice();
+
+    updateQueueSerial(renderer->getCurrentQueueSerial());
+    renderer->releaseResource(*this, &mBuffer);
+    renderer->releaseResource(*this, &mMemory);
+
+    void *srcMap   = nullptr;
+    size_t srcSize = 0;
+    ANGLE_TRY(src->map(context, 0, &srcMap, &srcSize));
+
+    VkBufferCreateInfo createInfo;
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.pNext                 = nullptr;
+    createInfo.flags                 = 0;
+    createInfo.size                  = srcSize;
+    createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+    ANGLE_TRY(mBuffer.init(device, createInfo));
+
+    size_t dstSize = 0;
+    ANGLE_TRY(vk::AllocateBufferMemory(renderer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &mBuffer,
+                                       &mMemory, &dstSize));
+    uint8_t *dstMap = nullptr;
+    ANGLE_TRY(mMemory.map(device, 0, srcSize, 0, &dstMap));
+
+    // memcpy(dstMap, srcMap, srcSize);
+    // XXX either add 'offset' to 'dstMap' or zero out the offset we pass to vulkan
+    ToFloat(reinterpret_cast<float *>(dstMap), static_cast<const uint8_t *>(srcMap) + offset,
+            srcSize - offset, stride, dimension, type);
+
+    ANGLE_TRY(src->unmap(context, nullptr));
+    mMemory.unmap(device);
+
+    return gl::NoError();
+}
+
+void Translation::destroy(VkDevice device)
+{
+    mBuffer.destroy(device);
+    mMemory.destroy(device);
+}
 
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
@@ -41,6 +152,9 @@ VertexArrayVk::~VertexArrayVk()
 
 void VertexArrayVk::destroy(const gl::Context *context)
 {
+    VkDevice device = vk::GetImpl(context)->getDevice();
+    for (auto &i : mTranslationBuffers)
+        i.destroy(device);
 }
 
 gl::AttributesMask VertexArrayVk::attribsToStream(ContextVk *context) const
@@ -65,27 +179,20 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
 
-        // TODO(fjhenigman): Work with more formats than just GL_FLOAT.
-        if (attrib.type != GL_FLOAT)
-        {
-            UNIMPLEMENTED();
-            return gl::InternalError();
-        }
-
         // Only [firstVertex, lastVertex] is needed by the upcoming draw so that
         // is all we copy, but we allocate space for [0, lastVertex] so indexing
         // will work.  If we don't start at zero all the indices will be off.
         // TODO(fjhenigman): See if we can account for indices being off by adjusting
         // the offset, thus avoiding wasted memory.
-        const size_t firstByte = firstVertex * binding.getStride();
-        const size_t lastByte =
-            lastVertex * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
         uint8_t *dst = nullptr;
-        ANGLE_TRY(stream->allocate(context, lastByte, &dst,
+        ANGLE_TRY(stream->allocate(context, (lastVertex + 1) * attrib.size * sizeof(float), &dst,
                                    &mCurrentArrayBufferHandles[attribIndex],
                                    &mCurrentArrayBufferOffsets[attribIndex], nullptr));
-        memcpy(dst + firstByte, static_cast<const uint8_t *>(attrib.pointer) + firstByte,
-               lastByte - firstByte);
+        ToFloat(reinterpret_cast<float *>(dst) + firstVertex * attrib.size * sizeof(float),
+                static_cast<const uint8_t *>(attrib.pointer) + firstVertex * binding.getStride(),
+                (lastVertex - firstVertex) * binding.getStride() +
+                    gl::ComputeVertexAttributeTypeSize(attrib),
+                binding.getStride(), attrib.size, attrib.type);
     }
 
     ANGLE_TRY(stream->flush(context));
@@ -108,6 +215,9 @@ void VertexArrayVk::syncState(const gl::Context *context,
 
     for (auto dirtyBit : dirtyBits)
     {
+        printf(" VertexArrayVk::syncState dirty bit %d\n", (int)dirtyBit);
+        if (dirtyBit > 16)
+            continue;
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
         {
             gl::Buffer *bufferGL = mState.getElementArrayBuffer().get();
@@ -136,9 +246,25 @@ void VertexArrayVk::syncState(const gl::Context *context,
 
             if (bufferGL)
             {
-                BufferVk *bufferVk                        = vk::GetImpl(bufferGL);
-                mCurrentArrayBufferResources[attribIndex] = bufferVk;
-                mCurrentArrayBufferHandles[attribIndex]   = bufferVk->getVkBuffer().getHandle();
+                br0();
+                size_t offset = ComputeVertexAttributeOffset(attrib, binding);
+                printf("VertexArrayVk::syncState size %d type %d offset %d stride %d\n",
+                       (int)attrib.size, (int)attrib.type, (int)offset, (int)binding.getStride());
+                Translation *t = &mTranslationBuffers[attribIndex];
+
+                BufferVk *vbuf = vk::GetImpl(bufferGL);
+                if (t->translate(context, vbuf, offset, binding.getStride(), attrib.size,
+                                 attrib.type)
+                        .isError())
+                {
+                    //XXX return an error
+                    printf("YOU LOSE\n");
+                }
+
+                mCurrentArrayBufferResources[attribIndex] = vbuf;
+                mCurrentArrayBufferHandles[attribIndex]   = vbuf->getVkBuffer().getHandle();
+                mCurrentArrayBufferResources[attribIndex] = t;
+                mCurrentArrayBufferHandles[attribIndex]   = t->mBuffer.getHandle();
                 mClientMemoryAttribs.reset(attribIndex);
             }
             else
@@ -238,18 +364,22 @@ void VertexArrayVk::updatePackedInputInfo(uint32_t attribIndex,
     size_t attribSize = gl::ComputeVertexAttributeTypeSize(attrib);
     ASSERT(attribSize <= std::numeric_limits<uint16_t>::max());
 
-    bindingDesc.stride    = static_cast<uint16_t>(binding.getStride());
+    bindingDesc.stride    = sizeof(float) * attrib.size;  // static_cast<uint16_t>(binding.getStride());
     bindingDesc.inputRate = static_cast<uint16_t>(
         binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
 
-    gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
-    VkFormat vkFormat                     = vk::GetNativeVertexFormat(vertexFormatType);
+    printf(
+        "VertexArrayVk::updatePackedInputInfo size %d type %d normalized %d pureInteger %d stride "
+        "%d\n",
+        (int)attrib.size, (int)attrib.type, (int)attrib.normalized, (int)attrib.pureInteger,
+        (int)bindingDesc.stride);
+    VkFormat vkFormat = (VkFormat)(VK_FORMAT_R32_SFLOAT + 3 * (attrib.size - 1));
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());
 
     vk::PackedVertexInputAttributeDesc &attribDesc = mPackedInputAttributes[attribIndex];
     attribDesc.format                              = static_cast<uint16_t>(vkFormat);
     attribDesc.location                            = static_cast<uint16_t>(attribIndex);
-    attribDesc.offset = static_cast<uint32_t>(ComputeVertexAttributeOffset(attrib, binding));
+    attribDesc.offset                              = 0;  // static_cast<uint32_t>(ComputeVertexAttributeOffset(attrib, binding));
 }
 
 }  // namespace rx

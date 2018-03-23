@@ -264,6 +264,7 @@ void VertexArray::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
+        printf(" VertexArray::syncState 0\n");
         mVertexArray->syncState(context, mDirtyBits);
         mDirtyBits.reset();
     }

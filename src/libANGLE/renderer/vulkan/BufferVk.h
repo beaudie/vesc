@@ -41,6 +41,7 @@ class BufferVk : public BufferImpl, public ResourceVk, public angle::Subject
                           GLintptr destOffset,
                           GLsizeiptr size) override;
     gl::Error map(const gl::Context *context, GLenum access, void **mapPtr) override;
+    gl::Error map(const gl::Context *context, GLenum access, void **mapPtr, size_t *sizeOut);
     gl::Error mapRange(const gl::Context *context,
                        size_t offset,
                        size_t length,

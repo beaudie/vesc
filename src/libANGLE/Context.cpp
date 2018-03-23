@@ -1805,8 +1805,11 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
         return;
     }
 
+    printf("Context::drawArrays 0\n");
     ANGLE_CONTEXT_TRY(prepareForDraw());
+    printf("Context::drawArrays 0\n");
     ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
+    printf("Context::drawArrays 0\n");
     MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
 }
 
@@ -2924,7 +2927,9 @@ void Context::initWorkarounds()
 
 Error Context::prepareForDraw()
 {
+    printf(" Context::prepareForDraw() 0\n");
     ANGLE_TRY(syncDirtyObjects());
+    printf(" Context::prepareForDraw() 1\n");
 
     if (isRobustResourceInitEnabled())
     {
@@ -2932,7 +2937,9 @@ Error Context::prepareForDraw()
         ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
     }
 
+    printf(" Context::prepareForDraw() 2\n");
     ANGLE_TRY(syncDirtyBits());
+    printf(" Context::prepareForDraw() 3\n");
     return NoError();
 }
 
@@ -2985,6 +2992,7 @@ Error Context::syncDirtyBits(const State::DirtyBits &bitMask)
 
 Error Context::syncDirtyObjects()
 {
+    printf(" Context::syncDirtyObjects() 0\n");
     return mGLState.syncDirtyObjects(this);
 }
 

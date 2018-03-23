@@ -114,18 +114,25 @@ gl::Error BufferVk::copySubData(const gl::Context *context,
     return gl::InternalError();
 }
 
-gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
+gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr, size_t *sizeOut)
 {
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
 
     VkDevice device = vk::GetImpl(context)->getDevice();
 
+    if (sizeOut)
+        *sizeOut = mState.getSize();
     ANGLE_TRY(
         mBufferMemory.map(device, 0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
     onStateChange(context, angle::SubjectMessage::STATE_CHANGE);
     return gl::NoError();
+}
+
+gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
+{
+    return map(context, access, mapPtr, nullptr);
 }
 
 gl::Error BufferVk::mapRange(const gl::Context *context,
