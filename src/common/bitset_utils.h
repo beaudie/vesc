@@ -64,8 +64,7 @@ class BitSetT final
     };
 
     BitSetT();
-    BitSetT(BitsT value);
-    ~BitSetT();
+    constexpr explicit BitSetT(BitsT value);
 
     BitSetT(const BitSetT &other);
     BitSetT &operator=(const BitSetT &other);
@@ -90,6 +89,10 @@ class BitSetT final
     BitSetT &operator^=(const BitSetT &other);
     BitSetT operator~() const;
 
+    BitSetT &operator&=(BitsT value);
+    BitSetT &operator|=(BitsT value);
+    BitSetT &operator^=(BitsT value);
+
     BitSetT operator<<(std::size_t pos) const;
     BitSetT &operator<<=(std::size_t pos);
     BitSetT operator>>(std::size_t pos) const;
@@ -110,12 +113,14 @@ class BitSetT final
     Iterator begin() const { return Iterator(*this); }
     Iterator end() const { return Iterator(BitSetT()); }
 
+    // Produces a mask of ones up to the "x"th bit.
+    constexpr static BitsT Mask(std::size_t x) { return ((Bit(x - 1) - 1) << 1) + 1; }
+
   private:
     constexpr static BitsT Bit(ParamT x)
     {
         return (static_cast<BitsT>(1) << static_cast<size_t>(x));
     }
-    constexpr static BitsT Mask(std::size_t x) { return ((Bit(x - 1) - 1) << 1) + 1; }
 
     BitsT mBits;
 };
@@ -213,12 +218,7 @@ BitSetT<N, BitsT, ParamT>::BitSetT() : mBits(0)
 }
 
 template <size_t N, typename BitsT, typename ParamT>
-BitSetT<N, BitsT, ParamT>::BitSetT(BitsT value) : mBits(value & Mask(N))
-{
-}
-
-template <size_t N, typename BitsT, typename ParamT>
-BitSetT<N, BitsT, ParamT>::~BitSetT()
+constexpr BitSetT<N, BitsT, ParamT>::BitSetT(BitsT value) : mBits(value & Mask(N))
 {
 }
 
@@ -310,6 +310,27 @@ template <size_t N, typename BitsT, typename ParamT>
 BitSetT<N, BitsT, ParamT> BitSetT<N, BitsT, ParamT>::operator~() const
 {
     return BitSetT<N, BitsT, ParamT>(~mBits & Mask(N));
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+BitSetT<N, BitsT, ParamT> &BitSetT<N, BitsT, ParamT>::operator&=(BitsT value)
+{
+    mBits &= value;
+    return *this;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+BitSetT<N, BitsT, ParamT> &BitSetT<N, BitsT, ParamT>::operator|=(BitsT value)
+{
+    mBits |= value;
+    return *this;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+BitSetT<N, BitsT, ParamT> &BitSetT<N, BitsT, ParamT>::operator^=(BitsT value)
+{
+    mBits ^= value;
+    return *this;
 }
 
 template <size_t N, typename BitsT, typename ParamT>

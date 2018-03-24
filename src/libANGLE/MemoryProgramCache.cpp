@@ -244,11 +244,11 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     static_assert(MAX_VERTEX_ATTRIBS * 2 <= sizeof(uint32_t) * 8,
                   "All bits of mAttributesTypeMask types and mask fit into 32 bits each");
     state->mAttributesTypeMask.from_ulong(stream.readInt<uint32_t>());
-    state->mAttributesMask = stream.readInt<uint32_t>();
+    state->mAttributesMask = stream.readInt<gl::AttributesMask>();
 
     static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
                   "Too many vertex attribs for mask");
-    state->mActiveAttribLocationsMask = stream.readInt<unsigned long>();
+    state->mActiveAttribLocationsMask = stream.readInt<gl::AttributesMask>();
 
     unsigned int attribCount = stream.readInt<unsigned int>();
     ASSERT(state->mAttributes.empty());
@@ -390,7 +390,7 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
                   "All bits of mDrawBufferTypeMask and mActiveOutputVariables types and mask fit "
                   "into 32 bits each");
     state->mDrawBufferTypeMask.from_ulong(stream.readInt<uint32_t>());
-    state->mActiveOutputVariables = stream.readInt<uint32_t>();
+    state->mActiveOutputVariables = stream.readInt<gl::DrawBufferMask>();
 
     unsigned int samplerRangeLow  = stream.readInt<unsigned int>();
     unsigned int samplerRangeHigh = stream.readInt<unsigned int>();
@@ -425,7 +425,7 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     state->mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
 
     static_assert(SHADER_TYPE_MAX <= sizeof(unsigned long) * 8, "Too many shader types");
-    state->mLinkedShaderStages = stream.readInt<unsigned long>();
+    state->mLinkedShaderStages = stream.readInt<gl::ShaderStagesMask>();
 
     return program->getImplementation()->load(context, infoLog, &stream);
 }
