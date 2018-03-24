@@ -15,6 +15,7 @@
 
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/Observer.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
@@ -72,7 +73,7 @@ class VertexArrayState final : angle::NonCopyable
     ComponentTypeMask mVertexAttributesTypeMask;
 };
 
-class VertexArray final : public LabeledObject
+class VertexArray final : public angle::ObserverInterface, public LabeledObject
 {
   public:
     VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
@@ -153,6 +154,11 @@ class VertexArray final : public LabeledObject
         return mState.getEnabledAttributesMask();
     }
 
+    // Observer implementation
+    void onSubjectStateChange(const gl::Context *context,
+                              angle::SubjectIndex index,
+                              angle::SubjectMessage message) override;
+
     // Dirty bits for VertexArrays use a heirarchical design. At the top level, each attribute
     // has a single dirty bit. Then an array of MAX_ATTRIBS dirty bits each has a dirty bit for
     // enabled/pointer/format/binding. Bindings are handled similarly. Note that because the
@@ -225,7 +231,13 @@ class VertexArray final : public LabeledObject
     DirtyAttribBitsArray mDirtyAttribBits;
     DirtyBindingBitsArray mDirtyBindingBits;
 
+    // We keep a separate dirty bit set for buffers whose data changed last update.
+    DirtyBits mDirtyBufferDataBits;
+
     rx::VertexArrayImpl *mVertexArray;
+
+    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    angle::ObserverBinding mElementArrayBufferObserverBinding;
 };
 
 }  // namespace gl

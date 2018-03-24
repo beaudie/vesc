@@ -26,7 +26,8 @@ class VertexArray9 : public VertexArrayImpl
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits,
                    const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
+                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                   const gl::VertexArray::DirtyBits &dirtyBufferDataBits) override;
 
     ~VertexArray9() override {}
 
@@ -39,7 +40,8 @@ class VertexArray9 : public VertexArrayImpl
 inline void VertexArray9::syncState(const gl::Context *context,
                                     const gl::VertexArray::DirtyBits &dirtyBits,
                                     const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                                    const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
+                                    const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                                    const gl::VertexArray::DirtyBits &dirtyBufferDataBits)
 {
     ASSERT(dirtyBits.any());
     Renderer9 *renderer = GetImplAs<Context9>(context)->getRenderer();

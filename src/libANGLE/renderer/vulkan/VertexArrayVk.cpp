@@ -95,7 +95,8 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
 void VertexArrayVk::syncState(const gl::Context *context,
                               const gl::VertexArray::DirtyBits &dirtyBits,
                               const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
+                              const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                              const gl::VertexArray::DirtyBits &dirtyBufferDataBits)
 {
     ASSERT(dirtyBits.any());
 
