@@ -10,11 +10,12 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_PROGRAMVK_H_
 #define LIBANGLE_RENDERER_VULKAN_PROGRAMVK_H_
 
+#include <array>
+
 #include "libANGLE/Constants.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/vulkan/StreamingBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
-
-#include <array>
 
 namespace rx
 {
@@ -107,6 +108,8 @@ class ProgramVk : public ProgramImpl
     vk::Error updateUniforms(ContextVk *contextVk);
 
     const std::vector<VkDescriptorSet> &getDescriptorSets() const;
+    const uint32_t *getDynamicOffsets();
+    uint32_t getDynamicOffsetsCount();
 
     // In Vulkan, it is invalid to pass in a NULL descriptor set to vkCmdBindDescriptorSets.
     // However, it's valid to leave them in an undefined, unbound state, if they are never used.
@@ -119,9 +122,12 @@ class ProgramVk : public ProgramImpl
     void updateTexturesDescriptorSet(ContextVk *contextVk);
     void invalidateTextures();
 
+    // For testing only.
+    void setDefaultUniformBlocksMinSize(size_t minSize);
+
   private:
     vk::Error reset(ContextVk *contextVk);
-    vk::Error initDescriptorSets(ContextVk *contextVk);
+    vk::Error allocateDescriptorSets(ContextVk *contextVk);
     gl::Error initDefaultUniformBlocks(const gl::Context *glContext);
     vk::Error updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
 
@@ -142,7 +148,7 @@ class ProgramVk : public ProgramImpl
         DefaultUniformBlock();
         ~DefaultUniformBlock();
 
-        vk::BufferAndMemory storage;
+        StreamingBuffer storage;
 
         // Shadow copies of the shader uniform data.
         angle::MemoryBuffer uniformData;
@@ -154,6 +160,7 @@ class ProgramVk : public ProgramImpl
     };
 
     std::array<DefaultUniformBlock, 2> mDefaultUniformBlocks;
+    std::array<uint32_t, 2> mUniformBlocksOffsets;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms.
     // It is necessary because we want to keep a compatible pipeline layout in all cases,
