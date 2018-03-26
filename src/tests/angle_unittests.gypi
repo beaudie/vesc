@@ -18,6 +18,7 @@
             '<(angle_path)/src/common/aligned_memory_unittest.cpp',
             '<(angle_path)/src/common/angleutils_unittest.cpp',
             '<(angle_path)/src/common/bitset_utils_unittest.cpp',
+            '<(angle_path)/src/common/FixedVector_unittest.cpp',
             '<(angle_path)/src/common/mathutil_unittest.cpp',
             '<(angle_path)/src/common/matrix_utils_unittest.cpp',
             '<(angle_path)/src/common/string_utils_unittest.cpp',
