@@ -17,6 +17,7 @@
             'common/Color.inl',
             'common/debug.cpp',
             'common/debug.h',
+            'common/FixedVector.h',
             'common/Float16ToFloat32.cpp',
             'common/mathutil.cpp',
             'common/mathutil.h',
