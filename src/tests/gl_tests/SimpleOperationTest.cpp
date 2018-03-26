@@ -694,7 +694,7 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
 }
 
-// Creates a texture, no other operations.
+// Creates a 2D texture, no other operations.
 TEST_P(SimpleOperationTest, CreateTexture2DNoData)
 {
     GLTexture texture;
@@ -703,7 +703,7 @@ TEST_P(SimpleOperationTest, CreateTexture2DNoData)
     ASSERT_GL_NO_ERROR();
 }
 
-// Creates a texture, no other operations.
+// Creates a 2D texture, no other operations.
 TEST_P(SimpleOperationTest, CreateTexture2DWithData)
 {
     std::vector<GLColor> colors(16 * 16, GLColor::red);
@@ -711,6 +711,23 @@ TEST_P(SimpleOperationTest, CreateTexture2DWithData)
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, colors.data());
+    ASSERT_GL_NO_ERROR();
+}
+
+// Creates a cube texture, no other operations.
+TEST_P(SimpleOperationTest, CreateTextureCubeNoData)
+{
+    constexpr GLenum kCubeFaces[] = {
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z};
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+    for (GLenum cubeFace : kCubeFaces)
+    {
+        glTexImage2D(cubeFace, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    }
     ASSERT_GL_NO_ERROR();
 }
 
