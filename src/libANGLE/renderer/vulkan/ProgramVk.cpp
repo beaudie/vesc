@@ -814,7 +814,7 @@ void ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
     const gl::State &glState     = contextVk->getGLState();
     const auto &completeTextures = glState.getCompleteTextureCache();
 
-    for (const auto &samplerBinding : mState.getSamplerBindings())
+    for (const gl::SamplerBinding &samplerBinding : mState.getSamplerBindings())
     {
         ASSERT(!samplerBinding.unreferenced);
 
@@ -828,7 +828,7 @@ void ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
         ASSERT(texture);
 
         TextureVk *textureVk   = vk::GetImpl(texture);
-        const vk::Image &image = textureVk->getImage();
+        const vk::ImageHelper &image = textureVk->getImage();
 
         VkDescriptorImageInfo &imageInfo = descriptorImageInfo[imageCount];
 

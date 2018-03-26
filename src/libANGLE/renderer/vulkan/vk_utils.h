@@ -256,7 +256,7 @@ class WrappedObject : angle::NonCopyable
 
     const HandleT *ptr() const { return &mHandle; }
 
-    void dumpResources(Serial serial, std::vector<vk::GarbageObject> *garbageQueue)
+    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue)
     {
         if (valid())
         {
@@ -316,7 +316,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     CommandBuffer();
 
     VkCommandBuffer releaseHandle();
-    void destroy(VkDevice device, const vk::CommandPool &commandPool);
+    void destroy(VkDevice device, const CommandPool &commandPool);
     Error init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo);
     using WrappedObject::operator=;
 
@@ -335,13 +335,13 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                              VkDependencyFlags dependencyFlags,
                              const VkBufferMemoryBarrier &bufferBarrier);
 
-    void clearSingleColorImage(const vk::Image &image, const VkClearColorValue &color);
-
-    void clearSingleDepthStencilImage(const vk::Image &image,
-                                      VkImageAspectFlags aspectFlags,
-                                      const VkClearDepthStencilValue &depthStencil);
-
-    void clearDepthStencilImage(const vk::Image &image,
+    void clearColorImage(const Image &image,
+                         VkImageLayout imageLayout,
+                         const VkClearColorValue &color,
+                         uint32_t rangeCount,
+                         const VkImageSubresourceRange *ranges);
+    void clearDepthStencilImage(const Image &image,
+                                VkImageLayout imageLayout,
                                 const VkClearDepthStencilValue &depthStencil,
                                 uint32_t rangeCount,
                                 const VkImageSubresourceRange *ranges);
@@ -351,8 +351,8 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                           uint32_t rectCount,
                           const VkClearRect *rects);
 
-    void copyBuffer(const vk::Buffer &srcBuffer,
-                    const vk::Buffer &destBuffer,
+    void copyBuffer(const Buffer &srcBuffer,
+                    const Buffer &destBuffer,
                     uint32_t regionCount,
                     const VkBufferCopy *regions);
 
@@ -361,13 +361,10 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                     uint32_t regionCount,
                     const VkBufferCopy *regions);
 
-    void copySingleImage(const vk::Image &srcImage,
-                         const vk::Image &destImage,
-                         const gl::Box &copyRegion,
-                         VkImageAspectFlags aspectMask);
-
-    void copyImage(const vk::Image &srcImage,
-                   const vk::Image &dstImage,
+    void copyImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
                    uint32_t regionCount,
                    const VkImageCopy *regions);
 
@@ -385,21 +382,21 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                      int32_t vertexOffset,
                      uint32_t firstInstance);
 
-    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const vk::Pipeline &pipeline);
+    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipeline);
     void bindVertexBuffers(uint32_t firstBinding,
                            uint32_t bindingCount,
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
     void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                            const vk::PipelineLayout &layout,
+                            const PipelineLayout &layout,
                             uint32_t firstSet,
                             uint32_t descriptorSetCount,
                             const VkDescriptorSet *descriptorSets,
                             uint32_t dynamicOffsetCount,
                             const uint32_t *dynamicOffsets);
 
-    void executeCommands(uint32_t commandBufferCount, const vk::CommandBuffer *commandBuffers);
+    void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
 };
 
 class Image final : public WrappedObject<Image, VkImage>
@@ -418,29 +415,14 @@ class Image final : public WrappedObject<Image, VkImage>
 
     Error init(VkDevice device, const VkImageCreateInfo &createInfo);
 
-    void changeLayoutTop(VkImageAspectFlags aspectMask,
-                         VkImageLayout newLayout,
-                         CommandBuffer *commandBuffer);
-
-    void changeLayoutWithStages(VkImageAspectFlags aspectMask,
-                                VkImageLayout newLayout,
-                                VkPipelineStageFlags srcStageMask,
-                                VkPipelineStageFlags dstStageMask,
-                                CommandBuffer *commandBuffer);
-
     void getMemoryRequirements(VkDevice device, VkMemoryRequirements *requirementsOut) const;
-    Error bindMemory(VkDevice device, const vk::DeviceMemory &deviceMemory);
+    Error bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
 
-    VkImageLayout getCurrentLayout() const { return mCurrentLayout; }
     void getSubresourceLayout(VkDevice device,
                               VkImageAspectFlagBits aspectMask,
                               uint32_t mipLevel,
                               uint32_t arrayLayer,
-                              VkSubresourceLayout *outSubresourceLayout);
-    void updateLayout(VkImageLayout layout) { mCurrentLayout = layout; }
-
-  private:
-    VkImageLayout mCurrentLayout;
+                              VkSubresourceLayout *outSubresourceLayout) const;
 };
 
 class ImageView final : public WrappedObject<ImageView, VkImageView>
@@ -484,8 +466,8 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
               VkDeviceSize offset,
               VkDeviceSize size,
               VkMemoryMapFlags flags,
-              uint8_t **mapPointer);
-    void unmap(VkDevice device);
+              uint8_t **mapPointer) const;
+    void unmap(VkDevice device) const;
 };
 
 class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
@@ -593,7 +575,7 @@ class StagingBuffer final : angle::NonCopyable
     StagingBuffer();
     void destroy(VkDevice device);
 
-    vk::Error init(ContextVk *contextVk, VkDeviceSize size, StagingUsage usage);
+    Error init(ContextVk *contextVk, VkDeviceSize size, StagingUsage usage);
 
     Buffer &getBuffer() { return mBuffer; }
     const Buffer &getBuffer() const { return mBuffer; }
@@ -601,7 +583,7 @@ class StagingBuffer final : angle::NonCopyable
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     size_t getSize() const { return mSize; }
 
-    void dumpResources(Serial serial, std::vector<vk::GarbageObject> *garbageQueue);
+    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue);
 
   private:
     Buffer mBuffer;
@@ -654,8 +636,8 @@ Error AllocateBufferMemory(RendererVk *renderer,
 
 struct BufferAndMemory final : private angle::NonCopyable
 {
-    vk::Buffer buffer;
-    vk::DeviceMemory memory;
+    Buffer buffer;
+    DeviceMemory memory;
 };
 
 Error AllocateImageMemory(RendererVk *renderer,
@@ -675,7 +657,7 @@ class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
     LineLoopHandler();
     ~LineLoopHandler();
 
-    void bindIndexBuffer(VkIndexType indexType, vk::CommandBuffer **commandBuffer);
+    void bindIndexBuffer(VkIndexType indexType, CommandBuffer **commandBuffer);
 
     gl::Error createIndexBuffer(ContextVk *contextVk, int firstVertex, int count);
     gl::Error createIndexBufferFromElementArrayBuffer(ContextVk *contextVk,
@@ -716,10 +698,6 @@ class ImageHelper final : angle::NonCopyable
                  const Format &format,
                  GLint samples,
                  VkImageUsageFlags usage);
-    void init2DWeakReference(VkImage handle,
-                             const gl::Extents &extents,
-                             const Format &format,
-                             GLint samples);
     Error initMemory(VkDevice device,
                      const MemoryProperties &memoryProperties,
                      VkMemoryPropertyFlags flags);
@@ -735,17 +713,44 @@ class ImageHelper final : angle::NonCopyable
 
     void release(Serial serial, RendererVk *renderer);
     void destroy(VkDevice device);
-    void dumpResources(Serial serial, std::vector<vk::GarbageObject> *garbageQueue);
+    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue);
 
-    Image &getImage();
+    void init2DWeakReference(VkImage handle,
+                             const gl::Extents &extents,
+                             const Format &format,
+                             GLint samples);
+    void resetImageWeakReference();
+
     const Image &getImage() const;
-    DeviceMemory &getDeviceMemory();
     const DeviceMemory &getDeviceMemory() const;
 
     const gl::Extents &getExtents() const;
     const Format &getFormat() const;
     GLint getSamples() const;
     size_t getAllocatedMemorySize() const;
+
+    VkImageLayout getCurrentLayout() const { return mCurrentLayout; }
+    void updateLayout(VkImageLayout layout) { mCurrentLayout = layout; }
+
+    void changeLayoutWithStages(VkImageAspectFlags aspectMask,
+                                VkImageLayout newLayout,
+                                VkPipelineStageFlags srcStageMask,
+                                VkPipelineStageFlags dstStageMask,
+                                CommandBuffer *commandBuffer);
+
+    void clearColor(const VkClearColorValue &color, CommandBuffer *commandBuffer);
+
+    void clearDepthStencil(VkImageAspectFlags aspectFlags,
+                           const VkClearDepthStencilValue &depthStencil,
+                           CommandBuffer *commandBuffer);
+
+    static void Copy(ImageHelper *srcImage,
+                     ImageHelper *dstImage,
+                     const gl::Offset &srcOffset,
+                     const gl::Offset &dstOffset,
+                     const gl::Extents &copySize,
+                     VkImageAspectFlags aspectMask,
+                     CommandBuffer *commandBuffer);
 
   private:
     // Vulkan objects.
@@ -757,6 +762,9 @@ class ImageHelper final : angle::NonCopyable
     const Format *mFormat;
     GLint mSamples;
     size_t mAllocatedMemorySize;
+
+    // Current state.
+    VkImageLayout mCurrentLayout;
 };
 
 }  // namespace vk
