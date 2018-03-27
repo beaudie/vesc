@@ -713,9 +713,10 @@ gl::Error TextureGL::copyTexture(const gl::Context *context,
     reserveTexImageToBeFilled(target, level, internalFormat, sourceImageDesc.size,
                               gl::GetUnsizedFormat(internalFormat), type);
 
+    const gl::InternalFormat &destFormatInfo = gl::GetInternalFormatInfo(internalFormat, type);
     return copySubTextureHelper(context, target, level, gl::Offset(0, 0, 0), sourceLevel,
-                                sourceArea, gl::GetUnsizedFormat(internalFormat), type, unpackFlipY,
-                                unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source);
+                                sourceArea, destFormatInfo, unpackFlipY, unpackPremultiplyAlpha,
+                                unpackUnmultiplyAlpha, source);
 }
 
 gl::Error TextureGL::copySubTexture(const gl::Context *context,
@@ -731,8 +732,8 @@ gl::Error TextureGL::copySubTexture(const gl::Context *context,
 {
     const gl::InternalFormat &destFormatInfo = *mState.getImageDesc(target, level).format.info;
     return copySubTextureHelper(context, target, level, destOffset, sourceLevel, sourceArea,
-                                destFormatInfo.format, destFormatInfo.type, unpackFlipY,
-                                unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source);
+                                destFormatInfo, unpackFlipY, unpackPremultiplyAlpha,
+                                unpackUnmultiplyAlpha, source);
 }
 
 gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
@@ -741,8 +742,7 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
                                           const gl::Offset &destOffset,
                                           size_t sourceLevel,
                                           const gl::Rectangle &sourceArea,
-                                          GLenum destFormat,
-                                          GLenum destType,
+                                          const gl::InternalFormat &destFormat,
                                           bool unpackFlipY,
                                           bool unpackPremultiplyAlpha,
                                           bool unpackUnmultiplyAlpha,
@@ -760,13 +760,12 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
 
     GLenum sourceFormat = sourceImageDesc.format.info->format;
     bool sourceFormatContainSupersetOfDestFormat =
-        (sourceFormat == destFormat && sourceFormat != GL_BGRA_EXT) ||
-        (sourceFormat == GL_RGBA && destFormat == GL_RGB);
+        (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
+        (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
 
     GLenum sourceComponentType = sourceImageDesc.format.info->componentType;
-    const auto &destInternalFormatInfo = gl::GetInternalFormatInfo(destFormat, destType);
-    GLenum destComponentType           = destInternalFormatInfo.componentType;
-    bool destSRGB                      = destInternalFormatInfo.colorEncoding == GL_SRGB;
+    GLenum destComponentType   = destFormat.componentType;
+    bool destSRGB              = destFormat.colorEncoding == GL_SRGB;
     if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
         sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
         !destSRGB)
@@ -801,8 +800,8 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
 
     // Fall back to CPU-readback
     return mBlitter->copySubTextureCPUReadback(context, sourceGL, sourceLevel, sourceComponentType,
-                                               this, target, level, destFormat, destType,
-                                               sourceArea, destOffset, unpackFlipY,
+                                               this, target, level, destFormat.format,
+                                               destFormat.type, sourceArea, destOffset, unpackFlipY,
                                                unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 }
 
