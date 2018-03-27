@@ -56,6 +56,7 @@ gl::Error StreamingBuffer::allocate(ContextVk *context,
 
         if (mMappedMemory)
         {
+            ANGLE_TRY(flush(context));
             mMemory.unmap(device);
             mMappedMemory = nullptr;
         }
