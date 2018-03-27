@@ -58,40 +58,58 @@ gl::Error InitDefaultUniformBlock(const gl::Context *context,
 
 template <typename T>
 void UpdateDefaultUniformBlock(GLsizei count,
+                               uint32_t arrayIndex,
                                int componentCount,
                                const T *v,
                                const sh::BlockMemberInfo &layoutInfo,
                                angle::MemoryBuffer *uniformData)
 {
-    int elementSize = sizeof(T) * componentCount;
+    const int elementSize = sizeof(T) * componentCount;
+
     if (layoutInfo.arrayStride == 0 || layoutInfo.arrayStride == elementSize)
     {
-        uint8_t *writePtr = uniformData->data() + layoutInfo.offset;
+        uint8_t *writePtr =
+            uniformData->data() + layoutInfo.offset + arrayIndex * layoutInfo.arrayStride;
         memcpy(writePtr, v, elementSize * count);
     }
     else
     {
-        UNIMPLEMENTED();
+        // Have to respect the arrayStride between each element of the array.
+        int maxArrayIndex = arrayIndex + count;
+        for (int writeArrayIndex = arrayIndex, readArrayIndex = 0; writeArrayIndex < maxArrayIndex;
+             writeArrayIndex++, readArrayIndex++)
+        {
+            const int arrayOffset = writeArrayIndex * layoutInfo.arrayStride;
+            uint8_t *writePtr     = uniformData->data() + layoutInfo.offset + arrayOffset;
+            const T *readPtr      = v + readArrayIndex;
+            memcpy(writePtr, readPtr, elementSize);
+        }
     }
 }
 
 template <typename T>
 void ReadFromDefaultUniformBlock(int componentCount,
+                                 uint32_t arrayIndex,
                                  T *dst,
                                  const sh::BlockMemberInfo &layoutInfo,
                                  const angle::MemoryBuffer *uniformData)
 {
     ASSERT(layoutInfo.offset != -1);
 
-    int elementSize = sizeof(T) * componentCount;
+    const int elementSize = sizeof(T) * componentCount;
+
     if (layoutInfo.arrayStride == 0 || layoutInfo.arrayStride == elementSize)
     {
-        const uint8_t *readPtr = uniformData->data() + layoutInfo.offset;
+        const uint8_t *readPtr =
+            uniformData->data() + layoutInfo.offset + arrayIndex * layoutInfo.arrayStride;
         memcpy(dst, readPtr, elementSize);
     }
     else
     {
-        UNIMPLEMENTED();
+        // Have to respect the arrayStride between each element of the array.
+        const int arrayOffset  = arrayIndex * layoutInfo.arrayStride;
+        const uint8_t *readPtr = uniformData->data() + layoutInfo.offset + arrayOffset;
+        memcpy(dst, readPtr, elementSize);
     }
 }
 
@@ -314,7 +332,8 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             std::string uniformName = uniform.name;
             if (uniform.isArray())
             {
-                uniformName += ArrayString(location.arrayIndex);
+                size_t firstBracketPos = uniformName.find("[");
+                uniformName            = uniformName.substr(0, firstBracketPos);
             }
 
             bool found = false;
@@ -429,7 +448,8 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
                 continue;
             }
 
-            UpdateDefaultUniformBlock(count, linkedUniform.typeInfo->componentCount, v, layoutInfo,
+            UpdateDefaultUniformBlock(count, locationInfo.arrayIndex,
+                                      linkedUniform.typeInfo->componentCount, v, layoutInfo,
                                       &uniformBlock.uniformData);
 
             uniformBlock.uniformsDirty = true;
@@ -461,8 +481,8 @@ void ProgramVk::getUniformImpl(GLint location, T *v, GLenum entryPointType) cons
     const DefaultUniformBlock &uniformBlock =
         mDefaultUniformBlocks[static_cast<GLuint>(shaderType)];
     const sh::BlockMemberInfo &layoutInfo   = uniformBlock.uniformLayout[location];
-    ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, v, layoutInfo,
-                                &uniformBlock.uniformData);
+    ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex, v,
+                                layoutInfo, &uniformBlock.uniformData);
 }
 
 void ProgramVk::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
