@@ -136,6 +136,7 @@ const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType);
 const char *GetGenericErrorMessage(GLenum error);
 
 unsigned int ElementTypeSize(GLenum elementType);
+void SetRobustLengthParam(GLsizei *length, GLsizei value);
 
 }  // namespace gl
 
