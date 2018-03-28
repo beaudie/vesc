@@ -640,7 +640,8 @@ void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
     mAppliedBindings[bindingIndex].setDivisor(adjustedDivisor);
 }
 
-void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::DirtyBits &dirtyBits)
+gl::Error VertexArrayGL::syncState(const gl::Context *context,
+                                   const VertexArray::DirtyBits &dirtyBits)
 {
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
@@ -691,6 +692,8 @@ void VertexArrayGL::syncState(const gl::Context *context, const VertexArray::Dir
         else
             UNREACHABLE();
     }
+
+    return gl::NoError();
 }
 
 void VertexArrayGL::applyNumViewsToDivisor(int numViews)
