@@ -825,6 +825,14 @@ unsigned int ElementTypeSize(GLenum elementType)
     }
 }
 
+void SetRobustLengthParam(GLsizei *length, GLsizei value)
+{
+    if (length)
+    {
+        *length = value;
+    }
+}
+
 }  // namespace gl
 
 namespace egl
