@@ -529,7 +529,7 @@ TEST_P(RobustResourceInitTest, ReadingUninitializedTexture)
 // data
 TEST_P(RobustResourceInitTest, ReuploadingClearsTexture)
 {
-    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+    ANGLE_SKIP_TEST_IF(!hasGLExtension() || IsOSX());
 
     // Put some data into the texture
     std::array<GLColor, kWidth * kHeight> data;
