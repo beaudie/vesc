@@ -153,7 +153,7 @@ class ProgramVk : public ProgramImpl
         DefaultUniformBlock();
         ~DefaultUniformBlock();
 
-        StreamingBuffer storage;
+        DynamicBuffer storage;
 
         // Shadow copies of the shader uniform data.
         angle::MemoryBuffer uniformData;

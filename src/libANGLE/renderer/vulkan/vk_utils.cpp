@@ -1180,7 +1180,7 @@ void GarbageObject::destroy(VkDevice device)
 LineLoopHandler::LineLoopHandler()
     : mObserverBinding(this, 0u),
       mStreamingLineLoopIndicesData(
-          new StreamingBuffer(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+          new DynamicBuffer(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
                               kLineLoopStreamingBufferMinSize)),
       mLineLoopIndexBuffer(VK_NULL_HANDLE),
       mLineLoopIndexBufferOffset(VK_NULL_HANDLE)
@@ -1217,7 +1217,7 @@ gl::Error LineLoopHandler::createIndexBuffer(ContextVk *contextVk, int firstVert
         *indices = unsignedFirstVertex;
 
         // Since we are not using the VK_MEMORY_PROPERTY_HOST_COHERENT_BIT flag when creating the
-        // device memory in the StreamingBuffer, we always need to make sure we flush it after
+        // device memory in the DynamicBuffer, we always need to make sure we flush it after
         // writing.
         ANGLE_TRY(mStreamingLineLoopIndicesData->flush(contextVk));
 
