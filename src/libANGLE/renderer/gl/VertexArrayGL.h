@@ -44,8 +44,8 @@ class VertexArrayGL : public VertexArrayImpl
     GLuint getVertexArrayID() const;
     GLuint getAppliedElementArrayBufferID() const;
 
-    void syncState(const gl::Context *context,
-                   const gl::VertexArray::DirtyBits &dirtyBits) override;
+    gl::Error syncState(const gl::Context *context,
+                        const gl::VertexArray::DirtyBits &dirtyBits) override;
     void applyNumViewsToDivisor(int numViews);
 
   private:

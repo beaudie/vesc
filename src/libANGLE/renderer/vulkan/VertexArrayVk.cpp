@@ -92,8 +92,8 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
     return gl::NoError();
 }
 
-void VertexArrayVk::syncState(const gl::Context *context,
-                              const gl::VertexArray::DirtyBits &dirtyBits)
+gl::Error VertexArrayVk::syncState(const gl::Context *context,
+                                   const gl::VertexArray::DirtyBits &dirtyBits)
 {
     ASSERT(dirtyBits.any());
 
@@ -156,6 +156,8 @@ void VertexArrayVk::syncState(const gl::Context *context,
             UNIMPLEMENTED();
         }
     }
+
+    return gl::NoError();
 }
 
 const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() const
