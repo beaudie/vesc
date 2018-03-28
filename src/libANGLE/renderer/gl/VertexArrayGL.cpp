@@ -640,9 +640,9 @@ void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
     mAppliedBindings[bindingIndex].setDivisor(adjustedDivisor);
 }
 
-void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
-                                    size_t attribIndex,
-                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
+gl::Error VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
+                                         size_t attribIndex,
+                                         const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
 {
     ASSERT(dirtyAttribBits.any());
 
@@ -734,6 +734,8 @@ void VertexArrayGL::syncState(const gl::Context *context,
             }
         }
     }
+
+    return gl::NoError();
 }
 
 void VertexArrayGL::applyNumViewsToDivisor(int numViews)
