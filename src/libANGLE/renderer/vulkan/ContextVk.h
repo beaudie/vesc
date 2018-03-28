@@ -13,9 +13,7 @@
 #include <vulkan/vulkan.h>
 
 #include "libANGLE/renderer/ContextImpl.h"
-#include "libANGLE/renderer/vulkan/DynamicDescriptorPool.h"
-#include "libANGLE/renderer/vulkan/StreamingBuffer.h"
-#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
@@ -157,7 +155,7 @@ class ContextVk : public ContextImpl
     void invalidateCurrentPipeline();
     void onVertexArrayChange();
 
-    DynamicDescriptorPool *getDynamicDescriptorPool();
+    vk::DynamicDescriptorPool *getDynamicDescriptorPool();
 
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
@@ -170,7 +168,7 @@ class ContextVk : public ContextImpl
                         DrawType drawType,
                         size_t firstVertex,
                         size_t lastVertex,
-                        ResourceVk *elementArrayBufferOverride,
+                        vk::CommandGraphResource *elementArrayBufferOverride,
                         vk::CommandBuffer **commandBuffer);
 
     RendererVk *mRenderer;
@@ -183,7 +181,7 @@ class ContextVk : public ContextImpl
 
     // The dynamic descriptor pool is externally sychronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep it in the ContextVk instead of the RendererVk.
-    DynamicDescriptorPool mDynamicDescriptorPool;
+    vk::DynamicDescriptorPool mDynamicDescriptorPool;
 
     // Triggers adding dependencies to the command graph.
     bool mVertexArrayDirty;
@@ -193,8 +191,8 @@ class ContextVk : public ContextImpl
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
 
-    StreamingBuffer mStreamingVertexData;
-    StreamingBuffer mStreamingIndexData;
+    vk::DynamicBuffer mStreamingVertexData;
+    vk::DynamicBuffer mStreamingIndexData;
 
     vk::LineLoopHandler mLineLoopHandler;
 };

@@ -50,7 +50,7 @@ gl::AttributesMask VertexArrayVk::attribsToStream(ContextVk *context) const
 }
 
 gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
-                                          StreamingBuffer *stream,
+                                          vk::DynamicBuffer *dynamicBuffer,
                                           size_t firstVertex,
                                           size_t lastVertex)
 {
@@ -82,14 +82,14 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
             lastVertex * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
         uint8_t *dst = nullptr;
         uint32_t offset = 0;
-        ANGLE_TRY(stream->allocate(context, lastByte, &dst,
-                                   &mCurrentArrayBufferHandles[attribIndex], &offset, nullptr));
+        ANGLE_TRY(dynamicBuffer->allocate(
+            context, lastByte, &dst, &mCurrentArrayBufferHandles[attribIndex], &offset, nullptr));
         mCurrentArrayBufferOffsets[attribIndex] = static_cast<VkDeviceSize>(offset);
         memcpy(dst + firstByte, static_cast<const uint8_t *>(attrib.pointer) + firstByte,
                lastByte - firstByte);
     }
 
-    ANGLE_TRY(stream->flush(context));
+    ANGLE_TRY(dynamicBuffer->flush(context));
     return gl::NoError();
 }
 
@@ -175,7 +175,7 @@ const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets
 
 void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
                                            const gl::AttributesMask &activeAttribsMask,
-                                           ResourceVk *elementArrayBufferOverride,
+                                           vk::CommandGraphResource *elementArrayBufferOverride,
                                            Serial serial,
                                            DrawType drawType)
 {
