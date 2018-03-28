@@ -6385,6 +6385,14 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
                 *type      = GL_FLOAT;
                 *numParams = 1;
                 return true;
+            case GL_MAX_TEXTURE_UNITS:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+            case GL_CLIENT_ACTIVE_TEXTURE:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
         }
     }
 
