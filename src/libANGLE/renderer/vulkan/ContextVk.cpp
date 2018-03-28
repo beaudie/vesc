@@ -218,6 +218,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
             ASSERT(texture);
 
             TextureVk *textureVk = vk::GetImpl(texture);
+            ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
             textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
         }
     }
@@ -366,7 +367,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             {
                 memcpy(dst, indices, amount);
             }
-            ANGLE_TRY(mStreamingIndexData.flush(contextVk));
+            ANGLE_TRY(mStreamingIndexData.flush(getDevice()));
 
             if (computeIndexRange)
             {

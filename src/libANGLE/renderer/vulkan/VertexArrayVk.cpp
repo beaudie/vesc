@@ -89,7 +89,7 @@ gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
                lastByte - firstByte);
     }
 
-    ANGLE_TRY(dynamicBuffer->flush(context));
+    ANGLE_TRY(dynamicBuffer->flush(context->getDevice()));
     return gl::NoError();
 }
 
