@@ -19,7 +19,6 @@
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
-#include "libANGLE/renderer/vulkan/DynamicDescriptorPool.h"
 #include "libANGLE/renderer/vulkan/FenceNVVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
@@ -152,7 +151,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
                                DrawType drawType,
                                size_t firstVertex,
                                size_t lastVertex,
-                               ResourceVk *elementArrayBufferOverride,
+                               vk::CommandGraphResource *elementArrayBufferOverride,
                                vk::CommandBuffer **commandBuffer)
 {
     if (mode != mCurrentDrawMode)
@@ -868,7 +867,7 @@ gl::Error ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbitfiel
     return gl::InternalError();
 }
 
-DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool()
+vk::DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool()
 {
     return &mDynamicDescriptorPool;
 }

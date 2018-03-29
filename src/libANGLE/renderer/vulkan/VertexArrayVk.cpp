@@ -50,7 +50,7 @@ gl::AttributesMask VertexArrayVk::attribsToStream(ContextVk *context) const
 }
 
 gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
-                                          DynamicBuffer *dynamicBuffer,
+                                          vk::DynamicBuffer *dynamicBuffer,
                                           size_t firstVertex,
                                           size_t lastVertex)
 {
@@ -175,7 +175,7 @@ const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets
 
 void VertexArrayVk::updateDrawDependencies(vk::CommandGraphNode *readNode,
                                            const gl::AttributesMask &activeAttribsMask,
-                                           ResourceVk *elementArrayBufferOverride,
+                                           vk::CommandGraphResource *elementArrayBufferOverride,
                                            Serial serial,
                                            DrawType drawType)
 {
