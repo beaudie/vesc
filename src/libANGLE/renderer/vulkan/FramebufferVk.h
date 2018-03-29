@@ -103,7 +103,6 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 
     Optional<vk::RenderPassDesc> mRenderPassDesc;
     vk::Framebuffer mFramebuffer;
-    Serial mLastRenderNodeSerial;
     RenderTargetCache<RenderTargetVk> mRenderTargetCache;
 };
 
