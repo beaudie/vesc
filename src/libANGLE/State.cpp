@@ -1930,6 +1930,13 @@ void State::getFloatv(GLenum pname, GLfloat *params)
         case GL_ALPHA_TEST_REF:
             *params = mGLES1State.mAlphaTestRef;
             break;
+        case GL_CURRENT_COLOR:
+            const auto &color = mGLES1State.mCurrentColor;
+            params[0]         = mCurrentColor.red;
+            params[1]         = mCurrentColor.green;
+            params[2]         = mCurrentColor.blue;
+            params[3]         = mCurrentColor.alpha;
+            break;
         default:
             UNREACHABLE();
             break;
