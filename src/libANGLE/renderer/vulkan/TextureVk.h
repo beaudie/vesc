@@ -18,6 +18,37 @@
 namespace rx
 {
 
+class StagingStorage final : angle::NonCopyable
+{
+  public:
+    StagingStorage();
+    ~StagingStorage();
+
+    void release(RendererVk *renderer);
+
+    void initSizeAndFormat(const gl::Extents &extents, const vk::Format &format);
+
+    const gl::Extents &getExtents() const;
+    const vk::Format &getFormat() const;
+
+    gl::Error stageSubImage(ContextVk *contextVk,
+                            const gl::InternalFormat &formatInfo,
+                            const gl::PixelUnpackState &unpack,
+                            GLenum type,
+                            const uint8_t *pixels);
+
+    vk::Error flushToImage(RendererVk *renderer,
+                           const vk::ImageHelper &image,
+                           vk::CommandBuffer *commandBuffer);
+
+  private:
+    vk::DynamicBuffer mStagingBuffer;
+    gl::Extents mExtents;
+    const vk::Format *mFormat;
+    VkBuffer mCurrentBufferHandle;
+    VkBufferImageCopy mCurrentCopyRegion;
+};
+
 class TextureVk : public TextureImpl, public vk::CommandGraphResource
 {
   public:
@@ -116,18 +147,16 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     const vk::ImageView &getImageView() const;
     const vk::Sampler &getSampler() const;
 
-  private:
-    gl::Error setSubImageImpl(ContextVk *contextVk,
-                              const gl::InternalFormat &formatInfo,
-                              const gl::PixelUnpackState &unpack,
-                              GLenum type,
-                              const uint8_t *pixels);
+    vk::Error ensureImageInitialized(RendererVk *renderer);
 
+  private:
     vk::ImageHelper mImage;
     vk::ImageView mImageView;
     vk::Sampler mSampler;
 
     RenderTargetVk mRenderTarget;
+
+    StagingStorage mStagingStorage;
 };
 
 }  // namespace rx

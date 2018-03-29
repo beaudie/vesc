@@ -218,6 +218,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
             ASSERT(texture);
 
             TextureVk *textureVk = vk::GetImpl(texture);
+            ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
             textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
         }
     }
@@ -318,8 +319,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
     }
     else
     {
-        ContextVk *contextVk         = vk::GetImpl(context);
-        const bool computeIndexRange = vk::GetImpl(vao)->attribsToStream(contextVk).any();
+        const bool computeIndexRange = vk::GetImpl(vao)->attribsToStream(this).any();
         gl::IndexRange range;
         VkBuffer buffer     = VK_NULL_HANDLE;
         uint32_t offset     = 0;
@@ -349,8 +349,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             const GLsizei amount = sizeof(GLushort) * count;
             GLubyte *dst         = nullptr;
 
-            ANGLE_TRY(
-                mDynamicIndexData.allocate(contextVk, amount, &dst, &buffer, &offset, nullptr));
+            ANGLE_TRY(mDynamicIndexData.allocate(this, amount, &dst, &buffer, &offset, nullptr));
             if (type == GL_UNSIGNED_BYTE)
             {
                 // Unsigned bytes don't have direct support in Vulkan so we have to expand the
@@ -366,7 +365,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             {
                 memcpy(dst, indices, amount);
             }
-            ANGLE_TRY(mDynamicIndexData.flush(contextVk));
+            ANGLE_TRY(mDynamicIndexData.flush(getDevice()));
 
             if (computeIndexRange)
             {
