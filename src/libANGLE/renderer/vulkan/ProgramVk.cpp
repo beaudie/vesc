@@ -437,29 +437,21 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
         return;
     }
 
-    if (linkedUniform.type == entryPointType)
+    for (auto &uniformBlock : mDefaultUniformBlocks)
     {
-        for (auto &uniformBlock : mDefaultUniformBlocks)
+        const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
+
+        // Assume an offset of -1 means the block is unused.
+        if (layoutInfo.offset == -1)
         {
-            const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
-
-            // Assume an offset of -1 means the block is unused.
-            if (layoutInfo.offset == -1)
-            {
-                continue;
-            }
-
-            UpdateDefaultUniformBlock(count, locationInfo.arrayIndex,
-                                      linkedUniform.typeInfo->componentCount, v, layoutInfo,
-                                      &uniformBlock.uniformData);
-
-            uniformBlock.uniformsDirty = true;
+            continue;
         }
-    }
-    else
-    {
-        ASSERT(linkedUniform.type == gl::VariableBoolVectorType(entryPointType));
-        UNIMPLEMENTED();
+
+        UpdateDefaultUniformBlock(count, locationInfo.arrayIndex,
+                                  linkedUniform.typeInfo->componentCount, v, layoutInfo,
+                                  &uniformBlock.uniformData);
+
+        uniformBlock.uniformsDirty = true;
     }
 }
 
@@ -475,15 +467,34 @@ void ProgramVk::getUniformImpl(GLint location, T *v, GLenum entryPointType) cons
         return;
     }
 
-    ASSERT(linkedUniform.typeInfo->componentType == entryPointType);
     const gl::ShaderType shaderType = linkedUniform.getFirstShaderTypeWhereActive();
     ASSERT(shaderType != gl::ShaderType::InvalidEnum);
 
     const DefaultUniformBlock &uniformBlock =
         mDefaultUniformBlocks[static_cast<GLuint>(shaderType)];
     const sh::BlockMemberInfo &layoutInfo   = uniformBlock.uniformLayout[location];
-    ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex, v,
-                                layoutInfo, &uniformBlock.uniformData);
+
+    if (linkedUniform.typeInfo->componentType == gl::VariableBoolVectorType(entryPointType))
+    {
+        // We are in fact reading a boolean, so if we read anything else than 0, we return 1.
+        std::vector<T> tempRead(linkedUniform.typeInfo->componentCount);
+        ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex,
+                                    tempRead.data(), layoutInfo, &uniformBlock.uniformData);
+
+        // Reinterpret each value we read into a boolean in the destination.
+        T *dstPtr = v;
+        for (int i = 0; i < linkedUniform.typeInfo->componentCount; i++)
+        {
+            *dstPtr = tempRead[i] != 0;
+            dstPtr  = dstPtr + 1;
+        }
+    }
+    else
+    {
+        ASSERT(linkedUniform.typeInfo->componentType == entryPointType);
+        ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex,
+                                    v, layoutInfo, &uniformBlock.uniformData);
+    }
 }
 
 void ProgramVk::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
