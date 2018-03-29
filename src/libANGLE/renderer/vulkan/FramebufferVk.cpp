@@ -130,7 +130,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     const gl::FramebufferAttachment *stencilAttachment = mState.getStencilAttachment();
     bool clearStencil = (stencilAttachment && (mask & GL_STENCIL_BUFFER_BIT) != 0);
     ASSERT(!clearStencil || stencilAttachment->isAttached());
-   
+
     bool clearColor = (mask & GL_COLOR_BUFFER_BIT) == GL_COLOR_BUFFER_BIT;
 
     if (context->getGLState().isScissorTestEnabled())
@@ -145,7 +145,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     // Standard Depth/stencil clear without scissor.
     if (clearDepth || clearStencil)
     {
-        
+
         ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
         writingNode = getCurrentWritingNode(currentSerial);
 
@@ -162,18 +162,18 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
         renderTarget->resource->onWriteResource(writingNode, currentSerial);
         renderTarget->image->changeLayoutWithStages(
-            aspectFlags, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+            aspectFlags, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
         commandBuffer->clearSingleDepthStencilImage(*renderTarget->image, aspectFlags,
                                                     clearDepthStencilValue);
-        
+
         if (!clearColor)
         {
             return gl::NoError();
         }
     }
-    
+
     const auto *attachment = mState.getFirstNonNullAttachment();
     ASSERT(attachment && attachment->isAttached());
 
@@ -196,7 +196,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
         commandBuffer->clearSingleColorImage(*colorRenderTarget->image,
-                                                contextVk->getClearColorValue().color);
+                                             contextVk->getClearColorValue().color);
     }
 
     return gl::NoError();
