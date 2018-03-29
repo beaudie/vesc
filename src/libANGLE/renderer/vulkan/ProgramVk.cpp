@@ -107,7 +107,7 @@ vk::Error SyncDefaultUniformBlock(ContextVk *contextVk,
                                      outBufferModified));
     *outOffset = offset;
     memcpy(data, bufferData.data(), bufferData.size());
-    ANGLE_TRY(dynamicBuffer.flush(contextVk));
+    ANGLE_TRY(dynamicBuffer.flush(contextVk->getDevice()));
     return vk::NoError();
 }
 
