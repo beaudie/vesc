@@ -55,10 +55,11 @@ constexpr size_t kStagingBufferSize = 1024 * 16;
 }  // anonymous namespace
 
 // StagingStorage implementation.
-StagingStorage::StagingStorage()
-    : mStagingBuffer(kStagingBufferFlags, kStagingBufferSize), mCurrentBufferHandle(VK_NULL_HANDLE)
+StagingStorage::StagingStorage() : mStagingBuffer(kStagingBufferFlags, kStagingBufferSize)
 {
-    mStagingBuffer.init(1);
+    // vkCmdCopyBufferToImage must have an offset that is a multiple of 4.
+    // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkBufferImageCopy.html
+    mStagingBuffer.init(4);
 }
 
 StagingStorage::~StagingStorage()
@@ -71,6 +72,7 @@ void StagingStorage::release(RendererVk *renderer)
 }
 
 gl::Error StagingStorage::stageSubresourceUpdate(ContextVk *contextVk,
+                                                 const gl::ImageIndex &index,
                                                  const gl::Extents &extents,
                                                  const gl::InternalFormat &formatInfo,
                                                  const gl::PixelUnpackState &unpack,
@@ -102,11 +104,13 @@ gl::Error StagingStorage::stageSubresourceUpdate(ContextVk *contextVk,
     size_t outputRowPitch   = storageFormat.pixelBytes * extents.width;
     size_t outputDepthPitch = outputRowPitch * extents.height;
 
+    VkBuffer bufferHandle = VK_NULL_HANDLE;
+
     uint8_t *stagingPointer = nullptr;
     bool newBufferAllocated = false;
     uint32_t stagingOffset  = 0;
     size_t allocationSize   = outputDepthPitch * extents.depth;
-    mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &mCurrentBufferHandle,
+    mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                             &stagingOffset, &newBufferAllocated);
 
     const uint8_t *source = pixels + inputSkipBytes;
@@ -116,16 +120,20 @@ gl::Error StagingStorage::stageSubresourceUpdate(ContextVk *contextVk,
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
 
-    mCurrentCopyRegion.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
-    mCurrentCopyRegion.bufferRowLength                 = extents.width;
-    mCurrentCopyRegion.bufferImageHeight               = extents.height;
-    mCurrentCopyRegion.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-    mCurrentCopyRegion.imageSubresource.mipLevel       = 0;
-    mCurrentCopyRegion.imageSubresource.baseArrayLayer = 0;
-    mCurrentCopyRegion.imageSubresource.layerCount     = 1;
+    VkBufferImageCopy copy;
 
-    gl_vk::GetOffset(gl::Offset(), &mCurrentCopyRegion.imageOffset);
-    gl_vk::GetExtent(extents, &mCurrentCopyRegion.imageExtent);
+    copy.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
+    copy.bufferRowLength                 = extents.width;
+    copy.bufferImageHeight               = extents.height;
+    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.mipLevel       = index.getLevelIndex();
+    copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+    copy.imageSubresource.layerCount     = index.getLayerCount();
+
+    gl_vk::GetOffset(gl::Offset(), &copy.imageOffset);
+    gl_vk::GetExtent(extents, &copy.imageExtent);
+
+    mSubresourceUpdates.emplace_back(bufferHandle, copy);
 
     return gl::NoError();
 }
@@ -134,16 +142,31 @@ vk::Error StagingStorage::flushUpdatesToImage(RendererVk *renderer,
                                               const vk::ImageHelper &image,
                                               vk::CommandBuffer *commandBuffer)
 {
-    if (mCurrentBufferHandle != VK_NULL_HANDLE)
+    ANGLE_TRY(mStagingBuffer.flush(renderer->getDevice()));
+
+    for (const SubresourceUpdate &update : mSubresourceUpdates)
     {
-        ANGLE_TRY(mStagingBuffer.flush(renderer->getDevice()));
-        commandBuffer->copyBufferToImage(mCurrentBufferHandle, image.getImage(),
-                                         image.getCurrentLayout(), 1, &mCurrentCopyRegion);
-        mCurrentBufferHandle = VK_NULL_HANDLE;
+        ASSERT(update.bufferHandle != VK_NULL_HANDLE);
+        commandBuffer->copyBufferToImage(update.bufferHandle, image.getImage(),
+                                         image.getCurrentLayout(), 1, &update.copyRegion);
     }
+
+    mSubresourceUpdates.clear();
 
     return vk::NoError();
 }
+
+StagingStorage::SubresourceUpdate::SubresourceUpdate() : bufferHandle(VK_NULL_HANDLE)
+{
+}
+
+StagingStorage::SubresourceUpdate::SubresourceUpdate(VkBuffer bufferHandleIn,
+                                                     const VkBufferImageCopy &copyRegionIn)
+    : bufferHandle(bufferHandleIn), copyRegion(copyRegionIn)
+{
+}
+
+StagingStorage::SubresourceUpdate::SubresourceUpdate(const SubresourceUpdate &other) = default;
 
 // TextureVk implementation.
 TextureVk::TextureVk(const gl::TextureState &state) : TextureImpl(state)
@@ -203,13 +226,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
         return gl::NoError();
     }
 
-    // TODO(jmadill): Cube map textures. http://anglebug.com/2318
-    if (index.getTarget() != gl::TextureTarget::_2D)
-    {
-        UNIMPLEMENTED();
-        return gl::InternalError();
-    }
-
     if (!mSampler.valid())
     {
         // Create a simple sampler. Force basic parameter settings.
@@ -243,8 +259,8 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     // Handle initial data.
     if (pixels)
     {
-        ANGLE_TRY(mStagingStorage.stageSubresourceUpdate(contextVk, size, formatInfo, unpack, type,
-                                                         pixels));
+        ANGLE_TRY(mStagingStorage.stageSubresourceUpdate(contextVk, index, size, formatInfo, unpack,
+                                                         type, pixels));
     }
 
     return gl::NoError();
@@ -261,8 +277,8 @@ gl::Error TextureVk::setSubImage(const gl::Context *context,
     ContextVk *contextVk                 = vk::GetImpl(context);
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
     ANGLE_TRY(mStagingStorage.stageSubresourceUpdate(
-        contextVk, gl::Extents(area.width, area.height, area.depth), formatInfo, unpack, type,
-        pixels));
+        contextVk, index, gl::Extents(area.width, area.height, area.depth), formatInfo, unpack,
+        type, pixels));
     return gl::NoError();
 }
 
@@ -412,7 +428,8 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
         VkImageUsageFlags usage =
             (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
              VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
-        ANGLE_TRY(mImage.init2D(device, extents, format, 1, usage));
+
+        ANGLE_TRY(mImage.init(device, mState.getType(), extents, format, 1, usage));
 
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage.initMemory(device, renderer->getMemoryProperties(), flags));
@@ -420,8 +437,9 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
         gl::SwizzleState mappedSwizzle;
         MapSwizzleState(format.internalFormat, mState.getSwizzleState(), &mappedSwizzle);
 
-        ANGLE_TRY(
-            mImage.initImageView(device, VK_IMAGE_ASPECT_COLOR_BIT, mappedSwizzle, &mImageView));
+        // TODO(jmadill): Separate imageviews for RenderTargets and Sampling.
+        ANGLE_TRY(mImage.initImageView(device, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+                                       mappedSwizzle, &mImageView));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
 
