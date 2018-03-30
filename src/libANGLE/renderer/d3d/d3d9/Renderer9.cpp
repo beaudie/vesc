@@ -1791,7 +1791,7 @@ gl::Error Renderer9::applyShaders(const gl::Context *context, GLenum drawMode)
     unsigned int programSerial = programD3D->getSerial();
     if (programSerial != mAppliedProgramSerial)
     {
-        programD3D->dirtyAllUniforms();
+        programD3D->dirtyAllLinkedUniforms();
         mStateManager.forceSetDXUniformsState();
         mAppliedProgramSerial = programSerial;
     }
@@ -1806,8 +1806,8 @@ gl::Error Renderer9::applyShaders(const gl::Context *context, GLenum drawMode)
 
 gl::Error Renderer9::applyUniforms(ProgramD3D *programD3D)
 {
-    // Skip updates if we're not dirty. Note that D3D9 cannot have compute.
-    if (!programD3D->areVertexUniformsDirty() && !programD3D->areFragmentUniformsDirty())
+    // Skip updates if we're not dirty. Note that D3D9 cannot have compute or geometry.
+    if (!programD3D->anyShaderUniformsDirty())
     {
         return gl::NoError();
     }
