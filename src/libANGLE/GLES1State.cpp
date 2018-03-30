@@ -159,7 +159,7 @@ unsigned int GLES1State::getClientTextureUnit() const
     return mClientActiveTexture;
 }
 
-void GLES1State::setCurrentColor(const ColorF& color)
+void GLES1State::setCurrentColor(const ColorF &color)
 {
     mCurrentColor = color;
 }
@@ -169,7 +169,7 @@ const ColorF &GLES1State::getCurrentColor() const
     return mCurrentColor;
 }
 
-void GLES1State::setCurrentNormal(const angle::Vector3& normal)
+void GLES1State::setCurrentNormal(const angle::Vector3 &normal)
 {
     mCurrentNormal = normal;
 }
@@ -177,6 +177,16 @@ void GLES1State::setCurrentNormal(const angle::Vector3& normal)
 const angle::Vector3 &GLES1State::getCurrentNormal() const
 {
     return mCurrentNormal;
+}
+
+void GLES1State::setCurrentTextureCoords(unsigned int unit, const TextureCoordF &coords)
+{
+    mCurrentTextureCoords[unit] = coords;
+}
+
+const TextureCoordF &GLES1State::getCurrentTextureCoords(unsigned int unit) const
+{
+    return mCurrentTextureCoords[unit];
 }
 
 }  // namespace gl

@@ -89,8 +89,8 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
 
         // If we have no buffer, then we either get an error, or there are no more checks to be
         // done.
-        const VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
-        gl::Buffer *buffer            = binding.getBuffer().get();
+        const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
+        gl::Buffer *buffer           = binding.getBuffer().get();
         if (!buffer)
         {
             if (webglCompatibility || !state.areClientArraysEnabled())
@@ -476,7 +476,7 @@ bool ValidateFragmentShaderColorBufferTypeMatch(Context *context)
 
 bool ValidateVertexShaderAttributeTypeMatch(Context *context)
 {
-    const auto &glState       = context->getGLState();
+    const auto &glState    = context->getGLState();
     const Program *program = context->getGLState().getProgram();
     const VertexArray *vao = context->getGLState().getVertexArray();
 
@@ -1324,7 +1324,7 @@ bool ValidateBlitFramebufferParameters(Context *context,
                     GLenum drawComponentType = drawFormat.info->componentType;
                     bool readFixedPoint      = (readComponentType == GL_UNSIGNED_NORMALIZED ||
                                            readComponentType == GL_SIGNED_NORMALIZED);
-                    bool drawFixedPoint = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
+                    bool drawFixedPoint      = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
                                            drawComponentType == GL_SIGNED_NORMALIZED);
 
                     if (extensions.colorBufferFloat)
@@ -2627,7 +2627,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
          uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
         const gl::InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-        GLuint blockBinding                  = program->getUniformBlockBinding(uniformBlockIndex);
+        GLuint blockBinding                    = program->getUniformBlockBinding(uniformBlockIndex);
         const OffsetBindingPointer<Buffer> &uniformBuffer =
             state.getIndexedUniformBuffer(blockBinding);
 
@@ -5522,26 +5522,26 @@ bool ValidateTexParameterBase(Context *context,
         case GL_TEXTURE_WRAP_S:
         case GL_TEXTURE_WRAP_T:
         case GL_TEXTURE_WRAP_R:
+        {
+            bool restrictedWrapModes =
+                target == TextureType::External || target == TextureType::Rectangle;
+            if (!ValidateTextureWrapModeValue(context, params, restrictedWrapModes))
             {
-                bool restrictedWrapModes =
-                    target == TextureType::External || target == TextureType::Rectangle;
-                if (!ValidateTextureWrapModeValue(context, params, restrictedWrapModes))
-                {
-                    return false;
-                }
+                return false;
             }
-            break;
+        }
+        break;
 
         case GL_TEXTURE_MIN_FILTER:
+        {
+            bool restrictedMinFilter =
+                target == TextureType::External || target == TextureType::Rectangle;
+            if (!ValidateTextureMinFilterValue(context, params, restrictedMinFilter))
             {
-                bool restrictedMinFilter =
-                    target == TextureType::External || target == TextureType::Rectangle;
-                if (!ValidateTextureMinFilterValue(context, params, restrictedMinFilter))
-                {
-                    return false;
-                }
+                return false;
             }
-            break;
+        }
+        break;
 
         case GL_TEXTURE_MAG_FILTER:
             if (!ValidateTextureMagFilterValue(context, params))
@@ -5570,15 +5570,15 @@ bool ValidateTexParameterBase(Context *context,
             break;
 
         case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+        {
+            GLfloat paramValue = static_cast<GLfloat>(params[0]);
+            if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
             {
-                GLfloat paramValue = static_cast<GLfloat>(params[0]);
-                if (!ValidateTextureMaxAnisotropyValue(context, paramValue))
-                {
-                    return false;
-                }
-                ASSERT(static_cast<ParamType>(paramValue) == params[0]);
+                return false;
             }
-            break;
+            ASSERT(static_cast<ParamType>(paramValue) == params[0]);
+        }
+        break;
 
         case GL_TEXTURE_MIN_LOD:
         case GL_TEXTURE_MAX_LOD:
@@ -6027,6 +6027,17 @@ bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuff
     if (samples != 0)
     {
         context->handleError(InvalidOperation());
+        return false;
+    }
+    return true;
+}
+
+bool ValidateMultitextureUnit(Context *context, GLenum texture)
+{
+    if (texture < GL_TEXTURE0 ||
+        texture > GL_TEXTURE0 + context->getCaps().maxMultitextureUnits - 1)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidMultitextureUnit);
         return false;
     }
     return true;

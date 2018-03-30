@@ -279,24 +279,23 @@ void Context::multMatrixx(const GLfixed *m)
 
 void Context::multiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setCurrentTextureCoords(target - GL_TEXTURE0, {s, t, r, q});
 }
 
-void Context::multiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
+void Context::multiTexCoord4x(GLenum target, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setCurrentTextureCoords(
+        target - GL_TEXTURE0, {FixedToFloat(s), FixedToFloat(t), FixedToFloat(r), FixedToFloat(q)});
 }
 
 void Context::normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
 {
-    mGLState.gles1().setCurrentNormal({ nx, ny, nz});
+    mGLState.gles1().setCurrentNormal({nx, ny, nz});
 }
 
 void Context::normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
 {
-    mGLState.gles1().setCurrentNormal({ FixedToFloat(nx),
-                                 FixedToFloat(ny),
-                                 FixedToFloat(nz) });
+    mGLState.gles1().setCurrentNormal({FixedToFloat(nx), FixedToFloat(ny), FixedToFloat(nz)});
 }
 
 void Context::normalPointer(GLenum type, GLsizei stride, const void *ptr)

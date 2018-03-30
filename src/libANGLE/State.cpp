@@ -1942,9 +1942,18 @@ void State::getFloatv(GLenum pname, GLfloat *params)
         case GL_CURRENT_NORMAL:
         {
             const auto &normal = mGLES1State.mCurrentNormal;
-            params[0]         = normal[0];
-            params[1]         = normal[1];
-            params[2]         = normal[2];
+            params[0]          = normal[0];
+            params[1]          = normal[1];
+            params[2]          = normal[2];
+            break;
+        }
+        case GL_CURRENT_TEXTURE_COORDS:
+        {
+            const auto &texcoord = mGLES1State.mCurrentTextureCoords[mActiveSampler];
+            params[0]            = texcoord.s;
+            params[1]            = texcoord.t;
+            params[2]            = texcoord.r;
+            params[3]            = texcoord.q;
             break;
         }
         default:
