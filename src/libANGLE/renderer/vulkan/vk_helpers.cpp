@@ -117,7 +117,7 @@ Error DynamicBuffer::allocate(ContextVk *context,
 
         if (mMappedMemory)
         {
-            ANGLE_TRY(flush(context));
+            ANGLE_TRY(flush(device));
             mMemory.unmap(device);
             mMappedMemory = nullptr;
         }
@@ -168,7 +168,7 @@ Error DynamicBuffer::allocate(ContextVk *context,
     return NoError();
 }
 
-Error DynamicBuffer::flush(ContextVk *context)
+Error DynamicBuffer::flush(VkDevice device)
 {
     if (mNextWriteOffset > mLastFlushOffset)
     {
@@ -178,7 +178,7 @@ Error DynamicBuffer::flush(ContextVk *context)
         range.memory = mMemory.getHandle();
         range.offset = mLastFlushOffset;
         range.size   = mNextWriteOffset - mLastFlushOffset;
-        ANGLE_VK_TRY(vkFlushMappedMemoryRanges(context->getDevice(), 1, &range));
+        ANGLE_VK_TRY(vkFlushMappedMemoryRanges(device, 1, &range));
 
         mLastFlushOffset = mNextWriteOffset;
     }
@@ -342,7 +342,7 @@ gl::Error LineLoopHandler::createIndexBuffer(ContextVk *contextVk, int firstVert
         // Since we are not using the VK_MEMORY_PROPERTY_HOST_COHERENT_BIT flag when creating the
         // device memory in the DynamicBuffer, we always need to make sure we flush it after
         // writing.
-        ANGLE_TRY(mDynamicLineLoopIndicesData.flush(contextVk));
+        ANGLE_TRY(mDynamicLineLoopIndicesData.flush(contextVk->getDevice()));
 
         mLineLoopBufferFirstIndex = firstVertex;
         mLineLoopBufferLastIndex  = lastVertex;
@@ -381,15 +381,17 @@ gl::Error LineLoopHandler::createIndexBufferFromElementArrayBuffer(ContextVk *co
         0, mLineLoopIndexBufferOffset + static_cast<VkDeviceSize>(count) * unitSize, unitSize};
     std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
 
-    CommandBuffer *commandBuffer;
-    beginWriteResource(contextVk->getRenderer(), &commandBuffer);
+    RendererVk *renderer = contextVk->getRenderer();
+    Serial currentSerial = renderer->getCurrentQueueSerial();
 
-    Serial currentSerial = contextVk->getRenderer()->getCurrentQueueSerial();
+    CommandBuffer *commandBuffer;
+    beginWriteResource(renderer, &commandBuffer);
+
     bufferVk->onReadResource(getCurrentWritingNode(), currentSerial);
     commandBuffer->copyBuffer(bufferVk->getVkBuffer().getHandle(), mLineLoopIndexBuffer, 2,
                               copies.data());
 
-    ANGLE_TRY(mDynamicLineLoopIndicesData.flush(contextVk));
+    ANGLE_TRY(mDynamicLineLoopIndicesData.flush(renderer->getDevice()));
     return gl::NoError();
 }
 

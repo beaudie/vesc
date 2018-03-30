@@ -45,7 +45,7 @@ class DynamicBuffer : angle::NonCopyable
                    bool *newBufferAllocatedOut);
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
-    Error flush(ContextVk *context);
+    Error flush(VkDevice device);
 
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
