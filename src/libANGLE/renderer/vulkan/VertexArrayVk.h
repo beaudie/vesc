@@ -16,7 +16,12 @@
 namespace rx
 {
 class BufferVk;
+
+namespace vk
+{
+class CommandGraphResource;
 class DynamicBuffer;
+}  // namespace vk
 
 class VertexArrayVk : public VertexArrayImpl
 {
@@ -28,7 +33,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     gl::AttributesMask attribsToStream(ContextVk *context) const;
     gl::Error streamVertexData(ContextVk *context,
-                               DynamicBuffer *dynamicBuffer,
+                               vk::DynamicBuffer *dynamicBuffer,
                                size_t firstVertex,
                                size_t lastVertex);
     gl::Error syncState(const gl::Context *context,
@@ -41,7 +46,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     void updateDrawDependencies(vk::CommandGraphNode *readNode,
                                 const gl::AttributesMask &activeAttribsMask,
-                                ResourceVk *elementArrayBufferOverride,
+                                vk::CommandGraphResource *elementArrayBufferOverride,
                                 Serial serial,
                                 DrawType drawType);
 
@@ -60,8 +65,8 @@ class VertexArrayVk : public VertexArrayImpl
 
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
-    gl::AttribArray<ResourceVk *> mCurrentArrayBufferResources;
-    ResourceVk *mCurrentElementArrayBufferResource;
+    gl::AttribArray<vk::CommandGraphResource *> mCurrentArrayBufferResources;
+    vk::CommandGraphResource *mCurrentElementArrayBufferResource;
 
     // Keep a cache of binding and attribute descriptions for easy pipeline updates.
     // This is copied out of here into the pipeline description on a Context state change.
