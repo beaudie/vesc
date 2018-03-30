@@ -1807,7 +1807,7 @@ gl::Error Renderer9::applyShaders(const gl::Context *context, GLenum drawMode)
 gl::Error Renderer9::applyUniforms(ProgramD3D *programD3D)
 {
     // Skip updates if we're not dirty. Note that D3D9 cannot have compute.
-    if (!programD3D->areVertexUniformsDirty() && !programD3D->areFragmentUniformsDirty())
+    if (!programD3D->areUniformsDirtyInES2Shaders())
     {
         return gl::NoError();
     }

@@ -261,12 +261,7 @@ StateManager11::SRVCache *StateManager11::getSRVCache(gl::ShaderType shaderType)
 
 // ShaderConstants11 implementation
 ShaderConstants11::ShaderConstants11()
-    : mVertexDirty(true),
-      mPixelDirty(true),
-      mComputeDirty(true),
-      mNumActiveVSSamplers(0),
-      mNumActivePSSamplers(0),
-      mNumActiveCSSamplers(0)
+    : mNumActiveVSSamplers(0), mNumActivePSSamplers(0), mNumActiveCSSamplers(0)
 {
 }
 
@@ -299,9 +294,7 @@ size_t ShaderConstants11::getRequiredBufferSize(gl::ShaderType shaderType) const
 
 void ShaderConstants11::markDirty()
 {
-    mVertexDirty         = true;
-    mPixelDirty          = true;
-    mComputeDirty        = true;
+    mShadersDirty.set();
     mNumActiveVSSamplers = 0;
     mNumActivePSSamplers = 0;
     mNumActiveCSSamplers = 0;
@@ -398,15 +391,15 @@ void ShaderConstants11::setComputeWorkGroups(GLuint numGroupsX,
     mCompute.numWorkGroups[0] = numGroupsX;
     mCompute.numWorkGroups[1] = numGroupsY;
     mCompute.numWorkGroups[2] = numGroupsZ;
-    mComputeDirty             = true;
+    mShadersDirty.set(gl::ShaderType::Compute);
 }
 
 void ShaderConstants11::setMultiviewWriteToViewportIndex(GLfloat index)
 {
     mVertex.multiviewWriteToViewportIndex = index;
-    mVertexDirty                          = true;
     mPixel.multiviewWriteToViewportIndex  = index;
-    mPixelDirty                           = true;
+    mShadersDirty.set(gl::ShaderType::Vertex);
+    mShadersDirty.set(gl::ShaderType::Fragment);
 }
 
 void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
@@ -414,8 +407,8 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
                                          bool is9_3,
                                          bool presentPathFast)
 {
-    mVertexDirty = true;
-    mPixelDirty  = true;
+    mShadersDirty.set(gl::ShaderType::Vertex);
+    mShadersDirty.set(gl::ShaderType::Fragment);
 
     // On Feature Level 9_*, we must emulate large and/or negative viewports in the shaders
     // using viewAdjust (like the D3D9 renderer).
@@ -513,27 +506,27 @@ gl::Error ShaderConstants11::updateBuffer(Renderer11 *renderer,
     switch (shaderType)
     {
         case gl::ShaderType::Vertex:
-            dirty                   = mVertexDirty || (mNumActiveVSSamplers < numSamplers);
+            dirty = mShadersDirty[gl::ShaderType::Vertex] || (mNumActiveVSSamplers < numSamplers);
             dataSize                = sizeof(Vertex);
             data                    = reinterpret_cast<const uint8_t *>(&mVertex);
             samplerData             = reinterpret_cast<const uint8_t *>(mSamplerMetadataVS.data());
-            mVertexDirty            = false;
+            mShadersDirty.set(gl::ShaderType::Vertex, false);
             mNumActiveVSSamplers    = numSamplers;
             break;
         case gl::ShaderType::Fragment:
-            dirty                   = mPixelDirty || (mNumActivePSSamplers < numSamplers);
+            dirty = mShadersDirty[gl::ShaderType::Fragment] || (mNumActivePSSamplers < numSamplers);
             dataSize                = sizeof(Pixel);
             data                    = reinterpret_cast<const uint8_t *>(&mPixel);
             samplerData             = reinterpret_cast<const uint8_t *>(mSamplerMetadataPS.data());
-            mPixelDirty             = false;
+            mShadersDirty.set(gl::ShaderType::Fragment, false);
             mNumActivePSSamplers    = numSamplers;
             break;
         case gl::ShaderType::Compute:
-            dirty                   = mComputeDirty || (mNumActiveCSSamplers < numSamplers);
+            dirty = mShadersDirty[gl::ShaderType::Compute] || (mNumActiveCSSamplers < numSamplers);
             dataSize                = sizeof(Compute);
             data                    = reinterpret_cast<const uint8_t *>(&mCompute);
             samplerData             = reinterpret_cast<const uint8_t *>(mSamplerMetadataCS.data());
-            mComputeDirty           = false;
+            mShadersDirty.set(gl::ShaderType::Compute, false);
             mNumActiveCSSamplers    = numSamplers;
             break;
         default:
@@ -2008,7 +2001,8 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     }
 
     // TODO(jmadill): Use dirty bits.
-    if (programD3D->areVertexUniformsDirty() || programD3D->areFragmentUniformsDirty())
+    // TODO(jiawei.shao@intel.com): Sync geometry shaders
+    if (programD3D->areUniformsDirtyInES2Shaders())
     {
         mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
     }
@@ -3121,12 +3115,14 @@ gl::Error StateManager11::applyUniforms(ProgramD3D *programD3D)
     const d3d11::Buffer *pixelConstantBuffer = nullptr;
     ANGLE_TRY(fragmentUniformStorage->getConstantBuffer(mRenderer, &pixelConstantBuffer));
 
-    if (vertexUniformStorage->size() > 0 && programD3D->areVertexUniformsDirty())
+    if (vertexUniformStorage->size() > 0 &&
+        programD3D->areUniformsDirtyInShader(gl::ShaderType::Vertex))
     {
         UpdateUniformBuffer(deviceContext, vertexUniformStorage, vertexConstantBuffer);
     }
 
-    if (fragmentUniformStorage->size() > 0 && programD3D->areFragmentUniformsDirty())
+    if (fragmentUniformStorage->size() > 0 &&
+        programD3D->areUniformsDirtyInShader(gl::ShaderType::Fragment))
     {
         UpdateUniformBuffer(deviceContext, fragmentUniformStorage, pixelConstantBuffer);
     }
@@ -3217,7 +3213,8 @@ gl::Error StateManager11::applyComputeUniforms(ProgramD3D *programD3D)
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
-    if (computeUniformStorage->size() > 0 && programD3D->areComputeUniformsDirty())
+    if (computeUniformStorage->size() > 0 &&
+        programD3D->areUniformsDirtyInShader(gl::ShaderType::Compute))
     {
         UpdateUniformBuffer(deviceContext, computeUniformStorage, constantBuffer);
         programD3D->markUniformsClean();
