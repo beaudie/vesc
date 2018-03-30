@@ -622,11 +622,9 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
       mDirtySamplerMapping(true),
       mUsedComputeImageRange(0),
       mUsedComputeReadonlyImageRange(0),
-      mSerial(issueSerial()),
-      mVertexUniformsDirty(true),
-      mFragmentUniformsDirty(true),
-      mComputeUniformsDirty(true)
+      mSerial(issueSerial())
 {
+    mShaderUniformsDirty.set();
     mDynamicHLSL = new DynamicHLSL(renderer);
 }
 
@@ -1811,14 +1809,14 @@ void ProgramD3D::initializeUniformBlocks()
 
         D3DUniformBlock d3dUniformBlock;
 
-        if (uniformBlock.vertexActive)
+        if (uniformBlock.isActive(gl::ShaderType::Vertex))
         {
             ASSERT(vertexShaderD3D != nullptr);
             unsigned int baseRegister = vertexShaderD3D->getUniformBlockRegister(uniformBlock.name);
             d3dUniformBlock.vsRegisterIndex = baseRegister + uniformBlockElement;
         }
 
-        if (uniformBlock.fragmentActive)
+        if (uniformBlock.isActive(gl::ShaderType::Fragment))
         {
             ASSERT(fragmentShaderD3D != nullptr);
             unsigned int baseRegister =
@@ -1826,7 +1824,7 @@ void ProgramD3D::initializeUniformBlocks()
             d3dUniformBlock.psRegisterIndex = baseRegister + uniformBlockElement;
         }
 
-        if (uniformBlock.computeActive)
+        if (uniformBlock.isActive(gl::ShaderType::Compute))
         {
             ASSERT(computeShaderD3D != nullptr);
             unsigned int baseRegister =
@@ -1968,16 +1966,12 @@ const std::vector<GLint> &ProgramD3D::getFragmentUniformBufferCache() const
 
 void ProgramD3D::dirtyAllUniforms()
 {
-    mVertexUniformsDirty   = true;
-    mFragmentUniformsDirty = true;
-    mComputeUniformsDirty  = true;
+    mShaderUniformsDirty.set();
 }
 
 void ProgramD3D::markUniformsClean()
 {
-    mVertexUniformsDirty   = false;
-    mFragmentUniformsDirty = false;
-    mComputeUniformsDirty  = false;
+    mShaderUniformsDirty.reset();
 }
 
 void ProgramD3D::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
@@ -2442,19 +2436,19 @@ void ProgramD3D::setUniformInternal(GLint location, GLsizei count, const T *v, G
     if (targetUniform->vsData)
     {
         setUniformImpl(locationInfo, count, v, targetUniform->vsData, uniformType);
-        mVertexUniformsDirty = true;
+        mShaderUniformsDirty.set(gl::ShaderType::Vertex);
     }
 
     if (targetUniform->psData)
     {
         setUniformImpl(locationInfo, count, v, targetUniform->psData, uniformType);
-        mFragmentUniformsDirty = true;
+        mShaderUniformsDirty.set(gl::ShaderType::Fragment);
     }
 
     if (targetUniform->csData)
     {
         setUniformImpl(locationInfo, count, v, targetUniform->csData, uniformType);
-        mComputeUniformsDirty = true;
+        mShaderUniformsDirty.set(gl::ShaderType::Compute);
     }
 }
 
@@ -2511,7 +2505,7 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
         if (setUniformMatrixfvImpl<cols, rows>(location, countIn, transpose, value,
                                                targetUniform->vsData, targetUniformType))
         {
-            mVertexUniformsDirty = true;
+            mShaderUniformsDirty.set(gl::ShaderType::Vertex);
         }
     }
 
@@ -2520,7 +2514,7 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
         if (setUniformMatrixfvImpl<cols, rows>(location, countIn, transpose, value,
                                                targetUniform->psData, targetUniformType))
         {
-            mFragmentUniformsDirty = true;
+            mShaderUniformsDirty.set(gl::ShaderType::Fragment);
         }
     }
 
@@ -2529,7 +2523,7 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
         if (setUniformMatrixfvImpl<cols, rows>(location, countIn, transpose, value,
                                                targetUniform->csData, targetUniformType))
         {
-            mComputeUniformsDirty = true;
+            mShaderUniformsDirty.set(gl::ShaderType::Compute);
         }
     }
 }
@@ -2949,6 +2943,18 @@ bool ProgramD3D::hasGeometryExecutableForPrimitiveType(GLenum drawMode)
 bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
 {
     return mCachedPixelExecutableIndex.valid();
+}
+
+bool ProgramD3D::areUniformsDirtyInES2Shaders() const
+{
+    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    {
+        if (areUniformsDirtyInShader(shaderType))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename DestT>
