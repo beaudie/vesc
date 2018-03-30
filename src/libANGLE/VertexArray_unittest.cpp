@@ -29,7 +29,11 @@ TEST(VertexArrayTest, VerifyGetIndexFromDirtyBit)
     for (size_t dirtyBit : dirtyBits)
     {
         const size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
-        if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX)
+        if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_0)
+        {
+            continue;
+        }
+        else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX)
         {
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0, index);
         }

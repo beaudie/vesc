@@ -15,6 +15,7 @@
 
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/Observer.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
@@ -72,7 +73,7 @@ class VertexArrayState final : angle::NonCopyable
     ComponentTypeMask mVertexAttributesTypeMask;
 };
 
-class VertexArray final : public LabeledObject
+class VertexArray final : public angle::ObserverInterface, public LabeledObject
 {
   public:
     VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
@@ -153,6 +154,11 @@ class VertexArray final : public LabeledObject
         return mState.getEnabledAttributesMask();
     }
 
+    // Observer implementation
+    void onSubjectStateChange(const gl::Context *context,
+                              angle::SubjectIndex index,
+                              angle::SubjectMessage message) override;
+
     // Dirty bits for VertexArrays use a heirarchical design. At the top level, each attribute
     // has a single dirty bit. Then an array of MAX_ATTRIBS dirty bits each has a dirty bit for
     // enabled/pointer/format/binding. Bindings are handled similarly. Note that because the
@@ -162,6 +168,7 @@ class VertexArray final : public LabeledObject
     enum DirtyBitType
     {
         DIRTY_BIT_ELEMENT_ARRAY_BUFFER,
+        DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA,
 
         // Dirty bits for attributes.
         DIRTY_BIT_ATTRIB_0,
@@ -191,12 +198,13 @@ class VertexArray final : public LabeledObject
     enum DirtyBindingBitType
     {
         DIRTY_BINDING_BUFFER,
+        DIRTY_BINDING_BUFFER_DATA,
         DIRTY_BINDING_DIVISOR,
         DIRTY_BINDING_UNKNOWN,
         DIRTY_BINDING_MAX = DIRTY_BINDING_UNKNOWN,
     };
 
-    using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
+    using DirtyBits             = angle::BitSet<DIRTY_BIT_MAX>;
     using DirtyAttribBits       = angle::BitSet<DIRTY_ATTRIB_MAX>;
     using DirtyBindingBits      = angle::BitSet<DIRTY_BINDING_MAX>;
     using DirtyAttribBitsArray  = std::array<DirtyAttribBits, gl::MAX_VERTEX_ATTRIBS>;
@@ -218,14 +226,21 @@ class VertexArray final : public LabeledObject
     void setDirtyAttribBit(size_t attribIndex, DirtyAttribBitType dirtyAttribBit);
     void setDirtyBindingBit(size_t bindingIndex, DirtyBindingBitType dirtyBindingBit);
 
+    void updateObserverBinding(size_t bindingIndex);
+    void setDependentDirtyBit(size_t dirtyBit);
+
     GLuint mId;
 
     VertexArrayState mState;
     DirtyBits mDirtyBits;
     DirtyAttribBitsArray mDirtyAttribBits;
     DirtyBindingBitsArray mDirtyBindingBits;
+    Optional<DirtyBits> mDirtyBitsGuard;
 
     rx::VertexArrayImpl *mVertexArray;
+
+    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    angle::ObserverBinding mElementArrayBufferObserverBinding;
 };
 
 }  // namespace gl
