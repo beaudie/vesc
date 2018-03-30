@@ -53,11 +53,11 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 namespace rx
 {
 class DisplayVk;
+class DynamicBuffer;
 class RenderTargetVk;
 class RendererVk;
 class ResourceVk;
 class RenderPassCache;
-class StreamingBuffer;
 
 enum class DrawType
 {
@@ -678,7 +678,7 @@ class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
 
   private:
     angle::ObserverBinding mObserverBinding;
-    std::unique_ptr<StreamingBuffer> mStreamingLineLoopIndicesData;
+    std::unique_ptr<DynamicBuffer> mDynamicLineLoopIndicesData;
     VkBuffer mLineLoopIndexBuffer;
     uint32_t mLineLoopIndexBufferOffset;
     Optional<int> mLineLoopBufferFirstIndex;

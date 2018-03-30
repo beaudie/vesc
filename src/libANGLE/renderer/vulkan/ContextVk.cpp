@@ -57,8 +57,8 @@ VkIndexType GetVkIndexType(GLenum glIndexType)
     }
 }
 
-constexpr size_t kStreamingVertexDataSize = 1024 * 1024;
-constexpr size_t kStreamingIndexDataSize  = 1024 * 8;
+constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
+constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
 
 }  // anonymous namespace
 
@@ -69,13 +69,13 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mDynamicDescriptorPool(),
       mVertexArrayDirty(false),
       mTexturesDirty(false),
-      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kStreamingVertexDataSize),
-      mStreamingIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kStreamingIndexDataSize)
+      mDynamicVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kDynamicVertexDataSize),
+      mDynamicIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize)
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
-    mStreamingVertexData.init(1);
-    mStreamingIndexData.init(1);
+    mDynamicVertexData.init(1);
+    mDynamicIndexData.init(1);
 }
 
 ContextVk::~ContextVk()
@@ -87,8 +87,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     VkDevice device = mRenderer->getDevice();
 
     mDynamicDescriptorPool.destroy(mRenderer);
-    mStreamingVertexData.destroy(device);
-    mStreamingIndexData.destroy(device);
+    mDynamicVertexData.destroy(device);
+    mDynamicIndexData.destroy(device);
     mLineLoopHandler.destroy(device);
 }
 
@@ -225,7 +225,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 
     (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
     ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(vkVAO->streamVertexData(contextVk, &mStreamingVertexData, firstVertex, lastVertex));
+    ANGLE_TRY(vkVAO->streamVertexData(contextVk, &mDynamicVertexData, firstVertex, lastVertex));
     (*commandBuffer)
         ->bindVertexBuffers(0, maxAttrib, vkVAO->getCurrentArrayBufferHandles().data(),
                             vkVAO->getCurrentArrayBufferOffsets().data());
@@ -351,7 +351,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             GLubyte *dst         = nullptr;
 
             ANGLE_TRY(
-                mStreamingIndexData.allocate(contextVk, amount, &dst, &buffer, &offset, nullptr));
+                mDynamicIndexData.allocate(contextVk, amount, &dst, &buffer, &offset, nullptr));
             if (type == GL_UNSIGNED_BYTE)
             {
                 // Unsigned bytes don't have direct support in Vulkan so we have to expand the
@@ -367,7 +367,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
             {
                 memcpy(dst, indices, amount);
             }
-            ANGLE_TRY(mStreamingIndexData.flush(contextVk));
+            ANGLE_TRY(mDynamicIndexData.flush(contextVk));
 
             if (computeIndexRange)
             {

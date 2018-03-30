@@ -16,7 +16,7 @@
 namespace rx
 {
 class BufferVk;
-class StreamingBuffer;
+class DynamicBuffer;
 
 class VertexArrayVk : public VertexArrayImpl
 {
@@ -28,7 +28,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     gl::AttributesMask attribsToStream(ContextVk *context) const;
     gl::Error streamVertexData(ContextVk *context,
-                               StreamingBuffer *stream,
+                               DynamicBuffer *dynamicBuffer,
                                size_t firstVertex,
                                size_t lastVertex);
     gl::Error syncState(const gl::Context *context,
