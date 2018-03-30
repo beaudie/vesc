@@ -6405,6 +6405,10 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
                 *type      = GL_FLOAT;
                 *numParams = 3;
                 return true;
+            case GL_CURRENT_TEXTURE_COORDS:
+                *type      = GL_FLOAT;
+                *numParams = 4;
+                return true;
         }
     }
 
