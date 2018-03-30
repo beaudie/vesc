@@ -1,4 +1,4 @@
-#line 16 "./Tokenizer.l"
+#line 16 "src/compiler/preprocessor/Tokenizer.l"
 //
 // Copyright (c) 2011-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -937,6 +937,7 @@ typedef pp::SourceLocation YYLTYPE;
         yyextra->lineStart = true;     \
     } while(0);
 
+#define YY_NO_INPUT
 #define YY_USER_ACTION                                              \
     do                                                              \
     {                                                               \
@@ -1685,11 +1686,10 @@ case YY_STATE_EOF(COMMENT):
     yylval->clear();
 
     // Line number overflows fake EOFs to exit early, check for this case.
-    if (yylineno == INT_MAX)
-    {
+    if (yylineno == INT_MAX) {
         yyextra->diagnostics->report(pp::Diagnostics::PP_TOKENIZER_ERROR,
-                                     pp::SourceLocation(yyfileno, yylineno),
-                                     "Integer overflow on line number");
+                pp::SourceLocation(yyfileno, yylineno),
+                "Integer overflow on line number");
     }
     else if (YY_START == COMMENT)
     {
@@ -1939,10 +1939,8 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 			num_to_read = YY_READ_BUF_SIZE;
 
 		/* Read in more data. */
-		yy_size_t ret = 0;
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			ret, num_to_read );
-		yyg->yy_n_chars = static_cast<int>(ret);
+			yyg->yy_n_chars, num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
 		}
