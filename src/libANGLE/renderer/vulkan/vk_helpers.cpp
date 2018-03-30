@@ -385,7 +385,7 @@ gl::Error LineLoopHandler::createIndexBufferFromElementArrayBuffer(ContextVk *co
     beginWriteResource(contextVk->getRenderer(), &commandBuffer);
 
     Serial currentSerial = contextVk->getRenderer()->getCurrentQueueSerial();
-    bufferVk->onReadResource(getCurrentWritingNode(currentSerial), currentSerial);
+    bufferVk->onReadResource(getCurrentWritingNode(), currentSerial);
     commandBuffer->copyBuffer(bufferVk->getVkBuffer().getHandle(), mLineLoopIndexBuffer, 2,
                               copies.data());
 

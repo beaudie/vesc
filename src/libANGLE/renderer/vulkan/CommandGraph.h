@@ -34,10 +34,10 @@ class CommandGraphResource
     Serial getQueueSerial() const;
 
     // Returns true if any tracked read or write nodes match 'currentSerial'.
-    bool hasCurrentWritingNode(Serial currentSerial) const;
+    bool hasChildlessWritingNode() const;
 
-    // Returns the active write node, and asserts 'currentSerial' matches the stored serial.
-    CommandGraphNode *getCurrentWritingNode(Serial currentSerial);
+    // Returns the active write node.
+    CommandGraphNode *getCurrentWritingNode();
 
     // Allocates a new write node and calls onWriteResource internally.
     CommandGraphNode *getNewWritingNode(RendererVk *renderer);
@@ -51,6 +51,9 @@ class CommandGraphResource
 
     // Sets up dependency relations. 'readingNode' will read from 'this' ResourceVk.
     void onReadResource(CommandGraphNode *readingNode, Serial serial);
+
+    // Returns false if the resource is not in use, and clears any current read/write nodes.
+    bool checkResourceInUse(RendererVk *renderer);
 
   private:
     Serial mStoredQueueSerial;
