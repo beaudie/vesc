@@ -15,6 +15,7 @@
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/IndexRangeCache.h"
+#include "libANGLE/Observer.h"
 #include "libANGLE/PackedGLEnums.h"
 #include "libANGLE/RefCountObject.h"
 
@@ -29,7 +30,7 @@ namespace gl
 class Buffer;
 class Context;
 
-class BufferState final : angle::NonCopyable
+class BufferState final : public angle::Subject
 {
   public:
     BufferState();
@@ -92,8 +93,9 @@ class Buffer final : public RefCountObject, public LabeledObject
     Error mapRange(const Context *context, GLintptr offset, GLsizeiptr length, GLbitfield access);
     Error unmap(const Context *context, GLboolean *result);
 
-    void onTransformFeedback();
-    void onPixelUnpack();
+    // These are called when another operation changes Buffer data.
+    void onTransformFeedback(const Context *context);
+    void onPixelPack(const Context *context);
 
     Error getIndexRange(const gl::Context *context,
                         GLenum type,
@@ -116,6 +118,8 @@ class Buffer final : public RefCountObject, public LabeledObject
     bool isBound() const;
     bool isBoundForTransformFeedbackAndOtherUse() const;
     void onBindingChanged(bool bound, BufferBinding target);
+
+    angle::Subject *getSubject();
 
   private:
     BufferState mState;

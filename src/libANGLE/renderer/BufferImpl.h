@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "common/mathutil.h"
+#include "libANGLE/Buffer.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/PackedGLEnums.h"
 
@@ -24,10 +25,13 @@ class Context;
 
 namespace rx
 {
-class BufferImpl : angle::NonCopyable
+// We use two set of Subject messages. The CONTENTS_CHANGED message is signaled whenever data
+// changes, to trigger re-translation or other events. Some buffers only need to be updated when the
+// underlying driver object changes - this is notified via the STORAGE_CHANGED message.
+class BufferImpl : public angle::SubjectImpl
 {
   public:
-    BufferImpl(const gl::BufferState &state) : mState(state) {}
+    BufferImpl(const gl::BufferState &state) : SubjectImpl(state), mState(state) {}
     virtual ~BufferImpl() {}
     virtual void destroy(const gl::Context *context) {}
 

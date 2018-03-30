@@ -690,6 +690,10 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
                 updateBindingBuffer(context, bindingIndex);
                 break;
 
+            case VertexArray::DIRTY_BINDING_BUFFER_DATA:
+                // No-op in GL.
+                break;
+
             case VertexArray::DIRTY_BINDING_DIVISOR:
                 updateBindingDivisor(bindingIndex);
                 break;
@@ -714,6 +718,9 @@ gl::Error VertexArrayGL::syncState(const gl::Context *context,
         {
             case VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER:
                 updateElementArrayBufferBinding(context);
+                break;
+
+            case VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA:
                 break;
 
             default:
@@ -751,4 +758,4 @@ void VertexArrayGL::applyNumViewsToDivisor(int numViews)
     }
 }
 
-}  // rx
+}  // namespace rx
