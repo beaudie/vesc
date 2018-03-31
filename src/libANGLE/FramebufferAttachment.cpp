@@ -53,9 +53,7 @@ std::vector<Offset> FramebufferAttachment::GetDefaultViewportOffsetVector()
         FramebufferAttachment::kDefaultViewportOffsets, FramebufferAttachment::kDefaultNumViews);
 }
 
-FramebufferAttachment::Target::Target()
-    : mBinding(GL_NONE),
-      mTextureIndex(ImageIndex::MakeInvalid())
+FramebufferAttachment::Target::Target() : mBinding(GL_NONE), mTextureIndex()
 {
 }
 
@@ -236,13 +234,13 @@ TextureTarget FramebufferAttachment::cubeMapFace() const
     ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mTarget.textureIndex();
-    return index.type == TextureType::CubeMap ? index.target : TextureTarget::InvalidEnum;
+    return index.getType() == TextureType::CubeMap ? index.getTarget() : TextureTarget::InvalidEnum;
 }
 
 GLint FramebufferAttachment::mipLevel() const
 {
     ASSERT(type() == GL_TEXTURE);
-    return mTarget.textureIndex().mipIndex;
+    return mTarget.textureIndex().getLevelIndex();
 }
 
 GLint FramebufferAttachment::layer() const
@@ -250,7 +248,7 @@ GLint FramebufferAttachment::layer() const
     ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mTarget.textureIndex();
-    return index.hasLayer() ? index.layerIndex : 0;
+    return index.hasLayer() ? index.getLayerIndex() : 0;
 }
 
 GLsizei FramebufferAttachment::getNumViews() const
@@ -370,10 +368,10 @@ Error FramebufferAttachmentObject::initializeContents(const Context *context,
 
     // Because gl::Texture cannot support tracking individual layer dirtiness, we only handle
     // initializing entire mip levels for 2D array textures.
-    if (imageIndex.type == TextureType::_2DArray && imageIndex.hasLayer())
+    if (imageIndex.getType() == TextureType::_2DArray && imageIndex.hasLayer())
     {
-        ImageIndex fullMipIndex = imageIndex;
-        fullMipIndex.layerIndex = ImageIndex::ENTIRE_LEVEL;
+        ImageIndex fullMipIndex =
+            ImageIndex::Make2DArray(imageIndex.getLevelIndex(), ImageIndex::kEntireLevel);
         return getAttachmentImpl()->initializeContents(context, fullMipIndex);
     }
     else
