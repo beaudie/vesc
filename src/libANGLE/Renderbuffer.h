@@ -32,7 +32,7 @@ namespace gl
 // FramebufferAttachment and Framebuffer for how they are applied to an FBO via an
 // attachment point.
 
-class RenderbufferState final : angle::NonCopyable
+class RenderbufferState final : public angle::Subject
 {
   public:
     RenderbufferState();
@@ -98,6 +98,7 @@ class Renderbuffer final : public egl::ImageSibling,
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     const Format &getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
+    angle::Subject *getSubject() override;
 
     void onAttach(const Context *context) override;
     void onDetach(const Context *context) override;

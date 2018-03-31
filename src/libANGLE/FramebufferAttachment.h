@@ -199,6 +199,8 @@ class FramebufferAttachmentObject
     virtual void onDetach(const Context *context) = 0;
     virtual GLuint getId() const = 0;
 
+    virtual angle::Subject *getSubject() = 0;
+
     // These are used for robust resource initialization.
     virtual InitState initState(const ImageIndex &imageIndex) const = 0;
     virtual void setInitState(const ImageIndex &imageIndex, InitState initState) = 0;
@@ -209,9 +211,6 @@ class FramebufferAttachmentObject
                                     rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     Error initializeContents(const Context *context, const ImageIndex &imageIndex);
-
-    void onStorageChange(const gl::Context *context) const;
-    angle::Subject *getSubject() const;
 
   protected:
     virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;

@@ -275,6 +275,7 @@
             'libANGLE/renderer/ProgramImpl.h',
             'libANGLE/renderer/ProgramPipelineImpl.h',
             'libANGLE/renderer/QueryImpl.h',
+            'libANGLE/renderer/RenderbufferImpl.cpp',
             'libANGLE/renderer/RenderbufferImpl.h',
             'libANGLE/renderer/RenderTargetCache.h',
             'libANGLE/renderer/SamplerImpl.h',

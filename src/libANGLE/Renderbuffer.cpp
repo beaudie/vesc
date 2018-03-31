@@ -109,7 +109,7 @@ Error Renderbuffer::setStorage(const Context *context,
 
     mState.update(static_cast<GLsizei>(width), static_cast<GLsizei>(height), Format(internalformat),
                   0, InitState::MayNeedInit);
-    onStorageChange(context);
+    mState.onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
 
     return NoError();
 }
@@ -126,7 +126,7 @@ Error Renderbuffer::setStorageMultisample(const Context *context,
 
     mState.update(static_cast<GLsizei>(width), static_cast<GLsizei>(height), Format(internalformat),
                   static_cast<GLsizei>(samples), InitState::MayNeedInit);
-    onStorageChange(context);
+    mState.onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
 
     return NoError();
 }
@@ -140,7 +140,7 @@ Error Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image 
 
     mState.update(static_cast<GLsizei>(image->getWidth()), static_cast<GLsizei>(image->getHeight()),
                   Format(image->getFormat()), 0, image->sourceInitState());
-    onStorageChange(context);
+    mState.onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
 
     return NoError();
 }
@@ -229,6 +229,11 @@ const Format &Renderbuffer::getAttachmentFormat(GLenum /*binding*/,
 GLsizei Renderbuffer::getAttachmentSamples(const ImageIndex & /*imageIndex*/) const
 {
     return getSamples();
+}
+
+angle::Subject *Renderbuffer::getSubject()
+{
+    return &mState;
 }
 
 InitState Renderbuffer::initState(const gl::ImageIndex & /*imageIndex*/) const

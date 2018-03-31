@@ -64,6 +64,21 @@ class Subject : NonCopyable
     std::vector<ObserverBinding *> mObservers;
 };
 
+// Special helper class for keeping a reference to an angle::Subject from a child object.
+class SubjectImpl : NonCopyable
+{
+  public:
+    SubjectImpl(const Subject &subject);
+    virtual ~SubjectImpl();
+
+    void onStateChange(const gl::Context *context, SubjectMessage message) const;
+    const Subject *getSubject() const;
+
+  private:
+    friend class ObserverBinding;
+    const Subject &mSubject;
+};
+
 // Keeps a binding between a Subject and Observer, with a specific subject index.
 class ObserverBinding final
 {
@@ -74,6 +89,13 @@ class ObserverBinding final
     ObserverBinding &operator=(const ObserverBinding &other);
 
     void bind(Subject *subject);
+
+    template <typename T>
+    void bindGeneric(T *object)
+    {
+        bind(object ? object->getSubject() : nullptr);
+    }
+
     void reset();
     void onStateChange(const gl::Context *context, SubjectMessage message) const;
     void onSubjectReset();

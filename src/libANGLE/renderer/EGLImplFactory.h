@@ -18,7 +18,7 @@ class AttributeMap;
 struct Config;
 class ImageSibling;
 struct ImageState;
-struct SurfaceState;
+class SurfaceState;
 }
 
 namespace gl

@@ -1729,7 +1729,7 @@ void Framebuffer::updateAttachment(const Context *context,
                        multiviewLayout, viewportOffsets);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
-    onDirtyBinding->bind(resource ? resource->getSubject() : nullptr);
+    onDirtyBinding->bindGeneric(resource);
 
     invalidateCompletenessCache();
 }

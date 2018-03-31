@@ -69,6 +69,25 @@ void Subject::resetObservers()
     mObservers.clear();
 }
 
+// SubjectImpl implementation.
+SubjectImpl::SubjectImpl(const Subject &subject) : mSubject(subject)
+{
+}
+
+SubjectImpl::~SubjectImpl()
+{
+}
+
+void SubjectImpl::onStateChange(const gl::Context *context, SubjectMessage message) const
+{
+    mSubject.onStateChange(context, message);
+}
+
+const Subject *SubjectImpl::getSubject() const
+{
+    return &mSubject;
+}
+
 // ObserverBinding implementation.
 ObserverBinding::ObserverBinding(ObserverInterface *observer, SubjectIndex index)
     : mSubject(nullptr), mObserver(observer), mIndex(index)

@@ -156,7 +156,7 @@ void Surface::postSwap(const gl::Context *context)
     if (mRobustResourceInitialization && mSwapBehavior != EGL_BUFFER_PRESERVED)
     {
         mInitState = gl::InitState::MayNeedInit;
-        onStorageChange(context);
+        mState.onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
     }
 }
 
@@ -438,6 +438,11 @@ const gl::Format &Surface::getAttachmentFormat(GLenum binding, const gl::ImageIn
 GLsizei Surface::getAttachmentSamples(const gl::ImageIndex &target) const
 {
     return getConfig()->samples;
+}
+
+angle::Subject *Surface::getSubject()
+{
+    return &mState;
 }
 
 GLuint Surface::getId() const

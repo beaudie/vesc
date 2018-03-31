@@ -11,7 +11,8 @@
 namespace rx
 {
 
-TextureImpl::TextureImpl(const gl::TextureState &state) : mState(state)
+TextureImpl::TextureImpl(const gl::TextureState &state)
+    : FramebufferAttachmentObjectImpl(mState), mState(state)
 {
 }
 

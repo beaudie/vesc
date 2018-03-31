@@ -21,6 +21,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Image.h"
+#include "libANGLE/Observer.h"
 #include "libANGLE/Stream.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
@@ -88,8 +89,9 @@ struct SwizzleState final
 };
 
 // State from Table 6.9 (state per texture object) in the OpenGL ES 3.0.2 spec.
-struct TextureState final : private angle::NonCopyable
+class TextureState final : public angle::Subject
 {
+  public:
     TextureState(TextureType type);
     ~TextureState();
 
@@ -126,8 +128,6 @@ struct TextureState final : private angle::NonCopyable
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
-    // TODO(jmadill): Remove TextureGL from friends.
-    friend class rx::TextureGL;
     friend bool operator==(const TextureState &a, const TextureState &b);
 
     bool computeSamplerCompleteness(const SamplerState &samplerState,
@@ -374,6 +374,7 @@ class Texture final : public egl::ImageSibling, public LabeledObject
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     const Format &getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
+    angle::Subject *getSubject() override;
 
     // GLES1 emulation
     void setCrop(const gl::Rectangle& rect);

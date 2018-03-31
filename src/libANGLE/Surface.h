@@ -37,8 +37,9 @@ namespace egl
 class Display;
 struct Config;
 
-struct SurfaceState final : private angle::NonCopyable
+class SurfaceState final : public angle::Subject
 {
+  public:
     SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn);
 
     gl::Framebuffer *defaultFramebuffer;
@@ -107,6 +108,7 @@ class Surface : public gl::FramebufferAttachmentObject
     const gl::Format &getAttachmentFormat(GLenum binding,
                                           const gl::ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const gl::ImageIndex &imageIndex) const override;
+    angle::Subject *getSubject() override;
 
     void onAttach(const gl::Context *context) override {}
     void onDetach(const gl::Context *context) override {}

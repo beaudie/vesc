@@ -26,12 +26,11 @@ class Image;
 
 namespace rx
 {
-
 class RenderbufferImpl : public FramebufferAttachmentObjectImpl
 {
   public:
-    RenderbufferImpl(const gl::RenderbufferState &state) : mState(state) {}
-    ~RenderbufferImpl() override {}
+    RenderbufferImpl(const gl::RenderbufferState &state);
+    ~RenderbufferImpl() override;
     virtual gl::Error onDestroy(const gl::Context *context);
 
     virtual gl::Error setStorage(const gl::Context *context,
@@ -48,11 +47,6 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
   protected:
     const gl::RenderbufferState &mState;
 };
-
-inline gl::Error RenderbufferImpl::onDestroy(const gl::Context *context)
-{
-    return gl::NoError();
-}
 }  // namespace rx
 
 #endif   // LIBANGLE_RENDERER_RENDERBUFFERIMPL_H_

@@ -31,7 +31,7 @@ namespace egl
 {
 class Display;
 struct Config;
-struct SurfaceState;
+class SurfaceState;
 class Thread;
 }
 

@@ -922,7 +922,7 @@ egl::Stream *Texture::getBoundStream() const
 void Texture::signalDirty(const Context *context, InitState initState)
 {
     mState.mInitState = initState;
-    onStorageChange(context);
+    mState.onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
     invalidateCompletenessCache();
 }
 
@@ -1380,6 +1380,11 @@ const Format &Texture::getAttachmentFormat(GLenum /*binding*/, const ImageIndex 
 GLsizei Texture::getAttachmentSamples(const ImageIndex &imageIndex) const
 {
     return getSamples(imageIndex.target, 0);
+}
+
+angle::Subject *Texture::getSubject()
+{
+    return &mState;
 }
 
 void Texture::setCrop(const gl::Rectangle& rect)

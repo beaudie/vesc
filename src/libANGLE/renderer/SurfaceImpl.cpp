@@ -8,10 +8,13 @@
 
 #include "libANGLE/renderer/SurfaceImpl.h"
 
+#include "libANGLE/Surface.h"
+
 namespace rx
 {
 
-SurfaceImpl::SurfaceImpl(const egl::SurfaceState &state) : mState(state)
+SurfaceImpl::SurfaceImpl(const egl::SurfaceState &state)
+    : FramebufferAttachmentObjectImpl(state), mState(state)
 {
 }
 

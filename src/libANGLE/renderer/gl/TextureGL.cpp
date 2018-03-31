@@ -1419,7 +1419,7 @@ GLuint TextureGL::getTextureID() const
 
 gl::TextureType TextureGL::getType() const
 {
-    return mState.mType;
+    return mState.getType();
 }
 
 gl::Error TextureGL::initializeContents(const gl::Context *context,

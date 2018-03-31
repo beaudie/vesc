@@ -16,12 +16,11 @@
 
 namespace rx
 {
-
-class FramebufferAttachmentObjectImpl : public angle::Subject
+class FramebufferAttachmentObjectImpl : public angle::SubjectImpl
 {
   public:
-    FramebufferAttachmentObjectImpl() {}
-    virtual ~FramebufferAttachmentObjectImpl() {}
+    FramebufferAttachmentObjectImpl(const angle::Subject &subject);
+    virtual ~FramebufferAttachmentObjectImpl();
 
     virtual gl::Error getAttachmentRenderTarget(const gl::Context *context,
                                                 GLenum binding,
@@ -31,6 +30,16 @@ class FramebufferAttachmentObjectImpl : public angle::Subject
     virtual gl::Error initializeContents(const gl::Context *context,
                                          const gl::ImageIndex &imageIndex);
 };
+
+inline FramebufferAttachmentObjectImpl::FramebufferAttachmentObjectImpl(
+    const angle::Subject &subject)
+    : SubjectImpl(subject)
+{
+}
+
+inline FramebufferAttachmentObjectImpl::~FramebufferAttachmentObjectImpl()
+{
+}
 
 inline gl::Error FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
     const gl::Context *context,
@@ -49,7 +58,6 @@ inline gl::Error FramebufferAttachmentObjectImpl::initializeContents(
     UNIMPLEMENTED();
     return gl::OutOfMemory() << "initialize not supported.";
 }
-
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_FRAMEBUFFER_ATTACHMENT_OBJECT_IMPL_H_
