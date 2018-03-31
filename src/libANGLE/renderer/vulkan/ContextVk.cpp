@@ -19,7 +19,6 @@
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
-#include "libANGLE/renderer/vulkan/DynamicDescriptorPool.h"
 #include "libANGLE/renderer/vulkan/FenceNVVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
@@ -149,7 +148,7 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
 
 gl::Error ContextVk::setupDraw(const gl::Context *context,
                                const gl::DrawCallParams &drawCallParams,
-                               ResourceVk *elementArrayBufferOverride,
+                               vk::CommandGraphResource *elementArrayBufferOverride,
                                vk::CommandBuffer **commandBufferOut)
 {
     if (drawCallParams.mode() != mCurrentDrawMode)
@@ -311,9 +310,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
         ANGLE_TRY(mLineLoopHandler.createIndexBufferFromElementArrayBuffer(
             this, elementArrayBufferVk, GetVkIndexType(type), count));
 
-        // TODO(fjhenigman): calculate the index range and pass to setupDraw()
-        ANGLE_TRY(setupDraw(context, drawCallParams, mLineLoopHandler.getLineLoopBufferResource(),
-                            &commandBuffer));
+        ANGLE_TRY(setupDraw(context, drawCallParams, &mLineLoopHandler, &commandBuffer));
 
         mLineLoopHandler.bindIndexBuffer(GetVkIndexType(type), &commandBuffer);
         commandBuffer->drawIndexed(count + 1, 1, 0, 0, 0);
@@ -857,7 +854,7 @@ gl::Error ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbitfiel
     return gl::InternalError();
 }
 
-DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool()
+vk::DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool()
 {
     return &mDynamicDescriptorPool;
 }
