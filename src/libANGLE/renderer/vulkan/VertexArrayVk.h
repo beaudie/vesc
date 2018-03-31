@@ -106,6 +106,7 @@ class VertexArrayVk : public VertexArrayImpl
     StreamingBuffer mStreamingIndexData;
 
     vk::LineLoopHandler mLineLoopHandler;
+    bool mDirtyLineLoopTranslation;
 
     // Cache variable for determining whether or not to store new dependencies in the node.
     bool mVertexBuffersDirty;

@@ -36,6 +36,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
       mCurrentElementArrayBufferResource(nullptr),
       mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kStreamingVertexDataSize),
       mStreamingIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kStreamingIndexDataSize),
+      mDirtyLineLoopTranslation(true),
       mVertexBuffersDirty(false),
       mIndexBufferDirty(false)
 {
@@ -76,7 +77,7 @@ gl::Error VertexArrayVk::streamVertexData(RendererVk *renderer,
 
     // TODO(fjhenigman): When we have a bunch of interleaved attributes, they end up
     // un-interleaved, wasting space and copying time.  Consider improving on that.
-    for (auto attribIndex : attribsToStream)
+    for (size_t attribIndex : attribsToStream)
     {
         const gl::VertexAttribute &attrib = attribs[attribIndex];
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
@@ -181,11 +182,13 @@ gl::Error VertexArrayVk::syncState(const gl::Context *context,
                     mCurrentElementArrayBufferOffset   = 0;
                     mCurrentElementArrayBufferResource = nullptr;
                 }
-                mIndexBufferDirty = true;
+                mIndexBufferDirty         = true;
+                mDirtyLineLoopTranslation = true;
                 break;
             }
 
             case gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA:
+                mDirtyLineLoopTranslation = true;
                 break;
 
             default:
@@ -436,9 +439,14 @@ gl::Error VertexArrayVk::onIndexedLineLoopDraw(const gl::Context *context,
 
     VkIndexType indexType = gl_vk::GetIndexType(drawCallParams.type());
 
-    ANGLE_TRY(mLineLoopHandler.createIndexBufferFromElementArrayBuffer(
-        renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(),
-        &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
+    // This also doesn't check if the element type changed, which should trigger translation.
+    if (mDirtyLineLoopTranslation)
+    {
+        ANGLE_TRY(mLineLoopHandler.createIndexBufferFromElementArrayBuffer(
+            renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(),
+            &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
+        mDirtyLineLoopTranslation = false;
+    }
     ANGLE_TRY(onIndexedDraw(context, renderer, drawCallParams, drawNode, true));
 
     return gl::NoError();
