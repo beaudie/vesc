@@ -38,6 +38,7 @@ class Display;
 namespace gl
 {
 struct Box;
+class DrawCallParams;
 struct Extents;
 struct RasterizerState;
 struct Rectangle;
@@ -697,16 +698,19 @@ class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
     LineLoopHandler();
     ~LineLoopHandler();
 
-    void bindIndexBuffer(VkIndexType indexType, vk::CommandBuffer **commandBuffer);
-
-    gl::Error createIndexBuffer(ContextVk *contextVk, int firstVertex, int count);
-    gl::Error createIndexBufferFromElementArrayBuffer(ContextVk *contextVk,
-                                                      BufferVk *bufferVk,
+    gl::Error createIndexBuffer(RendererVk *renderer,
+                                const gl::DrawCallParams &drawCallParams,
+                                VkBuffer *bufferHandleOut,
+                                VkDeviceSize *offsetOut);
+    gl::Error createIndexBufferFromElementArrayBuffer(RendererVk *renderer,
+                                                      BufferVk *elementArrayBufferVk,
                                                       VkIndexType indexType,
-                                                      int count);
+                                                      int indexCount,
+                                                      VkBuffer *bufferHandleOut,
+                                                      VkDeviceSize *bufferOffsetOut);
     void destroy(VkDevice device);
 
-    gl::Error draw(int count, CommandBuffer *commandBuffer);
+    static void Draw(int count, CommandBuffer *commandBuffer);
 
     ResourceVk *getLineLoopBufferResource();
 
@@ -718,8 +722,6 @@ class LineLoopHandler final : angle::NonCopyable, angle::ObserverInterface
   private:
     angle::ObserverBinding mObserverBinding;
     std::unique_ptr<StreamingBuffer> mStreamingLineLoopIndicesData;
-    VkBuffer mLineLoopIndexBuffer;
-    uint32_t mLineLoopIndexBufferOffset;
     Optional<int> mLineLoopBufferFirstIndex;
     Optional<int> mLineLoopBufferLastIndex;
 };
@@ -731,6 +733,7 @@ namespace gl_vk
 VkPrimitiveTopology GetPrimitiveTopology(GLenum mode);
 VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState);
 VkFrontFace GetFrontFace(GLenum frontFace);
+VkIndexType GetIndexType(GLenum elementType);
 }  // namespace gl_vk
 
 // This is a helper class for back-end objects used in Vk command buffers. It records a serial

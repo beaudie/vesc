@@ -114,7 +114,7 @@ void ReadFromDefaultUniformBlock(int componentCount,
     }
 }
 
-vk::Error SyncDefaultUniformBlock(ContextVk *contextVk,
+vk::Error SyncDefaultUniformBlock(RendererVk *renderer,
                                   StreamingBuffer &streamingBuffer,
                                   const angle::MemoryBuffer &bufferData,
                                   uint32_t *outOffset,
@@ -124,11 +124,11 @@ vk::Error SyncDefaultUniformBlock(ContextVk *contextVk,
     uint8_t *data       = nullptr;
     VkBuffer *outBuffer = nullptr;
     uint32_t offset;
-    ANGLE_TRY(streamingBuffer.allocate(contextVk, bufferData.size(), &data, outBuffer, &offset,
+    ANGLE_TRY(streamingBuffer.allocate(renderer, bufferData.size(), &data, outBuffer, &offset,
                                        outBufferModified));
     *outOffset = offset;
     memcpy(data, bufferData.data(), bufferData.size());
-    ANGLE_TRY(streamingBuffer.flush(contextVk));
+    ANGLE_TRY(streamingBuffer.flush(renderer->getDevice()));
     return vk::NoError();
 }
 
@@ -727,7 +727,7 @@ vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
         if (uniformBlock.uniformsDirty)
         {
             bool bufferModified = false;
-            ANGLE_TRY(SyncDefaultUniformBlock(contextVk, uniformBlock.storage,
+            ANGLE_TRY(SyncDefaultUniformBlock(contextVk->getRenderer(), uniformBlock.storage,
                                               uniformBlock.uniformData,
                                               &mUniformBlocksOffsets[index], &bufferModified));
             uniformBlock.uniformsDirty = false;
