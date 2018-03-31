@@ -659,6 +659,8 @@ VkComponentSwizzle GetSwizzle(const GLenum swizzle);
 VkIndexType GetIndexType(GLenum elementType);
 void GetOffset(const gl::Offset &glOffset, VkOffset3D *vkOffset);
 void GetExtent(const gl::Extents &glExtent, VkExtent3D *vkExtent);
+VkImageType GetImageType(gl::TextureType textureType);
+VkImageViewType GetImageViewType(gl::TextureType textureType);
 }  // namespace gl_vk
 
 }  // namespace rx
