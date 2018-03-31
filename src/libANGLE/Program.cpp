@@ -1049,9 +1049,16 @@ Error Program::link(const gl::Context *context)
     double startTime = platform->currentTime(platform);
 
     unlink();
+    mInfoLog.reset();
+
+    // Validate we have properly attached shaders before checking the cache.
+    if (!linkValidateShaders(context, mInfoLog))
+    {
+        return NoError();
+    }
 
     ProgramHash programHash;
-    auto *cache = context->getMemoryProgramCache();
+    MemoryProgramCache *cache = context->getMemoryProgramCache();
     if (cache)
     {
         ANGLE_TRY_RESULT(cache->getProgram(context, this, &mState, &programHash), mLinked);
@@ -1068,12 +1075,6 @@ Error Program::link(const gl::Context *context)
 
     // Cache load failed, fall through to normal linking.
     unlink();
-    mInfoLog.reset();
-
-    if (!linkValidateShaders(context, mInfoLog))
-    {
-        return NoError();
-    }
 
     if (mState.mAttachedComputeShader)
     {
