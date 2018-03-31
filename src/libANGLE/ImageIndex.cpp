@@ -136,7 +136,9 @@ ImageIndex ImageIndex::MakeFromType(TextureType type,
                                     GLint layerIndex,
                                     GLint layerCount)
 {
-    return ImageIndex(type, levelIndex, layerIndex, layerCount);
+    GLint overrideLayerCount =
+        (type == TextureType::CubeMap && layerIndex == kEntireLevel ? 6 : layerCount);
+    return ImageIndex(type, levelIndex, layerIndex, overrideLayerCount);
 }
 
 ImageIndex ImageIndex::Make2DMultisample()
