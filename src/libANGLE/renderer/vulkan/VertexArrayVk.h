@@ -108,6 +108,7 @@ class VertexArrayVk : public VertexArrayImpl
     vk::LineLoopHandler mLineLoopHandler;
     Optional<int> mLineLoopBufferFirstIndex;
     Optional<int> mLineLoopBufferLastIndex;
+    bool mDirtyLineLoopTranslation;
 
     // Cache variable for determining whether or not to store new dependencies in the node.
     bool mVertexBuffersDirty;
