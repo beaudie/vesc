@@ -158,5 +158,11 @@
         "Color" : "GL_COLOR_ARRAY",
         "PointSize" : "GL_POINT_SIZE_ARRAY_OES",
         "TextureCoord" : "GL_TEXTURE_COORD_ARRAY"
+    },
+    "MatrixType":
+    {
+        "Projection" : "GL_PROJECTION",
+        "Modelview" : "GL_MODELVIEW",
+        "Texture" : "GL_TEXTURE"
     }
 }
