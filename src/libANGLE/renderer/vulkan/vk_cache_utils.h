@@ -301,6 +301,7 @@ class PipelineDesc final
     // Depth/stencil states.
     void updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState);
     void updateDepthFunc(const gl::DepthStencilState &depthStencilState);
+    void updateDepthWriteEnabled(const gl::DepthStencilState &depthStencilState);
     void updateStencilTestEnabled(const gl::DepthStencilState &depthStencilState);
     void updateStencilFrontFuncs(GLint ref, const gl::DepthStencilState &depthStencilState);
     void updateStencilBackFuncs(GLint ref, const gl::DepthStencilState &depthStencilState);
@@ -308,6 +309,7 @@ class PipelineDesc final
     void updateStencilBackOps(const gl::DepthStencilState &depthStencilState);
     void updateStencilFrontWriteMask(const gl::DepthStencilState &depthStencilState);
     void updateStencilBackWriteMask(const gl::DepthStencilState &depthStencilState);
+    void updateColorWriteMask(const gl::BlendState &blendState);
 
   private:
     // TODO(jmadill): Handle Geometry/Compute shaders when necessary.
