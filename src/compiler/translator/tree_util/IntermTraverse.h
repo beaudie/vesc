@@ -40,7 +40,8 @@ class TIntermTraverser : angle::NonCopyable
     TIntermTraverser(bool preVisit,
                      bool inVisit,
                      bool postVisit,
-                     TSymbolTable *symbolTable = nullptr);
+                     TSymbolTable *symbolTable = nullptr,
+                     int maxAllowedDepth       = std::numeric_limits<int>::max());
     virtual ~TIntermTraverser();
 
     virtual void visitSymbol(TIntermSymbol *node) {}
@@ -99,19 +100,20 @@ class TIntermTraverser : angle::NonCopyable
 
   protected:
     // Should only be called from traverse*() functions
-    void incrementDepth(TIntermNode *current)
+    bool incrementDepth(TIntermNode *current)
     {
-        mDepth++;
-        mMaxDepth = std::max(mMaxDepth, mDepth);
+        mMaxDepth = std::max(mMaxDepth, static_cast<int>(mPath.size()));
         mPath.push_back(current);
+        return mMaxDepth < mMaxAllowedDepth;
     }
 
     // Should only be called from traverse*() functions
     void decrementDepth()
     {
-        mDepth--;
         mPath.pop_back();
     }
+
+    int getCurrentTraversalDepth() const { return static_cast<int>(mPath.size()) - 1; }
 
     // RAII helper for incrementDepth/decrementDepth
     class ScopedNodeInTraversalPath
@@ -120,12 +122,15 @@ class TIntermTraverser : angle::NonCopyable
         ScopedNodeInTraversalPath(TIntermTraverser *traverser, TIntermNode *current)
             : mTraverser(traverser)
         {
-            mTraverser->incrementDepth(current);
+            mWithinDepthLimit = mTraverser->incrementDepth(current);
         }
         ~ScopedNodeInTraversalPath() { mTraverser->decrementDepth(); }
 
+        bool isWithinDepthLimit() { return mWithinDepthLimit; }
+
       private:
         TIntermTraverser *mTraverser;
+        bool mWithinDepthLimit;
     };
 
     TIntermNode *getParentNode() { return mPath.size() <= 1 ? nullptr : mPath[mPath.size() - 2u]; }
@@ -196,8 +201,8 @@ class TIntermTraverser : angle::NonCopyable
     const bool inVisit;
     const bool postVisit;
 
-    int mDepth;
     int mMaxDepth;
+    int mMaxAllowedDepth;
 
     bool mInGlobalScope;
 
@@ -281,7 +286,8 @@ class TLValueTrackingTraverser : public TIntermTraverser
     TLValueTrackingTraverser(bool preVisit,
                              bool inVisit,
                              bool postVisit,
-                             TSymbolTable *symbolTable);
+                             TSymbolTable *symbolTable,
+                             int maxAllowedDepth = std::numeric_limits<int>::max());
     virtual ~TLValueTrackingTraverser() {}
 
     void traverseBinary(TIntermBinary *node) final;
