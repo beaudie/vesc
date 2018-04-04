@@ -724,6 +724,19 @@ void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
     }
 }
 
+void PipelineDesc::updateColorWriteMask(const gl::BlendState &blendState)
+{
+    for (auto &blendAttachmentState : mColorBlendStateInfo.attachments)
+    {
+        int colorMask = blendState.colorMaskRed ? VK_COLOR_COMPONENT_R_BIT : 0;
+        colorMask |= blendState.colorMaskGreen ? VK_COLOR_COMPONENT_G_BIT : 0;
+        colorMask |= blendState.colorMaskBlue ? VK_COLOR_COMPONENT_B_BIT : 0;
+        colorMask |= blendState.colorMaskAlpha ? VK_COLOR_COMPONENT_A_BIT : 0;
+
+        blendAttachmentState.colorWriteMask = static_cast<uint8_t>(colorMask);
+    }
+}
+
 void PipelineDesc::updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState)
 {
     mDepthStencilStateInfo.depthTestEnable = static_cast<uint8_t>(depthStencilState.depthTest);
@@ -782,6 +795,11 @@ void PipelineDesc::updateStencilBackWriteMask(const gl::DepthStencilState &depth
 {
     mDepthStencilStateInfo.back.writeMask =
         static_cast<uint32_t>(depthStencilState.stencilBackWritemask);
+}
+
+void PipelineDesc::updateDepthWriteEnabled(const gl::DepthStencilState &depthStencilState)
+{
+    mDepthStencilStateInfo.depthWriteEnable = depthStencilState.depthMask == GL_FALSE ? 0 : 1;
 }
 
 void PipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPassDesc)
@@ -846,8 +864,8 @@ void AttachmentOpsArray::initDummyOp(size_t index,
 
     ops.loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD;
     ops.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-    ops.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ops.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    ops.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_LOAD;
+    ops.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
     ops.initialLayout  = static_cast<uint16_t>(initialLayout);
     ops.finalLayout    = static_cast<uint16_t>(finalLayout);
 }
