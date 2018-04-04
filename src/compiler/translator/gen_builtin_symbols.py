@@ -88,6 +88,9 @@ namespace sh
 
 class TVariable;
 
+// We have to use #defines here to avoid increasing binary size.
+{get_function_id_declarations}
+
 namespace BuiltInVariable
 {{
 
@@ -455,6 +458,13 @@ class TType:
         mangled_name += get_basic_mangled_name(self.data['basic'])
         return mangled_name
 
+    def get_human_readable_name(self):
+        name = self.data['basic']
+        name += str(self.data['primarySize'])
+        if self.data['secondarySize'] > 1:
+            name += 'x' + str(self.data['secondarySize'])
+        return name
+
     def is_vector(self):
         return self.data['primarySize'] > 1 and self.data['secondarySize'] == 1
 
@@ -664,6 +674,9 @@ parameter_declarations = {}
 # Declarations of builtin TFunctions
 function_declarations = []
 
+# Values of builtin function ids in an easily accessible form.
+get_function_id_declarations = []
+
 # Functions for querying the pointer to a specific TVariable.
 get_variable_declarations = []
 get_variable_definitions = []
@@ -757,6 +770,12 @@ def get_function_mangled_name(function_name, parameters):
     for param in parameters:
         mangled_name += param.get_mangled_name()
     return mangled_name
+
+def get_function_human_readable_name(function_name, parameters):
+    name = function_name
+    for param in parameters:
+        name += '_' + param.get_human_readable_name()
+    return name
 
 ttype_mangled_name_variants = []
 for basic_type in basic_types_enumeration:
@@ -966,10 +985,13 @@ def process_single_function_group(condition, group_name, group):
             template_args['param_count'] = len(parameters)
             template_args['return_type'] = function_props['returnType'].get_statictype_string()
             template_args['mangled_name'] = get_function_mangled_name(function_name, parameters)
+            template_args['human_readable_name'] = get_function_human_readable_name(template_args['name_with_suffix'], parameters)
             template_args['mangled_name_length'] = len(template_args['mangled_name'])
 
             template_builtin_id_declaration = '    static constexpr const TSymbolUniqueId {unique_name} = TSymbolUniqueId({id});'
             builtin_id_declarations.append(template_builtin_id_declaration.format(**template_args))
+            template_get_id_declaration = '#define BUILTIN_FUNCTION_ID_{human_readable_name} {id}'
+            get_function_id_declarations.append(template_get_id_declaration.format(**template_args))
 
             parameters_list = []
             for param in parameters:
@@ -1257,6 +1279,7 @@ output_strings = {
     'function_data_source_name': functions_txt_filename,
     'function_declarations': '\n'.join(function_declarations),
     'parameter_declarations': '\n'.join(sorted(parameter_declarations)),
+    'get_function_id_declarations': '\n'.join(sorted(get_function_id_declarations)),
 
     'is_in_group_definitions': '\n'.join(is_in_group_definitions),
 
