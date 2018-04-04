@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_VERTEXARRAYVK_H_
 
 #include "libANGLE/renderer/VertexArrayImpl.h"
+#include "libANGLE/renderer/vulkan/StreamingBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 namespace gl
@@ -31,9 +32,6 @@ class VertexArrayVk : public VertexArrayImpl
 
     void destroy(const gl::Context *context) override;
 
-    gl::Error streamVertexData(const gl::Context *context,
-                               StreamingBuffer *stream,
-                               const gl::DrawCallParams &drawCallParams);
     gl::Error syncState(const gl::Context *context,
                         const gl::VertexArray::DirtyBits &dirtyBits,
                         const gl::VertexArray::DirtyAttribBitsArray &attribBits,
@@ -42,13 +40,27 @@ class VertexArrayVk : public VertexArrayImpl
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const;
     const gl::AttribArray<VkDeviceSize> &getCurrentArrayBufferOffsets() const;
 
-    void updateDrawDependencies(vk::CommandGraphNode *readNode,
-                                const gl::AttributesMask &activeAttribsMask,
-                                ResourceVk *elementArrayBufferOverride,
-                                Serial serial,
-                                bool isDrawElements);
-
     void getPackedInputDescriptions(vk::PipelineDesc *pipelineDesc);
+
+    // Draw call handling.
+    gl::Error onDraw(const gl::Context *context,
+                     RendererVk *renderer,
+                     const gl::DrawCallParams &drawCallParams,
+                     vk::CommandGraphNode *drawNode,
+                     bool newCommandBuffer);
+    gl::Error onIndexedDraw(const gl::Context *context,
+                            RendererVk *renderer,
+                            const gl::DrawCallParams &drawCallParams,
+                            vk::CommandGraphNode *drawNode,
+                            bool newCommandBuffer);
+    gl::Error onLineLoopDraw(const gl::Context *context,
+                             RendererVk *renderer,
+                             const gl::DrawCallParams &drawCallParams,
+                             vk::CommandGraphNode *drawNode);
+    gl::Error onIndexedLineLoopDraw(const gl::Context *context,
+                                    RendererVk *renderer,
+                                    const gl::DrawCallParams &drawCallParams,
+                                    vk::CommandGraphNode *drawNode);
 
   private:
     // This will update any dirty packed input descriptions, regardless if they're used by the
@@ -61,11 +73,23 @@ class VertexArrayVk : public VertexArrayImpl
                                const gl::VertexBinding &binding,
                                const gl::VertexAttribute &attrib);
 
-    gl::AttributesMask getAttribsToStream(const gl::Context *context) const;
+    void updateArrayBufferReadDependencies(vk::CommandGraphNode *drawNode,
+                                           const gl::AttributesMask &activeAttribsMask,
+                                           Serial serial);
+
+    void updateElementArrayBufferReadDependency(vk::CommandGraphNode *drawNode, Serial serial);
+
+    gl::Error streamVertexData(RendererVk *renderer,
+                               const gl::AttributesMask &attribsToStream,
+                               const gl::DrawCallParams &drawCallParams);
+
+    gl::Error streamIndexData(RendererVk *renderer, const gl::DrawCallParams &drawCallParams);
 
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<ResourceVk *> mCurrentArrayBufferResources;
+    VkBuffer mCurrentElementArrayBufferHandle;
+    VkDeviceSize mCurrentElementArrayBufferOffset;
     ResourceVk *mCurrentElementArrayBufferResource;
 
     // Keep a cache of binding and attribute descriptions for easy pipeline updates.
@@ -77,6 +101,17 @@ class VertexArrayVk : public VertexArrayImpl
     // Which attributes need to be copied from client memory.
     // TODO(jmadill): Move this to VertexArrayState. http://anglebug.com/2389
     gl::AttributesMask mClientMemoryAttribs;
+
+    StreamingBuffer mStreamingVertexData;
+    StreamingBuffer mStreamingIndexData;
+
+    vk::LineLoopHandler mLineLoopHandler;
+    Optional<int> mLineLoopBufferFirstIndex;
+    Optional<int> mLineLoopBufferLastIndex;
+
+    // Cache variable for determining whether or not to store new dependencies in the node.
+    bool mVertexBuffersDirty;
+    bool mIndexBufferDirty;
 };
 
 }  // namespace rx
