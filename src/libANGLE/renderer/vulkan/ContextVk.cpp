@@ -340,6 +340,21 @@ void ContextVk::popDebugGroup()
     UNIMPLEMENTED();
 }
 
+void ContextVk::updateScissor(const gl::State &glState)
+{
+    if (glState.isScissorTestEnabled())
+    {
+        mPipelineDesc->updateScissor(glState.getScissor());
+    }
+    else
+    {
+        // If the scissor test isn't enabled, we have to also update the scissor to
+        // be equal to the viewport to make sure we keep rendering everything in the
+        // viewport.
+        mPipelineDesc->updateScissor(glState.getViewport());
+    }
+}
+
 void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
 {
     if (dirtyBits.any())
@@ -357,14 +372,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
         switch (dirtyBit)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
-                if (glState.isScissorTestEnabled())
-                {
-                    mPipelineDesc->updateScissor(glState.getScissor());
-                }
-                else
-                {
-                    mPipelineDesc->updateScissor(glState.getViewport());
-                }
+                updateScissor(glState);
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
                 // Only modify the scissor region if the test is enabled, otherwise we want to keep
@@ -378,13 +386,10 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
                                               glState.getFarPlane());
 
-                // If the scissor test isn't enabled, we have to also update the scissor to
-                // be equal to the viewport to make sure we keep rendering everything in the
-                // viewport.
-                if (!glState.isScissorTestEnabled())
-                {
-                    mPipelineDesc->updateScissor(glState.getViewport());
-                }
+                // The scissor is clipped with the viewport, so if we update the viewport we
+                // must also update the scissor region in case we just grew the viewport and
+                // we should also grow the scissor region with it.
+                updateScissor(glState);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 WARN() << "DIRTY_BIT_DEPTH_RANGE unimplemented";

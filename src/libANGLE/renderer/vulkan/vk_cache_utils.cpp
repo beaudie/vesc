@@ -817,11 +817,11 @@ void PipelineDesc::updateScissor(const gl::Rectangle &rect)
     // just ignored.
     if (ClipRectangle(rect, clipRect, &intersection))
     {
-        mScissor = ConvertGlRectToVkRect(intersection);
+        mScissor = gl_vk::GetRect(intersection);
     }
     else
     {
-        mScissor = ConvertGlRectToVkRect(rect);
+        mScissor = gl_vk::GetRect(rect);
     }
 }
 
