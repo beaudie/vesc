@@ -87,8 +87,6 @@ struct Format;
 template <typename T>
 struct ImplTypeHelper;
 
-VkRect2D ConvertGlRectToVkRect(const gl::Rectangle &source);
-
 // clang-format off
 #define ANGLE_IMPL_TYPE_HELPER_GL(OBJ) \
 template<>                             \
@@ -766,6 +764,7 @@ class ImageHelper final : angle::NonCopyable
 
 namespace gl_vk
 {
+VkRect2D ConvertGlRectToVkRect(const gl::Rectangle &source);
 VkPrimitiveTopology GetPrimitiveTopology(GLenum mode);
 VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState);
 VkFrontFace GetFrontFace(GLenum frontFace);

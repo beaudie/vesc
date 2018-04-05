@@ -170,6 +170,8 @@ class ContextVk : public ContextImpl
                         ResourceVk *elementArrayBufferOverride,
                         vk::CommandBuffer **commandBufferOut);
 
+    void updateScissor(const gl::State &glState);
+
     RendererVk *mRenderer;
     vk::PipelineAndSerial *mCurrentPipeline;
     GLenum mCurrentDrawMode;
