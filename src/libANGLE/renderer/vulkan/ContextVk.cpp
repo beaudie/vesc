@@ -497,11 +497,18 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
                                               glState.getFarPlane());
 
-                // If the scissor test isn't enabled, we have to also update the scissor to
-                // be equal to the viewport to make sure we keep rendering everything in the
-                // viewport.
-                if (!glState.isScissorTestEnabled())
+                if (glState.isScissorTestEnabled())
                 {
+                    // The scissor is clipped with the viewport, so if we update the viewport we
+                    // must also update the scissor region in case we just grew the viewport and
+                    // we should also grow the scissor region with it.
+                    mPipelineDesc->updateScissor(glState.getScissor());
+                }
+                else
+                {
+                    // If the scissor test isn't enabled, we have to also update the scissor to
+                    // be equal to the viewport to make sure we keep rendering everything in the
+                    // viewport.
                     mPipelineDesc->updateScissor(glState.getViewport());
                 }
                 break;
