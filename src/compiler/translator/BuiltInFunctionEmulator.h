@@ -14,6 +14,7 @@ namespace sh
 
 class TIntermNode;
 class TFunction;
+class TSymbolUniqueId;
 
 using BuiltinQueryFunc = const char *(int);
 
@@ -40,10 +41,11 @@ class BuiltInFunctionEmulator
     void outputEmulatedFunctions(TInfoSinkBase &out) const;
 
     // Add functions that need to be emulated.
-    void addEmulatedFunction(int uniqueId, const char *emulatedFunctionDefinition);
+    void addEmulatedFunction(const TSymbolUniqueId &uniqueId,
+                             const char *emulatedFunctionDefinition);
 
-    void addEmulatedFunctionWithDependency(int dependency,
-                                           int uniqueId,
+    void addEmulatedFunctionWithDependency(const TSymbolUniqueId &dependency,
+                                           const TSymbolUniqueId &uniqueId,
                                            const char *emulatedFunctionDefinition);
 
     void addFunctionMap(BuiltinQueryFunc queryFunc);

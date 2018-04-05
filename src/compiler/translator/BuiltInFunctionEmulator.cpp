@@ -54,19 +54,19 @@ BuiltInFunctionEmulator::BuiltInFunctionEmulator()
 {
 }
 
-void BuiltInFunctionEmulator::addEmulatedFunction(int uniqueId,
+void BuiltInFunctionEmulator::addEmulatedFunction(const TSymbolUniqueId &uniqueId,
                                                   const char *emulatedFunctionDefinition)
 {
-    mEmulatedFunctions[uniqueId] = std::string(emulatedFunctionDefinition);
+    mEmulatedFunctions[uniqueId.get()] = std::string(emulatedFunctionDefinition);
 }
 
 void BuiltInFunctionEmulator::addEmulatedFunctionWithDependency(
-    int dependency,
-    int uniqueId,
+    const TSymbolUniqueId &dependency,
+    const TSymbolUniqueId &uniqueId,
     const char *emulatedFunctionDefinition)
 {
-    mEmulatedFunctions[uniqueId]    = std::string(emulatedFunctionDefinition);
-    mFunctionDependencies[uniqueId] = dependency;
+    mEmulatedFunctions[uniqueId.get()]    = std::string(emulatedFunctionDefinition);
+    mFunctionDependencies[uniqueId.get()] = dependency.get();
 }
 
 bool BuiltInFunctionEmulator::isOutputEmpty() const

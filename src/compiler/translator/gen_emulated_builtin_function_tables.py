@@ -31,7 +31,7 @@ namespace
 
 struct FunctionPair
 {{
-   constexpr FunctionPair(int idIn, const char *bodyIn) : id(idIn), body(bodyIn)
+   constexpr FunctionPair(const TSymbolUniqueId &idIn, const char *bodyIn) : id(idIn.get()), body(bodyIn)
    {{
    }}
 
@@ -102,7 +102,7 @@ def gen_emulated_function(data):
    body = [ sig, '{' ] + ['    ' + line for line in data['body']] + ['}']
 
    func += "{\n"
-   func += "BuiltInFunctionId::" + data['op'] + "_" + "_".join([enum_type(arg) for arg in data['args']]) + ",\n"
+   func += "BuiltInId::" + data['op'] + "_" + "_".join([enum_type(arg) for arg in data['args']]) + ",\n"
    if 'helper' in data:
       func += '"' + '\\n"\n"'.join(data['helper']) + '\\n"\n'
    func += '"' + '\\n"\n"'.join(body) + '\\n"\n'

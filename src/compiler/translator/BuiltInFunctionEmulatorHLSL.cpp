@@ -22,7 +22,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
     if (targetGLSLVersion < GLSL_VERSION_130)
         return;
 
-    emu->addEmulatedFunction(BuiltInFunctionId::isnan_Float1,
+    emu->addEmulatedFunction(BuiltInId::isnan_Float1,
                              "bool isnan_emu(float x)\n"
                              "{\n"
                              "    return (x > 0.0 || x < 0.0) ? false : x != 0.0;\n"
@@ -30,7 +30,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
                              "\n");
 
     emu->addEmulatedFunction(
-        BuiltInFunctionId::isnan_Float2,
+        BuiltInId::isnan_Float2,
         "bool2 isnan_emu(float2 x)\n"
         "{\n"
         "    bool2 isnan;\n"
@@ -42,7 +42,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
         "}\n");
 
     emu->addEmulatedFunction(
-        BuiltInFunctionId::isnan_Float3,
+        BuiltInId::isnan_Float3,
         "bool3 isnan_emu(float3 x)\n"
         "{\n"
         "    bool3 isnan;\n"
@@ -54,7 +54,7 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
         "}\n");
 
     emu->addEmulatedFunction(
-        BuiltInFunctionId::isnan_Float4,
+        BuiltInId::isnan_Float4,
         "bool4 isnan_emu(float4 x)\n"
         "{\n"
         "    bool4 isnan;\n"
@@ -73,7 +73,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // (a + b2^16) * (c + d2^16) = ac + (ad + bc) * 2^16 + bd * 2^32
     // Also note that below, a * d + ((a * c) >> 16) is guaranteed not to overflow, because:
     // a <= 0xffff, d <= 0xffff, ((a * c) >> 16) <= 0xffff and 0xffff * 0xffff + 0xffff = 0xffff0000
-    emu->addEmulatedFunction(BuiltInFunctionId::umulExtended_UInt1_UInt1_UInt1_UInt1,
+    emu->addEmulatedFunction(BuiltInId::umulExtended_UInt1_UInt1_UInt1_UInt1,
                              "void umulExtended_emu(uint x, uint y, out uint msb, out uint lsb)\n"
                              "{\n"
                              "    lsb = x * y;\n"
@@ -87,16 +87,16 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "    msb = ((ad + bc) >> 16) + (carry << 16) + b * d;\n"
                              "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::umulExtended_UInt1_UInt1_UInt1_UInt1,
-        BuiltInFunctionId::umulExtended_UInt2_UInt2_UInt2_UInt2,
+        BuiltInId::umulExtended_UInt1_UInt1_UInt1_UInt1,
+        BuiltInId::umulExtended_UInt2_UInt2_UInt2_UInt2,
         "void umulExtended_emu(uint2 x, uint2 y, out uint2 msb, out uint2 lsb)\n"
         "{\n"
         "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
         "    umulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::umulExtended_UInt1_UInt1_UInt1_UInt1,
-        BuiltInFunctionId::umulExtended_UInt3_UInt3_UInt3_UInt3,
+        BuiltInId::umulExtended_UInt1_UInt1_UInt1_UInt1,
+        BuiltInId::umulExtended_UInt3_UInt3_UInt3_UInt3,
         "void umulExtended_emu(uint3 x, uint3 y, out uint3 msb, out uint3 lsb)\n"
         "{\n"
         "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
@@ -104,8 +104,8 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "    umulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::umulExtended_UInt1_UInt1_UInt1_UInt1,
-        BuiltInFunctionId::umulExtended_UInt4_UInt4_UInt4_UInt4,
+        BuiltInId::umulExtended_UInt1_UInt1_UInt1_UInt1,
+        BuiltInId::umulExtended_UInt4_UInt4_UInt4_UInt4,
         "void umulExtended_emu(uint4 x, uint4 y, out uint4 msb, out uint4 lsb)\n"
         "{\n"
         "    umulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
@@ -119,8 +119,8 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     // TODO(oetuaho): Note that this code doesn't take one edge case into account, where x or y is
     // -2^31. abs(-2^31) is undefined.
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::umulExtended_UInt1_UInt1_UInt1_UInt1,
-        BuiltInFunctionId::imulExtended_Int1_Int1_Int1_Int1,
+        BuiltInId::umulExtended_UInt1_UInt1_UInt1_UInt1,
+        BuiltInId::imulExtended_Int1_Int1_Int1_Int1,
         "void imulExtended_emu(int x, int y, out int msb, out int lsb)\n"
         "{\n"
         "    uint unsignedMsb;\n"
@@ -145,16 +145,14 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "    }\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::imulExtended_Int1_Int1_Int1_Int1,
-        BuiltInFunctionId::imulExtended_Int2_Int2_Int2_Int2,
+        BuiltInId::imulExtended_Int1_Int1_Int1_Int1, BuiltInId::imulExtended_Int2_Int2_Int2_Int2,
         "void imulExtended_emu(int2 x, int2 y, out int2 msb, out int2 lsb)\n"
         "{\n"
         "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
         "    imulExtended_emu(x.y, y.y, msb.y, lsb.y);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::imulExtended_Int1_Int1_Int1_Int1,
-        BuiltInFunctionId::imulExtended_Int3_Int3_Int3_Int3,
+        BuiltInId::imulExtended_Int1_Int1_Int1_Int1, BuiltInId::imulExtended_Int3_Int3_Int3_Int3,
         "void imulExtended_emu(int3 x, int3 y, out int3 msb, out int3 lsb)\n"
         "{\n"
         "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
@@ -162,8 +160,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "    imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
         "}\n");
     emu->addEmulatedFunctionWithDependency(
-        BuiltInFunctionId::imulExtended_Int1_Int1_Int1_Int1,
-        BuiltInFunctionId::imulExtended_Int4_Int4_Int4_Int4,
+        BuiltInId::imulExtended_Int1_Int1_Int1_Int1, BuiltInId::imulExtended_Int4_Int4_Int4_Int4,
         "void imulExtended_emu(int4 x, int4 y, out int4 msb, out int4 lsb)\n"
         "{\n"
         "    imulExtended_emu(x.x, y.x, msb.x, lsb.x);\n"
