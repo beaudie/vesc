@@ -3262,6 +3262,17 @@ bool ValidateGetnUniformfvEXT(Context *context,
     return ValidateSizedGetUniform(context, program, location, bufSize, nullptr);
 }
 
+
+bool ValidateGetnUniformfvRobustANGLE(Context *context, GLuint program,
+    GLint location,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLfloat *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateGetnUniformivEXT(Context *context,
                               GLuint program,
                               GLint location,
@@ -3269,6 +3280,27 @@ bool ValidateGetnUniformivEXT(Context *context,
                               GLint *params)
 {
     return ValidateSizedGetUniform(context, program, location, bufSize, nullptr);
+}
+
+
+bool ValidateGetnUniformivRobustANGLE(Context *context, GLuint program,
+    GLint location,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateGetnUniformuivRobustANGLE(Context *context, GLuint program,
+    GLint location,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLuint *params)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateGetUniformfvRobustANGLE(Context *context,
@@ -4584,6 +4616,26 @@ bool ValidateGetTexParameterivRobustANGLE(Context *context,
     return true;
 }
 
+bool ValidateGetTexParameterIivRobustANGLE(Context *context, GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateGetTexParameterIuivRobustANGLE(Context *context, GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLuint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateTexParameterfvRobustANGLE(Context *context,
                                        TextureType target,
                                        GLenum pname,
@@ -4610,6 +4662,24 @@ bool ValidateTexParameterivRobustANGLE(Context *context,
     }
 
     return ValidateTexParameterBase(context, target, pname, bufSize, params);
+}
+
+bool ValidateTexParameterIivRobustANGLE(Context *context, GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateTexParameterIuivRobustANGLE(Context *context, GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLuint *params)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateGetSamplerParameterfvRobustANGLE(Context *context,
@@ -4668,6 +4738,26 @@ bool ValidateGetSamplerParameterivRobustANGLE(Context *context,
     return true;
 }
 
+bool ValidateGetSamplerParameterIivRobustANGLE(Context *context, GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateGetSamplerParameterIuivRobustANGLE(Context *context, GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateSamplerParameterfvRobustANGLE(Context *context,
                                            GLuint sampler,
                                            GLenum pname,
@@ -4694,6 +4784,23 @@ bool ValidateSamplerParameterivRobustANGLE(Context *context,
     }
 
     return ValidateSamplerParameterBase(context, sampler, pname, bufSize, params);
+}
+
+bool ValidateSamplerParameterIivRobustANGLE(Context *context, GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLint *param)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+bool ValidateSamplerParameterIuivRobustANGLE(Context *context, GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLuint *param)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateGetVertexAttribfvRobustANGLE(Context *context,

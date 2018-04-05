@@ -1698,6 +1698,14 @@ void Context::getPointerv(GLenum pname, void **params) const
     mGLState.getPointerv(pname, params);
 }
 
+void Context::getPointervRobust(GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    void **params)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::getIntegeri_v(GLenum target, GLuint index, GLint *data)
 {
     // Queries about context capabilities and maximums are answered by Context.
@@ -1876,10 +1884,38 @@ void Context::getTexParameterivRobust(TextureType target,
     getTexParameteriv(target, pname, params);
 }
 
+void Context::getTexParameterIivRobust(GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::getTexParameterIuivRobust(GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLuint *params)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::getTexLevelParameteriv(TextureTarget target, GLint level, GLenum pname, GLint *params)
 {
     Texture *texture = getTargetTexture(TextureTargetToType(target));
     QueryTexLevelParameteriv(texture, target, level, pname, params);
+}
+
+void Context::getTexLevelParameterivRobust(GLenum target,
+    GLint level,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::getTexLevelParameterfv(TextureTarget target,
@@ -1890,6 +1926,7 @@ void Context::getTexLevelParameterfv(TextureTarget target,
     Texture *texture = getTargetTexture(TextureTargetToType(target));
     QueryTexLevelParameterfv(texture, target, level, pname, params);
 }
+
 
 void Context::texParameterf(TextureType target, GLenum pname, GLfloat param)
 {
@@ -1933,6 +1970,22 @@ void Context::texParameterivRobust(TextureType target,
                                    const GLint *params)
 {
     texParameteriv(target, pname, params);
+}
+
+void Context::texParameterIivRobust(GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::texParameterIuivRobust(GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLuint *params)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count)
@@ -2333,6 +2386,16 @@ void Context::getProgramInterfaceiv(GLuint program,
     QueryProgramInterfaceiv(programObject, programInterface, pname, params);
 }
 
+void Context::getProgramInterfaceivRobust(GLuint program,
+    GLenum programInterface,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::handleError(const Error &error)
 {
     if (error.isError())
@@ -2611,6 +2674,22 @@ void Context::samplerParameterivRobust(GLuint sampler,
     samplerParameteriv(sampler, pname, param);
 }
 
+void Context::samplerParameterIivRobust(GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLint *param)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::samplerParameterIuivRobust(GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    const GLuint *param)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::samplerParameterf(GLuint sampler, GLenum pname, GLfloat param)
 {
     Sampler *samplerObject =
@@ -2650,6 +2729,15 @@ void Context::getSamplerParameterivRobust(GLuint sampler,
                                           GLint *params)
 {
     getSamplerParameteriv(sampler, pname, params);
+}
+
+void Context::getSamplerParameterIivRobust(GLuint sampler,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *params)
@@ -4679,6 +4767,15 @@ void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     }
 }
 
+void Context::getMultisamplefvRobust(GLenum pname,
+    GLuint index,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLfloat *val)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::renderbufferStorage(GLenum target,
                                   GLenum internalformat,
                                   GLsizei width,
@@ -4715,6 +4812,15 @@ void Context::getFramebufferParameteriv(GLenum target, GLenum pname, GLint *para
 {
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
     QueryFramebufferParameteriv(framebuffer, pname, params);
+}
+
+void Context::getFramebufferParameterivRobust(GLenum target,
+    GLenum pname,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
 }
 
 void Context::framebufferParameteri(GLenum target, GLenum pname, GLint param)
@@ -6333,12 +6439,30 @@ void Context::getnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLf
     programObject->getUniformfv(this, location, params);
 }
 
+void Context::getnUniformfvRobust(GLuint program,
+    GLint location,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLfloat *params)
+{
+    UNIMPLEMENTED();
+}
+
 void Context::getnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
 
     programObject->getUniformiv(this, location, params);
+}
+
+void getnUniformivRobustANGLE(GLuint program,
+    GLint location,
+    GLsizei bufSize,
+    GLsizei *length,
+    GLint *params)
+{
+    UNIMPLEMENTED();
 }
 
 GLboolean Context::isFenceNV(GLuint fence)
