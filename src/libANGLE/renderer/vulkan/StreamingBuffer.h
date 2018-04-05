@@ -23,13 +23,13 @@ class StreamingBuffer : public ResourceVk
     void init(size_t alignment);
     bool valid();
     ~StreamingBuffer();
-    vk::Error allocate(ContextVk *context,
+    vk::Error allocate(RendererVk *renderer,
                        size_t sizeInBytes,
                        uint8_t **ptrOut,
                        VkBuffer *handleOut,
                        uint32_t *offsetOut,
                        bool *outNewBufferAllocated);
-    vk::Error flush(ContextVk *context);
+    vk::Error flush(VkDevice device);
     void destroy(VkDevice device);
     VkBuffer getCurrentBufferHandle() const;
 
