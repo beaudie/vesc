@@ -112,6 +112,12 @@ struct PointParameters
     GLfloat pointSize;
 };
 
+struct MatrixStack
+{
+    size_t topIndex = 0;
+    std::vector<angle::Mat4> matrices;
+};
+
 class Context;
 class State;
 class GLES1State final : angle::NonCopyable
@@ -120,7 +126,7 @@ class GLES1State final : angle::NonCopyable
     GLES1State();
     ~GLES1State();
 
-    void initialize(const Context *context);
+    void initialize(const Context *context, const State *state);
 
     void setAlphaFunc(AlphaTestFunc func, GLfloat ref);
     void setClientTextureUnit(unsigned int unit);
@@ -138,8 +144,20 @@ class GLES1State final : angle::NonCopyable
     void setMatrixMode(MatrixType mode);
     MatrixType getMatrixMode() const;
 
+    void pushMatrix();
+    void popMatrix();
+
+    bool pushMatrixWouldOverflow() const;
+    bool popMatrixWouldUnderflow() const;
+
   private:
     friend class State;
+
+    MatrixStack &currentMatrixStack();
+    const MatrixStack &currentMatrixStack() const;
+
+    // Back pointer for reading from State.
+    const State *mGLState;
 
     // All initial state values come from the
     // OpenGL ES 1.1 spec.
@@ -181,9 +199,8 @@ class GLES1State final : angle::NonCopyable
     unsigned int mClientActiveTexture;
 
     // Table 6.7
-    using MatrixStack = std::vector<angle::Mat4>;
     MatrixType mMatrixMode;
-    MatrixStack mProjMatrices;
+    MatrixStack mProjectionMatrices;
     MatrixStack mModelviewMatrices;
     std::vector<MatrixStack> mTextureMatrices;
 

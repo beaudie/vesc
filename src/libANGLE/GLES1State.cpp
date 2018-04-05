@@ -26,7 +26,8 @@ bool TextureCoordF::operator==(const TextureCoordF &other) const
 }
 
 GLES1State::GLES1State()
-    : mVertexArrayEnabled(false),
+    : mGLState(nullptr),
+      mVertexArrayEnabled(false),
       mNormalArrayEnabled(false),
       mColorArrayEnabled(false),
       mPointSizeArrayEnabled(false),
@@ -59,8 +60,10 @@ GLES1State::GLES1State()
 GLES1State::~GLES1State() = default;
 
 // Taken from the GLES 1.x spec which specifies all initial state values.
-void GLES1State::initialize(const Context *context)
+void GLES1State::initialize(const Context *context, const State *state)
 {
+    mGLState = state;
+
     const Caps &caps = context->getCaps();
 
     mTexUnitEnables.resize(caps.maxMultitextureUnits);
@@ -97,12 +100,12 @@ void GLES1State::initialize(const Context *context)
 
     mTextureEnvironments.resize(caps.maxMultitextureUnits);
 
-    mProjMatrices.resize(caps.maxProjectionMatrixStackDepth);
-    mModelviewMatrices.resize(caps.maxModelviewMatrixStackDepth);
+    mProjectionMatrices.matrices.resize(caps.maxProjectionMatrixStackDepth);
+    mModelviewMatrices.matrices.resize(caps.maxModelviewMatrixStackDepth);
     mTextureMatrices.resize(caps.maxMultitextureUnits);
     for (auto &textureMatrixStack : mTextureMatrices)
     {
-        textureMatrixStack.resize(caps.maxTextureMatrixStackDepth);
+        textureMatrixStack.matrices.resize(caps.maxTextureMatrixStackDepth);
     }
 
     mMaterial.ambient  = {0.2f, 0.2f, 0.2f, 1.0f};
@@ -208,6 +211,63 @@ void GLES1State::setMatrixMode(MatrixType mode)
 MatrixType GLES1State::getMatrixMode() const
 {
     return mMatrixMode;
+}
+
+void GLES1State::pushMatrix()
+{
+    auto &stack = currentMatrixStack();
+    ASSERT(stack.topIndex < stack.matrices.size() - 1);
+    stack.matrices[stack.topIndex + 1] = stack.matrices[stack.topIndex];
+    stack.topIndex++;
+}
+
+void GLES1State::popMatrix()
+{
+    auto &stack = currentMatrixStack();
+    ASSERT(stack.topIndex > 0);
+    stack.topIndex--;
+}
+
+bool GLES1State::pushMatrixWouldOverflow() const
+{
+    auto &stack = currentMatrixStack();
+    return stack.topIndex >= stack.matrices.size() - 1;
+}
+
+bool GLES1State::popMatrixWouldUnderflow() const
+{
+    auto &stack = currentMatrixStack();
+    return stack.topIndex == 0;
+}
+
+MatrixStack &GLES1State::currentMatrixStack()
+{
+    switch (mMatrixMode)
+    {
+        case MatrixType::Modelview:
+            return mModelviewMatrices;
+        case MatrixType::Projection:
+            return mProjectionMatrices;
+        case MatrixType::Texture:
+            return mTextureMatrices[mGLState->getActiveSampler()];
+        default:
+            UNREACHABLE();
+    }
+}
+
+const MatrixStack &GLES1State::currentMatrixStack() const
+{
+    switch (mMatrixMode)
+    {
+        case MatrixType::Modelview:
+            return mModelviewMatrices;
+        case MatrixType::Projection:
+            return mProjectionMatrices;
+        case MatrixType::Texture:
+            return mTextureMatrices[mGLState->getActiveSampler()];
+        default:
+            UNREACHABLE();
+    }
 }
 
 }  // namespace gl
