@@ -391,6 +391,7 @@ void RobustResourceInitTest::setupTexture(GLTexture *tex)
     GLuint tempTexture;
     glGenTextures(1, &tempTexture);
     glBindTexture(GL_TEXTURE_2D, tempTexture);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     // this can be quite undeterministic so to improve odds of seeing uninitialized data write bits
@@ -762,6 +763,61 @@ TEST_P(RobustResourceInitTest, UninitializedPartsOfCopied2DTexturesAreBlack)
     EXPECT_GL_NO_ERROR();
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kWidth, kHeight, 0);
     checkNonZeroPixels(&tex, 0, 0, fboWidth, fboHeight, GLColor::red);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Reading an uninitialized portion of a texture (copyTexImage2D with negative x and y) should
+// succeed with all bytes set to 0. Regression test for a bug where the zeroing out of the
+// texture was done via the same code path as glTexImage2D, causing the PIXEL_UNPACK_BUFFER
+// to be used.
+TEST_P(RobustResourceInitTestES3, ReadingOutOfboundsCopiedTextureWithUnpackBuffer)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+    // TODO(geofflang@chromium.org): CopyTexImage from GL_RGBA4444 to GL_ALPHA fails when looking
+    // up which resulting format the texture should have.
+    ANGLE_SKIP_TEST_IF(IsOpenGL());
+
+    // GL_ALPHA texture can't be read with glReadPixels, for convenience this test uses
+    // glCopyTextureCHROMIUM to copy GL_ALPHA into GL_RGBA
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_CHROMIUM_copy_texture"));
+    PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM =
+        reinterpret_cast<PFNGLCOPYTEXTURECHROMIUMPROC>(eglGetProcAddress("glCopyTextureCHROMIUM"));
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    constexpr int fboWidth  = 16;
+    constexpr int fboHeight = 16;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, fboWidth, fboHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+    constexpr int x = -8;
+    constexpr int y = -8;
+
+    GLBuffer buffer;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer);
+    std::vector<GLColor> bunchOfGreen(fboWidth * fboHeight, GLColor::green);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, sizeof(bunchOfGreen), bunchOfGreen.data(), GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Use GL_ALPHA to force a CPU readback in the D3D11 backend
+    GLTexture texAlpha;
+    glBindTexture(GL_TEXTURE_2D, texAlpha);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, x, y, kWidth, kHeight, 0);
+    EXPECT_GL_NO_ERROR();
+
+    // GL_ALPHA cannot be glReadPixels, so copy into a GL_RGBA texture
+    GLTexture texRGBA;
+    setupTexture(&texRGBA);
+    glCopyTextureCHROMIUM(texAlpha, 0, GL_TEXTURE_2D, texRGBA, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                          GL_FALSE, GL_FALSE, GL_FALSE);
+    EXPECT_GL_NO_ERROR();
+
+    checkNonZeroPixels(&texRGBA, -x, -y, fboWidth, fboHeight, GLColor(0, 0, 0, 255));
     EXPECT_GL_NO_ERROR();
 }
 
