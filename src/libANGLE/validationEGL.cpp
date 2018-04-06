@@ -304,6 +304,7 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
         Optional<EGLAttrib> majorVersion;
         Optional<EGLAttrib> minorVersion;
         Optional<EGLAttrib> deviceType;
+        Optional<EGLAttrib> eglHandle;
 
         for (const auto &curAttrib : attribMap)
         {
@@ -398,6 +399,14 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                                                     "must be EGL_TRUE, EGL_FALSE, or "
                                                     "EGL_DONT_CARE.";
                     }
+                    break;
+
+                case EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE:
+                    if (value != EGL_DONT_CARE)
+                    {
+                         eglHandle = value;
+                    }
+                    // TODO: Do some more validation of this value
                     break;
 
                 default:
