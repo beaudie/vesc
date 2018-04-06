@@ -25,7 +25,7 @@ deps = {
     Var('android_git') + '/platform/external/shaderc/glslang' + '@' + '2edde6665d9a56ead5ea0e55b4e64d9a803e6164',
 
   'third_party/googletest/src':
-    Var('chromium_git') + '/external/github.com/google/googletest.git' + '@' + 'd175c8bf823e709d570772b038757fadf63bc632',
+    Var('chromium_git') + '/external/github.com/google/googletest.git' + '@' + '7e5f90d3780d553cb86771141fb81349f3a63508',
 
   'third_party/libpng/src':
     Var('android_git') + '/platform/external/libpng' + '@' + '094e181e79a3d6c23fd005679025058b7df1ad6c',
