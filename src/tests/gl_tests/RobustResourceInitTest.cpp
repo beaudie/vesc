@@ -766,6 +766,42 @@ TEST_P(RobustResourceInitTest, UninitializedPartsOfCopied2DTexturesAreBlack)
 }
 
 // Reading an uninitialized portion of a texture (copyTexImage2D with negative x and y) should
+// succeed with all bytes set to 0. Regression test for a bug where the zeroing out of the
+// texture was done via the same code path as glTexImage2D, causing the PIXEL_UNPACK_BUFFER
+// to be used.
+TEST_P(RobustResourceInitTestES3, ReadingOutOfboundsCopiedTextureWithUnpackBuffer)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLTexture tex;
+    setupTexture(&tex);
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    constexpr int fboWidth  = 16;
+    constexpr int fboHeight = 16;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, fboWidth, fboHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+    constexpr int x = -8;
+    constexpr int y = -8;
+
+    GLBuffer buffer;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer);
+    std::vector<GLColor> bunchOfGreen(fboWidth * fboHeight, GLColor::green);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, sizeof(bunchOfGreen), bunchOfGreen.data(), GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, kWidth, kHeight, 0);
+    checkNonZeroPixels(&tex, -x, -y, fboWidth, fboHeight, GLColor::red);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Reading an uninitialized portion of a texture (copyTexImage2D with negative x and y) should
 // succeed with all bytes set to 0.
 TEST_P(RobustResourceInitTest, ReadingOutOfboundsCopiedTexture)
 {
