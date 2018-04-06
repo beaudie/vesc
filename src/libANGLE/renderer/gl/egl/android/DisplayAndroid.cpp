@@ -9,6 +9,7 @@
 #include <android/native_window.h>
 
 #include "common/debug.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
@@ -45,7 +46,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
 {
     FunctionsEGLDL *egl = new FunctionsEGLDL();
     mEGL = egl;
-    ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), GetEGLPath()));
+    ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), GetEGLPath(), display->getAttributeMap()));
 
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
     ASSERT(eglVersion >= gl::Version(1, 4));
