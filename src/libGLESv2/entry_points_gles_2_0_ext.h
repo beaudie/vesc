@@ -437,10 +437,10 @@ ANGLE_EXPORT void GL_APIENTRY GetTexLevelParameterfvRobustANGLE(GLenum target,
                                                                 GLsizei *length,
                                                                 GLfloat *params);
 
-ANGLE_EXPORT void GL_APIENTRY GetPointervRobustANGLERobustANGLE(GLenum pname,
-                                                                GLsizei bufSize,
-                                                                GLsizei *length,
-                                                                void **params);
+ANGLE_EXPORT void GL_APIENTRY GetPointervRobustANGLE(GLenum pname,
+                                                     GLsizei bufSize,
+                                                     GLsizei *length,
+                                                     void **params);
 ANGLE_EXPORT void GL_APIENTRY ReadnPixelsRobustANGLE(GLint x,
                                                      GLint y,
                                                      GLsizei width,
