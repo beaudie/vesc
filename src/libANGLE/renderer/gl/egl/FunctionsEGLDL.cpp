@@ -7,6 +7,7 @@
 // FunctionsEGLDL.cpp: Implements the FunctionsEGLDL class.
 
 #include "libANGLE/renderer/gl/egl/FunctionsEGLDL.h"
+#include "libANGLE/AttributeMap.h"
 
 #include <dlfcn.h>
 
@@ -32,8 +33,18 @@ FunctionsEGLDL::~FunctionsEGLDL()
 {
 }
 
-egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay, const char *libName)
+egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay,
+                                      const char *libName,
+                                      const egl::AttributeMap &attribs)
 {
+
+    EGLAttrib eglHandle = attribs.get(EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, NULL);
+    if (eglHandle)
+    {
+        // If the handle is provided, use it. Android has already dlopened the vendor library.
+        nativeEGLHandle = reinterpret_cast<void *>(eglHandle);
+    }
+
     if (!nativeEGLHandle)
     {
         nativeEGLHandle = dlopen(libName, RTLD_NOW);
