@@ -503,7 +503,7 @@
         "glGetMultisamplefvRobustANGLE",
         "glGetTexLevelParameterivRobustANGLE",
         "glGetTexLevelParameterfvRobustANGLE",
-        "glGetPointervRobustANGLERobustANGLE",
+        "glGetPointervRobustANGLE",
         "glReadnPixelsRobustANGLE",
         "glGetnUniformfvRobustANGLE",
         "glGetnUniformivRobustANGLE",
