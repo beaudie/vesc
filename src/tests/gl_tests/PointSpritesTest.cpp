@@ -41,6 +41,10 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
     // http://anglebug.com/1643
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL() && IsWindows());
 
+    // TODO: Point coord not yet implemented in Vulkan.
+    // http://anglebug.com/2457
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     const std::string fs =
         R"(precision mediump float;
         void main()
@@ -544,4 +548,5 @@ ANGLE_INSTANTIATE_TEST(PointSpritesTest,
                        ES2_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES());
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
