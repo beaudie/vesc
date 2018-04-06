@@ -1746,22 +1746,14 @@ gl::Error TextureD3D_Cube::copyImage(const gl::Context *context,
                    origSourceArea.x + origSourceArea.width > fbSize.width ||
                    origSourceArea.y + origSourceArea.height > fbSize.height;
 
-    // In WebGL mode we need to zero the texture outside the framebuffer.
-    // If we have robust resource init, it was already zeroed by redefineImage() above, otherwise
-    // zero it explicitly.
-    // TODO(fjhenigman): When robust resource is fully implemented look into making it a
-    // prerequisite for WebGL and deleting this code.
-    if (outside && context->getExtensions().webglCompatibility &&
-        !context->isRobustResourceInitEnabled())
+    // WebGL requires that pixels that would be outside the framebuffer are treated as zero values,
+    // so clear the mip level to 0 prior to making the copy if any pixel would be sampled outside.
+    // Same thing for robust resource init.
+    if (outside &&
+        (context->getExtensions().webglCompatibility || context->isRobustResourceInitEnabled()))
     {
-        angle::MemoryBuffer *zero;
-        ANGLE_TRY(context->getZeroFilledBuffer(
-            origSourceArea.width * origSourceArea.height * internalFormatInfo.pixelBytes, &zero));
-        gl::PixelUnpackState unpack;
-        unpack.alignment = 1;
-        ANGLE_TRY(setImage(context, target, imageLevel, internalFormat, size,
-                           internalFormatInfo.format, internalFormatInfo.type, unpack,
-                           zero->data()));
+        ANGLE_TRY(
+            initializeContents(context, gl::ImageIndex::Make2D(static_cast<GLint>(imageLevel))));
     }
 
     gl::Rectangle sourceArea;
