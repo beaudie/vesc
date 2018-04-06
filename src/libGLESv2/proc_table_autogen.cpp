@@ -316,7 +316,7 @@ ProcEntry g_procTable[] = {
     {"glGetObjectPtrLabelKHR", P(gl::GetObjectPtrLabelKHR)},
     {"glGetPointerv", P(gl::GetPointerv)},
     {"glGetPointervKHR", P(gl::GetPointervKHR)},
-    {"glGetPointervRobustANGLERobustANGLE", P(gl::GetPointervRobustANGLERobustANGLE)},
+    {"glGetPointervRobustANGLE", P(gl::GetPointervRobustANGLE)},
     {"glGetProgramBinary", P(gl::GetProgramBinary)},
     {"glGetProgramBinaryOES", P(gl::GetProgramBinaryOES)},
     {"glGetProgramInfoLog", P(gl::GetProgramInfoLog)},
