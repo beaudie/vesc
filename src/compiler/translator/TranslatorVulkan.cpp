@@ -25,6 +25,60 @@ namespace sh
 
 namespace
 {
+// This traverses nodes, find the struct ones and add their declarations to the sink. It also
+// removes the nodes from the tree as it processes them.
+class DeclareStructTypesTraverser : public TIntermTraverser
+{
+  public:
+    DeclareStructTypesTraverser(TInfoSinkBase *sink, TOutputVulkanGLSL *outputVulkanGLSL)
+        : TIntermTraverser(true, false, false), mSink(sink), mOutputVulkanGLSL(outputVulkanGLSL)
+    {
+    }
+
+    bool visitDeclaration(Visit visit, TIntermDeclaration *node) override
+    {
+        ASSERT(visit == PreVisit);
+
+        if (!mInGlobalScope)
+        {
+            // We only want to declare the global structs in this traverser.
+            // TODO(lucferron): Add a test in GLSLTest for this specific case.
+            // http://anglebug.com/2459
+            return false;
+        }
+
+        const TIntermSequence &sequence = *(node->getSequence());
+        TIntermTyped *declarator        = sequence.front()->getAsTyped();
+        const TType &type               = declarator->getType();
+
+        if (type.isStructSpecifier())
+        {
+            TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
+            if (symbolNode != nullptr && symbolNode->variable().symbolType() == SymbolType::Empty)
+            {
+                mOutputVulkanGLSL->writeStructType(type.getStruct());
+
+                // Remove the struct specifier declaration from the tree so it isn't parsed again.
+                TIntermSequence emptyReplacement;
+                mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), node,
+                                                emptyReplacement);
+            }
+            else
+            {
+                // TODO(lucferron): Support structs with initializers correctly.
+                // http://anglebug.com/2459
+                UNIMPLEMENTED();
+            }
+        }
+
+        return false;
+    }
+
+  private:
+    TInfoSinkBase *mSink;
+    TOutputVulkanGLSL *mOutputVulkanGLSL;
+};
+
 class DeclareDefaultUniformsTraverser : public TIntermTraverser
 {
   public:
@@ -153,17 +207,36 @@ void TranslatorVulkan::translate(TIntermBlock *root,
                                  PerformanceDiagnostics * /*perfDiagnostics*/)
 {
     TInfoSinkBase &sink = getInfoSink().obj;
+    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
+                                 getNameMap(), &getSymbolTable(), getShaderType(),
+                                 getShaderVersion(), getOutputType(), compileOptions);
 
     sink << "#version 450 core\n";
 
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount = 0;
+    int structTypesUsedForUniforms = 0;
     for (const auto &uniform : getUniforms())
     {
         if (!uniform.isBuiltIn() && uniform.staticUse && !gl::IsOpaqueType(uniform.type))
         {
             ++defaultUniformCount;
         }
+
+        if (uniform.isStruct())
+        {
+            ++structTypesUsedForUniforms;
+        }
+    }
+
+    // TODO(lucferron): Refactor this function to do less tree traversals.
+    // http://anglebug.com/2461
+    if (structTypesUsedForUniforms > 0)
+    {
+        // We must declare the struct types before using them.
+        DeclareStructTypesTraverser structTypesTraverser(&sink, &outputGLSL);
+        root->traverse(&structTypesTraverser);
+        structTypesTraverser.updateTree();
     }
 
     if (defaultUniformCount > 0)
@@ -218,9 +291,6 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     }
 
     // Write translated shader.
-    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
-                                 getNameMap(), &getSymbolTable(), getShaderType(),
-                                 getShaderVersion(), getOutputType(), compileOptions);
     root->traverse(&outputGLSL);
 }
 
