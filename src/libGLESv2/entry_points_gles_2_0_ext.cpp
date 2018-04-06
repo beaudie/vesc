@@ -1853,10 +1853,10 @@ ANGLE_EXPORT void GL_APIENTRY GetTexLevelParameterfvRobustANGLE(GLenum target,
     UNIMPLEMENTED();
 }
 
-ANGLE_EXPORT void GL_APIENTRY GetPointervRobustANGLERobustANGLE(GLenum pname,
-                                                                GLsizei bufSize,
-                                                                GLsizei *length,
-                                                                void **params)
+ANGLE_EXPORT void GL_APIENTRY GetPointervRobustANGLE(GLenum pname,
+                                                     GLsizei bufSize,
+                                                     GLsizei *length,
+                                                     void **params)
 {
     EVENT(
         "(GLenum pname = 0x%X, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, void **params = "
