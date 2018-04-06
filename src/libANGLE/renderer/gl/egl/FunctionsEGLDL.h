@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_RENDERER_GL_CROS_FUNCTIONSEGLDL_H_
 #define LIBANGLE_RENDERER_GL_CROS_FUNCTIONSEGLDL_H_
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/gl/egl/FunctionsEGL.h"
 #include "libANGLE/renderer/gl/egl/functionsegl_typedefs.h"
 
@@ -20,7 +21,7 @@ class FunctionsEGLDL : public FunctionsEGL
     FunctionsEGLDL();
     ~FunctionsEGLDL() override;
 
-    egl::Error initialize(EGLNativeDisplayType nativeDisplay, const char *libName);
+    egl::Error initialize(EGLNativeDisplayType nativeDisplay, const char *libName, const egl::AttributeMap& attribs);
     void *getProcAddress(const char *name) const override;
 
   private:
