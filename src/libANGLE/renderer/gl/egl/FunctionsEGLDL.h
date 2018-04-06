@@ -12,6 +12,12 @@
 #include "libANGLE/renderer/gl/egl/FunctionsEGL.h"
 #include "libANGLE/renderer/gl/egl/functionsegl_typedefs.h"
 
+namespace egl
+{
+
+class AttributeMap;
+}
+
 namespace rx
 {
 class FunctionsEGLDL : public FunctionsEGL
@@ -20,7 +26,9 @@ class FunctionsEGLDL : public FunctionsEGL
     FunctionsEGLDL();
     ~FunctionsEGLDL() override;
 
-    egl::Error initialize(EGLNativeDisplayType nativeDisplay, const char *libName);
+    egl::Error initialize(EGLNativeDisplayType nativeDisplay,
+                          const char *libName,
+                          const egl::AttributeMap &attribs);
     void *getProcAddress(const char *name) const override;
 
   private:
