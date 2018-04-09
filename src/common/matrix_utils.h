@@ -94,6 +94,32 @@ class Matrix
         memcpy(mElements.data(), res.data(), numElts * sizeof(float));
     }
 
+    bool operator==(const Matrix<T> &m) const
+    {
+        ASSERT(columns() == m.columns());
+        ASSERT(rows() == m.rows());
+        const auto &otherElts = m.elements();
+        for (size_t i = 0; i < otherElts.size(); i++)
+        {
+            if (mElements[i] != otherElts[i])
+                return false;
+        }
+        return true;
+    }
+
+    bool nearlyEqual(T epsilon, const Matrix<T> &m) const
+    {
+        ASSERT(columns() == m.columns());
+        ASSERT(rows() == m.rows());
+        const auto &otherElts = m.elements();
+        for (size_t i = 0; i < otherElts.size(); i++)
+        {
+            if ((mElements[i] - otherElts[i] > epsilon) && (otherElts[i] - mElements[i] > epsilon))
+                return false;
+        }
+        return true;
+    }
+
     unsigned int size() const
     {
         ASSERT(rows() == columns());
