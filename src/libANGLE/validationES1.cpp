@@ -173,7 +173,7 @@ bool ValidateFrustumf(Context *context,
                       GLfloat n,
                       GLfloat f)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -185,7 +185,7 @@ bool ValidateFrustumx(Context *context,
                       GLfixed n,
                       GLfixed f)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -444,7 +444,7 @@ bool ValidateOrthof(Context *context,
                     GLfloat n,
                     GLfloat f)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -456,7 +456,7 @@ bool ValidateOrthox(Context *context,
                     GLfixed n,
                     GLfixed f)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -528,13 +528,13 @@ bool ValidatePushMatrix(Context *context)
 
 bool ValidateRotatef(Context *context, GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
 bool ValidateRotatex(Context *context, GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -546,13 +546,13 @@ bool ValidateSampleCoveragex(Context *context, GLclampx value, GLboolean invert)
 
 bool ValidateScalef(Context *context, GLfloat x, GLfloat y, GLfloat z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
 bool ValidateScalex(Context *context, GLfixed x, GLfixed y, GLfixed z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -625,13 +625,13 @@ bool ValidateTexParameterxv(Context *context,
 
 bool ValidateTranslatef(Context *context, GLfloat x, GLfloat y, GLfloat z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
 bool ValidateTranslatex(Context *context, GLfixed x, GLfixed y, GLfixed z)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
