@@ -58,12 +58,10 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
     // clang-format off
     mConfigAttribList =
     {
-        // Choose RGBA8888
         EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
         EGL_RED_SIZE, 8,
         EGL_GREEN_SIZE, 8,
         EGL_BLUE_SIZE, 8,
-        EGL_ALPHA_SIZE, 8,
         // EGL1.5 spec Section 2.2 says that depth, multisample and stencil buffer depths
         // must match for contexts to be compatible.
         EGL_DEPTH_SIZE, 24,
