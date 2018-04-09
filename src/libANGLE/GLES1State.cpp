@@ -262,4 +262,10 @@ void GLES1State::loadMatrix(const angle::Mat4 &m)
     currentMatrixStack().back() = m;
 }
 
+void GLES1State::multMatrix(const angle::Mat4 &m)
+{
+    auto currMatrix             = currentMatrixStack().back();
+    currentMatrixStack().back() = currMatrix.product(m);
+}
+
 }  // namespace gl
