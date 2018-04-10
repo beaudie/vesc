@@ -958,6 +958,134 @@ void main()
     glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
 }
 
+// Simple state change tests for line loop drawing. There is some very specific handling of line
+// line loops in Vulkan and we need to test switching between drawElements and drawArrays calls to
+// validate every edge cases.
+class LineLoopStateChangeTest : public StateChangeTest
+{
+  protected:
+    LineLoopStateChangeTest()
+    {
+        setWindowWidth(64);
+        setWindowHeight(64);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void validateSquareAndHourglass()
+    {
+        ASSERT_GL_NO_ERROR();
+
+        int quarterWidth  = getWindowWidth() / 4;
+        int quarterHeight = getWindowHeight() / 4;
+
+        // Bottom left
+        EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, quarterHeight, GLColor::green);
+
+        // Top left
+        EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+        // Top right
+        EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+        // bottom right
+        EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, quarterHeight, GLColor::green);
+
+        // dead center to validate the hourglass.
+        EXPECT_PIXEL_COLOR_EQ((quarterWidth * 2), quarterHeight * 2, GLColor::green);
+
+        // Verify line is closed between the 2 last vertices
+        EXPECT_PIXEL_COLOR_EQ((quarterWidth * 2) - 1, quarterHeight - 1, GLColor::green);
+    }
+
+    GLint mPositionLocation;
+};
+
+// Draw an hourglass with a drawElements call followed by a square with drawArrays.
+TEST_P(LineLoopStateChangeTest, DrawElementsThenDrawArrays)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    // We expect to draw a square with these 4 vertices with a drawArray call.
+    auto vertices = std::vector<Vector3>{
+        {-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}};
+
+    // If we use these indices to draw however, we should be drawing an hourglass.
+    auto indices = std::vector<GLushort>{0, 2, 1, 3};
+
+    mPositionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, mPositionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(mPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(mPositionLocation);
+
+    for (int i = 0; i < 10; i++)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, nullptr);  // hourglass
+        glDrawArrays(GL_LINE_LOOP, 0, 4);                             // square
+        swapBuffers();
+    }
+    glDisableVertexAttribArray(mPositionLocation);
+
+    validateSquareAndHourglass();
+}
+
+// Draw line loop using a drawArrays followed by an hourglass with drawElements.
+TEST_P(LineLoopStateChangeTest, DrawArraysThenDrawElements)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    // We expect to draw a square with these 4 vertices with a drawArray call.
+    auto vertices = std::vector<Vector3>{
+        {-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}};
+
+    // If we use these indices to draw however, we should be drawing an hourglass.
+    auto indices = std::vector<GLushort>{0, 2, 1, 3};
+
+    mPositionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, mPositionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(mPositionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(mPositionLocation);
+
+    for (int i = 0; i < 10; i++)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);                             // square
+        glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, nullptr);  // hourglass
+        swapBuffers();
+    }
+
+    glDisableVertexAttribArray(mPositionLocation);
+
+    validateSquareAndHourglass();
+}
+
 // Simple state change tests, primarily focused on basic object lifetime and dependency management
 // with back-ends that don't support that automatically (i.e. Vulkan).
 class SimpleStateChangeTest : public ANGLETest
@@ -1643,6 +1771,11 @@ void main() {
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST(StateChangeTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
+ANGLE_INSTANTIATE_TEST(LineLoopStateChangeTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES2_OPENGL(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
