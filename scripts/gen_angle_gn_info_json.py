@@ -4,14 +4,11 @@
 #  Use of this source code is governed by a BSD-style license that can be
 #  found in the LICENSE file.
 
-# This script adapted from Perfetto
-# license changed to BSD with permission of xam@google.com
-# (https://android.googlesource.com/platform/external/perfetto)
-
 # This tool will create a json description of the GN build environment that
 # can then be used by gen_angle_android_bp.py to build an Android.bp file for
 # the Android Soong build system.
-# The input to this tool is a list of GN labels for which to capturebp:
+# The input to this tool is a list of GN labels for which to capture the build
+# information in json:
 #
 # Generating angle.json needs to be done from within a Chromium build:
 #   cd <chromium>/src
@@ -22,30 +19,14 @@
 #
 
 import argparse
-import errno
 import json
 import logging
-import os
-import shutil
 import subprocess
 import sys
-
-# ----------------------------------------------------------------------------
-# End of configuration.
-# ----------------------------------------------------------------------------
 
 
 class Error(Exception):
     pass
-
-
-class ThrowingArgumentParser(argparse.ArgumentParser):
-    def __init__(self, context):
-        super(ThrowingArgumentParser, self).__init__()
-        self.context = context
-
-    def error(self, message):
-        raise Error('%s: %s' % (self.context, message))
 
 
 def get_json_description(gn_out, target_name):
@@ -105,7 +86,7 @@ def create_build_description(gn_out, targets):
 def main():
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
     parser = argparse.ArgumentParser(
-        description='Generate Android.bp from a GN description.')
+        description='Generate json build information from a GN description.')
     parser.add_argument(
         '--gn_out',
         help=
