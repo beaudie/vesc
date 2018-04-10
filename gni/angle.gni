@@ -42,6 +42,8 @@ declare_args() {
 
   angle_enable_vulkan = is_win || (is_linux && use_x11 && !is_chromeos) ||
                         (is_android && ndk_supports_vulkan)
+  # Do not enable validation layers for Android
+  angle_enable_vulkan_validation = is_win || (is_linux && use_x11 && !is_chromeos)
   angle_enable_null = true
   angle_enable_essl = true
   angle_enable_glsl = true

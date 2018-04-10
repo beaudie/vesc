@@ -384,6 +384,7 @@
                         '<@(angle_translator_hlsl_sources)',
                     ],
                 }],
+                # TODO: Do we need anything here for angle_enable_vulkan_validation?
                 ['angle_enable_vulkan==1',
                 {
                     'defines':
