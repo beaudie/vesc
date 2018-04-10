@@ -401,6 +401,10 @@ config("libANGLE_config") {
   }
   if (angle_enable_vulkan) {
     defines += [ "ANGLE_ENABLE_VULKAN" ]
+
+    if (angle_enable_vulkan_validation) {
+      defines += [ "ANGLE_ENABLE_VULKAN_VALIDATION" ]
+    }
   }
   if (angle_enable_null) {
     defines += [ "ANGLE_ENABLE_NULL" ]
@@ -418,6 +422,17 @@ if (angle_enable_vulkan) {
     deps = [
       "$angle_root/third_party/glslang:glslang",
     ]
+    public_configs = [
+      "$angle_root/third_party/glslang:glslang_config",
+    ]
+    if (!is_android) {
+      deps += [ "$angle_root/third_party/vulkan-validation-layers:libvulkan" ]
+      public_configs += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_loader_config" ]
+    }
+  }
+
+  if (angle_enable_vulkan_validation) {
+    # Use this target to build Vulkan validation layers for debugging Angle Vulkan backend
     public_deps = [
       "$angle_root/third_party/vulkan-validation-layers:vulkan_headers",
     ]
@@ -425,13 +440,10 @@ if (angle_enable_vulkan) {
       "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers",
     ]
     public_configs = [
-      "$angle_root/third_party/glslang:glslang_config",
       "$angle_root/third_party/vulkan-validation-layers:vulkan_config",
     ]
     if (!is_android) {
-      deps += [ "$angle_root/third_party/vulkan-validation-layers:libvulkan" ]
       data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_gen_json_files" ]
-      public_configs += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_loader_config" ]
     }
   }
 }
@@ -537,8 +549,11 @@ static_library("libANGLE") {
           rebase_path(gles_gypi.libangle_vulkan_android_sources, ".", "src")
     }
     deps += [ ":angle_vulkan" ]
-    public_deps +=
+    if (angle_enable_vulkan_validation) {
+      # Use this target to build Vulkan validation layers for debugging Angle Vulkan backend
+      public_deps +=
         [ "$angle_root/third_party/vulkan-validation-layers:vulkan_headers" ]
+    }
   }
 
   if (angle_enable_null) {
