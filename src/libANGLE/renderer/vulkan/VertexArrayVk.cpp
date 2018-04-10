@@ -366,8 +366,12 @@ gl::Error VertexArrayVk::drawArrays(const gl::Context *context,
         return gl::NoError();
     }
 
+    // If we've had a drawElements call with a line loop before, we want to make sure this is
+    // invalidated the next time drawElements is called since we use the same index buffer for both
+    // calls.
+    mDirtyLineLoopTranslation = true;
+
     // Handle GL_LINE_LOOP drawArrays.
-    // This test may be incorrect if the draw call switches from DrawArrays/DrawElements.
     int lastVertex = drawCallParams.firstVertex() + drawCallParams.vertexCount();
     if (!mLineLoopBufferFirstIndex.valid() || !mLineLoopBufferLastIndex.valid() ||
         mLineLoopBufferFirstIndex != drawCallParams.firstVertex() ||
@@ -405,6 +409,12 @@ gl::Error VertexArrayVk::drawElements(const gl::Context *context,
         return gl::NoError();
     }
 
+    // If we've had a drawArrays call with a line loop before, we want to make sure this is
+    // invalidated the next time drawArrays is called since we use the same index buffer for both
+    // calls.
+    mLineLoopBufferFirstIndex.reset();
+    mLineLoopBufferLastIndex.reset();
+
     // Handle GL_LINE_LOOP drawElements.
     gl::Buffer *elementArrayBuffer = mState.getElementArrayBuffer().get();
     if (!elementArrayBuffer)
@@ -417,7 +427,6 @@ gl::Error VertexArrayVk::drawElements(const gl::Context *context,
 
     VkIndexType indexType = gl_vk::GetIndexType(drawCallParams.type());
 
-    // This also doesn't check if the element type changed, which should trigger translation.
     if (mDirtyLineLoopTranslation)
     {
         ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
