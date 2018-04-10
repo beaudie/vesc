@@ -1237,8 +1237,8 @@ TEST_P(Texture2DTest, QueryBinding)
 
 TEST_P(Texture2DTest, ZeroSizedUploads)
 {
-    // TODO(lucferron): Enable this test on Vulkan after this bug is done.
-    // http://anglebug.com/2392
+    // TODO(lucferron): Enable this test on Vulkan after Sampler Arrays are implemented.
+    // http://anglebug.com/2462
     ANGLE_SKIP_TEST_IF(IsVulkan());
 
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -2443,13 +2443,12 @@ TEST_P(Texture2DTest, TextureLuminanceAlphaRGBSame)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DTest, TextureLuminance32ImplicitAlpha1)
 {
-    // TODO(lucferron): Enable Vulkan when we implement float support in ES3.0.
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D9());
-
-    setUpProgram();
+    ANGLE_SKIP_TEST_IF(IsD3D9());
 
     if (extensionEnabled("GL_OES_texture_float"))
     {
+        setUpProgram();
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTexture2D);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_FLOAT, nullptr);
@@ -2465,8 +2464,7 @@ TEST_P(Texture2DTest, TextureLuminance32ImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DTest, TextureLuminance16ImplicitAlpha1)
 {
-    // TODO(lucferron): Enable Vulkan when we implement float support in ES3.0.
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D9());
+    ANGLE_SKIP_TEST_IF(IsD3D9());
 
     if (extensionEnabled("GL_OES_texture_half_float"))
     {
