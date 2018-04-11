@@ -15,6 +15,18 @@ using namespace angle;
 
 namespace
 {
+constexpr char kBasicVertexShader[] =
+    R"(attribute vec3 position;
+void main()
+{
+    gl_Position = vec4(position, 1);
+})";
+
+constexpr char kGreenFragmentShader[] =
+    R"(void main()
+{
+    gl_FragColor = vec4(0, 1, 0, 1);
+})";
 
 class StateChangeTest : public ANGLETest
 {
@@ -1006,6 +1018,60 @@ void SimpleStateChangeTest::simpleDrawWithColor(const GLColor &color)
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLColor), colors.data(), GL_STATIC_DRAW);
     simpleDrawWithBuffer(&colorBuffer);
+}
+
+// Test that we can do a drawElements call successfully after making a drawArrays call in the same
+// frame.
+TEST_P(SimpleStateChangeTest, DrawArraysThenDrawElement)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    // We expect to draw a line with the first 2 vertices and a drawArray call, then another line
+    // with a drawElement call.
+    auto vertices = std::vector<Vector3>{
+        {-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}};
+
+    // If we use these indices to draw we'll be using the last 2 vertex only to draw.
+    auto indices = std::vector<GLushort>{2, 3};
+
+    GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    for (int i = 0; i < 10; i++)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_LINES, 0, 2);                             // line to the left
+        glDrawElements(GL_LINES, 2, GL_UNSIGNED_SHORT, nullptr);  // line to the right
+        swapBuffers();
+    }
+    glDisableVertexAttribArray(positionLocation);
+
+    ASSERT_GL_NO_ERROR();
+
+    int quarterWidth  = getWindowWidth() / 4;
+    int quarterHeight = getWindowHeight() / 4;
+
+    // Validate line to the left
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, quarterHeight, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth - 1, (quarterHeight * 3) - 1, GLColor::green);
+
+    // Validate line to the right
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, (quarterHeight * 3) - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3) - 1, quarterHeight, GLColor::green);
 }
 
 // Handles deleting a Buffer when it's being used.
