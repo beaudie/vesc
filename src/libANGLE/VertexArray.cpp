@@ -36,6 +36,11 @@ gl::AttributesMask VertexArrayState::getEnabledClientMemoryAttribsMask() const
     return (mClientMemoryAttribsMask & mEnabledAttributesMask);
 }
 
+bool VertexArrayState::hasEnabledNullPointerClientArray() const
+{
+    return (mNullPointerClientMemoryAttribsMask & mEnabledAttributesMask).any();
+}
+
 // VertexArray implementation.
 VertexArray::VertexArray(rx::GLImplFactory *factory,
                          GLuint id,
@@ -273,6 +278,8 @@ void VertexArray::setVertexAttribPointer(const Context *context,
     setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER);
 
     mState.mClientMemoryAttribsMask.set(attribIndex, boundBuffer == nullptr);
+    mState.mNullPointerClientMemoryAttribsMask.set(attribIndex,
+                                                   boundBuffer == nullptr && pointer == nullptr);
 }
 
 void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
