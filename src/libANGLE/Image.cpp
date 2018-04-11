@@ -10,10 +10,10 @@
 
 #include "common/debug.h"
 #include "common/utilities.h"
+#include "libANGLE/Renderbuffer.h"
+#include "libANGLE/Texture.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
-#include "libANGLE/Texture.h"
-#include "libANGLE/Renderbuffer.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/renderer/ImageImpl.h"
 
@@ -30,8 +30,8 @@ gl::ImageIndex GetImageIndex(EGLenum eglTarget, const egl::AttributeMap &attribs
     }
 
     gl::TextureTarget target = egl_gl::EGLImageTargetToTextureTarget(eglTarget);
-    GLint mip     = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_LEVEL_KHR, 0));
-    GLint layer   = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_ZOFFSET_KHR, 0));
+    GLint mip                = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_LEVEL_KHR, 0));
+    GLint layer              = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_ZOFFSET_KHR, 0));
 
     if (target == gl::TextureTarget::_3D)
     {
@@ -118,7 +118,7 @@ void ImageSibling::setSourceEGLImageInitState(gl::InitState initState) const
 }
 
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
-    : imageIndex(GetImageIndex(target, attribs)), source(buffer), targets()
+    : label(nullptr), imageIndex(GetImageIndex(target, attribs)), source(buffer), targets()
 {
 }
 
@@ -159,6 +159,16 @@ gl::Error Image::onDestroy(const gl::Context *context)
 Image::~Image()
 {
     SafeDelete(mImplementation);
+}
+
+void Image::setLabel(EGLLabelKHR label)
+{
+    mState.label = label;
+}
+
+EGLLabelKHR Image::getLabel() const
+{
+    return mState.label;
 }
 
 void Image::addTargetSibling(ImageSibling *sibling)

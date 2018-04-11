@@ -25,7 +25,7 @@ namespace egl
 {
 
 SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn)
-    : config(configIn), attributes(attributesIn)
+    : label(nullptr), config(configIn), attributes(attributesIn)
 {
 }
 
@@ -65,7 +65,8 @@ Surface::Surface(EGLint surfaceType,
       mDSFormat(config->depthStencilFormat),
       mInitState(gl::InitState::Initialized)
 {
-    mPostSubBufferRequested = (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
+    mPostSubBufferRequested =
+        (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
     mFlexibleSurfaceCompatibilityRequested =
         (attributes.get(EGL_FLEXIBLE_SURFACE_COMPATIBILITY_SUPPORTED_ANGLE, EGL_FALSE) == EGL_TRUE);
 
@@ -209,6 +210,16 @@ Error Surface::onDestroy(const Display *display)
         return destroyImpl(display);
     }
     return NoError();
+}
+
+void Surface::setLabel(EGLLabelKHR label)
+{
+    mState.label = label;
+}
+
+EGLLabelKHR Surface::getLabel() const
+{
+    return mState.label;
 }
 
 EGLint Surface::getType() const
