@@ -649,11 +649,6 @@ void PipelineDesc::updateViewport(const gl::Rectangle &viewport, float nearPlane
     mViewport.height   = static_cast<float>(viewport.height);
     mViewport.minDepth = nearPlane;
     mViewport.maxDepth = farPlane;
-
-    mScissor.offset.x      = viewport.x;
-    mScissor.offset.y      = viewport.y;
-    mScissor.extent.width  = viewport.width;
-    mScissor.extent.height = viewport.height;
 }
 
 void PipelineDesc::updateVertexInputInfo(const VertexInputBindings &bindings,
