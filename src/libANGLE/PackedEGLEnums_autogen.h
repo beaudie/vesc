@@ -24,6 +24,39 @@ namespace egl
 template <typename Enum>
 Enum FromEGLenum(EGLenum from);
 
+enum class MessageType : uint8_t
+{
+    Critical = 0,
+    Error    = 1,
+    Info     = 2,
+    Warn     = 3,
+
+    InvalidEnum = 4,
+    EnumCount   = 4,
+};
+
+template <>
+MessageType FromEGLenum<MessageType>(EGLenum from);
+EGLenum ToEGLenum(MessageType from);
+
+enum class ObjectType : uint8_t
+{
+    Context = 0,
+    Display = 1,
+    Image   = 2,
+    Stream  = 3,
+    Surface = 4,
+    Sync    = 5,
+    Thread  = 6,
+
+    InvalidEnum = 7,
+    EnumCount   = 7,
+};
+
+template <>
+ObjectType FromEGLenum<ObjectType>(EGLenum from);
+EGLenum ToEGLenum(ObjectType from);
+
 enum class TextureFormat : uint8_t
 {
     NoTexture = 0,

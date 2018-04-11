@@ -273,7 +273,7 @@ void ANGLESetDefaultDisplayPlatform(angle::EGLDisplayType display)
 
 }  // anonymous namespace
 
-DisplayState::DisplayState()
+DisplayState::DisplayState() : label(nullptr)
 {
 }
 
@@ -423,6 +423,16 @@ Display::~Display()
 
     SafeDelete(mDevice);
     SafeDelete(mImplementation);
+}
+
+void Display::setLabel(EGLLabelKHR label)
+{
+    mState.label = label;
+}
+
+EGLLabelKHR Display::getLabel() const
+{
+    return mState.label;
 }
 
 void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap)
@@ -1015,6 +1025,7 @@ static ClientExtensions GenerateClientExtensions()
 #endif
 
     extensions.clientGetAllProcAddresses = true;
+    extensions.debug                     = true;
 
     return extensions;
 }

@@ -823,6 +823,9 @@ struct ClientExtensions
 
     // EGL_KHR_client_get_all_proc_addresses
     bool clientGetAllProcAddresses;
+
+    // EGL_KHR_debug
+    bool debug;
 };
 
 }  // namespace egl

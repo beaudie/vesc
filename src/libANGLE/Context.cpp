@@ -279,6 +279,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mDisplayTextureShareGroup(shareTextures != nullptr),
       mSavedArgsType(nullptr),
       mImplementation(implFactory->createContext(mState)),
+      mLabel(nullptr),
       mCompiler(),
       mConfig(config),
       mClientType(EGL_OPENGL_ES_API),
@@ -515,6 +516,16 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
 Context::~Context()
 {
+}
+
+void Context::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Context::getLabel() const
+{
+    return mLabel;
 }
 
 egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
@@ -907,7 +918,7 @@ ProgramPipeline *Context::getProgramPipeline(GLuint handle) const
     return mState.mPipelines->getProgramPipeline(handle);
 }
 
-LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
+gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
 {
     switch (identifier)
     {
@@ -937,14 +948,14 @@ LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
     }
 }
 
-LabeledObject *Context::getLabeledObjectFromPtr(const void *ptr) const
+gl::LabeledObject *Context::getLabeledObjectFromPtr(const void *ptr) const
 {
     return getSync(reinterpret_cast<GLsync>(const_cast<void *>(ptr)));
 }
 
 void Context::objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
 {
-    LabeledObject *object = getLabeledObject(identifier, name);
+    gl::LabeledObject *object = getLabeledObject(identifier, name);
     ASSERT(object != nullptr);
 
     std::string labelName = GetObjectLabelFromPointer(length, label);
@@ -957,7 +968,7 @@ void Context::objectLabel(GLenum identifier, GLuint name, GLsizei length, const 
 
 void Context::objectPtrLabel(const void *ptr, GLsizei length, const GLchar *label)
 {
-    LabeledObject *object = getLabeledObjectFromPtr(ptr);
+    gl::LabeledObject *object = getLabeledObjectFromPtr(ptr);
     ASSERT(object != nullptr);
 
     std::string labelName = GetObjectLabelFromPointer(length, label);
@@ -970,7 +981,7 @@ void Context::getObjectLabel(GLenum identifier,
                              GLsizei *length,
                              GLchar *label) const
 {
-    LabeledObject *object = getLabeledObject(identifier, name);
+    gl::LabeledObject *object = getLabeledObject(identifier, name);
     ASSERT(object != nullptr);
 
     const std::string &objectLabel = object->getLabel();
@@ -982,7 +993,7 @@ void Context::getObjectPtrLabel(const void *ptr,
                                 GLsizei *length,
                                 GLchar *label) const
 {
-    LabeledObject *object = getLabeledObjectFromPtr(ptr);
+    gl::LabeledObject *object = getLabeledObjectFromPtr(ptr);
     ASSERT(object != nullptr);
 
     const std::string &objectLabel = object->getLabel();

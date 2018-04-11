@@ -1391,7 +1391,8 @@ ClientExtensions::ClientExtensions()
       deviceCreationD3D11(false),
       x11Visual(false),
       experimentalPresentPath(false),
-      clientGetAllProcAddresses(false)
+      clientGetAllProcAddresses(false),
+      debug(false)
 {
 }
 
@@ -1416,6 +1417,7 @@ std::vector<std::string> ClientExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_x11_visual",                  x11Visual,                 &extensionStrings);
     InsertExtensionString("EGL_ANGLE_experimental_present_path",   experimentalPresentPath,   &extensionStrings);
     InsertExtensionString("EGL_KHR_client_get_all_proc_addresses", clientGetAllProcAddresses, &extensionStrings);
+    InsertExtensionString("EGL_KHR_debug",                         debug,                     &extensionStrings);
     // clang-format on
 
     return extensionStrings;

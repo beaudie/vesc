@@ -25,7 +25,7 @@ namespace egl
 {
 
 SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn)
-    : defaultFramebuffer(nullptr), config(configIn), attributes(attributesIn)
+    : label(nullptr), defaultFramebuffer(nullptr), config(configIn), attributes(attributesIn)
 {
 }
 
@@ -222,6 +222,16 @@ Error Surface::onDestroy(const Display *display)
         return destroyImpl(display);
     }
     return NoError();
+}
+
+void Surface::setLabel(EGLLabelKHR label)
+{
+    mState.label = label;
+}
+
+EGLLabelKHR Surface::getLabel() const
+{
+    return mState.label;
 }
 
 EGLint Surface::getType() const
