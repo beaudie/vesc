@@ -89,7 +89,7 @@ Error Buffer::bufferData(const Context *context,
     mState.mSize  = size;
 
     // Notify when data changes.
-    mImpl->onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
+    mImpl->onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
 
     return NoError();
 }
