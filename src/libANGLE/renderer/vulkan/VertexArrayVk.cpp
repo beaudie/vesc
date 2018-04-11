@@ -343,6 +343,9 @@ gl::Error VertexArrayVk::drawArrays(const gl::Context *context,
 
     ANGLE_TRY(onDraw(context, renderer, drawCallParams, drawNode, newCommandBuffer));
 
+    // This forces the binding to happen if we follow a drawElement call from a drawArrays call.
+    mIndexBufferDirty = true;
+
     if (drawCallParams.mode() != GL_LINE_LOOP)
     {
         commandBuffer->draw(drawCallParams.vertexCount(), 1, drawCallParams.firstVertex(), 0);
