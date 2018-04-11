@@ -55,6 +55,16 @@ Stream::~Stream()
     }
 }
 
+void Stream::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Stream::getLabel() const
+{
+    return mLabel;
+}
+
 void Stream::setConsumerLatency(EGLint latency)
 {
     mConsumerLatency = latency;
