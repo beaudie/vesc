@@ -832,6 +832,9 @@ struct ClientExtensions
 
     // EGL_ANGLE_explicit_context
     bool explicitContext;
+
+    // EGL_KHR_debug
+    bool debug;
 };
 
 }  // namespace egl

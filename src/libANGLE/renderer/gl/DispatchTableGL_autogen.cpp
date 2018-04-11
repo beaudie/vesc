@@ -18,15 +18,12 @@
 #endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 // Check for nullptr so extensions do not overwrite core imports.
-#define ASSIGN(NAME, FP) \
-    if (!FP)             \
-    *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
+#define ASSIGN(NAME, FP) if (!FP) *reinterpret_cast<void **>(&FP) = loadProcAddress(NAME)
 
 namespace rx
 {
 
-void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
-                                         const std::set<std::string> &extensions)
+void DispatchTableGL::initProcsDesktopGL(const gl::Version &version, const std::set<std::string> &extensions)
 {
     if (version >= gl::Version(1, 0))
     {
@@ -567,8 +564,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glBindImageTexture", bindImageTexture);
         ASSIGN("glDrawArraysInstancedBaseInstance", drawArraysInstancedBaseInstance);
         ASSIGN("glDrawElementsInstancedBaseInstance", drawElementsInstancedBaseInstance);
-        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstance",
-               drawElementsInstancedBaseVertexBaseInstance);
+        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstance", drawElementsInstancedBaseVertexBaseInstance);
         ASSIGN("glDrawTransformFeedbackInstanced", drawTransformFeedbackInstanced);
         ASSIGN("glDrawTransformFeedbackStreamInstanced", drawTransformFeedbackStreamInstanced);
         ASSIGN("glGetActiveAtomicCounterBufferiv", getActiveAtomicCounterBufferiv);
@@ -679,8 +675,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glGetNamedBufferParameteriv", getNamedBufferParameteriv);
         ASSIGN("glGetNamedBufferPointerv", getNamedBufferPointerv);
         ASSIGN("glGetNamedBufferSubData", getNamedBufferSubData);
-        ASSIGN("glGetNamedFramebufferAttachmentParameteriv",
-               getNamedFramebufferAttachmentParameteriv);
+        ASSIGN("glGetNamedFramebufferAttachmentParameteriv", getNamedFramebufferAttachmentParameteriv);
         ASSIGN("glGetNamedFramebufferParameteriv", getNamedFramebufferParameteriv);
         ASSIGN("glGetNamedRenderbufferParameteriv", getNamedRenderbufferParameteriv);
         ASSIGN("glGetQueryBufferObjecti64v", getQueryBufferObjecti64v);
@@ -778,8 +773,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
     {
         ASSIGN("glDrawArraysInstancedBaseInstance", drawArraysInstancedBaseInstance);
         ASSIGN("glDrawElementsInstancedBaseInstance", drawElementsInstancedBaseInstance);
-        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstance",
-               drawElementsInstancedBaseVertexBaseInstance);
+        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstance", drawElementsInstancedBaseVertexBaseInstance);
     }
 
     if (extensions.count("GL_ARB_blend_func_extended") != 0)
@@ -875,8 +869,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glGetNamedBufferParameteriv", getNamedBufferParameteriv);
         ASSIGN("glGetNamedBufferPointerv", getNamedBufferPointerv);
         ASSIGN("glGetNamedBufferSubData", getNamedBufferSubData);
-        ASSIGN("glGetNamedFramebufferAttachmentParameteriv",
-               getNamedFramebufferAttachmentParameteriv);
+        ASSIGN("glGetNamedFramebufferAttachmentParameteriv", getNamedFramebufferAttachmentParameteriv);
         ASSIGN("glGetNamedFramebufferParameteriv", getNamedFramebufferParameteriv);
         ASSIGN("glGetNamedRenderbufferParameteriv", getNamedRenderbufferParameteriv);
         ASSIGN("glGetQueryBufferObjecti64v", getQueryBufferObjecti64v);
@@ -1640,8 +1633,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glGetNamedBufferParameterivEXT", getNamedBufferParameteriv);
         ASSIGN("glGetNamedBufferPointervEXT", getNamedBufferPointerv);
         ASSIGN("glGetNamedBufferSubDataEXT", getNamedBufferSubData);
-        ASSIGN("glGetNamedFramebufferAttachmentParameterivEXT",
-               getNamedFramebufferAttachmentParameteriv);
+        ASSIGN("glGetNamedFramebufferAttachmentParameterivEXT", getNamedFramebufferAttachmentParameteriv);
         ASSIGN("glGetNamedFramebufferParameterivEXT", getNamedFramebufferParameteriv);
         ASSIGN("glGetNamedRenderbufferParameterivEXT", getNamedRenderbufferParameteriv);
         ASSIGN("glGetTextureImageEXT", getTextureImage);
@@ -1909,8 +1901,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
     }
 }
 
-void DispatchTableGL::initProcsGLES(const gl::Version &version,
-                                    const std::set<std::string> &extensions)
+void DispatchTableGL::initProcsGLES(const gl::Version &version, const std::set<std::string> &extensions)
 {
     if (version >= gl::Version(2, 0))
     {
@@ -2290,8 +2281,7 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version,
     {
         ASSIGN("glDrawArraysInstancedBaseInstanceEXT", drawArraysInstancedBaseInstance);
         ASSIGN("glDrawElementsInstancedBaseInstanceEXT", drawElementsInstancedBaseInstance);
-        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstanceEXT",
-               drawElementsInstancedBaseVertexBaseInstance);
+        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstanceEXT", drawElementsInstancedBaseVertexBaseInstance);
     }
 
     if (extensions.count("GL_EXT_blend_func_extended") != 0)
@@ -2742,230 +2732,229 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
 }
 
 #if defined(ANGLE_ENABLE_OPENGL_NULL)
-void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
-                                             const std::set<std::string> &extensions)
+void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions)
 {
     if (version >= gl::Version(1, 0))
     {
-        blendFunc              = &glBlendFuncNULL;
-        clear                  = &glClearNULL;
-        clearColor             = &glClearColorNULL;
-        clearDepth             = &glClearDepthNULL;
-        clearStencil           = &glClearStencilNULL;
-        colorMask              = &glColorMaskNULL;
-        cullFace               = &glCullFaceNULL;
-        depthFunc              = &glDepthFuncNULL;
-        depthMask              = &glDepthMaskNULL;
-        depthRange             = &glDepthRangeNULL;
-        disable                = &glDisableNULL;
-        drawBuffer             = &glDrawBufferNULL;
-        enable                 = &glEnableNULL;
-        finish                 = &glFinishNULL;
-        flush                  = &glFlushNULL;
-        frontFace              = &glFrontFaceNULL;
-        getBooleanv            = &glGetBooleanvNULL;
-        getDoublev             = &glGetDoublevNULL;
-        getError               = &glGetErrorNULL;
-        getFloatv              = &glGetFloatvNULL;
-        getIntegerv            = &glGetIntegervNULL;
-        getString              = &glGetStringNULL;
-        getTexImage            = &glGetTexImageNULL;
+        blendFunc = &glBlendFuncNULL;
+        clear = &glClearNULL;
+        clearColor = &glClearColorNULL;
+        clearDepth = &glClearDepthNULL;
+        clearStencil = &glClearStencilNULL;
+        colorMask = &glColorMaskNULL;
+        cullFace = &glCullFaceNULL;
+        depthFunc = &glDepthFuncNULL;
+        depthMask = &glDepthMaskNULL;
+        depthRange = &glDepthRangeNULL;
+        disable = &glDisableNULL;
+        drawBuffer = &glDrawBufferNULL;
+        enable = &glEnableNULL;
+        finish = &glFinishNULL;
+        flush = &glFlushNULL;
+        frontFace = &glFrontFaceNULL;
+        getBooleanv = &glGetBooleanvNULL;
+        getDoublev = &glGetDoublevNULL;
+        getError = &glGetErrorNULL;
+        getFloatv = &glGetFloatvNULL;
+        getIntegerv = &glGetIntegervNULL;
+        getString = &glGetStringNULL;
+        getTexImage = &glGetTexImageNULL;
         getTexLevelParameterfv = &glGetTexLevelParameterfvNULL;
         getTexLevelParameteriv = &glGetTexLevelParameterivNULL;
-        getTexParameterfv      = &glGetTexParameterfvNULL;
-        getTexParameteriv      = &glGetTexParameterivNULL;
-        hint                   = &glHintNULL;
-        isEnabled              = &glIsEnabledNULL;
-        lineWidth              = &glLineWidthNULL;
-        logicOp                = &glLogicOpNULL;
-        pixelStoref            = &glPixelStorefNULL;
-        pixelStorei            = &glPixelStoreiNULL;
-        pointSize              = &glPointSizeNULL;
-        polygonMode            = &glPolygonModeNULL;
-        readBuffer             = &glReadBufferNULL;
-        readPixels             = &glReadPixelsNULL;
-        scissor                = &glScissorNULL;
-        stencilFunc            = &glStencilFuncNULL;
-        stencilMask            = &glStencilMaskNULL;
-        stencilOp              = &glStencilOpNULL;
-        texImage1D             = &glTexImage1DNULL;
-        texImage2D             = &glTexImage2DNULL;
-        texParameterf          = &glTexParameterfNULL;
-        texParameterfv         = &glTexParameterfvNULL;
-        texParameteri          = &glTexParameteriNULL;
-        texParameteriv         = &glTexParameterivNULL;
-        viewport               = &glViewportNULL;
+        getTexParameterfv = &glGetTexParameterfvNULL;
+        getTexParameteriv = &glGetTexParameterivNULL;
+        hint = &glHintNULL;
+        isEnabled = &glIsEnabledNULL;
+        lineWidth = &glLineWidthNULL;
+        logicOp = &glLogicOpNULL;
+        pixelStoref = &glPixelStorefNULL;
+        pixelStorei = &glPixelStoreiNULL;
+        pointSize = &glPointSizeNULL;
+        polygonMode = &glPolygonModeNULL;
+        readBuffer = &glReadBufferNULL;
+        readPixels = &glReadPixelsNULL;
+        scissor = &glScissorNULL;
+        stencilFunc = &glStencilFuncNULL;
+        stencilMask = &glStencilMaskNULL;
+        stencilOp = &glStencilOpNULL;
+        texImage1D = &glTexImage1DNULL;
+        texImage2D = &glTexImage2DNULL;
+        texParameterf = &glTexParameterfNULL;
+        texParameterfv = &glTexParameterfvNULL;
+        texParameteri = &glTexParameteriNULL;
+        texParameteriv = &glTexParameterivNULL;
+        viewport = &glViewportNULL;
     }
 
     if (version >= gl::Version(1, 1))
     {
-        bindTexture       = &glBindTextureNULL;
-        copyTexImage1D    = &glCopyTexImage1DNULL;
-        copyTexImage2D    = &glCopyTexImage2DNULL;
+        bindTexture = &glBindTextureNULL;
+        copyTexImage1D = &glCopyTexImage1DNULL;
+        copyTexImage2D = &glCopyTexImage2DNULL;
         copyTexSubImage1D = &glCopyTexSubImage1DNULL;
         copyTexSubImage2D = &glCopyTexSubImage2DNULL;
-        deleteTextures    = &glDeleteTexturesNULL;
-        drawArrays        = &glDrawArraysNULL;
-        drawElements      = &glDrawElementsNULL;
-        genTextures       = &glGenTexturesNULL;
-        isTexture         = &glIsTextureNULL;
-        polygonOffset     = &glPolygonOffsetNULL;
-        texSubImage1D     = &glTexSubImage1DNULL;
-        texSubImage2D     = &glTexSubImage2DNULL;
+        deleteTextures = &glDeleteTexturesNULL;
+        drawArrays = &glDrawArraysNULL;
+        drawElements = &glDrawElementsNULL;
+        genTextures = &glGenTexturesNULL;
+        isTexture = &glIsTextureNULL;
+        polygonOffset = &glPolygonOffsetNULL;
+        texSubImage1D = &glTexSubImage1DNULL;
+        texSubImage2D = &glTexSubImage2DNULL;
     }
 
     if (version >= gl::Version(1, 2))
     {
         copyTexSubImage3D = &glCopyTexSubImage3DNULL;
         drawRangeElements = &glDrawRangeElementsNULL;
-        texImage3D        = &glTexImage3DNULL;
-        texSubImage3D     = &glTexSubImage3DNULL;
+        texImage3D = &glTexImage3DNULL;
+        texSubImage3D = &glTexSubImage3DNULL;
     }
 
     if (version >= gl::Version(1, 3))
     {
-        activeTexture           = &glActiveTextureNULL;
-        compressedTexImage1D    = &glCompressedTexImage1DNULL;
-        compressedTexImage2D    = &glCompressedTexImage2DNULL;
-        compressedTexImage3D    = &glCompressedTexImage3DNULL;
+        activeTexture = &glActiveTextureNULL;
+        compressedTexImage1D = &glCompressedTexImage1DNULL;
+        compressedTexImage2D = &glCompressedTexImage2DNULL;
+        compressedTexImage3D = &glCompressedTexImage3DNULL;
         compressedTexSubImage1D = &glCompressedTexSubImage1DNULL;
         compressedTexSubImage2D = &glCompressedTexSubImage2DNULL;
         compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
-        getCompressedTexImage   = &glGetCompressedTexImageNULL;
-        sampleCoverage          = &glSampleCoverageNULL;
+        getCompressedTexImage = &glGetCompressedTexImageNULL;
+        sampleCoverage = &glSampleCoverageNULL;
     }
 
     if (version >= gl::Version(1, 4))
     {
-        blendColor        = &glBlendColorNULL;
-        blendEquation     = &glBlendEquationNULL;
+        blendColor = &glBlendColorNULL;
+        blendEquation = &glBlendEquationNULL;
         blendFuncSeparate = &glBlendFuncSeparateNULL;
-        multiDrawArrays   = &glMultiDrawArraysNULL;
+        multiDrawArrays = &glMultiDrawArraysNULL;
         multiDrawElements = &glMultiDrawElementsNULL;
-        pointParameterf   = &glPointParameterfNULL;
-        pointParameterfv  = &glPointParameterfvNULL;
-        pointParameteri   = &glPointParameteriNULL;
-        pointParameteriv  = &glPointParameterivNULL;
+        pointParameterf = &glPointParameterfNULL;
+        pointParameterfv = &glPointParameterfvNULL;
+        pointParameteri = &glPointParameteriNULL;
+        pointParameteriv = &glPointParameterivNULL;
     }
 
     if (version >= gl::Version(1, 5))
     {
-        beginQuery           = &glBeginQueryNULL;
-        bindBuffer           = &glBindBufferNULL;
-        bufferData           = &glBufferDataNULL;
-        bufferSubData        = &glBufferSubDataNULL;
-        deleteBuffers        = &glDeleteBuffersNULL;
-        deleteQueries        = &glDeleteQueriesNULL;
-        endQuery             = &glEndQueryNULL;
-        genBuffers           = &glGenBuffersNULL;
-        genQueries           = &glGenQueriesNULL;
+        beginQuery = &glBeginQueryNULL;
+        bindBuffer = &glBindBufferNULL;
+        bufferData = &glBufferDataNULL;
+        bufferSubData = &glBufferSubDataNULL;
+        deleteBuffers = &glDeleteBuffersNULL;
+        deleteQueries = &glDeleteQueriesNULL;
+        endQuery = &glEndQueryNULL;
+        genBuffers = &glGenBuffersNULL;
+        genQueries = &glGenQueriesNULL;
         getBufferParameteriv = &glGetBufferParameterivNULL;
-        getBufferPointerv    = &glGetBufferPointervNULL;
-        getBufferSubData     = &glGetBufferSubDataNULL;
-        getQueryObjectiv     = &glGetQueryObjectivNULL;
-        getQueryObjectuiv    = &glGetQueryObjectuivNULL;
-        getQueryiv           = &glGetQueryivNULL;
-        isBuffer             = &glIsBufferNULL;
-        isQuery              = &glIsQueryNULL;
-        mapBuffer            = &glMapBufferNULL;
-        unmapBuffer          = &glUnmapBufferNULL;
+        getBufferPointerv = &glGetBufferPointervNULL;
+        getBufferSubData = &glGetBufferSubDataNULL;
+        getQueryObjectiv = &glGetQueryObjectivNULL;
+        getQueryObjectuiv = &glGetQueryObjectuivNULL;
+        getQueryiv = &glGetQueryivNULL;
+        isBuffer = &glIsBufferNULL;
+        isQuery = &glIsQueryNULL;
+        mapBuffer = &glMapBufferNULL;
+        unmapBuffer = &glUnmapBufferNULL;
     }
 
     if (version >= gl::Version(2, 0))
     {
-        attachShader             = &glAttachShaderNULL;
-        bindAttribLocation       = &glBindAttribLocationNULL;
-        blendEquationSeparate    = &glBlendEquationSeparateNULL;
-        compileShader            = &glCompileShaderNULL;
-        createProgram            = &glCreateProgramNULL;
-        createShader             = &glCreateShaderNULL;
-        deleteProgram            = &glDeleteProgramNULL;
-        deleteShader             = &glDeleteShaderNULL;
-        detachShader             = &glDetachShaderNULL;
+        attachShader = &glAttachShaderNULL;
+        bindAttribLocation = &glBindAttribLocationNULL;
+        blendEquationSeparate = &glBlendEquationSeparateNULL;
+        compileShader = &glCompileShaderNULL;
+        createProgram = &glCreateProgramNULL;
+        createShader = &glCreateShaderNULL;
+        deleteProgram = &glDeleteProgramNULL;
+        deleteShader = &glDeleteShaderNULL;
+        detachShader = &glDetachShaderNULL;
         disableVertexAttribArray = &glDisableVertexAttribArrayNULL;
-        drawBuffers              = &glDrawBuffersNULL;
-        enableVertexAttribArray  = &glEnableVertexAttribArrayNULL;
-        getActiveAttrib          = &glGetActiveAttribNULL;
-        getActiveUniform         = &glGetActiveUniformNULL;
-        getAttachedShaders       = &glGetAttachedShadersNULL;
-        getAttribLocation        = &glGetAttribLocationNULL;
-        getProgramInfoLog        = &glGetProgramInfoLogNULL;
-        getProgramiv             = &glGetProgramivNULL;
-        getShaderInfoLog         = &glGetShaderInfoLogNULL;
-        getShaderSource          = &glGetShaderSourceNULL;
-        getShaderiv              = &glGetShaderivNULL;
-        getUniformLocation       = &glGetUniformLocationNULL;
-        getUniformfv             = &glGetUniformfvNULL;
-        getUniformiv             = &glGetUniformivNULL;
-        getVertexAttribPointerv  = &glGetVertexAttribPointervNULL;
-        getVertexAttribdv        = &glGetVertexAttribdvNULL;
-        getVertexAttribfv        = &glGetVertexAttribfvNULL;
-        getVertexAttribiv        = &glGetVertexAttribivNULL;
-        isProgram                = &glIsProgramNULL;
-        isShader                 = &glIsShaderNULL;
-        linkProgram              = &glLinkProgramNULL;
-        shaderSource             = &glShaderSourceNULL;
-        stencilFuncSeparate      = &glStencilFuncSeparateNULL;
-        stencilMaskSeparate      = &glStencilMaskSeparateNULL;
-        stencilOpSeparate        = &glStencilOpSeparateNULL;
-        uniform1f                = &glUniform1fNULL;
-        uniform1fv               = &glUniform1fvNULL;
-        uniform1i                = &glUniform1iNULL;
-        uniform1iv               = &glUniform1ivNULL;
-        uniform2f                = &glUniform2fNULL;
-        uniform2fv               = &glUniform2fvNULL;
-        uniform2i                = &glUniform2iNULL;
-        uniform2iv               = &glUniform2ivNULL;
-        uniform3f                = &glUniform3fNULL;
-        uniform3fv               = &glUniform3fvNULL;
-        uniform3i                = &glUniform3iNULL;
-        uniform3iv               = &glUniform3ivNULL;
-        uniform4f                = &glUniform4fNULL;
-        uniform4fv               = &glUniform4fvNULL;
-        uniform4i                = &glUniform4iNULL;
-        uniform4iv               = &glUniform4ivNULL;
-        uniformMatrix2fv         = &glUniformMatrix2fvNULL;
-        uniformMatrix3fv         = &glUniformMatrix3fvNULL;
-        uniformMatrix4fv         = &glUniformMatrix4fvNULL;
-        useProgram               = &glUseProgramNULL;
-        validateProgram          = &glValidateProgramNULL;
-        vertexAttrib1d           = &glVertexAttrib1dNULL;
-        vertexAttrib1dv          = &glVertexAttrib1dvNULL;
-        vertexAttrib1f           = &glVertexAttrib1fNULL;
-        vertexAttrib1fv          = &glVertexAttrib1fvNULL;
-        vertexAttrib1s           = &glVertexAttrib1sNULL;
-        vertexAttrib1sv          = &glVertexAttrib1svNULL;
-        vertexAttrib2d           = &glVertexAttrib2dNULL;
-        vertexAttrib2dv          = &glVertexAttrib2dvNULL;
-        vertexAttrib2f           = &glVertexAttrib2fNULL;
-        vertexAttrib2fv          = &glVertexAttrib2fvNULL;
-        vertexAttrib2s           = &glVertexAttrib2sNULL;
-        vertexAttrib2sv          = &glVertexAttrib2svNULL;
-        vertexAttrib3d           = &glVertexAttrib3dNULL;
-        vertexAttrib3dv          = &glVertexAttrib3dvNULL;
-        vertexAttrib3f           = &glVertexAttrib3fNULL;
-        vertexAttrib3fv          = &glVertexAttrib3fvNULL;
-        vertexAttrib3s           = &glVertexAttrib3sNULL;
-        vertexAttrib3sv          = &glVertexAttrib3svNULL;
-        vertexAttrib4Nbv         = &glVertexAttrib4NbvNULL;
-        vertexAttrib4Niv         = &glVertexAttrib4NivNULL;
-        vertexAttrib4Nsv         = &glVertexAttrib4NsvNULL;
-        vertexAttrib4Nub         = &glVertexAttrib4NubNULL;
-        vertexAttrib4Nubv        = &glVertexAttrib4NubvNULL;
-        vertexAttrib4Nuiv        = &glVertexAttrib4NuivNULL;
-        vertexAttrib4Nusv        = &glVertexAttrib4NusvNULL;
-        vertexAttrib4bv          = &glVertexAttrib4bvNULL;
-        vertexAttrib4d           = &glVertexAttrib4dNULL;
-        vertexAttrib4dv          = &glVertexAttrib4dvNULL;
-        vertexAttrib4f           = &glVertexAttrib4fNULL;
-        vertexAttrib4fv          = &glVertexAttrib4fvNULL;
-        vertexAttrib4iv          = &glVertexAttrib4ivNULL;
-        vertexAttrib4s           = &glVertexAttrib4sNULL;
-        vertexAttrib4sv          = &glVertexAttrib4svNULL;
-        vertexAttrib4ubv         = &glVertexAttrib4ubvNULL;
-        vertexAttrib4uiv         = &glVertexAttrib4uivNULL;
-        vertexAttrib4usv         = &glVertexAttrib4usvNULL;
-        vertexAttribPointer      = &glVertexAttribPointerNULL;
+        drawBuffers = &glDrawBuffersNULL;
+        enableVertexAttribArray = &glEnableVertexAttribArrayNULL;
+        getActiveAttrib = &glGetActiveAttribNULL;
+        getActiveUniform = &glGetActiveUniformNULL;
+        getAttachedShaders = &glGetAttachedShadersNULL;
+        getAttribLocation = &glGetAttribLocationNULL;
+        getProgramInfoLog = &glGetProgramInfoLogNULL;
+        getProgramiv = &glGetProgramivNULL;
+        getShaderInfoLog = &glGetShaderInfoLogNULL;
+        getShaderSource = &glGetShaderSourceNULL;
+        getShaderiv = &glGetShaderivNULL;
+        getUniformLocation = &glGetUniformLocationNULL;
+        getUniformfv = &glGetUniformfvNULL;
+        getUniformiv = &glGetUniformivNULL;
+        getVertexAttribPointerv = &glGetVertexAttribPointervNULL;
+        getVertexAttribdv = &glGetVertexAttribdvNULL;
+        getVertexAttribfv = &glGetVertexAttribfvNULL;
+        getVertexAttribiv = &glGetVertexAttribivNULL;
+        isProgram = &glIsProgramNULL;
+        isShader = &glIsShaderNULL;
+        linkProgram = &glLinkProgramNULL;
+        shaderSource = &glShaderSourceNULL;
+        stencilFuncSeparate = &glStencilFuncSeparateNULL;
+        stencilMaskSeparate = &glStencilMaskSeparateNULL;
+        stencilOpSeparate = &glStencilOpSeparateNULL;
+        uniform1f = &glUniform1fNULL;
+        uniform1fv = &glUniform1fvNULL;
+        uniform1i = &glUniform1iNULL;
+        uniform1iv = &glUniform1ivNULL;
+        uniform2f = &glUniform2fNULL;
+        uniform2fv = &glUniform2fvNULL;
+        uniform2i = &glUniform2iNULL;
+        uniform2iv = &glUniform2ivNULL;
+        uniform3f = &glUniform3fNULL;
+        uniform3fv = &glUniform3fvNULL;
+        uniform3i = &glUniform3iNULL;
+        uniform3iv = &glUniform3ivNULL;
+        uniform4f = &glUniform4fNULL;
+        uniform4fv = &glUniform4fvNULL;
+        uniform4i = &glUniform4iNULL;
+        uniform4iv = &glUniform4ivNULL;
+        uniformMatrix2fv = &glUniformMatrix2fvNULL;
+        uniformMatrix3fv = &glUniformMatrix3fvNULL;
+        uniformMatrix4fv = &glUniformMatrix4fvNULL;
+        useProgram = &glUseProgramNULL;
+        validateProgram = &glValidateProgramNULL;
+        vertexAttrib1d = &glVertexAttrib1dNULL;
+        vertexAttrib1dv = &glVertexAttrib1dvNULL;
+        vertexAttrib1f = &glVertexAttrib1fNULL;
+        vertexAttrib1fv = &glVertexAttrib1fvNULL;
+        vertexAttrib1s = &glVertexAttrib1sNULL;
+        vertexAttrib1sv = &glVertexAttrib1svNULL;
+        vertexAttrib2d = &glVertexAttrib2dNULL;
+        vertexAttrib2dv = &glVertexAttrib2dvNULL;
+        vertexAttrib2f = &glVertexAttrib2fNULL;
+        vertexAttrib2fv = &glVertexAttrib2fvNULL;
+        vertexAttrib2s = &glVertexAttrib2sNULL;
+        vertexAttrib2sv = &glVertexAttrib2svNULL;
+        vertexAttrib3d = &glVertexAttrib3dNULL;
+        vertexAttrib3dv = &glVertexAttrib3dvNULL;
+        vertexAttrib3f = &glVertexAttrib3fNULL;
+        vertexAttrib3fv = &glVertexAttrib3fvNULL;
+        vertexAttrib3s = &glVertexAttrib3sNULL;
+        vertexAttrib3sv = &glVertexAttrib3svNULL;
+        vertexAttrib4Nbv = &glVertexAttrib4NbvNULL;
+        vertexAttrib4Niv = &glVertexAttrib4NivNULL;
+        vertexAttrib4Nsv = &glVertexAttrib4NsvNULL;
+        vertexAttrib4Nub = &glVertexAttrib4NubNULL;
+        vertexAttrib4Nubv = &glVertexAttrib4NubvNULL;
+        vertexAttrib4Nuiv = &glVertexAttrib4NuivNULL;
+        vertexAttrib4Nusv = &glVertexAttrib4NusvNULL;
+        vertexAttrib4bv = &glVertexAttrib4bvNULL;
+        vertexAttrib4d = &glVertexAttrib4dNULL;
+        vertexAttrib4dv = &glVertexAttrib4dvNULL;
+        vertexAttrib4f = &glVertexAttrib4fNULL;
+        vertexAttrib4fv = &glVertexAttrib4fvNULL;
+        vertexAttrib4iv = &glVertexAttrib4ivNULL;
+        vertexAttrib4s = &glVertexAttrib4sNULL;
+        vertexAttrib4sv = &glVertexAttrib4svNULL;
+        vertexAttrib4ubv = &glVertexAttrib4ubvNULL;
+        vertexAttrib4uiv = &glVertexAttrib4uivNULL;
+        vertexAttrib4usv = &glVertexAttrib4usvNULL;
+        vertexAttribPointer = &glVertexAttribPointerNULL;
     }
 
     if (version >= gl::Version(2, 1))
@@ -2980,504 +2969,503 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (version >= gl::Version(3, 0))
     {
-        beginConditionalRender              = &glBeginConditionalRenderNULL;
-        beginTransformFeedback              = &glBeginTransformFeedbackNULL;
-        bindBufferBase                      = &glBindBufferBaseNULL;
-        bindBufferRange                     = &glBindBufferRangeNULL;
-        bindFragDataLocation                = &glBindFragDataLocationNULL;
-        bindFramebuffer                     = &glBindFramebufferNULL;
-        bindRenderbuffer                    = &glBindRenderbufferNULL;
-        bindVertexArray                     = &glBindVertexArrayNULL;
-        blitFramebuffer                     = &glBlitFramebufferNULL;
-        checkFramebufferStatus              = &glCheckFramebufferStatusNULL;
-        clampColor                          = &glClampColorNULL;
-        clearBufferfi                       = &glClearBufferfiNULL;
-        clearBufferfv                       = &glClearBufferfvNULL;
-        clearBufferiv                       = &glClearBufferivNULL;
-        clearBufferuiv                      = &glClearBufferuivNULL;
-        colorMaski                          = &glColorMaskiNULL;
-        deleteFramebuffers                  = &glDeleteFramebuffersNULL;
-        deleteRenderbuffers                 = &glDeleteRenderbuffersNULL;
-        deleteVertexArrays                  = &glDeleteVertexArraysNULL;
-        disablei                            = &glDisableiNULL;
-        enablei                             = &glEnableiNULL;
-        endConditionalRender                = &glEndConditionalRenderNULL;
-        endTransformFeedback                = &glEndTransformFeedbackNULL;
-        flushMappedBufferRange              = &glFlushMappedBufferRangeNULL;
-        framebufferRenderbuffer             = &glFramebufferRenderbufferNULL;
-        framebufferTexture1D                = &glFramebufferTexture1DNULL;
-        framebufferTexture2D                = &glFramebufferTexture2DNULL;
-        framebufferTexture3D                = &glFramebufferTexture3DNULL;
-        framebufferTextureLayer             = &glFramebufferTextureLayerNULL;
-        genFramebuffers                     = &glGenFramebuffersNULL;
-        genRenderbuffers                    = &glGenRenderbuffersNULL;
-        genVertexArrays                     = &glGenVertexArraysNULL;
-        generateMipmap                      = &glGenerateMipmapNULL;
-        getBooleani_v                       = &glGetBooleani_vNULL;
-        getFragDataLocation                 = &glGetFragDataLocationNULL;
+        beginConditionalRender = &glBeginConditionalRenderNULL;
+        beginTransformFeedback = &glBeginTransformFeedbackNULL;
+        bindBufferBase = &glBindBufferBaseNULL;
+        bindBufferRange = &glBindBufferRangeNULL;
+        bindFragDataLocation = &glBindFragDataLocationNULL;
+        bindFramebuffer = &glBindFramebufferNULL;
+        bindRenderbuffer = &glBindRenderbufferNULL;
+        bindVertexArray = &glBindVertexArrayNULL;
+        blitFramebuffer = &glBlitFramebufferNULL;
+        checkFramebufferStatus = &glCheckFramebufferStatusNULL;
+        clampColor = &glClampColorNULL;
+        clearBufferfi = &glClearBufferfiNULL;
+        clearBufferfv = &glClearBufferfvNULL;
+        clearBufferiv = &glClearBufferivNULL;
+        clearBufferuiv = &glClearBufferuivNULL;
+        colorMaski = &glColorMaskiNULL;
+        deleteFramebuffers = &glDeleteFramebuffersNULL;
+        deleteRenderbuffers = &glDeleteRenderbuffersNULL;
+        deleteVertexArrays = &glDeleteVertexArraysNULL;
+        disablei = &glDisableiNULL;
+        enablei = &glEnableiNULL;
+        endConditionalRender = &glEndConditionalRenderNULL;
+        endTransformFeedback = &glEndTransformFeedbackNULL;
+        flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
+        framebufferRenderbuffer = &glFramebufferRenderbufferNULL;
+        framebufferTexture1D = &glFramebufferTexture1DNULL;
+        framebufferTexture2D = &glFramebufferTexture2DNULL;
+        framebufferTexture3D = &glFramebufferTexture3DNULL;
+        framebufferTextureLayer = &glFramebufferTextureLayerNULL;
+        genFramebuffers = &glGenFramebuffersNULL;
+        genRenderbuffers = &glGenRenderbuffersNULL;
+        genVertexArrays = &glGenVertexArraysNULL;
+        generateMipmap = &glGenerateMipmapNULL;
+        getBooleani_v = &glGetBooleani_vNULL;
+        getFragDataLocation = &glGetFragDataLocationNULL;
         getFramebufferAttachmentParameteriv = &glGetFramebufferAttachmentParameterivNULL;
-        getIntegeri_v                       = &glGetIntegeri_vNULL;
-        getRenderbufferParameteriv          = &glGetRenderbufferParameterivNULL;
-        getStringi                          = &glGetStringiNULL;
-        getTexParameterIiv                  = &glGetTexParameterIivNULL;
-        getTexParameterIuiv                 = &glGetTexParameterIuivNULL;
-        getTransformFeedbackVarying         = &glGetTransformFeedbackVaryingNULL;
-        getUniformuiv                       = &glGetUniformuivNULL;
-        getVertexAttribIiv                  = &glGetVertexAttribIivNULL;
-        getVertexAttribIuiv                 = &glGetVertexAttribIuivNULL;
-        isEnabledi                          = &glIsEnablediNULL;
-        isFramebuffer                       = &glIsFramebufferNULL;
-        isRenderbuffer                      = &glIsRenderbufferNULL;
-        isVertexArray                       = &glIsVertexArrayNULL;
-        mapBufferRange                      = &glMapBufferRangeNULL;
-        renderbufferStorage                 = &glRenderbufferStorageNULL;
-        renderbufferStorageMultisample      = &glRenderbufferStorageMultisampleNULL;
-        texParameterIiv                     = &glTexParameterIivNULL;
-        texParameterIuiv                    = &glTexParameterIuivNULL;
-        transformFeedbackVaryings           = &glTransformFeedbackVaryingsNULL;
-        uniform1ui                          = &glUniform1uiNULL;
-        uniform1uiv                         = &glUniform1uivNULL;
-        uniform2ui                          = &glUniform2uiNULL;
-        uniform2uiv                         = &glUniform2uivNULL;
-        uniform3ui                          = &glUniform3uiNULL;
-        uniform3uiv                         = &glUniform3uivNULL;
-        uniform4ui                          = &glUniform4uiNULL;
-        uniform4uiv                         = &glUniform4uivNULL;
-        vertexAttribI1i                     = &glVertexAttribI1iNULL;
-        vertexAttribI1iv                    = &glVertexAttribI1ivNULL;
-        vertexAttribI1ui                    = &glVertexAttribI1uiNULL;
-        vertexAttribI1uiv                   = &glVertexAttribI1uivNULL;
-        vertexAttribI2i                     = &glVertexAttribI2iNULL;
-        vertexAttribI2iv                    = &glVertexAttribI2ivNULL;
-        vertexAttribI2ui                    = &glVertexAttribI2uiNULL;
-        vertexAttribI2uiv                   = &glVertexAttribI2uivNULL;
-        vertexAttribI3i                     = &glVertexAttribI3iNULL;
-        vertexAttribI3iv                    = &glVertexAttribI3ivNULL;
-        vertexAttribI3ui                    = &glVertexAttribI3uiNULL;
-        vertexAttribI3uiv                   = &glVertexAttribI3uivNULL;
-        vertexAttribI4bv                    = &glVertexAttribI4bvNULL;
-        vertexAttribI4i                     = &glVertexAttribI4iNULL;
-        vertexAttribI4iv                    = &glVertexAttribI4ivNULL;
-        vertexAttribI4sv                    = &glVertexAttribI4svNULL;
-        vertexAttribI4ubv                   = &glVertexAttribI4ubvNULL;
-        vertexAttribI4ui                    = &glVertexAttribI4uiNULL;
-        vertexAttribI4uiv                   = &glVertexAttribI4uivNULL;
-        vertexAttribI4usv                   = &glVertexAttribI4usvNULL;
-        vertexAttribIPointer                = &glVertexAttribIPointerNULL;
+        getIntegeri_v = &glGetIntegeri_vNULL;
+        getRenderbufferParameteriv = &glGetRenderbufferParameterivNULL;
+        getStringi = &glGetStringiNULL;
+        getTexParameterIiv = &glGetTexParameterIivNULL;
+        getTexParameterIuiv = &glGetTexParameterIuivNULL;
+        getTransformFeedbackVarying = &glGetTransformFeedbackVaryingNULL;
+        getUniformuiv = &glGetUniformuivNULL;
+        getVertexAttribIiv = &glGetVertexAttribIivNULL;
+        getVertexAttribIuiv = &glGetVertexAttribIuivNULL;
+        isEnabledi = &glIsEnablediNULL;
+        isFramebuffer = &glIsFramebufferNULL;
+        isRenderbuffer = &glIsRenderbufferNULL;
+        isVertexArray = &glIsVertexArrayNULL;
+        mapBufferRange = &glMapBufferRangeNULL;
+        renderbufferStorage = &glRenderbufferStorageNULL;
+        renderbufferStorageMultisample = &glRenderbufferStorageMultisampleNULL;
+        texParameterIiv = &glTexParameterIivNULL;
+        texParameterIuiv = &glTexParameterIuivNULL;
+        transformFeedbackVaryings = &glTransformFeedbackVaryingsNULL;
+        uniform1ui = &glUniform1uiNULL;
+        uniform1uiv = &glUniform1uivNULL;
+        uniform2ui = &glUniform2uiNULL;
+        uniform2uiv = &glUniform2uivNULL;
+        uniform3ui = &glUniform3uiNULL;
+        uniform3uiv = &glUniform3uivNULL;
+        uniform4ui = &glUniform4uiNULL;
+        uniform4uiv = &glUniform4uivNULL;
+        vertexAttribI1i = &glVertexAttribI1iNULL;
+        vertexAttribI1iv = &glVertexAttribI1ivNULL;
+        vertexAttribI1ui = &glVertexAttribI1uiNULL;
+        vertexAttribI1uiv = &glVertexAttribI1uivNULL;
+        vertexAttribI2i = &glVertexAttribI2iNULL;
+        vertexAttribI2iv = &glVertexAttribI2ivNULL;
+        vertexAttribI2ui = &glVertexAttribI2uiNULL;
+        vertexAttribI2uiv = &glVertexAttribI2uivNULL;
+        vertexAttribI3i = &glVertexAttribI3iNULL;
+        vertexAttribI3iv = &glVertexAttribI3ivNULL;
+        vertexAttribI3ui = &glVertexAttribI3uiNULL;
+        vertexAttribI3uiv = &glVertexAttribI3uivNULL;
+        vertexAttribI4bv = &glVertexAttribI4bvNULL;
+        vertexAttribI4i = &glVertexAttribI4iNULL;
+        vertexAttribI4iv = &glVertexAttribI4ivNULL;
+        vertexAttribI4sv = &glVertexAttribI4svNULL;
+        vertexAttribI4ubv = &glVertexAttribI4ubvNULL;
+        vertexAttribI4ui = &glVertexAttribI4uiNULL;
+        vertexAttribI4uiv = &glVertexAttribI4uivNULL;
+        vertexAttribI4usv = &glVertexAttribI4usvNULL;
+        vertexAttribIPointer = &glVertexAttribIPointerNULL;
     }
 
     if (version >= gl::Version(3, 1))
     {
-        copyBufferSubData         = &glCopyBufferSubDataNULL;
-        drawArraysInstanced       = &glDrawArraysInstancedNULL;
-        drawElementsInstanced     = &glDrawElementsInstancedNULL;
+        copyBufferSubData = &glCopyBufferSubDataNULL;
+        drawArraysInstanced = &glDrawArraysInstancedNULL;
+        drawElementsInstanced = &glDrawElementsInstancedNULL;
         getActiveUniformBlockName = &glGetActiveUniformBlockNameNULL;
-        getActiveUniformBlockiv   = &glGetActiveUniformBlockivNULL;
-        getActiveUniformName      = &glGetActiveUniformNameNULL;
-        getActiveUniformsiv       = &glGetActiveUniformsivNULL;
-        getUniformBlockIndex      = &glGetUniformBlockIndexNULL;
-        getUniformIndices         = &glGetUniformIndicesNULL;
-        primitiveRestartIndex     = &glPrimitiveRestartIndexNULL;
-        texBuffer                 = &glTexBufferNULL;
-        uniformBlockBinding       = &glUniformBlockBindingNULL;
+        getActiveUniformBlockiv = &glGetActiveUniformBlockivNULL;
+        getActiveUniformName = &glGetActiveUniformNameNULL;
+        getActiveUniformsiv = &glGetActiveUniformsivNULL;
+        getUniformBlockIndex = &glGetUniformBlockIndexNULL;
+        getUniformIndices = &glGetUniformIndicesNULL;
+        primitiveRestartIndex = &glPrimitiveRestartIndexNULL;
+        texBuffer = &glTexBufferNULL;
+        uniformBlockBinding = &glUniformBlockBindingNULL;
     }
 
     if (version >= gl::Version(3, 2))
     {
-        clientWaitSync                  = &glClientWaitSyncNULL;
-        deleteSync                      = &glDeleteSyncNULL;
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        clientWaitSync = &glClientWaitSyncNULL;
+        deleteSync = &glDeleteSyncNULL;
+        drawElementsBaseVertex = &glDrawElementsBaseVertexNULL;
         drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        fenceSync                       = &glFenceSyncNULL;
-        framebufferTexture              = &glFramebufferTextureNULL;
-        getBufferParameteri64v          = &glGetBufferParameteri64vNULL;
-        getInteger64i_v                 = &glGetInteger64i_vNULL;
-        getInteger64v                   = &glGetInteger64vNULL;
-        getMultisamplefv                = &glGetMultisamplefvNULL;
-        getSynciv                       = &glGetSyncivNULL;
-        isSync                          = &glIsSyncNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
-        provokingVertex                 = &glProvokingVertexNULL;
-        sampleMaski                     = &glSampleMaskiNULL;
-        texImage2DMultisample           = &glTexImage2DMultisampleNULL;
-        texImage3DMultisample           = &glTexImage3DMultisampleNULL;
-        waitSync                        = &glWaitSyncNULL;
+        drawRangeElementsBaseVertex = &glDrawRangeElementsBaseVertexNULL;
+        fenceSync = &glFenceSyncNULL;
+        framebufferTexture = &glFramebufferTextureNULL;
+        getBufferParameteri64v = &glGetBufferParameteri64vNULL;
+        getInteger64i_v = &glGetInteger64i_vNULL;
+        getInteger64v = &glGetInteger64vNULL;
+        getMultisamplefv = &glGetMultisamplefvNULL;
+        getSynciv = &glGetSyncivNULL;
+        isSync = &glIsSyncNULL;
+        multiDrawElementsBaseVertex = &glMultiDrawElementsBaseVertexNULL;
+        provokingVertex = &glProvokingVertexNULL;
+        sampleMaski = &glSampleMaskiNULL;
+        texImage2DMultisample = &glTexImage2DMultisampleNULL;
+        texImage3DMultisample = &glTexImage3DMultisampleNULL;
+        waitSync = &glWaitSyncNULL;
     }
 
     if (version >= gl::Version(3, 3))
     {
         bindFragDataLocationIndexed = &glBindFragDataLocationIndexedNULL;
-        bindSampler                 = &glBindSamplerNULL;
-        deleteSamplers              = &glDeleteSamplersNULL;
-        genSamplers                 = &glGenSamplersNULL;
-        getFragDataIndex            = &glGetFragDataIndexNULL;
-        getQueryObjecti64v          = &glGetQueryObjecti64vNULL;
-        getQueryObjectui64v         = &glGetQueryObjectui64vNULL;
-        getSamplerParameterIiv      = &glGetSamplerParameterIivNULL;
-        getSamplerParameterIuiv     = &glGetSamplerParameterIuivNULL;
-        getSamplerParameterfv       = &glGetSamplerParameterfvNULL;
-        getSamplerParameteriv       = &glGetSamplerParameterivNULL;
-        isSampler                   = &glIsSamplerNULL;
-        queryCounter                = &glQueryCounterNULL;
-        samplerParameterIiv         = &glSamplerParameterIivNULL;
-        samplerParameterIuiv        = &glSamplerParameterIuivNULL;
-        samplerParameterf           = &glSamplerParameterfNULL;
-        samplerParameterfv          = &glSamplerParameterfvNULL;
-        samplerParameteri           = &glSamplerParameteriNULL;
-        samplerParameteriv          = &glSamplerParameterivNULL;
-        vertexAttribDivisor         = &glVertexAttribDivisorNULL;
-        vertexAttribP1ui            = &glVertexAttribP1uiNULL;
-        vertexAttribP1uiv           = &glVertexAttribP1uivNULL;
-        vertexAttribP2ui            = &glVertexAttribP2uiNULL;
-        vertexAttribP2uiv           = &glVertexAttribP2uivNULL;
-        vertexAttribP3ui            = &glVertexAttribP3uiNULL;
-        vertexAttribP3uiv           = &glVertexAttribP3uivNULL;
-        vertexAttribP4ui            = &glVertexAttribP4uiNULL;
-        vertexAttribP4uiv           = &glVertexAttribP4uivNULL;
+        bindSampler = &glBindSamplerNULL;
+        deleteSamplers = &glDeleteSamplersNULL;
+        genSamplers = &glGenSamplersNULL;
+        getFragDataIndex = &glGetFragDataIndexNULL;
+        getQueryObjecti64v = &glGetQueryObjecti64vNULL;
+        getQueryObjectui64v = &glGetQueryObjectui64vNULL;
+        getSamplerParameterIiv = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
+        getSamplerParameterfv = &glGetSamplerParameterfvNULL;
+        getSamplerParameteriv = &glGetSamplerParameterivNULL;
+        isSampler = &glIsSamplerNULL;
+        queryCounter = &glQueryCounterNULL;
+        samplerParameterIiv = &glSamplerParameterIivNULL;
+        samplerParameterIuiv = &glSamplerParameterIuivNULL;
+        samplerParameterf = &glSamplerParameterfNULL;
+        samplerParameterfv = &glSamplerParameterfvNULL;
+        samplerParameteri = &glSamplerParameteriNULL;
+        samplerParameteriv = &glSamplerParameterivNULL;
+        vertexAttribDivisor = &glVertexAttribDivisorNULL;
+        vertexAttribP1ui = &glVertexAttribP1uiNULL;
+        vertexAttribP1uiv = &glVertexAttribP1uivNULL;
+        vertexAttribP2ui = &glVertexAttribP2uiNULL;
+        vertexAttribP2uiv = &glVertexAttribP2uivNULL;
+        vertexAttribP3ui = &glVertexAttribP3uiNULL;
+        vertexAttribP3uiv = &glVertexAttribP3uivNULL;
+        vertexAttribP4ui = &glVertexAttribP4uiNULL;
+        vertexAttribP4uiv = &glVertexAttribP4uivNULL;
     }
 
     if (version >= gl::Version(4, 0))
     {
-        beginQueryIndexed              = &glBeginQueryIndexedNULL;
-        bindTransformFeedback          = &glBindTransformFeedbackNULL;
-        blendEquationSeparatei         = &glBlendEquationSeparateiNULL;
-        blendEquationi                 = &glBlendEquationiNULL;
-        blendFuncSeparatei             = &glBlendFuncSeparateiNULL;
-        blendFunci                     = &glBlendFunciNULL;
-        deleteTransformFeedbacks       = &glDeleteTransformFeedbacksNULL;
-        drawArraysIndirect             = &glDrawArraysIndirectNULL;
-        drawElementsIndirect           = &glDrawElementsIndirectNULL;
-        drawTransformFeedback          = &glDrawTransformFeedbackNULL;
-        drawTransformFeedbackStream    = &glDrawTransformFeedbackStreamNULL;
-        endQueryIndexed                = &glEndQueryIndexedNULL;
-        genTransformFeedbacks          = &glGenTransformFeedbacksNULL;
-        getActiveSubroutineName        = &glGetActiveSubroutineNameNULL;
+        beginQueryIndexed = &glBeginQueryIndexedNULL;
+        bindTransformFeedback = &glBindTransformFeedbackNULL;
+        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
+        blendEquationi = &glBlendEquationiNULL;
+        blendFuncSeparatei = &glBlendFuncSeparateiNULL;
+        blendFunci = &glBlendFunciNULL;
+        deleteTransformFeedbacks = &glDeleteTransformFeedbacksNULL;
+        drawArraysIndirect = &glDrawArraysIndirectNULL;
+        drawElementsIndirect = &glDrawElementsIndirectNULL;
+        drawTransformFeedback = &glDrawTransformFeedbackNULL;
+        drawTransformFeedbackStream = &glDrawTransformFeedbackStreamNULL;
+        endQueryIndexed = &glEndQueryIndexedNULL;
+        genTransformFeedbacks = &glGenTransformFeedbacksNULL;
+        getActiveSubroutineName = &glGetActiveSubroutineNameNULL;
         getActiveSubroutineUniformName = &glGetActiveSubroutineUniformNameNULL;
-        getActiveSubroutineUniformiv   = &glGetActiveSubroutineUniformivNULL;
-        getProgramStageiv              = &glGetProgramStageivNULL;
-        getQueryIndexediv              = &glGetQueryIndexedivNULL;
-        getSubroutineIndex             = &glGetSubroutineIndexNULL;
-        getSubroutineUniformLocation   = &glGetSubroutineUniformLocationNULL;
-        getUniformSubroutineuiv        = &glGetUniformSubroutineuivNULL;
-        getUniformdv                   = &glGetUniformdvNULL;
-        isTransformFeedback            = &glIsTransformFeedbackNULL;
-        minSampleShading               = &glMinSampleShadingNULL;
-        patchParameterfv               = &glPatchParameterfvNULL;
-        patchParameteri                = &glPatchParameteriNULL;
-        pauseTransformFeedback         = &glPauseTransformFeedbackNULL;
-        resumeTransformFeedback        = &glResumeTransformFeedbackNULL;
-        uniform1d                      = &glUniform1dNULL;
-        uniform1dv                     = &glUniform1dvNULL;
-        uniform2d                      = &glUniform2dNULL;
-        uniform2dv                     = &glUniform2dvNULL;
-        uniform3d                      = &glUniform3dNULL;
-        uniform3dv                     = &glUniform3dvNULL;
-        uniform4d                      = &glUniform4dNULL;
-        uniform4dv                     = &glUniform4dvNULL;
-        uniformMatrix2dv               = &glUniformMatrix2dvNULL;
-        uniformMatrix2x3dv             = &glUniformMatrix2x3dvNULL;
-        uniformMatrix2x4dv             = &glUniformMatrix2x4dvNULL;
-        uniformMatrix3dv               = &glUniformMatrix3dvNULL;
-        uniformMatrix3x2dv             = &glUniformMatrix3x2dvNULL;
-        uniformMatrix3x4dv             = &glUniformMatrix3x4dvNULL;
-        uniformMatrix4dv               = &glUniformMatrix4dvNULL;
-        uniformMatrix4x2dv             = &glUniformMatrix4x2dvNULL;
-        uniformMatrix4x3dv             = &glUniformMatrix4x3dvNULL;
-        uniformSubroutinesuiv          = &glUniformSubroutinesuivNULL;
+        getActiveSubroutineUniformiv = &glGetActiveSubroutineUniformivNULL;
+        getProgramStageiv = &glGetProgramStageivNULL;
+        getQueryIndexediv = &glGetQueryIndexedivNULL;
+        getSubroutineIndex = &glGetSubroutineIndexNULL;
+        getSubroutineUniformLocation = &glGetSubroutineUniformLocationNULL;
+        getUniformSubroutineuiv = &glGetUniformSubroutineuivNULL;
+        getUniformdv = &glGetUniformdvNULL;
+        isTransformFeedback = &glIsTransformFeedbackNULL;
+        minSampleShading = &glMinSampleShadingNULL;
+        patchParameterfv = &glPatchParameterfvNULL;
+        patchParameteri = &glPatchParameteriNULL;
+        pauseTransformFeedback = &glPauseTransformFeedbackNULL;
+        resumeTransformFeedback = &glResumeTransformFeedbackNULL;
+        uniform1d = &glUniform1dNULL;
+        uniform1dv = &glUniform1dvNULL;
+        uniform2d = &glUniform2dNULL;
+        uniform2dv = &glUniform2dvNULL;
+        uniform3d = &glUniform3dNULL;
+        uniform3dv = &glUniform3dvNULL;
+        uniform4d = &glUniform4dNULL;
+        uniform4dv = &glUniform4dvNULL;
+        uniformMatrix2dv = &glUniformMatrix2dvNULL;
+        uniformMatrix2x3dv = &glUniformMatrix2x3dvNULL;
+        uniformMatrix2x4dv = &glUniformMatrix2x4dvNULL;
+        uniformMatrix3dv = &glUniformMatrix3dvNULL;
+        uniformMatrix3x2dv = &glUniformMatrix3x2dvNULL;
+        uniformMatrix3x4dv = &glUniformMatrix3x4dvNULL;
+        uniformMatrix4dv = &glUniformMatrix4dvNULL;
+        uniformMatrix4x2dv = &glUniformMatrix4x2dvNULL;
+        uniformMatrix4x3dv = &glUniformMatrix4x3dvNULL;
+        uniformSubroutinesuiv = &glUniformSubroutinesuivNULL;
     }
 
     if (version >= gl::Version(4, 1))
     {
-        activeShaderProgram       = &glActiveShaderProgramNULL;
-        bindProgramPipeline       = &glBindProgramPipelineNULL;
-        clearDepthf               = &glClearDepthfNULL;
-        createShaderProgramv      = &glCreateShaderProgramvNULL;
-        deleteProgramPipelines    = &glDeleteProgramPipelinesNULL;
-        depthRangeArrayv          = &glDepthRangeArrayvNULL;
-        depthRangeIndexed         = &glDepthRangeIndexedNULL;
-        depthRangef               = &glDepthRangefNULL;
-        genProgramPipelines       = &glGenProgramPipelinesNULL;
-        getDoublei_v              = &glGetDoublei_vNULL;
-        getFloati_v               = &glGetFloati_vNULL;
-        getProgramBinary          = &glGetProgramBinaryNULL;
+        activeShaderProgram = &glActiveShaderProgramNULL;
+        bindProgramPipeline = &glBindProgramPipelineNULL;
+        clearDepthf = &glClearDepthfNULL;
+        createShaderProgramv = &glCreateShaderProgramvNULL;
+        deleteProgramPipelines = &glDeleteProgramPipelinesNULL;
+        depthRangeArrayv = &glDepthRangeArrayvNULL;
+        depthRangeIndexed = &glDepthRangeIndexedNULL;
+        depthRangef = &glDepthRangefNULL;
+        genProgramPipelines = &glGenProgramPipelinesNULL;
+        getDoublei_v = &glGetDoublei_vNULL;
+        getFloati_v = &glGetFloati_vNULL;
+        getProgramBinary = &glGetProgramBinaryNULL;
         getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
-        getProgramPipelineiv      = &glGetProgramPipelineivNULL;
-        getShaderPrecisionFormat  = &glGetShaderPrecisionFormatNULL;
-        getVertexAttribLdv        = &glGetVertexAttribLdvNULL;
-        isProgramPipeline         = &glIsProgramPipelineNULL;
-        programBinary             = &glProgramBinaryNULL;
-        programParameteri         = &glProgramParameteriNULL;
-        programUniform1d          = &glProgramUniform1dNULL;
-        programUniform1dv         = &glProgramUniform1dvNULL;
-        programUniform1f          = &glProgramUniform1fNULL;
-        programUniform1fv         = &glProgramUniform1fvNULL;
-        programUniform1i          = &glProgramUniform1iNULL;
-        programUniform1iv         = &glProgramUniform1ivNULL;
-        programUniform1ui         = &glProgramUniform1uiNULL;
-        programUniform1uiv        = &glProgramUniform1uivNULL;
-        programUniform2d          = &glProgramUniform2dNULL;
-        programUniform2dv         = &glProgramUniform2dvNULL;
-        programUniform2f          = &glProgramUniform2fNULL;
-        programUniform2fv         = &glProgramUniform2fvNULL;
-        programUniform2i          = &glProgramUniform2iNULL;
-        programUniform2iv         = &glProgramUniform2ivNULL;
-        programUniform2ui         = &glProgramUniform2uiNULL;
-        programUniform2uiv        = &glProgramUniform2uivNULL;
-        programUniform3d          = &glProgramUniform3dNULL;
-        programUniform3dv         = &glProgramUniform3dvNULL;
-        programUniform3f          = &glProgramUniform3fNULL;
-        programUniform3fv         = &glProgramUniform3fvNULL;
-        programUniform3i          = &glProgramUniform3iNULL;
-        programUniform3iv         = &glProgramUniform3ivNULL;
-        programUniform3ui         = &glProgramUniform3uiNULL;
-        programUniform3uiv        = &glProgramUniform3uivNULL;
-        programUniform4d          = &glProgramUniform4dNULL;
-        programUniform4dv         = &glProgramUniform4dvNULL;
-        programUniform4f          = &glProgramUniform4fNULL;
-        programUniform4fv         = &glProgramUniform4fvNULL;
-        programUniform4i          = &glProgramUniform4iNULL;
-        programUniform4iv         = &glProgramUniform4ivNULL;
-        programUniform4ui         = &glProgramUniform4uiNULL;
-        programUniform4uiv        = &glProgramUniform4uivNULL;
-        programUniformMatrix2dv   = &glProgramUniformMatrix2dvNULL;
-        programUniformMatrix2fv   = &glProgramUniformMatrix2fvNULL;
+        getProgramPipelineiv = &glGetProgramPipelineivNULL;
+        getShaderPrecisionFormat = &glGetShaderPrecisionFormatNULL;
+        getVertexAttribLdv = &glGetVertexAttribLdvNULL;
+        isProgramPipeline = &glIsProgramPipelineNULL;
+        programBinary = &glProgramBinaryNULL;
+        programParameteri = &glProgramParameteriNULL;
+        programUniform1d = &glProgramUniform1dNULL;
+        programUniform1dv = &glProgramUniform1dvNULL;
+        programUniform1f = &glProgramUniform1fNULL;
+        programUniform1fv = &glProgramUniform1fvNULL;
+        programUniform1i = &glProgramUniform1iNULL;
+        programUniform1iv = &glProgramUniform1ivNULL;
+        programUniform1ui = &glProgramUniform1uiNULL;
+        programUniform1uiv = &glProgramUniform1uivNULL;
+        programUniform2d = &glProgramUniform2dNULL;
+        programUniform2dv = &glProgramUniform2dvNULL;
+        programUniform2f = &glProgramUniform2fNULL;
+        programUniform2fv = &glProgramUniform2fvNULL;
+        programUniform2i = &glProgramUniform2iNULL;
+        programUniform2iv = &glProgramUniform2ivNULL;
+        programUniform2ui = &glProgramUniform2uiNULL;
+        programUniform2uiv = &glProgramUniform2uivNULL;
+        programUniform3d = &glProgramUniform3dNULL;
+        programUniform3dv = &glProgramUniform3dvNULL;
+        programUniform3f = &glProgramUniform3fNULL;
+        programUniform3fv = &glProgramUniform3fvNULL;
+        programUniform3i = &glProgramUniform3iNULL;
+        programUniform3iv = &glProgramUniform3ivNULL;
+        programUniform3ui = &glProgramUniform3uiNULL;
+        programUniform3uiv = &glProgramUniform3uivNULL;
+        programUniform4d = &glProgramUniform4dNULL;
+        programUniform4dv = &glProgramUniform4dvNULL;
+        programUniform4f = &glProgramUniform4fNULL;
+        programUniform4fv = &glProgramUniform4fvNULL;
+        programUniform4i = &glProgramUniform4iNULL;
+        programUniform4iv = &glProgramUniform4ivNULL;
+        programUniform4ui = &glProgramUniform4uiNULL;
+        programUniform4uiv = &glProgramUniform4uivNULL;
+        programUniformMatrix2dv = &glProgramUniformMatrix2dvNULL;
+        programUniformMatrix2fv = &glProgramUniformMatrix2fvNULL;
         programUniformMatrix2x3dv = &glProgramUniformMatrix2x3dvNULL;
         programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
         programUniformMatrix2x4dv = &glProgramUniformMatrix2x4dvNULL;
         programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
-        programUniformMatrix3dv   = &glProgramUniformMatrix3dvNULL;
-        programUniformMatrix3fv   = &glProgramUniformMatrix3fvNULL;
+        programUniformMatrix3dv = &glProgramUniformMatrix3dvNULL;
+        programUniformMatrix3fv = &glProgramUniformMatrix3fvNULL;
         programUniformMatrix3x2dv = &glProgramUniformMatrix3x2dvNULL;
         programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
         programUniformMatrix3x4dv = &glProgramUniformMatrix3x4dvNULL;
         programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
-        programUniformMatrix4dv   = &glProgramUniformMatrix4dvNULL;
-        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4dv = &glProgramUniformMatrix4dvNULL;
+        programUniformMatrix4fv = &glProgramUniformMatrix4fvNULL;
         programUniformMatrix4x2dv = &glProgramUniformMatrix4x2dvNULL;
         programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
         programUniformMatrix4x3dv = &glProgramUniformMatrix4x3dvNULL;
         programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
-        releaseShaderCompiler     = &glReleaseShaderCompilerNULL;
-        scissorArrayv             = &glScissorArrayvNULL;
-        scissorIndexed            = &glScissorIndexedNULL;
-        scissorIndexedv           = &glScissorIndexedvNULL;
-        shaderBinary              = &glShaderBinaryNULL;
-        useProgramStages          = &glUseProgramStagesNULL;
-        validateProgramPipeline   = &glValidateProgramPipelineNULL;
-        vertexAttribL1d           = &glVertexAttribL1dNULL;
-        vertexAttribL1dv          = &glVertexAttribL1dvNULL;
-        vertexAttribL2d           = &glVertexAttribL2dNULL;
-        vertexAttribL2dv          = &glVertexAttribL2dvNULL;
-        vertexAttribL3d           = &glVertexAttribL3dNULL;
-        vertexAttribL3dv          = &glVertexAttribL3dvNULL;
-        vertexAttribL4d           = &glVertexAttribL4dNULL;
-        vertexAttribL4dv          = &glVertexAttribL4dvNULL;
-        vertexAttribLPointer      = &glVertexAttribLPointerNULL;
-        viewportArrayv            = &glViewportArrayvNULL;
-        viewportIndexedf          = &glViewportIndexedfNULL;
-        viewportIndexedfv         = &glViewportIndexedfvNULL;
+        releaseShaderCompiler = &glReleaseShaderCompilerNULL;
+        scissorArrayv = &glScissorArrayvNULL;
+        scissorIndexed = &glScissorIndexedNULL;
+        scissorIndexedv = &glScissorIndexedvNULL;
+        shaderBinary = &glShaderBinaryNULL;
+        useProgramStages = &glUseProgramStagesNULL;
+        validateProgramPipeline = &glValidateProgramPipelineNULL;
+        vertexAttribL1d = &glVertexAttribL1dNULL;
+        vertexAttribL1dv = &glVertexAttribL1dvNULL;
+        vertexAttribL2d = &glVertexAttribL2dNULL;
+        vertexAttribL2dv = &glVertexAttribL2dvNULL;
+        vertexAttribL3d = &glVertexAttribL3dNULL;
+        vertexAttribL3dv = &glVertexAttribL3dvNULL;
+        vertexAttribL4d = &glVertexAttribL4dNULL;
+        vertexAttribL4dv = &glVertexAttribL4dvNULL;
+        vertexAttribLPointer = &glVertexAttribLPointerNULL;
+        viewportArrayv = &glViewportArrayvNULL;
+        viewportIndexedf = &glViewportIndexedfNULL;
+        viewportIndexedfv = &glViewportIndexedfvNULL;
     }
 
     if (version >= gl::Version(4, 2))
     {
-        bindImageTexture                  = &glBindImageTextureNULL;
-        drawArraysInstancedBaseInstance   = &glDrawArraysInstancedBaseInstanceNULL;
+        bindImageTexture = &glBindImageTextureNULL;
+        drawArraysInstancedBaseInstance = &glDrawArraysInstancedBaseInstanceNULL;
         drawElementsInstancedBaseInstance = &glDrawElementsInstancedBaseInstanceNULL;
-        drawElementsInstancedBaseVertexBaseInstance =
-            &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
-        drawTransformFeedbackInstanced       = &glDrawTransformFeedbackInstancedNULL;
+        drawElementsInstancedBaseVertexBaseInstance = &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
+        drawTransformFeedbackInstanced = &glDrawTransformFeedbackInstancedNULL;
         drawTransformFeedbackStreamInstanced = &glDrawTransformFeedbackStreamInstancedNULL;
-        getActiveAtomicCounterBufferiv       = &glGetActiveAtomicCounterBufferivNULL;
-        getInternalformativ                  = &glGetInternalformativNULL;
-        memoryBarrier                        = &glMemoryBarrierNULL;
-        texStorage1D                         = &glTexStorage1DNULL;
-        texStorage2D                         = &glTexStorage2DNULL;
-        texStorage3D                         = &glTexStorage3DNULL;
+        getActiveAtomicCounterBufferiv = &glGetActiveAtomicCounterBufferivNULL;
+        getInternalformativ = &glGetInternalformativNULL;
+        memoryBarrier = &glMemoryBarrierNULL;
+        texStorage1D = &glTexStorage1DNULL;
+        texStorage2D = &glTexStorage2DNULL;
+        texStorage3D = &glTexStorage3DNULL;
     }
 
     if (version >= gl::Version(4, 3))
     {
-        bindVertexBuffer                = &glBindVertexBufferNULL;
-        clearBufferData                 = &glClearBufferDataNULL;
-        clearBufferSubData              = &glClearBufferSubDataNULL;
-        copyImageSubData                = &glCopyImageSubDataNULL;
-        debugMessageCallback            = &glDebugMessageCallbackNULL;
-        debugMessageControl             = &glDebugMessageControlNULL;
-        debugMessageInsert              = &glDebugMessageInsertNULL;
-        dispatchCompute                 = &glDispatchComputeNULL;
-        dispatchComputeIndirect         = &glDispatchComputeIndirectNULL;
-        framebufferParameteri           = &glFramebufferParameteriNULL;
-        getDebugMessageLog              = &glGetDebugMessageLogNULL;
-        getFramebufferParameteriv       = &glGetFramebufferParameterivNULL;
-        getInternalformati64v           = &glGetInternalformati64vNULL;
-        getObjectLabel                  = &glGetObjectLabelNULL;
-        getObjectPtrLabel               = &glGetObjectPtrLabelNULL;
-        getPointerv                     = &glGetPointervNULL;
-        getProgramInterfaceiv           = &glGetProgramInterfaceivNULL;
-        getProgramResourceIndex         = &glGetProgramResourceIndexNULL;
-        getProgramResourceLocation      = &glGetProgramResourceLocationNULL;
+        bindVertexBuffer = &glBindVertexBufferNULL;
+        clearBufferData = &glClearBufferDataNULL;
+        clearBufferSubData = &glClearBufferSubDataNULL;
+        copyImageSubData = &glCopyImageSubDataNULL;
+        debugMessageCallback = &glDebugMessageCallbackNULL;
+        debugMessageControl = &glDebugMessageControlNULL;
+        debugMessageInsert = &glDebugMessageInsertNULL;
+        dispatchCompute = &glDispatchComputeNULL;
+        dispatchComputeIndirect = &glDispatchComputeIndirectNULL;
+        framebufferParameteri = &glFramebufferParameteriNULL;
+        getDebugMessageLog = &glGetDebugMessageLogNULL;
+        getFramebufferParameteriv = &glGetFramebufferParameterivNULL;
+        getInternalformati64v = &glGetInternalformati64vNULL;
+        getObjectLabel = &glGetObjectLabelNULL;
+        getObjectPtrLabel = &glGetObjectPtrLabelNULL;
+        getPointerv = &glGetPointervNULL;
+        getProgramInterfaceiv = &glGetProgramInterfaceivNULL;
+        getProgramResourceIndex = &glGetProgramResourceIndexNULL;
+        getProgramResourceLocation = &glGetProgramResourceLocationNULL;
         getProgramResourceLocationIndex = &glGetProgramResourceLocationIndexNULL;
-        getProgramResourceName          = &glGetProgramResourceNameNULL;
-        getProgramResourceiv            = &glGetProgramResourceivNULL;
-        invalidateBufferData            = &glInvalidateBufferDataNULL;
-        invalidateBufferSubData         = &glInvalidateBufferSubDataNULL;
-        invalidateFramebuffer           = &glInvalidateFramebufferNULL;
-        invalidateSubFramebuffer        = &glInvalidateSubFramebufferNULL;
-        invalidateTexImage              = &glInvalidateTexImageNULL;
-        invalidateTexSubImage           = &glInvalidateTexSubImageNULL;
-        multiDrawArraysIndirect         = &glMultiDrawArraysIndirectNULL;
-        multiDrawElementsIndirect       = &glMultiDrawElementsIndirectNULL;
-        objectLabel                     = &glObjectLabelNULL;
-        objectPtrLabel                  = &glObjectPtrLabelNULL;
-        popDebugGroup                   = &glPopDebugGroupNULL;
-        pushDebugGroup                  = &glPushDebugGroupNULL;
-        shaderStorageBlockBinding       = &glShaderStorageBlockBindingNULL;
-        texBufferRange                  = &glTexBufferRangeNULL;
-        texStorage2DMultisample         = &glTexStorage2DMultisampleNULL;
-        texStorage3DMultisample         = &glTexStorage3DMultisampleNULL;
-        textureView                     = &glTextureViewNULL;
-        vertexAttribBinding             = &glVertexAttribBindingNULL;
-        vertexAttribFormat              = &glVertexAttribFormatNULL;
-        vertexAttribIFormat             = &glVertexAttribIFormatNULL;
-        vertexAttribLFormat             = &glVertexAttribLFormatNULL;
-        vertexBindingDivisor            = &glVertexBindingDivisorNULL;
+        getProgramResourceName = &glGetProgramResourceNameNULL;
+        getProgramResourceiv = &glGetProgramResourceivNULL;
+        invalidateBufferData = &glInvalidateBufferDataNULL;
+        invalidateBufferSubData = &glInvalidateBufferSubDataNULL;
+        invalidateFramebuffer = &glInvalidateFramebufferNULL;
+        invalidateSubFramebuffer = &glInvalidateSubFramebufferNULL;
+        invalidateTexImage = &glInvalidateTexImageNULL;
+        invalidateTexSubImage = &glInvalidateTexSubImageNULL;
+        multiDrawArraysIndirect = &glMultiDrawArraysIndirectNULL;
+        multiDrawElementsIndirect = &glMultiDrawElementsIndirectNULL;
+        objectLabel = &glObjectLabelNULL;
+        objectPtrLabel = &glObjectPtrLabelNULL;
+        popDebugGroup = &glPopDebugGroupNULL;
+        pushDebugGroup = &glPushDebugGroupNULL;
+        shaderStorageBlockBinding = &glShaderStorageBlockBindingNULL;
+        texBufferRange = &glTexBufferRangeNULL;
+        texStorage2DMultisample = &glTexStorage2DMultisampleNULL;
+        texStorage3DMultisample = &glTexStorage3DMultisampleNULL;
+        textureView = &glTextureViewNULL;
+        vertexAttribBinding = &glVertexAttribBindingNULL;
+        vertexAttribFormat = &glVertexAttribFormatNULL;
+        vertexAttribIFormat = &glVertexAttribIFormatNULL;
+        vertexAttribLFormat = &glVertexAttribLFormatNULL;
+        vertexBindingDivisor = &glVertexBindingDivisorNULL;
     }
 
     if (version >= gl::Version(4, 4))
     {
-        bindBuffersBase   = &glBindBuffersBaseNULL;
-        bindBuffersRange  = &glBindBuffersRangeNULL;
+        bindBuffersBase = &glBindBuffersBaseNULL;
+        bindBuffersRange = &glBindBuffersRangeNULL;
         bindImageTextures = &glBindImageTexturesNULL;
-        bindSamplers      = &glBindSamplersNULL;
-        bindTextures      = &glBindTexturesNULL;
+        bindSamplers = &glBindSamplersNULL;
+        bindTextures = &glBindTexturesNULL;
         bindVertexBuffers = &glBindVertexBuffersNULL;
-        bufferStorage     = &glBufferStorageNULL;
-        clearTexImage     = &glClearTexImageNULL;
-        clearTexSubImage  = &glClearTexSubImageNULL;
+        bufferStorage = &glBufferStorageNULL;
+        clearTexImage = &glClearTexImageNULL;
+        clearTexSubImage = &glClearTexSubImageNULL;
     }
 
     if (version >= gl::Version(4, 5))
     {
-        bindTextureUnit                          = &glBindTextureUnitNULL;
-        blitNamedFramebuffer                     = &glBlitNamedFramebufferNULL;
-        checkNamedFramebufferStatus              = &glCheckNamedFramebufferStatusNULL;
-        clearNamedBufferData                     = &glClearNamedBufferDataNULL;
-        clearNamedBufferSubData                  = &glClearNamedBufferSubDataNULL;
-        clearNamedFramebufferfi                  = &glClearNamedFramebufferfiNULL;
-        clearNamedFramebufferfv                  = &glClearNamedFramebufferfvNULL;
-        clearNamedFramebufferiv                  = &glClearNamedFramebufferivNULL;
-        clearNamedFramebufferuiv                 = &glClearNamedFramebufferuivNULL;
-        clipControl                              = &glClipControlNULL;
-        compressedTextureSubImage1D              = &glCompressedTextureSubImage1DNULL;
-        compressedTextureSubImage2D              = &glCompressedTextureSubImage2DNULL;
-        compressedTextureSubImage3D              = &glCompressedTextureSubImage3DNULL;
-        copyNamedBufferSubData                   = &glCopyNamedBufferSubDataNULL;
-        copyTextureSubImage1D                    = &glCopyTextureSubImage1DNULL;
-        copyTextureSubImage2D                    = &glCopyTextureSubImage2DNULL;
-        copyTextureSubImage3D                    = &glCopyTextureSubImage3DNULL;
-        createBuffers                            = &glCreateBuffersNULL;
-        createFramebuffers                       = &glCreateFramebuffersNULL;
-        createProgramPipelines                   = &glCreateProgramPipelinesNULL;
-        createQueries                            = &glCreateQueriesNULL;
-        createRenderbuffers                      = &glCreateRenderbuffersNULL;
-        createSamplers                           = &glCreateSamplersNULL;
-        createTextures                           = &glCreateTexturesNULL;
-        createTransformFeedbacks                 = &glCreateTransformFeedbacksNULL;
-        createVertexArrays                       = &glCreateVertexArraysNULL;
-        disableVertexArrayAttrib                 = &glDisableVertexArrayAttribNULL;
-        enableVertexArrayAttrib                  = &glEnableVertexArrayAttribNULL;
-        flushMappedNamedBufferRange              = &glFlushMappedNamedBufferRangeNULL;
-        generateTextureMipmap                    = &glGenerateTextureMipmapNULL;
-        getCompressedTextureImage                = &glGetCompressedTextureImageNULL;
-        getCompressedTextureSubImage             = &glGetCompressedTextureSubImageNULL;
-        getGraphicsResetStatus                   = &glGetGraphicsResetStatusNULL;
-        getNamedBufferParameteri64v              = &glGetNamedBufferParameteri64vNULL;
-        getNamedBufferParameteriv                = &glGetNamedBufferParameterivNULL;
-        getNamedBufferPointerv                   = &glGetNamedBufferPointervNULL;
-        getNamedBufferSubData                    = &glGetNamedBufferSubDataNULL;
+        bindTextureUnit = &glBindTextureUnitNULL;
+        blitNamedFramebuffer = &glBlitNamedFramebufferNULL;
+        checkNamedFramebufferStatus = &glCheckNamedFramebufferStatusNULL;
+        clearNamedBufferData = &glClearNamedBufferDataNULL;
+        clearNamedBufferSubData = &glClearNamedBufferSubDataNULL;
+        clearNamedFramebufferfi = &glClearNamedFramebufferfiNULL;
+        clearNamedFramebufferfv = &glClearNamedFramebufferfvNULL;
+        clearNamedFramebufferiv = &glClearNamedFramebufferivNULL;
+        clearNamedFramebufferuiv = &glClearNamedFramebufferuivNULL;
+        clipControl = &glClipControlNULL;
+        compressedTextureSubImage1D = &glCompressedTextureSubImage1DNULL;
+        compressedTextureSubImage2D = &glCompressedTextureSubImage2DNULL;
+        compressedTextureSubImage3D = &glCompressedTextureSubImage3DNULL;
+        copyNamedBufferSubData = &glCopyNamedBufferSubDataNULL;
+        copyTextureSubImage1D = &glCopyTextureSubImage1DNULL;
+        copyTextureSubImage2D = &glCopyTextureSubImage2DNULL;
+        copyTextureSubImage3D = &glCopyTextureSubImage3DNULL;
+        createBuffers = &glCreateBuffersNULL;
+        createFramebuffers = &glCreateFramebuffersNULL;
+        createProgramPipelines = &glCreateProgramPipelinesNULL;
+        createQueries = &glCreateQueriesNULL;
+        createRenderbuffers = &glCreateRenderbuffersNULL;
+        createSamplers = &glCreateSamplersNULL;
+        createTextures = &glCreateTexturesNULL;
+        createTransformFeedbacks = &glCreateTransformFeedbacksNULL;
+        createVertexArrays = &glCreateVertexArraysNULL;
+        disableVertexArrayAttrib = &glDisableVertexArrayAttribNULL;
+        enableVertexArrayAttrib = &glEnableVertexArrayAttribNULL;
+        flushMappedNamedBufferRange = &glFlushMappedNamedBufferRangeNULL;
+        generateTextureMipmap = &glGenerateTextureMipmapNULL;
+        getCompressedTextureImage = &glGetCompressedTextureImageNULL;
+        getCompressedTextureSubImage = &glGetCompressedTextureSubImageNULL;
+        getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
+        getNamedBufferParameteri64v = &glGetNamedBufferParameteri64vNULL;
+        getNamedBufferParameteriv = &glGetNamedBufferParameterivNULL;
+        getNamedBufferPointerv = &glGetNamedBufferPointervNULL;
+        getNamedBufferSubData = &glGetNamedBufferSubDataNULL;
         getNamedFramebufferAttachmentParameteriv = &glGetNamedFramebufferAttachmentParameterivNULL;
-        getNamedFramebufferParameteriv           = &glGetNamedFramebufferParameterivNULL;
-        getNamedRenderbufferParameteriv          = &glGetNamedRenderbufferParameterivNULL;
-        getQueryBufferObjecti64v                 = &glGetQueryBufferObjecti64vNULL;
-        getQueryBufferObjectiv                   = &glGetQueryBufferObjectivNULL;
-        getQueryBufferObjectui64v                = &glGetQueryBufferObjectui64vNULL;
-        getQueryBufferObjectuiv                  = &glGetQueryBufferObjectuivNULL;
-        getTextureImage                          = &glGetTextureImageNULL;
-        getTextureLevelParameterfv               = &glGetTextureLevelParameterfvNULL;
-        getTextureLevelParameteriv               = &glGetTextureLevelParameterivNULL;
-        getTextureParameterIiv                   = &glGetTextureParameterIivNULL;
-        getTextureParameterIuiv                  = &glGetTextureParameterIuivNULL;
-        getTextureParameterfv                    = &glGetTextureParameterfvNULL;
-        getTextureParameteriv                    = &glGetTextureParameterivNULL;
-        getTextureSubImage                       = &glGetTextureSubImageNULL;
-        getTransformFeedbacki64_v                = &glGetTransformFeedbacki64_vNULL;
-        getTransformFeedbacki_v                  = &glGetTransformFeedbacki_vNULL;
-        getTransformFeedbackiv                   = &glGetTransformFeedbackivNULL;
-        getVertexArrayIndexed64iv                = &glGetVertexArrayIndexed64ivNULL;
-        getVertexArrayIndexediv                  = &glGetVertexArrayIndexedivNULL;
-        getVertexArrayiv                         = &glGetVertexArrayivNULL;
-        getnCompressedTexImage                   = &glGetnCompressedTexImageNULL;
-        getnTexImage                             = &glGetnTexImageNULL;
-        getnUniformdv                            = &glGetnUniformdvNULL;
-        getnUniformfv                            = &glGetnUniformfvNULL;
-        getnUniformiv                            = &glGetnUniformivNULL;
-        getnUniformuiv                           = &glGetnUniformuivNULL;
-        invalidateNamedFramebufferData           = &glInvalidateNamedFramebufferDataNULL;
-        invalidateNamedFramebufferSubData        = &glInvalidateNamedFramebufferSubDataNULL;
-        mapNamedBuffer                           = &glMapNamedBufferNULL;
-        mapNamedBufferRange                      = &glMapNamedBufferRangeNULL;
-        memoryBarrierByRegion                    = &glMemoryBarrierByRegionNULL;
-        namedBufferData                          = &glNamedBufferDataNULL;
-        namedBufferStorage                       = &glNamedBufferStorageNULL;
-        namedBufferSubData                       = &glNamedBufferSubDataNULL;
-        namedFramebufferDrawBuffer               = &glNamedFramebufferDrawBufferNULL;
-        namedFramebufferDrawBuffers              = &glNamedFramebufferDrawBuffersNULL;
-        namedFramebufferParameteri               = &glNamedFramebufferParameteriNULL;
-        namedFramebufferReadBuffer               = &glNamedFramebufferReadBufferNULL;
-        namedFramebufferRenderbuffer             = &glNamedFramebufferRenderbufferNULL;
-        namedFramebufferTexture                  = &glNamedFramebufferTextureNULL;
-        namedFramebufferTextureLayer             = &glNamedFramebufferTextureLayerNULL;
-        namedRenderbufferStorage                 = &glNamedRenderbufferStorageNULL;
-        namedRenderbufferStorageMultisample      = &glNamedRenderbufferStorageMultisampleNULL;
-        readnPixels                              = &glReadnPixelsNULL;
-        textureBarrier                           = &glTextureBarrierNULL;
-        textureBuffer                            = &glTextureBufferNULL;
-        textureBufferRange                       = &glTextureBufferRangeNULL;
-        textureParameterIiv                      = &glTextureParameterIivNULL;
-        textureParameterIuiv                     = &glTextureParameterIuivNULL;
-        textureParameterf                        = &glTextureParameterfNULL;
-        textureParameterfv                       = &glTextureParameterfvNULL;
-        textureParameteri                        = &glTextureParameteriNULL;
-        textureParameteriv                       = &glTextureParameterivNULL;
-        textureStorage1D                         = &glTextureStorage1DNULL;
-        textureStorage2D                         = &glTextureStorage2DNULL;
-        textureStorage2DMultisample              = &glTextureStorage2DMultisampleNULL;
-        textureStorage3D                         = &glTextureStorage3DNULL;
-        textureStorage3DMultisample              = &glTextureStorage3DMultisampleNULL;
-        textureSubImage1D                        = &glTextureSubImage1DNULL;
-        textureSubImage2D                        = &glTextureSubImage2DNULL;
-        textureSubImage3D                        = &glTextureSubImage3DNULL;
-        transformFeedbackBufferBase              = &glTransformFeedbackBufferBaseNULL;
-        transformFeedbackBufferRange             = &glTransformFeedbackBufferRangeNULL;
-        unmapNamedBuffer                         = &glUnmapNamedBufferNULL;
-        vertexArrayAttribBinding                 = &glVertexArrayAttribBindingNULL;
-        vertexArrayAttribFormat                  = &glVertexArrayAttribFormatNULL;
-        vertexArrayAttribIFormat                 = &glVertexArrayAttribIFormatNULL;
-        vertexArrayAttribLFormat                 = &glVertexArrayAttribLFormatNULL;
-        vertexArrayBindingDivisor                = &glVertexArrayBindingDivisorNULL;
-        vertexArrayElementBuffer                 = &glVertexArrayElementBufferNULL;
-        vertexArrayVertexBuffer                  = &glVertexArrayVertexBufferNULL;
-        vertexArrayVertexBuffers                 = &glVertexArrayVertexBuffersNULL;
+        getNamedFramebufferParameteriv = &glGetNamedFramebufferParameterivNULL;
+        getNamedRenderbufferParameteriv = &glGetNamedRenderbufferParameterivNULL;
+        getQueryBufferObjecti64v = &glGetQueryBufferObjecti64vNULL;
+        getQueryBufferObjectiv = &glGetQueryBufferObjectivNULL;
+        getQueryBufferObjectui64v = &glGetQueryBufferObjectui64vNULL;
+        getQueryBufferObjectuiv = &glGetQueryBufferObjectuivNULL;
+        getTextureImage = &glGetTextureImageNULL;
+        getTextureLevelParameterfv = &glGetTextureLevelParameterfvNULL;
+        getTextureLevelParameteriv = &glGetTextureLevelParameterivNULL;
+        getTextureParameterIiv = &glGetTextureParameterIivNULL;
+        getTextureParameterIuiv = &glGetTextureParameterIuivNULL;
+        getTextureParameterfv = &glGetTextureParameterfvNULL;
+        getTextureParameteriv = &glGetTextureParameterivNULL;
+        getTextureSubImage = &glGetTextureSubImageNULL;
+        getTransformFeedbacki64_v = &glGetTransformFeedbacki64_vNULL;
+        getTransformFeedbacki_v = &glGetTransformFeedbacki_vNULL;
+        getTransformFeedbackiv = &glGetTransformFeedbackivNULL;
+        getVertexArrayIndexed64iv = &glGetVertexArrayIndexed64ivNULL;
+        getVertexArrayIndexediv = &glGetVertexArrayIndexedivNULL;
+        getVertexArrayiv = &glGetVertexArrayivNULL;
+        getnCompressedTexImage = &glGetnCompressedTexImageNULL;
+        getnTexImage = &glGetnTexImageNULL;
+        getnUniformdv = &glGetnUniformdvNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        getnUniformuiv = &glGetnUniformuivNULL;
+        invalidateNamedFramebufferData = &glInvalidateNamedFramebufferDataNULL;
+        invalidateNamedFramebufferSubData = &glInvalidateNamedFramebufferSubDataNULL;
+        mapNamedBuffer = &glMapNamedBufferNULL;
+        mapNamedBufferRange = &glMapNamedBufferRangeNULL;
+        memoryBarrierByRegion = &glMemoryBarrierByRegionNULL;
+        namedBufferData = &glNamedBufferDataNULL;
+        namedBufferStorage = &glNamedBufferStorageNULL;
+        namedBufferSubData = &glNamedBufferSubDataNULL;
+        namedFramebufferDrawBuffer = &glNamedFramebufferDrawBufferNULL;
+        namedFramebufferDrawBuffers = &glNamedFramebufferDrawBuffersNULL;
+        namedFramebufferParameteri = &glNamedFramebufferParameteriNULL;
+        namedFramebufferReadBuffer = &glNamedFramebufferReadBufferNULL;
+        namedFramebufferRenderbuffer = &glNamedFramebufferRenderbufferNULL;
+        namedFramebufferTexture = &glNamedFramebufferTextureNULL;
+        namedFramebufferTextureLayer = &glNamedFramebufferTextureLayerNULL;
+        namedRenderbufferStorage = &glNamedRenderbufferStorageNULL;
+        namedRenderbufferStorageMultisample = &glNamedRenderbufferStorageMultisampleNULL;
+        readnPixels = &glReadnPixelsNULL;
+        textureBarrier = &glTextureBarrierNULL;
+        textureBuffer = &glTextureBufferNULL;
+        textureBufferRange = &glTextureBufferRangeNULL;
+        textureParameterIiv = &glTextureParameterIivNULL;
+        textureParameterIuiv = &glTextureParameterIuivNULL;
+        textureParameterf = &glTextureParameterfNULL;
+        textureParameterfv = &glTextureParameterfvNULL;
+        textureParameteri = &glTextureParameteriNULL;
+        textureParameteriv = &glTextureParameterivNULL;
+        textureStorage1D = &glTextureStorage1DNULL;
+        textureStorage2D = &glTextureStorage2DNULL;
+        textureStorage2DMultisample = &glTextureStorage2DMultisampleNULL;
+        textureStorage3D = &glTextureStorage3DNULL;
+        textureStorage3DMultisample = &glTextureStorage3DMultisampleNULL;
+        textureSubImage1D = &glTextureSubImage1DNULL;
+        textureSubImage2D = &glTextureSubImage2DNULL;
+        textureSubImage3D = &glTextureSubImage3DNULL;
+        transformFeedbackBufferBase = &glTransformFeedbackBufferBaseNULL;
+        transformFeedbackBufferRange = &glTransformFeedbackBufferRangeNULL;
+        unmapNamedBuffer = &glUnmapNamedBufferNULL;
+        vertexArrayAttribBinding = &glVertexArrayAttribBindingNULL;
+        vertexArrayAttribFormat = &glVertexArrayAttribFormatNULL;
+        vertexArrayAttribIFormat = &glVertexArrayAttribIFormatNULL;
+        vertexArrayAttribLFormat = &glVertexArrayAttribLFormatNULL;
+        vertexArrayBindingDivisor = &glVertexArrayBindingDivisorNULL;
+        vertexArrayElementBuffer = &glVertexArrayElementBufferNULL;
+        vertexArrayVertexBuffer = &glVertexArrayVertexBufferNULL;
+        vertexArrayVertexBuffers = &glVertexArrayVertexBuffersNULL;
     }
 
     if (extensions.count("GL_ARB_ES2_compatibility") != 0)
     {
-        clearDepthf              = &glClearDepthfNULL;
-        depthRangef              = &glDepthRangefNULL;
+        clearDepthf = &glClearDepthfNULL;
+        depthRangef = &glDepthRangefNULL;
         getShaderPrecisionFormat = &glGetShaderPrecisionFormatNULL;
-        releaseShaderCompiler    = &glReleaseShaderCompilerNULL;
-        shaderBinary             = &glShaderBinaryNULL;
+        releaseShaderCompiler = &glReleaseShaderCompilerNULL;
+        shaderBinary = &glShaderBinaryNULL;
     }
 
     if (extensions.count("GL_ARB_ES3_1_compatibility") != 0)
@@ -3492,16 +3480,15 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_base_instance") != 0)
     {
-        drawArraysInstancedBaseInstance   = &glDrawArraysInstancedBaseInstanceNULL;
+        drawArraysInstancedBaseInstance = &glDrawArraysInstancedBaseInstanceNULL;
         drawElementsInstancedBaseInstance = &glDrawElementsInstancedBaseInstanceNULL;
-        drawElementsInstancedBaseVertexBaseInstance =
-            &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
+        drawElementsInstancedBaseVertexBaseInstance = &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
     }
 
     if (extensions.count("GL_ARB_blend_func_extended") != 0)
     {
         bindFragDataLocationIndexed = &glBindFragDataLocationIndexedNULL;
-        getFragDataIndex            = &glGetFragDataIndexNULL;
+        getFragDataIndex = &glGetFragDataIndexNULL;
     }
 
     if (extensions.count("GL_ARB_buffer_storage") != 0)
@@ -3511,13 +3498,13 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_clear_buffer_object") != 0)
     {
-        clearBufferData    = &glClearBufferDataNULL;
+        clearBufferData = &glClearBufferDataNULL;
         clearBufferSubData = &glClearBufferSubDataNULL;
     }
 
     if (extensions.count("GL_ARB_clear_texture") != 0)
     {
-        clearTexImage    = &glClearTexImageNULL;
+        clearTexImage = &glClearTexImageNULL;
         clearTexSubImage = &glClearTexSubImageNULL;
     }
 
@@ -3533,7 +3520,7 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_compute_shader") != 0)
     {
-        dispatchCompute         = &glDispatchComputeNULL;
+        dispatchCompute = &glDispatchComputeNULL;
         dispatchComputeIndirect = &glDispatchComputeIndirectNULL;
     }
 
@@ -3550,110 +3537,110 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     if (extensions.count("GL_ARB_debug_output") != 0)
     {
         debugMessageCallback = &glDebugMessageCallbackNULL;
-        debugMessageControl  = &glDebugMessageControlNULL;
-        debugMessageInsert   = &glDebugMessageInsertNULL;
-        getDebugMessageLog   = &glGetDebugMessageLogNULL;
+        debugMessageControl = &glDebugMessageControlNULL;
+        debugMessageInsert = &glDebugMessageInsertNULL;
+        getDebugMessageLog = &glGetDebugMessageLogNULL;
     }
 
     if (extensions.count("GL_ARB_direct_state_access") != 0)
     {
-        bindTextureUnit                          = &glBindTextureUnitNULL;
-        blitNamedFramebuffer                     = &glBlitNamedFramebufferNULL;
-        checkNamedFramebufferStatus              = &glCheckNamedFramebufferStatusNULL;
-        clearNamedBufferData                     = &glClearNamedBufferDataNULL;
-        clearNamedBufferSubData                  = &glClearNamedBufferSubDataNULL;
-        clearNamedFramebufferfi                  = &glClearNamedFramebufferfiNULL;
-        clearNamedFramebufferfv                  = &glClearNamedFramebufferfvNULL;
-        clearNamedFramebufferiv                  = &glClearNamedFramebufferivNULL;
-        clearNamedFramebufferuiv                 = &glClearNamedFramebufferuivNULL;
-        compressedTextureSubImage1D              = &glCompressedTextureSubImage1DNULL;
-        compressedTextureSubImage2D              = &glCompressedTextureSubImage2DNULL;
-        compressedTextureSubImage3D              = &glCompressedTextureSubImage3DNULL;
-        copyNamedBufferSubData                   = &glCopyNamedBufferSubDataNULL;
-        copyTextureSubImage1D                    = &glCopyTextureSubImage1DNULL;
-        copyTextureSubImage2D                    = &glCopyTextureSubImage2DNULL;
-        copyTextureSubImage3D                    = &glCopyTextureSubImage3DNULL;
-        createBuffers                            = &glCreateBuffersNULL;
-        createFramebuffers                       = &glCreateFramebuffersNULL;
-        createProgramPipelines                   = &glCreateProgramPipelinesNULL;
-        createQueries                            = &glCreateQueriesNULL;
-        createRenderbuffers                      = &glCreateRenderbuffersNULL;
-        createSamplers                           = &glCreateSamplersNULL;
-        createTextures                           = &glCreateTexturesNULL;
-        createTransformFeedbacks                 = &glCreateTransformFeedbacksNULL;
-        createVertexArrays                       = &glCreateVertexArraysNULL;
-        disableVertexArrayAttrib                 = &glDisableVertexArrayAttribNULL;
-        enableVertexArrayAttrib                  = &glEnableVertexArrayAttribNULL;
-        flushMappedNamedBufferRange              = &glFlushMappedNamedBufferRangeNULL;
-        generateTextureMipmap                    = &glGenerateTextureMipmapNULL;
-        getCompressedTextureImage                = &glGetCompressedTextureImageNULL;
-        getNamedBufferParameteri64v              = &glGetNamedBufferParameteri64vNULL;
-        getNamedBufferParameteriv                = &glGetNamedBufferParameterivNULL;
-        getNamedBufferPointerv                   = &glGetNamedBufferPointervNULL;
-        getNamedBufferSubData                    = &glGetNamedBufferSubDataNULL;
+        bindTextureUnit = &glBindTextureUnitNULL;
+        blitNamedFramebuffer = &glBlitNamedFramebufferNULL;
+        checkNamedFramebufferStatus = &glCheckNamedFramebufferStatusNULL;
+        clearNamedBufferData = &glClearNamedBufferDataNULL;
+        clearNamedBufferSubData = &glClearNamedBufferSubDataNULL;
+        clearNamedFramebufferfi = &glClearNamedFramebufferfiNULL;
+        clearNamedFramebufferfv = &glClearNamedFramebufferfvNULL;
+        clearNamedFramebufferiv = &glClearNamedFramebufferivNULL;
+        clearNamedFramebufferuiv = &glClearNamedFramebufferuivNULL;
+        compressedTextureSubImage1D = &glCompressedTextureSubImage1DNULL;
+        compressedTextureSubImage2D = &glCompressedTextureSubImage2DNULL;
+        compressedTextureSubImage3D = &glCompressedTextureSubImage3DNULL;
+        copyNamedBufferSubData = &glCopyNamedBufferSubDataNULL;
+        copyTextureSubImage1D = &glCopyTextureSubImage1DNULL;
+        copyTextureSubImage2D = &glCopyTextureSubImage2DNULL;
+        copyTextureSubImage3D = &glCopyTextureSubImage3DNULL;
+        createBuffers = &glCreateBuffersNULL;
+        createFramebuffers = &glCreateFramebuffersNULL;
+        createProgramPipelines = &glCreateProgramPipelinesNULL;
+        createQueries = &glCreateQueriesNULL;
+        createRenderbuffers = &glCreateRenderbuffersNULL;
+        createSamplers = &glCreateSamplersNULL;
+        createTextures = &glCreateTexturesNULL;
+        createTransformFeedbacks = &glCreateTransformFeedbacksNULL;
+        createVertexArrays = &glCreateVertexArraysNULL;
+        disableVertexArrayAttrib = &glDisableVertexArrayAttribNULL;
+        enableVertexArrayAttrib = &glEnableVertexArrayAttribNULL;
+        flushMappedNamedBufferRange = &glFlushMappedNamedBufferRangeNULL;
+        generateTextureMipmap = &glGenerateTextureMipmapNULL;
+        getCompressedTextureImage = &glGetCompressedTextureImageNULL;
+        getNamedBufferParameteri64v = &glGetNamedBufferParameteri64vNULL;
+        getNamedBufferParameteriv = &glGetNamedBufferParameterivNULL;
+        getNamedBufferPointerv = &glGetNamedBufferPointervNULL;
+        getNamedBufferSubData = &glGetNamedBufferSubDataNULL;
         getNamedFramebufferAttachmentParameteriv = &glGetNamedFramebufferAttachmentParameterivNULL;
-        getNamedFramebufferParameteriv           = &glGetNamedFramebufferParameterivNULL;
-        getNamedRenderbufferParameteriv          = &glGetNamedRenderbufferParameterivNULL;
-        getQueryBufferObjecti64v                 = &glGetQueryBufferObjecti64vNULL;
-        getQueryBufferObjectiv                   = &glGetQueryBufferObjectivNULL;
-        getQueryBufferObjectui64v                = &glGetQueryBufferObjectui64vNULL;
-        getQueryBufferObjectuiv                  = &glGetQueryBufferObjectuivNULL;
-        getTextureImage                          = &glGetTextureImageNULL;
-        getTextureLevelParameterfv               = &glGetTextureLevelParameterfvNULL;
-        getTextureLevelParameteriv               = &glGetTextureLevelParameterivNULL;
-        getTextureParameterIiv                   = &glGetTextureParameterIivNULL;
-        getTextureParameterIuiv                  = &glGetTextureParameterIuivNULL;
-        getTextureParameterfv                    = &glGetTextureParameterfvNULL;
-        getTextureParameteriv                    = &glGetTextureParameterivNULL;
-        getTransformFeedbacki64_v                = &glGetTransformFeedbacki64_vNULL;
-        getTransformFeedbacki_v                  = &glGetTransformFeedbacki_vNULL;
-        getTransformFeedbackiv                   = &glGetTransformFeedbackivNULL;
-        getVertexArrayIndexed64iv                = &glGetVertexArrayIndexed64ivNULL;
-        getVertexArrayIndexediv                  = &glGetVertexArrayIndexedivNULL;
-        getVertexArrayiv                         = &glGetVertexArrayivNULL;
-        invalidateNamedFramebufferData           = &glInvalidateNamedFramebufferDataNULL;
-        invalidateNamedFramebufferSubData        = &glInvalidateNamedFramebufferSubDataNULL;
-        mapNamedBuffer                           = &glMapNamedBufferNULL;
-        mapNamedBufferRange                      = &glMapNamedBufferRangeNULL;
-        namedBufferData                          = &glNamedBufferDataNULL;
-        namedBufferStorage                       = &glNamedBufferStorageNULL;
-        namedBufferSubData                       = &glNamedBufferSubDataNULL;
-        namedFramebufferDrawBuffer               = &glNamedFramebufferDrawBufferNULL;
-        namedFramebufferDrawBuffers              = &glNamedFramebufferDrawBuffersNULL;
-        namedFramebufferParameteri               = &glNamedFramebufferParameteriNULL;
-        namedFramebufferReadBuffer               = &glNamedFramebufferReadBufferNULL;
-        namedFramebufferRenderbuffer             = &glNamedFramebufferRenderbufferNULL;
-        namedFramebufferTexture                  = &glNamedFramebufferTextureNULL;
-        namedFramebufferTextureLayer             = &glNamedFramebufferTextureLayerNULL;
-        namedRenderbufferStorage                 = &glNamedRenderbufferStorageNULL;
-        namedRenderbufferStorageMultisample      = &glNamedRenderbufferStorageMultisampleNULL;
-        textureBuffer                            = &glTextureBufferNULL;
-        textureBufferRange                       = &glTextureBufferRangeNULL;
-        textureParameterIiv                      = &glTextureParameterIivNULL;
-        textureParameterIuiv                     = &glTextureParameterIuivNULL;
-        textureParameterf                        = &glTextureParameterfNULL;
-        textureParameterfv                       = &glTextureParameterfvNULL;
-        textureParameteri                        = &glTextureParameteriNULL;
-        textureParameteriv                       = &glTextureParameterivNULL;
-        textureStorage1D                         = &glTextureStorage1DNULL;
-        textureStorage2D                         = &glTextureStorage2DNULL;
-        textureStorage2DMultisample              = &glTextureStorage2DMultisampleNULL;
-        textureStorage3D                         = &glTextureStorage3DNULL;
-        textureStorage3DMultisample              = &glTextureStorage3DMultisampleNULL;
-        textureSubImage1D                        = &glTextureSubImage1DNULL;
-        textureSubImage2D                        = &glTextureSubImage2DNULL;
-        textureSubImage3D                        = &glTextureSubImage3DNULL;
-        transformFeedbackBufferBase              = &glTransformFeedbackBufferBaseNULL;
-        transformFeedbackBufferRange             = &glTransformFeedbackBufferRangeNULL;
-        unmapNamedBuffer                         = &glUnmapNamedBufferNULL;
-        vertexArrayAttribBinding                 = &glVertexArrayAttribBindingNULL;
-        vertexArrayAttribFormat                  = &glVertexArrayAttribFormatNULL;
-        vertexArrayAttribIFormat                 = &glVertexArrayAttribIFormatNULL;
-        vertexArrayAttribLFormat                 = &glVertexArrayAttribLFormatNULL;
-        vertexArrayBindingDivisor                = &glVertexArrayBindingDivisorNULL;
-        vertexArrayElementBuffer                 = &glVertexArrayElementBufferNULL;
-        vertexArrayVertexBuffer                  = &glVertexArrayVertexBufferNULL;
-        vertexArrayVertexBuffers                 = &glVertexArrayVertexBuffersNULL;
+        getNamedFramebufferParameteriv = &glGetNamedFramebufferParameterivNULL;
+        getNamedRenderbufferParameteriv = &glGetNamedRenderbufferParameterivNULL;
+        getQueryBufferObjecti64v = &glGetQueryBufferObjecti64vNULL;
+        getQueryBufferObjectiv = &glGetQueryBufferObjectivNULL;
+        getQueryBufferObjectui64v = &glGetQueryBufferObjectui64vNULL;
+        getQueryBufferObjectuiv = &glGetQueryBufferObjectuivNULL;
+        getTextureImage = &glGetTextureImageNULL;
+        getTextureLevelParameterfv = &glGetTextureLevelParameterfvNULL;
+        getTextureLevelParameteriv = &glGetTextureLevelParameterivNULL;
+        getTextureParameterIiv = &glGetTextureParameterIivNULL;
+        getTextureParameterIuiv = &glGetTextureParameterIuivNULL;
+        getTextureParameterfv = &glGetTextureParameterfvNULL;
+        getTextureParameteriv = &glGetTextureParameterivNULL;
+        getTransformFeedbacki64_v = &glGetTransformFeedbacki64_vNULL;
+        getTransformFeedbacki_v = &glGetTransformFeedbacki_vNULL;
+        getTransformFeedbackiv = &glGetTransformFeedbackivNULL;
+        getVertexArrayIndexed64iv = &glGetVertexArrayIndexed64ivNULL;
+        getVertexArrayIndexediv = &glGetVertexArrayIndexedivNULL;
+        getVertexArrayiv = &glGetVertexArrayivNULL;
+        invalidateNamedFramebufferData = &glInvalidateNamedFramebufferDataNULL;
+        invalidateNamedFramebufferSubData = &glInvalidateNamedFramebufferSubDataNULL;
+        mapNamedBuffer = &glMapNamedBufferNULL;
+        mapNamedBufferRange = &glMapNamedBufferRangeNULL;
+        namedBufferData = &glNamedBufferDataNULL;
+        namedBufferStorage = &glNamedBufferStorageNULL;
+        namedBufferSubData = &glNamedBufferSubDataNULL;
+        namedFramebufferDrawBuffer = &glNamedFramebufferDrawBufferNULL;
+        namedFramebufferDrawBuffers = &glNamedFramebufferDrawBuffersNULL;
+        namedFramebufferParameteri = &glNamedFramebufferParameteriNULL;
+        namedFramebufferReadBuffer = &glNamedFramebufferReadBufferNULL;
+        namedFramebufferRenderbuffer = &glNamedFramebufferRenderbufferNULL;
+        namedFramebufferTexture = &glNamedFramebufferTextureNULL;
+        namedFramebufferTextureLayer = &glNamedFramebufferTextureLayerNULL;
+        namedRenderbufferStorage = &glNamedRenderbufferStorageNULL;
+        namedRenderbufferStorageMultisample = &glNamedRenderbufferStorageMultisampleNULL;
+        textureBuffer = &glTextureBufferNULL;
+        textureBufferRange = &glTextureBufferRangeNULL;
+        textureParameterIiv = &glTextureParameterIivNULL;
+        textureParameterIuiv = &glTextureParameterIuivNULL;
+        textureParameterf = &glTextureParameterfNULL;
+        textureParameterfv = &glTextureParameterfvNULL;
+        textureParameteri = &glTextureParameteriNULL;
+        textureParameteriv = &glTextureParameterivNULL;
+        textureStorage1D = &glTextureStorage1DNULL;
+        textureStorage2D = &glTextureStorage2DNULL;
+        textureStorage2DMultisample = &glTextureStorage2DMultisampleNULL;
+        textureStorage3D = &glTextureStorage3DNULL;
+        textureStorage3DMultisample = &glTextureStorage3DMultisampleNULL;
+        textureSubImage1D = &glTextureSubImage1DNULL;
+        textureSubImage2D = &glTextureSubImage2DNULL;
+        textureSubImage3D = &glTextureSubImage3DNULL;
+        transformFeedbackBufferBase = &glTransformFeedbackBufferBaseNULL;
+        transformFeedbackBufferRange = &glTransformFeedbackBufferRangeNULL;
+        unmapNamedBuffer = &glUnmapNamedBufferNULL;
+        vertexArrayAttribBinding = &glVertexArrayAttribBindingNULL;
+        vertexArrayAttribFormat = &glVertexArrayAttribFormatNULL;
+        vertexArrayAttribIFormat = &glVertexArrayAttribIFormatNULL;
+        vertexArrayAttribLFormat = &glVertexArrayAttribLFormatNULL;
+        vertexArrayBindingDivisor = &glVertexArrayBindingDivisorNULL;
+        vertexArrayElementBuffer = &glVertexArrayElementBufferNULL;
+        vertexArrayVertexBuffer = &glVertexArrayVertexBufferNULL;
+        vertexArrayVertexBuffers = &glVertexArrayVertexBuffersNULL;
     }
 
     if (extensions.count("GL_ARB_draw_buffers") != 0)
@@ -3664,112 +3651,112 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     if (extensions.count("GL_ARB_draw_buffers_blend") != 0)
     {
         blendEquationSeparatei = &glBlendEquationSeparateiNULL;
-        blendEquationi         = &glBlendEquationiNULL;
-        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
-        blendFunci             = &glBlendFunciNULL;
+        blendEquationi = &glBlendEquationiNULL;
+        blendFuncSeparatei = &glBlendFuncSeparateiNULL;
+        blendFunci = &glBlendFunciNULL;
     }
 
     if (extensions.count("GL_ARB_draw_elements_base_vertex") != 0)
     {
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        drawElementsBaseVertex = &glDrawElementsBaseVertexNULL;
         drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
+        drawRangeElementsBaseVertex = &glDrawRangeElementsBaseVertexNULL;
+        multiDrawElementsBaseVertex = &glMultiDrawElementsBaseVertexNULL;
     }
 
     if (extensions.count("GL_ARB_draw_indirect") != 0)
     {
-        drawArraysIndirect   = &glDrawArraysIndirectNULL;
+        drawArraysIndirect = &glDrawArraysIndirectNULL;
         drawElementsIndirect = &glDrawElementsIndirectNULL;
     }
 
     if (extensions.count("GL_ARB_draw_instanced") != 0)
     {
-        drawArraysInstanced   = &glDrawArraysInstancedNULL;
+        drawArraysInstanced = &glDrawArraysInstancedNULL;
         drawElementsInstanced = &glDrawElementsInstancedNULL;
     }
 
     if (extensions.count("GL_ARB_fragment_program") != 0)
     {
         getProgramiv = &glGetProgramivNULL;
-        isProgram    = &glIsProgramNULL;
+        isProgram = &glIsProgramNULL;
     }
 
     if (extensions.count("GL_ARB_framebuffer_no_attachments") != 0)
     {
-        framebufferParameteri     = &glFramebufferParameteriNULL;
+        framebufferParameteri = &glFramebufferParameteriNULL;
         getFramebufferParameteriv = &glGetFramebufferParameterivNULL;
     }
 
     if (extensions.count("GL_ARB_framebuffer_object") != 0)
     {
-        bindFramebuffer                     = &glBindFramebufferNULL;
-        bindRenderbuffer                    = &glBindRenderbufferNULL;
-        blitFramebuffer                     = &glBlitFramebufferNULL;
-        checkFramebufferStatus              = &glCheckFramebufferStatusNULL;
-        deleteFramebuffers                  = &glDeleteFramebuffersNULL;
-        deleteRenderbuffers                 = &glDeleteRenderbuffersNULL;
-        framebufferRenderbuffer             = &glFramebufferRenderbufferNULL;
-        framebufferTexture1D                = &glFramebufferTexture1DNULL;
-        framebufferTexture2D                = &glFramebufferTexture2DNULL;
-        framebufferTexture3D                = &glFramebufferTexture3DNULL;
-        framebufferTextureLayer             = &glFramebufferTextureLayerNULL;
-        genFramebuffers                     = &glGenFramebuffersNULL;
-        genRenderbuffers                    = &glGenRenderbuffersNULL;
-        generateMipmap                      = &glGenerateMipmapNULL;
+        bindFramebuffer = &glBindFramebufferNULL;
+        bindRenderbuffer = &glBindRenderbufferNULL;
+        blitFramebuffer = &glBlitFramebufferNULL;
+        checkFramebufferStatus = &glCheckFramebufferStatusNULL;
+        deleteFramebuffers = &glDeleteFramebuffersNULL;
+        deleteRenderbuffers = &glDeleteRenderbuffersNULL;
+        framebufferRenderbuffer = &glFramebufferRenderbufferNULL;
+        framebufferTexture1D = &glFramebufferTexture1DNULL;
+        framebufferTexture2D = &glFramebufferTexture2DNULL;
+        framebufferTexture3D = &glFramebufferTexture3DNULL;
+        framebufferTextureLayer = &glFramebufferTextureLayerNULL;
+        genFramebuffers = &glGenFramebuffersNULL;
+        genRenderbuffers = &glGenRenderbuffersNULL;
+        generateMipmap = &glGenerateMipmapNULL;
         getFramebufferAttachmentParameteriv = &glGetFramebufferAttachmentParameterivNULL;
-        getRenderbufferParameteriv          = &glGetRenderbufferParameterivNULL;
-        isFramebuffer                       = &glIsFramebufferNULL;
-        isRenderbuffer                      = &glIsRenderbufferNULL;
-        renderbufferStorage                 = &glRenderbufferStorageNULL;
-        renderbufferStorageMultisample      = &glRenderbufferStorageMultisampleNULL;
+        getRenderbufferParameteriv = &glGetRenderbufferParameterivNULL;
+        isFramebuffer = &glIsFramebufferNULL;
+        isRenderbuffer = &glIsRenderbufferNULL;
+        renderbufferStorage = &glRenderbufferStorageNULL;
+        renderbufferStorageMultisample = &glRenderbufferStorageMultisampleNULL;
     }
 
     if (extensions.count("GL_ARB_geometry_shader4") != 0)
     {
-        framebufferTexture      = &glFramebufferTextureNULL;
+        framebufferTexture = &glFramebufferTextureNULL;
         framebufferTextureLayer = &glFramebufferTextureLayerNULL;
-        programParameteri       = &glProgramParameteriNULL;
+        programParameteri = &glProgramParameteriNULL;
     }
 
     if (extensions.count("GL_ARB_get_program_binary") != 0)
     {
-        getProgramBinary  = &glGetProgramBinaryNULL;
-        programBinary     = &glProgramBinaryNULL;
+        getProgramBinary = &glGetProgramBinaryNULL;
+        programBinary = &glProgramBinaryNULL;
         programParameteri = &glProgramParameteriNULL;
     }
 
     if (extensions.count("GL_ARB_get_texture_sub_image") != 0)
     {
         getCompressedTextureSubImage = &glGetCompressedTextureSubImageNULL;
-        getTextureSubImage           = &glGetTextureSubImageNULL;
+        getTextureSubImage = &glGetTextureSubImageNULL;
     }
 
     if (extensions.count("GL_ARB_gpu_shader_fp64") != 0)
     {
-        getUniformdv       = &glGetUniformdvNULL;
-        uniform1d          = &glUniform1dNULL;
-        uniform1dv         = &glUniform1dvNULL;
-        uniform2d          = &glUniform2dNULL;
-        uniform2dv         = &glUniform2dvNULL;
-        uniform3d          = &glUniform3dNULL;
-        uniform3dv         = &glUniform3dvNULL;
-        uniform4d          = &glUniform4dNULL;
-        uniform4dv         = &glUniform4dvNULL;
-        uniformMatrix2dv   = &glUniformMatrix2dvNULL;
+        getUniformdv = &glGetUniformdvNULL;
+        uniform1d = &glUniform1dNULL;
+        uniform1dv = &glUniform1dvNULL;
+        uniform2d = &glUniform2dNULL;
+        uniform2dv = &glUniform2dvNULL;
+        uniform3d = &glUniform3dNULL;
+        uniform3dv = &glUniform3dvNULL;
+        uniform4d = &glUniform4dNULL;
+        uniform4dv = &glUniform4dvNULL;
+        uniformMatrix2dv = &glUniformMatrix2dvNULL;
         uniformMatrix2x3dv = &glUniformMatrix2x3dvNULL;
         uniformMatrix2x4dv = &glUniformMatrix2x4dvNULL;
-        uniformMatrix3dv   = &glUniformMatrix3dvNULL;
+        uniformMatrix3dv = &glUniformMatrix3dvNULL;
         uniformMatrix3x2dv = &glUniformMatrix3x2dvNULL;
         uniformMatrix3x4dv = &glUniformMatrix3x4dvNULL;
-        uniformMatrix4dv   = &glUniformMatrix4dvNULL;
+        uniformMatrix4dv = &glUniformMatrix4dvNULL;
         uniformMatrix4x2dv = &glUniformMatrix4x2dvNULL;
         uniformMatrix4x3dv = &glUniformMatrix4x3dvNULL;
     }
 
     if (extensions.count("GL_ARB_imaging") != 0)
     {
-        blendColor    = &glBlendColorNULL;
+        blendColor = &glBlendColorNULL;
         blendEquation = &glBlendEquationNULL;
     }
 
@@ -3790,33 +3777,33 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_invalidate_subdata") != 0)
     {
-        invalidateBufferData     = &glInvalidateBufferDataNULL;
-        invalidateBufferSubData  = &glInvalidateBufferSubDataNULL;
-        invalidateFramebuffer    = &glInvalidateFramebufferNULL;
+        invalidateBufferData = &glInvalidateBufferDataNULL;
+        invalidateBufferSubData = &glInvalidateBufferSubDataNULL;
+        invalidateFramebuffer = &glInvalidateFramebufferNULL;
         invalidateSubFramebuffer = &glInvalidateSubFramebufferNULL;
-        invalidateTexImage       = &glInvalidateTexImageNULL;
-        invalidateTexSubImage    = &glInvalidateTexSubImageNULL;
+        invalidateTexImage = &glInvalidateTexImageNULL;
+        invalidateTexSubImage = &glInvalidateTexSubImageNULL;
     }
 
     if (extensions.count("GL_ARB_map_buffer_range") != 0)
     {
         flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
-        mapBufferRange         = &glMapBufferRangeNULL;
+        mapBufferRange = &glMapBufferRangeNULL;
     }
 
     if (extensions.count("GL_ARB_multi_bind") != 0)
     {
-        bindBuffersBase   = &glBindBuffersBaseNULL;
-        bindBuffersRange  = &glBindBuffersRangeNULL;
+        bindBuffersBase = &glBindBuffersBaseNULL;
+        bindBuffersRange = &glBindBuffersRangeNULL;
         bindImageTextures = &glBindImageTexturesNULL;
-        bindSamplers      = &glBindSamplersNULL;
-        bindTextures      = &glBindTexturesNULL;
+        bindSamplers = &glBindSamplersNULL;
+        bindTextures = &glBindTexturesNULL;
         bindVertexBuffers = &glBindVertexBuffersNULL;
     }
 
     if (extensions.count("GL_ARB_multi_draw_indirect") != 0)
     {
-        multiDrawArraysIndirect   = &glMultiDrawArraysIndirectNULL;
+        multiDrawArraysIndirect = &glMultiDrawArraysIndirectNULL;
         multiDrawElementsIndirect = &glMultiDrawElementsIndirectNULL;
     }
 
@@ -3832,30 +3819,30 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_occlusion_query") != 0)
     {
-        beginQuery        = &glBeginQueryNULL;
-        deleteQueries     = &glDeleteQueriesNULL;
-        endQuery          = &glEndQueryNULL;
-        genQueries        = &glGenQueriesNULL;
-        getQueryObjectiv  = &glGetQueryObjectivNULL;
+        beginQuery = &glBeginQueryNULL;
+        deleteQueries = &glDeleteQueriesNULL;
+        endQuery = &glEndQueryNULL;
+        genQueries = &glGenQueriesNULL;
+        getQueryObjectiv = &glGetQueryObjectivNULL;
         getQueryObjectuiv = &glGetQueryObjectuivNULL;
-        getQueryiv        = &glGetQueryivNULL;
-        isQuery           = &glIsQueryNULL;
+        getQueryiv = &glGetQueryivNULL;
+        isQuery = &glIsQueryNULL;
     }
 
     if (extensions.count("GL_ARB_point_parameters") != 0)
     {
-        pointParameterf  = &glPointParameterfNULL;
+        pointParameterf = &glPointParameterfNULL;
         pointParameterfv = &glPointParameterfvNULL;
     }
 
     if (extensions.count("GL_ARB_program_interface_query") != 0)
     {
-        getProgramInterfaceiv           = &glGetProgramInterfaceivNULL;
-        getProgramResourceIndex         = &glGetProgramResourceIndexNULL;
-        getProgramResourceLocation      = &glGetProgramResourceLocationNULL;
+        getProgramInterfaceiv = &glGetProgramInterfaceivNULL;
+        getProgramResourceIndex = &glGetProgramResourceIndexNULL;
+        getProgramResourceLocation = &glGetProgramResourceLocationNULL;
         getProgramResourceLocationIndex = &glGetProgramResourceLocationIndexNULL;
-        getProgramResourceName          = &glGetProgramResourceNameNULL;
-        getProgramResourceiv            = &glGetProgramResourceivNULL;
+        getProgramResourceName = &glGetProgramResourceNameNULL;
+        getProgramResourceiv = &glGetProgramResourceivNULL;
     }
 
     if (extensions.count("GL_ARB_provoking_vertex") != 0)
@@ -3867,12 +3854,12 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     {
         getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
         getnCompressedTexImage = &glGetnCompressedTexImageNULL;
-        getnTexImage           = &glGetnTexImageNULL;
-        getnUniformdv          = &glGetnUniformdvNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        getnUniformuiv         = &glGetnUniformuivNULL;
-        readnPixels            = &glReadnPixelsNULL;
+        getnTexImage = &glGetnTexImageNULL;
+        getnUniformdv = &glGetnUniformdvNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        getnUniformuiv = &glGetnUniformuivNULL;
+        readnPixels = &glReadnPixelsNULL;
     }
 
     if (extensions.count("GL_ARB_sample_shading") != 0)
@@ -3882,84 +3869,84 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_sampler_objects") != 0)
     {
-        bindSampler             = &glBindSamplerNULL;
-        deleteSamplers          = &glDeleteSamplersNULL;
-        genSamplers             = &glGenSamplersNULL;
-        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
+        bindSampler = &glBindSamplerNULL;
+        deleteSamplers = &glDeleteSamplersNULL;
+        genSamplers = &glGenSamplersNULL;
+        getSamplerParameterIiv = &glGetSamplerParameterIivNULL;
         getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
-        getSamplerParameterfv   = &glGetSamplerParameterfvNULL;
-        getSamplerParameteriv   = &glGetSamplerParameterivNULL;
-        isSampler               = &glIsSamplerNULL;
-        samplerParameterIiv     = &glSamplerParameterIivNULL;
-        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
-        samplerParameterf       = &glSamplerParameterfNULL;
-        samplerParameterfv      = &glSamplerParameterfvNULL;
-        samplerParameteri       = &glSamplerParameteriNULL;
-        samplerParameteriv      = &glSamplerParameterivNULL;
+        getSamplerParameterfv = &glGetSamplerParameterfvNULL;
+        getSamplerParameteriv = &glGetSamplerParameterivNULL;
+        isSampler = &glIsSamplerNULL;
+        samplerParameterIiv = &glSamplerParameterIivNULL;
+        samplerParameterIuiv = &glSamplerParameterIuivNULL;
+        samplerParameterf = &glSamplerParameterfNULL;
+        samplerParameterfv = &glSamplerParameterfvNULL;
+        samplerParameteri = &glSamplerParameteriNULL;
+        samplerParameteriv = &glSamplerParameterivNULL;
     }
 
     if (extensions.count("GL_ARB_separate_shader_objects") != 0)
     {
-        activeShaderProgram       = &glActiveShaderProgramNULL;
-        bindProgramPipeline       = &glBindProgramPipelineNULL;
-        createShaderProgramv      = &glCreateShaderProgramvNULL;
-        deleteProgramPipelines    = &glDeleteProgramPipelinesNULL;
-        genProgramPipelines       = &glGenProgramPipelinesNULL;
+        activeShaderProgram = &glActiveShaderProgramNULL;
+        bindProgramPipeline = &glBindProgramPipelineNULL;
+        createShaderProgramv = &glCreateShaderProgramvNULL;
+        deleteProgramPipelines = &glDeleteProgramPipelinesNULL;
+        genProgramPipelines = &glGenProgramPipelinesNULL;
         getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
-        getProgramPipelineiv      = &glGetProgramPipelineivNULL;
-        isProgramPipeline         = &glIsProgramPipelineNULL;
-        programUniform1d          = &glProgramUniform1dNULL;
-        programUniform1dv         = &glProgramUniform1dvNULL;
-        programUniform1f          = &glProgramUniform1fNULL;
-        programUniform1fv         = &glProgramUniform1fvNULL;
-        programUniform1i          = &glProgramUniform1iNULL;
-        programUniform1iv         = &glProgramUniform1ivNULL;
-        programUniform1ui         = &glProgramUniform1uiNULL;
-        programUniform1uiv        = &glProgramUniform1uivNULL;
-        programUniform2d          = &glProgramUniform2dNULL;
-        programUniform2dv         = &glProgramUniform2dvNULL;
-        programUniform2f          = &glProgramUniform2fNULL;
-        programUniform2fv         = &glProgramUniform2fvNULL;
-        programUniform2i          = &glProgramUniform2iNULL;
-        programUniform2iv         = &glProgramUniform2ivNULL;
-        programUniform2ui         = &glProgramUniform2uiNULL;
-        programUniform2uiv        = &glProgramUniform2uivNULL;
-        programUniform3d          = &glProgramUniform3dNULL;
-        programUniform3dv         = &glProgramUniform3dvNULL;
-        programUniform3f          = &glProgramUniform3fNULL;
-        programUniform3fv         = &glProgramUniform3fvNULL;
-        programUniform3i          = &glProgramUniform3iNULL;
-        programUniform3iv         = &glProgramUniform3ivNULL;
-        programUniform3ui         = &glProgramUniform3uiNULL;
-        programUniform3uiv        = &glProgramUniform3uivNULL;
-        programUniform4d          = &glProgramUniform4dNULL;
-        programUniform4dv         = &glProgramUniform4dvNULL;
-        programUniform4f          = &glProgramUniform4fNULL;
-        programUniform4fv         = &glProgramUniform4fvNULL;
-        programUniform4i          = &glProgramUniform4iNULL;
-        programUniform4iv         = &glProgramUniform4ivNULL;
-        programUniform4ui         = &glProgramUniform4uiNULL;
-        programUniform4uiv        = &glProgramUniform4uivNULL;
-        programUniformMatrix2dv   = &glProgramUniformMatrix2dvNULL;
-        programUniformMatrix2fv   = &glProgramUniformMatrix2fvNULL;
+        getProgramPipelineiv = &glGetProgramPipelineivNULL;
+        isProgramPipeline = &glIsProgramPipelineNULL;
+        programUniform1d = &glProgramUniform1dNULL;
+        programUniform1dv = &glProgramUniform1dvNULL;
+        programUniform1f = &glProgramUniform1fNULL;
+        programUniform1fv = &glProgramUniform1fvNULL;
+        programUniform1i = &glProgramUniform1iNULL;
+        programUniform1iv = &glProgramUniform1ivNULL;
+        programUniform1ui = &glProgramUniform1uiNULL;
+        programUniform1uiv = &glProgramUniform1uivNULL;
+        programUniform2d = &glProgramUniform2dNULL;
+        programUniform2dv = &glProgramUniform2dvNULL;
+        programUniform2f = &glProgramUniform2fNULL;
+        programUniform2fv = &glProgramUniform2fvNULL;
+        programUniform2i = &glProgramUniform2iNULL;
+        programUniform2iv = &glProgramUniform2ivNULL;
+        programUniform2ui = &glProgramUniform2uiNULL;
+        programUniform2uiv = &glProgramUniform2uivNULL;
+        programUniform3d = &glProgramUniform3dNULL;
+        programUniform3dv = &glProgramUniform3dvNULL;
+        programUniform3f = &glProgramUniform3fNULL;
+        programUniform3fv = &glProgramUniform3fvNULL;
+        programUniform3i = &glProgramUniform3iNULL;
+        programUniform3iv = &glProgramUniform3ivNULL;
+        programUniform3ui = &glProgramUniform3uiNULL;
+        programUniform3uiv = &glProgramUniform3uivNULL;
+        programUniform4d = &glProgramUniform4dNULL;
+        programUniform4dv = &glProgramUniform4dvNULL;
+        programUniform4f = &glProgramUniform4fNULL;
+        programUniform4fv = &glProgramUniform4fvNULL;
+        programUniform4i = &glProgramUniform4iNULL;
+        programUniform4iv = &glProgramUniform4ivNULL;
+        programUniform4ui = &glProgramUniform4uiNULL;
+        programUniform4uiv = &glProgramUniform4uivNULL;
+        programUniformMatrix2dv = &glProgramUniformMatrix2dvNULL;
+        programUniformMatrix2fv = &glProgramUniformMatrix2fvNULL;
         programUniformMatrix2x3dv = &glProgramUniformMatrix2x3dvNULL;
         programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
         programUniformMatrix2x4dv = &glProgramUniformMatrix2x4dvNULL;
         programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
-        programUniformMatrix3dv   = &glProgramUniformMatrix3dvNULL;
-        programUniformMatrix3fv   = &glProgramUniformMatrix3fvNULL;
+        programUniformMatrix3dv = &glProgramUniformMatrix3dvNULL;
+        programUniformMatrix3fv = &glProgramUniformMatrix3fvNULL;
         programUniformMatrix3x2dv = &glProgramUniformMatrix3x2dvNULL;
         programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
         programUniformMatrix3x4dv = &glProgramUniformMatrix3x4dvNULL;
         programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
-        programUniformMatrix4dv   = &glProgramUniformMatrix4dvNULL;
-        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4dv = &glProgramUniformMatrix4dvNULL;
+        programUniformMatrix4fv = &glProgramUniformMatrix4fvNULL;
         programUniformMatrix4x2dv = &glProgramUniformMatrix4x2dvNULL;
         programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
         programUniformMatrix4x3dv = &glProgramUniformMatrix4x3dvNULL;
         programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
-        useProgramStages          = &glUseProgramStagesNULL;
-        validateProgramPipeline   = &glValidateProgramPipelineNULL;
+        useProgramStages = &glUseProgramStagesNULL;
+        validateProgramPipeline = &glValidateProgramPipelineNULL;
     }
 
     if (extensions.count("GL_ARB_shader_atomic_counters") != 0)
@@ -3970,39 +3957,39 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     if (extensions.count("GL_ARB_shader_image_load_store") != 0)
     {
         bindImageTexture = &glBindImageTextureNULL;
-        memoryBarrier    = &glMemoryBarrierNULL;
+        memoryBarrier = &glMemoryBarrierNULL;
     }
 
     if (extensions.count("GL_ARB_shader_objects") != 0)
     {
-        compileShader      = &glCompileShaderNULL;
-        getActiveUniform   = &glGetActiveUniformNULL;
-        getShaderSource    = &glGetShaderSourceNULL;
+        compileShader = &glCompileShaderNULL;
+        getActiveUniform = &glGetActiveUniformNULL;
+        getShaderSource = &glGetShaderSourceNULL;
         getUniformLocation = &glGetUniformLocationNULL;
-        getUniformfv       = &glGetUniformfvNULL;
-        getUniformiv       = &glGetUniformivNULL;
-        linkProgram        = &glLinkProgramNULL;
-        shaderSource       = &glShaderSourceNULL;
-        uniform1f          = &glUniform1fNULL;
-        uniform1fv         = &glUniform1fvNULL;
-        uniform1i          = &glUniform1iNULL;
-        uniform1iv         = &glUniform1ivNULL;
-        uniform2f          = &glUniform2fNULL;
-        uniform2fv         = &glUniform2fvNULL;
-        uniform2i          = &glUniform2iNULL;
-        uniform2iv         = &glUniform2ivNULL;
-        uniform3f          = &glUniform3fNULL;
-        uniform3fv         = &glUniform3fvNULL;
-        uniform3i          = &glUniform3iNULL;
-        uniform3iv         = &glUniform3ivNULL;
-        uniform4f          = &glUniform4fNULL;
-        uniform4fv         = &glUniform4fvNULL;
-        uniform4i          = &glUniform4iNULL;
-        uniform4iv         = &glUniform4ivNULL;
-        uniformMatrix2fv   = &glUniformMatrix2fvNULL;
-        uniformMatrix3fv   = &glUniformMatrix3fvNULL;
-        uniformMatrix4fv   = &glUniformMatrix4fvNULL;
-        validateProgram    = &glValidateProgramNULL;
+        getUniformfv = &glGetUniformfvNULL;
+        getUniformiv = &glGetUniformivNULL;
+        linkProgram = &glLinkProgramNULL;
+        shaderSource = &glShaderSourceNULL;
+        uniform1f = &glUniform1fNULL;
+        uniform1fv = &glUniform1fvNULL;
+        uniform1i = &glUniform1iNULL;
+        uniform1iv = &glUniform1ivNULL;
+        uniform2f = &glUniform2fNULL;
+        uniform2fv = &glUniform2fvNULL;
+        uniform2i = &glUniform2iNULL;
+        uniform2iv = &glUniform2ivNULL;
+        uniform3f = &glUniform3fNULL;
+        uniform3fv = &glUniform3fvNULL;
+        uniform3i = &glUniform3iNULL;
+        uniform3iv = &glUniform3ivNULL;
+        uniform4f = &glUniform4fNULL;
+        uniform4fv = &glUniform4fvNULL;
+        uniform4i = &glUniform4iNULL;
+        uniform4iv = &glUniform4ivNULL;
+        uniformMatrix2fv = &glUniformMatrix2fvNULL;
+        uniformMatrix3fv = &glUniformMatrix3fvNULL;
+        uniformMatrix4fv = &glUniformMatrix4fvNULL;
+        validateProgram = &glValidateProgramNULL;
     }
 
     if (extensions.count("GL_ARB_shader_storage_buffer_object") != 0)
@@ -4012,31 +3999,31 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_shader_subroutine") != 0)
     {
-        getActiveSubroutineName        = &glGetActiveSubroutineNameNULL;
+        getActiveSubroutineName = &glGetActiveSubroutineNameNULL;
         getActiveSubroutineUniformName = &glGetActiveSubroutineUniformNameNULL;
-        getActiveSubroutineUniformiv   = &glGetActiveSubroutineUniformivNULL;
-        getProgramStageiv              = &glGetProgramStageivNULL;
-        getSubroutineIndex             = &glGetSubroutineIndexNULL;
-        getSubroutineUniformLocation   = &glGetSubroutineUniformLocationNULL;
-        getUniformSubroutineuiv        = &glGetUniformSubroutineuivNULL;
-        uniformSubroutinesuiv          = &glUniformSubroutinesuivNULL;
+        getActiveSubroutineUniformiv = &glGetActiveSubroutineUniformivNULL;
+        getProgramStageiv = &glGetProgramStageivNULL;
+        getSubroutineIndex = &glGetSubroutineIndexNULL;
+        getSubroutineUniformLocation = &glGetSubroutineUniformLocationNULL;
+        getUniformSubroutineuiv = &glGetUniformSubroutineuivNULL;
+        uniformSubroutinesuiv = &glUniformSubroutinesuivNULL;
     }
 
     if (extensions.count("GL_ARB_sync") != 0)
     {
         clientWaitSync = &glClientWaitSyncNULL;
-        deleteSync     = &glDeleteSyncNULL;
-        fenceSync      = &glFenceSyncNULL;
-        getInteger64v  = &glGetInteger64vNULL;
-        getSynciv      = &glGetSyncivNULL;
-        isSync         = &glIsSyncNULL;
-        waitSync       = &glWaitSyncNULL;
+        deleteSync = &glDeleteSyncNULL;
+        fenceSync = &glFenceSyncNULL;
+        getInteger64v = &glGetInteger64vNULL;
+        getSynciv = &glGetSyncivNULL;
+        isSync = &glIsSyncNULL;
+        waitSync = &glWaitSyncNULL;
     }
 
     if (extensions.count("GL_ARB_tessellation_shader") != 0)
     {
         patchParameterfv = &glPatchParameterfvNULL;
-        patchParameteri  = &glPatchParameteriNULL;
+        patchParameteri = &glPatchParameteriNULL;
     }
 
     if (extensions.count("GL_ARB_texture_barrier") != 0)
@@ -4056,19 +4043,19 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_texture_compression") != 0)
     {
-        compressedTexImage1D    = &glCompressedTexImage1DNULL;
-        compressedTexImage2D    = &glCompressedTexImage2DNULL;
-        compressedTexImage3D    = &glCompressedTexImage3DNULL;
+        compressedTexImage1D = &glCompressedTexImage1DNULL;
+        compressedTexImage2D = &glCompressedTexImage2DNULL;
+        compressedTexImage3D = &glCompressedTexImage3DNULL;
         compressedTexSubImage1D = &glCompressedTexSubImage1DNULL;
         compressedTexSubImage2D = &glCompressedTexSubImage2DNULL;
         compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
-        getCompressedTexImage   = &glGetCompressedTexImageNULL;
+        getCompressedTexImage = &glGetCompressedTexImageNULL;
     }
 
     if (extensions.count("GL_ARB_texture_multisample") != 0)
     {
-        getMultisamplefv      = &glGetMultisamplefvNULL;
-        sampleMaski           = &glSampleMaskiNULL;
+        getMultisamplefv = &glGetMultisamplefvNULL;
+        sampleMaski = &glSampleMaskiNULL;
         texImage2DMultisample = &glTexImage2DMultisampleNULL;
         texImage3DMultisample = &glTexImage3DMultisampleNULL;
     }
@@ -4093,219 +4080,219 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_ARB_timer_query") != 0)
     {
-        getQueryObjecti64v  = &glGetQueryObjecti64vNULL;
+        getQueryObjecti64v = &glGetQueryObjecti64vNULL;
         getQueryObjectui64v = &glGetQueryObjectui64vNULL;
-        queryCounter        = &glQueryCounterNULL;
+        queryCounter = &glQueryCounterNULL;
     }
 
     if (extensions.count("GL_ARB_transform_feedback2") != 0)
     {
-        bindTransformFeedback    = &glBindTransformFeedbackNULL;
+        bindTransformFeedback = &glBindTransformFeedbackNULL;
         deleteTransformFeedbacks = &glDeleteTransformFeedbacksNULL;
-        drawTransformFeedback    = &glDrawTransformFeedbackNULL;
-        genTransformFeedbacks    = &glGenTransformFeedbacksNULL;
-        isTransformFeedback      = &glIsTransformFeedbackNULL;
-        pauseTransformFeedback   = &glPauseTransformFeedbackNULL;
-        resumeTransformFeedback  = &glResumeTransformFeedbackNULL;
+        drawTransformFeedback = &glDrawTransformFeedbackNULL;
+        genTransformFeedbacks = &glGenTransformFeedbacksNULL;
+        isTransformFeedback = &glIsTransformFeedbackNULL;
+        pauseTransformFeedback = &glPauseTransformFeedbackNULL;
+        resumeTransformFeedback = &glResumeTransformFeedbackNULL;
     }
 
     if (extensions.count("GL_ARB_transform_feedback3") != 0)
     {
-        beginQueryIndexed           = &glBeginQueryIndexedNULL;
+        beginQueryIndexed = &glBeginQueryIndexedNULL;
         drawTransformFeedbackStream = &glDrawTransformFeedbackStreamNULL;
-        endQueryIndexed             = &glEndQueryIndexedNULL;
-        getQueryIndexediv           = &glGetQueryIndexedivNULL;
+        endQueryIndexed = &glEndQueryIndexedNULL;
+        getQueryIndexediv = &glGetQueryIndexedivNULL;
     }
 
     if (extensions.count("GL_ARB_transform_feedback_instanced") != 0)
     {
-        drawTransformFeedbackInstanced       = &glDrawTransformFeedbackInstancedNULL;
+        drawTransformFeedbackInstanced = &glDrawTransformFeedbackInstancedNULL;
         drawTransformFeedbackStreamInstanced = &glDrawTransformFeedbackStreamInstancedNULL;
     }
 
     if (extensions.count("GL_ARB_uniform_buffer_object") != 0)
     {
-        bindBufferBase            = &glBindBufferBaseNULL;
-        bindBufferRange           = &glBindBufferRangeNULL;
+        bindBufferBase = &glBindBufferBaseNULL;
+        bindBufferRange = &glBindBufferRangeNULL;
         getActiveUniformBlockName = &glGetActiveUniformBlockNameNULL;
-        getActiveUniformBlockiv   = &glGetActiveUniformBlockivNULL;
-        getActiveUniformName      = &glGetActiveUniformNameNULL;
-        getActiveUniformsiv       = &glGetActiveUniformsivNULL;
-        getIntegeri_v             = &glGetIntegeri_vNULL;
-        getUniformBlockIndex      = &glGetUniformBlockIndexNULL;
-        getUniformIndices         = &glGetUniformIndicesNULL;
-        uniformBlockBinding       = &glUniformBlockBindingNULL;
+        getActiveUniformBlockiv = &glGetActiveUniformBlockivNULL;
+        getActiveUniformName = &glGetActiveUniformNameNULL;
+        getActiveUniformsiv = &glGetActiveUniformsivNULL;
+        getIntegeri_v = &glGetIntegeri_vNULL;
+        getUniformBlockIndex = &glGetUniformBlockIndexNULL;
+        getUniformIndices = &glGetUniformIndicesNULL;
+        uniformBlockBinding = &glUniformBlockBindingNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_array_object") != 0)
     {
-        bindVertexArray    = &glBindVertexArrayNULL;
+        bindVertexArray = &glBindVertexArrayNULL;
         deleteVertexArrays = &glDeleteVertexArraysNULL;
-        genVertexArrays    = &glGenVertexArraysNULL;
-        isVertexArray      = &glIsVertexArrayNULL;
+        genVertexArrays = &glGenVertexArraysNULL;
+        isVertexArray = &glIsVertexArrayNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_attrib_64bit") != 0)
     {
-        getVertexAttribLdv   = &glGetVertexAttribLdvNULL;
-        vertexAttribL1d      = &glVertexAttribL1dNULL;
-        vertexAttribL1dv     = &glVertexAttribL1dvNULL;
-        vertexAttribL2d      = &glVertexAttribL2dNULL;
-        vertexAttribL2dv     = &glVertexAttribL2dvNULL;
-        vertexAttribL3d      = &glVertexAttribL3dNULL;
-        vertexAttribL3dv     = &glVertexAttribL3dvNULL;
-        vertexAttribL4d      = &glVertexAttribL4dNULL;
-        vertexAttribL4dv     = &glVertexAttribL4dvNULL;
+        getVertexAttribLdv = &glGetVertexAttribLdvNULL;
+        vertexAttribL1d = &glVertexAttribL1dNULL;
+        vertexAttribL1dv = &glVertexAttribL1dvNULL;
+        vertexAttribL2d = &glVertexAttribL2dNULL;
+        vertexAttribL2dv = &glVertexAttribL2dvNULL;
+        vertexAttribL3d = &glVertexAttribL3dNULL;
+        vertexAttribL3dv = &glVertexAttribL3dvNULL;
+        vertexAttribL4d = &glVertexAttribL4dNULL;
+        vertexAttribL4dv = &glVertexAttribL4dvNULL;
         vertexAttribLPointer = &glVertexAttribLPointerNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_attrib_binding") != 0)
     {
-        bindVertexBuffer     = &glBindVertexBufferNULL;
-        vertexAttribBinding  = &glVertexAttribBindingNULL;
-        vertexAttribFormat   = &glVertexAttribFormatNULL;
-        vertexAttribIFormat  = &glVertexAttribIFormatNULL;
-        vertexAttribLFormat  = &glVertexAttribLFormatNULL;
+        bindVertexBuffer = &glBindVertexBufferNULL;
+        vertexAttribBinding = &glVertexAttribBindingNULL;
+        vertexAttribFormat = &glVertexAttribFormatNULL;
+        vertexAttribIFormat = &glVertexAttribIFormatNULL;
+        vertexAttribLFormat = &glVertexAttribLFormatNULL;
         vertexBindingDivisor = &glVertexBindingDivisorNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_buffer_object") != 0)
     {
-        bindBuffer           = &glBindBufferNULL;
-        bufferData           = &glBufferDataNULL;
-        bufferSubData        = &glBufferSubDataNULL;
-        deleteBuffers        = &glDeleteBuffersNULL;
-        genBuffers           = &glGenBuffersNULL;
+        bindBuffer = &glBindBufferNULL;
+        bufferData = &glBufferDataNULL;
+        bufferSubData = &glBufferSubDataNULL;
+        deleteBuffers = &glDeleteBuffersNULL;
+        genBuffers = &glGenBuffersNULL;
         getBufferParameteriv = &glGetBufferParameterivNULL;
-        getBufferPointerv    = &glGetBufferPointervNULL;
-        getBufferSubData     = &glGetBufferSubDataNULL;
-        isBuffer             = &glIsBufferNULL;
-        mapBuffer            = &glMapBufferNULL;
-        unmapBuffer          = &glUnmapBufferNULL;
+        getBufferPointerv = &glGetBufferPointervNULL;
+        getBufferSubData = &glGetBufferSubDataNULL;
+        isBuffer = &glIsBufferNULL;
+        mapBuffer = &glMapBufferNULL;
+        unmapBuffer = &glUnmapBufferNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_program") != 0)
     {
         disableVertexAttribArray = &glDisableVertexAttribArrayNULL;
-        enableVertexAttribArray  = &glEnableVertexAttribArrayNULL;
-        getProgramiv             = &glGetProgramivNULL;
-        getVertexAttribPointerv  = &glGetVertexAttribPointervNULL;
-        getVertexAttribdv        = &glGetVertexAttribdvNULL;
-        getVertexAttribfv        = &glGetVertexAttribfvNULL;
-        getVertexAttribiv        = &glGetVertexAttribivNULL;
-        isProgram                = &glIsProgramNULL;
-        vertexAttrib1d           = &glVertexAttrib1dNULL;
-        vertexAttrib1dv          = &glVertexAttrib1dvNULL;
-        vertexAttrib1f           = &glVertexAttrib1fNULL;
-        vertexAttrib1fv          = &glVertexAttrib1fvNULL;
-        vertexAttrib1s           = &glVertexAttrib1sNULL;
-        vertexAttrib1sv          = &glVertexAttrib1svNULL;
-        vertexAttrib2d           = &glVertexAttrib2dNULL;
-        vertexAttrib2dv          = &glVertexAttrib2dvNULL;
-        vertexAttrib2f           = &glVertexAttrib2fNULL;
-        vertexAttrib2fv          = &glVertexAttrib2fvNULL;
-        vertexAttrib2s           = &glVertexAttrib2sNULL;
-        vertexAttrib2sv          = &glVertexAttrib2svNULL;
-        vertexAttrib3d           = &glVertexAttrib3dNULL;
-        vertexAttrib3dv          = &glVertexAttrib3dvNULL;
-        vertexAttrib3f           = &glVertexAttrib3fNULL;
-        vertexAttrib3fv          = &glVertexAttrib3fvNULL;
-        vertexAttrib3s           = &glVertexAttrib3sNULL;
-        vertexAttrib3sv          = &glVertexAttrib3svNULL;
-        vertexAttrib4Nbv         = &glVertexAttrib4NbvNULL;
-        vertexAttrib4Niv         = &glVertexAttrib4NivNULL;
-        vertexAttrib4Nsv         = &glVertexAttrib4NsvNULL;
-        vertexAttrib4Nub         = &glVertexAttrib4NubNULL;
-        vertexAttrib4Nubv        = &glVertexAttrib4NubvNULL;
-        vertexAttrib4Nuiv        = &glVertexAttrib4NuivNULL;
-        vertexAttrib4Nusv        = &glVertexAttrib4NusvNULL;
-        vertexAttrib4bv          = &glVertexAttrib4bvNULL;
-        vertexAttrib4d           = &glVertexAttrib4dNULL;
-        vertexAttrib4dv          = &glVertexAttrib4dvNULL;
-        vertexAttrib4f           = &glVertexAttrib4fNULL;
-        vertexAttrib4fv          = &glVertexAttrib4fvNULL;
-        vertexAttrib4iv          = &glVertexAttrib4ivNULL;
-        vertexAttrib4s           = &glVertexAttrib4sNULL;
-        vertexAttrib4sv          = &glVertexAttrib4svNULL;
-        vertexAttrib4ubv         = &glVertexAttrib4ubvNULL;
-        vertexAttrib4uiv         = &glVertexAttrib4uivNULL;
-        vertexAttrib4usv         = &glVertexAttrib4usvNULL;
-        vertexAttribPointer      = &glVertexAttribPointerNULL;
+        enableVertexAttribArray = &glEnableVertexAttribArrayNULL;
+        getProgramiv = &glGetProgramivNULL;
+        getVertexAttribPointerv = &glGetVertexAttribPointervNULL;
+        getVertexAttribdv = &glGetVertexAttribdvNULL;
+        getVertexAttribfv = &glGetVertexAttribfvNULL;
+        getVertexAttribiv = &glGetVertexAttribivNULL;
+        isProgram = &glIsProgramNULL;
+        vertexAttrib1d = &glVertexAttrib1dNULL;
+        vertexAttrib1dv = &glVertexAttrib1dvNULL;
+        vertexAttrib1f = &glVertexAttrib1fNULL;
+        vertexAttrib1fv = &glVertexAttrib1fvNULL;
+        vertexAttrib1s = &glVertexAttrib1sNULL;
+        vertexAttrib1sv = &glVertexAttrib1svNULL;
+        vertexAttrib2d = &glVertexAttrib2dNULL;
+        vertexAttrib2dv = &glVertexAttrib2dvNULL;
+        vertexAttrib2f = &glVertexAttrib2fNULL;
+        vertexAttrib2fv = &glVertexAttrib2fvNULL;
+        vertexAttrib2s = &glVertexAttrib2sNULL;
+        vertexAttrib2sv = &glVertexAttrib2svNULL;
+        vertexAttrib3d = &glVertexAttrib3dNULL;
+        vertexAttrib3dv = &glVertexAttrib3dvNULL;
+        vertexAttrib3f = &glVertexAttrib3fNULL;
+        vertexAttrib3fv = &glVertexAttrib3fvNULL;
+        vertexAttrib3s = &glVertexAttrib3sNULL;
+        vertexAttrib3sv = &glVertexAttrib3svNULL;
+        vertexAttrib4Nbv = &glVertexAttrib4NbvNULL;
+        vertexAttrib4Niv = &glVertexAttrib4NivNULL;
+        vertexAttrib4Nsv = &glVertexAttrib4NsvNULL;
+        vertexAttrib4Nub = &glVertexAttrib4NubNULL;
+        vertexAttrib4Nubv = &glVertexAttrib4NubvNULL;
+        vertexAttrib4Nuiv = &glVertexAttrib4NuivNULL;
+        vertexAttrib4Nusv = &glVertexAttrib4NusvNULL;
+        vertexAttrib4bv = &glVertexAttrib4bvNULL;
+        vertexAttrib4d = &glVertexAttrib4dNULL;
+        vertexAttrib4dv = &glVertexAttrib4dvNULL;
+        vertexAttrib4f = &glVertexAttrib4fNULL;
+        vertexAttrib4fv = &glVertexAttrib4fvNULL;
+        vertexAttrib4iv = &glVertexAttrib4ivNULL;
+        vertexAttrib4s = &glVertexAttrib4sNULL;
+        vertexAttrib4sv = &glVertexAttrib4svNULL;
+        vertexAttrib4ubv = &glVertexAttrib4ubvNULL;
+        vertexAttrib4uiv = &glVertexAttrib4uivNULL;
+        vertexAttrib4usv = &glVertexAttrib4usvNULL;
+        vertexAttribPointer = &glVertexAttribPointerNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_shader") != 0)
     {
-        bindAttribLocation       = &glBindAttribLocationNULL;
+        bindAttribLocation = &glBindAttribLocationNULL;
         disableVertexAttribArray = &glDisableVertexAttribArrayNULL;
-        enableVertexAttribArray  = &glEnableVertexAttribArrayNULL;
-        getActiveAttrib          = &glGetActiveAttribNULL;
-        getAttribLocation        = &glGetAttribLocationNULL;
-        getVertexAttribPointerv  = &glGetVertexAttribPointervNULL;
-        getVertexAttribdv        = &glGetVertexAttribdvNULL;
-        getVertexAttribfv        = &glGetVertexAttribfvNULL;
-        getVertexAttribiv        = &glGetVertexAttribivNULL;
-        vertexAttrib1d           = &glVertexAttrib1dNULL;
-        vertexAttrib1dv          = &glVertexAttrib1dvNULL;
-        vertexAttrib1f           = &glVertexAttrib1fNULL;
-        vertexAttrib1fv          = &glVertexAttrib1fvNULL;
-        vertexAttrib1s           = &glVertexAttrib1sNULL;
-        vertexAttrib1sv          = &glVertexAttrib1svNULL;
-        vertexAttrib2d           = &glVertexAttrib2dNULL;
-        vertexAttrib2dv          = &glVertexAttrib2dvNULL;
-        vertexAttrib2f           = &glVertexAttrib2fNULL;
-        vertexAttrib2fv          = &glVertexAttrib2fvNULL;
-        vertexAttrib2s           = &glVertexAttrib2sNULL;
-        vertexAttrib2sv          = &glVertexAttrib2svNULL;
-        vertexAttrib3d           = &glVertexAttrib3dNULL;
-        vertexAttrib3dv          = &glVertexAttrib3dvNULL;
-        vertexAttrib3f           = &glVertexAttrib3fNULL;
-        vertexAttrib3fv          = &glVertexAttrib3fvNULL;
-        vertexAttrib3s           = &glVertexAttrib3sNULL;
-        vertexAttrib3sv          = &glVertexAttrib3svNULL;
-        vertexAttrib4Nbv         = &glVertexAttrib4NbvNULL;
-        vertexAttrib4Niv         = &glVertexAttrib4NivNULL;
-        vertexAttrib4Nsv         = &glVertexAttrib4NsvNULL;
-        vertexAttrib4Nub         = &glVertexAttrib4NubNULL;
-        vertexAttrib4Nubv        = &glVertexAttrib4NubvNULL;
-        vertexAttrib4Nuiv        = &glVertexAttrib4NuivNULL;
-        vertexAttrib4Nusv        = &glVertexAttrib4NusvNULL;
-        vertexAttrib4bv          = &glVertexAttrib4bvNULL;
-        vertexAttrib4d           = &glVertexAttrib4dNULL;
-        vertexAttrib4dv          = &glVertexAttrib4dvNULL;
-        vertexAttrib4f           = &glVertexAttrib4fNULL;
-        vertexAttrib4fv          = &glVertexAttrib4fvNULL;
-        vertexAttrib4iv          = &glVertexAttrib4ivNULL;
-        vertexAttrib4s           = &glVertexAttrib4sNULL;
-        vertexAttrib4sv          = &glVertexAttrib4svNULL;
-        vertexAttrib4ubv         = &glVertexAttrib4ubvNULL;
-        vertexAttrib4uiv         = &glVertexAttrib4uivNULL;
-        vertexAttrib4usv         = &glVertexAttrib4usvNULL;
-        vertexAttribPointer      = &glVertexAttribPointerNULL;
+        enableVertexAttribArray = &glEnableVertexAttribArrayNULL;
+        getActiveAttrib = &glGetActiveAttribNULL;
+        getAttribLocation = &glGetAttribLocationNULL;
+        getVertexAttribPointerv = &glGetVertexAttribPointervNULL;
+        getVertexAttribdv = &glGetVertexAttribdvNULL;
+        getVertexAttribfv = &glGetVertexAttribfvNULL;
+        getVertexAttribiv = &glGetVertexAttribivNULL;
+        vertexAttrib1d = &glVertexAttrib1dNULL;
+        vertexAttrib1dv = &glVertexAttrib1dvNULL;
+        vertexAttrib1f = &glVertexAttrib1fNULL;
+        vertexAttrib1fv = &glVertexAttrib1fvNULL;
+        vertexAttrib1s = &glVertexAttrib1sNULL;
+        vertexAttrib1sv = &glVertexAttrib1svNULL;
+        vertexAttrib2d = &glVertexAttrib2dNULL;
+        vertexAttrib2dv = &glVertexAttrib2dvNULL;
+        vertexAttrib2f = &glVertexAttrib2fNULL;
+        vertexAttrib2fv = &glVertexAttrib2fvNULL;
+        vertexAttrib2s = &glVertexAttrib2sNULL;
+        vertexAttrib2sv = &glVertexAttrib2svNULL;
+        vertexAttrib3d = &glVertexAttrib3dNULL;
+        vertexAttrib3dv = &glVertexAttrib3dvNULL;
+        vertexAttrib3f = &glVertexAttrib3fNULL;
+        vertexAttrib3fv = &glVertexAttrib3fvNULL;
+        vertexAttrib3s = &glVertexAttrib3sNULL;
+        vertexAttrib3sv = &glVertexAttrib3svNULL;
+        vertexAttrib4Nbv = &glVertexAttrib4NbvNULL;
+        vertexAttrib4Niv = &glVertexAttrib4NivNULL;
+        vertexAttrib4Nsv = &glVertexAttrib4NsvNULL;
+        vertexAttrib4Nub = &glVertexAttrib4NubNULL;
+        vertexAttrib4Nubv = &glVertexAttrib4NubvNULL;
+        vertexAttrib4Nuiv = &glVertexAttrib4NuivNULL;
+        vertexAttrib4Nusv = &glVertexAttrib4NusvNULL;
+        vertexAttrib4bv = &glVertexAttrib4bvNULL;
+        vertexAttrib4d = &glVertexAttrib4dNULL;
+        vertexAttrib4dv = &glVertexAttrib4dvNULL;
+        vertexAttrib4f = &glVertexAttrib4fNULL;
+        vertexAttrib4fv = &glVertexAttrib4fvNULL;
+        vertexAttrib4iv = &glVertexAttrib4ivNULL;
+        vertexAttrib4s = &glVertexAttrib4sNULL;
+        vertexAttrib4sv = &glVertexAttrib4svNULL;
+        vertexAttrib4ubv = &glVertexAttrib4ubvNULL;
+        vertexAttrib4uiv = &glVertexAttrib4uivNULL;
+        vertexAttrib4usv = &glVertexAttrib4usvNULL;
+        vertexAttribPointer = &glVertexAttribPointerNULL;
     }
 
     if (extensions.count("GL_ARB_vertex_type_2_10_10_10_rev") != 0)
     {
-        vertexAttribP1ui  = &glVertexAttribP1uiNULL;
+        vertexAttribP1ui = &glVertexAttribP1uiNULL;
         vertexAttribP1uiv = &glVertexAttribP1uivNULL;
-        vertexAttribP2ui  = &glVertexAttribP2uiNULL;
+        vertexAttribP2ui = &glVertexAttribP2uiNULL;
         vertexAttribP2uiv = &glVertexAttribP2uivNULL;
-        vertexAttribP3ui  = &glVertexAttribP3uiNULL;
+        vertexAttribP3ui = &glVertexAttribP3uiNULL;
         vertexAttribP3uiv = &glVertexAttribP3uivNULL;
-        vertexAttribP4ui  = &glVertexAttribP4uiNULL;
+        vertexAttribP4ui = &glVertexAttribP4uiNULL;
         vertexAttribP4uiv = &glVertexAttribP4uivNULL;
     }
 
     if (extensions.count("GL_ARB_viewport_array") != 0)
     {
-        depthRangeArrayv  = &glDepthRangeArrayvNULL;
+        depthRangeArrayv = &glDepthRangeArrayvNULL;
         depthRangeIndexed = &glDepthRangeIndexedNULL;
-        getDoublei_v      = &glGetDoublei_vNULL;
-        getFloati_v       = &glGetFloati_vNULL;
-        scissorArrayv     = &glScissorArrayvNULL;
-        scissorIndexed    = &glScissorIndexedNULL;
-        scissorIndexedv   = &glScissorIndexedvNULL;
-        viewportArrayv    = &glViewportArrayvNULL;
-        viewportIndexedf  = &glViewportIndexedfNULL;
+        getDoublei_v = &glGetDoublei_vNULL;
+        getFloati_v = &glGetFloati_vNULL;
+        scissorArrayv = &glScissorArrayvNULL;
+        scissorIndexed = &glScissorIndexedNULL;
+        scissorIndexedv = &glScissorIndexedvNULL;
+        viewportArrayv = &glViewportArrayvNULL;
+        viewportIndexedf = &glViewportIndexedfNULL;
         viewportIndexedfv = &glViewportIndexedfvNULL;
     }
 
@@ -4326,8 +4313,8 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_copy_texture") != 0)
     {
-        copyTexImage1D    = &glCopyTexImage1DNULL;
-        copyTexImage2D    = &glCopyTexImage2DNULL;
+        copyTexImage1D = &glCopyTexImage1DNULL;
+        copyTexImage2D = &glCopyTexImage2DNULL;
         copyTexSubImage1D = &glCopyTexSubImage1DNULL;
         copyTexSubImage2D = &glCopyTexSubImage2DNULL;
         copyTexSubImage3D = &glCopyTexSubImage3DNULL;
@@ -4335,81 +4322,81 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_direct_state_access") != 0)
     {
-        checkNamedFramebufferStatus              = &glCheckNamedFramebufferStatusNULL;
-        clearNamedBufferData                     = &glClearNamedBufferDataNULL;
-        clearNamedBufferSubData                  = &glClearNamedBufferSubDataNULL;
-        compressedTextureSubImage1D              = &glCompressedTextureSubImage1DNULL;
-        compressedTextureSubImage2D              = &glCompressedTextureSubImage2DNULL;
-        compressedTextureSubImage3D              = &glCompressedTextureSubImage3DNULL;
-        copyTextureSubImage1D                    = &glCopyTextureSubImage1DNULL;
-        copyTextureSubImage2D                    = &glCopyTextureSubImage2DNULL;
-        copyTextureSubImage3D                    = &glCopyTextureSubImage3DNULL;
-        disableVertexArrayAttrib                 = &glDisableVertexArrayAttribNULL;
-        enableVertexArrayAttrib                  = &glEnableVertexArrayAttribNULL;
-        flushMappedNamedBufferRange              = &glFlushMappedNamedBufferRangeNULL;
-        generateTextureMipmap                    = &glGenerateTextureMipmapNULL;
-        getCompressedTextureImage                = &glGetCompressedTextureImageNULL;
-        getDoublei_v                             = &glGetDoublei_vNULL;
-        getFloati_v                              = &glGetFloati_vNULL;
-        getFramebufferParameteriv                = &glGetFramebufferParameterivNULL;
-        getNamedBufferParameteriv                = &glGetNamedBufferParameterivNULL;
-        getNamedBufferPointerv                   = &glGetNamedBufferPointervNULL;
-        getNamedBufferSubData                    = &glGetNamedBufferSubDataNULL;
+        checkNamedFramebufferStatus = &glCheckNamedFramebufferStatusNULL;
+        clearNamedBufferData = &glClearNamedBufferDataNULL;
+        clearNamedBufferSubData = &glClearNamedBufferSubDataNULL;
+        compressedTextureSubImage1D = &glCompressedTextureSubImage1DNULL;
+        compressedTextureSubImage2D = &glCompressedTextureSubImage2DNULL;
+        compressedTextureSubImage3D = &glCompressedTextureSubImage3DNULL;
+        copyTextureSubImage1D = &glCopyTextureSubImage1DNULL;
+        copyTextureSubImage2D = &glCopyTextureSubImage2DNULL;
+        copyTextureSubImage3D = &glCopyTextureSubImage3DNULL;
+        disableVertexArrayAttrib = &glDisableVertexArrayAttribNULL;
+        enableVertexArrayAttrib = &glEnableVertexArrayAttribNULL;
+        flushMappedNamedBufferRange = &glFlushMappedNamedBufferRangeNULL;
+        generateTextureMipmap = &glGenerateTextureMipmapNULL;
+        getCompressedTextureImage = &glGetCompressedTextureImageNULL;
+        getDoublei_v = &glGetDoublei_vNULL;
+        getFloati_v = &glGetFloati_vNULL;
+        getFramebufferParameteriv = &glGetFramebufferParameterivNULL;
+        getNamedBufferParameteriv = &glGetNamedBufferParameterivNULL;
+        getNamedBufferPointerv = &glGetNamedBufferPointervNULL;
+        getNamedBufferSubData = &glGetNamedBufferSubDataNULL;
         getNamedFramebufferAttachmentParameteriv = &glGetNamedFramebufferAttachmentParameterivNULL;
-        getNamedFramebufferParameteriv           = &glGetNamedFramebufferParameterivNULL;
-        getNamedRenderbufferParameteriv          = &glGetNamedRenderbufferParameterivNULL;
-        getTextureImage                          = &glGetTextureImageNULL;
-        getTextureLevelParameterfv               = &glGetTextureLevelParameterfvNULL;
-        getTextureLevelParameteriv               = &glGetTextureLevelParameterivNULL;
-        getTextureParameterIiv                   = &glGetTextureParameterIivNULL;
-        getTextureParameterIuiv                  = &glGetTextureParameterIuivNULL;
-        getTextureParameterfv                    = &glGetTextureParameterfvNULL;
-        getTextureParameteriv                    = &glGetTextureParameterivNULL;
-        mapNamedBuffer                           = &glMapNamedBufferNULL;
-        mapNamedBufferRange                      = &glMapNamedBufferRangeNULL;
-        namedBufferData                          = &glNamedBufferDataNULL;
-        namedBufferStorage                       = &glNamedBufferStorageNULL;
-        namedBufferSubData                       = &glNamedBufferSubDataNULL;
-        namedFramebufferParameteri               = &glNamedFramebufferParameteriNULL;
-        namedFramebufferRenderbuffer             = &glNamedFramebufferRenderbufferNULL;
-        namedFramebufferTexture                  = &glNamedFramebufferTextureNULL;
-        namedFramebufferTextureLayer             = &glNamedFramebufferTextureLayerNULL;
-        namedRenderbufferStorage                 = &glNamedRenderbufferStorageNULL;
-        namedRenderbufferStorageMultisample      = &glNamedRenderbufferStorageMultisampleNULL;
-        programUniform1d                         = &glProgramUniform1dNULL;
-        programUniform1dv                        = &glProgramUniform1dvNULL;
-        programUniform2d                         = &glProgramUniform2dNULL;
-        programUniform2dv                        = &glProgramUniform2dvNULL;
-        programUniform3d                         = &glProgramUniform3dNULL;
-        programUniform3dv                        = &glProgramUniform3dvNULL;
-        programUniform4d                         = &glProgramUniform4dNULL;
-        programUniform4dv                        = &glProgramUniform4dvNULL;
-        programUniformMatrix2dv                  = &glProgramUniformMatrix2dvNULL;
-        programUniformMatrix2x3dv                = &glProgramUniformMatrix2x3dvNULL;
-        programUniformMatrix2x4dv                = &glProgramUniformMatrix2x4dvNULL;
-        programUniformMatrix3dv                  = &glProgramUniformMatrix3dvNULL;
-        programUniformMatrix3x2dv                = &glProgramUniformMatrix3x2dvNULL;
-        programUniformMatrix3x4dv                = &glProgramUniformMatrix3x4dvNULL;
-        programUniformMatrix4dv                  = &glProgramUniformMatrix4dvNULL;
-        programUniformMatrix4x2dv                = &glProgramUniformMatrix4x2dvNULL;
-        programUniformMatrix4x3dv                = &glProgramUniformMatrix4x3dvNULL;
-        textureBuffer                            = &glTextureBufferNULL;
-        textureBufferRange                       = &glTextureBufferRangeNULL;
-        textureParameterIiv                      = &glTextureParameterIivNULL;
-        textureParameterIuiv                     = &glTextureParameterIuivNULL;
-        textureParameterf                        = &glTextureParameterfNULL;
-        textureParameterfv                       = &glTextureParameterfvNULL;
-        textureParameteri                        = &glTextureParameteriNULL;
-        textureParameteriv                       = &glTextureParameterivNULL;
-        textureStorage1D                         = &glTextureStorage1DNULL;
-        textureStorage2D                         = &glTextureStorage2DNULL;
-        textureStorage2DMultisample              = &glTextureStorage2DMultisampleNULL;
-        textureStorage3D                         = &glTextureStorage3DNULL;
-        textureStorage3DMultisample              = &glTextureStorage3DMultisampleNULL;
-        textureSubImage1D                        = &glTextureSubImage1DNULL;
-        textureSubImage2D                        = &glTextureSubImage2DNULL;
-        textureSubImage3D                        = &glTextureSubImage3DNULL;
-        unmapNamedBuffer                         = &glUnmapNamedBufferNULL;
+        getNamedFramebufferParameteriv = &glGetNamedFramebufferParameterivNULL;
+        getNamedRenderbufferParameteriv = &glGetNamedRenderbufferParameterivNULL;
+        getTextureImage = &glGetTextureImageNULL;
+        getTextureLevelParameterfv = &glGetTextureLevelParameterfvNULL;
+        getTextureLevelParameteriv = &glGetTextureLevelParameterivNULL;
+        getTextureParameterIiv = &glGetTextureParameterIivNULL;
+        getTextureParameterIuiv = &glGetTextureParameterIuivNULL;
+        getTextureParameterfv = &glGetTextureParameterfvNULL;
+        getTextureParameteriv = &glGetTextureParameterivNULL;
+        mapNamedBuffer = &glMapNamedBufferNULL;
+        mapNamedBufferRange = &glMapNamedBufferRangeNULL;
+        namedBufferData = &glNamedBufferDataNULL;
+        namedBufferStorage = &glNamedBufferStorageNULL;
+        namedBufferSubData = &glNamedBufferSubDataNULL;
+        namedFramebufferParameteri = &glNamedFramebufferParameteriNULL;
+        namedFramebufferRenderbuffer = &glNamedFramebufferRenderbufferNULL;
+        namedFramebufferTexture = &glNamedFramebufferTextureNULL;
+        namedFramebufferTextureLayer = &glNamedFramebufferTextureLayerNULL;
+        namedRenderbufferStorage = &glNamedRenderbufferStorageNULL;
+        namedRenderbufferStorageMultisample = &glNamedRenderbufferStorageMultisampleNULL;
+        programUniform1d = &glProgramUniform1dNULL;
+        programUniform1dv = &glProgramUniform1dvNULL;
+        programUniform2d = &glProgramUniform2dNULL;
+        programUniform2dv = &glProgramUniform2dvNULL;
+        programUniform3d = &glProgramUniform3dNULL;
+        programUniform3dv = &glProgramUniform3dvNULL;
+        programUniform4d = &glProgramUniform4dNULL;
+        programUniform4dv = &glProgramUniform4dvNULL;
+        programUniformMatrix2dv = &glProgramUniformMatrix2dvNULL;
+        programUniformMatrix2x3dv = &glProgramUniformMatrix2x3dvNULL;
+        programUniformMatrix2x4dv = &glProgramUniformMatrix2x4dvNULL;
+        programUniformMatrix3dv = &glProgramUniformMatrix3dvNULL;
+        programUniformMatrix3x2dv = &glProgramUniformMatrix3x2dvNULL;
+        programUniformMatrix3x4dv = &glProgramUniformMatrix3x4dvNULL;
+        programUniformMatrix4dv = &glProgramUniformMatrix4dvNULL;
+        programUniformMatrix4x2dv = &glProgramUniformMatrix4x2dvNULL;
+        programUniformMatrix4x3dv = &glProgramUniformMatrix4x3dvNULL;
+        textureBuffer = &glTextureBufferNULL;
+        textureBufferRange = &glTextureBufferRangeNULL;
+        textureParameterIiv = &glTextureParameterIivNULL;
+        textureParameterIuiv = &glTextureParameterIuivNULL;
+        textureParameterf = &glTextureParameterfNULL;
+        textureParameterfv = &glTextureParameterfvNULL;
+        textureParameteri = &glTextureParameteriNULL;
+        textureParameteriv = &glTextureParameterivNULL;
+        textureStorage1D = &glTextureStorage1DNULL;
+        textureStorage2D = &glTextureStorage2DNULL;
+        textureStorage2DMultisample = &glTextureStorage2DMultisampleNULL;
+        textureStorage3D = &glTextureStorage3DNULL;
+        textureStorage3DMultisample = &glTextureStorage3DMultisampleNULL;
+        textureSubImage1D = &glTextureSubImage1DNULL;
+        textureSubImage2D = &glTextureSubImage2DNULL;
+        textureSubImage3D = &glTextureSubImage3DNULL;
+        unmapNamedBuffer = &glUnmapNamedBufferNULL;
     }
 
     if (extensions.count("GL_EXT_draw_range_elements") != 0)
@@ -4429,43 +4416,43 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_framebuffer_object") != 0)
     {
-        bindFramebuffer                     = &glBindFramebufferNULL;
-        bindRenderbuffer                    = &glBindRenderbufferNULL;
-        checkFramebufferStatus              = &glCheckFramebufferStatusNULL;
-        deleteFramebuffers                  = &glDeleteFramebuffersNULL;
-        deleteRenderbuffers                 = &glDeleteRenderbuffersNULL;
-        framebufferRenderbuffer             = &glFramebufferRenderbufferNULL;
-        framebufferTexture1D                = &glFramebufferTexture1DNULL;
-        framebufferTexture2D                = &glFramebufferTexture2DNULL;
-        framebufferTexture3D                = &glFramebufferTexture3DNULL;
-        genFramebuffers                     = &glGenFramebuffersNULL;
-        genRenderbuffers                    = &glGenRenderbuffersNULL;
-        generateMipmap                      = &glGenerateMipmapNULL;
+        bindFramebuffer = &glBindFramebufferNULL;
+        bindRenderbuffer = &glBindRenderbufferNULL;
+        checkFramebufferStatus = &glCheckFramebufferStatusNULL;
+        deleteFramebuffers = &glDeleteFramebuffersNULL;
+        deleteRenderbuffers = &glDeleteRenderbuffersNULL;
+        framebufferRenderbuffer = &glFramebufferRenderbufferNULL;
+        framebufferTexture1D = &glFramebufferTexture1DNULL;
+        framebufferTexture2D = &glFramebufferTexture2DNULL;
+        framebufferTexture3D = &glFramebufferTexture3DNULL;
+        genFramebuffers = &glGenFramebuffersNULL;
+        genRenderbuffers = &glGenRenderbuffersNULL;
+        generateMipmap = &glGenerateMipmapNULL;
         getFramebufferAttachmentParameteriv = &glGetFramebufferAttachmentParameterivNULL;
-        getRenderbufferParameteriv          = &glGetRenderbufferParameterivNULL;
-        isFramebuffer                       = &glIsFramebufferNULL;
-        isRenderbuffer                      = &glIsRenderbufferNULL;
-        renderbufferStorage                 = &glRenderbufferStorageNULL;
+        getRenderbufferParameteriv = &glGetRenderbufferParameterivNULL;
+        isFramebuffer = &glIsFramebufferNULL;
+        isRenderbuffer = &glIsRenderbufferNULL;
+        renderbufferStorage = &glRenderbufferStorageNULL;
     }
 
     if (extensions.count("GL_EXT_gpu_shader4") != 0)
     {
         bindFragDataLocation = &glBindFragDataLocationNULL;
-        getFragDataLocation  = &glGetFragDataLocationNULL;
-        getUniformuiv        = &glGetUniformuivNULL;
-        uniform1ui           = &glUniform1uiNULL;
-        uniform1uiv          = &glUniform1uivNULL;
-        uniform2ui           = &glUniform2uiNULL;
-        uniform2uiv          = &glUniform2uivNULL;
-        uniform3ui           = &glUniform3uiNULL;
-        uniform3uiv          = &glUniform3uivNULL;
-        uniform4ui           = &glUniform4uiNULL;
-        uniform4uiv          = &glUniform4uivNULL;
+        getFragDataLocation = &glGetFragDataLocationNULL;
+        getUniformuiv = &glGetUniformuivNULL;
+        uniform1ui = &glUniform1uiNULL;
+        uniform1uiv = &glUniform1uivNULL;
+        uniform2ui = &glUniform2uiNULL;
+        uniform2uiv = &glUniform2uivNULL;
+        uniform3ui = &glUniform3uiNULL;
+        uniform3uiv = &glUniform3uivNULL;
+        uniform4ui = &glUniform4uiNULL;
+        uniform4uiv = &glUniform4uivNULL;
     }
 
     if (extensions.count("GL_EXT_point_parameters") != 0)
     {
-        pointParameterf  = &glPointParameterfNULL;
+        pointParameterf = &glPointParameterfNULL;
         pointParameterfv = &glPointParameterfvNULL;
     }
 
@@ -4482,7 +4469,7 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_shader_image_load_store") != 0)
     {
         bindImageTexture = &glBindImageTextureNULL;
-        memoryBarrier    = &glMemoryBarrierNULL;
+        memoryBarrier = &glMemoryBarrierNULL;
     }
 
     if (extensions.count("GL_EXT_subtexture") != 0)
@@ -4493,7 +4480,7 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_texture3D") != 0)
     {
-        texImage3D    = &glTexImage3DNULL;
+        texImage3D = &glTexImage3DNULL;
         texSubImage3D = &glTexSubImage3DNULL;
     }
 
@@ -4509,110 +4496,110 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_texture_integer") != 0)
     {
-        getTexParameterIiv  = &glGetTexParameterIivNULL;
+        getTexParameterIiv = &glGetTexParameterIivNULL;
         getTexParameterIuiv = &glGetTexParameterIuivNULL;
-        texParameterIiv     = &glTexParameterIivNULL;
-        texParameterIuiv    = &glTexParameterIuivNULL;
+        texParameterIiv = &glTexParameterIivNULL;
+        texParameterIuiv = &glTexParameterIuivNULL;
     }
 
     if (extensions.count("GL_EXT_texture_object") != 0)
     {
-        bindTexture    = &glBindTextureNULL;
+        bindTexture = &glBindTextureNULL;
         deleteTextures = &glDeleteTexturesNULL;
-        genTextures    = &glGenTexturesNULL;
-        isTexture      = &glIsTextureNULL;
+        genTextures = &glGenTexturesNULL;
+        isTexture = &glIsTextureNULL;
     }
 
     if (extensions.count("GL_EXT_timer_query") != 0)
     {
-        getQueryObjecti64v  = &glGetQueryObjecti64vNULL;
+        getQueryObjecti64v = &glGetQueryObjecti64vNULL;
         getQueryObjectui64v = &glGetQueryObjectui64vNULL;
     }
 
     if (extensions.count("GL_EXT_transform_feedback") != 0)
     {
-        beginTransformFeedback      = &glBeginTransformFeedbackNULL;
-        bindBufferBase              = &glBindBufferBaseNULL;
-        bindBufferRange             = &glBindBufferRangeNULL;
-        endTransformFeedback        = &glEndTransformFeedbackNULL;
+        beginTransformFeedback = &glBeginTransformFeedbackNULL;
+        bindBufferBase = &glBindBufferBaseNULL;
+        bindBufferRange = &glBindBufferRangeNULL;
+        endTransformFeedback = &glEndTransformFeedbackNULL;
         getTransformFeedbackVarying = &glGetTransformFeedbackVaryingNULL;
-        transformFeedbackVaryings   = &glTransformFeedbackVaryingsNULL;
+        transformFeedbackVaryings = &glTransformFeedbackVaryingsNULL;
     }
 
     if (extensions.count("GL_EXT_vertex_array") != 0)
     {
-        drawArrays  = &glDrawArraysNULL;
+        drawArrays = &glDrawArraysNULL;
         getPointerv = &glGetPointervNULL;
     }
 
     if (extensions.count("GL_EXT_vertex_attrib_64bit") != 0)
     {
-        getVertexAttribLdv   = &glGetVertexAttribLdvNULL;
-        vertexAttribL1d      = &glVertexAttribL1dNULL;
-        vertexAttribL1dv     = &glVertexAttribL1dvNULL;
-        vertexAttribL2d      = &glVertexAttribL2dNULL;
-        vertexAttribL2dv     = &glVertexAttribL2dvNULL;
-        vertexAttribL3d      = &glVertexAttribL3dNULL;
-        vertexAttribL3dv     = &glVertexAttribL3dvNULL;
-        vertexAttribL4d      = &glVertexAttribL4dNULL;
-        vertexAttribL4dv     = &glVertexAttribL4dvNULL;
+        getVertexAttribLdv = &glGetVertexAttribLdvNULL;
+        vertexAttribL1d = &glVertexAttribL1dNULL;
+        vertexAttribL1dv = &glVertexAttribL1dvNULL;
+        vertexAttribL2d = &glVertexAttribL2dNULL;
+        vertexAttribL2dv = &glVertexAttribL2dvNULL;
+        vertexAttribL3d = &glVertexAttribL3dNULL;
+        vertexAttribL3dv = &glVertexAttribL3dvNULL;
+        vertexAttribL4d = &glVertexAttribL4dNULL;
+        vertexAttribL4dv = &glVertexAttribL4dvNULL;
         vertexAttribLPointer = &glVertexAttribLPointerNULL;
     }
 
     if (extensions.count("GL_KHR_debug") != 0)
     {
         debugMessageCallback = &glDebugMessageCallbackNULL;
-        debugMessageControl  = &glDebugMessageControlNULL;
-        debugMessageInsert   = &glDebugMessageInsertNULL;
-        getDebugMessageLog   = &glGetDebugMessageLogNULL;
-        getObjectLabel       = &glGetObjectLabelNULL;
-        getObjectPtrLabel    = &glGetObjectPtrLabelNULL;
-        getPointerv          = &glGetPointervNULL;
-        objectLabel          = &glObjectLabelNULL;
-        objectPtrLabel       = &glObjectPtrLabelNULL;
-        popDebugGroup        = &glPopDebugGroupNULL;
-        pushDebugGroup       = &glPushDebugGroupNULL;
+        debugMessageControl = &glDebugMessageControlNULL;
+        debugMessageInsert = &glDebugMessageInsertNULL;
+        getDebugMessageLog = &glGetDebugMessageLogNULL;
+        getObjectLabel = &glGetObjectLabelNULL;
+        getObjectPtrLabel = &glGetObjectPtrLabelNULL;
+        getPointerv = &glGetPointervNULL;
+        objectLabel = &glObjectLabelNULL;
+        objectPtrLabel = &glObjectPtrLabelNULL;
+        popDebugGroup = &glPopDebugGroupNULL;
+        pushDebugGroup = &glPushDebugGroupNULL;
     }
 
     if (extensions.count("GL_KHR_robustness") != 0)
     {
         getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        getnUniformuiv         = &glGetnUniformuivNULL;
-        readnPixels            = &glReadnPixelsNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        getnUniformuiv = &glGetnUniformuivNULL;
+        readnPixels = &glReadnPixelsNULL;
     }
 
     if (extensions.count("GL_NV_geometry_program4") != 0)
     {
-        framebufferTexture      = &glFramebufferTextureNULL;
+        framebufferTexture = &glFramebufferTextureNULL;
         framebufferTextureLayer = &glFramebufferTextureLayerNULL;
     }
 
     if (extensions.count("GL_NV_vertex_program4") != 0)
     {
-        getVertexAttribIiv   = &glGetVertexAttribIivNULL;
-        getVertexAttribIuiv  = &glGetVertexAttribIuivNULL;
-        vertexAttribI1i      = &glVertexAttribI1iNULL;
-        vertexAttribI1iv     = &glVertexAttribI1ivNULL;
-        vertexAttribI1ui     = &glVertexAttribI1uiNULL;
-        vertexAttribI1uiv    = &glVertexAttribI1uivNULL;
-        vertexAttribI2i      = &glVertexAttribI2iNULL;
-        vertexAttribI2iv     = &glVertexAttribI2ivNULL;
-        vertexAttribI2ui     = &glVertexAttribI2uiNULL;
-        vertexAttribI2uiv    = &glVertexAttribI2uivNULL;
-        vertexAttribI3i      = &glVertexAttribI3iNULL;
-        vertexAttribI3iv     = &glVertexAttribI3ivNULL;
-        vertexAttribI3ui     = &glVertexAttribI3uiNULL;
-        vertexAttribI3uiv    = &glVertexAttribI3uivNULL;
-        vertexAttribI4bv     = &glVertexAttribI4bvNULL;
-        vertexAttribI4i      = &glVertexAttribI4iNULL;
-        vertexAttribI4iv     = &glVertexAttribI4ivNULL;
-        vertexAttribI4sv     = &glVertexAttribI4svNULL;
-        vertexAttribI4ubv    = &glVertexAttribI4ubvNULL;
-        vertexAttribI4ui     = &glVertexAttribI4uiNULL;
-        vertexAttribI4uiv    = &glVertexAttribI4uivNULL;
-        vertexAttribI4usv    = &glVertexAttribI4usvNULL;
+        getVertexAttribIiv = &glGetVertexAttribIivNULL;
+        getVertexAttribIuiv = &glGetVertexAttribIuivNULL;
+        vertexAttribI1i = &glVertexAttribI1iNULL;
+        vertexAttribI1iv = &glVertexAttribI1ivNULL;
+        vertexAttribI1ui = &glVertexAttribI1uiNULL;
+        vertexAttribI1uiv = &glVertexAttribI1uivNULL;
+        vertexAttribI2i = &glVertexAttribI2iNULL;
+        vertexAttribI2iv = &glVertexAttribI2ivNULL;
+        vertexAttribI2ui = &glVertexAttribI2uiNULL;
+        vertexAttribI2uiv = &glVertexAttribI2uivNULL;
+        vertexAttribI3i = &glVertexAttribI3iNULL;
+        vertexAttribI3iv = &glVertexAttribI3ivNULL;
+        vertexAttribI3ui = &glVertexAttribI3uiNULL;
+        vertexAttribI3uiv = &glVertexAttribI3uivNULL;
+        vertexAttribI4bv = &glVertexAttribI4bvNULL;
+        vertexAttribI4i = &glVertexAttribI4iNULL;
+        vertexAttribI4iv = &glVertexAttribI4ivNULL;
+        vertexAttribI4sv = &glVertexAttribI4svNULL;
+        vertexAttribI4ubv = &glVertexAttribI4ubvNULL;
+        vertexAttribI4ui = &glVertexAttribI4uiNULL;
+        vertexAttribI4uiv = &glVertexAttribI4uivNULL;
+        vertexAttribI4usv = &glVertexAttribI4usvNULL;
         vertexAttribIPointer = &glVertexAttribIPointerNULL;
     }
 
@@ -4623,396 +4610,394 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     }
 }
 
-void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
-                                        const std::set<std::string> &extensions)
+void DispatchTableGL::initProcsGLESNULL(const gl::Version &version, const std::set<std::string> &extensions)
 {
     if (version >= gl::Version(2, 0))
     {
-        activeTexture                       = &glActiveTextureNULL;
-        attachShader                        = &glAttachShaderNULL;
-        bindAttribLocation                  = &glBindAttribLocationNULL;
-        bindBuffer                          = &glBindBufferNULL;
-        bindFramebuffer                     = &glBindFramebufferNULL;
-        bindRenderbuffer                    = &glBindRenderbufferNULL;
-        bindTexture                         = &glBindTextureNULL;
-        blendColor                          = &glBlendColorNULL;
-        blendEquation                       = &glBlendEquationNULL;
-        blendEquationSeparate               = &glBlendEquationSeparateNULL;
-        blendFunc                           = &glBlendFuncNULL;
-        blendFuncSeparate                   = &glBlendFuncSeparateNULL;
-        bufferData                          = &glBufferDataNULL;
-        bufferSubData                       = &glBufferSubDataNULL;
-        checkFramebufferStatus              = &glCheckFramebufferStatusNULL;
-        clear                               = &glClearNULL;
-        clearColor                          = &glClearColorNULL;
-        clearDepthf                         = &glClearDepthfNULL;
-        clearStencil                        = &glClearStencilNULL;
-        colorMask                           = &glColorMaskNULL;
-        compileShader                       = &glCompileShaderNULL;
-        compressedTexImage2D                = &glCompressedTexImage2DNULL;
-        compressedTexSubImage2D             = &glCompressedTexSubImage2DNULL;
-        copyTexImage2D                      = &glCopyTexImage2DNULL;
-        copyTexSubImage2D                   = &glCopyTexSubImage2DNULL;
-        createProgram                       = &glCreateProgramNULL;
-        createShader                        = &glCreateShaderNULL;
-        cullFace                            = &glCullFaceNULL;
-        deleteBuffers                       = &glDeleteBuffersNULL;
-        deleteFramebuffers                  = &glDeleteFramebuffersNULL;
-        deleteProgram                       = &glDeleteProgramNULL;
-        deleteRenderbuffers                 = &glDeleteRenderbuffersNULL;
-        deleteShader                        = &glDeleteShaderNULL;
-        deleteTextures                      = &glDeleteTexturesNULL;
-        depthFunc                           = &glDepthFuncNULL;
-        depthMask                           = &glDepthMaskNULL;
-        depthRangef                         = &glDepthRangefNULL;
-        detachShader                        = &glDetachShaderNULL;
-        disable                             = &glDisableNULL;
-        disableVertexAttribArray            = &glDisableVertexAttribArrayNULL;
-        drawArrays                          = &glDrawArraysNULL;
-        drawElements                        = &glDrawElementsNULL;
-        enable                              = &glEnableNULL;
-        enableVertexAttribArray             = &glEnableVertexAttribArrayNULL;
-        finish                              = &glFinishNULL;
-        flush                               = &glFlushNULL;
-        framebufferRenderbuffer             = &glFramebufferRenderbufferNULL;
-        framebufferTexture2D                = &glFramebufferTexture2DNULL;
-        frontFace                           = &glFrontFaceNULL;
-        genBuffers                          = &glGenBuffersNULL;
-        genFramebuffers                     = &glGenFramebuffersNULL;
-        genRenderbuffers                    = &glGenRenderbuffersNULL;
-        genTextures                         = &glGenTexturesNULL;
-        generateMipmap                      = &glGenerateMipmapNULL;
-        getActiveAttrib                     = &glGetActiveAttribNULL;
-        getActiveUniform                    = &glGetActiveUniformNULL;
-        getAttachedShaders                  = &glGetAttachedShadersNULL;
-        getAttribLocation                   = &glGetAttribLocationNULL;
-        getBooleanv                         = &glGetBooleanvNULL;
-        getBufferParameteriv                = &glGetBufferParameterivNULL;
-        getError                            = &glGetErrorNULL;
-        getFloatv                           = &glGetFloatvNULL;
+        activeTexture = &glActiveTextureNULL;
+        attachShader = &glAttachShaderNULL;
+        bindAttribLocation = &glBindAttribLocationNULL;
+        bindBuffer = &glBindBufferNULL;
+        bindFramebuffer = &glBindFramebufferNULL;
+        bindRenderbuffer = &glBindRenderbufferNULL;
+        bindTexture = &glBindTextureNULL;
+        blendColor = &glBlendColorNULL;
+        blendEquation = &glBlendEquationNULL;
+        blendEquationSeparate = &glBlendEquationSeparateNULL;
+        blendFunc = &glBlendFuncNULL;
+        blendFuncSeparate = &glBlendFuncSeparateNULL;
+        bufferData = &glBufferDataNULL;
+        bufferSubData = &glBufferSubDataNULL;
+        checkFramebufferStatus = &glCheckFramebufferStatusNULL;
+        clear = &glClearNULL;
+        clearColor = &glClearColorNULL;
+        clearDepthf = &glClearDepthfNULL;
+        clearStencil = &glClearStencilNULL;
+        colorMask = &glColorMaskNULL;
+        compileShader = &glCompileShaderNULL;
+        compressedTexImage2D = &glCompressedTexImage2DNULL;
+        compressedTexSubImage2D = &glCompressedTexSubImage2DNULL;
+        copyTexImage2D = &glCopyTexImage2DNULL;
+        copyTexSubImage2D = &glCopyTexSubImage2DNULL;
+        createProgram = &glCreateProgramNULL;
+        createShader = &glCreateShaderNULL;
+        cullFace = &glCullFaceNULL;
+        deleteBuffers = &glDeleteBuffersNULL;
+        deleteFramebuffers = &glDeleteFramebuffersNULL;
+        deleteProgram = &glDeleteProgramNULL;
+        deleteRenderbuffers = &glDeleteRenderbuffersNULL;
+        deleteShader = &glDeleteShaderNULL;
+        deleteTextures = &glDeleteTexturesNULL;
+        depthFunc = &glDepthFuncNULL;
+        depthMask = &glDepthMaskNULL;
+        depthRangef = &glDepthRangefNULL;
+        detachShader = &glDetachShaderNULL;
+        disable = &glDisableNULL;
+        disableVertexAttribArray = &glDisableVertexAttribArrayNULL;
+        drawArrays = &glDrawArraysNULL;
+        drawElements = &glDrawElementsNULL;
+        enable = &glEnableNULL;
+        enableVertexAttribArray = &glEnableVertexAttribArrayNULL;
+        finish = &glFinishNULL;
+        flush = &glFlushNULL;
+        framebufferRenderbuffer = &glFramebufferRenderbufferNULL;
+        framebufferTexture2D = &glFramebufferTexture2DNULL;
+        frontFace = &glFrontFaceNULL;
+        genBuffers = &glGenBuffersNULL;
+        genFramebuffers = &glGenFramebuffersNULL;
+        genRenderbuffers = &glGenRenderbuffersNULL;
+        genTextures = &glGenTexturesNULL;
+        generateMipmap = &glGenerateMipmapNULL;
+        getActiveAttrib = &glGetActiveAttribNULL;
+        getActiveUniform = &glGetActiveUniformNULL;
+        getAttachedShaders = &glGetAttachedShadersNULL;
+        getAttribLocation = &glGetAttribLocationNULL;
+        getBooleanv = &glGetBooleanvNULL;
+        getBufferParameteriv = &glGetBufferParameterivNULL;
+        getError = &glGetErrorNULL;
+        getFloatv = &glGetFloatvNULL;
         getFramebufferAttachmentParameteriv = &glGetFramebufferAttachmentParameterivNULL;
-        getIntegerv                         = &glGetIntegervNULL;
-        getProgramInfoLog                   = &glGetProgramInfoLogNULL;
-        getProgramiv                        = &glGetProgramivNULL;
-        getRenderbufferParameteriv          = &glGetRenderbufferParameterivNULL;
-        getShaderInfoLog                    = &glGetShaderInfoLogNULL;
-        getShaderPrecisionFormat            = &glGetShaderPrecisionFormatNULL;
-        getShaderSource                     = &glGetShaderSourceNULL;
-        getShaderiv                         = &glGetShaderivNULL;
-        getString                           = &glGetStringNULL;
-        getTexParameterfv                   = &glGetTexParameterfvNULL;
-        getTexParameteriv                   = &glGetTexParameterivNULL;
-        getUniformLocation                  = &glGetUniformLocationNULL;
-        getUniformfv                        = &glGetUniformfvNULL;
-        getUniformiv                        = &glGetUniformivNULL;
-        getVertexAttribPointerv             = &glGetVertexAttribPointervNULL;
-        getVertexAttribfv                   = &glGetVertexAttribfvNULL;
-        getVertexAttribiv                   = &glGetVertexAttribivNULL;
-        hint                                = &glHintNULL;
-        isBuffer                            = &glIsBufferNULL;
-        isEnabled                           = &glIsEnabledNULL;
-        isFramebuffer                       = &glIsFramebufferNULL;
-        isProgram                           = &glIsProgramNULL;
-        isRenderbuffer                      = &glIsRenderbufferNULL;
-        isShader                            = &glIsShaderNULL;
-        isTexture                           = &glIsTextureNULL;
-        lineWidth                           = &glLineWidthNULL;
-        linkProgram                         = &glLinkProgramNULL;
-        pixelStorei                         = &glPixelStoreiNULL;
-        polygonOffset                       = &glPolygonOffsetNULL;
-        readPixels                          = &glReadPixelsNULL;
-        releaseShaderCompiler               = &glReleaseShaderCompilerNULL;
-        renderbufferStorage                 = &glRenderbufferStorageNULL;
-        sampleCoverage                      = &glSampleCoverageNULL;
-        scissor                             = &glScissorNULL;
-        shaderBinary                        = &glShaderBinaryNULL;
-        shaderSource                        = &glShaderSourceNULL;
-        stencilFunc                         = &glStencilFuncNULL;
-        stencilFuncSeparate                 = &glStencilFuncSeparateNULL;
-        stencilMask                         = &glStencilMaskNULL;
-        stencilMaskSeparate                 = &glStencilMaskSeparateNULL;
-        stencilOp                           = &glStencilOpNULL;
-        stencilOpSeparate                   = &glStencilOpSeparateNULL;
-        texImage2D                          = &glTexImage2DNULL;
-        texParameterf                       = &glTexParameterfNULL;
-        texParameterfv                      = &glTexParameterfvNULL;
-        texParameteri                       = &glTexParameteriNULL;
-        texParameteriv                      = &glTexParameterivNULL;
-        texSubImage2D                       = &glTexSubImage2DNULL;
-        uniform1f                           = &glUniform1fNULL;
-        uniform1fv                          = &glUniform1fvNULL;
-        uniform1i                           = &glUniform1iNULL;
-        uniform1iv                          = &glUniform1ivNULL;
-        uniform2f                           = &glUniform2fNULL;
-        uniform2fv                          = &glUniform2fvNULL;
-        uniform2i                           = &glUniform2iNULL;
-        uniform2iv                          = &glUniform2ivNULL;
-        uniform3f                           = &glUniform3fNULL;
-        uniform3fv                          = &glUniform3fvNULL;
-        uniform3i                           = &glUniform3iNULL;
-        uniform3iv                          = &glUniform3ivNULL;
-        uniform4f                           = &glUniform4fNULL;
-        uniform4fv                          = &glUniform4fvNULL;
-        uniform4i                           = &glUniform4iNULL;
-        uniform4iv                          = &glUniform4ivNULL;
-        uniformMatrix2fv                    = &glUniformMatrix2fvNULL;
-        uniformMatrix3fv                    = &glUniformMatrix3fvNULL;
-        uniformMatrix4fv                    = &glUniformMatrix4fvNULL;
-        useProgram                          = &glUseProgramNULL;
-        validateProgram                     = &glValidateProgramNULL;
-        vertexAttrib1f                      = &glVertexAttrib1fNULL;
-        vertexAttrib1fv                     = &glVertexAttrib1fvNULL;
-        vertexAttrib2f                      = &glVertexAttrib2fNULL;
-        vertexAttrib2fv                     = &glVertexAttrib2fvNULL;
-        vertexAttrib3f                      = &glVertexAttrib3fNULL;
-        vertexAttrib3fv                     = &glVertexAttrib3fvNULL;
-        vertexAttrib4f                      = &glVertexAttrib4fNULL;
-        vertexAttrib4fv                     = &glVertexAttrib4fvNULL;
-        vertexAttribPointer                 = &glVertexAttribPointerNULL;
-        viewport                            = &glViewportNULL;
+        getIntegerv = &glGetIntegervNULL;
+        getProgramInfoLog = &glGetProgramInfoLogNULL;
+        getProgramiv = &glGetProgramivNULL;
+        getRenderbufferParameteriv = &glGetRenderbufferParameterivNULL;
+        getShaderInfoLog = &glGetShaderInfoLogNULL;
+        getShaderPrecisionFormat = &glGetShaderPrecisionFormatNULL;
+        getShaderSource = &glGetShaderSourceNULL;
+        getShaderiv = &glGetShaderivNULL;
+        getString = &glGetStringNULL;
+        getTexParameterfv = &glGetTexParameterfvNULL;
+        getTexParameteriv = &glGetTexParameterivNULL;
+        getUniformLocation = &glGetUniformLocationNULL;
+        getUniformfv = &glGetUniformfvNULL;
+        getUniformiv = &glGetUniformivNULL;
+        getVertexAttribPointerv = &glGetVertexAttribPointervNULL;
+        getVertexAttribfv = &glGetVertexAttribfvNULL;
+        getVertexAttribiv = &glGetVertexAttribivNULL;
+        hint = &glHintNULL;
+        isBuffer = &glIsBufferNULL;
+        isEnabled = &glIsEnabledNULL;
+        isFramebuffer = &glIsFramebufferNULL;
+        isProgram = &glIsProgramNULL;
+        isRenderbuffer = &glIsRenderbufferNULL;
+        isShader = &glIsShaderNULL;
+        isTexture = &glIsTextureNULL;
+        lineWidth = &glLineWidthNULL;
+        linkProgram = &glLinkProgramNULL;
+        pixelStorei = &glPixelStoreiNULL;
+        polygonOffset = &glPolygonOffsetNULL;
+        readPixels = &glReadPixelsNULL;
+        releaseShaderCompiler = &glReleaseShaderCompilerNULL;
+        renderbufferStorage = &glRenderbufferStorageNULL;
+        sampleCoverage = &glSampleCoverageNULL;
+        scissor = &glScissorNULL;
+        shaderBinary = &glShaderBinaryNULL;
+        shaderSource = &glShaderSourceNULL;
+        stencilFunc = &glStencilFuncNULL;
+        stencilFuncSeparate = &glStencilFuncSeparateNULL;
+        stencilMask = &glStencilMaskNULL;
+        stencilMaskSeparate = &glStencilMaskSeparateNULL;
+        stencilOp = &glStencilOpNULL;
+        stencilOpSeparate = &glStencilOpSeparateNULL;
+        texImage2D = &glTexImage2DNULL;
+        texParameterf = &glTexParameterfNULL;
+        texParameterfv = &glTexParameterfvNULL;
+        texParameteri = &glTexParameteriNULL;
+        texParameteriv = &glTexParameterivNULL;
+        texSubImage2D = &glTexSubImage2DNULL;
+        uniform1f = &glUniform1fNULL;
+        uniform1fv = &glUniform1fvNULL;
+        uniform1i = &glUniform1iNULL;
+        uniform1iv = &glUniform1ivNULL;
+        uniform2f = &glUniform2fNULL;
+        uniform2fv = &glUniform2fvNULL;
+        uniform2i = &glUniform2iNULL;
+        uniform2iv = &glUniform2ivNULL;
+        uniform3f = &glUniform3fNULL;
+        uniform3fv = &glUniform3fvNULL;
+        uniform3i = &glUniform3iNULL;
+        uniform3iv = &glUniform3ivNULL;
+        uniform4f = &glUniform4fNULL;
+        uniform4fv = &glUniform4fvNULL;
+        uniform4i = &glUniform4iNULL;
+        uniform4iv = &glUniform4ivNULL;
+        uniformMatrix2fv = &glUniformMatrix2fvNULL;
+        uniformMatrix3fv = &glUniformMatrix3fvNULL;
+        uniformMatrix4fv = &glUniformMatrix4fvNULL;
+        useProgram = &glUseProgramNULL;
+        validateProgram = &glValidateProgramNULL;
+        vertexAttrib1f = &glVertexAttrib1fNULL;
+        vertexAttrib1fv = &glVertexAttrib1fvNULL;
+        vertexAttrib2f = &glVertexAttrib2fNULL;
+        vertexAttrib2fv = &glVertexAttrib2fvNULL;
+        vertexAttrib3f = &glVertexAttrib3fNULL;
+        vertexAttrib3fv = &glVertexAttrib3fvNULL;
+        vertexAttrib4f = &glVertexAttrib4fNULL;
+        vertexAttrib4fv = &glVertexAttrib4fvNULL;
+        vertexAttribPointer = &glVertexAttribPointerNULL;
+        viewport = &glViewportNULL;
     }
 
     if (version >= gl::Version(3, 0))
     {
-        beginQuery                     = &glBeginQueryNULL;
-        beginTransformFeedback         = &glBeginTransformFeedbackNULL;
-        bindBufferBase                 = &glBindBufferBaseNULL;
-        bindBufferRange                = &glBindBufferRangeNULL;
-        bindSampler                    = &glBindSamplerNULL;
-        bindTransformFeedback          = &glBindTransformFeedbackNULL;
-        bindVertexArray                = &glBindVertexArrayNULL;
-        blitFramebuffer                = &glBlitFramebufferNULL;
-        clearBufferfi                  = &glClearBufferfiNULL;
-        clearBufferfv                  = &glClearBufferfvNULL;
-        clearBufferiv                  = &glClearBufferivNULL;
-        clearBufferuiv                 = &glClearBufferuivNULL;
-        clientWaitSync                 = &glClientWaitSyncNULL;
-        compressedTexImage3D           = &glCompressedTexImage3DNULL;
-        compressedTexSubImage3D        = &glCompressedTexSubImage3DNULL;
-        copyBufferSubData              = &glCopyBufferSubDataNULL;
-        copyTexSubImage3D              = &glCopyTexSubImage3DNULL;
-        deleteQueries                  = &glDeleteQueriesNULL;
-        deleteSamplers                 = &glDeleteSamplersNULL;
-        deleteSync                     = &glDeleteSyncNULL;
-        deleteTransformFeedbacks       = &glDeleteTransformFeedbacksNULL;
-        deleteVertexArrays             = &glDeleteVertexArraysNULL;
-        drawArraysInstanced            = &glDrawArraysInstancedNULL;
-        drawBuffers                    = &glDrawBuffersNULL;
-        drawElementsInstanced          = &glDrawElementsInstancedNULL;
-        drawRangeElements              = &glDrawRangeElementsNULL;
-        endQuery                       = &glEndQueryNULL;
-        endTransformFeedback           = &glEndTransformFeedbackNULL;
-        fenceSync                      = &glFenceSyncNULL;
-        flushMappedBufferRange         = &glFlushMappedBufferRangeNULL;
-        framebufferTextureLayer        = &glFramebufferTextureLayerNULL;
-        genQueries                     = &glGenQueriesNULL;
-        genSamplers                    = &glGenSamplersNULL;
-        genTransformFeedbacks          = &glGenTransformFeedbacksNULL;
-        genVertexArrays                = &glGenVertexArraysNULL;
-        getActiveUniformBlockName      = &glGetActiveUniformBlockNameNULL;
-        getActiveUniformBlockiv        = &glGetActiveUniformBlockivNULL;
-        getActiveUniformsiv            = &glGetActiveUniformsivNULL;
-        getBufferParameteri64v         = &glGetBufferParameteri64vNULL;
-        getBufferPointerv              = &glGetBufferPointervNULL;
-        getFragDataLocation            = &glGetFragDataLocationNULL;
-        getInteger64i_v                = &glGetInteger64i_vNULL;
-        getInteger64v                  = &glGetInteger64vNULL;
-        getIntegeri_v                  = &glGetIntegeri_vNULL;
-        getInternalformativ            = &glGetInternalformativNULL;
-        getProgramBinary               = &glGetProgramBinaryNULL;
-        getQueryObjectuiv              = &glGetQueryObjectuivNULL;
-        getQueryiv                     = &glGetQueryivNULL;
-        getSamplerParameterfv          = &glGetSamplerParameterfvNULL;
-        getSamplerParameteriv          = &glGetSamplerParameterivNULL;
-        getStringi                     = &glGetStringiNULL;
-        getSynciv                      = &glGetSyncivNULL;
-        getTransformFeedbackVarying    = &glGetTransformFeedbackVaryingNULL;
-        getUniformBlockIndex           = &glGetUniformBlockIndexNULL;
-        getUniformIndices              = &glGetUniformIndicesNULL;
-        getUniformuiv                  = &glGetUniformuivNULL;
-        getVertexAttribIiv             = &glGetVertexAttribIivNULL;
-        getVertexAttribIuiv            = &glGetVertexAttribIuivNULL;
-        invalidateFramebuffer          = &glInvalidateFramebufferNULL;
-        invalidateSubFramebuffer       = &glInvalidateSubFramebufferNULL;
-        isQuery                        = &glIsQueryNULL;
-        isSampler                      = &glIsSamplerNULL;
-        isSync                         = &glIsSyncNULL;
-        isTransformFeedback            = &glIsTransformFeedbackNULL;
-        isVertexArray                  = &glIsVertexArrayNULL;
-        mapBufferRange                 = &glMapBufferRangeNULL;
-        pauseTransformFeedback         = &glPauseTransformFeedbackNULL;
-        programBinary                  = &glProgramBinaryNULL;
-        programParameteri              = &glProgramParameteriNULL;
-        readBuffer                     = &glReadBufferNULL;
+        beginQuery = &glBeginQueryNULL;
+        beginTransformFeedback = &glBeginTransformFeedbackNULL;
+        bindBufferBase = &glBindBufferBaseNULL;
+        bindBufferRange = &glBindBufferRangeNULL;
+        bindSampler = &glBindSamplerNULL;
+        bindTransformFeedback = &glBindTransformFeedbackNULL;
+        bindVertexArray = &glBindVertexArrayNULL;
+        blitFramebuffer = &glBlitFramebufferNULL;
+        clearBufferfi = &glClearBufferfiNULL;
+        clearBufferfv = &glClearBufferfvNULL;
+        clearBufferiv = &glClearBufferivNULL;
+        clearBufferuiv = &glClearBufferuivNULL;
+        clientWaitSync = &glClientWaitSyncNULL;
+        compressedTexImage3D = &glCompressedTexImage3DNULL;
+        compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
+        copyBufferSubData = &glCopyBufferSubDataNULL;
+        copyTexSubImage3D = &glCopyTexSubImage3DNULL;
+        deleteQueries = &glDeleteQueriesNULL;
+        deleteSamplers = &glDeleteSamplersNULL;
+        deleteSync = &glDeleteSyncNULL;
+        deleteTransformFeedbacks = &glDeleteTransformFeedbacksNULL;
+        deleteVertexArrays = &glDeleteVertexArraysNULL;
+        drawArraysInstanced = &glDrawArraysInstancedNULL;
+        drawBuffers = &glDrawBuffersNULL;
+        drawElementsInstanced = &glDrawElementsInstancedNULL;
+        drawRangeElements = &glDrawRangeElementsNULL;
+        endQuery = &glEndQueryNULL;
+        endTransformFeedback = &glEndTransformFeedbackNULL;
+        fenceSync = &glFenceSyncNULL;
+        flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
+        framebufferTextureLayer = &glFramebufferTextureLayerNULL;
+        genQueries = &glGenQueriesNULL;
+        genSamplers = &glGenSamplersNULL;
+        genTransformFeedbacks = &glGenTransformFeedbacksNULL;
+        genVertexArrays = &glGenVertexArraysNULL;
+        getActiveUniformBlockName = &glGetActiveUniformBlockNameNULL;
+        getActiveUniformBlockiv = &glGetActiveUniformBlockivNULL;
+        getActiveUniformsiv = &glGetActiveUniformsivNULL;
+        getBufferParameteri64v = &glGetBufferParameteri64vNULL;
+        getBufferPointerv = &glGetBufferPointervNULL;
+        getFragDataLocation = &glGetFragDataLocationNULL;
+        getInteger64i_v = &glGetInteger64i_vNULL;
+        getInteger64v = &glGetInteger64vNULL;
+        getIntegeri_v = &glGetIntegeri_vNULL;
+        getInternalformativ = &glGetInternalformativNULL;
+        getProgramBinary = &glGetProgramBinaryNULL;
+        getQueryObjectuiv = &glGetQueryObjectuivNULL;
+        getQueryiv = &glGetQueryivNULL;
+        getSamplerParameterfv = &glGetSamplerParameterfvNULL;
+        getSamplerParameteriv = &glGetSamplerParameterivNULL;
+        getStringi = &glGetStringiNULL;
+        getSynciv = &glGetSyncivNULL;
+        getTransformFeedbackVarying = &glGetTransformFeedbackVaryingNULL;
+        getUniformBlockIndex = &glGetUniformBlockIndexNULL;
+        getUniformIndices = &glGetUniformIndicesNULL;
+        getUniformuiv = &glGetUniformuivNULL;
+        getVertexAttribIiv = &glGetVertexAttribIivNULL;
+        getVertexAttribIuiv = &glGetVertexAttribIuivNULL;
+        invalidateFramebuffer = &glInvalidateFramebufferNULL;
+        invalidateSubFramebuffer = &glInvalidateSubFramebufferNULL;
+        isQuery = &glIsQueryNULL;
+        isSampler = &glIsSamplerNULL;
+        isSync = &glIsSyncNULL;
+        isTransformFeedback = &glIsTransformFeedbackNULL;
+        isVertexArray = &glIsVertexArrayNULL;
+        mapBufferRange = &glMapBufferRangeNULL;
+        pauseTransformFeedback = &glPauseTransformFeedbackNULL;
+        programBinary = &glProgramBinaryNULL;
+        programParameteri = &glProgramParameteriNULL;
+        readBuffer = &glReadBufferNULL;
         renderbufferStorageMultisample = &glRenderbufferStorageMultisampleNULL;
-        resumeTransformFeedback        = &glResumeTransformFeedbackNULL;
-        samplerParameterf              = &glSamplerParameterfNULL;
-        samplerParameterfv             = &glSamplerParameterfvNULL;
-        samplerParameteri              = &glSamplerParameteriNULL;
-        samplerParameteriv             = &glSamplerParameterivNULL;
-        texImage3D                     = &glTexImage3DNULL;
-        texStorage2D                   = &glTexStorage2DNULL;
-        texStorage3D                   = &glTexStorage3DNULL;
-        texSubImage3D                  = &glTexSubImage3DNULL;
-        transformFeedbackVaryings      = &glTransformFeedbackVaryingsNULL;
-        uniform1ui                     = &glUniform1uiNULL;
-        uniform1uiv                    = &glUniform1uivNULL;
-        uniform2ui                     = &glUniform2uiNULL;
-        uniform2uiv                    = &glUniform2uivNULL;
-        uniform3ui                     = &glUniform3uiNULL;
-        uniform3uiv                    = &glUniform3uivNULL;
-        uniform4ui                     = &glUniform4uiNULL;
-        uniform4uiv                    = &glUniform4uivNULL;
-        uniformBlockBinding            = &glUniformBlockBindingNULL;
-        uniformMatrix2x3fv             = &glUniformMatrix2x3fvNULL;
-        uniformMatrix2x4fv             = &glUniformMatrix2x4fvNULL;
-        uniformMatrix3x2fv             = &glUniformMatrix3x2fvNULL;
-        uniformMatrix3x4fv             = &glUniformMatrix3x4fvNULL;
-        uniformMatrix4x2fv             = &glUniformMatrix4x2fvNULL;
-        uniformMatrix4x3fv             = &glUniformMatrix4x3fvNULL;
-        unmapBuffer                    = &glUnmapBufferNULL;
-        vertexAttribDivisor            = &glVertexAttribDivisorNULL;
-        vertexAttribI4i                = &glVertexAttribI4iNULL;
-        vertexAttribI4iv               = &glVertexAttribI4ivNULL;
-        vertexAttribI4ui               = &glVertexAttribI4uiNULL;
-        vertexAttribI4uiv              = &glVertexAttribI4uivNULL;
-        vertexAttribIPointer           = &glVertexAttribIPointerNULL;
-        waitSync                       = &glWaitSyncNULL;
+        resumeTransformFeedback = &glResumeTransformFeedbackNULL;
+        samplerParameterf = &glSamplerParameterfNULL;
+        samplerParameterfv = &glSamplerParameterfvNULL;
+        samplerParameteri = &glSamplerParameteriNULL;
+        samplerParameteriv = &glSamplerParameterivNULL;
+        texImage3D = &glTexImage3DNULL;
+        texStorage2D = &glTexStorage2DNULL;
+        texStorage3D = &glTexStorage3DNULL;
+        texSubImage3D = &glTexSubImage3DNULL;
+        transformFeedbackVaryings = &glTransformFeedbackVaryingsNULL;
+        uniform1ui = &glUniform1uiNULL;
+        uniform1uiv = &glUniform1uivNULL;
+        uniform2ui = &glUniform2uiNULL;
+        uniform2uiv = &glUniform2uivNULL;
+        uniform3ui = &glUniform3uiNULL;
+        uniform3uiv = &glUniform3uivNULL;
+        uniform4ui = &glUniform4uiNULL;
+        uniform4uiv = &glUniform4uivNULL;
+        uniformBlockBinding = &glUniformBlockBindingNULL;
+        uniformMatrix2x3fv = &glUniformMatrix2x3fvNULL;
+        uniformMatrix2x4fv = &glUniformMatrix2x4fvNULL;
+        uniformMatrix3x2fv = &glUniformMatrix3x2fvNULL;
+        uniformMatrix3x4fv = &glUniformMatrix3x4fvNULL;
+        uniformMatrix4x2fv = &glUniformMatrix4x2fvNULL;
+        uniformMatrix4x3fv = &glUniformMatrix4x3fvNULL;
+        unmapBuffer = &glUnmapBufferNULL;
+        vertexAttribDivisor = &glVertexAttribDivisorNULL;
+        vertexAttribI4i = &glVertexAttribI4iNULL;
+        vertexAttribI4iv = &glVertexAttribI4ivNULL;
+        vertexAttribI4ui = &glVertexAttribI4uiNULL;
+        vertexAttribI4uiv = &glVertexAttribI4uivNULL;
+        vertexAttribIPointer = &glVertexAttribIPointerNULL;
+        waitSync = &glWaitSyncNULL;
     }
 
     if (version >= gl::Version(3, 1))
     {
-        activeShaderProgram        = &glActiveShaderProgramNULL;
-        bindImageTexture           = &glBindImageTextureNULL;
-        bindProgramPipeline        = &glBindProgramPipelineNULL;
-        bindVertexBuffer           = &glBindVertexBufferNULL;
-        createShaderProgramv       = &glCreateShaderProgramvNULL;
-        deleteProgramPipelines     = &glDeleteProgramPipelinesNULL;
-        dispatchCompute            = &glDispatchComputeNULL;
-        dispatchComputeIndirect    = &glDispatchComputeIndirectNULL;
-        drawArraysIndirect         = &glDrawArraysIndirectNULL;
-        drawElementsIndirect       = &glDrawElementsIndirectNULL;
-        framebufferParameteri      = &glFramebufferParameteriNULL;
-        genProgramPipelines        = &glGenProgramPipelinesNULL;
-        getBooleani_v              = &glGetBooleani_vNULL;
-        getFramebufferParameteriv  = &glGetFramebufferParameterivNULL;
-        getMultisamplefv           = &glGetMultisamplefvNULL;
-        getProgramInterfaceiv      = &glGetProgramInterfaceivNULL;
-        getProgramPipelineInfoLog  = &glGetProgramPipelineInfoLogNULL;
-        getProgramPipelineiv       = &glGetProgramPipelineivNULL;
-        getProgramResourceIndex    = &glGetProgramResourceIndexNULL;
+        activeShaderProgram = &glActiveShaderProgramNULL;
+        bindImageTexture = &glBindImageTextureNULL;
+        bindProgramPipeline = &glBindProgramPipelineNULL;
+        bindVertexBuffer = &glBindVertexBufferNULL;
+        createShaderProgramv = &glCreateShaderProgramvNULL;
+        deleteProgramPipelines = &glDeleteProgramPipelinesNULL;
+        dispatchCompute = &glDispatchComputeNULL;
+        dispatchComputeIndirect = &glDispatchComputeIndirectNULL;
+        drawArraysIndirect = &glDrawArraysIndirectNULL;
+        drawElementsIndirect = &glDrawElementsIndirectNULL;
+        framebufferParameteri = &glFramebufferParameteriNULL;
+        genProgramPipelines = &glGenProgramPipelinesNULL;
+        getBooleani_v = &glGetBooleani_vNULL;
+        getFramebufferParameteriv = &glGetFramebufferParameterivNULL;
+        getMultisamplefv = &glGetMultisamplefvNULL;
+        getProgramInterfaceiv = &glGetProgramInterfaceivNULL;
+        getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
+        getProgramPipelineiv = &glGetProgramPipelineivNULL;
+        getProgramResourceIndex = &glGetProgramResourceIndexNULL;
         getProgramResourceLocation = &glGetProgramResourceLocationNULL;
-        getProgramResourceName     = &glGetProgramResourceNameNULL;
-        getProgramResourceiv       = &glGetProgramResourceivNULL;
-        getTexLevelParameterfv     = &glGetTexLevelParameterfvNULL;
-        getTexLevelParameteriv     = &glGetTexLevelParameterivNULL;
-        isProgramPipeline          = &glIsProgramPipelineNULL;
-        memoryBarrier              = &glMemoryBarrierNULL;
-        memoryBarrierByRegion      = &glMemoryBarrierByRegionNULL;
-        programUniform1f           = &glProgramUniform1fNULL;
-        programUniform1fv          = &glProgramUniform1fvNULL;
-        programUniform1i           = &glProgramUniform1iNULL;
-        programUniform1iv          = &glProgramUniform1ivNULL;
-        programUniform1ui          = &glProgramUniform1uiNULL;
-        programUniform1uiv         = &glProgramUniform1uivNULL;
-        programUniform2f           = &glProgramUniform2fNULL;
-        programUniform2fv          = &glProgramUniform2fvNULL;
-        programUniform2i           = &glProgramUniform2iNULL;
-        programUniform2iv          = &glProgramUniform2ivNULL;
-        programUniform2ui          = &glProgramUniform2uiNULL;
-        programUniform2uiv         = &glProgramUniform2uivNULL;
-        programUniform3f           = &glProgramUniform3fNULL;
-        programUniform3fv          = &glProgramUniform3fvNULL;
-        programUniform3i           = &glProgramUniform3iNULL;
-        programUniform3iv          = &glProgramUniform3ivNULL;
-        programUniform3ui          = &glProgramUniform3uiNULL;
-        programUniform3uiv         = &glProgramUniform3uivNULL;
-        programUniform4f           = &glProgramUniform4fNULL;
-        programUniform4fv          = &glProgramUniform4fvNULL;
-        programUniform4i           = &glProgramUniform4iNULL;
-        programUniform4iv          = &glProgramUniform4ivNULL;
-        programUniform4ui          = &glProgramUniform4uiNULL;
-        programUniform4uiv         = &glProgramUniform4uivNULL;
-        programUniformMatrix2fv    = &glProgramUniformMatrix2fvNULL;
-        programUniformMatrix2x3fv  = &glProgramUniformMatrix2x3fvNULL;
-        programUniformMatrix2x4fv  = &glProgramUniformMatrix2x4fvNULL;
-        programUniformMatrix3fv    = &glProgramUniformMatrix3fvNULL;
-        programUniformMatrix3x2fv  = &glProgramUniformMatrix3x2fvNULL;
-        programUniformMatrix3x4fv  = &glProgramUniformMatrix3x4fvNULL;
-        programUniformMatrix4fv    = &glProgramUniformMatrix4fvNULL;
-        programUniformMatrix4x2fv  = &glProgramUniformMatrix4x2fvNULL;
-        programUniformMatrix4x3fv  = &glProgramUniformMatrix4x3fvNULL;
-        sampleMaski                = &glSampleMaskiNULL;
-        texStorage2DMultisample    = &glTexStorage2DMultisampleNULL;
-        useProgramStages           = &glUseProgramStagesNULL;
-        validateProgramPipeline    = &glValidateProgramPipelineNULL;
-        vertexAttribBinding        = &glVertexAttribBindingNULL;
-        vertexAttribFormat         = &glVertexAttribFormatNULL;
-        vertexAttribIFormat        = &glVertexAttribIFormatNULL;
-        vertexBindingDivisor       = &glVertexBindingDivisorNULL;
+        getProgramResourceName = &glGetProgramResourceNameNULL;
+        getProgramResourceiv = &glGetProgramResourceivNULL;
+        getTexLevelParameterfv = &glGetTexLevelParameterfvNULL;
+        getTexLevelParameteriv = &glGetTexLevelParameterivNULL;
+        isProgramPipeline = &glIsProgramPipelineNULL;
+        memoryBarrier = &glMemoryBarrierNULL;
+        memoryBarrierByRegion = &glMemoryBarrierByRegionNULL;
+        programUniform1f = &glProgramUniform1fNULL;
+        programUniform1fv = &glProgramUniform1fvNULL;
+        programUniform1i = &glProgramUniform1iNULL;
+        programUniform1iv = &glProgramUniform1ivNULL;
+        programUniform1ui = &glProgramUniform1uiNULL;
+        programUniform1uiv = &glProgramUniform1uivNULL;
+        programUniform2f = &glProgramUniform2fNULL;
+        programUniform2fv = &glProgramUniform2fvNULL;
+        programUniform2i = &glProgramUniform2iNULL;
+        programUniform2iv = &glProgramUniform2ivNULL;
+        programUniform2ui = &glProgramUniform2uiNULL;
+        programUniform2uiv = &glProgramUniform2uivNULL;
+        programUniform3f = &glProgramUniform3fNULL;
+        programUniform3fv = &glProgramUniform3fvNULL;
+        programUniform3i = &glProgramUniform3iNULL;
+        programUniform3iv = &glProgramUniform3ivNULL;
+        programUniform3ui = &glProgramUniform3uiNULL;
+        programUniform3uiv = &glProgramUniform3uivNULL;
+        programUniform4f = &glProgramUniform4fNULL;
+        programUniform4fv = &glProgramUniform4fvNULL;
+        programUniform4i = &glProgramUniform4iNULL;
+        programUniform4iv = &glProgramUniform4ivNULL;
+        programUniform4ui = &glProgramUniform4uiNULL;
+        programUniform4uiv = &glProgramUniform4uivNULL;
+        programUniformMatrix2fv = &glProgramUniformMatrix2fvNULL;
+        programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
+        programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
+        programUniformMatrix3fv = &glProgramUniformMatrix3fvNULL;
+        programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
+        programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
+        programUniformMatrix4fv = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
+        programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
+        sampleMaski = &glSampleMaskiNULL;
+        texStorage2DMultisample = &glTexStorage2DMultisampleNULL;
+        useProgramStages = &glUseProgramStagesNULL;
+        validateProgramPipeline = &glValidateProgramPipelineNULL;
+        vertexAttribBinding = &glVertexAttribBindingNULL;
+        vertexAttribFormat = &glVertexAttribFormatNULL;
+        vertexAttribIFormat = &glVertexAttribIFormatNULL;
+        vertexBindingDivisor = &glVertexBindingDivisorNULL;
     }
 
     if (version >= gl::Version(3, 2))
     {
-        blendBarrier                    = &glBlendBarrierNULL;
-        blendEquationSeparatei          = &glBlendEquationSeparateiNULL;
-        blendEquationi                  = &glBlendEquationiNULL;
-        blendFuncSeparatei              = &glBlendFuncSeparateiNULL;
-        blendFunci                      = &glBlendFunciNULL;
-        colorMaski                      = &glColorMaskiNULL;
-        copyImageSubData                = &glCopyImageSubDataNULL;
-        debugMessageCallback            = &glDebugMessageCallbackNULL;
-        debugMessageControl             = &glDebugMessageControlNULL;
-        debugMessageInsert              = &glDebugMessageInsertNULL;
-        disablei                        = &glDisableiNULL;
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        blendBarrier = &glBlendBarrierNULL;
+        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
+        blendEquationi = &glBlendEquationiNULL;
+        blendFuncSeparatei = &glBlendFuncSeparateiNULL;
+        blendFunci = &glBlendFunciNULL;
+        colorMaski = &glColorMaskiNULL;
+        copyImageSubData = &glCopyImageSubDataNULL;
+        debugMessageCallback = &glDebugMessageCallbackNULL;
+        debugMessageControl = &glDebugMessageControlNULL;
+        debugMessageInsert = &glDebugMessageInsertNULL;
+        disablei = &glDisableiNULL;
+        drawElementsBaseVertex = &glDrawElementsBaseVertexNULL;
         drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        enablei                         = &glEnableiNULL;
-        framebufferTexture              = &glFramebufferTextureNULL;
-        getDebugMessageLog              = &glGetDebugMessageLogNULL;
-        getGraphicsResetStatus          = &glGetGraphicsResetStatusNULL;
-        getObjectLabel                  = &glGetObjectLabelNULL;
-        getObjectPtrLabel               = &glGetObjectPtrLabelNULL;
-        getPointerv                     = &glGetPointervNULL;
-        getSamplerParameterIiv          = &glGetSamplerParameterIivNULL;
-        getSamplerParameterIuiv         = &glGetSamplerParameterIuivNULL;
-        getTexParameterIiv              = &glGetTexParameterIivNULL;
-        getTexParameterIuiv             = &glGetTexParameterIuivNULL;
-        getnUniformfv                   = &glGetnUniformfvNULL;
-        getnUniformiv                   = &glGetnUniformivNULL;
-        getnUniformuiv                  = &glGetnUniformuivNULL;
-        isEnabledi                      = &glIsEnablediNULL;
-        minSampleShading                = &glMinSampleShadingNULL;
-        objectLabel                     = &glObjectLabelNULL;
-        objectPtrLabel                  = &glObjectPtrLabelNULL;
-        patchParameteri                 = &glPatchParameteriNULL;
-        popDebugGroup                   = &glPopDebugGroupNULL;
-        primitiveBoundingBox            = &glPrimitiveBoundingBoxNULL;
-        pushDebugGroup                  = &glPushDebugGroupNULL;
-        readnPixels                     = &glReadnPixelsNULL;
-        samplerParameterIiv             = &glSamplerParameterIivNULL;
-        samplerParameterIuiv            = &glSamplerParameterIuivNULL;
-        texBuffer                       = &glTexBufferNULL;
-        texBufferRange                  = &glTexBufferRangeNULL;
-        texParameterIiv                 = &glTexParameterIivNULL;
-        texParameterIuiv                = &glTexParameterIuivNULL;
-        texStorage3DMultisample         = &glTexStorage3DMultisampleNULL;
+        drawRangeElementsBaseVertex = &glDrawRangeElementsBaseVertexNULL;
+        enablei = &glEnableiNULL;
+        framebufferTexture = &glFramebufferTextureNULL;
+        getDebugMessageLog = &glGetDebugMessageLogNULL;
+        getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
+        getObjectLabel = &glGetObjectLabelNULL;
+        getObjectPtrLabel = &glGetObjectPtrLabelNULL;
+        getPointerv = &glGetPointervNULL;
+        getSamplerParameterIiv = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
+        getTexParameterIiv = &glGetTexParameterIivNULL;
+        getTexParameterIuiv = &glGetTexParameterIuivNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        getnUniformuiv = &glGetnUniformuivNULL;
+        isEnabledi = &glIsEnablediNULL;
+        minSampleShading = &glMinSampleShadingNULL;
+        objectLabel = &glObjectLabelNULL;
+        objectPtrLabel = &glObjectPtrLabelNULL;
+        patchParameteri = &glPatchParameteriNULL;
+        popDebugGroup = &glPopDebugGroupNULL;
+        primitiveBoundingBox = &glPrimitiveBoundingBoxNULL;
+        pushDebugGroup = &glPushDebugGroupNULL;
+        readnPixels = &glReadnPixelsNULL;
+        samplerParameterIiv = &glSamplerParameterIivNULL;
+        samplerParameterIuiv = &glSamplerParameterIuivNULL;
+        texBuffer = &glTexBufferNULL;
+        texBufferRange = &glTexBufferRangeNULL;
+        texParameterIiv = &glTexParameterIivNULL;
+        texParameterIuiv = &glTexParameterIuivNULL;
+        texStorage3DMultisample = &glTexStorage3DMultisampleNULL;
     }
 
     if (extensions.count("GL_EXT_base_instance") != 0)
     {
-        drawArraysInstancedBaseInstance   = &glDrawArraysInstancedBaseInstanceNULL;
+        drawArraysInstancedBaseInstance = &glDrawArraysInstancedBaseInstanceNULL;
         drawElementsInstancedBaseInstance = &glDrawElementsInstancedBaseInstanceNULL;
-        drawElementsInstancedBaseVertexBaseInstance =
-            &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
+        drawElementsInstancedBaseVertexBaseInstance = &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
     }
 
     if (extensions.count("GL_EXT_blend_func_extended") != 0)
     {
-        bindFragDataLocation            = &glBindFragDataLocationNULL;
-        bindFragDataLocationIndexed     = &glBindFragDataLocationIndexedNULL;
-        getFragDataIndex                = &glGetFragDataIndexNULL;
+        bindFragDataLocation = &glBindFragDataLocationNULL;
+        bindFragDataLocationIndexed = &glBindFragDataLocationIndexedNULL;
+        getFragDataIndex = &glGetFragDataIndexNULL;
         getProgramResourceLocationIndex = &glGetProgramResourceLocationIndexNULL;
     }
 
@@ -5023,7 +5008,7 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_clear_texture") != 0)
     {
-        clearTexImage    = &glClearTexImageNULL;
+        clearTexImage = &glClearTexImageNULL;
         clearTexSubImage = &glClearTexSubImageNULL;
     }
 
@@ -5039,17 +5024,17 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
     {
-        beginQuery          = &glBeginQueryNULL;
-        deleteQueries       = &glDeleteQueriesNULL;
-        endQuery            = &glEndQueryNULL;
-        genQueries          = &glGenQueriesNULL;
-        getQueryObjecti64v  = &glGetQueryObjecti64vNULL;
-        getQueryObjectiv    = &glGetQueryObjectivNULL;
+        beginQuery = &glBeginQueryNULL;
+        deleteQueries = &glDeleteQueriesNULL;
+        endQuery = &glEndQueryNULL;
+        genQueries = &glGenQueriesNULL;
+        getQueryObjecti64v = &glGetQueryObjecti64vNULL;
+        getQueryObjectiv = &glGetQueryObjectivNULL;
         getQueryObjectui64v = &glGetQueryObjectui64vNULL;
-        getQueryObjectuiv   = &glGetQueryObjectuivNULL;
-        getQueryiv          = &glGetQueryivNULL;
-        isQuery             = &glIsQueryNULL;
-        queryCounter        = &glQueryCounterNULL;
+        getQueryObjectuiv = &glGetQueryObjectuivNULL;
+        getQueryiv = &glGetQueryivNULL;
+        isQuery = &glIsQueryNULL;
+        queryCounter = &glQueryCounterNULL;
     }
 
     if (extensions.count("GL_EXT_draw_buffers") != 0)
@@ -5060,26 +5045,26 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
     {
         blendEquationSeparatei = &glBlendEquationSeparateiNULL;
-        blendEquationi         = &glBlendEquationiNULL;
-        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
-        blendFunci             = &glBlendFunciNULL;
-        colorMaski             = &glColorMaskiNULL;
-        disablei               = &glDisableiNULL;
-        enablei                = &glEnableiNULL;
-        isEnabledi             = &glIsEnablediNULL;
+        blendEquationi = &glBlendEquationiNULL;
+        blendFuncSeparatei = &glBlendFuncSeparateiNULL;
+        blendFunci = &glBlendFunciNULL;
+        colorMaski = &glColorMaskiNULL;
+        disablei = &glDisableiNULL;
+        enablei = &glEnableiNULL;
+        isEnabledi = &glIsEnablediNULL;
     }
 
     if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
     {
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        drawElementsBaseVertex = &glDrawElementsBaseVertexNULL;
         drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
+        drawRangeElementsBaseVertex = &glDrawRangeElementsBaseVertexNULL;
+        multiDrawElementsBaseVertex = &glMultiDrawElementsBaseVertexNULL;
     }
 
     if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
     {
-        drawTransformFeedback          = &glDrawTransformFeedbackNULL;
+        drawTransformFeedback = &glDrawTransformFeedbackNULL;
         drawTransformFeedbackInstanced = &glDrawTransformFeedbackInstancedNULL;
     }
 
@@ -5096,12 +5081,12 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_map_buffer_range") != 0)
     {
         flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
-        mapBufferRange         = &glMapBufferRangeNULL;
+        mapBufferRange = &glMapBufferRangeNULL;
     }
 
     if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
     {
-        multiDrawArraysIndirect   = &glMultiDrawArraysIndirectNULL;
+        multiDrawArraysIndirect = &glMultiDrawArraysIndirectNULL;
         multiDrawElementsIndirect = &glMultiDrawElementsIndirectNULL;
     }
 
@@ -5117,13 +5102,13 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
     {
-        beginQuery        = &glBeginQueryNULL;
-        deleteQueries     = &glDeleteQueriesNULL;
-        endQuery          = &glEndQueryNULL;
-        genQueries        = &glGenQueriesNULL;
+        beginQuery = &glBeginQueryNULL;
+        deleteQueries = &glDeleteQueriesNULL;
+        endQuery = &glEndQueryNULL;
+        genQueries = &glGenQueriesNULL;
         getQueryObjectuiv = &glGetQueryObjectuivNULL;
-        getQueryiv        = &glGetQueryivNULL;
-        isQuery           = &glIsQueryNULL;
+        getQueryiv = &glGetQueryivNULL;
+        isQuery = &glIsQueryNULL;
     }
 
     if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
@@ -5134,9 +5119,9 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_robustness") != 0)
     {
         getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        readnPixels            = &glReadnPixelsNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        readnPixels = &glReadnPixelsNULL;
     }
 
     if (extensions.count("GL_EXT_tessellation_shader") != 0)
@@ -5146,27 +5131,27 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_texture_border_clamp") != 0)
     {
-        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIiv = &glGetSamplerParameterIivNULL;
         getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
-        getTexParameterIiv      = &glGetTexParameterIivNULL;
-        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
-        samplerParameterIiv     = &glSamplerParameterIivNULL;
-        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
-        texParameterIiv         = &glTexParameterIivNULL;
-        texParameterIuiv        = &glTexParameterIuivNULL;
+        getTexParameterIiv = &glGetTexParameterIivNULL;
+        getTexParameterIuiv = &glGetTexParameterIuivNULL;
+        samplerParameterIiv = &glSamplerParameterIivNULL;
+        samplerParameterIuiv = &glSamplerParameterIuivNULL;
+        texParameterIiv = &glTexParameterIivNULL;
+        texParameterIuiv = &glTexParameterIuivNULL;
     }
 
     if (extensions.count("GL_EXT_texture_buffer") != 0)
     {
-        texBuffer      = &glTexBufferNULL;
+        texBuffer = &glTexBufferNULL;
         texBufferRange = &glTexBufferRangeNULL;
     }
 
     if (extensions.count("GL_EXT_texture_storage") != 0)
     {
-        texStorage1D     = &glTexStorage1DNULL;
-        texStorage2D     = &glTexStorage2DNULL;
-        texStorage3D     = &glTexStorage3DNULL;
+        texStorage1D = &glTexStorage1DNULL;
+        texStorage2D = &glTexStorage2DNULL;
+        texStorage3D = &glTexStorage3DNULL;
         textureStorage1D = &glTextureStorage1DNULL;
         textureStorage2D = &glTextureStorage2DNULL;
         textureStorage3D = &glTextureStorage3DNULL;
@@ -5180,31 +5165,31 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_KHR_debug") != 0)
     {
         debugMessageCallback = &glDebugMessageCallbackNULL;
-        debugMessageControl  = &glDebugMessageControlNULL;
-        debugMessageInsert   = &glDebugMessageInsertNULL;
-        getDebugMessageLog   = &glGetDebugMessageLogNULL;
-        getObjectLabel       = &glGetObjectLabelNULL;
-        getObjectPtrLabel    = &glGetObjectPtrLabelNULL;
-        getPointerv          = &glGetPointervNULL;
-        objectLabel          = &glObjectLabelNULL;
-        objectPtrLabel       = &glObjectPtrLabelNULL;
-        popDebugGroup        = &glPopDebugGroupNULL;
-        pushDebugGroup       = &glPushDebugGroupNULL;
+        debugMessageControl = &glDebugMessageControlNULL;
+        debugMessageInsert = &glDebugMessageInsertNULL;
+        getDebugMessageLog = &glGetDebugMessageLogNULL;
+        getObjectLabel = &glGetObjectLabelNULL;
+        getObjectPtrLabel = &glGetObjectPtrLabelNULL;
+        getPointerv = &glGetPointervNULL;
+        objectLabel = &glObjectLabelNULL;
+        objectPtrLabel = &glObjectPtrLabelNULL;
+        popDebugGroup = &glPopDebugGroupNULL;
+        pushDebugGroup = &glPushDebugGroupNULL;
     }
 
     if (extensions.count("GL_KHR_robustness") != 0)
     {
         getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        getnUniformuiv         = &glGetnUniformuivNULL;
-        readnPixels            = &glReadnPixelsNULL;
+        getnUniformfv = &glGetnUniformfvNULL;
+        getnUniformiv = &glGetnUniformivNULL;
+        getnUniformuiv = &glGetnUniformuivNULL;
+        readnPixels = &glReadnPixelsNULL;
     }
 
     if (extensions.count("GL_OES_EGL_image") != 0)
     {
         eGLImageTargetRenderbufferStorageOES = &glEGLImageTargetRenderbufferStorageOESNULL;
-        eGLImageTargetTexture2DOES           = &glEGLImageTargetTexture2DOESNULL;
+        eGLImageTargetTexture2DOES = &glEGLImageTargetTexture2DOESNULL;
     }
 
     if (extensions.count("GL_OES_copy_image") != 0)
@@ -5215,21 +5200,21 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
     {
         blendEquationSeparatei = &glBlendEquationSeparateiNULL;
-        blendEquationi         = &glBlendEquationiNULL;
-        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
-        blendFunci             = &glBlendFunciNULL;
-        colorMaski             = &glColorMaskiNULL;
-        disablei               = &glDisableiNULL;
-        enablei                = &glEnableiNULL;
-        isEnabledi             = &glIsEnablediNULL;
+        blendEquationi = &glBlendEquationiNULL;
+        blendFuncSeparatei = &glBlendFuncSeparateiNULL;
+        blendFunci = &glBlendFunciNULL;
+        colorMaski = &glColorMaskiNULL;
+        disablei = &glDisableiNULL;
+        enablei = &glEnableiNULL;
+        isEnabledi = &glIsEnablediNULL;
     }
 
     if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
     {
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        drawElementsBaseVertex = &glDrawElementsBaseVertexNULL;
         drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
+        drawRangeElementsBaseVertex = &glDrawRangeElementsBaseVertexNULL;
+        multiDrawElementsBaseVertex = &glMultiDrawElementsBaseVertexNULL;
     }
 
     if (extensions.count("GL_OES_geometry_shader") != 0)
@@ -5240,14 +5225,14 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_OES_get_program_binary") != 0)
     {
         getProgramBinary = &glGetProgramBinaryNULL;
-        programBinary    = &glProgramBinaryNULL;
+        programBinary = &glProgramBinaryNULL;
     }
 
     if (extensions.count("GL_OES_mapbuffer") != 0)
     {
         getBufferPointerv = &glGetBufferPointervNULL;
-        mapBuffer         = &glMapBufferNULL;
-        unmapBuffer       = &glUnmapBufferNULL;
+        mapBuffer = &glMapBufferNULL;
+        unmapBuffer = &glUnmapBufferNULL;
     }
 
     if (extensions.count("GL_OES_primitive_bounding_box") != 0)
@@ -5267,29 +5252,29 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_OES_texture_3D") != 0)
     {
-        compressedTexImage3D    = &glCompressedTexImage3DNULL;
+        compressedTexImage3D = &glCompressedTexImage3DNULL;
         compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
-        copyTexSubImage3D       = &glCopyTexSubImage3DNULL;
-        framebufferTexture3D    = &glFramebufferTexture3DNULL;
-        texImage3D              = &glTexImage3DNULL;
-        texSubImage3D           = &glTexSubImage3DNULL;
+        copyTexSubImage3D = &glCopyTexSubImage3DNULL;
+        framebufferTexture3D = &glFramebufferTexture3DNULL;
+        texImage3D = &glTexImage3DNULL;
+        texSubImage3D = &glTexSubImage3DNULL;
     }
 
     if (extensions.count("GL_OES_texture_border_clamp") != 0)
     {
-        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIiv = &glGetSamplerParameterIivNULL;
         getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
-        getTexParameterIiv      = &glGetTexParameterIivNULL;
-        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
-        samplerParameterIiv     = &glSamplerParameterIivNULL;
-        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
-        texParameterIiv         = &glTexParameterIivNULL;
-        texParameterIuiv        = &glTexParameterIuivNULL;
+        getTexParameterIiv = &glGetTexParameterIivNULL;
+        getTexParameterIuiv = &glGetTexParameterIuivNULL;
+        samplerParameterIiv = &glSamplerParameterIivNULL;
+        samplerParameterIuiv = &glSamplerParameterIuivNULL;
+        texParameterIiv = &glTexParameterIivNULL;
+        texParameterIuiv = &glTexParameterIuivNULL;
     }
 
     if (extensions.count("GL_OES_texture_buffer") != 0)
     {
-        texBuffer      = &glTexBufferNULL;
+        texBuffer = &glTexBufferNULL;
         texBufferRange = &glTexBufferRangeNULL;
     }
 
@@ -5305,23 +5290,23 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_OES_vertex_array_object") != 0)
     {
-        bindVertexArray    = &glBindVertexArrayNULL;
+        bindVertexArray = &glBindVertexArrayNULL;
         deleteVertexArrays = &glDeleteVertexArraysNULL;
-        genVertexArrays    = &glGenVertexArraysNULL;
-        isVertexArray      = &glIsVertexArrayNULL;
+        genVertexArrays = &glGenVertexArraysNULL;
+        isVertexArray = &glIsVertexArrayNULL;
     }
 
     if (extensions.count("GL_OES_viewport_array") != 0)
     {
-        disablei          = &glDisableiNULL;
-        enablei           = &glEnableiNULL;
-        getFloati_v       = &glGetFloati_vNULL;
-        isEnabledi        = &glIsEnablediNULL;
-        scissorArrayv     = &glScissorArrayvNULL;
-        scissorIndexed    = &glScissorIndexedNULL;
-        scissorIndexedv   = &glScissorIndexedvNULL;
-        viewportArrayv    = &glViewportArrayvNULL;
-        viewportIndexedf  = &glViewportIndexedfNULL;
+        disablei = &glDisableiNULL;
+        enablei = &glEnableiNULL;
+        getFloati_v = &glGetFloati_vNULL;
+        isEnabledi = &glIsEnablediNULL;
+        scissorArrayv = &glScissorArrayvNULL;
+        scissorIndexed = &glScissorIndexedNULL;
+        scissorIndexedv = &glScissorIndexedvNULL;
+        viewportArrayv = &glViewportArrayvNULL;
+        viewportIndexedf = &glViewportIndexedfNULL;
         viewportIndexedfv = &glViewportIndexedfvNULL;
     }
 }
@@ -5341,80 +5326,80 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
     if (extensions.count("GL_EXT_debug_marker") != 0)
     {
         insertEventMarkerEXT = &glInsertEventMarkerEXTNULL;
-        popGroupMarkerEXT    = &glPopGroupMarkerEXTNULL;
-        pushGroupMarkerEXT   = &glPushGroupMarkerEXTNULL;
+        popGroupMarkerEXT = &glPopGroupMarkerEXTNULL;
+        pushGroupMarkerEXT = &glPushGroupMarkerEXTNULL;
     }
 
     if (extensions.count("GL_EXT_draw_instanced") != 0)
     {
-        drawArraysInstanced   = &glDrawArraysInstancedNULL;
+        drawArraysInstanced = &glDrawArraysInstancedNULL;
         drawElementsInstanced = &glDrawElementsInstancedNULL;
     }
 
     if (extensions.count("GL_EXT_multi_draw_arrays") != 0)
     {
-        multiDrawArrays   = &glMultiDrawArraysNULL;
+        multiDrawArrays = &glMultiDrawArraysNULL;
         multiDrawElements = &glMultiDrawElementsNULL;
     }
 
     if (extensions.count("GL_EXT_separate_shader_objects") != 0)
     {
-        activeShaderProgram       = &glActiveShaderProgramNULL;
-        bindProgramPipeline       = &glBindProgramPipelineNULL;
-        createShaderProgramv      = &glCreateShaderProgramvNULL;
-        deleteProgramPipelines    = &glDeleteProgramPipelinesNULL;
-        genProgramPipelines       = &glGenProgramPipelinesNULL;
+        activeShaderProgram = &glActiveShaderProgramNULL;
+        bindProgramPipeline = &glBindProgramPipelineNULL;
+        createShaderProgramv = &glCreateShaderProgramvNULL;
+        deleteProgramPipelines = &glDeleteProgramPipelinesNULL;
+        genProgramPipelines = &glGenProgramPipelinesNULL;
         getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
-        getProgramPipelineiv      = &glGetProgramPipelineivNULL;
-        isProgramPipeline         = &glIsProgramPipelineNULL;
-        programParameteri         = &glProgramParameteriNULL;
-        programUniform1f          = &glProgramUniform1fNULL;
-        programUniform1fv         = &glProgramUniform1fvNULL;
-        programUniform1i          = &glProgramUniform1iNULL;
-        programUniform1iv         = &glProgramUniform1ivNULL;
-        programUniform1ui         = &glProgramUniform1uiNULL;
-        programUniform1uiv        = &glProgramUniform1uivNULL;
-        programUniform2f          = &glProgramUniform2fNULL;
-        programUniform2fv         = &glProgramUniform2fvNULL;
-        programUniform2i          = &glProgramUniform2iNULL;
-        programUniform2iv         = &glProgramUniform2ivNULL;
-        programUniform2ui         = &glProgramUniform2uiNULL;
-        programUniform2uiv        = &glProgramUniform2uivNULL;
-        programUniform3f          = &glProgramUniform3fNULL;
-        programUniform3fv         = &glProgramUniform3fvNULL;
-        programUniform3i          = &glProgramUniform3iNULL;
-        programUniform3iv         = &glProgramUniform3ivNULL;
-        programUniform3ui         = &glProgramUniform3uiNULL;
-        programUniform3uiv        = &glProgramUniform3uivNULL;
-        programUniform4f          = &glProgramUniform4fNULL;
-        programUniform4fv         = &glProgramUniform4fvNULL;
-        programUniform4i          = &glProgramUniform4iNULL;
-        programUniform4iv         = &glProgramUniform4ivNULL;
-        programUniform4ui         = &glProgramUniform4uiNULL;
-        programUniform4uiv        = &glProgramUniform4uivNULL;
-        programUniformMatrix2fv   = &glProgramUniformMatrix2fvNULL;
+        getProgramPipelineiv = &glGetProgramPipelineivNULL;
+        isProgramPipeline = &glIsProgramPipelineNULL;
+        programParameteri = &glProgramParameteriNULL;
+        programUniform1f = &glProgramUniform1fNULL;
+        programUniform1fv = &glProgramUniform1fvNULL;
+        programUniform1i = &glProgramUniform1iNULL;
+        programUniform1iv = &glProgramUniform1ivNULL;
+        programUniform1ui = &glProgramUniform1uiNULL;
+        programUniform1uiv = &glProgramUniform1uivNULL;
+        programUniform2f = &glProgramUniform2fNULL;
+        programUniform2fv = &glProgramUniform2fvNULL;
+        programUniform2i = &glProgramUniform2iNULL;
+        programUniform2iv = &glProgramUniform2ivNULL;
+        programUniform2ui = &glProgramUniform2uiNULL;
+        programUniform2uiv = &glProgramUniform2uivNULL;
+        programUniform3f = &glProgramUniform3fNULL;
+        programUniform3fv = &glProgramUniform3fvNULL;
+        programUniform3i = &glProgramUniform3iNULL;
+        programUniform3iv = &glProgramUniform3ivNULL;
+        programUniform3ui = &glProgramUniform3uiNULL;
+        programUniform3uiv = &glProgramUniform3uivNULL;
+        programUniform4f = &glProgramUniform4fNULL;
+        programUniform4fv = &glProgramUniform4fvNULL;
+        programUniform4i = &glProgramUniform4iNULL;
+        programUniform4iv = &glProgramUniform4ivNULL;
+        programUniform4ui = &glProgramUniform4uiNULL;
+        programUniform4uiv = &glProgramUniform4uivNULL;
+        programUniformMatrix2fv = &glProgramUniformMatrix2fvNULL;
         programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
         programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
-        programUniformMatrix3fv   = &glProgramUniformMatrix3fvNULL;
+        programUniformMatrix3fv = &glProgramUniformMatrix3fvNULL;
         programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
         programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
-        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
-        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4fv = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4fv = &glProgramUniformMatrix4fvNULL;
         programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
         programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
-        useProgramStages          = &glUseProgramStagesNULL;
-        validateProgramPipeline   = &glValidateProgramPipelineNULL;
+        useProgramStages = &glUseProgramStagesNULL;
+        validateProgramPipeline = &glValidateProgramPipelineNULL;
     }
 
     if (extensions.count("GL_NV_fence") != 0)
     {
         deleteFencesNV = &glDeleteFencesNVNULL;
-        finishFenceNV  = &glFinishFenceNVNULL;
-        genFencesNV    = &glGenFencesNVNULL;
-        getFenceivNV   = &glGetFenceivNVNULL;
-        isFenceNV      = &glIsFenceNVNULL;
-        setFenceNV     = &glSetFenceNVNULL;
-        testFenceNV    = &glTestFenceNVNULL;
+        finishFenceNV = &glFinishFenceNVNULL;
+        genFencesNV = &glGenFencesNVNULL;
+        getFenceivNV = &glGetFenceivNVNULL;
+        isFenceNV = &glIsFenceNVNULL;
+        setFenceNV = &glSetFenceNVNULL;
+        testFenceNV = &glTestFenceNVNULL;
     }
 
     if (extensions.count("GL_NV_framebuffer_mixed_samples") != 0)
@@ -5429,29 +5414,29 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
 
     if (extensions.count("GL_NV_path_rendering") != 0)
     {
-        coverFillPathInstancedNV              = &glCoverFillPathInstancedNVNULL;
-        coverFillPathNV                       = &glCoverFillPathNVNULL;
-        coverStrokePathInstancedNV            = &glCoverStrokePathInstancedNVNULL;
-        coverStrokePathNV                     = &glCoverStrokePathNVNULL;
-        deletePathsNV                         = &glDeletePathsNVNULL;
-        genPathsNV                            = &glGenPathsNVNULL;
-        getPathParameterfvNV                  = &glGetPathParameterfvNVNULL;
-        getPathParameterivNV                  = &glGetPathParameterivNVNULL;
-        isPathNV                              = &glIsPathNVNULL;
-        matrixLoadfEXT                        = &glMatrixLoadfEXTNULL;
-        pathCommandsNV                        = &glPathCommandsNVNULL;
-        pathParameterfNV                      = &glPathParameterfNVNULL;
-        pathParameteriNV                      = &glPathParameteriNVNULL;
-        pathStencilFuncNV                     = &glPathStencilFuncNVNULL;
-        programPathFragmentInputGenNV         = &glProgramPathFragmentInputGenNVNULL;
-        stencilFillPathInstancedNV            = &glStencilFillPathInstancedNVNULL;
-        stencilFillPathNV                     = &glStencilFillPathNVNULL;
-        stencilStrokePathInstancedNV          = &glStencilStrokePathInstancedNVNULL;
-        stencilStrokePathNV                   = &glStencilStrokePathNVNULL;
-        stencilThenCoverFillPathInstancedNV   = &glStencilThenCoverFillPathInstancedNVNULL;
-        stencilThenCoverFillPathNV            = &glStencilThenCoverFillPathNVNULL;
+        coverFillPathInstancedNV = &glCoverFillPathInstancedNVNULL;
+        coverFillPathNV = &glCoverFillPathNVNULL;
+        coverStrokePathInstancedNV = &glCoverStrokePathInstancedNVNULL;
+        coverStrokePathNV = &glCoverStrokePathNVNULL;
+        deletePathsNV = &glDeletePathsNVNULL;
+        genPathsNV = &glGenPathsNVNULL;
+        getPathParameterfvNV = &glGetPathParameterfvNVNULL;
+        getPathParameterivNV = &glGetPathParameterivNVNULL;
+        isPathNV = &glIsPathNVNULL;
+        matrixLoadfEXT = &glMatrixLoadfEXTNULL;
+        pathCommandsNV = &glPathCommandsNVNULL;
+        pathParameterfNV = &glPathParameterfNVNULL;
+        pathParameteriNV = &glPathParameteriNVNULL;
+        pathStencilFuncNV = &glPathStencilFuncNVNULL;
+        programPathFragmentInputGenNV = &glProgramPathFragmentInputGenNVNULL;
+        stencilFillPathInstancedNV = &glStencilFillPathInstancedNVNULL;
+        stencilFillPathNV = &glStencilFillPathNVNULL;
+        stencilStrokePathInstancedNV = &glStencilStrokePathInstancedNVNULL;
+        stencilStrokePathNV = &glStencilStrokePathNVNULL;
+        stencilThenCoverFillPathInstancedNV = &glStencilThenCoverFillPathInstancedNVNULL;
+        stencilThenCoverFillPathNV = &glStencilThenCoverFillPathNVNULL;
         stencilThenCoverStrokePathInstancedNV = &glStencilThenCoverStrokePathInstancedNVNULL;
-        stencilThenCoverStrokePathNV          = &glStencilThenCoverStrokePathNVNULL;
+        stencilThenCoverStrokePathNV = &glStencilThenCoverStrokePathNVNULL;
     }
 }
 #endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
