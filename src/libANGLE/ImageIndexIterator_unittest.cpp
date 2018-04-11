@@ -32,15 +32,15 @@ TEST(ImageIndexTest, Iterator2D)
         ImageIndex current = iter.current();
         ImageIndex nextIndex = iter.next();
 
-        EXPECT_EQ(TextureType::_2D, nextIndex.type);
-        EXPECT_EQ(TextureTarget::_2D, nextIndex.target);
-        EXPECT_EQ(mip, nextIndex.mipIndex);
+        EXPECT_EQ(TextureType::_2D, nextIndex.getType());
+        EXPECT_EQ(TextureTarget::_2D, nextIndex.getTarget());
+        EXPECT_EQ(mip, nextIndex.getLevelIndex());
         EXPECT_FALSE(nextIndex.hasLayer());
 
         // Also test current
-        EXPECT_EQ(current.type, nextIndex.type);
-        EXPECT_EQ(current.mipIndex, nextIndex.mipIndex);
-        EXPECT_EQ(current.layerIndex, nextIndex.layerIndex);
+        EXPECT_EQ(current.getType(), nextIndex.getType());
+        EXPECT_EQ(current.getLevelIndex(), nextIndex.getLevelIndex());
+        EXPECT_EQ(current.getLayerIndex(), nextIndex.getLayerIndex());
     }
 
     EXPECT_FALSE(iter.hasNext());
@@ -59,9 +59,9 @@ TEST(ImageIndexTest, IteratorCube)
             EXPECT_TRUE(iter.hasNext());
             ImageIndex nextIndex = iter.next();
 
-            EXPECT_EQ(TextureType::CubeMap, nextIndex.type);
-            EXPECT_EQ(target, nextIndex.target);
-            EXPECT_EQ(mip, nextIndex.mipIndex);
+            EXPECT_EQ(TextureType::CubeMap, nextIndex.getType());
+            EXPECT_EQ(target, nextIndex.getTarget());
+            EXPECT_EQ(mip, nextIndex.getLevelIndex());
             EXPECT_FALSE(nextIndex.hasLayer());
         }
     }
@@ -82,10 +82,10 @@ TEST(ImageIndexTest, Iterator3D)
             EXPECT_TRUE(iter.hasNext());
             ImageIndex nextIndex = iter.next();
 
-            EXPECT_EQ(TextureType::_3D, nextIndex.type);
-            EXPECT_EQ(TextureTarget::_3D, nextIndex.target);
-            EXPECT_EQ(mip, nextIndex.mipIndex);
-            EXPECT_EQ(layer, nextIndex.layerIndex);
+            EXPECT_EQ(TextureType::_3D, nextIndex.getType());
+            EXPECT_EQ(TextureTarget::_3D, nextIndex.getTarget());
+            EXPECT_EQ(mip, nextIndex.getLevelIndex());
+            EXPECT_EQ(layer, nextIndex.getLayerIndex());
             EXPECT_TRUE(nextIndex.hasLayer());
         }
     }
@@ -109,10 +109,10 @@ TEST(ImageIndexTest, Iterator2DArray)
             EXPECT_TRUE(iter.hasNext());
             ImageIndex nextIndex = iter.next();
 
-            EXPECT_EQ(TextureType::_2DArray, nextIndex.type);
-            EXPECT_EQ(TextureTarget::_2DArray, nextIndex.target);
-            EXPECT_EQ(mip, nextIndex.mipIndex);
-            EXPECT_EQ(layer, nextIndex.layerIndex);
+            EXPECT_EQ(TextureType::_2DArray, nextIndex.getType());
+            EXPECT_EQ(TextureTarget::_2DArray, nextIndex.getTarget());
+            EXPECT_EQ(mip, nextIndex.getLevelIndex());
+            EXPECT_EQ(layer, nextIndex.getLayerIndex());
             EXPECT_TRUE(nextIndex.hasLayer());
         }
     }
