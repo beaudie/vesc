@@ -101,6 +101,9 @@ config("extra_warnings") {
       "-Winconsistent-missing-override",
     ]
   }
+  cflags += [
+    "-Wunneeded-internal-declaration",
+  ]
 }
 
 if (is_win) {
