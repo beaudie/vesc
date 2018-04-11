@@ -187,6 +187,11 @@ TextureType SamplerTypeToTextureType(GLenum samplerType);
 
 }  // namespace gl
 
+namespace egl
+{
+MessageType ErrorCodeToMessageType(EGLint errorCode);
+}
+
 namespace egl_gl
 {
 gl::TextureTarget EGLCubeMapTargetToCubeMapTarget(EGLenum eglTarget);

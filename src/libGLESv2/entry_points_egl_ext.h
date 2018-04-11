@@ -93,7 +93,7 @@ ANGLE_EXPORT EGLBoolean SwapBuffersWithDamageEXT(EGLDisplay dpy,
                                                  EGLint *rects,
                                                  EGLint n_rects);
 
-//
+// EGL_ANGLE_program_cache_control
 ANGLE_EXPORT EGLint EGLAPIENTRY ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib);
 ANGLE_EXPORT void EGLAPIENTRY ProgramCacheQueryANGLE(EGLDisplay dpy,
                                                      EGLint index,
@@ -107,6 +107,17 @@ ANGLE_EXPORT void EGLAPIENTRY ProgramCachePopulateANGLE(EGLDisplay dpy,
                                                         const void *binary,
                                                         EGLint binarysize);
 ANGLE_EXPORT EGLint EGLAPIENTRY ProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode);
+
+// EGL_KHR_debug
+ANGLE_EXPORT EGLint EGLAPIENTRY DebugMessageControlKHR(EGLDEBUGPROCKHR callback,
+                                                       const EGLAttrib *attrib_list);
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY QueryDebugKHR(EGLint attribute, EGLAttrib *value);
+
+ANGLE_EXPORT EGLint EGLAPIENTRY LabelObjectKHR(EGLDisplay display,
+                                               EGLenum objectType,
+                                               EGLObjectKHR object,
+                                               EGLLabelKHR label);
 
 }  // namespace egl
 
