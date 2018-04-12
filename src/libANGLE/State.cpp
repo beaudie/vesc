@@ -44,10 +44,10 @@ void UpdateBufferBinding(const Context *context,
                          BufferBinding target)
 {
     if (binding->get())
-        (*binding)->onBindingChanged(false, target);
+        (*binding)->onBindingChanged(context, false, target);
     binding->set(context, buffer);
     if (binding->get())
-        (*binding)->onBindingChanged(true, target);
+        (*binding)->onBindingChanged(context, true, target);
 }
 
 void UpdateBufferBinding(const Context *context,
@@ -58,10 +58,10 @@ void UpdateBufferBinding(const Context *context,
                          GLsizeiptr size)
 {
     if (binding->get())
-        (*binding)->onBindingChanged(false, target);
+        (*binding)->onBindingChanged(context, false, target);
     binding->set(context, buffer, offset, size);
     if (binding->get())
-        (*binding)->onBindingChanged(true, target);
+        (*binding)->onBindingChanged(context, true, target);
 }
 
 State::State()
@@ -290,7 +290,7 @@ void State::reset(const Context *context)
     mProgramPipeline.set(context, nullptr);
 
     if (mTransformFeedback.get())
-        mTransformFeedback->onBindingChanged(false);
+        mTransformFeedback->onBindingChanged(context, false);
     mTransformFeedback.set(context, nullptr);
 
     for (State::ActiveQueryMap::iterator i = mActiveQueries.begin(); i != mActiveQueries.end(); i++)
@@ -1145,15 +1145,15 @@ bool State::removeDrawFramebufferBinding(GLuint framebuffer)
     return false;
 }
 
-void State::setVertexArrayBinding(VertexArray *vertexArray)
+void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArray)
 {
     if (mVertexArray == vertexArray)
         return;
     if (mVertexArray)
-        mVertexArray->onBindingChanged(false);
+        mVertexArray->onBindingChanged(context, false);
     mVertexArray = vertexArray;
     if (vertexArray)
-        vertexArray->onBindingChanged(true);
+        vertexArray->onBindingChanged(context, true);
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
 
     if (mVertexArray && mVertexArray->hasAnyDirtyBit())
@@ -1174,11 +1174,11 @@ VertexArray *State::getVertexArray() const
     return mVertexArray;
 }
 
-bool State::removeVertexArrayBinding(GLuint vertexArray)
+bool State::removeVertexArrayBinding(const Context *context, GLuint vertexArray)
 {
     if (mVertexArray && mVertexArray->id() == vertexArray)
     {
-        mVertexArray->onBindingChanged(false);
+        mVertexArray->onBindingChanged(context, false);
         mVertexArray = nullptr;
         mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
         mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
@@ -1254,10 +1254,10 @@ void State::setTransformFeedbackBinding(const Context *context,
     if (transformFeedback == mTransformFeedback.get())
         return;
     if (mTransformFeedback.get())
-        mTransformFeedback->onBindingChanged(false);
+        mTransformFeedback->onBindingChanged(context, false);
     mTransformFeedback.set(context, transformFeedback);
     if (mTransformFeedback.get())
-        mTransformFeedback->onBindingChanged(true);
+        mTransformFeedback->onBindingChanged(context, true);
     mDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
 }
 
@@ -1278,7 +1278,7 @@ bool State::removeTransformFeedbackBinding(const Context *context, GLuint transf
     if (mTransformFeedback.id() == transformFeedback)
     {
         if (mTransformFeedback.get())
-            mTransformFeedback->onBindingChanged(false);
+            mTransformFeedback->onBindingChanged(context, false);
         mTransformFeedback.set(context, nullptr);
         return true;
     }
