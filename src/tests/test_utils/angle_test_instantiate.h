@@ -13,16 +13,24 @@
 #include <gtest/gtest.h>
 
 #include "common/debug.h"
+#include "common/vector_utils.h"
 
 namespace angle
 {
-
 struct CompilerParameters;
 struct PlatformParameters;
 
 bool IsPlatformAvailable(const CompilerParameters &param);
 
 bool IsPlatformAvailable(const PlatformParameters &param);
+
+// The input here for pixelPoints are the expected pixel precsion locations, we add .5 to every one
+// of them and re-scale the numbers to be between [-1,1]. Using this technique, we can make sure
+// the rasterization stage will end up drawing pixels at the expected locations.
+void CreateCoordinates(std::vector<Vector2> pixelPoints,
+                       int windowWidth,
+                       int windowHeight,
+                       std::vector<Vector3> &outVertices);
 
 // This functions is used to filter which tests should be registered,
 // T must be or inherit from angle::PlatformParameters.

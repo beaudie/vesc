@@ -14,6 +14,7 @@
 
 #include "EGLWindow.h"
 #include "OSWindow.h"
+#include "common/vector_utils.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "test_utils/angle_test_configs.h"
@@ -133,4 +134,16 @@ bool IsPlatformAvailable(const PlatformParameters &param)
     }
 }
 
+void CreateCoordinates(std::vector<Vector2> pixelPoints,
+                       int windowWidth,
+                       int windowHeight,
+                       std::vector<Vector3> &outVertices)
+{
+    for (Vector2 pixelPoint : pixelPoints)
+    {
+        outVertices.emplace_back(Vector3((pixelPoint[0] + 0.5f) * 2.0f / windowWidth - 1.0f,
+                                         (pixelPoint[1] + 0.5f) * 2.0f / windowHeight - 1.0f,
+                                         0.0f));
+    }
+}
 }  // namespace angle
