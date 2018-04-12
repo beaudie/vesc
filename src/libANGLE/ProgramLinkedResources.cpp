@@ -188,27 +188,29 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
 {
     // Check that uniforms defined in the graphics shaders are identical
     std::map<std::string, ShaderUniform> linkedUniforms;
-    for (const sh::Uniform &vertexUniform :
-         mState.getAttachedShader(ShaderType::Vertex)->getUniforms(context))
-    {
-        linkedUniforms[vertexUniform.name] = std::make_pair(ShaderType::Vertex, &vertexUniform);
-    }
 
-    std::vector<Shader *> activeShadersToLink;
-    if (mState.getAttachedShader(ShaderType::Geometry))
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
-        activeShadersToLink.push_back(mState.getAttachedShader(ShaderType::Geometry));
-    }
-    activeShadersToLink.push_back(mState.getAttachedShader(ShaderType::Fragment));
-
-    const size_t numActiveShadersToLink = activeShadersToLink.size();
-    for (size_t shaderIndex = 0; shaderIndex < numActiveShadersToLink; ++shaderIndex)
-    {
-        bool isLastShader = (shaderIndex == numActiveShadersToLink - 1);
-        if (!ValidateGraphicsUniformsPerShader(context, activeShadersToLink[shaderIndex],
-                                               !isLastShader, &linkedUniforms, infoLog))
+        Shader *currentShader = mState.getAttachedShader(shaderType);
+        if (currentShader)
         {
-            return false;
+            if (shaderType == ShaderType::Vertex)
+            {
+                for (const sh::Uniform &vertexUniform : currentShader->getUniforms(context))
+                {
+                    linkedUniforms[vertexUniform.name] =
+                        std::make_pair(ShaderType::Vertex, &vertexUniform);
+                }
+            }
+            else
+            {
+                bool isLastShader = (shaderType == ShaderType::Fragment);
+                if (!ValidateGraphicsUniformsPerShader(context, currentShader, !isLastShader,
+                                                       &linkedUniforms, infoLog))
+                {
+                    return false;
+                }
+            }
         }
     }
 
