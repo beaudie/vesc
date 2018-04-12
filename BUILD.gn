@@ -8,6 +8,10 @@ import("//build/config/linux/pkg_config.gni")
 import("//build/config/ui.gni")
 import("//testing/libfuzzer/fuzzer_test.gni")
 import("gni/angle.gni")
+if (is_android) {
+  # android/rules.gni can only be imported for Android targets
+  import("//build/config/android/rules.gni")
+}
 
 declare_args() {
   # Use the PCI lib to collect GPU information on Linux.
@@ -911,4 +915,26 @@ executable("angle_shader_translator") {
     ":translator",
     "//build/config:exe_and_shlib_deps",
   ]
+}
+
+if (is_android) {
+  android_apk("angle_apk") {
+    android_manifest = "AndroidManifest.xml"
+    requires_sdk_api_level_23 = true
+    if (current_cpu == "x86" || current_cpu == "arm") {
+      apk_name = "AngleLibraries"
+    }
+    if (current_cpu == "x64" || current_cpu == "arm64") {
+      apk_name = "AngleLibraries64"
+    }
+    uncompress_shared_libraries = true
+    shared_libraries = [
+      "//third_party/angle:libGLESv2",
+      "//third_party/angle:libEGL"
+    ]
+    deps = [
+      "//third_party/angle:libGLESv2",
+      "//third_party/angle:libEGL"
+    ]
+  }
 }
