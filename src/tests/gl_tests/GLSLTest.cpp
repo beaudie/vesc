@@ -2930,6 +2930,10 @@ TEST_P(GLSLTest, InitUninitializedStructContainingArrays)
     // http://anglebug.com/2460
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel() && IsLinux());
 
+    // TODO(lucferron): Flaky on windows
+    // http://anglebug.com/2460
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows());
+
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
