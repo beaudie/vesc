@@ -13,10 +13,10 @@
 #include <gtest/gtest.h>
 
 #include "common/debug.h"
+#include "common/vector_utils.h"
 
 namespace angle
 {
-
 struct CompilerParameters;
 struct PlatformParameters;
 

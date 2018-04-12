@@ -14,6 +14,7 @@
 
 #include "EGLWindow.h"
 #include "OSWindow.h"
+#include "common/vector_utils.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "test_utils/angle_test_configs.h"
@@ -132,5 +133,4 @@ bool IsPlatformAvailable(const PlatformParameters &param)
         return result;
     }
 }
-
 }  // namespace angle
