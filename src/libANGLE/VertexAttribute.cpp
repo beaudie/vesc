@@ -49,7 +49,7 @@ void VertexBinding::setBuffer(const gl::Context *context, Buffer *bufferIn, bool
         mBuffer->onBindingChanged(true, BufferBinding::Array);
 }
 
-void VertexBinding::onContainerBindingChanged(bool bound)
+void VertexBinding::onContainerBindingChanged(const Context *context, bool bound)
 {
     if (mBuffer.get())
         mBuffer->onBindingChanged(bound, BufferBinding::Array);
