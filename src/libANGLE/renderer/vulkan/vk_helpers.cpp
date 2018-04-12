@@ -377,6 +377,34 @@ gl::Error LineLoopHelper::getIndexBufferForElementArrayBuffer(RendererVk *render
     return gl::NoError();
 }
 
+gl::Error LineLoopHelper::getIndexBufferForElementArrayBufferFromClientMemory(RendererVk *renderer,
+                                                              const void* indicesInput,
+                                                              VkIndexType indexType,
+                                                              int indexCount,
+                                                              VkBuffer *bufferHandleOut,
+                                                              VkDeviceSize *bufferOffsetOut)
+{
+    ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
+
+    uint32_t *indices = nullptr;
+    uint32_t offset   = 0;
+
+    auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
+    size_t allocateBytes = unitSize * (indexCount + 1);
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(renderer, allocateBytes,
+                                           reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
+                                           &offset, nullptr));
+    *bufferOffsetOut = static_cast<VkDeviceSize>(offset);
+
+    //VkBufferCopy copy1 = {0, offset, static_cast<VkDeviceSize>(indexCount) * unitSize};
+    //VkBufferCopy copy2 = {0, offset + static_cast<VkDeviceSize>(indexCount) * unitSize, unitSize};
+    //std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
+    
+
+    ANGLE_TRY(mDynamicIndexBuffer.flush(renderer->getDevice()));
+    return gl::NoError();
+}
+
 void LineLoopHelper::destroy(VkDevice device)
 {
     mDynamicIndexBuffer.destroy(device);

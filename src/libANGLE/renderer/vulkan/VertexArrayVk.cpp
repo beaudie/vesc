@@ -416,23 +416,27 @@ gl::Error VertexArrayVk::drawElements(const gl::Context *context,
     mLineLoopBufferLastIndex.reset();
 
     // Handle GL_LINE_LOOP drawElements.
-    gl::Buffer *elementArrayBuffer = mState.getElementArrayBuffer().get();
-    if (!elementArrayBuffer)
+    if (mDirtyLineLoopTranslation) 
     {
-        UNIMPLEMENTED();
-        return gl::InternalError() << "Line loop indices in client memory not supported";
+        gl::Buffer *elementArrayBuffer = mState.getElementArrayBuffer().get();
+        VkIndexType indexType = gl_vk::GetIndexType(drawCallParams.type());
+
+        if (!elementArrayBuffer)
+        {
+            ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBufferFromClientMemory(
+                renderer, drawCallParams.indices(), indexType, drawCallParams.indexCount(),
+                &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
+        } 
+        else
+        {
+            BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+            ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
+                renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(),
+                &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
+        
+        }
     }
-
-    BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
-
-    VkIndexType indexType = gl_vk::GetIndexType(drawCallParams.type());
-
-    if (mDirtyLineLoopTranslation)
-    {
-        ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
-            renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(),
-            &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
-    }
+    
 
     ANGLE_TRY(onIndexedDraw(context, renderer, drawCallParams, drawNode, newCommandBuffer));
     vk::LineLoopHelper::Draw(drawCallParams.indexCount(), commandBuffer);
