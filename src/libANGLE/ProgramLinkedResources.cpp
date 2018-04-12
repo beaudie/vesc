@@ -188,27 +188,29 @@ bool UniformLinker::validateGraphicsUniforms(const Context *context, InfoLog &in
 {
     // Check that uniforms defined in the graphics shaders are identical
     std::map<std::string, ShaderUniform> linkedUniforms;
-    for (const sh::Uniform &vertexUniform :
-         mState.getAttachedShader(ShaderType::Vertex)->getUniforms(context))
-    {
-        linkedUniforms[vertexUniform.name] = std::make_pair(ShaderType::Vertex, &vertexUniform);
-    }
 
-    std::vector<Shader *> activeShadersToLink;
-    if (mState.getAttachedShader(ShaderType::Geometry))
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
-        activeShadersToLink.push_back(mState.getAttachedShader(ShaderType::Geometry));
-    }
-    activeShadersToLink.push_back(mState.getAttachedShader(ShaderType::Fragment));
-
-    const size_t numActiveShadersToLink = activeShadersToLink.size();
-    for (size_t shaderIndex = 0; shaderIndex < numActiveShadersToLink; ++shaderIndex)
-    {
-        bool isLastShader = (shaderIndex == numActiveShadersToLink - 1);
-        if (!ValidateGraphicsUniformsPerShader(context, activeShadersToLink[shaderIndex],
-                                               !isLastShader, &linkedUniforms, infoLog))
+        Shader *currentShader = mState.getAttachedShader(shaderType);
+        if (currentShader)
         {
-            return false;
+            if (shaderType == ShaderType::Vertex)
+            {
+                for (const sh::Uniform &vertexUniform : currentShader->getUniforms(context))
+                {
+                    linkedUniforms[vertexUniform.name] =
+                        std::make_pair(ShaderType::Vertex, &vertexUniform);
+                }
+            }
+            else
+            {
+                bool isLastShader = (shaderType == ShaderType::Fragment);
+                if (!ValidateGraphicsUniformsPerShader(context, currentShader, !isLastShader,
+                                                       &linkedUniforms, infoLog))
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -804,16 +806,17 @@ bool UniformLinker::checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &in
 InterfaceBlockLinker::InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut)
     : mBlocksOut(blocksOut)
 {
+    mShaderBlocks.fill(nullptr);
 }
 
 InterfaceBlockLinker::~InterfaceBlockLinker()
 {
 }
 
-void InterfaceBlockLinker::addShaderBlocks(ShaderType shader,
+void InterfaceBlockLinker::addShaderBlocks(ShaderType shaderType,
                                            const std::vector<sh::InterfaceBlock> *blocks)
 {
-    mShaderBlocks.push_back(std::make_pair(shader, blocks));
+    mShaderBlocks[shaderType] = blocks;
 }
 
 void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
@@ -823,37 +826,38 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
 
     std::set<std::string> visitedList;
 
-    for (const auto &shaderBlocks : mShaderBlocks)
+    for (ShaderType shaderType : AllShaderTypes())
     {
-        const ShaderType shaderType = shaderBlocks.first;
-
-        for (const auto &block : *shaderBlocks.second)
+        if (mShaderBlocks[shaderType])
         {
-            if (!IsActiveInterfaceBlock(block))
-                continue;
-
-            if (visitedList.count(block.name) > 0)
+            for (const auto &block : *mShaderBlocks[shaderType])
             {
-                if (block.active)
+                if (!IsActiveInterfaceBlock(block))
+                    continue;
+
+                if (visitedList.count(block.name) > 0)
                 {
-                    for (InterfaceBlock &priorBlock : *mBlocksOut)
+                    if (block.active)
                     {
-                        if (block.name == priorBlock.name)
+                        for (InterfaceBlock &priorBlock : *mBlocksOut)
                         {
-                            priorBlock.setActive(shaderType, true);
-                            // Update the block members static use.
-                            defineBlockMembers(nullptr, block.fields, block.fieldPrefix(),
-                                               block.fieldMappedPrefix(), -1,
-                                               block.blockType == sh::BlockType::BLOCK_BUFFER, 1,
-                                               shaderType);
+                            if (block.name == priorBlock.name)
+                            {
+                                priorBlock.setActive(shaderType, true);
+                                // Update the block members static use.
+                                defineBlockMembers(nullptr, block.fields, block.fieldPrefix(),
+                                                   block.fieldMappedPrefix(), -1,
+                                                   block.blockType == sh::BlockType::BLOCK_BUFFER,
+                                                   1, shaderType);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                defineInterfaceBlock(getBlockSize, getMemberInfo, block, shaderType);
-                visitedList.insert(block.name);
+                else
+                {
+                    defineInterfaceBlock(getBlockSize, getMemberInfo, block, shaderType);
+                    visitedList.insert(block.name);
+                }
             }
         }
     }
