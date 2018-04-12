@@ -2929,6 +2929,8 @@ TEST_P(GLSLTest, InitUninitializedStructContainingArrays)
     // TODO(lucferron): Root cause and fix it.
     // http://anglebug.com/2460
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel() && IsLinux());
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsNVIDIA());
 
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
