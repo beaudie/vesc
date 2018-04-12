@@ -13,7 +13,8 @@ namespace gl
 
 // [OpenGL ES 3.1] (November 3, 2016) Section 20 Page 361
 // Table 20.2: Vertex Array Object State
-VertexBinding::VertexBinding() : mStride(16u), mDivisor(0), mOffset(0)
+VertexBinding::VertexBinding()
+    : mStride(16u), mDivisor(0), mOffset(0), mCachedBufferSizeMinusOffset(0)
 {
 }
 
@@ -34,6 +35,7 @@ VertexBinding &VertexBinding::operator=(VertexBinding &&binding)
         mDivisor = binding.mDivisor;
         mOffset  = binding.mOffset;
         std::swap(binding.mBuffer, mBuffer);
+        mCachedBufferSizeMinusOffset = binding.mCachedBufferSizeMinusOffset;
     }
     return *this;
 }
@@ -53,6 +55,16 @@ void VertexBinding::onContainerBindingChanged(bool bound)
         mBuffer->onBindingChanged(bound, BufferBinding::Array);
 }
 
+void VertexBinding::updateCachedBufferSizeMinusOffset()
+{
+    mCachedBufferSizeMinusOffset = mBuffer->getSize() - mOffset;
+}
+
+GLuint64 VertexBinding::getCachedBufferSizeMinusOffset() const
+{
+    return mCachedBufferSizeMinusOffset;
+}
+
 VertexAttribute::VertexAttribute(GLuint bindingIndex)
     : enabled(false),
       type(GL_FLOAT),
@@ -62,7 +74,8 @@ VertexAttribute::VertexAttribute(GLuint bindingIndex)
       pointer(nullptr),
       relativeOffset(0),
       vertexAttribArrayStride(0),
-      bindingIndex(bindingIndex)
+      bindingIndex(bindingIndex),
+      cachedSizePlusRelativeOffset(0)
 {
 }
 
@@ -75,7 +88,8 @@ VertexAttribute::VertexAttribute(VertexAttribute &&attrib)
       pointer(attrib.pointer),
       relativeOffset(attrib.relativeOffset),
       vertexAttribArrayStride(attrib.vertexAttribArrayStride),
-      bindingIndex(attrib.bindingIndex)
+      bindingIndex(attrib.bindingIndex),
+      cachedSizePlusRelativeOffset(attrib.cachedSizePlusRelativeOffset)
 {
 }
 
@@ -92,8 +106,15 @@ VertexAttribute &VertexAttribute::operator=(VertexAttribute &&attrib)
         relativeOffset          = attrib.relativeOffset;
         vertexAttribArrayStride = attrib.vertexAttribArrayStride;
         bindingIndex            = attrib.bindingIndex;
+        cachedSizePlusRelativeOffset = attrib.cachedSizePlusRelativeOffset;
     }
     return *this;
+}
+
+void VertexAttribute::updateCachedSizePlusRelativeOffset()
+{
+    cachedSizePlusRelativeOffset =
+        relativeOffset + static_cast<GLuint64>(ComputeVertexAttributeTypeSize(*this));
 }
 
 size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib)
