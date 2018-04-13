@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 #include <cmath>
 
@@ -147,13 +148,6 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
     // http://anglebug.com/2447
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
 
-    const std::string fs =
-        R"(precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        })";
-
     const std::string vs =
         R"(void main()
         {
@@ -161,7 +155,7 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
             gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
         })";
 
-    ANGLE_GL_PROGRAM(program, vs, fs);
+    ANGLE_GL_PROGRAM(program, vs, shader_library::essl1::fs::blue());
     ASSERT_GL_NO_ERROR();
 
     glUseProgram(program);
@@ -169,8 +163,8 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
     glDrawArrays(GL_POINTS, 0, 1);
     ASSERT_GL_NO_ERROR();
 
-    // expect the center pixel to be green
-    EXPECT_PIXEL_EQ((windowWidth - 1) / 2, (windowHeight - 1) / 2, 0, 255, 0, 255);
+    // expect the center pixel to be blue
+    EXPECT_PIXEL_COLOR_EQ((windowWidth - 1) / 2, (windowHeight - 1) / 2, GLColor::blue);
 }
 
 // This is a regression test for a graphics driver bug affecting end caps on roads in MapsGL
@@ -392,13 +386,7 @@ TEST_P(PointSpritesTest, PointSizeDeclaredButUnused)
             gl_Position  = position;
         })";
 
-    const std::string fs =
-        R"(void main(void)
-        {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        })";
-
-    ANGLE_GL_PROGRAM(program, vs, fs);
+    ANGLE_GL_PROGRAM(program, vs, shader_library::essl1::fs::red());
     ASSERT_GL_NO_ERROR();
 
     glUseProgram(program);
@@ -418,13 +406,6 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
     // http://anglebug.com/2447
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
 
-    const std::string pointFS =
-        R"(precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        })";
-
     const std::string pointVS =
         R"(void main()
         {
@@ -432,24 +413,10 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
             gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
         })";
 
-    const std::string quadFS =
-        R"(precision mediump float;
-        void main()
-        {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        })";
+    ANGLE_GL_PROGRAM(pointProgram, pointVS, shader_library::essl1::fs::blue());
 
-    const std::string quadVS =
-        R"(precision mediump float;
-        attribute vec4 pos;
-        void main()
-        {
-            gl_Position = pos;
-        })";
-
-    ANGLE_GL_PROGRAM(pointProgram, pointVS, pointFS);
-
-    ANGLE_GL_PROGRAM(quadProgram, quadVS, quadFS);
+    ANGLE_GL_PROGRAM(quadProgram, shader_library::essl1::vs::simple(),
+                     shader_library::essl1::fs::red());
     ASSERT_GL_NO_ERROR();
 
     glEnable(GL_CULL_FACE);
@@ -462,7 +429,7 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
     };
 
     glUseProgram(quadProgram);
-    GLint positionLocation = glGetAttribLocation(quadProgram, "pos");
+    GLint positionLocation = glGetAttribLocation(quadProgram, shader_library::positionAttribName());
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, quadVertices);
     glEnableVertexAttribArray(positionLocation);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -471,8 +438,8 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
     glDrawArrays(GL_POINTS, 0, 1);
     ASSERT_GL_NO_ERROR();
 
-    // expect the center pixel to be green
-    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 255, 0, 255);
+    // expect the center pixel to be blue
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::blue);
 }
 
 // This checks for an NVIDIA driver bug where points larger than the maximum reported point size can
@@ -510,13 +477,7 @@ TEST_P(PointSpritesTest, PointSizeAboveMaxIsClamped)
         "    gl_PointSize = uPointSize;\n"
         "    gl_Position  = vPosition;\n"
         "}\n";
-    const std::string &fs =
-        "precision mediump float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
-        "}\n";
-    ANGLE_GL_PROGRAM(program, vs, fs);
+    ANGLE_GL_PROGRAM(program, vs, shader_library::essl1::fs::red());
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 

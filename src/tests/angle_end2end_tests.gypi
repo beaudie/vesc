@@ -128,6 +128,8 @@
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.cpp',
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.h',
             '<(angle_path)/src/tests/test_utils/gl_raii.h',
+            '<(angle_path)/src/tests/test_utils/shader_library.cpp',
+            '<(angle_path)/src/tests/test_utils/shader_library.h',
         ],
         'angle_end2end_tests_mac_sources':
         [

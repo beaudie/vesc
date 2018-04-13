@@ -8,6 +8,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -30,17 +31,6 @@ class PackUnpackTest : public ANGLETest
     void SetUp() override
     {
         ANGLETest::SetUp();
-
-        // Vertex Shader source
-        const std::string vs =
-            R"(#version 300 es
-            precision mediump float;
-            in vec4 position;
-
-            void main()
-            {
-                gl_Position = position;
-            })";
 
         // Fragment Shader source
         const std::string sNormFS =
@@ -84,9 +74,9 @@ class PackUnpackTest : public ANGLETest
                  fragColor = vec4(r, 0.0, 1.0);
              })";
 
-        mSNormProgram = CompileProgram(vs, sNormFS);
-        mUNormProgram = CompileProgram(vs, uNormFS);
-        mHalfProgram = CompileProgram(vs, halfFS);
+        mSNormProgram = CompileProgram(shader_library::essl3::vs::simple(), sNormFS);
+        mUNormProgram = CompileProgram(shader_library::essl3::vs::simple(), uNormFS);
+        mHalfProgram  = CompileProgram(shader_library::essl3::vs::simple(), halfFS);
         if (mSNormProgram == 0 || mUNormProgram == 0 || mHalfProgram == 0)
         {
             FAIL() << "shader compilation failed.";
@@ -129,7 +119,7 @@ class PackUnpackTest : public ANGLETest
         glUseProgram(program);
         glUniform2f(vec2Location, input1, input2);
 
-        drawQuad(program, "position", 0.5f);
+        drawQuad(program, shader_library::positionAttribName(), 0.5f);
 
         ASSERT_GL_NO_ERROR();
 

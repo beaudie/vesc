@@ -7,6 +7,7 @@
 // FloatingPointSurfaceTest.cpp : Test functionality of the EGL_EXT_pixel_format_float extension.
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -28,14 +29,6 @@ class FloatingPointSurfaceTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
-            "precision highp float;\n"
-            "attribute vec4 position;\n"
-            "void main()\n"
-            "{\n"
-            "   gl_Position = position;\n"
-            "}\n";
-
         const std::string fsSource =
             "precision highp float;\n"
             "void main()\n"
@@ -43,7 +36,7 @@ class FloatingPointSurfaceTest : public ANGLETest
             "   gl_FragColor = vec4(1.0, 2.0, 3.0, 4.0);\n"
             "}\n";
 
-        mProgram = CompileProgram(vsSource, fsSource);
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(), fsSource);
         ASSERT_NE(0u, mProgram) << "shader compilation failed.";
 
         ASSERT_GL_NO_ERROR();
@@ -74,7 +67,7 @@ TEST_P(FloatingPointSurfaceTest, Clearing)
 TEST_P(FloatingPointSurfaceTest, Drawing)
 {
     glUseProgram(mProgram);
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
 
     EXPECT_PIXEL_32F_EQ(0, 0, 1.0f, 2.0f, 3.0f, 4.0f);
 }

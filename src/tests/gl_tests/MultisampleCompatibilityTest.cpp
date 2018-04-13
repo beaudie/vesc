@@ -7,9 +7,10 @@
 //   Tests for the EXT_multisample_compatibility extension.
 //
 
+#include "shader_utils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
-#include "shader_utils.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -37,19 +38,10 @@ protected:
     {
         ANGLETest::SetUp();
 
-        static const char* v_shader_str =
-            "attribute vec4 a_Position;\n"
-            "void main()\n"
-            "{ gl_Position = a_Position; }";
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(),
+                                  shader_library::essl1::fs::uniformColor());
 
-        static const char* f_shader_str =
-            "precision mediump float;\n"
-            "uniform vec4 color;"
-            "void main() { gl_FragColor = color; }";
-
-        mProgram = CompileProgram(v_shader_str, f_shader_str);
-
-        GLuint position_loc = glGetAttribLocation(mProgram, "a_Position");
+        GLuint position_loc = glGetAttribLocation(mProgram, shader_library::positionAttribName());
         mColorLoc = glGetUniformLocation(mProgram, "color");
 
         glGenBuffers(1, &mVBO);
@@ -395,15 +387,8 @@ TEST_P(MultisampleCompatibilityTest, DrawCoverageAndResolve)
     // TODO: Figure out why this fails on Android.
     ANGLE_SKIP_TEST_IF(IsAndroid());
 
-    const std::string &vertex =
-        "attribute vec4 position;\n"
-        "void main()\n"
-        "{ gl_Position = position; }";
-    const std::string &fragment =
-        "void main()\n"
-        "{ gl_FragColor =  vec4(1.0, 0.0, 0.0, 1.0); }";
-
-    ANGLE_GL_PROGRAM(drawRed, vertex, fragment);
+    ANGLE_GL_PROGRAM(drawRed, shader_library::essl1::vs::simple(),
+                     shader_library::essl1::fs::red());
 
     GLsizei maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
@@ -413,7 +398,7 @@ TEST_P(MultisampleCompatibilityTest, DrawCoverageAndResolve)
         prepareForDraw(samples);
         glEnable(GL_SAMPLE_COVERAGE);
         glSampleCoverage(1.0, false);
-        drawQuad(drawRed.get(), "position", 0.5f);
+        drawQuad(drawRed.get(), shader_library::positionAttribName(), 0.5f);
 
         prepareForVerify();
         GLsizei pixelCount = kWidth * kHeight;

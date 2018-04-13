@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -82,13 +83,6 @@ class DrawBuffersTest : public ANGLETest
 
     void setupMRTProgramESSL3(bool bufferEnabled[8], GLuint *programOut)
     {
-        const std::string vertexShaderSource =
-            "#version 300 es\n"
-            "in vec4 position;\n"
-            "void main() {\n"
-            "    gl_Position = position;\n"
-            "}\n";
-
         std::stringstream strstr;
 
         strstr << "#version 300 es\n"
@@ -122,7 +116,7 @@ class DrawBuffersTest : public ANGLETest
 
         strstr << "}\n";
 
-        *programOut = CompileProgram(vertexShaderSource, strstr.str());
+        *programOut = CompileProgram(shader_library::essl3::vs::simple(), strstr.str());
         if (*programOut == 0)
         {
             FAIL() << "shader compilation failed.";
@@ -131,12 +125,6 @@ class DrawBuffersTest : public ANGLETest
 
     void setupMRTProgramESSL1(bool bufferEnabled[8], GLuint *programOut)
     {
-        const std::string vertexShaderSource =
-            "attribute vec4 position;\n"
-            "void main() {\n"
-            "    gl_Position = position;\n"
-            "}\n";
-
         std::stringstream strstr;
 
         strstr << "#extension GL_EXT_draw_buffers : enable\n"
@@ -160,7 +148,7 @@ class DrawBuffersTest : public ANGLETest
 
         strstr << "}\n";
 
-        *programOut = CompileProgram(vertexShaderSource, strstr.str());
+        *programOut = CompileProgram(shader_library::essl1::vs::simple(), strstr.str());
         if (*programOut == 0)
         {
             FAIL() << "shader compilation failed.";
@@ -257,7 +245,7 @@ TEST_P(DrawBuffersTest, Gaps)
         GL_COLOR_ATTACHMENT1
     };
     setDrawBuffers(2, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachment2D(1, mTextures[0], GL_TEXTURE_2D, 0);
 
@@ -291,7 +279,7 @@ TEST_P(DrawBuffersTest, FirstAndLast)
     };
 
     setDrawBuffers(4, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachment2D(0, mTextures[0], GL_TEXTURE_2D, 0);
     verifyAttachment2D(3, mTextures[1], GL_TEXTURE_2D, 0);
@@ -325,7 +313,7 @@ TEST_P(DrawBuffersTest, FirstHalfNULL)
     setupMRTProgram(flags, &program);
 
     setDrawBuffers(mMaxDrawBuffers, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     for (GLuint texIndex = 0; texIndex < halfMaxDrawBuffers; texIndex++)
     {
@@ -364,7 +352,7 @@ TEST_P(DrawBuffersTest, UnwrittenOutputVariablesShouldNotCrash)
     setDrawBuffers(4, bufs);
 
     // This call should not crash when we dynamically generate the HLSL code.
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachment2D(0, mTextures[0], GL_TEXTURE_2D, 0);
 
@@ -386,12 +374,6 @@ TEST_P(DrawBuffersTest, BroadcastGLFragColor)
 
     const GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 
-    const std::string vertexShaderSource =
-        "attribute vec4 position;\n"
-        "void main() {\n"
-        "    gl_Position = position;\n"
-        "}\n";
-
     const std::string fragmentShaderSource =
         "#extension GL_EXT_draw_buffers : enable\n"
         "precision highp float;\n"
@@ -405,14 +387,14 @@ TEST_P(DrawBuffersTest, BroadcastGLFragColor)
         "    }\n"
         "}\n";
 
-    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    GLuint program = CompileProgram(shader_library::essl1::vs::simple(), fragmentShaderSource);
     if (program == 0)
     {
         FAIL() << "shader compilation failed.";
     }
 
     setDrawBuffers(2, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachment2D(0, mTextures[0], GL_TEXTURE_2D, 0);
     verifyAttachment2D(0, mTextures[1], GL_TEXTURE_2D, 0);
@@ -449,7 +431,7 @@ TEST_P(DrawBuffersTestES3, 3DTextures)
     };
 
     glDrawBuffers(4, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachmentLayer(0, texture.get(), 0, 0);
     verifyAttachmentLayer(1, texture.get(), 0, 1);
@@ -484,7 +466,7 @@ TEST_P(DrawBuffersTestES3, 2DArrayTextures)
     };
 
     glDrawBuffers(4, bufs);
-    drawQuad(program, "position", 0.5);
+    drawQuad(program, shader_library::positionAttribName(), 0.5);
 
     verifyAttachmentLayer(0, texture.get(), 0, 0);
     verifyAttachmentLayer(1, texture.get(), 0, 1);

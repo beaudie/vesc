@@ -10,6 +10,7 @@
 
 #include "common/mathutil.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 namespace
 {
@@ -1294,14 +1295,7 @@ TEST_P(WebGLCompatibilityTest, DrawArraysBufferOutOfBoundsNonInstanced)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
     glUseProgram(program.get());
@@ -1357,14 +1351,7 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, a_w);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     GLint wLocation = glGetAttribLocation(program.get(), "a_w");
     ASSERT_NE(-1, posLocation);
@@ -1430,14 +1417,7 @@ TEST_P(WebGLCompatibilityTest, DrawArraysBufferOutOfBoundsInstancedANGLE)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, a_w);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     GLint wLocation = glGetAttribLocation(program.get(), "a_w");
     ASSERT_NE(-1, posLocation);
@@ -1498,14 +1478,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsBufferOutOfBoundsInIndexBuffer)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
     glUseProgram(program.get());
@@ -1558,14 +1531,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsBufferOutOfBoundsInVertexBuffer)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
     glUseProgram(program.get());
@@ -1829,14 +1795,7 @@ TEST_P(WebGL2CompatibilityTest, InstancedDrawZeroDivisor)
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
 
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
@@ -2056,14 +2015,7 @@ TEST_P(WebGLCompatibilityTest, DrawElementsOffsetRestriction)
         "    gl_Position = vec4(a_pos, 1.0);\n"
         "}\n";
 
-    const std::string &frag =
-        "precision highp float;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0);\n"
-        "}\n";
-
-    ANGLE_GL_PROGRAM(program, vert, frag);
+    ANGLE_GL_PROGRAM(program, vert, shader_library::essl1::fs::red());
 
     GLint posLocation = glGetAttribLocation(program.get(), "a_pos");
     ASSERT_NE(-1, posLocation);
@@ -3640,20 +3592,6 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
 
     ASSERT_GL_NO_ERROR();
 
-    const char *vertESSL1 =
-        "attribute vec4 a_pos;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = a_pos;\n"
-        "}\n";
-    const char *vertESSL3 =
-        "#version 300 es\n"
-        "in vec4 a_pos;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = a_pos;\n"
-        "}\n";
-
     GLenum allDrawBuffers[] = {
         GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
     };
@@ -3669,14 +3607,14 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
         "{\n"
         "    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
         "}\n";
-    ANGLE_GL_PROGRAM(programESSL1, vertESSL1, fragESSL1);
+    ANGLE_GL_PROGRAM(programESSL1, shader_library::essl1::vs::simple(), fragESSL1);
 
     {
         ClearEverythingToRed(renderbuffers);
 
         glBindFramebuffer(GL_FRAMEBUFFER, drawFBO);
         DrawBuffers(useEXT, 4, allDrawBuffers);
-        drawQuad(programESSL1, "a_pos", 0.5, 1.0, true);
+        drawQuad(programESSL1, shader_library::positionAttribName(), 0.5, 1.0, true);
         ASSERT_GL_NO_ERROR();
 
         CheckColors(renderbuffers, 0b0001, GLColor::green);
@@ -3690,7 +3628,7 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
 
         glBindFramebuffer(GL_FRAMEBUFFER, drawFBO);
         DrawBuffers(useEXT, 4, halfDrawBuffers);
-        drawQuad(programESSL1, "a_pos", 0.5, 1.0, true);
+        drawQuad(programESSL1, shader_library::positionAttribName(), 0.5, 1.0, true);
         ASSERT_GL_NO_ERROR();
 
         CheckColors(renderbuffers, 0b1111, GLColor::red);
@@ -3708,7 +3646,7 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
     {
         // In the extension, when an attachment isn't written to, it should get 0's
         unwrittenColor      = GLColor(0, 0, 0, 0);
-        writeOddOutputsVert = vertESSL1;
+        writeOddOutputsVert = shader_library::essl1::vs::simple();
         writeOddOutputsFrag =
             "#extension GL_EXT_draw_buffers : require\n"
             "precision highp float;\n"
@@ -3723,7 +3661,7 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
         // In ES3 if an attachment isn't declared, it shouldn't get written and should be red
         // because of the preceding clears.
         unwrittenColor      = GLColor::red;
-        writeOddOutputsVert = vertESSL3;
+        writeOddOutputsVert = shader_library::essl3::vs::simple();
         writeOddOutputsFrag =
             "#version 300 es\n"
             "precision highp float;\n"
@@ -3743,7 +3681,7 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
 
         glBindFramebuffer(GL_FRAMEBUFFER, drawFBO);
         DrawBuffers(useEXT, 4, allDrawBuffers);
-        drawQuad(writeOddOutputsProgram, "a_pos", 0.5, 1.0, true);
+        drawQuad(writeOddOutputsProgram, shader_library::positionAttribName(), 0.5, 1.0, true);
         ASSERT_GL_NO_ERROR();
 
         CheckColors(renderbuffers, 0b1010, GLColor::green);
@@ -3757,7 +3695,7 @@ TEST_P(WebGLCompatibilityTest, DrawBuffers)
 
         glBindFramebuffer(GL_FRAMEBUFFER, drawFBO);
         DrawBuffers(useEXT, 4, halfDrawBuffers);
-        drawQuad(writeOddOutputsProgram, "a_pos", 0.5, 1.0, true);
+        drawQuad(writeOddOutputsProgram, shader_library::positionAttribName(), 0.5, 1.0, true);
         ASSERT_GL_NO_ERROR();
 
         CheckColors(renderbuffers, 0b1000, GLColor::green);
@@ -4044,21 +3982,13 @@ TEST_P(WebGL2CompatibilityTest, NoAttributeVertexShader)
         "    ivec2 xy = ivec2(gl_VertexID % 2, (gl_VertexID / 2 + gl_VertexID / 3) % 2);\n"
         "    gl_Position = vec4(vec2(xy) * 2. - 1., 0, 1);\n"
         "}";
-    const std::string fragmentShader =
-        "#version 300 es\n"
-        "precision mediump float;\n"
-        "out vec4 result;\n"
-        "void main()\n"
-        "{\n"
-        "    result = vec4(0, 1, 0, 1);\n"
-        "}";
 
-    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    ANGLE_GL_PROGRAM(program, vertexShader, shader_library::essl3::fs::red());
     glUseProgram(program);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
     ASSERT_GL_NO_ERROR();
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
 // Tests bindAttribLocations for length limit

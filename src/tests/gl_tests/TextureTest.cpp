@@ -7,6 +7,7 @@
 #include "common/mathutil.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -755,13 +756,7 @@ class TextureSizeTextureArrayTest : public TexCoordDrawTest
 
     std::string getVertexShaderSource() override
     {
-        return std::string(
-            "#version 300 es\n"
-            "in vec4 position;\n"
-            "void main()\n"
-            "{\n"
-            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
-            "}\n");
+        return std::string(shader_library::essl3::vs::simple());
     }
 
     std::string getFragmentShaderSource() override
@@ -2367,7 +2362,7 @@ TEST_P(TextureSizeTextureArrayTest, BaseLevelVariesInTextureArray)
     glUniform1i(mTexture0Location, 0);
     glUniform1i(mTexture1Location, 1);
 
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
     EXPECT_GL_NO_ERROR();
     // Red channel: width of level 1 of texture A: 32.
     // Green channel: width of level 3 of texture B: 16.

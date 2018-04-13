@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 namespace angle
 {
@@ -29,23 +30,8 @@ class SRGBFramebufferTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vs =
-            "precision highp float;\n"
-            "attribute vec4 position;\n"
-            "void main()\n"
-            "{\n"
-            "   gl_Position = vec4(position.xy, 0.0, 1.0);\n"
-            "}\n";
-
-        const std::string fs =
-            "precision highp float;\n"
-            "uniform vec4 color;\n"
-            "void main()\n"
-            "{\n"
-            "   gl_FragColor = color;\n"
-            "}\n";
-
-        mProgram = CompileProgram(vs, fs);
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(),
+                                  shader_library::essl1::fs::uniformColor());
         ASSERT_NE(0u, mProgram);
 
         mColorLocation = glGetUniformLocation(mProgram, "color");
@@ -119,11 +105,11 @@ TEST_P(SRGBFramebufferTest, BasicUsage)
     glUniform4fv(mColorLocation, 1, srgbColor.toNormalizedVector().data());
 
     glEnable(GL_FRAMEBUFFER_SRGB_EXT);
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
 
     glDisable(GL_FRAMEBUFFER_SRGB_EXT);
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 }
 
