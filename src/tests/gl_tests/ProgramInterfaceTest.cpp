@@ -6,8 +6,10 @@
 
 // ProgramInterfaceTest: Tests of program interfaces.
 
+#include "common/string_utils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -31,15 +33,6 @@ class ProgramInterfaceTestES31 : public ANGLETest
 // Tests glGetProgramResourceIndex.
 TEST_P(ProgramInterfaceTestES31, GetResourceIndex)
 {
-    const std::string &vertexShaderSource =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "in highp vec4 position;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = position;\n"
-        "}";
-
     const std::string &fragmentShaderSource =
         "#version 310 es\n"
         "precision highp float;\n"
@@ -50,9 +43,10 @@ TEST_P(ProgramInterfaceTestES31, GetResourceIndex)
         "    oColor = color;\n"
         "}";
 
-    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+    ANGLE_GL_PROGRAM(program, shader_library::essl31::vs::simple(), fragmentShaderSource);
 
-    GLuint index = glGetProgramResourceIndex(program, GL_PROGRAM_INPUT, "position");
+    GLuint index =
+        glGetProgramResourceIndex(program, GL_PROGRAM_INPUT, shader_library::positionAttribName());
     EXPECT_GL_NO_ERROR();
     EXPECT_NE(GL_INVALID_INDEX, index);
 
@@ -75,15 +69,6 @@ TEST_P(ProgramInterfaceTestES31, GetResourceIndex)
 // Tests glGetProgramResourceName.
 TEST_P(ProgramInterfaceTestES31, GetResourceName)
 {
-    const std::string &vertexShaderSource =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "in highp vec4 position;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = position;\n"
-        "}";
-
     const std::string &fragmentShaderSource =
         "#version 310 es\n"
         "precision highp float;\n"
@@ -94,9 +79,10 @@ TEST_P(ProgramInterfaceTestES31, GetResourceName)
         "    oColor[0] = color;\n"
         "}";
 
-    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+    ANGLE_GL_PROGRAM(program, shader_library::essl31::vs::simple(), fragmentShaderSource);
 
-    GLuint index = glGetProgramResourceIndex(program, GL_PROGRAM_INPUT, "position");
+    GLuint index =
+        glGetProgramResourceIndex(program, GL_PROGRAM_INPUT, shader_library::positionAttribName());
     EXPECT_GL_NO_ERROR();
     EXPECT_NE(GL_INVALID_INDEX, index);
 
@@ -104,13 +90,13 @@ TEST_P(ProgramInterfaceTestES31, GetResourceName)
     GLsizei length;
     glGetProgramResourceName(program, GL_PROGRAM_INPUT, index, sizeof(name), &length, name);
     EXPECT_GL_NO_ERROR();
-    EXPECT_EQ(8, length);
-    EXPECT_EQ("position", std::string(name));
+    EXPECT_EQ(static_cast<int>(strlen(shader_library::positionAttribName())), length);
+    EXPECT_EQ(shader_library::positionAttribName(), std::string(name));
 
     glGetProgramResourceName(program, GL_PROGRAM_INPUT, index, 4, &length, name);
     EXPECT_GL_NO_ERROR();
     EXPECT_EQ(3, length);
-    EXPECT_EQ("pos", std::string(name));
+    EXPECT_TRUE(angle::BeginsWith(shader_library::positionAttribName(), name));
 
     glGetProgramResourceName(program, GL_PROGRAM_INPUT, index, -1, &length, name);
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
@@ -268,15 +254,6 @@ TEST_P(ProgramInterfaceTestES31, GetResource)
 // Tests glGetProgramInterfaceiv.
 TEST_P(ProgramInterfaceTestES31, GetProgramInterface)
 {
-    const std::string &vertexShaderSource =
-        "#version 310 es\n"
-        "precision highp float;\n"
-        "in highp vec4 position;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = position;\n"
-        "}";
-
     const std::string &fragmentShaderSource =
         "#version 310 es\n"
         "precision highp float;\n"
@@ -299,7 +276,7 @@ TEST_P(ProgramInterfaceTestES31, GetProgramInterface)
         "    blockInstance2[0].target = vec3(1, 1, 1);\n"
         "}";
 
-    ANGLE_GL_PROGRAM(program, vertexShaderSource, fragmentShaderSource);
+    ANGLE_GL_PROGRAM(program, shader_library::essl31::vs::simple(), fragmentShaderSource);
 
     GLint num;
     glGetProgramInterfaceiv(program, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &num);
@@ -308,7 +285,7 @@ TEST_P(ProgramInterfaceTestES31, GetProgramInterface)
 
     glGetProgramInterfaceiv(program, GL_PROGRAM_INPUT, GL_MAX_NAME_LENGTH, &num);
     EXPECT_GL_NO_ERROR();
-    EXPECT_EQ(9, num);
+    EXPECT_EQ(11, num);
 
     glGetProgramInterfaceiv(program, GL_PROGRAM_INPUT, GL_MAX_NUM_ACTIVE_VARIABLES, &num);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);

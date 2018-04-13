@@ -608,7 +608,16 @@ std::string RendererVk::getRendererDescription() const
     strstr << VK_VERSION_MINOR(apiVersion) << ".";
     strstr << VK_VERSION_PATCH(apiVersion);
 
-    strstr << "(" << mPhysicalDeviceProperties.deviceName << ")";
+    strstr << "(";
+
+    // In the case of NVIDIA, deviceName does not necessarily contain "NVIDIA". Add "NVIDIA" so that
+    // Vulkan end2end tests can be selectively disabled on NVIDIA.
+    if (mPhysicalDeviceProperties.vendorID == VENDOR_ID_NVIDIA)
+    {
+        strstr << "NVIDIA ";
+    }
+
+    strstr << mPhysicalDeviceProperties.deviceName << ")";
 
     return strstr.str();
 }

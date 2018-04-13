@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -110,14 +111,7 @@ class InstancingTest : public ANGLETest
 
     void setupDrawArraysTest(const std::string &vs)
     {
-        const std::string fs =
-            "precision mediump float;\n"
-            "void main()\n"
-            "{\n"
-            "    gl_FragColor = vec4(1.0, 0, 0, 1.0);\n"
-            "}\n";
-
-        mProgram = CompileProgram(vs, fs);
+        mProgram = CompileProgram(vs, shader_library::essl1::fs::red());
         ASSERT_NE(0u, mProgram);
 
         // Set the viewport
@@ -148,16 +142,9 @@ class InstancingTest : public ANGLETest
             "    gl_Position  = vec4(a_instancePos.xyz, 1.0);\n"
             "    gl_PointSize = 6.0;\n"
             "}\n";
-
-        const std::string fs =
-            "precision mediump float;\n"
-            "void main()\n"
-            "{\n"
-            "    gl_FragColor = vec4(1.0, 0, 0, 1.0);\n"
-            "}\n";
         // clang-format on
 
-        mProgram = CompileProgram(vs, fs);
+        mProgram = CompileProgram(vs, shader_library::essl1::fs::red());
         ASSERT_NE(0u, mProgram);
 
         // Set the viewport
