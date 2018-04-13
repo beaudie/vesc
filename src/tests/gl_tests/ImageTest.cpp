@@ -8,6 +8,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 namespace angle
 {
@@ -1638,19 +1639,8 @@ TEST_P(ImageTest, RespecificationWithFBO)
         !eglDisplayExtensionEnabled(window->getDisplay(), "EGL_KHR_image_base") ||
         !eglDisplayExtensionEnabled(window->getDisplay(), "EGL_KHR_gl_texture_2D_image"));
 
-    // Simple shader
-    const std::string &vertexSource =
-        "attribute vec2 position;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = vec4(position, 0, 1);\n"
-        "}";
-    const std::string &fragmentSource =
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n"
-        "}";
-    GLuint program = CompileProgram(vertexSource, fragmentSource);
+    GLuint program =
+        CompileProgram(shader_library::essl1::vs::simple(), shader_library::essl1::fs::blue());
     ASSERT_NE(0u, program);
 
     GLubyte originalData[4] = {255, 0, 255, 255};
@@ -1670,8 +1660,8 @@ TEST_P(ImageTest, RespecificationWithFBO)
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, target, 0);
-    drawQuad(program, "position", 0.5f);
-    EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
+    drawQuad(program, shader_library::positionAttribName(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 
     // Respecify source with same parameters. This should not change the texture storage in D3D11.
     glBindTexture(GL_TEXTURE_2D, source);
@@ -1681,8 +1671,8 @@ TEST_P(ImageTest, RespecificationWithFBO)
     verifyResults2D(source, updateData);
 
     // Render to the target texture again and verify it gets the rendered pixels.
-    drawQuad(program, "position", 0.5f);
-    EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
+    drawQuad(program, shader_library::positionAttribName(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 
     // Clean up
     glDeleteTextures(1, &source);
