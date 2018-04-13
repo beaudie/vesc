@@ -1353,10 +1353,6 @@ TEST_P(GLSLTest, MaxVaryingsSpecialCases)
 // rather than total register use.
 TEST_P(GLSLTest, MaxMinusTwoVaryingVec2PlusOneSpecialVariable)
 {
-    // TODO(lucferron): Root cause and fix it. Looks like a location is used twice (loc = 31).
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -1383,11 +1379,6 @@ TEST_P(GLSLTest, MaxVaryingVec3Array)
 // Only fails on D3D9 because of packing limitations.
 TEST_P(GLSLTest, MaxVaryingVec3AndOneFloat)
 {
-    // TODO(lucferron): Root cause and fix it.
-    // ERROR: 0:62: 'location' : overlapping use of location x
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -1397,25 +1388,15 @@ TEST_P(GLSLTest, MaxVaryingVec3AndOneFloat)
 // Only fails on D3D9 because of packing limitations.
 TEST_P(GLSLTest, MaxVaryingVec3ArrayAndOneFloatArray)
 {
-    // TODO(lucferron): Root cause and fix it.
-    // ERROR: 0:62: 'location' : overlapping use of location x
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
     VaryingTestBase(0, 1, 0, 0, 0, maxVaryings / 2, 0, 0, false, false, false, !IsD3D9());
 }
 
-// Only fails on D3D9 because of packing limitations.
+// Only fails on D3D9 and Vulkan because of packing limitations.
 TEST_P(GLSLTest, TwiceMaxVaryingVec2)
 {
-    // TODO(lucferron): Root cause and fix it.
-    // ERROR: 0:62: 'location' : overlapping use of location x
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
     ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
 
@@ -1426,33 +1407,27 @@ TEST_P(GLSLTest, TwiceMaxVaryingVec2)
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
-    VaryingTestBase(0, 0, 2 * maxVaryings, 0, 0, 0, 0, 0, false, false, false, !IsD3D9());
+    VaryingTestBase(0, 0, 2 * maxVaryings, 0, 0, 0, 0, 0, false, false, false,
+                    !IsD3D9() && !IsVulkan());
 }
 
 // Disabled because of a failure in D3D9
 TEST_P(GLSLTest, MaxVaryingVec2Arrays)
 {
-    // TODO(lucferron): Root cause and fix it.
-    // ERROR: 0:62: 'location' : overlapping use of location x
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     ANGLE_SKIP_TEST_IF(IsD3DSM3());
 
     // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
-    ANGLE_SKIP_TEST_IF(IsOpenGLES());
+    // ANGLE_SKIP_TEST_IF(IsOpenGLES());
 
     // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
+    // ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
-    // Special case: because arrays of mat2 are packed as small grids of two rows by two columns,
-    // we should be aware that when we're packing into an odd number of varying registers the
-    // last row will be empty and can not fit the final vec2 arrary.
-    GLint maxVec2Arrays = (maxVaryings >> 1) << 1;
+    // Vec2 takes 2 varying locations, so we can only initialize with half the max.
+    GLint maxVec2Arrays = (maxVaryings >> 1);
 
     VaryingTestBase(0, 0, 0, maxVec2Arrays, 0, 0, 0, 0, false, false, false, true);
 }
