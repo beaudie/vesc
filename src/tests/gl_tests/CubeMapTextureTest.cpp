@@ -5,6 +5,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -25,21 +26,8 @@ class CubeMapTextureTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
-            R"(attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            })";
-
-        const std::string fsSource =
-            R"(uniform highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            })";
-
-        mProgram = CompileProgram(vsSource, fsSource);
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(),
+                                  shader_library::essl1::fs::uniformColor());
         if (mProgram == 0)
         {
             FAIL() << "shader compilation failed.";
@@ -108,7 +96,7 @@ TEST_P(CubeMapTextureTest, RenderToFacesConsecutively)
         const GLfloat *faceColor = faceColors + (face * 4);
         glUniform4f(mColorLocation, faceColor[0], faceColor[1], faceColor[2], faceColor[3]);
 
-        drawQuad(mProgram, "position", 0.5f);
+        drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
         EXPECT_GL_NO_ERROR();
     }
 

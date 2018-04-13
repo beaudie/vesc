@@ -7,9 +7,10 @@
 //   Various tests for EXT_disjoint_timer_query functionality and validation
 //
 
+#include "random_utils.h"
 #include "system_utils.h"
 #include "test_utils/ANGLETest.h"
-#include "random_utils.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -31,18 +32,6 @@ class TimerQueriesTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string passthroughVS =
-            "attribute highp vec4 position; void main(void)\n"
-            "{\n"
-            "    gl_Position = position;\n"
-            "}\n";
-
-        const std::string passthroughPS =
-            "precision highp float; void main(void)\n"
-            "{\n"
-            "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
-            "}\n";
-
         const std::string costlyVS =
             "attribute highp vec4 position; varying highp vec4 testPos; void main(void)\n"
             "{\n"
@@ -61,7 +50,8 @@ class TimerQueriesTest : public ANGLETest
             "    gl_FragColor = test;\n"
             "}\n";
 
-        mProgram = CompileProgram(passthroughVS, passthroughPS);
+        mProgram =
+            CompileProgram(shader_library::essl1::vs::simple(), shader_library::essl1::fs::red());
         ASSERT_NE(0u, mProgram) << "shader compilation failed.";
 
         mProgramCostly = CompileProgram(costlyVS, costlyPS);
@@ -121,7 +111,7 @@ TEST_P(TimerQueriesTest, TimeElapsed)
 
     // Test time elapsed for a single quad
     glBeginQueryEXT(GL_TIME_ELAPSED_EXT, query1);
-    drawQuad(mProgram, "position", 0.8f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.8f);
     glEndQueryEXT(GL_TIME_ELAPSED_EXT);
     ASSERT_GL_NO_ERROR();
 
@@ -329,19 +319,6 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     };
     ContextInfo contexts[2];
 
-    // Shaders
-    const std::string cheapVS =
-        "attribute highp vec4 position; void main(void)\n"
-        "{\n"
-        "    gl_Position = position;\n"
-        "}\n";
-
-    const std::string cheapPS =
-        "precision highp float; void main(void)\n"
-        "{\n"
-        "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
-        "}\n";
-
     const std::string costlyVS =
         "attribute highp vec4 position; varying highp vec4 testPos; void main(void)\n"
         "{\n"
@@ -365,7 +342,8 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     contexts[0].display = display;
     ASSERT_NE(contexts[0].context, EGL_NO_CONTEXT);
     eglMakeCurrent(display, surface, surface, contexts[0].context);
-    contexts[0].program = CompileProgram(cheapVS, cheapPS);
+    contexts[0].program =
+        CompileProgram(shader_library::essl1::vs::simple(), shader_library::essl1::fs::red());
     glGenQueriesEXT(1, &contexts[0].query);
     ASSERT_GL_NO_ERROR();
 
@@ -381,7 +359,7 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
     // Start the query and draw a quad on the first context without ending the query
     eglMakeCurrent(display, surface, surface, contexts[0].context);
     glBeginQueryEXT(GL_TIME_ELAPSED_EXT, contexts[0].query);
-    drawQuad(contexts[0].program, "position", 0.8f);
+    drawQuad(contexts[0].program, shader_library::positionAttribName(), 0.8f);
     ASSERT_GL_NO_ERROR();
 
     // Switch contexts, draw the expensive quad and end its query
@@ -443,7 +421,7 @@ TEST_P(TimerQueriesTest, Timestamp)
     glGenQueriesEXT(1, &query1);
     glGenQueriesEXT(1, &query2);
     glQueryCounterEXT(query1, GL_TIMESTAMP_EXT);
-    drawQuad(mProgram, "position", 0.8f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.8f);
     glQueryCounterEXT(query2, GL_TIMESTAMP_EXT);
 
     ASSERT_GL_NO_ERROR();
@@ -506,7 +484,7 @@ TEST_P(TimerQueriesTestES3, TimestampGetInteger64)
     GLint64 result1 = 0;
     GLint64 result2 = 0;
     glGetInteger64v(GL_TIMESTAMP_EXT, &result1);
-    drawQuad(mProgram, "position", 0.8f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.8f);
     glGetInteger64v(GL_TIMESTAMP_EXT, &result2);
     ASSERT_GL_NO_ERROR();
     std::cout << "Timestamps (getInteger64v): " << result1 << " " << result2 << std::endl;
