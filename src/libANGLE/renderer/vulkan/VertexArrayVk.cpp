@@ -418,9 +418,12 @@ gl::Error VertexArrayVk::drawElements(const gl::Context *context,
         }
         else
         {
+            // when we have indices given along with an element array buffer, the indices act as
+            // an offset.
+            intptr_t offset                = reinterpret_cast<intptr_t>(drawCallParams.indices());
             BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
             ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
-                renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(),
+                renderer, elementArrayBufferVk, indexType, drawCallParams.indexCount(), offset,
                 &mCurrentElementArrayBufferHandle, &mCurrentElementArrayBufferOffset));
         }
     }
