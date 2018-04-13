@@ -125,6 +125,13 @@ hooks = [
     ],
   },
   {
+    # Update the Windows toolchain if necessary.  Must run before 'clang' below.
+    'name': 'win_toolchain',
+    'pattern': '.',
+    'condition': 'checkout_win',
+    'action': ['python', 'src/build/vs_toolchain.py', 'update', '--force'],
+  },
+  {
     # Note: On Win, this should run after win_toolchain, as it may use it.
     'name': 'clang',
     'pattern': '.',
@@ -142,12 +149,6 @@ hooks = [
                 '--bucket', 'chromium-browser-clang/rc',
                 '-s', 'build/toolchain/win/rc/win/rc.exe.sha1',
     ],
-  },
-
-  {
-    # A change to a .gyp, .gypi, or to GYP itself should run the generator.
-    'pattern': '.',
-    'action': ['python', 'gyp/gyp_angle'],
   },
 ]
 
