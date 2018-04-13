@@ -5,6 +5,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -25,27 +26,14 @@ class LineLoopTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
-            R"(attribute highp vec4 position;
-            void main(void)
-            {
-                gl_Position = position;
-            })";
-
-        const std::string fsSource =
-            R"(uniform highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            })";
-
-        mProgram = CompileProgram(vsSource, fsSource);
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(),
+                                  shader_library::essl1::fs::uniformColor());
         if (mProgram == 0)
         {
             FAIL() << "shader compilation failed.";
         }
 
-        mPositionLocation = glGetAttribLocation(mProgram, "position");
+        mPositionLocation = glGetAttribLocation(mProgram, shader_library::positionAttribName());
         mColorLocation    = glGetUniformLocation(mProgram, "color");
 
         glBlendFunc(GL_ONE, GL_ONE);

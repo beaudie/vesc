@@ -5,6 +5,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -59,7 +60,7 @@ class ViewportTest : public ANGLETest
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw a red quad centered in the middle of the viewport, with dimensions 25% of the size of the viewport.
-        drawQuad(mProgram, "position", 0.5f, 0.25f);
+        drawQuad(mProgram, shader_library::positionAttribName(), 0.5f, 0.25f);
 
         GLint centerViewportX = viewportSize[0] + (viewportSize[2] / 2);
         GLint centerViewportY = viewportSize[1] + (viewportSize[3] / 2);
@@ -122,21 +123,8 @@ class ViewportTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string testVertexShaderSource =
-            R"(attribute highp vec4 position;
-
-            void main(void)
-            {
-                gl_Position = position;
-            })";
-
-        const std::string testFragmentShaderSource =
-            R"(void main(void)
-            {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            })";
-
-        mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+        mProgram =
+            CompileProgram(shader_library::essl1::vs::simple(), shader_library::essl1::fs::red());
         if (mProgram == 0)
         {
             FAIL() << "shader compilation failed.";
