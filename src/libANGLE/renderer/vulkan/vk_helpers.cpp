@@ -346,6 +346,7 @@ gl::Error LineLoopHelper::getIndexBufferForElementArrayBuffer(RendererVk *render
                                                               BufferVk *elementArrayBufferVk,
                                                               VkIndexType indexType,
                                                               int indexCount,
+                                                              intptr_t offsetInElementArray,
                                                               VkBuffer *bufferHandleOut,
                                                               VkDeviceSize *bufferOffsetOut)
 {
@@ -361,8 +362,8 @@ gl::Error LineLoopHelper::getIndexBufferForElementArrayBuffer(RendererVk *render
                                            &offset, nullptr));
     *bufferOffsetOut = static_cast<VkDeviceSize>(offset);
 
-    VkBufferCopy copy1 = {0, offset, static_cast<VkDeviceSize>(indexCount) * unitSize};
-    VkBufferCopy copy2 = {0, offset + static_cast<VkDeviceSize>(indexCount) * unitSize, unitSize};
+    VkBufferCopy copy1 = {static_cast<VkDeviceSize>(offsetInElementArray), offset, static_cast<VkDeviceSize>(indexCount) * unitSize};
+    VkBufferCopy copy2 = {static_cast<VkDeviceSize>(offsetInElementArray), offset + static_cast<VkDeviceSize>(indexCount) * unitSize, unitSize};
     std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
 
     vk::CommandBuffer *commandBuffer;

@@ -126,6 +126,7 @@ class LineLoopHelper final : public vk::CommandGraphResource
                                                   BufferVk *elementArrayBufferVk,
                                                   VkIndexType indexType,
                                                   int indexCount,
+                                                  intptr_t offsetInElementArray,
                                                   VkBuffer *bufferHandleOut,
                                                   VkDeviceSize *bufferOffsetOut);
     gl::Error getIndexBufferForElementArrayBufferFromClientMemory(RendererVk *renderer,
