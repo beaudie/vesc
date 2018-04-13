@@ -8,6 +8,7 @@
 
 #include "random_utils.h"
 #include "test_utils/gl_raii.h"
+#include "test_utils/shader_library.h"
 
 using namespace angle;
 
@@ -76,24 +77,8 @@ class ClearTestBase : public ANGLETest
 
     void setupDefaultProgram()
     {
-        const std::string vertexShaderSource =
-            R"(precision highp float;
-            attribute vec4 position;
-
-            void main()
-            {
-                gl_Position = position;
-            })";
-
-        const std::string fragmentShaderSource =
-            R"(precision highp float;
-
-            void main()
-            {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            })";
-
-        mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
+        mProgram =
+            CompileProgram(shader_library::essl1::vs::simple(), shader_library::essl1::fs::red());
         ASSERT_NE(0u, mProgram);
     }
 
@@ -168,7 +153,7 @@ TEST_P(ClearTest, ClearIssue)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     setupDefaultProgram();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
@@ -243,7 +228,7 @@ TEST_P(ClearTestES3, BadFBOSerialBug)
     glDrawBuffers(1, drawBuffers);
 
     setupDefaultProgram();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
 
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);

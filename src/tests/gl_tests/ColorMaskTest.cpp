@@ -8,6 +8,7 @@
 // driver bug.
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/shader_library.h"
 
 namespace angle
 {
@@ -29,25 +30,8 @@ class ColorMaskTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        const std::string vsSource =
-            "precision highp float;\n"
-            "attribute vec4 position;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    gl_Position = position;\n"
-            "}\n";
-
-        const std::string fsSource =
-            "precision highp float;\n"
-            "uniform vec4 color;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    gl_FragColor = color;\n"
-            "}\n";
-
-        mProgram = CompileProgram(vsSource, fsSource);
+        mProgram = CompileProgram(shader_library::essl1::vs::simple(),
+                                  shader_library::essl1::fs::uniformColor());
         ASSERT_NE(0u, mProgram) << "shader compilation failed.";
 
         mColorUniform = glGetUniformLocation(mProgram, "color");
@@ -82,7 +66,7 @@ TEST_P(ColorMaskTest, AMDZeroColorMaskBug)
     glUseProgram(mProgram);
     glUniform4f(mColorUniform, 1.0f, 0.0f, 0.0f, 0.0f);
     EXPECT_GL_NO_ERROR();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
     EXPECT_PIXEL_EQ(x, y, 0, 0, 255, 255);
 
     // Re-enable the color mask, should be red (with blend disabled, the red should overwrite
@@ -91,7 +75,7 @@ TEST_P(ColorMaskTest, AMDZeroColorMaskBug)
     glUseProgram(mProgram);
     glUniform4f(mColorUniform, 1.0f, 0.0f, 0.0f, 0.0f);
     EXPECT_GL_NO_ERROR();
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgram, shader_library::positionAttribName(), 0.5f);
     EXPECT_PIXEL_EQ(x, y, 255, 0, 0, 0);
 }
 
