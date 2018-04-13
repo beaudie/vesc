@@ -20,6 +20,7 @@
 
 #include "common/string_utils.h"
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/ProgramLinkedResources.h"
 
 namespace rx
@@ -112,7 +113,11 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     for (const auto &varyingReg : resources.varyingPacking.getRegisterList())
     {
         const auto &varying        = *varyingReg.packedVarying;
-        std::string locationString = "location = " + Str(varyingReg.registerRow);
+
+        std::string locationString =
+            "location = " +
+            Str(varyingReg.registerRow +
+                (glContext->getCaps().maxVaryingVectors * varyingReg.registerColumn >> 1));
         InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
         InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
     }
