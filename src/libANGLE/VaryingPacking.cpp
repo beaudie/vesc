@@ -20,6 +20,9 @@ namespace gl
 
 namespace
 {
+// We can have 2 reserved key words for varyings that must account in the max number
+// of varyings.
+constexpr int kReservedVaryingCount = 2;
 
 // true if varying x has a higher priority in packing than y
 bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
@@ -57,7 +60,7 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
 
 // Implementation of VaryingPacking
 VaryingPacking::VaryingPacking(GLuint maxVaryingVectors, PackMode packMode)
-    : mRegisterMap(maxVaryingVectors), mPackMode(packMode)
+    : mRegisterMap(maxVaryingVectors + kReservedVaryingCount), mPackMode(packMode)
 {
 }
 
@@ -219,7 +222,7 @@ bool VaryingPacking::isFree(unsigned int registerRow,
 {
     for (unsigned int row = 0; row < varyingRows; ++row)
     {
-        ASSERT(registerRow + row < mRegisterMap.size());
+        ASSERT(registerRow + row < (mRegisterMap.size()));
         for (unsigned int column = 0; column < varyingColumns; ++column)
         {
             ASSERT(registerColumn + column < 4);
