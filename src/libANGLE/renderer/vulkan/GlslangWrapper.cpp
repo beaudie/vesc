@@ -112,7 +112,9 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     for (const auto &varyingReg : resources.varyingPacking.getRegisterList())
     {
         const auto &varying        = *varyingReg.packedVarying;
-        std::string locationString = "location = " + Str(varyingReg.registerRow);
+
+        std::string locationString = "location = " + Str(varyingReg.registerRow) +
+                                     ", component = " + Str(varyingReg.registerColumn);
         InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
         InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
     }
