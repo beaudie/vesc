@@ -15,6 +15,8 @@
 namespace angle
 {
 
+
+
 void LoadA8ToRGBA8(size_t width,
                    size_t height,
                    size_t depth,
