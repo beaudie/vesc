@@ -20,6 +20,7 @@
 
 #include "common/string_utils.h"
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/ProgramLinkedResources.h"
 
 namespace rx
@@ -112,7 +113,17 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     for (const auto &varyingReg : resources.varyingPacking.getRegisterList())
     {
         const auto &varying        = *varyingReg.packedVarying;
-        std::string locationString = "location = " + Str(varyingReg.registerRow);
+
+        // Every register can contain a vec2 in size. RegisterColumn should always increase by
+        // increments of 2. The rows will be allocated according to the maxVaryingVector in the
+        // caps. If we end up needing to pack multiple varyings on a single row, we need to
+        // have a different varying location for them so we use the (column / 2) to keep increasing
+        // the location.
+        ASSERT(varyingReg.registerColumn % 2 == 0);
+        std::string locationString =
+            "location = " +
+            Str(varyingReg.registerRow +
+                (glContext->getCaps().maxVaryingVectors * varyingReg.registerColumn >> 1));
         InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
         InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
     }
