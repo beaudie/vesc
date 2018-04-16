@@ -1457,6 +1457,10 @@ class Context final : angle::NonCopyable
 
     bool isValidBufferBinding(BufferBinding binding) const { return mValidBufferBindings[binding]; }
 
+    // GLES1 emulation: Renderer level (for validation)
+    int vertexArrayIndex(ClientVertexArrayType type) const;
+    static ClientVertexArrayType paramToVertexArrayType(GLenum param);
+
   private:
     Error prepareForDraw();
     Error prepareForClear(GLbitfield mask);
