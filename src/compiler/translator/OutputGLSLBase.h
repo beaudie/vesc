@@ -77,6 +77,7 @@ class TOutputGLSLBase : public TIntermTraverser
     virtual ImmutableString translateTextureFunction(const ImmutableString &name) { return name; }
 
     void declareStruct(const TStructure *structure);
+    virtual std::string mapQualifierToString(TQualifier qualifier);
 
   private:
     bool structDeclared(const TStructure *structure) const;
@@ -85,8 +86,6 @@ class TOutputGLSLBase : public TIntermTraverser
     void declareInterfaceBlock(const TInterfaceBlock *interfaceBlock);
 
     void writeBuiltInFunctionTriplet(Visit visit, TOperator op, bool useEmulatedFunction);
-
-    const char *mapQualifierToString(TQualifier qialifier);
 
     TInfoSinkBase &mObjSink;
     bool mDeclaringVariable;
