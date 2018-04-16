@@ -176,7 +176,8 @@ ImageUnit::ImageUnit(const ImageUnit &other) = default;
 
 ImageUnit::~ImageUnit() = default;
 
-static void MinMax(int a, int b, int *minimum, int *maximum)
+template <typename T>
+static void MinMax(T a, T b, T *minimum, T *maximum)
 {
     if (a < b)
     {
@@ -190,15 +191,35 @@ static void MinMax(int a, int b, int *minimum, int *maximum)
     }
 }
 
+Rectangle::Rectangle(const BlitRectangle &rect)
+    : x(rect.flipX() ? rect.x1 : rect.x0),
+      y(rect.flipY() ? rect.y1 : rect.y0),
+      width(static_cast<int>(rect.width())),
+      height(static_cast<int>(rect.height()))
+{
+    ASSERT(rect.width() < static_cast<unsigned int>(std::numeric_limits<int>::max()));
+    ASSERT(rect.height() < static_cast<unsigned int>(std::numeric_limits<int>::max()));
+}
+
+BlitRectangle::BlitRectangle(const Rectangle &rect)
+    : x0(rect.x0()), y0(rect.y0()), x1(rect.x1()), y1(rect.y1())
+{
+}
+
+bool operator==(const BlitRectangle &a, const BlitRectangle &b)
+{
+    return a.x0 == b.x0 && a.y0 == b.y0 && a.x1 == b.x1 && a.y1 == b.y1;
+}
+
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection)
 {
     int minSourceX, maxSourceX, minSourceY, maxSourceY;
-    MinMax(source.x, source.x + source.width, &minSourceX, &maxSourceX);
-    MinMax(source.y, source.y + source.height, &minSourceY, &maxSourceY);
+    MinMax<int>(source.x, source.x + source.width, &minSourceX, &maxSourceX);
+    MinMax<int>(source.y, source.y + source.height, &minSourceY, &maxSourceY);
 
     int minClipX, maxClipX, minClipY, maxClipY;
-    MinMax(clip.x, clip.x + clip.width, &minClipX, &maxClipX);
-    MinMax(clip.y, clip.y + clip.height, &minClipY, &maxClipY);
+    MinMax<int>(clip.x, clip.x + clip.width, &minClipX, &maxClipX);
+    MinMax<int>(clip.y, clip.y + clip.height, &minClipY, &maxClipY);
 
     if (minSourceX >= maxClipX || maxSourceX <= minClipX || minSourceY >= maxClipY || maxSourceY <= minClipY)
     {
@@ -224,6 +245,60 @@ bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *in
 
         return true;
     }
+}
+
+bool ClipRectangle(const BlitRectangle &source,
+                   const BlitRectangle &clip,
+                   BlitRectangle *intersection)
+{
+    int minSourceX, maxSourceX, minSourceY, maxSourceY;
+    MinMax<int>(source.x0, source.x1, &minSourceX, &maxSourceX);
+    MinMax<int>(source.y0, source.y1, &minSourceY, &maxSourceY);
+
+    int minClipX, maxClipX, minClipY, maxClipY;
+    MinMax<int>(clip.x0, clip.x1, &minClipX, &maxClipX);
+    MinMax<int>(clip.y0, clip.y1, &minClipY, &maxClipY);
+
+    if (minSourceX >= maxClipX || maxSourceX <= minClipX || minSourceY >= maxClipY ||
+        maxSourceY <= minClipY)
+    {
+        return false;
+    }
+    if (intersection)
+    {
+        intersection->x0 = std::max(minSourceX, minClipX);
+        intersection->y0 = std::max(minSourceY, minClipY);
+        intersection->x1 = std::min(maxSourceX, maxClipX);
+        intersection->y1 = std::min(maxSourceY, maxClipY);
+    }
+    return true;
+}
+
+bool ClipRectangle(const FloatRectangle &source,
+                   const FloatRectangle &clip,
+                   FloatRectangle *intersection)
+{
+    double minSourceX, maxSourceX, minSourceY, maxSourceY;
+    MinMax<double>(source.x, source.x + source.width, &minSourceX, &maxSourceX);
+    MinMax<double>(source.y, source.y + source.height, &minSourceY, &maxSourceY);
+
+    double minClipX, maxClipX, minClipY, maxClipY;
+    MinMax<double>(clip.x, clip.x + clip.width, &minClipX, &maxClipX);
+    MinMax<double>(clip.y, clip.y + clip.height, &minClipY, &maxClipY);
+
+    if (minSourceX >= maxClipX || maxSourceX <= minClipX || minSourceY >= maxClipY ||
+        maxSourceY <= minClipY)
+    {
+        return false;
+    }
+    if (intersection)
+    {
+        intersection->x      = std::max(minSourceX, minClipX);
+        intersection->y      = std::max(minSourceY, minClipY);
+        intersection->width  = std::min(maxSourceX, maxClipX) - std::max(minSourceX, minClipX);
+        intersection->height = std::min(maxSourceY, maxClipY) - std::max(minSourceY, minClipY);
+    }
+    return true;
 }
 
 bool Box::operator==(const Box &other) const

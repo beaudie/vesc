@@ -276,8 +276,8 @@ class Framebuffer final : public angle::ObserverInterface, public LabeledObject
                      void *pixels);
 
     Error blit(const Context *context,
-               const Rectangle &sourceArea,
-               const Rectangle &destArea,
+               const BlitRectangle &sourceArea,
+               const BlitRectangle &destArea,
                GLbitfield mask,
                GLenum filter);
 
