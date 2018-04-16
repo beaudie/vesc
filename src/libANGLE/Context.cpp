@@ -3350,8 +3350,8 @@ void Context::blitFramebuffer(GLint srcX0,
     Framebuffer *drawFramebuffer = mGLState.getDrawFramebuffer();
     ASSERT(drawFramebuffer);
 
-    Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
-    Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
+    BlitRectangle srcArea(srcX0, srcY0, srcX1, srcY1);
+    BlitRectangle dstArea(dstX0, dstY0, dstX1, dstY1);
 
     ANGLE_CONTEXT_TRY(syncStateForBlit());
 

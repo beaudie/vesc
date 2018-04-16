@@ -90,8 +90,8 @@ class FramebufferD3D : public FramebufferImpl
                          void *pixels) override;
 
     gl::Error blit(const gl::Context *context,
-                   const gl::Rectangle &sourceArea,
-                   const gl::Rectangle &destArea,
+                   const gl::BlitRectangle &sourceArea,
+                   const gl::BlitRectangle &destArea,
                    GLbitfield mask,
                    GLenum filter) override;
 
@@ -116,8 +116,8 @@ class FramebufferD3D : public FramebufferImpl
                                      uint8_t *pixels) = 0;
 
     virtual gl::Error blitImpl(const gl::Context *context,
-                               const gl::Rectangle &sourceArea,
-                               const gl::Rectangle &destArea,
+                               const gl::BlitRectangle &sourceArea,
+                               const gl::BlitRectangle &destArea,
                                const gl::Rectangle *scissor,
                                bool blitRenderTarget,
                                bool blitDepth,

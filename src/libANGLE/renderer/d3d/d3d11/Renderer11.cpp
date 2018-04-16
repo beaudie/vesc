@@ -3152,8 +3152,8 @@ gl::Error Renderer11::packPixels(const TextureHelper11 &textureHelper,
 }
 
 gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
-                                           const gl::Rectangle &readRectIn,
-                                           const gl::Rectangle &drawRectIn,
+                                           const gl::BlitRectangle &readRectIn,
+                                           const gl::BlitRectangle &drawRectIn,
                                            RenderTargetD3D *readRenderTarget,
                                            RenderTargetD3D *drawRenderTarget,
                                            GLenum filter,
@@ -3224,6 +3224,23 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
     // Stencil blits don't use shaders.
     ASSERT(readSRV.valid() || stencilBlit);
 
+    gl::BlitRectangle readRect = readRectIn;
+    gl::BlitRectangle drawRect = drawRectIn;
+
+    const bool flipX = (readRect.flipX() != drawRect.flipX());
+    const bool flipY = (readRect.flipY() != drawRect.flipY());
+    // Remove flips from readRect to simplify further operations.
+    if (readRect.flipX())
+    {
+        std::swap(readRect.y0, readRect.y1);
+        std::swap(drawRect.x0, drawRect.x1);
+    }
+    if (readRect.flipY())
+    {
+        std::swap(readRect.y0, readRect.y1);
+        std::swap(drawRect.y0, drawRect.y1);
+    }
+
     const gl::Extents readSize(readRenderTarget->getWidth(), readRenderTarget->getHeight(), 1);
     const gl::Extents drawSize(drawRenderTarget->getWidth(), drawRenderTarget->getHeight(), 1);
 
@@ -3233,98 +3250,66 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
     // buffer, the depth buffer, and / or the stencil buffer depending on mask."
     // This means negative x and y are out of bounds, and not to be read from. We handle this here
     // by internally scaling the read and draw rectangles.
-    gl::Rectangle readRect = readRectIn;
-    gl::Rectangle drawRect = drawRectIn;
 
-    auto flip = [](int val) { return val >= 0 ? 1 : -1; };
-
-    if (readRect.x > readSize.width && readRect.width < 0)
-    {
-        int delta = readRect.x - readSize.width;
-        readRect.x -= delta;
-        readRect.width += delta;
-
-        int drawDelta = delta * flip(drawRect.width);
-        drawRect.x += drawDelta;
-        drawRect.width -= drawDelta;
-    }
-
-    if (readRect.y > readSize.height && readRect.height < 0)
-    {
-        int delta = readRect.y - readSize.height;
-        readRect.y -= delta;
-        readRect.height += delta;
-
-        int drawDelta = delta * flip(drawRect.height);
-        drawRect.y += drawDelta;
-        drawRect.height -= drawDelta;
-    }
-
-    auto readToDrawX       = [&drawRectIn, &readRectIn](int readOffset) {
+    auto flip        = [](bool isFlipped) { return isFlipped ? -1 : 1; };
+    auto readToDrawX = [&drawRectIn, &readRectIn, &flip, &flipX](int64_t readOffset) {
         double readToDrawScale =
-            static_cast<double>(drawRectIn.width) / static_cast<double>(readRectIn.width);
-        return static_cast<int>(round(static_cast<double>(readOffset) * readToDrawScale));
+            static_cast<double>(drawRectIn.width()) / static_cast<double>(readRectIn.width());
+        return static_cast<int64_t>(
+            round(static_cast<double>(readOffset) * flip(flipX) * readToDrawScale));
     };
-    if (readRect.x < 0)
-    {
-        int readOffset = -readRect.x;
-        readRect.x += readOffset;
-        readRect.width -= readOffset;
-
-        int drawOffset = readToDrawX(readOffset);
-        drawRect.x += drawOffset;
-        drawRect.width -= drawOffset;
-    }
-
-    auto readToDrawY = [&drawRectIn, &readRectIn](int readOffset) {
+    auto readToDrawY = [&drawRectIn, &readRectIn, &flip, &flipY](int64_t readOffset) {
         double readToDrawScale =
-            static_cast<double>(drawRectIn.height) / static_cast<double>(readRectIn.height);
-        return static_cast<int>(round(static_cast<double>(readOffset) * readToDrawScale));
+            static_cast<double>(drawRectIn.height()) / static_cast<double>(readRectIn.height());
+        return static_cast<int64_t>(
+            round(static_cast<double>(readOffset) * flip(flipY) * readToDrawScale));
     };
-    if (readRect.y < 0)
+    if (readRect.x0 < 0)
     {
-        int readOffset = -readRect.y;
-        readRect.y += readOffset;
-        readRect.height -= readOffset;
-
-        int drawOffset = readToDrawY(readOffset);
-        drawRect.y += drawOffset;
-        drawRect.height -= drawOffset;
+        // Using int64_t is necessary to prevent overflow in case readRect.x0 ==
+        // std::numeric_limits<int>::min()
+        int64_t readOffset = -static_cast<int64_t>(readRect.x0);
+        readRect.x0        = 0;
+        drawRect.x0        = static_cast<int>(drawRect.x0 + readToDrawX(readOffset));
+    }
+    if (readRect.y0 < 0)
+    {
+        // Using int64_t is necessary to prevent overflow in case readRect.y0 ==
+        // std::numeric_limits<int>::min()
+        int64_t readOffset = -static_cast<int64_t>(readRect.y0);
+        readRect.y0        = 0;
+        drawRect.y0        = static_cast<int>(drawRect.y0 + readToDrawY(readOffset));
     }
 
-    if (readRect.x1() < 0)
+    if (readRect.x1 > readSize.width)
     {
-        int readOffset = -readRect.x1();
-        readRect.width += readOffset;
-
-        int drawOffset = readToDrawX(readOffset);
-        drawRect.width += drawOffset;
+        int delta = readRect.x1 - readSize.width;
+        readRect.x1 -= delta;
+        drawRect.x1 = static_cast<int>(drawRect.x1 - readToDrawX(delta));
     }
 
-    if (readRect.y1() < 0)
+    if (readRect.y1 > readSize.height)
     {
-        int readOffset = -readRect.y1();
-        readRect.height += readOffset;
-
-        int drawOffset = readToDrawY(readOffset);
-        drawRect.height += drawOffset;
+        int delta = readRect.y1 - readSize.height;
+        readRect.y1 -= delta;
+        drawRect.y1 = static_cast<int>(drawRect.y1 - readToDrawY(delta));
+    }
+    if (readRect.x0 >= readRect.x1 || readRect.y0 >= readRect.y1)
+    {
+        // Intersection of the read area and the read framebuffer size is empty.
+        return gl::NoError();
     }
 
-    if (readRect.x1() > readSize.width)
+    bool scissorNeeded = false;
+    if (scissor)
     {
-        int delta = readRect.x1() - readSize.width;
-        readRect.width -= delta;
-        drawRect.width -= delta * flip(drawRect.width);
+        if (!gl::ClipRectangle(drawRect, gl::BlitRectangle(*scissor), nullptr))
+        {
+            // Scissor and drawRect don't intersect, so this is a no-op.
+            return gl::NoError();
+        }
+        scissorNeeded = true;
     }
-
-    if (readRect.y1() > readSize.height)
-    {
-        int delta = readRect.y1() - readSize.height;
-        readRect.height -= delta;
-        drawRect.height -= delta * flip(drawRect.height);
-    }
-
-    bool scissorNeeded = scissor && gl::ClipRectangle(drawRect, *scissor, nullptr);
 
     const auto &destFormatInfo =
         gl::GetSizedInternalFormatInfo(drawRenderTarget->getInternalFormat());
@@ -3350,64 +3335,65 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
     bool colorMaskingNeeded = colorMask.alpha;
     ASSERT(!colorMask.red && !colorMask.green && !colorMask.blue);
 
-    bool wholeBufferCopy = !scissorNeeded && !colorMaskingNeeded && readRect.x == 0 &&
-                           readRect.width == readSize.width && readRect.y == 0 &&
-                           readRect.height == readSize.height && drawRect.x == 0 &&
-                           drawRect.width == drawSize.width && drawRect.y == 0 &&
-                           drawRect.height == drawSize.height;
+    bool flipRequired    = flipX || flipY;
+    bool stretchRequired = flipRequired || (readRect.width() != drawRect.width()) ||
+                           (readRect.height() != drawRect.height());
 
-    bool stretchRequired = readRect.width != drawRect.width || readRect.height != drawRect.height;
+    bool wholeBufferCopy = !flipRequired && !scissorNeeded && !colorMaskingNeeded &&
+                           readRect.x0 == 0 && readRect.x1 == readSize.width && readRect.y0 == 0 &&
+                           readRect.y1 == readSize.height && drawRect.x0 == 0 &&
+                           drawRect.x1 == drawSize.width && drawRect.y0 == 0 &&
+                           drawRect.y1 == drawSize.height;
 
-    bool flipRequired =
-        readRect.width < 0 || readRect.height < 0 || drawRect.width < 0 || drawRect.height < 0;
-
-    bool outOfBounds = readRect.x < 0 || readRect.x + readRect.width > readSize.width ||
-                       readRect.y < 0 || readRect.y + readRect.height > readSize.height ||
-                       drawRect.x < 0 || drawRect.x + drawRect.width > drawSize.width ||
-                       drawRect.y < 0 || drawRect.y + drawRect.height > drawSize.height;
+    ASSERT(readRect.x0 >= 0 && readRect.x1 <= readSize.width && readRect.y0 >= 0 &&
+           readRect.y1 <= readSize.height);
+    bool outOfBounds = drawRect.x0 < 0 || drawRect.x1 > drawSize.width || drawRect.y0 < 0 ||
+                       drawRect.y1 > drawSize.height;
 
     bool partialDSBlit =
         (nativeFormat.depthBits > 0 && depthBlit) != (nativeFormat.stencilBits > 0 && stencilBlit);
 
     if (readRenderTarget11->getFormatSet().formatID ==
             drawRenderTarget11->getFormatSet().formatID &&
-        !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
-        !colorMaskingNeeded && (!(depthBlit || stencilBlit) || wholeBufferCopy))
+        !stretchRequired && !outOfBounds && !partialDSBlit && !colorMaskingNeeded &&
+        (!(depthBlit || stencilBlit) || wholeBufferCopy))
     {
-        UINT dstX = drawRect.x;
-        UINT dstY = drawRect.y;
+        // The rects are guaranteed not to be flipped.
+        ASSERT(!readRect.flipX());
+        ASSERT(!readRect.flipY());
+        ASSERT(!drawRect.flipX());
+        ASSERT(!drawRect.flipY());
+
+        UINT dstX = drawRect.x0;
+        UINT dstY = drawRect.y0;
 
         D3D11_BOX readBox;
-        readBox.left   = readRect.x;
-        readBox.right  = readRect.x + readRect.width;
-        readBox.top    = readRect.y;
-        readBox.bottom = readRect.y + readRect.height;
+        readBox.left   = readRect.x0;
+        readBox.right  = readRect.x1;
+        readBox.top    = readRect.y0;
+        readBox.bottom = readRect.y1;
         readBox.front  = 0;
         readBox.back   = 1;
 
         if (scissorNeeded)
         {
-            // drawRect is guaranteed to have positive width and height because stretchRequired is
-            // false.
-            ASSERT(drawRect.width >= 0 || drawRect.height >= 0);
-
-            if (drawRect.x < scissor->x)
+            if (drawRect.x0 < scissor->x)
             {
                 dstX = scissor->x;
-                readBox.left += (scissor->x - drawRect.x);
+                readBox.left += scissor->x - drawRect.x0;
             }
-            if (drawRect.y < scissor->y)
+            if (drawRect.y0 < scissor->y)
             {
                 dstY = scissor->y;
-                readBox.top += (scissor->y - drawRect.y);
+                readBox.top += scissor->y - drawRect.y0;
             }
-            if (drawRect.x + drawRect.width > scissor->x + scissor->width)
+            if (drawRect.x1 > scissor->x1())
             {
-                readBox.right -= ((drawRect.x + drawRect.width) - (scissor->x + scissor->width));
+                readBox.right -= drawRect.x1 - scissor->x1();
             }
-            if (drawRect.y + drawRect.height > scissor->y + scissor->height)
+            if (drawRect.y1 > scissor->y1())
             {
-                readBox.bottom -= ((drawRect.y + drawRect.height) - (scissor->y + scissor->height));
+                readBox.bottom -= drawRect.y1 - scissor->y1();
             }
         }
 
@@ -3420,8 +3406,10 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Context *context,
     }
     else
     {
-        gl::Box readArea(readRect.x, readRect.y, 0, readRect.width, readRect.height, 1);
-        gl::Box drawArea(drawRect.x, drawRect.y, 0, drawRect.width, drawRect.height, 1);
+        gl::Box readArea(readRect.x0, readRect.y0, 0, readRect.width(), readRect.height(), 1);
+        gl::Box drawArea(drawRect.x0, drawRect.y0, 0,
+                         flip(flipX) * static_cast<int>(drawRect.width()),
+                         flip(flipY) * static_cast<int>(drawRect.height()), 1);
 
         if (depthBlit && stencilBlit)
         {
