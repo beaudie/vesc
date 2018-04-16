@@ -1665,6 +1665,38 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
         case GL_MAX_TEXTURE_STACK_DEPTH:
             *params = mCaps.maxTextureMatrixStackDepth;
             break;
+        // GLES1 emulation: Vertex attribute queries
+        case GL_VERTEX_ARRAY_BUFFER_BINDING:
+        case GL_NORMAL_ARRAY_BUFFER_BINDING:
+        case GL_COLOR_ARRAY_BUFFER_BINDING:
+        case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
+        case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+            getVertexAttribiv((GLuint)vertexArrayIndex(paramToVertexArrayType(pname)),
+                              GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, params);
+            break;
+        case GL_VERTEX_ARRAY_STRIDE:
+        case GL_NORMAL_ARRAY_STRIDE:
+        case GL_COLOR_ARRAY_STRIDE:
+        case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+        case GL_TEXTURE_COORD_ARRAY_STRIDE:
+            getVertexAttribiv((GLuint)vertexArrayIndex(paramToVertexArrayType(pname)),
+                              GL_VERTEX_ATTRIB_ARRAY_STRIDE, params);
+            break;
+        case GL_VERTEX_ARRAY_SIZE:
+        case GL_COLOR_ARRAY_SIZE:
+        case GL_TEXTURE_COORD_ARRAY_SIZE:
+            getVertexAttribiv((GLuint)vertexArrayIndex(paramToVertexArrayType(pname)),
+                              GL_VERTEX_ATTRIB_ARRAY_SIZE, params);
+            break;
+        case GL_VERTEX_ARRAY_TYPE:
+        case GL_COLOR_ARRAY_TYPE:
+        case GL_NORMAL_ARRAY_TYPE:
+        case GL_POINT_SIZE_ARRAY_TYPE_OES:
+        case GL_TEXTURE_COORD_ARRAY_TYPE:
+            getVertexAttribiv((GLuint)vertexArrayIndex(paramToVertexArrayType(pname)),
+                              GL_VERTEX_ATTRIB_ARRAY_TYPE, params);
+            break;
+
         default:
             handleError(mGLState.getIntegerv(this, pname, params));
             break;
@@ -1707,9 +1739,30 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getPointerv(GLenum pname, void **params) const
+void Context::getPointerv(GLenum pname, void **params)
 {
-    mGLState.getPointerv(pname, params);
+
+    // GLES1 emulation: There is a glGetPointerv for the ES 3.1 KHR_debug extension, while
+    // glGetPointerv is core to GLES1 (totally different purposes, same API name) Disambiguate them
+    // here.
+    if (getClientVersion() < Version(2, 0))
+    {
+        switch (pname)
+        {
+            case GL_VERTEX_ARRAY_POINTER:
+            case GL_NORMAL_ARRAY_POINTER:
+            case GL_COLOR_ARRAY_POINTER:
+            case GL_TEXTURE_COORD_ARRAY_POINTER:
+            case GL_POINT_SIZE_ARRAY_POINTER_OES:
+                getVertexAttribPointerv((GLuint)vertexArrayIndex(paramToVertexArrayType(pname)),
+                                        GL_VERTEX_ATTRIB_ARRAY_POINTER, params);
+                return;
+        }
+    }
+    else
+    {
+        mGLState.getPointerv(pname, params);
+    }
 }
 
 void Context::getPointervRobustANGLERobust(GLenum pname,
@@ -6990,6 +7043,24 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             case GL_MAX_MODELVIEW_STACK_DEPTH:
             case GL_MAX_PROJECTION_STACK_DEPTH:
             case GL_MAX_TEXTURE_STACK_DEPTH:
+            case GL_VERTEX_ARRAY_STRIDE:
+            case GL_NORMAL_ARRAY_STRIDE:
+            case GL_COLOR_ARRAY_STRIDE:
+            case GL_TEXTURE_COORD_ARRAY_STRIDE:
+            case GL_VERTEX_ARRAY_SIZE:
+            case GL_COLOR_ARRAY_SIZE:
+            case GL_TEXTURE_COORD_ARRAY_SIZE:
+            case GL_VERTEX_ARRAY_TYPE:
+            case GL_NORMAL_ARRAY_TYPE:
+            case GL_COLOR_ARRAY_TYPE:
+            case GL_TEXTURE_COORD_ARRAY_TYPE:
+            case GL_VERTEX_ARRAY_BUFFER_BINDING:
+            case GL_NORMAL_ARRAY_BUFFER_BINDING:
+            case GL_COLOR_ARRAY_BUFFER_BINDING:
+            case GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING:
+            case GL_POINT_SIZE_ARRAY_STRIDE_OES:
+            case GL_POINT_SIZE_ARRAY_TYPE_OES:
+            case GL_POINT_SIZE_ARRAY_BUFFER_BINDING_OES:
                 *type      = GL_INT;
                 *numParams = 1;
                 return true;

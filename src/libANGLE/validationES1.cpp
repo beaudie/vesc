@@ -136,8 +136,10 @@ bool ValidateColorPointer(Context *context,
                           GLsizei stride,
                           const void *pointer)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    return ValidateVertexAttribPointer(
+        context, context->vertexArrayIndex(ClientVertexArrayType::TextureCoord), size, type,
+        GL_FALSE, stride, pointer);
 }
 
 bool ValidateCullFace(Context *context, GLenum mode)
@@ -268,7 +270,7 @@ bool ValidateGetMaterialxv(Context *context, GLenum face, GLenum pname, GLfixed 
 
 bool ValidateGetPointerv(Context *context, GLenum pname, void **params)
 {
-    UNIMPLEMENTED();
+    ANGLE_VALIDATE_IS_GLES1(context);
     return true;
 }
 
@@ -461,8 +463,10 @@ bool ValidateNormal3x(Context *context, GLfixed nx, GLfixed ny, GLfixed nz)
 
 bool ValidateNormalPointer(Context *context, GLenum type, GLsizei stride, const void *pointer)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    return ValidateVertexAttribPointer(
+        context, context->vertexArrayIndex(ClientVertexArrayType::TextureCoord), 3, type, GL_FALSE,
+        stride, pointer);
 }
 
 bool ValidateOrthof(Context *context,
@@ -605,8 +609,10 @@ bool ValidateTexCoordPointer(Context *context,
                              GLsizei stride,
                              const void *pointer)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    return ValidateVertexAttribPointer(
+        context, context->vertexArrayIndex(ClientVertexArrayType::TextureCoord), size, type,
+        GL_FALSE, stride, pointer);
 }
 
 bool ValidateTexEnvf(Context *context, GLenum target, GLenum pname, GLfloat param)
@@ -678,8 +684,10 @@ bool ValidateVertexPointer(Context *context,
                            GLsizei stride,
                            const void *pointer)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    return ValidateVertexAttribPointer(
+        context, context->vertexArrayIndex(ClientVertexArrayType::TextureCoord), 3, type, GL_FALSE,
+        stride, pointer);
 }
 
 bool ValidateDrawTexfOES(Context *context,
@@ -779,8 +787,10 @@ bool ValidateWeightPointerOES(Context *context,
 
 bool ValidatePointSizePointerOES(Context *context, GLenum type, GLsizei stride, const void *pointer)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    return ValidateVertexAttribPointer(context,
+                                       context->vertexArrayIndex(ClientVertexArrayType::PointSize),
+                                       1, type, GL_FALSE, stride, pointer);
 }
 
 bool ValidateQueryMatrixxOES(Context *context, GLfixed *mantissa, GLint *exponent)
