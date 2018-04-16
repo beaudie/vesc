@@ -54,7 +54,6 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 
     TInfoSinkBase &out                      = objSink();
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
-    out << "layout(";
 
     // This isn't super clean, but it gets the job done.
     // See corresponding code in GlslangWrapper.cpp.
@@ -67,6 +66,10 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
     {
         out << "@@ LAYOUT-" << symbol->getName() << " @@";
     }
+    else
+    {
+        out << "layout(";
+    }
 
     if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
     {
@@ -74,7 +77,22 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
         out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
     }
 
-    out << ") ";
+    if (!needsCustomLayout)
+    {
+        out << ") ";
+    }
+}
+
+std::string TOutputVulkanGLSL::mapQualifierToString(TQualifier qualifier)
+{
+    // Add some markers around the qualifier to be able to remove them easily if needed.
+    std::string mappedQualifier = TOutputGLSLBase::mapQualifierToString(qualifier);
+    if (mappedQualifier.empty())
+    {
+        return "";
+    }
+
+    return "@@ QUALIFIER " + mappedQualifier + " @@";
 }
 
 void TOutputVulkanGLSL::writeStructType(const TStructure *structure)

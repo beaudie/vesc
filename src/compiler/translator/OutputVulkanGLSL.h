@@ -31,6 +31,7 @@ class TOutputVulkanGLSL : public TOutputGLSL
 
   protected:
     void writeLayoutQualifier(TIntermTyped *variable) override;
+    std::string mapQualifierToString(TQualifier qualifier) override;
 };
 
 }  // namespace sh

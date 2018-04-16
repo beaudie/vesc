@@ -214,7 +214,7 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermTyped *variable)
     out << ") ";
 }
 
-const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier)
+std::string TOutputGLSLBase::mapQualifierToString(TQualifier qualifier)
 {
     if (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
         (mCompileOptions & SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3) != 0)
@@ -265,8 +265,8 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
     }
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
-        const char *qualifierString = mapQualifierToString(qualifier);
-        if (qualifierString && qualifierString[0] != '\0')
+        std::string qualifierString = mapQualifierToString(qualifier);
+        if (!qualifierString.empty())
         {
             out << qualifierString << " ";
         }
