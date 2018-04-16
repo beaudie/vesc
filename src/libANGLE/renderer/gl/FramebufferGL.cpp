@@ -519,6 +519,47 @@ Error FramebufferGL::blit(const gl::Context *context,
 
     bool needManualColorBlit = false;
 
+    if (mWorkarounds.limitBlitFramebufferDimensions)
+    {
+        // Some GL drivers have a bug where they can't handle blit dimensions out of the 32-bit
+        // integer range.
+        if (abs(sourceArea.width) > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+            abs(sourceArea.height) > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+            abs(destArea.width) > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+            abs(destArea.height) > static_cast<int64_t>(std::numeric_limits<int>::max()))
+        {
+            if (destArea == sourceArea)
+            {
+                // The source and destination dimensions match, so we can simply clip the blit area
+                // to something smaller.
+                gl::Rectangle unflippedArea(destArea);
+                if (unflippedArea.width < 0)
+                {
+                    unflippedArea.x     = unflippedArea.x + unflippedArea.width;
+                    unflippedArea.width = -unflippedArea.width;
+                }
+                if (unflippedArea.height < 0)
+                {
+                    unflippedArea.y      = unflippedArea.y + unflippedArea.height;
+                    unflippedArea.height = -unflippedArea.height;
+                }
+                gl::Rectangle clippedArea;
+                gl::Rectangle clipRect(0, 0, std::numeric_limits<int>::max(),
+                                       std::numeric_limits<int>::max());
+                if (!gl::ClipRectangle(unflippedArea, clipRect, &clippedArea))
+                {
+                    return gl::NoError();
+                }
+                return blit(context, clippedArea, clippedArea, mask, filter);
+            }
+            // According to spec, source and destination bounds must match if the read framebuffer
+            // is multisampled. GLES 3.0.5 section 4.3.3 page 198. GLES 3.1 section 16.2.1 page 346.
+            ASSERT(readAttachmentSamples == 0);
+            // The manual blit implementation can clamp the dimensions also when they don't match.
+            needManualColorBlit = true;
+        }
+    }
+
     // TODO(cwallez) when the filter is LINEAR and both source and destination are SRGB, we
     // could avoid doing a manual blit.
 
