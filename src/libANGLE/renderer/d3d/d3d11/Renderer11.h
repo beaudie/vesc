@@ -355,8 +355,8 @@ class Renderer11 : public RendererD3D
                                  uint8_t *pixels);
 
     gl::Error blitRenderbufferRect(const gl::Context *context,
-                                   const gl::Rectangle &readRect,
-                                   const gl::Rectangle &drawRect,
+                                   const gl::BlitRectangle &readRect,
+                                   const gl::BlitRectangle &drawRect,
                                    RenderTargetD3D *readRenderTarget,
                                    RenderTargetD3D *drawRenderTarget,
                                    GLenum filter,

@@ -73,8 +73,8 @@ class FramebufferImpl : angle::NonCopyable
                                  void *pixels) = 0;
 
     virtual gl::Error blit(const gl::Context *context,
-                           const gl::Rectangle &sourceArea,
-                           const gl::Rectangle &destArea,
+                           const gl::BlitRectangle &sourceArea,
+                           const gl::BlitRectangle &destArea,
                            GLbitfield mask,
                            GLenum filter) = 0;
 

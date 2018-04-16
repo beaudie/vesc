@@ -62,8 +62,8 @@ class BlitGL : angle::NonCopyable
 
     gl::Error blitColorBufferWithShader(const gl::Framebuffer *source,
                                         const gl::Framebuffer *dest,
-                                        const gl::Rectangle &sourceArea,
-                                        const gl::Rectangle &destArea,
+                                        const gl::BlitRectangle &sourceArea,
+                                        const gl::BlitRectangle &destArea,
                                         GLenum filter);
 
     gl::ErrorOrResult<bool> copySubTexture(const gl::Context *context,
