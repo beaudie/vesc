@@ -1139,6 +1139,98 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
     ASSERT_GL_NO_ERROR();
 }
 
+// Blit an SRGB framebuffer with width/height that go out of 32-bit integer range.
+TEST_P(BlitFramebufferTest, BlitSRGBToRGBDimensionsOutOfIntegerRange)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(checkerProgram, shader_library::essl1::vs::passthrough(),
+                     shader_library::essl1::fs::checkered());
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_SRGB8_ALPHA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), shader_library::positionAttribName(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    GLint min = std::numeric_limits<int>::min();
+    GLint max = std::numeric_limits<int>::max();
+    glBlitFramebuffer(min, min, max, max, min, min, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_EQ(getWindowWidth() / 4, getWindowHeight() / 4, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, 0, 255, 0, 255);
+}
+
+// Blit with width/height that go out of 32-bit integer range.
+TEST_P(BlitFramebufferTest, BlitDimensionsOutOfIntegerRange)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(checkerProgram, shader_library::essl1::vs::passthrough(),
+                     shader_library::essl1::fs::checkered());
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), shader_library::positionAttribName(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    GLint min = std::numeric_limits<int>::min();
+    GLint max = std::numeric_limits<int>::max();
+    glBlitFramebuffer(min, min, max, max, min, min, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_EQ(getWindowWidth() / 4, getWindowHeight() / 4, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, 0, 255, 0, 255);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D9(),
