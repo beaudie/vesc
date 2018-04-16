@@ -647,8 +647,14 @@ void PipelineDesc::updateViewport(const gl::Rectangle &viewport, float nearPlane
     mViewport.y        = static_cast<float>(viewport.y);
     mViewport.width    = static_cast<float>(viewport.width);
     mViewport.height   = static_cast<float>(viewport.height);
-    mViewport.minDepth = nearPlane;
-    mViewport.maxDepth = farPlane;
+    updateDepthRange(nearPlane, farPlane);
+}
+
+void PipelineDesc::updateDepthRange(float nearPlane, float farPlane)
+{
+    // The near/far planes can't be lower than 0.0f or higher than 1.0f
+    mViewport.minDepth = std::max(nearPlane, 0.0f);
+    mViewport.maxDepth = std::min(farPlane, 1.0f);
 }
 
 void PipelineDesc::updateVertexInputInfo(const VertexInputBindings &bindings,
