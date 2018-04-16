@@ -214,21 +214,21 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermTyped *variable)
     out << ") ";
 }
 
-const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier, const TSymbol *symbol)
+void TOutputGLSLBase::writeQualifier(TQualifier qualifier, const TSymbol *symbol)
 {
+    TInfoSinkBase &out = objSink();
+
     if (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
         (mCompileOptions & SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3) != 0)
     {
         switch (qualifier)
         {
-            // The return string is consistent with sh::getQualifierString() from
-            // BaseTypes.h minus the "centroid" keyword.
-            case EvqCentroid:
-                return "";
             case EvqCentroidIn:
-                return "smooth in";
+                out << "smooth in ";
+                break;
             case EvqCentroidOut:
-                return "smooth out";
+                out << "smooth out ";
+                break;
             default:
                 break;
         }
@@ -238,16 +238,19 @@ const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier, const TS
         switch (qualifier)
         {
             case EvqAttribute:
-                return "in";
+                out << "in ";
+                break;
             case EvqVaryingIn:
-                return "in";
+                out << "in ";
+                break;
             case EvqVaryingOut:
-                return "out";
+                out << "out ";
+                break;
             default:
                 break;
         }
     }
-    return sh::getQualifierString(qualifier);
+    out << sh::getQualifierString(qualifier) << " ";
 }
 
 void TOutputGLSLBase::writeVariableType(const TType &type, const TSymbol *symbol)
@@ -265,11 +268,7 @@ void TOutputGLSLBase::writeVariableType(const TType &type, const TSymbol *symbol
     }
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
-        const char *qualifierString = mapQualifierToString(qualifier, symbol);
-        if (qualifierString && qualifierString[0] != '\0')
-        {
-            out << qualifierString << " ";
-        }
+        writeQualifier(qualifier, symbol);
     }
 
     const TMemoryQualifier &memoryQualifier = type.getMemoryQualifier();
@@ -995,7 +994,8 @@ bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
         const TIntermSequence &sequence = *(node->getSequence());
         TIntermTyped *variable          = sequence.front()->getAsTyped();
         writeLayoutQualifier(variable);
-        writeVariableType(variable->getType(), &variable->getAsSymbolNode()->variable());
+        TIntermSymbol *symbolNode = variable->getAsSymbolNode();
+        writeVariableType(variable->getType(), symbolNode ? &symbolNode->variable() : nullptr);
         if (variable->getAsSymbolNode() == nullptr ||
             variable->getAsSymbolNode()->variable().symbolType() != SymbolType::Empty)
         {
