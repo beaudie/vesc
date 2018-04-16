@@ -1161,6 +1161,11 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // 390 are known to be affected. Versions after that are expected not to be affected.
     workarounds->clampFragDepth = IsNvidia(vendor);
 
+    // Slightly different bugs affecting blitFramebuffer with large dimensions have been seen on all
+    // big three desktop GPU vendors.
+    workarounds->limitBlitFramebufferDimensions =
+        IsNvidia(vendor) || IsAMD(vendor) || IsIntel(vendor);
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;

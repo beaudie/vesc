@@ -208,8 +208,8 @@ gl::Error Framebuffer9::readPixelsImpl(const gl::Context *context,
 }
 
 gl::Error Framebuffer9::blitImpl(const gl::Context *context,
-                                 const gl::Rectangle &sourceArea,
-                                 const gl::Rectangle &destArea,
+                                 const gl::BlitRectangle &sourceArea,
+                                 const gl::BlitRectangle &destArea,
                                  const gl::Rectangle *scissor,
                                  bool blitRenderTarget,
                                  bool blitDepth,
@@ -259,16 +259,16 @@ gl::Error Framebuffer9::blitImpl(const gl::Context *context,
         gl::Extents dstSize(drawRenderTarget->getWidth(), drawRenderTarget->getHeight(), 1);
 
         RECT srcRect;
-        srcRect.left = sourceArea.x;
-        srcRect.right = sourceArea.x + sourceArea.width;
-        srcRect.top = sourceArea.y;
-        srcRect.bottom = sourceArea.y + sourceArea.height;
+        srcRect.left   = sourceArea.x0;
+        srcRect.right  = sourceArea.x1;
+        srcRect.top    = sourceArea.y0;
+        srcRect.bottom = sourceArea.y1;
 
         RECT dstRect;
-        dstRect.left = destArea.x;
-        dstRect.right = destArea.x + destArea.width;
-        dstRect.top = destArea.y;
-        dstRect.bottom = destArea.y + destArea.height;
+        dstRect.left   = destArea.x0;
+        dstRect.right  = destArea.x1;
+        dstRect.top    = destArea.y0;
+        dstRect.bottom = destArea.y1;
 
         // Clip the rectangles to the scissor rectangle
         if (scissor)
