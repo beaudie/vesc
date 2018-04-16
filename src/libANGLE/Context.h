@@ -386,7 +386,7 @@ class Context final : angle::NonCopyable
     void getIntegervRobust(GLenum pname, GLsizei bufSize, GLsizei *length, GLint *data);
     void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
-    void getPointerv(GLenum pname, void **params) const;
+    void getPointerv(GLenum pname, void **params);
     void getPointervRobustANGLERobust(GLenum pname,
                                       GLsizei bufSize,
                                       GLsizei *length,
@@ -1457,6 +1457,9 @@ class Context final : angle::NonCopyable
 
     bool isValidBufferBinding(BufferBinding binding) const { return mValidBufferBindings[binding]; }
 
+    // GLES1 emulation: Renderer level (for validation)
+    int vertexArrayIndex(ClientVertexArrayType type) const;
+
   private:
     Error prepareForDraw();
     Error prepareForClear(GLbitfield mask);
@@ -1490,6 +1493,9 @@ class Context final : angle::NonCopyable
     void initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit);
     void updateCaps();
     void initWorkarounds();
+
+    // GLES1 emulation: Renderer level
+    ClientVertexArrayType paramToVertexArrayType(GLenum param) const;
 
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
