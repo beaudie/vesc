@@ -35,8 +35,44 @@ void InsertLayoutSpecifierString(std::string *shaderString,
     std::stringstream searchStringBuilder;
     searchStringBuilder << "@@ LAYOUT-" << variableName << " @@";
     std::string searchString = searchStringBuilder.str();
+    size_t initialPos        = shaderString->find(searchString);
 
-    angle::ReplaceSubstring(shaderString, searchString, layoutString);
+    angle::ReplaceSubstring(shaderString, searchString, "layout(" + layoutString + ")");
+
+    // We need to find the @@ QUALIFIER and remove the markers around it because we know at
+    // this point the layout is used.
+    // From the initialPos we can find the first @@ QUALIFIER on the same line and remove it and
+    // only keep what's in the middle of it.
+    size_t qualifierPos = shaderString->find("@@ QUALIFIER", initialPos);
+
+    if (qualifierPos != std::string::npos)
+    {
+        size_t innerContentBeginPos = qualifierPos + 12;
+        size_t innerContentEndPos   = shaderString->find(" @@", innerContentBeginPos);
+        std::string innerContent =
+            shaderString->substr(innerContentBeginPos, innerContentEndPos - innerContentBeginPos);
+        angle::ReplaceSubstring(shaderString, "@@ QUALIFIER" + innerContent + " @@", innerContent);
+    }
+}
+
+void CleanupUnusedMarker(std::string *shaderSource, std::string marker)
+{
+    std::stringstream resultBuilder;
+    std::string line;
+    const std::string markerBegin = "@@ " + marker;
+    const std::string markerEnd   = " @@";
+    size_t pos                    = shaderSource->find(markerBegin);
+    while (pos != std::string::npos)
+    {
+        size_t innerContentBeginPos = pos + markerBegin.size();
+        size_t innerContentEndPos   = shaderSource->find(markerEnd, pos);
+        std::string innerContent =
+            shaderSource->substr(innerContentBeginPos, innerContentEndPos - innerContentBeginPos);
+        std::string contentToReplace = markerBegin + innerContent;
+        contentToReplace += markerEnd;
+        angle::ReplaceSubstring(shaderSource, contentToReplace, "");
+        pos = shaderSource->find(markerBegin);
+    }
 }
 
 }  // anonymous namespace
@@ -108,7 +144,7 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     }
 
     // Assign varying locations.
-    for (const auto &varyingReg : resources.varyingPacking.getRegisterList())
+    for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
     {
         const auto &varying        = *varyingReg.packedVarying;
 
@@ -154,8 +190,14 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         textureCount += samplerUniform.getBasicTypeElementCount();
     }
 
-    std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
+    // After we've search & replaced all layouts and qualifiers from the vertex & fragment shaders
+    // we can safely remove all the layouts/qualifiers left because it means they are not used.
+    CleanupUnusedMarker(&vertexSource, "LAYOUT");
+    CleanupUnusedMarker(&fragmentSource, "LAYOUT");
+    CleanupUnusedMarker(&vertexSource, "QUALIFIER");
+    CleanupUnusedMarker(&fragmentSource, "QUALIFIER");
 
+    std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
     std::array<int, 2> lengths = {
         {static_cast<int>(vertexSource.length()), static_cast<int>(fragmentSource.length())}};
 
