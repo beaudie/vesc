@@ -980,10 +980,6 @@ TEST_P(GLSLTest, InvariantAllBoth)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnFloat)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "float f() { if (v_varying > 0.0) return 1.0; }\n"
@@ -1000,10 +996,6 @@ TEST_P(GLSLTest, MissingReturnFloat)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec2)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "vec2 f() { if (v_varying > 0.0) return vec2(1.0, 1.0); }\n"
@@ -1020,10 +1012,6 @@ TEST_P(GLSLTest, MissingReturnVec2)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec3)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "vec3 f() { if (v_varying > 0.0) return vec3(1.0, 1.0, 1.0); }\n"
@@ -1040,10 +1028,6 @@ TEST_P(GLSLTest, MissingReturnVec3)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnVec4)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "vec4 f() { if (v_varying > 0.0) return vec4(1.0, 1.0, 1.0, 1.0); }\n"
@@ -1060,10 +1044,6 @@ TEST_P(GLSLTest, MissingReturnVec4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnIVec4)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "ivec4 f() { if (v_varying > 0.0) return ivec4(1, 1, 1, 1); }\n"
@@ -1080,10 +1060,6 @@ TEST_P(GLSLTest, MissingReturnIVec4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnMat4)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "mat4 f() { if (v_varying > 0.0) return mat4(1.0); }\n"
@@ -1100,10 +1076,6 @@ TEST_P(GLSLTest, MissingReturnMat4)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnStruct)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "struct s { float a; int b; vec2 c; };\n"
@@ -1305,7 +1277,7 @@ TEST_P(GLSLTest, MaxVaryingVec4)
 // Verify we can pack registers with one builtin varying.
 TEST_P(GLSLTest, MaxVaryingVec4_OneBuiltin)
 {
-    // TODO(lucferron): This test is failing on AMD Windows Vulkan only with an access violation 
+    // TODO(lucferron): This test is failing on AMD Windows Vulkan only with an access violation
     // error. It looks like we would need to reserve one more varying in the maxVaryingVectors
     // caps for this one.
     // http://anglebug.com/2483
