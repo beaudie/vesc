@@ -1161,6 +1161,8 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // 390 are known to be affected. Versions after that are expected not to be affected.
     workarounds->clampFragDepth = IsNvidia(vendor);
 
+    workarounds->limitBlitFramebufferDimensions = IsNvidia(vendor);
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     // TODO(jmadill): Narrow workaround range for specific devices.
     workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;

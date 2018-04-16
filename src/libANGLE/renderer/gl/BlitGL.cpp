@@ -372,7 +372,7 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
 
     // Normalize the destination area to have positive width and height because we will use
     // glViewport to set it, which doesn't allow negative width or height.
-    gl::Rectangle sourceArea = sourceAreaIn;
+    gl::FloatRectangle sourceArea = gl::FloatRectangle(sourceAreaIn);
     gl::Rectangle destArea   = destAreaIn;
     if (destArea.width < 0)
     {
@@ -389,25 +389,91 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
         sourceArea.height = -sourceArea.height;
     }
 
+    if (destArea.width > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+        destArea.height > static_cast<int64_t>(std::numeric_limits<int>::max()))
+    {
+        // We can't set a big enough viewport to cover the full destination area.
+        // Compute the part of the destination area that will be written by clipping it against the
+        // destination framebuffer.
+        gl::Rectangle inBoundsDest;
+
+        gl::Rectangle destBounds(0, 0, 0, 0);
+        for (size_t i = 0; i < dest->getDrawbufferStateCount(); ++i)
+        {
+            const gl::FramebufferAttachment *attachment = dest->getDrawBuffer(i);
+            if (attachment)
+            {
+                if (attachment->getSize().width > destBounds.width)
+                {
+                    destBounds.width = attachment->getSize().width;
+                }
+                if (attachment->getSize().height > destBounds.height)
+                {
+                    destBounds.height = attachment->getSize().height;
+                }
+            }
+        }
+
+        if (!gl::ClipRectangle(destArea, destBounds, &inBoundsDest))
+        {
+            return gl::NoError();
+        }
+
+        // Compute the source rectangle that matches the in-bounds part of the destination
+        // rectangle.
+        if (sourceArea.width >= 0)
+        {
+            double destXOffset =
+                (static_cast<double>(static_cast<int64_t>(inBoundsDest.x0()) - destArea.x0()));
+            sourceArea.x =
+                sourceArea.x + destXOffset * (std::abs(sourceArea.width) / destArea.width);
+        }
+        else
+        {
+            double destXOffset =
+                (static_cast<double>(static_cast<int64_t>(inBoundsDest.x1()) - destArea.x1()));
+            sourceArea.x =
+                sourceArea.x + destXOffset * (std::abs(sourceArea.width) / destArea.width);
+        }
+        if (sourceArea.height >= 0)
+        {
+            double destYOffset =
+                (static_cast<double>(static_cast<int64_t>(inBoundsDest.y0()) - destArea.y0()));
+            sourceArea.y =
+                sourceArea.y + destYOffset * (std::abs(sourceArea.height) / destArea.height);
+        }
+        else
+        {
+            double destYOffset =
+                (static_cast<double>(static_cast<int64_t>(inBoundsDest.y1()) - destArea.y1()));
+            sourceArea.y =
+                sourceArea.y + destYOffset * (std::abs(sourceArea.height) / destArea.height);
+        }
+        sourceArea.width =
+            (static_cast<double>(inBoundsDest.width) / destArea.width) * sourceArea.width;
+        sourceArea.height =
+            (static_cast<double>(inBoundsDest.height) / destArea.height) * sourceArea.height;
+
+        destArea = inBoundsDest;
+    }
+
     const gl::FramebufferAttachment *readAttachment = source->getReadColorbuffer();
     ASSERT(readAttachment->getSamples() <= 1);
 
     // Compute the part of the source that will be sampled.
-    gl::Rectangle inBoundsSource;
+    gl::FloatRectangle inBoundsSource;
     {
         gl::Extents sourceSize = readAttachment->getSize();
         gl::Rectangle sourceBounds(0, 0, sourceSize.width, sourceSize.height);
-        gl::ClipRectangle(sourceArea, sourceBounds, &inBoundsSource);
+        if (!gl::ClipRectangle(sourceArea, gl::FloatRectangle(sourceBounds), &inBoundsSource))
+        {
+            // Early out when the sampled part is empty as the blit will be a noop,
+            // and it prevents a division by zero in later computations.
+            return gl::NoError();
+        }
 
         // Note that inBoundsSource will have lost the orientation information.
         ASSERT(inBoundsSource.width >= 0 && inBoundsSource.height >= 0);
-
-        // Early out when the sampled part is empty as the blit will be a noop,
-        // and it prevents a division by zero in later computations.
-        if (inBoundsSource.width == 0 || inBoundsSource.height == 0)
-        {
-            return gl::NoError();
-        }
     }
 
     // The blit will be emulated by getting the source of the blit in a texture and sampling it
@@ -454,8 +520,16 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
         mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceGL->getFramebufferID());
         mStateManager->bindTexture(gl::TextureType::_2D, textureId);
 
-        mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, inBoundsSource.x, inBoundsSource.y,
-                                   inBoundsSource.width, inBoundsSource.height, 0);
+        // TODO: The floor/ceil calculations here will affect the bounds rectangle a bit. Compensate
+        // for this in the texture coordinates.
+        mFunctions->copyTexImage2D(
+            GL_TEXTURE_2D, 0, format, static_cast<GLint>(floor(inBoundsSource.x)),
+            static_cast<GLsizei>(floor(inBoundsSource.y)),
+            static_cast<GLint>(ceil(inBoundsSource.x + inBoundsSource.width) -
+                               floor(inBoundsSource.x)),
+            static_cast<GLsizei>(ceil(inBoundsSource.y + inBoundsSource.height) -
+                                 floor(inBoundsSource.y)),
+            0);
 
         setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, filter);
         setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, filter);
@@ -469,7 +543,7 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
     Vector2 DSize;
     {
         ASSERT(sourceArea.width != 0 && sourceArea.height != 0);
-        gl::Rectangle orientedInBounds = inBoundsSource;
+        gl::FloatRectangle orientedInBounds = inBoundsSource;
         if (sourceArea.width < 0)
         {
             orientedInBounds.x += orientedInBounds.width;
@@ -481,11 +555,10 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
             orientedInBounds.height = -orientedInBounds.height;
         }
 
-        DOffset =
-            Vector2(static_cast<float>(orientedInBounds.x - sourceArea.x) / sourceArea.width,
-                    static_cast<float>(orientedInBounds.y - sourceArea.y) / sourceArea.height);
-        DSize = Vector2(static_cast<float>(orientedInBounds.width) / sourceArea.width,
-                        static_cast<float>(orientedInBounds.height) / sourceArea.height);
+        DOffset = Vector2((orientedInBounds.x - sourceArea.x) / sourceArea.width,
+                          (orientedInBounds.y - sourceArea.y) / sourceArea.height);
+        DSize   = Vector2((orientedInBounds.width) / sourceArea.width,
+                        (orientedInBounds.height) / sourceArea.height);
     }
 
     ASSERT(DSize.x() != 0.0 && DSize.y() != 0.0);
