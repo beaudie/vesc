@@ -519,6 +519,64 @@ Error FramebufferGL::blit(const gl::Context *context,
 
     bool needManualColorBlit = false;
 
+    if (mWorkarounds.limitBlitFramebufferDimensions)
+    {
+        bool widthOutOfRange =
+            abs(sourceArea.width) > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+            abs(destArea.width) > static_cast<int64_t>(std::numeric_limits<int>::max());
+        bool heightOutOfRange =
+            abs(sourceArea.height) > static_cast<int64_t>(std::numeric_limits<int>::max()) ||
+            abs(destArea.height) > static_cast<int64_t>(std::numeric_limits<int>::max());
+        // Some GL drivers have a bug where they can't handle blit dimensions out of the 32-bit
+        // integer range.
+        if (widthOutOfRange || heightOutOfRange)
+        {
+            if (destArea.width == sourceArea.width && destArea.height == sourceArea.height)
+            {
+                // The source and destination dimensions match, so we can simply clip the blit area
+                // to something smaller.
+                gl::Rectangle unflippedSourceArea(sourceArea);
+                gl::Rectangle unflippedDestArea(destArea);
+                if (unflippedDestArea.width < 0)
+                {
+                    unflippedDestArea.x     = unflippedDestArea.x + unflippedDestArea.width;
+                    unflippedDestArea.width = -unflippedDestArea.width;
+                    ASSERT(unflippedSourceArea.width < 0);
+                    unflippedSourceArea.x     = unflippedSourceArea.x + unflippedSourceArea.width;
+                    unflippedSourceArea.width = -unflippedSourceArea.width;
+                }
+                if (unflippedDestArea.height < 0)
+                {
+                    unflippedDestArea.y      = unflippedDestArea.y + unflippedDestArea.height;
+                    unflippedDestArea.height = -unflippedDestArea.height;
+                    ASSERT(unflippedSourceArea.height < 0);
+                    unflippedSourceArea.y      = unflippedSourceArea.y + unflippedSourceArea.height;
+                    unflippedSourceArea.height = -unflippedSourceArea.height;
+                }
+                gl::Rectangle clippedDestArea;
+                gl::Rectangle clipRect(0, 0, std::numeric_limits<int>::max(),
+                                       std::numeric_limits<int>::max());
+                if (!gl::ClipRectangle(unflippedDestArea, clipRect, &clippedDestArea))
+                {
+                    return gl::NoError();
+                }
+                gl::Rectangle clippedSourceArea(clippedDestArea);
+                clippedSourceArea.x = static_cast<int>(
+                    clippedSourceArea.x +
+                    (static_cast<int64_t>(unflippedSourceArea.x) - unflippedDestArea.x));
+                clippedSourceArea.y = static_cast<int>(
+                    clippedSourceArea.y +
+                    (static_cast<int64_t>(unflippedSourceArea.y) - unflippedDestArea.y));
+                return blit(context, clippedSourceArea, clippedDestArea, mask, filter);
+            }
+            // According to spec, source and destination bounds must match if the read framebuffer
+            // is multisampled. GLES 3.0.5 section 4.3.3 page 198. GLES 3.1 section 16.2.1 page 346.
+            ASSERT(readAttachmentSamples == 0);
+            // The manual blit implementation can clamp the dimensions also when they don't match.
+            needManualColorBlit = true;
+        }
+    }
+
     // TODO(cwallez) when the filter is LINEAR and both source and destination are SRGB, we
     // could avoid doing a manual blit.
 

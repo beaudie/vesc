@@ -1271,8 +1271,10 @@ void StateManager11::syncScissorRectangle(const gl::Rectangle &scissor, bool ena
             int y            = modifiedScissorY + mViewportOffsets[i].y;
             rect.left        = std::max(0, x);
             rect.top         = std::max(0, y);
-            rect.right       = x + std::max(0, scissor.width);
-            rect.bottom      = y + std::max(0, scissor.height);
+            // Scissor width and height have been specified as 32-bit ints so it's safe to downcast
+            // them.
+            rect.right  = x + std::max(0, static_cast<int>(scissor.width));
+            rect.bottom = y + std::max(0, static_cast<int>(scissor.height));
         }
         mRenderer->getDeviceContext()->RSSetScissorRects(numRectangles, rectangles.data());
     }
@@ -1350,10 +1352,12 @@ void StateManager11::syncViewport(const gl::Context *context)
         if (!framebuffer->getFirstNonNullAttachment() &&
             (framebuffer->getDefaultWidth() || framebuffer->getDefaultHeight()))
         {
-            dxViewport.Width =
-                static_cast<GLfloat>(std::min(viewport.width, framebuffer->getDefaultWidth()));
-            dxViewport.Height =
-                static_cast<GLfloat>(std::min(viewport.height, framebuffer->getDefaultHeight()));
+            // Viewport width and height have been specified as 32-bit ints so it's safe to downcast
+            // them.
+            dxViewport.Width = static_cast<GLfloat>(
+                std::min(static_cast<int>(viewport.width), framebuffer->getDefaultWidth()));
+            dxViewport.Height = static_cast<GLfloat>(
+                std::min(static_cast<int>(viewport.height), framebuffer->getDefaultHeight()));
         }
         else
         {

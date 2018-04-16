@@ -45,26 +45,53 @@ PrimitiveType GetPrimitiveType(GLenum drawMode);
 struct Rectangle
 {
     Rectangle() : x(0), y(0), width(0), height(0) {}
-    constexpr Rectangle(int x_in, int y_in, int width_in, int height_in)
+    constexpr Rectangle(int x_in, int y_in, int64_t width_in, int64_t height_in)
         : x(x_in), y(y_in), width(width_in), height(height_in)
     {
     }
 
     int x0() const { return x; }
     int y0() const { return y; }
-    int x1() const { return x + width; }
-    int y1() const { return y + height; }
+    int x1() const { return static_cast<int>(x + width); }
+    int y1() const { return static_cast<int>(y + height); }
 
     int x;
     int y;
-    int width;
-    int height;
+    int64_t width;
+    int64_t height;
 };
 
 bool operator==(const Rectangle &a, const Rectangle &b);
 bool operator!=(const Rectangle &a, const Rectangle &b);
 
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection);
+
+struct FloatRectangle
+{
+    FloatRectangle() : x(0.0f), y(0.0f), width(0.0f), height(0.0f) {}
+    constexpr FloatRectangle(double x_in, double y_in, double width_in, double height_in)
+        : x(x_in), y(y_in), width(width_in), height(height_in)
+    {
+    }
+    explicit FloatRectangle(Rectangle rect)
+        : x(rect.x), y(rect.y), width(rect.width), height(rect.height)
+    {
+    }
+
+    double x0() const { return x; }
+    double y0() const { return y; }
+    double x1() const { return x + width; }
+    double y1() const { return y + height; }
+
+    double x;
+    double y;
+    double width;
+    double height;
+};
+
+bool ClipRectangle(const FloatRectangle &source,
+                   const FloatRectangle &clip,
+                   FloatRectangle *intersection);
 
 struct Offset
 {

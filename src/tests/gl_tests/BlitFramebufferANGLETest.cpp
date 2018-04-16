@@ -1070,6 +1070,9 @@ TEST_P(BlitFramebufferTest, MultisampleDepth)
 // Test resolving a multisampled stencil buffer.
 TEST_P(BlitFramebufferTest, MultisampleStencil)
 {
+    // Incorrect rendering results seen on AMD Windows OpenGL. http://anglebug.com/2486
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
+
     GLRenderbuffer renderbuf;
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuf.get());
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, 2, GL_STENCIL_INDEX8, 256, 256);
@@ -1124,6 +1127,264 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
     ASSERT_GL_NO_ERROR();
 }
 
+// Blit an SRGB framebuffer with width/height that go out of 32-bit integer range.
+TEST_P(BlitFramebufferTest, BlitSRGBToRGBDimensionsOutOfIntegerRange)
+{
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_SRGB8_ALPHA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLint min = std::numeric_limits<int>::min();
+    GLint max = std::numeric_limits<int>::max();
+    glBlitFramebuffer(min, min, max, max, min, min, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+}
+
+// Blit with width/height that go out of 32-bit integer range.
+TEST_P(BlitFramebufferTest, BlitDimensionsOutOfIntegerRange)
+{
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLint min = std::numeric_limits<int>::min();
+    GLint max = std::numeric_limits<int>::max();
+    glBlitFramebuffer(min, min, max, max, min, min, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+}
+
+// Blit with width/height that go out of 32-bit integer range. Use flipped dimensions for both
+// source and destination framebuffers so that they cancel out.
+TEST_P(BlitFramebufferTest, BlitDimensionsOutOfIntegerRangeFlipCancelsOut)
+{
+    // Incorrect rendering results (all black) seen on D3D11.
+    // http://anglebug.com/2490
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLint min = std::numeric_limits<int>::min();
+    GLint max = std::numeric_limits<int>::max();
+    glBlitFramebuffer(max, max, min, min, max, max, min, min, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+}
+
+// Blit with width/height that go out of 32-bit integer range and flip in the Y direction.
+TEST_P(BlitFramebufferTest, BlitDimensionsOutOfIntegerRangeFlipY)
+{
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+
+    // We want to test with a small enough FBO to catch numeric inaccuracies.
+    const int fboWidth  = 32;
+    const int fboHeight = 32;
+    glViewport(0, 0, fboWidth, fboHeight);
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, fboWidth, fboHeight);
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, fboWidth, fboHeight);
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // This should flip the framebuffer in the Y direction.
+    GLint minX = std::numeric_limits<int>::min();
+    GLint maxX = std::numeric_limits<int>::max();
+    GLint maxY = std::numeric_limits<int>::max();
+    GLint minY = -std::numeric_limits<int>::max() + fboHeight;
+    glBlitFramebuffer(minX, minY, maxX, maxY, minX, maxY, maxX, minY, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(fboWidth / 4, fboHeight / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * fboWidth / 4, fboHeight / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * fboWidth / 4, 3 * fboHeight / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(fboWidth / 4, 3 * fboHeight / 4, GLColor::red);
+}
+
+// Blit with width/height that go out of 32-bit integer range and flip in the X direction.
+TEST_P(BlitFramebufferTest, BlitDimensionsOutOfIntegerRangeFlipX)
+{
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+
+    // We want to test with a small enough FBO to catch numeric inaccuracies.
+    const int fboWidth  = 32;
+    const int fboHeight = 32;
+    glViewport(0, 0, fboWidth, fboHeight);
+
+    GLRenderbuffer sourceRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, sourceRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, fboWidth, fboHeight);
+
+    GLFramebuffer sourceFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sourceRBO);
+
+    GLRenderbuffer targetRBO;
+    glBindRenderbuffer(GL_RENDERBUFFER, targetRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, fboWidth, fboHeight);
+
+    GLFramebuffer targetFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, targetRBO);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, sourceFBO);
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // This should flip the framebuffer in the X direction.
+    GLint minY = std::numeric_limits<int>::min();
+    GLint maxY = std::numeric_limits<int>::max();
+    GLint maxX = std::numeric_limits<int>::max();
+    GLint minX = -std::numeric_limits<int>::max() + fboWidth;
+    glBlitFramebuffer(minX, minY, maxX, maxY, maxX, minY, minX, maxY, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(fboWidth / 4, fboHeight / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * fboWidth / 4, fboHeight / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * fboWidth / 4, 3 * fboHeight / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(fboWidth / 4, 3 * fboHeight / 4, GLColor::red);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D9(),
@@ -1132,4 +1393,4 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_OPENGL(),
                        ES3_OPENGL());
 
-ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL());
