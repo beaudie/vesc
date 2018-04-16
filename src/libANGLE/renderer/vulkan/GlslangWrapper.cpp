@@ -39,6 +39,25 @@ void InsertLayoutSpecifierString(std::string *shaderString,
     angle::ReplaceSubstring(shaderString, searchString, layoutString);
 }
 
+void ReplaceUnusedLayoutsWithStatics(std::string *shaderString)
+{
+    std::istringstream shaderStringStream(*shaderString);
+    
+    std::stringstream outputStringBuilder;
+    
+    std::string line;
+    while (std::getline(shaderStringStream, line))
+    {
+        if (line.find("@@ LAYOUT") != std::string::npos)
+        {
+            // Substitute the layout for a static keyword.
+            line = line.substr(line.find(") out") + 5);
+        }
+        outputStringBuilder << line << "\n";
+    }
+    *shaderString = outputStringBuilder.str();
+}
+
 }  // anonymous namespace
 
 // static
@@ -117,6 +136,10 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
         InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
     }
+
+    // Replace every @@ LAYOUT left for static keywords since they are not used and we know for sure at this point.
+    ReplaceUnusedLayoutsWithStatics(&vertexSource);
+    ReplaceUnusedLayoutsWithStatics(&fragmentSource);
 
     // Bind the default uniforms for vertex and fragment shaders.
     // See corresponding code in OutputVulkanGLSL.cpp.

@@ -980,10 +980,6 @@ TEST_P(GLSLTest, InvariantAllBoth)
 // Verify that functions without return statements still compile
 TEST_P(GLSLTest, MissingReturnFloat)
 {
-    // TODO(lucferron): Varyings that aren't used as an output in the FS are not yet supported.
-    // http://anglebug.com/2460
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string vertexShaderSource =
         "varying float v_varying;\n"
         "float f() { if (v_varying > 0.0) return 1.0; }\n"
