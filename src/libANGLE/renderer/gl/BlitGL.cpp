@@ -361,8 +361,8 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *context
 
 gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
                                             const gl::Framebuffer *dest,
-                                            const gl::Rectangle &sourceAreaIn,
-                                            const gl::Rectangle &destAreaIn,
+                                            const gl::BlitRectangle &sourceAreaIn,
+                                            const gl::BlitRectangle &destAreaIn,
                                             GLenum filter)
 {
     ANGLE_TRY(initializeResources());
@@ -370,92 +370,107 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
     BlitProgram *blitProgram = nullptr;
     ANGLE_TRY(getBlitProgram(BlitProgramType::FLOAT_TO_FLOAT, &blitProgram));
 
-    // Normalize the destination area to have positive width and height because we will use
-    // glViewport to set it, which doesn't allow negative width or height.
-    gl::Rectangle sourceArea = sourceAreaIn;
-    gl::Rectangle destArea   = destAreaIn;
-    if (destArea.width < 0)
+    // Store whether we need to flip in either x or y directions and normalize the areas to have
+    // positive width and height to simplify following computations.
+    bool flipX = destAreaIn.isFlippedX() != sourceAreaIn.isFlippedX();
+    bool flipY = destAreaIn.isFlippedY() != sourceAreaIn.isFlippedY();
+
+    // Destination area is kept as integers since it is used for the gl viewport. Source area needs
+    // to be converted to be in floating point format so it can be scaled with the same ratio as the
+    // destination area. In the end the source area will be used as texture coordinates.
+    gl::FloatRectangle sourceArea(sourceAreaIn);
+    gl::BlitRectangle destArea = destAreaIn.removeFlip();
+    ASSERT(sourceArea.width >= 0.0 &&
+           sourceArea.height >= 0.0);  // FloatRectangle constructor removes flip.
+
+    if (destArea.width() > static_cast<unsigned int>(std::numeric_limits<int>::max()) ||
+        destArea.height() > static_cast<unsigned int>(std::numeric_limits<int>::max()))
     {
-        destArea.x += destArea.width;
-        destArea.width = -destArea.width;
-        sourceArea.x += sourceArea.width;
-        sourceArea.width = -sourceArea.width;
-    }
-    if (destArea.height < 0)
-    {
-        destArea.y += destArea.height;
-        destArea.height = -destArea.height;
-        sourceArea.y += sourceArea.height;
-        sourceArea.height = -sourceArea.height;
+        // We can't set a big enough viewport to cover the full destination area.
+        // Compute the part of the destination area that will be written by clipping it against the
+        // destination framebuffer.
+        gl::BlitRectangle inBoundsDest;
+
+        gl::BlitRectangle destBounds(0, 0, 0, 0);
+        for (size_t i = 0; i < dest->getDrawbufferStateCount(); ++i)
+        {
+            const gl::FramebufferAttachment *attachment = dest->getDrawBuffer(i);
+            if (attachment)
+            {
+                if (attachment->getSize().width > destBounds.x1)
+                {
+                    destBounds.x1 = attachment->getSize().width;
+                }
+                if (attachment->getSize().height > destBounds.y1)
+                {
+                    destBounds.y1 = attachment->getSize().height;
+                }
+            }
+        }
+
+        if (!gl::ClipRectangle(destArea, destBounds, &inBoundsDest))
+        {
+            // In case the destination area is not in bounds, the blit is a no-op.
+            return gl::NoError();
+        }
+
+        // Compute the source rectangle that matches the in-bounds part of the destination
+        // rectangle.
+        double destXOffset = static_cast<double>(inBoundsDest.x0) - destArea.x0;
+        sourceArea.x       = sourceArea.x + (destXOffset / destArea.width()) * sourceArea.width;
+        double destYOffset = static_cast<double>(inBoundsDest.y0) - destArea.y0;
+        sourceArea.y       = sourceArea.y + (destYOffset / destArea.height()) * sourceArea.height;
+        sourceArea.width =
+            (static_cast<double>(inBoundsDest.width()) / destArea.width()) * sourceArea.width;
+        sourceArea.height =
+            (static_cast<double>(inBoundsDest.height()) / destArea.height()) * sourceArea.height;
+
+        destArea = inBoundsDest;
     }
 
     const gl::FramebufferAttachment *readAttachment = source->getReadColorbuffer();
     ASSERT(readAttachment->getSamples() <= 1);
 
     // Compute the part of the source that will be sampled.
-    gl::Rectangle inBoundsSource;
+    gl::Extents sourcePixelSize = readAttachment->getSize();
+    gl::Rectangle sourceTexturePixelBounds(0, 0, sourcePixelSize.width, sourcePixelSize.height);
+    if (!gl::ClipRectangle(sourceArea, gl::FloatRectangle(sourceTexturePixelBounds), nullptr))
     {
-        gl::Extents sourceSize = readAttachment->getSize();
-        gl::Rectangle sourceBounds(0, 0, sourceSize.width, sourceSize.height);
-        gl::ClipRectangle(sourceArea, sourceBounds, &inBoundsSource);
-
-        // Note that inBoundsSource will have lost the orientation information.
-        ASSERT(inBoundsSource.width >= 0 && inBoundsSource.height >= 0);
-
         // Early out when the sampled part is empty as the blit will be a noop,
         // and it prevents a division by zero in later computations.
-        if (inBoundsSource.width == 0 || inBoundsSource.height == 0)
-        {
-            return gl::NoError();
-        }
+        return gl::NoError();
     }
 
     // The blit will be emulated by getting the source of the blit in a texture and sampling it
-    // with CLAMP_TO_EDGE. The quad used to draw can trivially compute texture coordinates going
-    // from (0, 0) to (1, 1). These texture coordinates will need to be transformed to make two
-    // regions match:
-    //  - The region of the texture representing the source framebuffer region that will be sampled
-    //  - The region of the drawn quad that corresponds to non-clamped blit, this is the same as the
-    //    region of the source rectangle that is inside the source attachment.
-    //
-    //  These two regions, T (texture) and D (dest) are defined by their offset in texcoord space
-    //  in (0, 1)^2 and their size in texcoord space in (-1, 1)^2. The size can be negative to
-    //  represent the orientation of the blit.
-    //
-    //  Then if P is the quad texcoord, Q the texcoord inside T, and R the texture texcoord:
-    //    - Q = (P - D.offset) / D.size
-    //    - Q = (R - T.offset) / T.size
-    //  Hence R = (P - D.offset) / D.size * T.size - T.offset
-    //          = P * (T.size / D.size) + (T.offset - D.offset * T.size / D.size)
+    // with CLAMP_TO_EDGE.
 
     GLuint textureId;
-    Vector2 TOffset;
-    Vector2 TSize;
 
     // TODO(cwallez) once texture dirty bits are landed, reuse attached texture instead of using
     // CopyTexImage2D
     {
-        textureId = mScratchTextures[0];
-        TOffset   = Vector2(0.0);
-        TSize     = Vector2(1.0);
-        if (sourceArea.width < 0)
-        {
-            TOffset.x() = 1.0;
-            TSize.x()   = -1.0;
-        }
-        if (sourceArea.height < 0)
-        {
-            TOffset.y() = 1.0;
-            TSize.y()   = -1.0;
-        }
-
+        textureId                     = mScratchTextures[0];
         GLenum format                 = readAttachment->getFormat().info->internalFormat;
         const FramebufferGL *sourceGL = GetImplAs<FramebufferGL>(source);
         mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceGL->getFramebufferID());
         mStateManager->bindTexture(gl::TextureType::_2D, textureId);
 
-        mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, inBoundsSource.x, inBoundsSource.y,
-                                   inBoundsSource.width, inBoundsSource.height, 0);
+        // Copy the smallest integer rectangle that fully contains the in-bounds source area.
+        gl::FloatRectangle inBoundsSource;
+        gl::ClipRectangle(sourceArea, gl::FloatRectangle(sourceTexturePixelBounds),
+                          &inBoundsSource);
+        GLint copyRegionX      = static_cast<GLint>(floor(inBoundsSource.x));
+        GLint copyRegionY      = static_cast<GLint>(floor(inBoundsSource.y));
+        GLint copyRegionX2     = static_cast<GLint>(ceil(inBoundsSource.x + inBoundsSource.width));
+        GLint copyRegionY2     = static_cast<GLint>(ceil(inBoundsSource.y + inBoundsSource.height));
+        sourcePixelSize.width  = static_cast<GLsizei>(copyRegionX2 - copyRegionX);
+        sourcePixelSize.height = static_cast<GLsizei>(copyRegionY2 - copyRegionY);
+        mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, copyRegionX, copyRegionY,
+                                   sourcePixelSize.width, sourcePixelSize.height, 0);
+
+        // Translate the source area so that it's relative to the region we copied from the texture.
+        sourceArea.x -= copyRegionX;
+        sourceArea.y -= copyRegionY;
 
         setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, filter);
         setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, filter);
@@ -463,38 +478,27 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
         setScratchTextureParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
 
-    // Compute normalized sampled draw quad region
-    // It is the same as the region of the source rectangle that is in bounds.
-    Vector2 DOffset;
-    Vector2 DSize;
+    // Compute texture coordinates matching to the source area.
+    gl::FloatRectangle sourceAreaTexCoords(
+        sourceArea.x / sourcePixelSize.width, sourceArea.y / sourcePixelSize.height,
+        sourceArea.width / sourcePixelSize.width, sourceArea.height / sourcePixelSize.height);
+
+    if (flipX)
     {
-        ASSERT(sourceArea.width != 0 && sourceArea.height != 0);
-        gl::Rectangle orientedInBounds = inBoundsSource;
-        if (sourceArea.width < 0)
-        {
-            orientedInBounds.x += orientedInBounds.width;
-            orientedInBounds.width = -orientedInBounds.width;
-        }
-        if (sourceArea.height < 0)
-        {
-            orientedInBounds.y += orientedInBounds.height;
-            orientedInBounds.height = -orientedInBounds.height;
-        }
-
-        DOffset =
-            Vector2(static_cast<float>(orientedInBounds.x - sourceArea.x) / sourceArea.width,
-                    static_cast<float>(orientedInBounds.y - sourceArea.y) / sourceArea.height);
-        DSize = Vector2(static_cast<float>(orientedInBounds.width) / sourceArea.width,
-                        static_cast<float>(orientedInBounds.height) / sourceArea.height);
+        sourceAreaTexCoords.x     = sourceAreaTexCoords.x + sourceAreaTexCoords.width;
+        sourceAreaTexCoords.width = -sourceAreaTexCoords.width;
     }
-
-    ASSERT(DSize.x() != 0.0 && DSize.y() != 0.0);
-    Vector2 texCoordScale  = TSize / DSize;
-    Vector2 texCoordOffset = TOffset - DOffset * texCoordScale;
+    if (flipY)
+    {
+        sourceAreaTexCoords.y      = sourceAreaTexCoords.y + sourceAreaTexCoords.height;
+        sourceAreaTexCoords.height = -sourceAreaTexCoords.height;
+    }
+    ASSERT(sourceAreaTexCoords.width != 0.0 && sourceAreaTexCoords.height != 0.0);
 
     // Reset all the state except scissor and use the viewport to draw exactly to the destination
     // rectangle
-    ScopedGLState scopedState(mStateManager, mFunctions, destArea, ScopedGLState::KEEP_SCISSOR);
+    ScopedGLState scopedState(mStateManager, mFunctions, gl::Rectangle(destArea),
+                              ScopedGLState::KEEP_SCISSOR);
     scopedState.willUseTextureUnit(0);
 
     // Set uniforms
@@ -503,8 +507,11 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
 
     mStateManager->useProgram(blitProgram->program);
     mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0);
-    mFunctions->uniform2f(blitProgram->scaleLocation, texCoordScale.x(), texCoordScale.y());
-    mFunctions->uniform2f(blitProgram->offsetLocation, texCoordOffset.x(), texCoordOffset.y());
+    mFunctions->uniform2f(blitProgram->scaleLocation,
+                          static_cast<GLfloat>(1.0 / sourceAreaTexCoords.width),
+                          static_cast<GLfloat>(1.0 / sourceAreaTexCoords.height));
+    mFunctions->uniform2f(blitProgram->offsetLocation, static_cast<GLfloat>(sourceAreaTexCoords.x),
+                          static_cast<GLfloat>(sourceAreaTexCoords.y));
     mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0);
     mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0);
 

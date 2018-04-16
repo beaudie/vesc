@@ -147,6 +147,10 @@ struct WorkaroundsGL
     // On some NVIDIA drivers gl_FragDepth is not clamped correctly when rendering to a floating
     // point depth buffer. Clamp it in the translated shader to fix this.
     bool clampFragDepth = false;
+
+    // Several GL drivers (at least NVIDIA, Intel, AMD) can't handle blitFramebuffer dimensions
+    // larger than max 32-bit int correctly. http://crbug.com/830046
+    bool limitBlitFramebufferDimensions = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;

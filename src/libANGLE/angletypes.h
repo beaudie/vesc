@@ -28,6 +28,8 @@ namespace gl
 class Buffer;
 class Texture;
 
+struct BlitRectangle;
+
 enum PrimitiveType
 {
     PRIMITIVE_POINTS,
@@ -50,6 +52,10 @@ struct Rectangle
     {
     }
 
+    // Note that this constructor should only be used with rects that have width/height less than or
+    // equal to std::numeric_limits<int>::max().
+    explicit Rectangle(const BlitRectangle &rect);
+
     int x0() const { return x; }
     int y0() const { return y; }
     int x1() const { return x + width; }
@@ -64,7 +70,70 @@ struct Rectangle
 bool operator==(const Rectangle &a, const Rectangle &b);
 bool operator!=(const Rectangle &a, const Rectangle &b);
 
+// Returns true and sets "intersection" to the intersection of the rectangles in case the
+// intersection is non-empty.
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection);
+
+// This is different from Rectangle, since width/height can be greater than
+// std::numeric_limits<int>::max() in this case, which would result in overflows if using Rectangle.
+struct BlitRectangle
+{
+    BlitRectangle() : x0(0), y0(0), x1(0), y1(0) {}
+    BlitRectangle(int x0_in, int y0_in, int x1_in, int y1_in)
+        : x0(x0_in), y0(y0_in), x1(x1_in), y1(y1_in)
+    {
+    }
+    explicit BlitRectangle(const Rectangle &rect);
+
+    unsigned int width() const;
+    unsigned int height() const;
+    bool isFlippedX() const { return x1 < x0; }
+    bool isFlippedY() const { return y1 < y0; }
+
+    // Returns a new BlitRectangle with both X and Y flipping removed.
+    BlitRectangle removeFlip() const;
+
+    int x0;
+    int y0;
+    int x1;
+    int y1;
+};
+
+bool operator==(const BlitRectangle &a, const BlitRectangle &b);
+
+// Returns true and sets "intersection" to the intersection of the rectangles in case the
+// intersection is non-empty.
+bool ClipRectangle(const BlitRectangle &source,
+                   const BlitRectangle &clip,
+                   BlitRectangle *intersection);
+
+struct FloatRectangle
+{
+    FloatRectangle() : x(0.0), y(0.0), width(0.0), height(0.0) {}
+    constexpr FloatRectangle(double x_in, double y_in, double width_in, double height_in)
+        : x(x_in), y(y_in), width(width_in), height(height_in)
+    {
+    }
+
+    explicit FloatRectangle(Rectangle rect);
+    explicit FloatRectangle(BlitRectangle rect);
+
+    double x0() const { return x; }
+    double y0() const { return y; }
+    double x1() const { return x + width; }
+    double y1() const { return y + height; }
+
+    double x;
+    double y;
+    double width;
+    double height;
+};
+
+// Returns true and sets "intersection" to the intersection of the rectangles in case the
+// intersection is non-empty.
+bool ClipRectangle(const FloatRectangle &source,
+                   const FloatRectangle &clip,
+                   FloatRectangle *intersection);
 
 struct Offset
 {

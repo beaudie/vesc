@@ -501,8 +501,8 @@ Error FramebufferGL::readPixels(const gl::Context *context,
 }
 
 Error FramebufferGL::blit(const gl::Context *context,
-                          const gl::Rectangle &sourceArea,
-                          const gl::Rectangle &destArea,
+                          const gl::BlitRectangle &sourceArea,
+                          const gl::BlitRectangle &destArea,
                           GLbitfield mask,
                           GLenum filter)
 {
@@ -518,6 +518,69 @@ Error FramebufferGL::blit(const gl::Context *context,
     }
 
     bool needManualColorBlit = false;
+
+    if (mWorkarounds.limitBlitFramebufferDimensions)
+    {
+        bool widthOutOfRange =
+            sourceArea.width() > static_cast<unsigned int>(std::numeric_limits<int>::max()) ||
+            destArea.width() > static_cast<unsigned int>(std::numeric_limits<int>::max());
+        bool heightOutOfRange =
+            sourceArea.height() > static_cast<unsigned int>(std::numeric_limits<int>::max()) ||
+            destArea.height() > static_cast<unsigned int>(std::numeric_limits<int>::max());
+        // Some GL drivers have a bug where they can't handle blit dimensions out of the 32-bit
+        // integer range.
+        if (widthOutOfRange || heightOutOfRange)
+        {
+            if (destArea.width() == sourceArea.width() &&
+                destArea.height() == sourceArea.height() &&
+                destArea.isFlippedX() == sourceArea.isFlippedX() &&
+                destArea.isFlippedY() == sourceArea.isFlippedY())
+            {
+                // The source and destination dimensions match and the flips cancel out, so we can
+                // simply clip the blit area to something smaller.
+                gl::BlitRectangle unflippedSourceArea = sourceArea.removeFlip();
+                gl::BlitRectangle unflippedDestArea   = destArea.removeFlip();
+
+                if (unflippedDestArea.x1 <= 0 || unflippedDestArea.y1 <= 0)
+                {
+                    // Dest area intersection with framebuffer is empty, this is a no-op.
+                    return gl::NoError();
+                }
+
+                gl::BlitRectangle clippedDestArea(unflippedDestArea);
+                clippedDestArea.x0 = std::max(clippedDestArea.x0, 0);
+                clippedDestArea.y0 = std::max(clippedDestArea.y0, 0);
+
+                gl::BlitRectangle clippedSourceArea(unflippedSourceArea);
+                if (unflippedDestArea.x0 == std::numeric_limits<int>::min())
+                {
+                    // Special handling for when clippedDestArea.x0 - unflippedDestArea.x0 overflows
+                    clippedSourceArea.x0++;
+                    clippedSourceArea.x0 += std::numeric_limits<int>::max();
+                }
+                else
+                {
+                    clippedSourceArea.x0 += clippedDestArea.x0 - unflippedDestArea.x0;
+                }
+                if (unflippedDestArea.y0 == std::numeric_limits<int>::min())
+                {
+                    // Special handling for when clippedDestArea.y0 - unflippedDestArea.y0 overflows
+                    clippedSourceArea.y0++;
+                    clippedSourceArea.y0 += std::numeric_limits<int>::max();
+                }
+                else
+                {
+                    clippedSourceArea.y0 += clippedDestArea.y0 - unflippedDestArea.y0;
+                }
+                return blit(context, clippedSourceArea, clippedDestArea, mask, filter);
+            }
+            // According to spec, source and destination bounds must match if the read framebuffer
+            // is multisampled. GLES 3.0.5 section 4.3.3 page 198. GLES 3.1 section 16.2.1 page 346.
+            ASSERT(readAttachmentSamples == 0);
+            // The manual blit implementation can clamp the dimensions also when they don't match.
+            needManualColorBlit = true;
+        }
+    }
 
     // TODO(cwallez) when the filter is LINEAR and both source and destination are SRGB, we
     // could avoid doing a manual blit.
@@ -581,8 +644,8 @@ Error FramebufferGL::blit(const gl::Context *context,
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
 
-    mFunctions->blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x1(), sourceArea.y1(),
-                                destArea.x, destArea.y, destArea.x1(), destArea.y1(), blitMask,
+    mFunctions->blitFramebuffer(sourceArea.x0, sourceArea.y0, sourceArea.x1, sourceArea.y1,
+                                destArea.x0, destArea.y0, destArea.x1, destArea.y1, blitMask,
                                 filter);
 
     return gl::NoError();
