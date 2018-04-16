@@ -269,8 +269,8 @@ gl::Error Framebuffer11::readPixelsImpl(const gl::Context *context,
 }
 
 gl::Error Framebuffer11::blitImpl(const gl::Context *context,
-                                  const gl::Rectangle &sourceArea,
-                                  const gl::Rectangle &destArea,
+                                  const gl::BlitRectangle &sourceArea,
+                                  const gl::BlitRectangle &destArea,
                                   const gl::Rectangle *scissor,
                                   bool blitRenderTarget,
                                   bool blitDepth,
@@ -301,22 +301,22 @@ gl::Error Framebuffer11::blitImpl(const gl::Context *context,
                 ANGLE_TRY(drawBuffer.getRenderTarget(context, &drawRenderTarget));
                 ASSERT(drawRenderTarget);
 
-                const bool invertColorSource   = UsePresentPathFast(mRenderer, readBuffer);
-                gl::Rectangle actualSourceArea = sourceArea;
-                if (invertColorSource)
+                const bool flipColorSource         = UsePresentPathFast(mRenderer, readBuffer);
+                gl::BlitRectangle actualSourceArea = sourceArea;
+                if (flipColorSource)
                 {
                     RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
-                    actualSourceArea.y                 = readRenderTarget11->getHeight() - sourceArea.y;
-                    actualSourceArea.height            = -sourceArea.height;
+                    actualSourceArea.y0 = readRenderTarget11->getHeight() - sourceArea.y0;
+                    actualSourceArea.y1 = readRenderTarget11->getHeight() - sourceArea.y1;
                 }
 
-                const bool invertColorDest   = UsePresentPathFast(mRenderer, &drawBuffer);
-                gl::Rectangle actualDestArea = destArea;
-                if (invertColorDest)
+                const bool flipColorDest         = UsePresentPathFast(mRenderer, &drawBuffer);
+                gl::BlitRectangle actualDestArea = destArea;
+                if (flipColorDest)
                 {
                     RenderTarget11 *drawRenderTarget11 = GetAs<RenderTarget11>(drawRenderTarget);
-                    actualDestArea.y                   = drawRenderTarget11->getHeight() - destArea.y;
-                    actualDestArea.height              = -destArea.height;
+                    actualDestArea.y0 = drawRenderTarget11->getHeight() - destArea.y0;
+                    actualDestArea.y1 = drawRenderTarget11->getHeight() - destArea.y1;
                 }
 
                 ANGLE_TRY(mRenderer->blitRenderbufferRect(

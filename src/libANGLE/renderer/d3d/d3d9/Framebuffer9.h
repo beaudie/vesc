@@ -59,8 +59,8 @@ class Framebuffer9 : public FramebufferD3D
                              uint8_t *pixels) override;
 
     gl::Error blitImpl(const gl::Context *context,
-                       const gl::Rectangle &sourceArea,
-                       const gl::Rectangle &destArea,
+                       const gl::BlitRectangle &sourceArea,
+                       const gl::BlitRectangle &destArea,
                        const gl::Rectangle *scissor,
                        bool blitRenderTarget,
                        bool blitDepth,

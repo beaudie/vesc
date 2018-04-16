@@ -43,8 +43,8 @@ class MockFramebufferImpl : public rx::FramebufferImpl
 
     MOCK_METHOD5(blit,
                  gl::Error(const gl::Context *,
-                           const gl::Rectangle &,
-                           const gl::Rectangle &,
+                           const gl::BlitRectangle &,
+                           const gl::BlitRectangle &,
                            GLbitfield,
                            GLenum));
 

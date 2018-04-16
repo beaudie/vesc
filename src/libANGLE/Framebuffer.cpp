@@ -1398,8 +1398,8 @@ Error Framebuffer::readPixels(const Context *context,
 }
 
 Error Framebuffer::blit(const Context *context,
-                        const Rectangle &sourceArea,
-                        const Rectangle &destArea,
+                        const BlitRectangle &sourceArea,
+                        const BlitRectangle &destArea,
                         GLbitfield mask,
                         GLenum filter)
 {
