@@ -80,8 +80,8 @@ class FramebufferGL : public FramebufferImpl
                          void *pixels) override;
 
     gl::Error blit(const gl::Context *context,
-                   const gl::Rectangle &sourceArea,
-                   const gl::Rectangle &destArea,
+                   const gl::BlitRectangle &sourceArea,
+                   const gl::BlitRectangle &destArea,
                    GLbitfield mask,
                    GLenum filter) override;
 
