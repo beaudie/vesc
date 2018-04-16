@@ -214,7 +214,7 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermTyped *variable)
     out << ") ";
 }
 
-const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier, const TSymbol *symbol)
+std::string TOutputGLSLBase::mapQualifierToString(TQualifier qualifier, const TSymbol *symbol)
 {
     if (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
         (mCompileOptions & SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3) != 0)
@@ -265,8 +265,8 @@ void TOutputGLSLBase::writeVariableType(const TType &type, const TSymbol *symbol
     }
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
-        const char *qualifierString = mapQualifierToString(qualifier, symbol);
-        if (qualifierString && qualifierString[0] != '\0')
+        std::string qualifierString = mapQualifierToString(qualifier, symbol);
+        if (!qualifierString.empty())
         {
             out << qualifierString << " ";
         }
@@ -995,7 +995,8 @@ bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
         const TIntermSequence &sequence = *(node->getSequence());
         TIntermTyped *variable          = sequence.front()->getAsTyped();
         writeLayoutQualifier(variable);
-        writeVariableType(variable->getType(), &variable->getAsSymbolNode()->variable());
+        TIntermSymbol *symbolNode = variable->getAsSymbolNode();
+        writeVariableType(variable->getType(), symbolNode ? &symbolNode->variable() : nullptr);
         if (variable->getAsSymbolNode() == nullptr ||
             variable->getAsSymbolNode()->variable().symbolType() != SymbolType::Empty)
         {
