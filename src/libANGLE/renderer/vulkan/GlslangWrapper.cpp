@@ -28,15 +28,55 @@ namespace rx
 namespace
 {
 
-void InsertLayoutSpecifierString(std::string *shaderString,
-                                 const std::string &variableName,
-                                 const std::string &layoutString)
+constexpr char kLayoutKeyword[]    = "LAYOUT";
+constexpr char kQualifierKeyword[] = "QUALIFIER";
+
+constexpr char kQualifierMarkerBegin[] = "@@ QUALIFIER";
+constexpr char kLayoutMarkerBegin[]    = "@@ LAYOUT-";
+constexpr size_t kQualifierMarkerSize  = 12;
+constexpr char kMarkerEnd[]            = " @@";
+
+void InsertLayoutAndQualifierSpecifierString(std::string *shaderString,
+                                             const std::string &variableName,
+                                             const std::string &layoutString)
 {
     std::stringstream searchStringBuilder;
-    searchStringBuilder << "@@ LAYOUT-" << variableName << " @@";
-    std::string searchString = searchStringBuilder.str();
 
-    angle::ReplaceSubstring(shaderString, searchString, layoutString);
+    searchStringBuilder << kLayoutMarkerBegin << variableName << kMarkerEnd;
+    std::string searchString = searchStringBuilder.str();
+    size_t initialPos        = shaderString->find(searchString);
+
+    angle::ReplaceSubstring(shaderString, searchString, "layout(" + layoutString + ")");
+
+    // We need to find the @@ QUALIFIER and remove the markers around it because we know at
+    // this point the layout is used.
+    // From the initialPos we can find the first @@ QUALIFIER on the same line and remove it and
+    // only keep what's in the middle of it.
+    size_t qualifierPos = shaderString->find(kQualifierMarkerBegin, initialPos);
+
+    if (qualifierPos != std::string::npos)
+    {
+        size_t innerContentBeginPos = qualifierPos + kQualifierMarkerSize;
+        size_t innerContentEndPos   = shaderString->find(kMarkerEnd, innerContentBeginPos);
+        std::string innerContent =
+            shaderString->substr(innerContentBeginPos, innerContentEndPos - innerContentBeginPos);
+        angle::ReplaceSubstring(shaderString, kQualifierMarkerBegin + innerContent + kMarkerEnd,
+                                innerContent);
+    }
+}
+
+void CleanupUnusedMarker(std::string *shaderSource, std::string marker)
+{
+    std::string line;
+    const std::string markerBegin = "@@ " + marker;
+
+    size_t pos = shaderSource->find(markerBegin);
+    while (pos != std::string::npos)
+    {
+        size_t innerContentEndPos = shaderSource->find(kMarkerEnd, pos) + 3;
+        shaderSource->erase(pos, innerContentEndPos - pos);
+        pos = shaderSource->find(markerBegin);
+    }
 }
 
 }  // anonymous namespace
@@ -104,18 +144,20 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
             continue;
 
         std::string locationString = "location = " + Str(attribute.location);
-        InsertLayoutSpecifierString(&vertexSource, attribute.name, locationString);
+        InsertLayoutAndQualifierSpecifierString(&vertexSource, attribute.name, locationString);
     }
 
     // Assign varying locations.
-    for (const auto &varyingReg : resources.varyingPacking.getRegisterList())
+    for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
     {
         const auto &varying        = *varyingReg.packedVarying;
 
         std::string locationString = "location = " + Str(varyingReg.registerRow) +
                                      ", component = " + Str(varyingReg.registerColumn);
-        InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
-        InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
+        InsertLayoutAndQualifierSpecifierString(&vertexSource, varying.varying->name,
+                                                locationString);
+        InsertLayoutAndQualifierSpecifierString(&fragmentSource, varying.varying->name,
+                                                locationString);
     }
 
     // Bind the default uniforms for vertex and fragment shaders.
@@ -143,19 +185,27 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
                samplerUniform.isActive(gl::ShaderType::Fragment));
         if (samplerUniform.isActive(gl::ShaderType::Vertex))
         {
-            InsertLayoutSpecifierString(&vertexSource, samplerUniform.name, setBindingString);
+            InsertLayoutAndQualifierSpecifierString(&vertexSource, samplerUniform.name,
+                                                    setBindingString);
         }
 
         if (samplerUniform.isActive(gl::ShaderType::Fragment))
         {
-            InsertLayoutSpecifierString(&fragmentSource, samplerUniform.name, setBindingString);
+            InsertLayoutAndQualifierSpecifierString(&fragmentSource, samplerUniform.name,
+                                                    setBindingString);
         }
 
         textureCount += samplerUniform.getBasicTypeElementCount();
     }
 
-    std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
+    // After we've search & replaced all layouts and qualifiers from the vertex & fragment shaders
+    // we can safely remove all the layouts/qualifiers left because it means they are not used.
+    CleanupUnusedMarker(&vertexSource, kLayoutKeyword);
+    CleanupUnusedMarker(&fragmentSource, kLayoutKeyword);
+    CleanupUnusedMarker(&vertexSource, kQualifierKeyword);
+    CleanupUnusedMarker(&fragmentSource, kQualifierKeyword);
 
+    std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
     std::array<int, 2> lengths = {
         {static_cast<int>(vertexSource.length()), static_cast<int>(fragmentSource.length())}};
 
