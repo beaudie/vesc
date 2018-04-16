@@ -42,6 +42,22 @@ bool ValidateAlphaFuncCommon(gl::Context *context, gl::AlphaTestFunc func)
     }
 }
 
+bool ValidateClientStateCommon(gl::Context *context, gl::ClientVertexArrayType array)
+{
+    switch (array)
+    {
+        case gl::ClientVertexArrayType::Vertex:
+        case gl::ClientVertexArrayType::Normal:
+        case gl::ClientVertexArrayType::Color:
+        case gl::ClientVertexArrayType::PointSize:
+        case gl::ClientVertexArrayType::TextureCoord:
+            return true;
+        default:
+            context->handleError(gl::InvalidEnum() << gl::kErrorInvalidClientState);
+            return false;
+    }
+}
+
 }  // anonymous namespace
 
 namespace gl
@@ -129,16 +145,14 @@ bool ValidateDepthRangex(Context *context, GLfixed n, GLfixed f)
     return true;
 }
 
-bool ValidateDisableClientState(Context *context, GLenum array)
+bool ValidateDisableClientState(Context *context, ClientVertexArrayType array)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateClientStateCommon(context, array);
 }
 
-bool ValidateEnableClientState(Context *context, GLenum array)
+bool ValidateEnableClientState(Context *context, ClientVertexArrayType array)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateClientStateCommon(context, array);
 }
 
 bool ValidateFogf(Context *context, GLenum pname, GLfloat param)
