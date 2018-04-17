@@ -3228,8 +3228,10 @@ gl::Error StateManager11::syncUniformBuffers(const gl::Context *context, Program
 
     programD3D->updateUniformBufferCache(context->getCaps(), reservedVertex, reservedFragment);
 
-    const auto &vertexUniformBuffers     = programD3D->getVertexUniformBufferCache();
-    const auto &fragmentUniformBuffers   = programD3D->getFragmentUniformBufferCache();
+    const auto &vertexUniformBuffers =
+        programD3D->getShaderUniformBufferCache(gl::ShaderType::Vertex);
+    const auto &fragmentUniformBuffers =
+        programD3D->getShaderUniformBufferCache(gl::ShaderType::Fragment);
     const auto &glState                  = context->getGLState();
     ID3D11DeviceContext *deviceContext   = mRenderer->getDeviceContext();
     ID3D11DeviceContext1 *deviceContext1 = mRenderer->getDeviceContext1IfSupported();
