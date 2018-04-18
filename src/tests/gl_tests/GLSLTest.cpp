@@ -4171,7 +4171,7 @@ TEST_P(GLSLTest_ES3, ErrorMessageOfLinkInterfaceBlockFieldMismatch)
         })";
 
     validateComponentsInErrorMessage(vertexShader, fragmentShader, "Types",
-                                     "interface block 'S' member 'S.val2'");
+                                     "uniform block 'S' member 'S.val2'");
 }
 
 // Validate error messages  when the link mismatch occurs on the type of a member of a uniform block
@@ -4221,7 +4221,7 @@ TEST_P(GLSLTest_ES3, ErrorMessageOfLinkInterfaceBlockStructFieldMismatch)
         })";
 
     validateComponentsInErrorMessage(vertexShader, fragmentShader, "Types",
-                                     "interface block 'S' member 'S.val1.t2'");
+                                     "uniform block 'S' member 'S.val1.t2'");
 }
 
 // Test a vertex shader that doesn't declare any varyings with a fragment shader that statically
