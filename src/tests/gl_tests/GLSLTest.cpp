@@ -1468,14 +1468,10 @@ TEST_P(GLSLTest, BadIndexBug)
 // Test that structs defined in uniforms are translated correctly.
 TEST_P(GLSLTest, StructSpecifiersUniforms)
 {
-    // TODO(lucferron): Support struct initializers.
-    // http://anglebug.com/2459
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string fragmentShaderSource =
         R"(precision mediump float;
 
-        uniform struct S { float field;} s;
+        uniform struct S { float field; } s;
 
         void main()
         {
@@ -1485,6 +1481,56 @@ TEST_P(GLSLTest, StructSpecifiersUniforms)
 
     GLuint program = CompileProgram(essl1_shaders::vs::Simple(), fragmentShaderSource);
     EXPECT_NE(0u, program);
+}
+
+// Test that structs declaration followed directly by an initialization is translated correctly.
+TEST_P(GLSLTest, StructWithInitializer)
+{
+    const std::string fragmentShaderSource =
+        R"(precision mediump float;
+
+        struct S { float a; } s = S(1.0);
+
+        void main()
+        {
+            gl_FragColor = vec4(0, 0, 0, 1);
+            gl_FragColor.r += s.a;
+        })";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), fragmentShaderSource);
+    glUseProgram(program);
+
+    // Test drawing, should be red.
+    drawQuad(program.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that structs declaration followed directly by an initialization in a uniform.
+TEST_P(GLSLTest, StructWithUniformInitializer)
+{
+    const std::string fragmentShaderSource =
+        R"(precision mediump float;
+
+        struct S { float a; } s = S(1.0);
+        uniform S us;
+
+        void main()
+        {
+            gl_FragColor = vec4(0, 0, 0, 1);
+            gl_FragColor.r += s.a;
+            gl_FragColor.g += us.a;
+        })";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), fragmentShaderSource);
+    glUseProgram(program);
+
+    // Test drawing, should be red.
+    drawQuad(program.get(), essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Test that gl_DepthRange is not stored as a uniform location. Since uniforms
