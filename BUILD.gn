@@ -780,6 +780,26 @@ static_library("libEGL_static") {
   ]
 }
 
+if (is_mac) {
+  # We need to copy the ANGLE libraries so that the bundle_data
+  # dependencies have a "copy" target type. Otherwise for "shared_library"
+  # target types it will try to link things into Chromium Framework when
+  # we want to keep the ANGLE libraries separate instead.
+  copy("library_copy") {
+    sources = [
+      "$root_out_dir/libEGL.dylib",
+      "$root_out_dir/libGLESv2.dylib",
+    ]
+    outputs = [
+      "$root_out_dir/egl_intermediates/{{source_file_part}}",
+    ]
+    deps = [
+      ":libEGL",
+      ":libGLESv2",
+    ]
+  }
+}
+
 util_gypi = exec_script("//build/gypi_to_gn.py",
                         [ rebase_path("util/util.gyp") ],
                         "scope",
