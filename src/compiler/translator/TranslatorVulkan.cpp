@@ -11,6 +11,7 @@
 
 #include "compiler/translator/TranslatorVulkan.h"
 
+#include <iostream>
 #include "angle_gl.h"
 #include "common/utilities.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
@@ -19,6 +20,7 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
 #include "compiler/translator/util.h"
+#include "tree_util/ReplaceVariable.h"
 
 namespace sh
 {
@@ -41,9 +43,6 @@ class DeclareStructTypesTraverser : public TIntermTraverser
 
         if (!mInGlobalScope)
         {
-            // We only want to declare the global structs in this traverser.
-            // TODO(lucferron): Add a test in GLSLTest for this specific case.
-            // http://anglebug.com/2459
             return false;
         }
 
@@ -53,22 +52,7 @@ class DeclareStructTypesTraverser : public TIntermTraverser
 
         if (type.isStructSpecifier())
         {
-            TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
-            if (symbolNode != nullptr && symbolNode->variable().symbolType() == SymbolType::Empty)
-            {
-                mOutputVulkanGLSL->writeStructType(type.getStruct());
-
-                // Remove the struct specifier declaration from the tree so it isn't parsed again.
-                TIntermSequence emptyReplacement;
-                mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), node,
-                                                emptyReplacement);
-            }
-            else
-            {
-                // TODO(lucferron): Support structs with initializers correctly.
-                // http://anglebug.com/2459
-                UNIMPLEMENTED();
-            }
+            mOutputVulkanGLSL->writeStructType(type.getStruct());
         }
 
         return false;
@@ -235,7 +219,6 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         // We must declare the struct types before using them.
         DeclareStructTypesTraverser structTypesTraverser(&outputGLSL);
         root->traverse(&structTypesTraverser);
-        structTypesTraverser.updateTree();
     }
 
     if (defaultUniformCount > 0)
@@ -256,7 +239,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         bool hasGLFragColor = false;
         bool hasGLFragData  = false;
 
-        for (const auto &outputVar : outputVariables)
+        for (const OutputVariable &outputVar : outputVariables)
         {
             if (outputVar.name == "gl_FragColor")
             {
