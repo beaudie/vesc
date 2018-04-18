@@ -11,6 +11,7 @@
 
 #include "compiler/translator/TranslatorVulkan.h"
 
+#include <iostream>
 #include "angle_gl.h"
 #include "common/utilities.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
@@ -30,8 +31,8 @@ namespace
 class DeclareStructTypesTraverser : public TIntermTraverser
 {
   public:
-    DeclareStructTypesTraverser(TOutputVulkanGLSL *outputVulkanGLSL)
-        : TIntermTraverser(true, false, false), mOutputVulkanGLSL(outputVulkanGLSL)
+    DeclareStructTypesTraverser(TOutputVulkanGLSL *outputVulkanGLSL, TSymbolTable *symbolTable)
+        : TIntermTraverser(true, false, false, symbolTable), mOutputVulkanGLSL(outputVulkanGLSL)
     {
     }
 
@@ -54,10 +55,10 @@ class DeclareStructTypesTraverser : public TIntermTraverser
         if (type.isStructSpecifier())
         {
             TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
+            mOutputVulkanGLSL->writeStructType(type.getStruct());
+
             if (symbolNode != nullptr && symbolNode->variable().symbolType() == SymbolType::Empty)
             {
-                mOutputVulkanGLSL->writeStructType(type.getStruct());
-
                 // Remove the struct specifier declaration from the tree so it isn't parsed again.
                 TIntermSequence emptyReplacement;
                 mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), node,
@@ -65,9 +66,17 @@ class DeclareStructTypesTraverser : public TIntermTraverser
             }
             else
             {
-                // TODO(lucferron): Support structs with initializers correctly.
-                // http://anglebug.com/2459
-                UNIMPLEMENTED();
+                // This node declares a variable that also have an initializer, so we can't
+                // remove the node entirely. We need to unset mIsStructSpecifier in the type of this
+                // node and let the declaration of the struct var be processed later.
+                auto *typeCopy = new TType(symbolNode->getType());
+                typeCopy->setIsStructSpecifier(false);
+                auto *varReplacement = new TVariable(mSymbolTable, symbolNode->getName(), typeCopy,
+                                                     symbolNode->variable().symbolType());
+                auto *variableNode   = new TIntermSymbol(varReplacement);
+                auto *replacementDeclaration = new TIntermDeclaration();
+                replacementDeclaration->appendDeclarator(variableNode);
+                queueReplacement(replacementDeclaration, OriginalNode::IS_DROPPED);
             }
         }
 
@@ -233,7 +242,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     if (structTypesUsedForUniforms > 0)
     {
         // We must declare the struct types before using them.
-        DeclareStructTypesTraverser structTypesTraverser(&outputGLSL);
+        DeclareStructTypesTraverser structTypesTraverser(&outputGLSL, &getSymbolTable());
         root->traverse(&structTypesTraverser);
         structTypesTraverser.updateTree();
     }

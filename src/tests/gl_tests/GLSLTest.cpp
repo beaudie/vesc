@@ -1468,10 +1468,6 @@ TEST_P(GLSLTest, BadIndexBug)
 // Test that structs defined in uniforms are translated correctly.
 TEST_P(GLSLTest, StructSpecifiersUniforms)
 {
-    // TODO(lucferron): Support struct initializers.
-    // http://anglebug.com/2459
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string fragmentShaderSource =
         R"(precision mediump float;
 

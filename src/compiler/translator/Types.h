@@ -311,6 +311,10 @@ class TType
     bool isStructureContainingSamplers() const;
 
     bool isStructSpecifier() const { return mIsStructSpecifier; }
+    void setIsStructSpecifier(const bool isStructSpecifier)
+    {
+        mIsStructSpecifier = isStructSpecifier;
+    }
 
     // Return true if variables of this type should be replaced with an inline constant value if
     // such is available. False will be returned in cases where output doesn't support
