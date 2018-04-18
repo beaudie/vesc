@@ -19,6 +19,7 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
 #include "compiler/translator/util.h"
+#include "tree_util/ReplaceVariable.h"
 
 namespace sh
 {
@@ -54,10 +55,10 @@ class DeclareStructTypesTraverser : public TIntermTraverser
         if (type.isStructSpecifier())
         {
             TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
+            mOutputVulkanGLSL->writeStructType(type.getStruct());
+
             if (symbolNode != nullptr && symbolNode->variable().symbolType() == SymbolType::Empty)
             {
-                mOutputVulkanGLSL->writeStructType(type.getStruct());
-
                 // Remove the struct specifier declaration from the tree so it isn't parsed again.
                 TIntermSequence emptyReplacement;
                 mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), node,
@@ -65,17 +66,34 @@ class DeclareStructTypesTraverser : public TIntermTraverser
             }
             else
             {
-                // TODO(lucferron): Support structs with initializers correctly.
-                // http://anglebug.com/2459
-                UNIMPLEMENTED();
+                // This node declares a variable that can also have an initializer, so we can't
+                // remove the node entirely. We need to unset mIsStructSpecifier in the type of this
+                // node and let the declaration of the struct var be processed later.
+                mNodesToReplace.emplace_back(symbolNode);
             }
         }
 
         return false;
     }
 
+    void replaceStructSpecifiersVariables(TIntermBlock *root)
+    {
+        for (TIntermSymbol *node : mNodesToReplace)
+        {
+            TType *typeCopy = new TType(node->getType());
+            typeCopy->setIsStructSpecifier(false);
+
+            TVariable *varReplacement = new TVariable(mSymbolTable, node->getName(), typeCopy,
+                                                      node->variable().symbolType());
+            ReplaceVariable(root, &node->variable(), varReplacement);
+        }
+
+        mNodesToReplace.clear();
+    }
+
   private:
     TOutputVulkanGLSL *mOutputVulkanGLSL;
+    std::vector<TIntermSymbol *> mNodesToReplace;
 };
 
 class DeclareDefaultUniformsTraverser : public TIntermTraverser
@@ -236,6 +254,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         DeclareStructTypesTraverser structTypesTraverser(&outputGLSL);
         root->traverse(&structTypesTraverser);
         structTypesTraverser.updateTree();
+        structTypesTraverser.replaceStructSpecifiersVariables(root);
     }
 
     if (defaultUniformCount > 0)
@@ -256,7 +275,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         bool hasGLFragColor = false;
         bool hasGLFragData  = false;
 
-        for (const auto &outputVar : outputVariables)
+        for (const OutputVariable &outputVar : outputVariables)
         {
             if (outputVar.name == "gl_FragColor")
             {
