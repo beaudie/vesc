@@ -230,7 +230,6 @@
 2479 VULKAN : dEQP-GLES2.functional.texture.size.cube.512x512_l8_mipmap = SKIP
 2479 VULKAN : dEQP-GLES2.functional.texture.size.cube.512x512_rgb888_mipmap = SKIP
 2479 VULKAN : dEQP-GLES2.functional.texture.size.cube.512x512_rgba8888_mipmap = SKIP
-2161 VULKAN : dEQP-GLES2.functional.texture.wrap.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.filtering.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.mipmap.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.specification.* = SKIP
@@ -345,6 +344,7 @@
 2161 VULKAN : dEQP-GLES2.functional.default_vertex_attrib.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.lifetime.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.debug_marker.* = SKIP
+
 
 // TODO(lucferron) This is a regression tracked in http://anglebug.com/2484
 2484 VULKAN WIN LINUX ANDROID : dEQP-GLES2.functional.color_clear.short_scissored_rgb = SKIP
