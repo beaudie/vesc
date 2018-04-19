@@ -150,10 +150,14 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
 
   private:
     void releaseImage(const gl::Context *context, RendererVk *renderer);
+    gl::Error syncSampler(ContextVk *contextVk);
 
     vk::ImageHelper mImage;
     vk::ImageView mImageView;
     vk::Sampler mSampler;
+
+    gl::SamplerState mAppliedSampler;
+    bool mIsSamplerDirty = false;
 
     RenderTargetVk mRenderTarget;
 
