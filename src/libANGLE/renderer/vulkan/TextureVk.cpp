@@ -215,7 +215,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-    VkDevice device      = contextVk->getDevice();
 
     // TODO(jmadill): support multi-level textures.
     if (index.getLevelIndex() != 0)
@@ -245,29 +244,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 
     if (!mSampler.valid())
     {
-        // Create a simple sampler. Force basic parameter settings.
-        // TODO(jmadill): Sampler parameters.
-        VkSamplerCreateInfo samplerInfo;
-        samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        samplerInfo.pNext                   = nullptr;
-        samplerInfo.flags                   = 0;
-        samplerInfo.magFilter               = VK_FILTER_NEAREST;
-        samplerInfo.minFilter               = VK_FILTER_NEAREST;
-        samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-        samplerInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.mipLodBias              = 0.0f;
-        samplerInfo.anisotropyEnable        = VK_FALSE;
-        samplerInfo.maxAnisotropy           = 1.0f;
-        samplerInfo.compareEnable           = VK_FALSE;
-        samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
-        samplerInfo.minLod                  = 0.0f;
-        samplerInfo.maxLod                  = 1.0f;
-        samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
-        samplerInfo.unnormalizedCoordinates = VK_FALSE;
-
-        ANGLE_TRY(mSampler.init(device, samplerInfo));
+        ANGLE_TRY(initSampler(contextVk));
     }
 
     // Create a new graph node to store image initialization commands.
@@ -468,9 +445,51 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
     return vk::NoError();
 }
 
+gl::Error TextureVk::initSampler(ContextVk *contextVk)
+{
+    ASSERT(!mSampler.valid());
+    const gl::SamplerState &samplerState = mState.getSamplerState();
+
+    // Create a simple sampler. Force basic parameter settings.
+    VkSamplerCreateInfo samplerInfo;
+    samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.pNext                   = nullptr;
+    samplerInfo.flags                   = 0;
+    samplerInfo.magFilter               = gl_vk::GetFilter(samplerState.magFilter);
+    samplerInfo.minFilter               = gl_vk::GetFilter(samplerState.minFilter);
+    samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    samplerInfo.addressModeU            = gl_vk::GetSamplerAddressMode(samplerState.wrapS);
+    samplerInfo.addressModeV            = gl_vk::GetSamplerAddressMode(samplerState.wrapT);
+    samplerInfo.addressModeW            = gl_vk::GetSamplerAddressMode(samplerState.wrapR);
+    samplerInfo.mipLodBias              = 0.0f;
+    samplerInfo.anisotropyEnable        = VK_FALSE;
+    samplerInfo.maxAnisotropy           = 1.0f;
+    samplerInfo.compareEnable           = VK_FALSE;
+    samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.minLod                  = 0.0f;
+    samplerInfo.maxLod                  = 1.0f;
+    samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+    ANGLE_TRY(mSampler.init(contextVk->getDevice(), samplerInfo));
+    return gl::NoError();
+}
+
 gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::DirtyBits &dirtyBits)
 {
-    // TODO(jmadill): Texture sync state.
+    if (dirtyBits.none())
+    {
+        return gl::NoError();
+    }
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mSampler.valid())
+    {
+        RendererVk *renderer = contextVk->getRenderer();
+        renderer->releaseResource(*this, &mSampler);
+    }
+
+    ANGLE_TRY(initSampler(contextVk));
     return gl::NoError();
 }
 

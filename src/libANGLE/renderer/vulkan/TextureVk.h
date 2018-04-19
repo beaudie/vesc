@@ -147,6 +147,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     const vk::Sampler &getSampler() const;
 
     vk::Error ensureImageInitialized(RendererVk *renderer);
+    gl::Error initSampler(ContextVk *contextVk);
 
   private:
     void releaseImage(const gl::Context *context, RendererVk *renderer);
