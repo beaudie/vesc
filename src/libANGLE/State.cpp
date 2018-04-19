@@ -2613,7 +2613,7 @@ void State::syncProgramTextures(const Context *context)
             if (texture->isSamplerComplete(context, sampler) &&
                 !mDrawFramebuffer->hasTextureAttachment(texture))
             {
-                texture->syncState();
+                texture->syncState(context);
                 mCompleteTextureCache[textureUnitIndex] = texture;
             }
             else
