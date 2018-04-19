@@ -73,6 +73,7 @@ class DisplayAndroid : public DisplayEGL
                                     const char *extension,
                                     const U &defaultValue) const;
 
+    std::vector<EGLint> mConfigAttribListBase;
     std::vector<EGLint> mConfigAttribList;
     std::map<EGLint, EGLint> mConfigIds;
     EGLSurface mDummyPbuffer;
