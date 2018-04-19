@@ -129,7 +129,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
-    void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+    gl::Error syncState(const gl::Context *context, const gl::Texture::DirtyBits &dirtyBits) override;
 
     gl::Error setStorageMultisample(const gl::Context *context,
                                     gl::TextureType type,
@@ -149,10 +149,14 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
 
   private:
     void releaseImage(const gl::Context *context, RendererVk *renderer);
+    gl::Error syncSampler(VkDevice device);
 
     vk::ImageHelper mImage;
     vk::ImageView mImageView;
     vk::Sampler mSampler;
+    
+    gl::SamplerState mAppliedSampler;
+    bool mIsSamplerDirty = false;
 
     RenderTargetVk mRenderTarget;
 
