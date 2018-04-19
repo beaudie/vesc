@@ -1236,7 +1236,7 @@ Error Texture::generateMipmap(const Context *context)
     {
         return NoError();
     }
-    syncState();
+    syncState(context);
 
     // Clear the base image(s) immediately if needed
     if (context->isRobustResourceInitEnabled())
@@ -1435,9 +1435,9 @@ GLuint Texture::getId() const
     return id();
 }
 
-void Texture::syncState()
+void Texture::syncState(const Context *context)
 {
-    mTexture->syncState(mDirtyBits);
+    mTexture->syncState(context, mDirtyBits);
     mDirtyBits.reset();
 }
 
