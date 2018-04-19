@@ -261,6 +261,7 @@ class ANGLETestBase
     virtual void swapBuffers();
 
     void setupQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXYScale);
+    void setupQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXScale, GLfloat positionAttribYScale);
     void setupIndexedQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXYScale);
     void setupIndexedQuadIndexBuffer();
 
