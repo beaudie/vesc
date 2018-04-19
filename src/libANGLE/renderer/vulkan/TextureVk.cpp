@@ -19,6 +19,38 @@ namespace rx
 {
 namespace
 {
+VkFilter GetVkFilter(const GLenum filter)
+{
+    switch (filter)
+    {
+        case GL_LINEAR:
+            return VK_FILTER_LINEAR;
+        case GL_NEAREST:
+            return VK_FILTER_NEAREST;
+        default:
+            UNIMPLEMENTED();
+            return VK_FILTER_MAX_ENUM;
+    }
+}
+
+VkSamplerAddressMode GetVkSamplerAddressMode(const GLenum wrap)
+{
+    switch (wrap)
+    {
+        case GL_REPEAT:
+            return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        case GL_MIRRORED_REPEAT:
+            return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+        case GL_CLAMP_TO_BORDER:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+        case GL_CLAMP_TO_EDGE:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        default:
+            UNIMPLEMENTED();
+            return VK_SAMPLER_ADDRESS_MODE_MAX_ENUM;
+    }
+}
+
 void MapSwizzleState(GLenum internalFormat,
                      const gl::SwizzleState &swizzleState,
                      gl::SwizzleState *swizzleStateOut)
@@ -185,6 +217,12 @@ TextureVk::TextureVk(const gl::TextureState &state) : TextureImpl(state)
     mRenderTarget.image     = &mImage;
     mRenderTarget.imageView = &mImageView;
     mRenderTarget.resource  = this;
+
+    mAppliedSampler.minFilter = GL_NEAREST;
+    mAppliedSampler.magFilter = GL_NEAREST;
+    mAppliedSampler.wrapS = GL_CLAMP_TO_EDGE;
+    mAppliedSampler.wrapT = GL_CLAMP_TO_EDGE;
+    mAppliedSampler.wrapR = GL_CLAMP_TO_EDGE;
 }
 
 TextureVk::~TextureVk()
@@ -201,6 +239,44 @@ gl::Error TextureVk::onDestroy(const gl::Context *context)
 
     mPixelBuffer.release(renderer);
 
+    return gl::NoError();
+}
+
+gl::Error TextureVk::syncSampler(VkDevice device)
+{
+    if (!mSampler.valid() || mIsSamplerDirty)
+    {
+        if (mSampler.valid())
+        {
+            // TODO: release instead of destroying.
+            mSampler.destroy(device);
+        }
+
+        // Create a simple sampler. Force basic parameter settings.
+        VkSamplerCreateInfo samplerInfo;
+        samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        samplerInfo.pNext                   = nullptr;
+        samplerInfo.flags                   = 0;
+        samplerInfo.magFilter               = GetVkFilter(mAppliedSampler.magFilter);
+        samplerInfo.minFilter               = GetVkFilter(mAppliedSampler.minFilter);
+        samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+        samplerInfo.addressModeU            = GetVkSamplerAddressMode(mAppliedSampler.wrapS);
+        samplerInfo.addressModeV            = GetVkSamplerAddressMode(mAppliedSampler.wrapT);
+        samplerInfo.addressModeW            = GetVkSamplerAddressMode(mAppliedSampler.wrapR);
+        samplerInfo.mipLodBias              = 0.0f;
+        samplerInfo.anisotropyEnable        = VK_FALSE;
+        samplerInfo.maxAnisotropy           = 1.0f;
+        samplerInfo.compareEnable           = VK_FALSE;
+        samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
+        samplerInfo.minLod                  = 0.0f;
+        samplerInfo.maxLod                  = 1.0f;
+        samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
+        samplerInfo.unnormalizedCoordinates = VK_FALSE;
+        
+        mIsSamplerDirty = false;
+
+        ANGLE_TRY(mSampler.init(device, samplerInfo));
+    }
     return gl::NoError();
 }
 
@@ -243,32 +319,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
         return gl::NoError();
     }
 
-    if (!mSampler.valid())
-    {
-        // Create a simple sampler. Force basic parameter settings.
-        // TODO(jmadill): Sampler parameters.
-        VkSamplerCreateInfo samplerInfo;
-        samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        samplerInfo.pNext                   = nullptr;
-        samplerInfo.flags                   = 0;
-        samplerInfo.magFilter               = VK_FILTER_NEAREST;
-        samplerInfo.minFilter               = VK_FILTER_NEAREST;
-        samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-        samplerInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.mipLodBias              = 0.0f;
-        samplerInfo.anisotropyEnable        = VK_FALSE;
-        samplerInfo.maxAnisotropy           = 1.0f;
-        samplerInfo.compareEnable           = VK_FALSE;
-        samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
-        samplerInfo.minLod                  = 0.0f;
-        samplerInfo.maxLod                  = 1.0f;
-        samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
-        samplerInfo.unnormalizedCoordinates = VK_FALSE;
-
-        ANGLE_TRY(mSampler.init(device, samplerInfo));
-    }
+    ANGLE_TRY(syncSampler(device));
 
     // Create a new graph node to store image initialization commands.
     getNewWritingNode(renderer);
@@ -470,7 +521,40 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
 
 gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::DirtyBits &dirtyBits)
 {
-    // TODO(jmadill): Texture sync state.
+    if (dirtyBits.none())
+    {
+        return gl::NoError();
+    }
+
+    for (const size_t dirtyBit : dirtyBits)
+    {
+        switch(dirtyBit)
+        {
+            case gl::Texture::DIRTY_BIT_MIN_FILTER:
+                mAppliedSampler.minFilter = mState.getSamplerState().minFilter;
+                mIsSamplerDirty = true;
+                break;
+            case gl::Texture::DIRTY_BIT_MAG_FILTER:
+                mAppliedSampler.magFilter = mState.getSamplerState().magFilter;
+                mIsSamplerDirty = true;
+                break;
+            case gl::Texture::DIRTY_BIT_WRAP_R:
+                mAppliedSampler.wrapR = mState.getSamplerState().wrapR;
+                mIsSamplerDirty = true;
+                break;
+            case gl::Texture::DIRTY_BIT_WRAP_S:
+                mAppliedSampler.wrapS = mState.getSamplerState().wrapS;
+                mIsSamplerDirty = true;
+                break;
+            case gl::Texture::DIRTY_BIT_WRAP_T:
+                mAppliedSampler.wrapT = mState.getSamplerState().wrapT;
+                mIsSamplerDirty = true;
+                break;
+        }
+    }
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(syncSampler(contextVk->getDevice()));
     return gl::NoError();
 }
 
