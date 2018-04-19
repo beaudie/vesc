@@ -88,6 +88,7 @@ VertexAttribute::VertexAttribute(GLuint bindingIndex)
       bindingIndex(bindingIndex),
       cachedSizePlusRelativeOffset(0)
 {
+    updateCachedSizePlusRelativeOffset();
 }
 
 VertexAttribute::VertexAttribute(VertexAttribute &&attrib)
