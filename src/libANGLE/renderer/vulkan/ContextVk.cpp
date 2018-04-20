@@ -53,6 +53,7 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mCurrentDrawMode(GL_NONE),
       mDynamicDescriptorPool(),
       mTexturesDirty(false),
+      mTextureBindingsDirty(false),
       mVertexArrayBindingHasChanged(false)
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -165,9 +166,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     }
 
     // Ensure any writes to the textures are flushed before we read from them.
-    if (mTexturesDirty)
+    if (mTexturesDirty || mTextureBindingsDirty)
     {
-        mTexturesDirty = false;
         // TODO(jmadill): Should probably merge this for loop with programVk's descriptor update.
         const auto &completeTextures = state.getCompleteTextureCache();
         for (const gl::SamplerBinding &samplerBinding : programGL->getSamplerBindings())
@@ -183,10 +183,16 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
             // TODO(jmadill): Incomplete textures handling.
             ASSERT(texture);
 
-            TextureVk *textureVk = vk::GetImpl(texture);
-            ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
-            textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            if (mTexturesDirty)
+            {
+                TextureVk *textureVk = vk::GetImpl(texture);
+                ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
+                textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            }
         }
+
+        mTexturesDirty        = false;
+        mTextureBindingsDirty = false;
     }
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
@@ -376,6 +382,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
 
     // TODO(jmadill): Full dirty bits implementation.
     bool dirtyTextures = false;
+    bool dirtyTextureBindings = false;
 
     for (auto dirtyBit : dirtyBits)
     {
@@ -540,10 +547,10 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 break;
             }
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
-                dirtyTextures = true;
+                dirtyTextureBindings = true;
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
-                dirtyTextures = true;
+                dirtyTextureBindings = true;
                 break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
                 WARN() << "DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING unimplemented";
@@ -584,11 +591,13 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
         }
     }
 
-    if (dirtyTextures)
+    if (dirtyTextures || dirtyTextureBindings)
     {
         ProgramVk *programVk = vk::GetImpl(glState.getProgram());
         programVk->invalidateTextures();
-        mTexturesDirty = true;
+
+        mTexturesDirty        = dirtyTextures;
+        mTextureBindingsDirty = dirtyTextureBindings;
     }
 }
 
