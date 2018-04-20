@@ -56,11 +56,12 @@ void ClipConfigs(const std::vector<const Config *> &filteredConfigs,
 EGLint EGLAPIENTRY GetError(void)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("()");
     Thread *thread = GetCurrentThread();
 
     EGLint error = thread->getError();
     thread->setSuccess();
+    if (error != EGL_SUCCESS)
+        EVENT("()");
     return error;
 }
 

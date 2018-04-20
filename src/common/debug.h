@@ -19,6 +19,9 @@
 #include <string>
 
 #include "common/angleutils.h"
+#if defined(ANGLE_PLATFORM_ANDROID)
+#include <android/log.h>
+#endif
 
 #if !defined(TRACE_OUTPUT_FILE)
 #define TRACE_OUTPUT_FILE "angle_debug.txt"
@@ -228,7 +231,12 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #if defined(_MSC_VER)
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper ## __LINE__("%s" message "\n", __FUNCTION__, __VA_ARGS__);
 #else
+#if defined(ANGLE_PLATFORM_ANDROID)
+#define EVENT(message, ...) \
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s" message, __FUNCTION__, ##__VA_ARGS__);
+#else
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper("%s" message "\n", __FUNCTION__, ##__VA_ARGS__);
+#endif  // ANGLE_PLATFORM_ANDROID
 #endif // _MSC_VER
 #else
 #define EVENT(message, ...) (void(0))

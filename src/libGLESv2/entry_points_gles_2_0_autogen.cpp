@@ -211,9 +211,9 @@ void GL_APIENTRY BlendFuncSeparate(GLenum sfactorRGB,
 void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %llu, const void *data = 0x%016" PRIxPTR
+    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %" PRId64 ", const void *data = 0x%016" PRIxPTR
           ", GLenum usage = 0x%X)",
-          target, static_cast<unsigned long long>(size), (uintptr_t)data, usage);
+          target, static_cast<int64_t>(size), (uintptr_t)data, usage);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -231,11 +231,9 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GL
 void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr size = %llu, const void *data = "
-        "0x%016" PRIxPTR ")",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size),
-        (uintptr_t)data);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr size = %" PRId64
+          ", const void *data = 0x%016" PRIxPTR ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(size), (uintptr_t)data);
 
     Context *context = GetValidGlobalContext();
     if (context)

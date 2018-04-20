@@ -78,10 +78,9 @@ void GL_APIENTRY BindVertexBuffer(GLuint bindingindex,
                                   GLsizei stride)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %llu, GLsizei stride = "
-        "%d)",
-        bindingindex, buffer, static_cast<unsigned long long>(offset), stride);
+    EVENT("(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %" PRId64
+          ", GLsizei stride = %d)",
+          bindingindex, buffer, static_cast<int64_t>(offset), stride);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -150,7 +149,7 @@ void GL_APIENTRY DispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuin
 void GL_APIENTRY DispatchComputeIndirect(GLintptr indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLintptr indirect = %llu)", static_cast<unsigned long long>(indirect));
+    EVENT("(GLintptr indirect = %" PRId64 ")", static_cast<int64_t>(indirect));
 
     Context *context = GetValidGlobalContext();
     if (context)

@@ -11,6 +11,7 @@ Contributors
     Scott Graham, Google
     Shannon Woods, Google
     Geoff Lang, Google
+    Courtney Goeltzenleuchter, Google
 
 Contacts
 
@@ -22,7 +23,7 @@ Status
 
 Version
 
-    Version 5, 2017-12-28
+    Version 6, 2018-06-21
 
 Number
 

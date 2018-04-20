@@ -71,11 +71,9 @@ void GL_APIENTRY
 BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %llu, "
-        "GLsizeiptr size = %llu)",
-        target, index, buffer, static_cast<unsigned long long>(offset),
-        static_cast<unsigned long long>(size));
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %" PRId64
+          ", GLsizeiptr size = %" PRId64 ")",
+          target, index, buffer, static_cast<int64_t>(offset), static_cast<int64_t>(size));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -233,8 +231,9 @@ void GL_APIENTRY ClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *v
 GLenum GL_APIENTRY ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %" PRIu64
+          ")",
+          (uintptr_t)sync, flags, static_cast<uint64_t>(timeout));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -320,11 +319,10 @@ void GL_APIENTRY CopyBufferSubData(GLenum readTarget,
                                    GLsizeiptr size)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %llu, "
-        "GLintptr writeOffset = %llu, GLsizeiptr size = %llu)",
-        readTarget, writeTarget, static_cast<unsigned long long>(readOffset),
-        static_cast<unsigned long long>(writeOffset), static_cast<unsigned long long>(size));
+    EVENT("(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %" PRId64
+          ", GLintptr writeOffset = %" PRId64 ", GLsizeiptr size = %" PRId64 ")",
+          readTarget, writeTarget, static_cast<int64_t>(readOffset),
+          static_cast<int64_t>(writeOffset), static_cast<int64_t>(size));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -580,8 +578,8 @@ GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
 void GL_APIENTRY FlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
-          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64 ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1251,11 +1249,9 @@ void *GL_APIENTRY MapBufferRange(GLenum target,
                                  GLbitfield access)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
-        "access = 0x%X)",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
-        access);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64
+          ", GLbitfield access = 0x%X)",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length), access);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1967,8 +1963,9 @@ VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, cons
 void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %" PRIu64
+          ")",
+          (uintptr_t)sync, flags, static_cast<uint64_t>(timeout));
 
     Context *context = GetValidGlobalContext();
     if (context)

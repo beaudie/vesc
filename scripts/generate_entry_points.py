@@ -299,9 +299,9 @@ def just_the_name_packed(param, reserved_set):
         return name
 
 static_cast_to_dict = {
-    "GLintptr": "unsigned long long",
-    "GLsizeiptr": "unsigned long long",
-    "GLuint64": "unsigned long long",
+    "GLintptr": "int64_t",
+    "GLsizeiptr": "int64_t",
+    "GLuint64": "uint64_t",
 }
 
 reinterpret_cast_to_dict = {
@@ -334,14 +334,14 @@ format_dict = {
     "GLfixed": "0x%X",
     "GLfloat": "%f",
     "GLint": "%d",
-    "GLintptr": "%llu",
+    "GLintptr": "%\" PRId64 \"",
     "GLshort": "%d",
     "GLsizei": "%d",
-    "GLsizeiptr": "%llu",
+    "GLsizeiptr": "%\" PRId64 \"",
     "GLsync": "0x%016\" PRIxPTR \"",
     "GLubyte": "%d",
     "GLuint": "%u",
-    "GLuint64": "%llu",
+    "GLuint64": "%\" PRIu64 \"",
     "GLDEBUGPROC": "0x%016\" PRIxPTR \"",
     "GLDEBUGPROCKHR": "0x%016\" PRIxPTR \"",
     "GLeglImageOES": "0x%016\" PRIxPTR \"",

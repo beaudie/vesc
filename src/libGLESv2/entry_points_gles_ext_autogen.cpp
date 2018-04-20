@@ -3087,8 +3087,8 @@ void GL_APIENTRY FramebufferTextureEXT(GLenum target,
 void GL_APIENTRY FlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
-          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64 ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3108,11 +3108,9 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
                                     GLbitfield access)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
-        "access = 0x%X)",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
-        access);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64
+          ", GLbitfield access = 0x%X)",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length), access);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4865,11 +4863,9 @@ void GL_APIENTRY BindBufferRangeContextANGLE(GLeglContext ctx,
                                              GLsizeiptr size)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %llu, "
-        "GLsizeiptr size = %llu)",
-        target, index, buffer, static_cast<unsigned long long>(offset),
-        static_cast<unsigned long long>(size));
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %" PRId64
+          ", GLsizeiptr size = %" PRId64 ")",
+          target, index, buffer, static_cast<int64_t>(offset), static_cast<int64_t>(size));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5126,10 +5122,9 @@ void GL_APIENTRY BindVertexBufferContextANGLE(GLeglContext ctx,
                                               GLsizei stride)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %llu, GLsizei stride = "
-        "%d)",
-        bindingindex, buffer, static_cast<unsigned long long>(offset), stride);
+    EVENT("(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %" PRId64
+          ", GLsizei stride = %d)",
+          bindingindex, buffer, static_cast<int64_t>(offset), stride);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5308,9 +5303,9 @@ void GL_APIENTRY BufferDataContextANGLE(GLeglContext ctx,
                                         GLenum usage)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %llu, const void *data = 0x%016" PRIxPTR
+    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %" PRId64 ", const void *data = 0x%016" PRIxPTR
           ", GLenum usage = 0x%X)",
-          target, static_cast<unsigned long long>(size), (uintptr_t)data, usage);
+          target, static_cast<int64_t>(size), (uintptr_t)data, usage);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5333,11 +5328,9 @@ void GL_APIENTRY BufferSubDataContextANGLE(GLeglContext ctx,
                                            const void *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr size = %llu, const void *data = "
-        "0x%016" PRIxPTR ")",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size),
-        (uintptr_t)data);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr size = %" PRId64
+          ", const void *data = 0x%016" PRIxPTR ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(size), (uintptr_t)data);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5592,8 +5585,9 @@ GLenum GL_APIENTRY ClientWaitSyncContextANGLE(GLeglContext ctx,
                                               GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %" PRIu64
+          ")",
+          (uintptr_t)sync, flags, static_cast<uint64_t>(timeout));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5897,11 +5891,10 @@ void GL_APIENTRY CopyBufferSubDataContextANGLE(GLeglContext ctx,
                                                GLsizeiptr size)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %llu, "
-        "GLintptr writeOffset = %llu, GLsizeiptr size = %llu)",
-        readTarget, writeTarget, static_cast<unsigned long long>(readOffset),
-        static_cast<unsigned long long>(writeOffset), static_cast<unsigned long long>(size));
+    EVENT("(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %" PRId64
+          ", GLintptr writeOffset = %" PRId64 ", GLsizeiptr size = %" PRId64 ")",
+          readTarget, writeTarget, static_cast<int64_t>(readOffset),
+          static_cast<int64_t>(writeOffset), static_cast<int64_t>(size));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6648,7 +6641,7 @@ void GL_APIENTRY DispatchComputeContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DispatchComputeIndirectContextANGLE(GLeglContext ctx, GLintptr indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLintptr indirect = %llu)", static_cast<unsigned long long>(indirect));
+    EVENT("(GLintptr indirect = %" PRId64 ")", static_cast<int64_t>(indirect));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7264,8 +7257,8 @@ void GL_APIENTRY FlushMappedBufferRangeContextANGLE(GLeglContext ctx,
                                                     GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
-          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64 ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7286,8 +7279,8 @@ void GL_APIENTRY FlushMappedBufferRangeEXTContextANGLE(GLeglContext ctx,
                                                        GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
-          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64 ")",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10758,11 +10751,9 @@ void *GL_APIENTRY MapBufferRangeContextANGLE(GLeglContext ctx,
                                              GLbitfield access)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
-        "access = 0x%X)",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
-        access);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64
+          ", GLbitfield access = 0x%X)",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length), access);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10786,11 +10777,9 @@ void *GL_APIENTRY MapBufferRangeEXTContextANGLE(GLeglContext ctx,
                                                 GLbitfield access)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
-        "access = 0x%X)",
-        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
-        access);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %" PRId64 ", GLsizeiptr length = %" PRId64
+          ", GLbitfield access = 0x%X)",
+          target, static_cast<int64_t>(offset), static_cast<int64_t>(length), access);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15068,8 +15057,9 @@ void GL_APIENTRY WaitSyncContextANGLE(GLeglContext ctx,
                                       GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %" PRIu64
+          ")",
+          (uintptr_t)sync, flags, static_cast<uint64_t>(timeout));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)

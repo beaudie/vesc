@@ -173,6 +173,7 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 
         case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
 #if defined(ANGLE_ENABLE_OPENGL)
+            WARN() << "Enable OPENGL ANGLE interface";
 #if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
 #elif defined(ANGLE_USE_X11)
@@ -196,6 +197,7 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 
         case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
 #if defined(ANGLE_ENABLE_OPENGL)
+            WARN() << "Enable OPENGLES ANGLE interface";
 #if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
 #elif defined(ANGLE_USE_X11)
@@ -213,6 +215,7 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 
         case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
 #if defined(ANGLE_ENABLE_VULKAN)
+            WARN() << "Enable OPENGLES Vulkan interface";
 #if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayVkWin32(state);
 #elif defined(ANGLE_PLATFORM_LINUX)
