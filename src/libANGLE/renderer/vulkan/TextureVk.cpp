@@ -216,13 +216,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    // TODO(jmadill): support multi-level textures.
-    if (index.getLevelIndex() != 0)
-    {
-        UNIMPLEMENTED();
-        return gl::InternalError();
-    }
-
     // Convert internalFormat to sized internal format.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
 
@@ -388,6 +381,11 @@ gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
 {
+    if (mImage.valid())
+    {
+        return vk::NoError();
+    }
+
     VkDevice device                  = renderer->getDevice();
     vk::CommandBuffer *commandBuffer = nullptr;
 
@@ -418,9 +416,11 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
             (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
              VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
-        ANGLE_TRY(mImage.init(device, mState.getType(), extents, format, 1, usage));
+        ANGLE_TRY(
+            mImage.init(device, mState.getType(), extents, format, 1, usage, getLevelCount()));
 
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
         ANGLE_TRY(mImage.initMemory(device, renderer->getMemoryProperties(), flags));
 
         gl::SwizzleState mappedSwizzle;
@@ -463,7 +463,7 @@ gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::Di
     samplerInfo.flags                   = 0;
     samplerInfo.magFilter               = gl_vk::GetFilter(samplerState.magFilter);
     samplerInfo.minFilter               = gl_vk::GetFilter(samplerState.minFilter);
-    samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    samplerInfo.mipmapMode              = gl_vk::GetSamplerMipmapMode(samplerState.minFilter);
     samplerInfo.addressModeU            = gl_vk::GetSamplerAddressMode(samplerState.wrapS);
     samplerInfo.addressModeV            = gl_vk::GetSamplerAddressMode(samplerState.wrapT);
     samplerInfo.addressModeW            = gl_vk::GetSamplerAddressMode(samplerState.wrapR);
@@ -473,7 +473,7 @@ gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::Di
     samplerInfo.compareEnable           = VK_FALSE;
     samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
     samplerInfo.minLod                  = 0.0f;
-    samplerInfo.maxLod                  = 1.0f;
+    samplerInfo.maxLod                  = static_cast<GLfloat>(getLevelCount());
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
@@ -524,4 +524,9 @@ void TextureVk::releaseImage(const gl::Context *context, RendererVk *renderer)
     onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
+uint32_t TextureVk::getLevelCount()
+{
+    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
+    return mState.getMipmapMaxLevel() + 1;
+}
 }  // namespace rx

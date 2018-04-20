@@ -167,7 +167,8 @@ class ImageHelper final : angle::NonCopyable
                const gl::Extents &extents,
                const Format &format,
                GLint samples,
-               VkImageUsageFlags usage);
+               VkImageUsageFlags usage,
+               uint32_t mipLevels);
     Error initMemory(VkDevice device,
                      const MemoryProperties &memoryProperties,
                      VkMemoryPropertyFlags flags);

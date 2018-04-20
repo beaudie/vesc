@@ -419,7 +419,7 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
              VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
         ANGLE_TRY(
-            mDepthStencilImage.init(device, gl::TextureType::_2D, extents, dsFormat, 1, usage));
+            mDepthStencilImage.init(device, gl::TextureType::_2D, extents, dsFormat, 1, usage, 1));
         ANGLE_TRY(mDepthStencilImage.initMemory(device, renderer->getMemoryProperties(),
                                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
