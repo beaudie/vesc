@@ -30,11 +30,21 @@ namespace gl
 Error::Error(GLenum errorCode, std::string &&message)
     : mCode(errorCode), mID(errorCode), mMessage(EmplaceErrorString(std::move(message)))
 {
+    if (errorCode != GL_NO_ERROR)
+    {
+        WARN() << "error: " << getMessage() << "(" << errorCode << ")";
+        ASSERT(!true);
+    }
 }
 
 Error::Error(GLenum errorCode, GLuint id, std::string &&message)
     : mCode(errorCode), mID(id), mMessage(EmplaceErrorString(std::move(message)))
 {
+    if (errorCode != GL_NO_ERROR)
+    {
+        WARN() << "error: " << getMessage() << "(" << errorCode << ")";
+        ASSERT(!true);
+    }
 }
 
 void Error::createMessageString() const
@@ -81,11 +91,21 @@ namespace egl
 Error::Error(EGLint errorCode, std::string &&message)
     : mCode(errorCode), mID(errorCode), mMessage(EmplaceErrorString(std::move(message)))
 {
+    if (errorCode != EGL_SUCCESS)
+    {
+        WARN() << "error: " << getMessage() << "(" << errorCode << ")";
+        ASSERT(!true);
+    }
 }
 
 Error::Error(EGLint errorCode, EGLint id, std::string &&message)
     : mCode(errorCode), mID(id), mMessage(EmplaceErrorString(std::move(message)))
 {
+    if (errorCode != EGL_SUCCESS)
+    {
+        WARN() << "error: " << getMessage() << "(" << errorCode << ")";
+        ASSERT(!true);
+    }
 }
 
 void Error::createMessageString() const
