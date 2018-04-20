@@ -53,6 +53,7 @@ class ErrorStreamBase : angle::NonCopyable
     template <typename T>
     ErrorStreamBase &operator<<(T value)
     {
+        WARN() << value;
         mErrorStream << value;
         return *this;
     }
