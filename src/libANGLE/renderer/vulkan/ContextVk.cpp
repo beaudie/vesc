@@ -185,7 +185,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 
             TextureVk *textureVk = vk::GetImpl(texture);
             ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
-            textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            // textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
         }
     }
 
