@@ -150,8 +150,8 @@ vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
 
     // Conservatively flush all writes to the image. We could use a more restricted barrier.
     image->changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                  VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+                          VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                          VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
     ANGLE_TRY(mStagingBuffer.flush(renderer->getDevice()));
 
@@ -215,13 +215,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-
-    // TODO(jmadill): support multi-level textures.
-    if (index.getLevelIndex() != 0)
-    {
-        UNIMPLEMENTED();
-        return gl::InternalError();
-    }
 
     // Convert internalFormat to sized internal format.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
@@ -409,6 +402,9 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
 
     if (!mImage.valid())
     {
+        // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
+        GLuint levelCount = mState.getMipmapMaxLevel() + 1;
+
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
         const gl::Extents &extents         = baseLevelDesc.size;
         const vk::Format &format =
@@ -418,7 +414,7 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
             (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
              VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
-        ANGLE_TRY(mImage.init(device, mState.getType(), extents, format, 1, usage));
+        ANGLE_TRY(mImage.init(device, mState.getType(), extents, format, 1, usage, levelCount));
 
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage.initMemory(device, renderer->getMemoryProperties(), flags));
@@ -428,7 +424,7 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
 
         // TODO(jmadill): Separate imageviews for RenderTargets and Sampling.
         ANGLE_TRY(mImage.initImageView(device, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                       mappedSwizzle, &mImageView));
+                                       mappedSwizzle, &mImageView, levelCount));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
 
@@ -463,7 +459,7 @@ gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::Di
     samplerInfo.flags                   = 0;
     samplerInfo.magFilter               = gl_vk::GetFilter(samplerState.magFilter);
     samplerInfo.minFilter               = gl_vk::GetFilter(samplerState.minFilter);
-    samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    samplerInfo.mipmapMode              = gl_vk::GetSamplerMipmapMode(samplerState.minFilter);
     samplerInfo.addressModeU            = gl_vk::GetSamplerAddressMode(samplerState.wrapS);
     samplerInfo.addressModeV            = gl_vk::GetSamplerAddressMode(samplerState.wrapT);
     samplerInfo.addressModeW            = gl_vk::GetSamplerAddressMode(samplerState.wrapR);

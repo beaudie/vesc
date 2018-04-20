@@ -233,8 +233,8 @@
 2161 VULKAN : dEQP-GLES2.functional.texture.filtering.cube.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.filtering.nearest_mipmap_* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.filtering.linear_mipmap_* = SKIP
-2161 VULKAN : dEQP-GLES2.functional.texture.mipmap.* = SKIP
-2161 VULKAN : dEQP-GLES2.functional.texture.specification.* = SKIP
+// 2161 VULKAN : dEQP-GLES2.functional.texture.mipmap.* = SKIP
+// 2161 VULKAN : dEQP-GLES2.functional.texture.specification.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.completeness.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.texture.vertex.* = SKIP
 2161 VULKAN : dEQP-GLES2.functional.fragment_ops.random.* = SKIP

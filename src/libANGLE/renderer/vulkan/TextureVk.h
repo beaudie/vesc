@@ -37,7 +37,6 @@ class PixelBuffer final : angle::NonCopyable
     vk::Error flushUpdatesToImage(RendererVk *renderer,
                                   vk::ImageHelper *image,
                                   vk::CommandBuffer *commandBuffer);
-
   private:
     struct SubresourceUpdate
     {
