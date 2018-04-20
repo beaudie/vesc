@@ -81,7 +81,8 @@ void GL_APIENTRY BindVertexBuffer(GLuint bindingindex,
                                   GLsizei stride)
 {
     EVENT(
-        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %d, GLsizei stride = %d)",
+        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %ld, GLsizei stride = "
+        "%d)",
         bindingindex, buffer, offset, stride);
 
     Context *context = GetValidGlobalContext();
@@ -99,7 +100,7 @@ void GL_APIENTRY BindVertexBuffer(GLuint bindingindex,
 
 GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
 {
-    EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%0.8p)", type,
+    EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%p)", type,
           count, strings);
 
     Context *context = GetValidGlobalContext();
@@ -120,7 +121,7 @@ GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar
 
 void GL_APIENTRY DeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
 {
-    EVENT("(GLsizei n = %d, const GLuint *pipelines = 0x%0.8p)", n, pipelines);
+    EVENT("(GLsizei n = %d, const GLuint *pipelines = 0x%p)", n, pipelines);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -155,7 +156,7 @@ void GL_APIENTRY DispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuin
 
 void GL_APIENTRY DispatchComputeIndirect(GLintptr indirect)
 {
-    EVENT("(GLintptr indirect = %d)", indirect);
+    EVENT("(GLintptr indirect = %ld)", indirect);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -171,7 +172,7 @@ void GL_APIENTRY DispatchComputeIndirect(GLintptr indirect)
 
 void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
 {
-    EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%0.8p)", mode, indirect);
+    EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%p)", mode, indirect);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -188,7 +189,7 @@ void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
 
 void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
 {
-    EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%0.8p)", mode, type,
+    EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%p)", mode, type,
           indirect);
 
     Context *context = GetValidGlobalContext();
@@ -224,7 +225,7 @@ void GL_APIENTRY FramebufferParameteri(GLenum target, GLenum pname, GLint param)
 
 void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
 {
-    EVENT("(GLsizei n = %d, GLuint *pipelines = 0x%0.8p)", n, pipelines);
+    EVENT("(GLsizei n = %d, GLuint *pipelines = 0x%p)", n, pipelines);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -240,8 +241,7 @@ void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
 
 void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean *data = 0x%0.8p)", target, index,
-          data);
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean *data = 0x%p)", target, index, data);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -257,7 +257,7 @@ void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 
 void GL_APIENTRY GetFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%p)", target, pname,
           params);
 
     Context *context = GetValidGlobalContext();
@@ -275,7 +275,7 @@ void GL_APIENTRY GetFramebufferParameteriv(GLenum target, GLenum pname, GLint *p
 
 void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
-    EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%0.8p)", pname, index, val);
+    EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%p)", pname, index, val);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -296,7 +296,7 @@ void GL_APIENTRY GetProgramInterfaceiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLenum pname = 0x%X, GLint *params "
-        "= 0x%0.8p)",
+        "= 0x%p)",
         program, programInterface, pname, params);
 
     Context *context = GetValidGlobalContext();
@@ -319,8 +319,8 @@ void GL_APIENTRY GetProgramPipelineInfoLog(GLuint pipeline,
                                            GLchar *infoLog)
 {
     EVENT(
-        "(GLuint pipeline = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar *infoLog = "
-        "0x%0.8p)",
+        "(GLuint pipeline = %u, GLsizei bufSize = %d, GLsizei *length = 0x%p, GLchar *infoLog = "
+        "0x%p)",
         pipeline, bufSize, length, infoLog);
 
     Context *context = GetValidGlobalContext();
@@ -339,7 +339,7 @@ void GL_APIENTRY GetProgramPipelineInfoLog(GLuint pipeline,
 
 void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
 {
-    EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", pipeline, pname,
+    EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%p)", pipeline, pname,
           params);
 
     Context *context = GetValidGlobalContext();
@@ -359,7 +359,7 @@ GLuint GL_APIENTRY GetProgramResourceIndex(GLuint program,
                                            GLenum programInterface,
                                            const GLchar *name)
 {
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
+    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%p)",
           program, programInterface, name);
 
     Context *context = GetValidGlobalContext();
@@ -381,7 +381,7 @@ GLint GL_APIENTRY GetProgramResourceLocation(GLuint program,
                                              GLenum programInterface,
                                              const GLchar *name)
 {
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
+    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%p)",
           program, programInterface, name);
 
     Context *context = GetValidGlobalContext();
@@ -409,7 +409,7 @@ void GL_APIENTRY GetProgramResourceName(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLuint index = %u, GLsizei bufSize "
-        "= %d, GLsizei *length = 0x%0.8p, GLchar *name = 0x%0.8p)",
+        "= %d, GLsizei *length = 0x%p, GLchar *name = 0x%p)",
         program, programInterface, index, bufSize, length, name);
 
     Context *context = GetValidGlobalContext();
@@ -439,8 +439,8 @@ void GL_APIENTRY GetProgramResourceiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLuint index = %u, GLsizei "
-        "propCount = %d, const GLenum *props = 0x%0.8p, GLsizei bufSize = %d, GLsizei *length = "
-        "0x%0.8p, GLint *params = 0x%0.8p)",
+        "propCount = %d, const GLenum *props = 0x%p, GLsizei bufSize = %d, GLsizei *length = 0x%p, "
+        "GLint *params = 0x%p)",
         program, programInterface, index, propCount, props, bufSize, length, params);
 
     Context *context = GetValidGlobalContext();
@@ -461,9 +461,8 @@ void GL_APIENTRY GetProgramResourceiv(GLuint program,
 
 void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params)
 {
-    EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)",
-        target, level, pname, params);
+    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat *params = 0x%p)",
+          target, level, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -482,7 +481,7 @@ void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname
 
 void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint *params = 0x%0.8p)",
+    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint *params = 0x%p)",
           target, level, pname, params);
 
     Context *context = GetValidGlobalContext();
@@ -573,7 +572,7 @@ void GL_APIENTRY ProgramUniform1fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -611,8 +610,7 @@ void GL_APIENTRY ProgramUniform1iv(GLuint program,
                                    const GLint *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = 0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -651,7 +649,7 @@ void GL_APIENTRY ProgramUniform1uiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -692,7 +690,7 @@ void GL_APIENTRY ProgramUniform2fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -732,8 +730,7 @@ void GL_APIENTRY ProgramUniform2iv(GLuint program,
                                    const GLint *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = 0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -774,7 +771,7 @@ void GL_APIENTRY ProgramUniform2uiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -818,7 +815,7 @@ void GL_APIENTRY ProgramUniform3fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -858,8 +855,7 @@ void GL_APIENTRY ProgramUniform3iv(GLuint program,
                                    const GLint *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = 0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -902,7 +898,7 @@ void GL_APIENTRY ProgramUniform3uiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -946,7 +942,7 @@ void GL_APIENTRY ProgramUniform4fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -989,8 +985,7 @@ void GL_APIENTRY ProgramUniform4iv(GLuint program,
                                    const GLint *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = 0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -1034,7 +1029,7 @@ void GL_APIENTRY ProgramUniform4uiv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
+        "0x%p)",
         program, location, count, value);
 
     Context *context = GetValidGlobalContext();
@@ -1058,7 +1053,7 @@ void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1083,7 +1078,7 @@ void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1108,7 +1103,7 @@ void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1133,7 +1128,7 @@ void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1158,7 +1153,7 @@ void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1183,7 +1178,7 @@ void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1208,7 +1203,7 @@ void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1233,7 +1228,7 @@ void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -1258,7 +1253,7 @@ void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
 {
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
+        "const GLfloat *value = 0x%p)",
         program, location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
