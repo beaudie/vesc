@@ -32,14 +32,16 @@ FunctionsEGLDL::~FunctionsEGLDL()
 {
 }
 
-egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay, const char *libName, const egl::AttributeMap &attribs)
+egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay,
+                                      const char *libName,
+                                      const egl::AttributeMap &attribs)
 {
 
     intptr_t eglHandle = attribs.get(EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, NULL);
     if (eglHandle)
     {
         // If the handle is provided, use it. Android has already dlopened the vendor library.
-        nativeEGLHandle = reinterpret_cast<void*>(eglHandle);
+        nativeEGLHandle = reinterpret_cast<void *>(eglHandle);
     }
 
     if (!nativeEGLHandle)
