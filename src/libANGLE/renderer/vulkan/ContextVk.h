@@ -183,6 +183,7 @@ class ContextVk : public ContextImpl
 
     // Triggers adding dependencies to the command graph.
     bool mTexturesDirty;
+    bool mTextureBindingsDirty;
     bool mVertexArrayBindingHasChanged;
 
     // Cached clear value for color and depth/stencil.
