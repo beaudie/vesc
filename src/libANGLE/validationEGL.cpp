@@ -404,7 +404,7 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                 case EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE:
                     if (value != EGL_DONT_CARE)
                     {
-                         eglHandle = value;
+                        eglHandle = value;
                     }
                     // TODO: Do some more validation of this value
                     break;
