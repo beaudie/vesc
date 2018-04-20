@@ -300,22 +300,22 @@ format_dict = {
     "GLfixed": "0x%X",
     "GLfloat": "%f",
     "GLint": "%d",
-    "GLintptr": "%d",
+    "GLintptr": "%ld",
     "GLshort": "%d",
     "GLsizei": "%d",
-    "GLsizeiptr": "%d",
-    "GLsync": "0x%0.8p",
+    "GLsizeiptr": "%ld",
+    "GLsync": "0x%p",
     "GLubyte": "%d",
     "GLuint": "%u",
-    "GLuint64": "%llu",
-    "GLDEBUGPROC": "0x%0.8p",
-    "GLDEBUGPROCKHR": "0x%0.8p",
-    "GLeglImageOES": "0x%0.8p",
+    "GLuint64": "%\" PRId64 \"",
+    "GLDEBUGPROC": "0x%p",
+    "GLDEBUGPROCKHR": "0x%p",
+    "GLeglImageOES": "0x%p",
 }
 
 def param_format_string(param):
     if "*" in param:
-        return param + " = 0x%0.8p"
+        return param + " = 0x%p"
     else:
         type_only = just_the_type(param)
         if type_only not in format_dict:

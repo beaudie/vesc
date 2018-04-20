@@ -29,8 +29,8 @@ EGLBoolean EGLAPIENTRY QuerySurfacePointerANGLE(EGLDisplay dpy,
                                                 void **value)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint attribute = %d, void "
-        "**value = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLSurface surface = 0x%p, EGLint attribute = %d, void **value = "
+        "0x%p)",
         dpy, surface, attribute, value);
     Thread *thread = GetCurrentThread();
 
@@ -88,8 +88,8 @@ EGLBoolean EGLAPIENTRY
 PostSubBufferNV(EGLDisplay dpy, EGLSurface surface, EGLint x, EGLint y, EGLint width, EGLint height)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint x = %d, EGLint y = %d, "
-        "EGLint width = %d, EGLint height = %d)",
+        "(EGLDisplay dpy = 0x%p, EGLSurface surface = 0x%p, EGLint x = %d, EGLint y = %d, EGLint "
+        "width = %d, EGLint height = %d)",
         dpy, surface, x, y, width, height);
     Thread *thread = GetCurrentThread();
 
@@ -145,10 +145,8 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform,
                                              void *native_display,
                                              const EGLint *attrib_list)
 {
-    EVENT(
-        "(EGLenum platform = %d, void* native_display = 0x%0.8p, const EGLint* attrib_list = "
-        "0x%0.8p)",
-        platform, native_display, attrib_list);
+    EVENT("(EGLenum platform = %d, void* native_display = 0x%p, const EGLint* attrib_list = 0x%p)",
+          platform, native_display, attrib_list);
     Thread *thread = GetCurrentThread();
 
     Error err = ValidateGetPlatformDisplayEXT(platform, native_display, attrib_list);
@@ -182,8 +180,8 @@ EGLSurface EGLAPIENTRY CreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
                                                       const EGLint *attrib_list)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, void *native_window = 0x%0.8p, "
-        "const EGLint *attrib_list = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLConfig config = 0x%p, void *native_window = 0x%p, "
+        "const EGLint *attrib_list = 0x%p)",
         dpy, config, native_window, attrib_list);
     Thread *thread = GetCurrentThread();
 
@@ -206,8 +204,8 @@ EGLSurface EGLAPIENTRY CreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
                                                       const EGLint *attrib_list)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, void *native_pixmap = 0x%0.8p, "
-        "const EGLint *attrib_list = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLConfig config = 0x%p, void *native_pixmap = 0x%p, "
+        "const EGLint *attrib_list = 0x%p)",
         dpy, config, native_pixmap, attrib_list);
     Thread *thread = GetCurrentThread();
 
@@ -227,8 +225,8 @@ EGLSurface EGLAPIENTRY CreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
 // EGL_EXT_device_query
 EGLBoolean EGLAPIENTRY QueryDeviceAttribEXT(EGLDeviceEXT device, EGLint attribute, EGLAttrib *value)
 {
-    EVENT("(EGLDeviceEXT device = 0x%0.8p, EGLint attribute = %d, EGLAttrib *value = 0x%0.8p)",
-          device, attribute, value);
+    EVENT("(EGLDeviceEXT device = 0x%p, EGLint attribute = %d, EGLAttrib *value = 0x%p)", device,
+          attribute, value);
     Thread *thread = GetCurrentThread();
 
     Device *dev = static_cast<Device *>(device);
@@ -275,7 +273,7 @@ EGLBoolean EGLAPIENTRY QueryDeviceAttribEXT(EGLDeviceEXT device, EGLint attribut
 // EGL_EXT_device_query
 const char *EGLAPIENTRY QueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
 {
-    EVENT("(EGLDeviceEXT device = 0x%0.8p, EGLint name = %d)", device, name);
+    EVENT("(EGLDeviceEXT device = 0x%p, EGLint name = %d)", device, name);
     Thread *thread = GetCurrentThread();
 
     Device *dev = static_cast<Device *>(device);
@@ -303,8 +301,8 @@ const char *EGLAPIENTRY QueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
 // EGL_EXT_device_query
 EGLBoolean EGLAPIENTRY QueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint attribute = %d, EGLAttrib *value = 0x%0.8p)", dpy,
-          attribute, value);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLint attribute = %d, EGLAttrib *value = 0x%p)", dpy, attribute,
+          value);
     Thread *thread = GetCurrentThread();
 
     Display *display = static_cast<Display *>(dpy);
@@ -345,8 +343,8 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY CreateImageKHR(EGLDisplay dpy,
                                                     const EGLint *attrib_list)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLContext ctx = 0x%0.8p, EGLenum target = 0x%X, "
-        "EGLClientBuffer buffer = 0x%0.8p, const EGLAttrib *attrib_list = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLContext ctx = 0x%p, EGLenum target = 0x%X, "
+        "EGLClientBuffer buffer = 0x%p, const EGLAttrib *attrib_list = 0x%p)",
         dpy, ctx, target, buffer, attrib_list);
     Thread *thread = GetCurrentThread();
 
@@ -374,7 +372,7 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY CreateImageKHR(EGLDisplay dpy,
 
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLImage image = 0x%0.8p)", dpy, image);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLImage image = 0x%p)", dpy, image);
     Thread *thread = GetCurrentThread();
 
     Display *display = static_cast<Display *>(dpy);
@@ -397,8 +395,8 @@ ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY CreateDeviceANGLE(EGLint device_type,
                                                         const EGLAttrib *attrib_list)
 {
     EVENT(
-        "(EGLint device_type = %d, void* native_device = 0x%0.8p, const EGLAttrib* attrib_list = "
-        "0x%0.8p)",
+        "(EGLint device_type = %d, void* native_device = 0x%p, const EGLAttrib* attrib_list = "
+        "0x%p)",
         device_type, native_device, attrib_list);
     Thread *thread = GetCurrentThread();
 
@@ -423,7 +421,7 @@ ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY CreateDeviceANGLE(EGLint device_type,
 
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY ReleaseDeviceANGLE(EGLDeviceEXT device)
 {
-    EVENT("(EGLDeviceEXT device = 0x%0.8p)", device);
+    EVENT("(EGLDeviceEXT device = 0x%p)", device);
     Thread *thread = GetCurrentThread();
 
     Device *dev = static_cast<Device *>(device);
@@ -443,7 +441,7 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY ReleaseDeviceANGLE(EGLDeviceEXT device)
 // EGL_KHR_stream
 EGLStreamKHR EGLAPIENTRY CreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_list)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, const EGLAttrib* attrib_list = 0x%0.8p)", dpy, attrib_list);
+    EVENT("(EGLDisplay dpy = 0x%p, const EGLAttrib* attrib_list = 0x%p)", dpy, attrib_list);
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
@@ -470,7 +468,7 @@ EGLStreamKHR EGLAPIENTRY CreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_li
 
 EGLBoolean EGLAPIENTRY DestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR = 0x%p)", dpy, stream);
     Thread *thread = GetCurrentThread();
 
     Display *display     = static_cast<Display *>(dpy);
@@ -494,7 +492,7 @@ EGLBoolean EGLAPIENTRY StreamAttribKHR(EGLDisplay dpy,
                                        EGLint value)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLenum attribute = 0x%X, "
+        "(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, EGLenum attribute = 0x%X, "
         "EGLint value = 0x%X)",
         dpy, stream, attribute, value);
     Thread *thread = GetCurrentThread();
@@ -531,8 +529,8 @@ EGLBoolean EGLAPIENTRY QueryStreamKHR(EGLDisplay dpy,
                                       EGLint *value)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLenum attribute = 0x%X, "
-        "EGLint value = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, EGLenum attribute = 0x%X, "
+        "EGLint value = 0x%p)",
         dpy, stream, attribute, value);
     Thread *thread = GetCurrentThread();
 
@@ -571,8 +569,8 @@ EGLBoolean EGLAPIENTRY QueryStreamu64KHR(EGLDisplay dpy,
                                          EGLuint64KHR *value)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLenum attribute = 0x%X, "
-        "EGLuint64KHR value = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, EGLenum attribute = 0x%X, "
+        "EGLuint64KHR value = 0x%p)",
         dpy, stream, attribute, value);
     Thread *thread = GetCurrentThread();
 
@@ -604,7 +602,7 @@ EGLBoolean EGLAPIENTRY QueryStreamu64KHR(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY StreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR = 0x%p)", dpy, stream);
     Thread *thread = GetCurrentThread();
 
     Display *display     = static_cast<Display *>(dpy);
@@ -631,7 +629,7 @@ EGLBoolean EGLAPIENTRY StreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStr
 
 EGLBoolean EGLAPIENTRY StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR = 0x%p)", dpy, stream);
     Thread *thread = GetCurrentThread();
 
     Display *display     = static_cast<Display *>(dpy);
@@ -658,7 +656,7 @@ EGLBoolean EGLAPIENTRY StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR str
 
 EGLBoolean EGLAPIENTRY StreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR = 0x%p)", dpy, stream);
     Thread *thread = GetCurrentThread();
 
     Display *display     = static_cast<Display *>(dpy);
@@ -687,9 +685,8 @@ EGLBoolean EGLAPIENTRY StreamConsumerGLTextureExternalAttribsNV(EGLDisplay dpy,
                                                                 EGLStreamKHR stream,
                                                                 const EGLAttrib *attrib_list)
 {
-    EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLAttrib attrib_list = 0x%0.8p",
-        dpy, stream, attrib_list);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, EGLAttrib attrib_list = 0x%p", dpy,
+          stream, attrib_list);
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
@@ -720,9 +717,8 @@ EGLBoolean EGLAPIENTRY CreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
                                                            EGLStreamKHR stream,
                                                            const EGLAttrib *attrib_list)
 {
-    EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLAttrib attrib_list = 0x%0.8p",
-        dpy, stream, attrib_list);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, EGLAttrib attrib_list = 0x%p", dpy,
+          stream, attrib_list);
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
@@ -753,8 +749,8 @@ EGLBoolean EGLAPIENTRY StreamPostD3DTextureANGLE(EGLDisplay dpy,
                                                  const EGLAttrib *attrib_list)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, void* texture = 0x%0.8p, "
-        "EGLAttrib attrib_list = 0x%0.8p",
+        "(EGLDisplay dpy = 0x%p, EGLStreamKHR stream = 0x%p, void* texture = 0x%p, "
+        "EGLAttrib attrib_list = 0x%p",
         dpy, stream, texture, attrib_list);
     Thread *thread = GetCurrentThread();
 
@@ -787,8 +783,8 @@ EGLBoolean EGLAPIENTRY GetSyncValuesCHROMIUM(EGLDisplay dpy,
                                              EGLuint64KHR *sbc)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLuint64KHR* ust = 0x%0.8p, "
-        "EGLuint64KHR* msc = 0x%0.8p, EGLuint64KHR* sbc = 0x%0.8p",
+        "(EGLDisplay dpy = 0x%p, EGLSurface surface = 0x%p, EGLuint64KHR* ust = 0x%p, "
+        "EGLuint64KHR* msc = 0x%p, EGLuint64KHR* sbc = 0x%p",
         dpy, surface, ust, msc, sbc);
     Thread *thread = GetCurrentThread();
 
@@ -819,7 +815,7 @@ EGLBoolean EGLAPIENTRY SwapBuffersWithDamageKHR(EGLDisplay dpy,
                                                 EGLint n_rects)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint *rects = 0x%0.8p, EGLint "
+        "(EGLDisplay dpy = 0x%p, EGLSurface surface = 0x%p, EGLint *rects = 0x%p, EGLint "
         "n_rects = %d)",
         dpy, surface, rects, n_rects);
     Thread *thread = GetCurrentThread();
@@ -848,7 +844,7 @@ EGLBoolean EGLAPIENTRY PresentationTimeANDROID(EGLDisplay dpy,
                                                EGLSurface surface,
                                                EGLnsecsANDROID time)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLnsecsANDROID time = %d)",
+    EVENT("(EGLDisplay dpy = 0x%p, EGLSurface surface = 0x%p, EGLnsecsANDROID time = %" PRId64 ")"
           dpy, surface, time);
     Thread *thread = GetCurrentThread();
 
@@ -864,7 +860,7 @@ EGLBoolean EGLAPIENTRY PresentationTimeANDROID(EGLDisplay dpy,
 
 EGLint EGLAPIENTRY ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLenum attrib = 0x%X)", dpy, attrib);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLenum attrib = 0x%X)", dpy, attrib);
 
     Display *display = static_cast<Display *>(dpy);
     Thread *thread   = GetCurrentThread();
@@ -882,8 +878,8 @@ void EGLAPIENTRY ProgramCacheQueryANGLE(EGLDisplay dpy,
                                         EGLint *binarysize)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, EGLint index = %d, void *key = 0x%0.8p, EGLint *keysize = "
-        "0x%0.8p, void *binary = 0x%0.8p, EGLint *size = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, EGLint index = %d, void *key = 0x%p, EGLint *keysize = "
+        "0x%p, void *binary = 0x%p, EGLint *size = 0x%p)",
         dpy, index, key, keysize, binary, binarysize);
 
     Display *display = static_cast<Display *>(dpy);
@@ -902,8 +898,8 @@ void EGLAPIENTRY ProgramCachePopulateANGLE(EGLDisplay dpy,
                                            EGLint binarysize)
 {
     EVENT(
-        "(EGLDisplay dpy = 0x%0.8p, void *key = 0x%0.8p, EGLint keysize = %d, void *binary = "
-        "0x%0.8p, EGLint *size = 0x%0.8p)",
+        "(EGLDisplay dpy = 0x%p, void *key = 0x%p, EGLint keysize = %d, void *binary = "
+        "0x%p, EGLint *size = 0x%d)",
         dpy, key, keysize, binary, binarysize);
 
     Display *display = static_cast<Display *>(dpy);
@@ -917,7 +913,7 @@ void EGLAPIENTRY ProgramCachePopulateANGLE(EGLDisplay dpy,
 
 EGLint EGLAPIENTRY ProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode)
 {
-    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint limit = %d, EGLenum mode = 0x%X)", dpy, limit, mode);
+    EVENT("(EGLDisplay dpy = 0x%p, EGLint limit = %d, EGLenum mode = 0x%X)", dpy, limit, mode);
 
     Display *display = static_cast<Display *>(dpy);
     Thread *thread   = GetCurrentThread();
