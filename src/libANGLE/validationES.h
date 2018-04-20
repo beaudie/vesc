@@ -695,7 +695,7 @@ bool ValidateMultitextureUnit(Context *context, GLenum texture);
 template <typename ErrorStream = InvalidFramebufferOperation>
 ANGLE_INLINE bool ValidateFramebufferComplete(Context *context, Framebuffer *framebuffer)
 {
-    if (!framebuffer->isComplete(context))
+    if (ANGLE_UNLIKELY(!framebuffer->isComplete(context)))
     {
         context->handleError(ErrorStream());
         return false;

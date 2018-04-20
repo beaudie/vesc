@@ -78,9 +78,9 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
     const VertexArray *vao              = state.getVertexArray();
     const AttributesMask &clientAttribs = vao->getEnabledClientMemoryAttribsMask();
 
-    if (clientAttribs.any())
+    if (ANGLE_UNLIKELY(clientAttribs.any()))
     {
-        if (webglCompatibility || !state.areClientArraysEnabled())
+        if (ANGLE_UNLIKELY(webglCompatibility || !state.areClientArraysEnabled()))
         {
             // [WebGL 1.0] Section 6.5 Enabled Vertex Attributes and Range Checking
             // If a vertex attribute is enabled as an array via enableVertexAttribArray but no
@@ -89,7 +89,7 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), VertexArrayNoBuffer);
             return false;
         }
-        else if (vao->hasEnabledNullPointerClientArray())
+        else if (ANGLE_UNLIKELY(vao->hasEnabledNullPointerClientArray()))
         {
             // This is an application error that would normally result in a crash, but we catch it
             // and return an error
@@ -99,7 +99,7 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
     }
 
     // If we're drawing zero vertices, we have enough data.
-    if (vertexCount <= 0 || primcount <= 0)
+    if (ANGLE_UNLIKELY(vertexCount <= 0 || primcount <= 0))
     {
         return true;
     }
@@ -146,7 +146,8 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
         uint64_t attribDataSizeMinusAttribSize = maxVertexElement * attribStride;
 
         // An overflow can happen when adding the offset, check for it.
-        if (attribDataSizeMinusAttribSize > kUint64Max - attrib.cachedSizePlusRelativeOffset)
+        if (ANGLE_UNLIKELY(attribDataSizeMinusAttribSize >
+                           kUint64Max - attrib.cachedSizePlusRelativeOffset))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
             return false;
@@ -154,8 +155,8 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
 
         // [OpenGL ES 3.0.2] section 2.9.4 page 40:
         // We can return INVALID_OPERATION if our array buffer does not have enough backing data.
-        if (attribDataSizeMinusAttribSize + attrib.cachedSizePlusRelativeOffset >
-            binding.getCachedBufferSizeMinusOffset())
+        if (ANGLE_UNLIKELY(attribDataSizeMinusAttribSize + attrib.cachedSizePlusRelativeOffset >
+                           binding.getCachedBufferSizeMinusOffset()))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientVertexBufferSize);
             return false;
@@ -173,7 +174,7 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
             const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
 
             gl::Buffer *buffer = binding.getBuffer().get();
-            if (buffer->isBoundForTransformFeedbackAndOtherUse())
+            if (ANGLE_UNLIKELY(buffer->isBoundForTransformFeedbackAndOtherUse()))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(),
                                      VertexBufferBoundForTransformFeedback);
@@ -2048,25 +2049,25 @@ bool ValidateUniformCommonBase(Context *context,
                                const LinkedUniform **uniformOut)
 {
     // TODO(Jiajia): Add image uniform check in future.
-    if (count < 0)
+    if (ANGLE_UNLIKELY(count < 0))
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
         return false;
     }
 
-    if (!program)
+    if (ANGLE_UNLIKELY(!program))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidProgramName);
         return false;
     }
 
-    if (!program->isLinked())
+    if (ANGLE_UNLIKELY(!program->isLinked()))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ProgramNotLinked);
         return false;
     }
 
-    if (location == -1)
+    if (ANGLE_UNLIKELY(location == -1))
     {
         // Silently ignore the uniform command
         return false;
@@ -2074,20 +2075,20 @@ bool ValidateUniformCommonBase(Context *context,
 
     const auto &uniformLocations = program->getUniformLocations();
     size_t castedLocation        = static_cast<size_t>(location);
-    if (castedLocation >= uniformLocations.size())
+    if (ANGLE_UNLIKELY(castedLocation >= uniformLocations.size()))
     {
         context->handleError(InvalidOperation() << "Invalid uniform location");
         return false;
     }
 
     const auto &uniformLocation = uniformLocations[castedLocation];
-    if (uniformLocation.ignored)
+    if (ANGLE_UNLIKELY(uniformLocation.ignored))
     {
         // Silently ignore the uniform command
         return false;
     }
 
-    if (!uniformLocation.used())
+    if (ANGLE_UNLIKELY(!uniformLocation.used()))
     {
         context->handleError(InvalidOperation());
         return false;
@@ -2096,7 +2097,7 @@ bool ValidateUniformCommonBase(Context *context,
     const auto &uniform = program->getUniformByIndex(uniformLocation.index);
 
     // attempting to write an array to a non-array uniform is an INVALID_OPERATION
-    if (!uniform.isArray() && count > 1)
+    if (ANGLE_UNLIKELY(!uniform.isArray() && count > 1))
     {
         context->handleError(InvalidOperation());
         return false;
@@ -2119,30 +2120,30 @@ bool ValidateUniform1ivValue(Context *context,
         return true;
     }
 
-    if (IsSamplerType(uniformType))
+    if (ANGLE_UNLIKELY(!IsSamplerType(uniformType)))
     {
-        // Check that the values are in range.
-        const GLint max = context->getCaps().maxCombinedTextureImageUnits;
-        for (GLsizei i = 0; i < count; ++i)
-        {
-            if (value[i] < 0 || value[i] >= max)
-            {
-                context->handleError(InvalidValue() << "sampler uniform value out of range");
-                return false;
-            }
-        }
-        return true;
+        context->handleError(InvalidOperation() << "wrong type of value for uniform");
+        return false;
     }
 
-    context->handleError(InvalidOperation() << "wrong type of value for uniform");
-    return false;
+    // Check that the values are in range.
+    const GLint max = context->getCaps().maxCombinedTextureImageUnits;
+    for (GLsizei i = 0; i < count; ++i)
+    {
+        if (ANGLE_UNLIKELY(value[i] < 0 || value[i] >= max))
+        {
+            context->handleError(InvalidValue() << "sampler uniform value out of range");
+            return false;
+        }
+    }
+    return true;
 }
 
 bool ValidateUniformValue(Context *context, GLenum valueType, GLenum uniformType)
 {
     // Check that the value type is compatible with uniform type.
     // Do the cheaper test first, for a little extra speed.
-    if (valueType == uniformType || VariableBoolVectorType(valueType) == uniformType)
+    if (ANGLE_LIKELY(valueType == uniformType || VariableBoolVectorType(valueType) == uniformType))
     {
         return true;
     }
@@ -2154,13 +2155,13 @@ bool ValidateUniformValue(Context *context, GLenum valueType, GLenum uniformType
 bool ValidateUniformMatrixValue(Context *context, GLenum valueType, GLenum uniformType)
 {
     // Check that the value type is compatible with uniform type.
-    if (valueType == uniformType)
+    if (ANGLE_UNLIKELY(valueType != uniformType))
     {
-        return true;
+        context->handleError(InvalidOperation() << "wrong type of value for uniform");
+        return false;
     }
 
-    context->handleError(InvalidOperation() << "wrong type of value for uniform");
-    return false;
+    return true;
 }
 
 bool ValidateUniform(Context *context, GLenum valueType, GLint location, GLsizei count)
@@ -2600,7 +2601,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
         case GL_LINE_STRIP_ADJACENCY_EXT:
         case GL_TRIANGLES_ADJACENCY_EXT:
         case GL_TRIANGLE_STRIP_ADJACENCY_EXT:
-            if (!extensions.geometryShader)
+            if (ANGLE_UNLIKELY(!extensions.geometryShader))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), GeometryShaderExtensionNotEnabled);
                 return false;
@@ -2611,7 +2612,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
             return false;
     }
 
-    if (count < 0)
+    if (ANGLE_UNLIKELY(count < 0))
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
         return false;
@@ -2626,7 +2627,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     {
         // Check for mapped buffers
         // TODO(jmadill): Optimize this check for non - WebGL contexts.
-        if (state.hasMappedBuffer(BufferBinding::Array))
+        if (ANGLE_UNLIKELY(state.hasMappedBuffer(BufferBinding::Array)))
         {
             context->handleError(InvalidOperation());
             return false;
@@ -2657,7 +2658,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
             bool differentMasks = (depthStencilState.stencilMask & maxStencilValue) !=
                                   (depthStencilState.stencilBackMask & maxStencilValue);
 
-            if (differentRefs || differentWritemasks || differentMasks)
+            if (ANGLE_UNLIKELY(differentRefs || differentWritemasks || differentMasks))
             {
                 if (!extensions.webglCompatibility)
                 {
@@ -2670,13 +2671,13 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
         }
     }
 
-    if (!ValidateFramebufferComplete(context, framebuffer))
+    if (ANGLE_UNLIKELY(!ValidateFramebufferComplete(context, framebuffer)))
     {
         return false;
     }
 
     gl::Program *program = state.getProgram();
-    if (!program)
+    if (ANGLE_UNLIKELY(!program))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ProgramNotBound);
         return false;
@@ -2686,15 +2687,15 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     // vertex shader stage or fragment shader stage is a undefined behaviour.
     // But ANGLE should clearly generate an INVALID_OPERATION error instead of
     // produce undefined result.
-    if (!program->hasLinkedShaderStage(ShaderType::Vertex) ||
-        !program->hasLinkedShaderStage(ShaderType::Fragment))
+    if (ANGLE_UNLIKELY(!program->hasLinkedShaderStage(ShaderType::Vertex) ||
+                       !program->hasLinkedShaderStage(ShaderType::Fragment)))
     {
         context->handleError(InvalidOperation() << "It is a undefined behaviour to render without "
                                                    "vertex shader stage or fragment shader stage.");
         return false;
     }
 
-    if (!program->validateSamplers(nullptr, context->getCaps()))
+    if (ANGLE_UNLIKELY(!program->validateSamplers(nullptr, context->getCaps())))
     {
         context->handleError(InvalidOperation());
         return false;
@@ -2704,7 +2705,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     {
         const int programNumViews     = program->usesMultiview() ? program->getNumViews() : 1;
         const int framebufferNumViews = framebuffer->getNumViews();
-        if (framebufferNumViews != programNumViews)
+        if (ANGLE_UNLIKELY(framebufferNumViews != programNumViews))
         {
             context->handleError(InvalidOperation() << "The number of views in the active program "
                                                        "and draw framebuffer does not match.");
@@ -2712,8 +2713,8 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
         }
 
         const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
-        if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
-            framebufferNumViews > 1)
+        if (ANGLE_UNLIKELY(transformFeedbackObject != nullptr &&
+                           transformFeedbackObject->isActive() && framebufferNumViews > 1))
         {
             context->handleError(InvalidOperation()
                                  << "There is an active transform feedback object "
@@ -2722,8 +2723,8 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
             return false;
         }
 
-        if (extensions.disjointTimerQuery && framebufferNumViews > 1 &&
-            state.isQueryActive(GL_TIME_ELAPSED_EXT))
+        if (ANGLE_UNLIKELY(extensions.disjointTimerQuery && framebufferNumViews > 1 &&
+                           state.isQueryActive(GL_TIME_ELAPSED_EXT)))
         {
             context->handleError(InvalidOperation() << "There is an active query for target "
                                                        "GL_TIME_ELAPSED_EXT when the number of "
@@ -2736,8 +2737,8 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     // Do geometry shader specific validations
     if (program->hasLinkedShaderStage(ShaderType::Geometry))
     {
-        if (!IsCompatibleDrawModeWithGeometryShader(mode,
-                                                    program->getGeometryShaderInputPrimitiveType()))
+        if (ANGLE_UNLIKELY(!IsCompatibleDrawModeWithGeometryShader(
+                mode, program->getGeometryShaderInputPrimitiveType())))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(),
                                  IncompatibleDrawModeAgainstGeometryShader);
@@ -2754,7 +2755,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
         const OffsetBindingPointer<Buffer> &uniformBuffer =
             state.getIndexedUniformBuffer(blockBinding);
 
-        if (uniformBuffer.get() == nullptr)
+        if (ANGLE_UNLIKELY(uniformBuffer.get() == nullptr))
         {
             // undefined behaviour
             context->handleError(
@@ -2764,7 +2765,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
         }
 
         size_t uniformBufferSize = GetBoundBufferAvailableSize(uniformBuffer);
-        if (uniformBufferSize < uniformBlock.dataSize)
+        if (ANGLE_UNLIKELY(uniformBufferSize < uniformBlock.dataSize))
         {
             // undefined behaviour
             context->handleError(
@@ -2773,8 +2774,8 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
             return false;
         }
 
-        if (extensions.webglCompatibility &&
-            uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
+        if (ANGLE_UNLIKELY(extensions.webglCompatibility &&
+                           uniformBuffer->isBoundForTransformFeedbackAndOtherUse()))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(),
                                  UniformBufferBoundForTransformFeedback);
@@ -2786,27 +2787,28 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     if (extensions.webglCompatibility)
     {
         const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
-        if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
-            transformFeedbackObject->buffersBoundForOtherUse())
+        if (ANGLE_UNLIKELY(transformFeedbackObject != nullptr &&
+                           transformFeedbackObject->isActive() &&
+                           transformFeedbackObject->buffersBoundForOtherUse()))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), TransformFeedbackBufferDoubleBound);
             return false;
         }
         // Detect rendering feedback loops for WebGL.
-        if (framebuffer->formsRenderingFeedbackLoopWith(state))
+        if (ANGLE_UNLIKELY(framebuffer->formsRenderingFeedbackLoopWith(state)))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), FeedbackLoop);
             return false;
         }
 
         // Detect that the vertex shader input types match the attribute types
-        if (!ValidateVertexShaderAttributeTypeMatch(context))
+        if (ANGLE_UNLIKELY(!ValidateVertexShaderAttributeTypeMatch(context)))
         {
             return false;
         }
 
         // Detect that the color buffer types match the fragment shader output types
-        if (!ValidateFragmentShaderColorBufferTypeMatch(context))
+        if (ANGLE_UNLIKELY(!ValidateFragmentShaderColorBufferTypeMatch(context)))
         {
             return false;
         }
@@ -2821,7 +2823,7 @@ bool ValidateDrawArraysCommon(Context *context,
                               GLsizei count,
                               GLsizei primcount)
 {
-    if (first < 0)
+    if (ANGLE_UNLIKELY(first < 0))
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeStart);
         return false;
@@ -2829,10 +2831,10 @@ bool ValidateDrawArraysCommon(Context *context,
 
     const State &state                          = context->getGLState();
     gl::TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
-    if (curTransformFeedback && curTransformFeedback->isActive() &&
-        !curTransformFeedback->isPaused())
+    if (ANGLE_UNLIKELY(curTransformFeedback && curTransformFeedback->isActive() &&
+                       !curTransformFeedback->isPaused()))
     {
-        if (curTransformFeedback->getPrimitiveMode() != mode)
+        if (ANGLE_UNLIKELY(curTransformFeedback->getPrimitiveMode() != mode))
         {
             // It is an invalid operation to call DrawArrays or DrawArraysInstanced with a draw mode
             // that does not match the current transform feedback object's draw mode (if transform
@@ -2842,14 +2844,14 @@ bool ValidateDrawArraysCommon(Context *context,
             return false;
         }
 
-        if (!curTransformFeedback->checkBufferSpaceForDraw(count, primcount))
+        if (ANGLE_UNLIKELY(!curTransformFeedback->checkBufferSpaceForDraw(count, primcount)))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), TransformFeedbackBufferTooSmall);
             return false;
         }
     }
 
-    if (!ValidateDrawBase(context, mode, count))
+    if (ANGLE_UNLIKELY(!ValidateDrawBase(context, mode, count)))
     {
         return false;
     }
@@ -2859,16 +2861,17 @@ bool ValidateDrawArraysCommon(Context *context,
     // - if count < 0, skip validating no-op draw calls.
     // From this we know maxVertex will be positive, and only need to check if it overflows GLint.
     ASSERT(first >= 0);
-    if (count > 0)
+    if (ANGLE_LIKELY(count > 0))
     {
         int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
-        if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
+        if (ANGLE_UNLIKELY(maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max())))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex), count))
+        if (ANGLE_UNLIKELY(
+                !ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex), count)))
         {
             return false;
         }
@@ -2939,12 +2942,14 @@ bool ValidateDrawElementsCommon(Context *context,
                                 const void *indices,
                                 GLsizei primcount)
 {
-    if (!ValidateDrawElementsBase(context, type))
+    if (ANGLE_UNLIKELY(!ValidateDrawElementsBase(context, type)))
+    {
         return false;
+    }
 
     const State &state = context->getGLState();
 
-    if (!ValidateDrawBase(context, mode, count))
+    if (ANGLE_UNLIKELY(!ValidateDrawBase(context, mode, count)))
     {
         return false;
     }
@@ -2956,7 +2961,7 @@ bool ValidateDrawElementsCommon(Context *context,
     {
         // Check for mapped buffers
         // TODO(jmadill): Optimize this check for non - WebGL contexts.
-        if (state.hasMappedBuffer(gl::BufferBinding::ElementArray))
+        if (ANGLE_UNLIKELY(state.hasMappedBuffer(gl::BufferBinding::ElementArray)))
         {
             context->handleError(InvalidOperation() << "Index buffer is mapped.");
             return false;
@@ -2971,7 +2976,8 @@ bool ValidateDrawElementsCommon(Context *context,
     if (context->getExtensions().webglCompatibility)
     {
         ASSERT(isPow2(typeBytes) && typeBytes > 0);
-        if ((reinterpret_cast<uintptr_t>(indices) & static_cast<uintptr_t>(typeBytes - 1)) != 0)
+        if (ANGLE_UNLIKELY((reinterpret_cast<uintptr_t>(indices) &
+                            static_cast<uintptr_t>(typeBytes - 1)) != 0))
         {
             // [WebGL 1.0] Section 6.4 Buffer Offset and Stride Requirements
             // The offset arguments to drawElements and [...], must be a multiple of the size of the
@@ -2983,7 +2989,7 @@ bool ValidateDrawElementsCommon(Context *context,
         // [WebGL 1.0] Section 6.4 Buffer Offset and Stride Requirements
         // In addition the offset argument to drawElements must be non-negative or an INVALID_VALUE
         // error is generated.
-        if (reinterpret_cast<intptr_t>(indices) < 0)
+        if (ANGLE_UNLIKELY(reinterpret_cast<intptr_t>(indices) < 0))
         {
             ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeOffset);
             return false;
@@ -2993,7 +2999,7 @@ bool ValidateDrawElementsCommon(Context *context,
     if (context->getExtensions().webglCompatibility ||
         !context->getGLState().areClientArraysEnabled())
     {
-        if (!elementArrayBuffer && count > 0)
+        if (ANGLE_UNLIKELY(!elementArrayBuffer && count > 0))
         {
             // [WebGL 1.0] Section 6.2 No Client Side Arrays
             // If drawElements is called with a count greater than zero, and no WebGLBuffer is bound
@@ -3003,7 +3009,7 @@ bool ValidateDrawElementsCommon(Context *context,
         }
     }
 
-    if (count > 0 && !elementArrayBuffer && !indices)
+    if (ANGLE_UNLIKELY(count > 0 && !elementArrayBuffer && !indices))
     {
         // This is an application error that would normally result in a crash, but we catch it and
         // return an error
@@ -3011,7 +3017,7 @@ bool ValidateDrawElementsCommon(Context *context,
         return false;
     }
 
-    if (count > 0 && elementArrayBuffer)
+    if (ANGLE_LIKELY(count > 0 && elementArrayBuffer))
     {
         // The max possible type size is 8 and count is on 32 bits so doing the multiplication
         // in a 64 bit integer is safe. Also we are guaranteed that here count > 0.
@@ -3030,28 +3036,29 @@ bool ValidateDrawElementsCommon(Context *context,
 
         // The offset can be any value, check for overflows
         uint64_t offset = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(indices));
-        if (elementDataSizeNoOffset > kUint64Max - offset)
+        if (ANGLE_UNLIKELY(elementDataSizeNoOffset > kUint64Max - offset))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
             return false;
         }
 
         uint64_t elementDataSizeWithOffset = elementDataSizeNoOffset + offset;
-        if (elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize()))
+        if (ANGLE_UNLIKELY(elementDataSizeWithOffset >
+                           static_cast<uint64_t>(elementArrayBuffer->getSize())))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
             return false;
         }
 
         ASSERT(isPow2(typeSize) && typeSize > 0);
-        if ((elementArrayBuffer->getSize() & (typeSize - 1)) != 0)
+        if (ANGLE_UNLIKELY((elementArrayBuffer->getSize() & (typeSize - 1)) != 0))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), MismatchedByteCountType);
             return false;
         }
 
-        if (context->getExtensions().webglCompatibility &&
-            elementArrayBuffer->isBoundForTransformFeedbackAndOtherUse())
+        if (ANGLE_UNLIKELY(context->getExtensions().webglCompatibility &&
+                           elementArrayBuffer->isBoundForTransformFeedbackAndOtherUse()))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(),
                                  ElementArrayBufferBoundForTransformFeedback);
@@ -3063,16 +3070,16 @@ bool ValidateDrawElementsCommon(Context *context,
     {
         // Here we use maxVertex = 0 and vertexCount = 1 to avoid retrieving IndexRange when robust
         // access is enabled.
-        if (!ValidateDrawAttribs(context, primcount, 0, 1))
+        if (ANGLE_UNLIKELY(!ValidateDrawAttribs(context, primcount, 0, 1)))
         {
             return false;
         }
     }
-    else if (count == 0)
+    else if (ANGLE_UNLIKELY(count == 0))
     {
         // ValidateDrawAttribs also does some extra validation that is independent of the vertex
         // count.
-        if (!ValidateDrawAttribs(context, 0, 0, 0))
+        if (ANGLE_UNLIKELY(!ValidateDrawAttribs(context, 0, 0, 0)))
         {
             return false;
         }
@@ -3087,14 +3094,16 @@ bool ValidateDrawElementsCommon(Context *context,
         // If we use an index greater than our maximum supported index range, return an error.
         // The ES3 spec does not specify behaviour here, it is undefined, but ANGLE should always
         // return an error if possible here.
-        if (static_cast<GLuint64>(indexRange.end) >= context->getCaps().maxElementIndex)
+        if (ANGLE_UNLIKELY(static_cast<GLuint64>(indexRange.end) >=
+                           context->getCaps().maxElementIndex))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExceedsMaxElement);
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRange.end),
-                                 static_cast<GLint>(indexRange.vertexCount())))
+        if (ANGLE_UNLIKELY(!ValidateDrawAttribs(context, primcount,
+                                                static_cast<GLint>(indexRange.end),
+                                                static_cast<GLint>(indexRange.vertexCount()))))
         {
             return false;
         }

@@ -994,19 +994,19 @@ GLenum Framebuffer::checkStatus(const Context *context)
         return mCachedStatus.value();
     }
 
-    if (hasAnyDirtyBit() || !mCachedStatus.valid())
+    if (ANGLE_UNLIKELY(hasAnyDirtyBit() || !mCachedStatus.valid()))
     {
         mCachedStatus = checkStatusWithGLFrontEnd(context);
 
-        if (mCachedStatus.value() == GL_FRAMEBUFFER_COMPLETE)
+        if (ANGLE_LIKELY(mCachedStatus.value() == GL_FRAMEBUFFER_COMPLETE))
         {
             Error err = syncState(context);
-            if (err.isError())
+            if (ANGLE_UNLIKELY(err.isError()))
             {
                 context->handleError(err);
                 return GetDefaultReturnValue<EntryPoint::CheckFramebufferStatus, GLenum>();
             }
-            if (!mImpl->checkStatus(context))
+            if (ANGLE_UNLIKELY(!mImpl->checkStatus(context)))
             {
                 mCachedStatus = GL_FRAMEBUFFER_UNSUPPORTED;
             }

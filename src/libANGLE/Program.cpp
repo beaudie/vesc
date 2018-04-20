@@ -1906,7 +1906,7 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
 {
     // Skip cache if we're using an infolog, so we get the full error.
     // Also skip the cache if the sample mapping has changed, or if we haven't ever validated.
-    if (infoLog == nullptr && mCachedValidateSamplersResult.valid())
+    if (ANGLE_LIKELY(infoLog == nullptr && mCachedValidateSamplersResult.valid()))
     {
         return mCachedValidateSamplersResult.value();
     }
@@ -1933,7 +1933,7 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
 
         for (GLuint textureUnit : samplerBinding.boundTextureUnits)
         {
-            if (textureUnit >= caps.maxCombinedTextureImageUnits)
+            if (ANGLE_UNLIKELY(textureUnit >= caps.maxCombinedTextureImageUnits))
             {
                 if (infoLog)
                 {
@@ -1948,7 +1948,7 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
 
             if (mTextureUnitTypesCache[textureUnit] != TextureType::InvalidEnum)
             {
-                if (textureType != mTextureUnitTypesCache[textureUnit])
+                if (ANGLE_UNLIKELY(textureType != mTextureUnitTypesCache[textureUnit]))
                 {
                     if (infoLog)
                     {
