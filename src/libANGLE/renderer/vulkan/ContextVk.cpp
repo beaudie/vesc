@@ -168,6 +168,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     if (mTexturesDirty)
     {
         mTexturesDirty = false;
+
         // TODO(jmadill): Should probably merge this for loop with programVk's descriptor update.
         const auto &completeTextures = state.getCompleteTextureCache();
         for (const gl::SamplerBinding &samplerBinding : programGL->getSamplerBindings())
@@ -588,6 +589,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
     {
         ProgramVk *programVk = vk::GetImpl(glState.getProgram());
         programVk->invalidateTextures();
+
         mTexturesDirty = true;
     }
 }
