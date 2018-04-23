@@ -152,6 +152,7 @@ class GLES1State final : angle::NonCopyable
 
     void setClientStateEnabled(ClientVertexArrayType clientState, bool enable);
     bool isClientStateEnabled(ClientVertexArrayType clientState) const;
+    bool isTextureTargetEnabled(unsigned int unit, const TextureType type) const;
 
   private:
     friend class State;

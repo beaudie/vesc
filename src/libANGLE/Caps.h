@@ -377,6 +377,7 @@ struct Extensions
 
     // GLES1 emulation: GLES1 extensions
     bool pointSizeArray;
+    bool textureCubeMap;
 };
 
 struct ExtensionInfo
