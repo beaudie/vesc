@@ -11,6 +11,8 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 
+#include "libANGLE/GLES1Renderer.h"
+
 namespace
 {
 
@@ -610,19 +612,51 @@ int Context::vertexArrayIndex(ClientVertexArrayType type) const
     switch (type)
     {
         case ClientVertexArrayType::Vertex:
-            return 0;
+            return GLES1Renderer::kVertexAttribIndex;
         case ClientVertexArrayType::Normal:
-            return 1;
+            return GLES1Renderer::kNormalAttribIndex;
         case ClientVertexArrayType::Color:
-            return 2;
+            return GLES1Renderer::kColorAttribIndex;
         case ClientVertexArrayType::PointSize:
-            return 3;
+            return GLES1Renderer::kPointSizeAttribIndex;
         case ClientVertexArrayType::TextureCoord:
-            return 4 + mGLState.gles1().getClientTextureUnit();
+            return GLES1Renderer::kTextureCoordAttribIndexBase +
+                   mGLState.gles1().getClientTextureUnit();
         default:
             UNREACHABLE();
             return 0;
     }
+}
+
+// static
+int Context::texCoordArrayIndex(unsigned int unit) const
+{
+    return GLES1Renderer::kTextureCoordAttribIndexBase + unit;
+}
+
+AttributesMask Context::getEmulatedVertexArraysAttributeMask() const
+{
+    AttributesMask res;
+    const GLES1State &gles1 = mGLState.gles1();
+    // Vertex
+
+    ClientVertexArrayType nonTexcoordArrays[] = {
+        ClientVertexArrayType::Vertex, ClientVertexArrayType::Normal, ClientVertexArrayType::Color,
+        ClientVertexArrayType::PointSize,
+    };
+
+    for (size_t i = 0; i < sizeof(nonTexcoordArrays) / sizeof(ClientVertexArrayType); i++)
+    {
+        ClientVertexArrayType attrib = nonTexcoordArrays[i];
+        res.set(vertexArrayIndex(attrib), gles1.isClientStateEnabled(attrib));
+    }
+
+    for (unsigned int i = 0; i < getCaps().maxMultitextureUnits; i++)
+    {
+        res.set(texCoordArrayIndex(i), gles1.isTexCoordArrayEnabled(i));
+    }
+
+    return res;
 }
 
 // static
