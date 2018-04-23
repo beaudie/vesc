@@ -30,6 +30,12 @@ constexpr char kGreenFragmentShader[] =
     gl_FragColor = vec4(0, 1, 0, 1);
 })";
 
+constexpr char kRedFragmentShader[] =
+    R"(void main()
+{
+    gl_FragColor = vec4(1, 0, 0, 1);
+})";
+
 constexpr std::array<GLenum, 6> kCubeFaces = {
     {GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
      GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
@@ -231,6 +237,104 @@ TEST_P(SimpleOperationTest, LinkProgramShadersNoInputs)
     glDeleteProgram(program);
 
     ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(SimpleOperationTest, RelinkProgram)
+{
+    const GLuint program = glCreateProgram();
+
+    GLuint vs      = CompileShader(GL_VERTEX_SHADER, kBasicVertexShader);
+    GLuint greenFs = CompileShader(GL_FRAGMENT_SHADER, kGreenFragmentShader);
+    GLuint redFs   = CompileShader(GL_FRAGMENT_SHADER, kRedFragmentShader);
+
+    glAttachShader(program, vs);
+    glAttachShader(program, greenFs);
+    glLinkProgram(program);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    std::vector<Vector3> vertices = {{-1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, -1.0f, 0.0f},
+                                     {-1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {-1.0, 1.0f, 0.0f}};
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    // Draw a green triangle to the right
+    glUseProgram(program);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // Relink to draw red to the left
+    glDetachShader(program, greenFs);
+    glAttachShader(program, redFs);
+    glLinkProgram(program);
+    glDrawArrays(GL_TRIANGLES, 3, 3);
+
+    ASSERT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(positionLocation);
+
+    // Verify we drew red and green in the right places.
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::red);
+
+    glDeleteShader(vs);
+    glDeleteShader(greenFs);
+    glDeleteShader(redFs);
+    glDeleteProgram(program);
+}
+
+TEST_P(SimpleOperationTest, ReleaseShaderInUseThatReadsFromUniforms)
+{
+    constexpr char kFragShaderReadFromUniform[] =
+        R"(precision mediump float;
+        uniform vec4 u_input;
+        void main()
+        {
+            gl_FragColor = u_input;
+        })";
+
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kFragShaderReadFromUniform);
+    glUseProgram(program);
+
+    const GLint uniformLoc = glGetUniformLocation(program, "u_input");
+    EXPECT_NE(-1, uniformLoc);
+
+    // Set color to red.
+    glUniform4f(uniformLoc, 1.0f, 0.0f, 0.0f, 1.0f);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    std::vector<Vector3> vertices = {{-1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, -1.0f, 0.0f}};
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    // Release program while its in use.
+    glDeleteProgram(program);
+
+    // Draw a red triangle
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // Set color to green
+    glUniform4f(uniformLoc, 1.0f, 0.0f, 0.0f, 1.0f);
+
+    // Draw a green triangle
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    ASSERT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(positionLocation);
+
+    // Verify we drew red in the end since thats the last draw.
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::red);
 }
 
 TEST_P(SimpleOperationTest, LinkProgramWithUniforms)
