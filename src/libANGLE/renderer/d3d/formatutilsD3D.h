@@ -24,8 +24,6 @@ struct FormatType;
 
 namespace rx
 {
-typedef void (*VertexCopyFunction)(const uint8_t *input, size_t stride, size_t count, uint8_t *output);
-
 enum VertexConversionType
 {
     VERTEX_CONVERT_NONE = 0,
