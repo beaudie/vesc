@@ -16,9 +16,7 @@ namespace gl
 
 TextureCoordF::TextureCoordF() = default;
 
-TextureCoordF::TextureCoordF(float _s, float _t, float _r, float _q) : s(_s), t(_t), r(_r), q(_q)
-{
-}
+TextureCoordF::TextureCoordF(float _s, float _t, float _r, float _q) : s(_s), t(_t), r(_r), q(_q) {}
 
 bool TextureCoordF::operator==(const TextureCoordF &other) const
 {
@@ -310,6 +308,11 @@ bool GLES1State::isClientStateEnabled(ClientVertexArrayType clientState) const
             UNREACHABLE();
             return false;
     }
+}
+
+bool GLES1State::isTexCoordArrayEnabled(unsigned int unit) const
+{
+    return mTexCoordArrayEnabled[unit];
 }
 
 bool GLES1State::isTextureTargetEnabled(unsigned int unit, const TextureType type) const

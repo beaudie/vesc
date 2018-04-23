@@ -61,6 +61,7 @@ class TransformFeedback;
 class VertexArray;
 struct VertexAttribute;
 class ProgramPipeline;
+class GLES1Renderer;
 
 class Context final : angle::NonCopyable
 {
@@ -1459,6 +1460,8 @@ class Context final : angle::NonCopyable
 
     // GLES1 emulation: Renderer level (for validation)
     int vertexArrayIndex(ClientVertexArrayType type) const;
+    int texCoordArrayIndex(unsigned int unit) const;
+    AttributesMask getEnabledClientStateAttributeMask() const;
 
   private:
     Error prepareForDraw();
@@ -1556,6 +1559,9 @@ class Context final : angle::NonCopyable
     // Recorded errors
     typedef std::set<GLenum> ErrorSet;
     mutable ErrorSet mErrors;
+
+    // GLES1 renderer state
+    GLES1Renderer *mGLES1Renderer;
 
     // Current/lost context flags
     bool mHasBeenCurrent;
