@@ -652,8 +652,7 @@ void InfoLog::appendSanitized(const char *message)
         {
             msg.erase(found, strlen(g_fakepath));
         }
-    }
-    while (found != std::string::npos);
+    } while (found != std::string::npos);
 
     *mLazyStream << message << std::endl;
 }
@@ -1298,7 +1297,7 @@ void Program::unlink()
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
     mState.mImageBindings.clear();
-    mState.mNumViews = -1;
+    mState.mNumViews                          = -1;
     mState.mGeometryShaderInputPrimitiveType  = GL_TRIANGLES;
     mState.mGeometryShaderOutputPrimitiveType = GL_TRIANGLE_STRIP;
     mState.mGeometryShaderInvocations         = 1;
@@ -1373,15 +1372,15 @@ Error Program::saveBinary(const Context *context,
             *length = 0;
         }
 
-        // TODO: This should be moved to the validation layer but computing the size of the binary before saving
-        // it causes the save to happen twice.  It may be possible to write the binary to a separate buffer, validate
-        // sizes and then copy it.
+        // TODO: This should be moved to the validation layer but computing the size of the binary
+        // before saving it causes the save to happen twice.  It may be possible to write the binary
+        // to a separate buffer, validate sizes and then copy it.
         return InternalError();
     }
 
     if (binary)
     {
-        char *ptr = reinterpret_cast<char*>(binary);
+        char *ptr = reinterpret_cast<char *>(binary);
 
         memcpy(ptr, streamState, streamLength);
         ptr += streamLength;
@@ -1780,6 +1779,8 @@ GLuint Program::getUniformIndex(const std::string &name) const
 
 void Program::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 1, v);
     mProgram->setUniform1fv(location, clampedCount, v);
@@ -1787,6 +1788,8 @@ void Program::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 
 void Program::setUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 2, v);
     mProgram->setUniform2fv(location, clampedCount, v);
@@ -1794,6 +1797,8 @@ void Program::setUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 
 void Program::setUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 3, v);
     mProgram->setUniform3fv(location, clampedCount, v);
@@ -1801,6 +1806,8 @@ void Program::setUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 
 void Program::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 4, v);
     mProgram->setUniform4fv(location, clampedCount, v);
@@ -1808,6 +1815,8 @@ void Program::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 
 Program::SetUniformResult Program::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
+    if (location == -1)
+        return SetUniformResult::NoSamplerChange;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 1, v);
 
@@ -1824,6 +1833,8 @@ Program::SetUniformResult Program::setUniform1iv(GLint location, GLsizei count, 
 
 void Program::setUniform2iv(GLint location, GLsizei count, const GLint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 2, v);
     mProgram->setUniform2iv(location, clampedCount, v);
@@ -1831,6 +1842,8 @@ void Program::setUniform2iv(GLint location, GLsizei count, const GLint *v)
 
 void Program::setUniform3iv(GLint location, GLsizei count, const GLint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 3, v);
     mProgram->setUniform3iv(location, clampedCount, v);
@@ -1838,6 +1851,8 @@ void Program::setUniform3iv(GLint location, GLsizei count, const GLint *v)
 
 void Program::setUniform4iv(GLint location, GLsizei count, const GLint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 4, v);
     mProgram->setUniform4iv(location, clampedCount, v);
@@ -1845,6 +1860,8 @@ void Program::setUniform4iv(GLint location, GLsizei count, const GLint *v)
 
 void Program::setUniform1uiv(GLint location, GLsizei count, const GLuint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 1, v);
     mProgram->setUniform1uiv(location, clampedCount, v);
@@ -1852,6 +1869,8 @@ void Program::setUniform1uiv(GLint location, GLsizei count, const GLuint *v)
 
 void Program::setUniform2uiv(GLint location, GLsizei count, const GLuint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 2, v);
     mProgram->setUniform2uiv(location, clampedCount, v);
@@ -1859,6 +1878,8 @@ void Program::setUniform2uiv(GLint location, GLsizei count, const GLuint *v)
 
 void Program::setUniform3uiv(GLint location, GLsizei count, const GLuint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 3, v);
     mProgram->setUniform3uiv(location, clampedCount, v);
@@ -1866,61 +1887,108 @@ void Program::setUniform3uiv(GLint location, GLsizei count, const GLuint *v)
 
 void Program::setUniform4uiv(GLint location, GLsizei count, const GLuint *v)
 {
+    if (location == -1)
+        return;
     const VariableLocation &locationInfo = mState.mUniformLocations[location];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, 4, v);
     mProgram->setUniform4uiv(location, clampedCount, v);
 }
 
-void Program::setUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix2fv(GLint location,
+                                  GLsizei count,
+                                  GLboolean transpose,
+                                  const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<2, 2>(location, count, transpose, v);
     mProgram->setUniformMatrix2fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix3fv(GLint location,
+                                  GLsizei count,
+                                  GLboolean transpose,
+                                  const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<3, 3>(location, count, transpose, v);
     mProgram->setUniformMatrix3fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix4fv(GLint location,
+                                  GLsizei count,
+                                  GLboolean transpose,
+                                  const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<4, 4>(location, count, transpose, v);
     mProgram->setUniformMatrix4fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix2x3fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<2, 3>(location, count, transpose, v);
     mProgram->setUniformMatrix2x3fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix2x4fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<2, 4>(location, count, transpose, v);
     mProgram->setUniformMatrix2x4fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix3x2fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<3, 2>(location, count, transpose, v);
     mProgram->setUniformMatrix3x2fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix3x4fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<3, 4>(location, count, transpose, v);
     mProgram->setUniformMatrix3x4fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix4x2fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<4, 2>(location, count, transpose, v);
     mProgram->setUniformMatrix4x2fv(location, clampedCount, transpose, v);
 }
 
-void Program::setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *v)
+void Program::setUniformMatrix4x3fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *v)
 {
+    if (location == -1)
+        return;
     GLsizei clampedCount = clampMatrixUniformCount<4, 3>(location, count, transpose, v);
     mProgram->setUniformMatrix4x3fv(location, clampedCount, transpose, v);
 }
@@ -2176,7 +2244,9 @@ GLuint Program::getShaderStorageBlockBinding(GLuint shaderStorageBlockIndex) con
     return mState.getShaderStorageBlockBinding(shaderStorageBlockIndex);
 }
 
-void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode)
+void Program::setTransformFeedbackVaryings(GLsizei count,
+                                           const GLchar *const *varyings,
+                                           GLenum bufferMode)
 {
     mState.mTransformFeedbackVaryingNames.resize(count);
     for (GLsizei i = 0; i < count; i++)
@@ -2187,7 +2257,12 @@ void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *v
     mState.mTransformFeedbackBufferMode = bufferMode;
 }
 
-void Program::getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const
+void Program::getTransformFeedbackVarying(GLuint index,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLsizei *size,
+                                          GLenum *type,
+                                          GLchar *name) const
 {
     if (mLinked)
     {
@@ -2258,7 +2333,7 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
     Shader *computeShader  = mState.mAttachedShaders[ShaderType::Compute];
     Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
 
-    bool isComputeShaderAttached  = (computeShader != nullptr);
+    bool isComputeShaderAttached = (computeShader != nullptr);
     bool isGraphicsShaderAttached =
         (vertexShader != nullptr || fragmentShader != nullptr || geometryShader != nullptr);
     // Check whether we both have a compute and non-compute shaders attached.
@@ -2620,13 +2695,13 @@ bool Program::linkAtomicCounterBuffers()
 {
     for (unsigned int index : mState.mAtomicCounterUniformRange)
     {
-        auto &uniform = mState.mUniforms[index];
+        auto &uniform                      = mState.mUniforms[index];
         uniform.blockInfo.offset           = uniform.offset;
         uniform.blockInfo.arrayStride      = (uniform.isArray() ? 4 : 0);
         uniform.blockInfo.matrixStride     = 0;
         uniform.blockInfo.isRowMajorMatrix = false;
 
-        bool found    = false;
+        bool found = false;
         for (unsigned int bufferIndex = 0; bufferIndex < mState.mAtomicCounterBuffers.size();
              ++bufferIndex)
         {
@@ -2676,7 +2751,7 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
         // In GLSL ES 1.00.17 we only do aliasing checks for active attributes.
         mState.mAttributes = vertexShader->getActiveAttributes(context);
     }
-    GLuint maxAttribs          = data.getCaps().maxVertexAttributes;
+    GLuint maxAttribs = data.getCaps().maxVertexAttributes;
 
     // TODO(jmadill): handle aliasing robustly
     if (mState.mAttributes.size() > maxAttribs)
@@ -2818,8 +2893,8 @@ bool Program::linkInterfaceBlocks(const Context *context,
 
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        Shader &computeShader              = *mState.mAttachedShaders[ShaderType::Compute];
-        const auto &computeUniformBlocks   = computeShader.getUniformBlocks(context);
+        Shader &computeShader            = *mState.mAttachedShaders[ShaderType::Compute];
+        const auto &computeUniformBlocks = computeShader.getUniformBlocks(context);
 
         if (!ValidateInterfaceBlocksCount(caps.maxComputeUniformBlocks, computeUniformBlocks,
                                           ShaderType::Compute, sh::BlockType::BLOCK_UNIFORM,

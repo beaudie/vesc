@@ -312,6 +312,11 @@ bool GLES1State::isClientStateEnabled(ClientVertexArrayType clientState) const
     }
 }
 
+bool GLES1State::isTexCoordArrayEnabled(unsigned int unit) const
+{
+    return mTexCoordArrayEnabled[unit];
+}
+
 bool GLES1State::isTextureTargetEnabled(unsigned int unit, const TextureType type) const
 {
     return mTexUnitEnables[unit].test(type);
