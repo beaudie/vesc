@@ -24,6 +24,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/GLES1Renderer.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
@@ -388,6 +389,12 @@ Context::Context(rx::EGLImplFactory *implFactory,
         bindBufferRange(BufferBinding::Uniform, i, 0, 0, -1);
     }
 
+    // Initialize GLES1 renderer if appropriate.
+    if (getClientVersion() < Version(2, 0))
+    {
+        mGLES1Renderer.reset(new GLES1Renderer());
+    }
+
     // Initialize dirty bit masks
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_BUFFER_BINDING);
@@ -499,6 +506,10 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
 Context::~Context()
 {
+    if (mGLES1Renderer)
+    {
+        mGLES1Renderer->deinitialize(this);
+    }
 }
 
 egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
@@ -3261,6 +3272,11 @@ void Context::initWorkarounds()
 
 Error Context::prepareForDraw()
 {
+    if (mGLES1Renderer)
+    {
+        ANGLE_TRY(mGLES1Renderer->prepareForDraw(this, &mGLState));
+    }
+
     ANGLE_TRY(syncDirtyObjects());
 
     if (isRobustResourceInitEnabled())
@@ -3270,6 +3286,7 @@ Error Context::prepareForDraw()
     }
 
     ANGLE_TRY(syncDirtyBits());
+
     return NoError();
 }
 

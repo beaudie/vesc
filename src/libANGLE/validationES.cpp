@@ -117,7 +117,10 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
     const auto &vertexAttribs  = vao->getVertexAttributes();
     const auto &vertexBindings = vao->getVertexBindings();
 
-    const AttributesMask &activeAttribs = (program->getActiveAttribLocationsMask() &
+    bool isGLES1 = context->getClientVersion() < Version(2, 0);
+
+    const AttributesMask &activeAttribs = ((isGLES1 ? context->getEnabledClientStateAttributeMask()
+                                                    : program->getActiveAttribLocationsMask()) &
                                            vao->getEnabledAttributesMask() & ~clientAttribs);
 
     for (size_t attributeIndex : activeAttribs)
@@ -126,7 +129,7 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
         ASSERT(attrib.enabled);
 
         const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
-        ASSERT(program->isAttribLocationActive(attributeIndex));
+        ASSERT(isGLES1 || program->isAttribLocationActive(attributeIndex));
 
         GLint maxVertexElement = maxVertex;
         GLuint divisor         = binding.getDivisor();
@@ -2678,6 +2681,12 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
     if (!ValidateFramebufferComplete(context, framebuffer))
     {
         return false;
+    }
+
+    // GLES1 emulation: GLES1 does not require a current program
+    if (context->getClientVersion() < Version(2, 0))
+    {
+        return true;
     }
 
     gl::Program *program = state.getProgram();
