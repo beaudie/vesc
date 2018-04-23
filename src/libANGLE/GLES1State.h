@@ -115,7 +115,9 @@ struct PointParameters
 };
 
 class Context;
+class GLES1Renderer;
 class State;
+
 class GLES1State final : angle::NonCopyable
 {
   public:
@@ -156,6 +158,7 @@ class GLES1State final : angle::NonCopyable
 
   private:
     friend class State;
+    friend class GLES1Renderer;
 
     // Back pointer for reading from State.
     const State *mGLState;

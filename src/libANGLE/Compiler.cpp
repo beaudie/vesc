@@ -57,23 +57,24 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
       mResources(),
       mShaderCompilers({})
 {
-    ASSERT(state.getClientMajorVersion() == 2 || state.getClientMajorVersion() == 3);
+    ASSERT(state.getClientMajorVersion() == 1 || state.getClientMajorVersion() == 2 ||
+           state.getClientMajorVersion() == 3);
 
     const gl::Caps &caps             = state.getCaps();
     const gl::Extensions &extensions = state.getExtensions();
 
     sh::InitBuiltInResources(&mResources);
-    mResources.MaxVertexAttribs             = caps.maxVertexAttributes;
-    mResources.MaxVertexUniformVectors      = caps.maxVertexUniformVectors;
-    mResources.MaxVaryingVectors            = caps.maxVaryingVectors;
-    mResources.MaxVertexTextureImageUnits   = caps.maxVertexTextureImageUnits;
-    mResources.MaxCombinedTextureImageUnits = caps.maxCombinedTextureImageUnits;
-    mResources.MaxTextureImageUnits         = caps.maxTextureImageUnits;
-    mResources.MaxFragmentUniformVectors    = caps.maxFragmentUniformVectors;
-    mResources.MaxDrawBuffers               = caps.maxDrawBuffers;
-    mResources.OES_standard_derivatives     = extensions.standardDerivatives;
-    mResources.EXT_draw_buffers             = extensions.drawBuffers;
-    mResources.EXT_shader_texture_lod       = extensions.shaderTextureLOD;
+    mResources.MaxVertexAttribs                = caps.maxVertexAttributes;
+    mResources.MaxVertexUniformVectors         = caps.maxVertexUniformVectors;
+    mResources.MaxVaryingVectors               = caps.maxVaryingVectors;
+    mResources.MaxVertexTextureImageUnits      = caps.maxVertexTextureImageUnits;
+    mResources.MaxCombinedTextureImageUnits    = caps.maxCombinedTextureImageUnits;
+    mResources.MaxTextureImageUnits            = caps.maxTextureImageUnits;
+    mResources.MaxFragmentUniformVectors       = caps.maxFragmentUniformVectors;
+    mResources.MaxDrawBuffers                  = caps.maxDrawBuffers;
+    mResources.OES_standard_derivatives        = extensions.standardDerivatives;
+    mResources.EXT_draw_buffers                = extensions.drawBuffers;
+    mResources.EXT_shader_texture_lod          = extensions.shaderTextureLOD;
     mResources.OES_EGL_image_external          = extensions.eglImageExternal;
     mResources.OES_EGL_image_external_essl3    = extensions.eglImageExternalEssl3;
     mResources.NV_EGL_stream_consumer_external = extensions.eglStreamConsumerExternal;
@@ -124,7 +125,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxCombinedAtomicCounterBuffers = caps.maxCombinedAtomicCounterBuffers;
     mResources.MaxAtomicCounterBufferSize      = caps.maxAtomicCounterBufferSize;
 
-    mResources.MaxUniformBufferBindings = caps.maxUniformBufferBindings;
+    mResources.MaxUniformBufferBindings       = caps.maxUniformBufferBindings;
     mResources.MaxShaderStorageBufferBindings = caps.maxShaderStorageBufferBindings;
 
     // Needed by point size clamping workaround
