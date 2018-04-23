@@ -143,9 +143,10 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
     // http://anglebug.com/1643
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL() && IsWindows());
 
-    // TODO(lucferron): Failing on Android/Vulkan. Investigate and fix.
-    // http://anglebug.com/2447
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
+    GLfloat pointSizeRange[2] = {};
+    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
+    GLfloat maxPointSize = pointSizeRange[1];
+    ANGLE_SKIP_TEST_IF(maxPointSize < 2.0f);
 
     const std::string vs =
         R"(void main()
@@ -174,9 +175,10 @@ TEST_P(PointSpritesTest, PointCoordRegressionTest)
     // http://anglebug.com/1643
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL() && IsWindows());
 
-    // TODO(lucferron): Failing on Android/Vulkan. Investigate and fix.
-    // http://anglebug.com/2447
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
+    GLfloat pointSizeRange[2] = {};
+    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
+    GLfloat maxPointSize = pointSizeRange[1];
+    ANGLE_SKIP_TEST_IF(maxPointSize < 2.0f);
 
     const std::string fs =
         R"(precision mediump float;
@@ -210,13 +212,6 @@ TEST_P(PointSpritesTest, PointCoordRegressionTest)
     ASSERT_GL_NO_ERROR();
 
     glUseProgram(program);
-
-    GLfloat pointSizeRange[2] = {};
-    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
-
-    GLfloat maxPointSize = pointSizeRange[1];
-
-    ASSERT_TRUE(maxPointSize > 2);
 
     glClearColor(0, 0, 0, 1);
     glDisable(GL_DEPTH_TEST);
@@ -401,14 +396,17 @@ TEST_P(PointSpritesTest, PointSizeDeclaredButUnused)
 // spites.
 TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
 {
-    // TODO(lucferron): Failing on Android/Vulkan. Investigate and fix.
-    // http://anglebug.com/2447
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
+    GLfloat pointSizeRange[2] = {};
+    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
+    GLfloat maxPointSize = pointSizeRange[1];
+    ANGLE_SKIP_TEST_IF(maxPointSize < 2.0f);
 
     const std::string pointVS =
-        R"(void main()
+        R"(uniform float u_pointSize;
+
+        void main()
         {
-            gl_PointSize = 16.0;
+            gl_PointSize = u_pointSize;
             gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
         })";
 
@@ -433,6 +431,12 @@ TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glUseProgram(pointProgram);
+    GLint pointSizeLoc = glGetUniformLocation(pointProgram, "u_pointSize");
+    ASSERT_GL_NO_ERROR();
+    GLfloat pointSize = std::min<GLfloat>(16.0f, maxPointSize);
+    glUniform1f(pointSizeLoc, pointSize);
+    ASSERT_GL_NO_ERROR();
+
     glDrawArrays(GL_POINTS, 0, 1);
     ASSERT_GL_NO_ERROR();
 
