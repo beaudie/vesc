@@ -625,5 +625,36 @@ int Context::vertexArrayIndex(ClientVertexArrayType type) const
     }
 }
 
+int Context::texCoordArrayIndex(unsigned int unit) const
+{
+    return 4 + unit;
+}
+
+AttributesMask Context::getEnabledClientStateAttributeMask() const
+{
+    AttributesMask res;
+    const auto &gles1 = mGLState.gles1();
+    // Vertex
+
+    std::vector<ClientVertexArrayType> nonTexcoordArrays = {
+        ClientVertexArrayType::Vertex,
+        ClientVertexArrayType::Normal,
+        ClientVertexArrayType::Color,
+        ClientVertexArrayType::PointSize,
+    };
+
+    for (auto attrib : nonTexcoordArrays)
+    {
+        res.set(vertexArrayIndex(attrib), gles1.isClientStateEnabled(attrib));
+    }
+
+    for (unsigned int i = 0; i < getCaps().maxMultitextureUnits; i++)
+    {
+        res.set(texCoordArrayIndex(i), gles1.isTexCoordArrayEnabled(i));
+    }
+
+    return res;
+}
+
 // static
 }  // namespace gl
