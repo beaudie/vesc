@@ -115,7 +115,9 @@ struct PointParameters
 };
 
 class Context;
+class GLES1Renderer;
 class State;
+
 class GLES1State final : angle::NonCopyable
 {
   public:
@@ -150,12 +152,17 @@ class GLES1State final : angle::NonCopyable
     void loadMatrix(const angle::Mat4 &m);
     void multMatrix(const angle::Mat4 &m);
 
+    angle::Mat4 getTextureMatrix(unsigned int unit) const;
+
     void setClientStateEnabled(ClientVertexArrayType clientState, bool enable);
     bool isClientStateEnabled(ClientVertexArrayType clientState) const;
+    bool isTextureCoordArrayEnabled(unsigned int unit) const;
+
     bool isTextureTargetEnabled(unsigned int unit, const TextureType type) const;
 
   private:
     friend class State;
+    friend class GLES1Renderer;
 
     // Back pointer for reading from State.
     const State *mGLState;
