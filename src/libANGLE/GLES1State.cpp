@@ -268,6 +268,10 @@ void GLES1State::multMatrix(const angle::Mat4 &m)
     currentMatrixStack().back() = currentMatrix.product(m);
 }
 
+angle::Mat4 GLES1State::getTextureMatrix(unsigned int unit) const {
+    return mTextureMatrices[unit].back();
+}
+
 void GLES1State::setClientStateEnabled(ClientVertexArrayType clientState, bool enable)
 {
     switch (clientState)
@@ -311,6 +315,11 @@ bool GLES1State::isClientStateEnabled(ClientVertexArrayType clientState) const
             UNREACHABLE();
             return false;
     }
+}
+
+bool GLES1State::isTextureCoordArrayEnabled(unsigned int unit) const
+{
+    return mTexCoordArrayEnabled[unit];
 }
 
 bool GLES1State::isTextureTargetEnabled(unsigned int unit, const TextureType type) const {
