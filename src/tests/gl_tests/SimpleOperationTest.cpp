@@ -233,6 +233,41 @@ TEST_P(SimpleOperationTest, LinkProgramShadersNoInputs)
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(SimpleOperationTest, RelinkProgram)
+{
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Use the program to draw something simple.
+    glUseProgram(program);
+
+    std::vector<Vector3> vertices = {{-1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+
+    const GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertices.size()));
+
+    // Just try re-linking it after using it. Should work.
+    glLinkProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    // Now deleting it and still using it should also work.
+    glDeleteProgram(program);
+    glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertices.size()));
+    ASSERT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(positionLocation);
+}
+
 TEST_P(SimpleOperationTest, LinkProgramWithUniforms)
 {
     const std::string vsSource =
