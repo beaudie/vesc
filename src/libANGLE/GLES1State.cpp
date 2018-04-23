@@ -313,4 +313,16 @@ bool GLES1State::isClientStateEnabled(ClientVertexArrayType clientState) const
     }
 }
 
+bool GLES1State::isTextureTargetEnabled(unsigned int unit, const TextureType type) const {
+    switch (type) {
+        case TextureType::_2D:
+            return mTexUnitEnables[unit].enable2D;
+        case TextureType::CubeMap:
+            return mTexUnitEnables[unit].enableCubeMap;
+        default:
+            UNREACHABLE();
+            return false;
+    }
+}
+
 }  // namespace gl

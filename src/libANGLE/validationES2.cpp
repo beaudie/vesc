@@ -798,6 +798,8 @@ bool ValidCap(const Context *context, GLenum cap, bool queryOnly)
         case GL_NORMAL_ARRAY:
         case GL_COLOR_ARRAY:
         case GL_TEXTURE_COORD_ARRAY:
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP:
             return context->getClientVersion() < Version(2, 0);
         case GL_POINT_SIZE_ARRAY_OES:
             return context->getClientVersion() < Version(2, 0) &&
