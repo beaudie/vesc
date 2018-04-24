@@ -273,7 +273,7 @@ class PipelineDesc final
 
     // Shader stage info
     const ShaderStageInfo &getShaderStageInfo() const;
-    void updateShaders(ProgramVk *programVk);
+    void updateShaders(Serial vertexSerial, Serial fragmentSerial);
 
     // Vertex input state
     void updateVertexInputInfo(const VertexInputBindings &bindings,
@@ -300,7 +300,7 @@ class PipelineDesc final
     void updateBlendColor(const gl::ColorF &color);
     void updateBlendFuncs(const gl::BlendState &blend_state);
     void updateBlendEquations(const gl::BlendState &blend_state);
-    void updateColorWriteMask(const gl::BlendState &blendState);
+    void updateColorWriteMask(VkColorComponentFlags colorComponentFlags);
 
     // Depth/stencil states.
     void updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState);
