@@ -22,6 +22,13 @@ struct CompilerWorkaroundsD3D
 
     // IEEE strictness needs to be enabled for NANs to work.
     bool enableIEEEStrictness = false;
+
+    void reset()
+    {
+        skipOptimization     = false;
+        useMaxOptimization   = false;
+        enableIEEEStrictness = false;
+    }
 };
 
 struct WorkaroundsD3D
