@@ -496,6 +496,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     if (error.isError())
     {
         thread->setError(error);
+        WARN() << __FUNCTION__ << "(" << __LINE__ << "): error #" << error;
+        ASSERT(!error.isError());
         return EGL_FALSE;
     }
 
@@ -505,6 +507,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     if (makeCurrentError.isError())
     {
         thread->setError(makeCurrentError);
+        WARN() << __FUNCTION__ << "(" << __LINE__ << "): error #" << makeCurrentError;
+        ASSERT(!makeCurrentError.isError());
         return EGL_FALSE;
     }
 
@@ -519,6 +523,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
         if (err.isError())
         {
             thread->setError(err);
+            WARN() << __FUNCTION__ << "(" << __LINE__ << "): error #" << err;
+            ASSERT(err.isError());
             return EGL_FALSE;
         }
     }

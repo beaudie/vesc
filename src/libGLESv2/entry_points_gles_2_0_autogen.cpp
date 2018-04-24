@@ -1009,7 +1009,9 @@ GLenum GL_APIENTRY GetError()
 
         if (context->skipValidation() || ValidateGetError(context))
         {
-            EVENT("%s: %d", __FILE__, context->getError());
+            if (context->getError() != GL_NO_ERROR) {
+                EVENT("%s: %d", __FILE__, context->getError());
+            }
             return context->getError();
         }
     }
