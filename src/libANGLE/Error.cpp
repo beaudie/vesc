@@ -33,7 +33,6 @@ Error::Error(GLenum errorCode, std::string &&message)
     if (errorCode != GL_NO_ERROR)
     {
         WARN() << "error: " << getMessage() << "(" << errorCode << ")";
-        ASSERT(!true);
     }
 }
 
@@ -43,7 +42,6 @@ Error::Error(GLenum errorCode, GLuint id, std::string &&message)
     if (errorCode != GL_NO_ERROR)
     {
         WARN() << "error: " << getMessage() << "(" << errorCode << ")";
-        ASSERT(!true);
     }
 }
 
@@ -94,7 +92,6 @@ Error::Error(EGLint errorCode, std::string &&message)
     if (errorCode != EGL_SUCCESS)
     {
         WARN() << "error: " << getMessage() << "(" << errorCode << ")";
-        ASSERT(!true);
     }
 }
 
@@ -104,7 +101,6 @@ Error::Error(EGLint errorCode, EGLint id, std::string &&message)
     if (errorCode != EGL_SUCCESS)
     {
         WARN() << "error: " << getMessage() << "(" << errorCode << ")";
-        ASSERT(!true);
     }
 }
 
