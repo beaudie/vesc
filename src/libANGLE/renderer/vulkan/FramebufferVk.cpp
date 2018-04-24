@@ -38,6 +38,14 @@ const gl::InternalFormat &GetReadAttachmentInfo(const gl::Context *context,
         renderTarget->image->getFormat().textureFormat().fboImplementationInternalFormat;
     return gl::GetSizedInternalFormatInfo(implFormat);
 }
+
+// Returns false if the intersection rect is empty.
+bool GetClippedScissorRect(const gl::Rectangle &scissorRect,
+                           const gl::Rectangle &renderArea,
+                           gl::Rectangle *intersection)
+{
+    return ClipRectangle(scissorRect, renderArea, intersection);
+}
 }  // anonymous namespace
 
 // static
@@ -54,12 +62,22 @@ FramebufferVk *FramebufferVk::CreateDefaultFBO(const gl::FramebufferState &state
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
-    : FramebufferImpl(state), mBackbuffer(nullptr), mRenderPassDesc(), mFramebuffer()
+    : FramebufferImpl(state),
+      mBackbuffer(nullptr),
+      mRenderPassDesc(),
+      mFramebuffer(),
+      mActiveColorComponents(0),
+      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
 {
 }
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer)
-    : FramebufferImpl(state), mBackbuffer(backbuffer), mRenderPassDesc(), mFramebuffer()
+    : FramebufferImpl(state),
+      mBackbuffer(backbuffer),
+      mRenderPassDesc(),
+      mFramebuffer(),
+      mActiveColorComponents(0),
+      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
 {
 }
 
@@ -70,8 +88,9 @@ FramebufferVk::~FramebufferVk()
 void FramebufferVk::destroy(const gl::Context *context)
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
-
     renderer->releaseResource(*this, &mFramebuffer);
+    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.buffer);
+    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.memory);
 }
 
 void FramebufferVk::destroyDefault(const egl::Display *display)
@@ -129,6 +148,15 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     const gl::FramebufferAttachment *depthStencilAttachment = mState.getDepthStencilAttachment();
     const gl::State &glState                                = context->getGLState();
 
+    // The most costly clear mode is when we need to mask out specific color channels. This can
+    // only be done with a draw call. The scissor region however can easily be integrated with
+    // this method. Similarly for depth/stencil clear.
+    VkColorComponentFlags colorMaskFlags = contextVk->getClearColorMask();
+    if (clearColor && (mActiveColorComponents & colorMaskFlags) != mActiveColorComponents)
+    {
+        return clearWithDraw(contextVk, colorMaskFlags);
+    }
+
     // If we clear the depth OR the stencil but not both, and we have a packed depth stencil
     // attachment, we need to use clearAttachment instead of clearDepthStencil since Vulkan won't
     // allow us to clear one or the other separately.
@@ -179,16 +207,15 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         writingNode = getCurrentWritingNode();
     }
 
-    // TODO(jmadill): Check for masked color clear. http://anglebug.com/2455
-
     // TODO(jmadill): Support gaps in RenderTargets. http://anglebug.com/2394
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
+    const VkClearColorValue &clearColorValue = contextVk->getClearColorValue().color;
     for (size_t colorIndex : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
         colorRenderTarget->resource->onWriteResource(writingNode, currentSerial);
-        colorRenderTarget->image->clearColor(contextVk->getClearColorValue().color, commandBuffer);
+        colorRenderTarget->image->clearColor(clearColorValue, commandBuffer);
     }
 
     return gl::NoError();
@@ -327,7 +354,55 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
 
     ASSERT(dirtyBits.any());
-    ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
+    for (auto dirtyBit : dirtyBits)
+    {
+        switch (dirtyBit)
+        {
+            case gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
+            case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
+                ANGLE_TRY(mRenderTargetCache.updateDepthStencilRenderTarget(context, mState));
+                break;
+            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
+            case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+                break;
+            default:
+            {
+                ASSERT(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0 &&
+                       dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
+                size_t colorIndex =
+                    static_cast<size_t>(dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
+                ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndex));
+
+                // Update cached masks for masked clears.
+                RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndex];
+                if (renderTarget)
+                {
+                    const angle::Format &format = renderTarget->image->getFormat().textureFormat();
+                    mActiveColorComponentMasks[0].set(colorIndex, format.redBits > 0);
+                    mActiveColorComponentMasks[1].set(colorIndex, format.greenBits > 0);
+                    mActiveColorComponentMasks[2].set(colorIndex, format.blueBits > 0);
+                    mActiveColorComponentMasks[3].set(colorIndex, format.alphaBits > 0);
+                }
+                else
+                {
+                    mActiveColorComponentMasks[0].set(colorIndex, 0);
+                    mActiveColorComponentMasks[1].set(colorIndex, 0);
+                    mActiveColorComponentMasks[2].set(colorIndex, 0);
+                    mActiveColorComponentMasks[3].set(colorIndex, 0);
+                }
+                break;
+            }
+        }
+    }
+
+    mActiveColorComponents = (mActiveColorComponentMasks[0].any() ? VK_COLOR_COMPONENT_R_BIT : 0) |
+                             (mActiveColorComponentMasks[1].any() ? VK_COLOR_COMPONENT_G_BIT : 0) |
+                             (mActiveColorComponentMasks[2].any() ? VK_COLOR_COMPONENT_B_BIT : 0) |
+                             (mActiveColorComponentMasks[3].any() ? VK_COLOR_COMPONENT_A_BIT : 0);
 
     mRenderPassDesc.reset();
     renderer->releaseResource(*this, &mFramebuffer);
@@ -441,6 +516,8 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    getNewWritingNode(renderer);
+
     // This command can only happen inside a render pass, so obtain one if its already happening
     // or create a new one if not.
     vk::CommandGraphNode *node       = nullptr;
@@ -466,13 +543,12 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
     // When clearing, the scissor region must be clipped to the renderArea per the validation rules
     // in Vulkan.
     gl::Rectangle intersection;
-    if (!ClipRectangle(contextVk->getGLState().getScissor(), node->getRenderPassRenderArea(),
-                       &intersection))
+    if (!GetClippedScissorRect(contextVk->getGLState().getScissor(),
+                               node->getRenderPassRenderArea(), &intersection))
     {
         // There is nothing to clear since the scissor is outside of the render area.
         return gl::NoError();
     }
-
     clearRect.rect = gl_vk::GetRect(intersection);
 
     gl::AttachmentArray<VkClearAttachment> clearAttachments;
@@ -524,6 +600,129 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
 
     commandBuffer->clearAttachments(static_cast<uint32_t>(clearAttachmentIndex),
                                     clearAttachments.data(), 1, &clearRect);
+    return gl::NoError();
+}
+
+gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFlags colorMaskFlags)
+{
+    RendererVk *renderer             = contextVk->getRenderer();
+    vk::ShaderLibrary *shaderLibrary = renderer->getShaderLibrary();
+
+    const vk::ShaderAndSerial *fullScreenQuad = nullptr;
+    ANGLE_TRY(shaderLibrary->getShader(renderer, vk::InternalShaderID::FullScreenQuad_vert,
+                                       &fullScreenQuad));
+
+    const vk::ShaderAndSerial *uniformColor = nullptr;
+    ANGLE_TRY(
+        shaderLibrary->getShader(renderer, vk::InternalShaderID::UniformColor_frag, &uniformColor));
+
+    const vk::PipelineLayout *pipelineLayout = nullptr;
+    ANGLE_TRY(renderer->getInternalUniformPipelineLayout(&pipelineLayout));
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+
+    vk::CommandGraphNode *node = nullptr;
+    ANGLE_TRY(getCommandGraphNodeForDraw(contextVk, &node));
+
+    // This pipeline desc could be cached.
+    vk::PipelineDesc pipelineDesc;
+    pipelineDesc.initDefaults();
+    pipelineDesc.updateColorWriteMask(colorMaskFlags);
+    pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
+    pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), uniformColor->queueSerial());
+    pipelineDesc.updateViewport(node->getRenderPassRenderArea(), 0.0f, 1.0f);
+
+    const gl::State &glState = contextVk->getGLState();
+    if (glState.isScissorTestEnabled())
+    {
+        gl::Rectangle intersection;
+        if (!GetClippedScissorRect(glState.getScissor(), node->getRenderPassRenderArea(),
+                                   &intersection))
+        {
+            return gl::NoError();
+        }
+
+        pipelineDesc.updateScissor(intersection);
+    }
+    else
+    {
+        pipelineDesc.updateScissor(node->getRenderPassRenderArea());
+    }
+
+    vk::PipelineAndSerial *pipeline = nullptr;
+    ANGLE_TRY(renderer->getInternalPipeline(*fullScreenQuad, *uniformColor, *pipelineLayout,
+                                            pipelineDesc, gl::AttributesMask(), &pipeline));
+    pipeline->updateSerial(renderer->getCurrentQueueSerial());
+
+    VkDevice device = renderer->getDevice();
+
+    if (!mMaskedClearUniformBuffer.buffer.valid())
+    {
+        VkBufferUsageFlags bufferUsage =
+            (VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+
+        VkBufferCreateInfo uniformBufferInfo;
+        uniformBufferInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        uniformBufferInfo.pNext                 = nullptr;
+        uniformBufferInfo.flags                 = 0;
+        uniformBufferInfo.size                  = sizeof(VkClearColorValue);
+        uniformBufferInfo.usage                 = bufferUsage;
+        uniformBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        uniformBufferInfo.queueFamilyIndexCount = 0;
+        uniformBufferInfo.pQueueFamilyIndices   = nullptr;
+
+        ANGLE_TRY(mMaskedClearUniformBuffer.buffer.init(device, uniformBufferInfo));
+
+        VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        size_t requiredSize               = 0;
+        ANGLE_TRY(vk::AllocateBufferMemory(renderer, memoryFlags, &mMaskedClearUniformBuffer.buffer,
+                                           &mMaskedClearUniformBuffer.memory, &requiredSize));
+
+        const vk::DescriptorSetLayout &descriptorSetLayout =
+            renderer->getInternalUniformDescriptorSetLayout();
+
+        // This might confuse the dynamic descriptor pool's counting, but it shouldn't cause
+        // overflow.
+        vk::DynamicDescriptorPool *descriptorPool = contextVk->getDynamicDescriptorPool();
+        descriptorPool->allocateDescriptorSets(contextVk, descriptorSetLayout.ptr(), 1,
+                                               &mMaskedClearDescriptorSet);
+
+        VkDescriptorBufferInfo bufferInfo;
+        bufferInfo.buffer = mMaskedClearUniformBuffer.buffer.getHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+
+        VkWriteDescriptorSet writeSet;
+        writeSet.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeSet.pNext            = nullptr;
+        writeSet.dstSet           = mMaskedClearDescriptorSet;
+        writeSet.dstBinding       = 1;
+        writeSet.dstArrayElement  = 0;
+        writeSet.descriptorCount  = 1;
+        writeSet.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        writeSet.pImageInfo       = nullptr;
+        writeSet.pBufferInfo      = &bufferInfo;
+        writeSet.pTexelBufferView = nullptr;
+
+        vkUpdateDescriptorSets(device, 1, &writeSet, 0, nullptr);
+    }
+
+    VkClearColorValue clearColorValue = contextVk->getClearColorValue().color;
+    commandBuffer->updateBuffer(mMaskedClearUniformBuffer.buffer, 0, sizeof(VkClearColorValue),
+                                clearColorValue.float32);
+
+    vk::CommandBuffer *drawCommandBuffer = nullptr;
+    ANGLE_TRY(node->beginInsideRenderPassRecording(renderer, &drawCommandBuffer));
+
+    std::array<uint32_t, 2> dynamicOffsets = {{0, 0}};
+    drawCommandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1,
+                                          &mMaskedClearDescriptorSet, 2, dynamicOffsets.data());
+
+    // TODO(jmadill): Masked combined color and depth/stencil clear. http://anglebug.com/2455
+    drawCommandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get());
+    drawCommandBuffer->draw(6, 1, 0, 0);
+
     return gl::NoError();
 }
 

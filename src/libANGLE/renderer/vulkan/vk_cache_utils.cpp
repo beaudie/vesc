@@ -631,14 +631,12 @@ const ShaderStageInfo &PipelineDesc::getShaderStageInfo() const
     return mShaderStageInfo;
 }
 
-void PipelineDesc::updateShaders(ProgramVk *programVk)
+void PipelineDesc::updateShaders(Serial vertexSerial, Serial fragmentSerial)
 {
-    ASSERT(programVk->getVertexModuleSerial() < std::numeric_limits<uint32_t>::max());
-    mShaderStageInfo[0].moduleSerial =
-        static_cast<uint32_t>(programVk->getVertexModuleSerial().getValue());
-    ASSERT(programVk->getFragmentModuleSerial() < std::numeric_limits<uint32_t>::max());
-    mShaderStageInfo[1].moduleSerial =
-        static_cast<uint32_t>(programVk->getFragmentModuleSerial().getValue());
+    ASSERT(vertexSerial < std::numeric_limits<uint32_t>::max());
+    mShaderStageInfo[0].moduleSerial = static_cast<uint32_t>(vertexSerial.getValue());
+    ASSERT(fragmentSerial < std::numeric_limits<uint32_t>::max());
+    mShaderStageInfo[1].moduleSerial = static_cast<uint32_t>(fragmentSerial.getValue());
 }
 
 void PipelineDesc::updateViewport(const gl::Rectangle &viewport, float nearPlane, float farPlane)
@@ -727,9 +725,9 @@ void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
     }
 }
 
-void PipelineDesc::updateColorWriteMask(const gl::BlendState &blendState)
+void PipelineDesc::updateColorWriteMask(VkColorComponentFlags colorComponentFlags)
 {
-    uint8_t colorMask = static_cast<uint8_t>(gl_vk::GetColorComponentFlags(blendState));
+    uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
 
     for (PackedColorBlendAttachmentState &blendAttachmentState : mColorBlendStateInfo.attachments)
     {
