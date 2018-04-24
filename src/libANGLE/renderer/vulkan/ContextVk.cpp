@@ -45,6 +45,9 @@ constexpr gl::Rectangle kMaxSizedScissor(0,
                                          std::numeric_limits<int>::max(),
                                          std::numeric_limits<int>::max());
 
+constexpr VkColorComponentFlags kAllColorChannelsMask =
+    (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+     VK_COLOR_COMPONENT_A_BIT);
 }  // anonymous namespace
 
 ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
@@ -53,7 +56,8 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mCurrentDrawMode(GL_NONE),
       mDynamicDescriptorPool(),
       mTexturesDirty(false),
-      mVertexArrayBindingHasChanged(false)
+      mVertexArrayBindingHasChanged(false),
+      mClearColorMask(kAllColorChannelsMask)
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -117,8 +121,8 @@ gl::Error ContextVk::initPipeline()
     mPipelineDesc->updateRenderPassDesc(framebufferVk->getRenderPassDesc());
 
     // TODO(jmadill): Validate with ASSERT against physical device limits/caps?
-    ANGLE_TRY(mRenderer->getPipeline(programVk, *mPipelineDesc, activeAttribLocationsMask,
-                                     &mCurrentPipeline));
+    ANGLE_TRY(mRenderer->getAppPipeline(programVk, *mPipelineDesc, activeAttribLocationsMask,
+                                        &mCurrentPipeline));
 
     return gl::NoError();
 }
@@ -404,7 +408,8 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 mPipelineDesc->updateBlendEquations(glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
-                mPipelineDesc->updateColorWriteMask(glState.getBlendState());
+                mClearColorMask = gl_vk::GetColorComponentFlags(glState.getBlendState());
+                mPipelineDesc->updateColorWriteMask(mClearColorMask);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 WARN() << "DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED unimplemented";
@@ -751,4 +756,8 @@ const VkClearValue &ContextVk::getClearDepthStencilValue() const
     return mClearDepthStencilValue;
 }
 
+VkColorComponentFlags ContextVk::getClearColorMask() const
+{
+    return mClearColorMask;
+}
 }  // namespace rx
