@@ -223,6 +223,10 @@ EGLBoolean EGLAPIENTRY ChooseConfig(EGLDisplay dpy,
         return EGL_FALSE;
     }
 
+    for (int i = 0; attrib_list[i] != EGL_NONE; i += 2) {
+        WARN() << "Attribute: " << attrib_list[i] << " : " << attrib_list[i+1];
+    }
+
     ClipConfigs(display->getConfigs(attribMap), configs, config_size, num_config);
 
     thread->setError(NoError());
