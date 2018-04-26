@@ -190,6 +190,22 @@ static void MinMax(int a, int b, int *minimum, int *maximum)
     }
 }
 
+Rectangle Rectangle::removeFlip() const
+{
+    Rectangle unflipped = *this;
+    if (isFlippedX())
+    {
+        unflipped.x     = unflipped.x + unflipped.width;
+        unflipped.width = -unflipped.width;
+    }
+    if (isFlippedY())
+    {
+        unflipped.y      = unflipped.y + unflipped.height;
+        unflipped.height = -unflipped.height;
+    }
+    return unflipped;
+}
+
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection)
 {
     int minSourceX, maxSourceX, minSourceY, maxSourceY;
