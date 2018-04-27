@@ -1335,10 +1335,10 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxCombinedTextureImageUnits;
             break;
         case GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS:
-            *params = mCaps.maxVertexTextureImageUnits;
+            *params = mCaps.maxShaderTextureImageUnits[gl::ShaderType::Vertex];
             break;
         case GL_MAX_TEXTURE_IMAGE_UNITS:
-            *params = mCaps.maxTextureImageUnits;
+            *params = mCaps.maxShaderTextureImageUnits[gl::ShaderType::Fragment];
             break;
         case GL_MAX_FRAGMENT_UNIFORM_VECTORS:
             *params = mCaps.maxFragmentUniformVectors;
@@ -1382,10 +1382,10 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxUniformBufferBindings;
             break;
         case GL_MAX_VERTEX_UNIFORM_BLOCKS:
-            *params = mCaps.maxVertexUniformBlocks;
+            *params = mCaps.maxShaderUniformBlocks[gl::ShaderType::Vertex];
             break;
         case GL_MAX_FRAGMENT_UNIFORM_BLOCKS:
-            *params = mCaps.maxFragmentUniformBlocks;
+            *params = mCaps.maxShaderUniformBlocks[gl::ShaderType::Fragment];
             break;
         case GL_MAX_COMBINED_UNIFORM_BLOCKS:
             *params = mCaps.maxCombinedTextureImageUnits;
@@ -1521,7 +1521,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxVertexImageUniforms;
             break;
         case GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS:
-            *params = mCaps.maxVertexShaderStorageBlocks;
+            *params = mCaps.maxShaderStorageBlocks[gl::ShaderType::Vertex];
             break;
         case GL_MAX_FRAGMENT_ATOMIC_COUNTER_BUFFERS:
             *params = mCaps.maxFragmentAtomicCounterBuffers;
@@ -1533,7 +1533,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxFragmentImageUniforms;
             break;
         case GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS:
-            *params = mCaps.maxFragmentShaderStorageBlocks;
+            *params = mCaps.maxShaderStorageBlocks[gl::ShaderType::Fragment];
             break;
         case GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET:
             *params = mCaps.minProgramTextureGatherOffset;
@@ -1545,10 +1545,10 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxComputeWorkGroupInvocations;
             break;
         case GL_MAX_COMPUTE_UNIFORM_BLOCKS:
-            *params = mCaps.maxComputeUniformBlocks;
+            *params = mCaps.maxShaderUniformBlocks[gl::ShaderType::Compute];
             break;
         case GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS:
-            *params = mCaps.maxComputeTextureImageUnits;
+            *params = mCaps.maxShaderTextureImageUnits[gl::ShaderType::Compute];
             break;
         case GL_MAX_COMPUTE_SHARED_MEMORY_SIZE:
             *params = mCaps.maxComputeSharedMemorySize;
@@ -1569,7 +1569,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxCombinedComputeUniformComponents;
             break;
         case GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS:
-            *params = mCaps.maxComputeShaderStorageBlocks;
+            *params = mCaps.maxShaderStorageBlocks[gl::ShaderType::Compute];
             break;
         case GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES:
             *params = mCaps.maxCombinedShaderOutputResources;
@@ -1616,7 +1616,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxGeometryUniformComponents;
             break;
         case GL_MAX_GEOMETRY_UNIFORM_BLOCKS_EXT:
-            *params = mCaps.maxGeometryUniformBlocks;
+            *params = mCaps.maxShaderUniformBlocks[gl::ShaderType::Geometry];
             break;
         case GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS_EXT:
             *params = mCaps.maxCombinedGeometryUniformComponents;
@@ -1637,7 +1637,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxGeometryShaderInvocations;
             break;
         case GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT:
-            *params = mCaps.maxGeometryTextureImageUnits;
+            *params = mCaps.maxShaderTextureImageUnits[gl::ShaderType::Geometry];
             break;
         case GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS_EXT:
             *params = mCaps.maxGeometryAtomicCounterBuffers;
@@ -1649,7 +1649,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mCaps.maxGeometryImageUniforms;
             break;
         case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT:
-            *params = mCaps.maxGeometryShaderStorageBlocks;
+            *params = mCaps.maxShaderStorageBlocks[gl::ShaderType::Geometry];
             break;
         // GLES1 emulation: Caps queries
         case GL_MAX_TEXTURE_UNITS:
@@ -3105,14 +3105,17 @@ void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool rob
         LimitCap(&mCaps.maxVertexAttribBindings, MAX_VERTEX_ATTRIB_BINDINGS);
     }
 
-    LimitCap(&mCaps.maxVertexUniformBlocks, IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
+    LimitCap(&mCaps.maxShaderUniformBlocks[gl::ShaderType::Vertex],
+             IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
     LimitCap(&mCaps.maxVertexOutputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
     LimitCap(&mCaps.maxFragmentInputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
 
     // Limit textures as well, so we can use fast bitsets with texture bindings.
     LimitCap(&mCaps.maxCombinedTextureImageUnits, IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
-    LimitCap(&mCaps.maxVertexTextureImageUnits, IMPLEMENTATION_MAX_ACTIVE_TEXTURES / 2);
-    LimitCap(&mCaps.maxTextureImageUnits, IMPLEMENTATION_MAX_ACTIVE_TEXTURES / 2);
+    LimitCap(&mCaps.maxShaderTextureImageUnits[gl::ShaderType::Vertex],
+             IMPLEMENTATION_MAX_ACTIVE_TEXTURES / 2);
+    LimitCap(&mCaps.maxShaderTextureImageUnits[gl::ShaderType::Fragment],
+             IMPLEMENTATION_MAX_ACTIVE_TEXTURES / 2);
 
     mCaps.maxSampleMaskWords = std::min<GLuint>(mCaps.maxSampleMaskWords, MAX_SAMPLE_MASK_WORDS);
 
