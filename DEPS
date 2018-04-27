@@ -22,7 +22,7 @@ deps = {
     '{android_git}/platform/external/cherry@4f8fb08d33ca5ff05a1c638f04c85bbb8d8b52cc',
 
   '{root}/third_party/deqp/src':
-    '{android_git}/platform/external/deqp@5bc346ba2d5465a2e6094e254f12b1586fd0097f',
+    '{android_git}/platform/external/deqp@5b261b1d3a95bef5a6210f47ceb13ef14ef33fb4',
 
   '{root}/third_party/glslang/src':
     '{android_git}/platform/external/shaderc/glslang@2edde6665d9a56ead5ea0e55b4e64d9a803e6164',
